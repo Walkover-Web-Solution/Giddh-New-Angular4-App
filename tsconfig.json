@@ -32,7 +32,8 @@
   "exclude": [
     "node_modules",
     "dist",
-    "dev"
+    "dev",
+    "node_modules_electron"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,
