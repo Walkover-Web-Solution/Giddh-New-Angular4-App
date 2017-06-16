@@ -56,7 +56,8 @@ npm-debug.log
 .webpack.json
 /compiled/
 dll/
-
+node_modules_electron/
+dev/
 # Doc #
 /doc/
 
