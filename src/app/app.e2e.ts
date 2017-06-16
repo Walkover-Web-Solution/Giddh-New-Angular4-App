@@ -1,34 +1,44 @@
-import { browser, by, element } from 'protractor';
-import 'tslib';
+import { launchApp, awaitReady, stopApp } from '../../config/e2e-common';
+import { expect } from 'chai';
 
-describe('App', () => {
+describe('App', function() {
 
-  beforeEach(async () => {
-    await browser.get('/');
+  let app: any;
+  let browser: WebdriverIO.Client<void>;
+
+  beforeEach(() => {
+    app = launchApp();
+    return awaitReady(app).then(() => {
+      browser = app.client;
+    });
   });
 
-  it('should have a title', async () => {
-    let subject = await browser.getTitle();
-    let result  = 'Angular2 Webpack Starter by @gdi2290 from @AngularClass';
-    expect(subject).toEqual(result);
+  afterEach(() => {
+    return stopApp(app);
   });
 
-  it('should have header', async () => {
-    let subject = await element(by.css('h1')).isPresent();
+  it('should have a title', () => {
+    let subject = browser.getTitle();
+    let result  = 'Angular Electron Dream Starter by Colin Skow & @AngularClass';
+    return expect(subject).to.eventually.equal(result);
+  });
+
+  it('should have header', () => {
+    let subject = browser.isExisting('h1');
     let result  = true;
-    expect(subject).toEqual(result);
+    return expect(subject).to.eventually.equal(result);
   });
 
-  it('should have <home>', async () => {
-    let subject = await element(by.css('app home')).isPresent();
+  it('should have <home>', () => {
+    let subject = browser.isExisting('app home');
     let result  = true;
-    expect(subject).toEqual(result);
+    return expect(subject).to.eventually.equal(result);
   });
 
-  it('should have buttons', async () => {
-    let subject = await element(by.css('button')).getText();
-    let result  = 'Submit Value';
-    expect(subject).toEqual(result);
+  it('should have buttons', () => {
+    let subject: any = browser.getText('button');
+    let result  = ['Show Dialog', 'Submit Value'];
+    return expect(subject).to.eventually.deep.equal(result);
   });
 
 });

@@ -165,6 +165,11 @@ module.exports = function (options) {
       //       '@angular/router',
       //       '@angularclass/hmr',
       //       'rxjs',
+            // '@ngrx/core',
+            // '@ngrx/effects',
+            // '@ngrx/router-store',
+            // '@ngrx/store',
+            // '@ngrx/store-devtools'
       //     ]
       //   },
       //   dllDir: helpers.root('dll'),

@@ -1,3 +1,4 @@
+/// <reference types="jasmine" />
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import {
   inject,
@@ -5,43 +6,34 @@ import {
   TestBed,
   ComponentFixture
 } from '@angular/core/testing';
+import { StoreModule } from '@ngrx/store';
 
-/**
- * Load the implementations that should be tested
- */
+// Load the implementations that should be tested
 import { AppComponent } from './app.component';
-import { AppState } from './app.service';
+import { rootReducer } from './reducers';
+import { HomeActions } from './home/home.actions';
 
 describe(`App`, () => {
   let comp: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
 
-  /**
-   * async beforeEach
-   */
+  // async beforeEach
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [ AppComponent ],
+      imports: [ StoreModule.provideStore(rootReducer) ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [AppState]
+      providers: [HomeActions]
     })
-    /**
-     * Compile template and css
-     */
-    .compileComponents();
+    .compileComponents(); // compile template and css
   }));
 
-  /**
-   * Synchronous beforeEach
-   */
+  // synchronous beforeEach
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
     comp    = fixture.componentInstance;
 
-    /**
-     * Trigger initial data binding
-     */
-    fixture.detectChanges();
+    fixture.detectChanges(); // trigger initial data binding
   });
 
   it(`should be readly initialized`, () => {
@@ -50,9 +42,9 @@ describe(`App`, () => {
   });
 
   it(`should be @AngularClass`, () => {
-    expect(comp.url).toEqual('https://twitter.com/AngularClass');
-    expect(comp.angularclassLogo).toEqual('assets/img/angularclass-avatar.png');
-    expect(comp.name).toEqual('Angular 2 Webpack Starter');
+    expect(comp.url).toEqual('https://github.com/colinskow/angular-electron-dream-starter');
+    expect(comp.angularclassLogo).toEqual('assets/img/angular-electron.svg');
+    expect(comp.name).toEqual('Angular Electron Dream Starter');
   });
 
   it('should log ngOnInit', () => {
