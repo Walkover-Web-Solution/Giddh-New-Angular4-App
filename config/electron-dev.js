@@ -15,7 +15,7 @@ const helpers = require('./helpers');
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 
-const config = require('./webpack.dev')({ HMR: true });
+const config = require('./webpack.renderer.dev')({ HMR: true });
 config.entry.hmr = `webpack-hot-middleware/client?path=http://${HOST}:${PORT}/__webpack_hmr`;
 config.devServer = config.devServer || {};
 config.devServer.outputPath = config.output.path = helpers.root('dev');
