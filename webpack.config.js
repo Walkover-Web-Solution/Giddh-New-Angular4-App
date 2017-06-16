@@ -6,6 +6,12 @@
  * Look in ./config folder for webpack.dev.js
  */
 switch (process.env.NODE_ENV) {
+  case 'production:renderer':
+    module.exports = require('./config/webpack.renderer.prod')({env: 'production'});
+    break;
+  case 'development:renderer':
+    module.exports = require('./config/webpack.renderer.dev')({env: 'production'});
+    break;
   case 'prod':
   case 'production':
     module.exports = require('./config/webpack.prod')({env: 'production'});
@@ -19,3 +25,4 @@ switch (process.env.NODE_ENV) {
   default:
     module.exports = require('./config/webpack.dev')({env: 'development'});
 }
+

@@ -18,7 +18,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 /**
  * Webpack Constants
  */
-const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
+const ENV = process.env.ENV = process.env.NODE_ENV = 'development:renderer';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
@@ -251,14 +251,14 @@ module.exports = function (options) {
      *
      * See: https://webpack.github.io/docs/configuration.html#node
      */
-    node: {
-      global: true,
-      crypto: 'empty',
-      process: true,
-      module: false,
-      clearImmediate: false,
-      setImmediate: false
-    }
+    // node: {
+    //   global: true,
+    //   crypto: 'empty',
+    //   process: true,
+    //   module: false,
+    //   clearImmediate: false,
+    //   setImmediate: false
+    // }
 
   });
 }
