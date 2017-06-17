@@ -29,7 +29,8 @@
     "dist",
     "src/**/*.spec.ts",
     "src/**/*.e2e.ts",
-    "node_modules_electron"
+    "node_modules_electron",
+    "packages"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,

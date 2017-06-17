@@ -1,6 +1,4 @@
-import { HomeActions } from './home/actions/home.actions';
-
-import { AppState } from './reducers/roots';
+import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
@@ -30,7 +28,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
-import { rootReducer } from './reducers';
+import { rootReducer } from './store';
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
@@ -43,12 +41,13 @@ import { LoginModule } from './login';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
+import { ServiceModule } from './services/service.module';
+import { NoContentComponent } from './no-content/no-content.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  HomeActions,
-  { provide: APP_BASE_HREF, useValue : '/' }
+  { provide: APP_BASE_HREF, useValue: '/' }
 ];
 
 interface InternalStateType {
@@ -74,9 +73,11 @@ if (ENV === 'development') {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   declarations: [
     AppComponent,
+    PageComponent,
+    NoContentComponent
   ],
   /**
    * Import Angular's modules.
@@ -85,10 +86,10 @@ if (ENV === 'development') {
     BrowserModule,
     FormsModule,
     HttpModule,
-    PageComponent,
     AboutModule,
     HomeModule,
     LoginModule,
+    ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
@@ -107,7 +108,7 @@ export class AppModule {
   constructor(
     public appRef: ApplicationRef,
     public _store: Store<AppState>
-  ) {}
+  ) { }
 
   public hmrOnInit(store: StoreType) {
     if (!store || !store.rootState) {
@@ -149,7 +150,7 @@ export class AppModule {
     /**
      * Save input values
      */
-    store.restoreInputValues  = createInputTransfer();
+    store.restoreInputValues = createInputTransfer();
     /**
      * Remove styles
      */

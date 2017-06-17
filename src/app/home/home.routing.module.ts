@@ -4,16 +4,16 @@ import { HomeComponent } from './home.component';
 import { ChildHomeComponent } from './components';
 
 @NgModule({
-    imports: [
-        RouterModule.forChild([
-            { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
-            {
+  imports: [
+    RouterModule.forChild([
+      { path: 'home', redirectTo: 'pages/home', pathMatch: 'full' },
+      {
         path: 'pages', children: [
-          { path: 'child-home', component: ChildHomeComponent },
+          { path: 'home', component: HomeComponent }
         ]
       }
-        ])
-    ],
-    exports: [RouterModule]
+    ])
+  ],
+  exports: [RouterModule]
 })
 export class HomeRoutingModule { }

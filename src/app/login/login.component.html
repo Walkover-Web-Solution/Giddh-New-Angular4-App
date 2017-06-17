@@ -1,3 +1,26 @@
-<div>
-  Login Component
-</div>
+<section id="videoBg" class="intro login" style="height: 1042px;">
+    <!-- banner content -->
+    <div class="intro-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="brand-heading arvo">Enter your accounting space</h1>
+
+                    <div id="box" class="text-uppercase">
+                        <div class="clearfix mrB1">
+                            <p class="lead ">Sign In or register</p>
+                        </div>
+
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login google" ng-click="authenticate('google')">connect with Google</button>
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" ng-click="authenticate('twitter')">connect with Twitter</button>
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" ng-click="authenticate('linkedin')">connect with LinkedIn</button>
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" ng-click="signUpWithEmailModal($event)">connect with Email</button>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

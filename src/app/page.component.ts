@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
-   selector: 'body',
+   selector: 'page',
    template: `
-    <router-outlet></router-outlet>
+    Page Component
    `
 })
 export class PageComponent  {
