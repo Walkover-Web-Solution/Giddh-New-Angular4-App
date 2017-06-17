@@ -89,8 +89,9 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
-    "rxjs": "~5.4.1",
-    "electron-devtools-installer": "^2.2.0"
+    "electron-devtools-installer": "^2.2.0",
+    "ngx-perfect-scrollbar": "^4.4.0",
+    "rxjs": "~5.4.1"
   },
   "devDependencies": {
     "@angular/animations": "~4.2.2",
