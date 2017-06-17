@@ -5,7 +5,6 @@ import { RouterModule } from '@angular/router';
 
 import { AboutRoutingModule } from './about.routing.module';
 import { AboutComponent } from './about.component';
-import { TranslateModule } from 'ng2-translate';
 
 console.log('`About` bundle loaded asynchronously');
 
@@ -18,8 +17,7 @@ console.log('`About` bundle loaded asynchronously');
   imports: [
     CommonModule,
     FormsModule,
-    AboutRoutingModule,
-    TranslateModule
+    AboutRoutingModule
   ],
 })
 export class AboutModule {

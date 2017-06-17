@@ -6,29 +6,11 @@ import {
   OnInit
 } from '@angular/core';
 
-import { Title } from './title';
 import { AppState } from '../reducers/roots';
 
 @Component({
-  /**
-   * The selector is what angular internally uses
-   * for `document.querySelectorAll(selector)` in our index.html
-   * where, in this case, selector is the string 'home'.
-   */
   selector: 'home',  // <home></home>
-  /**
-   * We need to tell Angular's Dependency Injection which providers are in our app.
-   */
-  providers: [
-    Title
-  ],
-  /**
-   * Our list of styles in our component. We may add more to compose many styles together.
-   */
   styleUrls: [ './home.component.css' ],
-  /**
-   * Every Angular template is first compiled by the browser before Angular runs it's compiler.
-   */
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit {
@@ -40,8 +22,7 @@ export class HomeComponent implements OnInit {
    * TypeScript public modifiers
    */
   constructor(
-    private store: Store<AppState>,
-    private homeActions: HomeActions,
+  // tslint:disable-next-line:no-empty
   ) {}
 
   public ngOnInit() {
@@ -49,11 +30,5 @@ export class HomeComponent implements OnInit {
     /**
      * this.title.getData().subscribe(data => this.data = data);
      */
-  }
-
-  public submitState(value: string) {
-    console.log('submitState', value);
-    this.store.dispatch(this.homeActions.setValue(value));
-    this.localState.value = '';
   }
 }
