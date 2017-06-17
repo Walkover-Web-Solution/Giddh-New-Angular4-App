@@ -22,6 +22,10 @@ import { Store } from '@ngrx/store';
     './app.component.css'
   ],
   template: `
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG"
+       height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <router-outlet></router-outlet>
   `
 })
@@ -30,7 +34,7 @@ export class AppComponent implements OnInit {
   constructor() { }
 
   // tslint:disable-next-line:no-empty
-  public ngOnInit() {}
+  public ngOnInit() { }
 
 }
 
