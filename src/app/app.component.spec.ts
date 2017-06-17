@@ -11,7 +11,7 @@ import { StoreModule } from '@ngrx/store';
 // Load the implementations that should be tested
 import { AppComponent } from './app.component';
 import { rootReducer } from './reducers';
-import { HomeActions } from './home/home.actions';
+import { HomeActions } from './home';
 
 describe(`App`, () => {
   let comp: AppComponent;

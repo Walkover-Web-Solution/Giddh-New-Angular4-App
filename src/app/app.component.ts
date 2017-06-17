@@ -8,8 +8,7 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/take';
-import { HomeState } from './home/home.reducer';
-import { HomeActions } from './home/home.actions';
+import { HomeState, HomeActions } from './home';
 import { AppState } from './reducers/roots';
 import { Store } from '@ngrx/store';
 /**
