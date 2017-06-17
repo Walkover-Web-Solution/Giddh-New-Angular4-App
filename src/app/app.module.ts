@@ -43,12 +43,19 @@ import '../styles/styles.scss';
 import '../styles/headings.css';
 import { ServiceModule } from './services/service.module';
 import { NoContentComponent } from './no-content/no-content.component';
+import { SharedModule } from './shared/shared.module';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
   { provide: APP_BASE_HREF, useValue: '/' }
 ];
+
+const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+
+};
 
 interface InternalStateType {
   [key: string]: any;
@@ -89,9 +96,11 @@ if (ENV === 'development') {
     AboutModule,
     HomeModule,
     LoginModule,
+    SharedModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
+    PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ...CONDITIONAL_IMPORTS
   ],
