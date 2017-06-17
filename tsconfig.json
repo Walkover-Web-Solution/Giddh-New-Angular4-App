@@ -33,7 +33,8 @@
     "node_modules",
     "dist",
     "dev",
-    "node_modules_electron"
+    "node_modules_electron",
+    "packages"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,

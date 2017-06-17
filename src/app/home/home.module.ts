@@ -6,24 +6,20 @@ import { RouterModule } from '@angular/router';
 
 import { HomeRoutingModule } from './home.routing.module';
 import { HomeComponent } from './home.component';
-import { ChildHomeComponent } from './components';
-import { TranslateModule } from 'ng2-translate';
 
 console.log('`Home` bundle loaded asynchronously');
 
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
-    HomeComponent,
-    ChildHomeComponent
+    HomeComponent
   ],
   exports: [HomeComponent],
-  providers: [HomeActions],
+  providers: [],
   imports: [
     CommonModule,
     FormsModule,
     HomeRoutingModule,
-    TranslateModule
   ],
 })
 export class HomeModule {
