@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { HomeActions } from './home.actions';
+import { HomeActions } from './../actions/home.actions';
 
 export interface HomeState {
   value?: string;

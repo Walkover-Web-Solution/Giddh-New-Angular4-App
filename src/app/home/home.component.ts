@@ -1,13 +1,12 @@
 
 import { Store } from '@ngrx/store';
-import { HomeActions } from './home.actions';
+import { HomeActions } from './actions/home.actions';
 import {
   Component,
   OnInit
 } from '@angular/core';
 
 import { Title } from './title';
-import { XLargeDirective } from './x-large';
 import { AppState } from '../reducers/roots';
 
 @Component({
@@ -43,7 +42,6 @@ export class HomeComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private homeActions: HomeActions,
-    public title: Title
   ) {}
 
   public ngOnInit() {

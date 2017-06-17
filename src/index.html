@@ -10,6 +10,14 @@
    <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
   <!-- base url -->
   <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+
+  <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/bootstrap.css" rel="stylesheet">
+  <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/font-awesome.css" rel="stylesheet">
+  <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/style-1.css" rel="stylesheet">
+  <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/style-2.css" rel="stylesheet">
+  <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/fjala.css" rel="stylesheet">
+  <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/new-style.css" rel="stylesheet">
+
   <% } %>
   <% if (webpackConfig.htmlElements.headTags) { %>
   <!-- Configured Head Tags  -->
