@@ -1,5 +1,5 @@
 import { routerReducer, RouterState } from '@ngrx/router-store';
-import * as fromHome from '../home/home.reducer';
+import * as fromHome from '../home/reducers/home.reducer';
 
 export interface AppState {
   router: RouterState;

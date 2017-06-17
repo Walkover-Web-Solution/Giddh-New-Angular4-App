@@ -1,3 +1,5 @@
+import { HomeActions } from './home/actions/home.actions';
+
 import { AppState } from './reducers/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
@@ -33,11 +35,11 @@ import { rootReducer } from './reducers';
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-import { HomeComponent } from './home';
-import { HomeActions } from './home/home.actions';
-import { AboutComponent } from './about';
-import { NoContentComponent } from './no-content';
-import { XLargeDirective } from './home/x-large';
+
+import { PageComponent } from './page.component';
+import { AboutModule } from './about';
+import { HomeModule } from './home';
+import { LoginModule } from './login';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
@@ -75,10 +77,6 @@ if (ENV === 'development') {
   bootstrap: [ AppComponent ],
   declarations: [
     AppComponent,
-    AboutComponent,
-    HomeComponent,
-    NoContentComponent,
-    XLargeDirective
   ],
   /**
    * Import Angular's modules.
@@ -87,6 +85,10 @@ if (ENV === 'development') {
     BrowserModule,
     FormsModule,
     HttpModule,
+    PageComponent,
+    AboutModule,
+    HomeModule,
+    LoginModule,
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
