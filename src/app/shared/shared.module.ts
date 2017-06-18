@@ -5,6 +5,7 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar/dist';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,9 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar/dist';
   ],
   imports: [
     CommonModule,
-    PerfectScrollbarModule
+    RouterModule,
+    PerfectScrollbarModule,
+    NgbModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent]
 })
