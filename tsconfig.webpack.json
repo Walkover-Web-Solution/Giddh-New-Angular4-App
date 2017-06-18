@@ -30,7 +30,8 @@
     "src/**/*.spec.ts",
     "src/**/*.e2e.ts",
     "node_modules_electron",
-    "packages"
+    "packages",
+    "dev"
   ],
   "awesomeTypescriptLoaderOptions": {
     "forkChecker": true,
