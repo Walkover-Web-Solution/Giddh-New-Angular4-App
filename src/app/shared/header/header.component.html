@@ -1,196 +1,192 @@
 <!-- super loader -->
-  <div class="load-bar-wrap">
+<div class="load-bar-wrap">
     <div class="load-bar">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
     </div>
-  </div>
-  <!-- end of super loader -->
+</div>
+<!-- end of super loader -->
 
-  <header class="clearfix">
+<header class="clearfix">
     <div class="container-fluid">
-      <nav class="navbar navbar-inverse">
-        <ul class="nav navbar-nav">
-          <li class="hamburger_menu" style="margin-left:-15px;">
-            <a href id="page-dropdown" uib-dropdown-toggle>
-            <i class="glyphicon glyphicon-menu-hamburger"></i>
-          </a>
-            <ul id="topMenusBar" class="dropdown-menu" aria-labelledby="page-dropdown">
-              <li>
-                <div>
-                  <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
-                    <ul class="dshUl clearfix list-inline">
-                      <li class="dmLi trialB">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Dashboard</div>
-                              <div class="subTitle">Your <b>Company Summary</b> at one place.</div>
+        <nav class="navbar navbar-inverse">
+            <ul class="nav navbar-nav">
+                <li class="hamburger_menu" ngbDropdown style="margin-left:-15px;">
+                    <a ngbDropdownToggle id="page-dropdown" (click)="false">
+                        <i class="glyphicon glyphicon-menu-hamburger"></i>
+                    </a>
+                    <ul id="topMenusBar" role="menu" class="dropdown-menu">
+                        <li>
+                            <div>
+                                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
+                                    <ul class="dshUl clearfix list-inline">
+                                        <li class="dmLi trialB">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Dashboard</div>
+                                                        <div class="subTitle">Your <b>Company Summary</b> at one place.</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi trialB">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Settings</div>
+                                                        <div class="subTitle">Manage your company settings.</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="company.content.tbpl">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">TB/P&amp;L</div>
+                                                        <div class="subTitle">Trial Balance/ Profit and Loss</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Invoice 2.0</div>
+                                                        <div class="subTitle">Generate and Download Invoice/Proforma</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="inventory">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Inventory</div>
+                                                        <div class="subTitle">Manage Inventory</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Recurring Entry</div>
+                                                        <div class="subTitle">Add and Edit Recurring Entries</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="Reports">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Reports</div>
+                                                        <div class="subTitle">Generate and view Business Reports</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="audit-logs">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Audit Logs</div>
+                                                        <div class="subTitle">View all Logs</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="search">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Search</div>
+                                                        <div class="subTitle">View all your creditors</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </perfect-scrollbar>
                             </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi trialB">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Settings</div>
-                              <div class="subTitle">Manage your company settings.</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi" ui-sref="company.content.tbpl">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">TB/P&amp;L</div>
-                              <div class="subTitle">Trial Balance/ Profit and Loss</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Invoice 2.0</div>
-                              <div class="subTitle">Generate and Download Invoice/Proforma</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi" ui-sref="inventory">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Inventory</div>
-                              <div class="subTitle">Manage Inventory</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Recurring Entry</div>
-                              <div class="subTitle">Add and Edit Recurring Entries</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi" ui-sref="Reports">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Reports</div>
-                              <div class="subTitle">Generate and view Business Reports</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi" ui-sref="audit-logs">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Audit Logs</div>
-                              <div class="subTitle">View all Logs</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
-                      <li class="dmLi" ui-sref="search">
-                        <a href="">
-                          <div class="media">
-                            <div class="media-body">
-                              <div class="title">Search</div>
-                              <div class="subTitle">View all your creditors</div>
-                            </div>
-                          </div>
-                        </a>
-                      </li>
+                        </li>
                     </ul>
-                  </perfect-scrollbar>
-                </div>
-              </li>
-            </ul>
-          </li>
+                </li>
 
-          <!-- books search -->
-          <li>
-            <div class="row">
-              <div class="ledger_search form-inline col-xs-12">
+                <!-- books search -->
+                <li>
+                    <div class="row">
+                        <div class="ledger_search form-inline col-xs-12">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <input id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts">
 
-
-
-
-                <div class="form-group">
-                  <div class="input-group">
-                    <input id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts">
-
-
-                    <div class="input-group-addon cp" tooltip-placement="right" uib-tooltip="Expand all">
-                      <span class="icon-plus" aria-hidden="true"></span>
+                                    <div *ngIf="true; else collapseAll" class="input-group-addon cp" ngbTooltip="Expand all" placement="right">
+                                        <span class="icon-plus" aria-hidden="true"></span>
+                                    </div>
+                                    <ng-template #collapseAll>
+                                        <div #collapseAll class="input-group-addon cp" ngbTooltip="Collapse all" placement="right">
+                                            <span class="icon-minus"></span>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="input-group-addon cp" tooltip-placement="right" uib-tooltip="Collapse all">
-                      <span class="icon-minus"></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li>
-            <div>
-              <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1">
+                </li>
+                <li>
+                    <div>
+                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1">
                     <span class="icon-plus" aria-hidden="true"></span> Add & Manage
                 </button>
-            </div>
-          </li>
-        </ul>
-
-        <ul class="nav navbar-nav navbar-right">
-          <li class="company-name" uib-dropdown>
-            <a id="cmpWrp" class="clearfix" uib-dropdown-toggle>
-            <span class="icon-dropdown"></span>
-            <div class="cText">
-              <span class="cName">Ghlabs</span>
-              <span  class="fyear">112312312</span>
-            </div>
-          </a>
-            <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
-              <li class="create-company">
-                <button id="refreshCompanyBtn" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>
-                <button id="createCompanyBtn" class="btn btn-primary btn-sm">Create Company</button>
-              </li>
-              <li style="padding:0px;">
-                <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
-                  <li id="cmp">
-                    <span tooltip-placement="right">ghlabs</span>
-                    <i id="deleteCmp" class="glyphicon glyphicon-trash"></i>
-                  </li>
-                </ul>
-              </li>
+                    </div>
+                </li>
             </ul>
-          </li>
-          <li uib-dropdown tooltip-placement="left">
-            <a href id="user-dropdown" uib-dropdown-toggle>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="company-name" ngbDropdown>
+                    <a id="cmpWrp" (click)="false" class="clearfix" ngbDropdownToggle>
+                        <span class="icon-dropdown"></span>
+                        <div class="cText">
+                            <span class="cName">Ghlabs</span>
+                            <span class="fyear">112312312</span>
+                        </div>
+                    </a>
+                    <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
+                        <li class="create-company">
+                            <button id="refreshCompanyBtn" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>
+                            <button id="createCompanyBtn" class="btn btn-primary btn-sm">Create Company</button>
+                        </li>
+                        <li style="padding:0px;">
+                            <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
+                                <li id="cmp">
+                                    <span tooltip-placement="right">ghlabs</span>
+                                    <i id="deleteCmp" class="glyphicon glyphicon-trash"></i>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li ngbDropdown tooltip-placement="left">
+                    <a href (click)="false" id="user-dropdown" ngbDropdownToggle>
             GA
           </a>
-            <ul class="dropdown-menu" aria-labelledby="user-dropdown">
-              <li><a href="javascript:void(0)">Create Company</a></li>
-              <li><a ui-sref="company.content.user">User Detail</a></li>
-              <li><a href="javascript:void(0)">Run Tour</a></li>
-              <li><a target="_Blank" href="https://docs.giddh.com/">Documentation</a></li>
-              <li><a class="pull-left" href="javascript:void(0)"><span class="pull-left">Switch User</span><span class="on-btn pull-left"></span></a></li>
-              <li role="separator" class="divider" style="width:100%"></li>
-              <li><a href="javascript:void(0)">Logout</a></li>
+                    <ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                        <li><a href="javascript:void(0)">Create Company</a></li>
+                        <li><a ui-sref="company.content.user">User Detail</a></li>
+                        <li><a href="javascript:void(0)">Run Tour</a></li>
+                        <li><a target="_Blank" href="https://docs.giddh.com/">Documentation</a></li>
+                        <li><a class="pull-left" href="javascript:void(0)"><span class="pull-left">Switch User</span><span class="on-btn pull-left"></span></a></li>
+                        <li role="separator" class="divider" style="width:100%"></li>
+                        <li><a href="javascript:void(0)">Logout</a></li>
+                    </ul>
+                </li>
             </ul>
-          </li>
-        </ul>
-      </nav>
+        </nav>
     </div>
-  </header>
+</header>
