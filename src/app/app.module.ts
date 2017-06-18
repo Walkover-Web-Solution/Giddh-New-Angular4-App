@@ -46,6 +46,7 @@ import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -102,7 +103,8 @@ if (ENV === 'development') {
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
-    ...CONDITIONAL_IMPORTS
+    NgbModule.forRoot(),
+        ...CONDITIONAL_IMPORTS
   ],
   /**
    * Expose our Services and Providers into Angular's dependency injection.
