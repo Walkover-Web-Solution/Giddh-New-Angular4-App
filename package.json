@@ -72,7 +72,7 @@
     "start": "npm run server:dev",
     "start:electron": "npm run clean:dev && npm run prep:dev && node ./config/electron-dev",
     "start:main:dev": "webpack --config config/webpack.electron.js --env.live --progress --profile --watch",
-    "build:main:prod": "webpack --config config/webpack.electron.js --env --progress --profile --watch",
+    "build:main:prod": "webpack --config config/webpack.electron.js --env --progress --profile",
     "test": "npm run lint && karma start",
     "tslint": "tslint",
     "typedoc": "typedoc",
