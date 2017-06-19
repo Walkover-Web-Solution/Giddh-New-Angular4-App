@@ -2,6 +2,7 @@ import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'ng2-ui-auth';
 import { ErrorHandlerService } from './../services/errorhandler.service';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
