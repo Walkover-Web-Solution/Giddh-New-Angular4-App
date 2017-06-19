@@ -1,3 +1,18 @@
 {
+  "files.exclude": {
+    "**/.git": true,
+    "**/.svn": true,
+    "**/.hg": true,
+    "**/CVS": true,
+    "**/.DS_Store": true,
+    "dist": true,
+    "dev": true,
+    "node_modules": true,
+    "compiled": true,
+    "packages": true,
+    ".github": true,
+    ".awcache": true,
+    "node_modules_electron": true
+  },
   "typescript.tsdk": "node_modules/typescript/lib/"
 }

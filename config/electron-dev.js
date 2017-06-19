@@ -12,7 +12,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin');
 const spawn = require('child_process').spawn;
 const helpers = require('./helpers');
 
-const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || 'localapp.giddh.com';
 const PORT = process.env.PORT || 3000;
 
 const config = require('./webpack.renderer.dev')({ HMR: true });
@@ -43,7 +43,7 @@ const wdm = webpackDevMiddleware(compiler, {
 app.use(wdm);
 app.use(webpackHotMiddleware(compiler));
 
-const server = app.listen(PORT, 'localhost', serverError => {
+const server = app.listen(PORT, 'localapp.giddh.com', serverError => {
   if (serverError) {
     return console.error(serverError);
   }
@@ -60,7 +60,7 @@ const server = app.listen(PORT, 'localhost', serverError => {
     started = true;
   });
 
-  console.log('Listening at http://localhost:' + PORT);
+  console.log('Listening at http://localapp.giddh.com:' + PORT);
 });
 
 process.on('SIGTERM', () => {
