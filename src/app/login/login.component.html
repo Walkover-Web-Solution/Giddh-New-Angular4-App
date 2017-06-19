@@ -11,9 +11,9 @@
               <p class="lead ">Sign In or register</p>
             </div>
 
-            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="googleAuthenticate()">connect with Google</button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter">connect with Twitter</button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin">connect with LinkedIn</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="loginWithProvider('google')">connect with Google</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" (click)="loginWithProvider('twitter')">connect with Twitter</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="loginWithProvider('linkedin')">connect with LinkedIn</button>
             <button type="login" class="btn sharp btn-block btn-lg btn-login email" (click)="emailVeriFy.show()">connect with Email</button>
 
           </div>
