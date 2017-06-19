@@ -124,16 +124,12 @@
                         <div class="ledger_search form-inline col-xs-12">
                             <div class="form-group">
                                 <div class="input-group">
-                                    <input id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts">
+                                    <input id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts" (blur)="flyAccounts.next(false)" (focus)="flyAccounts.next(true)">
 
-                                    <div *ngIf="true; else collapseAll" class="input-group-addon cp" ngbTooltip="Expand all" placement="right">
-                                        <span class="icon-plus" aria-hidden="true"></span>
+                                    <div (click)="noGroups = !noGroups" class="input-group-addon cp" ngbTooltip="{{ noGroups ? 'Expand All' : 'Collapse all' }}" placement="right">
+                                        <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                                     </div>
-                                    <ng-template #collapseAll>
-                                        <div #collapseAll class="input-group-addon cp" ngbTooltip="Collapse all" placement="right">
-                                            <span class="icon-minus"></span>
-                                        </div>
-                                    </ng-template>
+
                                 </div>
                             </div>
                         </div>
@@ -141,7 +137,7 @@
                 </li>
                 <li>
                     <div>
-                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1">
+                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1" (click)="goToManageGroups()">
                     <span class="icon-plus" aria-hidden="true"></span> Add & Manage
                 </button>
                     </div>
@@ -189,4 +185,5 @@
             </ul>
         </nav>
     </div>
+    <accounts-side-bar [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
