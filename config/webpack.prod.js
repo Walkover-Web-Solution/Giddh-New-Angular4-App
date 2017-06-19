@@ -29,15 +29,17 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-const HOST = process.env.HOST || 'localhost';
+const HOST = process.env.HOST || 'localapp.giddh.com';
 const PORT = process.env.PORT || 8080;
+const AppUrl = 'http://localapp.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
 }).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
-  HMR: false
+  HMR: false,
+  AppUrl: AppUrl
 });
 
 module.exports = function (env) {
@@ -163,10 +165,12 @@ module.exports = function (env) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        'AppUrl': JSON.stringify(METADATA.AppUrl),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
+          'AppUrl': JSON.stringify(METADATA.AppUrl)
         }
       }),
 
