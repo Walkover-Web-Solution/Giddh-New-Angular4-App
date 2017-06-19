@@ -1,7 +1,9 @@
 import { Ng2UiAuthModule, CustomConfig } from 'ng2-ui-auth';
 
 export const Configuration = {
-  AppUrl
+  AppUrl,
+  ApiUrl,
+  isElectron
 };
 export class AuthProviders extends CustomConfig {
   public defaultHeaders = { 'Content-Type': 'application/json' };
