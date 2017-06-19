@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -8,7 +7,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 })
 export class ManageGroupsAccountsComponent implements OnInit {
 
-  constructor(public activeModal: NgbActiveModal) { }
+  constructor() { }
 
   ngOnInit() {
   }

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { NgModule, ApplicationRef } from '@angular/core';
+import { AuthService, AppGlobals } from 'angular2-google-login';
 import {
   removeNgStyles,
   createNewHosts,
@@ -20,6 +21,7 @@ import { StoreModule } from '@ngrx/store';
 import { Store } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { ToastyModule } from 'ng2-toasty';
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -44,12 +46,12 @@ import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' }
+  { provide: APP_BASE_HREF, useValue: '/' },
+  AuthService
 ];
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -92,6 +94,7 @@ if (ENV === 'development') {
     BrowserModule,
     FormsModule,
     HttpModule,
+    Ng2BootstrapModule.forRoot(),
     AboutModule,
     HomeModule,
     LoginModule,
@@ -102,7 +105,6 @@ if (ENV === 'development') {
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
-    NgbModule.forRoot(),
         ...CONDITIONAL_IMPORTS,
     Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS

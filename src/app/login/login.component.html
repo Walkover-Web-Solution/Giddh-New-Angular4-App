@@ -11,10 +11,10 @@
               <p class="lead ">Sign In or register</p>
             </div>
 
-            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="loginWithProvider('google')">connect with Google</button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter"  (click)="loginWithProvider('twitter')">connect with Twitter</button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="loginWithProvider('linkedin')">connect with LinkedIn</button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login email"  >connect with Email</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="googleAuthenticate()">connect with Google</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter">connect with Twitter</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin">connect with LinkedIn</button>
+            <button type="login" class="btn sharp btn-block btn-lg btn-login email" (click)="emailVeriFy.show()">connect with Email</button>
 
           </div>
 
@@ -24,3 +24,34 @@
     </div>
   </div>
 </section>
+<div class="modal fade" tabindex="-1" bsModal #emailVeriFy="bs-modal" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="noBrdRdsModal">
+
+        <div class="modal-header">
+          <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
+          <button type="button" class="close" aria-label="Close"><span
+                aria-hidden="true">&times;</span></button>
+        </div>
+
+
+        <div class="modal-body" style="height:400px">
+          <div ng-if="!verifyMail" class="clearfix form-group form-group-lg pd2">
+
+            <input class="form-control mrT1" ng-model="emailToS" type="email" placeholder="Enter your email address" required>
+            <button ng-disabled="getEmailForm.$invalid" class="btn sharp btn-block btn-success btn-lg mrT1" ng-click="signUpWithEmail(emailToS,false)">Submit</button>
+
+          </div>
+          <div ng-if="false" class="clearfix form-group form-group-lg pd2">
+            <form class="col-xs-12" name="verifyEmailForm" novalidate>
+              <input class="form-control mrT1" ng-model="verificationCode" type="text" placeholder="Enter verification code here" required>
+              <button ng-disabled="verifyEmailForm.$invalid" class="btn sharp btn-block btn-success btn-lg mrT1" ng-click="verifyEmail(emailToS,verificationCode)">Last step to go</button>
+            </form>
+            <a class="pull-right" style="cursor: pointer;" ng-click="signUpWithEmail(emailToVerify,true)">Resend code</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
