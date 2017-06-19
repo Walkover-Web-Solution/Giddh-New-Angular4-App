@@ -126,7 +126,7 @@
                                 <div class="input-group">
                                     <input id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts" (blur)="flyAccounts.next(false)" (focus)="flyAccounts.next(true)">
 
-                                    <div (click)="noGroups = !noGroups" class="input-group-addon cp" ngbTooltip="{{ noGroups ? 'Expand All' : 'Collapse all' }}" placement="right">
+                                    <div (click)="noGroups = !noGroups" class="input-group-addon cp" placement="right">
                                         <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                                     </div>
 

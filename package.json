@@ -90,7 +90,6 @@
   },
   "dependencies": {
     "electron-devtools-installer": "^2.2.0",
-    "ngx-perfect-scrollbar": "^4.4.0",
     "rxjs": "~5.4.1"
   },
   "devDependencies": {
@@ -121,6 +120,7 @@
     "@types/webdriverio": "^4.7.0",
     "@types/webpack": "^2.2.15",
     "add-asset-html-webpack-plugin": "^2.0.1",
+    "angular2-google-login": "^1.0.9",
     "angular2-template-loader": "^0.6.2",
     "assets-webpack-plugin": "^3.5.1",
     "awesome-typescript-loader": "~3.1.3",
@@ -166,6 +166,8 @@
     "ngc-webpack": "~2.0.0",
     "ngrx-store-freeze": "^0.1.9",
     "ngrx-store-logger": "^0.1.8",
+    "ngx-bootstrap": "^1.7.1",
+    "ngx-perfect-scrollbar": "^4.4.0",
     "node-sass": "^4.5.3",
     "npm-run-all": "^4.0.2",
     "optimize-js-plugin": "0.0.4",

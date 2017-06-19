@@ -24,7 +24,7 @@
                                     <a ng-bind-html="value.groupName | highlight: search.acnt" class="ellp max250"></a>
                                 </div>
                                 <ul class="accBox subAccBox" ng-show="value.open || value.groupUniqueName === selectedGroupUname" id="ul_{{value.groupUniqueName}}">
-                                    <li class="inrPrnt" ng-repeat="(index,accDtl) in value.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top" ngbTooltip="{{accDtl.uniqueName}}">
+                                    <li class="inrPrnt" ng-repeat="(index,accDtl) in value.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top" >
                                         <a ng-click="setLedgerData(value, accDtl);" ng-class="{'active': accDtl.uniqueName === selectedAccountUniqueName}" ui-sref="company.content.ledgerContent({unqName:accDtl.uniqueName})">
                                             <div class="clearfix">
                                                 <i ng-class="accDtl.charId == 1 ? 'smlSquare LIB' : 'smlSquare ASS'"></i>

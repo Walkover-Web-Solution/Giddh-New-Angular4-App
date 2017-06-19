@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { HomeRoutingModule } from './home.routing.module';
 import { HomeComponent } from './home.component';
 
@@ -20,6 +20,7 @@ console.log('`Home` bundle loaded asynchronously');
     CommonModule,
     FormsModule,
     HomeRoutingModule,
+    Ng2BootstrapModule.forRoot()
   ],
 })
 export class HomeModule {
