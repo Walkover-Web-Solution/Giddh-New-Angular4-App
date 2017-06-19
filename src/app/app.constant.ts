@@ -8,18 +8,12 @@ export class AuthProviders extends CustomConfig {
   public providers = {
     google: {
       clientId: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-      url: Configuration.AppUrl + '/auth/google'
-    },
+   },
     twitter: {
       clientId: 'w64afk3ZflEsdFxd6jyB9wt5j'
     },
     linkedin: {
       clientId: '75urm0g3386r26',
-      type: '2.0',
-      popupOptions: {
-        width: 527,
-        height: 582
-      }
     }
   };
 }
