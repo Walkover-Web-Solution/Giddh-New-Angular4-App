@@ -1,5 +1,8 @@
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs/Rx';
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { ManageGroupsAccountsComponent } from './components/';
 
 @Component({
   selector: 'app-header',
@@ -9,15 +12,22 @@ import { Observable } from 'rxjs/Observable';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   public title: Observable<string>;
+  public flyAccounts: Subject<boolean>= new Subject<boolean>();
+  public noGroups: boolean;
   public languages: any[] = [{ name: 'ENGLISH', value: 'en' }, { name: 'DUTCH', value: 'nl' }];
 
   /**
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor(private modalService: NgbModal) { }
   // tslint:disable-next-line:no-empty
   public ngOnInit() { }
   // tslint:disable-next-line:no-empty
   public ngAfterViewInit() { }
+
+  public goToManageGroups() {
+    const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
+    modalRef.componentInstance.name = 'ManageGroups';
+  }
 }
