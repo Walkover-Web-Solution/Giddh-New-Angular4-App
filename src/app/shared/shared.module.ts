@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule } from '@angular/router';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
+
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar/dist';
 import { ManageGroupsAccountsComponent, AccountsSideBarComponent } from './header/components';
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,7 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent } from './heade
     CommonModule,
     RouterModule,
     PerfectScrollbarModule,
-    NgbModule
+    Ng2BootstrapModule.forRoot()
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent],
   entryComponents: [ManageGroupsAccountsComponent]

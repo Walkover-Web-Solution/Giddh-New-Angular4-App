@@ -20,14 +20,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor(private modalService: NgbModal) { }
+  constructor() { }
   // tslint:disable-next-line:no-empty
   public ngOnInit() { }
   // tslint:disable-next-line:no-empty
   public ngAfterViewInit() { }
 
   public goToManageGroups() {
-    const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
-    modalRef.componentInstance.name = 'ManageGroups';
+    // const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
+    // modalRef.componentInstance.name = 'ManageGroups';
   }
 }
