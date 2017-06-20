@@ -7,13 +7,17 @@ import { Company } from '../../models/api-models/Company';
  */
 export interface CurrentCompanyState {
   company?: Company;
+  activeCompany?: Company;
+  isRefreshing: boolean;
 }
 
 /**
  * Setting the InitialState for this Reducer's Store
  */
 const initialState: CurrentCompanyState = {
-  company: null
+  company: null,
+  activeCompany: null,
+  isRefreshing: false
 };
 
 export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: Action) => {
@@ -23,9 +27,17 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
       return Object.assign({}, state, {
         isLoginWithEmailInProcess: false
       });
-      case 'CATCH_ERROR':
-        console.log(action.payload);
-        return;
+    case 'CATCH_ERROR':
+      console.log(action.payload);
+      return;
+    case CompanyActions.REFRESH_COMPANIES:
+      return Object.assign({}, state, {
+        isRefreshing: true
+      });
+    case CompanyActions.REFRESH_COMPANIES_RESPONSE:
+      return Object.assign({}, state, {
+        isRefreshing: false
+      });
     default:
       return state;
   }
