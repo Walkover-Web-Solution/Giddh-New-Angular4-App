@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 
 import { AboutRoutingModule } from './about.routing.module';
 import { AboutComponent } from './about.component';
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
+
 
 console.log('`About` bundle loaded asynchronously');
 
@@ -17,7 +19,8 @@ console.log('`About` bundle loaded asynchronously');
   imports: [
     CommonModule,
     FormsModule,
-    AboutRoutingModule
+    AboutRoutingModule,
+    Ng2BootstrapModule.forRoot()
   ],
 })
 export class AboutModule {

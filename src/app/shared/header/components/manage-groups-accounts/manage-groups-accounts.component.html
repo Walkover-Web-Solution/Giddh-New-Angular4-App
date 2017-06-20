@@ -1,0 +1,151 @@
+<div id="shareModal">
+<div id="getGroupModal">
+
+    <div class="modal-header themeBg pd2 pdL2 pdR2">
+        <button type="button" class="close" data-dismiss="modal" (click)="closePopupEvent()"  aria-label="Close"><span
+        aria-hidden="true">&times;</span></button>
+        <h3 class="modal-title">Manage Groups &amp; Accounts</h3>
+    </div>
+    <!-- end header -->
+
+    <div class="modal-body pd0">
+        <div class="clearfix">
+
+            <div class="col-xs-3  greyBg">
+                <div>
+
+                    <div class="mrT1 mrB1 form-inline">
+                        <div class="form-group">
+
+                            <div class="input-group">
+
+                                <div class="input-group-addon">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </div>
+
+                                <input type="text" name="grpSrch" class="form-control" ng-model="keyWord" placeholder="Search groups" ng-keyup="setScrollToTop(grpSrch, 'addMngGrpScrBar')" trial-accordion="search" ng-model-options="{debounce:1000}">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- searchbar end -->
+                    <div class="search-loading" ng-hide="showListGroupsNow">
+                        <span class="spinner small"></span> Loading…
+                    </div>
+
+                    <!--<perfect-scrollbar id="addMngGrpScrBar" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" suppressScrollX="false" useBothWheelAxes="false" suppressScrollY="true">
+                        <div *ngIf="showListGroupsNow">
+                            <div class="clearfix add-manage-grouplist">
+
+                                <section class="row row-1" ng-repeat="grp in groupList | orderBy: 'category' | grpsrch:keyWord" ng-class="grp.category">
+                                    <div class="" trial-accordion>
+                                        <div class="col-xs-12 group" ng-if="grp.isVisible"><span id="grp_{{grp.name}}" ng-bind-html="grp.name | uppercase" ng-click="selectItem(grp)" tooltip-placement="right"></span></div>
+                                    </div>
+                                    <section class="subGroups isHidden" ng-if="grp.groups.length">
+                                        <div ng-include="'childGroupList'"></div>
+                                    </section>
+                                </section>
+                            </div>
+                        </div>
+                    </perfect-scrollbar>-->
+                </div>
+            </div>
+            <!--<script type="text/ng-template" id="childGroupList">
+                <section class="row row-2" ng-repeat="grp in grp.groups">
+                    <div class="row" trial-accordion>
+                        <div class="col-xs-12 group" ng-style="{'padding-left':padLeft + 10}" ng-if="grp.isVisible"><span id="subGrp_{{grp.name}}" ng-bind-html="grp.name | capitalize" ng-click="selectItem(grp)" tooltip-placement="right"></span></div>
+                    </div>
+                    <section class="subGroups isHidden" ng-if="grp.groups.length" ng-style="{'padding-left':padLeft + 10}">
+                        <div ng-include="'childGroupList'"></div>
+                    </section>
+                </section>
+            </script>-->
+
+            <!-- middle body -->
+            <!--<div class="col-xs-7  pos-rel">
+                <div class="bdrR bdrL row " id="middleBody">
+
+                    <div ng-if="showGroupDetails" ng-include="'/public/webapp/ManageGroupsAndAccounts/groupOperations.html'"></div>
+
+                    <div ng-include="'/public/webapp/ManageGroupsAndAccounts/accountOperations.html'" ng-if="showAccountDetails"></div>
+
+                </div>
+
+                <div class="scroll-btn text-center" scroll-btn ng-if="showAccountDetails || showGroupDetails">
+                    <i class="glyphicon glyphicon-chevron-down" style="vertical-align: sub;color: #fff;"></i>
+                </div>
+            </div>-->
+
+            <!-- right side -->
+            <!--<div class="col-xs-2" id="right">
+                <div class="row pr">
+
+                    <div class="form-group pdL1 pdT1 pdR1">
+                        <div class="input-group">
+                            <div class="input-group-addon">
+                                <i class="glyphicon glyphicon-search"></i>
+                            </div>
+                            <input type="text" name="accountsSearch" ng-model="search.flataccount" class="form-control" placeholder="Search accounts" ng-change="searchAccountsC5(search.flataccount)" ng-model-options="{debounce:1000}">
+                        </div>
+                    </div>
+
+                    <section class="pr" style="height: 378px">
+                        <div class="search-loading" ng-hide="showAccountListDetails || showListGroupsNow || fltAccntListcount5.length > 0">
+                            <span class="spinner small"></span> Loading…
+                        </div>
+                        <div ng-if="showAccountListDetails" ng-hide="search.flataccount.length > 2">
+
+                            <div class="pdL1 pdR1 mrB1" ng-if="groupAccntList.length == 0">
+                                <h4 class="list-group-item-heading small">Oops, there are no accounts in <strong>{{selectedGroup.name}}</strong>
+                                </h4>
+
+                                <div class="mrB1 mrT1" ng-show="canAdd && !selectedGroup.fixed || canAdd && selectedGroup.fixed && !selectedGroup.isTopLevel">
+                                    <button class="btn btn-success btn-block" ng-click="addNewAccountShow(selectedGroup)" href="javascript:void(0)">+ Add New
+                  </button>
+                                </div>
+                            </div>
+
+                            <div ng-hide="groupAccntList.length == 0">
+
+                                <h3 class="mrB1 mrL1 small">Accounts from <strong>{{selectedGroup.name}}</strong></h3>
+
+                                <div class="mrB1 mrT1 pdL1 pdR1" ng-show="canAdd && !selectedGroup.fixed || canAdd && selectedGroup.fixed && !selectedGroup.isTopLevel">
+                                    <button class="btn btn-success btn-block" ng-click="addNewAccountShow(selectedGroup)" href="javascript:void(0)">+ Add New
+                  </button>
+                                </div>
+
+                                <perfect-scrollbar id="selAcntWrap" class="scrClass acntListDiv" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" ng-class="{'minimizeBoth': accountsSearch.length > 0}">
+                                    <div class="list-group">
+                                        <a ng-repeat="(key,value) in groupAccntList | filter:accountsSearch track by $index" href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item" ng-class="{'active': selectedAccntMenu === value}">
+                                            <h4 tooltip-placement="bottom" class="list-group-item-heading" ng-bind-html="value.name | highlight: accountsSearch"></h4>
+                                        </a>
+                                    </div>
+                                </perfect-scrollbar>
+                            </div>
+                        </div>
+
+                        <div ng-if="search.flataccount.length > 0 || isEmptyObject(selectedGroup)">
+                            <h3 class="mrB1 mrL1 small">Accounts from <strong>all group</strong></h3>
+                            <perfect-scrollbar id="allAcntWrap" class="scrClass acntListDiv" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" ng-class="{'minimizeBoth': accountsSearch.length > 0}">
+                                <div class="list-group">
+                                    <a ng-repeat="value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName" href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item" ng-class="{'active': selectedAccntMenu === value}">
+                                        <h4 tooltip-placement="bottom" class="list-group-item-heading ellp max200" ng-bind-html="value.name | highlight: accountsSearch"></h4>
+                                    </a>
+                                </div>
+
+                                <a href="javascript:void(0)" class="load-more pull-left" ng-click="loadMoreAcc(selectedCompany.uniqueName, search.flataccount)" ng-if="flatAccListC5.currentPage < flatAccListC5.totalPages">Load More</a>
+                            </perfect-scrollbar>
+                        </div>
+
+                    </section>
+
+                </div>
+            </div>-->
+            <!-- right side end -->
+        </div>
+
+    </div>
+    <!-- end modal body -->
+
+
+</div>
+</div>
