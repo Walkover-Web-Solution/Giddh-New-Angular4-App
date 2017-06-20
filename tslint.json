@@ -75,6 +75,9 @@
     "align": [
       "parameters",
       "statements"
+    ],
+    "max-classes-per-file": [
+      false
     ]
   }
 }
