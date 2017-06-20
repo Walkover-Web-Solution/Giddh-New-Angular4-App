@@ -5,10 +5,11 @@ import * as fromLogin from './authentication/authentication.reducer';
 export interface AppState {
   router: RouterState;
   home: fromHome.HomeState;
+  login: fromLogin.AuthenticationState;
 }
 
 export const reducers = {
   router: routerReducer,
   home: fromHome.homeReducer,
-  authentication: fromLogin.AuthenticationReducer
+  login: fromLogin.AuthenticationReducer
 };

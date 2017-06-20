@@ -29,6 +29,17 @@ module.exports = {
     { rel: 'apple-touch-icon', sizes: '180x180', href: '/assets/icon/apple-icon-180x180.png' },
 
     /**
+     * <link> tags for css.
+     */
+    { rel: 'stylesheet', href: '/assets/css/bootstrap.css' },
+    { rel: 'stylesheet', href: '/assets/css/font-awesome.css' },
+    { rel: 'stylesheet', href: '/assets/css/style-1.css' },
+    { rel: 'stylesheet', href: '/assets/css/style-2.css' },
+    { rel: 'stylesheet', href: '/assets/css/fjala.css' },
+    { rel: 'stylesheet', href: '/assets/css/new-style.css' },
+
+
+    /**
      * <link> tags for android web app icons
      */
     { rel: 'icon', type: 'image/png', sizes: '192x192', href: '/assets/icon/android-icon-192x192.png' },
