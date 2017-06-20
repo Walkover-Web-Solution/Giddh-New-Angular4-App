@@ -37,6 +37,7 @@ module.exports = {
     { rel: 'stylesheet', href: '/assets/css/style-2.css' },
     { rel: 'stylesheet', href: '/assets/css/fjala.css' },
     { rel: 'stylesheet', href: '/assets/css/new-style.css' },
+    { rel: 'stylesheet', href: '/assets/css/ladda.min.css' },
 
 
     /**
