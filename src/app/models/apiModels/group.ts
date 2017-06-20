@@ -1,18 +1,15 @@
-import { IUserInfo } from './userInfo.interface';
+import { INameUniqueName } from '../../interfaces/nameUniqueName.interface';
+import { IUserInfo } from '../../interfaces/userInfo.interface';
+import { ICreateGroup } from '../../interfaces/groupCreate.interface';
 
-interface InameUniqueName {
-  uniqueName: string;
-  name: string;
-}
-
-export class Group {
-  public applicableTaxes: InameUniqueName[];
+export class Group implements ICreateGroup {
+  public applicableTaxes: INameUniqueName[];
   public description?: string;
   public fixed: boolean;
-  public groups: Group[];
+  public groups: ICreateGroup[];
   public hsnNumber?: string;
   public name: string;
-  public role: InameUniqueName;
+  public role: INameUniqueName;
   public ssnNumber?: string;
   public synonyms?: string;
   public uniqueName: string;
@@ -21,8 +18,8 @@ export class Group {
   public updatedAt: string;
   public updatedBy: IUserInfo;
 
-  constructor(applicableTaxes: InameUniqueName[], description: string, fixed: boolean,
-              groups: Group[], hsnNumber: string, name: string, role: InameUniqueName,
+  constructor(applicableTaxes: INameUniqueName[], description: string, fixed: boolean,
+              groups: ICreateGroup[], hsnNumber: string, name: string, role: INameUniqueName,
               ssnNumber: string, synonyms: string, uniqueName: string, createdAt: string,
               createdBy: IUserInfo, updatedAt: string, updatedBy: IUserInfo) {
 

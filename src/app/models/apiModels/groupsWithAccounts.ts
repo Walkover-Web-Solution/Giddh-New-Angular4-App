@@ -1,20 +1,16 @@
-interface IAccountsInfo {
-  uniqueName: string;
-  stocks?: any[];
-  mergedAccounts: string;
-  name: string;
-}
+import { IAccountsInfo } from '../../interfaces/accountInfo.interface';
+import { IGroupsWithAccounts } from '../../interfaces/groupsWithAccounts.interface';
 
-export class GroupsWithAccounts {
+export class GroupsWithAccounts implements IGroupsWithAccounts {
   public synonyms: string;
   public accounts: IAccountsInfo[];
   public name: string;
   public uniqueName: string;
   public category: string;
-  public groups: GroupsWithAccounts[];
+  public groups: IGroupsWithAccounts[];
 
   constructor(synonyms: string, accounts: IAccountsInfo[], name: string, uniqueName: string,
-              category: string, groups: GroupsWithAccounts[]) {
+              category: string, groups: IGroupsWithAccounts[]) {
     this.synonyms = synonyms;
     this.accounts = accounts;
     this.name = name;
