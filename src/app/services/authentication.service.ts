@@ -21,10 +21,10 @@ export class AuthenticationService {
   }
 
   public SignupWithEmail(email: string): Observable<Response> {
-    return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
+    return this._http.post('http://api.giddh.com/states', { email }).map((res) => {
       return res;
     }).catch((e) => {
-      return Observable.throw(e);
+      return new Observable<Response>((o) => { o.next(e); });
     });
   }
 
