@@ -27,7 +27,7 @@ export class LoginActions {
         });
       } else {
         return this.SignupWithEmailResponce({
-          status: 'error', body: 'Verification Code Sent Successfully.', code: 'INVALID_EMAIL'
+          status: 'error', body: 'The email: abc@gmail.con is invalid.', code: 'INVALID_EMAIL'
         });
       }
     });

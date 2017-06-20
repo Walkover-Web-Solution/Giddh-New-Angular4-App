@@ -46,7 +46,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       }
       if (action.payload.status === 'error') {
         return Object.assign({}, state, {
-          isLoginWithEmailSubmited: true,
+          isLoginWithEmailSubmited: false,
           isLoginWithEmailInProcess: false
         });
       }
