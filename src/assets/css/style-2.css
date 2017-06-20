@@ -2110,7 +2110,7 @@ select.form-control {
 
 
 .modal-header h3{
-  color:#fff;
+  /* color:#fff; */
 }
 
 .width55{
@@ -2255,7 +2255,7 @@ select.form-control {
 .view_forms {
     float: left;
     width: 100%;
-    overflow-y: scroll; 
+    overflow-y: scroll;
     height: 100%;
     min-height: 550px;
 }
@@ -2313,7 +2313,7 @@ label {
     font-size: 14px;
     color: #808080;
 }
-.btn-add { 
+.btn-add {
     display: inline-block !important;
     color: #d25f29 !important;
 }
@@ -2322,7 +2322,7 @@ label {
     color: #fff !important;
 }
 .ledger-panel .bdrB {
-    border-bottom: 1px solid #bababa;   
+    border-bottom: 1px solid #bababa;
 }
 .pop-panel .ui-select-toggle{
     min-width: 100px !important;
@@ -2511,7 +2511,7 @@ label {
 .view_forms {
     float: left;
     width: 100%;
-    overflow-y: scroll; 
+    overflow-y: scroll;
     height: 100%;
     min-height: 550px;
 }
@@ -2569,7 +2569,7 @@ label {
     font-size: 14px;
     color: #808080;
 }
-.btn-add { 
+.btn-add {
     display: inline-block !important;
     color: #d25f29 !important;
 }
@@ -2578,7 +2578,7 @@ label {
     color: #fff !important;
 }
 .ledger-panel .bdrB {
-    border-bottom: 1px solid #bababa;   
+    border-bottom: 1px solid #bababa;
 }
 .pop-panel .ui-select-toggle{
     min-width: 100px !important;
