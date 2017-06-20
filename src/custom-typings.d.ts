@@ -61,6 +61,8 @@ declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
 declare var AppUrl: string;
+declare var ApiUrl: string;
+declare var isElectron: boolean;
 
 interface SystemJS {
   import: (path?: string) => Promise<any>;
@@ -72,6 +74,8 @@ interface GlobalEnvironment {
   SystemJS: SystemJS;
   System: SystemJS;
   AppUrl: string;
+  ApiUrl: string;
+  isElectron: boolean;
 }
 
 interface Es6PromiseLoader {
@@ -83,15 +87,15 @@ type FactoryPromise = () => Promise<any>;
 
 type AsyncRoutes = {
   [component: string]: Es6PromiseLoader |
-                               Function |
-                FactoryEs6PromiseLoader |
-                         FactoryPromise ;
+  Function |
+  FactoryEs6PromiseLoader |
+  FactoryPromise;
 };
 
 type IdleCallbacks = Es6PromiseLoader |
-                             Function |
-              FactoryEs6PromiseLoader |
-                       FactoryPromise ;
+  Function |
+  FactoryEs6PromiseLoader |
+  FactoryPromise;
 
 interface WebpackModule {
   hot: {
@@ -110,14 +114,14 @@ interface WebpackModule {
 }
 
 interface WebpackRequire {
-    (id: string): any;
-    (paths: string[], callback: (...modules: any[]) => void): void;
-    ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
-    context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
+  (id: string): any;
+  (paths: string[], callback: (...modules: any[]) => void): void;
+  ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
+  context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
 }
 
 interface WebpackContext extends WebpackRequire {
-    keys(): string[];
+  keys(): string[];
 }
 
 interface ErrorStackTraceLimit {
@@ -125,8 +129,15 @@ interface ErrorStackTraceLimit {
 }
 
 // Extend typings
-interface NodeRequire extends WebpackRequire {}
-interface ErrorConstructor extends ErrorStackTraceLimit {}
-interface NodeRequireFunction extends Es6PromiseLoader  {}
-interface NodeModule extends WebpackModule {}
-interface Global extends GlobalEnvironment  {}
+interface NodeRequire extends WebpackRequire { }
+interface ErrorConstructor extends ErrorStackTraceLimit { }
+interface NodeRequireFunction extends Es6PromiseLoader { }
+interface NodeModule extends WebpackModule { }
+interface Global extends GlobalEnvironment { }
+
+
+
+
+
+
+
