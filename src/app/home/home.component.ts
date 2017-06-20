@@ -1,12 +1,14 @@
+import { Company } from './../models/api-models/Company';
+import { CompanyActions } from './../services/actions/company.actions';
+import { Actions } from '@ngrx/effects';
 
 import { Store } from '@ngrx/store';
 import { HomeActions } from './actions/home.actions';
+import { AppState } from '../store/roots';
 import {
   Component,
   OnInit
 } from '@angular/core';
-
-import { AppState } from '../reducers/roots';
 
 @Component({
   selector: 'home',  // <home></home>
@@ -22,8 +24,11 @@ export class HomeComponent implements OnInit {
    * TypeScript public modifiers
    */
   constructor(
-  // tslint:disable-next-line:no-empty
+    private store: Store<AppState>,
+    private companyActions: CompanyActions
   ) {
+    let company = new Company();
+    this.store.dispatch(this.companyActions.CreateCompany(company));
   }
 
   public ngOnInit() {

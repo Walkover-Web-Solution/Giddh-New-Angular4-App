@@ -16,7 +16,10 @@ import { ToasterService } from './toaster.service';
  */
 
 import { HomeActions } from './actions/home.actions';
+import { SharedModule } from '../shared/shared.module';
+import { CompanyActions } from './actions/company.actions';
 import { LoginActions } from './actions/login.action';
+import { CompanyService } from './companyService.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -24,6 +27,8 @@ import { LoginActions } from './actions/login.action';
 
 @NgModule({
   imports: [CommonModule, RouterModule,
+    SharedModule.forRoot(),
+    EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions)],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -37,7 +42,8 @@ export class ServiceModule {
         HttpWrapperService,
         AuthenticationService,
         ErrorHandlerService,
-        ToasterService
+        ToasterService,
+        CompanyService
       ]
     };
   }
