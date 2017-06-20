@@ -1,21 +1,22 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { Action, ActionReducer } from '@ngrx/store';
+import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
+import { BaseResponse } from "../../models/api-models/BaseResponse";
 
 /**
  * Keeping Track of the AuthenticationState
  */
 export interface AuthenticationState {
-  isLoginWithEmailSubmited: boolean;
+  isVerifyEmailSuccess: boolean;
   isLoginWithMobileInProcess: boolean; // if true then We are checking with
   isVerifyMobileInProcess: boolean;
+  isLoginWithEmailSubmited: boolean;
   isLoginWithEmailInProcess: boolean;
   isVerifyEmailInProcess: boolean;
   isLoginWithGoogleInProcess: boolean;
   isLoginWithLinkedInInProcess: boolean;
   isLoginWithTwitterInProcess: boolean;
-  user: object;                   // current user | null
-  error?: object;                 // if an error occurred | null
-
+  user?: VerifyEmailResponseModel;                   // current user | null
 }
 
 /**
@@ -30,7 +31,7 @@ const initialState = {
   isLoginWithLinkedInInProcess: false,
   isLoginWithTwitterInProcess: false,
   isLoginWithEmailSubmited: false,
-  user: null                   // current user | null
+  isVerifyEmailSuccess: false
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -45,7 +46,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       }
       if (action.payload.status === 'error') {
         return Object.assign({}, state, {
-          isLoginWithEmailSubmited: true,
+          isLoginWithEmailSubmited: false,
           isLoginWithEmailInProcess: false
         });
       }
@@ -53,6 +54,27 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       return Object.assign({}, state, {
         isLoginWithEmailInProcess: true
       });
+
+    case LoginActions.VerifyEmailRequest:
+      return Object.assign({}, state, {
+        isVerifyEmailInProcess: true
+      });
+
+    case LoginActions.VerifyEmailResponce:
+      let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body,
+          isVerifyEmailInProcess: false,
+          isVerifyEmailSuccess: true
+        });
+      } else {
+        return Object.assign({}, state, {
+          user: null,
+          isVerifyEmailInProcess: false,
+          isVerifyEmailSuccess: false
+        });
+      }
     default:
       return state;
   }
