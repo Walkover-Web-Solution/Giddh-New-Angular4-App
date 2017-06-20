@@ -19,18 +19,12 @@ export class LoginActions {
     .switchMap(action => this.auth.SignupWithEmail(action.payload))
     .debug('data received via the HTTP request')
     .map(response => this.SignupWithEmailResponce(response));
+
   constructor(private actions$: Actions, private auth: AuthenticationService) {
 
   }
 
-  public setValue(value: string): Action {
-    return {
-      type: LoginActions.SignupWithEmail,
-      payload: value
-    };
-  }
-
-  public SignupWithEmailResponce(value: any): Action {
+  public SignupWithEmailResponce(value: Response): Action {
     return {
       type: LoginActions.SignupWithEmailResponce,
       payload: value
