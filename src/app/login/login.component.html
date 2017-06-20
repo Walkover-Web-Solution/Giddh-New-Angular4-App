@@ -93,7 +93,7 @@
           <div class="clearfix form-group form-group-lg pd2">
 
             <input class="form-control mrT1" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required>
-             <button class="btn btn-secondary mrT10 mrR10"(click)="getOtp()" [ladda]="isLoginWithMobileInProcess$ | async"
+             <button class="btn btn-secondary mrT10 mrR10" (click)="getOtp()" [ladda]="isLoginWithMobileInProcess$ | async"
              [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ | async) ? 'Get Otp' : 'Resend' }}</button>
             <button class="btn btn-default mrT10" (click)="hideMobileModal()">Cancel</button>
 
