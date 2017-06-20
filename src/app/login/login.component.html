@@ -41,7 +41,7 @@
           <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg pd2">
 
             <input class="form-control mrT1" formControlName="email" type="email" placeholder="Enter your email address" required>
-            <button [disabled]="!emailVerifyForm.controls['email'].valid" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="LoginWithEmail()">Submit</button>
+            <button [disabled]="!emailVerifyForm.controls['email'].valid" [ladda]="isVerifyEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="LoginWithEmail()">Submit</button>
 
           </div>
           <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg pd2">
