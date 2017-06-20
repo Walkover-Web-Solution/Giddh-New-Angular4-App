@@ -19,6 +19,7 @@ import { HomeActions } from './actions/home.actions';
 import { SharedModule } from '../shared/shared.module';
 import { CompanyActions } from './actions/company.actions';
 import { LoginActions } from './actions/login.action';
+import { CompanyService } from './companyService.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -41,7 +42,8 @@ export class ServiceModule {
         HttpWrapperService,
         AuthenticationService,
         ErrorHandlerService,
-        ToasterService
+        ToasterService,
+        CompanyService
       ]
     };
   }
