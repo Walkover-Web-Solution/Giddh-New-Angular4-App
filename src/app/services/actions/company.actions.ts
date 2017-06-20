@@ -1,4 +1,4 @@
-import { CompanyServiceService } from './../companyService.service';
+import { CompanyService } from './../companyService.service';
 import { Effect, Actions } from '@ngrx/effects';
 import { Company } from './../../models/api-models/Company';
 import { Injectable } from '@angular/core';
@@ -13,12 +13,11 @@ export class CompanyActions {
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)
-    // tslint:disable-next-line:quotemark
-    .debug("Create Company Effect")
+    .debug('Create Company Effect')
     .switchMap(action => this._companyService.CreateCompany(action.payload))
     .debug('HTTP CALL Succedded')
     .map(response => this.CreateCompanyResponse(response));
-  constructor(private action$: Actions, private _companyService: CompanyServiceService) {
+  constructor(private action$: Actions, private _companyService: CompanyService) {
 
   }
   public CreateCompany(value: Company): Action {
