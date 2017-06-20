@@ -8,6 +8,7 @@ import { FooterComponent } from './footer/footer.component';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar/dist';
 import { ManageGroupsAccountsComponent, AccountsSideBarComponent } from './header/components';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
+import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
   declarations: [
@@ -19,9 +20,13 @@ import { Ng2BootstrapModule } from 'ngx-bootstrap';
     CommonModule,
     RouterModule,
     PerfectScrollbarModule,
-    Ng2BootstrapModule.forRoot()
+    Ng2BootstrapModule.forRoot(),
+    LaddaModule.forRoot({
+      style: 'slide-left',
+      spinnerSize: 30
+    })
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent],
+  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule],
   entryComponents: [ManageGroupsAccountsComponent]
 })
 export class SharedModule {
