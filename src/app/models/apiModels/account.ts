@@ -3,7 +3,12 @@ import { IGstDetailListItem } from '../../interfaces/gstDetailListItem.interface
 import { IUserInfo } from '../../interfaces/userInfo.interface';
 import { INameUniqueName } from '../../interfaces/nameUniqueName.interface';
 
-export class Account implements IAccount {
+/**
+ * Model for create account api response
+ * API:: (create-account) /company/companyUniqueName/groups/:groupUniqueName:/accounts
+ */
+
+export class AccountResponse implements IAccount {
     public gstDetails: IGstDetailListItem[];
     public city?: string;
     public pincode?: string;

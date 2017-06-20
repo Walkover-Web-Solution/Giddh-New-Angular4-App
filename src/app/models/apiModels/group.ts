@@ -2,7 +2,12 @@ import { INameUniqueName } from '../../interfaces/nameUniqueName.interface';
 import { IUserInfo } from '../../interfaces/userInfo.interface';
 import { ICreateGroup } from '../../interfaces/groupCreate.interface';
 
-export class Group implements ICreateGroup {
+/**
+ * Model for create group api response
+ * API:: (create-group) /company/companyUniqueName/groups
+ */
+
+export class GroupResponse implements ICreateGroup {
   public applicableTaxes: INameUniqueName[];
   public description?: string;
   public fixed: boolean;
