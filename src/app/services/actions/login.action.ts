@@ -9,12 +9,12 @@ import { Observable } from 'rxjs/Observable';
 
 export class LoginActions {
 
-  public static SignupWithEmail = 'SignupWithEmail';
+  public static SignupWithEmailRequest = 'SignupWithEmailRequest';
   public static SignupWithEmailResponce = 'SignupWithEmailResponce';
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
-    .ofType(LoginActions.SignupWithEmail)
+    .ofType(LoginActions.SignupWithEmailRequest)
     .debug('action received')
     .switchMap(action => this.auth.SignupWithEmail(action.payload))
     .debug('data received via the HTTP request')
@@ -24,6 +24,12 @@ export class LoginActions {
 
   }
 
+  public SignupWithEmailRequest(value: any): Action {
+    return {
+      type: LoginActions.SignupWithEmailRequest,
+      payload: value
+    };
+  }
   public SignupWithEmailResponce(value: Response): Action {
     return {
       type: LoginActions.SignupWithEmailResponce,

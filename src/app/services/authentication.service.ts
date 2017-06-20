@@ -15,13 +15,13 @@ import { LOGIN_API } from './apiurls/login.api';
 export class AuthenticationService {
 
   constructor(public _http: HttpWrapperService,
-              public _router: Router,
-              public _currentUserService: CurrentUserService,
+    public _router: Router,
+    public _currentUserService: CurrentUserService,
   ) {
   }
 
   public SignupWithEmail(email: string): Observable<Response> {
-    return this._http.post(LOGIN_API.SignupWithEmail, {email}).map((res) => {
+    return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
       return res;
     }).catch((e) => {
       return Observable.throw(e);

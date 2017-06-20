@@ -5,6 +5,7 @@ import { Action, ActionReducer } from '@ngrx/store';
  * Keeping Track of the AuthenticationState
  */
 export interface AuthenticationState {
+  isLoginWithEmailSubmited: boolean;
   isLoginWithMobileInProcess: boolean; // if true then We are checking with
   isVerifyMobileInProcess: boolean;
   isLoginWithEmailInProcess: boolean;
@@ -28,19 +29,20 @@ const initialState = {
   isLoginWithGoogleInProcess: false,
   isLoginWithLinkedInInProcess: false,
   isLoginWithTwitterInProcess: false,
+  isLoginWithEmailSubmited: false,
   user: null                   // current user | null
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
 
   console.log(state);
-
   switch (action.type) {
     case LoginActions.SignupWithEmailResponce:
       return Object.assign({}, state, {
+        isLoginWithEmailSubmited: true,
         isLoginWithEmailInProcess: false
       });
-    case LoginActions.SignupWithEmail:
+    case LoginActions.SignupWithEmailRequest:
       return Object.assign({}, state, {
         isLoginWithEmailInProcess: true
       });
