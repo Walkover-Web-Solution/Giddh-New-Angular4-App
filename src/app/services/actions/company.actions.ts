@@ -15,19 +15,11 @@ export class CompanyActions {
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)
+    .debug('')
     .switchMap(action => this._companyService.CreateCompany(action.payload))
     .map(response => {
       console.log('Response ' + response);
       return this.CreateCompanyResponse(response);
-    }).catch((error) => of(this.CatchErrors(error)));
-
-  public errorEffect$: Observable<Action> = this.action$
-    .map((x: Response) => x.json())
-    .filter(payload => payload && payload.errorStatus !== 200)
-    .switchMap(payload => {
-      this._toasty.errorToast(payload, '');
-      console.log('Toast');
-      return Observable.empty();
     });
 
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService) {
@@ -45,9 +37,5 @@ export class CompanyActions {
       type: CompanyActions.CREATE_COMPANY,
       payload: value
     };
-  }
-
-  public CatchErrors(value: Response) {
-   // this.store.dispatch({ type: 'API_ERROR', value });
   }
 }
