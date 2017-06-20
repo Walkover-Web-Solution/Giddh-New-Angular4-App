@@ -166,6 +166,7 @@
     "ng2-ui-auth": "^6.2.0",
     "ngc-webpack": "~2.0.0",
     "ngrx-store-freeze": "^0.1.9",
+    "ngrx-store-localstorage": "^0.1.8",
     "ngrx-store-logger": "^0.1.8",
     "ngx-bootstrap": "^1.7.1",
     "ngx-perfect-scrollbar": "^4.4.0",
