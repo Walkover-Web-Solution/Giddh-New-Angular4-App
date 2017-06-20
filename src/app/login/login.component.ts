@@ -13,6 +13,7 @@ import { AuthService } from 'ng2-ui-auth';
 import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { VerifyEmailModel } from '../models/api-models/loginModels';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -58,6 +59,13 @@ export class LoginComponent implements OnInit {
     this.isLoginWithEmailSubmited$ = store.select(state => {
       return state.login.isLoginWithEmailSubmited;
     });
+    store.select(state => {
+      return state.login.isVerifyEmailSuccess;
+    }).subscribe((value) => {
+      if (value) {
+        this.router.navigate(['home']);
+      }
+    });
   }
 
   // tslint:disable-next-line:no-empty
@@ -80,8 +88,14 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  public LoginWithEmail() {
-    this.store.dispatch(this.loginAction.SignupWithEmailRequest('govi2010@gmail.com'));
+  public LoginWithEmail(email: string) {
+    this.store.dispatch(this.loginAction.SignupWithEmailRequest(email));
+  }
+  public VerifyEmail(email: string, code: string) {
+    let data = new VerifyEmailModel();
+    data.email = email;
+    data.verificationCode = code;
+    this.store.dispatch(this.loginAction.VerifyEmailRequest(data));
   }
   public hideEmailModal() {
     this.emailVerifyModal.hide();
