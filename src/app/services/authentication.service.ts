@@ -8,6 +8,8 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { CurrentUserService } from './currentUser.service';
 import { ErrorHandlerService } from './errorhandler.service';
 import { LoaderService } from './loader.service';
+import { LOGIN_API } from './apiurls/login.api';
+
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class AuthenticationService {
@@ -18,8 +20,14 @@ export class AuthenticationService {
   ) {
   }
 
-  // public loginSignUpWithGoogle(){
-  // }
+  public SignupWithEmail(email: string): Observable<Response> {
+    return this._http.post(LOGIN_API.SignupWithEmail, {email}).map((res) => {
+      return res;
+    }).catch((e) => {
+      return Observable.throw(e);
+    });
+  }
+
   public HandleError(error: any) {
     console.log(error);
     if (error.status === 403) {

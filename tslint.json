@@ -71,6 +71,10 @@
       "allow-pascal-case",
       "ban-keywords",
       "check-format"
+    ],
+    "align": [
+      "parameters",
+      "statements"
     ]
   }
 }

@@ -1,14 +1,17 @@
 import { Ng2UiAuthModule, CustomConfig } from 'ng2-ui-auth';
 
 export const Configuration = {
-  AppUrl
+  AppUrl,
+  ApiUrl,
+  isElectron
 };
 export class AuthProviders extends CustomConfig {
   public defaultHeaders = { 'Content-Type': 'application/json' };
   public providers = {
     google: {
       clientId: '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com',
-   },
+      url: Configuration.AppUrl
+    },
     twitter: {
       clientId: 'w64afk3ZflEsdFxd6jyB9wt5j'
     },

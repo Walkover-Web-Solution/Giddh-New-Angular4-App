@@ -23,12 +23,15 @@ const HOST = process.env.HOST || 'localapp.giddh.com';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const AppUrl = 'http://localapp.giddh.com/';
-const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
+const ApiUrl = 'http://api.giddh.com/';
+const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
   HMR: HMR,
-  AppUrl: AppUrl
+  isElectron: false,
+  AppUrl: AppUrl,
+  ApiUrl: ApiUrl
 });
 
 
@@ -40,7 +43,7 @@ const METADATA = webpackMerge(commonConfig({env: ENV}).metadata, {
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  return webpackMerge(commonConfig({env: ENV}), {
+  return webpackMerge(commonConfig({ env: ENV }), {
 
     /**
      * Developer tool to enhance debugging
@@ -137,12 +140,16 @@ module.exports = function (options) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
+        'isElectron': false,
         'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
-          'AppUrl': JSON.stringify(METADATA.AppUrl)
+          'isElectron': false,
+          'AppUrl': JSON.stringify(METADATA.AppUrl),
+          'ApiUrl': JSON.stringify(METADATA.ApiUrl),
         }
       }),
 
@@ -241,7 +248,7 @@ module.exports = function (options) {
       *
       * See: https://webpack.github.io/docs/webpack-dev-server.html
       */
-      setup: function(app) {
+      setup: function (app) {
         // For example, to define custom handlers for some paths:
         // app.get('/some/path', function(req, res) {
         //   res.json({ custom: 'response' });

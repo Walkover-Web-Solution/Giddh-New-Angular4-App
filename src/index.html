@@ -9,19 +9,12 @@
     <%= htmlWebpackPlugin.options.title %>
   </title>
   <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
-  <meta name="google-signin-client_id" content="641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com">
-  <script src="https://apis.google.com/js/platform.js" ></script>
+
   <!-- base url -->
   <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
     <!-- base url -->
     <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
     <% } %>
-      <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/bootstrap.css" rel="stylesheet">
-      <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/font-awesome.css" rel="stylesheet">
-      <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/style-1.css" rel="stylesheet">
-      <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/style-2.css" rel="stylesheet">
-      <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/fjala.css" rel="stylesheet">
-      <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/new-style.css" rel="stylesheet">
       <% if (webpackConfig.htmlElements.headTags) { %>
         <!-- Configured Head Tags  -->
         <%= webpackConfig.htmlElements.headTags %>
