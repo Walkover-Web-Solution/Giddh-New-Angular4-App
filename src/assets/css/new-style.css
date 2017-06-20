@@ -713,6 +713,31 @@ body.light .navbar.transparent{
 	margin: 0 auto;
 	width: 360px;
 	height: auto;
+   -webkit-box-shadow:0px 0px 5px 0px rgb(78, 78, 78);
+  -moz-box-shadow:0px 0px 5px 0px rgb(78, 78, 78);
+  box-shadow: 0px 0px 5px 0px rgb(78, 78, 78);
+}
+
+#box img {
+  max-height: 30px;
+  position: absolute;
+  left: 10px;
+  top: 6px;
+}
+
+#box button {
+  text-transform: uppercase;
+}
+
+#box .glyphicon{
+  max-height:30px;
+  position: absolute;
+  left:15px;
+  top:13px;
+}
+
+#box .btn:hover, #box .btn:hover{
+  color:#fff;
 }
 
 #boxDropdown{
