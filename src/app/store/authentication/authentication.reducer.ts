@@ -36,7 +36,6 @@ const initialState = {
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
 
-  console.log(state);
   switch (action.type) {
     case LoginActions.SignupWithEmailResponce:
       if (action.payload.status === 'success') {

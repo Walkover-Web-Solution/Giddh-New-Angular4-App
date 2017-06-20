@@ -18,13 +18,14 @@ const initialState: CurrentCompanyState = {
 
 export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: Action) => {
 
-  console.log(state);
-
   switch (action.type) {
     case CompanyActions.CREATE_COMPANY:
       return Object.assign({}, state, {
         isLoginWithEmailInProcess: false
       });
+      case 'CATCH_ERROR':
+        console.log(action.payload);
+        return;
     default:
       return state;
   }
