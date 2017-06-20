@@ -31,9 +31,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:no-empty
   public ngAfterViewInit() { }
 
-  public goToManageGroups() {
+  public showManageGroupsModal() {
     this.manageGroupsAccountsModal.show();
     // const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
     // modalRef.componentInstance.name = 'ManageGroups';
+  }
+
+  public hideManageGroupsModal() {
+    this.manageGroupsAccountsModal.hide();
   }
 }
