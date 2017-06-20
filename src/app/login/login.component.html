@@ -55,16 +55,16 @@
 
         <div class="modal-body" style="height:400px">
           <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
-          <div *ngIf="!isSubmited" class="clearfix form-group form-group-lg pd2">
+          <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg pd2">
 
             <input class="form-control mrT1" formControlName="email" type="email" placeholder="Enter your email address" required>
-            <button [disabled]="!emailVerifyForm.controls['email'].valid" [ladda]="isVerifyEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="isSubmited = true">Submit</button>
+            <button [disabled]="!emailVerifyForm.controls['email'].valid" [ladda]="isLoginWithEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="LoginWithEmail()">Submit</button>
 
           </div>
-          <div *ngIf="isSubmited" class="clearfix form-group form-group-lg pd2">
+          <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg pd2">
 
               <input class="form-control mrT1" formControlName="token" type="text" placeholder="Enter verification code here" required>
-              <button [disabled]="!emailVerifyForm.controls['token'].valid" class="btn sharp btn-block btn-success btn-lg mrT1" ng-click="verifyEmail(emailToS,verificationCode)">Last step to go</button>
+              <button [disabled]="!emailVerifyForm.controls['token'].valid" class="btn sharp btn-block btn-success btn-lg mrT1"  [ladda]="isVerifyEmailInProcess$ | async"  ng-click="verifyEmail(emailToS,verificationCode)">Last step to go</button>
             <a class="pull-right" style="cursor: pointer;" ng-click="signUpWithEmail(emailToVerify,true)">Resend code</a>
           </div>
           </form>
