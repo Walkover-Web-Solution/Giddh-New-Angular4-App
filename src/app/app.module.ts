@@ -21,8 +21,7 @@ import { RouterStoreModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { Store } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ToastyModule } from 'ng2-toasty';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
+
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -96,13 +95,10 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    LaddaModule,
-    Ng2BootstrapModule.forRoot(),
     AboutModule,
     HomeModule,
     LoginModule,
     SharedModule.forRoot(),
-    ToastyModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),

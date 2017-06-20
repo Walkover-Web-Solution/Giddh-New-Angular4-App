@@ -21,7 +21,9 @@ import { Observable } from 'rxjs/Observable';
 export class LoginComponent implements OnInit {
   @ViewChild('emailVerifyModal') public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
+  @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
   public isSubmited: boolean = false;
+  public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
   public isVerifyMobileInProcess$: Observable<boolean>;
   public isLoginWithMobileInProcess$: Observable<boolean>;
@@ -60,6 +62,11 @@ export class LoginComponent implements OnInit {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    this.mobileVerifyForm = this._fb.group({
+      mobileNumber: ['', [Validators.required]],
+      otp: ['', [Validators.required]],
+    });
+
     this.emailVerifyForm = this._fb.group({
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
@@ -80,6 +87,18 @@ export class LoginComponent implements OnInit {
     this.emailVerifyModal.hide();
   }
 
+  public showMobileModal() {
+    this.mobileVerifyModal.show();
+
+  }
+
+  public hideMobileModal() {
+    this.mobileVerifyModal.hide();
+  }
+
+  public getOtp() {
+    //
+  }
   /**
    * Getting data from browser's local storage
    */
