@@ -11,9 +11,11 @@ export class AccountsSideBarComponent implements OnInit {
  public companyList: any;
  public showAccountList: boolean = true;
  public noGroups: boolean;
+  // tslint:disable-next-line:no-empty
   constructor() { }
 
-  ngOnInit() {
+  // tslint:disable-next-line:no-empty
+  public ngOnInit() {
   }
 
 }
