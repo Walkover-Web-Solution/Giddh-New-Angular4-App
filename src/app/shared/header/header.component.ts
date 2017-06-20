@@ -1,8 +1,9 @@
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Rx';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ManageGroupsAccountsComponent } from './components/';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'app-header',
@@ -11,10 +12,14 @@ import { ManageGroupsAccountsComponent } from './components/';
     `]
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
+  @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   public title: Observable<string>;
   public flyAccounts: Subject<boolean>= new Subject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [{ name: 'ENGLISH', value: 'en' }, { name: 'DUTCH', value: 'nl' }];
+  public sideMenu: {isopen: boolean} = {isopen: false};
+  public userMenu: {isopen: boolean} = {isopen: false};
+  public companyMenu: {isopen: boolean} = {isopen: false};
 
   /**
    *
@@ -27,6 +32,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public ngAfterViewInit() { }
 
   public goToManageGroups() {
+    this.manageGroupsAccountsModal.show();
     // const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
     // modalRef.componentInstance.name = 'ManageGroups';
   }
