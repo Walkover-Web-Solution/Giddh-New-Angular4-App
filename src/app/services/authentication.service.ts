@@ -20,21 +20,14 @@ export class AuthenticationService {
   ) {
   }
 
-  public SignupWithEmail(email: string): Observable<string> {
-    // console.log('BEGIN Authorize, no auth data');
-    // return this._http.post(LOGIN_API.SignupWithEmail, {email}).map((res) => {
-    //   let result = res.json();
-    //   result.profile = { sub: login.Username };
-    //   this.SetAuthorizationData(result.access_token, result.id_token, result.profile);
-    //   return result;
-    // }).catch((e) => {
-    //   this._loader.stop();
-    //   return Observable.throw(e);
-    // });
-    return new Observable((o) => { o.next(''); });
+  public SignupWithEmail(email: string): Observable<Response> {
+    return this._http.post(LOGIN_API.SignupWithEmail, {email}).map((res) => {
+      return res;
+    }).catch((e) => {
+      return Observable.throw(e);
+    });
   }
-  // public loginSignUpWithGoogle(){
-  // }
+
   public HandleError(error: any) {
     console.log(error);
     if (error.status === 403) {
