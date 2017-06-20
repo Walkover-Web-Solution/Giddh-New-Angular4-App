@@ -37,7 +37,7 @@ export class LoginComponent implements OnInit {
     private store: Store<AppState>,
     private auth: AuthService,
     private router: Router,
-    private eh: ErrorHandlerService
+    private eh: ErrorHandlerService,
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -87,8 +87,8 @@ export class LoginComponent implements OnInit {
     this.mobileVerifyModal.hide();
   }
 
+  // tslint:disable-next-line:no-empty
   public getOtp() {
-    //
   }
   /**
    * Getting data from browser's local storage
