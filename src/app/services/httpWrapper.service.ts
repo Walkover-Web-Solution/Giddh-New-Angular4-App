@@ -5,7 +5,7 @@ import { CurrentUserService } from './currentUser.service';
 
 @Injectable()
 export class HttpWrapperService {
-    constructor(public _http: Http, public _currentUserService: CurrentUserService) {
+    constructor(private _http: Http, private _currentUserService: CurrentUserService) {
 
     }
 
