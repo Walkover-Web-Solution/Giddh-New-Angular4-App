@@ -1,7 +1,8 @@
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { LaddaModule } from 'angular2-ladda';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { NgModule, ApplicationRef } from '@angular/core';
 import { AuthService, AppGlobals } from 'angular2-google-login';
@@ -93,7 +94,9 @@ if (ENV === 'development') {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
+    LaddaModule,
     Ng2BootstrapModule.forRoot(),
     AboutModule,
     HomeModule,

@@ -89,6 +89,7 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
+    "angular2-ladda": "^1.2.1",
     "electron-devtools-installer": "^2.2.0",
     "rxjs": "~5.4.1"
   },
