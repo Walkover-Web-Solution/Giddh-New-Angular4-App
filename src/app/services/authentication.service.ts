@@ -24,7 +24,7 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
       return res;
     }).catch((e) => {
-      return new Observable<Response>((o) => { o.next(e); });
+      return new Observable<Response>((o) => { o.next(Object.assign({}, e, { status: 500 })); });
     });
   }
 
