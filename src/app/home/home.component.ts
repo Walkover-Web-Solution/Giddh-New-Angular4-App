@@ -23,7 +23,8 @@ export class HomeComponent implements OnInit {
    */
   constructor(
   // tslint:disable-next-line:no-empty
-  ) {}
+  ) {
+  }
 
   public ngOnInit() {
     console.log('hello `Home` component');
