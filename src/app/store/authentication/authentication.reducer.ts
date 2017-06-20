@@ -38,10 +38,18 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
   console.log(state);
   switch (action.type) {
     case LoginActions.SignupWithEmailResponce:
-      return Object.assign({}, state, {
-        isLoginWithEmailSubmited: true,
-        isLoginWithEmailInProcess: false
-      });
+      if (action.payload.status === 'success') {
+        return Object.assign({}, state, {
+          isLoginWithEmailSubmited: true,
+          isLoginWithEmailInProcess: false
+        });
+      }
+      if (action.payload.status === 'error') {
+        return Object.assign({}, state, {
+          isLoginWithEmailSubmited: true,
+          isLoginWithEmailInProcess: false
+        });
+      }
     case LoginActions.SignupWithEmailRequest:
       return Object.assign({}, state, {
         isLoginWithEmailInProcess: true
