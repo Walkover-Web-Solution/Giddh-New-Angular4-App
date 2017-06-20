@@ -12,8 +12,8 @@
     <div class="container-fluid">
         <nav class="navbar navbar-inverse">
             <ul class="nav navbar-nav">
-                <li class="hamburger_menu" ngbDropdown style="margin-left:-15px;">
-                    <a ngbDropdownToggle id="page-dropdown" (click)="false">
+                <li class="hamburger_menu" dropdown [isOpen]="sideMenu.isopen" style="margin-left:-15px;cursor: pointer">
+                    <a dropdownToggle id="page-dropdown" (click)="false">
                         <i class="glyphicon glyphicon-menu-hamburger"></i>
                     </a>
                     <ul id="topMenusBar" role="menu" class="dropdown-menu">
@@ -137,7 +137,7 @@
                 </li>
                 <li>
                     <div>
-                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1" (click)="goToManageGroups()">
+                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1" (click)="showManageGroupsModal()">
                     <span class="icon-plus" aria-hidden="true"></span> Add & Manage
                 </button>
                     </div>
@@ -145,8 +145,8 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="company-name" ngbDropdown>
-                    <a id="cmpWrp" (click)="false" class="clearfix" ngbDropdownToggle>
+                <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
+                    <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
                         <span class="icon-dropdown"></span>
                         <div class="cText">
                             <span class="cName">Ghlabs</span>
@@ -160,7 +160,7 @@
                         </li>
                         <li style="padding:0px;">
                             <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
-                                <li id="cmp">
+                                <li id="cmp" class="selected-company">
                                     <span tooltip-placement="right">ghlabs</span>
                                     <i id="deleteCmp" class="glyphicon glyphicon-trash"></i>
                                 </li>
@@ -168,8 +168,8 @@
                         </li>
                     </ul>
                 </li>
-                <li ngbDropdown tooltip-placement="left">
-                    <a href (click)="false" id="user-dropdown" ngbDropdownToggle>
+                <li dropdown [isOpen]="userMenu.isopen" tooltip-placement="left">
+                    <a href (click)="false" id="user-dropdown" dropdownToggle>
             GA
           </a>
                     <ul class="dropdown-menu" aria-labelledby="user-dropdown">
@@ -187,3 +187,11 @@
     </div>
     <accounts-side-bar [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
+
+<div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade" role="dialog" >
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+  <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
+</div>
+    </div>
+</div>

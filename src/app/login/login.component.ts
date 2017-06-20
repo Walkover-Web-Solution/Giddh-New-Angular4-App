@@ -37,8 +37,8 @@ export class LoginComponent implements OnInit {
   // tslint:disable-next-line:no-empty
   constructor(
     private _fb: FormBuilder,
-    private store: Store<AppState>,
     private auth: AuthService,
+    private store: Store<AppState>,
     private router: Router,
     private eh: ErrorHandlerService,
     private loginAction: LoginActions

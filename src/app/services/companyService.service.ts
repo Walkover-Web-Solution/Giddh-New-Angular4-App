@@ -6,7 +6,7 @@ import { Company } from '../models';
 import { COMPANY_API } from './apiurls';
 
 @Injectable()
-export class CompanyServiceService {
+export class CompanyService {
 
   constructor(private _http: HttpWrapperService) { }
 
