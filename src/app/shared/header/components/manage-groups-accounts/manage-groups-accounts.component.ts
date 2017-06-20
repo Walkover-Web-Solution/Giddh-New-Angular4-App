@@ -7,9 +7,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ManageGroupsAccountsComponent implements OnInit {
 
+  // tslint:disable-next-line:no-empty
   constructor() { }
 
-  ngOnInit() {
+  // tslint:disable-next-line:no-empty
+  public ngOnInit() {
   }
 
 }
