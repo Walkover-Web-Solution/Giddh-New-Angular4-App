@@ -1,6 +1,6 @@
-import { INameUniqueName } from '../../interfaces/nameUniqueName.interface';
-import { IUserInfo } from '../../interfaces/userInfo.interface';
-import { ICreateGroup } from '../../interfaces/groupCreate.interface';
+import { ICreateGroup } from "../interfaces/groupCreate.interface";
+import { INameUniqueName } from "../interfaces/nameUniqueName.interface";
+import { IUserInfo } from "../interfaces/userInfo.interface";
 
 /**
  * Model for create group api response
