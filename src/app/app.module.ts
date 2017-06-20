@@ -1,12 +1,11 @@
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-
-import {
-  NgModule,
-  ApplicationRef
-} from '@angular/core';
+import { LaddaModule } from 'angular2-ladda';
+import { Ng2UiAuthModule } from 'ng2-ui-auth';
+import { NgModule, ApplicationRef } from '@angular/core';
+import { AuthService, AppGlobals } from 'angular2-google-login';
 import {
   removeNgStyles,
   createNewHosts,
@@ -26,6 +25,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 /*
  * Platform and Environment providers/directives/pipes
  */
+import { AuthProviders } from './app.constant';
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 import { rootReducer } from './store';
@@ -50,7 +50,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' }
+  { provide: APP_BASE_HREF, useValue: '/' },
+  AuthService
 ];
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -92,6 +93,7 @@ if (ENV === 'development') {
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     AboutModule,
     HomeModule,
@@ -102,6 +104,8 @@ if (ENV === 'development') {
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+        ...CONDITIONAL_IMPORTS,
+    Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS
   ],
   /**

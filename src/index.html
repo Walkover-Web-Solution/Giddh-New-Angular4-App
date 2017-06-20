@@ -9,18 +9,11 @@
     <%= htmlWebpackPlugin.options.title %>
   </title>
   <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
+
   <!-- base url -->
   <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
     <!-- base url -->
     <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
-
-    <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/bootstrap.css" rel="stylesheet">
-    <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/font-awesome.css" rel="stylesheet">
-    <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/style-1.css" rel="stylesheet">
-    <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/style-2.css" rel="stylesheet">
-    <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/fjala.css" rel="stylesheet">
-    <link href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>assets/css/new-style.css" rel="stylesheet">
-
     <% } %>
       <% if (webpackConfig.htmlElements.headTags) { %>
         <!-- Configured Head Tags  -->
@@ -37,7 +30,10 @@
 
                   <!-- Async Google Analytics: change UA-71073175-1 to be your site's ID -->
                   <script>
-                    window.ga = window.ga || function () { (ga.q = ga.q || []).push(arguments) }; ga.l = +new Date;
+                    window.ga = window.ga || function () {
+                      (ga.q = ga.q || []).push(arguments)
+                    };
+                    ga.l = +new Date;
                     ga('create', 'UA-71073175-1', 'auto');
                     ga('send', 'pageview');
                   </script>
