@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./manage-groups-accounts.component.css']
 })
 export class ManageGroupsAccountsComponent implements OnInit {
-
+  @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
   // tslint:disable-next-line:no-empty
   constructor() { }
 
@@ -14,4 +14,7 @@ export class ManageGroupsAccountsComponent implements OnInit {
   public ngOnInit() {
   }
 
+  public closePopupEvent() {
+    this.closeEvent.emit(true);
+  }
 }

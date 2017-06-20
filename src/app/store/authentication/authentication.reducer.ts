@@ -1,7 +1,7 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { Action, ActionReducer } from '@ngrx/store';
 import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
-import { BaseResponse } from "../../models/api-models/BaseResponse";
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 /**
  * Keeping Track of the AuthenticationState

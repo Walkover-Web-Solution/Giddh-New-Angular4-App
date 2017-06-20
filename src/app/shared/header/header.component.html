@@ -137,7 +137,7 @@
                 </li>
                 <li>
                     <div>
-                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1" (click)="goToManageGroups()">
+                        <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1" (click)="showManageGroupsModal()">
                     <span class="icon-plus" aria-hidden="true"></span> Add & Manage
                 </button>
                     </div>
@@ -191,7 +191,7 @@
 <div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade" role="dialog" >
     <div class="modal-dialog modal-lg">
     <div class="modal-content">
-  <app-manage-groups-accounts></app-manage-groups-accounts>
+  <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
 </div>
     </div>
 </div>
