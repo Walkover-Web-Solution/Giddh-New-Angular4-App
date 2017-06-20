@@ -1,7 +1,10 @@
+import { AppState } from '../store/roots';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'ng2-ui-auth';
 import { ErrorHandlerService } from './../services/errorhandler.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'login',
@@ -9,13 +12,31 @@ import { ErrorHandlerService } from './../services/errorhandler.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  public isVerifyMobileInProcess$: Observable<boolean>;
+  public isLoginWithMobileInProcess$: Observable<boolean>;
+  public isVerifyEmailInProcess$: Observable<boolean>;
+  public isLoginWithEmailInProcess$: Observable<boolean>;
 
   // tslint:disable-next-line:no-empty
-  constructor(private auth: AuthService,
-              private router: Router,
-              private eh: ErrorHandlerService) { }
+  constructor(private store: Store<AppState>,
+    private auth: AuthService,
+    private router: Router,
+    private eh: ErrorHandlerService) {
+    this.isLoginWithEmailInProcess$ = store.select((state) => {
+      return state.login.isLoginWithEmailInProcess;
+    });
 
-  // tslint:disable-next-line:no-empty
+    this.isVerifyEmailInProcess$ = store.select((state) => {
+      return state.login.isVerifyEmailInProcess;
+    });
+    this.isLoginWithMobileInProcess$ = store.select((state) => {
+      return state.login.isLoginWithMobileInProcess;
+    });
+    this.isVerifyMobileInProcess$ = store.select((state) => {
+      return state.login.isVerifyMobileInProcess;
+    });
+  }
+
   public ngOnInit() {
     // this.auth.login({})
   }

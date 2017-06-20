@@ -1,25 +1,17 @@
+import { LoginActions } from '../../services/actions/login.action';
 import { Action, ActionReducer } from '@ngrx/store';
-
-export const AuthActions = {
-  LOGIN: 'LOGIN',
-  LOGOUT: 'LOGOUT',
-  LOGIN_SUCCESS: 'LOGIN_SUCCESS',
-  LOGIN_FAILED: 'LOGIN_FAILED',
-  CHECK_AUTH: 'CHECK_AUTH',
-  LOGOUT_SUCCESS: 'LOGOUT_SUCCESS',
-  LOGOUT_FAILED: 'LOGOUT_FAILED',
-  CHECK_AUTH_SUCCESS: 'CHECK_AUTH_SUCCESS',
-  CHECK_AUTH_FAILED: 'CHECK_AUTH_FAILED',
-  CHECK_AUTH_SUCCESS_NO_USER: 'CHECK_AUTH_SUCCESS_NO_USER'
-};
 
 /**
  * Keeping Track of the AuthenticationState
  */
 export interface AuthenticationState {
-  inProgress: boolean;            // are we taking some network action
-  isLoggedIn: boolean;            // is the user logged in or not
-  tokenCheckComplete: boolean;    // have we checked for a persisted user token
+  isLoginWithMobileInProcess: boolean; // if true then We are checking with
+  isVerifyMobileInProcess: boolean;
+  isLoginWithEmailInProcess: boolean;
+  isVerifyEmailInProcess: boolean;
+  isLoginWithGoogleInProcess: boolean;
+  isLoginWithLinkedInInProcess: boolean;
+  isLoginWithTwitterInProcess: boolean;
   user: object;                   // current user | null
   error?: object;                 // if an error occurred | null
 
@@ -29,10 +21,14 @@ export interface AuthenticationState {
  * Setting the InitialState for this Reducer's Store
  */
 const initialState = {
-  inProgress: false,
-  isLoggedIn: false,
-  tokenCheckComplete: false,
-  user: null
+  isLoginWithMobileInProcess: false, // if true then We are checking with
+  isVerifyMobileInProcess: false,
+  isLoginWithEmailInProcess: false,
+  isVerifyEmailInProcess: false,
+  isLoginWithGoogleInProcess: false,
+  isLoginWithLinkedInInProcess: false,
+  isLoginWithTwitterInProcess: false,
+  user: null                   // current user | null
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -40,37 +36,14 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
   console.log(state);
 
   switch (action.type) {
-    case AuthActions.LOGIN: {
-      return Object.assign({}, state, { inProgress: true, isLoggedIn: false, error: null });
-
-    }
-    case AuthActions.LOGOUT: {
-      return Object.assign({}, state, { inProgress: true, isLoggedIn: true });
-    }
-    case AuthActions.CHECK_AUTH_SUCCESS: {
-      state = Object.assign({}, state, { tokenCheckComplete: true });
-    }
-    case AuthActions.LOGIN_SUCCESS: {
-      return Object.assign({}, state, { inProgress: false, user: action.payload, isLoggedIn: true })
-    }
-    case AuthActions.CHECK_AUTH_FAILED:
-      state = Object.assign({}, state, { tokenCheckComplete: true });
-    case AuthActions.LOGIN_FAILED: {
-      return Object.assign({}, state, { inProgress: false, error: action.payload, isLoggedIn: false });
-    }
-    case AuthActions.LOGOUT_FAILED: {
-      return Object.assign({}, state, { inProgress: false, error: action.payload, isLoggedIn: true });
-    }
-    case AuthActions.CHECK_AUTH_SUCCESS_NO_USER:
-      return Object.assign({}, initialState, { tokenCheckComplete: true });
-
-    case AuthActions.LOGOUT_SUCCESS: {
-      return Object.assign({}, initialState);
-    }
-    case AuthActions.CHECK_AUTH: {
-      return Object.assign({}, state, { inProgress: true, isLoggedIn: false, tokenCheckComplete: false });
-    }
-
+    case LoginActions.SignupWithEmailResponce:
+      return Object.assign({}, state, {
+        isLoginWithEmailInProcess: false
+      });
+    case LoginActions.SignupWithEmail:
+      return Object.assign({}, state, {
+        isLoginWithEmailInProcess: true
+      });
     default:
       return state;
   }
