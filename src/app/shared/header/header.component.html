@@ -155,13 +155,13 @@
                     </a>
                     <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
                         <li class="create-company">
-                            <button id="refreshCompanyBtn" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>
-                            <button id="createCompanyBtn" class="btn btn-primary btn-sm">Create Company</button>
+                            <button id="refreshCompanyBtn" class="btn btn-success btn-sm" (click)="refreshCompanies($event)"><i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i></button>
+                            <button id="createCompanyBtn" class="btn btn-primary btn-sm" (click)="showAddCompanyModal()">Create Company</button>
                         </li>
                         <li style="padding:0px;">
                             <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
-                                <li id="cmp" class="selected-company">
-                                    <span tooltip-placement="right">ghlabs</span>
+                                <li id="cmp" *ngFor="let cmp of companies$ | async">
+                                    <span tooltip-placement="right">{{ cmp.name }}</span>
                                     <i id="deleteCmp" class="glyphicon glyphicon-trash"></i>
                                 </li>
                             </ul>
@@ -188,10 +188,20 @@
     <accounts-side-bar [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
+<!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade" role="dialog" >
     <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-  <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
+      <div class="modal-content">
+        <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
+      </div>
+    </div>
 </div>
+
+<!--add company modal  -->
+<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog" >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <company-add></company-add>
+      </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ export interface AppState {
   router: RouterState;
   home: fromHome.HomeState;
   login: fromLogin.AuthenticationState;
+  session: fromLogin.SessionState;
 
   company: fromCompany.CurrentCompanyState;
 }
@@ -15,5 +16,6 @@ export const reducers = {
   router: routerReducer,
   home: fromHome.homeReducer,
   company: fromCompany.CompanyReducer,
-  login: fromLogin.AuthenticationReducer
+  login: fromLogin.AuthenticationReducer,
+  session: fromLogin.SessionReducer
 };
