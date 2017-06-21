@@ -52,6 +52,7 @@ export class LoginActions {
     .ofType(LoginActions.VerifyEmailResponce)
     .debug('action received')
     .map(action => {
+      debugger
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }

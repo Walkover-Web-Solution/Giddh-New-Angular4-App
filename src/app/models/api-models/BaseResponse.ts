@@ -3,4 +3,5 @@ export class BaseResponse<T> {
   public code?: string;
   public message?: string;
   public body?: T;
+  public response?: T;
 }

@@ -2,8 +2,12 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Rx';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import { ManageGroupsAccountsComponent } from './components/';
 import { ModalDirective } from 'ngx-bootstrap';
+import { AppState } from '../../store/roots';
+import { CompanyActions } from '../../services/actions';
+import { ComapnyResponse } from '../../models/index';
 
 @Component({
   selector: 'app-header',
@@ -13,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+  @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
   public title: Observable<string>;
   public flyAccounts: Subject<boolean>= new Subject<boolean>();
   public noGroups: boolean;
@@ -20,12 +25,23 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public sideMenu: {isopen: boolean} = {isopen: false};
   public userMenu: {isopen: boolean} = {isopen: false};
   public companyMenu: {isopen: boolean} = {isopen: false};
+  public isCompanyRefreshInProcess$: Observable<boolean>;
+  public companies$: Observable<ComapnyResponse[]>;
 
   /**
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+
+    this.isCompanyRefreshInProcess$ = this.store.select(state => {
+      return state.company.isRefreshing;
+    });
+
+    this.companies$ = this.store.select(state => {
+      return state.company.companies;
+    });
+   }
   // tslint:disable-next-line:no-empty
   public ngOnInit() { }
   // tslint:disable-next-line:no-empty
@@ -33,11 +49,21 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public showManageGroupsModal() {
     this.manageGroupsAccountsModal.show();
-    // const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
-    // modalRef.componentInstance.name = 'ManageGroups';
   }
 
   public hideManageGroupsModal() {
     this.manageGroupsAccountsModal.hide();
+  }
+
+  public showAddCompanyModal() {
+    this.addCompanyModal.show();
+  }
+
+  public hideAddCompanyModal() {
+    this.addCompanyModal.hide();
+  }
+
+  public refreshCompanies(e: Event) {
+    this.store.dispatch(this.companyActions.RefreshCompanies());
   }
 }

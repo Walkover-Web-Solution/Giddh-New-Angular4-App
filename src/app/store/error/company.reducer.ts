@@ -1,6 +1,6 @@
 import { CompanyActions } from './../../services/actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { Company } from '../../models/api-models/Company';
+import { CompanyRequest } from '../../models/api-models/Company';
 
 /**
  * Keeping Track of the CompanyState

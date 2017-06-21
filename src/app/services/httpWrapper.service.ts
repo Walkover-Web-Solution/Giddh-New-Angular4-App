@@ -1,11 +1,14 @@
+import { VerifyEmailResponseModel } from '../models/api-models/loginModels';
+import { AppState } from '../store/roots';
 import { Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { CurrentUserService } from './currentUser.service';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class HttpWrapperService {
-    constructor(private _http: Http, private _currentUserService: CurrentUserService) {
+  private user: VerifyEmailResponseModel;
+  constructor(private _http: Http, private store: Store<AppState>) {
 
   }
 
@@ -37,16 +40,19 @@ export class HttpWrapperService {
   }
 
   public prepareOptions(options: RequestOptionsArgs): RequestOptionsArgs {
-    let token: string = this._currentUserService.token;
-
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user;
+      }
+    });
     options = options || {};
 
     if (!options.headers) {
       options.headers = new Headers();
     }
 
-    if (token) {
-      options.headers.append('Authorization', 'Bearer ' + token);
+    if (this.user) {
+      options.headers.append('auth-key', this.user.authKey);
     }
     options.headers.append('Access-Control-Allow-Origin', '*');
     options.headers.append('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
