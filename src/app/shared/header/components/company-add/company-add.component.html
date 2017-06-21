@@ -1,0 +1,100 @@
+<div id="shareModal">
+  <div id="setupWizardModal" ng-controller="setWizardController">
+
+    <div class="modal-header themeBg pd2 pdL2 pdR2">
+      <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true" ng-click="promptBeforeClose()" aria-label="Close"></i>
+      <h3 class="modal-title bg">Create New Company</h3>
+    </div>
+    <!-- end header -->
+
+    <div class="modal-body noPad">
+
+      <div class="welcome-msg">
+        <div ng-if="!showSuccessMsg" class="l8grey">
+          <span>Welcome!</span><br>
+          <span>Let us help you set up your company with Giddh.</span>
+          <span>Before creating a company we need to verify your mobile no. first.</span>
+        </div>
+        <div ng-if="showSuccessMsg">
+          <span>Congratulations!</span><br>
+          <span>Company created successfully.</span>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="wizard-container">
+
+        <form-wizard>
+          <wizard-step [title]="'Add Mobile Number'">
+            <div class="wizard-step">
+              <div class=" clearfix">
+                <h1 class="l8grey">Add Mobile Number</h1>
+                <form class="mrT mrB1" name="mobileForm" novalidate>
+                  <input ng-minlength="10" ng-pattern="/^[0-9]{1,10}$/" class="form-control max350 pull-left" type="text" ng-required="true"
+                    placeholder="9998899988" name="mobileForm.phoneNumber" ng-model="phoneNumber" />
+                  <button class="btn btn-success mrL1" ng-click="addNumber(phoneNumber)" ng-disabled="mobileForm.$invalid">Add</button>
+                </form>
+                <h3 class="mrB1">Format should be like 9898989898</h3>
+              </div>
+              <div class=" clearfix" ng-if="mobNum.showVerificationBox" style="padding-top:0;">
+                <hr>
+                <h1 class="mrT2">Enter Verfication Code</h1>
+                <div class="mrT">
+                  <input class="form-control max350 pull-left" type="text" placeholder="Verification Code" ng-model="mobNum.verificationCode"
+                  />
+                  <button class="btn btn-success mrL2" ng-click="verifyNumber(mobNum.verificationCode)">Verify</button>
+                </div>
+              </div>
+            </div>
+
+
+          </wizard-step>
+          <wizard-step [title]="'Create Company'">
+
+            <div class="wizard-step">
+              <h1 class="l8grey">Create Your Company</h1>
+              <form name="createCompForm" novalidate id="createCompForm" class="mrT mrB1">
+
+                <div class="form-group" ng-class="(createCompForm.name.$valid  && createCompForm.name.$touched) ? 'has-success' : (createCompForm.name.$touched) ? 'has-error' : '' ">
+                  <input type="text" ng-model="company.name" class="form-control" placeholder="Company Name" required name="name" minlength="5"
+                    maxlength="100" ngPattern="/[a-zA-Z0-9^ ]/">
+                </div>
+                <div class="form-group" ng-class="(createCompForm.city.$valid  && createCompForm.city.$touched) ? 'has-success' : (createCompForm.city.$touched) ? 'has-error' : '' ">
+                  <input type="text" ng-model="company.city" uib-typeahead="address for address in getOnlyCity($viewValue)" typeahead-loading="loadingLocationsOnlyCt"
+                    typeahead-no-results="noResultsOnlyCt" class="form-control" name="city" autocomplete="off" required maxlength="50"
+                    placeholder="Company City">
+                  <i ng-show="loadingLocationsOnlyCt" class="glyphicon glyphicon-refresh"></i>
+
+                  <div ng-show="noResultsOnlyCt">
+                    <i class="glyphicon glyphicon-remove"></i> No Results Found
+                  </div>
+
+                </div>
+
+                <div class="modal-footer">
+                  <button class="btn btn-success" type="button" ng-click="createCompany(company)" ng-disabled="createCompForm.$invalid">
+                    Create
+                  </button>
+                </div>
+              </form>
+              <!-- <input class=" btn btn-primary center-block" style="width:80px;margin-top:45px" type="submit" wz-next value="Next" /> -->
+            </div>
+          </wizard-step>
+          <wizard-step [title]="'Finish'">
+            <div class="wizard-step text-center">
+              <h1 class="mrT4 mrB2">Click here to manage Groups and Accounts</h1>
+              <button type="button" class="btn btn-primary btn-sm btn-block mrB1 max350 center-block" ng-click="triggerAddManage();$close()">
+                  <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add &amp; Manage Groups and Accounts
+                </button>
+            </div>
+          </wizard-step>
+        </form-wizard>
+      </div>
+
+    </div>
+    <!-- end modal body -->
+
+
+  </div>
+</div>
