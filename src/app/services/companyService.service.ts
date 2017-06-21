@@ -1,48 +1,68 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { CompanyRequest } from '../models';
+import { CompanyRequest, ComapnyResponse } from '../models';
 import { COMPANY_API } from './apiurls';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
+import { BaseResponse } from '../models/api-models/BaseResponse';
 
 @Injectable()
-export class CompanyService {
+export class CompanyService implements OnInit {
 
   private user: UserDetails;
   constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-    });
+  }
+
+  public ngOnInit() {
+//
   }
 
   /**
    * CreateCompany
    */
-  public CreateCompany(company: CompanyRequest): Observable<Response> {
+  public CreateCompany(company: CompanyRequest): Observable<BaseResponse<ComapnyResponse>> {
+
     return this._http.post(COMPANY_API.CREATE_COMPANY, { company })
       .map((res) => {
-        return res;
+        let data: BaseResponse<ComapnyResponse> = res.json();
+        return data;
       })
       .catch((e) => {
-        return Observable.throw(e);
+        let data: BaseResponse<ComapnyResponse> = {
+        body: null,
+        code: 'Internal Error',
+        message: 'something went wrong',
+        status: 'error'
+      };
+      return new Observable<BaseResponse<ComapnyResponse>>((o) => { o.next(data); });
       });
     }
 
   /**
    * CompanyList
    */
-  public CompanyList(): Observable<Response> {
+  public CompanyList(): Observable<BaseResponse<ComapnyResponse[]>> {
+     this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+    });
     return this._http.get(COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName))
       .map((res) => {
-        return res;
+        let data: BaseResponse<ComapnyResponse[]> = res.json();
+        return data;
       })
       .catch((e) => {
-        return Observable.throw(e);
+        let data: BaseResponse<ComapnyResponse[]> = {
+        body: null,
+        code: 'Internal Error',
+        message: 'something went wrong',
+        status: 'error'
+      };
+      return new Observable<BaseResponse<ComapnyResponse[]>>((o) => { o.next(data); });
       });
   }
 
