@@ -25,8 +25,8 @@ function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
 
 const DEV_REDUCERS = [stateSetter, storeFreeze, storeLogger()];
 
-const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys: ['login'] }), combineReducers)(reducers);
-const productionReducer = compose(localStorageSync({ keys: ['login'] }), combineReducers)(reducers);
+const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys: ['login'], rehydrate: true }), combineReducers)(reducers);
+const productionReducer = compose(localStorageSync({ keys: ['login.'], rehydrate: true }), combineReducers)(reducers);
 
 export function rootReducer(state: any, action: any) {
   if (ENV !== 'development') {
