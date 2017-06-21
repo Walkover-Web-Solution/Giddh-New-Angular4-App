@@ -129,3 +129,34 @@ export class AccountRequest implements IAccount {
       this.stateCode = account.stateCode;
   }
 }
+
+/**
+ * Model for merge account api request
+ * API:: (create-account) /company/{companyUniqueName}/accounts/{accountUniqueName}/merge
+ * Takes an array of account uniquenames
+ * This request will take array of AccountMergeRequest as payload
+ * its response will be success message in body
+ */
+export class AccountMergeRequest {
+  public uniqueName: string;
+
+  constructor(acount: AccountMergeRequest) {
+    this.uniqueName = acount.uniqueName;
+  }
+}
+
+/**
+ * Model for unmerge account api request
+ * API:: (create-account) /company/{companyUniqueName}/accounts/{accountUniqueName}/un-merge
+ * This request will take array of AccountUnMergeRequest as payload
+ * its response will be success message in body
+ */
+export class AccountUnMergeRequest {
+  public uniqueNames: string[];
+  public moveTo: string;
+
+  constructor(account: AccountUnMergeRequest) {
+    this.uniqueNames = account.uniqueNames;
+    this.moveTo = account.moveTo;
+  }
+}
