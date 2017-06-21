@@ -2,8 +2,11 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Rx';
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
 import { ManageGroupsAccountsComponent } from './components/';
 import { ModalDirective } from 'ngx-bootstrap';
+import { AppState } from '../../store/roots';
+import { CompanyActions } from '../../services/actions';
 
 @Component({
   selector: 'app-header',
@@ -20,12 +23,17 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public sideMenu: {isopen: boolean} = {isopen: false};
   public userMenu: {isopen: boolean} = {isopen: false};
   public companyMenu: {isopen: boolean} = {isopen: false};
+  public isCompanyRefreshInProcess$: Observable<boolean>;
 
   /**
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor() { }
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+    this.isCompanyRefreshInProcess$ = this.store.select(state => {
+      return state.company.isRefreshing;
+    });
+   }
   // tslint:disable-next-line:no-empty
   public ngOnInit() { }
   // tslint:disable-next-line:no-empty
@@ -33,11 +41,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public showManageGroupsModal() {
     this.manageGroupsAccountsModal.show();
-    // const modalRef = this.modalService.open(ManageGroupsAccountsComponent);
-    // modalRef.componentInstance.name = 'ManageGroups';
   }
 
   public hideManageGroupsModal() {
     this.manageGroupsAccountsModal.hide();
+  }
+
+  public refreshCompanies(e: Event) {
+    e.stopPropagation();
+    this.store.dispatch(this.companyActions.RefreshCompanies());
   }
 }
