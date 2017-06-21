@@ -62,6 +62,7 @@ export class LoginComponent implements OnInit {
     store.select(state => {
       return state.login.isVerifyEmailSuccess;
     }).subscribe((value) => {
+      debugger
       if (value) {
         this.router.navigate(['home']);
       }
