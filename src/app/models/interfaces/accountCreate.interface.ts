@@ -14,25 +14,25 @@ export interface IAccount extends INameUniqueName {
     openingBalanceDate?: string;
     openingBalanceType?: string;
     gstDetails?: IGstDetailListItem[];
-}
-
-export interface IAccountCreate extends IAccount, IAccountsInfo {
+    hsnNumber?: string;
     city?: string;
     pincode?: string;
     country?: string;
+    sacNumber?: string;
+    stateCode?: string;
+}
+
+export interface IAccountCreate extends IAccount, IAccountsInfo {
     createdAt?: string;
     updatedAt?: string;
     updatedBy?: IUserInfo;
-    sacNumber?: string;
     attentionTo?: string;
-    stateCode?: string;
     createdBy?: IUserInfo;
     parentGroups?: INameUniqueName[];
     applicableTaxes?: INameUniqueName[];
     isFixed?: boolean;
     yodleeAdded?: boolean;
     accountType?: string;
-    hsnNumber?: string;
     state?: string;
     role?: INameUniqueName;
 }
