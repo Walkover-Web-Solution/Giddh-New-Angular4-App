@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from './../companyService.service';
-import { Effect, Actions } from '@ngrx/effects';
-import { Company } from './../../models/api-models/Company';
+import { Effect, Actions, toPayload } from '@ngrx/effects';
+import { CompanyRequest } from './../../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Action } from '@ngrx/store';
@@ -11,15 +11,17 @@ import { ToasterService } from '../toaster.service';
 @Injectable()
 
 export class CompanyActions {
-  public static CREATE_COMPANY = '[Company] Create';
-  public static REFRESH_COMPANIES = '[Company] Refresh';
-  public static REFRESH_COMPANIES_RESPONSE = '[Company] Response';
+  public static CREATE_COMPANY = 'CompanyCreate';
+  public static REFRESH_COMPANIES = 'CompanyRefresh';
+  public static REFRESH_COMPANIES_RESPONSE = 'CompanyResponse';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)
     .debug('')
-    .switchMap(action => this._companyService.CreateCompany(action.payload))
+    .switchMap(action => {
+      return this._companyService.CreateCompany(action.payload);
+    })
     .map(response => {
       console.log('Response ' + response);
       return this.CreateCompanyResponse(response);
@@ -49,7 +51,7 @@ export class CompanyActions {
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService) {
 
   }
-  public CreateCompany(value: Company): Action {
+  public CreateCompany(value: CompanyRequest): Action {
     return {
       type: CompanyActions.CREATE_COMPANY,
       payload: value
@@ -58,8 +60,7 @@ export class CompanyActions {
 
   public RefreshCompanies(): Action {
     return {
-      type: CompanyActions.REFRESH_COMPANIES,
-      payload: true
+      type: CompanyActions.REFRESH_COMPANIES
     };
   }
 
