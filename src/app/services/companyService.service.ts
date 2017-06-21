@@ -10,8 +10,8 @@ import { UserDetails } from '../models/api-models/loginModels';
 
 @Injectable()
 export class CompanyService {
-  private user: UserDetails;
 
+  private user: UserDetails;
   constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
 
     this.store.select(state => {
