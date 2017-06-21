@@ -41,20 +41,18 @@ export class HttpWrapperService {
 
   public prepareOptions(options: RequestOptionsArgs): RequestOptionsArgs {
     this.store.take(1).subscribe(s => {
-      if (s.login.user) {
-        this.user = s.login.user;
+      if (s.session.user) {
+        this.user = s.session.user;
       }
     });
-    let token: string = this.user.authKey;
-
     options = options || {};
 
     if (!options.headers) {
       options.headers = new Headers();
     }
 
-    if (token) {
-      options.headers.append('auth-key', token);
+    if (this.user) {
+      options.headers.append('auth-key', this.user.authKey);
     }
     options.headers.append('Access-Control-Allow-Origin', '*');
     options.headers.append('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');

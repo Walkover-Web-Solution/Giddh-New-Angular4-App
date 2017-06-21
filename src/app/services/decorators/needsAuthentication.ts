@@ -12,8 +12,8 @@ export class NeedsAuthentication implements CanActivate {
   }
   public canActivate() {
     this.store.take(1).subscribe(s => {
-      if (s.login.user) {
-        this.user = s.login.user;
+      if (s.session.user) {
+        this.user = s.session.user;
       }
     });
     if (this.user && this.user.authKey) {
