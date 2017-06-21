@@ -155,7 +155,7 @@
                     </a>
                     <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
                         <li class="create-company">
-                            <button id="refreshCompanyBtn" class="btn btn-success btn-sm"><i class="glyphicon glyphicon-refresh"></i></button>
+                            <button id="refreshCompanyBtn" class="btn btn-success btn-sm" (click)="refreshCompanies($event)"><i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i></button>
                             <button id="createCompanyBtn" class="btn btn-primary btn-sm">Create Company</button>
                         </li>
                         <li style="padding:0px;">
