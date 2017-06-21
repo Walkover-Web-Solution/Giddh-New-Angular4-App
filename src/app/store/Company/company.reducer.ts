@@ -8,7 +8,6 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
  */
 export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
-  activeCompany?: ComapnyResponse;
   isRefreshing: boolean;
 }
 
@@ -17,7 +16,6 @@ export interface CurrentCompanyState {
  */
 const initialState: CurrentCompanyState = {
   companies: null,
-  activeCompany: null,
   isRefreshing: false
 };
 

@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { CompanyRequest, ComapnyResponse } from '../models';
+import { CompanyRequest, ComapnyResponse, StateDetailsResponse } from '../models';
 import { COMPANY_API } from './apiurls';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -79,4 +79,21 @@ export class CompanyService implements OnInit {
       });
   }
 
+  /**
+   * get state details
+   */
+  public getStateDetails(): Observable<BaseResponse<StateDetailsResponse>> {
+    return this._http.get(COMPANY_API.GET_STATE_DETAILS).map((res) => {
+      let data: BaseResponse<StateDetailsResponse> = res.json();
+      return data;
+    }).catch((e) => {
+      let data: BaseResponse<StateDetailsResponse> = {
+        body: null,
+        code: 'Internal Error',
+        message: 'Internal Error',
+        status: 'error'
+      };
+      return new Observable<BaseResponse<StateDetailsResponse>>((o) => { o.next(data); });
+    });
+  }
 }
