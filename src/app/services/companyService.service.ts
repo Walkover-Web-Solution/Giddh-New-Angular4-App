@@ -14,8 +14,8 @@ export class CompanyService {
   private user: UserDetails;
   constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
     this.store.take(1).subscribe(s => {
-      if (s.login.user) {
-        this.user = s.login.user.user;
+      if (s.session.user) {
+        this.user = s.session.user.user;
       }
     });
   }
