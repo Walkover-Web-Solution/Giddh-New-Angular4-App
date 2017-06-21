@@ -8,18 +8,20 @@ import { Store } from '@ngrx/store';
 @Injectable()
 export class NeedsAuthentication implements CanActivate {
   private user: VerifyEmailResponseModel;
-  constructor(public _router: Router, private store: Store<AppState>, ) {
-    this.store.select(state => {
-      this.user = state.login.user;
-    });
+  constructor(public _router: Router, private store: Store<AppState>) {
   }
   public canActivate() {
-
+    this.store.take(1).subscribe(s => {
+      if (s.login.user) {
+        this.user = s.login.user;
+      }
+    });
     if (this.user && this.user.authKey) {
       return true;
+    } else {
+      console.log('Request is unauthorized, redirect to Login Component!');
+      // this._auth.Authorize();
+      this._router.navigate(['/login']);
     }
-    console.log('Request is unauthorized, redirect to Login Component!');
-    // this._auth.Authorize();
-    this._router.navigate(['/login']);
   }
 }
