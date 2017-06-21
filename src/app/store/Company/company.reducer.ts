@@ -7,8 +7,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
  * Keeping Track of the CompanyState
  */
 export interface CurrentCompanyState {
-  companies?: CompanyRequest[];
-  activeCompany?: CompanyRequest;
+  companies?: ComapnyResponse[];
+  activeCompany?: ComapnyResponse;
   isRefreshing: boolean;
 }
 
