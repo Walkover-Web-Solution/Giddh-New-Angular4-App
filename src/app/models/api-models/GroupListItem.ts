@@ -1,4 +1,4 @@
-import { IGroupListItem } from '../../interfaces/groupListItem.interface';
+import { IGroupListItem } from '../interfaces/groupListItem.interface';
 
 /**
  * Model for company groups api response
