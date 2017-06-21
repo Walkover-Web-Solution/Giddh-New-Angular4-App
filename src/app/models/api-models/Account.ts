@@ -1,14 +1,13 @@
-import { IAccount } from '../../interfaces/accountCreate.interface';
-import { IGstDetailListItem } from '../../interfaces/gstDetailListItem.interface';
-import { IUserInfo } from '../../interfaces/userInfo.interface';
-import { INameUniqueName } from '../../interfaces/nameUniqueName.interface';
+import { IAccountCreate, IAccount } from '../interfaces/accountCreate.interface';
+import { IGstDetailListItem } from '../interfaces/gstDetailListItem.interface';
+import { IUserInfo } from '../interfaces/userInfo.interface';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 
 /**
  * Model for create account api response
  * API:: (create-account) /company/companyUniqueName/groups/:groupUniqueName:/accounts
  */
-
-export class AccountResponse implements IAccount {
+export class AccountResponse implements IAccountCreate {
     public gstDetails: IGstDetailListItem[];
     public city?: string;
     public pincode?: string;
@@ -82,4 +81,39 @@ export class AccountResponse implements IAccount {
     this.uniqueName = uniqueName;
     this.name = name;
     }
+}
+
+/**
+ * Model for create account api request
+ * API:: (create-account) /company/companyUniqueName/groups/:groupUniqueName:/accounts
+ */
+
+export class AccountRequest implements IAccount {
+  public address?: string;
+  public attentionTo?: string;
+  public companyName?: string;
+  public description?: string;
+  public email?: string;
+  public mobileNo?: string;
+  public openingBalance?: any;
+  public openingBalanceDate?: string;
+  public openingBalanceType?: string;
+  public name: string;
+  public uniqueName: string;
+  public gstDetails?: IGstDetailListItem[];
+
+  constructor(account: IAccount) {
+      this.address = account.address;
+      this.attentionTo = account.attentionTo;
+      this.companyName = account.companyName;
+      this.description = account.description;
+      this.email = account.email;
+      this.mobileNo = account.mobileNo;
+      this.openingBalance = account.openingBalance;
+      this.openingBalanceDate = account.openingBalanceDate;
+      this.openingBalanceType = account.openingBalanceType;
+      this.name = account.name;
+      this.uniqueName = account.uniqueName;
+      this.gstDetails = account.gstDetails;
+  }
 }
