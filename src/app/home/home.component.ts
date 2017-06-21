@@ -1,4 +1,4 @@
-import { Company } from './../models/api-models/Company';
+import { CompanyRequest } from './../models/api-models/Company';
 import { CompanyActions } from './../services/actions/company.actions';
 import { Actions } from '@ngrx/effects';
 
@@ -27,8 +27,8 @@ export class HomeComponent implements OnInit {
     private store: Store<AppState>,
     private companyActions: CompanyActions
   ) {
-    let company = new Company();
-    this.store.dispatch(this.companyActions.CreateCompany(company));
+    let company = new CompanyRequest();
+    // this.store.dispatch(this.companyActions.CreateCompany(company));
   }
 
   public ngOnInit() {

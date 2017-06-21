@@ -19,6 +19,10 @@ export interface AuthenticationState {
   user?: VerifyEmailResponseModel;                   // current user | null
 }
 
+export interface SessionState {
+  user?: VerifyEmailResponseModel;                   // current user | null
+}
+
 /**
  * Setting the InitialState for this Reducer's Store
  */
@@ -32,6 +36,10 @@ const initialState = {
   isLoginWithTwitterInProcess: false,
   isLoginWithEmailSubmited: false,
   isVerifyEmailSuccess: false
+};
+
+const sessionInitialState = {
+  user: null
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -78,4 +86,22 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
     default:
       return state;
   }
+};
+
+export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
+   switch (action.type) {
+    case LoginActions.VerifyEmailResponce:
+      let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body
+        });
+      } else {
+        return Object.assign({}, state, {
+          user: null
+        });
+      }
+    default:
+      return state;
+   }
 };
