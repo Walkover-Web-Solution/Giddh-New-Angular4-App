@@ -68,12 +68,12 @@ export class GroupCreateRequest implements IGroup {
  * Model for Update group api request
  * API:: (create-group) /company/companyUniqueName/groups
  */
-export class GroupUpateRequest implements IGroup {
+export class GroupUpateRequest {
   public description?: string;
-  public name: string;
-  public uniqueName: string;
+  public name?: string;
+  public uniqueName?: string;
 
-  constructor(group: GroupCreateRequest) {
+  constructor(group: GroupUpateRequest) {
     this.description = group.description;
     this.name = group.name;
     this.uniqueName = group.uniqueName;

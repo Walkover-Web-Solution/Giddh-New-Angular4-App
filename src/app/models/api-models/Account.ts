@@ -101,6 +101,12 @@ export class AccountRequest implements IAccount {
   public name: string;
   public uniqueName: string;
   public gstDetails?: IGstDetailListItem[];
+  public hsnNumber: string;
+  public city: string;
+  public pincode: string;
+  public country: string;
+  public sacNumber: string;
+  public stateCode: string;
 
   constructor(account: IAccount) {
       this.address = account.address;
@@ -115,5 +121,11 @@ export class AccountRequest implements IAccount {
       this.name = account.name;
       this.uniqueName = account.uniqueName;
       this.gstDetails = account.gstDetails;
+      this.hsnNumber = account.hsnNumber;
+      this.city = account.city;
+      this.pincode = account.pincode;
+      this.country = account.country;
+      this.sacNumber = account.sacNumber;
+      this.stateCode = account.stateCode;
   }
 }
