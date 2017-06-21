@@ -6,7 +6,6 @@ import { RouterModule } from '@angular/router';
 
 import { AuthenticationService } from './authentication.service';
 import { StorageService } from './storage.service';
-import { CurrentUserService } from './currentUser.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ErrorHandlerService } from './errorhandler.service';
 import { ToasterService } from './toaster.service';
@@ -20,6 +19,7 @@ import { SharedModule } from '../shared/shared.module';
 import { CompanyActions } from './actions/company.actions';
 import { LoginActions } from './actions/login.action';
 import { CompanyService } from './companyService.service';
+import { NeedsAuthentication } from './decorators/needsAuthentication';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -38,12 +38,12 @@ export class ServiceModule {
       ngModule: ServiceModule,
       providers: [
         StorageService,
-        CurrentUserService,
         HttpWrapperService,
         AuthenticationService,
         ErrorHandlerService,
         ToasterService,
-        CompanyService
+        CompanyService,
+        NeedsAuthentication
       ]
     };
   }
