@@ -7,13 +7,19 @@ import { Response } from '@angular/http';
 import { Action } from '@ngrx/store';
 import { of } from 'rxjs/observable/of';
 import { ToasterService } from '../toaster.service';
+import { ComapnyResponse, StateDetailsResponse } from '../../models/index';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 @Injectable()
 
 export class CompanyActions {
   public static CREATE_COMPANY = 'CompanyCreate';
+  public static CREATE_COMPANY_RESPONSE = 'CompanyResponse';
   public static REFRESH_COMPANIES = 'CompanyRefresh';
-  public static REFRESH_COMPANIES_RESPONSE = 'CompanyResponse';
+  public static REFRESH_COMPANIES_RESPONSE = 'CompanyRefreshResponse';
+  public static GET_STATE_DETAILS = 'CompanyStateDetails';
+  public static GET_STATE_DETAILS_RESPONSE = 'CompanyStateDetailsResponse';
+  public static SET_ACTIVE_COMPANY = 'CompanyActiveCompany';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
@@ -48,6 +54,15 @@ export class CompanyActions {
       return { type: '' };
     });
 
+     @Effect()
+  public GetStateDetails$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_STATE_DETAILS)
+    .debug('')
+    .switchMap(action => this._companyService.getStateDetails())
+    .map(response => {
+      console.log('Response ' + response);
+      return this.GetStateDetailsResponse(response);
+  });
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService) {
 
   }
@@ -64,17 +79,37 @@ export class CompanyActions {
     };
   }
 
-  public RefreshCompaniesResponse(response: Response): Action {
+  public RefreshCompaniesResponse(response: BaseResponse<ComapnyResponse[]>): Action {
     return {
       type: CompanyActions.REFRESH_COMPANIES_RESPONSE,
       payload: response
     };
   }
 
-  public CreateCompanyResponse(value: Response): Action {
+  public CreateCompanyResponse(value: BaseResponse<ComapnyResponse>): Action {
     return {
-      type: CompanyActions.CREATE_COMPANY,
+      type: CompanyActions.CREATE_COMPANY_RESPONSE,
       payload: value
+    };
+  }
+
+  public GetStateDetails(): Action {
+    return {
+      type: CompanyActions.GET_STATE_DETAILS
+    };
+  }
+
+  public GetStateDetailsResponse(value: BaseResponse<StateDetailsResponse>): Action {
+    return {
+      type: CompanyActions.GET_STATE_DETAILS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public setActiveCompany(company: ComapnyResponse): Action {
+    return {
+      type: CompanyActions.SET_ACTIVE_COMPANY,
+      payload: company
     };
   }
 }
