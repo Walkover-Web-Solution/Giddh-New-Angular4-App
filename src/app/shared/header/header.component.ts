@@ -7,6 +7,7 @@ import { ManageGroupsAccountsComponent } from './components/';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { CompanyActions } from '../../services/actions';
+import { ComapnyResponse } from '../../models/index';
 
 @Component({
   selector: 'app-header',
@@ -25,14 +26,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public userMenu: {isopen: boolean} = {isopen: false};
   public companyMenu: {isopen: boolean} = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
+  public companies$: Observable<ComapnyResponse[]>;
 
   /**
    *
    */
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
       return state.company.isRefreshing;
+    });
+
+    this.companies$ = this.store.select(state => {
+      return state.company.companies;
     });
    }
   // tslint:disable-next-line:no-empty
@@ -57,7 +64,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   public refreshCompanies(e: Event) {
-    e.stopPropagation();
     this.store.dispatch(this.companyActions.RefreshCompanies());
   }
 }
