@@ -1,5 +1,7 @@
-export interface IGroup {
-  name: string;
+import { INameUniqueName } from './nameUniqueName.interface';
+
+export interface IGroup extends INameUniqueName {
   synonyms?: string;
-  uniqueName: string;
+  description?: string;
+  parentGroupUniqueName?: string;
 }

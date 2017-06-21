@@ -1,6 +1,7 @@
-import { ICreateGroup } from "../interfaces/groupCreate.interface";
-import { INameUniqueName } from "../interfaces/nameUniqueName.interface";
-import { IUserInfo } from "../interfaces/userInfo.interface";
+import { ICreateGroup } from '../interfaces/groupCreate.interface';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { IUserInfo } from '../interfaces/userInfo.interface';
+import { IGroup } from '../interfaces/group.interface';
 
 /**
  * Model for create group api response
@@ -42,5 +43,39 @@ export class GroupResponse implements ICreateGroup {
     this.createdBy = createdBy;
     this.updatedAt = updatedAt;
     this.updatedBy = updatedBy;
+  }
+}
+
+/**
+ * Model for create group api request
+ * API:: (create-group) /company/companyUniqueName/groups
+ */
+export class GroupCreateRequest implements IGroup {
+  public description?: string;
+  public name: string;
+  public uniqueName: string;
+  public parentGroupUniqueName: string;
+
+  constructor(group: GroupCreateRequest) {
+    this.description = group.description;
+    this.name = group.name;
+    this.uniqueName = group.uniqueName;
+    this.parentGroupUniqueName = group.parentGroupUniqueName;
+  }
+}
+
+/**
+ * Model for Update group api request
+ * API:: (create-group) /company/companyUniqueName/groups
+ */
+export class GroupUpateRequest implements IGroup {
+  public description?: string;
+  public name: string;
+  public uniqueName: string;
+
+  constructor(group: GroupCreateRequest) {
+    this.description = group.description;
+    this.name = group.name;
+    this.uniqueName = group.uniqueName;
   }
 }

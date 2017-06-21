@@ -4,7 +4,6 @@ import { IGroup } from './group.interface';
 
 export interface ICreateGroup extends IGroup {
   applicableTaxes: INameUniqueName[];
-  description?: string;
   fixed: boolean;
   groups: ICreateGroup[];
   hsnNumber?: string;
