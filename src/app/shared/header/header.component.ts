@@ -16,6 +16,7 @@ import { CompanyActions } from '../../services/actions';
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
+  @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
   public title: Observable<string>;
   public flyAccounts: Subject<boolean>= new Subject<boolean>();
   public noGroups: boolean;
@@ -45,6 +46,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public hideManageGroupsModal() {
     this.manageGroupsAccountsModal.hide();
+  }
+
+  public showAddCompanyModal() {
+    this.addCompanyModal.show();
+  }
+
+  public hideAddCompanyModal() {
+    this.addCompanyModal.hide();
   }
 
   public refreshCompanies(e: Event) {
