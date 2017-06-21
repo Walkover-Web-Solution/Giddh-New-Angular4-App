@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs, Response, Headers } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { CurrentUserService } from './currentUser.service';
 
 @Injectable()
 export class HttpWrapperService {
-    constructor(private _http: Http, private _currentUserService: CurrentUserService) {
+    constructor(private _http: Http) {
 
   }
 
@@ -37,23 +36,23 @@ export class HttpWrapperService {
   }
 
   public prepareOptions(options: RequestOptionsArgs): RequestOptionsArgs {
-    let token: string = this._currentUserService.token;
+    // let token: string = this._currentUserService.token;
 
-    options = options || {};
+    // options = options || {};
 
-    if (!options.headers) {
-      options.headers = new Headers();
-    }
+    // if (!options.headers) {
+    //   options.headers = new Headers();
+    // }
 
-    if (token) {
-      options.headers.append('Authorization', 'Bearer ' + token);
-    }
-    options.headers.append('Access-Control-Allow-Origin', '*');
-    options.headers.append('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    options.headers.append('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
-    options.headers.append('cache-control', 'no-cache');
-    options.headers.append('Content-Type', 'application/json');
-    options.headers.append('Accept', 'application/json');
+    // if (token) {
+    //   options.headers.append('Authorization', 'Bearer ' + token);
+    // }
+    // options.headers.append('Access-Control-Allow-Origin', '*');
+    // options.headers.append('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    // options.headers.append('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+    // options.headers.append('cache-control', 'no-cache');
+    // options.headers.append('Content-Type', 'application/json');
+    // options.headers.append('Accept', 'application/json');
 
     return options;
   }
