@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
+import { HandleCatch } from './catchManager/catchmanger';
 
 @Injectable()
 export class AccountService implements OnInit {
@@ -36,15 +37,7 @@ export class AccountService implements OnInit {
         let data: BaseResponse<AccountResponse> = res.json();
         return data;
       })
-      .catch((e) => {
-        let data: BaseResponse<AccountResponse> = {
-          body: null,
-          code: 'Internal Error',
-          message: 'something went wrong',
-          status: 'error'
-        };
-        return new Observable<BaseResponse<AccountResponse>>((o) => { o.next(data); });
-      });
+      .catch((e) => HandleCatch<AccountResponse>(e));
   }
 
   public UpdateAccount(model: AccountRequest, accountName: string): Observable<BaseResponse<AccountResponse>> {
@@ -59,15 +52,7 @@ export class AccountService implements OnInit {
         let data: BaseResponse<AccountResponse> = res.json();
         return data;
       })
-      .catch((e) => {
-        let data: BaseResponse<AccountResponse> = {
-          body: null,
-          code: 'Internal Error',
-          message: 'something went wrong',
-          status: 'error'
-        };
-        return new Observable<BaseResponse<AccountResponse>>((o) => { o.next(data); });
-      });
+      .catch((e) => HandleCatch<AccountResponse>(e));
   }
 
   public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string>> {
@@ -82,15 +67,7 @@ export class AccountService implements OnInit {
         let data: BaseResponse<string> = res.json();
         return data;
       })
-      .catch((e) => {
-        let data: BaseResponse<string> = {
-          body: null,
-          code: 'Internal Error',
-          message: 'something went wrong',
-          status: 'error'
-        };
-        return new Observable<BaseResponse<string>>((o) => { o.next(data); });
-      });
+      .catch((e) => HandleCatch<string>(e));
   }
 
   public UnmergeAccount(model: AccountUnMergeRequest, accountUniqueName: string): Observable<BaseResponse<string>> {
@@ -105,14 +82,21 @@ export class AccountService implements OnInit {
         let data: BaseResponse<string> = res.json();
         return data;
       })
-      .catch((e) => {
-        let data: BaseResponse<string> = {
-          body: null,
-          code: 'Internal Error',
-          message: 'something went wrong',
-          status: 'error'
-        };
-        return new Observable<BaseResponse<string>>((o) => { o.next(data); });
-      });
+      .catch((e) => HandleCatch<string>(e));
+  }
+
+  public ApplyTax(model: AccountUnMergeRequest, accountUniqueName: string): Observable<BaseResponse<string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(ACCOUNTS_API.UNMERGE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<string>(e));
   }
 }
