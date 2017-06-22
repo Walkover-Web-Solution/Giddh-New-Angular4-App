@@ -1,3 +1,4 @@
+import { Select2Module } from 'ng2-select2';
 import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { RouterModule } from '@angular/router';
@@ -30,7 +31,8 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComp
       spinnerSize: 30
     }),
     ToastyModule.forRoot(),
-    FormWizardModule
+    FormWizardModule,
+    Select2Module
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastyModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent]
