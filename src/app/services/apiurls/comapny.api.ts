@@ -6,5 +6,5 @@ export const COMPANY_API = {
   SET_STATE_DETAILS: Configuration.ApiUrl + 'state-details',
   COMPANY_LIST: Configuration.ApiUrl + 'users/:uniqueName/companies',
   CREATE_COMPANY: Configuration.ApiUrl + 'company',
-  DELETE_COMPANY: Configuration.ApiUrl + 'company',
+  DELETE_COMPANY: Configuration.ApiUrl + 'company/:uniqueName',
 };

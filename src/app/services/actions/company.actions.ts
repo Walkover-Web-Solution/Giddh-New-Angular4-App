@@ -4,11 +4,12 @@ import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { CompanyRequest } from './../../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
-import { Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs/observable/of';
 import { ToasterService } from '../toaster.service';
 import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/index';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { AppState } from "../../store/roots";
 
 @Injectable()
 
@@ -22,6 +23,9 @@ export class CompanyActions {
   public static SET_STATE_DETAILS = 'CompanySetStateDetails';
   public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
   public static SET_ACTIVE_COMPANY = 'CompanyActiveCompany';
+
+  public static DELETE_COMPANY = 'CompanyDelete';
+  public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
@@ -78,7 +82,29 @@ export class CompanyActions {
       return this.SetStateDetailsResponse(response);
   });
 
-  constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService) {
+   @Effect()
+  public DeleteCompany$: Observable<Action> = this.action$
+    .ofType(CompanyActions.DELETE_COMPANY)
+    .debug('')
+    .switchMap(action => this._companyService.DeleteCompany(action.payload))
+    .map(response => {
+      return this.DeleteCompanyResponse(response);
+    });
+
+  @Effect()
+  public DeleteCompanyResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.DELETE_COMPANY_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, 'success');
+      }
+      this.store.dispatch(this.RefreshCompanies());
+      return {type: ''};
+    });
+  constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
 
   }
   public CreateCompany(value: CompanyRequest): Action {
@@ -131,6 +157,20 @@ export class CompanyActions {
   public SetStateDetailsResponse(value: BaseResponse<StateDetailsResponse>): Action {
     return {
       type: CompanyActions.SET_STATE_DETAILS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public DeleteCompany(value: string): Action {
+    return {
+      type: CompanyActions.DELETE_COMPANY,
+      payload: value
+    };
+  }
+
+  public DeleteCompanyResponse(value: BaseResponse<string>): Action {
+    return {
+      type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
     };
   }

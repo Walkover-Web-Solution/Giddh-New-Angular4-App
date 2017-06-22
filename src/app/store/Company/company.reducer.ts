@@ -42,6 +42,12 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         isRefreshing: false,
         companies: action.payload.body
       });
+    case CompanyActions.DELETE_COMPANY_RESPONSE:
+      let uniqueName: BaseResponse<string> = action.payload;
+      let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
+      return Object.assign({}, state, {
+        companies: array
+      });
     default:
       return state;
   }

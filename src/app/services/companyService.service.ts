@@ -69,13 +69,19 @@ export class CompanyService implements OnInit {
   /**
    * DeleteCompany
    */
-  public DeleteCompany(uniqueName: string): Observable<Response> {
-    return this._http.delete(COMPANY_API.CREATE_COMPANY, { uniqueName })
+  public DeleteCompany(uniqueName: string): Observable<BaseResponse<string>> {
+    return this._http.delete(COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName))
       .map((res) => {
-        return res;
-      })
-      .catch((e) => {
-        return Observable.throw(e);
+        let data: BaseResponse<string> = res.json();
+        return data;
+      }).catch((e) => {
+        let data: BaseResponse<string> = {
+        body: null,
+        code: 'Internal Error',
+        message: 'Internal Error',
+        status: 'error'
+      };
+      return new Observable<BaseResponse<string>>((o) => { o.next(data); });
       });
   }
 
