@@ -141,13 +141,12 @@ module.exports = function (options) {
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'isElectron': false,
+        'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
         'process.env': {
           'ENV': JSON.stringify(METADATA.ENV),
           'NODE_ENV': JSON.stringify(METADATA.ENV),
-          'HMR': METADATA.HMR,
-          'isElectron': false,
-          'AppUrl': JSON.stringify(METADATA.AppUrl),
-          'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'HMR': METADATA.HMR
         }
       }),
 
