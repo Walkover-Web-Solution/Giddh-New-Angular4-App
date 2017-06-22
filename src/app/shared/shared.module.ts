@@ -13,13 +13,13 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormWizardModule, ConfirmModalComponent } from './theme';
 
-import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent } from './header/components';
+import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent } from './header/components';
 
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent
+    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +35,7 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComp
     Select2Module
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastyModule],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent]
+  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {
