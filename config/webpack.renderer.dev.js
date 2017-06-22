@@ -19,10 +19,10 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
  * Webpack Constants
  */
 const ENV = process.env.ENV = process.env.NODE_ENV = 'development:renderer';
-const HOST = process.env.HOST || 'localapp.giddh.com';
+const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
-const AppUrl = 'http://localapp.giddh.com/';
+const AppUrl = 'localhost';
 const ApiUrl = 'http://apitest.giddh.com/';
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   host: HOST,

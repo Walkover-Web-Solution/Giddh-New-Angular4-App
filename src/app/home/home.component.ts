@@ -9,7 +9,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { LoginActions } from '../services/actions';
+import { LoginActions } from '../services/actions/login.action';
 
 @Component({
   selector: 'home',  // <home></home>

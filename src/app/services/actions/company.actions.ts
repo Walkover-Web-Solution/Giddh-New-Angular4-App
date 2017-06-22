@@ -1,15 +1,14 @@
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from './../companyService.service';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
-import { CompanyRequest } from './../../models/api-models/Company';
+import { CompanyRequest, ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from './../../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
 import { of } from 'rxjs/observable/of';
 import { ToasterService } from '../toaster.service';
-import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/index';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AppState } from "../../store/roots";
+import { AppState } from '../../store/roots';
 
 @Injectable()
 

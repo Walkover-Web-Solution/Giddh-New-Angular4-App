@@ -2,12 +2,12 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { CompanyRequest, ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../models';
-import { COMPANY_API } from './apiurls';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
+import { ComapnyResponse, CompanyRequest, StateDetailsResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { COMPANY_API } from './apiurls/comapny.api';
 
 @Injectable()
 export class CompanyService implements OnInit {

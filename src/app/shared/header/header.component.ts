@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/index';
+import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 
 @Component({
   selector: 'app-header',
