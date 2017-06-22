@@ -77,13 +77,11 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
       if (data.status === 'success') {
         return Object.assign({}, state, {
-          user: data.body,
           isVerifyEmailInProcess: false,
           isVerifyEmailSuccess: true
         });
       } else {
         return Object.assign({}, state, {
-          user: null,
           isVerifyEmailInProcess: false,
           isVerifyEmailSuccess: false
         });
