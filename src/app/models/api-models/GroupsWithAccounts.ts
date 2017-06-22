@@ -13,14 +13,4 @@ export class GroupsWithAccountsResponse implements IGroupsWithAccounts {
   public uniqueName: string;
   public category: string;
   public groups: IGroupsWithAccounts[];
-
-  constructor(synonyms: string, accounts: IAccountsInfo[], name: string, uniqueName: string,
-              category: string, groups: IGroupsWithAccounts[]) {
-    this.synonyms = synonyms;
-    this.accounts = accounts;
-    this.name = name;
-    this.uniqueName = uniqueName;
-    this.category = category;
-    this.groups = groups;
-  }
 }

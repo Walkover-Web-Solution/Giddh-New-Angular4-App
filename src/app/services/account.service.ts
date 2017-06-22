@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse } from '../models/api-models/Account';
+import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest, AccountSharedWithResponse } from '../models/api-models/Account';
 import { ACCOUNTS_API } from './apiurls/account.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -47,7 +47,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountName', accountName), model)
+    return this._http.put(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountName', accountName), model)
       .map((res) => {
         let data: BaseResponse<AccountResponse> = res.json();
         return data;
@@ -62,7 +62,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.MERGE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.put(ACCOUNTS_API.MERGE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
         let data: BaseResponse<string> = res.json();
         return data;
@@ -98,5 +98,49 @@ export class AccountService implements OnInit {
         return data;
       })
       .catch((e) => HandleCatch<string>(e));
+  }
+  public AccountMove(model: AccountMoveRequest, accountUniqueName: string): Observable<BaseResponse<string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.put(ACCOUNTS_API.MOVE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<string>(e));
+  }
+
+  public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.put(ACCOUNTS_API.SHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<string>(e));
+  }
+
+  public AccountShareWith(accountUniqueName: string): Observable<BaseResponse<AccountSharedWithResponse>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.get(ACCOUNTS_API.SHARED_WITH.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName))
+      .map((res) => {
+        let data: BaseResponse<AccountSharedWithResponse> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<AccountSharedWithResponse>(e));
   }
 }
