@@ -8,16 +8,13 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ComapnyResponse, CompanyRequest, StateDetailsResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/comapny.api';
+import { HandleCatch } from './catchManager/catchmanger';
 
 @Injectable()
-export class CompanyService implements OnInit {
+export class CompanyService  {
 
   private user: UserDetails;
   constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
-  }
-
-  public ngOnInit() {
-//
   }
 
   /**
@@ -30,15 +27,7 @@ export class CompanyService implements OnInit {
         let data: BaseResponse<ComapnyResponse> = res.json();
         return data;
       })
-      .catch((e) => {
-        let data: BaseResponse<ComapnyResponse> = {
-        body: null,
-        code: 'Internal Error',
-        message: 'something went wrong',
-        status: 'error'
-      };
-      return new Observable<BaseResponse<ComapnyResponse>>((o) => { o.next(data); });
-      });
+      .catch((e) => HandleCatch<ComapnyResponse>(e));
     }
 
   /**
@@ -55,15 +44,7 @@ export class CompanyService implements OnInit {
         let data: BaseResponse<ComapnyResponse[]> = res.json();
         return data;
       })
-      .catch((e) => {
-        let data: BaseResponse<ComapnyResponse[]> = {
-        body: null,
-        code: 'Internal Error',
-        message: 'something went wrong',
-        status: 'error'
-      };
-      return new Observable<BaseResponse<ComapnyResponse[]>>((o) => { o.next(data); });
-      });
+      .catch((e) => HandleCatch<ComapnyResponse[]>(e));
   }
 
   /**
@@ -74,15 +55,7 @@ export class CompanyService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string> = res.json();
         return data;
-      }).catch((e) => {
-        let data: BaseResponse<string> = {
-        body: null,
-        code: 'Internal Error',
-        message: 'Internal Error',
-        status: 'error'
-      };
-      return new Observable<BaseResponse<string>>((o) => { o.next(data); });
-      });
+      }).catch((e) => HandleCatch<string>(e));
   }
 
   /**
@@ -92,15 +65,7 @@ export class CompanyService implements OnInit {
     return this._http.get(COMPANY_API.GET_STATE_DETAILS).map((res) => {
       let data: BaseResponse<StateDetailsResponse> = res.json();
       return data;
-    }).catch((e) => {
-      let data: BaseResponse<StateDetailsResponse> = {
-        body: null,
-        code: 'Internal Error',
-        message: 'Internal Error',
-        status: 'error'
-      };
-      return new Observable<BaseResponse<StateDetailsResponse>>((o) => { o.next(data); });
-    });
+    }).catch((e) => HandleCatch<StateDetailsResponse>(e));
   }
 
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<StateDetailsResponse>> {
@@ -115,14 +80,6 @@ export class CompanyService implements OnInit {
         };
         return data;
       }
-    }).catch((e) => {
-      let data: BaseResponse<StateDetailsResponse> = {
-        body: null,
-        code: 'Internal Error',
-        message: 'Internal Error',
-        status: 'error'
-      };
-      return new Observable<BaseResponse<StateDetailsResponse>>((o) => { o.next(data); });
-    });
+    }).catch((e) => HandleCatch<StateDetailsRequest>(e));
   }
 }

@@ -10,7 +10,7 @@ import { LoaderService } from './loader.service';
 import { LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { VerifyEmailModel, VerifyEmailResponseModel } from '../models/api-models/loginModels';
-import { HandelCache } from './cacheManager/cachemanger';
+import { HandleCatch } from './catchManager/catchmanger';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
@@ -25,27 +25,27 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
-    }).catch((e) => HandelCache<string>(e));
+    }).catch((e) => HandleCatch<string>(e));
   }
 
   public VerifyEmail(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel>> {
     return this._http.post(LOGIN_API.VerifyEmail, modele).map((res) => {
       let data: BaseResponse<VerifyEmailResponseModel> = res.json();
       return data;
-    }).catch((e) => HandelCache<VerifyEmailResponseModel>(e));
+    }).catch((e) => HandleCatch<VerifyEmailResponseModel>(e));
   }
 
   public SignupWithMobile(email: string): Observable<BaseResponse<string>> {
     return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
-    }).catch((e) => HandelCache<string>(e));
+    }).catch((e) => HandleCatch<string>(e));
   }
 
   public VerifyOTP(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel>> {
     return this._http.post(LOGIN_API.VerifyEmail, modele).map((res) => {
       let data: BaseResponse<VerifyEmailResponseModel> = res.json();
       return data;
-    }).catch((e) => HandelCache<VerifyEmailResponseModel>(e));
+    }).catch((e) => HandleCatch<VerifyEmailResponseModel>(e));
   }
 }
