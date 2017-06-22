@@ -9,7 +9,7 @@ import {
     Component,
     OnInit
 } from '@angular/core';
-import { LoginActions } from '../services/actions';
+import { LoginActions } from '../services/actions/login.action';
 import { Select2OptionData } from 'ng2-select2/ng2-select2';
 
 @Component({
