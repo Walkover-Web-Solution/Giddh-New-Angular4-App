@@ -2,7 +2,7 @@ import { LoginActions, CompanyActions } from '../../services/actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsResponse } from '../../models/index';
+import { StateDetailsResponse, StateDetailsRequest } from '../../models/index';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -110,6 +110,15 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         lastState: stateData.body.lastState,
         companyUniqueName: stateData.body.companyUniqueName
       });
+    case CompanyActions.SET_STATE_DETAILS_RESPONSE:
+      let setStateData: BaseResponse<StateDetailsRequest> = action.payload;
+      if (setStateData.status === 'success') {
+        return Object.assign({} , state, {
+          lastState: setStateData.body.lastState,
+          companyUniqueName: setStateData.body.companyUniqueName
+        });
+      }
+      return state;
     default:
       return state;
    }
