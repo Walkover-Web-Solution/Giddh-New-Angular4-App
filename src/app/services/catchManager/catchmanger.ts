@@ -1,9 +1,8 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Observable } from 'rxjs/Observable';
 
-export function HandelCache<T>(r: any): Observable<BaseResponse<T>> {
+export function HandleCatch<T>(r: any): Observable<BaseResponse<T>> {
   let data: BaseResponse<T> = new BaseResponse<T>();
-  debugger;
   if (r.status === 0) {
     data = {
       body: null,

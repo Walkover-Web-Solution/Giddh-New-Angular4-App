@@ -107,10 +107,13 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
       let stateData: BaseResponse<StateDetailsResponse> = action.payload;
-      return Object.assign({}, state, {
-        lastState: stateData.body.lastState,
-        companyUniqueName: stateData.body.companyUniqueName
-      });
+      if (stateData.status === 'success') {
+        return Object.assign({}, state, {
+          lastState: stateData.body.lastState,
+          companyUniqueName: stateData.body.companyUniqueName
+        });
+      }
+      return state;
     case CompanyActions.SET_STATE_DETAILS_RESPONSE:
       let setStateData: BaseResponse<StateDetailsRequest> = action.payload;
       if (setStateData.status === 'success') {

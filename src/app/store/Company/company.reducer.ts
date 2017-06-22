@@ -38,16 +38,23 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         isRefreshing: true
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
-      return Object.assign({}, state, {
-        isRefreshing: false,
-        companies: action.payload.body
-      });
+      let companies: BaseResponse<ComapnyResponse[]> = action.payload;
+      if (companies.status === 'success') {
+        return Object.assign({}, state, {
+          isRefreshing: false,
+          companies: action.payload.body
+        });
+      }
+      return state;
     case CompanyActions.DELETE_COMPANY_RESPONSE:
       let uniqueName: BaseResponse<string> = action.payload;
-      let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
-      return Object.assign({}, state, {
-        companies: array
-      });
+      if (uniqueName.status === 'success') {
+        let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
+        return Object.assign({}, state, {
+          companies: array
+        });
+      }
+      return state;
     default:
       return state;
   }
