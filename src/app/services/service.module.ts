@@ -21,6 +21,7 @@ import { LoginActions } from './actions/login.action';
 import { CompanyService } from './companyService.service';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { LocationService } from './location.service';
+import { UserAuthenticated } from './decorators/UserAuthenticated';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -45,7 +46,8 @@ export class ServiceModule {
         ToasterService,
         CompanyService,
         NeedsAuthentication,
-        LocationService
+        LocationService,
+        UserAuthenticated
       ]
     };
   }

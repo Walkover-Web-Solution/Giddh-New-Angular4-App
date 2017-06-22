@@ -1,4 +1,4 @@
-import { CompanyActions } from './../../services/actions';
+import { CompanyActions } from './../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { CompanyRequest } from '../../models/api-models/Company';
 

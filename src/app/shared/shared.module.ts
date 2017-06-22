@@ -11,7 +11,7 @@ import { ToastyModule } from 'ng2-toasty';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { FormWizardModule } from './theme';
+import { FormWizardModule, ConfirmModalComponent } from './theme';
 
 import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent } from './header/components';
 
@@ -19,7 +19,7 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComp
   declarations: [
     // Components / Directives/ Pipes
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent
+    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent
   ],
   imports: [
     CommonModule,
@@ -35,7 +35,7 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComp
     Select2Module
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastyModule],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent]
+  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {
