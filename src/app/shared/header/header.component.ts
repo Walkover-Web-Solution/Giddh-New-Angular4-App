@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { ComapnyResponse, StateDetailsResponse } from '../../models/index';
+import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 
 @Component({
   selector: 'app-header',
@@ -19,9 +19,10 @@ import { ComapnyResponse, StateDetailsResponse } from '../../models/index';
   ]
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
-  @ViewChild('manageGroupsAccountsModal')
-  public manageGroupsAccountsModal: ModalDirective;
+  @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+
+  @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   public title: Observable<string>;
   public flyAccounts: Subject<boolean> = new Subject<boolean>();
   public noGroups: boolean;
@@ -36,6 +37,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public companies$: Observable<ComapnyResponse[]>;
 
   public selectedCompany: Observable<ComapnyResponse>;
+  public markForDeleteCompany: ComapnyResponse;
+  public deleteCompanyBody: string;
 
   /**
    *
@@ -88,5 +91,28 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
+  }
+
+  public changeCompany(selectedCompanyUniqueName: string) {
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
+    stateDetailsRequest.lastState = 'home';
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+  }
+
+  public deleteCompany() {
+    this.store.dispatch(this.companyActions.DeleteCompany(this.markForDeleteCompany.uniqueName));
+    this.hideDeleteCompanyModal();
+  }
+
+  public showDeleteCompanyModal(company: ComapnyResponse, e: Event) {
+    this.markForDeleteCompany = company;
+    this.deleteCompanyBody = `Are You Sure You Want To Delete ${company.name} ? `;
+    this.deleteCompanyModal.show();
+    e.stopPropagation();
+  }
+  public hideDeleteCompanyModal() {
+    this.deleteCompanyModal.hide();
   }
 }

@@ -17,18 +17,22 @@ const SpecifyTsFilesPlugin = require('./specify-ts-files-plugin');
  * Webpack Constants
  */
 const PROD = helpers.hasNpmFlag('prod');
-const ENV = JSON.stringify(process.env.NODE_ENV = process.env.ENV = PROD? 'production' : 'development');
-const HOST = JSON.stringify(process.env.HOST || 'localapp.giddh.com');
+const ENV = JSON.stringify(process.env.NODE_ENV = process.env.ENV = PROD ? 'production' : 'development');
+const HOST = JSON.stringify(process.env.HOST || 'localhost');
 const PORT = process.env.PORT || 3000;
-
-module.exports = function(options) {
+const AppUrl = 'localhost';
+const ApiUrl = 'http://apitest.giddh.com/';
+module.exports = function (options) {
 
   DEV_SERVER = options && options['live'] || false;
   const METADATA = {
     host: HOST,
     port: PORT,
     ENV: ENV,
-    DEV_SERVER: DEV_SERVER
+    DEV_SERVER: DEV_SERVER,
+    isElectron: true,
+    AppUrl: AppUrl,
+    ApiUrl: ApiUrl
   };
 
   const entry = {
@@ -83,7 +87,19 @@ module.exports = function(options) {
 
     plugins: [
       PROD ? new NoEmitOnErrorsPlugin() : null,
-      new webpack.DefinePlugin(METADATA),
+      new webpack.DefinePlugin({
+        'ENV': JSON.stringify(METADATA.ENV),
+        'HMR': METADATA.HMR,
+        'DEV_SERVER': METADATA.DEV_SERVER,
+        'isElectron': false,
+        'AppUrl': JSON.stringify(METADATA.AppUrl),
+        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+        'process.env': {
+          'ENV': JSON.stringify(METADATA.ENV),
+          'NODE_ENV': JSON.stringify(METADATA.ENV),
+          'HMR': METADATA.HMR
+        }
+      }),
       new CheckerPlugin(),
       new webpack.IgnorePlugin(new RegExp("^(spawn-sync|bufferutil|utf-8-validate)$")),
       new SpecifyTsFilesPlugin({
