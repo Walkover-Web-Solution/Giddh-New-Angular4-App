@@ -9,6 +9,7 @@ import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { UserDetails } from '../../models/api-models/loginModels';
 
 @Component({
   selector: 'app-header',
@@ -39,6 +40,9 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public selectedCompany: Observable<ComapnyResponse>;
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
+  public user$: Observable<UserDetails>;
+
+  public userName: string;
 
   /**
    *
@@ -49,6 +53,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private store: Store<AppState>,
     private companyActions: CompanyActions
   ) {
+    this.user$ = this.store.select(state => {
+      return state.session.user.user;
+    });
+
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
       return state.company.isRefreshing;
     });
@@ -69,9 +77,19 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.store.dispatch(this.loginAction.LoginSuccess());
+    this.user$.subscribe((u) => {
+      if (u.name.match(/\s/g)) {
+        let name = u.name;
+        let tmpName = name.split(' ');
+        this.userName = tmpName[0][0] + tmpName[1][0];
+      } else {
+        this.userName = u.name[0] + u.name[1];
+      }
+    });
   }
   // tslint:disable-next-line:no-empty
-  public ngAfterViewInit() {}
+  public ngAfterViewInit() {
+  }
 
   public showManageGroupsModal() {
     this.manageGroupsAccountsModal.show();
@@ -91,6 +109,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
+    e.stopPropagation();
   }
 
   public changeCompany(selectedCompanyUniqueName: string) {

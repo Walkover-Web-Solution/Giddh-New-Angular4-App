@@ -164,7 +164,7 @@
                                   (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
                                     <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
-                                      class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                      class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)" [ngClass]="{'glyphicon-spin': isCompanyRefreshInProcess$ | async}"></i>
                                 </li>
                             </ul>
                         </li>
@@ -172,10 +172,10 @@
                 </li>
                 <li dropdown [isOpen]="userMenu.isopen" tooltip-placement="left">
                     <a href (click)="false" id="user-dropdown" dropdownToggle>
-            GA
+            {{userName | uppercase}}
           </a>
                     <ul class="dropdown-menu" aria-labelledby="user-dropdown">
-                        <li><a href="javascript:void(0)">Create Company</a></li>
+                        <li><a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a></li>
                         <li><a ui-sref="company.content.user">User Detail</a></li>
                         <li><a href="javascript:void(0)">Run Tour</a></li>
                         <li><a target="_Blank" href="https://docs.giddh.com/">Documentation</a></li>
