@@ -9,7 +9,6 @@ import { Store } from '@ngrx/store';
 export class HttpWrapperService {
   private user: VerifyEmailResponseModel;
   constructor(private _http: Http, private store: Store<AppState>) {
-
   }
 
   public get = (url: string, params?: any, options?: RequestOptionsArgs): Observable<Response> => {
@@ -54,9 +53,7 @@ export class HttpWrapperService {
     if (this.user) {
       options.headers.append('auth-key', this.user.authKey);
     }
-    options.headers.append('Access-Control-Allow-Origin', '*');
-    options.headers.append('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    options.headers.append('Access-Control-Allow-Headers', 'Origin, Content-Type, X-Auth-Token');
+    // options.withCredentials = true;
     options.headers.append('cache-control', 'no-cache');
     options.headers.append('Content-Type', 'application/json');
     options.headers.append('Accept', 'application/json');
