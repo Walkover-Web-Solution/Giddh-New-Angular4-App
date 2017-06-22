@@ -172,6 +172,10 @@
   version "2.5.52"
   resolved "https://registry.yarnpkg.com/@types/jasmine/-/jasmine-2.5.52.tgz#6ea5435d5c71562296e63ef27a4718f94f2fbb13"
 
+"@types/jquery@*", "@types/jquery@^2.0.39":
+  version "2.0.47"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-2.0.47.tgz#9665a157519dd48d259f94ac670d332a56561c00"
+
 "@types/lodash@^4.14.37":
   version "4.14.66"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.66.tgz#3dbb83477becf130611f8fac82a8fdb199805981"
@@ -195,6 +199,12 @@
 "@types/q@^0.0.32":
   version "0.0.32"
   resolved "https://registry.yarnpkg.com/@types/q/-/q-0.0.32.tgz#bd284e57c84f1325da702babfc82a5328190c0c5"
+
+"@types/select2@^4.0.31":
+  version "4.0.37"
+  resolved "https://registry.yarnpkg.com/@types/select2/-/select2-4.0.37.tgz#9b6c00480d1f2b2df7bb43708339bd7cef765dd5"
+  dependencies:
+    "@types/jquery" "*"
 
 "@types/selenium-webdriver@^2.53.35", "@types/selenium-webdriver@~2.53.39":
   version "2.53.42"
@@ -3983,6 +3993,13 @@ ng-router-loader@^2.1.0:
   dependencies:
     loader-utils "^0.2.16"
     recast "^0.11.20"
+
+ng2-select2@^1.0.0-beta.10:
+  version "1.0.0-beta.10"
+  resolved "https://registry.yarnpkg.com/ng2-select2/-/ng2-select2-1.0.0-beta.10.tgz#908b0b8a9f8cd06736f3bca16b1e35a1f696a145"
+  dependencies:
+    "@types/jquery" "^2.0.39"
+    "@types/select2" "^4.0.31"
 
 ng2-toasty@^4.0.3:
   version "4.0.3"
