@@ -163,7 +163,8 @@
                                 <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                                   (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash"></i>
+                                    <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
+                                      class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                                 </li>
                             </ul>
                         </li>
@@ -203,6 +204,16 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <company-add></company-add>
+      </div>
+    </div>
+</div>
+
+<!--delete company modal  -->
+<div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog" >
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal()"
+          (successCallBack)="deleteCompany()"></confirm-modal>
       </div>
     </div>
 </div>
