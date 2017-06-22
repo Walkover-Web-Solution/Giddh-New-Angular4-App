@@ -1,7 +1,9 @@
 import { LoginActions } from '../../services/actions/login.action';
+import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -20,7 +22,9 @@ export interface AuthenticationState {
 }
 
 export interface SessionState {
-  user?: VerifyEmailResponseModel;                   // current user | null
+  user?: VerifyEmailResponseModel;
+  lastState: string;
+  companyUniqueName: string;                   // current user | null
 }
 
 /**
@@ -39,7 +43,9 @@ const initialState = {
 };
 
 const sessionInitialState = {
-  user: null
+  user: null,
+  lastState: '',
+  companyUniqueName: ''
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -72,13 +78,11 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
       if (data.status === 'success') {
         return Object.assign({}, state, {
-          user: data.body,
           isVerifyEmailInProcess: false,
           isVerifyEmailSuccess: true
         });
       } else {
         return Object.assign({}, state, {
-          user: null,
           isVerifyEmailInProcess: false,
           isVerifyEmailSuccess: false
         });
@@ -89,7 +93,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
 };
 
 export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
-   switch (action.type) {
+  switch (action.type) {
     case LoginActions.VerifyEmailResponce:
       let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
       if (data.status === 'success') {
@@ -101,7 +105,22 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
           user: null
         });
       }
+    case CompanyActions.GET_STATE_DETAILS_RESPONSE:
+      let stateData: BaseResponse<StateDetailsResponse> = action.payload;
+      return Object.assign({}, state, {
+        lastState: stateData.body.lastState,
+        companyUniqueName: stateData.body.companyUniqueName
+      });
+    case CompanyActions.SET_STATE_DETAILS_RESPONSE:
+      let setStateData: BaseResponse<StateDetailsRequest> = action.payload;
+      if (setStateData.status === 'success') {
+        return Object.assign({}, state, {
+          lastState: setStateData.body.lastState,
+          companyUniqueName: setStateData.body.companyUniqueName
+        });
+      }
+      return state;
     default:
       return state;
-   }
+  }
 };

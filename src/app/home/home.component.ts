@@ -9,6 +9,7 @@ import {
   Component,
   OnInit
 } from '@angular/core';
+import { LoginActions } from '../services/actions/login.action';
 
 @Component({
   selector: 'home',  // <home></home>
@@ -25,7 +26,8 @@ export class HomeComponent implements OnInit {
    */
   constructor(
     private store: Store<AppState>,
-    private companyActions: CompanyActions
+    private companyActions: CompanyActions,
+    private loginAction: LoginActions
   ) {
     let company = new CompanyRequest();
     // this.store.dispatch(this.companyActions.CreateCompany(company));
