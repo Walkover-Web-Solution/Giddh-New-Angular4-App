@@ -160,9 +160,10 @@
                         </li>
                         <li style="padding:0px;">
                             <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
-                                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}">
+                                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                                  (click)="changeCompany(cmp.uniqueName)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i id="deleteCmp" class="glyphicon glyphicon-trash"></i>
+                                    <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash"></i>
                                 </li>
                             </ul>
                         </li>

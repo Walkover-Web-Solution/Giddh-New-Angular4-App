@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { ComapnyResponse, StateDetailsResponse } from '../../models/index';
+import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/index';
 
 @Component({
   selector: 'app-header',
@@ -88,5 +88,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
+  }
+
+  public changeCompany(selectedCompanyUniqueName: string) {
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
+    stateDetailsRequest.lastState = 'home';
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 }
