@@ -36,9 +36,9 @@ import { APP_BASE_HREF } from '@angular/common';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 
 import { PageComponent } from './page.component';
-import { AboutModule } from './about';
-import { HomeModule } from './home';
-import { LoginModule } from './login';
+import { AboutModule } from './about/about.module';
+import { HomeModule } from './home/home.module';
+import { LoginModule } from './login/login.module';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';

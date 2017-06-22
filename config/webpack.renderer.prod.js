@@ -29,9 +29,9 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production:renderer';
-const HOST = process.env.HOST || 'localapp.giddh.com';
+const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
-const AppUrl = 'http://localapp.giddh.com/';
+const AppUrl = 'localhost';
 const ApiUrl = 'http://api.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
@@ -174,10 +174,7 @@ module.exports = function (env) {
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
-            'HMR': METADATA.HMR,
-            'isElectron': true,
-            'AppUrl': JSON.stringify(METADATA.AppUrl),
-            'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+            'HMR': METADATA.HMR
           }
         }),
 

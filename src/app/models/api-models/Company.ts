@@ -12,7 +12,8 @@ export class CompanyRequest {
 }
 
 export class StateDetailsRequest {
-
+   public lastState: string;
+  public companyUniqueName: string;
 }
 
 export class StateDetailsResponse {
