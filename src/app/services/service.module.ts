@@ -20,6 +20,7 @@ import { CompanyActions } from './actions/company.actions';
 import { LoginActions } from './actions/login.action';
 import { CompanyService } from './companyService.service';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
+import { LocationService } from './location.service';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
 
 /**
@@ -45,6 +46,7 @@ export class ServiceModule {
         ToasterService,
         CompanyService,
         NeedsAuthentication,
+        LocationService,
         UserAuthenticated
       ]
     };

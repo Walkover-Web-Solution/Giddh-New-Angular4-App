@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { HomeActions } from './actions/home.actions';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,6 +7,7 @@ import { RouterModule } from '@angular/router';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { HomeRoutingModule } from './home.routing.module';
 import { HomeComponent } from './home.component';
+import { Select2Module } from 'ng2-select2';
 
 console.log('`Home` bundle loaded asynchronously');
 
@@ -20,7 +22,9 @@ console.log('`Home` bundle loaded asynchronously');
     CommonModule,
     FormsModule,
     HomeRoutingModule,
-    Ng2BootstrapModule.forRoot()
+    Ng2BootstrapModule.forRoot(),
+    SharedModule,
+    Select2Module
   ],
 })
 export class HomeModule {

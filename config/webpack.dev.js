@@ -2,6 +2,7 @@
  * @author: @AngularClass
  */
 
+const webpack = require('webpack');
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 // const webpackMergeDll = webpackMerge.strategy({plugins: 'replace'});
@@ -146,10 +147,7 @@ module.exports = function(options) {
                 'process.env': {
                     'ENV': JSON.stringify(METADATA.ENV),
                     'NODE_ENV': JSON.stringify(METADATA.ENV),
-                    'HMR': METADATA.HMR,
-                    'isElectron': false,
-                    'AppUrl': JSON.stringify(METADATA.AppUrl),
-                    'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+                    'HMR': METADATA.HMR
                 }
             }),
 
@@ -221,7 +219,7 @@ module.exports = function(options) {
                 options: {
 
                 }
-            }),
+            })
 
         ],
 
