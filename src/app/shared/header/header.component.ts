@@ -112,12 +112,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     e.stopPropagation();
   }
 
-  public changeCompany(selectedCompanyUniqueName: string) {
+  public changeCompany(selectedCompanyUniqueName: string, e: Event) {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
     stateDetailsRequest.lastState = 'home';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    e.stopPropagation();
   }
 
   public deleteCompany() {
