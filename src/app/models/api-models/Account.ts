@@ -151,3 +151,34 @@ export class AccountUnMergeRequest {
   public uniqueNames: string[];
   public moveTo: string;
 }
+
+/*
+ * Model for move account to a group api request
+ * API:: (Move-account-to_group) company/:companyUniqueName/accounts/:accountUniqueName/move
+ * its response will be success message in body
+ */
+export class AccountMoveRequest {
+  public uniqueName: string;
+}
+
+/*
+ * Model for share account api request
+ * API:: (share account) company/:companyUniqueName/accounts/:accountUniqueName/share
+ * its response will be success message in body
+ */
+export class ShareAccountRequest {
+  public role: string;
+  public user: string;
+}
+
+/*
+ * Model for shared-with account to a group api request
+ * API:: (share account) company/:companyUniqueName/accounts/:accountUniqueName/shared-with
+ * response will be array of AccountSharedWithResponse
+ */
+export class AccountSharedWithResponse {
+  public role: INameUniqueName;
+  public userEmail: string;
+  public userName: string;
+  public userUniqueName: string;
+}
