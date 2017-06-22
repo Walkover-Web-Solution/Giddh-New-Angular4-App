@@ -1,4 +1,4 @@
-import { CompanyActions } from './../../services/actions';
+import { CompanyActions } from './../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { CompanyRequest, ComapnyResponse } from '../../models/api-models/Company';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -8,7 +8,6 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
  */
 export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
-  activeCompany?: ComapnyResponse;
   isRefreshing: boolean;
 }
 
@@ -17,7 +16,6 @@ export interface CurrentCompanyState {
  */
 const initialState: CurrentCompanyState = {
   companies: null,
-  activeCompany: null,
   isRefreshing: false
 };
 
@@ -43,6 +41,12 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
       return Object.assign({}, state, {
         isRefreshing: false,
         companies: action.payload.body
+      });
+    case CompanyActions.DELETE_COMPANY_RESPONSE:
+      let uniqueName: BaseResponse<string> = action.payload;
+      let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
+      return Object.assign({}, state, {
+        companies: array
       });
     default:
       return state;

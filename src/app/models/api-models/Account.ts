@@ -139,10 +139,6 @@ export class AccountRequest implements IAccount {
  */
 export class AccountMergeRequest {
   public uniqueName: string;
-
-  constructor(acount: AccountMergeRequest) {
-    this.uniqueName = acount.uniqueName;
-  }
 }
 
 /**
@@ -154,9 +150,4 @@ export class AccountMergeRequest {
 export class AccountUnMergeRequest {
   public uniqueNames: string[];
   public moveTo: string;
-
-  constructor(account: AccountUnMergeRequest) {
-    this.uniqueNames = account.uniqueNames;
-    this.moveTo = account.moveTo;
-  }
 }

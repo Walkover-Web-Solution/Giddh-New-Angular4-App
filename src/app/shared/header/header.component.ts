@@ -6,34 +6,49 @@ import { Store } from '@ngrx/store';
 import { ManageGroupsAccountsComponent } from './components/';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
-import { CompanyActions } from '../../services/actions';
-import { ComapnyResponse } from '../../models/index';
+import { LoginActions } from '../../services/actions/login.action';
+import { CompanyActions } from '../../services/actions/company.actions';
+import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
-  styles: [`
-    `]
+  styles: [
+    `
+    `
+  ]
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
+
+  @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   public title: Observable<string>;
-  public flyAccounts: Subject<boolean>= new Subject<boolean>();
+  public flyAccounts: Subject<boolean> = new Subject<boolean>();
   public noGroups: boolean;
-  public languages: any[] = [{ name: 'ENGLISH', value: 'en' }, { name: 'DUTCH', value: 'nl' }];
-  public sideMenu: {isopen: boolean} = {isopen: false};
-  public userMenu: {isopen: boolean} = {isopen: false};
-  public companyMenu: {isopen: boolean} = {isopen: false};
+  public languages: any[] = [
+    { name: 'ENGLISH', value: 'en' },
+    { name: 'DUTCH', value: 'nl' }
+  ];
+  public sideMenu: { isopen: boolean } = { isopen: false };
+  public userMenu: { isopen: boolean } = { isopen: false };
+  public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
+
+  public selectedCompany: Observable<ComapnyResponse>;
+  public markForDeleteCompany: ComapnyResponse;
+  public deleteCompanyBody: string;
 
   /**
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
-
+  constructor(
+    private loginAction: LoginActions,
+    private store: Store<AppState>,
+    private companyActions: CompanyActions
+  ) {
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
       return state.company.isRefreshing;
     });
@@ -41,11 +56,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.companies$ = this.store.select(state => {
       return state.company.companies;
     });
-   }
+
+    this.selectedCompany = this.store.select(state => {
+      if (!state.company.companies) {
+        return;
+      }
+      return state.company.companies.find(cmp => {
+        return cmp.uniqueName === state.session.companyUniqueName;
+      });
+    });
+  }
   // tslint:disable-next-line:no-empty
-  public ngOnInit() { }
+  public ngOnInit() {
+    this.store.dispatch(this.loginAction.LoginSuccess());
+  }
   // tslint:disable-next-line:no-empty
-  public ngAfterViewInit() { }
+  public ngAfterViewInit() {}
 
   public showManageGroupsModal() {
     this.manageGroupsAccountsModal.show();
@@ -65,5 +91,28 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
+  }
+
+  public changeCompany(selectedCompanyUniqueName: string) {
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
+    stateDetailsRequest.lastState = 'home';
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+  }
+
+  public deleteCompany() {
+    this.store.dispatch(this.companyActions.DeleteCompany(this.markForDeleteCompany.uniqueName));
+    this.hideDeleteCompanyModal();
+  }
+
+  public showDeleteCompanyModal(company: ComapnyResponse, e: Event) {
+    this.markForDeleteCompany = company;
+    this.deleteCompanyBody = `Are You Sure You Want To Delete ${company.name} ? `;
+    this.deleteCompanyModal.show();
+    e.stopPropagation();
+  }
+  public hideDeleteCompanyModal() {
+    this.deleteCompanyModal.hide();
   }
 }

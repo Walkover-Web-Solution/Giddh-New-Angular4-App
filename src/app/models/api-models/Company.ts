@@ -11,6 +11,16 @@ export class CompanyRequest {
 
 }
 
+export class StateDetailsRequest {
+   public lastState: string;
+  public companyUniqueName: string;
+}
+
+export class StateDetailsResponse {
+  public lastState: string;
+  public companyUniqueName: string;
+}
+
 export class ComapnyResponse {
   public canUserSwitch: boolean;
   public companyIdentity: any[];
