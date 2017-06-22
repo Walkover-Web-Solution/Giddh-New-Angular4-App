@@ -7,7 +7,7 @@ import { Response } from '@angular/http';
 import { Action } from '@ngrx/store';
 import { of } from 'rxjs/observable/of';
 import { ToasterService } from '../toaster.service';
-import { ComapnyResponse, StateDetailsResponse } from '../../models/index';
+import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/index';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 @Injectable()
@@ -17,8 +17,10 @@ export class CompanyActions {
   public static CREATE_COMPANY_RESPONSE = 'CompanyResponse';
   public static REFRESH_COMPANIES = 'CompanyRefresh';
   public static REFRESH_COMPANIES_RESPONSE = 'CompanyRefreshResponse';
-  public static GET_STATE_DETAILS = 'CompanyStateDetails';
-  public static GET_STATE_DETAILS_RESPONSE = 'CompanyStateDetailsResponse';
+  public static GET_STATE_DETAILS = 'CompanyGetStateDetails';
+  public static GET_STATE_DETAILS_RESPONSE = 'CompanyGetStateDetailsResponse';
+  public static SET_STATE_DETAILS = 'CompanySetStateDetails';
+  public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
   public static SET_ACTIVE_COMPANY = 'CompanyActiveCompany';
 
   @Effect()
@@ -54,7 +56,7 @@ export class CompanyActions {
       return { type: '' };
     });
 
-     @Effect()
+  @Effect()
   public GetStateDetails$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_STATE_DETAILS)
     .debug('')
@@ -62,7 +64,20 @@ export class CompanyActions {
     .map(response => {
       console.log('Response ' + response);
       return this.GetStateDetailsResponse(response);
+    });
+
+  @Effect()
+  public SetStateDetails$: Observable<Action> = this.action$
+    .ofType(CompanyActions.SET_STATE_DETAILS)
+    .debug('')
+    .switchMap(action => this._companyService.setStateDetails(action.payload))
+    .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+      }
+      return this.SetStateDetailsResponse(response);
   });
+
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService) {
 
   }
@@ -106,10 +121,17 @@ export class CompanyActions {
     };
   }
 
-  public setActiveCompany(company: ComapnyResponse): Action {
+  public SetStateDetails(value: StateDetailsRequest): Action {
     return {
-      type: CompanyActions.SET_ACTIVE_COMPANY,
-      payload: company
+      type: CompanyActions.SET_STATE_DETAILS,
+      payload: value
+    };
+  }
+
+  public SetStateDetailsResponse(value: BaseResponse<StateDetailsResponse>): Action {
+    return {
+      type: CompanyActions.SET_STATE_DETAILS_RESPONSE,
+      payload: value
     };
   }
 }
