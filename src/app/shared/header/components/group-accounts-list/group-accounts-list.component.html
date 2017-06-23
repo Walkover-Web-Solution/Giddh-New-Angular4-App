@@ -1,7 +1,21 @@
-<h3 class="mrB1 mrL1 small">Accounts from <strong>all group</strong></h3>
+<h3 class="list-group-item-heading small" *ngIf="!(activeGroupName$ | async)">Accounts from
+  <strong>all group</strong>
+</h3>
+
+<div>
+  <h4 class="list-group-item-heading small" *ngIf="(activeGroupName$ | async) && (accountsList$ | async)?.length">Accounts from
+    <strong>{{ activeGroupName$ | async }}</strong>
+  </h4>
+
+  <h4 class="list-group-item-heading small" *ngIf="(activeGroupName$ | async) && !(accountsList$ | async)?.length">Oops, there are no accounts in
+    <strong>{{ activeGroupName$ | async }}</strong>
+  </h4>
+
+</div>
+
 <div id="allAcntWrap" class="scrClass acntListDiv ps-container">
   <div class="list-group">
-    <a *ngFor="let value of accountsList" href="javascript:void(0)" class="list-group-item">
+    <a *ngFor="let value of (accountsList$ | async)" href="javascript:void(0)" class="list-group-item">
       <h4 uib-tooltip="cash" tooltip-placement="bottom" class="list-group-item-heading ellp max200">{{value.name}}</h4>
     </a>
   </div>

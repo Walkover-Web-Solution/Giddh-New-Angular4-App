@@ -1,4 +1,4 @@
-<div id="getGroupModal" ng-controller="groupController as gc" class="">
+<div id="getGroupModal" class="">
 
   <div class="modal-header themeBg">
     <button type="button" class="close" data-dismiss="modal" (click)="closePopupEvent()" aria-label="Close"><span aria-hidden="true">×</span></button>
@@ -50,17 +50,6 @@
           </perfect-scrollbar>
         </div>
       </div>
-      <script type="text/ng-template" id="childGroupList">
-        <section class="row row-2" ng-repeat="grp in grp.groups">
-          <div class="row" trial-accordion>
-            <div class="col-xs-12 group" ng-style="{'padding-left':padLeft + 10}" ng-if="grp.isVisible"><span id="subGrp_{{grp.name}}" ng-bind-html="grp.name | capitalize" ng-click="selectItem(grp)" uib-tooltip="{{grp.synonyms}}"
-                tooltip-placement="right"></span></div>
-          </div>
-          <section class="subGroups isHidden" ng-if="grp.groups.length" ng-style="{'padding-left':padLeft + 10}">
-            <div ng-include="'childGroupList'"></div>
-          </section>
-        </section>
-      </script>
 
       <!-- middle body -->
       <div class="col-xs-7  pos-rel">
@@ -79,32 +68,28 @@
       <div class="col-xs-2" id="right">
         <div class="row pr">
 
-          <div class="form-group pdL1 pdT1 pdR1">
-            <div class="input-group">
-              <div class="input-group-addon">
-                <i class="glyphicon glyphicon-search"></i>
+            <div class="form-group pdL1 pdT1 pdR1">
+              <div class="input-group">
+                <div class="input-group-addon">
+                  <i class="glyphicon glyphicon-search"></i>
+                </div>
+                <input type="text" name="accountsSearch" ng-model="search.flataccount" class="form-control ng-pristine ng-untouched ng-valid"
+                  placeholder="Search accounts" ng-change="searchAccountsC5(search.flataccount)" ng-model-options="{debounce:1000}">
               </div>
-              <input type="text" name="accountsSearch" ng-model="search.flataccount" class="form-control ng-pristine ng-untouched ng-valid"
-                placeholder="Search accounts" ng-change="searchAccountsC5(search.flataccount)" ng-model-options="{debounce:1000}">
             </div>
+
+            <section class="pr" style="height: 378px">
+              <div class="search-loading" *ngIf="(searchLoad | async)">
+                <span class="spinner small"></span> Loading…
+              </div>
+
+              <app-manage-groups-accounts></app-manage-groups-accounts>
+
+            </section>
+
           </div>
-
-          <section class="pr" style="height: 378px">
-            <div class="search-loading ng-hide" ng-hide="showAccountListDetails || showListGroupsNow || fltAccntListcount5.length > 0">
-              <span class="spinner small"></span> Loading…
-            </div>
-            <!-- ngIf: showAccountListDetails -->
-
-            <!-- ngIf: search.flataccount.length > 0 || isEmptyObject(selectedGroup) -->
-            <group-account-list [accountsList]="[]"></group-account-list>
-            <!-- <div ng-if="search.flataccount.length > 0 || isEmptyObject(selectedGroup)" class="">
-
-            </div> -->
-            <!-- end ngIf: search.flataccount.length > 0 || isEmptyObject(selectedGroup) -->
-            <!-- uib-tooltip="{{value.parentGroups[0].name}}"tooltip-placement="bottom" ng-if="value.parentGroups[0].name!=selectedGroup.name" -->
-          </section>
-
-        </div>
+        <!-- <perfect-scrollbar class="row pr"> -->
+      <!-- </perfect-scrollbar> -->
       </div>
       <!-- right side end -->
     </div>
