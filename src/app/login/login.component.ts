@@ -14,7 +14,7 @@ import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyEmailModel } from '../models/api-models/loginModels';
-import { AuthService } from "ng2-ui-auth/commonjs/ng2-ui-auth.module";
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -38,7 +38,6 @@ export class LoginComponent implements OnInit {
   // tslint:disable-next-line:no-empty
   constructor(
     private _fb: FormBuilder,
-    private auth: AuthService,
     private store: Store<AppState>,
     private router: Router,
     private eh: ErrorHandlerService,
@@ -125,17 +124,6 @@ export class LoginComponent implements OnInit {
   }
 
   public loginWithProvider(provider: string) {
-    this.auth.authenticate(provider).subscribe({
-      error: (err: any) => {
-        // tslint:disable-next-line:no-debugger
-        debugger;
-        this.eh.handleError(err);
-      },
-      complete: () => {
-        // tslint:disable-next-line:no-debugger
-        debugger;
-        this.router.navigateByUrl('main');
-      }
-    });
+    //
   }
 }
