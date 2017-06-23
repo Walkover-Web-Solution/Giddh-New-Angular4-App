@@ -4,6 +4,9 @@ import { GroupsWithAccountsResponse } from '../../../../models/api-models/Groups
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { mockData } from './mock';
+import * as _ from 'lodash';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -24,45 +27,17 @@ export class ManageGroupsAccountsComponent implements OnInit {
   public breadCrumbList: any[] = [];
   public accountSharedUserList: any[] = [];
   public groupSharedUserList: any[] = [];
+
+  public psConfig: PerfectScrollbarConfigInterface;
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>) {
     // this.columns$ = this.store.select(state => {
     //   return state.groupwithaccounts.groupswithaccounts;
     // });
-    let data = {
-    name: 'Capital',
-    synonyms: 'hahha',
-    uniqueName: 'capital',
-    accounts: [],
-    active: {
-      type: 'grp'
-    },
-    groups: [
-        {
-          synonyms: '',
-            name: 'First Sub Group',
-            description: 'No desc.',
-            role: {
-                name: 'Super Admin',
-                uniqueName: 'super_admin',
-                permissions: [
-                    {
-                        code: 'VW',
-                        description: 'View'
-                    }
-                ]
-            },
-            uniqueName: 'Sub Group Unique Name',
-            accounts: [],
-            groups: [],
-            isFixed: false,
-            category: ''
-        }
-      ],
-      category: 'assets'
-    };
-    // let a = new GroupsWithAccountsResponse('a', [], '', '', '', []);
-    this.groupList$ = Observable.of([data]);
+    let newMockData = mockData;
+    newMockData = _.sortBy(mockData, 'category');
+    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
+    this.psConfig = { maxScrollbarLength: 20 };
   }
 
   // tslint:disable-next-line:no-empty
@@ -96,4 +71,5 @@ export class ManageGroupsAccountsComponent implements OnInit {
   public getSelectedType() {
     //
   }
+
 }
