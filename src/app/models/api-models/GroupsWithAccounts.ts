@@ -1,5 +1,6 @@
 import { IAccountsInfo } from '../interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../interfaces/groupsWithAccounts.interface';
+import { GroupsWithAccountsVm } from '../view-models/GroupWithAccountsVm';
 
 /**
  * Model for getting group list api response
@@ -12,15 +13,8 @@ export class GroupsWithAccountsResponse implements IGroupsWithAccounts {
   public name: string;
   public uniqueName: string;
   public category: string;
+  public isActive?: boolean;
+  public isOpen?: boolean;
   public groups: IGroupsWithAccounts[];
 
-  constructor(synonyms: string, accounts: IAccountsInfo[], name: string, uniqueName: string,
-              category: string, groups: IGroupsWithAccounts[]) {
-    this.synonyms = synonyms;
-    this.accounts = accounts;
-    this.name = name;
-    this.uniqueName = uniqueName;
-    this.category = category;
-    this.groups = groups;
-  }
 }

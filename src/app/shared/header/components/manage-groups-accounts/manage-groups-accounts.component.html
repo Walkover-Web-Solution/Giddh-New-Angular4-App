@@ -29,77 +29,28 @@
             </div>
           </div>
           <!-- searchbar end -->
-          <div class="search-loading0" *ngIf="showListGroupsNow">
+          <div class="search-loading0" *ngIf="!showListGroupsNow">
             <span class="spinner small"></span> Loading…
           </div>
 
-          <div id="addMngGrpScrBar" class="scrClass ps-container" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
-            suppressscrollx="false" usebothwheelaxes="false" suppressscrolly="true">
+          <perfect-scrollbar id="addMngGrpScrBar" class="scrClass" [config]="psConfig">
+          <!-- <div id="addMngGrpScrBar" class="scrClass ps-container" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
+            suppressscrollx="false" usebothwheelaxes="false" suppressscrolly="true"> -->
             <div ng-transclude="">
               <!-- ngIf: showListGroupsNow -->
-              <div *ngIf="showListGroupsNow" class="">
-
-
-                <div class="clearfix add-manage-grouplist">
-
-                  <section class="row row-1  assets" *ngFor="let grp of (groupList$ | async)" class="{{grp.category}}">
-                    <div class="" trial-accordion="">
-                      <div class="col-xs-12 group" *ngIf="!grp.isVisible"><span id="grp_{{grp.name}}" ng-bind-html="grp.name | uppercase" ng-click="selectItem(grp)" uib-tooltip="Debtors, Stock, Bank balance"
-                          tooltip-placement="right" class="ng-binding">{{grp.name}}</span></div>
-                    </div>
-                    <!-- ngIf: grp.groups.length -->
-                    <section class="subGroups" ng-if="grp.groups.length">
-                      <!-- ngInclude: 'childGroupList' -->
-                      <div ng-include="'childGroupList'" class="">
-                        <!-- ngRepeat: grp in grp.groups -->
-                        <section class="row row-2" *ngFor="let subgrp of grp.groups">
-                          <div class="row" trial-accordion="">
-                            <!-- ngIf: grp.isVisible -->
-                            <div class="col-xs-12 group " ng-style="{'padding-left':padLeft + 10}" ng-if="grp.isVisible"
-                              style="padding-left: 30px;"><span id="subGrp_Bank Accounts" ng-bind-html="grp.name | capitalize" ng-click="selectItem(grp)"
-                                uib-tooltip="" tooltip-placement="right" class="ng-binding">Bank accounts</span></div>
-                            <!-- end ngIf: grp.isVisible -->
-                          </div>
-                          <!-- ngIf: grp.groups.length -->
-                        </section>
-                        <!-- end ngRepeat: grp in grp.groups -->
-                        <section class="row row-2 " ng-repeat="grp in grp.groups">
-                          <div class="row" trial-accordion="">
-                            <!-- ngIf: grp.isVisible -->
-                            <div class="col-xs-12 group " ng-style="{'padding-left':padLeft + 10}" ng-if="grp.isVisible"
-                              style="padding-left: 30px;"><span id="subGrp_Cash" ng-bind-html="grp.name | capitalize" ng-click="selectItem(grp)" uib-tooltip=""
-                                tooltip-placement="right" class="ng-binding">Cash</span></div>
-                            <!-- end ngIf: grp.isVisible -->
-                          </div>
-                          <!-- ngIf: grp.groups.length -->
-                        </section>
-                        <!-- end ngRepeat: grp in grp.groups -->
-                        <section class="row row-2 " ng-repeat="grp in grp.groups">
-                          <div class="row" trial-accordion="">
-                            <!-- ngIf: grp.isVisible -->
-                            <div class="col-xs-12 group " ng-style="{'padding-left':padLeft + 10}" ng-if="grp.isVisible"
-                              style="padding-left: 30px;"><span id="subGrp_Sundry Debtors" ng-bind-html="grp.name | capitalize" ng-click="selectItem(grp)"
-                                uib-tooltip="" tooltip-placement="right" class="ng-binding">Sundry debtors</span></div>
-                            <!-- end ngIf: grp.isVisible -->
-                          </div>
-                          <!-- ngIf: grp.groups.length -->
-                        </section>
-                        <!-- end ngRepeat: grp in grp.groups -->
-                      </div>
-                    </section>
-                    <!-- end ngIf: grp.groups.length -->
-                  </section>
-                </div>
+              <div *ngIf="showListGroupsNow">
+                <groups-recursive-list [groupList]="groupList$ | async"></groups-recursive-list>
               </div>
               <!-- end ngIf: showListGroupsNow -->
             </div>
-            <div class="ps-scrollbar-x-rail" style="width: 0px; display: none; left: 0px; bottom: 0px;">
+            <!-- <div class="ps-scrollbar-x-rail" style="width: 0px; display: none; left: 0px; bottom: 0px;">
               <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
             </div>
             <div class="ps-scrollbar-y-rail" style="top: 0px; height: 380px; display: none; right: 0px;">
               <div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div>
-            </div>
-          </div>
+            </div> -->
+          <!-- </div> -->
+          </perfect-scrollbar>
         </div>
       </div>
       <script type="text/ng-template" id="childGroupList">
@@ -148,53 +99,10 @@
             <!-- ngIf: showAccountListDetails -->
 
             <!-- ngIf: search.flataccount.length > 0 || isEmptyObject(selectedGroup) -->
-            <div ng-if="search.flataccount.length > 0 || isEmptyObject(selectedGroup)" class="">
-              <h3 class="mrB1 mrL1 small">Accounts from <strong>all group</strong></h3>
-              <div id="allAcntWrap" class="scrClass acntListDiv ps-container" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
-                ng-class="{'minimizeBoth': accountsSearch.length > 0}">
-                <div ng-transclude="">
-                  <div class="list-group ">
-                    <!-- ngRepeat: value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName -->
-                    <a ng-repeat="value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName"
-                      href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item " ng-class="{'active': selectedAccntMenu === value}">
-                      <h4 uib-tooltip="cash" tooltip-placement="bottom" class="list-group-item-heading ellp max200 ng-binding" ng-bind-html="value.name | highlight: accountsSearch">Cash</h4>
-                    </a>
-                    <!-- end ngRepeat: value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName -->
-                    <a ng-repeat="value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName"
-                      href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item " ng-class="{'active': selectedAccntMenu === value}">
-                      <h4 uib-tooltip="sgst" tooltip-placement="bottom" class="list-group-item-heading ellp max200 ng-binding" ng-bind-html="value.name | highlight: accountsSearch">SGST</h4>
-                    </a>
-                    <!-- end ngRepeat: value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName -->
-                    <a ng-repeat="value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName"
-                      href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item " ng-class="{'active': selectedAccntMenu === value}">
-                      <h4 uib-tooltip="cgst" tooltip-placement="bottom" class="list-group-item-heading ellp max200 ng-binding" ng-bind-html="value.name | highlight: accountsSearch">CGST</h4>
-                    </a>
-                    <!-- end ngRepeat: value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName -->
-                    <a ng-repeat="value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName"
-                      href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item " ng-class="{'active': selectedAccntMenu === value}">
-                      <h4 uib-tooltip="giddh" tooltip-placement="bottom" class="list-group-item-heading ellp max200 ng-binding" ng-bind-html="value.name | highlight: accountsSearch">Walkover Technologies Private Limited</h4>
-                    </a>
-                    <!-- end ngRepeat: value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName -->
-                    <a ng-repeat="value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName"
-                      href="javascript:void(0)" ng-click="showAccountDtl(value)" class="list-group-item " ng-class="{'active': selectedAccntMenu === value}">
-                      <h4 uib-tooltip="utgst" tooltip-placement="bottom" class="list-group-item-heading ellp max200 ng-binding" ng-bind-html="value.name | highlight: accountsSearch">UTGST</h4>
-                    </a>
-                    <!-- end ngRepeat: value in gc.accountsListShort | filter:accountsSearch | limitTo: flatAccListC5.limit  | orderBy:value.uniqueName -->
-                  </div>
+            <group-account-list [accountsList]="[]"></group-account-list>
+            <!-- <div ng-if="search.flataccount.length > 0 || isEmptyObject(selectedGroup)" class="">
 
-                  <!-- ngIf: flatAccListC5.currentPage < flatAccListC5.totalPages --><a href="javascript:void(0)" class="load-more pull-left " ng-click="loadMoreAcc(selectedCompany.uniqueName, search.flataccount)"
-                    ng-if="flatAccListC5.currentPage < flatAccListC5.totalPages">Load More</a>
-                  <!-- end ngIf: flatAccListC5.currentPage < flatAccListC5.totalPages -->
-                  <!-- </perfect-scrollbar> -->
-                </div>
-                <div class="ps-scrollbar-x-rail" style="width: 97px; display: none; left: 0px; bottom: 0px;">
-                  <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
-                </div>
-                <div class="ps-scrollbar-y-rail" style="top: 0px; height: 300px; display: none; right: 0px;">
-                  <div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div>
-                </div>
-              </div>
-            </div>
+            </div> -->
             <!-- end ngIf: search.flataccount.length > 0 || isEmptyObject(selectedGroup) -->
             <!-- uib-tooltip="{{value.parentGroups[0].name}}"tooltip-placement="bottom" ng-if="value.parentGroups[0].name!=selectedGroup.name" -->
           </section>

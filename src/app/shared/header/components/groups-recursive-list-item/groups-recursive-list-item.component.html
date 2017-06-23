@@ -1,0 +1,10 @@
+<section class="rows row-2">
+  <div class="row" (click)="onGroupClick(group.uniqueName)">
+    <div class="col-xs-12 group" [ngStyle]="{'padding-left': padLeft+'px'}">
+      <span>{{ group.name }}</span>
+    </div>
+  </div>
+    <div *ngIf="group.isOpen">
+      <groups-recursive-list-item  *ngFor="let g of group.groups" [padLeft]="padLeft + 15" [group]="g"></groups-recursive-list-item>
+    </div>
+</section>
