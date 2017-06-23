@@ -73,6 +73,12 @@ export class GroupSharedWithResponse {
   public userUniqueName: string;
 }
 
+/**
+ * Model for Shared-with api response
+ * API:: (group-shared-with) 'company/:companyUniqueName/groups/:groupUniqueName/move'
+ * its response will be array of MoveGroupResponse
+ * Request is a PUT call takes MoveGroupRequest arguments
+ */
 export class MoveGroupRequest {
   public parentGroupUniqueName: string;
 }
