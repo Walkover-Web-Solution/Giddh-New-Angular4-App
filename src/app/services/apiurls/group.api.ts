@@ -10,4 +10,5 @@ export const GROUP_API = {
   DELETE_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
   MOVA_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/move',
   FLATTEN_GROUPS_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/groups/flatten-groups-accounts?q=&page=1&count=10&showEmptyGroups=', // get call
+  TAX_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy', // get call
 };
