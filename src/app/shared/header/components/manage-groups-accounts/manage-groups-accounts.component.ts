@@ -1,12 +1,12 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { mockData } from './mock';
 import * as _ from 'lodash';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -15,8 +15,8 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 })
 export class ManageGroupsAccountsComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
-  public grpSrch: string = '';
-  public searchLoad: boolean = true;
+  @ViewChild('grpSrchEl') public grpSrchEl: ElementRef;
+  public searchLoad: Observable<boolean>;
   public showListGroupsNow: boolean = true;
   public showOnUpdate: boolean = false;
   public canUpdate: boolean = false;
@@ -30,21 +30,25 @@ export class ManageGroupsAccountsComponent implements OnInit {
 
   public psConfig: PerfectScrollbarConfigInterface;
   // tslint:disable-next-line:no-empty
-  constructor(private store: Store<AppState>) {
-    // this.columns$ = this.store.select(state => {
-    //   return state.groupwithaccounts.groupswithaccounts;
-    // });
-    let newMockData = mockData;
-    newMockData = _.sortBy(mockData, 'category');
+  constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+    this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
     this.psConfig = { maxScrollbarLength: 20 };
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
+    .map((e: any) => e.target.value)
+    .debounceTime(700)
+    .distinctUntilChanged()
+    .subscribe((val) => {
+      this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
+    });
   }
 
   public closePopupEvent() {
+    this.grpSrchEl.nativeElement.value = '';
     this.closeEvent.emit(true);
   }
 
