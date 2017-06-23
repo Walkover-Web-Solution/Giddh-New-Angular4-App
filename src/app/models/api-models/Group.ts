@@ -2,6 +2,7 @@ import { ICreateGroup } from '../interfaces/groupCreate.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { IGroup } from '../interfaces/group.interface';
+import { IAccountsInfo } from '../interfaces/accountInfo.interface';
 
 /**
  * Model for create group api response
@@ -70,4 +71,19 @@ export class GroupSharedWithResponse {
   public userEmail: string;
   public userName: string;
   public userUniqueName: string;
+}
+
+export class MoveGroupRequest {
+  public parentGroupUniqueName: string;
+}
+
+export class MoveGroupResponse {
+  public applicableTaxes: INameUniqueName[];
+  public uniqueName: string;
+  public synonyms?: string;
+  public accounts: IAccountsInfo[];
+  public description?: any;
+  public category?: any;
+  public groups: ICreateGroup[];
+  public name: string;
 }
