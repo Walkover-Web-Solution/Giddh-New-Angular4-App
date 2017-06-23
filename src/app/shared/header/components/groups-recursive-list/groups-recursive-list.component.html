@@ -1,0 +1,13 @@
+<div class="clearfix add-manage-grouplist">
+  <section *ngFor="let group of groupList" class="rows row-2 {{group.category}}">
+    <div class="row" (click)="onGroupClick(group.uniqueName)">
+      <div class="col-xs-12 group">
+        <span>{{ group.name }}</span>
+      </div>
+    </div>
+    <div *ngIf="group.isOpen">
+      <groups-recursive-list-item *ngFor="let g of group.groups" [group]="g"></groups-recursive-list-item>
+    </div>
+  </section>
+
+</div>
