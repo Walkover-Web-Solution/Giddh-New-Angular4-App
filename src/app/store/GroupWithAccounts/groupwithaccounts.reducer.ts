@@ -4,44 +4,67 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
+import * as _ from 'lodash';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
 export interface CurrentGroupAndAccountState {
   groupswithaccounts: GroupsWithAccountsResponse[];
+  isGroupWithAccountsLoading: boolean;
+  activeGroupName: string;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
-  return mockData.map((m) => {
-    m = m as GroupsWithAccountsResponse;
-    m.isActive = false;
-    m.isOpen = false;
+  return _.orderBy(mockData.map((m) => {
+    m = Object.assign({}, m, {
+        isActive: false,
+        isOpen: false
+    });
+
     m.groups = prepare(m.groups);
     return m;
-  });
+  }), 'category');
 };
 
 /**
  * Setting the InitialState for this Reducer's Store
  */
 const initialState: CurrentGroupAndAccountState = {
-  groupswithaccounts: prepare(mockData)
+  groupswithaccounts: null,
+  isGroupWithAccountsLoading: false,
+  activeGroupName: null
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
   switch (action.type) {
+    case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS:
+      return Object.assign({}, state , {
+        isGroupWithAccountsLoading: true
+      });
+    case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE:
+      let data: BaseResponse<GroupsWithAccountsResponse[]> = action.payload;
+      if (data.status === 'success') {
+        let newData = prepare(data.body);
+        return Object.assign({} , state, {
+          groupswithaccounts: newData,
+          isGroupWithAccountsLoading: false
+        });
+      }
+      return state;
     case GroupWithAccountsAction.SET_ACTIVE_GROUP:
-      let groupArray: GroupsWithAccountsResponse[] = Object.assign([], state.groupswithaccounts);
-      groupArray.map(grp => {
+      let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+      groupArray.forEach(grp => {
         if (grp.uniqueName === action.payload) {
           grp.isActive = true;
-          grp.isOpen = true;
+          grp.isOpen = !grp.isOpen;
+          return;
         } else {
-          grp.isOpen = setActiveGroupFunc(grp.groups, action.payload);
+          setActiveGroupFunc(grp.groups, action.payload);
           grp.isActive = false;
         }
       });
       return Object.assign({}, state, {
+        activeGroupName: action.payload,
         groupswithaccounts: groupArray
       });
     default:
@@ -54,16 +77,15 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): 
   for (let grp of groups) {
     if (grp.uniqueName === uniqueName) {
       grp.isActive = true;
-      grp.isOpen = true;
-      myChildElementIsOpen = true;
+      grp.isOpen = !grp.isOpen;
+      myChildElementIsOpen = !grp.isOpen;
       break;
     } else {
       grp.isActive = false;
-      grp.isOpen = false;
     }
     if (grp.groups) {
       myChildElementIsOpen = setActiveGroupFunc(grp.groups, uniqueName);
-      grp.isOpen = myChildElementIsOpen;
+      // grp.isOpen = myChildElementIsOpen;
       if (grp.isOpen) {
         return myChildElementIsOpen;
       }
