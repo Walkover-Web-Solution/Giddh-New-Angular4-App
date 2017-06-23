@@ -3,7 +3,8 @@ import { Ng2UiAuthModule, CustomConfig } from 'ng2-ui-auth';
 export const Configuration = {
   AppUrl,
   ApiUrl,
-  isElectron
+  isElectron,
+  OtpToken: '73k6G_GDzvhy4XE33EQCaKUnC0PHwEZBvf0qsZ3Q9S3ZBcXH-f_6JT_4fH-Qx1Y5LxIIwzqy7cFQVMoyUSXBfLL5WBX6oQWifweWIQlJQ8YkRZ1lAmu3oqwvNJXP1Y5ZTXDHO1IV5-Q63zwNbzxTFw=='
 };
 export class AuthProviders extends CustomConfig {
   public defaultHeaders = { 'Content-Type': 'application/json' };
