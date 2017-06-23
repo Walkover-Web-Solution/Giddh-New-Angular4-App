@@ -2,6 +2,7 @@ import { routerReducer, RouterState } from '@ngrx/router-store';
 import * as fromHome from './home/home.reducer';
 import * as fromLogin from './authentication/authentication.reducer';
 import * as fromCompany from './Company/company.reducer';
+import * as fromGroupAndAccounts from './GroupWithAccounts/groupwithaccounts.reducer';
 
 export interface AppState {
   router: RouterState;
@@ -10,6 +11,7 @@ export interface AppState {
   session: fromLogin.SessionState;
 
   company: fromCompany.CurrentCompanyState;
+  groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
 }
 
 export const reducers = {
@@ -17,5 +19,6 @@ export const reducers = {
   home: fromHome.homeReducer,
   company: fromCompany.CompanyReducer,
   login: fromLogin.AuthenticationReducer,
-  session: fromLogin.SessionReducer
+  session: fromLogin.SessionReducer,
+  groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer
 };
