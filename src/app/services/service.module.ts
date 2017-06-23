@@ -19,6 +19,8 @@ import { HomeActions } from './actions/home.actions';
 import { SharedModule } from '../shared/shared.module';
 import { CompanyActions } from './actions/company.actions';
 import { LoginActions } from './actions/login.action';
+import { GroupWithAccountsAction } from './actions/groupwithaccounts.actions';
+
 import { CompanyService } from './companyService.service';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { LocationService } from './location.service';
@@ -32,7 +34,8 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
   imports: [CommonModule, RouterModule,
     SharedModule.forRoot(),
     EffectsModule.run(CompanyActions),
-    EffectsModule.run(LoginActions)],
+    EffectsModule.run(LoginActions),
+    EffectsModule.run(GroupWithAccountsAction)],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
 export class ServiceModule {
