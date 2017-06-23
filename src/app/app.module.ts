@@ -42,9 +42,9 @@ import { LoginModule } from './login/login.module';
 
 import '../styles/styles.scss';
 import '../styles/headings.css';
-import { ServiceModule } from './services/service.module';
 import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
+import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 

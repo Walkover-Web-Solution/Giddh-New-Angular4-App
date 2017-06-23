@@ -69,7 +69,7 @@ module.exports = {
     script: [
         { type: 'text/javascript', src: './assets/js/jquery-1.11.3.min.js' },
         { type: 'text/javascript', src: './assets/js/select2.js' },
-        { type: 'text/javascript', src: './assets/js/toastr.umd.js' },
+        // { type: 'text/javascript', src: './assets/js/toastr.umd.js' },
         { type: 'text/javascript', src: 'https://maps.googleapis.com/maps/api/js?libraries=places' }
     ]
 };
