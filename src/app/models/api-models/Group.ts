@@ -3,6 +3,7 @@ import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { IGroup } from '../interfaces/group.interface';
 import { IAccountsInfo } from '../interfaces/accountInfo.interface';
+import { IFlattenGroupsAccountsDetail } from '../interfaces/flattenGroupsAccountsDetail.interface';
 
 /**
  * Model for create group api response
@@ -92,4 +93,20 @@ export class MoveGroupResponse {
   public category?: any;
   public groups: ICreateGroup[];
   public name: string;
+}
+
+/*
+ * Model for flatten-groups-accounts api response
+ * GET call
+ * API:: (flatten-groups-accounts) company/:companyUniqueName/groups/flatten-groups-accounts?q=&page=1&count=10&showEmptyGroups=
+ * you can pass query parameters in this as page, query as q and showEmptyGroups and count which is sent 10
+ * its response will be hash as FlattenGroupsAccountsResponse
+ */
+export class FlattenGroupsAccountsResponse {
+  public count: number;
+  public page: number;
+  public results: IFlattenGroupsAccountsDetail[];
+  public size: number;
+  public totalItems: number;
+  public totalPages: number;
 }
