@@ -11,7 +11,7 @@ import 'rxjs/add/operator/take';
 import { HomeState, HomeActions } from './services';
 import { AppState } from './reducers/roots';
 import { Store } from '@ngrx/store';
-import { ToastyConfig } from 'ng2-toasty';
+
 /**
  * App Component
  * Top Level Component
@@ -28,14 +28,11 @@ import { ToastyConfig } from 'ng2-toasty';
        height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
     <router-outlet></router-outlet>
-    <ng2-toasty></ng2-toasty>
   `
 })
 export class AppComponent implements OnInit {
   // tslint:disable-next-line:no-empty
-  constructor(public _toastyConfig: ToastyConfig) {
-    this._toastyConfig.theme = 'bootstrap';
-    this._toastyConfig.position = 'top-right';
+  constructor() {
   }
 
   // tslint:disable-next-line:no-empty

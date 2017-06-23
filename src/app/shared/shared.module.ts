@@ -7,16 +7,19 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
-import { ToastyModule } from 'ng2-toasty';
 
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormWizardModule, ConfirmModalComponent } from './theme';
+import { ToastrModule } from 'ngx-toastr';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,
+import {
+  ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,
   AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent,
-  GroupAccountsListComponent } from './header/components';
+  GroupAccountsListComponent
+} from './header/components';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -37,11 +40,12 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       style: 'slide-left',
       spinnerSize: 30
     }),
-    ToastyModule.forRoot(),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
     FormWizardModule,
     Select2Module
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastyModule],
+  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, BrowserAnimationsModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent]
 })
