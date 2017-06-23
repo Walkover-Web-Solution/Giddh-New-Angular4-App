@@ -4,10 +4,15 @@ import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
+import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
+import { GroupService } from '../group.service';
+import { ToasterService } from '../toaster.service';
 
 @Injectable()
 export class GroupWithAccountsAction {
   public static SET_ACTIVE_GROUP = 'SetActiveGroup';
+  public static GET_GROUP_WITH_ACCOUNTS = 'GroupWithAccounts';
+  public static GET_GROUP_WITH_ACCOUNTS_RESPONSE = 'GroupWithAccountsResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -17,13 +22,46 @@ export class GroupWithAccountsAction {
       return { type: '' };
     });
 
-  constructor(private action$: Actions) {
+    @Effect()
+    public GetGroupsWithAccount$: Observable<Action> = this.action$
+      .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS)
+      .debug('')
+      .switchMap(action => this._groupService.GetGroupsWithAccounts(action.payload))
+      .map(response => {
+        return this.getGroupWithAccountsResponse(response);
+      });
+
+    @Effect()
+    public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
+      .debug('')
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        }
+        return {type: ''};
+      });
+  constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
     //
   }
   public SetActiveGroup(uniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.SET_ACTIVE_GROUP,
       payload: uniqueName
+    };
+  }
+
+  public getGroupWithAccounts(value?: string): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS,
+      payload: value
+    };
+  }
+
+  public getGroupWithAccountsResponse(value: BaseResponse<GroupsWithAccountsResponse[]>): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE,
+      payload: value
     };
   }
 }
