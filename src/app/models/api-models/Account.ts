@@ -39,48 +39,6 @@ export class AccountResponse implements IAccountCreate {
     public mergedAccounts: string;
     public uniqueName: string;
     public name: string;
-
-    constructor(gstDetails: IGstDetailListItem[], city: string, pincode: string, email: string,
-                country: string, createdAt: string, updatedAt: string, updatedBy: IUserInfo,
-                mobileNo: string, sacNumber: string, attentionTo: string, stateCode: string,
-                createdBy: IUserInfo, companyName: string, parentGroups: INameUniqueName[],
-                openingBalanceDate: string, applicableTaxes: INameUniqueName[], isFixed: boolean,
-                yodleeAdded: boolean, accountType: string, hsnNumber: string, state: string,
-                openingBalanceType: string, openingBalance: number, description: string,
-                address: string, role: INameUniqueName, stocks: any[], mergedAccounts: string,
-                uniqueName: string, name: string) {
-    this.gstDetails = gstDetails;
-    this.city = city;
-    this.pincode = pincode;
-    this.email = email;
-    this.country = country;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-    this.updatedBy = updatedBy;
-    this.mobileNo = mobileNo;
-    this.sacNumber = sacNumber;
-    this.attentionTo = attentionTo;
-    this.stateCode = stateCode;
-    this.createdBy = createdBy;
-    this.companyName = companyName;
-    this.parentGroups = parentGroups;
-    this.openingBalanceDate = openingBalanceDate;
-    this.applicableTaxes = applicableTaxes;
-    this.isFixed = isFixed;
-    this.yodleeAdded = yodleeAdded;
-    this.accountType = accountType;
-    this.hsnNumber = hsnNumber;
-    this.openingBalanceType = openingBalanceType;
-    this.openingBalance = openingBalance;
-    this.state = state;
-    this.description = description;
-    this.address = address;
-    this.role = role;
-    this.stocks = stocks;
-    this.mergedAccounts = mergedAccounts;
-    this.uniqueName = uniqueName;
-    this.name = name;
-    }
 }
 
 /**
@@ -107,27 +65,6 @@ export class AccountRequest implements IAccount {
   public country: string;
   public sacNumber: string;
   public stateCode: string;
-
-  constructor(account: IAccount) {
-      this.address = account.address;
-      this.attentionTo = account.attentionTo;
-      this.companyName = account.companyName;
-      this.description = account.description;
-      this.email = account.email;
-      this.mobileNo = account.mobileNo;
-      this.openingBalance = account.openingBalance;
-      this.openingBalanceDate = account.openingBalanceDate;
-      this.openingBalanceType = account.openingBalanceType;
-      this.name = account.name;
-      this.uniqueName = account.uniqueName;
-      this.gstDetails = account.gstDetails;
-      this.hsnNumber = account.hsnNumber;
-      this.city = account.city;
-      this.pincode = account.pincode;
-      this.country = account.country;
-      this.sacNumber = account.sacNumber;
-      this.stateCode = account.stateCode;
-  }
 }
 
 /**

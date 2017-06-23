@@ -16,5 +16,4 @@ export class GroupsWithAccountsResponse implements IGroupsWithAccounts {
   public isActive?: boolean;
   public isOpen?: boolean;
   public groups: IGroupsWithAccounts[];
-
 }

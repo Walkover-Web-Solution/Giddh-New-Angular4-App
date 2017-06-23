@@ -2,6 +2,7 @@ import { ICreateGroup } from '../interfaces/groupCreate.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { IGroup } from '../interfaces/group.interface';
+import { IAccountsInfo } from '../interfaces/accountInfo.interface';
 
 /**
  * Model for create group api response
@@ -24,26 +25,6 @@ export class GroupResponse implements ICreateGroup {
   public updatedAt: string;
   public updatedBy: IUserInfo;
 
-  constructor(applicableTaxes: INameUniqueName[], description: string, fixed: boolean,
-              groups: ICreateGroup[], hsnNumber: string, name: string, role: INameUniqueName,
-              ssnNumber: string, synonyms: string, uniqueName: string, createdAt: string,
-              createdBy: IUserInfo, updatedAt: string, updatedBy: IUserInfo) {
-
-    this.applicableTaxes = applicableTaxes;
-    this.description = description;
-    this.fixed = fixed;
-    this.groups = groups;
-    this.hsnNumber = hsnNumber;
-    this.name = name;
-    this.role = role;
-    this.ssnNumber = ssnNumber;
-    this.synonyms = synonyms;
-    this.uniqueName = uniqueName;
-    this.createdAt = createdAt;
-    this.createdBy = createdBy;
-    this.updatedAt = updatedAt;
-    this.updatedBy = updatedBy;
-  }
 }
 
 /**
@@ -56,12 +37,6 @@ export class GroupCreateRequest implements IGroup {
   public uniqueName: string;
   public parentGroupUniqueName: string;
 
-  constructor(group: GroupCreateRequest) {
-    this.description = group.description;
-    this.name = group.name;
-    this.uniqueName = group.uniqueName;
-    this.parentGroupUniqueName = group.parentGroupUniqueName;
-  }
 }
 
 /**
@@ -72,12 +47,6 @@ export class GroupUpateRequest {
   public description?: string;
   public name?: string;
   public uniqueName?: string;
-
-  constructor(group: GroupUpateRequest) {
-    this.description = group.description;
-    this.name = group.name;
-    this.uniqueName = group.uniqueName;
-  }
 }
 
 /**
@@ -102,4 +71,25 @@ export class GroupSharedWithResponse {
   public userEmail: string;
   public userName: string;
   public userUniqueName: string;
+}
+
+/**
+ * Model for Shared-with api response
+ * API:: (group-shared-with) 'company/:companyUniqueName/groups/:groupUniqueName/move'
+ * its response will be array of MoveGroupResponse
+ * Request is a PUT call takes MoveGroupRequest arguments
+ */
+export class MoveGroupRequest {
+  public parentGroupUniqueName: string;
+}
+
+export class MoveGroupResponse {
+  public applicableTaxes: INameUniqueName[];
+  public uniqueName: string;
+  public synonyms?: string;
+  public accounts: IAccountsInfo[];
+  public description?: any;
+  public category?: any;
+  public groups: ICreateGroup[];
+  public name: string;
 }

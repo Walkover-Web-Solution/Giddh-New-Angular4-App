@@ -9,12 +9,6 @@ export class ApplyTaxRequest implements IApplyTax {
   public uniqueName: string;
   public taxes: string[];
   public isAccount: boolean;
-
-  constructor(taxable: IApplyTax) {
-    this.uniqueName = taxable.uniqueName;
-    this.taxes = taxable.taxes;
-    this.isAccount = taxable.isAccount;
-  }
 }
 
 /**
