@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { AuthenticationService } from './authentication.service';
+import { GroupService } from './group.service';
 import { StorageService } from './storage.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ErrorHandlerService } from './errorhandler.service';
@@ -50,7 +51,8 @@ export class ServiceModule {
         CompanyService,
         NeedsAuthentication,
         LocationService,
-        UserAuthenticated
+        UserAuthenticated,
+        GroupService
       ]
     };
   }
