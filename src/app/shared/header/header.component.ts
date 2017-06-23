@@ -10,14 +10,11 @@ import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
+import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html',
-  styles: [
-    `
-    `
-  ]
+  templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
@@ -51,7 +48,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   constructor(
     private loginAction: LoginActions,
     private store: Store<AppState>,
-    private companyActions: CompanyActions
+    private companyActions: CompanyActions,
+    private groupWithAccountsAction: GroupWithAccountsAction
   ) {
     this.user$ = this.store.select(state => {
       return state.session.user.user;
@@ -92,6 +90,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   public showManageGroupsModal() {
+    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
     this.manageGroupsAccountsModal.show();
   }
 
