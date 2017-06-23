@@ -14,7 +14,7 @@ import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyEmailModel } from '../models/api-models/loginModels';
-import { AuthService } from "ng2-ui-auth/commonjs/ng2-ui-auth.module";
+import { AuthService } from 'ng2-ui-auth/commonjs/ng2-ui-auth.module';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
