@@ -4,6 +4,7 @@ import { IUserInfo } from '../interfaces/userInfo.interface';
 import { IGroup } from '../interfaces/group.interface';
 import { IAccountsInfo } from '../interfaces/accountInfo.interface';
 import { IFlattenGroupsAccountsDetail } from '../interfaces/flattenGroupsAccountsDetail.interface';
+import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
 
 /**
  * Model for create group api response
@@ -109,4 +110,15 @@ export class FlattenGroupsAccountsResponse {
   public size: number;
   public totalItems: number;
   public totalPages: number;
+}
+
+/*
+ * Model for tax-hierarchy api response
+ * GET call
+ * API:: (groups tax-hierarchy) company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy
+ * response will be hash as GroupsTaxHierarchyResponse
+ */
+export class GroupsTaxHierarchyResponse {
+  public applicableTaxes: INameUniqueName[];
+  public inheritedTaxes: IInheritedTaxes[];
 }

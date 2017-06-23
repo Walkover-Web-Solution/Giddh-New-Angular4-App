@@ -3,6 +3,7 @@ import { IGstDetailListItem } from '../interfaces/gstDetailListItem.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IFlattenAccountsResultItem } from '../interfaces/flattenAccountsResultItem.interface';
+import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
 
 /**
  * Model for create account api response
@@ -137,4 +138,15 @@ export class FlattenAccountsResponse {
   public size: number;
   public totalItems: number;
   public totalPages: number;
+}
+
+/*
+ * Model for tax-hierarchy api response
+ * GET call
+ * API:: (accounts tax-hierarchy) company/:companyUniqueName/accounts/:accountUniqueName/tax-hierarchy
+ * response will be hash as AccountsTaxHierarchyResponse
+ */
+export class AccountsTaxHierarchyResponse {
+  public applicableTaxes: INameUniqueName[];
+  public inheritedTaxes: IInheritedTaxes[];
 }
