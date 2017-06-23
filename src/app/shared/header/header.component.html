@@ -164,7 +164,7 @@
                                   (click)="changeCompany(cmp.uniqueName,$event)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
                                     <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
-                                      class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)" [ngClass]="{'glyphicon-spin': isCompanyRefreshInProcess$ | async}"></i>
+                                      class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                                 </li>
                             </ul>
                         </li>
