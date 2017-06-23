@@ -9,11 +9,12 @@ import {
   FormControl
 } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AuthService } from 'ng2-ui-auth';
+
 import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyEmailModel } from '../models/api-models/loginModels';
+import { AuthService } from "ng2-ui-auth/commonjs/ng2-ui-auth.module";
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
