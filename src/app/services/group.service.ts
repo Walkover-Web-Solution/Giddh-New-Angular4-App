@@ -10,7 +10,7 @@ import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
-import { GroupUpateRequest, GroupSharedWithResponse, GroupResponse, GroupCreateRequest, ShareGroupRequest } from '../models/api-models/Group';
+import { GroupUpateRequest, GroupSharedWithResponse, GroupResponse, GroupCreateRequest, ShareGroupRequest, MoveGroupRequest } from '../models/api-models/Group';
 import { AppState } from '../store/roots';
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -87,6 +87,45 @@ export class GroupService {
       let data: BaseResponse<GroupsWithAccountsResponse[]> = res.json();
       return data;
     }).catch((e) => HandleCatch<GroupsWithAccountsResponse[]>(e));
+  }
+
+  public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(GROUP_API.MOVA_GROUP.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
+      let data: BaseResponse<string> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<string>(e));
+  }
+
+  public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(GROUP_API.DELETE_GROUP.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+      let data: BaseResponse<string> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<string>(e));
+  }
+
+  public GetSubGroup(groupUniqueName: string): Observable<BaseResponse<GroupResponse[]>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+      let data: BaseResponse<GroupResponse[]> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<GroupResponse[]>(e));
   }
 
 }
