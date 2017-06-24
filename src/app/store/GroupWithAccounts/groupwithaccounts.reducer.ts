@@ -6,7 +6,7 @@ import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
 import * as _ from 'lodash';
-import { IFlattenGroupsAccountsDetail } from "../../models/interfaces/flattenGroupsAccountsDetail.interface";
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -17,6 +17,7 @@ export interface CurrentGroupAndAccountState {
   accountSearchString: string;
   flattenGroupsAccounts?: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
+  activeGroupInProgress: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -48,7 +49,8 @@ const initialState: CurrentGroupAndAccountState = {
   isGroupWithAccountsLoading: false,
   activeGroup: null,
   accountSearchString: '',
-  isRefreshingFlattenGroupsAccounts: false
+  isRefreshingFlattenGroupsAccounts: false,
+  activeGroupInProgress: false
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
@@ -73,6 +75,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+      case GroupWithAccountsAction.GET_GROUP_DETAILS:
+        return Object.assign({}, state, {
+          activeGroupInProgress: true
+        });
 
     case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE:
       let grpData: BaseResponse<GroupResponse> = action.payload;
@@ -90,6 +96,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
         return Object.assign({}, state, {
           activeGroup: grpData.body,
+          activeGroupInProgress: false,
           groupswithaccounts: groupArray
         });
       }
