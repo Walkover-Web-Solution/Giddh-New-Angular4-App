@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest, AccountSharedWithResponse } from '../models/api-models/Account';
+import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest, AccountSharedWithResponse, FlattenAccountsResponse, AccountsTaxHierarchyResponse } from '../models/api-models/Account';
 import { ACCOUNTS_API } from './apiurls/account.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -142,5 +142,30 @@ export class AccountService implements OnInit {
         return data;
       })
       .catch((e) => HandleCatch<AccountSharedWithResponse>(e));
+  }
+  public GetFlattenAccounts(q: string, refresh: string): Observable<BaseResponse<FlattenAccountsResponse[]>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':refresh', refresh)).map((res) => {
+      let data: BaseResponse<FlattenAccountsResponse[]> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<FlattenAccountsResponse[]>(e));
+  }
+
+  public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse[]>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(ACCOUNTS_API.TAX_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+      let data: BaseResponse<AccountsTaxHierarchyResponse[]> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<AccountsTaxHierarchyResponse[]>(e));
   }
 }

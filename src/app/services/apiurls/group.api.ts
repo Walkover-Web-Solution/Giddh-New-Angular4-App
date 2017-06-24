@@ -8,7 +8,7 @@ export const GROUP_API = {
   GROUPS_WITH_ACCOUNT: Configuration.ApiUrl + 'company/:companyUniqueName/groups-with-accounts?q=:q',
   GET_SUB_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/subgroups', // model GroupResponse[]  get method
   DELETE_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
-  MOVA_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/move',
+  MOVE_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/move',
   FLATTEN_GROUP_WITH_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-groups-with-accounts?q=',
   FLATTEN_GROUPS_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/groups/flatten-groups-accounts?q=&page=1&count=10&showEmptyGroups=', // get call
   TAX_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy', // get call
