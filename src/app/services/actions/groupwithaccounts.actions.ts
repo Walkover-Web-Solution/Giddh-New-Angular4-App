@@ -1,3 +1,4 @@
+import { GroupResponse } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -14,6 +15,8 @@ export class GroupWithAccountsAction {
   public static GET_GROUP_WITH_ACCOUNTS = 'GroupWithAccounts';
   public static GET_GROUP_WITH_ACCOUNTS_RESPONSE = 'GroupWithAccountsResponse';
   public static SET_GROUP_ACCOUNTS_SEARCH_STRING = 'GroupAccountsSearchString';
+  public static GET_GROUP_DETAILS = 'GroupDetails';
+  public static GET_GROUP_DETAILS_RESPONSE = 'GroupDetailsResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -51,6 +54,26 @@ export class GroupWithAccountsAction {
     return { type: '' };
   });
 
+  @Effect()
+  public GetGroupsDetails$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS)
+    .debug('')
+    .switchMap(action => this._groupService.GetGroupDetails(action.payload))
+    .map(response => {
+      return this.getGroupDetailsResponse(response);
+  });
+
+  @Effect()
+  public GetGroupDetailsResponse$: Observable<Action> = this.action$
+  .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
+  .debug('')
+  .map(action => {
+    if (action.payload.status === 'error') {
+      this._toasty.errorToast(action.payload.message, action.payload.code);
+    }
+    return {type: ''};
+  });
+
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
     //
   }
@@ -78,6 +101,20 @@ export class GroupWithAccountsAction {
   public setAccountsSearchString(value: string): Action {
     return {
       type : GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING,
+      payload: value
+    };
+  }
+
+  public getGroupDetails(value?: string): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_DETAILS,
+      payload: value
+    };
+  }
+
+  public getGroupDetailsResponse(value: BaseResponse<GroupResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
       payload: value
     };
   }

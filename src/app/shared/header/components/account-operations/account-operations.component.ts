@@ -1,3 +1,10 @@
+import { GroupResponse } from './../../../../models/api-models/Group';
+import { IGroup } from './../../../../models/interfaces/group.interface';
+import { IAccountsInfo } from './../../../../models/interfaces/accountInfo.interface';
+import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
+import { AppState } from './../../../../store/roots';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -7,21 +14,45 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class AccountOperationsComponent implements OnInit {
   // tslint:disable-next-line:no-empty
-  public addAccountForm: FormGroup;
-  constructor(private _fb: FormBuilder) { }
+  public subGroupForm: FormGroup;
+  public groupDetailForm: FormGroup;
+  public moveGroupForm: FormGroup;
+  public shareGroupForm: FormGroup;
+  public showGroupForm: boolean = false;
+  public activeGroup$: Observable<GroupResponse>;
+
+  constructor(private _fb: FormBuilder, private store: Store<AppState>) {
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
+  }
 
   public ngOnInit() {
-    this.addAccountForm = this._fb.group({
-      accName: ['', Validators.required],
-      accUnq: ['', Validators.required],
-      openingBalance: ['', Validators.required],
-      openingBalanceType: ['', Validators.required],
-      mobileNo: ['', Validators.required],
-      email: ['', [ Validators.required, Validators.email]],
-      companyName: ['', Validators.required],
-      attentionTo: ['', Validators.required],
-      address: ['', Validators.required],
+    this.groupDetailForm = this._fb.group({
+      name: ['', Validators.required],
+      uniqueName: ['', Validators.required],
       description: ['', Validators.required]
+    });
+
+    this.subGroupForm = this._fb.group({
+      name: ['', Validators.required],
+      uniqueName: ['', Validators.required],
+      desc: ['', Validators.required]
+    });
+
+    this.moveGroupForm = this._fb.group({
+      moveto: ['', Validators.required]
+    });
+
+    this.shareGroupForm = this._fb.group({
+      userEmail: ['', [Validators.required, Validators.email]]
+    });
+
+    this.activeGroup$.subscribe((a) => {
+      if (a) {
+        this.showGroupForm = true;
+        this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+      } else {
+        this.showGroupForm = false;
+      }
     });
   }
 

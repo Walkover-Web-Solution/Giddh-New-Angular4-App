@@ -19,6 +19,6 @@ export class GroupsRecursiveListComponent implements OnInit {
   public ngOnInit() {  }
 
   public onGroupClick(uniqueName: string) {
-    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(uniqueName));
+    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(uniqueName));
   }
 }
