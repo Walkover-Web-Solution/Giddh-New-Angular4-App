@@ -1,3 +1,4 @@
+import { GroupResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -11,7 +12,7 @@ import * as _ from 'lodash';
 export interface CurrentGroupAndAccountState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   isGroupWithAccountsLoading: boolean;
-  activeGroupName: string;
+  activeGroup: GroupResponse;
   accountSearchString: string;
 }
 
@@ -33,7 +34,7 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
 const initialState: CurrentGroupAndAccountState = {
   groupswithaccounts: null,
   isGroupWithAccountsLoading: false,
-  activeGroupName: null,
+  activeGroup: null,
   accountSearchString: ''
 };
 
@@ -59,22 +60,28 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
-    case GroupWithAccountsAction.SET_ACTIVE_GROUP:
-      let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-      groupArray.forEach(grp => {
-        if (grp.uniqueName === action.payload) {
-          grp.isActive = true;
-          grp.isOpen = !grp.isOpen;
-          return;
-        } else {
-          setActiveGroupFunc(grp.groups, action.payload);
-          grp.isActive = false;
-        }
-      });
-      return Object.assign({}, state, {
-        activeGroupName: action.payload,
-        groupswithaccounts: groupArray
-      });
+
+    case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE:
+      let grpData: BaseResponse<GroupResponse> = action.payload;
+      if (grpData.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        groupArray.forEach(grp => {
+          if (grp.uniqueName === grpData.body.uniqueName) {
+            grp.isActive = true;
+            grp.isOpen = !grp.isOpen;
+            return;
+          } else {
+            setActiveGroupFunc(grp.groups, grpData.body.uniqueName);
+            grp.isActive = false;
+          }
+        });
+        return Object.assign({}, state, {
+          activeGroup: grpData.body,
+          groupswithaccounts: groupArray
+        });
+      }
+      return state;
+
     default:
       return state;
   }
