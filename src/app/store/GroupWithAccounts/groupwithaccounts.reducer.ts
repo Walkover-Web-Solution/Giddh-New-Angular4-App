@@ -14,6 +14,7 @@ export interface CurrentGroupAndAccountState {
   isGroupWithAccountsLoading: boolean;
   activeGroup: GroupResponse;
   accountSearchString: string;
+  activeGroupInProgress: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -35,7 +36,8 @@ const initialState: CurrentGroupAndAccountState = {
   groupswithaccounts: null,
   isGroupWithAccountsLoading: false,
   activeGroup: null,
-  accountSearchString: ''
+  accountSearchString: '',
+  activeGroupInProgress: false
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
@@ -60,6 +62,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+      case GroupWithAccountsAction.GET_GROUP_DETAILS:
+        return Object.assign({}, state, {
+          activeGroupInProgress: true
+        });
 
     case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE:
       let grpData: BaseResponse<GroupResponse> = action.payload;
@@ -77,6 +83,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
         return Object.assign({}, state, {
           activeGroup: grpData.body,
+          activeGroupInProgress: false,
           groupswithaccounts: groupArray
         });
       }
