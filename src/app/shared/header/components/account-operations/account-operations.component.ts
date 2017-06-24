@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs/Rx';
 
 @Component({
   selector: 'account-operations',
@@ -21,9 +22,11 @@ export class AccountOperationsComponent implements OnInit {
   public shareGroupForm: FormGroup;
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
+  public activeGroupInProgress$: Observable<boolean>;
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
   }
 
   public ngOnInit() {
