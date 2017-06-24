@@ -1,3 +1,4 @@
+import { FormBuilder } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -5,9 +6,27 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './company-add.component.html'
 })
 export class CompanyAddComponent implements OnInit {
-  // tslint:disable-next-line:no-empty
+  public phoneNumber: string;
+  public verificationCode: string;
+  public showVerificationBox: boolean;
   constructor() { }
 
   // tslint:disable-next-line:no-empty
-  public ngOnInit() { }
+  public ngOnInit() {
+
+   }
+
+  /**
+   * addNumber
+   */
+  public addNumber() {
+    
+  }
+
+  /**
+   * verifyNumber
+   */
+  public verifyNumber() {
+    
+  }
 }
