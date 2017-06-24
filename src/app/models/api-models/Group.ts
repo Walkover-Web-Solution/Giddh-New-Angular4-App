@@ -96,6 +96,16 @@ export class MoveGroupResponse {
   public name: string;
 }
 
+
+
+export class FlattenGroupsAccountsRequest {
+  public q: string = '';
+  public page: number = 1;
+  public count: number = 1000;
+  public showEmptyGroups: string = '';
+}
+
+
 /*
  * Model for flatten-groups-accounts api response
  * GET call
