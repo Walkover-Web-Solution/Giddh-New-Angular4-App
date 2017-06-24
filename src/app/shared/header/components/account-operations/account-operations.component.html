@@ -1,6 +1,5 @@
 <div class="bdrR bdrL row " id="middleBody" *ngIf="showGroupForm">
-
-  <div ng-if="showGroupDetails" ng-include="'/public/webapp/ManageGroupsAndAccounts/groupOperations.html'" class="">
+  <div ng-if="showGroupDetails" class="">
     <div class="clearfix bdrB ">
 
       <div class="col-xs-6  bdrR">
@@ -18,14 +17,12 @@
 
                 <div class="form-group">
                   <label>Unique name</label>
-                  <input type="text" class="form-control" placeholder="Enter Unique Name"
-                  formControlName="uniqueName">
+                  <input type="text" class="form-control" placeholder="Enter Unique Name" formControlName="uniqueName">
                 </div>
 
                 <div class="form-group">
                   <label>Description</label>
-                  <textarea maxlength="200" class="form-control" placeholder="Enter description"
-                  formControlName="description"></textarea>
+                  <textarea maxlength="200" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
                 </div>
 
                 <button class="btn btn-primary" [disabled]="!groupDetailForm.valid">Update
@@ -45,16 +42,13 @@
           <div class="pd2">
             <form id="subGroupForm" name="subGroupForm" (submit)="addNewGroup()" [formGroup]="subGroupForm" novalidate class="">
 
-              <input type="text" placeholder="Enter Subgroup name" class="form-control form-group"
-                formControlName="name">
+              <input type="text" placeholder="Enter Subgroup name" class="form-control form-group" formControlName="name">
 
-              <input type="text" placeholder="Enter Unique name" class="form-control form-group"
-                valid-unique="" formControlName="uniqueName">
+              <input type="text" placeholder="Enter Unique name" class="form-control form-group" valid-unique="" formControlName="uniqueName">
 
-              <textarea maxlength="200" class="form-control form-group" placeholder="Enter description"
-                formControlName="desc"></textarea>
+              <textarea maxlength="200" class="form-control form-group" placeholder="Enter description" formControlName="desc"></textarea>
 
-              <button class="btn btn-primary" type="submit" [disabled]="!subGroupForm.valid" >Add Subgroup</button>
+              <button class="btn btn-primary" type="submit" [disabled]="!subGroupForm.valid">Add Subgroup</button>
             </form>
           </div>
         </div>
@@ -73,8 +67,7 @@
             </div>
 
             <div class="form-group">
-              <input formControlName="moveto" type="text" placeholder="Group name" class="form-control"
-                uib-typeahead="groups as groups.name for groups in flattenGroupList | omit: isChildGroup | filter:{name: $viewValue} | limitTo:8"
+              <input formControlName="moveto" type="text" placeholder="Group name" class="form-control" uib-typeahead="groups as groups.name for groups in flattenGroupList | omit: isChildGroup | filter:{name: $viewValue} | limitTo:8"
                 aria-autocomplete="list" aria-expanded="false" aria-owns="typeahead-632-2430">
             </div>
             <div class="form-group">
@@ -86,7 +79,7 @@
 
       <div class="col-xs-6 bdrL" ng-show="canShare">
         <div class="row">
-          <form name="shareGroupForm" novalidate=""  [formGroup]="shareGroupForm" class="form-inline pd2">
+          <form name="shareGroupForm" novalidate="" [formGroup]="shareGroupForm" class="form-inline pd2">
             <div>
               <label class="mrR">Share group</label>
             </div>
@@ -118,12 +111,37 @@
       </div>
     </script>
   </div>
-  <!-- end ngIf: showGroupDetails -->
-
-  <!-- ngIf: showAccountDetails -->
 
 </div>
 
 <div class="scroll-btn text-center" scroll-btn="" *ngIf="showGroupForm">
   <i class="glyphicon glyphicon-chevron-down" style="vertical-align: sub;color: #fff;"></i>
+</div>
+
+<div class="ng-tns-c9-0" *ngIf="activeGroupInProgress$ | async">
+
+  <div class="ng-busy ng-trigger ng-trigger-flyInOut">
+
+    <div class="">
+      <div class="ng-busy-default-wrapper">
+        <div class="ng-busy-default-sign">
+          <div class="ng-busy-default-spinner">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+            <div class="bar4"></div>
+            <div class="bar5"></div>
+            <div class="bar6"></div>
+            <div class="bar7"></div>
+            <div class="bar8"></div>
+            <div class="bar9"></div>
+            <div class="bar10"></div>
+            <div class="bar11"></div>
+            <div class="bar12"></div>
+          </div>
+          <div class="ng-busy-default-text">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
