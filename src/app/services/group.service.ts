@@ -102,6 +102,19 @@ export class GroupService {
     }).catch((e) => HandleCatch<string>(e));
   }
 
+  public GetGroupDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+      let data: BaseResponse<GroupResponse> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<GroupResponse>(e));
+  }
+
   public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {

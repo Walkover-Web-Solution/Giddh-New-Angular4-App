@@ -15,17 +15,17 @@
       <span class="spinner small"></span> Loading…
     </div>
 
-    <h3 class="list-group-item-heading small" *ngIf="!(activeGroupName$ | async)">Accounts from
+    <h3 class="list-group-item-heading small" *ngIf="!(activeGroup$ | async)">Accounts from
       <strong>all group</strong>
     </h3>
 
     <div>
-      <h4 class="list-group-item-heading small" *ngIf="(activeGroupName$ | async) && (accountsList$ | async)?.length">Accounts from
-        <strong>{{ activeGroupName$ | async }}</strong>
+      <h4 class="list-group-item-heading small" *ngIf="(activeGroup$ | async) && (accountsList$ | async)?.length">Accounts from
+        <strong>{{ (activeGroup$ | async)?.name }}</strong>
       </h4>
 
-      <h4 class="list-group-item-heading small" *ngIf="(activeGroupName$ | async) && !(accountsList$ | async)?.length">Oops, there are no accounts in
-        <strong>{{ activeGroupName$ | async }}</strong>
+      <h4 class="list-group-item-heading small" *ngIf="(activeGroup$ | async) && !(accountsList$ | async)?.length">Oops, there are no accounts in
+        <strong>{{ (activeGroup$ | async)?.name }}</strong>
       </h4>
 
     </div>
