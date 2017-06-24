@@ -1,7 +1,7 @@
-import { GroupResponse, FlattenGroupsAccountsResponse } from './../../models/api-models/Group';
+import { BaseResponse } from './../../models/api-models/BaseResponse';
+import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, UnShareGroupResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
-import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
@@ -18,6 +18,7 @@ export interface CurrentGroupAndAccountState {
   flattenGroupsAccounts?: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
   activeGroupInProgress: boolean;
+  activeGroupSharedWith?: GroupSharedWithResponse[];
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -50,7 +51,8 @@ const initialState: CurrentGroupAndAccountState = {
   activeGroup: null,
   accountSearchString: '',
   isRefreshingFlattenGroupsAccounts: false,
-  activeGroupInProgress: false
+  activeGroupInProgress: false,
+  activeGroupSharedWith: null
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
@@ -144,6 +146,24 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+
+      case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
+        let sharedData: BaseResponse<GroupSharedWithResponse[]> = action.payload;
+        if (sharedData.status === 'success') {
+          return Object.assign({} , state , {
+            activeGroupSharedWith: sharedData.body
+          });
+        }
+        return state;
+      case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
+        let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
+        if (unSharedData.status === 'success') {
+          let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.body.user !== ac.userEmail);
+          return Object.assign({}, state, {
+            activeGroupSharedWith: myGroupSharedWith
+          });
+        }
+        return state;
     default:
       return state;
   }

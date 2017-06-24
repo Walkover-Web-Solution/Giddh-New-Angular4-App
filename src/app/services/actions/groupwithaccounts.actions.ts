@@ -1,10 +1,10 @@
-import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest } from './../../models/api-models/Group';
+import { AppState } from './../../store/roots';
+import { BaseResponse } from './../../models/api-models/BaseResponse';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, UnShareGroupResponse } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
-import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AppState } from '../../store/roots';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../group.service';
 import { ToasterService } from '../toaster.service';
@@ -21,6 +21,14 @@ export class GroupWithAccountsAction {
   public static GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE = 'GetFlattenGroupsAccountsResponse';
   public static CREATE_GROUP = 'GroupCreate';
   public static CREATE_GROUP_RESPONSE = 'GroupCreateResponse';
+  public static SHARE_GROUP = 'GroupShare';
+  public static SHARE_GROUP_RESPONSE = 'GroupShareResponse';
+
+  public static UNSHARE_GROUP = 'GroupUnShare';
+  public static UNSHARE_GROUP_RESPONSE = 'GroupUnShareResponse';
+
+  public static SHARED_GROUP_WITH = 'GroupSharedWith';
+  public static SHARED_GROUP_WITH_RESPONSE = 'GroupSharedWithResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -72,10 +80,11 @@ export class GroupWithAccountsAction {
     .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
     .debug('')
     .map(action => {
+      let data: BaseResponse<GroupResponse> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return this.sharedGroupWith(data.body.uniqueName);
     });
 
   @Effect()
@@ -118,7 +127,82 @@ export class GroupWithAccountsAction {
       return { type: '' };
     });
 
-  constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
+    @Effect()
+    public shareGroup$: Observable<Action> = this.action$
+      .ofType(GroupWithAccountsAction.SHARE_GROUP)
+      .debug('')
+      .switchMap(action => this._groupService.ShareGroup(action.payload.body, action.payload.groupUniqueName))
+      .map(response => {
+        return this.shareGroupResponse(response);
+      });
+
+    @Effect()
+    public shareGroupResponse$: Observable<Action> = this.action$
+      .ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE)
+      .debug('')
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+        } else {
+          this._toasty.successToast(action.payload.body, '');
+          let groupUniqueName = '';
+          this.store.take(1).subscribe(s => {
+            groupUniqueName = s.groupwithaccounts.activeGroup.uniqueName;
+          });
+
+          return this.sharedGroupWith(groupUniqueName);
+        }
+        return { type: '' };
+      });
+
+      @Effect()
+      public unShareGroup$: Observable<Action> = this.action$
+        .ofType(GroupWithAccountsAction.UNSHARE_GROUP)
+        .debug('')
+        .switchMap(action => this._groupService.UnShareGroup(action.payload.user, action.payload.groupUniqueName))
+        .map(response => {
+          return this.unShareGroupResponse(response);
+        });
+
+      @Effect()
+      public unShareGroupResponse$: Observable<Action> = this.action$
+        .ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE)
+        .debug('')
+        .map(action => {
+          if (action.payload.status === 'error') {
+            this._toasty.errorToast(action.payload.message, action.payload.code);
+          } else {
+            this._toasty.successToast(action.payload.body.toastMessage, '');
+            let groupUniqueName = '';
+            this.store.take(1).subscribe(s => {
+              groupUniqueName = s.groupwithaccounts.activeGroup.uniqueName;
+            });
+            return this.sharedGroupWith(groupUniqueName);
+          }
+          return { type: '' };
+        });
+
+      @Effect()
+      public sharedGroup$: Observable<Action> = this.action$
+        .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH)
+        .debug('')
+        .switchMap(action => this._groupService.ShareWithGroup(action.payload))
+        .map(response => {
+          return this.sharedGroupWithResponse(response);
+        });
+
+      @Effect()
+      public sharedGroupResponse$: Observable<Action> = this.action$
+        .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE)
+        .debug('')
+        .map(action => {
+          if (action.payload.status === 'error') {
+            this._toasty.errorToast(action.payload.message, action.payload.code);
+          }
+          return { type: '' };
+        });
+
+  constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService, public store: Store<AppState>) {
     //
   }
   public SetActiveGroup(uniqueName: string): Action {
@@ -184,6 +268,49 @@ export class GroupWithAccountsAction {
   public getFlattenGroupsAccountsResponse(value: BaseResponse<FlattenGroupsAccountsResponse>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public shareGroup(value: ShareGroupRequest, groupUniqueName: string): Action {
+    return {
+      type: GroupWithAccountsAction.SHARE_GROUP,
+      payload: Object.assign({}, {body: value}, {
+        groupUniqueName
+      })
+    };
+  }
+  public shareGroupResponse(value: BaseResponse<string>): Action {
+    return {
+      type: GroupWithAccountsAction.SHARE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
+
+  public unShareGroup(value: string, groupUniqueName: string): Action {
+    return {
+      type: GroupWithAccountsAction.UNSHARE_GROUP,
+      payload: Object.assign({}, {user: value}, {
+        groupUniqueName
+      })
+    };
+  }
+  public unShareGroupResponse(value: BaseResponse<UnShareGroupResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
+
+  public sharedGroupWith(groupUniqueName: string): Action {
+    return {
+      type: GroupWithAccountsAction.SHARED_GROUP_WITH,
+      payload: groupUniqueName
+    };
+  }
+  public sharedGroupWithResponse(value: BaseResponse<GroupSharedWithResponse[]>): Action {
+    return {
+      type: GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE,
       payload: value
     };
   }
