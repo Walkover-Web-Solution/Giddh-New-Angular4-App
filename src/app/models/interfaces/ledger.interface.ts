@@ -15,7 +15,7 @@ export interface IInventory {
 }
 
 export interface IUnit {
-  name: string;
+  name?: string;
   code: string;
 }
 
@@ -25,7 +25,7 @@ export interface IInvoiceRequest {
 
 export interface IInvoiceTransactionItem {
   accountUniqueName: string;
-  description: string;
+  description?: string;
 }
 
 export interface IInvoiceEntryItem {
@@ -42,13 +42,13 @@ export interface ILedger {
   entryDate: string;
   taxes?: string[];
   applyApplicableTaxes?: boolean;
-  isInclusiveTax: boolean;
-  unconfirmedEntry: boolean;
-  attachedFile: string;
+  isInclusiveTax?: boolean;
+  unconfirmedEntry?: boolean;
+  attachedFile?: string;
   tag?: string;
   description?: string;
-  generateInvoice: boolean;
+  generateInvoice?: boolean;
   chequeNumber?: string;
   clearanceDate?: string;
-  invoiceRequest: IInvoiceRequest;
+  invoiceRequest?: IInvoiceRequest;
 }
