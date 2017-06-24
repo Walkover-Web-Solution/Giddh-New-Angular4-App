@@ -1,4 +1,4 @@
-import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse } from './../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -19,14 +19,16 @@ export class GroupWithAccountsAction {
   public static GET_GROUP_DETAILS_RESPONSE = 'GroupDetailsResponse';
   public static GET_FLATTEN_GROUPS_ACCOUNTS = 'GetFlattenGroupsAccounts';
   public static GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE = 'GetFlattenGroupsAccountsResponse';
+  public static CREATE_GROUP = 'GroupCreate';
+  public static CREATE_GROUP_RESPONSE = 'GroupCreateResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
-  .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
+    .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
     .debug('')
     .map(action => {
       return { type: '' };
-  });
+    });
 
   @Effect()
   public GetGroupsWithAccount$: Observable<Action> = this.action$
@@ -35,26 +37,26 @@ export class GroupWithAccountsAction {
     .switchMap(action => this._groupService.GetGroupsWithAccounts(action.payload))
     .map(response => {
       return this.getGroupWithAccountsResponse(response);
-  });
+    });
 
   @Effect()
   public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
-  .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
-  .debug('')
-  .map(action => {
-    if (action.payload.status === 'error') {
-      this._toasty.errorToast(action.payload.message, action.payload.code);
-    }
-    return {type: ''};
-  });
+    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
 
   @Effect()
   public SetAccountsSearchString$: Observable<Action> = this.action$
-  .ofType(GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING)
-  .debug('')
-  .map(action => {
-    return { type: '' };
-  });
+    .ofType(GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING)
+    .debug('')
+    .map(action => {
+      return { type: '' };
+    });
 
   @Effect()
   public GetGroupsDetails$: Observable<Action> = this.action$
@@ -63,38 +65,58 @@ export class GroupWithAccountsAction {
     .switchMap(action => this._groupService.GetGroupDetails(action.payload))
     .map(response => {
       return this.getGroupDetailsResponse(response);
-  });
+    });
 
   @Effect()
   public GetGroupDetailsResponse$: Observable<Action> = this.action$
-  .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
-  .debug('')
-  .map(action => {
-    if (action.payload.status === 'error') {
-      this._toasty.errorToast(action.payload.message, action.payload.code);
-    }
-    return {type: ''};
-  });
+    .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
+
+  @Effect()
+  public CreateGroup$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.CREATE_GROUP)
+    .debug('')
+    .switchMap(action => this._groupService.CreateGroup(action.payload))
+    .map(response => {
+      return this.createGroupResponse(response);
+    });
+
+  @Effect()
+  public CreateGroupResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
 
   @Effect()
   public GetFlattenGroupsAccounts$: Observable<Action> = this.action$
-  .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS)
+    .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS)
     .debug('')
     .switchMap(action => this._groupService.GetFlattenGroupsAccounts(action.payload))
     .map(response => {
-      return this.getGroupDetailsResponse(response);
-  });
+      return this.getFlattenGroupsAccountsResponse(response);
+    });
 
   @Effect()
   public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
-  .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
-  .debug('')
-  .map(action => {
-    if (action.payload.status === 'error') {
-      this._toasty.errorToast(action.payload.message, action.payload.code);
-    }
-    return {type: ''};
-  });
+    .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
 
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
     //
@@ -122,12 +144,12 @@ export class GroupWithAccountsAction {
 
   public setAccountsSearchString(value: string): Action {
     return {
-      type : GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING,
+      type: GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING,
       payload: value
     };
   }
 
-  public getGroupDetails(value?: string): Action {
+  public getGroupDetails(value: string): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS,
       payload: value
@@ -141,17 +163,29 @@ export class GroupWithAccountsAction {
     };
   }
 
+  public createGroup(value: GroupCreateRequest): Action {
+    return {
+      type: GroupWithAccountsAction.CREATE_GROUP,
+      payload: value
+    };
+  }
+  public createGroupResponse(value: BaseResponse<GroupResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.CREATE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
   public getFlattenGroupsAccounts(value?: FlattenGroupsAccountsRequest): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS,
       payload: value
     };
   }
-
   public getFlattenGroupsAccountsResponse(value: BaseResponse<FlattenGroupsAccountsResponse>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
       payload: value
     };
   }
+
 }
