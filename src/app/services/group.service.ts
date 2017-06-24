@@ -25,14 +25,14 @@ export class GroupService {
     private store: Store<AppState>
   ) {
   }
-  public CreateGroup(modele: GroupCreateRequest): Observable<BaseResponse<GroupResponse>> {
+  public CreateGroup(model: GroupCreateRequest): Observable<BaseResponse<GroupResponse>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(GROUP_API.CREATE.replace(':companyUniqueName', this.companyUniqueName), modele).map((res) => {
+    return this._http.post(GROUP_API.CREATE.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
       let data: BaseResponse<GroupResponse> = res.json();
       return data;
     }).catch((e) => HandleCatch<GroupResponse>(e));
