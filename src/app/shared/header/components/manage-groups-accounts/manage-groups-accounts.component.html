@@ -66,28 +66,7 @@
 
       <!-- right side -->
       <div class="col-xs-2" id="right">
-        <div class="row pr">
-
-            <div class="form-group pdL1 pdT1 pdR1">
-              <div class="input-group">
-                <div class="input-group-addon">
-                  <i class="glyphicon glyphicon-search"></i>
-                </div>
-                <input type="text" name="accountsSearch" ng-model="search.flataccount" class="form-control ng-pristine ng-untouched ng-valid"
-                  placeholder="Search accounts" ng-change="searchAccountsC5(search.flataccount)" ng-model-options="{debounce:1000}">
-              </div>
-            </div>
-
-            <section class="pr" style="height: 378px">
-              <div class="search-loading" *ngIf="(searchLoad | async)">
-                <span class="spinner small"></span> Loading…
-              </div>
-
-               <group-account-list></group-account-list>
-
-            </section>
-
-          </div>
+        <group-account-list></group-account-list>
         <!-- <perfect-scrollbar class="row pr"> -->
       <!-- </perfect-scrollbar> -->
       </div>

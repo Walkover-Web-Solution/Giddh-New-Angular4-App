@@ -13,6 +13,7 @@ export class GroupWithAccountsAction {
   public static SET_ACTIVE_GROUP = 'SetActiveGroup';
   public static GET_GROUP_WITH_ACCOUNTS = 'GroupWithAccounts';
   public static GET_GROUP_WITH_ACCOUNTS_RESPONSE = 'GroupWithAccountsResponse';
+  public static SET_GROUP_ACCOUNTS_SEARCH_STRING = 'GroupAccountsSearchString';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -20,27 +21,36 @@ export class GroupWithAccountsAction {
     .debug('')
     .map(action => {
       return { type: '' };
-    });
+  });
 
-    @Effect()
-    public GetGroupsWithAccount$: Observable<Action> = this.action$
-      .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS)
-      .debug('')
-      .switchMap(action => this._groupService.GetGroupsWithAccounts(action.payload))
-      .map(response => {
-        return this.getGroupWithAccountsResponse(response);
-      });
+  @Effect()
+  public GetGroupsWithAccount$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS)
+    .debug('')
+    .switchMap(action => this._groupService.GetGroupsWithAccounts(action.payload))
+    .map(response => {
+      return this.getGroupWithAccountsResponse(response);
+  });
 
-    @Effect()
-    public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
-      .debug('')
-      .map(action => {
-        if (action.payload.status === 'error') {
-          this._toasty.errorToast(action.payload.message, action.payload.code);
-        }
-        return {type: ''};
-      });
+  @Effect()
+  public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
+  .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
+  .debug('')
+  .map(action => {
+    if (action.payload.status === 'error') {
+      this._toasty.errorToast(action.payload.message, action.payload.code);
+    }
+    return {type: ''};
+  });
+
+  @Effect()
+  public SetAccountsSearchString$: Observable<Action> = this.action$
+  .ofType(GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING)
+  .debug('')
+  .map(action => {
+    return { type: '' };
+  });
+
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
     //
   }
@@ -61,6 +71,13 @@ export class GroupWithAccountsAction {
   public getGroupWithAccountsResponse(value: BaseResponse<GroupsWithAccountsResponse[]>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public setAccountsSearchString(value: string): Action {
+    return {
+      type : GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING,
       payload: value
     };
   }

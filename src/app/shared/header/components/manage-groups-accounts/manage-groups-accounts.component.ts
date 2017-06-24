@@ -17,16 +17,8 @@ export class ManageGroupsAccountsComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
   @ViewChild('grpSrchEl') public grpSrchEl: ElementRef;
   public searchLoad: Observable<boolean>;
-  public showListGroupsNow: boolean = true;
-  public showOnUpdate: boolean = false;
-  public canUpdate: boolean = false;
-  public canShare: boolean = false;
-  public createNew: boolean = false;
-  public mainGrp: any[] = [];
+
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
-  public breadCrumbList: any[] = [];
-  public accountSharedUserList: any[] = [];
-  public groupSharedUserList: any[] = [];
 
   public psConfig: PerfectScrollbarConfigInterface;
   // tslint:disable-next-line:no-empty
@@ -42,7 +34,10 @@ export class ManageGroupsAccountsComponent implements OnInit {
     .map((e: any) => e.target.value)
     .debounceTime(700)
     .distinctUntilChanged()
-    .subscribe((val) => {
+    .subscribe((val: string) => {
+      if (val.startsWith(' ')) {
+        return;
+      }
       this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
     });
   }
@@ -51,29 +46,4 @@ export class ManageGroupsAccountsComponent implements OnInit {
     this.grpSrchEl.nativeElement.value = '';
     this.closeEvent.emit(true);
   }
-
-  public resetSearch() {
-    //
-  }
-
-  public createNewGrpAccount(index) {
-    //
-  }
-
-  public jumpToGroup() {
-    //
-  }
-
-  public shareAccModal() {
-    //
-  }
-
-  public shareGrpModal() {
-    //
-  }
-
-  public getSelectedType() {
-    //
-  }
-
 }
