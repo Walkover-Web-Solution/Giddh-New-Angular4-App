@@ -1,3 +1,4 @@
+import { UnShareGroupResponse, UnShareGroupRequest } from './../models/api-models/Group';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Store } from '@ngrx/store';
@@ -20,7 +21,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 export class GroupService {
   private companyUniqueName: string;
   private user: UserDetails;
-  constructor(public _http: HttpWrapperService, //DevSkim: ignore DS137138
+  constructor(public _http: HttpWrapperService,
     public _router: Router,
     private store: Store<AppState>
   ) {
@@ -57,23 +58,42 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
+
     return this._http.put(GROUP_API.SHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
     }).catch((e) => HandleCatch<string>(e));
   }
 
-  public ShareWithGroup(modele: GroupSharedWithResponse, groupUniqueName: string): Observable<BaseResponse<string>> {
+  public UnShareGroup(userEmail: string, groupUniqueName: string): Observable<BaseResponse<UnShareGroupResponse>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.SHARED_WITH.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
+
+    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), {user: userEmail}).map((res) => {
       let data: BaseResponse<string> = res.json();
+      let newResp = new BaseResponse<UnShareGroupResponse>();
+      newResp.body = new UnShareGroupResponse();
+      newResp.body.toastMessage = data.body;
+      newResp.body.user = userEmail;
+      return newResp;
+    }).catch((e) => HandleCatch<UnShareGroupResponse>(e));
+  }
+
+  public ShareWithGroup(groupUniqueName: string): Observable<BaseResponse<GroupSharedWithResponse[]>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(GROUP_API.SHARED_WITH.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+      let data: BaseResponse<GroupSharedWithResponse[]> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string>(e));
+    }).catch((e) => HandleCatch<GroupSharedWithResponse[]>(e));
   }
 
   public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[]>> {
