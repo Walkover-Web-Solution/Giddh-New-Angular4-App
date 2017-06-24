@@ -1,4 +1,5 @@
-import { GroupResponse } from './../../../../models/api-models/Group';
+import { GroupWithAccountsAction } from './../../../../services/actions/groupwithaccounts.actions';
+import { GroupResponse, GroupCreateRequest } from './../../../../models/api-models/Group';
 import { IGroup } from './../../../../models/interfaces/group.interface';
 import { IAccountsInfo } from './../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
@@ -21,7 +22,7 @@ export class AccountOperationsComponent implements OnInit {
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
 
-  constructor(private _fb: FormBuilder, private store: Store<AppState>) {
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
   }
 
@@ -56,4 +57,16 @@ export class AccountOperationsComponent implements OnInit {
     });
   }
 
+  public async addNewGroup() {
+    let activeGrp = await this.activeGroup$.first().toPromise();
+
+    let grpObject = new GroupCreateRequest();
+    grpObject.parentGroupUniqueName = activeGrp.uniqueName;
+    grpObject.description = this.subGroupForm.controls['desc'].value;
+    grpObject.name = this.subGroupForm.controls['name'].value;
+    grpObject.uniqueName = this.subGroupForm.controls['uniqueName'].value;
+
+    this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
+    this.subGroupForm.reset();
+  }
 }
