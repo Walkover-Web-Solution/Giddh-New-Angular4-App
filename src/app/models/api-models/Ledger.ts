@@ -14,15 +14,15 @@ export class LedgerRequest implements ILedger {
   public entryDate: string;
   public taxes?: string[];
   public applyApplicableTaxes?: boolean;
-  public isInclusiveTax: boolean;
-  public unconfirmedEntry: boolean;
-  public attachedFile: string;
+  public isInclusiveTax?: boolean;
+  public unconfirmedEntry?: boolean;
+  public attachedFile?: string;
   public tag?: string;
   public description?: string;
-  public generateInvoice: boolean;
+  public generateInvoice?: boolean;
   public chequeNumber?: string;
   public clearanceDate?: string;
-  public invoiceRequest: IInvoiceRequest;
+  public invoiceRequest?: IInvoiceRequest;
 }
 
 /*
