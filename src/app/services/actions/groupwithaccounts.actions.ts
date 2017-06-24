@@ -1,4 +1,4 @@
-import { GroupResponse } from './../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -17,6 +17,8 @@ export class GroupWithAccountsAction {
   public static SET_GROUP_ACCOUNTS_SEARCH_STRING = 'GroupAccountsSearchString';
   public static GET_GROUP_DETAILS = 'GroupDetails';
   public static GET_GROUP_DETAILS_RESPONSE = 'GroupDetailsResponse';
+  public static GET_FLATTEN_GROUPS_ACCOUNTS = 'GetFlattenGroupsAccounts';
+  public static GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE = 'GetFlattenGroupsAccountsResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -74,6 +76,26 @@ export class GroupWithAccountsAction {
     return {type: ''};
   });
 
+  @Effect()
+  public GetFlattenGroupsAccounts$: Observable<Action> = this.action$
+  .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS)
+    .debug('')
+    .switchMap(action => this._groupService.GetFlattenGroupsAccounts(action.payload))
+    .map(response => {
+      return this.getGroupDetailsResponse(response);
+  });
+
+  @Effect()
+  public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
+  .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
+  .debug('')
+  .map(action => {
+    if (action.payload.status === 'error') {
+      this._toasty.errorToast(action.payload.message, action.payload.code);
+    }
+    return {type: ''};
+  });
+
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
     //
   }
@@ -113,6 +135,20 @@ export class GroupWithAccountsAction {
   }
 
   public getGroupDetailsResponse(value: BaseResponse<GroupResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public getFlattenGroupsAccounts(value?: FlattenGroupsAccountsRequest): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_DETAILS,
+      payload: value
+    };
+  }
+
+  public getFlattenGroupsAccountsResponse(value: BaseResponse<FlattenGroupsAccountsResponse>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
       payload: value

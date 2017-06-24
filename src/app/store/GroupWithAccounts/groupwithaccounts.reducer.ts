@@ -1,4 +1,4 @@
-import { GroupResponse } from './../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -6,6 +6,7 @@ import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
 import * as _ from 'lodash';
+import { IFlattenGroupsAccountsDetail } from "../../models/interfaces/flattenGroupsAccountsDetail.interface";
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -14,18 +15,29 @@ export interface CurrentGroupAndAccountState {
   isGroupWithAccountsLoading: boolean;
   activeGroup: GroupResponse;
   accountSearchString: string;
+  flattenGroupsAccounts?: IFlattenGroupsAccountsDetail[];
+  isRefreshingFlattenGroupsAccounts: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
   return _.orderBy(mockData.map((m) => {
     m = Object.assign({}, m, {
-        isActive: false,
-        isOpen: false
+      isActive: false,
+      isOpen: false
     });
 
     m.groups = prepare(m.groups);
     return m;
   }), 'category');
+};
+
+const prepareFlattenGroupsAccounts = (mockData: IFlattenGroupsAccountsDetail[]): IFlattenGroupsAccountsDetail[] => {
+  return mockData.map((m) => {
+    m = Object.assign({}, m, {
+      isOpen: false
+    });
+    return m;
+  });
 };
 
 /**
@@ -35,13 +47,14 @@ const initialState: CurrentGroupAndAccountState = {
   groupswithaccounts: null,
   isGroupWithAccountsLoading: false,
   activeGroup: null,
-  accountSearchString: ''
+  accountSearchString: '',
+  isRefreshingFlattenGroupsAccounts: false
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
   switch (action.type) {
     case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS:
-      return Object.assign({}, state , {
+      return Object.assign({}, state, {
         isGroupWithAccountsLoading: true
       });
 
@@ -54,7 +67,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       let data: BaseResponse<GroupsWithAccountsResponse[]> = action.payload;
       if (data.status === 'success') {
         let newData = prepare(data.body);
-        return Object.assign({} , state, {
+        return Object.assign({}, state, {
           groupswithaccounts: newData,
           isGroupWithAccountsLoading: false
         });
@@ -80,8 +93,21 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           groupswithaccounts: groupArray
         });
       }
-      return state;
 
+    case GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS:
+      return Object.assign({}, state, {
+        isRefreshingFlattenGroupsAccounts: true
+      });
+    case GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE:
+      let data1: BaseResponse<FlattenGroupsAccountsResponse> = action.payload;
+      if (data1.status === 'success') {
+        let newData = prepareFlattenGroupsAccounts(data1.body.results);
+        return Object.assign({}, state, {
+          flattenGroupsAccounts: newData,
+          isRefreshingFlattenGroupsAccounts: false
+        });
+      }
+      return state;
     default:
       return state;
   }
