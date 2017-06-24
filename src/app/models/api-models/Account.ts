@@ -2,6 +2,8 @@ import { IAccountCreate, IAccount } from '../interfaces/accountCreate.interface'
 import { IGstDetailListItem } from '../interfaces/gstDetailListItem.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { IFlattenAccountsResultItem } from '../interfaces/flattenAccountsResultItem.interface';
+import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
 
 /**
  * Model for create account api response
@@ -118,4 +120,33 @@ export class AccountSharedWithResponse {
   public userEmail: string;
   public userName: string;
   public userUniqueName: string;
+}
+
+/*
+ * Model for flatten accounts api response
+ * GET call
+ * API:: (flatten accounts) company/:companyUniqueName/flatten-accounts?q=&refresh=
+ * used to filter accounts while searching on right side searchbox of popup
+ * you can pass query parameters in this as page, query as q and refresh and count which is sent 5
+ * to get next 5 accounts
+ * response will be hash as FlattenAccountsResponse
+ */
+export class FlattenAccountsResponse {
+  public count: number;
+  public page: number;
+  public results: IFlattenAccountsResultItem[];
+  public size: number;
+  public totalItems: number;
+  public totalPages: number;
+}
+
+/*
+ * Model for tax-hierarchy api response
+ * GET call
+ * API:: (accounts tax-hierarchy) company/:companyUniqueName/accounts/:accountUniqueName/tax-hierarchy
+ * response will be hash as AccountsTaxHierarchyResponse
+ */
+export class AccountsTaxHierarchyResponse {
+  public applicableTaxes: INameUniqueName[];
+  public inheritedTaxes: IInheritedTaxes[];
 }

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS } from '../app.constant';
 import { ToastrService } from 'ngx-toastr';
 @Injectable()

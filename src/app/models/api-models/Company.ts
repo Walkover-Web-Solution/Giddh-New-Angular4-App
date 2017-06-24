@@ -1,3 +1,6 @@
+import { ITax, ITaxDetail } from '../interfaces/tax.interface';
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+
 export class CompanyRequest {
   public name: string;
   public uniqueName: string;
@@ -86,4 +89,20 @@ export interface ActiveFinancialYear {
   financialYearEnds: string;
   isLocked: boolean;
   uniqueName: string;
+}
+
+/*
+ * Model for taxes api request
+ * GET call
+ * API:: (taxes) company/:companyUniqueName/tax
+ * response will be array of TaxResponse
+ */
+export class TaxResponse implements ITax {
+  public account: INameUniqueName;
+  public duration: string;
+  public taxDetail: ITaxDetail[];
+  public taxFileDate: number;
+  public taxNumber: string;
+  public name: string;
+  public uniqueName: string;
 }
