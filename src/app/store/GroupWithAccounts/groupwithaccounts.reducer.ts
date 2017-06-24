@@ -82,6 +82,35 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
 
+      case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
+      let gData: BaseResponse<GroupResponse> = action.payload;
+      if (gData.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        groupArray.forEach(grp => {
+          if (grp.isActive) {
+            let newData = new GroupsWithAccountsResponse();
+            newData.accounts = [];
+            newData.category = grp.category;
+            newData.groups = [];
+            newData.isActive = false;
+            newData.isOpen = true;
+            newData.name = gData.body.name;
+            newData.synonyms = gData.body.synonyms;
+            newData.uniqueName = gData.body.uniqueName;
+            grp.groups.push(newData);
+            return;
+          }
+          if (grp.groups) {
+            if (AddAndActiveGroupFunc(grp.groups, gData)) {
+              return;
+            }
+          }
+        });
+        return Object.assign({}, state, {
+          groupswithaccounts: groupArray
+        });
+      }
+      return state;
     default:
       return state;
   }
@@ -103,6 +132,34 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): 
       // grp.isOpen = myChildElementIsOpen;
       if (grp.isOpen) {
         return myChildElementIsOpen;
+      }
+    }
+  }
+  return myChildElementIsOpen;
+};
+
+const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse>): boolean => {
+  let myChildElementIsOpen = false;
+  for (let grp of groups) {
+    if (grp.isActive) {
+      let newData = new GroupsWithAccountsResponse();
+      newData.accounts = [];
+      newData.category = grp.category;
+      newData.groups = [];
+      newData.isActive = false;
+      newData.isOpen = true;
+      newData.name = gData.body.name;
+      newData.synonyms = gData.body.synonyms;
+      newData.uniqueName = gData.body.uniqueName;
+      grp.groups.push(newData);
+      myChildElementIsOpen = true;
+      return myChildElementIsOpen;
+    }
+    if (grp.groups) {
+      if (AddAndActiveGroupFunc(grp.groups, gData)) {
+        return true;
+      } else {
+        return false;
       }
     }
   }

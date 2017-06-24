@@ -43,7 +43,7 @@
             Add Subgroup
           </div>
           <div class="pd2">
-            <form id="subGroupForm" name="subGroupForm" [formGroup]="subGroupForm" novalidate class="">
+            <form id="subGroupForm" name="subGroupForm" (submit)="addNewGroup()" [formGroup]="subGroupForm" novalidate class="">
 
               <input type="text" placeholder="Enter Subgroup name" class="form-control form-group"
                 formControlName="name">
@@ -54,7 +54,7 @@
               <textarea maxlength="200" class="form-control form-group" placeholder="Enter description"
                 formControlName="desc"></textarea>
 
-              <button class="btn btn-primary"  [disabled]="!subGroupForm.valid" >Add Subgroup</button>
+              <button class="btn btn-primary" type="submit" [disabled]="!subGroupForm.valid" >Add Subgroup</button>
             </form>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { GroupResponse } from './../../models/api-models/Group';
+import { GroupResponse, GroupCreateRequest } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -17,6 +17,8 @@ export class GroupWithAccountsAction {
   public static SET_GROUP_ACCOUNTS_SEARCH_STRING = 'GroupAccountsSearchString';
   public static GET_GROUP_DETAILS = 'GroupDetails';
   public static GET_GROUP_DETAILS_RESPONSE = 'GroupDetailsResponse';
+  public static CREATE_GROUP = 'GroupCreate';
+  public static CREATE_GROUP_RESPONSE = 'GroupCreateResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -74,6 +76,26 @@ export class GroupWithAccountsAction {
     return {type: ''};
   });
 
+  @Effect()
+  public CreateGroup$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.CREATE_GROUP)
+    .debug('')
+    .switchMap(action => this._groupService.CreateGroup(action.payload))
+    .map(response => {
+      return this.createGroupResponse(response);
+  });
+
+  @Effect()
+  public CreateGroupResponse$: Observable<Action> = this.action$
+  .ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE)
+  .debug('')
+  .map(action => {
+    if (action.payload.status === 'error') {
+      this._toasty.errorToast(action.payload.message, action.payload.code);
+    }
+    return {type: ''};
+  });
+
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService) {
     //
   }
@@ -105,7 +127,7 @@ export class GroupWithAccountsAction {
     };
   }
 
-  public getGroupDetails(value?: string): Action {
+  public getGroupDetails(value: string): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS,
       payload: value
@@ -115,6 +137,20 @@ export class GroupWithAccountsAction {
   public getGroupDetailsResponse(value: BaseResponse<GroupResponse>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public createGroup(value: GroupCreateRequest): Action {
+    return {
+      type: GroupWithAccountsAction.CREATE_GROUP,
+      payload: value
+    };
+  }
+
+  public createGroupResponse(value: BaseResponse<GroupResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.CREATE_GROUP_RESPONSE,
       payload: value
     };
   }
