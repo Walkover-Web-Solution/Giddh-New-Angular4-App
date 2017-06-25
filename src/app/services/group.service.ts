@@ -1,4 +1,4 @@
-import { UnShareGroupResponse, UnShareGroupRequest } from './../models/api-models/Group';
+import { UnShareGroupResponse, UnShareGroupRequest, MoveGroupResponse } from './../models/api-models/Group';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Store } from '@ngrx/store';
@@ -76,6 +76,7 @@ export class GroupService {
     return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), {user: userEmail}).map((res) => {
       let data: BaseResponse<string> = res.json();
       let newResp = new BaseResponse<UnShareGroupResponse>();
+      newResp.status = 'success';
       newResp.body = new UnShareGroupResponse();
       newResp.body.toastMessage = data.body;
       newResp.body.user = userEmail;
@@ -109,17 +110,17 @@ export class GroupService {
     }).catch((e) => HandleCatch<GroupsWithAccountsResponse[]>(e));
   }
 
-  public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<string>> {
+  public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<MoveGroupResponse>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.MOVE_GROUP.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
-      let data: BaseResponse<string> = res.json();
+    return this._http.put(GROUP_API.MOVE_GROUP.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
+      let data: BaseResponse<MoveGroupResponse> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string>(e));
+    }).catch((e) => HandleCatch<MoveGroupResponse>(e));
   }
 
   public GetGroupDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse>> {

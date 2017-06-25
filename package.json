@@ -162,7 +162,6 @@
     "karma-webpack": "~2.0.3",
     "ncp": "^2.0.0",
     "ng-router-loader": "^2.1.0",
-    "ng2-select2": "^1.0.0-beta.10",
     "ng2-ui-auth": "^6.2.0",
     "ngc-webpack": "~2.0.0",
     "ngrx-store-freeze": "^0.1.9",

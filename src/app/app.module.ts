@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 import { LaddaModule } from 'angular2-ladda';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { NgModule, ApplicationRef } from '@angular/core';
-import { Select2Module } from 'ng2-select2';
 import { AuthService, AppGlobals } from 'angular2-google-login';
 import {
   removeNgStyles,
@@ -106,7 +105,6 @@ if (ENV === 'development') {
         ...CONDITIONAL_IMPORTS,
     Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
-    Select2Module
   ],
   /**
    * Expose our Services and Providers into Angular's dependency injection.

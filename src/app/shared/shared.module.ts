@@ -1,4 +1,4 @@
-import { Select2Module } from 'ng2-select2';
+import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { CommonModule } from '@angular/common';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -30,7 +30,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // Components / Directives/ Pipes
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent
+    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe
   ],
   imports: [
     CommonModule,
@@ -46,9 +46,10 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FormWizardModule,
-    Select2Module
+    // Select2Module
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, BrowserAnimationsModule],
+  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
+    BrowserAnimationsModule, AccountFilterPipe],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent]
 })
