@@ -84,6 +84,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         this.userName = u.name[0] + u.name[1];
       }
     });
+
+    this.manageGroupsAccountsModal.onHidden.subscribe(e => {
+      this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+    });
   }
   // tslint:disable-next-line:no-empty
   public ngAfterViewInit() {
