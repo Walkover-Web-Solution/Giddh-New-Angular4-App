@@ -21,7 +21,7 @@
                   <i class="glyphicon glyphicon-search"></i>
                 </div>
 
-                <input type="text"  name="grpSrch" #grpSrchEl class="form-control" placeholder="Search groups">
+                <input type="text" [(ngModel)]="grpSrch"  name="grpSrch" #grpSrchEl class="form-control" placeholder="Search groups">
               </div>
             </div>
           </div>
@@ -31,12 +31,12 @@
           </div>
 
           <perfect-scrollbar id="addMngGrpScrBar" class="scrClass" [config]="psConfig">
-          <!-- <div id="addMngGrpScrBar" class="scrClass ps-container" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
+            <!-- <div id="addMngGrpScrBar" class="scrClass ps-container" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
             suppressscrollx="false" usebothwheelaxes="false" suppressscrolly="true"> -->
             <div ng-transclude="">
               <!-- ngIf: showListGroupsNow -->
               <div *ngIf="!(searchLoad | async)">
-                <groups-recursive-list [groupList]="groupList$ | async"></groups-recursive-list>
+                <groups-recursive-list [groupList]="(groupList$ | async) | myAccountFilter: grpSrch"></groups-recursive-list>
               </div>
               <!-- end ngIf: showListGroupsNow -->
             </div>
@@ -46,50 +46,21 @@
             <div class="ps-scrollbar-y-rail" style="top: 0px; height: 380px; display: none; right: 0px;">
               <div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div>
             </div> -->
-          <!-- </div> -->
+            <!-- </div> -->
           </perfect-scrollbar>
         </div>
       </div>
 
       <!-- middle body -->
       <div class="col-xs-7  pos-rel">
-        <div class="bdrR bdrL row " id="middleBody">
-
-          <!-- ngIf: showGroupDetails -->
-
-          <!-- ngIf: showAccountDetails -->
-
-        </div>
-
-        <!-- ngIf: showAccountDetails || showGroupDetails -->
+        <account-operations></account-operations>
       </div>
 
       <!-- right side -->
       <div class="col-xs-2" id="right">
-        <div class="row pr">
-
-            <div class="form-group pdL1 pdT1 pdR1">
-              <div class="input-group">
-                <div class="input-group-addon">
-                  <i class="glyphicon glyphicon-search"></i>
-                </div>
-                <input type="text" name="accountsSearch" ng-model="search.flataccount" class="form-control ng-pristine ng-untouched ng-valid"
-                  placeholder="Search accounts" ng-change="searchAccountsC5(search.flataccount)" ng-model-options="{debounce:1000}">
-              </div>
-            </div>
-
-            <section class="pr" style="height: 378px">
-              <div class="search-loading" *ngIf="(searchLoad | async)">
-                <span class="spinner small"></span> Loading…
-              </div>
-
-               <group-account-list></group-account-list>
-
-            </section>
-
-          </div>
+        <group-account-list></group-account-list>
         <!-- <perfect-scrollbar class="row pr"> -->
-      <!-- </perfect-scrollbar> -->
+        <!-- </perfect-scrollbar> -->
       </div>
       <!-- right side end -->
     </div>

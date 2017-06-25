@@ -1,22 +1,43 @@
-<h3 class="list-group-item-heading small" *ngIf="!(activeGroupName$ | async)">Accounts from
-  <strong>all group</strong>
-</h3>
+<div class="row pr">
 
-<div>
-  <h4 class="list-group-item-heading small" *ngIf="(activeGroupName$ | async) && (accountsList$ | async)?.length">Accounts from
-    <strong>{{ activeGroupName$ | async }}</strong>
-  </h4>
-
-  <h4 class="list-group-item-heading small" *ngIf="(activeGroupName$ | async) && !(accountsList$ | async)?.length">Oops, there are no accounts in
-    <strong>{{ activeGroupName$ | async }}</strong>
-  </h4>
-
-</div>
-
-<div id="allAcntWrap" class="scrClass acntListDiv ps-container">
-  <div class="list-group">
-    <a *ngFor="let value of (accountsList$ | async)" href="javascript:void(0)" class="list-group-item">
-      <h4 uib-tooltip="cash" tooltip-placement="bottom" class="list-group-item-heading ellp max200">{{value.name}}</h4>
-    </a>
+  <div class="form-group pdL1 pdT1 pdR1">
+    <div class="input-group">
+      <div class="input-group-addon">
+        <i class="glyphicon glyphicon-search"></i>
+      </div>
+      <input type="text" name="accountsSearch" class="form-control" (keyup)=searchAccounts($event)
+        placeholder="Search accounts">
+    </div>
   </div>
+
+  <section class="pr" style="height: 378px">
+    <div class="search-loading" *ngIf="(searchLoad$ | async)">
+      <span class="spinner small"></span> Loading…
+    </div>
+
+    <h3 class="list-group-item-heading small" *ngIf="!(activeGroup$ | async)">Accounts from
+      <strong>all group</strong>
+    </h3>
+
+    <div>
+      <h4 class="list-group-item-heading small" *ngIf="(activeGroup$ | async) && (accountsList$ | async)?.length">Accounts from
+        <strong>{{ (activeGroup$ | async)?.name }}</strong>
+      </h4>
+
+      <h4 class="list-group-item-heading small" *ngIf="(activeGroup$ | async) && !(accountsList$ | async)?.length">Oops, there are no accounts in
+        <strong>{{ (activeGroup$ | async)?.name }}</strong>
+      </h4>
+
+    </div>
+
+    <div id="allAcntWrap" class="scrClass acntListDiv ps-container">
+      <div class="list-group">
+        <a *ngFor="let value of (accountsList$ | async)" href="javascript:void(0)" class="list-group-item">
+          <h4 uib-tooltip="cash" tooltip-placement="bottom" class="list-group-item-heading ellp max200">{{value.name}}</h4>
+        </a>
+      </div>
+    </div>
+
+  </section>
+
 </div>
