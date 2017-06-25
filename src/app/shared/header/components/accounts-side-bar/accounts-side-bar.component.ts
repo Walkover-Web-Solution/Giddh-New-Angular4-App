@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { AppState } from "../../../../store/roots";
-import { Store } from "@ngrx/store";
-import { Observable } from "rxjs/Observable";
-import { IFlattenGroupsAccountsDetail } from "../../../../models/interfaces/flattenGroupsAccountsDetail.interface";
+import { AppState } from '../../../../store/roots';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
+import { IFlattenGroupsAccountsDetail } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
   selector: 'accounts-side-bar',
@@ -19,7 +19,7 @@ export class AccountsSideBarComponent implements OnInit {
   constructor(private store: Store<AppState>) {
     this.flatAccountWGroupsList$ = this.store.select(state => {
       return state.groupwithaccounts.flattenGroupsAccounts;
-    })
+    });
   }
 
   // tslint:disable-next-line:no-empty
