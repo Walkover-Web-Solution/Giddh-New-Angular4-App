@@ -16,17 +16,10 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
 export class ManageGroupsAccountsComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
   @ViewChild('grpSrchEl') public grpSrchEl: ElementRef;
+  public grpSrch: string;
   public searchLoad: Observable<boolean>;
-  public showListGroupsNow: boolean = true;
-  public showOnUpdate: boolean = false;
-  public canUpdate: boolean = false;
-  public canShare: boolean = false;
-  public createNew: boolean = false;
-  public mainGrp: any[] = [];
+
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
-  public breadCrumbList: any[] = [];
-  public accountSharedUserList: any[] = [];
-  public groupSharedUserList: any[] = [];
 
   public psConfig: PerfectScrollbarConfigInterface;
   // tslint:disable-next-line:no-empty
@@ -38,42 +31,20 @@ export class ManageGroupsAccountsComponent implements OnInit {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
-    .map((e: any) => e.target.value)
-    .debounceTime(700)
-    .distinctUntilChanged()
-    .subscribe((val) => {
-      this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
-    });
+    // Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
+    //   .map((e: any) => e.target.value)
+    //   .debounceTime(700)
+    //   .distinctUntilChanged()
+    //   .subscribe((val: string) => {
+    //     if (val.startsWith(' ')) {
+    //       return;
+    //     }
+    //     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
+    //   });
   }
 
   public closePopupEvent() {
     this.grpSrchEl.nativeElement.value = '';
     this.closeEvent.emit(true);
   }
-
-  public resetSearch() {
-    //
-  }
-
-  public createNewGrpAccount(index) {
-    //
-  }
-
-  public jumpToGroup() {
-    //
-  }
-
-  public shareAccModal() {
-    //
-  }
-
-  public shareGrpModal() {
-    //
-  }
-
-  public getSelectedType() {
-    //
-  }
-
 }
