@@ -59,16 +59,21 @@
 
     <div class="clearfix bdrB">
 
-      <div class="col-xs-6" *ngIf="!(isRootLevlGroup$ | async)">
+      <div class="col-xs-6" *ngIf="!(activeGroup$ | async)?.fixed">
         <div class="row">
-          <form name="moveGroupForm" novalidate class="pd2 form-inline" [formGroup]="moveGroupForm">
+          <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="pd2 form-inline" [formGroup]="moveGroupForm">
             <div>
               <label class="mrR">Move to group</label>
             </div>
 
             <div class="form-group">
-              <input formControlName="moveto" type="text" placeholder="Group name" class="form-control" uib-typeahead="groups as groups.name for groups in flattenGroupList | omit: isChildGroup | filter:{name: $viewValue} | limitTo:8"
-                aria-autocomplete="list" aria-expanded="false" aria-owns="typeahead-632-2430">
+              <input formControlName="moveto"
+              (typeaheadOnSelect)="moveToGroupSelected($event)"
+              [typeahead]="accountList"
+              typeaheadOptionField="name"
+              class="form-control">
+              <!-- <input formControlName="moveto" type="text" placeholder="Group name" class="form-control" uib-typeahead="groups as groups.name for groups in flattenGroupList | omit: isChildGroup | filter:{name: $viewValue} | limitTo:8"
+                aria-autocomplete="list" aria-expanded="false" aria-owns="typeahead-632-2430"> -->
             </div>
             <div class="form-group">
               <button class="btn btn-info mrL" [disabled]="!moveGroupForm.valid">Move</button>
