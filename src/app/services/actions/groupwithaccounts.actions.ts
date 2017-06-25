@@ -1,6 +1,6 @@
 import { AppState } from './../../store/roots';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
-import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, UnShareGroupResponse, MoveGroupRequest, MoveGroupResponse } from './../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, UnShareGroupResponse, MoveGroupRequest, MoveGroupResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -32,6 +32,11 @@ export class GroupWithAccountsAction {
 
   public static MOVE_GROUP = 'GroupMove';
   public static MOVE_GROUP_RESPONSE = 'GroupMoveResponse';
+
+  public static GET_GROUP_TAX_HIERARCHY = 'GroupTaxHierarchy';
+  public static GET_GROUP_TAX_HIERARCHY_RESPONSE = 'GroupTaxHierarchyResponse';
+
+  public static RESET_GROUPS_STATE = 'GroupResetState';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -223,6 +228,26 @@ export class GroupWithAccountsAction {
             return { type: '' };
           });
 
+          @Effect()
+          public getGroupTaxHierarchy$: Observable<Action> = this.action$
+            .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY)
+            .debug('')
+            .switchMap(action => this._groupService.GetTaxHierarchy(action.payload))
+            .map(response => {
+              return this.getTaxHierarchyResponse(response);
+            });
+
+          @Effect()
+          public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
+            .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE)
+            .debug('')
+            .map(action => {
+              if (action.payload.status === 'error') {
+                this._toasty.errorToast(action.payload.message, action.payload.code);
+              }
+              return { type: '' };
+            });
+
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService, public store: Store<AppState>) {
     //
   }
@@ -351,4 +376,22 @@ export class GroupWithAccountsAction {
     };
   }
 
+  public getTaxHierarchy(value: string): Action {
+    return {
+      type: GroupWithAccountsAction.MOVE_GROUP,
+      payload: value
+    };
+  }
+  public getTaxHierarchyResponse(value: BaseResponse<GroupsTaxHierarchyResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.MOVE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
+
+  public resetAddAndMangePopup(): Action {
+    return {
+      type: GroupWithAccountsAction.RESET_GROUPS_STATE
+    };
+  }
 }
