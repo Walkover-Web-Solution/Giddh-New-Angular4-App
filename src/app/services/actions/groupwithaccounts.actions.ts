@@ -1,6 +1,6 @@
 import { AppState } from './../../store/roots';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
-import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, UnShareGroupResponse } from './../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, UnShareGroupResponse, MoveGroupRequest, MoveGroupResponse } from './../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -29,6 +29,9 @@ export class GroupWithAccountsAction {
 
   public static SHARED_GROUP_WITH = 'GroupSharedWith';
   public static SHARED_GROUP_WITH_RESPONSE = 'GroupSharedWithResponse';
+
+  public static MOVE_GROUP = 'GroupMove';
+  public static MOVE_GROUP_RESPONSE = 'GroupMoveResponse';
 
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
@@ -173,11 +176,6 @@ export class GroupWithAccountsAction {
             this._toasty.errorToast(action.payload.message, action.payload.code);
           } else {
             this._toasty.successToast(action.payload.body.toastMessage, '');
-            let groupUniqueName = '';
-            this.store.take(1).subscribe(s => {
-              groupUniqueName = s.groupwithaccounts.activeGroup.uniqueName;
-            });
-            return this.sharedGroupWith(groupUniqueName);
           }
           return { type: '' };
         });
@@ -201,6 +199,29 @@ export class GroupWithAccountsAction {
           }
           return { type: '' };
         });
+
+        @Effect()
+        public moveGroup$: Observable<Action> = this.action$
+          .ofType(GroupWithAccountsAction.MOVE_GROUP)
+          .debug('')
+          .switchMap(action => this._groupService.MoveGroup(action.payload.body, action.payload.groupUniqueName))
+          .map(response => {
+            return this.moveGroupResponse(response);
+          });
+
+        @Effect()
+        public moveGroupResponse$: Observable<Action> = this.action$
+          .ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE)
+          .debug('')
+          .map(action => {
+            if (action.payload.status === 'error') {
+              this._toasty.errorToast(action.payload.message, action.payload.code);
+            } else {
+              this._toasty.successToast('Group moved successfully', '');
+              return this.getGroupWithAccounts('');
+            }
+            return { type: '' };
+          });
 
   constructor(private action$: Actions, private _groupService: GroupService, private _toasty: ToasterService, public store: Store<AppState>) {
     //
@@ -311,6 +332,21 @@ export class GroupWithAccountsAction {
   public sharedGroupWithResponse(value: BaseResponse<GroupSharedWithResponse[]>): Action {
     return {
       type: GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE,
+      payload: value
+    };
+  }
+
+  public moveGroup(value: MoveGroupRequest, groupUniqueName: string): Action {
+    return {
+      type: GroupWithAccountsAction.MOVE_GROUP,
+      payload: Object.assign({}, {body: value}, {
+        groupUniqueName
+      })
+    };
+  }
+  public moveGroupResponse(value: BaseResponse<MoveGroupResponse>): Action {
+    return {
+      type: GroupWithAccountsAction.MOVE_GROUP_RESPONSE,
       payload: value
     };
   }

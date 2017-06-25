@@ -114,7 +114,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public changeCompany(selectedCompanyUniqueName: string, e: Event) {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
-    stateDetailsRequest.lastState = 'home';
+    stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     e.stopPropagation();
