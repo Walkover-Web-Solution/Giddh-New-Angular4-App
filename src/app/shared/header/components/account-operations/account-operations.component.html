@@ -82,6 +82,41 @@
         </div>
       </div>
 
+      <div class="clearfix" *ngIf="isTaxableGroup$ | async">
+        <div class="bdrB">
+            <div class="dGryHead">
+              Taxes
+            </div>
+            <div class="pd2 clearfix">
+              <div class="tax-list-wrap">
+                <div class="tax-label"><label>All Applied Taxes</label></div>
+
+                <span class="tax-bullet" *ngFor="let tax of (activeGroup$ | async)?.applicableTaxes">{{ tax.name }}</span>
+
+                <p *ngIf="!(activeGroup$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
+                <button id="editTax" class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
+                  <i class="glyphicon glyphicon-edit"></i>
+                </button>
+              </div>
+
+              <div class="edit-tax-section" *ngIf="showEditTaxSection">
+                <div class="tax-list-wrap">
+                  <div class="tax-label"><label>All Inherited Taxes</label></div>
+                  <span class="tax-bullet" *ngFor="let acll of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes"></span>
+                  <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+                </div>
+                <div class="tax-list-wrap">
+                  <div class="tax-label"><label>All Applicable Taxes</label></div>
+                  <div class="clearfix max350 mrT1">
+
+                  </div>
+                  <button class="btn btn-success mrT1" ng-click="applyTax('account')" ng-if="showEditTaxSection"> Save</button>
+                </div>
+              </div>
+            </div>
+      </div>
+      </div>
+
       <div class="col-xs-6 bdrL" (submit)="shareGroup()">
         <div class="row">
           <form name="shareGroupForm" novalidate="" [formGroup]="shareGroupForm" class="form-inline pd2">
@@ -124,19 +159,10 @@
       </div>
     </div>
 
-    <div class="pd2" *ngIf="!(isRootLevlGroup$ | async)">
+    <div class="pd2" *ngIf="!(activeGroup$ | async)?.fixed">
       <button class="btn btn-danger ng-binding" ng-click="deleteGroup()">Delete Current Assets group</button>
     </div>
 
-    <script type="text/ng-template" id="taxHierarchy.html" class="" style="
-      display: block !important; ">
-      <div class="popover-content">
-        <label>Tax being inherited from:</label>
-        <ul>
-          <li ng-repeat="grp in inTax.groups">{{grp.name}}</li>
-        </ul>
-      </div>
-    </script>
   </div>
 
 </div>
