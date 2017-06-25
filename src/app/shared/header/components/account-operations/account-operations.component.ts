@@ -2,7 +2,7 @@ import { GroupListItemResponse } from './../../../../models/api-models/GroupList
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from './../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from './../../../../services/actions/groupwithaccounts.actions';
-import { GroupResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest } from './../../../../models/api-models/Group';
+import { GroupResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest, GroupsTaxHierarchyResponse } from './../../../../models/api-models/Group';
 import { IGroup } from './../../../../models/interfaces/group.interface';
 import { IAccountsInfo } from './../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
@@ -17,7 +17,8 @@ import * as _ from 'lodash';
   selector: 'account-operations',
   templateUrl: './account-operations.component.html',
 })
-export class AccountOperationsComponent implements OnInit {
+export class AccountOperationsComponent implements OnInit, AfterViewInit {
+  public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
   public subGroupForm: FormGroup;
   public groupDetailForm: FormGroup;
@@ -25,12 +26,12 @@ export class AccountOperationsComponent implements OnInit {
   public shareGroupForm: FormGroup;
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
-  // public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public activeGroupInProgress$: Observable<boolean>;
-  public isRootLevlGroup$: Observable<boolean>;
+  public isTaxableGroup$: Observable<boolean>;
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public accountList: any[];
+  public showEditTaxSection: boolean = false;
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
 
@@ -38,6 +39,7 @@ export class AccountOperationsComponent implements OnInit {
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
+    this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
   }
 
   public ngOnInit() {
@@ -77,6 +79,17 @@ export class AccountOperationsComponent implements OnInit {
     });
   }
 
+  public ngAfterViewInit() {
+    this.isTaxableGroup$ = this.store.select(state => {
+      let result: boolean = false;
+      if (state.groupwithaccounts.groupswithaccounts && state.groupwithaccounts.activeGroup) {
+        result = this.getAccountFromGroup(state.groupwithaccounts.groupswithaccounts, state.groupwithaccounts.activeGroup.uniqueName, false);
+      } else {
+        result = false;
+      }
+      return result;
+    });
+  }
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
@@ -150,5 +163,26 @@ export class AccountOperationsComponent implements OnInit {
       return obj;
     });
     return obj;
+  }
+
+  public async taxHierarchy() {
+    let activeGrp = await this.activeGroup$.first().toPromise();
+    this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGrp.uniqueName));
+    this.showEditTaxSection = true;
+  }
+
+  public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
+    groupList.forEach(el => {
+      if (el.accounts) {
+        if (el.uniqueName === uniqueName && (el.category === 'income' || el.category === 'expenses')) {
+          result = true;
+          return;
+        }
+      }
+      if (el.groups) {
+        result = this.getAccountFromGroup(el.groups, uniqueName, result);
+      }
+    });
+    return result;
   }
 }
