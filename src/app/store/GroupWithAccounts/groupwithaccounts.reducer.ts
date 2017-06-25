@@ -164,6 +164,17 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           });
         }
         return state;
+
+        case GroupWithAccountsAction.RESET_GROUPS_STATE:
+          return Object.assign({} , state, {
+            groupswithaccounts: [],
+            isGroupWithAccountsLoading: false,
+            activeGroup: null,
+            accountSearchString: '',
+            isRefreshingFlattenGroupsAccounts: false,
+            activeGroupInProgress: false,
+            activeGroupSharedWith: []
+          });
     default:
       return state;
   }

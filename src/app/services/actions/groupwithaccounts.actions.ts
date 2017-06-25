@@ -33,6 +33,8 @@ export class GroupWithAccountsAction {
   public static MOVE_GROUP = 'GroupMove';
   public static MOVE_GROUP_RESPONSE = 'GroupMoveResponse';
 
+  public static RESET_GROUPS_STATE = 'GroupResetState';
+
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
@@ -351,4 +353,9 @@ export class GroupWithAccountsAction {
     };
   }
 
+  public resetAddAndMangePopup(): Action {
+    return {
+      type: GroupWithAccountsAction.RESET_GROUPS_STATE
+    };
+  }
 }
