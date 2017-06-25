@@ -1,6 +1,6 @@
 <div class="clearfix add-manage-grouplist">
   <section *ngFor="let group of groupList" class="rows row-2 {{group.category}}">
-    <div class="row" (click)="onGroupClick(group.uniqueName)">
+    <div class="row" (click)="onGroupClick(group.uniqueName)" *ngIf="group.isVisible" >
       <div class="col-xs-12 group">
         <span>{{ group.name }}</span>
       </div>

@@ -25,7 +25,8 @@ const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResp
   return _.orderBy(mockData.map((m) => {
     m = Object.assign({}, m, {
       isActive: false,
-      isOpen: false
+      isOpen: false,
+      isVisible: true
     });
 
     m.groups = prepare(m.groups);
@@ -77,10 +78,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
-      case GroupWithAccountsAction.GET_GROUP_DETAILS:
-        return Object.assign({}, state, {
-          activeGroupInProgress: true
-        });
+    case GroupWithAccountsAction.GET_GROUP_DETAILS:
+      return Object.assign({}, state, {
+        activeGroupInProgress: true
+      });
 
     case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE:
       let grpData: BaseResponse<GroupResponse> = action.payload;
@@ -147,23 +148,23 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
 
-      case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
-        let sharedData: BaseResponse<GroupSharedWithResponse[]> = action.payload;
-        if (sharedData.status === 'success') {
-          return Object.assign({} , state , {
-            activeGroupSharedWith: sharedData.body
-          });
-        }
-        return state;
-      case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
-        let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
-        if (unSharedData.status === 'success') {
-          let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.body.user !== ac.userEmail);
-          return Object.assign({}, state, {
-            activeGroupSharedWith: myGroupSharedWith
-          });
-        }
-        return state;
+    case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
+      let sharedData: BaseResponse<GroupSharedWithResponse[]> = action.payload;
+      if (sharedData.status === 'success') {
+        return Object.assign({}, state, {
+          activeGroupSharedWith: sharedData.body
+        });
+      }
+      return state;
+    case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
+      let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
+      if (unSharedData.status === 'success') {
+        let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.body.user !== ac.userEmail);
+        return Object.assign({}, state, {
+          activeGroupSharedWith: myGroupSharedWith
+        });
+      }
+      return state;
     default:
       return state;
   }
