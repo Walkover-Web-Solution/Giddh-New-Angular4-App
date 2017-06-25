@@ -32,7 +32,12 @@ export class LocationService {
       query += `components=country:${location.QueryString}`;
     }
     return this._http.get(this.GoogleApiURL + query)
-    .map((res) => res.json())
+    .map((res) => {
+      let r = res.json();
+      console.log(r);
+      return r;
+    }
+      )
     .catch((e) => Observable.throw(e));
   }
 }
