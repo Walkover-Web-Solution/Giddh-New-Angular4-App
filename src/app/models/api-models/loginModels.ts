@@ -22,7 +22,7 @@ export class UserDetails {
 }
 
 export class SignupWithMobile {
-  public mobileNumber: number;
+  public mobileNumber: string;
   public countryCode: number = 91;
 }
 export class SignupWithMobileResponse {
@@ -30,7 +30,7 @@ export class SignupWithMobileResponse {
 }
 
 export class VerifyMobileModel {
-  public mobileNumber: number;
+  public mobileNumber: string;
   public countryCode: number = 91;
   public oneTimePassword: string;
 }
