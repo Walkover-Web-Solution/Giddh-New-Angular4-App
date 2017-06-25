@@ -41,6 +41,7 @@ module.exports = {
         { rel: 'stylesheet', href: './assets/css/style-bootstrap.css' },
         { rel: 'stylesheet', href: './assets/css/perfect-scrollbar.component.css' },
         { rel: 'stylesheet', href: './assets/css/toastr.css' },
+        { rel: 'stylesheet', href: './assets/css/busy.css' },
 
 
 

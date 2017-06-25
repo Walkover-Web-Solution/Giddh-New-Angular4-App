@@ -1,3 +1,4 @@
+import { GroupResponse } from './../../../../models/api-models/Group';
 import { Component, OnInit, Input } from '@angular/core';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { Store } from '@ngrx/store';
@@ -5,6 +6,7 @@ import { AppState } from '../../../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from 'lodash';
+import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 
 @Component({
   selector: 'group-account-list',
@@ -12,31 +14,39 @@ import * as _ from 'lodash';
 })
 export class GroupAccountsListComponent implements OnInit {
   public accountsList$: Observable<IAccountsInfo[]>;
-  public activeGroupName$: Observable<string>;
-  // public searchLoad: Observable<boolean>;
+  public activeGroup$: Observable<GroupResponse>;
+  public searchLoad$: Observable<boolean>;
   // tslint:disable-next-line:no-empty
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.accountsList$ =  this.store.select(state => {
       let accountsList: IAccountsInfo[] = [];
       if (state.groupwithaccounts.groupswithaccounts) {
-        if (state.groupwithaccounts.activeGroupName === null) {
+        if (state.groupwithaccounts.activeGroup === null) {
           accountsList = this.genFlatterAccounts(_.cloneDeep(state.groupwithaccounts.groupswithaccounts), []);
         } else {
-          accountsList = this.getAccountFromGroup(_.cloneDeep(state.groupwithaccounts.groupswithaccounts), _.cloneDeep(state.groupwithaccounts.activeGroupName), []);
+          accountsList = this.getAccountFromGroup(_.cloneDeep(state.groupwithaccounts.groupswithaccounts), _.cloneDeep(state.groupwithaccounts.activeGroup.uniqueName), []);
         }
+        accountsList = accountsList.filter(acn => {
+          return acn.name.toLowerCase().indexOf(state.groupwithaccounts.accountSearchString.toLowerCase()) > -1;
+        });
       }
       return accountsList;
     });
 
-    this.activeGroupName$ = this.store.select(state => {
-      return state.groupwithaccounts.activeGroupName;
-    });
-    // this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.searchLoad$ = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
 //
+  }
+
+  public searchAccounts(e: any) {
+    if (e.target.value.startsWith(' ')) {
+      return;
+    }
+    this.store.dispatch(this.groupWithAccountsAction.setAccountsSearchString(e.target.value));
   }
 
   public genFlatterAccounts(groupList: IGroupsWithAccounts[], result: IAccountsInfo[]): IAccountsInfo[] {

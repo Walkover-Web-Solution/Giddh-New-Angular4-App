@@ -14,7 +14,6 @@ import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyEmailModel } from '../models/api-models/loginModels';
-
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
