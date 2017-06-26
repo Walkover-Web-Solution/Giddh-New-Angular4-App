@@ -125,7 +125,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return state;
     case CompanyActions.SET_CONTACT_NO:
       return Object.assign({}, state, {
-        user: Object.assign({}, state.user, { contactNumber: action.payload })
+        user: { user: { contactNo: action.payload } }
       });
     default:
       return state;
