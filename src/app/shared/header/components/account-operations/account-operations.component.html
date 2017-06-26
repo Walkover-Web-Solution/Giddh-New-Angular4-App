@@ -1,5 +1,5 @@
 <div class="bdrR bdrL row " id="middleBody" *ngIf="showGroupForm">
-  <div ng-if="showGroupDetails" class="">
+  <div *ngIf="!(showAddAccountForm$ | async)">
     <div class="clearfix bdrB ">
 
       <div class="col-xs-6  bdrR">
@@ -9,7 +9,7 @@
           </div>
           <div class="pd2 ">
             <fieldset ng-disabled="!canUpdate">
-              <form id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" class="">
+              <form id="groupDetailForm" name="groupDetailForm" (submit)="updateGroup()" novalidate [formGroup]="groupDetailForm" class="">
                 <div class="form-group">
                   <label>Group Name</label>
                   <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
@@ -171,6 +171,10 @@
 
     </div>
 
+  </div>
+
+  <div *ngIf="showAddAccountForm$ | async">
+    <account-add></account-add>
   </div>
 
   <div class="scroll-btn text-center" scroll-btn="" *ngIf="showGroupForm">

@@ -10,7 +10,7 @@ import { IAccountsInfo } from './../../../../models/interfaces/accountInfo.inter
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 import * as _ from 'lodash';
@@ -42,6 +42,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public companyTaxDropDown: Observable<Select2OptionData[]>;
   public accountList: any[];
   public showEditTaxSection: boolean = false;
+
+  public showAddAccountForm$: Observable<boolean>;
 
   public taxPopOverTemplate: string = `
   <div class="popover-content">
@@ -84,6 +86,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
     this.companyTaxes$ = this.store.select(state => state.company.taxes);
+    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
 
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
@@ -110,7 +113,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['']
     });
 
     this.subGroupForm = this._fb.group({
@@ -184,6 +187,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.subGroupForm.reset();
   }
 
+  public async updateGroup() {
+    let activeGroup = await this.activeGroup$.first().toPromise();
+    let extendedObj = Object.assign({}, activeGroup, this.groupDetailForm.value);
+    this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroup.uniqueName));
+  }
   public async shareGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
 

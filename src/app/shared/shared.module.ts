@@ -20,7 +20,7 @@ import { SelectModule } from 'ng-select';
 import {
   ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,
   AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent,
-  GroupAccountsListComponent
+  GroupAccountsListComponent, AccountAddComponent
 } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
@@ -33,7 +33,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // Components / Directives/ Pipes
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe
+    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
+    AccountAddComponent
   ],
   imports: [
     CommonModule,
@@ -55,7 +56,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
     BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent]
+    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

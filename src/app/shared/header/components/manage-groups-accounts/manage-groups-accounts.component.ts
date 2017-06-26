@@ -22,6 +22,7 @@ export class ManageGroupsAccountsComponent implements OnInit {
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
 
   public psConfig: PerfectScrollbarConfigInterface;
+  public addNewAccountForm: boolean = false;
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
@@ -31,16 +32,7 @@ export class ManageGroupsAccountsComponent implements OnInit {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    // Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
-    //   .map((e: any) => e.target.value)
-    //   .debounceTime(700)
-    //   .distinctUntilChanged()
-    //   .subscribe((val: string) => {
-    //     if (val.startsWith(' ')) {
-    //       return;
-    //     }
-    //     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
-    //   });
+
   }
 
   public closePopupEvent() {

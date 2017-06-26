@@ -1,9 +1,9 @@
+import { GroupWithAccountsAction } from './../../services/actions/groupwithaccounts.actions';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, UnShareGroupResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
-import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -20,6 +20,8 @@ export interface CurrentGroupAndAccountState {
   activeGroupInProgress: boolean;
   activeGroupSharedWith?: GroupSharedWithResponse[];
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
+
+  addAccountOpen: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -55,7 +57,8 @@ const initialState: CurrentGroupAndAccountState = {
   isRefreshingFlattenGroupsAccounts: false,
   activeGroupInProgress: false,
   activeGroupSharedWith: null,
-  activeGroupTaxHierarchy: null
+  activeGroupTaxHierarchy: null,
+  addAccountOpen: false
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
@@ -105,7 +108,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           groupswithaccounts: groupArray
         });
       }
-
+      return state;
     case GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS:
       return Object.assign({}, state, {
         isRefreshingFlattenGroupsAccounts: true
@@ -187,6 +190,35 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             });
           }
           return state;
+          case GroupWithAccountsAction.SHOW_ADD_ACCOUNT_FORM:
+          return Object.assign({}, state, {
+            addAccountOpen: true
+          });
+      case GroupWithAccountsAction.HIDE_ADD_ACCOUNT_FORM:
+          return Object.assign({}, state, {
+            addAccountOpen: false
+          });
+      case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE:
+      let activeGrpData: BaseResponse<GroupResponse> = action.payload;
+      if (activeGrpData.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        groupArray.forEach(grp => {
+          if (grp.uniqueName === activeGrpData.body.uniqueName) {
+            grp.isActive = true;
+            grp.isOpen = !grp.isOpen;
+            return;
+          } else {
+            setActiveGroupFunc(grp.groups, activeGrpData.body.uniqueName);
+            grp.isActive = false;
+          }
+        });
+        return Object.assign({}, state, {
+          activeGroup: activeGrpData.body,
+          activeGroupInProgress: false,
+          groupswithaccounts: groupArray
+        });
+      }
+      return state;
     default:
       return state;
   }
