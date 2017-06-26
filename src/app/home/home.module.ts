@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { HomeRoutingModule } from './home.routing.module';
 import { HomeComponent } from './home.component';
-import { Select2Module } from 'ng2-select2';
 
 console.log('`Home` bundle loaded asynchronously');
 
@@ -24,7 +23,6 @@ console.log('`Home` bundle loaded asynchronously');
     HomeRoutingModule,
     Ng2BootstrapModule.forRoot(),
     SharedModule,
-    Select2Module
   ],
 })
 export class HomeModule {

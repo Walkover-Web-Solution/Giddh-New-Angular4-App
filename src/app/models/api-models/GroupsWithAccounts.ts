@@ -15,6 +15,7 @@ export class GroupsWithAccountsResponse implements IGroupsWithAccounts {
   public category: string;
   public isActive: boolean;
   public isOpen: boolean;
+  public isVisible: boolean = true;
   public groups: IGroupsWithAccounts[];
 
   // tslint:disable-next-line:no-empty
