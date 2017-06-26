@@ -23,9 +23,8 @@ export class CompanyService  {
   /**
    * CreateCompany
    */
-  public CreateCompany(company: CompanyRequest): Observable<BaseResponse<ComapnyResponse>> {
-
-    return this._http.post(COMPANY_API.CREATE_COMPANY, { company })
+  public CreateCompany(company: any): Observable<BaseResponse<ComapnyResponse>> {
+    return this._http.post(COMPANY_API.CREATE_COMPANY, company)
       .map((res) => {
         let data: BaseResponse<ComapnyResponse> = res.json();
         return data;
