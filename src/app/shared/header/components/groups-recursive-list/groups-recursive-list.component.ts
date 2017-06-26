@@ -20,5 +20,6 @@ export class GroupsRecursiveListComponent implements OnInit {
 
   public onGroupClick(uniqueName: string) {
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(uniqueName));
+    this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
   }
 }

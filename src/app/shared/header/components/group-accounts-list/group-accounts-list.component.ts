@@ -1,5 +1,5 @@
 import { GroupResponse } from './../../../../models/api-models/Group';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -13,9 +13,12 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
   templateUrl: './group-accounts-list.component.html'
 })
 export class GroupAccountsListComponent implements OnInit {
+  public isRootLevlGroup$: Observable<boolean>;
   public accountsList$: Observable<IAccountsInfo[]>;
   public activeGroup$: Observable<GroupResponse>;
   public searchLoad$: Observable<boolean>;
+
+  public showAddAccountForm$: Observable<boolean>;
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.accountsList$ =  this.store.select(state => {
@@ -35,13 +38,22 @@ export class GroupAccountsListComponent implements OnInit {
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
     this.searchLoad$ = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
+    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-//
+    this.isRootLevlGroup$ = this.store.select(state => {
+      if (state.groupwithaccounts.groupswithaccounts && state.groupwithaccounts.activeGroup) {
+        let index = _.findIndex(state.groupwithaccounts.groupswithaccounts, (s) => {
+          return s.uniqueName === state.groupwithaccounts.activeGroup.uniqueName;
+        });
+        return index !== -1 ? true : false;
+      } else {
+        return false;
+      }
+    });
   }
-
   public searchAccounts(e: any) {
     if (e.target.value.startsWith(' ')) {
       return;
@@ -49,6 +61,9 @@ export class GroupAccountsListComponent implements OnInit {
     this.store.dispatch(this.groupWithAccountsAction.setAccountsSearchString(e.target.value));
   }
 
+  public addNewAccountShow() {
+    this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
+  }
   public genFlatterAccounts(groupList: IGroupsWithAccounts[], result: IAccountsInfo[]): IAccountsInfo[] {
     groupList.forEach((el) => {
       if (el.accounts) {
