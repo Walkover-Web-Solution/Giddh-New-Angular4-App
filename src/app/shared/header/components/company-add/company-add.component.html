@@ -8,9 +8,8 @@
         <!-- end header -->
 
         <div class="modal-body noPad">
-
             <div class="welcome-msg">
-                <div ng-if="!showSuccessMsg" class="l8grey">
+                <div *ngIf="!(isMobileVerified | async)" class="l8grey">
                     <span>Welcome!</span><br>
                     <span>Let us help you set up your company with Giddh.</span>
                     <span>Before creating a company we need to verify your mobile no. first.</span>
@@ -20,13 +19,10 @@
                     <span>Company created successfully.</span>
                 </div>
             </div>
-
             <hr>
-
             <div class="wizard-container">
-
-                <form-wizard>
-                    <wizard-step [title]="'Add Mobile Number'">
+                <form-wizard #wizard>
+                    <wizard-step *ngIf="!(isMobileVerified | async)" [title]="'Add Mobile Number'">
                         <div class="wizard-step">
                             <div class=" clearfix">
                                 <h1 class="l8grey">Add Mobile Number</h1>
@@ -35,47 +31,35 @@
 
                                     <button class="btn btn-success mrL1" (click)="addNumber()" [disabled]="addForm.invalid">Add</button>
                                 </form>
-                                {{ addForm.valid }}
-                                <h3 class="mrB1">Format should be like {{phoneNumber}}</h3>
+                                <h3 class="mrB1">Format should be like 9898989898</h3>
                             </div>
-                            <div class=" clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
+                            <div class=" clearfix" *ngIf="showVerificationBox | async" style="padding-top:0;">
                                 <hr>
                                 <h1 class="mrT2">Enter Verfication Code</h1>
                                 <div class="mrT">
                                     <form #verifyForm="ngForm" class="mrT mrB1" name="mobileForm" novalidate>
-                                        <input class="form-control max350 pull-left" type="text" required placeholder="Verification Code" [(ngModel)]="verificationCode" />
+                                        <input class="form-control max350 pull-left" type="text" required placeholder="Verification Code" name="verificationCode" [(ngModel)]="verificationCode" />
                                         <button class="btn btn-success mrL2" [disabled]="verifyForm.invalid" (click)="verifyNumber()">Verify</button>
                                     </form>
                                 </div>
                             </div>
                         </div>
-
-
                     </wizard-step>
+
                     <wizard-step [title]="'Create Company'">
 
                         <div class="wizard-step">
                             <h1 class="l8grey">Create Your Company</h1>
-                            <form name="createCompForm" novalidate id="createCompForm" class="mrT mrB1">
+                            <form #createCompanyForm="ngForm" name="createCompForm" novalidate id="createCompForm" class="mrT mrB1">
 
-                                <div class="form-group" ng-class="(createCompForm.name.$valid  && createCompForm.name.$touched) ? 'has-success' : (createCompForm.name.$touched) ? 'has-error' : '' ">
-                                    <input type="text" ng-model="company.name" class="form-control" placeholder="Company Name" required name="name" minlength="5" maxlength="100" ngPattern="/[a-zA-Z0-9^ ]/">
+                                <div class="form-group">
+                                    <input #name="ngModel" type="text" [ngClass]="{'hasError': name.invalid, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ ]{5,100}">
                                 </div>
-                                <div class="form-group" ng-class="(createCompForm.city.$valid  && createCompForm.city.$touched) ? 'has-success' : (createCompForm.city.$touched) ? 'has-error' : '' ">
-                                    <input type="text" ng-model="company.city" uib-typeahead="address for address in getOnlyCity($viewValue)" typeahead-loading="loadingLocationsOnlyCt" typeahead-no-results="noResultsOnlyCt" class="form-control" name="city" autocomplete="off" required maxlength="50"
-                                        placeholder="Company City">
-                                    <i ng-show="loadingLocationsOnlyCt" class="glyphicon glyphicon-refresh"></i>
-
-                                    <div ng-show="noResultsOnlyCt">
-                                        <i class="glyphicon glyphicon-remove"></i> No Results Found
-                                    </div>
-
+                                <div class="form-group">
+                                    <input #city="ngModel" [typeahead]="dataSource" type="text" [ngClass]="{'hasError': city.invalid, 'has-success':city.valid}" [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="Company City">
                                 </div>
-
                                 <div class="modal-footer">
-                                    <button class="btn btn-success" type="button" ng-click="createCompany(company)" ng-disabled="createCompForm.$invalid">
-                    Create
-                  </button>
+                                    <button class="btn btn-success" type="button" (click)="createCompany(company)" [disabled]="createCompanyForm.invalid">Create</button>
                                 </div>
                             </form>
                             <!-- <input class=" btn btn-primary center-block" style="width:80px;margin-top:45px" type="submit" wz-next value="Next" /> -->

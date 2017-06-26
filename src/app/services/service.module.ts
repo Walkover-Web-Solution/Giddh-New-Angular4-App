@@ -1,3 +1,5 @@
+import { ErrorHandler } from './catchManager/catchmanger';
+import { VerifyMobileActions } from './actions/verifyMobile.actions';
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { CommonModule } from '@angular/common';
@@ -35,7 +37,8 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
     SharedModule.forRoot(),
     EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions),
-    EffectsModule.run(GroupWithAccountsAction)],
+    EffectsModule.run(GroupWithAccountsAction),
+    EffectsModule.run(VerifyMobileActions)],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
 export class ServiceModule {
@@ -52,7 +55,8 @@ export class ServiceModule {
         NeedsAuthentication,
         LocationService,
         UserAuthenticated,
-        GroupService
+        GroupService,
+        ErrorHandler
       ]
     };
   }

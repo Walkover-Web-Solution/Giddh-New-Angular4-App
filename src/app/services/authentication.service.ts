@@ -10,14 +10,15 @@ import { LoaderService } from './loader.service';
 import { LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { VerifyEmailModel, VerifyEmailResponseModel, SignupWithMobile, VerifyMobileModel } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { HandleCatch, ErrorHandler } from './catchManager/catchmanger';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class AuthenticationService {
 
   constructor(public _http: HttpWrapperService,
-    public _router: Router
+    public _router: Router,
+    private _error: ErrorHandler
   ) {
   }
 
@@ -53,13 +54,13 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.VerifyNumber, modele).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string>(e));
+    }).catch((e) => this._error.handle<string>(e));
   }
 
   public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string>> {
     return this._http.put(LOGIN_API.VerifyNumber, modele).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string>(e));
+    }).catch((e) => this._error.handle<string>(e));
   }
 }
