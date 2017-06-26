@@ -16,6 +16,7 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
 export class ManageGroupsAccountsComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
   @ViewChild('grpSrchEl') public grpSrchEl: ElementRef;
+  public grpSrch: string;
   public searchLoad: Observable<boolean>;
 
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
@@ -30,16 +31,16 @@ export class ManageGroupsAccountsComponent implements OnInit {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
-    .map((e: any) => e.target.value)
-    .debounceTime(700)
-    .distinctUntilChanged()
-    .subscribe((val: string) => {
-      if (val.startsWith(' ')) {
-        return;
-      }
-      this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
-    });
+    // Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
+    //   .map((e: any) => e.target.value)
+    //   .debounceTime(700)
+    //   .distinctUntilChanged()
+    //   .subscribe((val: string) => {
+    //     if (val.startsWith(' ')) {
+    //       return;
+    //     }
+    //     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
+    //   });
   }
 
   public closePopupEvent() {

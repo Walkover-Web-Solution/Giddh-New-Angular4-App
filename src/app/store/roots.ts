@@ -1,3 +1,4 @@
+import * as fromVerifyMobileReducer from './authentication/verifyMobile.reducer';
 import { routerReducer, RouterState } from '@ngrx/router-store';
 import * as fromHome from './home/home.reducer';
 import * as fromLogin from './authentication/authentication.reducer';
@@ -12,6 +13,7 @@ export interface AppState {
 
   company: fromCompany.CurrentCompanyState;
   groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
+  verifyMobile: fromVerifyMobileReducer.VerifyMobileState;
 }
 
 export const reducers = {
@@ -20,5 +22,6 @@ export const reducers = {
   company: fromCompany.CompanyReducer,
   login: fromLogin.AuthenticationReducer,
   session: fromLogin.SessionReducer,
-  groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer
+  groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer,
+  verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer
 };
