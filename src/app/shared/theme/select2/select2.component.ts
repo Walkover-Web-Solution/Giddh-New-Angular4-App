@@ -88,14 +88,13 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
     if (!this.element) {
       return;
     }
-
     if (changes['data'] && JSON.stringify(changes['data'].previousValue) !== JSON.stringify(changes['data'].currentValue)) {
       this.initPlugin();
 
       const newValue: string = this.element.val();
-      // this.valueChanged.emit({
-      //   value: newValue
-      // });
+      this.valueChanged.emit({
+        value: newValue
+      });
     }
 
     if (changes['value'] && changes['value'].previousValue !== changes['value'].currentValue) {
@@ -149,9 +148,12 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
       this.renderer.setElementProperty(this.selector.nativeElement, 'innerHTML', '');
     }
     //
+    let parentElement = this.element.parent().parent();
+    debugger;
     let options: Select2Options = {
       data: this.data,
-      width: (this.width) ? this.width : 'resolve'
+      width: (this.width) ? this.width : 'resolve',
+      dropdownParent: parentElement
     };
 
     Object.assign(options, this.options);
@@ -160,13 +162,13 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
       (jQuery.fn.select2 as any).amd.require(['select2/compat/matcher'], (oldMatcher: any) => {
         options.matcher = oldMatcher(options.matcher);
         this.element.select2(options);
-
         if (typeof this.value !== 'undefined') {
           this.setElementValue(this.value);
         }
       });
     } else {
       this.element.select2(options);
+      this.setElementValue(this.value);
     }
 
     if (this.disabled) {
@@ -176,7 +178,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 
   public setElementValue(newValue: string | string[]) {
     if (Array.isArray(newValue)) {
-      for (let option of this.selector.nativeElement.options) {
+      for (let option of (this.element[0] as any).options) {
         if (newValue.indexOf(option.value) > -1) {
           this.renderer.setElementProperty(option, 'selected', 'true');
         }

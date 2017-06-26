@@ -15,6 +15,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 import * as _ from 'lodash';
 import { IOption, SelectModule, SelectComponent } from 'ng-select';
+import { Select2OptionData } from '../../../theme/select2/select2.interface';
 
 @Component({
   selector: 'account-operations',
@@ -22,6 +23,7 @@ import { IOption, SelectModule, SelectComponent } from 'ng-select';
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit {
+  public activeGroupSelected$: Observable<string[]>;
   @ViewChild('select') public select: SelectComponent;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
@@ -37,7 +39,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public companyTaxes$: Observable<TaxResponse[]>;
-  public companyTaxDropDown: Observable<IOption[]>;
+  public companyTaxDropDown: Observable<Select2OptionData[]>;
   public accountList: any[];
   public showEditTaxSection: boolean = false;
 
@@ -50,11 +52,33 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   </div>
   `;
   public selectedTax: string[];
+  public options: Select2Options = {
+    minimumResultsForSearch: 9001,
+    multiple: true,
+    width: '100%',
+    placeholder: 'Choose a project',
+    templateResult: (data) => {
+      if (!data.id) { return data.text; }
+      // let text = this._translate.instant(data.text);
+      return $('<span>' + data.text + '</span>');
+    },
+    templateSelection: (data) => {
 
+      if (!data.id) { return data.text; }
+      // let text = this._translate.instant(data.text);
+      return $('<span>' + data.text + '</span>');
+    }
+  };
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private companyActions: CompanyActions) {
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.activeGroupSelected$ = this.store.select(state => {
+      if (state.groupwithaccounts.activeGroup) {
+        return state.groupwithaccounts.activeGroup.applicableTaxes.map(p => p.uniqueName);
+      }
+      return [];
+    });
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
@@ -62,19 +86,19 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.companyTaxes$ = this.store.select(state => state.company.taxes);
 
     this.companyTaxDropDown = this.store.select(state => {
-      let arr: IOption[] = [];
+      let arr: Select2OptionData[] = [];
       if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
         state.company.taxes.map((t) => {
           if (state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.length) {
             state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(it => {
               it.applicableTaxes.map(ita => {
                 if (ita.uniqueName !== t.uniqueName) {
-                  arr.push({ label: t.name, value: t.uniqueName });
+                  arr.push({ text: t.name, id: t.uniqueName });
                 }
               });
             });
           } else {
-            arr.push({ label: t.name, value: t.uniqueName });
+            arr.push({ text: t.name, id: t.uniqueName });
           }
         });
       }
@@ -117,24 +141,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       if (a) {
         this.showGroupForm = true;
         this.showEditTaxSection = false;
-        this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+        this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
       } else {
         this.showGroupForm = false;
       }
     });
 
-    this.companyTaxDropDown.subscribe((c) => {
-      let a: GroupResponse;
-      this.activeGroup$.take(1).subscribe(ac => {
-        a = ac;
-      });
-      if (a) {
-        let selectedTax = _.map(a.applicableTaxes, (at) => {
-          return at.uniqueName;
-        });
-        this.selectedTax = selectedTax;
-      }
-    });
   }
 
   public ngAfterViewInit() {
@@ -147,6 +159,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       }
       return result;
     });
+    // let a: GroupResponse;
+    // this.activeGroup$.take(1).subscribe(ac => {
+    //   a = ac;
+    // });
+    // if (a) {
+    //   let selectedTax = _.map(a.applicableTaxes, (at) => {
+    //     return at.uniqueName;
+    //   });
+    //   this.selectedTax = selectedTax;
+    //   // this.taxGroupForm.patchValue({ taxes: selectedTax });
+    // }
   }
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
@@ -170,7 +193,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.store.dispatch(this.groupWithAccountsAction.shareGroup(grpObject, activeGrp.uniqueName));
   }
   public moveToGroupSelected(event: any) {
-    this.moveGroupForm.patchValue({moveto: event.item.uniqueName});
+    this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
   }
   public async moveGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
@@ -210,7 +233,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     return _.flatten(listofUN);
   }
 
-  public makeGroupListFlatwithLessDtl(rawList: any)  {
+  public makeGroupListFlatwithLessDtl(rawList: any) {
     let obj;
     obj = _.map(rawList, (item: any) => {
       obj = {};

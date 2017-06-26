@@ -43,6 +43,7 @@ module.exports = {
         { rel: 'stylesheet', href: './assets/css/toastr.css' },
         { rel: 'stylesheet', href: './assets/css/busy.css' },
         { rel: 'stylesheet', href: './assets/js/plugins/select2/css/select2.min.css' },
+        { rel: 'stylesheet', href: './assets/js/plugins/tagmanager/tagmanager.css' },
 
 
 
@@ -71,6 +72,7 @@ module.exports = {
     script: [
         { type: 'text/javascript', src: './assets/js/jquery-1.11.3.min.js' },
         { type: 'text/javascript', src: './assets/js//plugins/select2/js/select2.full.min.js' },
+        { type: 'text/javascript', src: './assets/js//plugins/tagmanager/tagmanager.js' },
         { type: 'text/javascript', src: 'https://maps.googleapis.com/maps/api/js?libraries=places' }
     ]
 };

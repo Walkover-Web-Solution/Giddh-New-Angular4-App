@@ -23,6 +23,7 @@ import {
   GroupAccountsListComponent
 } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
+import { TagsModule } from './theme/tags/tags.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -49,7 +50,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot(),
     FormWizardModule,
     SelectModule,
-    Select2Module
+    Select2Module, TagsModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
     BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module],
