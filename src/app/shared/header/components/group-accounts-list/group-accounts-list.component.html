@@ -30,6 +30,11 @@
 
     </div>
 
+    <div class="mrB1 mrT1 pdL1 pdR1" *ngIf="!(isRootLevlGroup$ | async) && (activeGroup$ | async)">
+      <button class="btn btn-success btn-block" (click)="addNewAccountShow()" href="javascript:void(0)">+ Add New
+      </button>
+    </div>
+
     <div id="allAcntWrap" class="scrClass acntListDiv ps-container">
       <div class="list-group">
         <a *ngFor="let value of (accountsList$ | async)" href="javascript:void(0)" class="list-group-item">

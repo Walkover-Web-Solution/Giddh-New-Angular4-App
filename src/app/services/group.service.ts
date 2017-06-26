@@ -1,4 +1,5 @@
-import { UnShareGroupResponse, UnShareGroupRequest, MoveGroupResponse } from './../models/api-models/Group';
+import { AccountRequest, AccountResponse } from './../models/api-models/Account';
+import { UnShareGroupResponse, UnShareGroupRequest, MoveGroupResponse, GroupUpateRequest } from './../models/api-models/Group';
 import { Injectable, EventEmitter } from '@angular/core';
 import { Http, Response, Headers } from '@angular/http';
 import { Store } from '@ngrx/store';
@@ -11,7 +12,7 @@ import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
-import { GroupUpateRequest, GroupSharedWithResponse, GroupResponse, GroupCreateRequest, ShareGroupRequest, MoveGroupRequest, FlattenGroupsAccountsResponse, GroupsTaxHierarchyResponse } from '../models/api-models/Group';
+import { GroupSharedWithResponse, GroupResponse, GroupCreateRequest, ShareGroupRequest, MoveGroupRequest, FlattenGroupsAccountsResponse, GroupsTaxHierarchyResponse } from '../models/api-models/Group';
 import { AppState } from '../store/roots';
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -188,4 +189,17 @@ export class GroupService {
     }).catch((e) => HandleCatch<GroupsTaxHierarchyResponse>(e));
   }
 
+  public CreateAccount(groupUniqueName: string, model: AccountRequest): Observable<BaseResponse<AccountResponse>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(GROUP_API.CREATE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName),
+     model).map((res) => {
+      let data: BaseResponse<AccountResponse> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<AccountResponse>(e));
+  }
 }
