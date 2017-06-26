@@ -378,17 +378,16 @@ export class GroupWithAccountsAction {
 
   public getTaxHierarchy(value: string): Action {
     return {
-      type: GroupWithAccountsAction.MOVE_GROUP,
+      type: GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY,
       payload: value
     };
   }
   public getTaxHierarchyResponse(value: BaseResponse<GroupsTaxHierarchyResponse>): Action {
     return {
-      type: GroupWithAccountsAction.MOVE_GROUP_RESPONSE,
+      type: GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE,
       payload: value
     };
   }
-
   public resetAddAndMangePopup(): Action {
     return {
       type: GroupWithAccountsAction.RESET_GROUPS_STATE

@@ -15,7 +15,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
-import { TagInputModule } from 'ng2-tag-input';
+import { SelectModule } from 'ng-select';
 
 import {
   ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,
@@ -47,11 +47,10 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FormWizardModule,
-    TagInputModule
-    // Select2Module
+    SelectModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
-    BrowserAnimationsModule, AccountFilterPipe, TagInputModule],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent]
 })

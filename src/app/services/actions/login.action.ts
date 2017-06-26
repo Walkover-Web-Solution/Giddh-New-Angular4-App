@@ -60,6 +60,7 @@ export class LoginActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
+        return {type: ''};
       }
       return this.LoginSuccess();
     });
