@@ -6,6 +6,4 @@ export interface Select2OptionData {
     additional?: any;
 }
 
-export interface Select2TemplateFunction {
-    (state: Select2OptionData): JQuery | string;
-}
+export type Select2TemplateFunction = (state: Select2OptionData) => JQuery | string;
