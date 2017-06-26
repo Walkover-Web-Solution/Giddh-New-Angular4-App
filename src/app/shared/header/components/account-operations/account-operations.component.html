@@ -110,12 +110,11 @@
                 <div class="tax-list-wrap">
                   <div class="tax-label"><label>All Applicable Taxes</label></div>
                   <div class="clearfix max350 mrT1">
-                      <ng-select
-                        #select
-                        [(ngModel)]="selectedTax"
-                        [options]="companyTaxDropDown | async"
-                        [multiple]="true">
-                      </ng-select>
+                    <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
+                    </ng-select> -->
+                    <!-- <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm"> -->
+                     <select2 [data]="companyTaxDropDown | async" [options]="options" [value]="activeGroupSelected$ | async"></select2>
+                    <!-- </form> -->
                   </div>
                   <button class="btn btn-success mrT1" ng-click="applyTax('account')" ng-if="showEditTaxSection"> Save</button>
                 </div>
