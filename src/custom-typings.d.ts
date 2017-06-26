@@ -63,6 +63,8 @@ declare var System: SystemJS;
 declare var AppUrl: string;
 declare var ApiUrl: string;
 declare var isElectron: boolean;
+declare var $: JQueryStatic;
+declare var jQuery: JQueryStatic;
 
 interface SystemJS {
   import: (path?: string) => Promise<any>;
