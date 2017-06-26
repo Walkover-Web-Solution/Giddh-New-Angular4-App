@@ -1,228 +1,200 @@
-<div class="view_forms" id="Addaccount">
+<div class="bdrR bdrL row " id="middleBody" *ngIf="showGroupForm">
+  <div ng-if="showGroupDetails" class="">
+    <div class="clearfix bdrB ">
 
-  <form class="horizontal-form" name="addAccountForm" novalidate autocomplete="off">
-    <div class="form_bg pd2">
-      <div class="form-group clearfix">
-        <div class="col-xs-6">
-          <div class="row">
-            <label>A/c Name</label>
-            <input type="text" name="accName" maxlength="100" ng-disabled="mc.isFixedAcc" class="form-control" ng-model="mc.selectedAcc.name" ng-change="autoFillUnq(mc.selectedAcc.name)" ng-model-options="{debounce:1000}" required />
+      <div class="col-xs-6  bdrR">
+        <div class="row">
+          <div class="dGryHead">
+            Group Info
+          </div>
+          <div class="pd2 ">
+            <fieldset ng-disabled="!canUpdate">
+              <form id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" class="">
+                <div class="form-group">
+                  <label>Group Name</label>
+                  <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
+                </div>
+
+                <div class="form-group">
+                  <label>Unique name</label>
+                  <input type="text" class="form-control" placeholder="Enter Unique Name" formControlName="uniqueName">
+                </div>
+
+                <div class="form-group">
+                  <label>Description</label>
+                  <textarea maxlength="200" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
+                </div>
+
+                <button class="btn btn-primary" [disabled]="!groupDetailForm.valid">Update
+              </button>
+              </form>
+            </fieldset>
           </div>
         </div>
       </div>
-      <div class="form-group clearfix mrB">
-        <div class="col-xs-5">
-          <div class="row">
-            <label>Unique Name</label>
-            <input type="text"  class="form-control" name="accUnq" ng-model="mc.selectedAcc.uniqueName" valid-unique
-              ng-model="mc.selectedAcc.uniqueName" ng-disabled="mc.isFixedAcc || mc.fetchingUnq" required />
+      <!-- group info content end -->
+
+      <div class="col-xs-6">
+        <div class="row" ng-show="canAdd">
+          <div class="dGryHead">
+            Add Subgroup
+          </div>
+          <div class="pd2">
+            <form id="subGroupForm" name="subGroupForm" (submit)="addNewGroup()" [formGroup]="subGroupForm" novalidate class="">
+
+              <input type="text" placeholder="Enter Subgroup name" class="form-control form-group" formControlName="name">
+
+              <input type="text" placeholder="Enter Unique name" class="form-control form-group" valid-unique="" formControlName="uniqueName">
+
+              <textarea maxlength="200" class="form-control form-group" placeholder="Enter description" formControlName="desc"></textarea>
+
+              <button class="btn btn-primary" type="submit" [disabled]="!subGroupForm.valid">Add Subgroup</button>
+            </form>
           </div>
         </div>
-        <div class="col-xs-6">
-          <label class="col-xs-12 row">Opening Balance</label>
-          <div class="col-xs-8">
-            <div class="row">
-              <input type="text" class="form-control" name="openingBalance" ng-model="mc.selectedAcc.openingBalance" valid-number  />
+      </div>
+      <!-- add new group content end -->
+    </div>
+
+
+    <div class="clearfix bdrB">
+
+      <div class="col-xs-6" *ngIf="!(activeGroup$ | async)?.fixed">
+        <div class="row">
+          <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="pd2 form-inline" [formGroup]="moveGroupForm">
+            <div>
+              <label class="mrR">Move to group</label>
             </div>
-          </div>
-          <div class="col-xs-4">
-            <div class="row">
-              <div class="form-inline">
-                <select class="form-control col-md-3" name="openingBalanceType" ng-model="mc.selectedAcc.openingBalanceType">
-                  <option value="DEBIT">Debit</option>
-                  <option value="CREDIT">Credit</option>
-                </select>
-                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+
+            <div class="form-group">
+              <input formControlName="moveto"
+              (typeaheadOnSelect)="moveToGroupSelected($event)"
+              [typeahead]="accountList"
+              typeaheadOptionField="name"
+              class="form-control">
+              <!-- <input formControlName="moveto" type="text" placeholder="Group name" class="form-control" uib-typeahead="groups as groups.name for groups in flattenGroupList | omit: isChildGroup | filter:{name: $viewValue} | limitTo:8"
+                aria-autocomplete="list" aria-expanded="false" aria-owns="typeahead-632-2430"> -->
+            </div>
+            <div class="form-group">
+              <button class="btn btn-info mrL" [disabled]="!moveGroupForm.valid">Move</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="clearfix" *ngIf="isTaxableGroup$ | async">
+        <div class="bdrB">
+            <div class="dGryHead">
+              Taxes
+            </div>
+            <div class="pd2 clearfix">
+              <div class="tax-list-wrap">
+                <div class="tax-label"><label>All Applied Taxes</label></div>
+
+                <span class="tax-bullet" *ngFor="let tax of (activeGroup$ | async)?.applicableTaxes">{{ tax.name }}</span>
+
+                <p *ngIf="!(activeGroup$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
+                <button id="editTax" class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
+                  <i class="glyphicon glyphicon-edit"></i>
+                </button>
+              </div>
+
+              <div class="edit-tax-section" *ngIf="showEditTaxSection">
+                <div class="tax-list-wrap">
+                  <div class="tax-label"><label>All Inherited Taxes</label></div>
+                  <span class="tax-bullet" *ngFor="let acll of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes"></span>
+                  <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+                </div>
+                <div class="tax-list-wrap">
+                  <div class="tax-label"><label>All Applicable Taxes</label></div>
+                  <div class="clearfix max350 mrT1">
+
+                  </div>
+                  <button class="btn btn-success mrT1" ng-click="applyTax('account')" ng-if="showEditTaxSection"> Save</button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
       </div>
-    </div>
+      </div>
 
-    <div class="pd2 detailed">
-
-      <div class="form-group col-xs-3">
+      <div class="col-xs-6 bdrL" (submit)="shareGroup()">
         <div class="row">
-          <label>Mobile Number</label>
-          <input type="text" class="form-control" name="mobileNo" placeholder="9198XXXXXXXX" ng-model="mc.selectedAcc.mobileNo" valid-number ng-disabled="mc.isFixedAcc"  />
-
-          <input type="hidden" ng-model="mc.acntExt.Ccode" uib-typeahead="country as country.value for country in countryCodesList | filter:$viewValue | limitTo:8" class="form-control" typeahead-template-url="countryList.html" placeholder="91" ng-disabled="mc.isFixedAcc"/>
-
-          <input type="hidden" placeholder="98XXXXXXXX" class="form-control" name="onlyMobileNo"
-                 ng-model="mc.acntExt.onlyMobileNo" valid-number ng-disabled="mc.isFixedAcc"/>
-        </div>
-      </div>
-
-      <div class="form-group col-xs-5">
-        <label>Email</label>
-        <input type="text" class="form-control" name="email" placeholder="email@example.com" ng-model="mc.selectedAcc.email"  ng-disabled="mc.isFixedAcc" />
-      </div>
-      <div class="clearfix"></div>
-
-      <div class="form-group col-xs-5">
-        <div class="row">
-          <label>Company</label>
-          <input type="text" class="form-control" name="companyName" placeholder="Apple INC" ng-model="mc.selectedAcc.companyName" ng-disabled="mc.isFixedAcc" />
-        </div>
-      </div>
-      <div class="form-group col-xs-7">
-        <label>Attention to (will be used in invoice)</label>
-        <input type="text" class="form-control" name="attentionTo" placeholder="Barney stinson" ng-model="mc.selectedAcc.attentionTo" ng-disabled="mc.isFixedAcc" />
-      </div>
-      <div class="clearfix"></div>
-      <div class="form-group mrB">
-        <label>Address</label>
-        <input type="text" class="form-control" name="address" ng-model="mc.selectedAcc.address" placeholder="405, Indore, India" ng-disabled="mc.isFixedAcc" />
-      </div>
-    </div>
-    <div class="form_bg pd2">
-      <div class="form-group col-xs-12">
-        <div class="row">
-          <div class="col-xs-12">
-            <div class="row">
-              <label>Description</label>
+          <form name="shareGroupForm" novalidate="" [formGroup]="shareGroupForm" class="form-inline pd2">
+            <div>
+              <label class="mrR">Share group</label>
             </div>
-          </div>
-          <div class="col-xs-12">
-            <div class="row">
-              <textarea class="form-control" name="description" cols="10" rows="5" ng-model="mc.selectedAcc.description" ng-disabled="mc.isFixedAcc"></textarea>
+            <div class="form-group">
+              <input required="" name="userEmail" type="email" formControlName="userEmail" placeholder="Enter Email ID" class="form-control ng-pristine ng-untouched ng-valid-email ng-invalid ng-invalid-required">
             </div>
+            <div class="form-group">
+              <button [disabled]="!shareGroupForm.valid" type="submit" class="btn btn-info mrL">Share</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="row ng-scope" *ngIf="(activeGroupSharedWith$ | async)?.length">
+          <div class="pd2">
+            <ul class="list-group ln">
+              <li *ngFor="let val of (activeGroupSharedWith$ | async)" class="list-group-item">
+
+                <div class="form-inline clearfix">
+                  <div class="form-group">
+                    <i class="glyphicon glyphicon-user"></i>
+                    {{ val.userEmail }}
+                  </div>
+                  <div class="form-group">
+
+                  </div>
+                  <span class="delIcon">
+                    <i class="glyphicon glyphicon-trash" (click)="unShareGroup(val.userEmail)"></i>
+                  </span>
+                </div>
+
+              </li><!-- end ngRepeat: (key,value) in groupSharedUserList track by $index -->
+            </ul>
+
           </div>
         </div>
+
       </div>
-      <div class="clearfix"></div>
     </div>
 
-    <div class="pd2 clearfix pdB1">
-        <a href="javascript:void(0);" class="btn isActive" ng-if="mc.showOnUpdate && !mc.selectedAcc.fixed" ng-click="mc.deleteAccount()">DELETE  </a>
-        <button class="btn btn-success pull-right" ng-if="!mc.showOnUpdate" ng-click="mc.addAccount()" ng-disabled="addAccountForm.$invalid">Add</button>
-        <button class="btn btn-success pull-right" ng-if="mc.showOnUpdate && canUpdate" ng-click="mc.updateAccount()" ng-disabled="addAccountForm.$invalid">Update</button>
-    </div>
-
-    <hr ng-if="mc.AccountCategory == 'income' || mc.AccountCategory == 'expenses'" />
-    <!-- taxes -->
-    <div class="pd2 detailed" ng-if="mc.AccountCategory == 'income' || mc.AccountCategory == 'expenses'">
-      <div class="tax_group">
-        <h2 style="font-size: 18px;">Taxes</h2>
-        <button id="editTax" ng-if="canUpdate" class="btn btn-sm btn-default edit-tax-btn" ng-click="mc.getTaxHierarchy('account')" ng-hide="mc.showEditTaxSection"><i class="glyphicon glyphicon-edit"></i></button>
-      </div>
-
-      <div class="form-group clearfix mrT1 mrB">
-        <label>All Applied Taxes</label>
-        <div class="tags clearfix">
-          <span class="tax-bullet" ng-repeat="tax in mc.selectedAcc.applicableTaxes" ng-if="mc.selectedAcc.applicableTaxes.length > 0"></span>
-          <small ng-if="mc.selectedAcc.applicableTaxes.length < 1" class="grey">No taxes Applied</small>
-        </div>
-        <hr>
-      </div>
-
-      <div class="" ng-if="mc.showEditTaxSection">
-        <div class="form-group clearfix mrT1 mrB">
-          <label>All Inherited Taxes</label>
-          <div class="tags clearfix">
-            <span class="tax-bullet" ng-repeat="inTax in mc.allInheritedTaxes" popover-trigger="mouseenter" popover-placement="bottom" uib-popover-template="'taxHierarchy.html'" ng-if="mc.allInheritedTaxes.length > 0"></span>
-            <small ng-if="mc.allInheritedTaxes.length < 1" class="grey">No Inherited Taxes</small>
-          </div>
-        </div>
-        <hr>
-        <div class="form-group clearfix mrT1 mrB" id="App_taxes">
-          <label>All Applicable Taxes</label>
-          <!-- <ui-select multiple ng-model="mc.taxHierarchy.applicableTaxes" theme="bootstrap">
-          <ui-select-match placeholder="Select Taxes">
-          <span>{{$item.name}}</span>
-          </ui-select-match >
-          <ui-select-choices repeat="tax in mc.taxList| filter: $select.search | omit: mc.alreadyAppliedTaxes"> -->
-          <span class="tax_tag" ng-bind="tax.name"></span>
-          <!-- </ui-select-choices>
-          </ui-select> -->
-        </div>
-        <button class="btn btn-success mrT1" ng-click="mc.applyTax('group')" ng-if="mc.showEditTaxSection"> Save</button>
-      </div>
-      </div> <!-- end taxes -->
-    </form>
-
-<hr ng-if="mc.showOnUpdate && !mc.selectedAcc.fixed" />
-
-    <div class="pdR2 pdL2 detailed clearfix pdT1 pdB1" ng-if="mc.showOnUpdate && !mc.selectedAcc.fixed">
-        <div>
-          <label>Move to group</label>
-        </div>
-        <div class="form-group col-xs-5 pdL0 mr0">
-          <input ng-model="mc.moveacto" name="moveacto" type="text" placeholder="Select Group" class="form-control" required
-          uib-typeahead="groups as groups.name for groups in mc.flattenGroupList | omit: mc.isCurrentGroup | filter:({name:$viewValue} || {uniqueName:$viewValue} || {synonyms:$viewValue}) | limitTo: 4"/>
-        </div>
-        <div class="form-group mr0">
-          <button class="btn isActive" ng-click="mc.moveAccnt(mc.moveacto)" ng-disabled="moveacto.$invalid">Move</button>
-        </div>
-    </div>
-
-      <div class="clearfix"></div>
-
-    <div class="pd2 detailed clearfix pdT pdB1" ng-if="mc.showOnUpdate && !mc.selectedAcc.fixed">
-
-      <div class="form-group col-xs-10 mrB">
-        <div class="row">
-
-          <label class="col-xs-12 row">Merge this A/c with</label>
-          <ul class="accmerge mrB1" ng-if="mc.getMergeAcc.length>0">
-            <li ng-repeat="merged in mc.getMergeAcc">
-              <a href="javascript:void(0);"ng-class="{isActive:merged == mc.toMerge.toUnMerge.uniqueNames}" ng-click="mc.unmerge(merged)"> <i class="fa fa-times" ng-click="mc.deleteMergedAccount(merged)"></i></a>
-
-            </li>
-          </ul>
-
-          <div class="col-xs-8 pdL0 merge_input">
-              <div class="form-inline">
-                <!-- <ui-select multiple='true' ng-model="mc.toMerge.mergedAcc" theme="bootstrap">
-                    <ui-select-match allow-clear="true" placeholder="Select Accounts" ui-lock-choice="$item.noRemove == true" reset-search-input="true">
-                      {{$item.uniqueName}}
-                    </ui-select-match >
-                    <ui-select-choices
-                      ui-disable-choice="acc.uniqueName === selAcntUname"
-                      repeat="acc in mc.mergeAccList | omit:acc.isFixed | filter: $select.search" refresh="mc.refreshFlatAccount($select.search)" minimum-input-length="1" ng-model-options="{debounce:1000}">
-                      <span>{{acc.name}} ({{acc.uniqueName}})</span>
-                    </ui-select-choices>
-                </ui-select> -->
-              </div>
-          </div>
-
-          <div class="col-xs-4 row">
-            <button class="btn isActive" ng-click="mc.mergeAccounts()">Merge</button>
-          </div>
-        </div>
-
-      </div>
-      <div class="clearfix"></div>
-      <small>This option is risky and can not be undone</small>
-      <hr class="mrT1">
-      </div> <!-- pd2 -->
-
-      <!--  -->
-    <div class="pd2 detailed clearfix pdT pdB mrB2" ng-if="mc.showDeleteMove">
-
-        <div>
-          <label>Move to other A/c</label>
-        </div>
-        <div class="form-group col-xs-5 pdL0 mr0">
-          <!-- <ui-select ng-model="mc.toMerge.moveToAcc" theme="bootstrap">
-              <ui-select-match placeholder="Select Accounts">
-                <span>{{$select.selected.name}}</span>
-              </ui-select-match >
-              <ui-select-choices
-                ui-disable-choice="acc.uniqueName === selAcntUname"
-                repeat="acc in fltAccntListPaginated | filter: $select.search" refresh="refreshFlatAccount($select.search)">
-                <span>{{acc.name}} ({{acc.uniqueName}})</span>
-              </ui-select-choices>
-          </ui-select> -->
-        </div>
-        <div class="form-group mr0">
-
-        <!-- ng-disabled="toMerge.moveToAcc.length < 1" -->
-          <button class="btn isActive" ng-click="mc.moveToAccount()">Move</button>
-        </div>
-        <div class="clearfix"></div>
-        <hr class="mrT1">
+    <div class="pd2" *ngIf="!(activeGroup$ | async)?.fixed">
+      <button class="btn btn-danger ng-binding" ng-click="deleteGroup()">Delete Current Assets group</button>
     </div>
 
   </div>
+
+</div>
+
+<div class="scroll-btn text-center" scroll-btn="" *ngIf="showGroupForm">
+  <i class="glyphicon glyphicon-chevron-down" style="vertical-align: sub;color: #fff;"></i>
+</div>
+
+<div class="" *ngIf="activeGroupInProgress$ | async ">
+
+  <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
+
+    <div class="">
+      <div class="ng-busy-default-wrapper">
+        <div class="ng-busy-default-sign">
+          <div class="ng-busy-default-spinner">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+            <div class="bar4"></div>
+            <div class="bar5"></div>
+            <div class="bar6"></div>
+            <div class="bar7"></div>
+            <div class="bar8"></div>
+            <div class="bar9"></div>
+            <div class="bar10"></div>
+            <div class="bar11"></div>
+            <div class="bar12"></div>
+          </div>
+          <div class="ng-busy-default-text">Loading...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

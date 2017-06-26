@@ -7,6 +7,7 @@ export interface IFlattenGroupsAccountsDetailItem {
   groupName: string;
   groupSynonyms?: string;
   groupUniqueName: string;
+  isOpen:boolean;
 }
 
 export interface IFlattenGroupsAccountsDetail extends IFlattenGroupsAccountsDetailItem {

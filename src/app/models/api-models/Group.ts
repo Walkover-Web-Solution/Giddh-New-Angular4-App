@@ -1,3 +1,4 @@
+import { User } from 'oidc-client';
 import { ICreateGroup } from '../interfaces/groupCreate.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
@@ -96,6 +97,13 @@ export class MoveGroupResponse {
   public name: string;
 }
 
+export class FlattenGroupsAccountsRequest {
+  public q: string = '';
+  public page: number = 1;
+  public count: number = 1000;
+  public showEmptyGroups: string = '';
+}
+
 /*
  * Model for flatten-groups-accounts api response
  * GET call
@@ -112,6 +120,14 @@ export class FlattenGroupsAccountsResponse {
   public totalPages: number;
 }
 
+export class UnShareGroupRequest {
+  public user: string;
+}
+
+export class UnShareGroupResponse {
+  public user: string;
+  public toastMessage: string;
+}
 /*
  * Model for tax-hierarchy api response
  * GET call

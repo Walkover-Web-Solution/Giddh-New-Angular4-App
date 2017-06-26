@@ -9,4 +9,5 @@ export interface IGroupsWithAccounts extends INameUniqueName {
 
   isActive: boolean;
   isOpen: boolean;
+  isVisible: boolean;
 }

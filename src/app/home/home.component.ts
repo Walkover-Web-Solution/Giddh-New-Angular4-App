@@ -10,7 +10,7 @@ import {
     OnInit
 } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
-import { Select2OptionData } from 'ng2-select2/ng2-select2';
+// import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
     selector: 'home',  // <home></home>
@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
     /**
      * Set our default values
      */
-    public exampleData: Select2OptionData[];
+    // public exampleData: Select2OptionData[];
     public localState = { value: '' };
     /**
      * TypeScript public modifiers
@@ -37,8 +37,8 @@ export class HomeComponent implements OnInit {
 
     public ngOnInit() {
         console.log('hello `Home` component');
-        this.exampleData = [
-        ];
+        // this.exampleData = [
+        // ];
     }
 
     public getAddress(e) {
