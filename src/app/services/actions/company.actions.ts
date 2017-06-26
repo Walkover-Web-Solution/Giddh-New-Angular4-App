@@ -22,6 +22,7 @@ export class CompanyActions {
   public static SET_STATE_DETAILS = 'CompanySetStateDetails';
   public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
   public static SET_ACTIVE_COMPANY = 'CompanyActiveCompany';
+  public static SET_CONTACT_NO = 'SET_CONTACT_NO';
 
   public static DELETE_COMPANY = 'CompanyDelete';
   public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
@@ -48,7 +49,7 @@ export class CompanyActions {
     .map(response => {
       console.log('Response ' + response);
       return this.RefreshCompaniesResponse(response);
-  });
+    });
 
   @Effect()
   public RefreshCompaniesResponse$: Observable<Action> = this.action$
@@ -81,7 +82,7 @@ export class CompanyActions {
         this._toasty.errorToast(response.message, response.code);
       }
       return this.SetStateDetailsResponse(response);
-  });
+    });
 
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
@@ -103,7 +104,7 @@ export class CompanyActions {
         this._toasty.successToast(action.payload.body, 'success');
       }
       this.store.dispatch(this.RefreshCompanies());
-      return {type: ''};
+      return { type: '' };
     });
 
   @Effect()
@@ -205,6 +206,12 @@ export class CompanyActions {
   public getTaxResponse(value: BaseResponse<TaxResponse[]>): Action {
     return {
       type: CompanyActions.GET_TAX_RESPONSE,
+      payload: value
+    };
+  }
+  public SetContactNumber(value: string): Action {
+    return {
+      type: CompanyActions.SET_CONTACT_NO,
       payload: value
     };
   }
