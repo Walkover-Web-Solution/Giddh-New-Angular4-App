@@ -31,7 +31,7 @@ export class CompanyAddComponent implements OnInit {
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox);
-    this.isMobileVerified = this.store.select(s => s.session.user.contactNumber).map(m => m !== null);
+    this.isMobileVerified = this.store.select(s => s.session.user.user.contactNo).map(m => m !== null);
     this.dataSource = Observable
       .create((observer: any) => {
         this._location.GetCity({
