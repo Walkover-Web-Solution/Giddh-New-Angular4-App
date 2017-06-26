@@ -1,3 +1,4 @@
+import { TaxResponse } from './../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -14,6 +15,8 @@ import { HandleCatch } from './catchManager/catchmanger';
 export class CompanyService  {
 
   private user: UserDetails;
+  private companyUniqueName: string;
+
   constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
   }
 
@@ -81,5 +84,18 @@ export class CompanyService  {
         return data;
       }
     }).catch((e) => HandleCatch<StateDetailsRequest>(e));
+  }
+
+  public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[]>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<TaxResponse[]> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<TaxResponse[]>(e));
   }
 }

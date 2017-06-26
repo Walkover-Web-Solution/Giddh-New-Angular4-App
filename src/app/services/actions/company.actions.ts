@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from './../companyService.service';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
-import { CompanyRequest, ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from './../../models/api-models/Company';
+import { CompanyRequest, ComapnyResponse, StateDetailsResponse, StateDetailsRequest, TaxResponse } from './../../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
@@ -25,6 +25,8 @@ export class CompanyActions {
 
   public static DELETE_COMPANY = 'CompanyDelete';
   public static DELETE_COMPANY_RESPONSE = 'CompanyDeleteResponse';
+  public static GET_TAX = 'GroupTax';
+  public static GET_TAX_RESPONSE = 'GroupTaxResponse';
 
   @Effect()
   public createCompany$: Observable<Action> = this.action$
@@ -81,7 +83,7 @@ export class CompanyActions {
       return this.SetStateDetailsResponse(response);
   });
 
-   @Effect()
+  @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.DELETE_COMPANY)
     .debug('')
@@ -103,6 +105,27 @@ export class CompanyActions {
       this.store.dispatch(this.RefreshCompanies());
       return {type: ''};
     });
+
+  @Effect()
+  public CompanyTax$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_TAX)
+    .debug('')
+    .switchMap(action => this._companyService.getComapnyTaxes())
+    .map(response => {
+      return this.getTaxResponse(response);
+});
+
+  @Effect()
+  public CompanyTaxResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.GET_TAX_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return {type: ''};
+});
+
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
 
   }
@@ -170,6 +193,18 @@ export class CompanyActions {
   public DeleteCompanyResponse(value: BaseResponse<string>): Action {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
+      payload: value
+    };
+  }
+
+  public getTax(): Action {
+    return {
+      type: CompanyActions.GET_TAX
+    };
+  }
+  public getTaxResponse(value: BaseResponse<TaxResponse[]>): Action {
+    return {
+      type: CompanyActions.GET_TAX_RESPONSE,
       payload: value
     };
   }

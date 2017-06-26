@@ -1,7 +1,8 @@
+import { BaseResponse } from './../../models/api-models/BaseResponse';
+import { TaxResponse } from './../../models/api-models/Company';
 import { CompanyActions } from './../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { CompanyRequest, ComapnyResponse } from '../../models/api-models/Company';
-import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 /**
  * Keeping Track of the CompanyState
@@ -9,6 +10,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
   isRefreshing: boolean;
+  taxes: TaxResponse[];
 }
 
 /**
@@ -16,7 +18,8 @@ export interface CurrentCompanyState {
  */
 const initialState: CurrentCompanyState = {
   companies: null,
-  isRefreshing: false
+  isRefreshing: false,
+  taxes: null
 };
 
 export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: Action) => {
@@ -52,6 +55,14 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
         return Object.assign({}, state, {
           companies: array
+        });
+      }
+      return state;
+    case CompanyActions.GET_TAX_RESPONSE:
+      let taxes: BaseResponse<TaxResponse[]> = action.payload;
+      if (taxes.status === 'success') {
+        return Object.assign({}, state, {
+          taxes: taxes.body
         });
       }
       return state;
