@@ -79,3 +79,34 @@ export class LedgerRequest implements ILedger {
  *   }
  * }
  */
+
+/*
+ * Model for mail ledger api request
+ * POST call
+ * API:: ( mail ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/mail
+ * its response will be success message in body
+ */
+export class MailLedgerRequest {
+  public recipients: string[];
+}
+
+/*
+ * Model for Download invoice api request
+ * POST call
+ * API:: ( Download invoice ) company/:companyUniqueName/accounts/:accountUniqueName/invoices/download
+ * its response will be success message in body
+ */
+export class DownloadLedgerRequest {
+  public invoiceNumber: string[];
+}
+
+/*
+ * Model for Export Ledger api request
+ * GET call
+ * API:: ( Export Ledger ) company/:companyUniqueName/accounts/:accountUniqueName/export-ledger
+ * you can also pass three query arameters parameters as
+ * 1) fromDate: this will be starting date
+ * 2) ltype: layout type values [ 'admin-detailed', 'admin-condensed', view-detailed]
+ * 3) toDate: this will be ending date
+ * Reponse will be base 64 encoded string in body
+ */
