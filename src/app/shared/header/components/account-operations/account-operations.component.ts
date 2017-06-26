@@ -1,3 +1,5 @@
+import { TaxResponse } from './../../../../models/api-models/Company';
+import { CompanyActions } from './../../../../services/actions/company.actions';
 import { GroupListItemResponse } from './../../../../models/api-models/GroupListItem';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from './../../../../models/api-models/GroupsWithAccounts';
@@ -8,38 +10,76 @@ import { IAccountsInfo } from './../../../../models/interfaces/accountInfo.inter
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Rx';
 import * as _ from 'lodash';
+import { IOption, SelectModule, SelectComponent } from 'ng-select';
 
 @Component({
   selector: 'account-operations',
   templateUrl: './account-operations.component.html',
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit {
+  @ViewChild('select') public select: SelectComponent;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
   public subGroupForm: FormGroup;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
   public shareGroupForm: FormGroup;
+  public taxGroupForm: FormGroup;
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
   public activeGroupInProgress$: Observable<boolean>;
   public isTaxableGroup$: Observable<boolean>;
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
+  public companyTaxes$: Observable<TaxResponse[]>;
+  public companyTaxDropDown: Observable<IOption[]>;
   public accountList: any[];
   public showEditTaxSection: boolean = false;
 
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+  public taxPopOverTemplate: string = `
+  <div class="popover-content">
+  <label>Tax being inherited from:</label>
+    <ul>
+    <li>@inTax.name</li>
+    </ul>
+  </div>
+  `;
+  public selectedTax: string[];
+
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
+    private companyActions: CompanyActions) {
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
+    this.companyTaxes$ = this.store.select(state => state.company.taxes);
+
+    this.companyTaxDropDown = this.store.select(state => {
+      let arr: IOption[] = [];
+      if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
+        state.company.taxes.map((t) => {
+          if (state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.length) {
+            state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(it => {
+              it.applicableTaxes.map(ita => {
+                if (ita.uniqueName !== t.uniqueName) {
+                  arr.push({ label: t.name, value: t.uniqueName });
+                }
+              });
+            });
+          } else {
+            arr.push({ label: t.name, value: t.uniqueName });
+          }
+        });
+      }
+      return arr;
+    });
   }
 
   public ngOnInit() {
@@ -63,6 +103,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       userEmail: ['', [Validators.required, Validators.email]]
     });
 
+    this.taxGroupForm = this._fb.group({
+      taxes: ['']
+    });
+
     this.groupList$.subscribe((a) => {
       if (a) {
         this.accountList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
@@ -72,9 +116,23 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.showGroupForm = true;
+        this.showEditTaxSection = false;
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
       } else {
         this.showGroupForm = false;
+      }
+    });
+
+    this.companyTaxDropDown.subscribe((c) => {
+      let a: GroupResponse;
+      this.activeGroup$.take(1).subscribe(ac => {
+        a = ac;
+      });
+      if (a) {
+        let selectedTax = _.map(a.applicableTaxes, (at) => {
+          return at.uniqueName;
+        });
+        this.selectedTax = selectedTax;
       }
     });
   }
@@ -167,6 +225,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
 
   public async taxHierarchy() {
     let activeGrp = await this.activeGroup$.first().toPromise();
+    this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGrp.uniqueName));
     this.showEditTaxSection = true;
   }
