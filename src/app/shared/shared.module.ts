@@ -22,6 +22,7 @@ import {
   AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent,
   GroupAccountsListComponent
 } from './header/components';
+import { Select2Module } from './theme/select2/select2.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -47,10 +48,11 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FormWizardModule,
-    SelectModule
+    SelectModule,
+    Select2Module
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
-    BrowserAnimationsModule, AccountFilterPipe, SelectModule],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent]
 })
