@@ -1,4 +1,6 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
+import { IStocksItem } from '../interfaces/stocksItem.interface';
 
 /*
  * Model for Create Stock Group api request
@@ -24,4 +26,17 @@ export class StockGroupResponse {
   public parentStockGroupNames: string[];
   public stocks: INameUniqueName[];
   public uniqueName: string;
+}
+
+/**
+ * Model for Stocks api response
+ * API:: (Stocks) company/:companyUniqueName/stock-group/stocks
+ */
+export class StocksResponse implements IPaginatedResponse {
+  public count: number;
+  public page: number;
+  public results: IStocksItem[];
+  public size: number;
+  public totalItems: number;
+  public totalPages: number;
 }
