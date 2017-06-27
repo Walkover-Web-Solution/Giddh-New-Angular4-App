@@ -2,7 +2,7 @@
 
 import {
   AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy,
-  Output, SimpleChanges, ViewChild, ViewEncapsulation, Renderer, OnInit, forwardRef
+  Output, SimpleChanges, ViewChild, ViewEncapsulation, Renderer, OnInit, forwardRef, ChangeDetectorRef
 } from '@angular/core';
 import { NgControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -50,7 +50,8 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
   public check: boolean = false;
   public style: string = `CSS`;
 
-  constructor(public renderer: Renderer) { }
+  constructor(public renderer: Renderer, public cd: ChangeDetectorRef ) {
+  }
   // tslint:disable-next-line:no-empty
   public onChangeCb: (_: any) => void = (e) => { };
   // tslint:disable-next-line:no-empty

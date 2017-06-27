@@ -24,6 +24,8 @@ import { Action, Store } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../group.service';
 import { ToasterService } from '../toaster.service';
+import { AccountService } from '../account.service';
+import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -62,6 +64,38 @@ export class GroupWithAccountsAction {
   public static HIDE_ADD_ACCOUNT_FORM = 'GroupHideAddAccountForm';
   public static RESET_GROUPS_STATE = 'GroupResetState';
 
+  public static APPLY_GROUP_TAX = 'ApplyGroupTax';
+  public static APPLY_GROUP_TAX_RESPONSE = 'ApplyGroupTaxResponse';
+
+  @Effect()
+  public ApplyGroupTax$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX)
+    .debug('')
+    .switchMap(action => this._accountService.ApplyTax(action.payload))
+    .map(response => {
+      return this.applyGroupTaxResponse(response);
+    });
+
+  @Effect()
+  public ApplyGroupTaxResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE)
+    .debug('')
+    .map(action => {
+      let data: BaseResponse<string> = action.payload;
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      }
+      this._toasty.successToast(action.payload.body, action.payload.status);
+      let grouName = null;
+      this.store.take(1).subscribe((s) => {
+        if (s.groupwithaccounts.activeGroup) {
+          grouName = s.groupwithaccounts.activeGroup.uniqueName;
+        }
+      });
+      return this.getGroupDetails(grouName);
+    });
+
   @Effect()
   public SetActiveGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
@@ -83,7 +117,7 @@ export class GroupWithAccountsAction {
 
   @Effect()
   public GetGroupsWithAccountResponse$: Observable<
-    Action
+  Action
   > = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
     .debug('')
@@ -156,7 +190,7 @@ export class GroupWithAccountsAction {
 
   @Effect()
   public GetFlattenGroupsAccountsResponse$: Observable<
-    Action
+  Action
   > = this.action$
     .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
     .debug('')
@@ -286,7 +320,7 @@ export class GroupWithAccountsAction {
 
   @Effect()
   public getGroupTaxHierarchyResponse$: Observable<
-    Action
+  Action
   > = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE)
     .debug('')
@@ -297,53 +331,54 @@ export class GroupWithAccountsAction {
       return { type: '' };
     });
 
-    @Effect()
-    public CreateAccount$: Observable<Action> = this.action$
-      .ofType(GroupWithAccountsAction.CREATE_ACCOUNT)
-      .debug('')
-      .switchMap(action => this._groupService.CreateAccount(action.payload.groupUniqueName, action.payload.account))
-      .map(response => {
-        return this.createAccountResponse(response);
-      });
+  @Effect()
+  public CreateAccount$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.CREATE_ACCOUNT)
+    .debug('')
+    .switchMap(action => this._groupService.CreateAccount(action.payload.groupUniqueName, action.payload.account))
+    .map(response => {
+      return this.createAccountResponse(response);
+    });
 
-    @Effect()
-    public CreateAccountResponse$: Observable<Action> = this.action$
-      .ofType(GroupWithAccountsAction.CREATE_ACCOUNT_RESPONSE)
-      .debug('')
-      .map(action => {
-        if (action.payload.status === 'error') {
-          this._toasty.errorToast(action.payload.message, action.payload.code);
-          return { type: '' };
-        } else {
-          this._toasty.successToast('Account Created Successfully');
-        }
-        this.hideAddAccountForm();
-        return this.getGroupWithAccounts('');
-      });
+  @Effect()
+  public CreateAccountResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.CREATE_ACCOUNT_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      } else {
+        this._toasty.successToast('Account Created Successfully');
+      }
+      this.hideAddAccountForm();
+      return this.getGroupWithAccounts('');
+    });
 
-      @Effect()
-      public UpdateGroup$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.UPDATE_GROUP)
-        .debug('')
-        .switchMap(action => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName))
-        .map(response => {
-          return this.updateGroupResponse(response);
-        });
-      @Effect()
-      public UpdateGroupResponse$: Observable<Action> = this.action$
-        .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE)
-        .debug('')
-        .map(action => {
-          if (action.payload.status === 'error') {
-            this._toasty.errorToast(action.payload.message, action.payload.code);
-          } else {
-            this._toasty.successToast('Group Updated Successfully');
-          }
-          return { type: '' };
-        });
+  @Effect()
+  public UpdateGroup$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.UPDATE_GROUP)
+    .debug('')
+    .switchMap(action => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName))
+    .map(response => {
+      return this.updateGroupResponse(response);
+    });
+  @Effect()
+  public UpdateGroupResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE)
+    .debug('')
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast('Group Updated Successfully');
+      }
+      return { type: '' };
+    });
   constructor(
     private action$: Actions,
     private _groupService: GroupService,
+    private _accountService: AccountService,
     private _toasty: ToasterService,
     public store: Store<AppState>
   ) {
@@ -543,12 +578,26 @@ export class GroupWithAccountsAction {
   public updateGroup(value: GroupUpateRequest, groupUniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP,
-      payload: Object.assign({}, {groupUniqueName}, {data: value})
+      payload: Object.assign({}, { groupUniqueName }, { data: value })
     };
   }
   public updateGroupResponse(value: BaseResponse<GroupResponse>): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
+
+  public applyGroupTax(value: ApplyTaxRequest): Action {
+    value.isAccount = false;
+    return {
+      type: GroupWithAccountsAction.APPLY_GROUP_TAX,
+      payload: value
+    };
+  }
+  public applyGroupTaxResponse(value: BaseResponse<string>): Action {
+    return {
+      type: GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE,
       payload: value
     };
   }

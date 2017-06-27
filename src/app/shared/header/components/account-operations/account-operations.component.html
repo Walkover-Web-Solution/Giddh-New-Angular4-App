@@ -88,14 +88,16 @@
                 <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
                 <div class="tax-list-wrap">
                   <div class="tax-label"><label>All Applicable Taxes</label></div>
-                  <div class="clearfix max350 mrT1">
-                    <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
+                  <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                    <div class="clearfix max350 mrT1">
+                      <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
                     </ng-select> -->
-                    <!-- <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm"> -->
-                    <select2 [data]="companyTaxDropDown | async" [options]="options" [value]="activeGroupSelected$ | async"></select2>
-                    <!-- </form> -->
-                  </div>
-                  <button class="btn btn-success mrT1" ng-click="applyTax('account')" ng-if="showEditTaxSection"> Save</button>
+
+                      <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async" [options]="options" [value]="activeGroupSelected$ | async"></select2>
+
+                    </div>
+                    <button class="btn btn-success mrT1"> Save</button>
+                  </form>
                 </div>
               </div>
             </div>
