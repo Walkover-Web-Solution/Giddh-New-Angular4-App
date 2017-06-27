@@ -10,11 +10,3 @@ export class ApplyTaxRequest implements IApplyTax {
   public taxes: string[];
   public isAccount: boolean;
 }
-
-/**
- * Model for apply tax api response
- * API:: (Apply tax) /company/{{companyname}}/tax/assign
- * Response is as success message from api in body
- */
-export class ApplyTaxResponse {
-}
