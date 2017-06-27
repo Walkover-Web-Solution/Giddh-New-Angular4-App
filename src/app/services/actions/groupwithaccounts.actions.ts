@@ -21,30 +21,15 @@ import {
   GroupsTaxHierarchyResponse,
   GroupUpateRequest
 } from './../../models/api-models/Group';
-import {
-  Effect,
-  Actions,
-  toPayload
-} from '@ngrx/effects';
-import {
-  Observable
-} from 'rxjs/Observable';
-import {
-  Injectable
-} from '@angular/core';
-import {
-  Action,
-  Store
-} from '@ngrx/store';
-import {
-  GroupsWithAccountsResponse
-} from '../../models/api-models/GroupsWithAccounts';
-import {
-  GroupService
-} from '../group.service';
-import {
-  ToasterService
-} from '../toaster.service';
+import { Effect, Actions, toPayload } from '@ngrx/effects';
+import { Observable } from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Action, Store } from '@ngrx/store';
+import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
+import { GroupService } from '../group.service';
+import { ToasterService } from '../toaster.service';
+import { AccountService } from '../account.service';
+import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -75,8 +60,40 @@ export class GroupWithAccountsAction {
   public static HIDE_ADD_ACCOUNT_FORM = 'GroupHideAddAccountForm';
   public static RESET_GROUPS_STATE = 'GroupResetState';
 
+  public static APPLY_GROUP_TAX = 'ApplyGroupTax';
+  public static APPLY_GROUP_TAX_RESPONSE = 'ApplyGroupTaxResponse';
+
   @Effect()
-  public SetActiveGroup$: Observable < Action > = this.action$
+  public ApplyGroupTax$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX)
+    .debug('')
+    .switchMap(action => this._accountService.ApplyTax(action.payload))
+    .map(response => {
+      return this.applyGroupTaxResponse(response);
+    });
+
+  @Effect()
+  public ApplyGroupTaxResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE)
+    .debug('')
+    .map(action => {
+      let data: BaseResponse<string> = action.payload;
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      }
+      this._toasty.successToast(action.payload.body, action.payload.status);
+      let grouName = null;
+      this.store.take(1).subscribe((s) => {
+        if (s.groupwithaccounts.activeGroup) {
+          grouName = s.groupwithaccounts.activeGroup.uniqueName;
+        }
+      });
+      return this.getGroupDetails(grouName);
+    });
+
+  @Effect()
+  public SetActiveGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
     .debug('')
     .map(action => {
@@ -86,7 +103,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetGroupsWithAccount$: Observable < Action > = this.action$
+  public GetGroupsWithAccount$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS)
     .debug('')
     .switchMap(action =>
@@ -97,9 +114,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetGroupsWithAccountResponse$: Observable <
-    Action >
-    = this.action$
+  public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
     .debug('')
     .map(action => {
@@ -112,7 +127,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public SetAccountsSearchString$: Observable < Action > = this.action$
+  public SetAccountsSearchString$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING)
     .debug('')
     .map(action => {
@@ -122,7 +137,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetGroupsDetails$: Observable < Action > = this.action$
+  public GetGroupsDetails$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS)
     .debug('')
     .switchMap(action => this._groupService.GetGroupDetails(action.payload))
@@ -131,11 +146,11 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetGroupDetailsResponse$: Observable < Action > = this.action$
+  public GetGroupDetailsResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
     .debug('')
     .map(action => {
-      let data: BaseResponse < GroupResponse > = action.payload;
+      let data: BaseResponse<GroupResponse> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
@@ -144,7 +159,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public CreateGroup$: Observable < Action > = this.action$
+  public CreateGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.CREATE_GROUP)
     .debug('')
     .switchMap(action => this._groupService.CreateGroup(action.payload))
@@ -153,7 +168,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public CreateGroupResponse$: Observable < Action > = this.action$
+  public CreateGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE)
     .debug('')
     .map(action => {
@@ -166,7 +181,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetFlattenGroupsAccounts$: Observable < Action > = this.action$
+  public GetFlattenGroupsAccounts$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS)
     .debug('')
     .switchMap(action =>
@@ -177,9 +192,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetFlattenGroupsAccountsResponse$: Observable <
-    Action >
-    = this.action$
+  public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
     .debug('')
     .map(action => {
@@ -192,7 +205,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public shareGroup$: Observable < Action > = this.action$
+  public shareGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SHARE_GROUP)
     .debug('')
     .switchMap(action =>
@@ -206,7 +219,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public shareGroupResponse$: Observable < Action > = this.action$
+  public shareGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SHARE_GROUP_RESPONSE)
     .debug('')
     .map(action => {
@@ -227,7 +240,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public unShareGroup$: Observable < Action > = this.action$
+  public unShareGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.UNSHARE_GROUP)
     .debug('')
     .switchMap(action =>
@@ -241,7 +254,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public unShareGroupResponse$: Observable < Action > = this.action$
+  public unShareGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE)
     .debug('')
     .map(action => {
@@ -256,7 +269,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public sharedGroup$: Observable < Action > = this.action$
+  public sharedGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH)
     .debug('')
     .switchMap(action => this._groupService.ShareWithGroup(action.payload))
@@ -265,7 +278,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public sharedGroupResponse$: Observable < Action > = this.action$
+  public sharedGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE)
     .debug('')
     .map(action => {
@@ -278,7 +291,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public moveGroup$: Observable < Action > = this.action$
+  public moveGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.MOVE_GROUP)
     .debug('')
     .switchMap(action =>
@@ -292,7 +305,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public moveGroupResponse$: Observable < Action > = this.action$
+  public moveGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.MOVE_GROUP_RESPONSE)
     .debug('')
     .map(action => {
@@ -308,7 +321,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public getGroupTaxHierarchy$: Observable < Action > = this.action$
+  public getGroupTaxHierarchy$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY)
     .debug('')
     .switchMap(action => this._groupService.GetTaxHierarchy(action.payload))
@@ -317,9 +330,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public getGroupTaxHierarchyResponse$: Observable <
-    Action >
-    = this.action$
+  public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE)
     .debug('')
     .map(action => {
@@ -332,7 +343,7 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public UpdateGroup$: Observable < Action > = this.action$
+  public UpdateGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.UPDATE_GROUP)
     .debug('')
     .switchMap(action => this._groupService.UpdateGroup(action.payload.data, action.payload.groupUniqueName))
@@ -340,7 +351,7 @@ export class GroupWithAccountsAction {
       return this.updateGroupResponse(response);
     });
   @Effect()
-  public UpdateGroupResponse$: Observable < Action > = this.action$
+  public UpdateGroupResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.UPDATE_GROUP_RESPONSE)
     .debug('')
     .map(action => {
@@ -357,8 +368,9 @@ export class GroupWithAccountsAction {
   constructor(
     private action$: Actions,
     private _groupService: GroupService,
+    private _accountService: AccountService,
     private _toasty: ToasterService,
-    private store: Store < AppState >
+    private store: Store<AppState>
   ) {
     //
   }
@@ -377,7 +389,7 @@ export class GroupWithAccountsAction {
   }
 
   public getGroupWithAccountsResponse(
-    value: BaseResponse < GroupsWithAccountsResponse[] >
+    value: BaseResponse<GroupsWithAccountsResponse[]>
   ): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE,
@@ -399,7 +411,7 @@ export class GroupWithAccountsAction {
     };
   }
 
-  public getGroupDetailsResponse(value: BaseResponse < GroupResponse > ): Action {
+  public getGroupDetailsResponse(value: BaseResponse<GroupResponse>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
       payload: value
@@ -412,14 +424,14 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
-  public createGroupResponse(value: BaseResponse < GroupResponse > ): Action {
+  public createGroupResponse(value: BaseResponse<GroupResponse>): Action {
     return {
       type: GroupWithAccountsAction.CREATE_GROUP_RESPONSE,
       payload: value
     };
   }
   public getFlattenGroupsAccounts(
-    value ?: FlattenGroupsAccountsRequest
+    value?: FlattenGroupsAccountsRequest
   ): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS,
@@ -427,7 +439,7 @@ export class GroupWithAccountsAction {
     };
   }
   public getFlattenGroupsAccountsResponse(
-    value: BaseResponse < FlattenGroupsAccountsResponse >
+    value: BaseResponse<FlattenGroupsAccountsResponse>
   ): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
@@ -441,11 +453,11 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-        groupUniqueName
-      })
+          groupUniqueName
+        })
     };
   }
-  public shareGroupResponse(value: BaseResponse < string > ): Action {
+  public shareGroupResponse(value: BaseResponse<string>): Action {
     return {
       type: GroupWithAccountsAction.SHARE_GROUP_RESPONSE,
       payload: value
@@ -458,12 +470,12 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-        groupUniqueName
-      })
+          groupUniqueName
+        })
     };
   }
   public unShareGroupResponse(
-    value: BaseResponse < UnShareGroupResponse >
+    value: BaseResponse<UnShareGroupResponse>
   ): Action {
     return {
       type: GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE,
@@ -478,7 +490,7 @@ export class GroupWithAccountsAction {
     };
   }
   public sharedGroupWithResponse(
-    value: BaseResponse < GroupSharedWithResponse[] >
+    value: BaseResponse<GroupSharedWithResponse[]>
   ): Action {
     return {
       type: GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE,
@@ -492,11 +504,11 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-        groupUniqueName
-      })
+          groupUniqueName
+        })
     };
   }
-  public moveGroupResponse(value: BaseResponse < MoveGroupResponse > ): Action {
+  public moveGroupResponse(value: BaseResponse<MoveGroupResponse>): Action {
     return {
       type: GroupWithAccountsAction.MOVE_GROUP_RESPONSE,
       payload: value
@@ -510,7 +522,7 @@ export class GroupWithAccountsAction {
     };
   }
   public getTaxHierarchyResponse(
-    value: BaseResponse < GroupsTaxHierarchyResponse >
+    value: BaseResponse<GroupsTaxHierarchyResponse>
   ): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE,
@@ -538,16 +550,26 @@ export class GroupWithAccountsAction {
   public updateGroup(value: GroupUpateRequest, groupUniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP,
-      payload: Object.assign({}, {
-        groupUniqueName
-      }, {
-        data: value
-      })
+      payload: Object.assign({}, { groupUniqueName }, { data: value })
     };
   }
-  public updateGroupResponse(value: BaseResponse < GroupResponse > ): Action {
+  public updateGroupResponse(value: BaseResponse<GroupResponse>): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
+
+  public applyGroupTax(value: ApplyTaxRequest): Action {
+    value.isAccount = false;
+    return {
+      type: GroupWithAccountsAction.APPLY_GROUP_TAX,
+      payload: value
+    };
+  }
+  public applyGroupTaxResponse(value: BaseResponse<string>): Action {
+    return {
+      type: GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE,
       payload: value
     };
   }
