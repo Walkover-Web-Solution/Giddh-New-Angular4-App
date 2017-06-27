@@ -333,12 +333,13 @@ export class GroupWithAccountsAction {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
       } else {
         this._toasty.successToast('Group Updated Successfully');
       }
-      return {
-        type: ''
-      };
+      return this.getGroupWithAccounts('');
     });
 
   constructor(

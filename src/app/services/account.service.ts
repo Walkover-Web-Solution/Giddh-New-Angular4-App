@@ -146,7 +146,21 @@ export class AccountService implements OnInit {
       .catch((e) => HandleCatch<string>(e));
   }
 
-  public AccountShareWith(accountUniqueName: string): Observable<BaseResponse<AccountSharedWithResponse>> {
+  public AccountUnshare(userEmail: string, accountUniqueName: string): Observable<BaseResponse<string>> {
+    debugger
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+
+    return this._http.put(ACCOUNTS_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), { user: userEmail }).map((res) => {
+      let data: BaseResponse<string> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<string>(e));
+  }
+  public AccountShareWith(accountUniqueName: string): Observable<BaseResponse<AccountSharedWithResponse[]>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -155,10 +169,10 @@ export class AccountService implements OnInit {
     });
     return this._http.get(ACCOUNTS_API.SHARED_WITH.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName))
       .map((res) => {
-        let data: BaseResponse<AccountSharedWithResponse> = res.json();
+        let data: BaseResponse<AccountSharedWithResponse[]> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<AccountSharedWithResponse>(e));
+      .catch((e) => HandleCatch<AccountSharedWithResponse[]>(e));
   }
   public GetFlattenAccounts(q: string, refresh: string): Observable<BaseResponse<FlattenAccountsResponse[]>> {
     this.store.take(1).subscribe(s => {

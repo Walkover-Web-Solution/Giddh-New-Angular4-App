@@ -7,7 +7,8 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountsTaxHierarchyResponse, AccountResponse } from '../../models/api-models/Account';
+import { AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
+import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -20,6 +21,7 @@ export interface CurrentGroupAndAccountState {
   isRefreshingFlattenGroupsAccounts: boolean;
   activeGroupInProgress: boolean;
   activeGroupSharedWith?: GroupSharedWithResponse[];
+  activeAccountSharedWith?: AccountSharedWithResponse[];
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
   activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
@@ -59,6 +61,7 @@ const initialState: CurrentGroupAndAccountState = {
   isRefreshingFlattenGroupsAccounts: false,
   activeGroupInProgress: false,
   activeGroupSharedWith: null,
+  activeAccountSharedWith: null,
   activeGroupTaxHierarchy: null,
   addAccountOpen: false,
   activeAccount: null
@@ -166,6 +169,14 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE:
+    let sharedAccountData: BaseResponse<AccountSharedWithResponse[]> = action.payload;
+    if (sharedAccountData.status === 'success') {
+      return Object.assign({}, state, {
+        activeAccountSharedWith: sharedAccountData.body
+      });
+    }
+    return state;
     case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
       let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
       if (unSharedData.status === 'success') {

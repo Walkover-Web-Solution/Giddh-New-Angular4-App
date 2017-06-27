@@ -19,7 +19,8 @@ import * as _ from 'lodash';
 import { IOption, SelectModule, SelectComponent } from 'ng-select';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { AccountsTaxHierarchyResponse, AccountResponse } from '../../../../models/api-models/Account';
+import { AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
+import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../../models/api-models/Account';
 
 @Component({
   selector: 'account-operations',
@@ -29,6 +30,9 @@ import { AccountsTaxHierarchyResponse, AccountResponse } from '../../../../model
 export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
+  public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
+  public shareAccountForm: FormGroup;
+  public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -78,8 +82,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       return $('<span>' + data.text + '</span>');
     }
   };
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountsAction: AccountsAction,
-    private companyActions: CompanyActions) {
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
+    private companyActions: CompanyActions, private accountsAction: AccountsAction) {
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
@@ -98,11 +102,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     });
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith);
+    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
     this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy);
     this.companyTaxes$ = this.store.select(state => state.company.taxes);
     this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
 
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
@@ -161,6 +167,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
 
     this.taxGroupForm = this._fb.group({
       taxes: ['']
+    });
+
+    this.moveAccountForm = this._fb.group({
+      moveto: ['', Validators.required]
+    });
+
+    this.shareAccountForm = this._fb.group({
+      userEmail: ['', [Validators.required, Validators.email]]
     });
 
     this.groupList$.subscribe((a) => {
@@ -235,6 +249,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     grpObject.user = this.shareGroupForm.controls['userEmail'].value;
     this.store.dispatch(this.groupWithAccountsAction.shareGroup(grpObject, activeGrp.uniqueName));
   }
+  public async shareAccount() {
+    let activeAcc = await this.activeAccount$.first().toPromise();
+    let accObject = new ShareAccountRequest();
+    accObject.role = 'view_only';
+    accObject.user = this.shareAccountForm.controls['userEmail'].value;
+    this.store.dispatch(this.accountsAction.shareAccount(accObject, activeAcc.uniqueName));
+  }
+
   public moveToGroupSelected(event: any) {
     this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
   }
@@ -251,6 +273,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
     this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
+  }
+
+  public async unShareAccount(val) {
+    let activeAcc = await this.activeAccount$.first().toPromise();
+    debugger;
+    this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
 
   public flattenGroup(rawList: any[], parents: any[] = []) {
