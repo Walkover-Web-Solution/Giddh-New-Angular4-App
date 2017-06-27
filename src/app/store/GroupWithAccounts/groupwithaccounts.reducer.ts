@@ -259,6 +259,7 @@ export const GroupsWithAccountsReducer: ActionReducer < CurrentGroupAndAccountSt
           addAccountOpen: true
         });
       }
+      return state;
       case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
       let updatedAccount: BaseResponse<AccountResponse> = action.payload;
       if (updatedAccount.status === 'success') {
@@ -266,6 +267,7 @@ export const GroupsWithAccountsReducer: ActionReducer < CurrentGroupAndAccountSt
           activeAccount: action.payload.body,
         });
       }
+      return state;
       case AccountsAction.RESET_ACTIVE_ACCOUNT:
         return Object.assign({}, state, {activeAccount: null, addAccountOpen: false});
     default:
