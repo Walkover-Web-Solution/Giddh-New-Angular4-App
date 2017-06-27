@@ -43,7 +43,6 @@ export class AccountsAction {
   @Effect()
   public CreateAccount$: Observable < Action > = this.action$
     .ofType(AccountsAction.CREATE_ACCOUNT)
-    .debug('')
     .switchMap(action => this._accountService.CreateAccount(action.payload.accountUniqueName, action.payload.account))
     .map(response => {
       return this.createAccountResponse(response);
@@ -52,7 +51,6 @@ export class AccountsAction {
   @Effect()
   public CreateAccountResponse$: Observable < Action > = this.action$
     .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE)
-    .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -69,7 +67,6 @@ export class AccountsAction {
   @Effect()
   public GetAccountDetails$: Observable < Action > = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS)
-    .debug('')
     .switchMap(action => this._accountService.GetAccountDetails(action.payload))
     .map(response => {
       return this.getAccountDetailsResponse(response);
@@ -77,7 +74,6 @@ export class AccountsAction {
   @Effect()
   public GetAccountDetailsResponse$: Observable < Action > = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE)
-    .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -90,7 +86,6 @@ export class AccountsAction {
   @Effect()
   public UpdateAccount$: Observable < Action > = this.action$
     .ofType(AccountsAction.UPDATE_ACCOUNT)
-    .debug('')
     .switchMap(action => this._accountService.UpdateAccount(action.payload.account, action.payload.accountUniqueName))
     .map(response => {
       return this.updateAccountResponse(response);
@@ -99,7 +94,6 @@ export class AccountsAction {
   @Effect()
   public UpdateAccountResponse$: Observable < Action > = this.action$
     .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE)
-    .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -116,7 +110,6 @@ export class AccountsAction {
     private store: Store < AppState >,
     private groupWithAccountsAction: GroupWithAccountsAction
   ) {
-
   }
 
   public createAccount(value: string, account: AccountRequest): Action {
