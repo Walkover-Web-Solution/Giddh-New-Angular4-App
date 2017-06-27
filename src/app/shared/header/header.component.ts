@@ -118,7 +118,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
-    e.stopPropagation();
+    // e.stopPropagation();
   }
 
   public changeCompany(selectedCompanyUniqueName: string, e: Event) {
@@ -127,7 +127,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    e.stopPropagation();
+    // e.stopPropagation();
   }
 
   public deleteCompany() {

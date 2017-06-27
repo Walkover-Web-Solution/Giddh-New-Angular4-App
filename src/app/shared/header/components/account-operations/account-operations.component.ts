@@ -20,7 +20,7 @@ import { IOption, SelectModule, SelectComponent } from 'ng-select';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
-import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../../models/api-models/Account';
+import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../../../models/api-models/Account';
 
 @Component({
   selector: 'account-operations',
@@ -293,6 +293,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public moveToGroupSelected(event: any) {
     this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
   }
+
+  public moveToAccountSelected(event: any) {
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
+  }
   public async moveGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
@@ -300,6 +304,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     grpObject.parentGroupUniqueName = this.moveGroupForm.controls['moveto'].value;
     this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGrp.uniqueName));
     this.moveGroupForm.reset();
+  }
+  public async moveAccount() {
+    let activeAcc = await this.activeAccount$.first().toPromise();
+
+    let grpObject = new AccountMoveRequest();
+    grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
+    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
+    this.moveAccountForm.reset();
   }
 
   public async unShareGroup(val) {
