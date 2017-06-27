@@ -1,6 +1,6 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IStocksItem, IStockItem } from '../interfaces/stocksItem.interface';
+import { IStocksItem, IStockItem, IStockReport, IStockReportItem, IStockTransaction } from '../interfaces/stocksItem.interface';
 
 /*
  * Model for Create Stock Group api request
@@ -63,4 +63,32 @@ export class StockUnitResponse {
   public name: string;
   public parentStockUnit?: IStockItem;
   public quantityPerUnit: number;
+}
+
+/**
+ * Model for stock-report api response
+ * GET call
+ * API:: (stock-report) company/:companyUniqueName/stock-group/get-stock-report?count=10&from=&page=0&stockGroupUniqueName=&stockUniqueName=d&to=
+ * you can pass query parameters in this as:
+ * 1) from => date string
+ * 2) to => date string,
+ * 3) page => number,
+ * 4) stockUniqueName => string
+ * 5)stockGroupUniqueName string
+ * 6)count => number which is sent 10
+ * Response will be a array of StockUnitResponse
+ * the field stockUnitQtyMap contains a hash depending on the stockUnit
+ * if stock unit is 'kg' stockUnitQtyMap contains {kg: 1}
+ * for hour stockUnitQtyMap contains {hr: 1} etc
+ */
+export class StockReportResponse implements IStockReport {
+  public closingBalance: IStockReportItem;
+  public count: number;
+  public openingBalance: IStockReportItem;
+  public page: number;
+  public stockUnit: string;
+  public stockUnitQtyMap: any;
+  public totalItems: number;
+  public totalPages: number;
+  public transactions: IStockTransaction[];
 }

@@ -1,8 +1,11 @@
-export interface IPaginatedResponse {
+export interface IPagination {
   count: number;
   page: number;
-  results: any[];
-  size: number;
   totalItems: number;
   totalPages: number;
+}
+
+export interface IPaginatedResponse extends IPagination {
+  size: number;
+  results: any[];
 }
