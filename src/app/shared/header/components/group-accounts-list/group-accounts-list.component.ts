@@ -1,4 +1,3 @@
-import { GroupResponse } from './../../../../models/api-models/Group';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { Store } from '@ngrx/store';
@@ -7,6 +6,9 @@ import { Observable } from 'rxjs/Observable';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from 'lodash';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountResponse } from '../../../../models/api-models/Account';
+import { GroupResponse } from '../../../../models/api-models/Group';
 
 @Component({
   selector: 'group-account-list',
@@ -17,10 +19,12 @@ export class GroupAccountsListComponent implements OnInit {
   public accountsList$: Observable<IAccountsInfo[]>;
   public activeGroup$: Observable<GroupResponse>;
   public searchLoad$: Observable<boolean>;
+  public activeAccount$: Observable<AccountResponse>;
 
   public showAddAccountForm$: Observable<boolean>;
   // tslint:disable-next-line:no-empty
-  constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+  constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
+    private accountsAcction: AccountsAction, private accountsAction: AccountsAction) {
     this.accountsList$ =  this.store.select(state => {
       let accountsList: IAccountsInfo[] = [];
       if (state.groupwithaccounts.groupswithaccounts) {
@@ -39,6 +43,7 @@ export class GroupAccountsListComponent implements OnInit {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
     this.searchLoad$ = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
     this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
   }
 
   // tslint:disable-next-line:no-empty
@@ -90,5 +95,23 @@ export class GroupAccountsListComponent implements OnInit {
       }
     });
     return result;
+  }
+
+  public getAccountDetails(accountUniqueName: string) {
+    this.store.dispatch(this.accountsAcction.getAccountDetails(accountUniqueName));
+    let activeGroup: GroupResponse = null;
+    this.activeGroup$.first().subscribe(ac => activeGroup = ac);
+    if (!activeGroup) {
+      this.activeGroupFromAccount();
+    }
+  }
+
+  public activeGroupFromAccount() {
+    this.activeAccount$.subscribe(ac => {
+      if (ac) {
+        let grp = ac.parentGroups[ac.parentGroups.length - 1];
+        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(grp.uniqueName));
+      }
+    });
   }
 }

@@ -2,8 +2,12 @@ import {
   AccountResponse,
   AccountRequest
 } from './../../models/api-models/Account';
-import { AppState } from './../../store/roots';
-import { BaseResponse } from './../../models/api-models/BaseResponse';
+import {
+  AppState
+} from './../../store/roots';
+import {
+  BaseResponse
+} from './../../models/api-models/BaseResponse';
 import {
   GroupResponse,
   FlattenGroupsAccountsRequest,
@@ -39,26 +43,18 @@ export class GroupWithAccountsAction {
   public static GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE = 'GetFlattenGroupsAccountsResponse';
   public static CREATE_GROUP = 'GroupCreate';
   public static CREATE_GROUP_RESPONSE = 'GroupCreateResponse';
-
   public static UPDATE_GROUP = 'GroupUpdate';
   public static UPDATE_GROUP_RESPONSE = 'GroupUpdateResponse';
   public static SHARE_GROUP = 'GroupShare';
   public static SHARE_GROUP_RESPONSE = 'GroupShareResponse';
-
   public static UNSHARE_GROUP = 'GroupUnShare';
   public static UNSHARE_GROUP_RESPONSE = 'GroupUnShareResponse';
-
   public static SHARED_GROUP_WITH = 'GroupSharedWith';
   public static SHARED_GROUP_WITH_RESPONSE = 'GroupSharedWithResponse';
-
   public static MOVE_GROUP = 'GroupMove';
   public static MOVE_GROUP_RESPONSE = 'GroupMoveResponse';
-
   public static GET_GROUP_TAX_HIERARCHY = 'GroupTaxHierarchy';
   public static GET_GROUP_TAX_HIERARCHY_RESPONSE = 'GroupTaxHierarchyResponse';
-
-  public static CREATE_ACCOUNT = 'GroupCreateAccount';
-  public static CREATE_ACCOUNT_RESPONSE = 'GroupCreateAccountResponse';
 
   public static SHOW_ADD_ACCOUNT_FORM = 'GroupShowAddAccountForm';
   public static HIDE_ADD_ACCOUNT_FORM = 'GroupHideAddAccountForm';
@@ -101,7 +97,9 @@ export class GroupWithAccountsAction {
     .ofType(GroupWithAccountsAction.SET_ACTIVE_GROUP)
     .debug('')
     .map(action => {
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -116,16 +114,16 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetGroupsWithAccountResponse$: Observable<
-  Action
-  > = this.action$
+  public GetGroupsWithAccountResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE)
     .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -133,7 +131,9 @@ export class GroupWithAccountsAction {
     .ofType(GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING)
     .debug('')
     .map(action => {
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -174,7 +174,9 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -189,16 +191,16 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public GetFlattenGroupsAccountsResponse$: Observable<
-  Action
-  > = this.action$
+  public GetFlattenGroupsAccountsResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE)
     .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -231,7 +233,9 @@ export class GroupWithAccountsAction {
 
         return this.sharedGroupWith(groupUniqueName);
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -258,7 +262,9 @@ export class GroupWithAccountsAction {
       } else {
         this._toasty.successToast(action.payload.body.toastMessage, '');
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -278,7 +284,9 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -306,7 +314,9 @@ export class GroupWithAccountsAction {
         this._toasty.successToast('Group moved successfully', '');
         return this.getGroupWithAccounts('');
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -319,40 +329,16 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public getGroupTaxHierarchyResponse$: Observable<
-  Action
-  > = this.action$
+  public getGroupTaxHierarchyResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE)
     .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
-    });
-
-  @Effect()
-  public CreateAccount$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.CREATE_ACCOUNT)
-    .debug('')
-    .switchMap(action => this._groupService.CreateAccount(action.payload.groupUniqueName, action.payload.account))
-    .map(response => {
-      return this.createAccountResponse(response);
-    });
-
-  @Effect()
-  public CreateAccountResponse$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.CREATE_ACCOUNT_RESPONSE)
-    .debug('')
-    .map(action => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
-      } else {
-        this._toasty.successToast('Account Created Successfully');
-      }
-      this.hideAddAccountForm();
-      return this.getGroupWithAccounts('');
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -373,14 +359,17 @@ export class GroupWithAccountsAction {
       } else {
         this._toasty.successToast('Group Updated Successfully');
       }
-      return { type: '' };
+      return {
+        type: ''
+      };
     });
+
   constructor(
     private action$: Actions,
     private _groupService: GroupService,
     private _accountService: AccountService,
     private _toasty: ToasterService,
-    public store: Store<AppState>
+    private store: Store<AppState>
   ) {
     //
   }
@@ -460,13 +449,11 @@ export class GroupWithAccountsAction {
   public shareGroup(value: ShareGroupRequest, groupUniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.SHARE_GROUP,
-      payload: Object.assign(
-        {},
-        { body: value },
-        {
+      payload: Object.assign({}, {
+        body: value
+      }, {
           groupUniqueName
-        }
-      )
+        })
     };
   }
   public shareGroupResponse(value: BaseResponse<string>): Action {
@@ -479,13 +466,11 @@ export class GroupWithAccountsAction {
   public unShareGroup(value: string, groupUniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.UNSHARE_GROUP,
-      payload: Object.assign(
-        {},
-        { user: value },
-        {
+      payload: Object.assign({}, {
+        user: value
+      }, {
           groupUniqueName
-        }
-      )
+        })
     };
   }
   public unShareGroupResponse(
@@ -515,13 +500,11 @@ export class GroupWithAccountsAction {
   public moveGroup(value: MoveGroupRequest, groupUniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.MOVE_GROUP,
-      payload: Object.assign(
-        {},
-        { body: value },
-        {
+      payload: Object.assign({}, {
+        body: value
+      }, {
           groupUniqueName
-        }
-      )
+        })
     };
   }
   public moveGroupResponse(value: BaseResponse<MoveGroupResponse>): Action {
@@ -542,18 +525,6 @@ export class GroupWithAccountsAction {
   ): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE,
-      payload: value
-    };
-  }
-  public createAccount(value: string, account: AccountRequest): Action {
-    return {
-      type: GroupWithAccountsAction.CREATE_ACCOUNT,
-      payload: Object.assign({}, { groupUniqueName: value }, { account })
-    };
-  }
-  public createAccountResponse(value: BaseResponse<AccountResponse>): Action {
-    return {
-      type: GroupWithAccountsAction.CREATE_ACCOUNT_RESPONSE,
       payload: value
     };
   }

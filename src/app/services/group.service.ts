@@ -74,7 +74,7 @@ export class GroupService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), {user: userEmail}).map((res) => {
+    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), { user: userEmail }).map((res) => {
       let data: BaseResponse<string> = res.json();
       let newResp = new BaseResponse<UnShareGroupResponse>();
       newResp.status = 'success';
@@ -187,20 +187,6 @@ export class GroupService {
       let data: BaseResponse<GroupsTaxHierarchyResponse> = res.json();
       return data;
     }).catch((e) => HandleCatch<GroupsTaxHierarchyResponse>(e));
-  }
-
-  public CreateAccount(groupUniqueName: string, model: AccountRequest): Observable<BaseResponse<AccountResponse>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
-    return this._http.post(GROUP_API.CREATE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName),
-     model).map((res) => {
-      let data: BaseResponse<AccountResponse> = res.json();
-      return data;
-    }).catch((e) => HandleCatch<AccountResponse>(e));
   }
 
 }
