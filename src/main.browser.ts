@@ -22,7 +22,6 @@ import { Observable } from 'rxjs';
 
 const debuggerOn = true;
 
-debugger;
 Observable.prototype.debug = function(message: string) {
     return this.do(
         nextValue => {
