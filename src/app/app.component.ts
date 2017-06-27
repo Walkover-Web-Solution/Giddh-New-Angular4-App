@@ -7,7 +7,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/take';
+
 import { HomeState, HomeActions } from './services';
 import { AppState } from './reducers/roots';
 import { Store } from '@ngrx/store';
