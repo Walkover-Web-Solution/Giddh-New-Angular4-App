@@ -203,7 +203,9 @@
 <div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog" >
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <company-add></company-add>
+        <company-add (closeCompanyModal)="hideAddCompanyModal()"
+        (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
+        </company-add>
       </div>
     </div>
 </div>
