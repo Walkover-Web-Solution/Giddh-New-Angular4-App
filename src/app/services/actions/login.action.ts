@@ -25,7 +25,6 @@ export class LoginActions {
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailRequest)
-    .debug('action received')
     .switchMap(action => this.auth.SignupWithEmail(action.payload))
     .debug('data received via the HTTP request')
     .map(response => this.SignupWithEmailResponce(response));
@@ -33,7 +32,6 @@ export class LoginActions {
   @Effect()
   public signupWithEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailResponce)
-    .debug('action received')
     .map(action => {
       if (action.payload.status === 'success') {
         this._toaster.successToast(action.payload.body);
@@ -46,7 +44,6 @@ export class LoginActions {
   @Effect()
   public verifyEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailRequest)
-    .debug('action received')
     .switchMap(action =>
       this.auth.VerifyEmail(action.payload as VerifyEmailModel)
     )
@@ -56,7 +53,6 @@ export class LoginActions {
   @Effect()
   public verifyEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailResponce)
-    .debug('action received')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
@@ -68,7 +64,6 @@ export class LoginActions {
   @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
-    .debug('action received')
     .map(action => {
      this.store.dispatch(this.comapnyActions.GetStateDetails());
      this.store.dispatch(this.comapnyActions.RefreshCompanies());

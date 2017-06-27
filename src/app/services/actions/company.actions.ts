@@ -32,10 +32,7 @@ export class CompanyActions {
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)
-    .debug('')
-    .switchMap(action => {
-      return this._companyService.CreateCompany(action.payload);
-    })
+    .switchMap(action => this._companyService.CreateCompany(action.payload))
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
@@ -48,7 +45,6 @@ export class CompanyActions {
   @Effect()
   public RefreshCompanies$: Observable<Action> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES)
-    .debug('')
     .switchMap(action => this._companyService.CompanyList())
     .map(response => {
       if (response.status === 'error') {
@@ -62,7 +58,6 @@ export class CompanyActions {
   @Effect()
   public RefreshCompaniesResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE)
-    .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -73,7 +68,6 @@ export class CompanyActions {
   @Effect()
   public GetStateDetails$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_STATE_DETAILS)
-    .debug('')
     .switchMap(action => this._companyService.getStateDetails())
     .map(response => {
       if (response.status === 'error') {
@@ -87,7 +81,6 @@ export class CompanyActions {
   @Effect()
   public SetStateDetails$: Observable<Action> = this.action$
     .ofType(CompanyActions.SET_STATE_DETAILS)
-    .debug('')
     .switchMap(action => this._companyService.setStateDetails(action.payload))
     .map(response => {
       if (response.status === 'error') {
@@ -100,7 +93,6 @@ export class CompanyActions {
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.DELETE_COMPANY)
-    .debug('')
     .switchMap(action => this._companyService.DeleteCompany(action.payload))
     .map(response => {
       return this.DeleteCompanyResponse(response);
@@ -109,7 +101,6 @@ export class CompanyActions {
   @Effect()
   public DeleteCompanyResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.DELETE_COMPANY_RESPONSE)
-    .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -124,7 +115,6 @@ export class CompanyActions {
   @Effect()
   public CompanyTax$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_TAX)
-    .debug('')
     .switchMap(action => this._companyService.getComapnyTaxes())
     .map(response => {
       return this.getTaxResponse(response);
@@ -133,7 +123,6 @@ export class CompanyActions {
   @Effect()
   public CompanyTaxResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_TAX_RESPONSE)
-    .debug('')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);

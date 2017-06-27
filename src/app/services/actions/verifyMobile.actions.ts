@@ -22,7 +22,6 @@ export class VerifyMobileActions {
 
   @Effect() private verifyNumber$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST)
-    .debug('')
     .switchMap(action => this._authService.VerifyNumber(action.payload))
     .map(response => {
       if (response.status === 'success') {
@@ -34,7 +33,6 @@ export class VerifyMobileActions {
     });
   @Effect() private verifyNumberCode$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST)
-    .debug('')
     .switchMap(action => this._authService.VerifyNumberOTP(action.payload))
     .map(response => {
       if (response.status === 'success') {
