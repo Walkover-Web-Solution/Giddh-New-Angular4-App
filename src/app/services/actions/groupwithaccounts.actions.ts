@@ -538,7 +538,6 @@ export class GroupWithAccountsAction {
   }
 
   public applyGroupTax(value: ApplyTaxRequest): Action {
-    value.isAccount = false;
     return {
       type: GroupWithAccountsAction.APPLY_GROUP_TAX,
       payload: value

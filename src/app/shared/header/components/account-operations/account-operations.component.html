@@ -106,6 +106,7 @@
 
 
       </div>
+
       <div class="col-xs-6" *ngIf="!(activeGroup$ | async)?.fixed">
         <div class="row">
           <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="pd2 form-inline" [formGroup]="moveGroupForm">
@@ -177,8 +178,72 @@
 
   <div *ngIf="showAddAccountForm$ | async">
     <account-add></account-add>
+    <div class="clearfix" *ngIf="isTaxableAccount$ | async">
+      <div class="bdrB">
+        <div class="dGryHead">
+          Taxes
+        </div>
+        <div class="pd2 clearfix">
+          <div class="tax-list-wrap">
+            <div class="tax-label"><label>All Applied Taxes</label></div>
 
+            <span class="tax-bullet" *ngFor="let tax of (activeAccount$ | async)?.applicableTaxes">{{ tax.name }}</span>
+
+            <p *ngIf="!(activeAccount$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
+            <button id="editTax" class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
+              <i class="glyphicon glyphicon-edit"></i>
+            </button>
+          </div>
+
+          <div class="edit-tax-section" *ngIf="showEditTaxSection">
+            <div class="tax-list-wrap">
+              <div class="tax-label"><label>All Inherited Taxes</label></div>
+              <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
+                <ng-template #popTemplate>
+                  <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+                </ng-template>
+                <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+              </span>
+              </div>
+              <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+              <div class="tax-list-wrap">
+                <div class="tax-label"><label>All Applicable Taxes</label></div>
+                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                  <div class="clearfix max350 mrT1">
+                    <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
+                </ng-select> -->
+
+                    <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async" [options]="options" [value]="activeGroupSelected$ | async"></select2>
+
+                  </div>
+                  <button type="submit" class="btn btn-success mrT1"> Save</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="clearfix bdrB">
+      <div class="col-xs-6" *ngIf="!(activeGroup$ | async)?.fixed && activeAccount$ | async">
+        <div class="row">
+          <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="pd2 form-inline" [formGroup]="moveAccountForm">
+            <div>
+              <label class="mrR">Move to Group</label>
+            </div>
+
+            <div class="form-group">
+              <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)"
+              [typeahead]="accountList" typeaheadOptionField="name"
+                class="form-control">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-info mrL" [disabled]="!moveAccountForm.valid">Move</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="col-xs-6 bdrL" *ngIf="activeAccount$ | async" (submit)="shareAccount()">
         <div class="row">
           <form name="shareAccountForm" novalidate="" [formGroup]="shareAccountForm" class="form-inline pd2">
@@ -219,7 +284,9 @@
         </div>
 
       </div>
+
     </div>
+
   </div>
 
   <div class="scroll-btn text-center" scroll-btn="" *ngIf="showGroupForm">
