@@ -32,7 +32,7 @@ const ENV = process.env.NODE_ENV = process.env.ENV = 'production:renderer';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const AppUrl = 'localhost';
-const ApiUrl = 'http://api.giddh.com/';
+const ApiUrl = 'http://apitest.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
 }).metadata, {
