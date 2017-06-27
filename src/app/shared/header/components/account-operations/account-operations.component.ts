@@ -1,3 +1,4 @@
+import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { Select2Component } from '../../../theme/select2/select2.component';
 import { TaxResponse } from './../../../../models/api-models/Company';
 import { CompanyActions } from './../../../../services/actions/company.actions';
@@ -18,8 +19,8 @@ import * as _ from 'lodash';
 import { IOption, SelectModule, SelectComponent } from 'ng-select';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../../models/api-models/Account';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
+import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../../../models/api-models/Account';
 
 @Component({
   selector: 'account-operations',
@@ -28,12 +29,14 @@ import { AccountsAction } from '../../../../services/actions/accounts.actions';
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public activeAccount$: Observable<AccountResponse>;
+  public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
+  public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
   public subGroupForm: FormGroup;
   public groupDetailForm: FormGroup;
@@ -83,10 +86,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     private companyActions: CompanyActions, private accountsAction: AccountsAction) {
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
     this.activeGroupSelected$ = this.store.select(state => {
-      if (state.groupwithaccounts.activeGroupTaxHierarchy) {
-        return _.difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+      if (state.groupwithaccounts.activeAccount) {
+        if (state.groupwithaccounts.activeAccountTaxHierarchy) {
+          return _.difference(state.groupwithaccounts.activeAccountTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+        }
+      } else {
+        if (state.groupwithaccounts.activeGroupTaxHierarchy) {
+          return _.difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
+        }
       }
+
       return [];
     });
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
@@ -94,19 +105,40 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
+    this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy);
     this.companyTaxes$ = this.store.select(state => state.company.taxes);
     this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
 
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
-      if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
-        return _.differenceBy(state.company.taxes.map(p => {
-          return { text: p.name, id: p.uniqueName };
-        }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-          return { text: p.name, id: p.uniqueName };
-        }), 'id');
+      if (state.company.taxes) {
+        if (state.groupwithaccounts.activeAccount) {
+          if (state.groupwithaccounts.activeAccountTaxHierarchy) {
+            return _.differenceBy(state.company.taxes.map(p => {
+              return { text: p.name, id: p.uniqueName };
+            }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+              return { text: p.name, id: p.uniqueName };
+            }), 'id');
+          } else {
+            return state.company.taxes.map(p => {
+              return { text: p.name, id: p.uniqueName };
+            });
+          }
 
+        } else {
+          if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
+            return _.differenceBy(state.company.taxes.map(p => {
+              return { text: p.name, id: p.uniqueName };
+            }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
+              return { text: p.name, id: p.uniqueName };
+            }), 'id');
+          } else {
+            return state.company.taxes.map(p => {
+              return { text: p.name, id: p.uniqueName };
+            });
+          }
+        }
       }
       return arr;
     });
@@ -160,6 +192,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
         this.showGroupForm = false;
       }
     });
+    this.activeAccount$.subscribe((a) => {
+      if (a) {
+        this.showEditTaxSection = false;
+      }
+    });
 
   }
 
@@ -167,6 +204,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.isTaxableGroup$ = this.store.select(state => {
       let result: boolean = false;
       if (state.groupwithaccounts.groupswithaccounts && state.groupwithaccounts.activeGroup) {
+        if (state.groupwithaccounts.activeAccount) {
+          return false;
+        }
+        result = this.getAccountFromGroup(state.groupwithaccounts.groupswithaccounts, state.groupwithaccounts.activeGroup.uniqueName, false);
+      } else {
+        result = false;
+      }
+      return result;
+    });
+    this.isTaxableAccount$ = this.store.select(state => {
+      let result: boolean = false;
+      if (state.groupwithaccounts.groupswithaccounts && state.groupwithaccounts.activeGroup && state.groupwithaccounts.activeAccount) {
         result = this.getAccountFromGroup(state.groupwithaccounts.groupswithaccounts, state.groupwithaccounts.activeGroup.uniqueName, false);
       } else {
         result = false;
@@ -178,10 +227,38 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
         this.applyTaxSelect2.cd.detectChanges();
       }
     });
+    this.activeAccountTaxHierarchy$.subscribe((a) => {
+      let activeAccount: AccountResponse = null;
+      this.store.take(1).subscribe(s => {
+        if (s.groupwithaccounts) {
+          activeAccount = s.groupwithaccounts.activeAccount;
+        }
+      });
+      if (activeAccount) {
+        if (a) {
+          this.showEditTaxSection = true;
+        }
+      }
+    });
+
+    this.activeGroupTaxHierarchy$.subscribe((a) => {
+      let activeAccount: AccountResponse = null;
+      let activeGroup: GroupResponse = null;
+      this.store.take(1).subscribe(s => {
+        if (s.groupwithaccounts) {
+          activeGroup = s.groupwithaccounts.activeGroup;
+          activeAccount = s.groupwithaccounts.activeAccount;
+        }
+      });
+      if (activeGroup && !activeAccount) {
+        if (a) {
+          this.showEditTaxSection = true;
+        }
+      }
+    });
   }
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
-
     let grpObject = new GroupCreateRequest();
     grpObject.parentGroupUniqueName = activeGrp.uniqueName;
     grpObject.description = this.subGroupForm.controls['desc'].value;
@@ -216,6 +293,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public moveToGroupSelected(event: any) {
     this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
   }
+
+  public moveToAccountSelected(event: any) {
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
+  }
   public async moveGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
@@ -223,6 +304,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     grpObject.parentGroupUniqueName = this.moveGroupForm.controls['moveto'].value;
     this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGrp.uniqueName));
     this.moveGroupForm.reset();
+  }
+  public async moveAccount() {
+    let activeAcc = await this.activeAccount$.first().toPromise();
+
+    let grpObject = new AccountMoveRequest();
+    grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
+    this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
+    this.moveAccountForm.reset();
   }
 
   public async unShareGroup(val) {
@@ -233,7 +322,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
 
   public async unShareAccount(val) {
     let activeAcc = await this.activeAccount$.first().toPromise();
-    debugger;
     this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
 
@@ -274,10 +362,24 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   }
 
   public async taxHierarchy() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
-    this.store.dispatch(this.companyActions.getTax());
-    this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGrp.uniqueName));
-    this.showEditTaxSection = true;
+    let activeAccount: AccountResponse = null;
+    let activeGroup: GroupResponse = null;
+    this.store.take(1).subscribe(s => {
+      if (s.groupwithaccounts) {
+        activeAccount = s.groupwithaccounts.activeAccount;
+        activeGroup = s.groupwithaccounts.activeGroup;
+      }
+    });
+    if (activeAccount) {
+      //
+      this.store.dispatch(this.companyActions.getTax());
+      this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
+    } else {
+      this.store.dispatch(this.companyActions.getTax());
+      this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+      // this.showEditTaxSection = true;
+    }
+
   }
 
   public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
@@ -305,7 +407,21 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       }
     });
     if (activeAccount) {
-      //
+      let data: ApplyTaxRequest = new ApplyTaxRequest();
+      data.isAccount = true;
+      data.taxes = [];
+      this.activeAccountTaxHierarchy$.take(1).subscribe((t) => {
+        if (t) {
+          t.inheritedTaxes.forEach(tt => {
+            tt.applicableTaxes.forEach(ttt => {
+              data.taxes.push(ttt.uniqueName);
+            });
+          });
+        }
+      });
+      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+      data.uniqueName = activeAccount.uniqueName;
+      this.store.dispatch(this.accountsAction.applyAccountTax(data));
     } else {
       let data: ApplyTaxRequest = new ApplyTaxRequest();
       data.isAccount = false;
@@ -319,7 +435,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
           });
         }
       });
-      data.taxes.push(...this.taxGroupForm.controls['taxes'].value);
+      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
       data.uniqueName = activeGroup.uniqueName;
       this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     }
