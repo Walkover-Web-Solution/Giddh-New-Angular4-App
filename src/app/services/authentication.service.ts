@@ -54,13 +54,13 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.VerifyNumber, modele).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
-    }).catch((e) => this._error.handle<string>(e));
+    }).catch((e) => HandleCatch<string>(e));
   }
 
   public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string>> {
     return this._http.put(LOGIN_API.VerifyNumber, modele).map((res) => {
       let data: BaseResponse<string> = res.json();
       return data;
-    }).catch((e) => this._error.handle<string>(e));
+    }).catch((e) => HandleCatch<string>(e));
   }
 }
