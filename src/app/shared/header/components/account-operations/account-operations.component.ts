@@ -192,6 +192,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
         this.showGroupForm = false;
       }
     });
+    this.activeAccount$.subscribe((a) => {
+      if (a) {
+        this.showEditTaxSection = false;
+      }
+    });
 
   }
 
@@ -222,10 +227,38 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
         this.applyTaxSelect2.cd.detectChanges();
       }
     });
+    this.activeAccountTaxHierarchy$.subscribe((a) => {
+      let activeAccount: AccountResponse = null;
+      this.store.take(1).subscribe(s => {
+        if (s.groupwithaccounts) {
+          activeAccount = s.groupwithaccounts.activeAccount;
+        }
+      });
+      if (activeAccount) {
+        if (a) {
+          this.showEditTaxSection = true;
+        }
+      }
+    });
+
+    this.activeGroupTaxHierarchy$.subscribe((a) => {
+      let activeAccount: AccountResponse = null;
+      let activeGroup: GroupResponse = null;
+      this.store.take(1).subscribe(s => {
+        if (s.groupwithaccounts) {
+          activeGroup = s.groupwithaccounts.activeGroup;
+          activeAccount = s.groupwithaccounts.activeAccount;
+        }
+      });
+      if (activeGroup && !activeAccount) {
+        if (a) {
+          this.showEditTaxSection = true;
+        }
+      }
+    });
   }
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
-
     let grpObject = new GroupCreateRequest();
     grpObject.parentGroupUniqueName = activeGrp.uniqueName;
     grpObject.description = this.subGroupForm.controls['desc'].value;
@@ -277,7 +310,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
 
   public async unShareAccount(val) {
     let activeAcc = await this.activeAccount$.first().toPromise();
-    debugger;
     this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
 
@@ -330,11 +362,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       //
       this.store.dispatch(this.companyActions.getTax());
       this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
-      this.showEditTaxSection = true;
     } else {
       this.store.dispatch(this.companyActions.getTax());
       this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
-      this.showEditTaxSection = true;
+      // this.showEditTaxSection = true;
     }
 
   }
@@ -376,7 +407,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
           });
         }
       });
-      data.taxes.push(...this.taxGroupForm.controls['taxes'].value);
+      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
       data.uniqueName = activeAccount.uniqueName;
       this.store.dispatch(this.accountsAction.applyAccountTax(data));
     } else {
@@ -392,7 +423,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
           });
         }
       });
-      data.taxes.push(...this.taxGroupForm.controls['taxes'].value);
+      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
       data.uniqueName = activeGroup.uniqueName;
       this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     }
