@@ -170,13 +170,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE:
-    let sharedAccountData: BaseResponse<AccountSharedWithResponse[]> = action.payload;
-    if (sharedAccountData.status === 'success') {
-      return Object.assign({}, state, {
-        activeAccountSharedWith: sharedAccountData.body
-      });
-    }
-    return state;
+      let sharedAccountData: BaseResponse<AccountSharedWithResponse[]> = action.payload;
+      if (sharedAccountData.status === 'success') {
+        return Object.assign({}, state, {
+          activeAccountSharedWith: sharedAccountData.body
+        });
+      }
+      return state;
     case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
       let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
       if (unSharedData.status === 'success') {
@@ -197,7 +197,11 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         activeGroupInProgress: false,
         activeGroupSharedWith: []
       });
+    case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
+      return Object.assign({}, state, {
+        activeGroupTaxHierarchy: null
+      });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE:
       let taxHierarchyData: BaseResponse<GroupsTaxHierarchyResponse> = action.payload;
       if (taxHierarchyData.status === 'success') {
@@ -206,6 +210,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY:
+      return Object.assign({}, state, {
+        activeAccountTaxHierarchy: null
+      });
     case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE:
       let accountTaxHierarchyData: BaseResponse<AccountsTaxHierarchyResponse> = action.payload;
       if (accountTaxHierarchyData.status === 'success') {
