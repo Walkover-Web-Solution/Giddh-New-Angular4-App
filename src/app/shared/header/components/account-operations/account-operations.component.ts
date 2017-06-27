@@ -76,8 +76,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
     this.activeGroupSelected$ = this.store.select(state => {
-      if (state.groupwithaccounts.activeGroup) {
-        return state.groupwithaccounts.activeGroup.applicableTaxes.map(p => p.uniqueName);
+      if (state.groupwithaccounts.activeGroupTaxHierarchy) {
+        return _.difference(state.groupwithaccounts.activeGroupTaxHierarchy.applicableTaxes.map(p => p.uniqueName), state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.uniqueName));
       }
       return [];
     });
@@ -91,19 +91,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
       if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
-        state.company.taxes.map((t) => {
-          if (state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.length) {
-            state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(it => {
-              it.applicableTaxes.map(ita => {
-                if (ita.uniqueName !== t.uniqueName) {
-                  arr.push({ text: t.name, id: t.uniqueName });
-                }
-              });
-            });
-          } else {
-            arr.push({ text: t.name, id: t.uniqueName });
-          }
-        });
+        return _.differenceBy(state.company.taxes.map(p => {
+          return { text: p.name, id: p.uniqueName };
+        }), state.groupwithaccounts.activeGroup.applicableTaxes.map(p => {
+          return { text: p.name, id: p.uniqueName };
+        }), 'id');
       }
       return arr;
     });
