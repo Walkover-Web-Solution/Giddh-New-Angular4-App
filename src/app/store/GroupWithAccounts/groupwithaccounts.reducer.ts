@@ -1,6 +1,5 @@
-
+import { AccountsAction } from '../../services/actions/accounts.actions';
 import { GroupWithAccountsAction } from './../../services/actions/groupwithaccounts.actions';
-import { AccountsAction } from './../../services/actions/accounts.actions.ts';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, UnShareGroupResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
@@ -8,7 +7,7 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountResponse } from '../../models/api-models/Account';
+import { AccountsTaxHierarchyResponse, AccountResponse } from '../../models/api-models/Account';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -22,6 +21,7 @@ export interface CurrentGroupAndAccountState {
   activeGroupInProgress: boolean;
   activeGroupSharedWith?: GroupSharedWithResponse[];
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
+  activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
   activeAccount: AccountResponse;
 }
@@ -195,6 +195,14 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE:
+      let accountTaxHierarchyData: BaseResponse<AccountsTaxHierarchyResponse> = action.payload;
+      if (accountTaxHierarchyData.status === 'success') {
+        return Object.assign({}, state, {
+          activeAccountTaxHierarchy: accountTaxHierarchyData.body
+        });
+      }
+      return state;
     case GroupWithAccountsAction.SHOW_ADD_ACCOUNT_FORM:
       return Object.assign({}, state, {
         addAccountOpen: true,
@@ -235,7 +243,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
-      case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
+    case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
       let updatedAccount: BaseResponse<AccountResponse> = action.payload;
       if (updatedAccount.status === 'success') {
         return Object.assign({}, state, {
@@ -243,8 +251,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
-      case AccountsAction.RESET_ACTIVE_ACCOUNT:
-        return Object.assign({}, state, {activeAccount: null, addAccountOpen: false});
+    case AccountsAction.RESET_ACTIVE_ACCOUNT:
+      return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
     default:
       return state;
   }

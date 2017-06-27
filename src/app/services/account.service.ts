@@ -173,7 +173,7 @@ export class AccountService implements OnInit {
     }).catch((e) => HandleCatch<FlattenAccountsResponse[]>(e));
   }
 
-  public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse[]>> {
+  public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -181,8 +181,8 @@ export class AccountService implements OnInit {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(ACCOUNTS_API.TAX_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
-      let data: BaseResponse<AccountsTaxHierarchyResponse[]> = res.json();
+      let data: BaseResponse<AccountsTaxHierarchyResponse> = res.json();
       return data;
-    }).catch((e) => HandleCatch<AccountsTaxHierarchyResponse[]>(e));
+    }).catch((e) => HandleCatch<AccountsTaxHierarchyResponse>(e));
   }
 }
