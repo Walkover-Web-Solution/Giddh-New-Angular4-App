@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { IGroupsWithAccounts } from '../../../models/interfaces/groupsWithAccounts.interface';
 @Pipe({
   name: 'myAccountFilter',
-  pure: false
+  pure: true
 })
 
 export class AccountFilterPipe implements PipeTransform {
