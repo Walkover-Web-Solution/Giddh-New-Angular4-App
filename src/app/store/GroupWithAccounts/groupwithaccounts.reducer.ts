@@ -133,7 +133,9 @@ export const GroupsWithAccountsReducer: ActionReducer < CurrentGroupAndAccountSt
         return Object.assign({}, state, {
           activeGroup: grpData.body,
           activeGroupInProgress: false,
-          groupswithaccounts: groupArray
+          groupswithaccounts: groupArray,
+          activeGroupTaxHierarchy: null,
+          activeGroupSharedWith: null
         });
       }
       return state;
@@ -182,7 +184,7 @@ export const GroupsWithAccountsReducer: ActionReducer < CurrentGroupAndAccountSt
       return state;
 
     case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
-      let sharedData: BaseResponse < GroupSharedWithResponse[] > = action.payload;
+      let sharedData: BaseResponse<GroupSharedWithResponse[]> = action.payload;
       if (sharedData.status === 'success') {
         return Object.assign({}, state, {
           activeGroupSharedWith: sharedData.body
@@ -190,7 +192,7 @@ export const GroupsWithAccountsReducer: ActionReducer < CurrentGroupAndAccountSt
       }
       return state;
     case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
-      let unSharedData: BaseResponse < UnShareGroupResponse > = action.payload;
+      let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
       if (unSharedData.status === 'success') {
         let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.body.user !== ac.userEmail);
         return Object.assign({}, state, {
@@ -211,7 +213,7 @@ export const GroupsWithAccountsReducer: ActionReducer < CurrentGroupAndAccountSt
       });
 
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE:
-      let taxHierarchyData: BaseResponse < GroupsTaxHierarchyResponse > = action.payload;
+      let taxHierarchyData: BaseResponse<GroupsTaxHierarchyResponse> = action.payload;
       if (taxHierarchyData.status === 'success') {
         return Object.assign({}, state, {
           activeGroupTaxHierarchy: taxHierarchyData.body
