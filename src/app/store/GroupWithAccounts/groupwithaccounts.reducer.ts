@@ -1,10 +1,11 @@
+
 import { GroupWithAccountsAction } from './../../services/actions/groupwithaccounts.actions';
+import { AccountsAction } from './../../services/actions/accounts.actions.ts';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, UnShareGroupResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
-import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AccountResponse } from '../../models/api-models/Account';
@@ -21,7 +22,6 @@ export interface CurrentGroupAndAccountState {
   activeGroupInProgress: boolean;
   activeGroupSharedWith?: GroupSharedWithResponse[];
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
-
   addAccountOpen: boolean;
   activeAccount: AccountResponse;
 }
@@ -197,11 +197,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       return state;
     case GroupWithAccountsAction.SHOW_ADD_ACCOUNT_FORM:
       return Object.assign({}, state, {
-        addAccountOpen: true
+        addAccountOpen: true,
+        activeAccount: null
       });
     case GroupWithAccountsAction.HIDE_ADD_ACCOUNT_FORM:
       return Object.assign({}, state, {
-        addAccountOpen: false
+        addAccountOpen: false,
+        activeAccount: null
       });
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE:
       let activeGrpData: BaseResponse<GroupResponse> = action.payload;
@@ -224,6 +226,23 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE:
+      let activeAccount: BaseResponse<AccountResponse> = action.payload;
+      if (activeAccount.status === 'success') {
+        return Object.assign({}, state, {
+          activeAccount: action.payload.body,
+          addAccountOpen: true
+        });
+      }
+    case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
+      let updatedAccount: BaseResponse<AccountResponse> = action.payload;
+      if (updatedAccount.status === 'success') {
+        return Object.assign({}, state, {
+          activeAccount: action.payload.body,
+        });
+      }
+    case AccountsAction.RESET_ACTIVE_ACCOUNT:
+      return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
     default:
       return state;
   }
