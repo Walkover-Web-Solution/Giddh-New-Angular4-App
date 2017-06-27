@@ -14,7 +14,7 @@
           <span>Let us help you set up your company with Giddh.</span>
           <span>Before creating a company we need to verify your mobile no. first.</span>
         </div>
-        <div ng-if="showSuccessMsg">
+        <div *ngIf="isCompanyCreated$ | async">
           <span>Congratulations!</span><br>
           <span>Company created successfully.</span>
         </div>
