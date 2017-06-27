@@ -138,6 +138,7 @@ export class GroupWithAccountsAction {
       let data: BaseResponse < GroupResponse > = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {type: ''};
       }
       return this.sharedGroupWith(data.body.uniqueName);
     });

@@ -37,6 +37,10 @@ export class CompanyActions {
       return this._companyService.CreateCompany(action.payload);
     })
     .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return {type: ''};
+      }
       console.log('Response ' + response);
       return this.CreateCompanyResponse(response);
     });
@@ -47,6 +51,10 @@ export class CompanyActions {
     .debug('')
     .switchMap(action => this._companyService.CompanyList())
     .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return {type: ''};
+      }
       console.log('Response ' + response);
       return this.RefreshCompaniesResponse(response);
     });
@@ -68,6 +76,10 @@ export class CompanyActions {
     .debug('')
     .switchMap(action => this._companyService.getStateDetails())
     .map(response => {
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return {type: ''};
+      }
       console.log('Response ' + response);
       return this.GetStateDetailsResponse(response);
     });
@@ -80,6 +92,7 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
+        return { type: '' };
       }
       return this.SetStateDetailsResponse(response);
     });
@@ -100,6 +113,7 @@ export class CompanyActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {type: ''};
       } else {
         this._toasty.successToast(action.payload.body, 'success');
       }
