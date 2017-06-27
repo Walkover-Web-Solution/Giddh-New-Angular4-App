@@ -26,7 +26,6 @@ export class LoginActions {
   public signupWithEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailRequest)
     .switchMap(action => this.auth.SignupWithEmail(action.payload))
-    .debug('data received via the HTTP request')
     .map(response => this.SignupWithEmailResponce(response));
 
   @Effect()
@@ -47,7 +46,6 @@ export class LoginActions {
     .switchMap(action =>
       this.auth.VerifyEmail(action.payload as VerifyEmailModel)
     )
-    .debug('data received via the HTTP request')
     .map(response => this.VerifyEmailResponce(response));
 
   @Effect()
