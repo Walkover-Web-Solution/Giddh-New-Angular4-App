@@ -11,6 +11,7 @@ export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
   isRefreshing: boolean;
   taxes: TaxResponse[];
+  isTaxesLoading: boolean;
 }
 
 /**
@@ -19,7 +20,8 @@ export interface CurrentCompanyState {
 const initialState: CurrentCompanyState = {
   companies: null,
   isRefreshing: false,
-  taxes: null
+  taxes: null,
+  isTaxesLoading: false
 };
 
 export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: Action) => {
@@ -58,14 +60,21 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         });
       }
       return state;
+    case CompanyActions.GET_TAX:
+      return Object.assign({}, state, {
+        isTaxesLoading: true
+      });
     case CompanyActions.GET_TAX_RESPONSE:
       let taxes: BaseResponse<TaxResponse[]> = action.payload;
       if (taxes.status === 'success') {
         return Object.assign({}, state, {
-          taxes: taxes.body
+          taxes: taxes.body,
+          isTaxesLoading: false
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        isTaxesLoading: false
+      });
     default:
       return state;
   }
