@@ -130,7 +130,6 @@ export class AccountService implements OnInit {
       })
       .catch((e) => HandleCatch<string>(e));
   }
-
   public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -145,9 +144,7 @@ export class AccountService implements OnInit {
       })
       .catch((e) => HandleCatch<string>(e));
   }
-
   public AccountUnshare(userEmail: string, accountUniqueName: string): Observable<BaseResponse<string>> {
-    debugger
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
