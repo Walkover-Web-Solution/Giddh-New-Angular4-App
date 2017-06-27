@@ -174,7 +174,8 @@ module.exports = function (env) {
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
-            'HMR': METADATA.HMR
+            'HMR': METADATA.HMR,
+            'isElectron': true,
           }
         }),
 
@@ -203,7 +204,7 @@ module.exports = function (env) {
           // comments: true, //debug
 
 
-          beautify: false, //prod
+          beautify: true, //prod
           output: {
             comments: false
           }, //prod
@@ -215,7 +216,7 @@ module.exports = function (env) {
             warnings: false,
             conditionals: true,
             unused: true,
-            comparisons: true,
+            comparisons: false,
             sequences: true,
             dead_code: true,
             evaluate: true,

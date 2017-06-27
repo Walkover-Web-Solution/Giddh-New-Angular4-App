@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 import { LaddaModule } from 'angular2-ladda';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { NgModule, ApplicationRef } from '@angular/core';
-import { AuthService, AppGlobals } from 'angular2-google-login';
 import {
   removeNgStyles,
   createNewHosts,
@@ -48,8 +47,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' },
-  AuthService
+  { provide: APP_BASE_HREF, useValue: '/' }
 ];
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
