@@ -1,3 +1,4 @@
+import { Select2Component } from '../../../theme/select2/select2.component';
 import { TaxResponse } from './../../../../models/api-models/Company';
 import { CompanyActions } from './../../../../services/actions/company.actions';
 import { GroupListItemResponse } from './../../../../models/api-models/GroupListItem';
@@ -16,6 +17,8 @@ import { Subscription } from 'rxjs/Rx';
 import * as _ from 'lodash';
 import { IOption, SelectModule, SelectComponent } from 'ng-select';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
+import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
+import { AccountResponse } from "../../../../models/api-models/Account";
 
 @Component({
   selector: 'account-operations',
@@ -24,7 +27,7 @@ import { Select2OptionData } from '../../../theme/select2/select2.interface';
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public activeGroupSelected$: Observable<string[]>;
-  @ViewChild('select') public select: SelectComponent;
+  @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
   public subGroupForm: FormGroup;
@@ -93,9 +96,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
         return _.differenceBy(state.company.taxes.map(p => {
           return { text: p.name, id: p.uniqueName };
-        }), state.groupwithaccounts.activeGroup.applicableTaxes.map(p => {
+        }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
           return { text: p.name, id: p.uniqueName };
         }), 'id');
+
       }
       return arr;
     });
@@ -165,6 +169,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     //   this.selectedTax = selectedTax;
     //   // this.taxGroupForm.patchValue({ taxes: selectedTax });
     // }
+    this.activeGroupSelected$.subscribe(() => {
+      if (this.applyTaxSelect2) {
+        this.applyTaxSelect2.cd.detectChanges();
+      }
+    });
   }
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
@@ -266,5 +275,38 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       }
     });
     return result;
+  }
+
+  public applyTax() {
+    let activeAccount: AccountResponse = null;
+    let activeGroup: GroupResponse = null;
+    this.store.take(1).subscribe(s => {
+      if (s.groupwithaccounts) {
+        activeAccount = s.groupwithaccounts.activeAccount;
+        activeGroup = s.groupwithaccounts.activeGroup;
+      }
+    });
+    if (activeAccount) {
+      //
+    } else {
+      debugger;
+      let data: ApplyTaxRequest = new ApplyTaxRequest();
+      data.isAccount = false;
+      data.taxes = [];
+      this.activeGroupTaxHierarchy$.take(1).subscribe((t) => {
+        if (t) {
+          t.inheritedTaxes.forEach(tt => {
+            tt.applicableTaxes.forEach(ttt => {
+              data.taxes.push(ttt.uniqueName);
+            });
+          });
+        }
+      });
+      debugger;
+      data.taxes.push(...this.taxGroupForm.controls['taxes'].value);
+      data.uniqueName = activeGroup.uniqueName;
+      this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
+    }
+
   }
 }

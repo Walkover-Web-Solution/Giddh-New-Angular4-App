@@ -7,6 +7,7 @@ import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.
 import { mockData } from '../../shared/header/components/manage-groups-accounts/mock';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { AccountResponse } from '../../models/api-models/Account';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -22,6 +23,7 @@ export interface CurrentGroupAndAccountState {
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
 
   addAccountOpen: boolean;
+  activeAccount: AccountResponse;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -58,7 +60,8 @@ const initialState: CurrentGroupAndAccountState = {
   activeGroupInProgress: false,
   activeGroupSharedWith: null,
   activeGroupTaxHierarchy: null,
-  addAccountOpen: false
+  addAccountOpen: false,
+  activeAccount: null
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
