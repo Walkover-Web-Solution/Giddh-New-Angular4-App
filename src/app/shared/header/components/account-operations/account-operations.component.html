@@ -194,10 +194,10 @@
           </form>
         </div>
 
-        <div class="row ng-scope" *ngIf="(activeGroupSharedWith$ | async)?.length">
+        <div class="row ng-scope" *ngIf="(activeAccountSharedWith$ | async)?.length">
           <div class="pd2">
             <ul class="list-group ln">
-              <li *ngFor="let val of (activeGroupSharedWith$ | async)" class="list-group-item">
+              <li *ngFor="let val of (activeAccountSharedWith$ | async)" class="list-group-item">
 
                 <div class="form-inline clearfix">
                   <div class="form-group">
@@ -207,7 +207,7 @@
 
                   </div>
                   <span class="delIcon">
-                  <i class="glyphicon glyphicon-trash" (click)="unShareGroup(val.userEmail)"></i>
+                    <i class="glyphicon glyphicon-trash" (click)="unShareAccount(val.userEmail)"></i>
                 </span>
                 </div>
 
