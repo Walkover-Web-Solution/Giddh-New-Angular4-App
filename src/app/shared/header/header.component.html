@@ -160,11 +160,9 @@
                         </li>
                         <li style="padding:0px;">
                             <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
-                                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
-                                  (click)="changeCompany(cmp.uniqueName,$event)">
+                                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName,$event)">
                                     <span tooltip-placement="right">{{ cmp.name }}</span>
-                                    <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
-                                      class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                    <i id="deleteCmp" *ngIf="cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                                 </li>
                             </ul>
                         </li>
@@ -181,7 +179,7 @@
                         <li><a target="_Blank" href="https://docs.giddh.com/">Documentation</a></li>
                         <li><a class="pull-left" href="javascript:void(0)"><span class="pull-left">Switch User</span><span class="on-btn pull-left"></span></a></li>
                         <li role="separator" class="divider" style="width:100%"></li>
-                        <li><a href="javascript:void(0)">Logout</a></li>
+                        <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -191,31 +189,29 @@
 </header>
 
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade" role="dialog" >
-  <div class="modal-dialog modal-lg modal-liq90">
-      <div class="modal-content">
-        <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
-      </div>
+<div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-liq90">
+        <div class="modal-content">
+            <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
+        </div>
     </div>
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog" >
+<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <company-add (closeCompanyModal)="hideAddCompanyModal()"
-        (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
-        </company-add>
-      </div>
+        <div class="modal-content">
+            <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
+            </company-add>
+        </div>
     </div>
 </div>
 
 <!--delete company modal  -->
-<div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog" >
+<div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal()"
-          (successCallBack)="deleteCompany()"></confirm-modal>
-      </div>
+        <div class="modal-content">
+            <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal()" (successCallBack)="deleteCompany()"></confirm-modal>
+        </div>
     </div>
 </div>

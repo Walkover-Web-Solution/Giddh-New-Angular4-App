@@ -105,6 +105,10 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
           user: null
         });
       }
+      case LoginActions.LogOut:
+        return Object.assign({}, state, {
+          user: null
+        });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
       let stateData: BaseResponse<StateDetailsResponse> = action.payload;
       if (stateData.status === 'success') {
