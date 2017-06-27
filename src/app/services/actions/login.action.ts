@@ -21,6 +21,7 @@ export class LoginActions {
   public static VerifyEmailRequest = 'VerifyEmailRequest';
   public static VerifyEmailResponce = 'VerifyEmailResponce';
   public static LoginSuccess = 'LoginSuccess';
+  public static LogOut = 'LoginOut';
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
@@ -68,6 +69,8 @@ export class LoginActions {
      return { type: ''};
     });
 
+
+
   constructor(
     private actions$: Actions,
     private auth: AuthenticationService,
@@ -106,6 +109,12 @@ export class LoginActions {
   public LoginSuccess(): Action {
     return {
       type: LoginActions.LoginSuccess
+    };
+  }
+
+    public LogOut(): Action {
+    return {
+      type: LoginActions.LogOut
     };
   }
 }

@@ -11,6 +11,7 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -49,10 +50,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private loginAction: LoginActions,
     private store: Store<AppState>,
     private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private router: Router
   ) {
     this.user$ = this.store.select(state => {
-      return state.session.user.user;
+      if (state.session.user) {
+        return state.session.user.user;
+      }
     });
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
@@ -76,12 +80,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public ngOnInit() {
     this.store.dispatch(this.loginAction.LoginSuccess());
     this.user$.subscribe((u) => {
-      if (u.name.match(/\s/g)) {
-        let name = u.name;
-        let tmpName = name.split(' ');
-        this.userName = tmpName[0][0] + tmpName[1][0];
-      } else {
-        this.userName = u.name[0] + u.name[1];
+      if (u) {
+        if (u.name.match(/\s/g)) {
+          let name = u.name;
+          let tmpName = name.split(' ');
+          this.userName = tmpName[0][0] + tmpName[1][0];
+        } else {
+          this.userName = u.name[0] + u.name[1];
+        }
       }
     });
 
@@ -143,5 +149,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   public hideDeleteCompanyModal() {
     this.deleteCompanyModal.hide();
+  }
+
+  public logout() {
+    this.store.dispatch(this.loginAction.LogOut());
+    this.router.navigate(['']);
   }
 }
