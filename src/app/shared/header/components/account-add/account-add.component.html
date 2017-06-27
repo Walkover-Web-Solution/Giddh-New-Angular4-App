@@ -1,13 +1,14 @@
 <div>
   <fieldset>
-    <ol class="breadcrumb mrB2" ng-if="showBreadCrumb">
-      <li ng-repeat="(key,value) in breadCrumbList" ng-class="{active:$last}" class="active">
-        <a href="javascript:void(0)" ng-click="jumpToGroup(value.uniqueName, groupList)">Bank Accounts
+    <ol class="breadcrumb mrB2" *ngIf="(activeAccount$ | async)?.parentGroups.length">
+      <li *ngFor="let value of (activeAccount$ | async)?.parentGroups;let i = index"
+      [ngClass]="{'active': i === ((activeAccount$ | async)?.parentGroups.length -1 ) }" >
+      <a href="javascript:void(0)" (click)="jumpToGroup(value.uniqueName)">{{ value.name }}
       </a>
       </li>
     </ol>
 
-    <div class="clearfix">
+    <div class="clearfix" style="display:none">
       <div class="col-xs-12">
         <div class="alert alert-warning" ng-class="['alert-' + (type || 'warning'), closeable ? 'alert-dismissible' : null]"
           role="alert" type="warning" ng-show="cantUpdate">
@@ -21,8 +22,9 @@
     </div>
 
     <div class="clearfix bdrB">
-      <div class="dGryHead ng-binding">Add Account</div>
-      <form class="col-xs-12" name="addAccountForm" [formGroup]="addAccountForm" novalidate (submit)="submit()">
+      <div class="dGryHead ng-binding" *ngIf="!(activeAccount$ | async)">Add Account</div>
+      <div class="dGryHead ng-binding" *ngIf="(activeAccount$ | async)">Update Account</div>
+      <form class="col-xs-12" name="addAccountForm" [formGroup]="addAccountForm" novalidate>
 
         <div class="row pdT2 pdL pdR">
 
@@ -99,8 +101,8 @@
         <!-- end of clearfix -->
         <div class="row pdL pdR">
           <div class="form-group col-xs-12 text-center">
-            <button ng-if="acntCase == 'Add'" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Add
-          </button>
+            <button *ngIf="!(activeAccount$ | async)" type="submit" (click)="submit()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Add</button>
+            <button *ngIf="(activeAccount$ | async)" type="submit" (click)="updateAccount()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Update</button>
           </div>
         </div>
       </form>
