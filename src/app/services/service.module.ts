@@ -27,6 +27,7 @@ import { CompanyService } from './companyService.service';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { LocationService } from './location.service';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
+import { AccountsAction } from './actions/accounts.actions';
 import { AccountService } from './account.service';
 
 /**
@@ -39,7 +40,9 @@ import { AccountService } from './account.service';
     EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions),
     EffectsModule.run(GroupWithAccountsAction),
-    EffectsModule.run(VerifyMobileActions)],
+    EffectsModule.run(VerifyMobileActions),
+    EffectsModule.run(AccountsAction)
+  ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
 export class ServiceModule {
@@ -57,8 +60,8 @@ export class ServiceModule {
         LocationService,
         UserAuthenticated,
         GroupService,
-        ErrorHandler,
-        AccountService
+        AccountService,
+        ErrorHandler
       ]
     };
   }
