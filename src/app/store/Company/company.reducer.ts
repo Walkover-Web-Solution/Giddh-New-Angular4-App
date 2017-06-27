@@ -11,6 +11,7 @@ export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
   isRefreshing: boolean;
   taxes: TaxResponse[];
+  isCompanyCreated: boolean;
   isTaxesLoading: boolean;
 }
 
@@ -21,7 +22,8 @@ const initialState: CurrentCompanyState = {
   companies: null,
   isRefreshing: false,
   taxes: null,
-  isTaxesLoading: false
+  isTaxesLoading: false,
+  isCompanyCreated: false
 };
 
 export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: Action) => {
@@ -30,11 +32,19 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
     case CompanyActions.CREATE_COMPANY:
       let data: BaseResponse<ComapnyResponse> = action.payload;
       if (data.status === 'success') {
-        let newCompanies = Object.assign([], state);
+        let newCompanies = Object.assign([], state, {isCompanyCreated: false});
         newCompanies.companies.push(data.body);
         return newCompanies;
       }
       return state;
+    case CompanyActions.CREATE_COMPANY_RESPONSE:
+      let companyResp: BaseResponse<string> = action.payload;
+        if (companyResp.status === 'success') {
+          return Object.assign({}, state, {
+            isCompanyCreated: true
+          });
+        }
+        return state;
     case 'CATCH_ERROR':
       console.log(action.payload);
       return;

@@ -110,6 +110,12 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.addCompanyModal.hide();
   }
 
+  public hideCompanyModalAndShowAddAndManage() {
+    this.addCompanyModal.hide();
+    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+    this.manageGroupsAccountsModal.show();
+  }
+
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
     e.stopPropagation();

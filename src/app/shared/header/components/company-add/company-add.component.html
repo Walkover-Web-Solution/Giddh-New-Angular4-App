@@ -2,7 +2,7 @@
     <div id="setupWizardModal" ng-controller="setWizardController">
 
         <div class="modal-header themeBg pd2 pdL2 pdR2">
-            <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true" ng-click="promptBeforeClose()" aria-label="Close"></i>
+            <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true" (click)="closeModal()" aria-label="Close"></i>
             <h3 class="modal-title bg">Create New Company</h3>
         </div>
         <!-- end header -->
@@ -68,7 +68,7 @@
                     <wizard-step [title]="'Finish'">
                         <div class="wizard-step text-center">
                             <h1 class="mrT4 mrB2">Click here to manage Groups and Accounts</h1>
-                            <button type="button" class="btn btn-primary btn-sm btn-block mrB1 max350 center-block" ng-click="triggerAddManage();$close()">
+                            <button type="button" class="btn btn-primary btn-sm btn-block mrB1 max350 center-block" (click)="closeModalAndAndShowAddMangeModal()">
                   <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add &amp; Manage Groups and Accounts
                 </button>
                         </div>
