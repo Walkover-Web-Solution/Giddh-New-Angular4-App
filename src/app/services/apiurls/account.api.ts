@@ -8,6 +8,7 @@ export const ACCOUNTS_API = {
   UNMERGE_ACCOUNT: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/un-merge',
   MOVE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/move',
   SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/share',
+  UNSHARE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/unshare',
   SHARED_WITH: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/shared-with',
   FLATTEN_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-accounts?q=:q&refresh=:refresh', // get call
   TAX_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/tax-hierarchy', // get call
