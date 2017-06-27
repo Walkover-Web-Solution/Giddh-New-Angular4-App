@@ -9,6 +9,8 @@ import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
+import { APPLY_TAX_API } from './apiurls/applyTax.api';
+import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
 
 @Injectable()
 export class AccountService implements OnInit {
@@ -98,14 +100,16 @@ export class AccountService implements OnInit {
       .catch((e) => HandleCatch<string>(e));
   }
 
-  public ApplyTax(model: AccountUnMergeRequest, accountUniqueName: string): Observable<BaseResponse<string>> {
+  public ApplyTax(model: ApplyTaxRequest): Observable<BaseResponse<string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.UNMERGE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    let mod = [];
+    mod.push(model);
+    return this._http.post(APPLY_TAX_API.APPLY_TAX.replace(':companyUniqueName', this.companyUniqueName), mod)
       .map((res) => {
         let data: BaseResponse<string> = res.json();
         return data;

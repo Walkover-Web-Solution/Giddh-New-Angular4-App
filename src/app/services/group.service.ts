@@ -74,7 +74,7 @@ export class GroupService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), {user: userEmail}).map((res) => {
+    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), { user: userEmail }).map((res) => {
       let data: BaseResponse<string> = res.json();
       let newResp = new BaseResponse<UnShareGroupResponse>();
       newResp.status = 'success';
