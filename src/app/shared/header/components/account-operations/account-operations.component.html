@@ -179,6 +179,25 @@
     <account-add></account-add>
 
     <div class="clearfix bdrB">
+      <div class="col-xs-6" *ngIf="!(activeGroup$ | async)?.fixed && activeAccount$ | async">
+        <div class="row">
+          <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="pd2 form-inline" [formGroup]="moveAccountForm">
+            <div>
+              <label class="mrR">Move to Group</label>
+            </div>
+
+            <div class="form-group">
+              <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)"
+              [typeahead]="accountList" typeaheadOptionField="name"
+                class="form-control">
+            </div>
+            <div class="form-group">
+              <button class="btn btn-info mrL" [disabled]="!moveAccountForm.valid">Move</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="col-xs-6 bdrL" *ngIf="activeAccount$ | async" (submit)="shareAccount()">
         <div class="row">
           <form name="shareAccountForm" novalidate="" [formGroup]="shareAccountForm" class="form-inline pd2">
@@ -219,7 +238,9 @@
         </div>
 
       </div>
+
     </div>
+
   </div>
 
   <div class="scroll-btn text-center" scroll-btn="" *ngIf="showGroupForm">
