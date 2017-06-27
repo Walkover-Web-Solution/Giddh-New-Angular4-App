@@ -18,7 +18,7 @@ import * as _ from 'lodash';
 import { IOption, SelectModule, SelectComponent } from 'ng-select';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { AccountResponse, ShareAccountRequest } from '../../../../models/api-models/Account';
+import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 
 @Component({
@@ -28,6 +28,7 @@ import { AccountsAction } from '../../../../services/actions/accounts.actions';
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public activeAccount$: Observable<AccountResponse>;
+  public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
@@ -90,6 +91,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     });
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith);
+    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
     this.companyTaxes$ = this.store.select(state => state.company.taxes);
@@ -227,6 +229,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
     this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
+  }
+
+  public async unShareAccount(val) {
+    let activeAcc = await this.activeAccount$.first().toPromise();
+    debugger;
+    this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
 
   public flattenGroup(rawList: any[], parents: any[] = []) {
