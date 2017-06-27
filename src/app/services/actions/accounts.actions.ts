@@ -29,7 +29,7 @@ import {
 } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
-import { ShareAccountRequest, AccountSharedWithResponse } from '../../models/api-models/Account';
+import { ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../models/api-models/Account';
 import { UnShareGroupResponse } from '../../models/api-models/Group';
 
 @Injectable()
@@ -42,6 +42,8 @@ export class AccountsAction {
   public static UNSHARE_ACCOUNT_RESPONSE = 'AccountUnShareResponse';
   public static SHARED_ACCOUNT_WITH = 'AccountSharedWith';
   public static SHARED_ACCOUNT_WITH_RESPONSE = 'AccountSharedWithResponse';
+  public static MOVE_ACCOUNT = 'AccountMove';
+  public static MOVE_ACCOUNT_RESPONSE = 'AccountMoveResponse';
   public static UPDATE_ACCOUNT = 'UpdateAccount';
   public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
   public static GET_ACCOUNT_DETAILS = 'AccountDetails';
@@ -51,7 +53,7 @@ export class AccountsAction {
   @Effect()
   public CreateAccount$: Observable < Action > = this.action$
     .ofType(AccountsAction.CREATE_ACCOUNT)
-    .switchMap(action => this._accountService.CreateAccount(action.payload.accountUniqueName, action.payload.account))
+    .switchMap(action => this._accountService.CreateAccount(action.payload.account, action.payload.accountUniqueName))
     .map(response => {
       return this.createAccountResponse(response);
     });
@@ -190,6 +192,33 @@ export class AccountsAction {
             type: ''
           };
         });
+
+        @Effect()
+        public moveAccount$: Observable<Action> = this.action$
+          .ofType(AccountsAction.MOVE_ACCOUNT)
+          .switchMap(action =>
+            this._accountService.AccountMove(
+              action.payload.body,
+              action.payload.accountUniqueName
+            )
+          )
+          .map(response => {
+            return this.moveAccountResponse(response);
+          });
+        @Effect()
+        public moveAccountResponse$: Observable<Action> = this.action$
+          .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE)
+          .map(action => {
+            if (action.payload.status === 'error') {
+              this._toasty.errorToast(action.payload.message, action.payload.code);
+            } else {
+              this._toasty.successToast('Group moved successfully', '');
+              this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+            }
+            return {
+              type: ''
+            };
+          });
   constructor(
     private action$: Actions,
     private _accountService: AccountService,
@@ -276,6 +305,23 @@ export class AccountsAction {
   ): Action {
     return {
       type: AccountsAction.UNSHARE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public moveAccount(value: AccountMoveRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.MOVE_ACCOUNT,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+  public moveAccountResponse(value: BaseResponse<string>): Action {
+    return {
+      type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
