@@ -1,11 +1,13 @@
 import { AccountRequest } from './../../../../models/api-models/Account';
 import { Observable } from 'rxjs';
 import { GroupResponse } from './../../../../models/api-models/Group';
-import { GroupWithAccountsAction } from './../../../../services/actions/groupwithaccounts.actions';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountResponse } from '../../../../models/api-models/Account';
+import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 
 @Component({
   selector: 'account-add',
@@ -14,8 +16,11 @@ import { Component, OnInit } from '@angular/core';
 export class AccountAddComponent implements OnInit {
   public addAccountForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+  public activeAccount$: Observable<AccountResponse>;
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
+    private groupWithAccountsAction: GroupWithAccountsAction) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
   }
 
   public ngOnInit() {
@@ -31,6 +36,13 @@ export class AccountAddComponent implements OnInit {
       description: ['', [Validators.required]],
       address: ['', [Validators.required]]
     });
+    this.activeAccount$.subscribe(acc => {
+      if (acc) {
+        this.addAccountForm.patchValue(acc);
+      } else {
+        this.addAccountForm.reset();
+      }
+    });
   }
 
   public async submit() {
@@ -38,7 +50,19 @@ export class AccountAddComponent implements OnInit {
 
     let accountObj = new AccountRequest();
     accountObj = this.addAccountForm.value as AccountRequest;
-    this.store.dispatch(this.groupWithAccountsAction.createAccount(activeGroup.uniqueName, accountObj));
+    this.store.dispatch(this.accountsAction.createAccount(activeGroup.uniqueName, accountObj));
     this.addAccountForm.reset();
+  }
+
+  public async updateAccount() {
+    let activeAcc = await this.activeAccount$.first().toPromise();
+    let accountObj = new AccountRequest();
+    accountObj = this.addAccountForm.value as AccountRequest;
+    this.store.dispatch(this.accountsAction.updateAccount(activeAcc.uniqueName, accountObj));
+  }
+
+  public jumpToGroup(uniqueName: string) {
+    this.store.dispatch(this.accountsAction.resetActiveAccount());
+    this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(uniqueName));
   }
 }

@@ -55,6 +55,19 @@ export class AccountService implements OnInit {
       .catch((e) => HandleCatch<AccountResponse>(e));
   }
 
+  public GetAccountDetails(accountUniqueName: string): Observable<BaseResponse<AccountResponse>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+      let data: BaseResponse<AccountResponse> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<AccountResponse>(e));
+  }
+
   public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {

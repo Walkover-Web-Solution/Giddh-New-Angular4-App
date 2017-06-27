@@ -2,7 +2,6 @@ import { Configuration } from '../../app.constant';
 
 export const GROUP_API = {
   CREATE: Configuration.ApiUrl + 'company/:companyUniqueName/groups',
-  CREATE_ACCOUNT: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/accounts',
   UPDATE_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName',
   SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/share',
   UNSHARE: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/unshare',
