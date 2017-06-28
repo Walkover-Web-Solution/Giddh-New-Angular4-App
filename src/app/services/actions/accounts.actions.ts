@@ -29,11 +29,11 @@ export class AccountsAction {
   public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
   public static GET_ACCOUNT_DETAILS = 'AccountDetails';
   public static GET_ACCOUNT_DETAILS_RESPONSE = 'AccountDetailsResponse';
+  public static GET_ACCOUNT_UNIQUENAME = 'AccountUniqueName';
+  public static GET_ACCOUNT_UNIQUENAME_RESPONSE = 'AccountUniqueNameResponse';
   public static RESET_ACTIVE_ACCOUNT = 'AccountReset';
-
   public static GET_ACCOUNT_TAX_HIERARCHY = 'AccountTaxHierarchy';
   public static GET_ACCOUNT_TAX_HIERARCHY_RESPONSE = 'AccountTaxHierarchyResponse';
-
   public static APPLY_GROUP_TAX = 'ApplyAccountTax';
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyAccountTaxResponse';
 
@@ -102,6 +102,26 @@ export class AccountsAction {
       let data: BaseResponse<AccountResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      }
+      return this.sharedAccountWith(data.body.uniqueName);
+    });
+  @Effect()
+  public GetAccountUniqueName$: Observable<Action> = this.action$
+    .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME)
+    .switchMap(action => this._accountService.GetAccountDetails(action.payload))
+    .map(response => {
+      return this.getAccountUniqueNameResponse(response);
+    });
+  @Effect()
+  public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE)
+    .map(action => {
+      let data: BaseResponse<AccountResponse> = action.payload;
+      if (action.payload.status === 'error') {
+        // this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
           type: ''
         };
@@ -306,7 +326,18 @@ export class AccountsAction {
       payload: value
     };
   }
-
+  public getAccountUniqueName(value: string): Action {
+    return {
+      type: AccountsAction.GET_ACCOUNT_UNIQUENAME,
+      payload: value
+    };
+  }
+  public getAccountUniqueNameResponse(value: BaseResponse<AccountResponse>): Action {
+    return {
+      type: AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE,
+      payload: value
+    };
+  }
   public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
     return {
       type: AccountsAction.SHARE_ACCOUNT,
@@ -323,7 +354,6 @@ export class AccountsAction {
       payload: value
     };
   }
-
   public unShareAccount(value: string, accountUniqueName: string): Action {
     return {
       type: AccountsAction.UNSHARE_ACCOUNT,
@@ -340,7 +370,6 @@ export class AccountsAction {
       payload: value
     };
   }
-
   public moveAccount(value: AccountMoveRequest, accountUniqueName: string): Action {
     return {
       type: AccountsAction.MOVE_ACCOUNT,
@@ -357,7 +386,6 @@ export class AccountsAction {
       payload: value
     };
   }
-
   public sharedAccountWith(accountUniqueName: string): Action {
     return {
       type: AccountsAction.SHARED_ACCOUNT_WITH,
@@ -370,13 +398,11 @@ export class AccountsAction {
       payload: value
     };
   }
-
   public resetActiveAccount(): Action {
     return {
       type: AccountsAction.RESET_ACTIVE_ACCOUNT
     };
   }
-
   public getTaxHierarchy(value: string): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_TAX_HIERARCHY,

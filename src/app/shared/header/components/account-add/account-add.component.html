@@ -34,7 +34,7 @@
 
               <div class="form-group">
                 <input type="text" placeholder="Enter Account name" class="form-control" name="name" formControlName="name" required="" ng-disabled="isFixedAcc"
-                  autocomplete="off" ng-change="autoFillUnq(selectedAccount.name)" ng-model-options="{debounce:1000}">
+                autocomplete="off" (change)="generateUniqueName()">
               </div>
               <div class="form-group">
                 <input type="text" placeholder="Unique Names" class="form-control " name="uniqueName" valid-unique="" formControlName="uniqueName"
@@ -48,12 +48,12 @@
               <div class="row">
                 <div class="col-xs-6">
                   <select class="form-control" name="openingBalanceType" formControlName="openingBalanceType">
-                  <option value="" class="" selected="selected">--Please select--</option>
+                    <option [selected]="true">--Please select--</option>
                   <option value="CREDIT" label="Credit">Credit</option>
                   <option value="DEBIT" label="Debit">Debit</option></select>
                 </div>
                 <div class="col-xs-6">
-                  <input type="text" class="form-control" name="openingBalance" formControlName="openingBalance" valid-number="">
+                  <input type="text" class="form-control" name="openingBalance" formControlName="openingBalance">
                 </div>
               </div>
 

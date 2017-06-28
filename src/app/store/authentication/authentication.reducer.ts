@@ -4,6 +4,7 @@ import { Action, ActionReducer } from '@ngrx/store';
 import { VerifyEmailModel, UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import * as _ from 'lodash';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -128,9 +129,9 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
       return state;
     case CompanyActions.SET_CONTACT_NO:
-      return Object.assign({}, state, {
-        user: { user: { contactNo: action.payload } }
-      });
+      let newState = _.cloneDeep(state);
+      newState.user.user.contactNo = action.payload;
+      return newState;
     default:
       return state;
   }

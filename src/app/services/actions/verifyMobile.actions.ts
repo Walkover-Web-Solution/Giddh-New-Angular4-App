@@ -17,6 +17,7 @@ export class VerifyMobileActions {
 
   public static VERIFY_MOBILE_REQUEST = 'VERIFY_MOBILE_REQUEST';
   public static SHOW_VERIFICATION_BOX = 'SHOW_VERIFICATION_BOX';
+  public static SET_VERIFIACATION_MOBILENO = 'SER_VARIFICATION_MOBILENO';
   public static VERIFY_MOBILE_CODE_REQUEST = 'VERIFY_MOBILE_CODE_REQUEST';
   public static VERIFY_MOBILE_CODE_RESPONSE = 'VERIFY_MOBILE_CODE_RESPONSE';
 
@@ -25,9 +26,11 @@ export class VerifyMobileActions {
     .switchMap(action => this._authService.VerifyNumber(action.payload))
     .map(response => {
       if (response.status === 'success') {
-        this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, true);
+        this.store.dispatch(this.action(VerifyMobileActions.SET_VERIFIACATION_MOBILENO, response.request.mobileNumber));
+        this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, true));
       } else {
         this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, false));
+        this._toasty.errorToast(response.message, response.code);
       }
       return { type: '' };
     });
@@ -39,11 +42,12 @@ export class VerifyMobileActions {
         this._toasty.successToast(response.body);
         let no: string = null;
         this.store
-          .select(x => x.verifyMobile.phoneNumber)
           .take(1)
-          .subscribe(p => no = p);
+          .subscribe(p => {
+            no = p.verifyMobile.phoneNumber;
+          });
         this.store.dispatch(this.companyActions.SetContactNumber(no));
-        this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_RESPONSE, response);
+        this.store.dispatch(this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_RESPONSE, response));
       } else {
         this._toasty.errorToast(response.message, response.code);
       }
