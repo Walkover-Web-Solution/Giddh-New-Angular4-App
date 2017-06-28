@@ -21,19 +21,17 @@ export class LoginActions {
   public static VerifyEmailRequest = 'VerifyEmailRequest';
   public static VerifyEmailResponce = 'VerifyEmailResponce';
   public static LoginSuccess = 'LoginSuccess';
+  public static LogOut = 'LoginOut';
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailRequest)
-    .debug('action received')
     .switchMap(action => this.auth.SignupWithEmail(action.payload))
-    .debug('data received via the HTTP request')
     .map(response => this.SignupWithEmailResponce(response));
 
   @Effect()
   public signupWithEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailResponce)
-    .debug('action received')
     .map(action => {
       if (action.payload.status === 'success') {
         this._toaster.successToast(action.payload.body);
@@ -46,21 +44,18 @@ export class LoginActions {
   @Effect()
   public verifyEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailRequest)
-    .debug('action received')
     .switchMap(action =>
       this.auth.VerifyEmail(action.payload as VerifyEmailModel)
     )
-    .debug('data received via the HTTP request')
     .map(response => this.VerifyEmailResponce(response));
 
   @Effect()
   public verifyEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailResponce)
-    .debug('action received')
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: '' };
       }
       return this.LoginSuccess();
     });
@@ -68,11 +63,10 @@ export class LoginActions {
   @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
-    .debug('action received')
     .map(action => {
-     this.store.dispatch(this.comapnyActions.GetStateDetails());
-     this.store.dispatch(this.comapnyActions.RefreshCompanies());
-     return { type: ''};
+      this.store.dispatch(this.comapnyActions.GetStateDetails());
+      this.store.dispatch(this.comapnyActions.RefreshCompanies());
+      return { type: '' };
     });
 
   constructor(
@@ -81,15 +75,15 @@ export class LoginActions {
     public _toaster: ToasterService,
     private store: Store<AppState>,
     private comapnyActions: CompanyActions
-  ) {}
+  ) { }
 
-  public SignupWithEmailRequest(value: any): Action {
+  public SignupWithEmailRequest(value: string): Action {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value
     };
   }
-  public SignupWithEmailResponce(value: any): Action {
+  public SignupWithEmailResponce(value: BaseResponse<string, string>): Action {
     return {
       type: LoginActions.SignupWithEmailResponce,
       payload: value
@@ -102,9 +96,7 @@ export class LoginActions {
       payload: value
     };
   }
-  public VerifyEmailResponce(
-    value: BaseResponse<VerifyEmailResponseModel>
-  ): Action {
+  public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): Action {
     return {
       type: LoginActions.VerifyEmailResponce,
       payload: value
@@ -113,6 +105,12 @@ export class LoginActions {
   public LoginSuccess(): Action {
     return {
       type: LoginActions.LoginSuccess
+    };
+  }
+
+  public LogOut(): Action {
+    return {
+      type: LoginActions.LogOut
     };
   }
 }
