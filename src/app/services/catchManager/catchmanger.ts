@@ -8,8 +8,8 @@ import { Observable } from 'rxjs/Observable';
 export class ErrorHandler {
   constructor(private _toaster: ToasterService) { }
 
-  public handle<T>(e: any) {
-  let response: BaseResponse<T> = new BaseResponse<T>();
+  public handle<TResponce, TRequest>(e: any) {
+    let response: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
     if (e.status === 0) {
       response = {
         body: null,
@@ -25,8 +25,8 @@ export class ErrorHandler {
     // return new Observable<BaseResponse<T>>((o) => { o.next(response); });
   }
 }
-export function HandleCatch<T>(r: any): Observable<BaseResponse<T>> {
-  let data: BaseResponse<T> = new BaseResponse<T>();
+export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
+  let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
   if (r.status === 0) {
     data = {
       body: null,
@@ -34,8 +34,12 @@ export function HandleCatch<T>(r: any): Observable<BaseResponse<T>> {
       message: 'something went wrong',
       status: 'error'
     };
+    data.request = request;
+    data.queryString = queryString;
   } else {
     data = r.json();
+    data.request = request;
+    data.queryString = queryString;
   }
-  return new Observable<BaseResponse<T>>((o) => { o.next(data); });
+  return new Observable<BaseResponse<TResponce, TRequest>>((o) => { o.next(data); });
 }
