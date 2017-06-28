@@ -36,7 +36,7 @@ export class CompanyAddComponent implements OnInit {
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox);
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
-         return s.session.user.user.contactNo !== null;
+        return s.session.user.user.contactNo !== null;
       }
     });
     this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated);
@@ -47,7 +47,7 @@ export class CompanyAddComponent implements OnInit {
           AdministratorLevel: undefined,
           Country: undefined,
           OnlyCity: true
-        }).subscribe((res) => observer.next(['Test']));
+        }).subscribe((res) => observer.next(res));
       });
 
     this.isMobileVerified.subscribe(p => {
