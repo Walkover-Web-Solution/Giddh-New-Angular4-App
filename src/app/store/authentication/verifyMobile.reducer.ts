@@ -27,6 +27,10 @@ const initialState = {
 export const VerifyMobileReducer: ActionReducer<VerifyMobileState> = (state: VerifyMobileState = initialState, action: Action) => {
 
   switch (action.type) {
+    case VerifyMobileActions.SET_VERIFIACATION_MOBILENO:
+      return Object.assign({}, state, {
+        phoneNumber: action.payload
+      });
     case VerifyMobileActions.SHOW_VERIFICATION_BOX:
       return Object.assign({}, state, {
         showVerificationBox: action.payload

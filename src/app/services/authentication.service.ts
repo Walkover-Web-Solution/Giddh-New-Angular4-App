@@ -50,9 +50,10 @@ export class AuthenticationService {
     }).catch((e) => HandleCatch<VerifyEmailResponseModel>(e));
   }
 
-  public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string>> {
+  public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
     return this._http.post(LOGIN_API.VerifyNumber, modele).map((res) => {
-      let data: BaseResponse<string> = res.json();
+      let data: BaseResponse<string, SignupWithMobile> = res.json();
+      data.request = modele;
       return data;
     }).catch((e) => HandleCatch<string>(e));
   }
