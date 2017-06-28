@@ -59,9 +59,11 @@ export class GroupWithAccountsAction {
   public static SHOW_ADD_ACCOUNT_FORM = 'GroupShowAddAccountForm';
   public static HIDE_ADD_ACCOUNT_FORM = 'GroupHideAddAccountForm';
   public static RESET_GROUPS_STATE = 'GroupResetState';
-
   public static APPLY_GROUP_TAX = 'ApplyGroupTax';
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyGroupTaxResponse';
+
+  public static DELETE_GROUP = 'GroupDelete';
+  public static DELETE_GROUP_RESPONSE = 'GroupDeleteResponse';
 
   @Effect()
   public ApplyGroupTax$: Observable<Action> = this.action$
@@ -342,6 +344,28 @@ export class GroupWithAccountsAction {
       return this.getGroupWithAccounts('');
     });
 
+    @Effect()
+    public DeleteGroup$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.DELETE_GROUP)
+    .switchMap(action => this._groupService.DeleteGroup(action.payload))
+    .map(response => {
+      return this.deleteGroupResponse(response);
+    });
+
+  @Effect()
+  public DeleteGroupResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.DELETE_GROUP_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+        return this.getGroupWithAccounts('');
+      }
+    });
   constructor(
     private action$: Actions,
     private _groupService: GroupService,
@@ -546,6 +570,19 @@ export class GroupWithAccountsAction {
   public applyGroupTaxResponse(value: BaseResponse<string>): Action {
     return {
       type: GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE,
+      payload: value
+    };
+  }
+
+  public deleteGroup(value: string): Action {
+    return {
+      type: GroupWithAccountsAction.DELETE_GROUP,
+      payload: value
+    };
+  }
+  public deleteGroupResponse(value: BaseResponse<string>): Action {
+    return {
+      type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE,
       payload: value
     };
   }

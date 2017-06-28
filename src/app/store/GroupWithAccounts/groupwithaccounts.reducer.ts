@@ -9,6 +9,7 @@ import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -284,6 +285,12 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
     } else {
       return Object.assign({}, state, { fetchingUniqueName: false, isAccountNameAvailable: true});
     }
+    case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
+      let deleteAction: BaseResponse<string> = action.payload;
+      if (deleteAction.status === 'success') {
+        return Object.assign({}, state, { activeGroup: null });
+      }
+      return state;
     default:
       return state;
   }

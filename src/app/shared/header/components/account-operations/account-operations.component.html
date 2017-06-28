@@ -169,13 +169,13 @@
       </div>
 
       <div class="pd2" *ngIf="!(activeGroup$ | async)?.fixed">
-        <button class="btn btn-danger ng-binding" ng-click="deleteGroup()">Delete Current Assets group</button>
+        <button class="btn btn-danger ng-binding" (click)="showDeleteCompanyModal()">Delete {{ (activeGroup$ | async)?.name }} group</button>
       </div>
 
     </div>
 
   </div>
-
+  <!--add aacount form  -->
   <div *ngIf="showAddAccountForm$ | async">
     <account-add></account-add>
     <div class="clearfix" *ngIf="isTaxableAccount$ | async">
@@ -319,4 +319,16 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!--delete Group modal  -->
+  <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <confirm-modal [title]="'Delete Company'"
+              [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
+              (cancelCallBack)="hideDeleteCompanyModal()" (successCallBack)="deleteGroup()">
+            </confirm-modal>
+          </div>
+      </div>
   </div>
