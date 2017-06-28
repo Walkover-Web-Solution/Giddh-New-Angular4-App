@@ -1,13 +1,14 @@
+import { GroupUpateRequest, GroupCreateRequest } from '../../models/api-models/Group';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { GroupWithAccountsAction } from './../../services/actions/groupwithaccounts.actions';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
-import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, UnShareGroupResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
+import { AccountRequest, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -80,7 +81,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       });
 
     case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE:
-      let data: BaseResponse<GroupsWithAccountsResponse[]> = action.payload;
+      let data: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
       if (data.status === 'success') {
         let newData = prepare(data.body);
         return Object.assign({}, state, {
@@ -95,7 +96,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       });
 
     case GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE:
-      let grpData: BaseResponse<GroupResponse> = action.payload;
+      let grpData: BaseResponse<GroupResponse, string> = action.payload;
       if (grpData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         groupArray.forEach(grp => {
@@ -122,7 +123,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         isRefreshingFlattenGroupsAccounts: true
       });
     case GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE:
-      let data1: BaseResponse<FlattenGroupsAccountsResponse> = action.payload;
+      let data1: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
       if (data1.status === 'success') {
         let newData = prepareFlattenGroupsAccounts(data1.body.results);
         return Object.assign({}, state, {
@@ -132,7 +133,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
-      let gData: BaseResponse<GroupResponse> = action.payload;
+      let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
       if (gData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         groupArray.forEach(grp => {
@@ -162,7 +163,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       return state;
 
     case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
-      let sharedData: BaseResponse<GroupSharedWithResponse[]> = action.payload;
+      let sharedData: BaseResponse<GroupSharedWithResponse[], string> = action.payload;
       if (sharedData.status === 'success') {
         return Object.assign({}, state, {
           activeGroupSharedWith: sharedData.body
@@ -170,7 +171,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE:
-      let sharedAccountData: BaseResponse<AccountSharedWithResponse[]> = action.payload;
+      let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
       if (sharedAccountData.status === 'success') {
         return Object.assign({}, state, {
           activeAccountSharedWith: sharedAccountData.body
@@ -178,9 +179,9 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE:
-      let unSharedData: BaseResponse<UnShareGroupResponse> = action.payload;
+      let unSharedData: BaseResponse<string, string> = action.payload;
       if (unSharedData.status === 'success') {
-        let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.body.user !== ac.userEmail);
+        let myGroupSharedWith = _.cloneDeep(state.activeGroupSharedWith).filter(ac => unSharedData.request !== ac.userEmail);
         return Object.assign({}, state, {
           activeGroupSharedWith: myGroupSharedWith
         });
@@ -203,7 +204,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         activeGroupTaxHierarchy: null
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE:
-      let taxHierarchyData: BaseResponse<GroupsTaxHierarchyResponse> = action.payload;
+      let taxHierarchyData: BaseResponse<GroupsTaxHierarchyResponse, string> = action.payload;
       if (taxHierarchyData.status === 'success') {
         return Object.assign({}, state, {
           activeGroupTaxHierarchy: taxHierarchyData.body
@@ -215,7 +216,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         activeAccountTaxHierarchy: null
       });
     case AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE:
-      let accountTaxHierarchyData: BaseResponse<AccountsTaxHierarchyResponse> = action.payload;
+      let accountTaxHierarchyData: BaseResponse<AccountsTaxHierarchyResponse, string> = action.payload;
       if (accountTaxHierarchyData.status === 'success') {
         return Object.assign({}, state, {
           activeAccountTaxHierarchy: accountTaxHierarchyData.body
@@ -233,7 +234,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         activeAccount: null
       });
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE:
-      let activeGrpData: BaseResponse<GroupResponse> = action.payload;
+      let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
       if (activeGrpData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         groupArray.forEach(grp => {
@@ -254,7 +255,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE:
-      let activeAccount: BaseResponse<AccountResponse> = action.payload;
+      let activeAccount: BaseResponse<AccountResponse, string> = action.payload;
       if (activeAccount.status === 'success') {
         return Object.assign({}, state, {
           activeAccount: action.payload.body,
@@ -263,7 +264,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
-      let updatedAccount: BaseResponse<AccountResponse> = action.payload;
+      let updatedAccount: BaseResponse<AccountResponse, AccountRequest> = action.payload;
       if (updatedAccount.status === 'success') {
         return Object.assign({}, state, {
           activeAccount: action.payload.body,
@@ -299,7 +300,7 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): 
   return myChildElementIsOpen;
 };
 
-const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse>): boolean => {
+const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>): boolean => {
   let myChildElementIsOpen = false;
   for (let grp of groups) {
     if (grp.isActive) {
