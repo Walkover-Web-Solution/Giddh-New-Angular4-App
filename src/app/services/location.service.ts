@@ -10,6 +10,7 @@ import { Domain } from '../models/domain';
 import { Store } from '@ngrx/store';
 import { Http } from '@angular/http';
 import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
+import * as _ from 'lodash';
 
 @Injectable()
 export class LocationService {
@@ -21,6 +22,7 @@ export class LocationService {
   }
 
   public GetCity(location: GeoLocationSearch) {
+    debugger
     let query = ``;
     if (location.Country !== undefined) {
       query += `address=${location.QueryString}&components=country:${location.Country}|administrative_area:${location.QueryString}`;
@@ -34,10 +36,18 @@ export class LocationService {
     return this._http.get(this.GoogleApiURL + query)
       .map((res) => {
         let r = res.json();
+        let data = r.results.map((a) => {
+          return a.address_components.map((p) => {
+            if (_.some(p.types, (q) => q === 'locality')) {
+              return p.long_name;
+            }
+            return '';
+          });
+        });
+        data = _.flatten(data).filter(p => p !== '');
         console.log(r);
-        return r;
-      }
-      )
-      .catch((e) => Observable.throw(e));
+        return data;
+      })
+      .catch((e) => e);
   }
 }
