@@ -33,6 +33,7 @@ import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 @Injectable()
 export class GroupWithAccountsAction {
   public static SET_ACTIVE_GROUP = 'SetActiveGroup';
+  public static RESET_ACTIVE_GROUP = 'ResetActiveGroup';
   public static GET_GROUP_WITH_ACCOUNTS = 'GroupWithAccounts';
   public static GET_GROUP_WITH_ACCOUNTS_RESPONSE = 'GroupWithAccountsResponse';
   public static SET_GROUP_ACCOUNTS_SEARCH_STRING = 'GroupAccountsSearchString';
@@ -378,6 +379,12 @@ export class GroupWithAccountsAction {
     return {
       type: GroupWithAccountsAction.SET_ACTIVE_GROUP,
       payload: uniqueName
+    };
+  }
+
+  public ResetActiveGroup(): Action {
+    return {
+      type: GroupWithAccountsAction.RESET_ACTIVE_GROUP,
     };
   }
 

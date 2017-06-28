@@ -204,6 +204,21 @@ export class AccountService implements OnInit {
       })
       .catch((e) => HandleCatch<AccountSharedWithResponse[], string>(e));
   }
+  public DeleteAccount(accountUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(ACCOUNTS_API.DELETE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+      let data: BaseResponse<string, string> = res.json();
+      data.request = accountUniqueName;
+      data.queryString = { accountUniqueName };
+      return data;
+    }).catch((e) => HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName }));
+  }
+
   public GetFlattenAccounts(q: string, refresh: string): Observable<BaseResponse<FlattenAccountsResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {

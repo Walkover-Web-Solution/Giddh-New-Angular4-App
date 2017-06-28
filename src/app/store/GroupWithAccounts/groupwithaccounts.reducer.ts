@@ -28,7 +28,7 @@ export interface CurrentGroupAndAccountState {
   addAccountOpen: boolean;
   activeAccount: AccountResponse;
   fetchingUniqueName: boolean;
-  isAccountNameAvailable: boolean;
+  isAccountNameAvailable?: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -68,8 +68,7 @@ const initialState: CurrentGroupAndAccountState = {
   activeGroupTaxHierarchy: null,
   addAccountOpen: false,
   activeAccount: null,
-  fetchingUniqueName: false,
-  isAccountNameAvailable: false
+  fetchingUniqueName: false
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
@@ -277,20 +276,17 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
     case AccountsAction.RESET_ACTIVE_ACCOUNT:
       return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME:
-      return Object.assign({}, state, { fetchingUniqueName: true });
+    return Object.assign({}, state, { fetchingUniqueName: true, isAccountNameAvailable: null });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE:
       let responseData: BaseResponse<AccountResponse, string> = action.payload;
       if (responseData.status === 'success') {
         return Object.assign({}, state, { fetchingUniqueName: false, isAccountNameAvailable: false });
       } else {
-        return Object.assign({}, state, { fetchingUniqueName: false, isAccountNameAvailable: true });
+        if (responseData.code === 'ACCOUNT_NOT_FOUND') {
+          return Object.assign({}, state, { fetchingUniqueName: false, isAccountNameAvailable: true });
+        }
+        return state;
       }
-    case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
-      let deleteAction: BaseResponse<string, string> = action.payload;
-      if (deleteAction.status === 'success') {
-        return Object.assign({}, state, { activeGroup: null });
-      }
-      return state;
     default:
       return state;
   }

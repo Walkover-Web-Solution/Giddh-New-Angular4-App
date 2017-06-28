@@ -54,12 +54,14 @@ export class AccountAddComponent implements OnInit {
     val = val.replace(/ |,|\//g, '').toLocaleLowerCase();
     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
-    this.isAccountNameAvailable$.take(1).subscribe(a => {
-      if (a) {
-        this.addAccountForm.patchValue({ uniqueName: val });
-      } else {
-        let num = 1;
-        this.addAccountForm.patchValue({ uniqueName: val + num });
+    this.isAccountNameAvailable$.subscribe(a => {
+      if (a !== null && a !== undefined) {
+        if (a) {
+          this.addAccountForm.patchValue({ uniqueName: val });
+        } else {
+          let num = 1;
+          this.addAccountForm.patchValue({ uniqueName: val + num });
+        }
       }
     });
   }
