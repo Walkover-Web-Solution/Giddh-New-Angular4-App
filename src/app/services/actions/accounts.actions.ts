@@ -12,7 +12,6 @@ import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../models/api-models/Account';
-import { UnShareGroupResponse } from '../../models/api-models/Group';
 
 @Injectable()
 export class AccountsAction {
@@ -50,7 +49,7 @@ export class AccountsAction {
   public ApplyAccountTaxResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE)
     .map(action => {
-      let data: BaseResponse<string> = action.payload;
+      let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
@@ -100,7 +99,7 @@ export class AccountsAction {
   public GetAccountDetailsResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE)
     .map(action => {
-      let data: BaseResponse<AccountResponse> = action.payload;
+      let data: BaseResponse<AccountResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
@@ -151,109 +150,109 @@ export class AccountsAction {
       };
     });
 
-    @Effect()
-    public shareAccount$: Observable<Action> = this.action$
-      .ofType(AccountsAction.SHARE_ACCOUNT)
-      .switchMap(action =>
-        this._accountService.AccountShare(
-          action.payload.body,
-          action.payload.accountUniqueName
-        )
+  @Effect()
+  public shareAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountShare(
+        action.payload.body,
+        action.payload.accountUniqueName
       )
-      .map(response => {
-        return this.shareAccountResponse(response);
-      });
-    @Effect()
-    public shareAccountResponse$: Observable<Action> = this.action$
-      .ofType(AccountsAction.SHARE_ACCOUNT_RESPONSE)
-      .map(action => {
-        if (action.payload.status === 'error') {
-          this._toasty.errorToast(action.payload.message, action.payload.code);
-        } else {
-          this._toasty.successToast(action.payload.body, '');
-        }
+    )
+    .map(response => {
+      return this.shareAccountResponse(response);
+    });
+  @Effect()
+  public shareAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
+  public unShareAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UNSHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountUnshare(
+        action.payload.user,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.unShareAccountResponse(response);
+    });
+
+  @Effect()
+  public unShareAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
           type: ''
         };
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+      }
+      let accountUniqueName = null;
+      this.store.take(1).subscribe(s => {
+        accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
       });
+      return this.sharedAccountWith(accountUniqueName);
+    });
 
-      @Effect()
-      public unShareAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UNSHARE_ACCOUNT)
-        .switchMap(action =>
-          this._accountService.AccountUnshare(
-            action.payload.user,
-            action.payload.accountUniqueName
-          )
-        )
-        .map(response => {
-          return this.unShareAccountResponse(response);
-        });
+  @Effect()
+  public sharedAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARED_ACCOUNT_WITH)
+    .switchMap(action => this._accountService.AccountShareWith(action.payload))
+    .map(response => {
+      return this.sharedAccountWithResponse(response);
+    });
+  @Effect()
+  public sharedAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return {
+        type: ''
+      };
+    });
 
-      @Effect()
-      public unShareAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE)
-        .map(action => {
-          if (action.payload.status === 'error') {
-            this._toasty.errorToast(action.payload.message, action.payload.code);
-            return {
-              type: ''
-            };
-          } else {
-            this._toasty.successToast(action.payload.body, '');
-          }
-          let accountUniqueName = null;
-          this.store.take(1).subscribe(s => {
-            accountUniqueName = s.groupwithaccounts.activeAccount.uniqueName;
-          });
-          return this.sharedAccountWith(accountUniqueName);
-        });
-
-      @Effect()
-      public sharedAccount$: Observable<Action> = this.action$
-        .ofType(AccountsAction.SHARED_ACCOUNT_WITH)
-        .switchMap(action => this._accountService.AccountShareWith(action.payload))
-        .map(response => {
-          return this.sharedAccountWithResponse(response);
-        });
-      @Effect()
-      public sharedAccountResponse$: Observable<Action> = this.action$
-        .ofType(AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE)
-        .map(action => {
-          if (action.payload.status === 'error') {
-            this._toasty.errorToast(action.payload.message, action.payload.code);
-          }
-          return {
-            type: ''
-          };
-        });
-
-        @Effect()
-        public moveAccount$: Observable<Action> = this.action$
-          .ofType(AccountsAction.MOVE_ACCOUNT)
-          .switchMap(action =>
-            this._accountService.AccountMove(
-              action.payload.body,
-              action.payload.accountUniqueName
-            )
-          )
-          .map(response => {
-            return this.moveAccountResponse(response);
-          });
-        @Effect()
-        public moveAccountResponse$: Observable<Action> = this.action$
-          .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE)
-          .map(action => {
-            if (action.payload.status === 'error') {
-              this._toasty.errorToast(action.payload.message, action.payload.code);
-            } else {
-              this._toasty.successToast('Group moved successfully', '');
-              this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-            }
-            return {
-              type: ''
-            };
-          });
+  @Effect()
+  public moveAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.MOVE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountMove(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.moveAccountResponse(response);
+    });
+  @Effect()
+  public moveAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.MOVE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast('Group moved successfully', '');
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+      }
+      return {
+        type: ''
+      };
+    });
   constructor(
     private action$: Actions,
     private _accountService: AccountService,
@@ -273,7 +272,7 @@ export class AccountsAction {
         })
     };
   }
-  public createAccountResponse(value: BaseResponse<AccountResponse>): Action {
+  public createAccountResponse(value: BaseResponse<AccountResponse, AccountRequest>): Action {
     return {
       type: AccountsAction.CREATE_ACCOUNT_RESPONSE,
       payload: value
@@ -289,7 +288,7 @@ export class AccountsAction {
         })
     };
   }
-  public updateAccountResponse(value: BaseResponse<AccountResponse>): Action {
+  public updateAccountResponse(value: BaseResponse<AccountResponse, AccountRequest>): Action {
     return {
       type: AccountsAction.UPDATE_ACCOUNT_RESPONSE,
       payload: value
@@ -301,7 +300,7 @@ export class AccountsAction {
       payload: value
     };
   }
-  public getAccountDetailsResponse(value: BaseResponse<AccountResponse>): Action {
+  public getAccountDetailsResponse(value: BaseResponse<AccountResponse, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value
@@ -318,7 +317,7 @@ export class AccountsAction {
         })
     };
   }
-  public shareAccountResponse(value: BaseResponse<string>): Action {
+  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
     return {
       type: AccountsAction.SHARE_ACCOUNT_RESPONSE,
       payload: value
@@ -335,9 +334,7 @@ export class AccountsAction {
         })
     };
   }
-  public unShareAccountResponse(
-    value: BaseResponse<string>
-  ): Action {
+  public unShareAccountResponse(value: BaseResponse<string, string>): Action {
     return {
       type: AccountsAction.UNSHARE_ACCOUNT_RESPONSE,
       payload: value
@@ -354,7 +351,7 @@ export class AccountsAction {
         })
     };
   }
-  public moveAccountResponse(value: BaseResponse<string>): Action {
+  public moveAccountResponse(value: BaseResponse<string, AccountMoveRequest>): Action {
     return {
       type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
       payload: value
@@ -367,9 +364,7 @@ export class AccountsAction {
       payload: accountUniqueName
     };
   }
-  public sharedAccountWithResponse(
-    value: BaseResponse<AccountSharedWithResponse[]>
-  ): Action {
+  public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): Action {
     return {
       type: AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE,
       payload: value
@@ -388,7 +383,7 @@ export class AccountsAction {
       payload: value
     };
   }
-  public getTaxHierarchyResponse(value: BaseResponse<AccountsTaxHierarchyResponse>): Action {
+  public getTaxHierarchyResponse(value: BaseResponse<AccountsTaxHierarchyResponse, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE,
       payload: value
@@ -400,7 +395,7 @@ export class AccountsAction {
       payload: value
     };
   }
-  public applyAccountTaxResponse(value: BaseResponse<string>): Action {
+  public applyAccountTaxResponse(value: BaseResponse<string, ApplyTaxRequest>): Action {
     return {
       type: AccountsAction.APPLY_GROUP_TAX_RESPONSE,
       payload: value

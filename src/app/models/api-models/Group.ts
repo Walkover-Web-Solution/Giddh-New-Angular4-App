@@ -124,10 +124,6 @@ export class UnShareGroupRequest {
   public user: string;
 }
 
-export class UnShareGroupResponse {
-  public user: string;
-  public toastMessage: string;
-}
 /*
  * Model for tax-hierarchy api response
  * GET call

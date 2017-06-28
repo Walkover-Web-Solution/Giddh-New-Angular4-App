@@ -55,7 +55,7 @@ export class LoginActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: '' };
       }
       return this.LoginSuccess();
     });
@@ -64,12 +64,10 @@ export class LoginActions {
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
     .map(action => {
-     this.store.dispatch(this.comapnyActions.GetStateDetails());
-     this.store.dispatch(this.comapnyActions.RefreshCompanies());
-     return { type: ''};
+      this.store.dispatch(this.comapnyActions.GetStateDetails());
+      this.store.dispatch(this.comapnyActions.RefreshCompanies());
+      return { type: '' };
     });
-
-
 
   constructor(
     private actions$: Actions,
@@ -77,15 +75,15 @@ export class LoginActions {
     public _toaster: ToasterService,
     private store: Store<AppState>,
     private comapnyActions: CompanyActions
-  ) {}
+  ) { }
 
-  public SignupWithEmailRequest(value: any): Action {
+  public SignupWithEmailRequest(value: string): Action {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value
     };
   }
-  public SignupWithEmailResponce(value: any): Action {
+  public SignupWithEmailResponce(value: BaseResponse<string, string>): Action {
     return {
       type: LoginActions.SignupWithEmailResponce,
       payload: value
@@ -98,9 +96,7 @@ export class LoginActions {
       payload: value
     };
   }
-  public VerifyEmailResponce(
-    value: BaseResponse<VerifyEmailResponseModel>
-  ): Action {
+  public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): Action {
     return {
       type: LoginActions.VerifyEmailResponce,
       payload: value
@@ -112,7 +108,7 @@ export class LoginActions {
     };
   }
 
-    public LogOut(): Action {
+  public LogOut(): Action {
     return {
       type: LoginActions.LogOut
     };
