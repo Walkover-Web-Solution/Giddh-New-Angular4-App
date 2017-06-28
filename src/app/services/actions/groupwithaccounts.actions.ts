@@ -343,8 +343,8 @@ export class GroupWithAccountsAction {
       return this.getGroupWithAccounts('');
     });
 
-    @Effect()
-    public DeleteGroup$: Observable<Action> = this.action$
+  @Effect()
+  public DeleteGroup$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.DELETE_GROUP)
     .switchMap(action => this._groupService.DeleteGroup(action.payload))
     .map(response => {
@@ -569,7 +569,7 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
-  public deleteGroupResponse(value: BaseResponse<string>): Action {
+  public deleteGroupResponse(value: BaseResponse<string, string>): Action {
     return {
       type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE,
       payload: value
