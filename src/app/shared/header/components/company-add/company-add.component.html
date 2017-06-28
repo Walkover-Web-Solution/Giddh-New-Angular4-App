@@ -22,7 +22,7 @@
       <hr>
       <div class="wizard-container">
         <form-wizard #wizard>
-          <wizard-step *ngIf="!(isMobileVerified | async)" [title]="'Add Mobile Number'">
+          <wizard-step [isActive]="!(isMobileVerified | async)" *ngIf="!(isMobileVerified | async)" [title]="'Add Mobile Number'">
             <div class="wizard-step">
               <div class=" clearfix">
                 <h1 class="l8grey">Add Mobile Number</h1>
@@ -48,7 +48,7 @@
             </div>
           </wizard-step>
 
-          <wizard-step [title]="'Create Company'">
+          <wizard-step [title]="'Create Company'" *ngIf="(isMobileVerified | async)" [isActive]="(isMobileVerified | async)">
 
             <div class="wizard-step">
               <h1 class="l8grey">Create Your Company</h1>
