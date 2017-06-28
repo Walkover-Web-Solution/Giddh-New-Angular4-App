@@ -69,8 +69,6 @@ export class LoginActions {
      return { type: ''};
     });
 
-
-
   constructor(
     private actions$: Actions,
     private auth: AuthenticationService,
