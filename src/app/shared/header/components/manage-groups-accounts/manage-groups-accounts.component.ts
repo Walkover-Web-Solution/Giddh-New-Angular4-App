@@ -27,7 +27,7 @@ export class ManageGroupsAccountsComponent implements OnInit {
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
-    this.psConfig = { maxScrollbarLength: 20 };
+    this.psConfig = { maxScrollbarLength: 80 };
   }
 
   // tslint:disable-next-line:no-empty
