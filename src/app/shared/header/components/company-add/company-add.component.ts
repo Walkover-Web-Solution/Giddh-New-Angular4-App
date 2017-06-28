@@ -10,7 +10,7 @@ import { VerifyMobileActions } from './../../../../services/actions/verifyMobile
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { FormBuilder } from '@angular/forms';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 
 @Component({
@@ -19,11 +19,14 @@ import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 })
 export class CompanyAddComponent implements OnInit {
   @ViewChild('wizard') public wizard: WizardComponent;
+  @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
+  @Output() public closeCompanyModalAndShowAddManege: EventEmitter<any> = new EventEmitter();
   public company: CompanyRequest = new CompanyRequest();
   public phoneNumber: string;
   public verificationCode: string;
   public showVerificationBox: Observable<boolean>;
   public isMobileVerified: Observable<boolean>;
+  public isCompanyCreated$: Observable<boolean>;
   public dataSource: Observable<any>;
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService) { }
@@ -31,7 +34,12 @@ export class CompanyAddComponent implements OnInit {
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox);
-    this.isMobileVerified = this.store.select(s => s.session.user.user.contactNo).map(m => m !== null);
+    this.isMobileVerified = this.store.select(s => {
+      if (s.session.user) {
+         return s.session.user.user.contactNo !== null;
+      }
+    });
+    this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated);
     this.dataSource = Observable
       .create((observer: any) => {
         this._location.GetCity({
@@ -44,6 +52,11 @@ export class CompanyAddComponent implements OnInit {
 
     this.isMobileVerified.subscribe(p => {
       if (p) {
+        this.wizard.next();
+      }
+    });
+    this.isCompanyCreated$.subscribe(s => {
+      if (s) {
         this.wizard.next();
       }
     });
@@ -85,8 +98,16 @@ export class CompanyAddComponent implements OnInit {
     company.city = this.company.city;
     company.uniqueName = this.getRandomString(company.name, company.city);
     this.store.dispatch(this.companyActions.CreateCompany(company));
+    this.wizard.next();
   }
 
+  public closeModal() {
+    this.closeCompanyModal.emit();
+  }
+
+  public closeModalAndAndShowAddMangeModal() {
+    this.closeCompanyModalAndShowAddManege.emit();
+  }
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration
     let d, dateString, randomGenerate, strings;

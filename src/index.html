@@ -13,8 +13,9 @@
   <!-- base url -->
   <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
     <!-- base url -->
-    <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+    <!-- <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>"> -->
     <% } %>
+    <script>window.$ = window.jQuery = require('./assets/js/jquery-1.11.3.min.js')</script>
       <% if (webpackConfig.htmlElements.headTags) { %>
         <!-- Configured Head Tags  -->
         <%= webpackConfig.htmlElements.headTags %>

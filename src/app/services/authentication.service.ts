@@ -22,45 +22,50 @@ export class AuthenticationService {
   ) {
   }
 
-  public SignupWithEmail(email: string): Observable<BaseResponse<string>> {
+  public SignupWithEmail(email: string): Observable<BaseResponse<string, string>> {
     return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
-      let data: BaseResponse<string> = res.json();
+      let data: BaseResponse<string, string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string>(e));
+    }).catch((e) => HandleCatch<string, string>(e, email));
   }
 
-  public VerifyEmail(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel>> {
+  public VerifyEmail(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
     return this._http.post(LOGIN_API.VerifyEmail, modele).map((res) => {
-      let data: BaseResponse<VerifyEmailResponseModel> = res.json();
+      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = res.json();
+      data.request = modele;
       return data;
-    }).catch((e) => HandleCatch<VerifyEmailResponseModel>(e));
+    }).catch((e) => HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, modele));
   }
 
-  public SignupWithMobile(email: SignupWithMobile): Observable<BaseResponse<string>> {
+  public SignupWithMobile(email: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
     return this._http.post(LOGIN_API.SignupWithMobile, email).map((res) => {
-      let data: BaseResponse<string> = res.json();
+      let data: BaseResponse<string, SignupWithMobile> = res.json();
+      data.request = email;
       return data;
-    }).catch((e) => HandleCatch<string>(e));
+    }).catch((e) => HandleCatch<string, SignupWithMobile>(e, email));
   }
 
-  public VerifyOTP(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel>> {
+  public VerifyOTP(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
     return this._http.post(LOGIN_API.VerifyOTP, modele).map((res) => {
-      let data: BaseResponse<VerifyEmailResponseModel> = res.json();
+      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = res.json();
+      data.request = modele;
       return data;
-    }).catch((e) => HandleCatch<VerifyEmailResponseModel>(e));
+    }).catch((e) => HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, modele));
   }
 
-  public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string>> {
+  public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
     return this._http.post(LOGIN_API.VerifyNumber, modele).map((res) => {
-      let data: BaseResponse<string> = res.json();
+      let data: BaseResponse<string, SignupWithMobile> = res.json();
+      data.request = modele;
       return data;
-    }).catch((e) => this._error.handle<string>(e));
+    }).catch((e) => HandleCatch<string, SignupWithMobile>(e, modele));
   }
 
-  public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string>> {
+  public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string, VerifyMobileModel>> {
     return this._http.put(LOGIN_API.VerifyNumber, modele).map((res) => {
-      let data: BaseResponse<string> = res.json();
+      let data: BaseResponse<string, VerifyMobileModel> = res.json();
+      data.request = modele;
       return data;
-    }).catch((e) => this._error.handle<string>(e));
+    }).catch((e) => HandleCatch<string, VerifyMobileModel>(e));
   }
 }
