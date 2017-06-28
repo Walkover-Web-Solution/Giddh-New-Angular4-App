@@ -169,7 +169,7 @@
       </div>
 
       <div class="pd2" *ngIf="!(activeGroup$ | async)?.fixed">
-        <button class="btn btn-danger ng-binding" (click)="showDeleteCompanyModal()">Delete {{ (activeGroup$ | async)?.name }} group</button>
+        <button class="btn btn-danger ng-binding" (click)="showDeleteGroupModal()">Delete {{ (activeGroup$ | async)?.name }} group</button>
       </div>
 
     </div>
@@ -190,7 +190,7 @@
             <span class="tax-bullet" *ngFor="let tax of (activeAccount$ | async)?.applicableTaxes">{{ tax.name }}</span>
 
             <p *ngIf="!(activeAccount$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
-            <button id="editTax" class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
+            <button class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
               <i class="glyphicon glyphicon-edit"></i>
             </button>
           </div>
@@ -285,6 +285,10 @@
 
       </div>
 
+      <div class="pd2" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
+        <button class="btn btn-danger" (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account</button>
+      </div>
+
     </div>
 
   </div>
@@ -325,10 +329,23 @@
   <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
       <div class="modal-dialog modal-lg">
           <div class="modal-content">
-            <confirm-modal [title]="'Delete Company'"
-              [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
-              (cancelCallBack)="hideDeleteCompanyModal()" (successCallBack)="deleteGroup()">
+            <confirm-modal [title]="'Delete Group'"
+                           [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
+                           (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
             </confirm-modal>
           </div>
       </div>
   </div>
+
+  <!--delete Account modal  -->
+  <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <confirm-modal [title]="'Delete Account'"
+                       [body]="'Are you sure you want to delete this Account?'"
+                       (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+        </confirm-modal>
+      </div>
+    </div>
+  </div>
+</div>
