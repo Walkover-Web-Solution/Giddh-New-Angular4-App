@@ -12,6 +12,7 @@ import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../models/api-models/Account';
+import { GroupResponse } from '../../models/api-models/Group';
 
 @Injectable()
 export class AccountsAction {
@@ -36,6 +37,8 @@ export class AccountsAction {
   public static GET_ACCOUNT_TAX_HIERARCHY_RESPONSE = 'AccountTaxHierarchyResponse';
   public static APPLY_GROUP_TAX = 'ApplyAccountTax';
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyAccountTaxResponse';
+  public static DELETE_ACCOUNT = 'AccountDelete';
+  public static DELETE_ACCOUNT_RESPONSE = 'AccountDeleteResponse';
 
   @Effect()
   public ApplyAccountTax$: Observable<Action> = this.action$
@@ -273,6 +276,32 @@ export class AccountsAction {
         type: ''
       };
     });
+
+  @Effect()
+  public DeleteAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.DELETE_ACCOUNT)
+    .switchMap(action => this._accountService.DeleteAccount(action.payload))
+    .map(response => {
+      return this.deleteAccountResponse(response);
+    });
+
+  @Effect()
+  public DeleteAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.DELETE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+        let activeGroup: GroupResponse = null;
+        this.store.take(1).subscribe(s => activeGroup = s.groupwithaccounts.activeGroup);
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
+      }
+      return {
+        type: ''
+      };
+    });
   constructor(
     private action$: Actions,
     private _accountService: AccountService,
@@ -424,6 +453,18 @@ export class AccountsAction {
   public applyAccountTaxResponse(value: BaseResponse<string, ApplyTaxRequest>): Action {
     return {
       type: AccountsAction.APPLY_GROUP_TAX_RESPONSE,
+      payload: value
+    };
+  }
+  public deleteAccount(accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.DELETE_ACCOUNT,
+      payload: accountUniqueName
+    };
+  }
+  public deleteAccountResponse(value: BaseResponse<string, string>): Action {
+    return {
+      type: AccountsAction.DELETE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
