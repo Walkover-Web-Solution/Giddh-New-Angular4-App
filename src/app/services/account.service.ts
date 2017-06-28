@@ -75,6 +75,21 @@ export class AccountService implements OnInit {
     }).catch((e) => HandleCatch<AccountResponse, string>(e));
   }
 
+  public GetAccountUniqueName(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+      let data: BaseResponse<AccountResponse, string> = res.json();
+      data.queryString = { accountUniqueName };
+      data.request = accountUniqueName;
+      return data;
+    }).catch((e) => HandleCatch<AccountResponse, string>(e));
+  }
+
   public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string, AccountMergeRequest[]>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -137,7 +152,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, AccountMoveRequest> = res.json();
         data.request = model;
-        data.queryString = {accountUniqueName};
+        data.queryString = { accountUniqueName };
         return data;
       })
       .catch((e) => HandleCatch<string, AccountMoveRequest>(e));
@@ -153,7 +168,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, ShareAccountRequest> = res.json();
         data.request = model;
-        data.queryString = {accountUniqueName};
+        data.queryString = { accountUniqueName };
         return data;
       })
       .catch((e) => HandleCatch<string, ShareAccountRequest>(e));
@@ -169,7 +184,7 @@ export class AccountService implements OnInit {
     return this._http.put(ACCOUNTS_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), { user: userEmail }).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = userEmail;
-      data.queryString = {accountUniqueName};
+      data.queryString = { accountUniqueName };
       return data;
     }).catch((e) => HandleCatch<string, string>(e));
   }
@@ -199,7 +214,7 @@ export class AccountService implements OnInit {
     return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':refresh', refresh)).map((res) => {
       let data: BaseResponse<FlattenAccountsResponse[], string> = res.json();
       data.request = '';
-      data.queryString = {q, refresh};
+      data.queryString = { q, refresh };
       return data;
     }).catch((e) => HandleCatch<FlattenAccountsResponse[], string>(e));
   }
