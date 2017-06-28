@@ -40,3 +40,47 @@ export interface IStockReport extends IPagination {
   stockUnitQtyMap: any;
   transactions: IStockTransaction[];
 }
+
+export interface IUnitRateItem {
+  rate: number;
+  stockUnitCode: string;
+}
+
+export interface IAccountDetails {
+  accountUniqueName: string;
+  unitRates: IUnitRateItem[];
+}
+
+export interface IStockItemDetail {
+  stockUniqueName: string;
+  quantity: number;
+  stockUnitCode: string;
+  rate?: number;
+  amount?: number;
+}
+
+export interface IManufacturingDetails {
+  manufacturingQuantity: number;
+  manufacturingUnitCode: string;
+  linkedStocks: IStockItemDetail[];
+  date?: string;
+  grandTotal?: string;
+  otherExpenses: any[]; // Not sure about this field so keeping it as any for now
+  multipleOf: number;
+}
+
+export interface IStockUnitItem extends IStockItem {
+  hierarchicalQuantity: number;
+  quantityPerUnit: number;
+}
+
+export interface IStockDetail extends INameUniqueName {
+  manufacturingDetails: IManufacturingDetails;
+  openingAmount: number;
+  openingQuantity: number;
+  purchaseAccountDetails?: IAccountDetails;
+  salesAccountDetails?: IAccountDetails;
+  stockGroup: INameUniqueName;
+  stockUnit: IStockUnitItem;
+  stockUnitCde?: string;
+}

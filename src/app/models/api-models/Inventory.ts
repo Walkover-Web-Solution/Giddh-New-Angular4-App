@@ -1,6 +1,6 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IStocksItem, IStockItem, IStockReport, IStockReportItem, IStockTransaction } from '../interfaces/stocksItem.interface';
+import { IStocksItem, IStockItem, IStockReport, IStockReportItem, IStockTransaction, IStockDetail, IManufacturingDetails, IAccountDetails, IStockUnitItem } from '../interfaces/stocksItem.interface';
 
 /*
  * Model for Create Stock Group api request
@@ -91,4 +91,23 @@ export class StockReportResponse implements IStockReport {
   public totalItems: number;
   public totalPages: number;
   public transactions: IStockTransaction[];
+}
+
+/**
+ * Model for stock-detail api response
+ * GET call
+ * API:: (stock-detail) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName
+ * Response will be hash containing StockDetailResponse
+ */
+export class StockDetailResponse implements IStockDetail {
+  public manufacturingDetails: IManufacturingDetails;
+  public openingAmount: number;
+  public openingQuantity: number;
+  public purchaseAccountDetails?: IAccountDetails;
+  public salesAccountDetails?: IAccountDetails;
+  public stockGroup: INameUniqueName;
+  public stockUnit: IStockUnitItem;
+  public stockUnitCde?: string;
+  public name: string;
+  public uniqueName: string;
 }
