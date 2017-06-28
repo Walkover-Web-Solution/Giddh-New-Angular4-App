@@ -15,7 +15,6 @@ import {
   GroupCreateRequest,
   ShareGroupRequest,
   GroupSharedWithResponse,
-  UnShareGroupResponse,
   MoveGroupRequest,
   MoveGroupResponse,
   GroupsTaxHierarchyResponse,
@@ -75,7 +74,7 @@ export class GroupWithAccountsAction {
   public ApplyGroupTaxResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE)
     .map(action => {
-      let data: BaseResponse<string> = action.payload;
+      let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
@@ -142,10 +141,10 @@ export class GroupWithAccountsAction {
   public GetGroupDetailsResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE)
     .map(action => {
-      let data: BaseResponse<GroupResponse> = action.payload;
+      let data: BaseResponse<GroupResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: '' };
       }
       return this.sharedGroupWith(data.body.uniqueName);
     });
@@ -245,7 +244,7 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        this._toasty.successToast(action.payload.body.toastMessage, '');
+        this._toasty.successToast(action.payload.body, '');
       }
       return {
         type: ''
@@ -365,9 +364,7 @@ export class GroupWithAccountsAction {
     };
   }
 
-  public getGroupWithAccountsResponse(
-    value: BaseResponse<GroupsWithAccountsResponse[]>
-  ): Action {
+  public getGroupWithAccountsResponse(value: BaseResponse<GroupsWithAccountsResponse[], string>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE,
       payload: value
@@ -388,7 +385,7 @@ export class GroupWithAccountsAction {
     };
   }
 
-  public getGroupDetailsResponse(value: BaseResponse<GroupResponse>): Action {
+  public getGroupDetailsResponse(value: BaseResponse<GroupResponse, string>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
       payload: value
@@ -401,7 +398,7 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
-  public createGroupResponse(value: BaseResponse<GroupResponse>): Action {
+  public createGroupResponse(value: BaseResponse<GroupResponse, GroupCreateRequest>): Action {
     return {
       type: GroupWithAccountsAction.CREATE_GROUP_RESPONSE,
       payload: value
@@ -415,11 +412,9 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
-  public getFlattenGroupsAccountsResponse(
-    value: BaseResponse<FlattenGroupsAccountsResponse>
-  ): Action {
+  public getFlattenGroupsAccountsResponse(value: BaseResponse<FlattenGroupsAccountsResponse, string>): Action {
     return {
-      type: GroupWithAccountsAction.GET_GROUP_DETAILS_RESPONSE,
+      type: GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE,
       payload: value
     };
   }
@@ -434,7 +429,7 @@ export class GroupWithAccountsAction {
         })
     };
   }
-  public shareGroupResponse(value: BaseResponse<string>): Action {
+  public shareGroupResponse(value: BaseResponse<string, ShareGroupRequest>): Action {
     return {
       type: GroupWithAccountsAction.SHARE_GROUP_RESPONSE,
       payload: value
@@ -451,9 +446,7 @@ export class GroupWithAccountsAction {
         })
     };
   }
-  public unShareGroupResponse(
-    value: BaseResponse<UnShareGroupResponse>
-  ): Action {
+  public unShareGroupResponse(value: BaseResponse<string, string>): Action {
     return {
       type: GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE,
       payload: value
@@ -466,9 +459,7 @@ export class GroupWithAccountsAction {
       payload: groupUniqueName
     };
   }
-  public sharedGroupWithResponse(
-    value: BaseResponse<GroupSharedWithResponse[]>
-  ): Action {
+  public sharedGroupWithResponse(value: BaseResponse<GroupSharedWithResponse[], string>): Action {
     return {
       type: GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE,
       payload: value
@@ -485,7 +476,7 @@ export class GroupWithAccountsAction {
         })
     };
   }
-  public moveGroupResponse(value: BaseResponse<MoveGroupResponse>): Action {
+  public moveGroupResponse(value: BaseResponse<MoveGroupResponse, MoveGroupRequest>): Action {
     return {
       type: GroupWithAccountsAction.MOVE_GROUP_RESPONSE,
       payload: value
@@ -498,9 +489,7 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
-  public getTaxHierarchyResponse(
-    value: BaseResponse<GroupsTaxHierarchyResponse>
-  ): Action {
+  public getTaxHierarchyResponse(value: BaseResponse<GroupsTaxHierarchyResponse, string>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE,
       payload: value
@@ -530,7 +519,7 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, { groupUniqueName }, { data: value })
     };
   }
-  public updateGroupResponse(value: BaseResponse<GroupResponse>): Action {
+  public updateGroupResponse(value: BaseResponse<GroupResponse, GroupUpateRequest>): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP_RESPONSE,
       payload: value
@@ -543,7 +532,7 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
-  public applyGroupTaxResponse(value: BaseResponse<string>): Action {
+  public applyGroupTaxResponse(value: BaseResponse<string, ApplyTaxRequest>): Action {
     return {
       type: GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE,
       payload: value

@@ -24,20 +24,20 @@ export class LocationService {
     let query = ``;
     if (location.Country !== undefined) {
       query += `address=${location.QueryString}&components=country:${location.Country}|administrative_area:${location.QueryString}`;
-    }else if (location.AdministratorLevel !== undefined) {
+    } else if (location.AdministratorLevel !== undefined) {
       query += `address=${location.QueryString}&components=administrative_area:${location.QueryString}`;
-    }else if (location.OnlyCity) {
+    } else if (location.OnlyCity) {
       query += `address=${location.QueryString}`;
-    }else {
+    } else {
       query += `components=country:${location.QueryString}`;
     }
     return this._http.get(this.GoogleApiURL + query)
-    .map((res) => {
-      let r = res.json();
-      console.log(r);
-      return r;
-    }
+      .map((res) => {
+        let r = res.json();
+        console.log(r);
+        return r;
+      }
       )
-    .catch((e) => Observable.throw(e));
+      .catch((e) => Observable.throw(e));
   }
 }

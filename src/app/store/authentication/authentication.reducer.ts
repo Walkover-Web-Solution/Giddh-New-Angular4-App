@@ -1,7 +1,7 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
+import { VerifyEmailModel, UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 
@@ -75,7 +75,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       });
 
     case LoginActions.VerifyEmailResponce:
-      let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
+      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
       if (data.status === 'success') {
         return Object.assign({}, state, {
           isVerifyEmailInProcess: false,
@@ -95,7 +95,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
 export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
   switch (action.type) {
     case LoginActions.VerifyEmailResponce:
-      let data: BaseResponse<VerifyEmailResponseModel> = action.payload;
+      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
       if (data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body
@@ -105,12 +105,12 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
           user: null
         });
       }
-      case LoginActions.LogOut:
-        return Object.assign({}, state, {
-          user: null
-        });
+    case LoginActions.LogOut:
+      return Object.assign({}, state, {
+        user: null
+      });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
-      let stateData: BaseResponse<StateDetailsResponse> = action.payload;
+      let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
       if (stateData.status === 'success') {
         return Object.assign({}, state, {
           lastState: stateData.body.lastState,
@@ -119,11 +119,11 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
       return state;
     case CompanyActions.SET_STATE_DETAILS_RESPONSE:
-      let setStateData: BaseResponse<StateDetailsRequest> = action.payload;
+      let setStateData: BaseResponse<string, StateDetailsRequest> = action.payload;
       if (setStateData.status === 'success') {
         return Object.assign({}, state, {
-          lastState: setStateData.body.lastState,
-          companyUniqueName: setStateData.body.companyUniqueName
+          lastState: setStateData.request.lastState,
+          companyUniqueName: setStateData.request.companyUniqueName
         });
       }
       return state;

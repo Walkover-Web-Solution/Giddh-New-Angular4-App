@@ -12,7 +12,7 @@ import { COMPANY_API } from './apiurls/comapny.api';
 import { HandleCatch } from './catchManager/catchmanger';
 
 @Injectable()
-export class CompanyService  {
+export class CompanyService {
 
   private user: UserDetails;
   private companyUniqueName: string;
@@ -23,69 +23,65 @@ export class CompanyService  {
   /**
    * CreateCompany
    */
-  public CreateCompany(company: any): Observable<BaseResponse<ComapnyResponse>> {
+  public CreateCompany(company: CompanyRequest): Observable<BaseResponse<ComapnyResponse, CompanyRequest>> {
     return this._http.post(COMPANY_API.CREATE_COMPANY, company)
       .map((res) => {
-        let data: BaseResponse<ComapnyResponse> = res.json();
+        let data: BaseResponse<ComapnyResponse, CompanyRequest> = res.json();
+        data.request = company;
         return data;
       })
-      .catch((e) => HandleCatch<ComapnyResponse>(e));
-    }
+      .catch((e) => HandleCatch<ComapnyResponse, CompanyRequest>(e, company));
+  }
 
   /**
    * CompanyList
    */
-  public CompanyList(): Observable<BaseResponse<ComapnyResponse[]>> {
-     this.store.take(1).subscribe(s => {
+  public CompanyList(): Observable<BaseResponse<ComapnyResponse[], string>> {
+    this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
     });
     return this._http.get(COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName))
       .map((res) => {
-        let data: BaseResponse<ComapnyResponse[]> = res.json();
+        let data: BaseResponse<ComapnyResponse[], string> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<ComapnyResponse[]>(e));
+      .catch((e) => HandleCatch<ComapnyResponse[], string>(e, ''));
   }
 
   /**
    * DeleteCompany
    */
-  public DeleteCompany(uniqueName: string): Observable<BaseResponse<string>> {
+  public DeleteCompany(uniqueName: string): Observable<BaseResponse<string, string>> {
     return this._http.delete(COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName))
       .map((res) => {
-        let data: BaseResponse<string> = res.json();
+        let data: BaseResponse<string, string> = res.json();
+        data.queryString = { uniqueName };
         return data;
-      }).catch((e) => HandleCatch<string>(e));
+      }).catch((e) => HandleCatch<string, string>(e, ''));
   }
 
   /**
    * get state details
    */
-  public getStateDetails(): Observable<BaseResponse<StateDetailsResponse>> {
+  public getStateDetails(): Observable<BaseResponse<StateDetailsResponse, string>> {
     return this._http.get(COMPANY_API.GET_STATE_DETAILS).map((res) => {
-      let data: BaseResponse<StateDetailsResponse> = res.json();
+      let data: BaseResponse<StateDetailsResponse, string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<StateDetailsResponse>(e));
+    }).catch((e) => HandleCatch<StateDetailsResponse, string>(e));
   }
 
-  public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<StateDetailsResponse>> {
+  // Effects need to be review
+  public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
     return this._http.post(COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
-      let d: BaseResponse<string> = res.json();
-      if (d.status === 'success') {
-        let data: BaseResponse<StateDetailsResponse> = {
-          body: stateDetails,
-          code: 'success',
-          message: 'success',
-          status: 'success'
-        };
-        return data;
-      }
-    }).catch((e) => HandleCatch<StateDetailsRequest>(e));
+      let data: BaseResponse<string, StateDetailsRequest> = res.json();
+      data.request = stateDetails;
+      return data;
+    }).catch((e) => HandleCatch<string, StateDetailsRequest>(e, stateDetails));
   }
 
-  public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[]>> {
+  public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -93,8 +89,8 @@ export class CompanyService  {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-      let data: BaseResponse<TaxResponse[]> = res.json();
+      let data: BaseResponse<TaxResponse[], string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<TaxResponse[]>(e));
+    }).catch((e) => HandleCatch<TaxResponse[], string>(e));
   }
 }

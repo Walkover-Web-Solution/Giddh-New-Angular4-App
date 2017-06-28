@@ -30,21 +30,21 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
 
   switch (action.type) {
     case CompanyActions.CREATE_COMPANY:
-      let data: BaseResponse<ComapnyResponse> = action.payload;
+      let data: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (data.status === 'success') {
-        let newCompanies = Object.assign([], state, {isCompanyCreated: false});
+        let newCompanies = Object.assign([], state, { isCompanyCreated: false });
         newCompanies.companies.push(data.body);
         return newCompanies;
       }
       return state;
     case CompanyActions.CREATE_COMPANY_RESPONSE:
-      let companyResp: BaseResponse<string> = action.payload;
-        if (companyResp.status === 'success') {
-          return Object.assign({}, state, {
-            isCompanyCreated: true
-          });
-        }
-        return state;
+      let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
+      if (companyResp.status === 'success') {
+        return Object.assign({}, state, {
+          isCompanyCreated: true
+        });
+      }
+      return state;
     case 'CATCH_ERROR':
       console.log(action.payload);
       return;
@@ -53,7 +53,7 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         isRefreshing: true
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
-      let companies: BaseResponse<ComapnyResponse[]> = action.payload;
+      let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
       if (companies.status === 'success') {
         return Object.assign({}, state, {
           isRefreshing: false,
@@ -62,7 +62,7 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
       }
       return state;
     case CompanyActions.DELETE_COMPANY_RESPONSE:
-      let uniqueName: BaseResponse<string> = action.payload;
+      let uniqueName: BaseResponse<string, string> = action.payload;
       if (uniqueName.status === 'success') {
         let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
         return Object.assign({}, state, {
@@ -75,7 +75,7 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         isTaxesLoading: true
       });
     case CompanyActions.GET_TAX_RESPONSE:
-      let taxes: BaseResponse<TaxResponse[]> = action.payload;
+      let taxes: BaseResponse<TaxResponse[], string> = action.payload;
       if (taxes.status === 'success') {
         return Object.assign({}, state, {
           taxes: taxes.body,

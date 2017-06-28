@@ -16,7 +16,6 @@ export class UserAuthenticated implements CanActivate {
         this.user = s.session.user;
       }
     });
-    debugger
     if (this.user && this.user.authKey) {
       console.log('Request is unauthorized, redirect to Login Component!');
       // this._auth.Authorize();

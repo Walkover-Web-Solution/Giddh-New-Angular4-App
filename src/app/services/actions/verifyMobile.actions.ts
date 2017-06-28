@@ -29,7 +29,7 @@ export class VerifyMobileActions {
       } else {
         this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, false));
       }
-      return {type: ''};
+      return { type: '' };
     });
   @Effect() private verifyNumberCode$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST)
@@ -58,11 +58,9 @@ export class VerifyMobileActions {
 
   }
 
-  public verifyNumberRequest =
-  (model: SignupWithMobile): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_REQUEST, model)
+  public verifyNumberRequest = (model: SignupWithMobile): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_REQUEST, model);
 
-  public verifyNumberCodeRequest =
-  (verifyMobileModel: VerifyMobileModel): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST, verifyMobileModel)
+  public verifyNumberCodeRequest = (verifyMobileModel: VerifyMobileModel): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST, verifyMobileModel);
 
   private action = (type, payload) => ({ type, payload });
 }

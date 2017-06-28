@@ -36,7 +36,7 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return {type: ''};
+        return { type: '' };
       }
       console.log('Response ' + response);
       return this.CreateCompanyResponse(response);
@@ -49,7 +49,7 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return {type: ''};
+        return { type: '' };
       }
       console.log('Response ' + response);
       return this.RefreshCompaniesResponse(response);
@@ -72,7 +72,7 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return {type: ''};
+        return { type: '' };
       }
       console.log('Response ' + response);
       return this.GetStateDetailsResponse(response);
@@ -104,7 +104,7 @@ export class CompanyActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: '' };
       } else {
         this._toasty.successToast(action.payload.body, 'success');
       }
@@ -118,7 +118,7 @@ export class CompanyActions {
     .switchMap(action => this._companyService.getComapnyTaxes())
     .map(response => {
       return this.getTaxResponse(response);
-});
+    });
 
   @Effect()
   public CompanyTaxResponse$: Observable<Action> = this.action$
@@ -127,8 +127,8 @@ export class CompanyActions {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: ''};
-});
+      return { type: '' };
+    });
 
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
 
@@ -146,14 +146,14 @@ export class CompanyActions {
     };
   }
 
-  public RefreshCompaniesResponse(response: BaseResponse<ComapnyResponse[]>): Action {
+  public RefreshCompaniesResponse(response: BaseResponse<ComapnyResponse[], string>): Action {
     return {
       type: CompanyActions.REFRESH_COMPANIES_RESPONSE,
       payload: response
     };
   }
 
-  public CreateCompanyResponse(value: BaseResponse<ComapnyResponse>): Action {
+  public CreateCompanyResponse(value: BaseResponse<ComapnyResponse, CompanyRequest>): Action {
     return {
       type: CompanyActions.CREATE_COMPANY_RESPONSE,
       payload: value
@@ -166,7 +166,7 @@ export class CompanyActions {
     };
   }
 
-  public GetStateDetailsResponse(value: BaseResponse<StateDetailsResponse>): Action {
+  public GetStateDetailsResponse(value: BaseResponse<StateDetailsResponse, string>): Action {
     return {
       type: CompanyActions.GET_STATE_DETAILS_RESPONSE,
       payload: value
@@ -180,7 +180,7 @@ export class CompanyActions {
     };
   }
 
-  public SetStateDetailsResponse(value: BaseResponse<StateDetailsResponse>): Action {
+  public SetStateDetailsResponse(value: BaseResponse<string, StateDetailsRequest>): Action {
     return {
       type: CompanyActions.SET_STATE_DETAILS_RESPONSE,
       payload: value
@@ -194,7 +194,7 @@ export class CompanyActions {
     };
   }
 
-  public DeleteCompanyResponse(value: BaseResponse<string>): Action {
+  public DeleteCompanyResponse(value: BaseResponse<string, string>): Action {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
@@ -206,7 +206,7 @@ export class CompanyActions {
       type: CompanyActions.GET_TAX
     };
   }
-  public getTaxResponse(value: BaseResponse<TaxResponse[]>): Action {
+  public getTaxResponse(value: BaseResponse<TaxResponse[], string>): Action {
     return {
       type: CompanyActions.GET_TAX_RESPONSE,
       payload: value
