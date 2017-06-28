@@ -119,7 +119,7 @@ export class AccountsAction {
   public GetAccountUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE)
     .map(action => {
-      let data: BaseResponse<AccountResponse> = action.payload;
+      let data: BaseResponse<AccountResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         // this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
@@ -332,7 +332,7 @@ export class AccountsAction {
       payload: value
     };
   }
-  public getAccountUniqueNameResponse(value: BaseResponse<AccountResponse>): Action {
+  public getAccountUniqueNameResponse(value: BaseResponse<AccountResponse, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE,
       payload: value
