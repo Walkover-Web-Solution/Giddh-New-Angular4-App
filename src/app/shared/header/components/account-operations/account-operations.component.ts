@@ -21,6 +21,7 @@ import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
 import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../../../models/api-models/Account';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'account-operations',
@@ -35,6 +36,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
+  @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
@@ -440,5 +442,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     }
 
+  }
+
+  public hideDeleteCompanyModal() {
+    this.deleteGroupModal.hide();
+  }
+
+  public showDeleteCompanyModal() {
+    this.deleteGroupModal.show();
+  }
+  public deleteGroup() {
+    let activeGrpUniqueName = null;
+    this.activeGroup$.take(1).subscribe(s => activeGrpUniqueName = s.uniqueName);
+    this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
   }
 }

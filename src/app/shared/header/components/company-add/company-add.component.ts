@@ -37,7 +37,7 @@ export class CompanyAddComponent implements OnInit {
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
          return s.session.user.user.contactNo !== null;
-        }
+      }
     });
     this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated);
     this.dataSource = Observable
