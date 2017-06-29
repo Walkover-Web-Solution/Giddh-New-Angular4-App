@@ -80,7 +80,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       if (data.status === 'success') {
         return Object.assign({}, state, {
           isVerifyEmailInProcess: false,
-          isVerifyEmailSuccess: true
+          isVerifyEmailSuccess: true,
         });
       } else {
         return Object.assign({}, state, {
@@ -88,6 +88,18 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
           isVerifyEmailSuccess: false
         });
       }
+    case LoginActions.LogOut:
+      return Object.assign({}, state, {
+        isLoginWithMobileInProcess: false, // if true then We are checking with
+        isVerifyMobileInProcess: false,
+        isLoginWithEmailInProcess: false,
+        isVerifyEmailInProcess: false,
+        isLoginWithGoogleInProcess: false,
+        isLoginWithLinkedInInProcess: false,
+        isLoginWithTwitterInProcess: false,
+        isLoginWithEmailSubmited: false,
+        isVerifyEmailSuccess: false
+      });
     default:
       return state;
   }
