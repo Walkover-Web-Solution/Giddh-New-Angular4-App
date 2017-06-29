@@ -71,13 +71,13 @@
             <div class="form-group row">
               <div class="col-xs-12">
 
-                <input type="text" formControlName="mobileNo" class="form-control" valid-number="" ng-disabled="isFixedAcc" placeholder="9198XXXXXXXX">
+                <input type="text" formControlName="mobileNo" class="form-control"  placeholder="9198XXXXXXXX">
 
               </div>
             </div>
 
             <div class="form-group">
-              <input type="email" placeholder="Email" class="form-control" name="email" formControlName="email" ng-disabled="isFixedAcc">
+              <input type="email" placeholder="Email" class="form-control" name="email" formControlName="email">
             </div>
 
             <div class="form-group">
@@ -102,7 +102,7 @@
         <div class="row pdL pdR">
           <div class="form-group col-xs-12 text-center">
             <button *ngIf="!(activeAccount$ | async)" type="submit" (click)="submit()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Add</button>
-            <button *ngIf="(activeAccount$ | async)" type="submit" (click)="updateAccount()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Update</button>
+            <button *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed" type="submit" (click)="updateAccount()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Update</button>
           </div>
         </div>
       </form>

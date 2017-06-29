@@ -30,9 +30,9 @@ export class HomeComponent implements OnInit {
     'Sofia', 'Stockholm', 'Stuttgart', 'The Hague', 'Turin', 'Valencia', 'Vienna',
     'Vilnius', 'Warsaw', 'Wrocław', 'Zagreb', 'Zaragoza'];
 
-  private value: any = ['Athens'];
-  private _disabledV: string = '0';
-  private disabled: boolean = false;
+  public value: any = ['Athens'];
+  public _disabledV: string = '0';
+  public disabled: boolean = false;
 
   /**
    * TypeScript public modifiers
@@ -42,13 +42,17 @@ export class HomeComponent implements OnInit {
     // this.store.dispatch(this.companyActions.CreateCompany(company));
   }
 
-  private get disabledV(): string {
+  public get disabledV(): string {
     return this._disabledV;
   }
 
-  private set disabledV(value: string) {
+  public set disabledV(value: string) {
     this._disabledV = value;
-    this.disabled = this._disabledV === '1';
+    if (this._disabledV === '1') {
+      this.disabled = true;
+    } else {
+      this.disabled = false;
+    }
   }
 
   public selected(value: any): void {

@@ -1,6 +1,5 @@
 import { GroupUpateRequest, GroupCreateRequest } from '../../models/api-models/Group';
 import { AccountsAction } from '../../services/actions/accounts.actions';
-import { GroupWithAccountsAction } from './../../services/actions/groupwithaccounts.actions';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
@@ -10,6 +9,7 @@ import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AccountRequest, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
+import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -73,6 +73,29 @@ const initialState: CurrentGroupAndAccountState = {
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
   switch (action.type) {
+    case GroupWithAccountsAction.SET_ACTIVE_GROUP:
+      let groupsArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+      let activeGroupData: IGroupsWithAccounts;
+      for (let el of groupsArray) {
+        activeGroupData = setActiveGroupFunc(el.groups, action.payload, null);
+        if (activeGroupData) {
+          el.isOpen = true;
+          break;
+        }
+      }
+      return Object.assign({}, state, {
+        activeGroup: activeGroupData,
+        activeGroupInProgress: false,
+        groupswithaccounts: groupsArray,
+        activeGroupTaxHierarchy: null,
+        activeGroupSharedWith: null
+      });
+    case GroupWithAccountsAction.RESET_ACTIVE_GROUP:
+      return Object.assign({}, state, {
+        activeGroup: null,
+        activeGroupTaxHierarchy: null,
+        activeGroupSharedWith: null
+      });
     case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS:
       return Object.assign({}, state, {
         isGroupWithAccountsLoading: true
@@ -88,8 +111,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       if (data.status === 'success') {
         let newData = prepare(data.body);
         return Object.assign({}, state, {
-          groupswithaccounts: newData,
-          isGroupWithAccountsLoading: false
+          isGroupWithAccountsLoading: false,
+          groupswithaccounts: newData
         });
       }
       return state;
@@ -199,7 +222,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         accountSearchString: '',
         isRefreshingFlattenGroupsAccounts: false,
         activeGroupInProgress: false,
-        activeGroupSharedWith: []
+        activeGroupSharedWith: [],
+        activeAccount: null
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
@@ -313,7 +337,6 @@ const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
   }
   return myChildElementIsOpen;
 };
-
 const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], updatedGroup: GroupResponse) => {
   for (let grp of groups) {
     if (grp.uniqueName === updatedGroup.uniqueName) {
@@ -351,4 +374,22 @@ const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseRespons
     }
   }
   return myChildElementIsOpen;
+};
+const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
+  for (let el of groups) {
+    if (el.uniqueName === uniqueName) {
+      el.isActive = true;
+      el.isOpen = true;
+      result = el;
+      return result;
+    }
+    if (el.groups) {
+      result = setActiveGroupFunc(el.groups, uniqueName, result);
+      if (result) {
+        el.isOpen = true;
+        result = el;
+      }
+    }
+  }
+  return result;
 };

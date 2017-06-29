@@ -363,7 +363,8 @@ export class GroupWithAccountsAction {
         };
       } else {
         this._toasty.successToast(action.payload.body, '');
-        return this.getGroupWithAccounts('');
+        this.store.dispatch(this.getGroupWithAccounts(''));
+        return this.ResetActiveGroup();
       }
     });
   constructor(
