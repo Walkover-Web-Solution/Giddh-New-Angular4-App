@@ -39,7 +39,7 @@ export class CompanyActions {
         return { type: '' };
       }
       console.log('Response ' + response);
-      return this.CreateCompanyResponse(response);
+      return this.RefreshCompanies();
     });
 
   @Effect()
