@@ -1,0 +1,214 @@
+<section class="pd2 ng-scope">
+  <section class="row">
+    <div class="col-xs-12 col-md-10 col-lg-8">
+
+
+      <div class="form_title">
+        <!-- ngIf: !vm.editMode --><label ng-if="!vm.editMode" class="ng-scope">Add Custom Stock Unit</label>
+        <!-- end ngIf: !vm.editMode -->
+        <!-- ngIf: vm.editMode -->
+      </div>
+
+
+      <form name="customUnitForm" class="form-theme ng-pristine ng-invalid ng-invalid-required" novalidate="">
+
+        <div class="row mrBChldLbl">
+
+          <div class="form-group col-xs-3">
+            <label>Parent Stock Unit</label>
+            <div class="ui-select-container ui-select-bootstrap dropdown ng-valid" ng-class="{open: $select.open}" ng-model="vm.customUnitObj.parentStockUnit"
+              theme="bootstrap" search-enabled="true" title="Select">
+              <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"
+                placeholder="Select" allow-clear="true"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Select activate" ng-disabled="$select.disabled"
+                  ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding">Select</span>                <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
+                  ng-transclude=""><span class="ng-binding ng-scope"></span></span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i>                <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)" aria-label="Select clear"
+                  style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
+              </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Select" aria-owns="ui-select-choices-0"
+                aria-activedescendant="ui-select-choices-row-0-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
+                placeholder="Select" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open">
+              <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
+                ui-disable-choice="item.code === vm.customUnitObj.code" repeat="item as item in vm.customUnits | propsFilter: {name: $select.search, code: $select.search}">
+                <li class="ui-select-choices-group" id="ui-select-choices-0">
+                  <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
+                  <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
+                  <!-- ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                  <!-- ngIf: $select.open -->
+                  <!-- end ngRepeat: item in $select.items -->
+                </li>
+              </ul>
+              <div class="ui-select-no-choice"></div>
+              <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-0"
+                aria-label="Select focus" aria-haspopup="true" role="button"></div>
+          </div>
+
+          <div class="form-group col-xs-3 cstuWrp">
+            <span class="sign">X</span>
+            <label>Quantity per Unit<span class="required">*</span></label>
+            <input placeholder="Quantity" type="text" ng-model="vm.customUnitObj.quantityPerUnit" name="quantityPerUnit" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+              required="">
+          </div>
+
+          <div class="form-group col-xs-3 cstuWrp">
+            <span class="sign fs20">=</span>
+            <label>Name<span class="required">*</span></label>
+            <input placeholder="Unit name" ng-model="vm.customUnitObj.name" type="text" name="name" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+              required="">
+          </div>
+
+          <div class="form-group col-xs-3">
+            <label>Unit Code<span class="required">*</span></label>
+            <input placeholder="Unique name" type="text" name="code" ng-model="vm.customUnitObj.code" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required"
+              required="">
+          </div>
+
+        </div>
+
+        <div class="row">
+          <!-- ngIf: !vm.editMode -->
+          <div class="col-xs-12 ng-scope" ng-if="!vm.editMode">
+            <button type="submit" class="btn btn-sm btn-success" ng-click="vm.addCustomUnitStock()" ng-disabled="customUnitForm.$invalid"
+              disabled="disabled">Save</button>
+            <button type="submit" class="btn btn-sm btn-primary" ng-click="vm.clearCustomUnitStock()">Clear</button>
+          </div>
+          <!-- end ngIf: !vm.editMode -->
+
+          <!-- ngIf: vm.editMode -->
+        </div>
+
+      </form>
+
+
+      <div class="mrT2 clearfix">
+        <table class="col-xs-12 table_theme">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Unit Code</th>
+              <th>Quantity per Unit</th>
+              <th>Parent Stock</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">100k</td>
+              <td class="ng-binding">100k</td>
+              <td class="ng-binding">0.1</td>
+              <td class="ng-binding">10k</td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">100n</td>
+              <td class="ng-binding">100n</td>
+              <td class="ng-binding">0.1</td>
+              <td class="ng-binding">10n</td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">10k</td>
+              <td class="ng-binding">10k</td>
+              <td class="ng-binding">1</td>
+              <td class="ng-binding"></td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">10n</td>
+              <td class="ng-binding">10n</td>
+              <td class="ng-binding">1</td>
+              <td class="ng-binding"></td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">1k</td>
+              <td class="ng-binding">1k</td>
+              <td class="ng-binding">10</td>
+              <td class="ng-binding">10k</td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">1n</td>
+              <td class="ng-binding">1n</td>
+              <td class="ng-binding">10</td>
+              <td class="ng-binding">10n</td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">Gram</td>
+              <td class="ng-binding">gm</td>
+              <td class="ng-binding">0.001</td>
+              <td class="ng-binding">kg</td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">kg</td>
+              <td class="ng-binding">kg</td>
+              <td class="ng-binding">1</td>
+              <td class="ng-binding"></td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+            <tr ng-repeat="item in vm.unitTypes track by $index" class="ng-scope">
+              <td class="ng-binding">nos</td>
+              <td class="ng-binding">nos</td>
+              <td class="ng-binding">1</td>
+              <td class="ng-binding"></td>
+              <td class="action">
+                <a href="" class="btn btn-default" ng-click="vm.editUnit(item, $index)">Edit</a>
+                <a href="" class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</a>
+              </td>
+            </tr>
+            <!-- end ngRepeat: item in vm.unitTypes track by $index -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</section>

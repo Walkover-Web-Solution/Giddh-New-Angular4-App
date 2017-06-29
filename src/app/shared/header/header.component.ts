@@ -153,6 +153,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
-    this.router.navigate(['']);
+    this.router.navigate(['/login']);
   }
 }
