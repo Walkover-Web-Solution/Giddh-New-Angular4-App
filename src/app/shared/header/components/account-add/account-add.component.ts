@@ -29,10 +29,10 @@ export class AccountAddComponent implements OnInit {
 
   public ngOnInit() {
     this.addAccountForm = this._fb.group({
-      name: ['', [Validators.required, Validators.maxLength(100)]],
+      name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['', [Validators.required]],
-      openingBalance: ['', [Validators.required]],
+      openingBalanceType: ['CREDIT', [Validators.required]],
+      openingBalance: [0, Validators.compose([Validators.required, Validators.pattern('\\d+(\\.\\d{2})*$')])],
       mobileNo: [''],
       email: [''],
       companyName: [''],
@@ -45,6 +45,8 @@ export class AccountAddComponent implements OnInit {
         this.addAccountForm.patchValue(acc);
       } else {
         this.addAccountForm.reset();
+        this.addAccountForm.controls['openingBalanceType'].patchValue('CREDIT');
+        this.addAccountForm.controls['openingBalance'].patchValue(0);
       }
     });
   }

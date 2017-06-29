@@ -284,6 +284,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     grpObject.role = 'view_only';
     grpObject.user = this.shareGroupForm.controls['userEmail'].value;
     this.store.dispatch(this.groupWithAccountsAction.shareGroup(grpObject, activeGrp.uniqueName));
+    this.shareGroupForm.reset();
   }
   public async shareAccount() {
     let activeAcc = await this.activeAccount$.first().toPromise();
@@ -291,6 +292,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     accObject.role = 'view_only';
     accObject.user = this.shareAccountForm.controls['userEmail'].value;
     this.store.dispatch(this.accountsAction.shareAccount(accObject, activeAcc.uniqueName));
+    this.shareAccountForm.reset();
   }
 
   public moveToGroupSelected(event: any) {

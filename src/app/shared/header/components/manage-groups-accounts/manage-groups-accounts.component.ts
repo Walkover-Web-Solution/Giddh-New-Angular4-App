@@ -15,7 +15,6 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
 })
 export class ManageGroupsAccountsComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
-  @ViewChild('grpSrchEl') public grpSrchEl: ElementRef;
   public grpSrch: string;
   public searchLoad: Observable<boolean>;
 
@@ -36,7 +35,7 @@ export class ManageGroupsAccountsComponent implements OnInit {
   }
 
   public closePopupEvent() {
-    this.grpSrchEl.nativeElement.value = '';
+    this.grpSrch = '';
     this.closeEvent.emit(true);
   }
 }
