@@ -102,15 +102,15 @@ export class GroupAccountsListComponent implements OnInit {
     let activeGroup: GroupResponse = null;
     this.activeGroup$.first().subscribe(ac => activeGroup = ac);
     if (!activeGroup) {
-      this.activeGroupFromAccount();
+      this.activeGroupFromAccount(accountUniqueName);
     }
   }
 
-  public activeGroupFromAccount() {
+  public activeGroupFromAccount(accountUniqueName: string) {
     this.activeAccount$.subscribe(ac => {
       if (ac) {
         let grp = ac.parentGroups[ac.parentGroups.length - 1];
-        this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(grp.uniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(grp.uniqueName));
       }
     });
   }

@@ -157,7 +157,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.subGroupForm = this._fb.group({
       name: ['', Validators.required],
       uniqueName: ['', Validators.required],
-      desc: ['', Validators.required]
+      desc: ['']
     });
 
     this.moveGroupForm = this._fb.group({

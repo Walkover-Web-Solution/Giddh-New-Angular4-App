@@ -25,7 +25,7 @@
                   <textarea maxlength="200" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
                 </div>
 
-                <button class="btn btn-primary" [disabled]="!groupDetailForm.valid">Update
+                <button class="btn btn-primary" *ngIf="!(activeGroup$ | async)?.fixed" [disabled]="!groupDetailForm.valid">Update
               </button>
               </form>
             </fieldset>

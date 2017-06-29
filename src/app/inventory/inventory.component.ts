@@ -9,15 +9,12 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
-// import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
-  selector: 'home',  // <home></home>
-  styleUrls: ['./home.component.css'],
-  templateUrl: './home.component.html'
+  selector: 'inventory',
+  templateUrl: './inventory.component.html'
 })
-export class HomeComponent implements OnInit {
+export class InventoryComponent implements OnInit {
 
   public localState = { value: '' };
   public items: string[] = ['Amsterdam', 'Antwerp', 'Athens', 'Barcelona',
@@ -37,22 +34,18 @@ export class HomeComponent implements OnInit {
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private loginAction: LoginActions) {
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
     let company = new CompanyRequest();
     // this.store.dispatch(this.companyActions.CreateCompany(company));
   }
 
-  public get disabledV(): string {
+  private get disabledV(): string {
     return this._disabledV;
   }
 
-  public set disabledV(value: string) {
+  private set disabledV(value: string) {
     this._disabledV = value;
-    if (this._disabledV === '1') {
-      this.disabled = true;
-    } else {
-      this.disabled = false;
-    }
+    this.disabled = this._disabledV === '1';
   }
 
   public selected(value: any): void {

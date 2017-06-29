@@ -7,6 +7,7 @@ import { LoginComponent } from './login/login.component';
 import { DataResolver } from './app.resolver';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
+import { InventoryComponent } from './inventory/inventory.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,6 +18,7 @@ export const ROUTES: Routes = [
       { path: '', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
+      { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
     ]
   }
 ];

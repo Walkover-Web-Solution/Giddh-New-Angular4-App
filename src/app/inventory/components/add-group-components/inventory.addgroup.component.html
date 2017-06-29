@@ -1,0 +1,94 @@
+<section class="col-xs-12 col-md-8 col-lg-6 ng-scope">
+  <div class="pd pdT2">
+
+    <!-- ngIf: !stock.groupEditMode -->
+
+
+    <!-- ngIf: stock.groupEditMode -->
+    <section ng-if="stock.groupEditMode" class="clearfix ng-scope" auto-height="" style="min-height: 600px; height: 507px;">
+
+      <div class="form_title">
+        <label>Modify Group</label>
+      </div>
+
+      <form name="updateStockGroup" class="form-theme ng-pristine ng-valid ng-valid-required" novalidate="">
+
+        <div class="row groupStockFormRow">
+          <div class="form-group col-xs-6">
+            <label>Name<span class="required">*</span></label>
+            <input type="text" name="name" class="form-control ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="stock.updateStockGroup.name"
+              required="" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
+          </div>
+
+          <div class="form-group col-xs-6">
+            <label>Unique Name<span class="required">*</span></label>
+            <input type="text" name="uniqueName" class="form-control ng-pristine ng-untouched ng-valid ng-valid-required" ng-model="stock.updateStockGroup.uniqueName"
+              required="">
+          </div>
+        </div>
+
+        <div class="row form-inline mrB2">
+          <div class="col-xs-12">
+            <div class="form-group mrB" style="width: 110px">
+              <label>Parent Group</label>
+            </div>
+            <div class="form-group mrB" style="width: 200px">
+              <div class="ui-select-container ui-select-bootstrap dropdown ng-valid" ng-class="{open: $select.open}" ng-disabled="stock.updateStockGroup.isSelfParent"
+                ng-model="stock.updateStockGroup.parent" theme="bootstrap" search-enabled="true" title="Select">
+                <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"
+                  placeholder="Select"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Select activate" ng-disabled="$select.disabled"
+                    ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding">Select</span>                  <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
+                    ng-transclude=""><span class="ng-binding ng-scope"></span></span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i>                  <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)" aria-label="Select clear"
+                    style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
+                </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Select" aria-owns="ui-select-choices-2"
+                  aria-activedescendant="ui-select-choices-row-2-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
+                  placeholder="Select" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open" style="width: 10px;">
+                <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
+                  ui-disable-choice="item.uniqueName === stock.$state.params.grpId" repeat="item.uniqueName as item in stock.stockGroup.list | propsFilter: {name: $select.search, uniqueName: $select.search}">
+                  <li class="ui-select-choices-group" id="ui-select-choices-2">
+                    <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
+                    <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
+                    <!-- ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                    <!-- ngIf: $select.open -->
+                    <!-- end ngRepeat: item in $select.items -->
+                  </li>
+                </ul>
+                <div class="ui-select-no-choice"></div>
+                <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-2"
+                  aria-label="Select focus" aria-haspopup="true" role="button"></div>
+            </div>
+          </div>
+          <div class="col-xs-12">
+            <div class="form-group" style="width: 110px">
+              <label>&nbsp;</label>
+            </div>
+            <div class="checkbox">
+              <label for="isSelfParentUpdt" ng-click="$event.stopPropagation(); stock.resetParentSelectBoxUpdt()">
+							<input type="checkbox" ng-model="stock.updateStockGroup.isSelfParent" id="isSelfParentUpdt" name="parentStockGroup" class="ng-pristine ng-untouched ng-valid">Assign as a Parent Group</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="clearfix">
+          <button type="submit" class="btn btn-md btn-success mrR1" ng-click="stock.updateGroup()" ng-disabled="updateStockGroup.$invalid">Update</button>
+
+          <button type="submit" class="btn btn-md btn-danger" ng-click="stock.deleteStockGrp()">Delete</button>
+        </div>
+      </form>
+
+    </section>
+    <!-- end ngIf: stock.groupEditMode -->
+  </div>
+</section>
