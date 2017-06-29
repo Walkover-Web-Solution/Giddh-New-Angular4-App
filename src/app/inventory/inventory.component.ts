@@ -9,15 +9,12 @@ import {
   Component,
   OnInit
 } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
-// import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
-  selector: 'home',  // <home></home>
-  styleUrls: ['./home.component.css'],
-  templateUrl: './home.component.html'
+  selector: 'inventory',
+  templateUrl: './inventory.component.html'
 })
-export class HomeComponent implements OnInit {
+export class InventoryComponent implements OnInit {
 
   public localState = { value: '' };
   public items: string[] = ['Amsterdam', 'Antwerp', 'Athens', 'Barcelona',
@@ -37,7 +34,7 @@ export class HomeComponent implements OnInit {
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private loginAction: LoginActions) {
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
     let company = new CompanyRequest();
     // this.store.dispatch(this.companyActions.CreateCompany(company));
   }
