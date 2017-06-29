@@ -43,6 +43,7 @@ import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { InventoryModule } from './inventory/inventory.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -93,6 +94,7 @@ if (ENV === 'development') {
     HttpModule,
     AboutModule,
     HomeModule,
+    InventoryModule,
     LoginModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
@@ -100,7 +102,7 @@ if (ENV === 'development') {
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
-        ...CONDITIONAL_IMPORTS,
+    ...CONDITIONAL_IMPORTS,
     Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
   ],
