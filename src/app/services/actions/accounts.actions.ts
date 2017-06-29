@@ -269,8 +269,10 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        this._toasty.successToast('Group moved successfully', '');
+        this._toasty.successToast('Account moved successfully', '');
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        this.store.dispatch(this.groupWithAccountsAction.ResetActiveGroup());
+        this.store.dispatch(this.resetActiveAccount());
       }
       return {
         type: ''
