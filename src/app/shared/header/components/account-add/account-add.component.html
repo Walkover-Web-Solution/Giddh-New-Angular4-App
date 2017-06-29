@@ -48,12 +48,12 @@
               <div class="row">
                 <div class="col-xs-6">
                   <select class="form-control" name="openingBalanceType" formControlName="openingBalanceType">
-                    <option [selected]="true">--Please select--</option>
+                    <option>--Please select--</option>
                   <option value="CREDIT" label="Credit">Credit</option>
                   <option value="DEBIT" label="Debit">Debit</option></select>
                 </div>
                 <div class="col-xs-6">
-                  <input type="text" class="form-control" name="openingBalance" formControlName="openingBalance">
+                  <input type="text" class="form-control" value="0" name="openingBalance" formControlName="openingBalance">
                 </div>
               </div>
 
