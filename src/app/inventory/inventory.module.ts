@@ -13,6 +13,8 @@ import { InventoryAddGroupComponent } from './components/add-group-components/in
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
 import { InventoryStockReportComponent } from './components/stock-report-component/inventory.stockreport.component';
+import { StockgrpListComponent } from './components/sidebar-components/stockgrplist.component';
+import { StockListComponent } from './components/sidebar-components/stockList.component';
 
 console.log('`Inventory` bundle loaded asynchronously');
 
@@ -25,7 +27,9 @@ console.log('`Inventory` bundle loaded asynchronously');
     InventoryAddStockComponent,
     InventoryHearderComponent,
     InventoryCustomStockComponent,
-    InventoryStockReportComponent
+    InventoryStockReportComponent,
+    StockgrpListComponent,
+    StockListComponent
   ],
   exports: [
     InventoryComponent,
@@ -34,7 +38,9 @@ console.log('`Inventory` bundle loaded asynchronously');
     InventoryAddStockComponent,
     InventoryHearderComponent,
     InventoryCustomStockComponent,
-    InventoryStockReportComponent
+    InventoryStockReportComponent,
+    StockgrpListComponent,
+    StockListComponent
   ],
   providers: [],
   imports: [
