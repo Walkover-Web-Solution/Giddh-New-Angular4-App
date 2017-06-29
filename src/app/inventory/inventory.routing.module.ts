@@ -7,7 +7,7 @@ import { NeedsAuthentication } from '../services/decorators/needsAuthentication'
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
-import { InventoryStockReportComponent } from "./components/stock-report-component/inventory.stockreport.component";
+import { InventoryStockReportComponent } from './components/stock-report-component/inventory.stockreport.component';
 
 @NgModule({
   imports: [
