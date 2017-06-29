@@ -143,3 +143,18 @@ export class StockUnitRequest implements IStockUnit {
   public name: string;
   public code: string;
 }
+
+/*
+ * Delete stock api
+ * DELETE call
+ * API:: (Delete stock) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName
+ * its response will be string in body
+ */
+
+/*
+ * Delete custom stock unit api
+ * DELETE call
+ * API:: (Delete custom stock unit) company/:companyUniqueName/stock-unit/:uName
+ * uname stands for unique name of custom unit
+ * its response will be string in body
+ */
