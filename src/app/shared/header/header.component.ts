@@ -12,6 +12,7 @@ import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../.
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-header',
@@ -34,7 +35,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
-
   public selectedCompany: Observable<ComapnyResponse>;
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
 
     this.companies$ = this.store.select(state => {
-      return state.company.companies;
+      return _.orderBy(state.company.companies, 'name');
     });
 
     this.selectedCompany = this.store.select(state => {
@@ -124,16 +124,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public refreshCompanies(e: Event) {
     this.store.dispatch(this.companyActions.RefreshCompanies());
-    // e.stopPropagation();
   }
 
-  public changeCompany(selectedCompanyUniqueName: string, e: Event) {
+  public changeCompany(selectedCompanyUniqueName: string) {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
     stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    // e.stopPropagation();
   }
 
   public deleteCompany() {
@@ -153,6 +151,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
-    this.router.navigate(['/login']);
+    // this.router.navigate(['/login']);
   }
 }
