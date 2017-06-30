@@ -27,7 +27,9 @@ export interface CurrentGroupAndAccountState {
   activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
   activeAccount: AccountResponse;
-  fetchingUniqueName: boolean;
+  fetchingGrpUniqueName: boolean;
+  isGroupNameAvailable?: boolean;
+  fetchingAccUniqueName: boolean;
   isAccountNameAvailable?: boolean;
 }
 
@@ -68,7 +70,8 @@ const initialState: CurrentGroupAndAccountState = {
   activeGroupTaxHierarchy: null,
   addAccountOpen: false,
   activeAccount: null,
-  fetchingUniqueName: false
+  fetchingGrpUniqueName: false,
+  fetchingAccUniqueName: false
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
@@ -300,17 +303,29 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
     case AccountsAction.RESET_ACTIVE_ACCOUNT:
       return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME:
-    return Object.assign({}, state, { fetchingUniqueName: true, isAccountNameAvailable: null });
+    return Object.assign({}, state, { fetchingAccUniqueName: true, isAccountNameAvailable: null });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE:
       let responseData: BaseResponse<AccountResponse, string> = action.payload;
       if (responseData.status === 'success') {
-        return Object.assign({}, state, { fetchingUniqueName: false, isAccountNameAvailable: false });
+        return Object.assign({}, state, { fetchingAccUniqueName: false, isAccountNameAvailable: false });
       } else {
         if (responseData.code === 'ACCOUNT_NOT_FOUND') {
-          return Object.assign({}, state, { fetchingUniqueName: false, isAccountNameAvailable: true });
+          return Object.assign({}, state, { fetchingAccUniqueName: false, isAccountNameAvailable: true });
         }
         return state;
       }
+      case GroupWithAccountsAction.GET_GROUP_UNIQUENAME:
+      return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
+      case GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE:
+        let resData: BaseResponse<AccountResponse, string> = action.payload;
+        if (resData.status === 'success') {
+          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
+        } else {
+          if (resData.code === 'GROUP_NOT_FOUND') {
+            return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
+          }
+          return state;
+        }
     default:
       return state;
   }
