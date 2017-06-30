@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { ActivatedRoute } from '@angular/router';
-import { SidebarAction } from "../../../services/actions/inventory/sidebar.actions";
-import { Subscription } from "rxjs/Rx";
+import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
+import { Subscription } from 'rxjs/Rx';
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
@@ -21,6 +21,7 @@ import { Subscription } from "rxjs/Rx";
 })
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy {
   public sub: Subscription;
+  public groupUniqueName: string;
   public stockUniqueName: string;
   /**
    * TypeScript public modifiers
@@ -29,11 +30,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
   public ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
+      this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
     });
   }
   public ngAfterViewInit() {
-    this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName))
+    // this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
   }
   public ngOnDestroy() {
     this.sub.unsubscribe();
