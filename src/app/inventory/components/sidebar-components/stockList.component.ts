@@ -13,9 +13,9 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
   styles: [`
   `],
   template: `
-  <ul class="list-unstyled stock-items" [hidden]="!Groups.visibleChilds" >
-    <li *ngFor="let item of Groups.stocks" >
-      <a href ng-class="{'active': stockUniqueName === item.uniqueName }">{{item.name}}</a>
+  <ul class="list-unstyled stock-items" [hidden]="!Groups.isOpen" >
+    <li  (click)="OpenStock(item, $event)" *ngFor="let item of Groups.stocks" >
+      <div [routerLink]="[ 'add-group',Groups.uniqueName,'add-stock', item.uniqueName]" ng-class="{'active': stockUniqueName === item.uniqueName }">{{item.name}}</div>
     </li>
   </ul>
   `
@@ -38,5 +38,8 @@ export class StockListComponent implements OnInit, OnDestroy {
   }
   public ngOnDestroy() {
     this.sub.unsubscribe();
+  }
+  public OpenStock(item, e: Event) {
+    e.stopPropagation();
   }
 }
