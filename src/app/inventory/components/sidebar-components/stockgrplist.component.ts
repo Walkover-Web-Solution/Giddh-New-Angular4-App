@@ -30,16 +30,18 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   @Input()
   public Groups: IGroupsWithStocksHierarchyMinItem[];
   public groupUniqueName: string;
+  public stockUniqueName: string;
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction) {
   }
 
   public ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
+      this.stockUniqueName = params['stockUniqueName'];
     });
   }
   public ngOnDestroy() {
-    this.sub.unsubscribe();
+    // this.sub.unsubscribe();
   }
 
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {

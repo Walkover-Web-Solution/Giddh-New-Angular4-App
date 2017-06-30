@@ -11,7 +11,7 @@ import {
 import { LoginActions } from '../services/actions/login.action';
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute } from '@angular/router';
-import { SidebarAction } from "../../../services/actions/inventory/sidebar.actions";
+import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
@@ -29,6 +29,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
+      if (this.groupUniqueName) {
+        this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
+        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+      }
     });
   }
   public ngOnDestroy() {
