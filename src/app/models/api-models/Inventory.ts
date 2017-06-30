@@ -68,7 +68,7 @@ export class StockUnitResponse {
 /**
  * Model for stock-report api response
  * GET call
- * API:: (stock-report) company/:companyUniqueName/stock-group/get-stock-report?count=10&from=&page=0&stockGroupUniqueName=&stockUniqueName=d&to=
+ * API:: (stock-report) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page
  * you can pass query parameters in this as:
  * 1) from => date string
  * 2) to => date string,
