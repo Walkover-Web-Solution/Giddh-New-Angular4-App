@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { Observable } from 'rxjs/Rx';
-// import { Select2OptionData } from '../shared/theme/select2';
+import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 
 @Component({
   selector: 'invetory-sidebar',  // <home></home>
@@ -22,11 +22,12 @@ export class InventorySidebarComponent implements OnInit {
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private sidebarAction: SidebarAction) {
     this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks);
   }
   public ngOnInit() {
     console.log('hello `Home` component');
+    this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     // this.exampleData = [
     // ];
   }
