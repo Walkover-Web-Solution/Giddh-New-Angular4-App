@@ -5,7 +5,7 @@
       <div class="input-group-addon">
         <i class="glyphicon glyphicon-search"></i>
       </div>
-      <input type="text" name="accountsSearch" class="form-control" (keyup)=searchAccounts($event) placeholder="Search accounts">
+      <input type="text" name="accountsSearch" [(ngModel)]="searchAcc" class="form-control" (keyup)=searchAccounts($event) placeholder="Search accounts">
     </div>
   </div>
 

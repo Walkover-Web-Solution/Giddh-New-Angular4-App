@@ -22,7 +22,6 @@ export class LocationService {
   }
 
   public GetCity(location: GeoLocationSearch) {
-    debugger
     let query = ``;
     if (location.Country !== undefined) {
       query += `address=${location.QueryString}&components=country:${location.Country}|administrative_area:${location.QueryString}`;
