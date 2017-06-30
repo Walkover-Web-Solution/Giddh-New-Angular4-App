@@ -56,6 +56,9 @@ export class GroupWithAccountsAction {
   public static GET_GROUP_TAX_HIERARCHY = 'GroupTaxHierarchy';
   public static GET_GROUP_TAX_HIERARCHY_RESPONSE = 'GroupTaxHierarchyResponse';
 
+  public static GET_GROUP_UNIQUENAME = 'GroupUniqueName';
+  public static GET_GROUP_UNIQUENAME_RESPONSE = 'GroupUniqueNameResponse';
+
   public static SHOW_ADD_ACCOUNT_FORM = 'GroupShowAddAccountForm';
   public static HIDE_ADD_ACCOUNT_FORM = 'GroupHideAddAccountForm';
   public static RESET_GROUPS_STATE = 'GroupResetState';
@@ -368,6 +371,23 @@ export class GroupWithAccountsAction {
         return this.ResetActiveGroup();
       }
     });
+
+  @Effect()
+  public GetGroupUniqueName$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME)
+    .switchMap(action => this._groupService.GetGrouptDetails(action.payload))
+    .map(response => {
+      return this.getGroupUniqueNameResponse(response);
+    });
+  @Effect()
+  public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
+    .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE)
+    .map(action => {
+      let data: BaseResponse<AccountResponse, string> = action.payload;
+      return {
+        type: ''
+      };
+    });
   constructor(
     private action$: Actions,
     private _groupService: GroupService,
@@ -581,6 +601,19 @@ export class GroupWithAccountsAction {
   public deleteGroupResponse(value: BaseResponse<string, string>): Action {
     return {
       type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE,
+      payload: value
+    };
+  }
+
+  public getGroupUniqueName(value: string): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_UNIQUENAME,
+      payload: value
+    };
+  }
+  public getGroupUniqueNameResponse(value: BaseResponse<GroupResponse, string>): Action {
+    return {
+      type: GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE,
       payload: value
     };
   }

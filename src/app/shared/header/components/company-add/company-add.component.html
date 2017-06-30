@@ -64,7 +64,7 @@
                     placeholder="Company City">
                 </div>
                 <div class="modal-footer">
-                  <button class="btn btn-success" type="submit" [disabled]="createCompanyForm.invalid">Create</button>
+                  <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid">Create</button>
                 </div>
               </form>
               <!-- <input class=" btn btn-primary center-block" style="width:80px;margin-top:45px" type="submit" wz-next value="Next" /> -->
@@ -73,7 +73,8 @@
           <wizard-step [title]="'Finish'">
             <div class="wizard-step text-center">
               <h1 class="mrT4 mrB2">Click here to manage Groups and Accounts</h1>
-              <button type="button" class="btn btn-primary btn-sm btn-block mrB1 max350 center-block" (click)="closeModalAndAndShowAddMangeModal()">
+              <button type="button" class="btn btn-primary btn-sm btn-block mrB1 max350 center-block"
+              (click)="closeModalAndShowAddMangeModal()">
                   <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> Add &amp; Manage Groups and Accounts
                 </button>
             </div>

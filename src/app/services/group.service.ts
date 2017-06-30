@@ -71,6 +71,20 @@ export class GroupService {
     }).catch((e) => HandleCatch<string, ShareGroupRequest>(e, modele, { groupUniqueName }));
   }
 
+  public GetGrouptDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+      let data: BaseResponse<GroupResponse, string> = res.json();
+      data.queryString = { groupUniqueName };
+      return data;
+    }).catch((e) => HandleCatch<GroupResponse, string>(e));
+  }
+
   // need to check on Effect
   public UnShareGroup(userEmail: string, groupUniqueName: string): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
