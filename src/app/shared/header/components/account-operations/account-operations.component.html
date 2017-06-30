@@ -42,9 +42,10 @@
           <div class="pd2">
             <form id="subGroupForm" name="subGroupForm" (submit)="addNewGroup()" [formGroup]="subGroupForm" novalidate class="">
 
-              <input type="text" placeholder="Enter Subgroup name" class="form-control form-group" formControlName="name">
+              <input type="text" placeholder="Enter Subgroup name" class="form-control form-group" formControlName="name" (change)="generateUniqueName()">
 
-              <input type="text" placeholder="Enter Unique name" class="form-control form-group" valid-unique="" formControlName="uniqueName">
+              <input type="text" placeholder="Enter Unique name" class="form-control form-group" UniqueNameDirective
+              formControlName="uniqueName">
 
               <textarea maxlength="200" class="form-control form-group" placeholder="Enter description" formControlName="desc"></textarea>
 

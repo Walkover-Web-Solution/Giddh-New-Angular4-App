@@ -22,6 +22,7 @@ import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
 import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
+import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
 
 @Component({
   selector: 'account-operations',
@@ -58,6 +59,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   public showEditTaxSection: boolean = false;
 
   public showAddAccountForm$: Observable<boolean>;
+  public fetchingGrpUniqueName$: Observable<boolean>;
+  public isGroupNameAvailable$: Observable<boolean>;
 
   public taxPopOverTemplate: string = `
   <div class="popover-content">
@@ -112,7 +115,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.companyTaxes$ = this.store.select(state => state.company.taxes);
     this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
-
+    this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName);
+    this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable);
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
       if (state.company.taxes) {
@@ -156,7 +160,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
 
     this.subGroupForm = this._fb.group({
       name: ['', Validators.required],
-      uniqueName: ['', Validators.required],
+      uniqueName: ['', [Validators.required], uniqueNameValidator],
       desc: ['']
     });
 
@@ -201,6 +205,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       }
     });
 
+    this.fetchingGrpUniqueName$.subscribe(f => {
+      if (f) {
+        this.subGroupForm.controls['uniqueName'].disable();
+      } else {
+        this.subGroupForm.controls['uniqueName'].enable();
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -260,6 +271,23 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       }
     });
   }
+  public generateUniqueName() {
+    let val: string = this.subGroupForm.controls['name'].value;
+    val = val.replace(/\\ |,|\//g, '').toLocaleLowerCase();
+    this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
+
+    this.isGroupNameAvailable$.subscribe(a => {
+      if (a !== null && a !== undefined) {
+        if (a) {
+          this.subGroupForm.patchValue({ uniqueName: val });
+        } else {
+          let num = 1;
+          this.subGroupForm.patchValue({ uniqueName: val + num });
+        }
+      }
+    });
+  }
+
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
     let grpObject = new GroupCreateRequest();
@@ -294,11 +322,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.store.dispatch(this.accountsAction.shareAccount(accObject, activeAcc.uniqueName));
     this.shareAccountForm.reset();
   }
-
   public moveToGroupSelected(event: any) {
     this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
   }
-
   public moveToAccountSelected(event: any) {
     this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
   }
@@ -318,18 +344,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
     this.moveAccountForm.reset();
   }
-
   public async unShareGroup(val) {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
     this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
   }
-
   public async unShareAccount(val) {
     let activeAcc = await this.activeAccount$.first().toPromise();
     this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
-
   public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
     listofUN = _.map(rawList, (listItem) => {
@@ -352,7 +375,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     });
     return _.flatten(listofUN);
   }
-
   public makeGroupListFlatwithLessDtl(rawList: any) {
     let obj;
     obj = _.map(rawList, (item: any) => {
@@ -365,7 +387,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     });
     return obj;
   }
-
   public async taxHierarchy() {
     let activeAccount: AccountResponse = null;
     let activeGroup: GroupResponse = null;
@@ -386,7 +407,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     }
 
   }
-
   public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
     groupList.forEach(el => {
       if (el.accounts) {
@@ -401,7 +421,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     });
     return result;
   }
-
   public applyTax() {
     let activeAccount: AccountResponse = null;
     let activeGroup: GroupResponse = null;
@@ -446,15 +465,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     }
 
   }
-
   public hideDeleteGroupModal() {
     this.deleteGroupModal.hide();
   }
-
   public hideDeleteAccountModal() {
     this.deleteAccountModal.hide();
   }
-
   public showDeleteGroupModal() {
     this.deleteGroupModal.show();
   }
@@ -467,7 +483,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
     this.hideDeleteGroupModal();
   }
-
   public deleteAccount() {
     let activeAccUniqueName = null;
     this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
