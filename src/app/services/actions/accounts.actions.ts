@@ -123,13 +123,9 @@ export class AccountsAction {
     .ofType(AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE)
     .map(action => {
       let data: BaseResponse<AccountResponse, string> = action.payload;
-      if (action.payload.status === 'error') {
-        // this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: ''
-        };
-      }
-      return this.sharedAccountWith(data.body.uniqueName);
+      return {
+        type: ''
+      };
     });
 
   @Effect()
