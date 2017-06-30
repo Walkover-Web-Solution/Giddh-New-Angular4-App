@@ -11,6 +11,7 @@ export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
   isRefreshing: boolean;
   taxes: TaxResponse[];
+  isCompanyCreationInProcess: boolean;
   isCompanyCreated: boolean;
   isTaxesLoading: boolean;
 }
@@ -23,6 +24,7 @@ const initialState: CurrentCompanyState = {
   isRefreshing: false,
   taxes: null,
   isTaxesLoading: false,
+  isCompanyCreationInProcess: false,
   isCompanyCreated: false
 };
 
@@ -30,17 +32,12 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
 
   switch (action.type) {
     case CompanyActions.CREATE_COMPANY:
-      let data: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
-      if (data.status === 'success') {
-        let newCompanies = Object.assign([], state, { isCompanyCreated: false });
-        newCompanies.companies.push(data.body);
-        return newCompanies;
-      }
-      return state;
+      return Object.assign({}, state, { isCompanyCreationInProcess: true });
     case CompanyActions.CREATE_COMPANY_RESPONSE:
       let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
         return Object.assign({}, state, {
+          isCompanyCreationInProcess: false,
           isCompanyCreated: true
         });
       }

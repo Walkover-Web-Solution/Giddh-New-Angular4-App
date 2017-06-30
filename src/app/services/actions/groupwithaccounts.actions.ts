@@ -295,7 +295,8 @@ export class GroupWithAccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         this._toasty.successToast('Group moved successfully', '');
-        return this.getGroupWithAccounts('');
+        this.store.dispatch(this.getGroupWithAccounts(''));
+        return this.ResetActiveGroup();
       }
       return {
         type: ''

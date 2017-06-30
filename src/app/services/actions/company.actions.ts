@@ -33,15 +33,19 @@ export class CompanyActions {
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)
     .switchMap(action => this._companyService.CreateCompany(action.payload))
+    .map(response => this.CreateCompanyResponse(response));
+
+  @Effect()
+  public createCompanyResponse$: Observable<Action> = this.action$
+    .ofType(CompanyActions.CREATE_COMPANY_RESPONSE)
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };
       }
       console.log('Response ' + response);
-      return this.CreateCompanyResponse(response);
+      return this.RefreshCompanies();
     });
-
   @Effect()
   public RefreshCompanies$: Observable<Action> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES)

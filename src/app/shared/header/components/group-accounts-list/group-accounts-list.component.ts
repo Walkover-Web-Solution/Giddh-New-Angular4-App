@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -19,13 +19,14 @@ export class GroupAccountsListComponent implements OnInit {
   public accountsList$: Observable<IAccountsInfo[]>;
   public activeGroup$: Observable<GroupResponse>;
   public searchLoad$: Observable<boolean>;
+  public searchAcc: string;
   public activeAccount$: Observable<AccountResponse>;
 
   public showAddAccountForm$: Observable<boolean>;
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private accountsAcction: AccountsAction, private accountsAction: AccountsAction) {
-    this.accountsList$ =  this.store.select(state => {
+    this.accountsList$ = this.store.select(state => {
       let accountsList: IAccountsInfo[] = [];
       if (state.groupwithaccounts.groupswithaccounts) {
         if (state.groupwithaccounts.activeGroup === null) {
@@ -38,6 +39,12 @@ export class GroupAccountsListComponent implements OnInit {
         });
       }
       return accountsList;
+    });
+
+    this.store.select(s => s.groupwithaccounts.accountSearchString).subscribe((s) => {
+      if (!s) {
+        this.searchAcc = '';
+      }
     });
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
