@@ -51,7 +51,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         groupArray = _.cloneDeep(state.groupsWithStocks);
         group = (action.payload as BaseResponse<StockGroupResponse, string>).body;
         for (let el of groupArray) {
-          activeGroupData = setRecursivlyStock(el.childStockGroups ? el.childStockGroups : [], group, null);
+          activeGroupData = setRecursivlyStock(el.childStockGroups ? el.childStockGroups : [], group, null, (action.payload as BaseResponse<StockGroupResponse, string>).queryString.stockUniqueName);
           if (activeGroupData) {
             break;
           } else {
@@ -116,17 +116,32 @@ const setRecursivlyActive = (groups: IGroupsWithStocksHierarchyMinItem[], unique
   return result;
 };
 
-const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: StockGroupResponse, result: IGroupsWithStocksHierarchyMinItem) => {
+const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: StockGroupResponse, result: IGroupsWithStocksHierarchyMinItem, stockUniqueName?: string) => {
   for (let el of groups) {
     if (el.uniqueName === group.uniqueName) {
       el.stocks = group.stocks;
-      result = el;
-      return result;
+      if (stockUniqueName) {
+        for (let st of el.stocks) {
+          st = Object.assign({}, st, {
+            isActive: st.uniqueName === stockUniqueName
+          });
+          // st.isActive = ();
+        }
+      }
+      el.isActive = true;
+      el.isOpen = !el.isOpen;
+      if (!result) { result = el; }
+    } else {
+      el.isActive = false;
     }
     if (el.childStockGroups && el.childStockGroups.length > 0 && !result) {
-      result = setRecursivlyActive(el.childStockGroups, group.uniqueName, result);
+      result = setRecursivlyStock(el.childStockGroups, group, result, stockUniqueName);
       if (result) {
-        return result;
+        el.isOpen = true;
+        el.isActive = false;
+        result = el;
+      } else {
+        el.isActive = false;
       }
     }
   }

@@ -16,9 +16,9 @@ export class SidebarAction {
   public GetInventoryGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetInventoryGroup)
     .switchMap(action => {
-      let groupRespce: BaseResponse<StockGroupResponse, string> = { request: 'daal0032', status: 'success', body: { uniqueName: 'daal0032', parentStockGroup: { uniqueName: 'daal0032', name: 'Daal223' }, childStockGroups: [], stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }], parentStockGroupNames: ['Daal223'], name: 'Rise111' } };
+      let groupRespce: BaseResponse<StockGroupResponse, string> = {queryString: { stockUniqueName: action.payload.stockUniqueName }, request: 'daal0032', status: 'success', body: { uniqueName: 'daal0032', parentStockGroup: { uniqueName: 'daal0032', name: 'Daal223' }, childStockGroups: [], stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }], parentStockGroupNames: ['Daal223'], name: 'Rise111' } };
       let groupRespceError: BaseResponse<StockGroupResponse, string> = { request: 'daal0032', status: 'error', code: 'Invalid', message: 'this is cool' };
-      if (action.payload === 'daal0032') {
+      if (action.payload.groupUniqueName === 'daal0032') {
         return Observable.of(groupRespce);
       } else {
         return Observable.of(groupRespceError);
@@ -42,7 +42,6 @@ export class SidebarAction {
   public GetGroupsWithStocksHierarchyMin$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin)
     .switchMap(action => {
-      debugger;
       let groupRespce: BaseResponse<GroupsWithStocksHierarchyMin, string> = {
         status: 'success', body:
         {
@@ -68,7 +67,6 @@ export class SidebarAction {
   public GetGroupsWithStocksHierarchyMinResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse)
     .map(action => {
-      debugger;
       let data: BaseResponse<StockGroupResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -88,10 +86,10 @@ export class SidebarAction {
       payload: groupUniqueName
     };
   }
-  public GetInventoryGroup(groupUniqueName: string): Action {
+  public GetInventoryGroup(groupUniqueName: string, stockUniqueName?: string): Action {
     return {
       type: InventoryActionsConst.GetInventoryGroup,
-      payload: groupUniqueName
+      payload: {groupUniqueName, stockUniqueName}
     };
   }
 
