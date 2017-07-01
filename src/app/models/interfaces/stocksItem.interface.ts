@@ -65,8 +65,8 @@ export interface IManufacturingDetails {
   linkedStocks: IStockItemDetail[];
   date?: string;
   grandTotal?: string;
-  otherExpenses: any[]; // Not sure about this field so keeping it as any for now
-  multipleOf: number;
+  otherExpenses?: any[]; // Not sure about this field so keeping it as any for now
+  multipleOf?: number;
 }
 
 export interface IStockUnitItem extends IStockItem {
@@ -82,5 +82,28 @@ export interface IStockDetail extends INameUniqueName {
   salesAccountDetails?: IAccountDetails;
   stockGroup: INameUniqueName;
   stockUnit: IStockUnitItem;
-  stockUnitCde?: string;
+  stockUnitCode?: string;
+}
+
+/**
+ * interface for stock
+ * Used in create stock api call
+ */
+export interface Istock extends INameUniqueName {
+  manufacturingDetails: IManufacturingDetails;
+  openingAmount: number;
+  openingQuantity: number;
+  purchaseAccountDetails?: IAccountDetails;
+  salesAccountDetails?: IAccountDetails;
+  stockUnitCode?: string;
+  isFsStock: boolean;
+}
+
+/**
+ * interface for stockUnit
+ * Used in create stockunit create api call
+ */
+export interface IStockUnit extends IStockItem {
+  parentStockUnit: IStockItem;
+  quantityPerUnit: number;
 }
