@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { FormBuilder } from '@angular/forms';
 import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
+import { StateDetailsRequest } from '../../../../models/api-models/Company';
 
 @Component({
   selector: 'company-add',
@@ -20,12 +21,13 @@ import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 export class CompanyAddComponent implements OnInit {
   @ViewChild('wizard') public wizard: WizardComponent;
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
-  @Output() public closeCompanyModalAndShowAddManege: EventEmitter<any> = new EventEmitter();
+  @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   public company: CompanyRequest = new CompanyRequest();
   public phoneNumber: string;
   public verificationCode: string;
   public showVerificationBox: Observable<boolean>;
   public isMobileVerified: Observable<boolean>;
+  public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
   public dataSource: Observable<any>;
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
@@ -34,6 +36,8 @@ export class CompanyAddComponent implements OnInit {
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox);
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.company.isCompanyCreationInProcess);
+
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo !== null;
@@ -58,6 +62,10 @@ export class CompanyAddComponent implements OnInit {
     this.isCompanyCreated$.subscribe(s => {
       if (s) {
         this.wizard.next();
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = this.company.uniqueName;
+        stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
+        this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
       }
     });
     this.store
@@ -97,15 +105,15 @@ export class CompanyAddComponent implements OnInit {
     company.name = this.company.name;
     company.city = this.company.city;
     company.uniqueName = this.getRandomString(company.name, company.city);
+    this.company.uniqueName = company.uniqueName;
     this.store.dispatch(this.companyActions.CreateCompany(company));
-    this.wizard.next();
   }
 
   public closeModal() {
     this.closeCompanyModal.emit();
   }
 
-  public closeModalAndAndShowAddMangeModal() {
+  public closeModalAndShowAddMangeModal() {
     this.closeCompanyModalAndShowAddManege.emit();
   }
   private getRandomString(comnanyName, city) {

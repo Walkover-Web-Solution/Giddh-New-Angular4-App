@@ -29,6 +29,7 @@ import { LocationService } from './location.service';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { AccountsAction } from './actions/accounts.actions';
 import { AccountService } from './account.service';
+import { SidebarAction } from './actions/inventory/sidebar.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -41,7 +42,8 @@ import { AccountService } from './account.service';
     EffectsModule.run(LoginActions),
     EffectsModule.run(GroupWithAccountsAction),
     EffectsModule.run(VerifyMobileActions),
-    EffectsModule.run(AccountsAction)
+    EffectsModule.run(AccountsAction),
+    EffectsModule.run(SidebarAction)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
