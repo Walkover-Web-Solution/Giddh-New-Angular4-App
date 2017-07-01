@@ -32,6 +32,7 @@
     "no-output-rename": true,
     "no-reference": false,
     "only-arrow-functions": false,
+    "jsdoc-format": false,
     "pipe-naming": [
       true,
       "camelCase",

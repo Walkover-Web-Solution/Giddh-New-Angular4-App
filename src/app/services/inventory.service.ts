@@ -28,15 +28,6 @@ export class InventoryService {
     }).catch((e) => HandleCatch<StockGroupResponse, StockGroupRequest>(e, model));
   }
 
-  public getStockUnits(): Observable<BaseResponse<StockUnitResponse[], string>> {
-    return this._http.get(INVENTORY_API.STOCK_UNITS.replace(':companyUniqueName', this.companyUniqueName))
-      .map((res) => {
-        let data: BaseResponse<StockUnitResponse[], string> = res.json();
-        data.request = this.companyUniqueName;
-        return data;
-      })
-      .catch((e) => HandleCatch<StockUnitResponse[], string>(e, this.companyUniqueName));
-  }
   /**
    * Update StockGroup
   */
@@ -50,7 +41,7 @@ export class InventoryService {
     return this._http.put(INVENTORY_API.UPDATE_STOCK_GROUP.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniquename', stockGroupUniquename), model).map((res) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res.json();
       data.request = model;
-      data.queryString = { stockGroupUniquename }
+      data.queryString = { stockGroupUniquename };
       return data;
     }).catch((e) => HandleCatch<StockGroupResponse, StockGroupRequest>(e, model, { stockGroupUniquename }));
   }
