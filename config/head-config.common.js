@@ -72,7 +72,6 @@ module.exports = {
   script: [
     { type: 'text/javascript', src: 'assets/js/jquery-1.11.3.min.js' },
     { type: 'text/javascript', src: 'assets/js//plugins/select2/js/select2.full.min.js' },
-    { type: 'text/javascript', src: 'assets/js//plugins/tagmanager/tagmanager.js' },
-    { type: 'text/javascript', src: 'https://maps.googleapis.com/maps/api/js?libraries=places' }
+    { type: 'text/javascript', src: 'assets/js//plugins/tagmanager/tagmanager.js' }
   ]
 };
