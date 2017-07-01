@@ -1,10 +1,10 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockGroupResponse, StocksResponse } from '../../models/api-models/Inventory';
+import { StockGroupResponse, StockUnitResponse } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
-import { StockUnitResponse } from '../../models/api-models/Inventory';
 import { InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 /**
  * Keeping Track of the CompanyState
@@ -63,7 +63,6 @@ const initialState: InventoryState = {
     quantityPerUnit: 1,
     code: 'hr'
   }]
-  groupsWithStocks: []
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
