@@ -1,13 +1,14 @@
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
-import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
+import { StockUnitResponse } from '../../models/api-models/Inventory';
 
 /**
  * Keeping Track of the CompanyState
  */
 export interface InventoryState {
   groupsWithStocks?: IGroupsWithStocksHierarchyMinItem[];
+  stockUnits?: StockUnitResponse[];
 }
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
   return _.orderBy(mockData.map((m) => {
@@ -49,7 +50,13 @@ const initialState: InventoryState = {
           name: '1'
         }],
       name: 'kartik'
-    }])
+    }]),
+  stockUnits: [{
+    name: 'Hour',
+    hierarchicalQuantity: 1,
+    quantityPerUnit: 1,
+    code: 'hr'
+  }]
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {

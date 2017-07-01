@@ -1,10 +1,24 @@
 /// <reference types="select2" />
 
 import {
-  AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy,
-  Output, SimpleChanges, ViewChild, ViewEncapsulation, Renderer, OnInit, forwardRef, ChangeDetectorRef
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  Renderer,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation
 } from '@angular/core';
-import { NgControl, ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { Select2OptionData } from './select2.interface';
 
@@ -150,7 +164,6 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
     }
     //
     let parentElement = this.element.parent().parent();
-    debugger;
     let options: Select2Options = {
       data: this.data,
       width: (this.width) ? this.width : 'resolve',

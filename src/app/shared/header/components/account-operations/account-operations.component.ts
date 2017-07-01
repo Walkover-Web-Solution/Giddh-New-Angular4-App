@@ -2,25 +2,32 @@ import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { Select2Component } from '../../../theme/select2/select2.component';
 import { TaxResponse } from './../../../../models/api-models/Company';
 import { CompanyActions } from './../../../../services/actions/company.actions';
-import { GroupListItemResponse } from './../../../../models/api-models/GroupListItem';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from './../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from './../../../../services/actions/groupwithaccounts.actions';
-import { GroupResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest, GroupsTaxHierarchyResponse } from './../../../../models/api-models/Group';
-import { IGroup } from './../../../../models/interfaces/group.interface';
-import { IAccountsInfo } from './../../../../models/interfaces/accountInfo.interface';
+import {
+  GroupCreateRequest,
+  GroupResponse,
+  GroupSharedWithResponse,
+  GroupsTaxHierarchyResponse,
+  MoveGroupRequest,
+  ShareGroupRequest
+} from './../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, Input } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs/Rx';
 import * as _ from 'lodash';
-import { IOption, SelectModule, SelectComponent } from 'ng-select';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { AccountsTaxHierarchyResponse } from '../../../../models/api-models/Account';
-import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../../../models/api-models/Account';
+import {
+  AccountMoveRequest,
+  AccountResponse,
+  AccountSharedWithResponse,
+  AccountsTaxHierarchyResponse,
+  ShareAccountRequest
+} from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
