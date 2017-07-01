@@ -1,6 +1,6 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IStocksItem, IStockItem, IStockReport, IStockReportItem, IStockTransaction, IStockDetail, IManufacturingDetails, IAccountDetails, IStockUnitItem } from '../interfaces/stocksItem.interface';
+import { IStocksItem, IStockItem, IStockReport, IStockReportItem, IStockTransaction, IStockDetail, IManufacturingDetails, IAccountDetails, IStockUnitItem, Istock, IStockUnit } from '../interfaces/stocksItem.interface';
 
 /*
  * Model for Create Stock Group api request
@@ -68,7 +68,7 @@ export class StockUnitResponse {
 /**
  * Model for stock-report api response
  * GET call
- * API:: (stock-report) company/:companyUniqueName/stock-group/get-stock-report?count=10&from=&page=0&stockGroupUniqueName=&stockUniqueName=d&to=
+ * API:: (stock-report) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName/report-v2?from=:from&to=:to&count=:count&page=:page
  * you can pass query parameters in this as:
  * 1) from => date string
  * 2) to => date string,
@@ -107,7 +107,54 @@ export class StockDetailResponse implements IStockDetail {
   public salesAccountDetails?: IAccountDetails;
   public stockGroup: INameUniqueName;
   public stockUnit: IStockUnitItem;
-  public stockUnitCde?: string;
+  public stockUnitCode?: string;
   public name: string;
   public uniqueName: string;
 }
+
+/*
+ * Model for create-stock api request
+ * POST call
+ * API:: (create-stock) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock
+ * its response will be hash as StockDetailResponse
+ */
+export class CreateStockRequest implements Istock {
+  public isFsStock: boolean;
+  public manufacturingDetails: IManufacturingDetails;
+  public name: string;
+  public openingAmount: number;
+  public openingQuantity: number;
+  public purchaseAccountDetails: IAccountDetails;
+  public salesAccountDetails: IAccountDetails;
+  public stockUnitCode: string;
+  public uniqueName: string;
+}
+
+/*
+ * Model for create-stock-unit api request
+ * POST call
+ * API:: (create-stock-unit) company/:companyUniqueName/stock-unit
+ * used to create custom stock units
+ * its response will be hash as StockUnitResponse
+ */
+export class StockUnitRequest implements IStockUnit {
+  public parentStockUnit: IStockItem;
+  public quantityPerUnit: number;
+  public name: string;
+  public code: string;
+}
+
+/*
+ * Delete stock api
+ * DELETE call
+ * API:: (Delete stock) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName
+ * its response will be string in body
+ */
+
+/*
+ * Delete custom stock unit api
+ * DELETE call
+ * API:: (Delete custom stock unit) company/:companyUniqueName/stock-unit/:uName
+ * uname stands for unique name of custom unit
+ * its response will be string in body
+ */
