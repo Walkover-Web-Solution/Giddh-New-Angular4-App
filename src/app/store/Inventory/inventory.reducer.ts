@@ -1,12 +1,10 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockGroupRequest, StockGroupResponse, StockUnitResponse } from '../../models/api-models/Inventory';
-import { StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import { StockGroupRequest, StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { ObjectUnsubscribedError } from 'rxjs/Rx';
 
 /**
  * Keeping Track of the CompanyState
