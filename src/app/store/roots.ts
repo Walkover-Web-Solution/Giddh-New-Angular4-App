@@ -25,5 +25,5 @@ export const reducers = {
   session: fromLogin.SessionReducer,
   groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer,
   verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
-  inventory: fromInventory.InventoryReducer
+  inventory: fromInventory.InventoryReducer,
 };

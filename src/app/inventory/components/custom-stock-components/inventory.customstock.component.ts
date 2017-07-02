@@ -2,13 +2,14 @@ import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
-import { StockUnitResponse } from '../../../models/api-models/Inventory';
+import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
+import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
-  selector: 'invetory-custom-stock',  // <home></home>
+  selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html'
 })
 export class InventoryCustomStockComponent implements OnInit {
@@ -18,11 +19,12 @@ export class InventoryCustomStockComponent implements OnInit {
     width: '100%',
     placeholder: 'Choose a parent unit'
   };
-  public stockUnit$: Observable<StockUnitResponse[]>;
+  public stockUnit$: Observable<StockUnitRequest[]>;
   public editMode: boolean;
-  public customUnitObj: StockUnitResponse = new StockUnitResponse();
+  public editCode: string;
+  public customUnitObj: StockUnitRequest = new StockUnitRequest();
 
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction) {
     this.stockUnit$ = this.store.select(p => p.inventory.stockUnits);
     this.stockUnitsDropDown$ = this.store.select(p => {
       let units = p.inventory.stockUnits;
@@ -34,26 +36,44 @@ export class InventoryCustomStockComponent implements OnInit {
   }
 
   public ngOnInit() {
-    console.log('hello `invetory-custom-stock` component');
+    console.log('hello `inventory-custom-stock` component');
+    this.store.dispatch(this.customStockActions.GetStockUnit());
     // this.exampleData = [
     // ];
   }
 
   public saveUnit(): any {
-
+    if (!this.editMode) {
+      this.store.dispatch(this.customStockActions.CreateStockUnit(this.customUnitObj));
+    } else {
+      this.store.dispatch(this.customStockActions.UpdateStockUnit(this.customUnitObj, this.editCode));
+    }
   }
 
-  public deleteUnit(): any {
-
+  public deleteUnit(code): any {
+    this.store.dispatch(this.customStockActions.DeleteStockUnit(code));
   }
 
-  public editUnit(item: StockUnitResponse, index: number) {
-    this.customUnitObj = item;
+  public editUnit(item: StockUnitRequest) {
+    this.customUnitObj = Object.assign({}, item);
+    this.editCode = item.code;
     this.editMode = true;
   }
 
   public clearFields() {
-    this.customUnitObj = new StockUnitResponse();
+    this.customUnitObj = new StockUnitRequest();
     this.editMode = false;
+    this.editCode = '';
+
+  }
+
+  public  change(v) {
+    this.stockUnit$.find(p => {
+      let unit = p.find(q => q.code === v.value);
+      if (unit !== undefined) {
+        this.customUnitObj.parentStockUnit = unit;
+        return true;
+      }
+    }).subscribe();
   }
 }

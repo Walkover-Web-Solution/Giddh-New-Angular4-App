@@ -6,7 +6,15 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { INVENTORY_API } from './apiurls/inventory.api';
 
-import { StockGroupRequest, StockGroupResponse, StocksResponse, StockUnitRequest, StockUnitResponse, CreateStockRequest, StockDetailResponse } from '../models/api-models/Inventory';
+import {
+  CreateStockRequest,
+  StockDetailResponse,
+  StockGroupRequest,
+  StockGroupResponse,
+  StocksResponse,
+  StockUnitRequest,
+  StockUnitResponse
+} from '../models/api-models/Inventory';
 import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
@@ -110,7 +118,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
+      return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
       let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count };

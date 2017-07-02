@@ -1,9 +1,9 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockGroupResponse, StockUnitResponse } from '../../models/api-models/Inventory';
+import { StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
-import { InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
+import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 /**
@@ -11,7 +11,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
  */
 export interface InventoryState {
   groupsWithStocks?: IGroupsWithStocksHierarchyMinItem[];
-  stockUnits?: StockUnitResponse[];
+  stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
   activeStock?: string;
 }
@@ -59,8 +59,8 @@ const initialState: InventoryState = {
     }]),
   stockUnits: [{
     name: 'Hour',
-    hierarchicalQuantity: 1,
     quantityPerUnit: 1,
+    parentStockUnit: null,
     code: 'hr'
   }]
 };
@@ -117,9 +117,18 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           activeGroupData = null;
         }
       }
-      return Object.assign({}, state, {
-        groupsWithStocks: groupArray,
-      });
+      return Object.assign({}, state, { groupsWithStocks: groupArray, });
+    /*
+     *Custom Stock Units...
+     * */
+    case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
+      return Object.assign({}, state, { stockUnits: action.payload });
+    case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
+      return Object.assign({}, state, { stockUnits: [...state.stockUnits, action.payload] });
+    case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
+      return Object.assign({}, state, { stockUnits: state.stockUnits.map(p => p.code === action.payload ? action.payload : p) });
+    case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
+      return Object.assign({}, state, { stockUnits: state.stockUnits.filter(p => p.code !== action.payload) });
     default:
       return state;
   }
@@ -130,7 +139,9 @@ const setRecursivlyActive = (groups: IGroupsWithStocksHierarchyMinItem[], unique
     if (el.uniqueName === uniqueName) {
       el.isActive = true;
       el.isOpen = !el.isOpen;
-      if (!result) { result = el; }
+      if (!result) {
+        result = el;
+      }
     } else {
       el.isActive = false;
     }
@@ -162,7 +173,9 @@ const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: 
       }
       el.isActive = true;
       el.isOpen = !el.isOpen;
-      if (!result) { result = el; }
+      if (!result) {
+        result = el;
+      }
     } else {
       el.isActive = false;
     }
