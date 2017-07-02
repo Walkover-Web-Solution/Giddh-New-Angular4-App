@@ -1,7 +1,7 @@
 import { SharedModule } from './../shared/shared.module';
 import { InventoryActions } from './actions/inventory.actions';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
@@ -46,6 +46,7 @@ console.log('`Inventory` bundle loaded asynchronously');
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     InventoryRoutingModule,
     Ng2BootstrapModule.forRoot(),
     SharedModule,

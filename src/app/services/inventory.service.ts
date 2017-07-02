@@ -29,6 +29,12 @@ export class InventoryService {
   constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) { }
 
   public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
     return this._http.post(INVENTORY_API.CREATE_STOCK_GROUP.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res.json();
       data.request = model;
@@ -72,6 +78,20 @@ export class InventoryService {
     }).catch((e) => HandleCatch<string, string>(e, stockGroupUniqueName, { stockGroupUniqueName }));
   }
 
+  public GetGroupsStock(stockGroupUniqueName: string): Observable<BaseResponse<StockGroupResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVENTORY_API.GROUPS_STOCKS.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName)).map((res) => {
+      let data: BaseResponse<StockGroupResponse, string> = res.json();
+      data.request = stockGroupUniqueName;
+      data.queryString = { stockGroupUniqueName };
+      return data;
+    }).catch((e) => HandleCatch<StockGroupResponse, string>(e, stockGroupUniqueName, { stockGroupUniqueName }));
+  }
   /**
    * get Groups with Stocks
   */
