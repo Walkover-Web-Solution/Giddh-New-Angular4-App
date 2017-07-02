@@ -21,8 +21,11 @@ export  class  InventoryAction {
   public  addNewGroupResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.AddNewGroupResponse)
     .map(response => {
+      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response;
       if (response.status === 'error') {
-        return { type: '' };
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Group Created Successfully');
       }
       return { type: '' };
     });
