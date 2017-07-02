@@ -9,6 +9,7 @@ import { Store, Action } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
+import { InventoryService } from '../../inventory.service';
 
 @Injectable()
 export class SidebarAction {
@@ -38,27 +39,11 @@ export class SidebarAction {
       }
       return { type: '' };
     });
+
   @Effect()
   public GetGroupsWithStocksHierarchyMin$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin)
-    .switchMap(action => {
-      let groupRespce: BaseResponse<GroupsWithStocksHierarchyMin, string> = {
-        status: 'success', body:
-        {
-          page: 1, count: 9, totalPages: 1, totalItems: 9, results: [{
-            uniqueName: 'bhaari0028', childStockGroups:
-            [{ uniqueName: 'halka0023', childStockGroups: [], name: 'Halka' }], name: 'Bhaari'
-          }, { uniqueName: 'sh', childStockGroups: [], name: 'Shares' }, { uniqueName: 'soup0034', childStockGroups: [], name: 'Soup' },
-          { uniqueName: 'daal00321', childStockGroups: [], name: 'Daal' }, { uniqueName: 'puri0040', childStockGroups: [], name: 'puri' },
-          { uniqueName: 'sav0039', childStockGroups: [], name: 'Sav22' }, {
-            uniqueName: 'daal0032', childStockGroups: [{ uniqueName: 'bhaji0038', childStockGroups: [], name: 'Bhaji' },
-            { uniqueName: 'rise0037', childStockGroups: [], name: 'Rise111' }], name: 'Daal223'
-          }, { uniqueName: 'sharma&sons', childStockGroups: [], name: 'Sharma & Sons' }, { uniqueName: 'dummy', childStockGroups: [], name: 'Dummy' }], size: 9
-        }
-      };
-      // if (action.payload === 'rise0037') {
-      return Observable.of(groupRespce);
-    })
+    .switchMap(action => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload))
     .map(response => {
       return this.GetGroupsWithStocksHierarchyMinResponse(response);
     });
@@ -77,7 +62,7 @@ export class SidebarAction {
     private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
-    private router: ActivatedRoute
+    private _inventoryService: InventoryService,
   ) {
   }
   public OpenGroup(groupUniqueName: string): Action {

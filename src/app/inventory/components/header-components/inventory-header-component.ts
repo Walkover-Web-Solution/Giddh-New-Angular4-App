@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
   <div class="top_row clearfix">
     <div class="pull-right">
       <button [routerLink]="['custom-stock']" type="button" class="btn btn-primary mrL1">Custom Stock Unit</button>
-      <button type="button" class="btn btn-primary mrL1" ng-click="stock.loadPage('add-group')">Add Group</button>
+      <button type="button" class="btn btn-primary mrL1" [routerLink]="['add-group']">Add Group</button>
     </div>
   </div>
 </div>
