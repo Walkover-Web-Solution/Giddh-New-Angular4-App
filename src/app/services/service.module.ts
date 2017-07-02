@@ -26,11 +26,9 @@ import { AccountService } from './account.service';
 import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
-
 /**
  * Home Module
  */
-import { InventoryService } from './inventory.service';
 import { InventoryAction } from './actions/inventory/inventory.actions';
 
 /**
