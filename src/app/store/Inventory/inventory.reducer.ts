@@ -5,6 +5,7 @@ import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
 import { InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { ObjectUnsubscribedError } from 'rxjs/Rx';
 
 /**
  * Keeping Track of the CompanyState
@@ -15,6 +16,8 @@ export interface InventoryState {
   activeGroup?: StockGroupResponse;
   activeStock?: string;
   isAddNewGroupInProcess: boolean;
+  fetchingGrpUniqueName: boolean;
+  isGroupNameAvailable: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -40,7 +43,9 @@ const initialState: InventoryState = {
     quantityPerUnit: 1,
     code: 'hr'
   }],
-  isAddNewGroupInProcess: false
+  isAddNewGroupInProcess: false,
+  fetchingGrpUniqueName: false,
+  isGroupNameAvailable: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -75,6 +80,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return Object.assign({}, state, {activeGroup: group, groupsWithStocks: groupArray});
       }
       return state;
+
     case InventoryActionsConst.InventoryGroupToggleOpen:
       groupUniqueName = action.payload;
       groupArray = _.cloneDeep(state.groupsWithStocks);
@@ -98,8 +104,10 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       return Object.assign({}, state, {
         groupsWithStocks: groupArray
       });
+
     case InventoryActionsConst.AddNewGroup:
       return Object.assign({}, state, {isAddNewGroupInProcess: true});
+
     case InventoryActionsConst.AddNewGroupResponse:
       let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (groupStockResponse.status === 'success') {
@@ -126,6 +134,18 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return Object.assign({}, state, {isAddNewGroupInProcess: false, groupsWithStocks: groupArray});
       }
       return state;
+    case InventoryActionsConst.GetGroupUniqueName:
+      return Object.assign({}, state, {fetchingGrpUniqueName: true, isGroupNameAvailable: null});
+    case InventoryActionsConst.GetGroupUniqueNameResponse:
+      let resData: BaseResponse<StockGroupResponse, string> = action.payload;
+      if (resData.status === 'success') {
+        return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
+      } else {
+        if (resData.code === 'STOCK_GROUP_NOT_FOUND') {
+          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
+        }
+        return state;
+      }
     default:
       return state;
   }

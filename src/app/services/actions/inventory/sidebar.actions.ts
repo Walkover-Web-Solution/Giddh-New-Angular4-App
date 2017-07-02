@@ -16,15 +16,7 @@ export class SidebarAction {
   @Effect()
   public GetInventoryGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetInventoryGroup)
-    .switchMap(action => {
-      let groupRespce: BaseResponse<StockGroupResponse, string> = {queryString: { stockUniqueName: action.payload.stockUniqueName }, request: 'daal0032', status: 'success', body: { uniqueName: 'daal0032', parentStockGroup: { uniqueName: 'daal0032', name: 'Daal223' }, childStockGroups: [], stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }], parentStockGroupNames: ['Daal223'], name: 'Rise111' } };
-      let groupRespceError: BaseResponse<StockGroupResponse, string> = { request: 'daal0032', status: 'error', code: 'Invalid', message: 'this is cool' };
-      if (action.payload.groupUniqueName === 'daal0032') {
-        return Observable.of(groupRespce);
-      } else {
-        return Observable.of(groupRespceError);
-      }
-    })
+    .switchMap(action => this._inventoryService.GetGroupsStock(action.payload.groupUniqueName))
     .map(response => {
       return this.GetInventoryGroupResponse(response);
     });
@@ -37,6 +29,22 @@ export class SidebarAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
+      return { type: '' };
+    });
+
+  @Effect()
+  public GetGroupUniqueName$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetGroupUniqueName)
+    .switchMap(action => this._inventoryService.GetGroupsStock(action.payload))
+    .map(response => {
+      return this.GetGroupUniqueNameResponse(response);
+    });
+
+  @Effect()
+  public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetGroupUniqueNameResponse)
+    .map(action => {
+      let data: BaseResponse<StockGroupResponse, string> = action.payload;
       return { type: '' };
     });
 
@@ -81,6 +89,20 @@ export class SidebarAction {
   public GetInventoryGroupResponse(value: BaseResponse<StockGroupResponse, string>): Action {
     return {
       type: InventoryActionsConst.GetInventoryGroupResponse,
+      payload: value
+    };
+  }
+
+  public GetGroupUniqueName(groupUniqueName: string): Action {
+    return {
+      type: InventoryActionsConst.GetGroupUniqueName,
+      payload: groupUniqueName
+    };
+  }
+
+  public GetGroupUniqueNameResponse(value: BaseResponse<StockGroupResponse, string>): Action {
+    return {
+      type: InventoryActionsConst.GetGroupUniqueNameResponse,
       payload: value
     };
   }

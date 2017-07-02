@@ -10,8 +10,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../../services/inventory.service';
 import { StockGroupRequest } from '../../../models/api-models/Inventory';
-import { InventoryAction } from '../../../services/actions/inventory/inventory.action';
+import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -24,12 +25,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public addGroupForm: FormGroup;
   public dataSource: Observable<any>;
   public selectedGroup: IGroupsWithStocksFlattenItem;
+  public fetchingGrpUniqueName: Observable<boolean>;
+  public isGroupNameAvailable$: Observable<boolean>;
 
   /**
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private  _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction) {
+    this.fetchingGrpUniqueName = this.store.select(state => state.inventory.fetchingGrpUniqueName);
+    this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable);
   }
 
   public ngOnInit() {
@@ -42,7 +47,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     });
     this.addGroupForm = this._fb.group({
       name: ['', [Validators.required]],
-      uniqueName: ['', [Validators.required]],
+      uniqueName: ['', [Validators.required], uniqueNameValidator],
       parentStockGroupUniqueName: [{value: '', disabled: true}, [Validators.required]],
       isSelfParent: [true]
     });
@@ -61,6 +66,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         this.addGroupForm.controls['parentStockGroupUniqueName'].enable();
       }
     });
+
+    this.fetchingGrpUniqueName.subscribe(f => {
+      if (f) {
+        this.addGroupForm.controls['uniqueName'].disable();
+      } else {
+        this.addGroupForm.controls['uniqueName'].enable();
+      }
+    });
   }
 
   public ngOnDestroy() {
@@ -69,6 +82,23 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
 
   public groupSelected(event: any) {
     this.selectedGroup = event.item;
+  }
+
+  public generateUniqueName() {
+    let val: string = this.addGroupForm.controls['name'].value;
+    val = val.replace(/\\ |,|\//g, '').toLocaleLowerCase();
+    this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
+
+    this.isGroupNameAvailable$.subscribe(a => {
+      if (a !== null && a !== undefined) {
+        if (a) {
+          this.addGroupForm.patchValue({ uniqueName: val });
+        } else {
+          let num = 1;
+          this.addGroupForm.patchValue({ uniqueName: val + num });
+        }
+      }
+    });
   }
 
   public addNewGroup() {
