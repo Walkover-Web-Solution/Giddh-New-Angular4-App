@@ -30,6 +30,8 @@ import { InventoryService } from './inventory.service';
 /**
  * Home Module
  */
+import { InventoryService } from './inventory.service';
+import { InventoryAction } from './actions/inventory/inventory.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -43,6 +45,8 @@ import { InventoryService } from './inventory.service';
     EffectsModule.run(GroupWithAccountsAction),
     EffectsModule.run(VerifyMobileActions),
     EffectsModule.run(AccountsAction),
+    EffectsModule.run(SidebarAction),
+    EffectsModule.run(InventoryAction),
     EffectsModule.run(SidebarAction),
     EffectsModule.run(CustomStockUnitAction),
   ],
@@ -64,8 +68,8 @@ export class ServiceModule {
         UserAuthenticated,
         GroupService,
         AccountService,
-        ErrorHandler,
-        InventoryService
+        InventoryService,
+        ErrorHandler
       ]
     };
   }

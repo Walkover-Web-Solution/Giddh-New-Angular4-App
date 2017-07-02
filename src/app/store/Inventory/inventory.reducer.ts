@@ -1,10 +1,12 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
+import { StockGroupRequest, StockGroupResponse, StockUnitResponse } from '../../models/api-models/Inventory';
 import { StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
 import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { ObjectUnsubscribedError } from 'rxjs/Rx';
 
 /**
  * Keeping Track of the CompanyState
@@ -14,7 +16,11 @@ export interface InventoryState {
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
   activeStock?: string;
+  isAddNewGroupInProcess: boolean;
+  fetchingGrpUniqueName: boolean;
+  isGroupNameAvailable: boolean;
 }
+
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
   return _.orderBy(mockData.map((m) => {
     m = Object.assign({}, m, {
@@ -31,38 +37,15 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
  */
 // stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }]
 const initialState: InventoryState = {
-  groupsWithStocks: prepare([
-    { uniqueName: 'new', childStockGroups: [], name: 'new' },
-    {
-      uniqueName: 'subgroup',
-      childStockGroups: [
-        { uniqueName: 'test', childStockGroups: [], name: 'test' }
-      ],
-      name: 'Sub Group'
-    },
-    {
-      uniqueName: 'kartik',
-      childStockGroups: [
-        {
-          uniqueName: '1',
-          childStockGroups: [
-            {
-              uniqueName: 'www',
-              childStockGroups: [
-                { uniqueName: 'tttt', childStockGroups: [], name: 'ttttt' }
-              ],
-              name: 'www'
-            }],
-          name: '1'
-        }],
-      name: 'kartik'
-    }]),
+  groupsWithStocks: null,
   stockUnits: [{
     name: 'Hour',
     quantityPerUnit: 1,
-    parentStockUnit: null,
     code: 'hr'
-  }]
+  }],
+  isAddNewGroupInProcess: false,
+  fetchingGrpUniqueName: false,
+  isGroupNameAvailable: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -74,7 +57,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:
       if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).status === 'success') {
         groupArray = (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.results;
-        return Object.assign({}, state, { groupsWithStocks: prepare(groupArray) });
+        return Object.assign({}, state, {groupsWithStocks: prepare(groupArray)});
       }
       return state;
 
@@ -94,9 +77,10 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           }
           activeGroupData = null;
         }
-        return Object.assign({}, state, { activeGroup: group, groupsWithStocks: groupArray });
+        return Object.assign({}, state, {activeGroup: group, groupsWithStocks: groupArray});
       }
       return state;
+
     case InventoryActionsConst.InventoryGroupToggleOpen:
       groupUniqueName = action.payload;
       groupArray = _.cloneDeep(state.groupsWithStocks);
@@ -117,7 +101,51 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           activeGroupData = null;
         }
       }
-      return Object.assign({}, state, { groupsWithStocks: groupArray, });
+      return Object.assign({}, state, {
+        groupsWithStocks: groupArray
+      });
+
+    case InventoryActionsConst.AddNewGroup:
+      return Object.assign({}, state, {isAddNewGroupInProcess: true});
+
+    case InventoryActionsConst.AddNewGroupResponse:
+      let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
+      if (groupStockResponse.status === 'success') {
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        if (groupStockResponse.request.isSelfParent) {
+          groupArray.push({
+            name: groupStockResponse.body.name,
+            uniqueName: groupStockResponse.body.uniqueName,
+            childStockGroups: [],
+            isOpen: false,
+            isActive: false
+          });
+        } else {
+          for (let el of groupArray) {
+            activeGroupData = addNewGroup(el.childStockGroups ? el.childStockGroups : [], groupStockResponse, null);
+            if (activeGroupData) {
+              el.isOpen = true;
+              el.isActive = false;
+              return;
+            }
+            activeGroupData = null;
+          }
+        }
+        return Object.assign({}, state, {isAddNewGroupInProcess: false, groupsWithStocks: groupArray});
+      }
+      return state;
+    case InventoryActionsConst.GetGroupUniqueName:
+      return Object.assign({}, state, {fetchingGrpUniqueName: true, isGroupNameAvailable: null});
+    case InventoryActionsConst.GetGroupUniqueNameResponse:
+      let resData: BaseResponse<StockGroupResponse, string> = action.payload;
+      if (resData.status === 'success') {
+        return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
+      } else {
+        if (resData.code === 'STOCK_GROUP_NOT_FOUND') {
+          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
+        }
+        return state;
+      }
     /*
      *Custom Stock Units...
      * */
@@ -181,6 +209,36 @@ const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: 
     }
     if (el.childStockGroups && el.childStockGroups.length > 0 && !result) {
       result = setRecursivlyStock(el.childStockGroups, group, result, stockUniqueName);
+      if (result) {
+        el.isOpen = true;
+        el.isActive = false;
+        result = el;
+      } else {
+        el.isActive = false;
+      }
+    }
+  }
+  return result;
+};
+
+const addNewGroup = (groups: IGroupsWithStocksHierarchyMinItem[], group: BaseResponse<StockGroupResponse, StockGroupRequest>, result: IGroupsWithStocksHierarchyMinItem) => {
+  for (let el of groups) {
+    if (el.uniqueName === group.request.parentStockGroupUniqueName) {
+      el.isActive = true;
+      el.isOpen = true;
+      el.childStockGroups.push({
+        name: group.body.name,
+        uniqueName: group.body.uniqueName,
+        childStockGroups: [],
+        isOpen: false,
+        isActive: false
+      });
+      if (!result) {
+        result = el;
+      }
+    }
+    if (el.childStockGroups && el.childStockGroups.length > 0 && !result) {
+      result = addNewGroup(el.childStockGroups, group, result);
       if (result) {
         el.isOpen = true;
         el.isActive = false;
