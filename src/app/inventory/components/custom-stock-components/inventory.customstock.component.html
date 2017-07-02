@@ -14,8 +14,8 @@
 
           <div class="form-group col-xs-3">
             <label>Parent Stock Unit</label>
-            <select2 [data]="stockUnitsDropDown$ | async" [options]="options" [value]="customUnitObj.code"></select2>
-
+            <select2 [data]="stockUnitsDropDown$ | async" [options]="options"
+                      (valueChanged)="change($event)"></select2>
           </div>
 
           <div class="form-group col-xs-3 cstuWrp">
@@ -42,14 +42,14 @@
 
         <div class="row">
           <div class="col-xs-12" *ngIf="!editMode">
-            <button type="submit" class="btn btn-sm btn-success" (click)="false"
+            <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()"
                     [disabled]="customUnitForm.invalid">Save
             </button>
             <button type="submit" class="btn btn-sm btn-primary" (click)="clearFields()">Clear</button>
           </div>
 
           <div class="col-xs-12" *ngIf="editMode">
-            <button type="submit" class="btn btn-sm btn-success" (click)="false"
+            <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()"
                     [disabled]="customUnitForm.invalid">Update
             </button>
             <button type="submit" class="btn btn-sm btn-primary" (click)="clearFields()">Cancel</button>
@@ -72,14 +72,14 @@
           </thead>
           <tbody>
           <!--<tr   repeat="item in vm.unitTypes track by $index">-->
-          <tr *ngFor="let item of stockUnit$ | async; let i = index">
+          <tr *ngFor="let item of stockUnit$ | async">
             <td>{{item.name}}</td>
             <td>{{item.code}}</td>
             <td>{{item.quantityPerUnit}}</td>
             <td>{{item.parentStockUnit?.name}}</td>
             <td class="action">
-              <button href class="btn btn-default" (click)="editUnit(item, i)">Edit</button>
-              <button href class="btn btn-default" ng-click="vm.deleteCustomUnitStock(item)">Delete</button>
+              <button href class="btn btn-default" (click)="editUnit(item)">Edit</button>
+              <button href class="btn btn-default" (click)="deleteUnit(item.code)">Delete</button>
             </td>
           </tr>
           </tbody>

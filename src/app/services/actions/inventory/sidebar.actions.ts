@@ -5,7 +5,7 @@ import { InventoryActionsConst } from './inventory.const';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../toaster.service';
-import { Store, Action } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
@@ -16,8 +16,25 @@ export class SidebarAction {
   public GetInventoryGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetInventoryGroup)
     .switchMap(action => {
-      let groupRespce: BaseResponse<StockGroupResponse, string> = {queryString: { stockUniqueName: action.payload.stockUniqueName }, request: 'daal0032', status: 'success', body: { uniqueName: 'daal0032', parentStockGroup: { uniqueName: 'daal0032', name: 'Daal223' }, childStockGroups: [], stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }], parentStockGroupNames: ['Daal223'], name: 'Rise111' } };
-      let groupRespceError: BaseResponse<StockGroupResponse, string> = { request: 'daal0032', status: 'error', code: 'Invalid', message: 'this is cool' };
+      let groupRespce: BaseResponse<StockGroupResponse, string> = {
+        queryString: { stockUniqueName: action.payload.stockUniqueName },
+        request: 'daal0032',
+        status: 'success',
+        body: {
+          uniqueName: 'daal0032',
+          parentStockGroup: { uniqueName: 'daal0032', name: 'Daal223' },
+          childStockGroups: [],
+          stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }],
+          parentStockGroupNames: ['Daal223'],
+          name: 'Rise111'
+        }
+      };
+      let groupRespceError: BaseResponse<StockGroupResponse, string> = {
+        request: 'daal0032',
+        status: 'error',
+        code: 'Invalid',
+        message: 'this is cool'
+      };
       if (action.payload.groupUniqueName === 'daal0032') {
         return Observable.of(groupRespce);
       } else {
@@ -43,17 +60,31 @@ export class SidebarAction {
     .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin)
     .switchMap(action => {
       let groupRespce: BaseResponse<GroupsWithStocksHierarchyMin, string> = {
-        status: 'success', body:
-        {
+        status: 'success', body: {
           page: 1, count: 9, totalPages: 1, totalItems: 9, results: [{
-            uniqueName: 'bhaari0028', childStockGroups:
-            [{ uniqueName: 'halka0023', childStockGroups: [], name: 'Halka' }], name: 'Bhaari'
-          }, { uniqueName: 'sh', childStockGroups: [], name: 'Shares' }, { uniqueName: 'soup0034', childStockGroups: [], name: 'Soup' },
-          { uniqueName: 'daal00321', childStockGroups: [], name: 'Daal' }, { uniqueName: 'puri0040', childStockGroups: [], name: 'puri' },
-          { uniqueName: 'sav0039', childStockGroups: [], name: 'Sav22' }, {
-            uniqueName: 'daal0032', childStockGroups: [{ uniqueName: 'bhaji0038', childStockGroups: [], name: 'Bhaji' },
-            { uniqueName: 'rise0037', childStockGroups: [], name: 'Rise111' }], name: 'Daal223'
-          }, { uniqueName: 'sharma&sons', childStockGroups: [], name: 'Sharma & Sons' }, { uniqueName: 'dummy', childStockGroups: [], name: 'Dummy' }], size: 9
+            uniqueName: 'bhaari0028',
+            childStockGroups: [{ uniqueName: 'halka0023', childStockGroups: [], name: 'Halka' }],
+            name: 'Bhaari'
+          }, { uniqueName: 'sh', childStockGroups: [], name: 'Shares' }, {
+            uniqueName: 'soup0034',
+            childStockGroups: [],
+            name: 'Soup'
+          },
+            { uniqueName: 'daal00321', childStockGroups: [], name: 'Daal' }, {
+              uniqueName: 'puri0040',
+              childStockGroups: [],
+              name: 'puri'
+            },
+            { uniqueName: 'sav0039', childStockGroups: [], name: 'Sav22' }, {
+              uniqueName: 'daal0032',
+              childStockGroups: [{ uniqueName: 'bhaji0038', childStockGroups: [], name: 'Bhaji' },
+                { uniqueName: 'rise0037', childStockGroups: [], name: 'Rise111' }],
+              name: 'Daal223'
+            }, { uniqueName: 'sharma&sons', childStockGroups: [], name: 'Sharma & Sons' }, {
+              uniqueName: 'dummy',
+              childStockGroups: [],
+              name: 'Dummy'
+            }], size: 9
         }
       };
       // if (action.payload === 'rise0037') {
@@ -73,23 +104,24 @@ export class SidebarAction {
       }
       return { type: '' };
     });
-  constructor(
-    private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private router: ActivatedRoute
-  ) {
+
+  constructor(private action$: Actions,
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private router: ActivatedRoute) {
   }
+
   public OpenGroup(groupUniqueName: string): Action {
     return {
       type: InventoryActionsConst.InventoryGroupToggleOpen,
       payload: groupUniqueName
     };
   }
+
   public GetInventoryGroup(groupUniqueName: string, stockUniqueName?: string): Action {
     return {
       type: InventoryActionsConst.GetInventoryGroup,
-      payload: {groupUniqueName, stockUniqueName}
+      payload: { groupUniqueName, stockUniqueName }
     };
   }
 
