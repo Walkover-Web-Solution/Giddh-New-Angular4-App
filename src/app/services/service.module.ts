@@ -31,7 +31,7 @@ import { AccountsAction } from './actions/accounts.actions';
 import { AccountService } from './account.service';
 import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { InventoryService } from './inventory.service';
-import { InventoryAction } from './actions/inventory/inventory.action';
+import { InventoryAction } from './actions/inventory/inventory.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
