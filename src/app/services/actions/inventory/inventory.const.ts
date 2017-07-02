@@ -9,6 +9,12 @@ export class InventoryActionsConst {
 
   public static GetInventoryStock = 'GetInventoryStock';
   public static GetInventoryStockResponse = 'GetInventoryStockResponse';
+
+  public  static  AddNewGroup = 'AddNewGroup';
+  public  static  AddNewGroupResponse = 'AddNewGroupResponse';
+
+  public static GetGroupUniqueName = 'GetGroupUniqueName';
+  public static GetGroupUniqueNameResponse = 'GetGroupUniqueNameResponse';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {
