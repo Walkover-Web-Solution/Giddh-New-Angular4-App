@@ -30,6 +30,8 @@ import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { AccountsAction } from './actions/accounts.actions';
 import { AccountService } from './account.service';
 import { SidebarAction } from './actions/inventory/sidebar.actions';
+import { InventoryService } from './inventory.service';
+import { InventoryAction } from './actions/inventory/inventory.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -43,7 +45,8 @@ import { SidebarAction } from './actions/inventory/sidebar.actions';
     EffectsModule.run(GroupWithAccountsAction),
     EffectsModule.run(VerifyMobileActions),
     EffectsModule.run(AccountsAction),
-    EffectsModule.run(SidebarAction)
+    EffectsModule.run(SidebarAction),
+    EffectsModule.run(InventoryAction)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -63,6 +66,7 @@ export class ServiceModule {
         UserAuthenticated,
         GroupService,
         AccountService,
+        InventoryService,
         ErrorHandler
       ]
     };

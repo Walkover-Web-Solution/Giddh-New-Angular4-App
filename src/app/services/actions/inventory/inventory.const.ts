@@ -10,4 +10,7 @@ export class InventoryActionsConst {
 
   public static GetInventoryStock = 'GetInventoryStock';
   public static GetInventoryStockResponse = 'GetInventoryStockResponse';
+
+  public  static  AddNewGroup = 'AddNewGroup';
+  public  static  AddNewGroupResponse = 'AddNewGroupResponse';
 }
