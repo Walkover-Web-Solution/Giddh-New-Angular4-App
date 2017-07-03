@@ -3,13 +3,13 @@ import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
-import { Subscription } from 'rxjs/Rx';
-import { ActivatedRoute } from '@angular/router';
+import { Subscription, Subject } from 'rxjs/Rx';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../../services/inventory.service';
-import { StockGroupRequest } from '../../../models/api-models/Inventory';
+import { StockGroupRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
@@ -23,65 +23,97 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public parentStockSearchString: string;
   public groupUniqueName: string;
   public addGroupForm: FormGroup;
-  public dataSource: any = [];
+  public dataSource: Subject<any> = new Subject<any>();
   public selectedGroup: IGroupsWithStocksFlattenItem;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
+  public activeGroup$: Observable<StockGroupResponse>;
 
   /**
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-              private  _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction) {
+    private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
+  private router: Router) {
     this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable);
+    this.activeGroup$ = this.store.select(state => state.inventory.activeGroup);
+
+    this.store.take(1).subscribe(state => {
+      if (state.inventory.groupsWithStocks === null) {
+        this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
+      }
+    });
   }
 
   public ngOnInit() {
+    // subscribe to url
     this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       if (this.groupUniqueName) {
-        this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
     });
+
+    // add group form
     this.addGroupForm = this._fb.group({
       name: ['', [Validators.required]],
       uniqueName: ['', [Validators.required], uniqueNameValidator],
-      parentStockGroupUniqueName: [{value: '', disabled: true}, [Validators.required]],
+      parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
       isSelfParent: [true]
     });
 
+    // source for parentgroup selection
     this.addGroupForm.controls['parentStockGroupUniqueName'].valueChanges
-    .debounceTime(700)
-    .distinctUntilChanged()
-    .switchMap((value: string) => {
-      return this._inventoryService.GetGroupsWithStocksFlatten(value);
-    })
-    .subscribe(data => {
-      this.dataSource = data.body.results;
-    });
-    // this.dataSource = Observable
-    //   .create((observer) => {
-    //     this._inventoryService.GetGroupsWithStocksFlatten(this.parentStockSearchString).subscribe((res) => {
-    //       observer.next(res.body.results);
-    //     });
-    //   });
+      .debounceTime(500)
+      .distinctUntilChanged()
+      .switchMap((value: string) => {
+        return this._inventoryService.GetGroupsWithStocksFlatten(value);
+      })
+      .subscribe(data => {
+        this.dataSource.next(data.body.results);
+      });
+
+    // enable disable parentGroup select
     this.addGroupForm.controls['isSelfParent'].valueChanges.subscribe(s => {
-      this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
       if (s) {
+        this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
         this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
       } else {
         this.addGroupForm.controls['parentStockGroupUniqueName'].enable();
-        this.addGroupForm.setErrors({groupNameInvalid: true});
+        this.addGroupForm.setErrors({ groupNameInvalid: true });
       }
     });
 
+    // fetching uniquename boolean
     this.fetchingGrpUniqueName$.subscribe(f => {
       if (f) {
         this.addGroupForm.controls['uniqueName'].disable();
       } else {
         this.addGroupForm.controls['uniqueName'].enable();
+      }
+    });
+
+    // check if active group is available if then fill form else reset form
+    this.activeGroup$.subscribe(a => {
+      if (a) {
+        let updGroupObj = new StockGroupRequest();
+        updGroupObj.name = a.name;
+        updGroupObj.uniqueName = a.uniqueName;
+
+        if (a.parentStockGroup) {
+          this.selectedGroup = { name: a.parentStockGroup.name, uniqueName: a.parentStockGroup.uniqueName };
+          updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.name;
+          this.parentStockSearchString = a.parentStockGroup.name;
+          updGroupObj.isSelfParent = false;
+        } else {
+          updGroupObj.parentStockGroupUniqueName = '';
+          this.parentStockSearchString = '';
+          updGroupObj.isSelfParent = true;
+        }
+        this.addGroupForm.patchValue(updGroupObj);
+      } else {
+        this.addGroupForm.reset();
       }
     });
   }
@@ -90,15 +122,18 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.sub.unsubscribe();
   }
 
+  // group selected
   public groupSelected(event: any) {
     this.selectedGroup = event.item;
     this.addGroupForm.updateValueAndValidity();
   }
 
-  public noGroupResultFound() {
-    this.addGroupForm.setErrors({groupNameInvalid: true});
+  // if there's no matched result
+  public onGroupResult() {
+    this.addGroupForm.setErrors({ groupNameInvalid: true });
   }
 
+  // generate uniquename
   public generateUniqueName() {
     let val: string = this.addGroupForm.controls['name'].value;
     val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
@@ -124,5 +159,25 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
     this.addGroupForm.reset();
+  }
+
+  public updateGroup() {
+    let stockRequest = new StockGroupRequest();
+    let activeGroup: StockGroupResponse = null;
+    this.activeGroup$.take(1).subscribe(a => activeGroup = a);
+    stockRequest = this.addGroupForm.value as StockGroupRequest;
+    if (!this.addGroupForm.value.isSelfParent) {
+      stockRequest.parentStockGroupUniqueName = this.selectedGroup.uniqueName;
+    }
+    this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
+    this.router.navigateByUrl('/pages/inventory/add-group');
+  }
+
+  public removeGroup() {
+    let activeGroup: StockGroupResponse = null;
+    this.activeGroup$.take(1).subscribe(a => activeGroup = a);
+    this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
+    this.addGroupForm.reset();
+    this.router.navigateByUrl('/pages/inventory/add-group');
   }
 }
