@@ -31,6 +31,7 @@ export class InventoryStockReportComponent implements OnInit {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
       if (this.groupUniqueName) {
+        debugger
         // this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName, this.stockUniqueName));
       }

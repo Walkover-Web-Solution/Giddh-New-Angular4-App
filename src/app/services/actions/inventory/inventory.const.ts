@@ -13,6 +13,12 @@ export class InventoryActionsConst {
   public  static  AddNewGroup = 'AddNewGroup';
   public  static  AddNewGroupResponse = 'AddNewGroupResponse';
 
+  public  static  UpdateGroup = 'UpdateGroup';
+  public  static  UpdateGroupResponse = 'UpdateGroupResponse';
+
+  public  static  RemoveGroup = 'RemoveGroup';
+  public  static  RemoveGroupResponse = 'RemoveGroupResponse';
+
   public static GetGroupUniqueName = 'GetGroupUniqueName';
   public static GetGroupUniqueNameResponse = 'GetGroupUniqueNameResponse';
 }
