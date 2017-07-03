@@ -8,7 +8,8 @@
     <section ng-if="stock.groupEditMode" class="clearfix " auto-height="" style="min-height: 600px; height: 507px;">
 
       <div class="form_title">
-        <label>Modify Group</label>
+        <!-- <label>Modify Group</label> -->
+        <label>Add Group</label>
       </div>
 
       <form name="updateStockGroup" class="form-theme" (submit)="addNewGroup()" [formGroup]="addGroupForm" novalidate="">
@@ -33,12 +34,14 @@
               <label>Parent Group</label>
             </div>
             <div class="form-group mrB">
-              <input  [typeahead]="dataSource"
+              <input [typeahead]="dataSource"
                       type="text"
                       [(ngModel)]="parentStockSearchString"
+                      typeaheadAsync="true"
                       formControlName="parentStockGroupUniqueName"
                       typeaheadOptionField="name"
                       (typeaheadOnSelect)="groupSelected($event)"
+                      (typeaheadNoResults)="noGroupResultFound($event)"
                      class="form-control" name="city" autocomplete="off" maxlength="50"
                     placeholder="Select">
             </div>

@@ -36,11 +36,7 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
 // stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }]
 const initialState: InventoryState = {
   groupsWithStocks: null,
-  stockUnits: [{
-    name: 'Hour',
-    quantityPerUnit: 1,
-    code: 'hr'
-  }],
+  stockUnits: null,
   isAddNewGroupInProcess: false,
   fetchingGrpUniqueName: false,
   isGroupNameAvailable: false
@@ -120,11 +116,26 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           });
         } else {
           for (let el of groupArray) {
-            activeGroupData = addNewGroup(el.childStockGroups ? el.childStockGroups : [], groupStockResponse, null);
-            if (activeGroupData) {
+            if (el.uniqueName === groupStockResponse.request.parentStockGroupUniqueName) {
+              el.childStockGroups.push({
+                name: groupStockResponse.body.name,
+                uniqueName: groupStockResponse.body.uniqueName,
+                childStockGroups: [],
+                isOpen: false,
+                isActive: false
+              });
               el.isOpen = true;
-              el.isActive = false;
-              return;
+              el.isActive = true;
+              break;
+            } else {
+              if (el.childStockGroups.length) {
+                activeGroupData = addNewGroup(el.childStockGroups, groupStockResponse, null);
+                if (activeGroupData) {
+                  el.isOpen = true;
+                  el.isActive = true;
+                  break;
+                }
+              }
             }
             activeGroupData = null;
           }
@@ -137,10 +148,10 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case InventoryActionsConst.GetGroupUniqueNameResponse:
       let resData: BaseResponse<StockGroupResponse, string> = action.payload;
       if (resData.status === 'success') {
-        return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
+        return Object.assign({}, state, {fetchingGrpUniqueName: false, isGroupNameAvailable: false});
       } else {
         if (resData.code === 'STOCK_GROUP_NOT_FOUND') {
-          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
+          return Object.assign({}, state, {fetchingGrpUniqueName: false, isGroupNameAvailable: true});
         }
         return state;
       }
@@ -148,13 +159,13 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
      *Custom Stock Units...
      * */
     case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: action.payload });
+      return Object.assign({}, state, {stockUnits: action.payload});
     case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: [...state.stockUnits, action.payload] });
+      return Object.assign({}, state, {stockUnits: [...state.stockUnits, action.payload]});
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: state.stockUnits.map(p => p.code === action.payload ? action.payload : p) });
+      return Object.assign({}, state, {stockUnits: state.stockUnits.map(p => p.code === action.payload ? action.payload : p)});
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: state.stockUnits.filter(p => p.code !== action.payload) });
+      return Object.assign({}, state, {stockUnits: state.stockUnits.filter(p => p.code !== action.payload)});
     default:
       return state;
   }
@@ -233,16 +244,14 @@ const addNewGroup = (groups: IGroupsWithStocksHierarchyMinItem[], group: BaseRes
       });
       if (!result) {
         result = el;
+        return result;
       }
     }
     if (el.childStockGroups && el.childStockGroups.length > 0 && !result) {
       result = addNewGroup(el.childStockGroups, group, result);
       if (result) {
-        el.isOpen = true;
-        el.isActive = false;
         result = el;
-      } else {
-        el.isActive = false;
+        return result;
       }
     }
   }
