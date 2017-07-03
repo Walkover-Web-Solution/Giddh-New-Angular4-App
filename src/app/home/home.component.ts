@@ -66,7 +66,9 @@ export class HomeComponent implements OnInit {
   public refreshValue(value: any): void {
     this.value = value;
   }
-
+  public selectedOption(value: any) {
+    console.log(value);
+  }
   public itemsToString(value: any[] = []): string {
     return value
       .map((item: any) => {
