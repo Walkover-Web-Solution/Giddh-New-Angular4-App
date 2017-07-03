@@ -1,0 +1,82 @@
+{
+  "_args": [
+    [
+      {
+        "raw": "@types/select2@^4.0.31",
+        "scope": "@types",
+        "escapedName": "@types%2fselect2",
+        "name": "@types/select2",
+        "rawSpec": "^4.0.31",
+        "spec": ">=4.0.31 <5.0.0",
+        "type": "range"
+      },
+      "C:\\Project\\cadtrace"
+    ]
+  ],
+  "_from": "@types/select2@>=4.0.31 <5.0.0",
+  "_id": "@types/select2@4.0.35",
+  "_inCache": true,
+  "_location": "/@types/select2",
+  "_npmOperationalInternal": {
+    "host": "packages-18-east.internal.npmjs.com",
+    "tmp": "tmp/select2-4.0.35.tgz_1494975879559_0.5881802598014474"
+  },
+  "_npmUser": {
+    "name": "types",
+    "email": "ts-npm-types@microsoft.com"
+  },
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "@types/select2@^4.0.31",
+    "scope": "@types",
+    "escapedName": "@types%2fselect2",
+    "name": "@types/select2",
+    "rawSpec": "^4.0.31",
+    "spec": ">=4.0.31 <5.0.0",
+    "type": "range"
+  },
+  "_requiredBy": [
+    "#DEV:/"
+  ],
+  "_resolved": "https://registry.npmjs.org/@types/select2/-/select2-4.0.35.tgz",
+  "_shasum": "646e0a6d2088eb76a39e255b1c130b2563e11b5d",
+  "_shrinkwrap": null,
+  "_spec": "@types/select2@^4.0.31",
+  "_where": "C:\\Project\\cadtrace",
+  "contributors": [
+    {
+      "name": "Boris Yankov",
+      "url": "https://github.com/borisyankov/"
+    }
+  ],
+  "dependencies": {
+    "@types/jquery": "*"
+  },
+  "description": "TypeScript definitions for Select2",
+  "devDependencies": {},
+  "directories": {},
+  "dist": {
+    "shasum": "646e0a6d2088eb76a39e255b1c130b2563e11b5d",
+    "tarball": "https://registry.npmjs.org/@types/select2/-/select2-4.0.35.tgz"
+  },
+  "license": "MIT",
+  "main": "",
+  "maintainers": [
+    {
+      "name": "types",
+      "email": "ts-npm-types@microsoft.com"
+    }
+  ],
+  "name": "@types/select2",
+  "optionalDependencies": {},
+  "peerDependencies": {},
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "https://www.github.com/DefinitelyTyped/DefinitelyTyped.git"
+  },
+  "scripts": {},
+  "typeScriptVersion": "2.0",
+  "typesPublisherContentHash": "1fe68c2e0602d268586c4bf4a7265478d10740967ebb376449c66269ddd9d855",
+  "version": "4.0.35"
+}

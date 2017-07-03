@@ -17,32 +17,42 @@ export class VerifyMobileActions {
 
   public static VERIFY_MOBILE_REQUEST = 'VERIFY_MOBILE_REQUEST';
   public static SHOW_VERIFICATION_BOX = 'SHOW_VERIFICATION_BOX';
+  public static SET_VERIFIACATION_MOBILENO = 'SER_VARIFICATION_MOBILENO';
   public static VERIFY_MOBILE_CODE_REQUEST = 'VERIFY_MOBILE_CODE_REQUEST';
   public static VERIFY_MOBILE_CODE_RESPONSE = 'VERIFY_MOBILE_CODE_RESPONSE';
 
   @Effect() private verifyNumber$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST)
-    .switchMap(action => this._authService.VerifyNumber(action.payload)
-      .map(response => this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, true))
-      .catch(e => {
+    .switchMap(action => this._authService.VerifyNumber(action.payload))
+    .map(response => {
+      if (response.status === 'success') {
+        this.store.dispatch(this.action(VerifyMobileActions.SET_VERIFIACATION_MOBILENO, response.request.mobileNumber));
+        this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, true));
+      } else {
         this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, false));
-        return Observable.of(e);
-      })
-    );
+        this._toasty.errorToast(response.message, response.code);
+      }
+      return { type: '' };
+    });
   @Effect() private verifyNumberCode$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST)
-    .switchMap(action => this._authService.VerifyNumberOTP(action.payload)
-      .map(response => {
+    .switchMap(action => this._authService.VerifyNumberOTP(action.payload))
+    .map(response => {
+      if (response.status === 'success') {
+        this._toasty.successToast(response.body);
         let no: string = null;
         this.store
-          .select(x => x.verifyMobile.phoneNumber)
           .take(1)
-          .subscribe(p => no = p);
+          .subscribe(p => {
+            no = p.verifyMobile.phoneNumber;
+          });
         this.store.dispatch(this.companyActions.SetContactNumber(no));
-        return this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_RESPONSE, response);
-      })
-      .catch(e => Observable.of(e))
-    );
+        this.store.dispatch(this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_RESPONSE, response));
+      } else {
+        this._toasty.errorToast(response.message, response.code);
+      }
+      return { type: '' };
+    });
   constructor(private action$: Actions,
     private _authService: AuthenticationService,
     private _toasty: ToasterService,
@@ -52,11 +62,9 @@ export class VerifyMobileActions {
 
   }
 
-  public verifyNumberRequest =
-  (model: SignupWithMobile): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_REQUEST, model)
+  public verifyNumberRequest = (model: SignupWithMobile): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_REQUEST, model);
 
-  public verifyNumberCodeRequest =
-  (verifyMobileModel: VerifyMobileModel): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST, verifyMobileModel)
+  public verifyNumberCodeRequest = (verifyMobileModel: VerifyMobileModel): Action => this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST, verifyMobileModel);
 
   private action = (type, payload) => ({ type, payload });
 }

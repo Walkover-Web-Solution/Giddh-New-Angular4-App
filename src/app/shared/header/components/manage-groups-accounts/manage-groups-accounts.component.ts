@@ -15,36 +15,27 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
 })
 export class ManageGroupsAccountsComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
-  @ViewChild('grpSrchEl') public grpSrchEl: ElementRef;
   public grpSrch: string;
   public searchLoad: Observable<boolean>;
 
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
 
   public psConfig: PerfectScrollbarConfigInterface;
+  public addNewAccountForm: boolean = false;
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
-    this.psConfig = { maxScrollbarLength: 20 };
+    this.psConfig = { maxScrollbarLength: 80 };
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    // Observable.fromEvent(this.grpSrchEl.nativeElement, 'keyup')
-    //   .map((e: any) => e.target.value)
-    //   .debounceTime(700)
-    //   .distinctUntilChanged()
-    //   .subscribe((val: string) => {
-    //     if (val.startsWith(' ')) {
-    //       return;
-    //     }
-    //     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(val));
-    //   });
+
   }
 
   public closePopupEvent() {
-    this.grpSrchEl.nativeElement.value = '';
+    this.grpSrch = '';
     this.closeEvent.emit(true);
   }
 }

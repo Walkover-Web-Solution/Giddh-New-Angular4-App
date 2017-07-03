@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 import { LaddaModule } from 'angular2-ladda';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { NgModule, ApplicationRef } from '@angular/core';
-import { AuthService, AppGlobals } from 'angular2-google-login';
 import {
   removeNgStyles,
   createNewHosts,
@@ -44,12 +43,12 @@ import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { InventoryModule } from './inventory/inventory.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' },
-  AuthService
+  { provide: APP_BASE_HREF, useValue: '/' }
 ];
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -95,6 +94,7 @@ if (ENV === 'development') {
     HttpModule,
     AboutModule,
     HomeModule,
+    InventoryModule,
     LoginModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
@@ -102,7 +102,7 @@ if (ENV === 'development') {
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
-        ...CONDITIONAL_IMPORTS,
+    ...CONDITIONAL_IMPORTS,
     Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
   ],
