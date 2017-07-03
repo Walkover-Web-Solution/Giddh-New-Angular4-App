@@ -23,9 +23,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public parentStockSearchString: string;
   public groupUniqueName: string;
   public addGroupForm: FormGroup;
-  public dataSource: Observable<any>;
+  public dataSource: any = [];
   public selectedGroup: IGroupsWithStocksFlattenItem;
-  public fetchingGrpUniqueName: Observable<boolean>;
+  public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
 
   /**
@@ -33,7 +33,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
               private  _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction) {
-    this.fetchingGrpUniqueName = this.store.select(state => state.inventory.fetchingGrpUniqueName);
+    this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable);
   }
 
@@ -52,22 +52,32 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       isSelfParent: [true]
     });
 
-    this.dataSource = Observable
-      .create((observer: any) => {
-        this._inventoryService.GetGroupsWithStocksFlatten(this.parentStockSearchString).subscribe((res) => {
-          observer.next(res.body.results);
-        });
-      });
+    this.addGroupForm.controls['parentStockGroupUniqueName'].valueChanges
+    .debounceTime(700)
+    .distinctUntilChanged()
+    .switchMap((value: string) => {
+      return this._inventoryService.GetGroupsWithStocksFlatten(value);
+    })
+    .subscribe(data => {
+      this.dataSource = data.body.results;
+    });
+    // this.dataSource = Observable
+    //   .create((observer) => {
+    //     this._inventoryService.GetGroupsWithStocksFlatten(this.parentStockSearchString).subscribe((res) => {
+    //       observer.next(res.body.results);
+    //     });
+    //   });
     this.addGroupForm.controls['isSelfParent'].valueChanges.subscribe(s => {
       this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
       if (s) {
         this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
       } else {
         this.addGroupForm.controls['parentStockGroupUniqueName'].enable();
+        this.addGroupForm.setErrors({groupNameInvalid: true});
       }
     });
 
-    this.fetchingGrpUniqueName.subscribe(f => {
+    this.fetchingGrpUniqueName$.subscribe(f => {
       if (f) {
         this.addGroupForm.controls['uniqueName'].disable();
       } else {
@@ -82,11 +92,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
 
   public groupSelected(event: any) {
     this.selectedGroup = event.item;
+    this.addGroupForm.updateValueAndValidity();
+  }
+
+  public noGroupResultFound() {
+    this.addGroupForm.setErrors({groupNameInvalid: true});
   }
 
   public generateUniqueName() {
     let val: string = this.addGroupForm.controls['name'].value;
-    val = val.replace(/\\ |,|\//g, '').toLocaleLowerCase();
+    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
     this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
 
     this.isGroupNameAvailable$.subscribe(a => {
