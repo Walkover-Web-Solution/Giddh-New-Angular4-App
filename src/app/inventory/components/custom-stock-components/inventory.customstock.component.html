@@ -1,0 +1,90 @@
+<section class="pd2 ng-scope">
+  <section class="row">
+    <div class="col-xs-12 col-md-10 col-lg-8">
+      <div class="form_title">
+        <!-- ngIf: !vm.editMode --><label ng-if="!vm.editMode" class="ng-scope">Add Custom Stock Unit</label>
+        <!-- end ngIf: !vm.editMode -->
+        <!-- ngIf: vm.editMode -->
+      </div>
+
+      <form #customUnitForm="ngForm" name="customUnitForm" class="form-theme" novalidate>
+
+        <div class="row mrBChldLbl">
+
+          <div class="form-group col-xs-3">
+            <label>Parent Stock Unit</label>
+            <select2 [data]="stockUnitsDropDown$ | async" [options]="options"
+                     [value]="customUnitObj?.parentStockUnit?.code"
+                     (valueChanged)="change($event)"></select2>
+          </div>
+
+          <div class="form-group col-xs-3 cstuWrp">
+            <span class="sign">X</span>
+            <label>Quantity per Unit<span class="required">*</span></label>
+            <input placeholder="Quantity" type="text" [(ngModel)]="customUnitObj.quantityPerUnit" name="quantityPerUnit"
+                   class="form-control" required>
+          </div>
+
+          <div class="form-group col-xs-3 cstuWrp">
+            <span class="sign fs20">=</span>
+            <label>Name<span class="required">*</span></label>
+            <input placeholder="Unit name" [(ngModel)]="customUnitObj.name" type="text" name="name" class="form-control"
+                   required>
+          </div>
+
+          <div class="form-group col-xs-3">
+            <label>Unit Code<span class="required">*</span></label>
+            <input placeholder="Unique name" type="text" name="code" [(ngModel)]="customUnitObj.code"
+                   class="form-control" required>
+          </div>
+
+        </div>
+
+        <div class="row">
+          <div class="col-xs-12" *ngIf="!editMode">
+            <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()"
+                    [disabled]="customUnitForm.invalid">Save
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary" (click)="clearFields()">Clear</button>
+          </div>
+
+          <div class="col-xs-12" *ngIf="editMode">
+            <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()"
+                    [disabled]="customUnitForm.invalid">Update
+            </button>
+            <button type="submit" class="btn btn-sm btn-primary" (click)="clearFields()">Cancel</button>
+          </div>
+        </div>
+
+      </form>
+
+
+      <div class="mrT2 clearfix">
+        <table class="col-xs-12 table_theme">
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Unit Code</th>
+            <th>Quantity per Unit</th>
+            <th>Parent Stock</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <!--<tr   repeat="item in vm.unitTypes track by $index">-->
+          <tr *ngFor="let item of stockUnit$ | async">
+            <td>{{item.name}}</td>
+            <td>{{item.code}}</td>
+            <td>{{item.quantityPerUnit}}</td>
+            <td>{{item.parentStockUnit?.name}}</td>
+            <td class="action">
+              <button href class="btn btn-default" (click)="editUnit(item)">Edit</button>
+              <button href class="btn btn-default" (click)="deleteUnit(item.code)">Delete</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</section>

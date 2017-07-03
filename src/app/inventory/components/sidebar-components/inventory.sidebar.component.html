@@ -1,0 +1,10 @@
+<section id="inventory-sidebar" class="sidebar pull-left" style="height: 558px; min-height: 558px;">
+  <div class="h100">
+    <div class="input-group width100 search-input">
+      <input type="search" placeholder="Search Stock">
+    </div>
+    <stockgrp-list [Groups]='groupsWithStocks$ | async'>
+
+    </stockgrp-list>
+  </div>
+</section>

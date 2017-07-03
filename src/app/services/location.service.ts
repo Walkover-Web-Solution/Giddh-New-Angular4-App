@@ -10,6 +10,7 @@ import { Domain } from '../models/domain';
 import { Store } from '@ngrx/store';
 import { Http } from '@angular/http';
 import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
+import * as _ from 'lodash';
 
 @Injectable()
 export class LocationService {
@@ -24,20 +25,28 @@ export class LocationService {
     let query = ``;
     if (location.Country !== undefined) {
       query += `address=${location.QueryString}&components=country:${location.Country}|administrative_area:${location.QueryString}`;
-    }else if (location.AdministratorLevel !== undefined) {
+    } else if (location.AdministratorLevel !== undefined) {
       query += `address=${location.QueryString}&components=administrative_area:${location.QueryString}`;
-    }else if (location.OnlyCity) {
+    } else if (location.OnlyCity) {
       query += `address=${location.QueryString}`;
-    }else {
+    } else {
       query += `components=country:${location.QueryString}`;
     }
     return this._http.get(this.GoogleApiURL + query)
-    .map((res) => {
-      let r = res.json();
-      console.log(r);
-      return r;
-    }
-      )
-    .catch((e) => Observable.throw(e));
+      .map((res) => {
+        let r = res.json();
+        let data = r.results.map((a) => {
+          return a.address_components.map((p) => {
+            if (_.some(p.types, (q) => q === 'locality')) {
+              return p.long_name;
+            }
+            return '';
+          });
+        });
+        data = _.flatten(data).filter(p => p !== '');
+        console.log(r);
+        return data;
+      })
+      .catch((e) => e);
   }
 }

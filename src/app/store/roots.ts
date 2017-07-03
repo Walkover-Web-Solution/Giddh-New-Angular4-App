@@ -4,16 +4,17 @@ import * as fromHome from './home/home.reducer';
 import * as fromLogin from './authentication/authentication.reducer';
 import * as fromCompany from './Company/company.reducer';
 import * as fromGroupAndAccounts from './GroupWithAccounts/groupwithaccounts.reducer';
+import * as fromInventory from './Inventory/inventory.reducer';
 
 export interface AppState {
   router: RouterState;
   home: fromHome.HomeState;
   login: fromLogin.AuthenticationState;
   session: fromLogin.SessionState;
-
   company: fromCompany.CurrentCompanyState;
   groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
   verifyMobile: fromVerifyMobileReducer.VerifyMobileState;
+  inventory: fromInventory.InventoryState;
 }
 
 export const reducers = {
@@ -23,5 +24,6 @@ export const reducers = {
   login: fromLogin.AuthenticationReducer,
   session: fromLogin.SessionReducer,
   groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer,
-  verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer
+  verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
+  inventory: fromInventory.InventoryReducer,
 };

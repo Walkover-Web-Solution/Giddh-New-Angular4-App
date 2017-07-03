@@ -15,13 +15,12 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
-import { TagInputModule } from 'ng2-tag-input';
+import { SelectModule } from './theme/select/select.module';
 
-import {
-  ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,
-  AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent,
-  GroupAccountsListComponent
-} from './header/components';
+import {  ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,  AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent,  GroupAccountsListComponent, AccountAddComponent } from './header/components';
+import { Select2Module } from './theme/select2/select2.module';
+import { TagsModule } from './theme/tags/tags.module';
+import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -31,7 +30,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     // Components / Directives/ Pipes
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe
+    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
+    AccountAddComponent, UniqueNameDirective
   ],
   imports: [
     CommonModule,
@@ -47,13 +47,13 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FormWizardModule,
-    TagInputModule
-    // Select2Module
+    SelectModule,
+    Select2Module, TagsModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
-    BrowserAnimationsModule, AccountFilterPipe, TagInputModule],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent]
+    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

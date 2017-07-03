@@ -4,6 +4,7 @@ import { IUserInfo } from '../interfaces/userInfo.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IFlattenAccountsResultItem } from '../interfaces/flattenAccountsResultItem.interface';
 import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
+import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 
 /**
  * Model for create account api response
@@ -131,7 +132,7 @@ export class AccountSharedWithResponse {
  * to get next 5 accounts
  * response will be hash as FlattenAccountsResponse
  */
-export class FlattenAccountsResponse {
+export class FlattenAccountsResponse implements IPaginatedResponse {
   public count: number;
   public page: number;
   public results: IFlattenAccountsResultItem[];

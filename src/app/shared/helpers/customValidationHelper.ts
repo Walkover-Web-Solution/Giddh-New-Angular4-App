@@ -21,3 +21,14 @@ export const mobileValidator = (control: FormControl) => {
     }
   });
 };
+
+export const uniqueNameValidator = (control: FormControl) => {
+  return new Promise<any>((resolve, reject) => {
+    let pattern = /^[a-z0-9]*$/;
+    if (!pattern.test(control.value)) {
+      resolve({ notValidUniqueName: true });
+    } else {
+      resolve(null);
+    }
+  });
+};
