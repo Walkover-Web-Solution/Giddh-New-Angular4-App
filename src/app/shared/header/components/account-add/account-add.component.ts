@@ -61,7 +61,7 @@ export class AccountAddComponent implements OnInit {
 
   public generateUniqueName() {
     let val: string = this.addAccountForm.controls['name'].value;
-    val = val.replace(/\\ |,|\//g, '').toLocaleLowerCase();
+    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
     this.isAccountNameAvailable$.subscribe(a => {

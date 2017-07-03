@@ -280,7 +280,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
   }
   public generateUniqueName() {
     let val: string = this.subGroupForm.controls['name'].value;
-    val = val.replace(/\\ |,|\//g, '').toLocaleLowerCase();
+    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
     this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
 
     this.isGroupNameAvailable$.subscribe(a => {
