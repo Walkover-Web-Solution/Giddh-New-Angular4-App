@@ -6,6 +6,7 @@ import { IGroup } from '../interfaces/group.interface';
 import { IAccountsInfo } from '../interfaces/accountInfo.interface';
 import { IFlattenGroupsAccountsDetail } from '../interfaces/flattenGroupsAccountsDetail.interface';
 import { IInheritedTaxes } from '../interfaces/inheritedTaxes.interface';
+import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 
 /**
  * Model for create group api response
@@ -111,7 +112,7 @@ export class FlattenGroupsAccountsRequest {
  * you can pass query parameters in this as page, query as q and showEmptyGroups and count which is sent 10
  * its response will be hash as FlattenGroupsAccountsResponse
  */
-export class FlattenGroupsAccountsResponse {
+export class FlattenGroupsAccountsResponse implements IPaginatedResponse {
   public count: number;
   public page: number;
   public results: IFlattenGroupsAccountsDetail[];
@@ -124,10 +125,6 @@ export class UnShareGroupRequest {
   public user: string;
 }
 
-export class UnShareGroupResponse {
-  public user: string;
-  public toastMessage: string;
-}
 /*
  * Model for tax-hierarchy api response
  * GET call

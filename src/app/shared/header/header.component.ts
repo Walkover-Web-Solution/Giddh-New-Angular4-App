@@ -11,6 +11,8 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { Router } from '@angular/router';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-header',
@@ -33,7 +35,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
-
   public selectedCompany: Observable<ComapnyResponse>;
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
@@ -49,10 +50,13 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private loginAction: LoginActions,
     private store: Store<AppState>,
     private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private router: Router
   ) {
     this.user$ = this.store.select(state => {
-      return state.session.user.user;
+      if (state.session.user) {
+        return state.session.user.user;
+      }
     });
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
@@ -60,7 +64,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     });
 
     this.companies$ = this.store.select(state => {
-      return state.company.companies;
+      return _.orderBy(state.company.companies, 'name');
     });
 
     this.selectedCompany = this.store.select(state => {
@@ -76,12 +80,14 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public ngOnInit() {
     this.store.dispatch(this.loginAction.LoginSuccess());
     this.user$.subscribe((u) => {
-      if (u.name.match(/\s/g)) {
-        let name = u.name;
-        let tmpName = name.split(' ');
-        this.userName = tmpName[0][0] + tmpName[1][0];
-      } else {
-        this.userName = u.name[0] + u.name[1];
+      if (u) {
+        if (u.name.match(/\s/g)) {
+          let name = u.name;
+          let tmpName = name.split(' ');
+          this.userName = tmpName[0][0] + tmpName[1][0];
+        } else {
+          this.userName = u.name[0] + u.name[1];
+        }
       }
     });
 
@@ -110,18 +116,22 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     this.addCompanyModal.hide();
   }
 
-  public refreshCompanies(e: Event) {
-    this.store.dispatch(this.companyActions.RefreshCompanies());
-    e.stopPropagation();
+  public hideCompanyModalAndShowAddAndManage() {
+    this.addCompanyModal.hide();
+    this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+    this.manageGroupsAccountsModal.show();
   }
 
-  public changeCompany(selectedCompanyUniqueName: string, e: Event) {
+  public refreshCompanies(e: Event) {
+    this.store.dispatch(this.companyActions.RefreshCompanies());
+  }
+
+  public changeCompany(selectedCompanyUniqueName: string) {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
     stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    e.stopPropagation();
   }
 
   public deleteCompany() {
@@ -137,5 +147,10 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   public hideDeleteCompanyModal() {
     this.deleteCompanyModal.hide();
+  }
+
+  public logout() {
+    this.store.dispatch(this.loginAction.LogOut());
+    // this.router.navigate(['/login']);
   }
 }

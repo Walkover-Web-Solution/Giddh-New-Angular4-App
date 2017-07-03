@@ -32,7 +32,7 @@ const ENV = process.env.NODE_ENV = process.env.ENV = 'production:renderer';
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 8080;
 const AppUrl = 'localhost';
-const ApiUrl = 'http://api.giddh.com/';
+const ApiUrl = 'http://apitest.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
 }).metadata, {
@@ -174,7 +174,8 @@ module.exports = function (env) {
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
-            'HMR': METADATA.HMR
+            'HMR': METADATA.HMR,
+            'isElectron': true,
           }
         }),
 
@@ -203,7 +204,7 @@ module.exports = function (env) {
           // comments: true, //debug
 
 
-          beautify: false, //prod
+          beautify: true, //prod
           output: {
             comments: false
           }, //prod
@@ -215,7 +216,7 @@ module.exports = function (env) {
             warnings: false,
             conditionals: true,
             unused: true,
-            comparisons: true,
+            comparisons: false,
             sequences: true,
             dead_code: true,
             evaluate: true,
