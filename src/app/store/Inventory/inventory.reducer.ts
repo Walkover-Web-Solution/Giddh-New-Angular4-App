@@ -36,11 +36,7 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
 // stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }]
 const initialState: InventoryState = {
   groupsWithStocks: null,
-  stockUnits: [{
-    name: 'Hour',
-    quantityPerUnit: 1,
-    code: 'hr'
-  }],
+  stockUnits: [],
   isAddNewGroupInProcess: false,
   fetchingGrpUniqueName: false,
   isGroupNameAvailable: false
