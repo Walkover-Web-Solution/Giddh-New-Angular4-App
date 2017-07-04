@@ -40,7 +40,8 @@ const initialState = {
   isLoginWithLinkedInInProcess: false,
   isLoginWithTwitterInProcess: false,
   isLoginWithEmailSubmited: false,
-  isVerifyEmailSuccess: false
+  isVerifyEmailSuccess: false,
+  user: null
 };
 
 const sessionInitialState = {
@@ -98,7 +99,8 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithLinkedInInProcess: false,
         isLoginWithTwitterInProcess: false,
         isLoginWithEmailSubmited: false,
-        isVerifyEmailSuccess: false
+        isVerifyEmailSuccess: false,
+        user: null
       });
     default:
       return state;
