@@ -3,8 +3,11 @@ export class SelectItem {
   public text: string;
   public children: SelectItem[];
   public parent: SelectItem;
+  public isActive: boolean;
+  public isLocked: boolean;
 
-  public constructor(source: any) {
+  public constructor(source: any, isLocked: boolean = false) {
+    this.isLocked = isLocked;
     if (typeof source === 'string') {
       this.id = this.text = source;
     }

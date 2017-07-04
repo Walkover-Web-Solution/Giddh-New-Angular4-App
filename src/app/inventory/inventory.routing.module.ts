@@ -19,7 +19,7 @@ import { InventoryStockReportComponent } from './components/stock-report-compone
           {
             path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication],
             children: [
-              { path: 'add-group', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication] },
+              { path: 'add-group', pathMatch: 'full', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication] },
               { path: 'add-group/:groupUniqueName', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication], },
               { path: 'add-group/:groupUniqueName/add-stock', component: InventoryAddStockComponent, canActivate: [NeedsAuthentication] },
               { path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent, canActivate: [NeedsAuthentication] },

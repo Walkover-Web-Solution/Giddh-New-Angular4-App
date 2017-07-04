@@ -46,14 +46,14 @@
   class="ui-select-container ui-select-multiple dropdown form-control open">
   <div [ngClass]="{'ui-disabled': disabled}"></div>
   <span class="ui-select-match">
-   <span *ngFor="let a of active">
+   <span *ngFor="let a of active" (click)="selectActiveClick(a,$event)">
        <span class="ui-select-match-item btn btn-default btn-secondary btn-xs"
              tabindex="-1"
              type="button"
-             [ngClass]="{'btn-default': true}">
+             [ngClass]="{'btn-default': true, 'active':a.isActive}">
           <a class="close"
              style="margin-left: 5px; padding: 0;"
-             (click)="removeClick(a, $event)">&times;</a>
+             (click)="removeClick(a, $event)" *ngIf="!a.isLocked">&times;</a>
           <span [innerHtml]="sanitize(a.text)"></span>
   </span>
   </span>
