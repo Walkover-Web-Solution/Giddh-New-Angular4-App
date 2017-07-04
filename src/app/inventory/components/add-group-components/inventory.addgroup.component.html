@@ -3,12 +3,12 @@
     <section ng-if="stock.groupEditMode" class="clearfix " auto-height="" style="min-height: 600px; height: 507px;">
 
       <div class="form_title">
-          <ng-template *ngIf="!(activeGroup$ | async);else modifyGroupLbl">
+          <div *ngIf="!(activeGroup$ | async)">
               <label>Add Group</label>
-          </ng-template>
-          <ng-template #modifyGroupLbl>
+          </div>
+          <div *ngIf="activeGroup$ | async">
             <label>Modify Group</label>
-          </ng-template>
+          </div>
       </div>
 
       <form name="updateStockGroup" class="form-theme"  [formGroup]="addGroupForm" novalidate="">
@@ -57,14 +57,14 @@
         </div>
 
         <div class="clearfix">
-          <ng-template *ngIf="!(activeGroup$ | async);else updateGroupbtn">
+          <div *ngIf="!(activeGroup$ | async);">
             <button type="submit" class="btn btn-md btn-success mrR1" (click)="addNewGroup()" [disabled]="addGroupForm.invalid">Save</button>
             <button type="reset" class="btn btn-md btn-primary">Cancel</button>
-          </ng-template>
-          <ng-template #updateGroupbtn>
+          </div>
+          <div *ngIf="activeGroup$ | async;">
              <button type="submit" [disabled]="addGroupForm.invalid" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
               <button type="submit" class="btn btn-md btn-danger" (click)="removeGroup()">Delete</button>
-          </ng-template>
+          </div>
         </div>
       </form>
 
