@@ -17,7 +17,9 @@ export class LayoutComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:no-empty
   constructor() { }
   // tslint:disable-next-line:no-empty
-  public ngOnInit() { }
+  public ngOnInit() {
+    console.log('layout');
+  }
   // tslint:disable-next-line:no-empty
   public ngAfterViewInit() { }
 }

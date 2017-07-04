@@ -37,7 +37,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
-  private router: Router) {
+    private router: Router) {
     this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable);
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup);
@@ -54,9 +54,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     // subscribe to url
     this.sub = this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
-      if (this.groupUniqueName) {
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-      }
+      let activeGroup = null;
+      this.activeGroup$.take(1).subscribe(a => {
+        if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
+          //
+        } else {
+          debugger;
+          this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+        }
+      });
     });
 
     // add group form
