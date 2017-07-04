@@ -26,7 +26,7 @@ export class InventorySidebarComponent implements OnInit {
     this.groupsWithStocks$ = this.store.select(s => s.inventory.groupsWithStocks);
   }
   public ngOnInit() {
-    console.log('hello `Home` component');
+    console.log('hello sidebar');
     this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
     // this.exampleData = [
     // ];
