@@ -72,7 +72,7 @@ export class CompanyActions {
   @Effect()
   public GetStateDetails$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_STATE_DETAILS)
-    .switchMap(action => this._companyService.getStateDetails())
+    .switchMap(action => this._companyService.getStateDetails(action.payload))
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
@@ -164,9 +164,10 @@ export class CompanyActions {
     };
   }
 
-  public GetStateDetails(): Action {
+  public GetStateDetails(cmpUniqueName?: string): Action {
     return {
-      type: CompanyActions.GET_STATE_DETAILS
+      type: CompanyActions.GET_STATE_DETAILS,
+      payload: cmpUniqueName
     };
   }
 
