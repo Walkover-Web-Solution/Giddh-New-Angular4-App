@@ -118,6 +118,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         }
         this.addGroupForm.patchValue(updGroupObj);
       } else {
+        this.store.dispatch(this.inventoryActions.resetActiveGroup());
         this.addGroupForm.reset();
       }
     });
