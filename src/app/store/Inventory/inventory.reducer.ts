@@ -1,5 +1,5 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockGroupRequest, StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import {StockDetailResponse, StockGroupRequest,  StockGroupResponse,  StockUnitRequest} from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
@@ -13,7 +13,7 @@ export interface InventoryState {
   groupsWithStocks?: IGroupsWithStocksHierarchyMinItem[];
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
-  activeStock?: string;
+  activeStock?: StockDetailResponse;
   isAddNewGroupInProcess: boolean;
   fetchingGrpUniqueName: boolean;
   isGroupNameAvailable: boolean;
