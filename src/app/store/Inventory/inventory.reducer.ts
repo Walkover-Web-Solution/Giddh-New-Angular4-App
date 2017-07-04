@@ -1,5 +1,5 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import {StockDetailResponse, StockGroupRequest,  StockGroupResponse,  StockUnitRequest} from '../../models/api-models/Inventory';
+import { StockDetailResponse, StockGroupRequest, StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
@@ -14,6 +14,7 @@ export interface InventoryState {
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
   activeStock?: StockDetailResponse;
+  activeStockUniqueName?: string;
   isAddNewGroupInProcess: boolean;
   fetchingGrpUniqueName: boolean;
   isGroupNameAvailable: boolean;
@@ -51,6 +52,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
   let group: StockGroupResponse = null;
   let activeGroupData: IGroupsWithStocksHierarchyMinItem;
   switch (action.type) {
+    case InventoryActionsConst.SetActiveStock:
+      return Object.assign({}, state, { activeStockUniqueName: action.payload });
     case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:
       if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).status === 'success') {
         groupArray = (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.results;
@@ -64,12 +67,21 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         group = (action.payload as BaseResponse<StockGroupResponse, string>).body;
         if (groupArray) {
           for (let el of groupArray) {
-            activeGroupData = setRecursivlyStock(el.childStockGroups ? el.childStockGroups : [], group, null, (action.payload as BaseResponse<StockGroupResponse, string>).queryString.stockUniqueName);
+            activeGroupData = setRecursivlyStock(el.childStockGroups ? el.childStockGroups : [], group, null, state.activeStockUniqueName);
             if (activeGroupData) {
               break;
             } else {
               if (group.uniqueName === el.uniqueName) {
                 el.stocks = group.stocks;
+                if (state.activeStockUniqueName) {
+                  for (let st of el.stocks) {
+                    st = Object.assign({}, st, {
+                      isActive: st.uniqueName === state.activeStockUniqueName
+                    });
+                  }
+                }
+                el.isActive = true;
+                el.isOpen = true;
                 break;
               }
             }
@@ -105,7 +117,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       });
 
     case InventoryActionsConst.AddNewGroup:
-      return Object.assign({}, state, { isAddNewGroupInProcess: true });
+      return Object.assign({}, state, { isAddNewGroupInProcess: true, activeStockUniqueName: null });
 
     case InventoryActionsConst.AddNewGroupResponse:
       let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
@@ -145,7 +157,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             activeGroupData = null;
           }
         }
-        return Object.assign({}, state, { isAddNewGroupInProcess: false, groupsWithStocks: groupArray });
+        return Object.assign({}, state, { isAddNewGroupInProcess: false, groupsWithStocks: groupArray, activeStockUniqueName: null });
       }
       return state;
     case InventoryActionsConst.GetGroupUniqueName:
@@ -161,7 +173,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return state;
       }
     case InventoryActionsConst.UpdateGroup:
-      return Object.assign({}, state, {isUpdateGroupInProcess: true});
+      return Object.assign({}, state, { isUpdateGroupInProcess: true });
     case InventoryActionsConst.UpdateGroupResponse:
       let resp = action.payload;
       if (resp.status === 'success') {
@@ -194,7 +206,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
           }
         }
-        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, isUpdateGroupInProcess: false});
+        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, isUpdateGroupInProcess: false });
       }
       return state;
     case InventoryActionsConst.RemoveGroup:
@@ -218,7 +230,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       }
       return state;
     case InventoryActionsConst.ResetActiveGroup:
-      return Object.assign({}, state, { activeGroup: null });
+      return Object.assign({}, state, { activeGroup: null, activeStockUniqueName: null });
 
     /*
      *Custom Stock Units...
@@ -264,6 +276,7 @@ const setRecursivlyActive = (groups: IGroupsWithStocksHierarchyMinItem[], unique
 const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: StockGroupResponse, result: IGroupsWithStocksHierarchyMinItem, stockUniqueName?: string) => {
   for (let el of groups) {
     if (el.uniqueName === group.uniqueName) {
+      debugger;
       el.stocks = group.stocks;
       if (stockUniqueName) {
         for (let st of el.stocks) {
@@ -274,7 +287,7 @@ const setRecursivlyStock = (groups: IGroupsWithStocksHierarchyMinItem[], group: 
         }
       }
       el.isActive = true;
-      el.isOpen = !el.isOpen;
+      el.isOpen = true;
       if (!result) {
         result = el;
       }

@@ -1,6 +1,7 @@
 export class InventoryActionsConst {
   public static GetGroupsWithStocksHierarchyMin = 'GetGroupsWithStocksHierarchyMin';
   public static GetGroupsWithStocksHierarchyMinResponse = 'GetGroupsWithStocksHierarchyMinResponse';
+  public static SetActiveStock = 'SetActiveStock';
   public static InventoryGroupToggleOpen = 'InventoryGroupToggleOpen';
 
   public static GetInventoryGroup = 'GetInventoryGroup';
@@ -10,16 +11,16 @@ export class InventoryActionsConst {
   public static GetInventoryStock = 'GetInventoryStock';
   public static GetInventoryStockResponse = 'GetInventoryStockResponse';
 
-  public  static  AddNewGroup = 'AddNewGroup';
-  public  static  AddNewGroupResponse = 'AddNewGroupResponse';
+  public static AddNewGroup = 'AddNewGroup';
+  public static AddNewGroupResponse = 'AddNewGroupResponse';
 
-  public  static  UpdateGroup = 'UpdateGroup';
-  public  static  UpdateGroupResponse = 'UpdateGroupResponse';
+  public static UpdateGroup = 'UpdateGroup';
+  public static UpdateGroupResponse = 'UpdateGroupResponse';
 
-  public  static  ResetActiveGroup = 'ResetGroup';
+  public static ResetActiveGroup = 'ResetGroup';
 
-  public  static  RemoveGroup = 'RemoveGroup';
-  public  static  RemoveGroupResponse = 'RemoveGroupResponse';
+  public static RemoveGroup = 'RemoveGroup';
+  public static RemoveGroupResponse = 'RemoveGroupResponse';
 
   public static GetGroupUniqueName = 'GetGroupUniqueName';
   public static GetGroupUniqueNameResponse = 'GetGroupUniqueNameResponse';
