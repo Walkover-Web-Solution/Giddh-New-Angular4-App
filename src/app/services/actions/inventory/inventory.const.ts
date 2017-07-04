@@ -13,6 +13,14 @@ export class InventoryActionsConst {
   public  static  AddNewGroup = 'AddNewGroup';
   public  static  AddNewGroupResponse = 'AddNewGroupResponse';
 
+  public  static  UpdateGroup = 'UpdateGroup';
+  public  static  UpdateGroupResponse = 'UpdateGroupResponse';
+
+  public  static  ResetActiveGroup = 'ResetGroup';
+
+  public  static  RemoveGroup = 'RemoveGroup';
+  public  static  RemoveGroupResponse = 'RemoveGroupResponse';
+
   public static GetGroupUniqueName = 'GetGroupUniqueName';
   public static GetGroupUniqueNameResponse = 'GetGroupUniqueNameResponse';
 }
@@ -26,5 +34,9 @@ export const CUSTOM_STOCK_UNIT_ACTIONS = {
   DELETE_STOCK_UNIT_RESPONSE: 'DELETE_STOCK_UNIT_RESPONSE',
   CREATE_STOCK_UNIT_RESPONSE: 'CREATE_STOCK_UNIT_RESPONSE',
   GET_STOCK_UNIT_RESPONSE: 'GET_STOCK_UNIT_RESPONSE',
+};
 
+export const STOCKS_REPORT_ACTIONS = {
+  GET_STOCKS_REPORT: 'GET_STOCKS_REPORT',
+  GET_STOCKS_REPORT_RESPONSE: 'GET_STOCKS_REPORT_RESPONSE',
 };

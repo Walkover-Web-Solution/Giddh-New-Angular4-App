@@ -1,72 +1,72 @@
-<section class="pd2 h100 ng-scope" ng-if="vm.stockId">
+<section class="pd2" *ngIf="!vm.stockId">
+  <p>Select a Stock to Load Report </p>
+  <a href (click)="getStockReport()">Refresh</a>
+</section>
+
+<section class="pd2 h100" *ngIf="vm.stockId">
 
   <div class="clearfix mrB2">
-    <button ng-click="vm.goToManageStock()" class="btn btn-primary btn-md gico-wrap ng-binding"><i class="icon-edit" aria-hidden="true"></i> Manage powerbank Stock</button>
+    <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
+      <i class="icon-edit" aria-hidden="true"></i> Manage {{ vm.selectedStock.name}} Stock</button>
   </div>
 
   <div class="filterForm clearfix pr">
     <div class="form-group mrB pull-left">
       <label>From Date</label>
       <p class="input-group">
-        <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-date ng-valid-required"
-          uib-datepicker-popup="dd-MM-yyyy" required="" datepicker-options="vm.dateOptions" is-open="vm.fromDatePickerIsOpen"
-          ng-click="vm.fromDatePickerOpen($event)" ng-model="vm.fromDate.date" max-date="vm.today" placeholder="from date">
-        <!-- ngIf: isOpen -->
+        <input type="text" class="form-control" required datepicker-options="vm.dateOptions" is-open="vm.fromDatePickerIsOpen" ng-click="vm.fromDatePickerOpen($event)"
+          ng-model="vm.fromDate.date" max-date="vm.today" placeholder="from date" />
       </p>
     </div>
     <div class="form-group mrB pull-left">
       <label>To Date</label>
       <p class="input-group">
-        <input type="text" class="form-control ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-date ng-valid-required"
-          uib-datepicker-popup="dd-MM-yyyy" required="" datepicker-options="vm.dateOptions" is-open="vm.toDatePickerIsOpen"
-          ng-click="vm.toDatePickerOpen($event)" ng-model="vm.toDate.date" min-date="vm.fromDate.date" max-date="vm.today"
-          placeholder="to date">
-        <!-- ngIf: isOpen -->
+        <input type="text" class="form-control" required datepicker-options="vm.dateOptions" is-open="vm.toDatePickerIsOpen" ng-click="vm.toDatePickerOpen($event)"
+          ng-model="vm.toDate.date" min-date="vm.fromDate.date" max-date="vm.today" placeholder="to date" />
       </p>
     </div>
     <div class="form-group">
       <label>&nbsp;</label>
-      <button class="btn btn-primary" ng-click="vm.getStockReport()">Go</button>
+      <button class="btn btn-primary" (click)="getStockReport()">Go</button>
     </div>
   </div>
 
-  <!-- ngIf: vm.report.transactions.length == 0 -->
+  <p class="mrT1" *ngIf="vm.report.transactions.length === 0">No Transactions for this Stock</p>
 
   <section style="margin-bottom: 40px">
 
-    <!-- ngIf: vm.report.openingBalance -->
-    <div class="row fs13 ng-scope" ng-if="vm.report.openingBalance">
+    <div class="row fs13" *ngIf="vm.report.openingBalance">
       <div class="col-xs-12 text-right">
 
         <span class="mrR2">
-					<label class="ng-binding">O/B Qty:
-						100
-						10k &amp;
+					<label>O/B Qty:
+						{{vm.report.openingBalance.quantity}}
+						{{vm.report.openingBalance.stockUnit}} &amp;
 					</label>
-					<label tooltip-placement="top" uib-tooltip="Rate 10.0000" class="ng-binding">₹&nbsp;1000</label>
+					<label  placement="top"
+                 tooltip="Rate {{vm.report.openingBalance.amount/vm.report.openingBalance.quantity | number:4}}">&#8377;&nbsp;{{vm.report.openingBalance.amount}}</label>
 				</span>
 
         <span>
-					<label class="ng-binding">C/B Qty:
-						90
-						10k &amp;
+					<label>C/B Qty:
+						{{vm.report.closingBalance.quantity}}
+						{{vm.report.closingBalance.stockUnit}} &amp;
 					</label>
-					<label tooltip-placement="top" uib-tooltip="Rate 10.0000" class="ng-binding">₹&nbsp;900</label>
+					<label tooltip-placement="top"
+                 tooltip="Rate {{vm.report.closingBalance.amount/vm.report.closingBalance.quantity | number:4}}">&#8377;&nbsp;{{vm.report.closingBalance.amount}}</label>
 				</span>
 
       </div>
     </div>
-    <!-- end ngIf: vm.report.openingBalance -->
 
-    <!-- ngIf: vm.report.transactions.length > 0 -->
-    <table class="mrT1 stkRprtTbl table_theme width100 ng-scope" ng-if="vm.report.transactions.length > 0">
+    <table class="mrT1 stkRprtTbl table_theme width100" *ngIf="vm.report.transactions.length > 0">
       <thead>
         <tr>
           <th rowspan="2">Date</th>
           <th rowspan="2">Voucher Type</th>
           <th rowspan="2" class="bdrR">Account name</th>
           <th colspan="4" class="alC">Transactions</th>
-          <th class="bdrL">Closing Stock</th>
+          <th class="bdrL" class="alC">Closing Stock</th>
         </tr>
         <tr>
           <th>Inwards</th>
@@ -77,32 +77,30 @@
         </tr>
       </thead>
       <tbody>
-        <!-- ngRepeat: txn in vm.report.transactions -->
-        <tr ng-repeat="txn in vm.report.transactions" class="ng-scope">
-          <td ng-bind="txn.entryDate" class="ng-binding">26-06-2017</td>
-          <td ng-bind="txn.voucherType" class="ng-binding">SALES</td>
-          <td ng-bind="txn.account.name" class="ng-binding">General Reserves</td>
+        <tr ng-repeat="txn in vm.report.transactions">
+          <td ng-bind="txn.entryDate"></td>
+          <td ng-bind="txn.voucherType"></td>
+          <td ng-bind="txn.account.name"></td>
           <td>
-            <!-- ngIf: txn.type == 'dr' -->
-            <!-- ngIf: txn.type == 'cr' --><span ng-if="txn.type == 'cr'" class="ng-scope">-</span>
-            <!-- end ngIf: txn.type == 'cr' -->
-          </td>
-          <td>
-            <!-- ngIf: txn.type == 'cr' --><span ng-if="txn.type == 'cr'" class="ng-binding ng-scope">
-							1&nbsp;100k
+            <span *ngIf="txn.type == 'dr'">
+							{{txn.quantity}}&nbsp;{{txn.stockUnit}}
 						</span>
-            <!-- end ngIf: txn.type == 'cr' -->
-            <!-- ngIf: txn.type == 'dr' -->
+            <span *ngIf="txn.type == 'cr'">-</span>
           </td>
-          <td ng-bind="txn.rate" ng-class="txn.type === 'cr'? 'cr' : 'dr' " class="ng-binding cr">200</td>
-          <td ng-class="txn.type === 'cr'? 'cr' : 'dr' " class="ng-binding cr">
-            200
+          <td>
+            <span *ngIf="txn.type == 'cr'">
+							{{txn.quantity}}&nbsp;{{txn.stockUnit}}
+						</span>
+            <span *ngIf="txn.type == 'dr'">-</span>
           </td>
-          <td class="ng-binding">
-            90&nbsp;10k
+          <td ng-bind="txn.rate" ng-class="txn.type === 'cr'? 'cr' : 'dr' "></td>
+          <td ng-class="txn.type === 'cr'? 'cr' : 'dr' ">
+            {{txn.amount}}
+          </td>
+          <td>
+            {{txn.closingQuantity}}&nbsp;{{vm.report.stockUnit}}
           </td>
         </tr>
-        <!-- end ngRepeat: txn in vm.report.transactions -->
       </tbody>
       <tfoot>
         <tr>
@@ -110,13 +108,11 @@
             <div class="pagination pull-right">
               <ul class="list-inline">
                 <li>
-                  <button class="btn btn-default" ng-click="vm.report.page = vm.report.page-1; vm.getStockReport()" ng-disabled="vm.report.page == 1"
-                    disabled="disabled">Prev</button>
+                  <button class="btn btn-default" ng-click="vm.report.page = vm.report.page-1; vm.getStockReport()" ng-disabled="vm.report.page == 1">Prev</button>
                 </li>
-                <li class="ng-binding">1/1</li>
+                <li>{{vm.report.page}}/{{vm.report.totalPages}}</li>
                 <li>
-                  <button class="btn btn-default" ng-click="vm.report.page = vm.report.page+1; vm.getStockReport()" ng-disabled="vm.report.page == vm.report.totalPages"
-                    disabled="disabled">Next</button>
+                  <button class="btn btn-default" ng-click="vm.report.page = vm.report.page+1; vm.getStockReport()" ng-disabled="vm.report.page == vm.report.totalPages">Next</button>
                 </li>
               </ul>
             </div>
@@ -124,6 +120,5 @@
         </tr>
       </tfoot>
     </table>
-    <!-- end ngIf: vm.report.transactions.length > 0 -->
   </section>
 </section>

@@ -1,18 +1,17 @@
 <section class="col-xs-12 col-md-8 col-lg-6 ">
   <div class="pd pdT2">
-
-    <!-- ngIf: !stock.groupEditMode -->
-
-
-    <!-- ngIf: stock.groupEditMode -->
     <section ng-if="stock.groupEditMode" class="clearfix " auto-height="" style="min-height: 600px; height: 507px;">
 
       <div class="form_title">
-        <!-- <label>Modify Group</label> -->
-        <label>Add Group</label>
+          <div *ngIf="!(activeGroup$ | async)">
+              <label>Add Group</label>
+          </div>
+          <div *ngIf="activeGroup$ | async">
+            <label>Modify Group</label>
+          </div>
       </div>
 
-      <form name="updateStockGroup" class="form-theme" (submit)="addNewGroup()" [formGroup]="addGroupForm" novalidate="">
+      <form name="updateStockGroup" class="form-theme"  [formGroup]="addGroupForm" novalidate="">
 
         <div class="row groupStockFormRow">
           <div class="form-group col-xs-6">
@@ -41,7 +40,7 @@
                       formControlName="parentStockGroupUniqueName"
                       typeaheadOptionField="name"
                       (typeaheadOnSelect)="groupSelected($event)"
-                      (typeaheadNoResults)="noGroupResultFound($event)"
+                      (typeaheadNoResults)="onGroupResult()"
                      class="form-control" name="city" autocomplete="off" maxlength="50"
                     placeholder="Select">
             </div>
@@ -58,11 +57,14 @@
         </div>
 
         <div class="clearfix">
-          <button type="submit" class="btn btn-md btn-success mrR1" [disabled]="addGroupForm.invalid">Save</button>
-          <button type="reset" class="btn btn-md btn-primary">Cancel</button>
-          <!-- <button type="submit" class="btn btn-md btn-success mrR1" ng-disabled="updateStockGroup.$invalid">Update</button>
-
-          <button type="submit" class="btn btn-md btn-danger">Delete</button> -->
+          <div *ngIf="!(activeGroup$ | async);">
+            <button type="submit" class="btn btn-md btn-success mrR1" (click)="addNewGroup()" [disabled]="addGroupForm.invalid">Save</button>
+            <button type="reset" class="btn btn-md btn-primary">Cancel</button>
+          </div>
+          <div *ngIf="activeGroup$ | async;">
+             <button type="submit" [disabled]="addGroupForm.invalid" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
+              <button type="submit" class="btn btn-md btn-danger" (click)="removeGroup()">Delete</button>
+          </div>
         </div>
       </form>
 
