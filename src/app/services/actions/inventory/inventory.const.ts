@@ -16,6 +16,8 @@ export class InventoryActionsConst {
   public  static  UpdateGroup = 'UpdateGroup';
   public  static  UpdateGroupResponse = 'UpdateGroupResponse';
 
+  public  static  ResetActiveGroup = 'ResetGroup';
+
   public  static  RemoveGroup = 'RemoveGroup';
   public  static  RemoveGroupResponse = 'RemoveGroupResponse';
 
