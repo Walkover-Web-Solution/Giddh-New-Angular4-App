@@ -25,7 +25,6 @@ export class StockReportActions {
         }));
     });
 
-
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,

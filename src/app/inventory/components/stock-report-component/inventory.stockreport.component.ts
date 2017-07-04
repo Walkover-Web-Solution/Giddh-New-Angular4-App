@@ -23,13 +23,14 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.take(1).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
       if (this.groupUniqueName) {
         // this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
         let activeGroup = null;
         let activeStock = null;
+        this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
         this.store.select(a => a.inventory.activeGroup).take(1).subscribe(a => {
           if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
             //
@@ -37,16 +38,9 @@ export class InventoryStockReportComponent implements OnInit {
             this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
           }
         });
-
-        this.store.select(a => a.inventory.activeStock).take(1).subscribe(a => {
-          if (this.stockUniqueName && a && a.uniqueName === this.stockUniqueName) {
-            //
-          } else {
-            this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
-          }
-        });
       }
     });
+    this.sub.unsubscribe();
   }
 
   public getStockReport() {

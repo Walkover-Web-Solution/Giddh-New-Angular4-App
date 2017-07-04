@@ -19,7 +19,7 @@ export class InventoryComponent implements OnInit {
   }
 
   public ngOnInit() {
-    console.log('hello `Home` component');
+    console.log('hello inventory module');
     // this.exampleData = [
     // ];
   }
