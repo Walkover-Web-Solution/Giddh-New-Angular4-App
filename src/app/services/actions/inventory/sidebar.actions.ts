@@ -44,7 +44,6 @@ export class SidebarAction {
   public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetGroupUniqueNameResponse)
     .map(action => {
-      let data: BaseResponse<StockGroupResponse, string> = action.payload;
       return { type: '' };
     });
 

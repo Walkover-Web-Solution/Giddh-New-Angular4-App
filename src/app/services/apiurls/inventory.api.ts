@@ -4,7 +4,7 @@ export const INVENTORY_API = {
   CREATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group', // post call
   UPDATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniquename', // put call
   DELETE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
-  STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/stocks', // get call
+  STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stocks', // get call
   GROUPS_STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
   GROUPS_WITH_STOCKS_FLATTEN: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-stock-groups-with-stocks?count=:count&page=:page&q=:q', // get call
   GROUPS_WITH_STOCKS_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/hierarchical-stock-groups?q=:q&page=:page&count=:count', // get call

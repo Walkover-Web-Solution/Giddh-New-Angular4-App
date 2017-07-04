@@ -1,5 +1,5 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockGroupRequest, StockGroupResponse, StockUnitRequest } from '../../models/api-models/Inventory';
+import { StockGroupRequest, StockGroupResponse, StockUnitRequest, StockDetailResponse, StocksResponse } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
@@ -11,6 +11,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
  */
 export interface InventoryState {
   groupsWithStocks?: IGroupsWithStocksHierarchyMinItem[];
+  stocksList: StocksResponse;
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
   activeStock?: string;
@@ -18,6 +19,8 @@ export interface InventoryState {
   fetchingGrpUniqueName: boolean;
   isGroupNameAvailable: boolean;
   isUpdateGroupInProcess: boolean;
+  fetchingStockUniqueName: boolean;
+  isStockNameAvailable: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -37,12 +40,15 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
 // stocks: [{ uniqueName: 'sabji', name: 'Sabji' }, { uniqueName: 'kadi', name: 'Kadi' }]
 const initialState: InventoryState = {
   groupsWithStocks: null,
+  stocksList: null,
   stockUnits: [],
   activeGroup: null,
   isAddNewGroupInProcess: false,
   fetchingGrpUniqueName: false,
   isGroupNameAvailable: false,
-  isUpdateGroupInProcess: false
+  isUpdateGroupInProcess: false,
+  fetchingStockUniqueName: false,
+  isStockNameAvailable: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -219,7 +225,24 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       return state;
     case InventoryActionsConst.ResetActiveGroup:
       return Object.assign({}, state, { activeGroup: null });
-
+    case InventoryActionsConst.GetStockUniqueName:
+      return Object.assign({}, state, { fetchingStockUniqueName: true, isStockNameAvailable: null });
+    case InventoryActionsConst.GetStockUniqueNameResponse:
+      let resStockData: BaseResponse<StockDetailResponse, string> = action.payload;
+      if (resStockData.status === 'success') {
+        return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: false });
+      } else {
+        if (resStockData.code === 'STOCK_NOT_FOUND') {
+          return Object.assign({}, state, { fetchingStockUniqueName: false, isStockNameAvailable: true });
+        }
+        return state;
+      }
+    case InventoryActionsConst.GetStockResponse:
+      let stockResponse: BaseResponse<StocksResponse, string> = action.payload;
+      if (stockResponse.status === 'success') {
+        return Object.assign({}, state, { stocksList: stockResponse.body });
+      }
+      return state;
     /*
      *Custom Stock Units...
      * */
