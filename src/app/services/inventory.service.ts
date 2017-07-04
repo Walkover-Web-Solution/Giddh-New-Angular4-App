@@ -11,6 +11,7 @@ import {
   StockDetailResponse,
   StockGroupRequest,
   StockGroupResponse,
+  StockReportRequest,
   StocksResponse,
   StockUnitRequest,
   StockUnitResponse
@@ -26,7 +27,8 @@ export class InventoryService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) { }
+  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  }
 
   public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
     this.store.take(1).subscribe(s => {
@@ -44,7 +46,7 @@ export class InventoryService {
 
   /**
    * Update StockGroup
-  */
+   */
   public UpdateStockGroup(model: StockGroupRequest, stockGroupUniquename: string): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -62,7 +64,7 @@ export class InventoryService {
 
   /**
    * Delete StockGroup
-  */
+   */
   public DeleteStockGroup(stockGroupUniqueName: string): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -92,9 +94,10 @@ export class InventoryService {
       return data;
     }).catch((e) => HandleCatch<StockGroupResponse, string>(e, stockGroupUniqueName, { stockGroupUniqueName }));
   }
+
   /**
    * get Groups with Stocks
-  */
+   */
   public GetGroupsWithStocksFlatten(q: string = '', page: number = 1, count: string = ''): Observable<BaseResponse<GroupsWithStocksFlatten, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -112,7 +115,7 @@ export class InventoryService {
 
   /**
    * get Stocks
-  */
+   */
   public GetStocks(): Observable<BaseResponse<StocksResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -130,7 +133,7 @@ export class InventoryService {
 
   /**
    * get Stocks with hierarchy
-  */
+   */
   public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count: string = ''): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -138,7 +141,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-      return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
+    return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
       let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count };
@@ -148,7 +151,7 @@ export class InventoryService {
 
   /**
    * Create StockUnit
-  */
+   */
   public CreateStockUnit(model: StockUnitRequest): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -165,7 +168,7 @@ export class InventoryService {
 
   /**
    * Update StockUnit
-  */
+   */
   public UpdateStockUnit(model: StockUnitRequest, uName: string): Observable<BaseResponse<StockUnitResponse, StockUnitRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -183,7 +186,7 @@ export class InventoryService {
 
   /**
    * Delete StockUnit
-  */
+   */
   public DeleteStockUnit(uName: string): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -201,7 +204,7 @@ export class InventoryService {
 
   /**
    * get StockUnits
-  */
+   */
   public GetStockUnit(): Observable<BaseResponse<StockUnitResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -219,7 +222,7 @@ export class InventoryService {
 
   /**
    * Create Stock
-  */
+   */
   public CreateStock(model: CreateStockRequest, stockGroupUniqueName: string): Observable<BaseResponse<StockDetailResponse, CreateStockRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -237,7 +240,7 @@ export class InventoryService {
 
   /**
    * Update Stock
-  */
+   */
   public UpdateStock(model: CreateStockRequest, stockGroupUniqueName: string): Observable<BaseResponse<StockDetailResponse, CreateStockRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -255,7 +258,7 @@ export class InventoryService {
 
   /**
    * Delete Stock
-  */
+   */
   public DeleteStock(stockGroupUniqueName: string, stockUniqueName: string): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -273,7 +276,7 @@ export class InventoryService {
 
   /**
    * get Stockdetails
-  */
+   */
   public GetStockDetails(stockGroupUniqueName: string, stockUniqueName: string): Observable<BaseResponse<StockDetailResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -291,20 +294,42 @@ export class InventoryService {
 
   /**
    * get GetStocksReport
-  */
-  public GetStocksReport(stockGroupUniqueName: string, stockUniqueName: string, from: string = '', to: string = '', count: number = 10, page: number = 1): Observable<BaseResponse<StockDetailResponse, string>> {
+   */
+  public GetStocksReport(stockReportRequest: StockReportRequest): Observable<BaseResponse<StockDetailResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVENTORY_API.STOCK_REPORT.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName).replace(':stockUniqueName', stockUniqueName).replace(':from', from).replace(':to', to).replace(':count', count.toString()).replace(':page', page.toString())).map((res) => {
-      let data: BaseResponse<StockDetailResponse, string> = res.json();
-      data.request = '';
-      data.queryString = { stockGroupUniqueName, stockUniqueName, from, to, count, page };
-      return data;
-    }).catch((e) => HandleCatch<StockDetailResponse, string>(e, '', { stockGroupUniqueName, stockUniqueName, from, to, count, page }));
+    return this._http.get(INVENTORY_API.STOCK_REPORT.replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':stockGroupUniqueName', stockReportRequest.stockGroupUniqueName)
+      .replace(':stockUniqueName', stockReportRequest.stockUniqueName)
+      .replace(':from', stockReportRequest.from)
+      .replace(':to', stockReportRequest.to)
+      .replace(':count', stockReportRequest.count.toString())
+      .replace(':page', stockReportRequest.page.toString()))
+      .map((res) => {
+        let data: BaseResponse<StockDetailResponse, string> = res.json();
+        data.request = '';
+        data.queryString = {
+          stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+          stockUniqueName: stockReportRequest.stockUniqueName,
+          from: stockReportRequest.from,
+          to: stockReportRequest.to,
+          count: stockReportRequest.count,
+          page: stockReportRequest.page
+        }
+        ;
+        return data;
+      }).catch((e) => HandleCatch<StockDetailResponse, string>(e, '', {
+        stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
+        stockUniqueName: stockReportRequest.stockUniqueName,
+        from: stockReportRequest.from,
+        to: stockReportRequest.to,
+        count: stockReportRequest.count,
+        page: stockReportRequest.page
+      }));
   }
 
 }
