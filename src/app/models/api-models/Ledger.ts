@@ -1,4 +1,4 @@
-import { ILedger, ILedgerTransactionItem, IInvoiceRequest } from '../interfaces/ledger.interface';
+import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem } from '../interfaces/ledger.interface';
 
 /*
  * Model for ledger create api request
@@ -110,3 +110,35 @@ export class DownloadLedgerRequest {
  * 3) toDate: this will be ending date
  * Reponse will be base 64 encoded string in body
  */
+
+
+
+/*
+ * Model for transactions api response
+ * GET call
+ * API:: ( transactions ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/transactions?count=:count&fromDate=:fromDate&page=:page&q=:q&reversePage=:reversePage&sort=:sort&toDate=:toDate
+ * you can also pass query arameters parameters as
+ * 1) fromDate: this will be starting date
+ * 2) count: number per page sent 15
+ * 3) toDate: this will be ending date
+ * 4) q: query
+ * 5) reversePage: boolean
+ * 6) sort= asc or desc
+ * 7) page: number
+ * Reponse will be hash containing TransactionsResponse
+ */
+
+export class TransactionsResponse implements ITransactions {
+  public closingBalance: IClosingBalance;
+  public count: number;
+  public creditTotal: number;
+  public creditTransactions: ITransactionItem[];
+  public creditTransactionsCount: number;
+  public debitTotal: number;
+  public debitTransactions: ITransactionItem[];
+  public debitTransactionsCount: number;
+  public forwardedBalance: IForwardBalance;
+  public page: number;
+  public totalItems: number;
+  public totalPages: number;
+}
