@@ -19,6 +19,7 @@ import * as _ from 'lodash';
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
+  public session$: Observable<boolean>;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 
@@ -75,6 +76,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
     });
+    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null));
   }
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
@@ -97,6 +99,11 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   // tslint:disable-next-line:no-empty
   public ngAfterViewInit() {
+    this.session$.subscribe((s) => {
+      if (!s) {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 
   public showManageGroupsModal() {
@@ -151,6 +158,6 @@ export class HeaderComponent implements OnInit, AfterViewInit {
 
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
-    // this.router.navigate(['/login']);
+
   }
 }

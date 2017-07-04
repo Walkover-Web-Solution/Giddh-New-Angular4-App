@@ -217,6 +217,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null });
       }
       return state;
+    case InventoryActionsConst.ResetActiveGroup:
+      return Object.assign({}, state, { activeGroup: null });
 
     /*
      *Custom Stock Units...
