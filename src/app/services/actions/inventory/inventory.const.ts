@@ -23,6 +23,12 @@ export class InventoryActionsConst {
 
   public static GetGroupUniqueName = 'GetGroupUniqueName';
   public static GetGroupUniqueNameResponse = 'GetGroupUniqueNameResponse';
+
+  public static GetStockUniqueName = 'GetStockUniqueName';
+  public static GetStockUniqueNameResponse = 'GetStockUniqueNameResponse';
+
+  public static GetStock = 'GetStock';
+  public static GetStockResponse = 'GetStockResponse';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {

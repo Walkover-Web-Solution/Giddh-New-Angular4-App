@@ -234,6 +234,21 @@ export class AccountService implements OnInit {
     }).catch((e) => HandleCatch<FlattenAccountsResponse[], string>(e));
   }
 
+  public GetFlatternAccountsOfGroup(groupUniqueNames: { groupUniqueNames: string[] }, count?: any, q?: string, page?: any): Observable<BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', this.companyUniqueName).replace(':count', count || 0).replace(':q', q || '').replace(':page', page || 1), groupUniqueNames).map((res) => {
+      let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = res.json();
+      data.request = groupUniqueNames;
+      data.queryString = { count, q, page };
+      return data;
+    }).catch((e) => HandleCatch<FlattenAccountsResponse, { groupUniqueNames: string[] }>(e));
+  }
+
   public GetTaxHierarchy(accountUniqueName: string): Observable<BaseResponse<AccountsTaxHierarchyResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {

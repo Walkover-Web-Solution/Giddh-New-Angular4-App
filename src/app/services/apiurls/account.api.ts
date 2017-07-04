@@ -13,4 +13,5 @@ export const ACCOUNTS_API = {
   SHARED_WITH: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/shared-with',
   FLATTEN_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-accounts?q=:q&refresh=:refresh', // get call
   TAX_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/tax-hierarchy', // get call
+  FLATTEN_ACCOUNTS_OF_GROUPS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-accounts?count=:count&page=:page&q=:q'
 };

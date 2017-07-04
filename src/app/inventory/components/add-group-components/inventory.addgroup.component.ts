@@ -119,6 +119,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         this.addGroupForm.patchValue(updGroupObj);
       } else {
         this.addGroupForm.reset();
+        this.parentStockSearchString = '';
       }
     });
   }

@@ -29,10 +29,13 @@ export class InventoryCustomStockComponent implements OnInit {
     this.customUnitObj = new StockUnitRequest();
     this.stockUnit$ = this.store.select(p => p.inventory.stockUnits);
     this.stockUnitsDropDown$ = this.store.select(p => {
-      let units = p.inventory.stockUnits;
-      return units.map(unit => {
-        return { text: unit.name, id: unit.code };
-      });
+      if (p.inventory.stockUnits.length) {
+        let units = p.inventory.stockUnits;
+
+        return units.map(unit => {
+          return { text: unit.name, id: unit.code };
+        });
+      }
     });
 
   }
