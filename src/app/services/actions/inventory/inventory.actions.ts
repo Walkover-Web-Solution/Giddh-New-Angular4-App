@@ -113,4 +113,10 @@ export  class  InventoryAction {
       payload: value
     };
   }
+
+  public resetActiveGroup(): Action {
+    return {
+      type: InventoryActionsConst.ResetActiveGroup
+    };
+  }
 }
