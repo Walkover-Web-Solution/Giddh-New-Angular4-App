@@ -1,3 +1,5 @@
+import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
+import { AppState } from '../../../store/roots';
 import {
   Component,
   OnInit,
@@ -7,6 +9,8 @@ import {
 import { ActivatedRoute, Router, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'stock-list',
@@ -21,6 +25,8 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
   `
 })
 export class StockListComponent implements OnInit, OnDestroy {
+  public activeStock$: Observable<StockDetailResponse>;
+  public activeGroup$: Observable<StockGroupResponse>;
 
   public sub: Subscription;
   @Input()
@@ -29,18 +35,18 @@ export class StockListComponent implements OnInit, OnDestroy {
   @Input()
   public Groups: IGroupsWithStocksHierarchyMinItem;
   public stockUniqueName: any;
-  constructor(private route: ActivatedRoute, private _router: Router) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router) {
+    this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
+    this.activeStock$ = this.store.select(p => p.inventory.activeStock);
   }
   public ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      this.stockUniqueName = params['stockUniqueName'];
-    });
+    //
   }
   public ngOnDestroy() {
-    this.sub.unsubscribe();
+    //
   }
   public OpenStock(item, e: Event) {
     e.stopPropagation();
-    this._router.navigateByUrl(`/pages/inventory/add-group/${this.Groups.uniqueName}/stock-report/${item.uniqueName}`);
+    this._router.navigate(['/pages', 'inventory', 'add-group', this.Groups.uniqueName, 'stock-report', item.uniqueName]);
   }
 }

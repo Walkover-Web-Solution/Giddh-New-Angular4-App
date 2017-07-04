@@ -1,3 +1,4 @@
+import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
@@ -6,6 +7,7 @@ import { Subscription } from 'rxjs/Rx';
 import * as _ from 'lodash';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs/Observable';
 @Component({
   selector: 'stockgrp-list',
   styles: [`
@@ -25,20 +27,18 @@ import { Store } from '@ngrx/store';
   `
 })
 export class StockgrpListComponent implements OnInit, OnDestroy {
-  public sub: Subscription;
-
+  public activeStock$: Observable<StockDetailResponse>;
+  public activeGroup$: Observable<StockGroupResponse>;
   @Input()
   public Groups: IGroupsWithStocksHierarchyMinItem[];
-  public groupUniqueName: string;
   public stockUniqueName: string;
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction) {
+    this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
+    this.activeStock$ = this.store.select(p => p.inventory.activeStock);
   }
 
   public ngOnInit() {
-    this.sub = this.route.params.subscribe(params => {
-      this.groupUniqueName = params['groupUniqueName'];
-      this.stockUniqueName = params['stockUniqueName'];
-    });
+    //
   }
   public ngOnDestroy() {
     // this.sub.unsubscribe();
