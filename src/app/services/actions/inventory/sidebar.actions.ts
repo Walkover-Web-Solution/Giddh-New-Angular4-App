@@ -161,4 +161,10 @@ export class SidebarAction {
       payload: value
     };
   }
+  public SetActiveStock(value: string) {
+    return {
+      type: InventoryActionsConst.SetActiveStock,
+      payload: value
+    };
+  }
 }
