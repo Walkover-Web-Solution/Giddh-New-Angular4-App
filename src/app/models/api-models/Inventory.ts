@@ -1,6 +1,18 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
-import { IStocksItem, IStockItem, IStockReport, IStockReportItem, IStockTransaction, IStockDetail, IManufacturingDetails, IAccountDetails, IStockUnitItem, Istock, IStockUnit } from '../interfaces/stocksItem.interface';
+import {
+  IAccountDetails,
+  IManufacturingDetails,
+  Istock,
+  IStockDetail,
+  IStockItem,
+  IStockReport,
+  IStockReportItem,
+  IStocksItem,
+  IStockTransaction,
+  IStockUnit,
+  IStockUnitItem
+} from '../interfaces/stocksItem.interface';
 
 /*
  * Model for Create Stock Group api request
@@ -91,6 +103,15 @@ export class StockReportResponse implements IStockReport {
   public totalItems: number;
   public totalPages: number;
   public transactions: IStockTransaction[];
+}
+
+export class StockReportRequest {
+  public stockGroupUniqueName: string;
+  public stockUniqueName: string;
+  public from: string = '';
+  public to: string = '';
+  public count: number = 10;
+  public page: number = 1;
 }
 
 /**
