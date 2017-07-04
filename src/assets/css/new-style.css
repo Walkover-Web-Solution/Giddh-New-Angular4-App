@@ -633,10 +633,10 @@ body.light .navbar.transparent{
 	border-color: #E34A26;
 }
 .btn-secondary:active, .btn-secondary.active {
-	color: #fff;
-	background-color: #E34A26;
-	border-color: #E34A26;
-	box-shadow: none;
+	color: #fff!important;
+	background-color: #E34A26!important;
+	border-color: #E34A26!important;
+	box-shadow: none!important;
 }
 
 /*only border buttons*/

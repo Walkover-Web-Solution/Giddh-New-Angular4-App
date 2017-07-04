@@ -128,6 +128,8 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   @Input() public childrenField: string = 'children';
   @Input() public multiple: boolean = false;
 
+  @Input() public UiLockChoice: boolean = false;
+
   @Input()
   public set items(value: any[]) {
     if (!value) {
@@ -167,7 +169,7 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
           ? item
           : { id: item[this.idField], text: item[this.textField] };
 
-        return new SelectItem(data);
+        return new SelectItem(data, this.UiLockChoice && true);
       });
     }
   }
@@ -180,6 +182,8 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
   @Output() public removed: EventEmitter<any> = new EventEmitter();
   @Output() public typed: EventEmitter<any> = new EventEmitter();
   @Output() public opened: EventEmitter<any> = new EventEmitter();
+
+  @Output() public selectedOption: EventEmitter<any> = new EventEmitter();
 
   public options: SelectItem[] = [];
   public itemObjects: SelectItem[] = [];
@@ -296,7 +300,13 @@ export class SelectComponent implements OnInit, ControlValueAccessor {
     this.behavior = (this.firstItemHasChildren) ?
       new ChildrenBehavior(this) : new GenericBehavior(this);
   }
-
+  public selectActiveClick(select: SelectItem, event: Event) {
+    this._active.forEach(p => p.isActive = false);
+    if (select.isLocked && this.UiLockChoice) {
+      select.isActive = true;
+      this.selectedOption.emit(select);
+    }
+  }
   public remove(item: SelectItem): void {
     if (this._disabled === true) {
       return;

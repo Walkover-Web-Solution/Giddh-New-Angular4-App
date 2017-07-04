@@ -64,7 +64,13 @@ export class LoginActions {
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
     .map(action => {
-      this.store.dispatch(this.comapnyActions.GetStateDetails());
+      let cmpUniqueName = '';
+      this.store.select(s => s.session.companyUniqueName).take(1).subscribe(s => {
+        if (s) {
+          cmpUniqueName = s;
+        }
+      });
+      this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
       this.store.dispatch(this.comapnyActions.RefreshCompanies());
       return { type: '' };
     });
