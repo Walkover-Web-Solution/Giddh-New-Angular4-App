@@ -11,7 +11,8 @@ import {
   IStocksItem,
   IStockTransaction,
   IStockUnit,
-  IStockUnitItem
+  IStockUnitItem,
+  IStockUnitResponse
 } from '../interfaces/stocksItem.interface';
 
 /*
@@ -69,7 +70,7 @@ export class StocksResponse implements IPaginatedResponse {
  * API:: (units types) company/:companyUniqueName/stock-unit
  * Response will be a array of StockUnitResponse
  */
-export class StockUnitResponse {
+export class StockUnitResponse implements IStockUnitResponse {
   public code: string;
   public hierarchicalQuantity: number;
   public name: string;
