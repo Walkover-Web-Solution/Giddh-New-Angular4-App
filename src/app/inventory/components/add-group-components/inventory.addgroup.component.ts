@@ -59,7 +59,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
           //
         } else {
-          debugger;
           this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
         }
       });
