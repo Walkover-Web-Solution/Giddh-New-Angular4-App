@@ -65,8 +65,8 @@ export class CompanyService {
   /**
    * get state details
    */
-  public getStateDetails(): Observable<BaseResponse<StateDetailsResponse, string>> {
-    return this._http.get(COMPANY_API.GET_STATE_DETAILS).map((res) => {
+  public getStateDetails(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
+    return this._http.get(COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', cmpUniqueName ? cmpUniqueName : '')).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
       return data;
     }).catch((e) => HandleCatch<StateDetailsResponse, string>(e));
