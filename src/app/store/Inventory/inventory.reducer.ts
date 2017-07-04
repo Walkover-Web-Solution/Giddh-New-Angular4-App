@@ -17,6 +17,7 @@ export interface InventoryState {
   isAddNewGroupInProcess: boolean;
   fetchingGrpUniqueName: boolean;
   isGroupNameAvailable: boolean;
+  isUpdateGroupInProcess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -40,7 +41,8 @@ const initialState: InventoryState = {
   activeGroup: null,
   isAddNewGroupInProcess: false,
   fetchingGrpUniqueName: false,
-  isGroupNameAvailable: false
+  isGroupNameAvailable: false,
+  isUpdateGroupInProcess: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -159,7 +161,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return state;
       }
     case InventoryActionsConst.UpdateGroup:
-      return state;
+      return Object.assign({}, state, {isUpdateGroupInProcess: true});
     case InventoryActionsConst.UpdateGroupResponse:
       let resp = action.payload;
       if (resp.status === 'success') {
@@ -192,7 +194,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
           }
         }
-        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: resp.request});
+        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, isUpdateGroupInProcess: false});
       }
       return state;
     case InventoryActionsConst.RemoveGroup:
@@ -215,6 +217,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null });
       }
       return state;
+    case InventoryActionsConst.ResetActiveGroup:
+      return Object.assign({}, state, { activeGroup: null });
 
     /*
      *Custom Stock Units...

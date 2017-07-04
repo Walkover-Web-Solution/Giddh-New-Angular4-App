@@ -13,6 +13,7 @@ import { StockGroupRequest, StockGroupResponse } from '../../../models/api-model
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -28,6 +29,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
+  public isUpdateGroupInProcess$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
    * TypeScript public modifiers
@@ -38,6 +41,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable);
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup);
+    this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess);
 
     this.store.take(1).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
@@ -48,7 +52,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     // subscribe to url
-    this.sub = this.route.params.subscribe(params => {
+    this.sub = this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       if (this.groupUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
@@ -70,12 +74,13 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       .switchMap((value: string) => {
         return this._inventoryService.GetGroupsWithStocksFlatten(value);
       })
+      .takeUntil(this.destroyed$)
       .subscribe(data => {
         this.dataSource.next(data.body.results);
       });
 
     // enable disable parentGroup select
-    this.addGroupForm.controls['isSelfParent'].valueChanges.subscribe(s => {
+    this.addGroupForm.controls['isSelfParent'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
         this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
@@ -86,7 +91,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     });
 
     // fetching uniquename boolean
-    this.fetchingGrpUniqueName$.subscribe(f => {
+    this.fetchingGrpUniqueName$.takeUntil(this.destroyed$).subscribe(f => {
       if (f) {
         this.addGroupForm.controls['uniqueName'].disable();
       } else {
@@ -95,7 +100,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     });
 
     // check if active group is available if then fill form else reset form
-    this.activeGroup$.subscribe(a => {
+    this.activeGroup$.takeUntil(this.destroyed$).subscribe(a => {
       if (a) {
         let updGroupObj = new StockGroupRequest();
         updGroupObj.name = a.name;
@@ -113,13 +118,15 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         }
         this.addGroupForm.patchValue(updGroupObj);
       } else {
+        this.store.dispatch(this.inventoryActions.resetActiveGroup());
         this.addGroupForm.reset();
       }
     });
   }
 
   public ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   // group selected
@@ -169,8 +176,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     if (!this.addGroupForm.value.isSelfParent) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.uniqueName;
     }
-    this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
-    this.router.navigateByUrl('/pages/inventory/add-group');
+    // this.router.navigate(['/pages', 'inventory', 'add-group', 'soda123']);
   }
 
   public removeGroup() {
