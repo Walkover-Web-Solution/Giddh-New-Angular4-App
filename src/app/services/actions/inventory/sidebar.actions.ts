@@ -1,6 +1,6 @@
 import { GroupsWithStocksHierarchyMin } from '../../../models/api-models/GroupsWithStocks';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { StockGroupResponse } from '../../../models/api-models/Inventory';
+import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryActionsConst } from './inventory.const';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
@@ -16,7 +16,7 @@ export class SidebarAction {
   @Effect()
   public GetInventoryGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetInventoryGroup)
-    .switchMap(action => this ._inventoryService.GetGroupsStock (action.payload.groupUniqueName ))
+    .switchMap(action => this._inventoryService.GetGroupsStock(action.payload.groupUniqueName))
     .map(response => {
       return this.GetInventoryGroupResponse(response);
     });
@@ -26,6 +26,32 @@ export class SidebarAction {
     .ofType(InventoryActionsConst.GetInventoryGroupResponse)
     .map(action => {
       let data: BaseResponse<StockGroupResponse, string> = action.payload;
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
+
+  @Effect()
+  public GetInventoryStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetInventoryStock)
+    .switchMap(action => {
+      let activeGroup: StockGroupResponse = null;
+      this.store.select(p => p.inventory.activeGroup).take(1).subscribe(a => {
+        activeGroup = a;
+      }).unsubscribe();
+      debugger;
+      return this._inventoryService.GetStockDetails(activeGroup.uniqueName, action.payload);
+    })
+    .map(response => {
+      return this.GetInventoryStockResponse(response);
+    });
+
+  @Effect()
+  public GetInventoryStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetInventoryStockResponse)
+    .map(action => {
+      let data: BaseResponse<StockDetailResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
@@ -51,7 +77,7 @@ export class SidebarAction {
   @Effect()
   public GetGroupsWithStocksHierarchyMin$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetGroupsWithStocksHierarchyMin)
-    .switchMap(action => this._inventoryService.GetGroupsWithStocksHierarchyMin (action.payload ))
+    .switchMap(action => this._inventoryService.GetGroupsWithStocksHierarchyMin(action.payload))
     .map(response => {
       return this.GetGroupsWithStocksHierarchyMinResponse(response);
     });
@@ -67,7 +93,7 @@ export class SidebarAction {
       return { type: '' };
     });
 
-    constructor(private action$: Actions,
+  constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
     private _inventoryService: InventoryService,
@@ -81,10 +107,10 @@ export class SidebarAction {
     };
   }
 
-  public GetInventoryGroup(groupUniqueName: string, stockUniqueName?: string): Action {
+  public GetInventoryGroup(groupUniqueName: string): Action {
     return {
       type: InventoryActionsConst.GetInventoryGroup,
-      payload: { groupUniqueName, stockUniqueName }
+      payload: { groupUniqueName }
     };
   }
 
@@ -116,7 +142,7 @@ export class SidebarAction {
     };
   }
 
-  public GetInventoryStockResponse(value: BaseResponse<StockGroupResponse, string>): Action {
+  public GetInventoryStockResponse(value: BaseResponse<StockDetailResponse, string>): Action {
     return {
       type: InventoryActionsConst.GetInventoryStockResponse,
       payload: value

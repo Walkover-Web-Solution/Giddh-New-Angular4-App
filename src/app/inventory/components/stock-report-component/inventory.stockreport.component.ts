@@ -16,13 +16,10 @@ export class InventoryStockReportComponent implements OnInit {
   public sub: Subscription;
   public groupUniqueName: string;
   public stockUniqueName: string;
-  public vm: InventoryStockReportVM;
-
   /**
-   * TypeScript public modifiers
-   */
+ * TypeScript public modifiers
+ */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction) {
-    this.vm = new InventoryStockReportVM();
   }
 
   public ngOnInit() {
@@ -31,7 +28,23 @@ export class InventoryStockReportComponent implements OnInit {
       this.stockUniqueName = params['stockUniqueName'];
       if (this.groupUniqueName) {
         // this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName, this.stockUniqueName));
+        let activeGroup = null;
+        let activeStock = null;
+        this.store.select(a => a.inventory.activeGroup).take(1).subscribe(a => {
+          if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
+            //
+          } else {
+            this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+          }
+        });
+
+        this.store.select(a => a.inventory.activeStock).take(1).subscribe(a => {
+          if (this.stockUniqueName && a && a.uniqueName === this.stockUniqueName) {
+            //
+          } else {
+            this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
+          }
+        });
       }
     });
   }
