@@ -1,4 +1,5 @@
 import { INameUniqueName } from './nameUniqueName.interface';
+import { IPagination } from './paginatedResponse.interface';
 
 export interface ILedgerTransactionItem {
   amount: string;
@@ -51,4 +52,46 @@ export interface ILedger {
   chequeNumber?: string;
   clearanceDate?: string;
   invoiceRequest?: IInvoiceRequest;
+}
+
+
+export interface ITransactions extends IPagination {
+  closingBalance: IClosingBalance;
+  creditTotal: number;
+  creditTransactions: ITransactionItem[];
+  creditTransactionsCount: number;
+  debitTotal: number;
+  debitTransactions: ITransactionItem[];
+  debitTransactionsCount: number;
+  forwardedBalance: IForwardBalance;
+}
+
+export interface IClosingBalance {
+  amount: number;
+  type: string;
+}
+
+export interface IForwardBalance extends IClosingBalance {
+  description?: string;
+}
+
+export interface ITransactionItem {
+  amount: number;
+  attachedFileName: string;
+  attachedFileUniqueName: string;
+  chequeClearanceDate: string;
+  chequeNumber: string;
+  description: string;
+  entryCreatedAt: string;
+  entryDate: string;
+  entryUniqueName: string;
+  inventory?: IInventory;
+  invoiceNumber: string;
+  isBaseAccount: boolean;
+  isCompoundEntry: boolean;
+  isInvoiceGenerated: boolean;
+  isTax: boolean;
+  particular: INameUniqueName;
+  type: string;
+  unconfirmedEntry: boolean;
 }
