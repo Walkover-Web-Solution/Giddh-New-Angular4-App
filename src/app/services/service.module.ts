@@ -1,3 +1,4 @@
+import { StockReportActions } from './actions/inventory/stocks-report.actions';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { VerifyMobileActions } from './actions/verifyMobile.actions';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -47,6 +48,7 @@ import { InventoryAction } from './actions/inventory/inventory.actions';
     EffectsModule.run(InventoryAction),
     EffectsModule.run(SidebarAction),
     EffectsModule.run(CustomStockUnitAction),
+    EffectsModule.run(StockReportActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })

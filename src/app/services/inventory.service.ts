@@ -1,3 +1,4 @@
+import { StockReportResponse } from '../models/api-models/Inventory';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -295,7 +296,7 @@ export class InventoryService {
   /**
    * get GetStocksReport
    */
-  public GetStocksReport(stockReportRequest: StockReportRequest): Observable<BaseResponse<StockDetailResponse, string>> {
+  public GetStocksReport(stockReportRequest: StockReportRequest): Observable<BaseResponse<StockReportResponse, StockReportRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -310,8 +311,8 @@ export class InventoryService {
       .replace(':count', stockReportRequest.count.toString())
       .replace(':page', stockReportRequest.page.toString()))
       .map((res) => {
-        let data: BaseResponse<StockDetailResponse, string> = res.json();
-        data.request = '';
+        let data: BaseResponse<StockReportResponse, StockReportRequest> = res.json();
+        data.request = stockReportRequest;
         data.queryString = {
           stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
           stockUniqueName: stockReportRequest.stockUniqueName,
@@ -320,9 +321,9 @@ export class InventoryService {
           count: stockReportRequest.count,
           page: stockReportRequest.page
         }
-        ;
+          ;
         return data;
-      }).catch((e) => HandleCatch<StockDetailResponse, string>(e, '', {
+      }).catch((e) => HandleCatch<StockReportResponse, StockReportRequest>(e, stockReportRequest, {
         stockGroupUniqueName: stockReportRequest.stockGroupUniqueName,
         stockUniqueName: stockReportRequest.stockUniqueName,
         from: stockReportRequest.from,
