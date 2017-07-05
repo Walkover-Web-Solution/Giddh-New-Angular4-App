@@ -70,7 +70,6 @@ export class SidebarAction {
   public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetGroupUniqueNameResponse)
     .map(action => {
-      let data: BaseResponse<StockGroupResponse, string> = action.payload;
       return { type: '' };
     });
 
@@ -158,6 +157,12 @@ export class SidebarAction {
   public GetGroupsWithStocksHierarchyMinResponse(value: BaseResponse<GroupsWithStocksHierarchyMin, string>): Action {
     return {
       type: InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse,
+      payload: value
+    };
+  }
+  public SetActiveStock(value: string) {
+    return {
+      type: InventoryActionsConst.SetActiveStock,
       payload: value
     };
   }
