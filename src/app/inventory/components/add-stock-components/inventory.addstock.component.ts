@@ -6,24 +6,23 @@ import { LoginActions } from '../services/actions/login.action';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Subscription } from 'rxjs/Rx';
-// import { Select2OptionData } from '../shared/theme/select2';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
 import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
-import { StockUnitRequest, CreateStockRequest, StockGroupResponse, LinkedStockes } from '../../../models/api-models/Inventory';
+import { StockUnitRequest, CreateStockRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import * as  _ from 'lodash';
 import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { IStockItemDetail } from '../../../models/interfaces/stocksItem.interface';
 
 @Component({
   selector: 'invetory-add-stock',  // <home></home>
   templateUrl: './inventory.addstock.component.html'
 })
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy {
-  public sub: Subscription;
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public stockUnitsDropDown$: Observable<Select2OptionData[]>;
   public purchaseAccountsDropDown$: Observable<Select2OptionData[]>;
@@ -40,8 +39,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public fetchingStockUniqueName$: Observable<boolean>;
   public isStockNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
-  public linkedStocks: LinkedStockes[] = [];
-  public linkedStock: LinkedStockes = new LinkedStockes();
+  public linkedStocks: IStockItemDetail[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -58,7 +56,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.customStockActions.GetStockUnit());
 
     // subscribe route parameters
-    this.sub = this.route.params.takeUntil(this.destroyed$).subscribe(params => {
+    this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
       if (this.groupUniqueName) {
@@ -66,14 +64,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
-    // get all stock
+    // get all stocks
     this.stockListDropDown$ =  this.store.select(p => {
       if (p.inventory.stocksList) {
         if (p.inventory.stocksList.results) {
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: unit.name, id: unit.uniqueName };
+            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
           });
         }
       }
@@ -85,7 +83,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let units = p.inventory.stockUnits;
 
         return units.map(unit => {
-          return { text: unit.name, id: unit.code };
+          return { text: `${unit.name} (${unit.code})`, id: unit.code };
         });
       }
     }).takeUntil(this.destroyed$);
@@ -106,6 +104,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       saleUnitRates: this._fb.array([
         this.initUnitAndRates()
       ]),
+      manufacturingDetails: this._fb.group({
+        // manufacturingQuantity: ['', Validators.required],
+        // manufacturingUnitCode: ['', Validators.required],
+        linkedStocks: this._fb.array([])
+      }),
+      linkedStockUniqueName: ['', Validators.required],
+      linkedQuantity: ['', Validators.required],
+      linkedStockUnitCode: ['', Validators.required],
       isFsStock: [false]
     });
 
@@ -134,7 +140,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   // initial unitandRates controls
   public initUnitAndRates() {
-    // initialize our address
+    // initialize our controls
     return this._fb.group({
       rate: ['', Validators.required],
       stockUnitCode: ['', Validators.required]
@@ -207,12 +213,37 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
   }
 
-  public addItemInLinkedStocks() {
-    this.linkedStocks.push(this.linkedStock);
+  public initialIManufacturingDetails() {
+     // initialize our controls
+    return this._fb.group({
+      stockUniqueName: ['', [Validators.required]],
+      stockUnitCode: ['', [Validators.required]],
+      quantity: ['', [Validators.required]]
+    });
   }
 
-  public editItemInLinkedStocks(item: LinkedStockes, i: number) {
-    this.linkedStocks[i] = item;
+  public addItemInLinkedStocks() {
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+
+    let obj = new IStockItemDetail();
+    obj.stockUniqueName = this.addStockForm.value.linkedStockUniqueName;
+    obj.stockUnitCode = this.addStockForm.value.linkedStockUnitCode;
+    obj.quantity = this.addStockForm.value.linkedQuantity;
+
+    let frmgrp = this.initialIManufacturingDetails();
+    control.push(frmgrp);
+    frmgrp.patchValue(obj);
+
+    this.addStockForm.controls['linkedStockUniqueName'].reset();
+    this.addStockForm.controls['linkedStockUnitCode'].reset();
+    this.addStockForm.controls['linkedQuantity'].reset();
+  }
+
+  public editItemInLinkedStocks(item: FormGroup) {
+    this.addStockForm.controls['linkedStockUniqueName'].setValue(item.value.stockUniqueName);
+    this.addStockForm.controls['linkedStockUnitCode'].setValue(item.value.stockUnitCode);
+    this.addStockForm.controls['linkedQuantity'].setValue(item.value.quantity);
   }
 
   public removeItemInLinkedStocks(i: number) {
@@ -220,7 +251,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public resetLinkedStock() {
-    this.linkedStock = new LinkedStockes();
+    // this.linkedStock = new IStockItemDetail();
   }
   // submit form
   public submit() {
