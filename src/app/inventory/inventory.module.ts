@@ -16,8 +16,6 @@ import { InventoryStockReportComponent } from './components/stock-report-compone
 import { StockgrpListComponent } from './components/sidebar-components/stockgrplist.component';
 import { StockListComponent } from './components/sidebar-components/stockList.component';
 
-console.log('`Inventory` bundle loaded asynchronously');
-
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -49,7 +47,7 @@ console.log('`Inventory` bundle loaded asynchronously');
     ReactiveFormsModule,
     InventoryRoutingModule,
     Ng2BootstrapModule.forRoot(),
-    SharedModule,
+    SharedModule
   ],
 })
 export class InventoryModule {
