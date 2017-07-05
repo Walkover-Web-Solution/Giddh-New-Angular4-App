@@ -9,7 +9,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { TransactionsResponse } from '../models/api-models/Ledger';
+import { TransactionsResponse, ReconcileResponse } from '../models/api-models/Ledger';
 
 @Injectable()
 export class LedgerService {
@@ -35,5 +35,23 @@ export class LedgerService {
       data.queryString = { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort };
       return data;
     }).catch((e) => HandleCatch<TransactionsResponse, string>(e, '', { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort }));
+  }
+
+  /**
+   * get reconcile
+   */
+  public GetReconcile(accountUniqueName: string = ''): Observable<BaseResponse<ReconcileResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+      let data: BaseResponse<ReconcileResponse, string> = res.json();
+      data.request = '';
+      data.queryString = { accountUniqueName };
+      return data;
+    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName }));
   }
 }

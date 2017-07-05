@@ -1,4 +1,4 @@
-import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem } from '../interfaces/ledger.interface';
+import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IReconcileTransaction } from '../interfaces/ledger.interface';
 
 /*
  * Model for ledger create api request
@@ -141,4 +141,16 @@ export class TransactionsResponse implements ITransactions {
   public page: number;
   public totalItems: number;
   public totalPages: number;
+}
+
+export class ReconcileResponse {
+  public transactions: IReconcileTransaction[];
+  public total: object;
+  public attachedFile: string;
+  public invoiceGenerated: boolean;
+  public attachedFileName?: string;
+  public chequeNumber: string;
+  public invoiceNumber: string;
+  public entryDate: string;
+  public taxes: string[];
 }

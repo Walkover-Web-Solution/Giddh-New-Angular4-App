@@ -95,3 +95,16 @@ export interface ITransactionItem {
   type: string;
   unconfirmedEntry: boolean;
 }
+
+/**
+ * interface used in reconcile api's response
+ * keeping inventory as "any" because I am not ure about the structure of inventory object
+ */
+export interface IReconcileTransaction {
+  particular: INameUniqueName;
+  amount: number;
+  type: string;
+  inventory?: any;
+  isTax: boolean;
+  isBaseAccount: boolean;
+}
