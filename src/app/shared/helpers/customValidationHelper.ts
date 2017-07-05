@@ -1,4 +1,4 @@
-import { FormControl } from '@angular/forms';
+import { FormControl, AbstractControl, FormArray } from '@angular/forms';
 
 export const emailValidator = (control: FormControl) => {
   return new Promise<any>((resolve, reject) => {
@@ -31,4 +31,23 @@ export const uniqueNameValidator = (control: FormControl) => {
       resolve(null);
     }
   });
+};
+
+export const stockManufacturingDetailsValidator = (control: AbstractControl) => {
+    // const linkedStockUniqueName = control.get('linkedStockUniqueName');
+    // const linkedQuantity = control.get('linkedQuantity');
+    // const linkedStockUnitCode = control.get('linkedStockUnitCode');
+    const linkedStocks = control.get('linkedStocks') as FormArray;
+    const manufacturingQuantity = control.get('manufacturingQuantity');
+    const manufacturingUnitCode = control.get('manufacturingUnitCode');
+
+    if (manufacturingQuantity && manufacturingUnitCode) {
+      if (!linkedStocks.controls.length) {
+        return {notAllowed: true};
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
 };

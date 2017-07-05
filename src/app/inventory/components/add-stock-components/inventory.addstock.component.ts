@@ -8,7 +8,7 @@ import { SidebarAction } from '../../../services/actions/inventory/sidebar.actio
 import { Subscription } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
 import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
+import { uniqueNameValidator, stockManufacturingDetailsValidator } from '../../../shared/helpers/customValidationHelper';
 import { StockUnitRequest, CreateStockRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
@@ -32,14 +32,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     width: '100%',
     placeholder: 'Choose a parent unit'
   };
-  public stockUnit$: Observable<StockUnitRequest[]>;
   public groupUniqueName: string;
   public stockUniqueName: string;
   public addStockForm: FormGroup;
   public fetchingStockUniqueName$: Observable<boolean>;
   public isStockNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
-  public linkedStocks: IStockItemDetail[] = [];
+  public editModeForLinkedStokes: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -65,7 +64,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // get all stocks
-    this.stockListDropDown$ =  this.store.select(p => {
+    this.stockListDropDown$ = this.store.select(p => {
       if (p.inventory.stocksList) {
         if (p.inventory.stocksList.results) {
           let units = p.inventory.stocksList.results;
@@ -78,7 +77,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }).takeUntil(this.destroyed$);
 
     // get all stock units
-    this.stockUnitsDropDown$ =  this.store.select(p => {
+    this.stockUnitsDropDown$ = this.store.select(p => {
       if (p.inventory.stockUnits.length) {
         let units = p.inventory.stockUnits;
 
@@ -90,14 +89,14 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
     // add stock form
     this.addStockForm = this._fb.group({
-      name: ['', [Validators.required]],
-      uniqueName: ['', [Validators.required], uniqueNameValidator],
+      name: ['', [Validators.required, Validators.minLength(2)]],
+      uniqueName: ['', [Validators.required, Validators.minLength(2)], uniqueNameValidator],
       stockUnitCode: ['', [Validators.required]],
-      openingQuantity: ['', [Validators.required]],
+      openingQuantity: [''],
       stockRate: [{ value: '', disabled: true }],
-      openingAmount: ['', [Validators.required]],
-      purchaseAccountUniqueName: ['', [Validators.required]],
-      salesAccountUniqueName: ['', [Validators.required]],
+      openingAmount: [''],
+      purchaseAccountUniqueName: [''],
+      salesAccountUniqueName: [''],
       purchaseUnitRates: this._fb.array([
         this.initUnitAndRates()
       ]),
@@ -105,14 +104,24 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.initUnitAndRates()
       ]),
       manufacturingDetails: this._fb.group({
-        // manufacturingQuantity: ['', Validators.required],
-        // manufacturingUnitCode: ['', Validators.required],
-        linkedStocks: this._fb.array([])
-      }),
-      linkedStockUniqueName: ['', Validators.required],
-      linkedQuantity: ['', Validators.required],
-      linkedStockUnitCode: ['', Validators.required],
+        manufacturingQuantity: ['', [Validators.required]],
+        manufacturingUnitCode: ['', [Validators.required]],
+        linkedStocks: this._fb.array([]),
+        linkedStockUniqueName: [''],
+        linkedQuantity: [''],
+        linkedStockUnitCode: [''],
+      }, { validator: stockManufacturingDetailsValidator }),
       isFsStock: [false]
+    });
+
+    // subscribe isFsStock for disabling manufacturingDetails
+    this.addStockForm.controls['isFsStock'].valueChanges.subscribe((v) => {
+      const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+      if (v) {
+        manufacturingDetailsContorl.enable();
+      } else {
+        manufacturingDetailsContorl.disable();
+      }
     });
 
     // get purchase accounts
@@ -142,15 +151,16 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public initUnitAndRates() {
     // initialize our controls
     return this._fb.group({
-      rate: ['', Validators.required],
-      stockUnitCode: ['', Validators.required]
+      rate: [''],
+      stockUnitCode: ['']
     });
   }
 
   // add purchaseUnitRates controls
-  public addPurchaseUnitRates() {
+  public addPurchaseUnitRates(i: number) {
+    const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
     // add address to the list
-    if (this.addStockForm.controls['purchaseUnitRates'].valid) {
+    if (purchaseUnitRatesControls.controls[i].value.rate && purchaseUnitRatesControls.controls[i].value.stockUnitCode) {
       const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
       control.push(this.initUnitAndRates());
     }
@@ -160,13 +170,18 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public removePurchaseUnitRates(i: number) {
     // remove address from the list
     const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-    control.removeAt(i);
+    if (control.length > 1) {
+      control.removeAt(i);
+    } else {
+      control.controls[0].reset();
+    }
   }
 
   // add saleUnitRates controls
-  public addSaleUnitRates() {
+  public addSaleUnitRates(i: number) {
+    const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
     // add address to the list
-    if (this.addStockForm.controls['saleUnitRates'].valid) {
+    if (saleUnitRatesControls.controls[i].value.rate && saleUnitRatesControls.controls[i].value.stockUnitCode) {
       const control = this.addStockForm.controls['saleUnitRates'] as FormArray;
       control.push(this.initUnitAndRates());
     }
@@ -176,9 +191,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public removeSaleUnitRates(i: number) {
     // remove address from the list
     const control = this.addStockForm.controls['saleUnitRates'] as FormArray;
-    control.removeAt(i);
+    if (control.length > 1) {
+      control.removeAt(i);
+    } else {
+      control.controls[0].reset();
+    }
   }
   public ngAfterViewInit() {
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    manufacturingDetailsContorl.disable();
     // calculate rate on changes of form values
     this.addStockForm.controls['openingQuantity'].valueChanges.subscribe(() => this.calCulateRate());
     this.addStockForm.controls['openingAmount'].valueChanges.subscribe(() => this.calCulateRate());
@@ -214,11 +235,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public initialIManufacturingDetails() {
-     // initialize our controls
+    // initialize our controls
     return this._fb.group({
-      stockUniqueName: ['', [Validators.required]],
-      stockUnitCode: ['', [Validators.required]],
-      quantity: ['', [Validators.required]]
+      stockUniqueName: [''],
+      stockUnitCode: [''],
+      quantity: ['']
     });
   }
 
@@ -226,37 +247,140 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
 
-    let obj = new IStockItemDetail();
-    obj.stockUniqueName = this.addStockForm.value.linkedStockUniqueName;
-    obj.stockUnitCode = this.addStockForm.value.linkedStockUnitCode;
-    obj.quantity = this.addStockForm.value.linkedQuantity;
+    if (manufacturingDetailsContorl.value.linkedStockUniqueName && manufacturingDetailsContorl.value.linkedStockUnitCode && manufacturingDetailsContorl.value.linkedQuantity) {
+      let obj = new IStockItemDetail();
+      obj.stockUniqueName = manufacturingDetailsContorl.value.linkedStockUniqueName;
+      obj.stockUnitCode = manufacturingDetailsContorl.value.linkedStockUnitCode;
+      obj.quantity = manufacturingDetailsContorl.value.linkedQuantity;
 
-    let frmgrp = this.initialIManufacturingDetails();
-    control.push(frmgrp);
-    frmgrp.patchValue(obj);
+      let frmgrp = this.initialIManufacturingDetails();
+      control.push(frmgrp);
+      frmgrp.patchValue(obj);
 
-    this.addStockForm.controls['linkedStockUniqueName'].reset();
-    this.addStockForm.controls['linkedStockUnitCode'].reset();
-    this.addStockForm.controls['linkedQuantity'].reset();
+      manufacturingDetailsContorl.controls['linkedStockUniqueName'].reset();
+      manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
+      manufacturingDetailsContorl.controls['linkedQuantity'].reset();
+    }
   }
 
   public editItemInLinkedStocks(item: FormGroup) {
-    this.addStockForm.controls['linkedStockUniqueName'].setValue(item.value.stockUniqueName);
-    this.addStockForm.controls['linkedStockUnitCode'].setValue(item.value.stockUnitCode);
-    this.addStockForm.controls['linkedQuantity'].setValue(item.value.quantity);
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    manufacturingDetailsContorl.controls['linkedStockUniqueName'].setValue(item.value.stockUniqueName);
+    manufacturingDetailsContorl.controls['linkedStockUnitCode'].setValue(item.value.stockUnitCode);
+    manufacturingDetailsContorl.controls['linkedQuantity'].setValue(item.value.quantity);
+    this.editModeForLinkedStokes = true;
+  }
+
+  public updateItemInLinkedStocks() {
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    if (manufacturingDetailsContorl.value.linkedStockUniqueName && manufacturingDetailsContorl.value.linkedStockUnitCode && manufacturingDetailsContorl.value.linkedQuantity) {
+      const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+      const linkedStokesControl = control;
+      const linkedStokesValues = control.value;
+
+      let obj = new IStockItemDetail();
+      obj.stockUniqueName = manufacturingDetailsContorl.value.linkedStockUniqueName;
+      obj.stockUnitCode = manufacturingDetailsContorl.value.linkedStockUnitCode;
+      obj.quantity = manufacturingDetailsContorl.value.linkedQuantity;
+
+      const index = linkedStokesValues.findIndex(c => c.stockUniqueName === obj.stockUniqueName);
+      linkedStokesControl.controls[index].patchValue(obj);
+
+      manufacturingDetailsContorl.controls['linkedStockUniqueName'].reset();
+      manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
+      manufacturingDetailsContorl.controls['linkedQuantity'].reset();
+      this.editModeForLinkedStokes = false;
+    }
   }
 
   public removeItemInLinkedStocks(i: number) {
-    this.linkedStocks.splice(i, 1);
+    this.editModeForLinkedStokes = false;
+
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    const linkedStokesControl = control;
+
+    manufacturingDetailsContorl.controls['linkedStockUniqueName'].reset();
+    manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
+    manufacturingDetailsContorl.controls['linkedQuantity'].reset();
+
+    linkedStokesControl.removeAt(i);
   }
 
   public resetLinkedStock() {
     // this.linkedStock = new IStockItemDetail();
   }
+
+  public checkIfLinkedStockIsUnique(v) {
+    const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
+    const linkedStokes = control.value;
+    if (linkedStokes) {
+      let el = linkedStokes.find(a => a.stockUniqueName === v.value);
+      if (el) {
+        manufacturingDetailsContorl.controls['linkedStockUniqueName'].setValue(el.stockUniqueName);
+        manufacturingDetailsContorl.controls['linkedStockUnitCode'].setValue(el.stockUnitCode);
+        manufacturingDetailsContorl.controls['linkedQuantity'].setValue(el.quantity);
+        this.editModeForLinkedStokes = true;
+        return true;
+      }
+    }
+    manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
+    manufacturingDetailsContorl.controls['linkedQuantity'].reset();
+    this.editModeForLinkedStokes = false;
+    return true;
+  }
+
+  public resetStockForm() {
+    const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+    const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
+
+    const manufacturingDetailsContorls = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
+    const linkedStocksControls = manufacturingDetailsContorls.controls['linkedStocks'] as FormArray;
+
+    purchaseUnitRatesControls.controls = purchaseUnitRatesControls.controls.splice(1);
+    saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
+
+    linkedStocksControls.controls = [];
+    this.addStockForm.reset();
+  }
+
   // submit form
   public submit() {
+    let activeGroup: StockGroupResponse = null;
+    this.activeGroup$.take(1).subscribe((a) => activeGroup = a);
     let stockObj = new CreateStockRequest();
-    stockObj = this.addStockForm.value as CreateStockRequest;
+    let formObj = this.addStockForm.value;
+
+    stockObj.name = formObj.name;
+    stockObj.uniqueName = formObj.uniqueName;
+    stockObj.stockUnitCode = formObj.stockUnitCode;
+    stockObj.openingAmount = formObj.openingAmount;
+    stockObj.openingQuantity = formObj.openingQuantity;
+
+    formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
+      return pr.stockUnitCode && pr.rate;
+    });
+    stockObj.purchaseAccountDetails = { accountUniqueName: formObj.purchaseAccountUniqueName, unitRates: formObj.purchaseUnitRates };
+
+    formObj.saleUnitRates = formObj.saleUnitRates.filter((pr) => {
+      return pr.stockUnitCode && pr.rate;
+    });
+    stockObj.salesAccountDetails = { accountUniqueName: formObj.salesAccountUniqueName, unitRates: formObj.saleUnitRates };
+
+    stockObj.isFsStock = formObj.isFsStock;
+
+    if (stockObj.isFsStock) {
+      stockObj.manufacturingDetails = {
+        manufacturingQuantity: formObj.manufacturingDetails.manufacturingQuantity,
+        manufacturingUnitCode: formObj.manufacturingDetails.manufacturingUnitCode,
+        linkedStocks: formObj.manufacturingDetails.linkedStocks
+      };
+    } else {
+      stockObj.manufacturingDetails = null;
+    }
+
+    this.store.dispatch(this.inventoryAction.createStock(stockObj, activeGroup.uniqueName));
   }
 
   public ngOnDestroy() {

@@ -14,6 +14,9 @@ export class InventoryActionsConst {
   public static AddNewGroup = 'AddNewGroup';
   public static AddNewGroupResponse = 'AddNewGroupResponse';
 
+  public static CreateStock = 'CreateStock';
+  public static CreateStockResponse = 'CreateStockResponse';
+
   public static UpdateGroup = 'UpdateGroup';
   public static UpdateGroupResponse = 'UpdateGroupResponse';
 

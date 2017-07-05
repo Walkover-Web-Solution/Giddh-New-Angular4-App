@@ -21,7 +21,6 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComp
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
-import { OverlayModule } from 'angular-io-overlay';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -49,10 +48,9 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
-    OverlayModule,
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
-    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, OverlayModule],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent]
 })
