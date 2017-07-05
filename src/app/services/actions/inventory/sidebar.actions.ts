@@ -40,7 +40,6 @@ export class SidebarAction {
       this.store.select(p => p.inventory.activeGroup).take(1).subscribe(a => {
         activeGroup = a;
       }).unsubscribe();
-      debugger;
       return this._inventoryService.GetStockDetails(activeGroup.uniqueName, action.payload);
     })
     .map(response => {
