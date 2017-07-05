@@ -39,7 +39,7 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.sub = this.route.params.take(1).subscribe(params => {
+    this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
       if (this.groupUniqueName) {
@@ -82,11 +82,13 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public nextPage() {
+    debugger;
     this.stockReportRequest.page++;
     this.getStockReport(false);
   }
 
   public prevPage() {
+    debugger;
     this.stockReportRequest.page--;
     this.getStockReport(false);
   }

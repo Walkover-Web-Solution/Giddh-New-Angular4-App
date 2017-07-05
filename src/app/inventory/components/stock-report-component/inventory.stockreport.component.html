@@ -110,12 +110,12 @@
             <div class="pagination pull-right">
               <ul class="list-inline">
                 <li>
-                  <button class="btn btn-default" (click)="nextPage()" [disabled]="(stockReport$ | async)?.page === 1">Prev
+                  <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === 1">Prev
                 </button>
                 </li>
                 <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
                 <li>
-                  <button class="btn btn-default" (click)="prevPage()" [disabled]="(stockReport$ | async)?.page === (stockReport$ | async)?.totalPages">Next
+                  <button class="btn btn-default" (click)="nextPage()" [disabled]="(stockReport$ | async)?.page === (stockReport$ | async)?.totalPages">Next
                 </button>
                 </li>
               </ul>
