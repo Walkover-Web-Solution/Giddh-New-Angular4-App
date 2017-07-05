@@ -2,29 +2,41 @@
 
   <div class="clearfix mrB2">
     <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
-      <i class="icon-edit" aria-hidden="true"></i> Manage {{ stockUniqueName }} Stock</button>
+      <i class="icon-edit" aria-hidden="true"></i> Manage {{ stockUniqueName }} Stock
+    </button>
   </div>
+  <form #filter="ngForm">
+    <div class="filterForm clearfix pr">
+      <div class="form-group mrB pull-left">
+        <label>From Date</label>
+        <div class="input-group">
+          <input type="text" name="from" [ngModel]="fromDate"
+                 (focus)="showFromDatePicker = true; showToDatePicker=false;">
+          <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <datepicker name="fromDate" [(ngModel)]="fromDate" (click)="showFromDatePicker=!showFromDatePicker"
+                         [showWeeks]="true"></datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="form-group mrB pull-left">
+        <label>To Date</label>
+        <div class="input-group">
+          <input type="text" name="to" [ngModel]="toDate"
+                 (focus)="showToDatePicker = true;showFromDatePicker=false;">
+          <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <datepicker name="toDate" [(ngModel)]="toDate"  (click)="showToDatePicker=!showToDatePicker" [showWeeks]="true"></datepicker>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>&nbsp;</label>
+        <button class="btn btn-primary" (click)="getStockReport()">Go</button>
+      </div>
+    </div>
 
-  <div class="filterForm clearfix pr">
-    <div class="form-group mrB pull-left">
-      <label>From Date</label>
-      <p class="input-group">
-        <date-picker formControlName="from"></date-picker>
-      </p>
-    </div>
-    <div class="form-group mrB pull-left">
-      <label>To Date</label>
-      <p class="input-group">
-        <date-picker formControlName="to"></date-picker>
-      </p>
-    </div>
-    <div class="form-group">
-      <label>&nbsp;</label>
-      <button class="btn btn-primary" (click)="getStockReport()">Go</button>
-    </div>
-  </div>
+  </form>
 
-  <p class="mrT1" *ngIf="(stockReport$ | async)?.transactions.length === 0">No Transactions for this Stock</p>
+  <p class="mrT1" *ngIf="(stockReport$ | async)?.transactions?.length === 0">No Transactions for this Stock</p>
 
   <section style="margin-bottom: 40px">
 
@@ -36,7 +48,7 @@
 						{{(stockReport$ | async)?.openingBalance.quantity}}
 						{{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
 					</label>
-					<label  placement="top"
+					<label placement="top"
                  tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity | number:4}}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
 				</span>
 
@@ -52,67 +64,71 @@
       </div>
     </div>
 
-    <table class="mrT1 stkRprtTbl table_theme width100" *ngIf="(stockReport$ | async)?.transactions.length > 0">
+    <table class="mrT1 stkRprtTbl table_theme width100" *ngIf="(stockReport$ | async)?.transactions?.length > 0">
       <thead>
-        <tr>
-          <th rowspan="2">Date</th>
-          <th rowspan="2">Voucher Type</th>
-          <th rowspan="2" class="bdrR">Account name</th>
-          <th colspan="4" class="alC">Transactions</th>
-          <th class="bdrL" class="alC">Closing Stock</th>
-        </tr>
-        <tr>
-          <th>Inwards</th>
-          <th>Outwards</th>
-          <th>Rate</th>
-          <th>Value</th>
-          <th class="bdrL">Quantity</th>
-        </tr>
+      <tr>
+        <th rowspan="2">Date</th>
+        <th rowspan="2">Voucher Type</th>
+        <th rowspan="2" class="bdrR">Account name</th>
+        <th colspan="4" class="alC">Transactions</th>
+        <th class="bdrL" class="alC">Closing Stock</th>
+      </tr>
+      <tr>
+        <th>Inwards</th>
+        <th>Outwards</th>
+        <th>Rate</th>
+        <th>Value</th>
+        <th class="bdrL">Quantity</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
-          <td ng-bind="txn.entryDate"></td>
-          <td ng-bind="txn.voucherType"></td>
-          <td ng-bind="txn.account.name"></td>
-          <td>
+      <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
+        <td>{{txn.entryDate}}</td>
+        <td>{{txn.voucherType}}</td>
+        <td>{{txn.account.name}}</td>
+        <td>
             <span *ngIf="txn.type == 'dr'">
 							{{txn.quantity}}&nbsp;{{txn.stockUnit}}
 						</span>
-            <span *ngIf="txn.type == 'cr'">-</span>
-          </td>
-          <td>
+          <span *ngIf="txn.type == 'cr'">-</span>
+        </td>
+        <td>
             <span *ngIf="txn.type == 'cr'">
 							{{txn.quantity}}&nbsp;{{txn.stockUnit}}
 						</span>
-            <span *ngIf="txn.type == 'dr'">-</span>
-          </td>
-          <td ng-bind="txn.rate" ng-class="txn.type === 'cr'? 'cr' : 'dr' "></td>
-          <td ng-class="txn.type === 'cr'? 'cr' : 'dr' ">
-            {{txn.amount}}
-          </td>
-          <td>
-            {{txn.closingQuantity}}&nbsp;{{(stockReport$ | async)?.stockUnit}}
-          </td>
-        </tr>
+          <span *ngIf="txn.type == 'dr'">-</span>
+        </td>
+        <td [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">{{txn.rate}}</td>
+        <td [ngClass]="txn.type === 'cr'? 'cr' : 'dr' ">
+          {{txn.amount}}
+        </td>
+        <td>
+          {{txn.closingQuantity}}&nbsp;{{(stockReport$ | async)?.stockUnit}}
+        </td>
+      </tr>
       </tbody>
       <tfoot>
-        <tr>
-          <td colspan="14">
-            <div class="pagination pull-right">
-              <ul class="list-inline">
-                <li>
-                  <button class="btn btn-default" ng-click="(stockReport$ | async)?.page = (stockReport$ | async)?.page-1; vm.getStockReport()"
-                    [disabled]="(stockReport$ | async)?.page == 1">Prev</button>
-                </li>
-                <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
-                <li>
-                  <button class="btn btn-default" ng-click="(stockReport$ | async)?.page = (stockReport$ | async)?.page+1; vm.getStockReport()"
-                    [disabled]="(stockReport$ | async)?.page == (stockReport$ | async)?.totalPages">Next</button>
-                </li>
-              </ul>
-            </div>
-          </td>
-        </tr>
+      <tr>
+        <td colspan="14">
+          <div class="pagination pull-right">
+            <ul class="list-inline">
+              <li>
+                <button class="btn btn-default"
+                        (click)="nextPage()"
+                        [disabled]="(stockReport$ | async)?.page == 1">Prev
+                </button>
+              </li>
+              <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
+              <li>
+                <button class="btn btn-default"
+                        (click)="prevPage()"
+                        [disabled]="(stockReport$ | async)?.page == (stockReport$ | async)?.totalPages">Next
+                </button>
+              </li>
+            </ul>
+          </div>
+        </td>
+      </tr>
       </tfoot>
     </table>
   </section>
