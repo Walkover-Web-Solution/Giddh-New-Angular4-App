@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { LaddaModule } from 'angular2-ladda';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { NgModule, ApplicationRef } from '@angular/core';
+
 import {
   removeNgStyles,
   createNewHosts,

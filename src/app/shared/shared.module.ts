@@ -17,17 +17,18 @@ import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
 
-import {  ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent,  AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent,  GroupAccountsListComponent, AccountAddComponent } from './header/components';
+import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
+import { DatePickerModule } from 'angular-io-datepicker';
+import { OverlayModule } from 'angular-io-overlay';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 @NgModule({
   declarations: [
-    // Components / Directives/ Pipes
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
@@ -48,10 +49,12 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ToastrModule.forRoot(),
     FormWizardModule,
     SelectModule,
-    Select2Module, TagsModule
+    Select2Module, TagsModule,
+    OverlayModule,
+    DatePickerModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
-    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, OverlayModule, DatePickerModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent]
 })
