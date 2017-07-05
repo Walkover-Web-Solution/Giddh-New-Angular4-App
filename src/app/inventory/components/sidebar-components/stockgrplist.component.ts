@@ -49,7 +49,10 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
 
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
     e.stopPropagation();
-    this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
-    this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
+    if (grp.isOpen) {
+      this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
+    } else {
+      this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
+    }
   }
 }
