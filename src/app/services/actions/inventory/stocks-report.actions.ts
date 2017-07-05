@@ -1,7 +1,7 @@
 /**
  * Created by ad on 04-07-2017.
  */
-import {StockReportResponse, StockReportRequest} from '../../../models/api-models/Inventory';
+import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
@@ -38,7 +38,7 @@ export class StockReportActions {
     };
   }
 
-  private validateResponse<TResponse, Trequest>(response: BaseResponse<TResponse, Trequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

@@ -1,4 +1,4 @@
-import { StockReportResponse, StockReportRequest } from '../../../models/api-models/Inventory';
+import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../services/actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store/roots';
 
@@ -9,7 +9,7 @@ import { SidebarAction } from '../../../services/actions/inventory/sidebar.actio
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { InventoryStockReportVM } from './inventory-stock-report.view-model';
-import { FormGroup, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -21,13 +21,18 @@ export class InventoryStockReportComponent implements OnInit {
   public sub: Subscription;
   public groupUniqueName: string;
   public stockUniqueName: string;
-  public form: FormGroup;
+  public stockReportRequest: StockReportRequest;
+  public showFromDatePicker: boolean;
+  public showToDatePicker: boolean;
+  public toDate: Date;
+  public fromDate: Date;
 
   /**
- * TypeScript public modifiers
- */
+   * TypeScript public modifiers
+   */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction, private stockReportActions: StockReportActions, private fb: FormBuilder) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport);
+    this.stockReportRequest = new StockReportRequest();
   }
 
   public ngOnInit() {
@@ -42,32 +47,36 @@ export class InventoryStockReportComponent implements OnInit {
           if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
             //
           } else {
-            let request = new StockReportRequest();
-            request.count = 10;
-            request.from = '';
-            request.to = '';
-            request.page = 1;
-            request.stockGroupUniqueName = this.groupUniqueName;
-            request.stockUniqueName = this.stockUniqueName;
-            this.store.dispatch(this.stockReportActions.GetStocksReport(request));
+
+            this.stockReportRequest.count = 10;
+            this.stockReportRequest.from = '';
+            this.stockReportRequest.to = '';
+            this.stockReportRequest.page = 1;
+            this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
+            this.stockReportRequest.stockUniqueName = this.stockUniqueName;
+            this.store.dispatch(this.stockReportActions.GetStocksReport(this.stockReportRequest));
           }
         });
       }
     });
-    this.sub.unsubscribe();
-    this.form = this.fb.group({
-      from: '',
-      to: '',
-      page: '',
-      count: '',
-    });
   }
 
   public getStockReport() {
+    this.store.dispatch(this.stockReportActions.GetStocksReport(this.stockReportRequest));
     return false;
   }
 
   public goToManageStock() {
     return false;
+  }
+
+  public nextPage() {
+    this.stockReportRequest.page++;
+    this.getStockReport();
+  }
+
+  public prevPage() {
+    this.stockReportRequest.page--;
+    this.getStockReport();
   }
 }
