@@ -150,19 +150,24 @@
                 <div class="clearfix pdTBth15">
                   <div class="form-group col-xs-4">
                     <select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                     [(ngModel)]="linkedStock.stockUniqueName"></select2>
+                     formControlName="linkedStockUniqueName"></select2>
                   </div>
 
                   <div class="form-group col-xs-3">
-                    <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode" [(ngModel)]="linkedStock.stockUnitCode"></select2>
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
+                     formControlName="linkedStockUnitCode"></select2>
                   </div>
 
                   <div class="form-group col-xs-3">
-                    <input type="text" name="quantity" [(ngModel)]="linkedStock.quantity" placeholder="Stock Quantity" class="form-control">
+                    <input type="text" formControlName="linkedQuantity" name="quantity" placeholder="Stock Quantity" class="form-control">
                   </div>
                   <div class="form-group col-xs-2">
-                    <a ng-if="!vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" (click)="addItemInLinkedStocks()">Add</a>
-                    <!-- <a ng-if="vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" ng-click="vm.updateMfsCmbItem()">Update</a> -->
+                    <button type="button" ng-if="!vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" (click)="addItemInLinkedStocks()"
+                      [disabled]="addStockForm.controls['linkedStockUniqueName'].invalid || addStockForm.controls['linkedQuantity'].invalid ||
+                                  addStockForm.controls['linkedStockUnitCode'].invalid"
+                    >Add</button>
+                     <button ng-if="vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" ng-click="vm.updateMfsCmbItem()">
+                       Update</button>
                   </div>
                 </div>
 
@@ -173,18 +178,18 @@
                 </div>
 
                 <section class="linkstock">
-                  <table class="col-xs-12 linkStockTbl">
-                    <tbody>
-                      <tr *ngFor="let list of linkedStocks;let i = index;">
+                  <table class="col-xs-12 linkStockTbl" formGroupName="manufacturingDetails">
+                    <tbody formArrayName="linkedStocks">
+                      <tr *ngFor="let list of addStockForm.controls['manufacturingDetails'].controls['linkedStocks'].controls;let i = index;" [formGroupName]="i">
                         <td class="col-xs-4 list-row">
                           <span></span>
-                           <p>{{list.stockUniqueName}}</p>
+                           <p>{{list.value.stockUniqueName}}</p>
                         </td>
-                         <td class="col-xs-2">{{list.stockUnitCode}}</td>
-                         <td class="col-xs-2">{{list.quantity}}</td>
+                         <td class="col-xs-2">{{list.value.stockUnitCode}}</td>
+                         <td class="col-xs-2">{{list.value.quantity}}</td>
                         <td class="col-xs-4 action">
-                          <a href class="btn btn-default" (click)="editItemInLinkedStocks(list, i)">Edit</a>
-                          <a href class="btn btn-default" (click)="removeItemInLinkedStocks(i)">Delete</a>
+                          <a href class="btn btn-default" href="javascript:void(0)" (click)="editItemInLinkedStocks(list, i)">Edit</a>
+                          <a href class="btn btn-default" href="javascript:void(0)" (click)="removeItemInLinkedStocks(i)">Delete</a>
                         </td>
                       </tr>
                     </tbody>
@@ -237,7 +242,7 @@
   <div class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd pdT0">
 
-      <button type="submit" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid" click="submit()">Save</button>
+      <button type="submit" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid" click="submit()">Save</button>
 
 
       <button type="reset" class="btn btn-md btn-primary">
