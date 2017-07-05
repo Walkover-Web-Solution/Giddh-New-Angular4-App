@@ -1,28 +1,21 @@
-<!-- <section class="pd2" *ngIf="!vm.stockId">
-  <p>Select a Stock to Load Report </p>
-  <a href (click)="getStockReport()">Refresh</a>
-</section>
-
-<section class="pd2 h100" *ngIf="vm.stockId">
+<section class="pd2 h100">
 
   <div class="clearfix mrB2">
     <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
-      <i class="icon-edit" aria-hidden="true"></i> Manage {{ vm.selectedStock.name}} Stock</button>
+      <i class="icon-edit" aria-hidden="true"></i> Manage {{ stockUniqueName }} Stock</button>
   </div>
 
   <div class="filterForm clearfix pr">
     <div class="form-group mrB pull-left">
       <label>From Date</label>
       <p class="input-group">
-        <input type="text" class="form-control" required datepicker-options="vm.dateOptions" is-open="vm.fromDatePickerIsOpen" ng-click="vm.fromDatePickerOpen($event)"
-          ng-model="vm.fromDate.date" max-date="vm.today" placeholder="from date" />
+        <date-picker formControlName="from"></date-picker>
       </p>
     </div>
     <div class="form-group mrB pull-left">
       <label>To Date</label>
       <p class="input-group">
-        <input type="text" class="form-control" required datepicker-options="vm.dateOptions" is-open="vm.toDatePickerIsOpen" ng-click="vm.toDatePickerOpen($event)"
-          ng-model="vm.toDate.date" min-date="vm.fromDate.date" max-date="vm.today" placeholder="to date" />
+        <date-picker formControlName="to"></date-picker>
       </p>
     </div>
     <div class="form-group">
@@ -31,35 +24,35 @@
     </div>
   </div>
 
-  <p class="mrT1" *ngIf="vm.report.transactions.length === 0">No Transactions for this Stock</p>
+  <p class="mrT1" *ngIf="(stockReport$ | async)?.transactions.length === 0">No Transactions for this Stock</p>
 
   <section style="margin-bottom: 40px">
 
-    <div class="row fs13" *ngIf="vm.report.openingBalance">
+    <div class="row fs13" *ngIf="(stockReport$ | async)?.openingBalance">
       <div class="col-xs-12 text-right">
 
         <span class="mrR2">
 					<label>O/B Qty:
-						{{vm.report.openingBalance.quantity}}
-						{{vm.report.openingBalance.stockUnit}} &amp;
+						{{(stockReport$ | async)?.openingBalance.quantity}}
+						{{(stockReport$ | async)?.openingBalance.stockUnit}} &amp;
 					</label>
 					<label  placement="top"
-                 tooltip="Rate {{vm.report.openingBalance.amount/vm.report.openingBalance.quantity | number:4}}">&#8377;&nbsp;{{vm.report.openingBalance.amount}}</label>
+                 tooltip="Rate {{(stockReport$ | async)?.openingBalance.amount/(stockReport$ | async)?.openingBalance.quantity | number:4}}">&#8377;&nbsp;{{(stockReport$ | async)?.openingBalance.amount}}</label>
 				</span>
 
         <span>
 					<label>C/B Qty:
-						{{vm.report.closingBalance.quantity}}
-						{{vm.report.closingBalance.stockUnit}} &amp;
+						{{(stockReport$ | async)?.closingBalance.quantity}}
+						{{(stockReport$ | async)?.closingBalance.stockUnit}} &amp;
 					</label>
 					<label tooltip-placement="top"
-                 tooltip="Rate {{vm.report.closingBalance.amount/vm.report.closingBalance.quantity | number:4}}">&#8377;&nbsp;{{vm.report.closingBalance.amount}}</label>
+                 tooltip="Rate {{(stockReport$ | async)?.closingBalance.amount/(stockReport$ | async)?.closingBalance.quantity | number:4}}">&#8377;&nbsp;{{(stockReport$ | async)?.closingBalance.amount}}</label>
 				</span>
 
       </div>
     </div>
 
-    <table class="mrT1 stkRprtTbl table_theme width100" *ngIf="vm.report.transactions.length > 0">
+    <table class="mrT1 stkRprtTbl table_theme width100" *ngIf="(stockReport$ | async)?.transactions.length > 0">
       <thead>
         <tr>
           <th rowspan="2">Date</th>
@@ -77,7 +70,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr ng-repeat="txn in vm.report.transactions">
+        <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
           <td ng-bind="txn.entryDate"></td>
           <td ng-bind="txn.voucherType"></td>
           <td ng-bind="txn.account.name"></td>
@@ -98,7 +91,7 @@
             {{txn.amount}}
           </td>
           <td>
-            {{txn.closingQuantity}}&nbsp;{{vm.report.stockUnit}}
+            {{txn.closingQuantity}}&nbsp;{{(stockReport$ | async)?.stockUnit}}
           </td>
         </tr>
       </tbody>
@@ -108,11 +101,13 @@
             <div class="pagination pull-right">
               <ul class="list-inline">
                 <li>
-                  <button class="btn btn-default" ng-click="vm.report.page = vm.report.page-1; vm.getStockReport()" ng-disabled="vm.report.page == 1">Prev</button>
+                  <button class="btn btn-default" ng-click="(stockReport$ | async)?.page = (stockReport$ | async)?.page-1; vm.getStockReport()"
+                    [disabled]="(stockReport$ | async)?.page == 1">Prev</button>
                 </li>
-                <li>{{vm.report.page}}/{{vm.report.totalPages}}</li>
+                <li>{{(stockReport$ | async)?.page}}/{{(stockReport$ | async)?.totalPages}}</li>
                 <li>
-                  <button class="btn btn-default" ng-click="vm.report.page = vm.report.page+1; vm.getStockReport()" ng-disabled="vm.report.page == vm.report.totalPages">Next</button>
+                  <button class="btn btn-default" ng-click="(stockReport$ | async)?.page = (stockReport$ | async)?.page+1; vm.getStockReport()"
+                    [disabled]="(stockReport$ | async)?.page == (stockReport$ | async)?.totalPages">Next</button>
                 </li>
               </ul>
             </div>
@@ -121,4 +116,4 @@
       </tfoot>
     </table>
   </section>
-</section> -->
+</section>

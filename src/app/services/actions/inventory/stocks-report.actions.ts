@@ -1,7 +1,7 @@
 /**
  * Created by ad on 04-07-2017.
  */
-import { StockReportRequest } from '../../../models/api-models/Inventory';
+import {StockReportResponse, StockReportRequest} from '../../../models/api-models/Inventory';
 import { STOCKS_REPORT_ACTIONS } from './inventory.const';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
@@ -19,16 +19,16 @@ export class StockReportActions {
     .ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT)
     .switchMap(action => {
       return this._inventoryService.GetStocksReport(action.payload)
-        .map((r) => this.validateResponse(r, {
+        .map((r) => this.validateResponse<StockReportResponse, StockReportRequest>(r, {
           type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
           payload: r.body
         }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private  _inventoryService: InventoryService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _inventoryService: InventoryService) {
   }
 
   public GetStocksReport(stockReportRequest: StockReportRequest): Action {
@@ -38,7 +38,7 @@ export class StockReportActions {
     };
   }
 
-  private validateResponse(response: BaseResponse<any, any>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, Trequest>(response: BaseResponse<TResponse, Trequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
