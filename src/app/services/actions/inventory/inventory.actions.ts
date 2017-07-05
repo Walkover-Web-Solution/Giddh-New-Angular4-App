@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StockGroupRequest, StockGroupResponse, StockDetailResponse, StocksResponse } from '../../../models/api-models/Inventory';
+import { StockGroupRequest, StockGroupResponse, StockDetailResponse, StocksResponse, CreateStockRequest } from '../../../models/api-models/Inventory';
 import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AppState } from '../../../store/roots';
@@ -98,6 +98,24 @@ export class InventoryAction {
       return { type: '' };
     });
 
+  @Effect()
+  public createStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.CreateStock)
+    .switchMap(action => this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName))
+    .map(response => this.createStockResponse(response));
+
+  @Effect()
+  public createStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.CreateStockResponse)
+    .map(response => {
+      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Stock Created Successfully');
+      }
+      return { type: '' };
+    });
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions, private _toasty: ToasterService) {
 
   }
@@ -112,6 +130,20 @@ export class InventoryAction {
   public addNewGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): Action {
     return {
       type: InventoryActionsConst.AddNewGroupResponse,
+      payload: value
+    };
+  }
+
+  public createStock(value: CreateStockRequest, stockGroupUniqueName: string): Action {
+    return {
+      type: InventoryActionsConst.CreateStock,
+      payload: { stock: value, stockGroupUniqueName }
+    };
+  }
+
+  public createStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): Action {
+    return {
+      type: InventoryActionsConst.CreateStockResponse,
       payload: value
     };
   }
