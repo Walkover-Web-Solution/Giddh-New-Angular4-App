@@ -1,89 +1,47 @@
-<form name="addEditStockForm" novalidate="" class="ng-pristine ng-scope ng-invalid ng-invalid-required ng-valid-minlength">
+<form name="addEditStockForm" [formGroup]="addStockForm" novalidate="">
   <section class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd2 pdB0">
       <div class="row form_title">
-        <!-- ngIf: !vm.addStockObj.stockGroup --><label ng-if="!vm.addStockObj.stockGroup" class="ng-scope">Add Stock</label>
-        <!-- end ngIf: !vm.addStockObj.stockGroup -->
-        <!-- ngIf: vm.addStockObj.stockGroup -->
+        <label ng-if="!vm.addStockObj.stockGroup" class="">Add Stock</label>
       </div>
 
       <div class="row">
         <section class="form-theme clearfix mrBChldLbl">
           <div class="row mr0">
+
             <div class="form-group col-xs-6 pdL0 pdR">
               <label>Name<span class="required">*</span></label>
-              <input type="text" name="name" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required ng-valid-minlength"
-                ng-model="vm.addStockObj.name" required="" minlength="2" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
+              <input type="text" name="name" class="form-control" formControlName="name" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);"
+                (change)="generateUniqueName()">
             </div>
-            <!-- show only when update -->
+
             <div class="form-group col-xs-6 pdR0 pdL">
               <label>Unique Name</label>
-              <input type="text" name="uniqueName" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required" ng-model="vm.addStockObj.uniqueName"
-                required="">
+              <input type="text" name="uniqueName" class="form-control" formControlName="uniqueName" UniqueNameDirective>
             </div>
+
           </div>
 
           <div class="row mr0">
+
             <div class="form-group col-xs-3 pdL0 pdR">
               <label>Stock Unit<span class="required">*</span></label>
-              <div class="ui-select-container ui-select-bootstrap dropdown ng-invalid ng-invalid-required" ng-class="{open: $select.open}"
-                ng-model="vm.addStockObj.stockUnitCode" theme="bootstrap" search-enabled="true" required="required" title="Choose Unit">
-                <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Choose Unit activate"
-                    ng-disabled="$select.disabled" ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding"></span>                  <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
-                    ng-transclude="">
-                  <span class="ng-binding ng-scope">
-
-                  </span>
-                  </span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i> <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)"
-                    aria-label="Choose Unit clear" style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
-                </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Choose Unit" aria-owns="ui-select-choices-6"
-                  aria-activedescendant="ui-select-choices-row-6-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
-                  placeholder="" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open" style="width: 10px;">
-                <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
-                  repeat="unit.code as unit in vm.customUnits | propsFilter: {name: $select.search, code: $select.search}">
-                  <li class="ui-select-choices-group" id="ui-select-choices-6">
-                    <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
-                    <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
-                    <!-- ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: unit in $select.items -->
-                  </li>
-                </ul>
-                <div class="ui-select-no-choice"></div>
-                <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-6"
-                  aria-label="Choose Unit focus" aria-haspopup="true" role="button"></div>
+              <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
             </div>
 
             <div class="form-group col-xs-3 pdR">
               <label>Open. Qty</label>
-              <input type="number" name="openingQuantity" class="form-control ng-pristine ng-untouched ng-valid" ng-model="vm.addStockObj.openingQuantity">
+              <input type="number" name="openingQuantity" class="form-control" formControlName="openingQuantity">
             </div>
 
             <div class="form-group col-xs-3 pdL">
               <label>Rate/stock unit</label>
-              <input readonly="true" type="text" class="form-control" placeholder="calculate later" value="">
+              <input type="text" name="stockRate" formControlName="stockRate" class="form-control" placeholder="calculate later">
             </div>
 
-            <!--amount/quantity formula manuallly calculate -->
             <div class="form-group col-xs-3 pdL pdR0 ">
               <label>Amount</label>
-              <input type="number" name="openingAmount" class="form-control ng-pristine ng-untouched ng-valid" ng-model="vm.addStockObj.openingAmount">
+              <input type="number" name="openingAmount" class="form-control" formControlName="openingAmount">
             </div>
 
           </div>
@@ -91,34 +49,7 @@
           <div class="row mr0 col-xs-6 pdL0 pdR">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Purchase Acc</label>
-              <div class="ui-select-container ui-select-bootstrap dropdown ng-valid" ng-class="{open: $select.open}" ng-model="vm.addStockObj.purchaseAccountDetails.accountUniqueName"
-                theme="bootstrap">
-                <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"
-                  allow-clear="true" placeholder="select purchase account"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Select box activate"
-                    ng-disabled="$select.disabled" ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding">select purchase account</span>                  <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
-                    ng-transclude="">
-                  <span class="ng-binding ng-scope"></span>
-                  </span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i> <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)"
-                    aria-label="Select box clear" style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
-                </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Select box" aria-owns="ui-select-choices-7"
-                  aria-activedescendant="ui-select-choices-row-7-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
-                  placeholder="select purchase account" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open"
-                  style="width: 10px;">
-                <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
-                  repeat="account.uniqueName as account in vm.purchaseAccounts | filter:$select.search | limitTo:5" refresh="vm.getPurchaseAccounts($select.search)">
-                  <li class="ui-select-choices-group" id="ui-select-choices-7">
-                    <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
-                    <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
-                    <!-- ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                  </li>
-                </ul>
-                <div class="ui-select-no-choice"></div>
-                <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-7"
-                  aria-label="Select box focus" aria-haspopup="true" role="button"></div>
+              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options" formControlName="purchaseAccountUniqueName"></select2>
             </div>
 
             <div class="row mrB">
@@ -130,101 +61,29 @@
               </div>
             </div>
 
-            <!-- ngRepeat: item in vm.addStockObj.purchaseAccountDetails.unitRates track by $index -->
-            <div class="row mrB1 ng-scope" ng-repeat="item in vm.addStockObj.purchaseAccountDetails.unitRates track by $index">
-              <div class="col-xs-5">
-                <div class="ui-select-container ui-select-bootstrap dropdown ng-valid" ng-class="{open: $select.open}" search-enabled="true"
-                  ng-model="item.stockUnitCode" theme="bootstrap" title="Choose Unit">
-                  <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Choose Unit activate"
-                      ng-disabled="$select.disabled" ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding"></span>                    <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
-                      ng-transclude="">
-                    <span class="ng-binding ng-scope"></span>
-                    </span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i> <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)"
-                      aria-label="Choose Unit clear" style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
-                  </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Choose Unit" aria-owns="ui-select-choices-9"
-                    aria-activedescendant="ui-select-choices-row-9-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
-                    placeholder="" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open" style="width: 10px;">
-                  <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
-                    repeat="unit.code as unit in vm.customUnits | propsFilter: {name: $select.search, code: $select.search}">
-                    <li class="ui-select-choices-group" id="ui-select-choices-9">
-                      <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
-                      <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
-                      <!-- ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                    </li>
-                  </ul>
-                  <div class="ui-select-no-choice"></div>
-                  <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-9"
-                    aria-label="Choose Unit focus" aria-haspopup="true" role="button"></div>
-              </div>
-              <div class="col-xs-5">
-                <input type="number" class="form-control ng-pristine ng-untouched ng-valid" ng-model="item.rate">
-              </div>
-              <div class="col-xs-2 mutliple_unit">
-                <!-- ngIf: $last --><button ng-if="$last" ng-click="vm.addUnitItem(item, 'pArr')" class="ng-scope"><i class="fa fa-plus add_row"></i></button>
-                <!-- end ngIf: $last -->
-                <button ng-hide="$last &amp;&amp; !$first" ng-click="vm.removeUnitItem(item, 'pArr')"><i class="fa fa-times dlet"></i></button>
+            <div formArrayName="purchaseUnitRates">
+              <div class="row mrB1" *ngFor="let item of addStockForm.controls['purchaseUnitRates'].controls; let i=index">
+                <div [formGroupName]="i">
+                  <div class="col-xs-5">
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
+                  </div>
+                  <div class="col-xs-5">
+                    <input type="number" class="form-control" formControlName="rate">
+                  </div>
+                </div>
+                <div class="col-xs-2 mutliple_unit">
+                  <button (click)="addPurchaseUnitRates()"><i class="fa fa-plus add_row"></i></button>
+                  <button (click)="removePurchaseUnitRates(i)"><i class="fa fa-times dlet"></i></button>
+                </div>
               </div>
             </div>
-            <!-- end ngRepeat: item in vm.addStockObj.purchaseAccountDetails.unitRates track by $index -->
-
           </div>
 
 
           <div class="row mr0 col-xs-6 pdL pdR0">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Sales Acc</label>
-              <div class="ui-select-container ui-select-bootstrap dropdown ng-valid" ng-class="{open: $select.open}" ng-model="vm.addStockObj.salesAccountDetails.accountUniqueName"
-                theme="bootstrap">
-                <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"
-                  allow-clear="true" placeholder="select sales account"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Select box activate"
-                    ng-disabled="$select.disabled" ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding">select sales account</span>                  <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
-                    ng-transclude="">
-                  <span class="ng-binding ng-scope"></span>
-                  </span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i> <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)"
-                    aria-label="Select box clear" style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
-                </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Select box" aria-owns="ui-select-choices-8"
-                  aria-activedescendant="ui-select-choices-row-8-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
-                  placeholder="select sales account" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open"
-                  style="width: 10px;">
-                <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
-                  repeat="account.uniqueName as account in vm.salesAccounts | filter:$select.search | limitTo:5" refresh="vm.getSalesAccounts($select.search)">
-                  <li class="ui-select-choices-group" id="ui-select-choices-8">
-                    <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
-                    <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
-                    <!-- ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                    <!-- ngIf: $select.open -->
-                    <!-- end ngRepeat: account in $select.items -->
-                  </li>
-                </ul>
-                <div class="ui-select-no-choice"></div>
-                <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-8"
-                  aria-label="Select box focus" aria-haspopup="true" role="button"></div>
+              <select2 [data]="salesAccountsDropDown$ | async" [options]="options" formControlName="salesAccountUniqueName"></select2>
             </div>
 
 
@@ -238,103 +97,152 @@
               </div>
             </div>
 
-            <!-- ngRepeat: item in vm.addStockObj.salesAccountDetails.unitRates track by $index -->
-            <div class="row mrB1 ng-scope" ng-repeat="item in vm.addStockObj.salesAccountDetails.unitRates track by $index">
-              <div class="col-xs-5">
-                <div class="ui-select-container ui-select-bootstrap dropdown ng-valid" ng-class="{open: $select.open}" search-enabled="true"
-                  ng-model="item.stockUnitCode" theme="bootstrap" title="Choose Unit">
-                  <div class="ui-select-match" ng-hide="$select.open &amp;&amp; $select.searchEnabled" ng-disabled="$select.disabled" ng-class="{'btn-default-focus':$select.focus}"><span tabindex="-1" class="btn btn-default form-control ui-select-toggle" aria-label="Choose Unit activate"
-                      ng-disabled="$select.disabled" ng-click="$select.activate()" style="outline: 0;"><span ng-show="$select.isEmpty()" class="ui-select-placeholder text-muted ng-binding"></span>                    <span ng-hide="$select.isEmpty()" class="ui-select-match-text pull-left ng-hide" ng-class="{'ui-select-allow-clear': $select.allowClear &amp;&amp; !$select.isEmpty()}"
-                      ng-transclude="">
-                    <span class="ng-binding ng-scope"></span>
-                    </span> <i class="caret pull-right" ng-click="$select.toggle($event)"></i> <a ng-show="$select.allowClear &amp;&amp; !$select.isEmpty() &amp;&amp; ($select.disabled !== true)"
-                      aria-label="Choose Unit clear" style="margin-right: 10px" ng-click="$select.clear($event)" class="btn btn-xs btn-link pull-right ng-hide"><i class="glyphicon glyphicon-remove" aria-hidden="true"></i></a></span>
-                  </div><input type="search" autocomplete="off" tabindex="-1" aria-expanded="true" aria-label="Choose Unit" aria-owns="ui-select-choices-10"
-                    aria-activedescendant="ui-select-choices-row-10-0" class="form-control ui-select-search ng-pristine ng-untouched ng-valid ng-hide"
-                    placeholder="" ng-model="$select.search" ng-show="$select.searchEnabled &amp;&amp; $select.open" style="width: 10px;">
-                  <ul class="ui-select-choices ui-select-choices-content ui-select-dropdown dropdown-menu ng-hide" role="listbox" ng-show="$select.open &amp;&amp; $select.items.length > 0"
-                    repeat="unit.code as unit in vm.customUnits | propsFilter: {name: $select.search, code: $select.search}">
-                    <li class="ui-select-choices-group" id="ui-select-choices-10">
-                      <div class="divider ng-hide" ng-show="$select.isGrouped &amp;&amp; $index > 0"></div>
-                      <div ng-show="$select.isGrouped" class="ui-select-choices-group-label dropdown-header ng-binding ng-hide" ng-bind="$group.name"></div>
-                      <!-- ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                      <!-- ngIf: $select.open -->
-                      <!-- end ngRepeat: unit in $select.items -->
-                    </li>
-                  </ul>
-                  <div class="ui-select-no-choice"></div>
-                  <input ng-disabled="$select.disabled" class="ui-select-focusser ui-select-offscreen ng-scope" type="text" id="focusser-10"
-                    aria-label="Choose Unit focus" aria-haspopup="true" role="button"></div>
-              </div>
-              <div class="col-xs-5">
-                <input type="number" class="form-control ng-pristine ng-untouched ng-valid" ng-model="item.rate">
-              </div>
-              <div class="col-xs-2 mutliple_unit">
-                <!-- ngIf: $last --><button ng-if="$last" ng-click="vm.addUnitItem(item, 'sArr')" class="ng-scope"><i class="fa fa-plus add_row"></i></button>
-                <!-- end ngIf: $last -->
-                <button ng-hide="$last &amp;&amp; !$first" ng-click="vm.removeUnitItem(item, 'sArr')"><i class="fa fa-times dlet"></i></button>
+            <div formArrayName="saleUnitRates">
+              <div class="row mrB1" *ngFor="let item of addStockForm.controls['saleUnitRates'].controls; let i=index">
+                <div [formGroupName]="i">
+                  <div class="col-xs-5">
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
+                  </div>
+                  <div class="col-xs-5">
+                    <input type="number" class="form-control" formControlName="rate">
+                  </div>
+                </div>
+                <div class="col-xs-2 mutliple_unit">
+                  <button (click)="addSaleUnitRates()"><i class="fa fa-plus add_row"></i></button>
+                  <button (click)="removeSaleUnitRates(i)"><i class="fa fa-times dlet"></i></button>
+                </div>
               </div>
             </div>
-            <!-- end ngRepeat: item in vm.addStockObj.salesAccountDetails.unitRates track by $index -->
 
           </div>
 
           <div class="row mrT1">
             <div class="col-xs-12">
               <div class="checkbox">
-                <label class="isFsStock" for="isFsStock" ng-click="$event.stopPropagation()">
-                  <input type="checkbox" ng-model="vm.addStockObj.isFsStock" id="isFsStock" name="isFsStock" class="ng-pristine ng-untouched ng-valid">Is it a finished stock? <small>(Manufacturing/Combo)</small></label>
+                <label class="isFsStock" for="isFsStock">
+                  <input type="checkbox" formControlName="isFsStock" id="isFsStock" name="isFsStock">
+                    Is it a finished stock? <small>(Manufacturing/Combo)</small></label>
               </div>
             </div>
           </div>
         </section>
-        <!-- end box -->
       </div>
+
+
     </div>
   </section>
 
   <div class="clearfix"></div>
-  <!-- combo code -->
-  <section class="col-xs-12">
+  <section class="col-xs-12" *ngIf="addStockForm.value.isFsStock">
     <div class="pdL2 pdR2 mrB2">
       <div class="row">
-        <!-- ngIf: vm.addStockObj.isFsStock -->
+        <table class="width100 table_theme mrT1 noPdTd addStockTbl">
+          <thead>
+            <tr>
+              <th colspan="2" class="">
+                (Made with)
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="col-xs-8">
+                <div class="clearfix pdTBth15">
+                  <div class="form-group col-xs-4">
+                    <select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
+                     [(ngModel)]="linkedStock.stockUniqueName"></select2>
+                  </div>
+
+                  <div class="form-group col-xs-3">
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode" [(ngModel)]="linkedStock.stockUnitCode"></select2>
+                  </div>
+
+                  <div class="form-group col-xs-3">
+                    <input type="text" name="quantity" [(ngModel)]="linkedStock.quantity" placeholder="Stock Quantity" class="form-control">
+                  </div>
+                  <div class="form-group col-xs-2">
+                    <a ng-if="!vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" (click)="addItemInLinkedStocks()">Add</a>
+                    <!-- <a ng-if="vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" ng-click="vm.updateMfsCmbItem()">Update</a> -->
+                  </div>
+                </div>
+
+                <div class="clearfix mrT1 mrB1" ng-if="vm.mfsCmbItemErrMsg">
+                  <div class="col-xs-12">
+                    <!-- <p class="text-warning">{{vm.mfsCmbItemErrMsg}}</p> -->
+                  </div>
+                </div>
+
+                <section class="linkstock">
+                  <table class="col-xs-12 linkStockTbl">
+                    <tbody>
+                      <tr *ngFor="let list of linkedStocks;let i = index;">
+                        <td class="col-xs-4 list-row">
+                          <span></span>
+                           <p>{{list.stockUniqueName}}</p>
+                        </td>
+                         <td class="col-xs-2">{{list.stockUnitCode}}</td>
+                         <td class="col-xs-2">{{list.quantity}}</td>
+                        <td class="col-xs-4 action">
+                          <a href class="btn btn-default" (click)="editItemInLinkedStocks(list, i)">Edit</a>
+                          <a href class="btn btn-default" (click)="removeItemInLinkedStocks(i)">Delete</a>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </section>
+              </td>
+              <td class="col-xs-4">
+                <section class="clearfix pr">
+                  <div class="col-md-2 col-lg-2 col-xs-12">
+                    &nbsp;
+                  </div>
+                  <p class="lead col-md-10 col-lg-10 col-xs-12 mrB fw400">
+                    <small>
+								<!-- {{vm.addStockObj.manufacturingDetails.manufacturingQuantity}} -->
+								<!-- {{vm.addStockObj.manufacturingDetails.manufacturingUnitCode}} -->
+                </small>
+              <!-- {{vm.addStockObj.name}} -->
+                  </p>
+                </section>
+                <section class="clearfix pr">
+                  <div class="form-group col-md-2 col-lg-2 col-xs-12">
+                    <span class="total-ico">=</span>
+                  </div>
+                  <div class="form-group col-md-5 col-lg-5 col-xs-12">
+                    <input type="text" class="form-control" ng-model="vm.addStockObj.manufacturingDetails.manufacturingQuantity" name="manufacturingQuantity"
+                      placeholder="Quantity" />
+                  </div>
+                  <div class="form-group col-md-5 col-lg-5 col-xs-12">
+
+                    <!-- <ui-select ng-model="vm.addStockObj.manufacturingDetails.manufacturingUnitCode" theme="bootstrap" search-enabled="true" title="Choose Unit">
+                      <ui-select-match placeholder="Select">{{$select.selected.name}}</ui-select-match>
+                      <ui-select-choices repeat="item.code as item in vm.customUnits | propsFilter: {name: $select.search, code: $select.search}">
+                        <span ng-bind-html="item.name | hilite: $select.search"></span>
+                        <small>(<span ng-bind-html="''+item.code | hilite: $select.search"></span>)</small>
+                      </ui-select-choices>
+                    </ui-select> -->
+
+                  </div>
+                </section>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
-  <!-- combo code end-->
+
   <div class="clearfix"></div>
 
   <div class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd pdT0">
 
-      <!-- ngIf: !vm.addStockObj.stockGroup --><button ng-if="!vm.addStockObj.stockGroup" type="submit" class="btn btn-md btn-success mrR1 ng-scope" ng-disabled="addEditStockForm.$invalid"
-        ng-click="vm.addStock()" disabled="disabled">Save</button>
-      <!-- end ngIf: !vm.addStockObj.stockGroup -->
+      <button type="submit" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid" click="submit()">Save</button>
 
-      <!-- ngIf: vm.addStockObj.stockGroup -->
 
-      <button ng-click="vm.clearAddEditStockForm()" type="reset" class="btn btn-md btn-primary">
+      <button type="reset" class="btn btn-md btn-primary">
         Cancel
       </button>
-
-      <!-- ngIf: vm.addStockObj.stockGroup -->
 
     </div>
   </div>

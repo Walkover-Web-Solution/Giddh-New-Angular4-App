@@ -80,6 +80,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    console.log('header');
     this.store.dispatch(this.loginAction.LoginSuccess());
     this.user$.subscribe((u) => {
       if (u) {
