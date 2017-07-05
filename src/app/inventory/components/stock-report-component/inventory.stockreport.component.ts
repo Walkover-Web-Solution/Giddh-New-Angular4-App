@@ -11,7 +11,8 @@ import { Subscription } from 'rxjs/Rx';
 import { InventoryStockReportVM } from './inventory-stock-report.view-model';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-
+import * as moment from 'moment';
+import * as _ from 'lodash';
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
   templateUrl: './inventory.stockreport.component.html'
@@ -27,6 +28,8 @@ export class InventoryStockReportComponent implements OnInit {
   public toDate: Date;
   public fromDate: Date;
 
+  public moment = moment;
+
   /**
    * TypeScript public modifiers
    */
@@ -36,33 +39,41 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.sub = this.route.params.take(1).subscribe(params => {
+    this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
       if (this.groupUniqueName) {
         let activeGroup = null;
         let activeStock = null;
         this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
-        this.store.select(a => a.inventory.activeGroup).take(1).subscribe(a => {
-          if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
-            //
-          } else {
-
-            this.stockReportRequest.count = 10;
-            this.stockReportRequest.from = '';
-            this.stockReportRequest.to = '';
-            this.stockReportRequest.page = 1;
-            this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
-            this.stockReportRequest.stockUniqueName = this.stockUniqueName;
-            this.store.dispatch(this.stockReportActions.GetStocksReport(this.stockReportRequest));
-          }
-        });
+        if (this.groupUniqueName && this.stockUniqueName) {
+          this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
+            if (!a) {
+              this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
+              this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+            }
+          });
+          this.stockReportRequest.count = 10;
+          this.fromDate = moment().add(-1, 'month').toDate();
+          this.toDate = moment().toDate();
+          this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
+          this.stockReportRequest.to = moment().format('DD-MM-YYYY');
+          this.stockReportRequest.page = 1;
+          this.stockReportRequest.stockGroupUniqueName = this.groupUniqueName;
+          this.stockReportRequest.stockUniqueName = this.stockUniqueName;
+          this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
+        }
       }
     });
   }
 
-  public getStockReport() {
-    this.store.dispatch(this.stockReportActions.GetStocksReport(this.stockReportRequest));
+  public getStockReport(resetPage: boolean) {
+    this.stockReportRequest.from = moment(this.fromDate).format('DD-MM-YYYY');
+    this.stockReportRequest.to = moment(this.toDate).format('DD-MM-YYYY');
+    if (resetPage) {
+      this.stockReportRequest.page = 1;
+    }
+    this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
     return false;
   }
 
@@ -71,12 +82,24 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public nextPage() {
+    debugger;
     this.stockReportRequest.page++;
-    this.getStockReport();
+    this.getStockReport(false);
   }
 
   public prevPage() {
+    debugger;
     this.stockReportRequest.page--;
-    this.getStockReport();
+    this.getStockReport(false);
+  }
+  public closeFromDate(e: any) {
+    if (this.showFromDatePicker) {
+      this.showFromDatePicker = false;
+    }
+  }
+  public closeToDate(e: any) {
+    if (this.showToDatePicker) {
+      this.showToDatePicker = false;
+    }
   }
 }
