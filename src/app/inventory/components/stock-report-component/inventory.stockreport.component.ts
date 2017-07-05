@@ -90,4 +90,14 @@ export class InventoryStockReportComponent implements OnInit {
     this.stockReportRequest.page--;
     this.getStockReport(false);
   }
+  public closeFromDate(e: any) {
+    if (this.showFromDatePicker) {
+      this.showFromDatePicker = false;
+    }
+  }
+  public closeToDate(e: any) {
+    if (this.showToDatePicker) {
+      this.showToDatePicker = false;
+    }
+  }
 }
