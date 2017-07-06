@@ -13,6 +13,7 @@ import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
   templateUrl: './inventory.stockreport.component.html'
@@ -34,7 +35,7 @@ export class InventoryStockReportComponent implements OnInit {
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router) {
+    private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
@@ -80,6 +81,7 @@ export class InventoryStockReportComponent implements OnInit {
 
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {
+      this.store.dispatch(this.inventoryAction.showLoaderForStock());
       this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
       this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName, 'add-stock', this.stockUniqueName]);
     }

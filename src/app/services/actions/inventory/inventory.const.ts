@@ -37,8 +37,13 @@ export class InventoryActionsConst {
   public static GetStockUniqueName = 'GetStockUniqueName';
   public static GetStockUniqueNameResponse = 'GetStockUniqueNameResponse';
 
+  public static ShowLoadingForStockEditInProcess = 'ShowLoadingForStockEditInProcess';
+  public static HideLoadingForStockEditInProcess = 'HideLoadingForStockEditInProcess';
+
   public static GetStock = 'GetStock';
   public static GetStockResponse = 'GetStockResponse';
+
+  public static ResetActiveStock = 'ResetActiveStock';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {

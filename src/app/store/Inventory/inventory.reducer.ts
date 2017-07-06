@@ -24,6 +24,7 @@ export interface InventoryState {
   isStockNameAvailable: boolean;
   createStockSuccess: boolean;
   stockReport?: StockReportResponse;
+  showLoadingForStockEditInProcess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -52,7 +53,8 @@ const initialState: InventoryState = {
   isUpdateGroupInProcess: false,
   fetchingStockUniqueName: false,
   isStockNameAvailable: false,
-  createStockSuccess: false
+  createStockSuccess: false,
+  showLoadingForStockEditInProcess: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -329,6 +331,12 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
            activeStockUniqueName: stockDetailsResp.body.uniqueName});
       }
       return state;
+    case InventoryActionsConst.ShowLoadingForStockEditInProcess:
+      return Object.assign({}, state, { showLoadingForStockEditInProcess: true });
+    case InventoryActionsConst.HideLoadingForStockEditInProcess:
+      return Object.assign({}, state, { showLoadingForStockEditInProcess: false });
+    case InventoryActionsConst.ResetActiveStock:
+      return Object.assign({}, state, { activeStock: null, activeStockUniqueName: null});
     /*
      *Custom Stock Units...
      * */

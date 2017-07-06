@@ -279,4 +279,21 @@ export class InventoryAction {
       payload: value
     };
   }
+
+   public resetActiveStock(): Action {
+    return {
+      type: InventoryActionsConst.ResetActiveStock
+    };
+  }
+  public showLoaderForStock(): Action {
+    return {
+      type: InventoryActionsConst.ShowLoadingForStockEditInProcess
+    };
+  }
+
+  public hideLoaderForStock(): Action {
+    return {
+      type: InventoryActionsConst.HideLoadingForStockEditInProcess
+    };
+  }
 }
