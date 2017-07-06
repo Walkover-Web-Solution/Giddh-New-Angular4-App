@@ -3,28 +3,25 @@
     <section ng-if="stock.groupEditMode" class="clearfix " auto-height="" style="min-height: 600px; height: 507px;">
 
       <div class="form_title">
-          <div *ngIf="!(activeGroup$ | async)">
-              <label>Add Group</label>
-          </div>
-          <div *ngIf="activeGroup$ | async">
-            <label>Modify Group</label>
-          </div>
+        <div *ngIf="!(activeGroup$ | async)">
+          <label>Add Group</label>
+        </div>
+        <div *ngIf="activeGroup$ | async">
+          <label>Modify Group</label>
+        </div>
       </div>
 
-      <form name="updateStockGroup" class="form-theme"  [formGroup]="addGroupForm" novalidate="">
+      <form name="updateStockGroup" class="form-theme" [formGroup]="addGroupForm" novalidate="">
 
         <div class="row groupStockFormRow">
           <div class="form-group col-xs-6">
             <label>Name<span class="required">*</span></label>
-            <input type="text" name="name" class="form-control" formControlName="name"
-              required="" style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);"
-              (change)="generateUniqueName()">
+            <input type="text" name="name" class="form-control" formControlName="name" required="" style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
           </div>
 
           <div class="form-group col-xs-6">
             <label>Unique Name<span class="required">*</span></label>
-            <input type="text" name="uniqueName" formControlName="uniqueName" class="form-control"
-               UniqueNameDirective>
+            <input type="text" name="uniqueName" formControlName="uniqueName" class="form-control" UniqueNameDirective>
           </div>
         </div>
 
@@ -34,16 +31,9 @@
               <label>Parent Group</label>
             </div>
             <div class="form-group mrB">
-              <input [typeahead]="dataSource"
-                      type="text"
-                      [(ngModel)]="parentStockSearchString"
-                      typeaheadAsync="true"
-                      formControlName="parentStockGroupUniqueName"
-                      typeaheadOptionField="name"
-                      (typeaheadOnSelect)="groupSelected($event)"
-                      (typeaheadNoResults)="onGroupResult()"
-                     class="form-control" name="city" autocomplete="off" maxlength="50"
-                    placeholder="Select">
+              <input [typeahead]="dataSource" type="text" [(ngModel)]="parentStockSearchString" typeaheadAsync="true" formControlName="parentStockGroupUniqueName"
+                typeaheadOptionField="name" (typeaheadOnSelect)="groupSelected($event)" (typeaheadNoResults)="onGroupResult()"
+                class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Select">
             </div>
           </div>
           <div class="col-xs-12">
@@ -63,8 +53,8 @@
             <button type="reset" class="btn btn-md btn-primary">Cancel</button>
           </div>
           <div *ngIf="activeGroup$ | async;">
-             <button type="submit" [disabled]="addGroupForm.invalid" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
-              <button type="submit" class="btn btn-md btn-danger" (click)="removeGroup()">Delete</button>
+            <button type="submit" [disabled]="addGroupForm.invalid" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
+            <button type="submit" class="btn btn-md btn-danger" (click)="removeGroup()">Delete</button>
           </div>
         </div>
       </form>
