@@ -219,25 +219,28 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         if (resp.request.isSelfParent) {
           groupArray.map(gr => {
             if (gr.uniqueName === activeGroup.uniqueName) {
-              gr.name = resp.request.name;
-              gr.uniqueName = resp.request.uniqueName;
+              gr.name = resp.body.name;
+              gr.uniqueName = resp.body.uniqueName;
             }
           });
         } else {
           for (let el of groupArray) {
+            debugger;
             if (el.uniqueName === activeGroup.parentStockGroup.uniqueName) {
-              let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.request.uniqueName, null);
+              let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.queryString.stockGroupUniquename, null);
               if (myGrp) {
-                addItemAtIndex(groupArray, resp.request.parentStockGroupUniqueName, myGrp);
+                myGrp.name = resp.body.name;
+                myGrp.uniqueName = resp.body.uniqueName;
+                addItemAtIndex(groupArray, resp.body.parentStockGroup.uniqueName, myGrp);
                 break;
               }
             } else {
               if (el.childStockGroups.length) {
-                let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.request.uniqueName, null);
+                let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.queryString.stockGroupUniquename, null);
                 if (myGrp) {
-                  myGrp.name = resp.request.name;
-                  myGrp.uniqueName = resp.request.uniqueName;
-                  addItemAtIndex(groupArray, resp.request.parentStockGroupUniqueName, myGrp);
+                  myGrp.name = resp.body.name;
+                  myGrp.uniqueName = resp.body.uniqueName;
+                  addItemAtIndex(groupArray, resp.body.parentStockGroup.uniqueName, myGrp);
                   break;
                 }
               }
@@ -463,6 +466,7 @@ const removeGroupItem = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniq
 const addItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, group: IGroupsWithStocksHierarchyMinItem) => {
   for (let el of groups) {
     if (el.uniqueName === parentUniqueName) {
+      // debugger
       el.isActive = true;
       el.isOpen = true;
       el.childStockGroups.push({
@@ -505,6 +509,7 @@ const removeGroupItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
     if (groups[index].uniqueName === uniqueName) {
       result = groups[index];
       groups.splice(index, 1);
+      debugger;
       return result;
     }
 
