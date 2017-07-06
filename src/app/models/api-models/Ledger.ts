@@ -1,4 +1,4 @@
-import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IReconcileTransaction } from '../interfaces/ledger.interface';
+import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IReconcileTransaction, IVoucherItem } from '../interfaces/ledger.interface';
 
 /*
  * Model for ledger create api request
@@ -6,7 +6,7 @@ import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosi
  * API:: ( ledger create) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
  * in tranasaction there is a field isStock
  * if isStock is true we have to send inventory object inside it please see IInventory interface
- * I have also attaches responses in this file Please have a look
+ * its response wil be array of LedgerResponse
  */
 export class LedgerRequest implements ILedger {
   public transactions: ILedgerTransactionItem[];
@@ -26,59 +26,28 @@ export class LedgerRequest implements ILedger {
 }
 
 /*
- * for reference Please see the responses attached
- * Response 1):
- * {
- *     "transactions":[{"amount":"20", "particular":"sales", "type":"debit"}],
- *     "voucherType":"sales",
- *     "entryDate":"13-04-2017",
- *     "applyApplicableTaxes":true,
- *     "isInclusiveTax": true,
- *     "unconfirmedEntry":false,
- *     "attachedFile":"",
- *     "tag":null,
- *     "description":"",
- *     "generateInvoice": false,
- *     "chequeNumber":"123456",
- *     "clearanceDate": "03-01-2017",
- * 	"invoiceRequest": {
- *     	"invoice": {
- *     		"entries": [{
- * 			"transactions": [{
- * 				"accountUniqueName": "sales",
- * 				"description": "test desciption with sms @2000/ .05 paise"
- * 			}]
- * 		}]
- *      }
- *   }
- * Response 2):
- *   {
- *     "transactions":[{"amount":"20", "particular":"msg91", "type":"debit", "isStock": true,
- *     "inventory":{"stock" :{ "name": "redSweet", "uniqueName":"redsweet7"  },"quantity":20, "unit":{ "name":"box" , "code":"nos" }}}],
- *     "voucherType":"sales",
- *     "entryDate":"13-04-2017",
- *     "taxes":["1488196651373t80mszivw3", "1488196672667jfrk88128o", "14909676100377f3j7d3cx6"],
- *     "applyApplicableTaxes":true,
- *     "isInclusiveTax": true,
- *     "unconfirmedEntry":false,
- *     "attachedFile":"",
- *     "tag":null,
- *     "description":"",
- *     "generateInvoice": false,
- *     "chequeNumber":"123456",
- *     "clearanceDate": "03-01-2017",
- * 	"invoiceRequest": {
- *     	"invoice": {
- *     		"entries": [{
- * 			"transactions": [{
- * 				"accountUniqueName": "sales",
- * 				"description": "test desciption with sms @2000/ .05 paise"
- * 			}]
- * 		}]
- *      }
- *   }
- * }
+ * Model for Create ledger api response
+ * POST call
+ * API:: ( Create ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
  */
+export class LedgerResponse {
+  transactions: IReconcileTransaction[];
+  total: IClosingBalance;
+  uniqueName: string;
+  voucherNo: number;
+  chequeClearanceDate?: string;
+  taxes: string[];
+  entryDate?: string;
+  invoiceNumber?: string;
+  invoiceGenerated: boolean;
+  attachedFileName?: string;
+  unconfirmedEntry: boolean;
+  voucher: IVoucherItem;
+  attachedFile?: string;
+  chequeNumber?: string;
+  tag?: string;
+  description?: string;
+}
 
 /*
  * Model for mail ledger api request
