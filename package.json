@@ -53,7 +53,7 @@
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  build --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  build --macos --x64",
     "package:windows": "rimraf packages/win/* && npm run build:aot:prod:renderer  && npm run build:main:prod && build --win --x64",
-    "postinstall": "node ./config/install-app-deps",
+    "postinstall": "npm run webdriver:update && node ./config/install-app-deps",
     "postversion": "git push && git push --tags",
     "preclean:install": "npm run clean",
     "preversion": "npm test",
