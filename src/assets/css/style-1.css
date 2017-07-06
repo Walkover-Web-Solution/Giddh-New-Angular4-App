@@ -3714,7 +3714,7 @@ ul.pills li {
 
 #setupWizardModal .wizard-container .steps-indicator {
   position: absolute;
-  bottom: -25px;
+  bottom: -40px;
 }
 
 #dashboard .panel-body {
