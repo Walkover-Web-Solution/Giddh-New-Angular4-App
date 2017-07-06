@@ -22,6 +22,7 @@ import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { ElementViewContainerRef } from './helpers/directives/element.viewchild.directive';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -31,7 +32,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
-    AccountAddComponent, UniqueNameDirective
+    AccountAddComponent, UniqueNameDirective, ElementViewContainerRef
   ],
   imports: [
     CommonModule,
