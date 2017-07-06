@@ -320,6 +320,13 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         });
       }
       return state;
+    case InventoryActionsConst.GetInventoryStockResponse:
+      let stockDetailsResp: BaseResponse<StockDetailResponse, string> = action.payload;
+      if (stockDetailsResp.status === 'success') {
+        return Object.assign({}, state, {activeStock: stockDetailsResp.body,
+           activeStockUniqueName: stockDetailsResp.body.uniqueName});
+      }
+      return state;
     /*
      *Custom Stock Units...
      * */
@@ -516,6 +523,24 @@ const addNewStockToGroup = (groups: IGroupsWithStocksHierarchyMinItem[], stock: 
       result = addNewStockToGroup(el.childStockGroups, stock, result);
       if (result) {
         result = el;
+        return result;
+      }
+    }
+  }
+  return result;
+};
+
+const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[], uniqueName: string, result: IGroupsWithStocksHierarchyMinItem): IGroupsWithStocksHierarchyMinItem => {
+  for (let index = 0; index < groups.length; index++) {
+    if (groups[index].uniqueName === uniqueName) {
+      result = groups[index];
+      groups.splice(index, 1);
+      return result;
+    }
+
+    if (groups[index].childStockGroups && groups[index].childStockGroups.length > 0) {
+      result = removeStockItemAndReturnIt(groups[index].childStockGroups, uniqueName, result);
+      if (result) {
         return result;
       }
     }
