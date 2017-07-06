@@ -39,6 +39,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public isStockNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
   public editModeForLinkedStokes: boolean = false;
+  public createStockSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -47,6 +48,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).takeUntil(this.destroyed$);
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).takeUntil(this.destroyed$);
+    this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
   }
   public ngOnInit() {
     // dispatch stocklist request
@@ -143,6 +145,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           salesAccounts.push({ text: d.name, id: d.uniqueName });
         });
         this.salesAccountsDropDown$ = Observable.of(salesAccounts);
+      }
+    });
+
+    // subscribe createStockSuccess for resting form
+    this.createStockSuccess$.subscribe(s => {
+      if (s) {
+        this.resetStockForm();
       }
     });
   }
