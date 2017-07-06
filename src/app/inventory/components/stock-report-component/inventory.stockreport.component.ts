@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 
 import { Component, OnInit } from '@angular/core';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { InventoryStockReportVM } from './inventory-stock-report.view-model';
 import { FormBuilder } from '@angular/forms';
@@ -33,7 +33,8 @@ export class InventoryStockReportComponent implements OnInit {
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction, private stockReportActions: StockReportActions, private fb: FormBuilder) {
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
+    private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
@@ -78,7 +79,10 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public goToManageStock() {
-    return false;
+    if (this.groupUniqueName && this.stockUniqueName) {
+      this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
+      this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName, 'add-stock', this.stockUniqueName]);
+    }
   }
 
   public nextPage() {

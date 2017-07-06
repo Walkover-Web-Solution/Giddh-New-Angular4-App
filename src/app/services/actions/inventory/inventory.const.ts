@@ -20,10 +20,16 @@ export class InventoryActionsConst {
   public static UpdateGroup = 'UpdateGroup';
   public static UpdateGroupResponse = 'UpdateGroupResponse';
 
+  public static UpdateStock = 'UpdateStock';
+  public static UpdateStockResponse = 'UpdateStockResponse';
+
   public static ResetActiveGroup = 'ResetGroup';
 
   public static RemoveGroup = 'RemoveGroup';
   public static RemoveGroupResponse = 'RemoveGroupResponse';
+
+  public static RemoveStock = 'RemoveStock';
+  public static RemoveStockResponse = 'RemoveStockResponse';
 
   public static GetGroupUniqueName = 'GetGroupUniqueName';
   public static GetGroupUniqueNameResponse = 'GetGroupUniqueNameResponse';
