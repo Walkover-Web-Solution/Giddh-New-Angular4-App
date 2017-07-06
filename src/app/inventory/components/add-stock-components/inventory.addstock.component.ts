@@ -222,8 +222,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   // add purchaseUnitRates controls
   public addPurchaseUnitRates(i: number, item?: IUnitRateItem) {
-    const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
-    const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+    const purchaseUnitRatesControls = this.addStockForm.get['purchaseUnitRates'] as FormArray;
+    const control = this.addStockForm.get['purchaseUnitRates'] as FormArray;
 
     // add purchaseUnitRates to the list
     if (item) {
