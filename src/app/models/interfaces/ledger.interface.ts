@@ -108,3 +108,11 @@ export interface IReconcileTransaction {
   isTax: boolean;
   isBaseAccount: boolean;
 }
+
+/**
+ * interface used in create ledger response
+ */
+export interface IVoucherItem {
+  name: string;
+  shortCode: string;
+}
