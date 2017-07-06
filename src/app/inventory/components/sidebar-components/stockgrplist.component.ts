@@ -13,10 +13,19 @@ import { Observable } from 'rxjs/Observable';
     .active {
       color: #d35f29 !important;
     }
+    .stock-grp-list>li>div, .sub-grp>li>div {
+    text-transform: uppercase;
+    color: #616161;
+    font-family: Roboto-Bold;
+}
+  .stock-items>li>div {
+    text-transform: capitalize;
+    color: #909090;
+}
   `],
   template: `
     <ul class="list-unstyled stock-grp-list mrT1">
-      <li (click)="OpenGroup(grp,$event)" class="pdL" *ngFor="let grp of Groups">
+      <li (click)="OpenGroup(grp,$event)" class="pdL" [ngClass]="{'isParent': grp.childStockGroups.length > 0}" *ngFor="let grp of Groups">
         <div [routerLink]="[ 'add-group', grp.uniqueName ]" [ngClass]="{'active': grp.isActive}">{{grp.name}}</div>
         <i *ngIf="grp.childStockGroups.length > 0" class="icon-arrow-down" [ngClass]="{'open': grp.isOpen}"></i>
         <stock-list [Groups]='grp'>
