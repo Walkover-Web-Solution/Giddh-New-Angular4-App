@@ -142,7 +142,7 @@
           <thead>
             <tr>
               <th colspan="2" class="">
-               {{addStockForm.controls['name'].value}}  (Made with)
+                {{addStockForm.controls['name'].value}} (Made with)
               </th>
             </tr>
           </thead>
@@ -151,13 +151,12 @@
               <td class="col-xs-8">
                 <div class="clearfix pdTBth15">
                   <div class="form-group col-xs-4">
-                    <select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                     formControlName="linkedStockUniqueName" (valueChanged)="checkIfLinkedStockIsUnique($event)"></select2>
+                    <select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="linkedStockUniqueName"
+                      (valueChanged)="checkIfLinkedStockIsUnique($event)"></select2>
                   </div>
 
                   <div class="form-group col-xs-3">
-                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                     formControlName="linkedStockUnitCode"></select2>
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="linkedStockUnitCode"></select2>
                   </div>
 
                   <div class="form-group col-xs-3">
@@ -167,10 +166,8 @@
                     <button type="button" *ngIf="!editModeForLinkedStokes" class="btn btn-sm btn-primary pull-right" (click)="addItemInLinkedStocks()"
                       [disabled]="addStockForm.controls['manufacturingDetails'].controls['linkedStockUniqueName'].invalid ||
                                   addStockForm.controls['manufacturingDetails'].controls['linkedQuantity'].invalid ||
-                                  addStockForm.controls['manufacturingDetails'].controls['linkedStockUnitCode'].invalid"
-                    >Add</button>
-                     <button class="btn btn-sm btn-primary pull-right" *ngIf="editModeForLinkedStokes" (click)="updateItemInLinkedStocks(1)"
-                     [disabled]="addStockForm.controls['manufacturingDetails'].controls['linkedStockUniqueName'].invalid ||
+                                  addStockForm.controls['manufacturingDetails'].controls['linkedStockUnitCode'].invalid">Add</button>
+                    <button class="btn btn-sm btn-primary pull-right" *ngIf="editModeForLinkedStokes" (click)="updateItemInLinkedStocks(1)" [disabled]="addStockForm.controls['manufacturingDetails'].controls['linkedStockUniqueName'].invalid ||
                                   addStockForm.controls['manufacturingDetails'].controls['linkedQuantity'].invalid ||
                                   addStockForm.controls['manufacturingDetails'].controls['linkedStockUnitCode'].invalid">
                        Update</button>
@@ -189,10 +186,10 @@
                       <tr *ngFor="let list of addStockForm.controls['manufacturingDetails'].controls['linkedStocks'].controls;let i = index;" [formGroupName]="i">
                         <td class="col-xs-4 list-row">
                           <span></span>
-                           <p>{{list.value.stockUniqueName}}</p>
+                          <p>{{list.value.stockUniqueName}}</p>
                         </td>
-                         <td class="col-xs-2">{{list.value.stockUnitCode}}</td>
-                         <td class="col-xs-2">{{list.value.quantity}}</td>
+                        <td class="col-xs-2">{{list.value.stockUnitCode}}</td>
+                        <td class="col-xs-2">{{list.value.quantity}}</td>
                         <td class="col-xs-4 action">
                           <a href class="btn btn-default" href="javascript:void(0)" (click)="editItemInLinkedStocks(list, i)">Edit</a>
                           <a href class="btn btn-default" href="javascript:void(0)" (click)="removeItemInLinkedStocks(i)">Delete</a>
@@ -211,8 +208,7 @@
                     <small>
 								 {{addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value}}
 								{{addStockForm.controls['manufacturingDetails'].controls['manufacturingUnitCode'].value}}
-                </small>
-               {{addStockForm.controls['name'].value}}
+                </small> {{addStockForm.controls['name'].value}}
                   </p>
                 </section>
                 <section class="clearfix pr">
@@ -220,12 +216,11 @@
                     <span class="total-ico">=</span>
                   </div>
                   <div class="form-group col-md-5 col-lg-5 col-xs-12">
-                    <input type="text" class="form-control" name="manufacturingQuantity"
-                      placeholder="Quantity" formControlName="manufacturingQuantity" />
+                    <input type="text" class="form-control" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity"
+                    />
                   </div>
                   <div class="form-group col-md-5 col-lg-5 col-xs-12">
-                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                     formControlName="manufacturingUnitCode"></select2>
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="manufacturingUnitCode"></select2>
                   </div>
                 </section>
               </td>
