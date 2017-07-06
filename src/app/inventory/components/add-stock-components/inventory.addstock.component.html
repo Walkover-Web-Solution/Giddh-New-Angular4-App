@@ -62,7 +62,7 @@
             </div>
 
             <div formArrayName="purchaseUnitRates">
-              <div class="row mrB1" *ngFor="let item of addStockForm.controls['purchaseUnitRates'].controls; let i=index">
+              <div class="row mrB1" *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index">
                 <div [formGroupName]="i">
                   <div class="col-xs-5">
                     <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
@@ -99,7 +99,7 @@
             </div>
 
             <div formArrayName="saleUnitRates">
-              <div class="row mrB1" *ngFor="let item of addStockForm.controls['saleUnitRates'].controls; let i=index">
+              <div class="row mrB1" *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index">
                 <div [formGroupName]="i">
                   <div class="col-xs-5">
                     <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
