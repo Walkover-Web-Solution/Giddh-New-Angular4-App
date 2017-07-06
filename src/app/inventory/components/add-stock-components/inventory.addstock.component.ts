@@ -1,14 +1,14 @@
 import { AppState } from '../../../store/roots';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Subscription } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
-import { FormGroup, FormBuilder, Validators, FormArray } from '@angular/forms';
-import { uniqueNameValidator, stockManufacturingDetailsValidator } from '../../../shared/helpers/customValidationHelper';
+import { FormGroup, FormBuilder, Validators, FormArray, Validator } from '@angular/forms';
+import { uniqueNameValidator, stockManufacturingDetailsValidator, digitsOnly, decimalDigits, equalSigns } from '../../../shared/helpers/customValidationHelper';
 import { StockUnitRequest, CreateStockRequest, StockGroupResponse, StockDetailResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
@@ -42,16 +42,18 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public editModeForLinkedStokes: boolean = false;
   public createStockSuccess$: Observable<boolean>;
   public activeStock$: Observable<StockDetailResponse>;
+  public showLoadingForStockEditInProcess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-    private customStockActions: CustomStockUnitAction) {
+    private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).takeUntil(this.destroyed$);
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).takeUntil(this.destroyed$);
     this.activeStock$ = this.store.select(s => s.inventory.activeStock).takeUntil(this.destroyed$);
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
+    this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).takeUntil(this.destroyed$);
   }
   public ngOnInit() {
     // dispatch stocklist request
@@ -97,9 +99,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       name: ['', [Validators.required, Validators.minLength(2)]],
       uniqueName: ['', [Validators.required, Validators.minLength(2)], uniqueNameValidator],
       stockUnitCode: ['', [Validators.required]],
-      openingQuantity: [''],
+      openingQuantity: ['', decimalDigits],
       stockRate: [{ value: '', disabled: true }],
-      openingAmount: [''],
+      openingAmount: ['', decimalDigits],
       purchaseAccountUniqueName: [''],
       salesAccountUniqueName: [''],
       purchaseUnitRates: this._fb.array([
@@ -113,7 +115,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         manufacturingUnitCode: ['', [Validators.required]],
         linkedStocks: this._fb.array([]),
         linkedStockUniqueName: [''],
-        linkedQuantity: [''],
+        linkedQuantity: ['', digitsOnly],
         linkedStockUnitCode: [''],
       }, { validator: stockManufacturingDetailsValidator }),
       isFsStock: [false]
@@ -152,7 +154,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // subscribe active stock if availabel fill form
-    this.activeStock$.subscribe(a => {
+    this.activeStock$.delay(1000).subscribe(a => {
       if (a) {
         this.isUpdatingStockForm = true;
         this.addStockForm.patchValue({
@@ -194,8 +196,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         } else {
           this.addStockForm.patchValue({ isFsStock: false });
         }
+        this.store.dispatch(this.inventoryAction.hideLoaderForStock());
       } else {
         this.isUpdatingStockForm = false;
+        this.resetStockForm();
       }
     });
 
@@ -211,7 +215,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public initUnitAndRates() {
     // initialize our controls
     return this._fb.group({
-      rate: [''],
+      rate: ['', digitsOnly],
       stockUnitCode: ['']
     });
   }
@@ -309,6 +313,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let quantity = this.addStockForm.value.openingQuantity;
     let amount = this.addStockForm.value.openingAmount;
 
+    if (Math.sign(quantity) !== Math.sign(amount)) {
+     this.addStockForm.controls['stockRate'].reset();
+     return;
+    }
     if (quantity && amount) {
       this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(3) });
     } else if (quantity === 0 || amount === 0) {
@@ -321,7 +329,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     return this._fb.group({
       stockUniqueName: [''],
       stockUnitCode: [''],
-      quantity: ['']
+      quantity: ['', digitsOnly]
     });
   }
 
@@ -429,9 +437,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     const manufacturingDetailsContorls = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const linkedStocksControls = manufacturingDetailsContorls.controls['linkedStocks'] as FormArray;
 
-    purchaseUnitRatesControls.controls = purchaseUnitRatesControls.controls.splice(1);
-    saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
-
+    if (purchaseUnitRatesControls.controls.length > 1) {
+      purchaseUnitRatesControls.controls = purchaseUnitRatesControls.controls.splice(1);
+    }
+    if (saleUnitRatesControls.length > 1) {
+      saleUnitRatesControls.controls = saleUnitRatesControls.controls.splice(1);
+    }
     linkedStocksControls.controls = [];
     this.addStockForm.reset();
   }
