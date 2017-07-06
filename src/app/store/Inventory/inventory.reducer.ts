@@ -233,6 +233,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
               if (el.childStockGroups.length) {
                 let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.request.uniqueName, null);
                 if (myGrp) {
+                  myGrp.name = resp.request.name;
+                  myGrp.uniqueName = resp.request.uniqueName;
                   addItemAtIndex(groupArray, resp.request.parentStockGroupUniqueName, myGrp);
                   break;
                 }
