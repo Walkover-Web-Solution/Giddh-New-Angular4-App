@@ -8,6 +8,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../toaster.service';
 import { InventoryActionsConst } from './inventory.const';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class InventoryAction {
@@ -112,11 +113,13 @@ export class InventoryAction {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
+        this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock']);
         this._toasty.successToast('Stock Created Successfully');
       }
       return { type: '' };
     });
-  constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions, private _toasty: ToasterService) {
+  constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
+     private _toasty: ToasterService, private router: Router) {
 
   }
 

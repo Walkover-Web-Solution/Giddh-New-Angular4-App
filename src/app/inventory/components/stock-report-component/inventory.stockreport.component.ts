@@ -82,13 +82,11 @@ export class InventoryStockReportComponent implements OnInit {
   }
 
   public nextPage() {
-    debugger;
     this.stockReportRequest.page++;
     this.getStockReport(false);
   }
 
   public prevPage() {
-    debugger;
     this.stockReportRequest.page--;
     this.getStockReport(false);
   }
