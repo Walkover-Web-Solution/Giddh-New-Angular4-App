@@ -2819,8 +2819,20 @@ label {
 .steps-indicator:before {
   position: absolute;
   height: 1px;
+  top: -8px;
+  z-index: 0;
+  width: calc(100%/3);
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+}
+.steps-indicator.step-2:before {
+  width: calc(100%/2);
 }
 .steps-indicator li a:before, .steps-indicator:before {
   background-color: #e6e6e6;
   content: '';
+}
+.steps-indicator>li>a:focus, .steps-indicator>li>a:hover {
+  background: none;
 }
