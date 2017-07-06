@@ -1,6 +1,7 @@
+import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Rx';
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ManageGroupsAccountsComponent } from './components/';
@@ -13,13 +14,16 @@ import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
+import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
 export class HeaderComponent implements OnInit, AfterViewInit {
+
   public session$: Observable<boolean>;
+  @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 
@@ -52,7 +56,8 @@ export class HeaderComponent implements OnInit, AfterViewInit {
     private store: Store<AppState>,
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router
+    private router: Router,
+    private componentFactoryResolver: ComponentFactoryResolver
   ) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
@@ -117,6 +122,7 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   }
 
   public showAddCompanyModal() {
+    this.loadAddCompanyComponent();
     this.addCompanyModal.show();
   }
 
@@ -160,5 +166,20 @@ export class HeaderComponent implements OnInit, AfterViewInit {
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
 
+  }
+  public onHide() {
+    this.store.dispatch(this.companyActions.ResetCompanyPopup());
+  }
+  public loadAddCompanyComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
+    let viewContainerRef = this.elementViewContainerRef.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
   }
 }
