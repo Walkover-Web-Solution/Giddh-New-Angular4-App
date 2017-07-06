@@ -123,7 +123,7 @@ export class InventoryAction {
   public updateStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateStock)
     .switchMap(action => this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
-    .map(response => this.createStockResponse(response));
+    .map(response => this.updateStockResponse(response));
 
   @Effect()
   public updateStockResponse$: Observable<Action> = this.action$
@@ -133,6 +133,7 @@ export class InventoryAction {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
+        this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock', data.body.uniqueName]);
         this._toasty.successToast('Stock Updated Successfully');
       }
       return { type: '' };

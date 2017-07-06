@@ -159,7 +159,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.isUpdatingStockForm = true;
         this.addStockForm.patchValue({
           name: a.name, uniqueName: a.uniqueName,
-          stockUnitCode: a.stockUnit.code, openingQuantity: a.openingQuantity,
+          stockUnitCode: a.stockUnit ? a.stockUnit.code : '', openingQuantity: a.openingQuantity,
           openingAmount: a.openingAmount
         });
 
@@ -487,7 +487,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   public update() {
     let activeGroup: StockGroupResponse = null;
+    let activeStock: StockDetailResponse = null;
+
     this.activeGroup$.take(1).subscribe((a) => activeGroup = a);
+    this.activeStock$.take(1).subscribe((a) => activeStock = a);
+
     let stockObj = new CreateStockRequest();
     let formObj = this.addStockForm.value;
 
@@ -519,7 +523,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
 
-    this.store.dispatch(this.inventoryAction.updateStock(stockObj, activeGroup.uniqueName, stockObj.uniqueName));
+    this.store.dispatch(this.inventoryAction.updateStock(stockObj, activeGroup.uniqueName, activeStock.uniqueName));
   }
 
   public deleteStock() {

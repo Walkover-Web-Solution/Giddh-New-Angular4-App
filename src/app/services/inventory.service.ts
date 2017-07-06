@@ -252,9 +252,9 @@ export class InventoryService {
     return this._http.put(INVENTORY_API.UPDATE_STOCK.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName).replace(':stockUniqueName', stockUniqueName), model).map((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
       data.request = model;
-      data.queryString = { stockGroupUniqueName };
+      data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
-    }).catch((e) => HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, { stockGroupUniqueName }));
+    }).catch((e) => HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, { stockGroupUniqueName, stockUniqueName }));
   }
 
   /**
