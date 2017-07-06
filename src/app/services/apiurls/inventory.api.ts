@@ -15,6 +15,6 @@ export const INVENTORY_API = {
   CREATE_STOCK_UNIT: Configuration.ApiUrl + 'company/:companyUniqueName/stock-unit', // post call
   DELETE_STOCK: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // DELETE call
   DELETE_STOCK_UNIT: Configuration.ApiUrl + 'company/:companyUniqueName/stock-unit/:uName', // DELETE call
-  UPDATE_STOCK: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniquename/stock/:stockUniquename', // PUT call
+  UPDATE_STOCK: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
   UPDATE_STOCK_UNIT: Configuration.ApiUrl + 'company/:companyUniqueName/stock-unit/:uName', // PUT call
 };
