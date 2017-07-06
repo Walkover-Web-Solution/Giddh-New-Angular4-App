@@ -29,7 +29,6 @@ export class SidebarAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
-        debugger;
         this.store.dispatch(this.OpenGroup(data.body.uniqueName));
       }
       return { type: '' };

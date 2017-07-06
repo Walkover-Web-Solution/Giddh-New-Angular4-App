@@ -22,6 +22,7 @@ export interface InventoryState {
   isUpdateGroupInProcess: boolean;
   fetchingStockUniqueName: boolean;
   isStockNameAvailable: boolean;
+  createStockSuccess: boolean;
   stockReport?: StockReportResponse;
 }
 
@@ -50,7 +51,8 @@ const initialState: InventoryState = {
   isGroupNameAvailable: false,
   isUpdateGroupInProcess: false,
   fetchingStockUniqueName: false,
-  isStockNameAvailable: false
+  isStockNameAvailable: false,
+  createStockSuccess: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -287,11 +289,35 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       }
       return state;
     case InventoryActionsConst.CreateStock:
-      return state;
+      return Object.assign({}, state, { createStockSuccess: false });
     case InventoryActionsConst.CreateStockResponse:
       let createStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
       if (createStockResp.status === 'success') {
-        return state;
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        for (let el of groupArray) {
+          if (el.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
+            el.stocks.push(createStockResp.body);
+            el.isOpen = true;
+            el.isActive = true;
+            break;
+          } else {
+            if (el.childStockGroups.length) {
+              activeGroupData = addNewStockToGroup(el.childStockGroups, createStockResp, null);
+              if (activeGroupData) {
+                el.isOpen = true;
+                el.isActive = true;
+                break;
+              }
+            }
+          }
+          activeGroupData = null;
+        }
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStockUniqueName: createStockResp.request.uniqueName,
+          activeStock: createStockResp.body,
+          createStockSuccess: true
+        });
       }
       return state;
     /*
@@ -468,6 +494,28 @@ const removeGroupItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
     if (groups[index].childStockGroups && groups[index].childStockGroups.length > 0) {
       result = removeGroupItemAndReturnIt(groups[index].childStockGroups, parentUniqueName, uniqueName, result);
       if (result) {
+        return result;
+      }
+    }
+  }
+  return result;
+};
+
+const addNewStockToGroup = (groups: IGroupsWithStocksHierarchyMinItem[], stock: BaseResponse<StockDetailResponse, CreateStockRequest>, result: IGroupsWithStocksHierarchyMinItem) => {
+  for (let el of groups) {
+    if (el.uniqueName === stock.queryString.stockGroupUniqueName) {
+      el.isActive = true;
+      el.isOpen = true;
+      el.stocks.push(stock.body);
+      if (!result) {
+        result = el;
+        return result;
+      }
+    }
+    if (el.childStockGroups && el.childStockGroups.length > 0 && !result) {
+      result = addNewStockToGroup(el.childStockGroups, stock, result);
+      if (result) {
+        result = el;
         return result;
       }
     }
