@@ -48,7 +48,8 @@
           <div class="row mr0 col-xs-6 pdL0 pdR">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Purchase Acc</label>
-              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options" formControlName="purchaseAccountUniqueName"></select2>
+              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options"
+              formControlName="purchaseAccountUniqueName" [value]="addStockForm.controls['purchaseAccountUniqueName'].value"></select2>
             </div>
 
             <div class="row mrB">
@@ -82,7 +83,8 @@
           <div class="row mr0 col-xs-6 pdL pdR0">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Sales Acc</label>
-              <select2 [data]="salesAccountsDropDown$ | async" [options]="options" formControlName="salesAccountUniqueName"></select2>
+              <select2 [data]="salesAccountsDropDown$ | async" [options]="options"
+              formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>
             </div>
 
 
@@ -234,12 +236,18 @@
   <div class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd pdT0">
 
-      <button type="submit" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid" click="submit()">Save</button>
+      <button type="submit" *ngIf="!isUpdatingStockForm" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid">Save</button>
 
+      <button type="button" *ngIf="isUpdatingStockForm" class="btn btn-md btn-success mrR1" (click)="update()" [disabled]="addStockForm.invalid">Update</button>
 
       <button type="button" (click)="resetStockForm()" class="btn btn-md btn-primary">
         Cancel
       </button>
+
+      <button *ngIf="isUpdatingStockForm" class="btn btn-md btn-danger pull-right gico-wrap" (click)="deleteStock()">
+			<span class="icon-trash"></span>
+			Delete Stock
+		</button>
 
     </div>
   </div>
