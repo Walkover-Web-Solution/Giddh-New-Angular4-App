@@ -5,6 +5,7 @@ import * as fromLogin from './authentication/authentication.reducer';
 import * as fromCompany from './Company/company.reducer';
 import * as fromGroupAndAccounts from './GroupWithAccounts/groupwithaccounts.reducer';
 import * as fromInventory from './Inventory/inventory.reducer';
+import *  as fromSearch from './Search/search.reducer';
 
 export interface AppState {
   router: RouterState;
@@ -15,6 +16,7 @@ export interface AppState {
   groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
   verifyMobile: fromVerifyMobileReducer.VerifyMobileState;
   inventory: fromInventory.InventoryState;
+  search: fromSearch.SearchState;
 }
 
 export const reducers = {
@@ -26,4 +28,5 @@ export const reducers = {
   groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer,
   verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
   inventory: fromInventory.InventoryReducer,
+  search: fromSearch.searchReducer,
 };

@@ -1,11 +1,11 @@
 <div class="row" auto-height="" style="min-height: 600px; height: 967.6px;">
   <div id="left">
     <div class="scrClass flow_visible ps-container" style="min-height: 600px; height: 967.6px;">
-      <form name="searchFormClb" novalidate="" class="col-xs-12">
+      <form #search="ngForm" name="searchFormClb" novalidate="" class="col-xs-12">
         <p class="lead mrT2">Search</p>
         <div class="form-group">
           <label>Select Groups</label>
-          <input type="text" class="form-control" />
+          <input type="text" name="groupName" [(ngModel)]="groupName" class="form-control"/>
         </div>
 
         <div class="form-group" (clickOutside)="showFromDatePicker=false;">
@@ -38,11 +38,13 @@
         </div>
 
         <div class="mrB4">
-          <button ng-disabled="searchFormClb.$invalid || searchDtCntLdr" class="btn btn-primary btn-block" ng-click=" getClosingBalance(searchFormData, false)"
-            disabled="disabled">Go</button>
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block" (click)=" getClosingBalance(false)"
+          >Go
+          </button>
 
-          <button ng-disabled="searchFormClb.$invalid || searchDtCntLdr" class="btn btn-primary btn-block mrT1" ng-click=" getClosingBalance(searchFormData, true)"
-            disabled="disabled">Refresh</button>
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block mrT1" (click)=" getClosingBalance(true)"
+          >Refresh
+          </button>
         </div>
       </form>
     </div>
