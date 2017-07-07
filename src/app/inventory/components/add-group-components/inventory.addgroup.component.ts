@@ -1,9 +1,8 @@
 import { AppState } from '../../../store/roots';
-import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
-import { Subscription, Subject } from 'rxjs/Rx';
+import { Subject, Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -38,10 +37,10 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
     private router: Router) {
-    this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName);
-    this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable);
-    this.activeGroup$ = this.store.select(state => state.inventory.activeGroup);
-    this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess);
+    this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName).takeUntil(this.destroyed$);
+    this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable).takeUntil(this.destroyed$);
+    this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).takeUntil(this.destroyed$);
+    this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$);
 
     this.store.take(1).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
