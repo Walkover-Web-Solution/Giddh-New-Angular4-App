@@ -4,19 +4,20 @@ import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { InventoryStockReportVM } from './inventory-stock-report.view-model';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
   templateUrl: './inventory.stockreport.component.html'
 })
-export class InventoryStockReportComponent implements OnInit {
+export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public stockReport$: Observable<StockReportResponse>;
   public sub: Subscription;
   public groupUniqueName: string;
@@ -26,12 +27,13 @@ export class InventoryStockReportComponent implements OnInit {
   public showToDatePicker: boolean;
   public toDate: Date;
   public fromDate: Date;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction, private stockReportActions: StockReportActions, private fb: FormBuilder) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport);
+    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
     this.stockReportRequest = new StockReportRequest();
   }
 
@@ -60,7 +62,10 @@ export class InventoryStockReportComponent implements OnInit {
       }
     });
   }
-
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
   public getStockReport() {
     this.store.dispatch(this.stockReportActions.GetStocksReport(this.stockReportRequest));
     return false;
