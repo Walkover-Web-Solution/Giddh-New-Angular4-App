@@ -17,10 +17,8 @@ export interface InventoryState {
   activeGroup?: StockGroupResponse;
   activeStock?: StockDetailResponse;
   activeStockUniqueName?: string;
-  isAddNewGroupInProcess: boolean;
   fetchingGrpUniqueName: boolean;
   isGroupNameAvailable: boolean;
-  isUpdateGroupInProcess: boolean;
   fetchingStockUniqueName: boolean;
   isStockNameAvailable: boolean;
   createStockSuccess: boolean;
@@ -29,6 +27,9 @@ export interface InventoryState {
   isStockUpdateInProcess: boolean;
   isStockDeleteInProcess: boolean;
   showLoadingForStockEditInProcess: boolean;
+  isAddNewGroupInProcess: boolean;
+  isUpdateGroupInProcess: boolean;
+  isDeleteGroupInProcess: boolean;
   createCustomStockInProcess: boolean;
   updateCustomStockInProcess: boolean;
   deleteCustomStockInProcessCode: any[];
@@ -54,10 +55,8 @@ const initialState: InventoryState = {
   stocksList: null,
   stockUnits: [],
   activeGroup: null,
-  isAddNewGroupInProcess: false,
   fetchingGrpUniqueName: false,
   isGroupNameAvailable: false,
-  isUpdateGroupInProcess: false,
   fetchingStockUniqueName: false,
   isStockNameAvailable: false,
   createStockSuccess: false,
@@ -65,6 +64,9 @@ const initialState: InventoryState = {
   isStockUpdateInProcess: false,
   isStockDeleteInProcess: false,
   showLoadingForStockEditInProcess: false,
+  isAddNewGroupInProcess: false,
+  isUpdateGroupInProcess: false,
+  isDeleteGroupInProcess: false,
   createCustomStockInProcess: false,
   updateCustomStockInProcess: false,
   deleteCustomStockInProcessCode: []
@@ -208,7 +210,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           activeStockUniqueName: null
         });
       }
-      return state;
+      return Object.assign({}, state, { isAddNewGroupInProcess: false });
     case InventoryActionsConst.GetGroupUniqueName:
       return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
     case InventoryActionsConst.GetGroupUniqueNameResponse:
@@ -265,9 +267,9 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           isUpdateGroupInProcess: false
         });
       }
-      return state;
+      return Object.assign({}, state, { isUpdateGroupInProcess: false });
     case InventoryActionsConst.RemoveGroup:
-      return state;
+      return Object.assign({}, state, { isDeleteGroupInProcess: true });
     case InventoryActionsConst.RemoveGroupResponse:
       let removeGrpResp = action.payload as BaseResponse<string, string>;
       if (removeGrpResp.status === 'success') {
@@ -283,9 +285,9 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
           }
         }
-        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null });
+        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, isDeleteGroupInProcess: false });
       }
-      return state;
+      return Object.assign({}, state, { isDeleteGroupInProcess: false });
     case InventoryActionsConst.ResetActiveGroup:
       return Object.assign({}, state, { activeGroup: null, activeStockUniqueName: null });
 

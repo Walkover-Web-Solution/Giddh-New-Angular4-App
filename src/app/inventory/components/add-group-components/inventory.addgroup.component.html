@@ -49,12 +49,12 @@
 
         <div class="clearfix">
           <div *ngIf="!(activeGroup$ | async);">
-            <button type="submit" class="btn btn-md btn-success mrR1" (click)="addNewGroup()" [disabled]="addGroupForm.invalid">Save</button>
+            <button type="submit" class="btn btn-md btn-success mrR1" [ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()" [disabled]="addGroupForm.invalid">Save</button>
             <button type="reset" class="btn btn-md btn-primary">Cancel</button>
           </div>
           <div *ngIf="activeGroup$ | async;">
-            <button type="submit" [disabled]="addGroupForm.invalid" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
-            <button type="submit" class="btn btn-md btn-danger" (click)="removeGroup()">Delete</button>
+            <button type="submit" [disabled]="addGroupForm.invalid" [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
+            <button type="submit" class="btn btn-md btn-danger" [ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()">Delete</button>
           </div>
         </div>
       </form>
