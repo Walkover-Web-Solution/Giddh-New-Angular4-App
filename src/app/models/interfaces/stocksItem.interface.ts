@@ -51,12 +51,12 @@ export interface IAccountDetails {
   unitRates: IUnitRateItem[];
 }
 
-export interface IStockItemDetail {
-  stockUniqueName: string;
-  quantity: number;
-  stockUnitCode: string;
-  rate?: number;
-  amount?: number;
+export class IStockItemDetail {
+  public stockUniqueName: string;
+  public quantity: number;
+  public stockUnitCode: string;
+  public rate?: number;
+  public amount?: number;
 }
 
 export interface IManufacturingDetails {

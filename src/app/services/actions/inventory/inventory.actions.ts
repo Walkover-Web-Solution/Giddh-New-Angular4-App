@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StockGroupRequest, StockGroupResponse, StockDetailResponse, StocksResponse } from '../../../models/api-models/Inventory';
+import { StockGroupRequest, StockGroupResponse, StockDetailResponse, StocksResponse, CreateStockRequest } from '../../../models/api-models/Inventory';
 import { Action, Store } from '@ngrx/store';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AppState } from '../../../store/roots';
@@ -8,6 +8,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../toaster.service';
 import { InventoryActionsConst } from './inventory.const';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class InventoryAction {
@@ -21,8 +22,8 @@ export class InventoryAction {
   public addNewGroupResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.AddNewGroupResponse)
     .map(response => {
-      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response;
-      if (response.status === 'error') {
+      let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
+      if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Group Created Successfully');
@@ -41,7 +42,7 @@ export class InventoryAction {
     .ofType(InventoryActionsConst.UpdateGroupResponse)
     .map(response => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
-      if (response.status === 'error') {
+      if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Group Updated Successfully');
@@ -60,7 +61,7 @@ export class InventoryAction {
     .ofType(InventoryActionsConst.RemoveGroupResponse)
     .map(response => {
       let data: BaseResponse<string, string> = response.payload;
-      if (response.status === 'error') {
+      if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast(data.body, '');
@@ -98,7 +99,68 @@ export class InventoryAction {
       return { type: '' };
     });
 
-  constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions, private _toasty: ToasterService) {
+  @Effect()
+  public createStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.CreateStock)
+    .switchMap(action => this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName))
+    .map(response => this.createStockResponse(response));
+
+  @Effect()
+  public createStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.CreateStockResponse)
+    .map(response => {
+      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock']);
+        this._toasty.successToast('Stock Created Successfully');
+      }
+      return { type: '' };
+    });
+
+  @Effect()
+  public updateStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.UpdateStock)
+    .switchMap(action => this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
+    .map(response => this.updateStockResponse(response));
+
+  @Effect()
+  public updateStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.UpdateStockResponse)
+    .map(response => {
+      let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock', data.body.uniqueName]);
+        this._toasty.successToast('Stock Updated Successfully');
+      }
+      return { type: '' };
+    });
+
+  @Effect()
+  public removeStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.RemoveStock)
+    .switchMap(action => this._inventoryService.DeleteStock(action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
+    .map(response => this.removeStockResponse(response));
+
+  @Effect()
+  public removeStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.RemoveStockResponse)
+    .map(response => {
+      let data: BaseResponse<string, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body, '');
+        this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName]);
+      }
+      return { type: '' };
+    });
+
+  constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
+     private _toasty: ToasterService, private router: Router) {
 
   }
 
@@ -112,6 +174,34 @@ export class InventoryAction {
   public addNewGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): Action {
     return {
       type: InventoryActionsConst.AddNewGroupResponse,
+      payload: value
+    };
+  }
+
+  public createStock(value: CreateStockRequest, stockGroupUniqueName: string): Action {
+    return {
+      type: InventoryActionsConst.CreateStock,
+      payload: { stock: value, stockGroupUniqueName }
+    };
+  }
+
+  public createStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): Action {
+    return {
+      type: InventoryActionsConst.CreateStockResponse,
+      payload: value
+    };
+  }
+
+  public updateStock(value: CreateStockRequest, stockGroupUniqueName: string, stockUniqueName: string): Action {
+    return {
+      type: InventoryActionsConst.UpdateStock,
+      payload: { stock: value, stockGroupUniqueName, stockUniqueName }
+    };
+  }
+
+  public updateStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): Action {
+    return {
+      type: InventoryActionsConst.UpdateStockResponse,
       payload: value
     };
   }
@@ -140,6 +230,20 @@ export class InventoryAction {
   public removeGroupResponse(value: BaseResponse<string, string>): Action {
     return {
       type: InventoryActionsConst.RemoveGroupResponse,
+      payload: value
+    };
+  }
+
+  public removeStock(stockGroupUniqueName: string, stockUniqueName: string): Action {
+    return {
+      type: InventoryActionsConst.RemoveStock,
+      payload: {stockGroupUniqueName, stockUniqueName}
+    };
+  }
+
+  public removeStockResponse(value: BaseResponse<string, string>): Action {
+    return {
+      type: InventoryActionsConst.RemoveStockResponse,
       payload: value
     };
   }
@@ -174,6 +278,23 @@ export class InventoryAction {
     return {
       type: InventoryActionsConst.GetStockResponse,
       payload: value
+    };
+  }
+
+   public resetActiveStock(): Action {
+    return {
+      type: InventoryActionsConst.ResetActiveStock
+    };
+  }
+  public showLoaderForStock(): Action {
+    return {
+      type: InventoryActionsConst.ShowLoadingForStockEditInProcess
+    };
+  }
+
+  public hideLoaderForStock(): Action {
+    return {
+      type: InventoryActionsConst.HideLoadingForStockEditInProcess
     };
   }
 }

@@ -5,12 +5,12 @@ import { LocationService } from './../../../../services/location.service';
 import { CompanyRequest } from './../../../../models/api-models/Company';
 import { mobileValidator } from './../../../helpers/customValidationHelper';
 import { SignupWithMobile, VerifyMobileModel } from './../../../../models/api-models/loginModels';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, ReplaySubject } from 'rxjs';
 import { VerifyMobileActions } from './../../../../services/actions/verifyMobile.actions';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { FormBuilder } from '@angular/forms';
-import { Component, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 import { StateDetailsRequest } from '../../../../models/api-models/Company';
 
@@ -18,7 +18,7 @@ import { StateDetailsRequest } from '../../../../models/api-models/Company';
   selector: 'company-add',
   templateUrl: './company-add.component.html'
 })
-export class CompanyAddComponent implements OnInit {
+export class CompanyAddComponent implements OnInit, OnDestroy {
   @ViewChild('wizard') public wizard: WizardComponent;
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
@@ -30,29 +30,31 @@ export class CompanyAddComponent implements OnInit {
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
   public dataSource: Observable<any>;
+  public sub: Subscription;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService) { }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox);
-    this.isCompanyCreationInProcess$ = this.store.select(s => s.company.isCompanyCreationInProcess);
+    this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.company.isCompanyCreationInProcess).takeUntil(this.destroyed$);
 
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.contactNo !== null;
       }
-    });
-    this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated);
+    }).takeUntil(this.destroyed$);
+    this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated).takeUntil(this.destroyed$);
     this.dataSource = Observable
       .create((observer: any) => {
         this._location.GetCity({
-          QueryString: this.company.city,
+          QueryString: this.company.city.trim(),
           AdministratorLevel: undefined,
           Country: undefined,
           OnlyCity: true
         }).subscribe((res) => observer.next(res));
-      });
+      }).takeUntil(this.destroyed$);
 
     this.isMobileVerified.subscribe(p => {
       if (p) {
@@ -69,7 +71,7 @@ export class CompanyAddComponent implements OnInit {
       }
     });
     this.store
-      .select(c => c.company.companies)
+      .select(c => c.company.companies).takeUntil(this.destroyed$)
       .subscribe(p => {
         if (p && p.find(c => c.name === this.company.name) !== undefined) {
           this.company = new CompanyRequest();
@@ -77,7 +79,10 @@ export class CompanyAddComponent implements OnInit {
         }
       });
   }
-
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
   /**
    * addNumber
    */
