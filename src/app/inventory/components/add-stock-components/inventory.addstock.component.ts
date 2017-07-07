@@ -1,7 +1,7 @@
 import { AppState } from '../../../store/roots';
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
@@ -17,6 +17,7 @@ import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IStockItemDetail, IAccountDetails, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'invetory-add-stock',  // <home></home>
@@ -27,6 +28,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public stockUnitsDropDown$: Observable<Select2OptionData[]>;
   public purchaseAccountsDropDown$: Observable<Select2OptionData[]>;
   public salesAccountsDropDown$: Observable<Select2OptionData[]>;
+
+  @ViewChild('formDiv') public formDiv: ElementRef;
+  public formDivBoundingRect: Subject<any> = new Subject<any>();
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -62,25 +66,31 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).takeUntil(this.destroyed$);
   }
   public ngOnInit() {
+    this.formDivBoundingRect.next({
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 0,
+    width: 0
+  });
     // dispatch stocklist request
     this.store.dispatch(this.inventoryAction.GetStock());
     // dispatch stockunit request
     this.store.dispatch(this.customStockActions.GetStockUnit());
 
     // subscribe route parameters
-    this.route.params.takeUntil(this.destroyed$).subscribe(params => {
+    this.route.params.distinct().takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
+
       if (this.groupUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
-      // if (this.stockUniqueName) {
-      //   this.store.select(p => p.inventory).subscribe(a => {
-      //     if (a.activeGroup && !a.activeStock) {
-      //       this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
-      //     }
-      //   });
-      // }
+
+      if (params['stockUniqueName'] && params['groupUniqueName']) {
+        this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
+      }
     });
 
     // get all stocks
@@ -328,10 +338,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let quantity = this.addStockForm.value.openingQuantity;
     let amount = this.addStockForm.value.openingAmount;
 
-    // if (Math.sign(quantity) !== Math.sign(amount)) {
-    //  this.addStockForm.controls['stockRate'].reset();
-    //  return;
-    // }
     if (quantity && amount) {
       this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(3) });
     } else if (quantity === 0 || amount === 0) {
@@ -421,10 +427,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     linkedStokesControl.removeAt(i);
   }
 
-  public resetLinkedStock() {
-    // this.linkedStock = new IStockItemDetail();
-  }
-
   public checkIfLinkedStockIsUnique(v) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
@@ -510,8 +512,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   // submit form
   public submit() {
-    let activeGroup: StockGroupResponse = null;
-    this.activeGroup$.take(1).subscribe((a) => activeGroup = a);
     let stockObj = new CreateStockRequest();
     let formObj = this.addStockForm.value;
 
@@ -543,16 +543,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
 
-    this.store.dispatch(this.inventoryAction.createStock(stockObj, activeGroup.uniqueName));
+    this.store.dispatch(this.inventoryAction.createStock(stockObj, this.groupUniqueName));
   }
 
   public update() {
-    let activeGroup: StockGroupResponse = null;
-    let activeStock: StockDetailResponse = null;
-
-    this.activeGroup$.take(1).subscribe((a) => activeGroup = a);
-    this.activeStock$.take(1).subscribe((a) => activeStock = a);
-
     let stockObj = new CreateStockRequest();
     let formObj = this.addStockForm.value;
 
@@ -584,17 +578,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
 
-    this.store.dispatch(this.inventoryAction.updateStock(stockObj, activeGroup.uniqueName, activeStock.uniqueName));
+    this.store.dispatch(this.inventoryAction.updateStock(stockObj, this.groupUniqueName, this.stockUniqueName));
   }
 
   public deleteStock() {
-    let activeGroup: StockGroupResponse = null;
-    let activeStock: StockDetailResponse = null;
-
-    this.activeGroup$.take(1).subscribe((a) => activeGroup = a);
-    this.activeStock$.take(1).subscribe((a) => activeStock = a);
-
-    this.store.dispatch(this.inventoryAction.removeStock(activeGroup.uniqueName, activeStock.uniqueName));
+    this.store.dispatch(this.inventoryAction.removeStock(this.groupUniqueName, this.stockUniqueName));
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
