@@ -3714,7 +3714,7 @@ ul.pills li {
 
 #setupWizardModal .wizard-container .steps-indicator {
   position: absolute;
-  bottom: 35px;
+  bottom: -40px;
 }
 
 #dashboard .panel-body {
@@ -4518,10 +4518,20 @@ table.proforma-particulars {
   cursor: pointer;
 }
 
-.stock-grp-list > li {
+ .stock-grp-list > li {
   padding: 7px 15px;
   border-bottom: 1px solid #a8aab6;
+  background-color: rgb(220, 220, 220);
 }
+
+
+.parent-group > .stock-grp-list > li > div{
+ 
+  font-family: Roboto-Bold !important;
+  text-transform: uppercase;
+}
+
+
 
 .stock-items > li, .sub-grp > li {
   padding: 7px 0 7px 10px;
@@ -4543,6 +4553,7 @@ table.proforma-particulars {
 .stock-twin-list ul li {
   padding: 5px;
   border-top: 1px solid #e0e0e0;
+
 }
 
 .stock-twin-list ul li:first-child {

@@ -1,19 +1,21 @@
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 import * as  _ from 'lodash';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html'
 })
-export class InventoryCustomStockComponent implements OnInit {
+export class InventoryCustomStockComponent implements OnInit, OnDestroy {
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public stockUnitsDropDown$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
@@ -27,7 +29,7 @@ export class InventoryCustomStockComponent implements OnInit {
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction) {
     this.customUnitObj = new StockUnitRequest();
-    this.stockUnit$ = this.store.select(p => p.inventory.stockUnits);
+    this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).takeUntil(this.destroyed$);
     this.stockUnitsDropDown$ = this.store.select(p => {
       if (p.inventory.stockUnits.length) {
         let units = p.inventory.stockUnits;
@@ -79,5 +81,10 @@ export class InventoryCustomStockComponent implements OnInit {
         return true;
       }
     }).subscribe();
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

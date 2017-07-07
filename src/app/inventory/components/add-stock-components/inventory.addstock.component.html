@@ -11,8 +11,7 @@
 
             <div class="form-group col-xs-6 pdL0 pdR">
               <label>Name<span class="required">*</span></label>
-              <input type="text" name="name" class="form-control" formControlName="name" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);"
-                (change)="generateUniqueName()">
+              <input type="text" name="name" class="form-control" formControlName="name" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=&quot;);">
             </div>
 
             <div class="form-group col-xs-6 pdR0 pdL">
@@ -31,7 +30,7 @@
 
             <div class="form-group col-xs-3 pdR">
               <label>Open. Qty</label>
-              <input type="number" name="openingQuantity" class="form-control" formControlName="openingQuantity">
+              <input type="text" name="openingQuantity" class="form-control" formControlName="openingQuantity">
             </div>
 
             <div class="form-group col-xs-3 pdL">
@@ -41,7 +40,7 @@
 
             <div class="form-group col-xs-3 pdL pdR0 ">
               <label>Amount</label>
-              <input type="number" name="openingAmount" class="form-control" formControlName="openingAmount">
+              <input type="text" name="openingAmount" class="form-control" formControlName="openingAmount">
             </div>
 
           </div>
@@ -49,7 +48,8 @@
           <div class="row mr0 col-xs-6 pdL0 pdR">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Purchase Acc</label>
-              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options" formControlName="purchaseAccountUniqueName"></select2>
+              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options"
+              formControlName="purchaseAccountUniqueName" [value]="addStockForm.controls['purchaseAccountUniqueName'].value"></select2>
             </div>
 
             <div class="row mrB">
@@ -62,7 +62,7 @@
             </div>
 
             <div formArrayName="purchaseUnitRates">
-              <div class="row mrB1" *ngFor="let item of addStockForm.controls['purchaseUnitRates'].controls; let i=index">
+              <div class="row mrB1" *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index">
                 <div [formGroupName]="i">
                   <div class="col-xs-5">
                     <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
@@ -72,7 +72,7 @@
                   </div>
                 </div>
                 <div class="col-xs-2 mutliple_unit">
-                  <button (click)="addPurchaseUnitRates()"><i class="fa fa-plus add_row"></i></button>
+                  <button (click)="addPurchaseUnitRates(i)"><i class="fa fa-plus add_row"></i></button>
                   <button (click)="removePurchaseUnitRates(i)"><i class="fa fa-times dlet"></i></button>
                 </div>
               </div>
@@ -83,7 +83,8 @@
           <div class="row mr0 col-xs-6 pdL pdR0">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Sales Acc</label>
-              <select2 [data]="salesAccountsDropDown$ | async" [options]="options" formControlName="salesAccountUniqueName"></select2>
+              <select2 [data]="salesAccountsDropDown$ | async" [options]="options"
+              formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>
             </div>
 
 
@@ -98,7 +99,7 @@
             </div>
 
             <div formArrayName="saleUnitRates">
-              <div class="row mrB1" *ngFor="let item of addStockForm.controls['saleUnitRates'].controls; let i=index">
+              <div class="row mrB1" *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index">
                 <div [formGroupName]="i">
                   <div class="col-xs-5">
                     <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
@@ -108,7 +109,7 @@
                   </div>
                 </div>
                 <div class="col-xs-2 mutliple_unit">
-                  <button (click)="addSaleUnitRates()"><i class="fa fa-plus add_row"></i></button>
+                  <button (click)="addSaleUnitRates(i)"><i class="fa fa-plus add_row"></i></button>
                   <button (click)="removeSaleUnitRates(i)"><i class="fa fa-times dlet"></i></button>
                 </div>
               </div>
@@ -133,6 +134,7 @@
   </section>
 
   <div class="clearfix"></div>
+  <!--manufactre details  -->
   <section class="col-xs-12" *ngIf="addStockForm.value.isFsStock">
     <div class="pdL2 pdR2 mrB2">
       <div class="row">
@@ -140,29 +142,35 @@
           <thead>
             <tr>
               <th colspan="2" class="">
-                (Made with)
+                {{addStockForm.controls['name'].value}} (Made with)
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr>
+            <tr formGroupName="manufacturingDetails">
               <td class="col-xs-8">
                 <div class="clearfix pdTBth15">
                   <div class="form-group col-xs-4">
-                    <select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                     [(ngModel)]="linkedStock.stockUniqueName"></select2>
+                    <select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="linkedStockUniqueName"
+                      (valueChanged)="checkIfLinkedStockIsUnique($event)"></select2>
                   </div>
 
                   <div class="form-group col-xs-3">
-                    <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode" [(ngModel)]="linkedStock.stockUnitCode"></select2>
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="linkedStockUnitCode"></select2>
                   </div>
 
                   <div class="form-group col-xs-3">
-                    <input type="text" name="quantity" [(ngModel)]="linkedStock.quantity" placeholder="Stock Quantity" class="form-control">
+                    <input type="text" formControlName="linkedQuantity" name="quantity" placeholder="Stock Quantity" class="form-control">
                   </div>
                   <div class="form-group col-xs-2">
-                    <a ng-if="!vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" (click)="addItemInLinkedStocks()">Add</a>
-                    <!-- <a ng-if="vm.mfsCmbItem.hasIdx" class="btn btn-sm btn-primary pull-right" ng-click="vm.updateMfsCmbItem()">Update</a> -->
+                    <button type="button" *ngIf="!editModeForLinkedStokes" class="btn btn-sm btn-primary pull-right" (click)="addItemInLinkedStocks()"
+                      [disabled]="addStockForm.controls['manufacturingDetails'].controls['linkedStockUniqueName'].invalid ||
+                                  addStockForm.controls['manufacturingDetails'].controls['linkedQuantity'].invalid ||
+                                  addStockForm.controls['manufacturingDetails'].controls['linkedStockUnitCode'].invalid">Add</button>
+                    <button class="btn btn-sm btn-primary pull-right" *ngIf="editModeForLinkedStokes" (click)="updateItemInLinkedStocks(1)" [disabled]="addStockForm.controls['manufacturingDetails'].controls['linkedStockUniqueName'].invalid ||
+                                  addStockForm.controls['manufacturingDetails'].controls['linkedQuantity'].invalid ||
+                                  addStockForm.controls['manufacturingDetails'].controls['linkedStockUnitCode'].invalid">
+                       Update</button>
                   </div>
                 </div>
 
@@ -174,17 +182,17 @@
 
                 <section class="linkstock">
                   <table class="col-xs-12 linkStockTbl">
-                    <tbody>
-                      <tr *ngFor="let list of linkedStocks;let i = index;">
+                    <tbody formArrayName="linkedStocks">
+                      <tr *ngFor="let list of addStockForm.controls['manufacturingDetails'].controls['linkedStocks'].controls;let i = index;" [formGroupName]="i">
                         <td class="col-xs-4 list-row">
                           <span></span>
-                           <p>{{list.stockUniqueName}}</p>
+                          <p>{{list.value.stockUniqueName}}</p>
                         </td>
-                         <td class="col-xs-2">{{list.stockUnitCode}}</td>
-                         <td class="col-xs-2">{{list.quantity}}</td>
+                        <td class="col-xs-2">{{list.value.stockUnitCode}}</td>
+                        <td class="col-xs-2">{{list.value.quantity}}</td>
                         <td class="col-xs-4 action">
-                          <a href class="btn btn-default" (click)="editItemInLinkedStocks(list, i)">Edit</a>
-                          <a href class="btn btn-default" (click)="removeItemInLinkedStocks(i)">Delete</a>
+                          <a href class="btn btn-default" href="javascript:void(0)" (click)="editItemInLinkedStocks(list, i)">Edit</a>
+                          <a href class="btn btn-default" href="javascript:void(0)" (click)="removeItemInLinkedStocks(i)">Delete</a>
                         </td>
                       </tr>
                     </tbody>
@@ -198,10 +206,9 @@
                   </div>
                   <p class="lead col-md-10 col-lg-10 col-xs-12 mrB fw400">
                     <small>
-								<!-- {{vm.addStockObj.manufacturingDetails.manufacturingQuantity}} -->
-								<!-- {{vm.addStockObj.manufacturingDetails.manufacturingUnitCode}} -->
-                </small>
-              <!-- {{vm.addStockObj.name}} -->
+								 {{addStockForm.controls['manufacturingDetails'].controls['manufacturingQuantity'].value}}
+								{{addStockForm.controls['manufacturingDetails'].controls['manufacturingUnitCode'].value}}
+                </small> {{addStockForm.controls['name'].value}}
                   </p>
                 </section>
                 <section class="clearfix pr">
@@ -209,19 +216,11 @@
                     <span class="total-ico">=</span>
                   </div>
                   <div class="form-group col-md-5 col-lg-5 col-xs-12">
-                    <input type="text" class="form-control" ng-model="vm.addStockObj.manufacturingDetails.manufacturingQuantity" name="manufacturingQuantity"
-                      placeholder="Quantity" />
+                    <input type="text" class="form-control" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity"
+                    />
                   </div>
                   <div class="form-group col-md-5 col-lg-5 col-xs-12">
-
-                    <!-- <ui-select ng-model="vm.addStockObj.manufacturingDetails.manufacturingUnitCode" theme="bootstrap" search-enabled="true" title="Choose Unit">
-                      <ui-select-match placeholder="Select">{{$select.selected.name}}</ui-select-match>
-                      <ui-select-choices repeat="item.code as item in vm.customUnits | propsFilter: {name: $select.search, code: $select.search}">
-                        <span ng-bind-html="item.name | hilite: $select.search"></span>
-                        <small>(<span ng-bind-html="''+item.code | hilite: $select.search"></span>)</small>
-                      </ui-select-choices>
-                    </ui-select> -->
-
+                    <select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="manufacturingUnitCode"></select2>
                   </div>
                 </section>
               </td>
@@ -237,14 +236,48 @@
   <div class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd pdT0">
 
-      <button type="submit" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid" click="submit()">Save</button>
+      <button type="submit" *ngIf="!isUpdatingStockForm" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid">Save</button>
 
+      <button type="button" *ngIf="isUpdatingStockForm" class="btn btn-md btn-success mrR1" (click)="update()" [disabled]="addStockForm.invalid">Update</button>
 
-      <button type="reset" class="btn btn-md btn-primary">
+      <button type="button" (click)="resetStockForm()" class="btn btn-md btn-primary">
         Cancel
       </button>
+
+      <button *ngIf="isUpdatingStockForm" class="btn btn-md btn-danger pull-right gico-wrap" (click)="deleteStock()">
+			<span class="icon-trash"></span>
+			Delete Stock
+		</button>
 
     </div>
   </div>
 
 </form>
+
+<div *ngIf="showLoadingForStockEditInProcess$ | async">
+
+    <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
+
+      <div class="">
+        <div class="ng-busy-default-wrapper">
+          <div class="ng-busy-default-sign">
+            <div class="ng-busy-default-spinner">
+              <div class="bar1"></div>
+              <div class="bar2"></div>
+              <div class="bar3"></div>
+              <div class="bar4"></div>
+              <div class="bar5"></div>
+              <div class="bar6"></div>
+              <div class="bar7"></div>
+              <div class="bar8"></div>
+              <div class="bar9"></div>
+              <div class="bar10"></div>
+              <div class="bar11"></div>
+              <div class="bar12"></div>
+            </div>
+            <div class="ng-busy-default-text">Loading...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
