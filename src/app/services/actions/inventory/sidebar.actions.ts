@@ -7,7 +7,7 @@ import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { InventoryService } from '../../inventory.service';
 
@@ -38,11 +38,7 @@ export class SidebarAction {
   public GetInventoryStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetInventoryStock)
     .switchMap(action => {
-      let activeGroup: StockGroupResponse = null;
-      this.store.select(p => p.inventory.activeGroup).take(1).subscribe(a => {
-        activeGroup = a;
-      }).unsubscribe();
-      return this._inventoryService.GetStockDetails(activeGroup.uniqueName, action.payload);
+      return this._inventoryService.GetStockDetails(action.payload.activeGroupUniqueName, action.payload.stockUniqueName);
     })
     .map(response => {
       return this.GetInventoryStockResponse(response);
@@ -97,6 +93,8 @@ export class SidebarAction {
     private _toasty: ToasterService,
     private store: Store<AppState>,
     private _inventoryService: InventoryService,
+    private route: ActivatedRoute,
+    private router: Router
   ) {
   }
 
@@ -135,10 +133,10 @@ export class SidebarAction {
     };
   }
 
-  public GetInventoryStock(stockUniqueName: string): Action {
+  public GetInventoryStock(stockUniqueName: string, activeGroupUniqueName: string): Action {
     return {
       type: InventoryActionsConst.GetInventoryStock,
-      payload: stockUniqueName
+      payload: {stockUniqueName, activeGroupUniqueName}
     };
   }
 

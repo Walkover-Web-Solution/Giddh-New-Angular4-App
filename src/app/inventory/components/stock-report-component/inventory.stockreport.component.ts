@@ -89,7 +89,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {
       this.store.dispatch(this.inventoryAction.showLoaderForStock());
-      this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
+      this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       this.router.navigate(['/pages', 'inventory', 'add-group', this.groupUniqueName, 'add-stock', this.stockUniqueName]);
     }
   }

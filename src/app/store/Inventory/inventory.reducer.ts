@@ -15,6 +15,7 @@ export interface InventoryState {
   stocksList: StocksResponse;
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
+  activeGroupUniqueName?: string;
   activeStock?: StockDetailResponse;
   activeStockUniqueName?: string;
   fetchingGrpUniqueName: boolean;
@@ -134,7 +135,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
             activeGroupData = null;
           }
-          return Object.assign({}, state, { activeGroup: group, groupsWithStocks: groupArray });
+          return Object.assign({}, state, { activeGroup: group, activeGroupUniqueName: group.uniqueName, groupsWithStocks: groupArray });
         }
       }
       return state;
@@ -264,6 +265,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return Object.assign({}, state, {
           groupsWithStocks: groupArray,
           activeGroup: null,
+          activeGroupUniqueName: '',
           isUpdateGroupInProcess: false
         });
       }
@@ -285,11 +287,11 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
           }
         }
-        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, isDeleteGroupInProcess: false });
+        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, activeGroupUniqueName: '', isDeleteGroupInProcess: false });
       }
       return Object.assign({}, state, { isDeleteGroupInProcess: false });
     case InventoryActionsConst.ResetActiveGroup:
-      return Object.assign({}, state, { activeGroup: null, activeStockUniqueName: null });
+      return Object.assign({}, state, { activeGroup: null, activeGroupUniqueName: '', activeStockUniqueName: null });
 
     case InventoryActionsConst.GetStockUniqueName:
       return Object.assign({}, state, { fetchingStockUniqueName: true, isStockNameAvailable: null });
