@@ -3,11 +3,10 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
-
-import { DataResolver } from './app.resolver';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
 import { InventoryComponent } from './inventory/inventory.component';
+import { SearchComponent } from './search/search.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +18,7 @@ export const ROUTES: Routes = [
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
+      { path: 'search', component: SearchComponent, canActivate: [NeedsAuthentication] },
     ]
   }
 ];
