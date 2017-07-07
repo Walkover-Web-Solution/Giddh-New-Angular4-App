@@ -31,6 +31,8 @@ import { InventoryService } from './inventory.service';
  * Home Module
  */
 import { InventoryAction } from './actions/inventory/inventory.actions';
+import { SearchActions } from './actions/search.actions';
+import { SearchService } from './search.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -48,7 +50,8 @@ import { InventoryAction } from './actions/inventory/inventory.actions';
     EffectsModule.run(InventoryAction),
     EffectsModule.run(SidebarAction),
     EffectsModule.run(CustomStockUnitAction),
-    EffectsModule.run(StockReportActions)
+    EffectsModule.run(StockReportActions),
+    EffectsModule.run(SearchActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -69,7 +72,8 @@ export class ServiceModule {
         GroupService,
         AccountService,
         InventoryService,
-        ErrorHandler
+        ErrorHandler,
+        SearchService
       ]
     };
   }
