@@ -1,0 +1,43 @@
+<div class="row" auto-height="" style="min-height: 600px; height: 967.6px;">
+  <div id="left">
+    <div class="scrClass flow_visible ps-container" style="min-height: 600px; height: 967.6px;">
+      <form name="searchFormClb" novalidate="" class="col-xs-12">
+        <p class="lead mrT2">Search</p>
+        <div class="form-group">
+          <label>Select Groups</label>
+          <input type="text" />
+        </div>
+
+        <div class="form-group">
+          <label>From date</label>
+          <p class="input-group">
+            <input type="text" />
+            <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="fromDatePickerOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+
+        <div class="form-group">
+          <label>To date</label>
+          <p class="input-group">
+            <input type="text" />
+            <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="toDatePickerOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
+            </span>
+          </p>
+        </div>
+
+        <div class="mrB4">
+          <button ng-disabled="searchFormClb.$invalid || searchDtCntLdr" class="btn btn-primary btn-block" ng-click=" getClosingBalance(searchFormData, false)"
+            disabled="disabled">Go</button>
+
+          <button ng-disabled="searchFormClb.$invalid || searchDtCntLdr" class="btn btn-primary btn-block mrT1" ng-click=" getClosingBalance(searchFormData, true)"
+            disabled="disabled">Refresh</button>
+        </div>
+      </form>
+    </div>
+
+
+  </div>
+</div>
