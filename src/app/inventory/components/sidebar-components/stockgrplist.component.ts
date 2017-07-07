@@ -3,10 +3,10 @@ import { AppState } from '../../../store/roots';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs/Rx';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 @Component({
   selector: 'stockgrp-list',
   styles: [`
@@ -42,10 +42,12 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   @Input()
   public Groups: IGroupsWithStocksHierarchyMinItem[];
   public stockUniqueName: string;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction) {
-    this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
-    this.activeStock$ = this.store.select(p => p.inventory.activeStock);
+    this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).takeUntil(this.destroyed$);
+    this.activeStock$ = this.store.select(p => p.inventory.activeStock).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -53,15 +55,16 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    // this.sub.unsubscribe();
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   public OpenGroup(grp: IGroupsWithStocksHierarchyMinItem, e: Event) {
-    e.stopPropagation();
     if (grp.isOpen) {
       this.store.dispatch(this.sideBarAction.OpenGroup(grp.uniqueName));
     } else {
       this.store.dispatch(this.sideBarAction.GetInventoryGroup(grp.uniqueName));
     }
   }
+
 }

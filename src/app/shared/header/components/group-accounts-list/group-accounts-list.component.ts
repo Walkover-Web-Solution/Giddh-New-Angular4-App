@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -9,6 +9,7 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AccountResponse } from '../../../../models/api-models/Account';
 import { GroupResponse } from '../../../../models/api-models/Group';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'group-account-list',
@@ -23,6 +24,7 @@ export class GroupAccountsListComponent implements OnInit {
   public activeAccount$: Observable<AccountResponse>;
 
   public showAddAccountForm$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private accountsAcction: AccountsAction, private accountsAction: AccountsAction) {
@@ -39,18 +41,18 @@ export class GroupAccountsListComponent implements OnInit {
         });
       }
       return accountsList;
-    });
+    }).takeUntil(this.destroyed$);
 
-    this.store.select(s => s.groupwithaccounts.accountSearchString).subscribe((s) => {
+    this.store.select(s => s.groupwithaccounts.accountSearchString).takeUntil(this.destroyed$).subscribe((s) => {
       if (!s) {
         this.searchAcc = '';
       }
     });
 
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
-    this.searchLoad$ = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
-    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.searchLoad$ = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).takeUntil(this.destroyed$);
+    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
   }
 
   // tslint:disable-next-line:no-empty
@@ -64,7 +66,7 @@ export class GroupAccountsListComponent implements OnInit {
       } else {
         return false;
       }
-    });
+    }).takeUntil(this.destroyed$);
   }
   public searchAccounts(e: any) {
     if (e.target.value.startsWith(' ')) {
@@ -121,4 +123,9 @@ export class GroupAccountsListComponent implements OnInit {
       }
     });
   }
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
 }
