@@ -1,19 +1,18 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, Input } from '@angular/core';
-import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'app-manage-groups-accounts',
   templateUrl: './manage-groups-accounts.component.html',
   styleUrls: ['./manage-groups-accounts.component.css']
 })
-export class ManageGroupsAccountsComponent implements OnInit {
+export class ManageGroupsAccountsComponent implements OnInit, OnDestroy {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
   public grpSrch: string;
   public searchLoad: Observable<boolean>;
@@ -22,10 +21,11 @@ export class ManageGroupsAccountsComponent implements OnInit {
 
   public psConfig: PerfectScrollbarConfigInterface;
   public addNewAccountForm: boolean = false;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
-    this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading);
-    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
+    this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).takeUntil(this.destroyed$);
+    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
     this.psConfig = { maxScrollbarLength: 80 };
   }
 
@@ -37,5 +37,10 @@ export class ManageGroupsAccountsComponent implements OnInit {
   public closePopupEvent() {
     this.grpSrch = '';
     this.closeEvent.emit(true);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

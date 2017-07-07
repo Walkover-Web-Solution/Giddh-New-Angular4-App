@@ -4,28 +4,30 @@ import { GroupResponse } from './../../../../models/api-models/Group';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AccountResponse } from '../../../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'account-add',
   templateUrl: './account-add.component.html'
 })
-export class AccountAddComponent implements OnInit {
+export class AccountAddComponent implements OnInit, OnDestroy {
   public addAccountForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
   public activeAccount$: Observable<AccountResponse>;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
     private groupWithAccountsAction: GroupWithAccountsAction) {
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
-    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName);
-    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable);
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -95,5 +97,9 @@ export class AccountAddComponent implements OnInit {
   public jumpToGroup(uniqueName: string) {
     this.store.dispatch(this.accountsAction.resetActiveAccount());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(uniqueName));
+  }
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
