@@ -1,39 +1,50 @@
 <div class="row" auto-height="" style="min-height: 600px; height: 967.6px;">
   <div id="left">
     <div class="scrClass flow_visible ps-container" style="min-height: 600px; height: 967.6px;">
-      <form name="searchFormClb" novalidate="" class="col-xs-12">
+      <form #search="ngForm" name="searchFormClb" novalidate="" class="col-xs-12">
         <p class="lead mrT2">Search</p>
         <div class="form-group">
           <label>Select Groups</label>
-          <input type="text" />
+          <input type="text" name="groupName" [(ngModel)]="groupName" class="form-control"/>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" (clickOutside)="showFromDatePicker=false;">
           <label>From date</label>
-          <p class="input-group">
-            <input type="text" />
+          <div class="input-group" >
+            <input type="text" name="from" [ngModel]="moment(fromDate).format('DD/MM/YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
+              class="form-control" />
             <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="fromDatePickerOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
+                    <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+          </div>
+          <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <datepicker name="fromDate" [(ngModel)]="fromDate" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
+          </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" (clickOutside)="showToDatePicker=false;">
           <label>To date</label>
-          <p class="input-group">
-            <input type="text" />
+          <div class="input-group">
+            <input type="text" name="to" [ngModel]="moment(toDate).format('DD/MM/YYYY')" (focus)="showToDatePicker = true;showFromDatePicker=false;"
+              class="form-control" />
             <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="toDatePickerOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
+                    <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+
+          </div>
+          <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="true"></datepicker>
+          </div>
         </div>
 
         <div class="mrB4">
-          <button ng-disabled="searchFormClb.$invalid || searchDtCntLdr" class="btn btn-primary btn-block" ng-click=" getClosingBalance(searchFormData, false)"
-            disabled="disabled">Go</button>
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block" (click)=" getClosingBalance(false)"
+          >Go
+          </button>
 
-          <button ng-disabled="searchFormClb.$invalid || searchDtCntLdr" class="btn btn-primary btn-block mrT1" ng-click=" getClosingBalance(searchFormData, true)"
-            disabled="disabled">Refresh</button>
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block mrT1" (click)=" getClosingBalance(true)"
+          >Refresh
+          </button>
         </div>
       </form>
     </div>
