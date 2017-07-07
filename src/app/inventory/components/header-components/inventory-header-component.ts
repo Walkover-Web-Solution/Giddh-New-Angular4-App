@@ -37,6 +37,7 @@ export class InventoryHearderComponent implements  OnDestroy, OnInit {
     this.router.navigate(['/pages', 'inventory', 'add-group']);
   }
   public goToAddStock() {
+    this.store.dispatch(this.inventoryAction.resetActiveStock());
     let groupName = null;
     this.activeGroup$.take(1).subscribe(s => groupName = s.uniqueName);
     this.router.navigate(['/pages', 'inventory', 'add-group', groupName, 'add-stock']);
