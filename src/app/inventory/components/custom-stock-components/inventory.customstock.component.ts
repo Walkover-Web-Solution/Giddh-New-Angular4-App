@@ -15,7 +15,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   templateUrl: './inventory.customstock.component.html'
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy {
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public stockUnitsDropDown$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
@@ -26,6 +25,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public editMode: boolean;
   public editCode: string;
   public customUnitObj: StockUnitRequest;
+  public createCustomStockInProcess$: Observable<boolean>;
+  public updateCustomStockInProcess$: Observable<boolean>;
+  public deleteCustomStockInProcessCode$: Observable<any[]>;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction) {
     this.customUnitObj = new StockUnitRequest();
@@ -39,6 +42,9 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.createCustomStockInProcess$ = this.store.select(s => s.inventory.createCustomStockInProcess).takeUntil(this.destroyed$);
+    this.updateCustomStockInProcess$ = this.store.select(s => s.inventory.updateCustomStockInProcess).takeUntil(this.destroyed$);
+    this.deleteCustomStockInProcessCode$ = this.store.select(s => s.inventory.deleteCustomStockInProcessCode).takeUntil(this.destroyed$);
 
   }
 
@@ -82,7 +88,6 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
       }
     }).subscribe();
   }
-
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
