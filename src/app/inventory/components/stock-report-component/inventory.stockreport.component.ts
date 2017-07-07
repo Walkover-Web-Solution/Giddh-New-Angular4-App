@@ -4,7 +4,7 @@ import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
@@ -14,11 +14,13 @@ import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
 import * as _ from 'lodash';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+
 @Component({
   selector: 'invetory-stock-report',  // <home></home>
   templateUrl: './inventory.stockreport.component.html'
 })
-export class InventoryStockReportComponent implements OnInit {
+export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public stockReport$: Observable<StockReportResponse>;
   public sub: Subscription;
   public groupUniqueName: string;
@@ -28,12 +30,15 @@ export class InventoryStockReportComponent implements OnInit {
   public showToDatePicker: boolean;
   public toDate: Date;
   public fromDate: Date;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   public moment = moment;
 
   /**
    * TypeScript public modifiers
    */
+  constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction, private stockReportActions: StockReportActions, private fb: FormBuilder) {
+    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport);
@@ -76,9 +81,11 @@ export class InventoryStockReportComponent implements OnInit {
       this.stockReportRequest.page = 1;
     }
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
-    return false;
   }
-
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+      }
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {
       this.store.dispatch(this.inventoryAction.showLoaderForStock());
