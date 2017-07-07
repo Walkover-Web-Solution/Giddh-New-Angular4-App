@@ -15,6 +15,7 @@ import { AppState } from '../../store/roots';
 export class CompanyActions {
   public static CREATE_COMPANY = 'CompanyCreate';
   public static CREATE_COMPANY_RESPONSE = 'CompanyResponse';
+  public static RESET_CREATE_COMPANY_FLAG = 'RESET_CREATE_COMPANY_FLAG';
   public static REFRESH_COMPANIES = 'CompanyRefresh';
   public static REFRESH_COMPANIES_RESPONSE = 'CompanyRefreshResponse';
   public static GET_STATE_DETAILS = 'CompanyGetStateDetails';
@@ -222,5 +223,8 @@ export class CompanyActions {
       type: CompanyActions.SET_CONTACT_NO,
       payload: value
     };
+  }
+  public ResetCompanyPopup(): Action {
+    return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
   }
 }

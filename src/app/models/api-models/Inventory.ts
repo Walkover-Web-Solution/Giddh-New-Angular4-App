@@ -166,11 +166,6 @@ export class StockUnitRequest implements IStockUnit {
   public code: string;
 }
 
-export class LinkedStockes {
-  public stockUniqueName: string;
-  public quantity: number;
-  public stockUnitCode: string;
-}
 /*
  * Delete stock api
  * DELETE call

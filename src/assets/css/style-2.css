@@ -2783,3 +2783,266 @@ label {
 .cursor-pointer {
   cursor: pointer !important;
 }
+
+/**************** Create company modal **********************/
+#setupWizardModal .nav-item, #setupWizardModal .nav-justified>li>a {
+  padding: 0;
+}
+#setupWizardModal .nav-justified>li>a {
+  color: grey;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: .25s;
+  cursor: pointer;
+}
+.steps-indicator li.active a:before {
+  background-color: grey;
+}
+.steps-indicator li a:before {
+  position: absolute;
+  top: -7px;
+  left: calc(50% - 7px);
+  width: 14px;
+  height: 14px;
+  border-radius: 100%;
+  transition: .25s;
+}
+.steps-indicator li a:before, .steps-indicator:before {
+  background-color: #e6e6e6;
+  content: '';
+  top: -15px;
+}
+.steps-indicator .enabled[_ngcontent-c7], .steps-indicator .active[_ngcontent-c7], .steps-indicator .disabled[_ngcontent-c7] {
+  border-bottom: 0;
+}
+.steps-indicator:before {
+  position: absolute;
+  height: 1px;
+  top: -8px;
+  z-index: 0;
+  width: calc(100%/3);
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+}
+.steps-indicator.step-2:before {
+  width: calc(100%/2);
+}
+.steps-indicator li a:before, .steps-indicator:before {
+  background-color: #e6e6e6;
+  content: '';
+}
+.steps-indicator>li>a:focus, .steps-indicator>li>a:hover {
+  background: none;
+}
+.intro.login{
+	background: url('../../assets/images/new/login_bg.jpg') no-repeat top center scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+}
+.login .brand-heading {
+	color: white;
+	font-size: 40px;
+	margin-bottom: 80px;
+}
+
+#box{
+	background-color: #fff;
+	padding: 20px 30px;
+	margin: 0 auto;
+	width: 360px;
+	height: auto;
+   -webkit-box-shadow:0px 0px 5px 0px rgb(78, 78, 78);
+  -moz-box-shadow:0px 0px 5px 0px rgb(78, 78, 78);
+  box-shadow: 0px 0px 5px 0px rgb(78, 78, 78);
+}
+
+#box img {
+  max-height: 30px;
+  position: absolute;
+  left: 10px;
+  top: 6px;
+}
+
+#box button {
+  text-transform: uppercase;
+}
+
+#box .glyphicon{
+  max-height:30px;
+  position: absolute;
+  left:15px;
+  top:13px;
+}
+
+#box .btn:hover, #box .btn:hover{
+  color:#fff;
+}
+
+#boxDropdown{
+  background-color: #fff;
+  padding: 20px 30px;
+  margin: 0 auto;
+  width: 360px;
+  height: auto;
+  position: absolute;
+  right:0;
+  min-height:280px;
+  -webkit-box-shadow:0px 0px 5px 0px rgb(78, 78, 78);
+  -moz-box-shadow:0px 0px 5px 0px rgb(78, 78, 78);
+  box-shadow: 0px 0px 5px 0px rgb(78, 78, 78);
+}
+
+#boxDropdown button {
+  text-transform: uppercase;
+}
+
+.login-btn{
+  position: relative;
+}
+
+/*.login-btn:hover #boxDropdown{
+  display: block;
+  right:0;
+  opacity: 1;
+  -webkit-transition: opacity 2s ease-in;
+  transition: opacity 2s ease-in;
+}*/
+
+.login #boxDropdown img {
+  max-height:30px;
+  position: absolute;
+  left:10px;
+  top:6px;
+}
+
+.login #boxDropdown .glyphicon{
+  max-height:30px;
+  position: absolute;
+  left:15px;
+  top:13px;
+}
+
+.login #boxDropdown .btn:hover, #box .btn:hover{
+  color:#fff;
+}
+
+.login .mrB1{margin-bottom: 10px}
+.login .giddh-logo{
+  background: #221F1F none repeat scroll 0 0;
+  border: 7px solid #C63B13;
+  border-radius: 50%;
+  box-shadow: 0 10px 0 14px #fff inset;
+  box-sizing: border-box;
+  height: 60px;
+  width: 60px;
+  margin:0 auto 20px;
+}
+
+.login .twitter{
+  background: #11B1E5;
+}
+
+.login .google{
+  background:#DE4D3C;
+}
+
+.login .linkedin{
+  background: #0E78AA;
+}
+
+.login .mobile{
+  background: #26263A;
+}
+
+.login .btn-login {
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #fff;
+	margin-bottom: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: transform;
+  transition-property: transform;
+}
+.login .btn-login:hover,.login  .btn-login:focus,.login  .btn-login:active {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+/*giddh loader*/
+.login .giddh-spinner{
+    animation: rotate 1.5s infinite linear;
+    background: #221F1F none repeat scroll 0 0;
+    border: 7px solid #C63B13;
+    border-radius: 50%;
+    box-shadow: 0 -10px 0 14px #fff inset;
+    box-sizing: border-box;
+    height: 60px;
+    width: 60px;
+    margin:0 auto 20px;
+}
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.login .intro {
+  display: table;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: url('../images/new/banner-grid-design.png') repeat;
+}
+.login .intro.pricing, .intro.security{
+	background: #FFF8EA url('../images/new/banner-grid-design.png') repeat;
+}
+.login .intro.home .intro-body {
+	background: rgba(0, 0, 0, 0.3);
+}
+.login .intro .intro-body {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  padding: 100px 0;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  top: 0;
+  left: 0;
+}
+.login .intro.home .brand-heading {
+  font-size: 40px;
+  letter-spacing: 2px;
+  margin: 0 0 5px;
+  /*text-transform: uppercase;*/
+  color: #011F39;
+  text-align: center;
+}
+.login .intro.home .btn{
+	width: 320px;
+	height: 80px;
+	/*margin-bottom: 70px;*/
+	/*font-family: 'Arvo', serif;*/
+	font-size: 25px;
+    font-weight: 300;
+	line-height: 60px;
+}
+.login .btn {
+    padding: 11px 16px;
+    border: 0;
+    border-radius: 0;
+    font-size: 14px;
+}

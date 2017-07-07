@@ -1,25 +1,21 @@
 import { LoginActions } from '../services/actions/login.action';
 import { AppState } from '../store/roots';
 import { Router } from '@angular/router';
-import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormControl
-} from '@angular/forms';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 
 import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyEmailModel } from '../models/api-models/loginModels';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('emailVerifyModal') public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
@@ -34,6 +30,8 @@ export class LoginComponent implements OnInit {
   private email: string;
   private name: string;
   private token: string;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   // tslint:disable-next-line:no-empty
   constructor(
     private _fb: FormBuilder,
@@ -44,23 +42,23 @@ export class LoginComponent implements OnInit {
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
-    });
+    }).takeUntil(this.destroyed$);
     this.isVerifyEmailInProcess$ = store.select(state => {
       return state.login.isVerifyEmailInProcess;
-    });
+    }).takeUntil(this.destroyed$);
     this.isLoginWithMobileInProcess$ = store.select(state => {
       return state.login.isLoginWithMobileInProcess;
-    });
+    }).takeUntil(this.destroyed$);
     this.isVerifyMobileInProcess$ = store.select(state => {
       return state.login.isVerifyMobileInProcess;
-    });
+    }).takeUntil(this.destroyed$);
 
     this.isLoginWithEmailSubmited$ = store.select(state => {
       return state.login.isLoginWithEmailSubmited;
-    });
+    }).takeUntil(this.destroyed$);
     store.select(state => {
       return state.login.isVerifyEmailSuccess;
-    }).subscribe((value) => {
+    }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
         this.router.navigate(['home']);
       }
@@ -122,7 +120,12 @@ export class LoginComponent implements OnInit {
     this.email = localStorage.getItem('email');
   }
 
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
   public loginWithProvider(provider: string) {
     //
   }
+
 }

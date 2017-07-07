@@ -1,10 +1,11 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockReportResponse, StockGroupRequest, StockGroupResponse, StockUnitRequest, StockDetailResponse, StocksResponse } from '../../models/api-models/Inventory';
+import { StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest, CreateStockRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
-import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst } from '../../services/actions/inventory/inventory.const';
+import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
 /**
  * Keeping Track of the CompanyState
@@ -22,7 +23,9 @@ export interface InventoryState {
   isUpdateGroupInProcess: boolean;
   fetchingStockUniqueName: boolean;
   isStockNameAvailable: boolean;
+  createStockSuccess: boolean;
   stockReport?: StockReportResponse;
+  showLoadingForStockEditInProcess: boolean;
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -50,7 +53,9 @@ const initialState: InventoryState = {
   isGroupNameAvailable: false,
   isUpdateGroupInProcess: false,
   fetchingStockUniqueName: false,
-  isStockNameAvailable: false
+  isStockNameAvailable: false,
+  createStockSuccess: false,
+  showLoadingForStockEditInProcess: false
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -63,8 +68,29 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       return Object.assign({}, state, { activeStockUniqueName: action.payload });
     case InventoryActionsConst.GetGroupsWithStocksHierarchyMinResponse:
       if ((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).status === 'success') {
-        groupArray = (action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.results;
-        return Object.assign({}, state, { groupsWithStocks: prepare(groupArray) });
+        groupArray = prepare((action.payload as BaseResponse<GroupsWithStocksHierarchyMin, string>).body.results);
+        if (state.activeGroup) {
+          groupUniqueName = state.activeGroup.uniqueName;
+
+          if (groupUniqueName && groupArray) {
+            for (let el of groupArray) {
+              activeGroupData = setRecursivlyActive(el.childStockGroups ? el.childStockGroups : [], groupUniqueName, null);
+              if (activeGroupData) {
+                el.isOpen = true;
+                el.isActive = false;
+              } else {
+                if (groupUniqueName === el.uniqueName) {
+                  el.isOpen = !el.isOpen;
+                  el.isActive = true;
+                } else {
+                  el.isActive = false;
+                }
+              }
+              activeGroupData = null;
+            }
+          }
+        }
+        return Object.assign({}, state, { groupsWithStocks: groupArray });
       }
       return state;
 
@@ -164,7 +190,11 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             activeGroupData = null;
           }
         }
-        return Object.assign({}, state, { isAddNewGroupInProcess: false, groupsWithStocks: groupArray, activeStockUniqueName: null });
+        return Object.assign({}, state, {
+          isAddNewGroupInProcess: false,
+          groupsWithStocks: groupArray,
+          activeStockUniqueName: null
+        });
       }
       return state;
     case InventoryActionsConst.GetGroupUniqueName:
@@ -190,30 +220,38 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         if (resp.request.isSelfParent) {
           groupArray.map(gr => {
             if (gr.uniqueName === activeGroup.uniqueName) {
-              gr.name = resp.request.name;
-              gr.uniqueName = resp.request.uniqueName;
+              gr.name = resp.body.name;
+              gr.uniqueName = resp.body.uniqueName;
             }
           });
         } else {
           for (let el of groupArray) {
             if (el.uniqueName === activeGroup.parentStockGroup.uniqueName) {
-              let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.request.uniqueName, null);
+              let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.queryString.stockGroupUniquename, null);
               if (myGrp) {
-                addItemAtIndex(groupArray, resp.request.parentStockGroupUniqueName, myGrp);
+                myGrp.name = resp.body.name;
+                myGrp.uniqueName = resp.body.uniqueName;
+                addItemAtIndex(groupArray, resp.body.parentStockGroup.uniqueName, myGrp);
                 break;
               }
             } else {
               if (el.childStockGroups.length) {
-                let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.request.uniqueName, null);
+                let myGrp = removeGroupItemAndReturnIt(el.childStockGroups, activeGroup.parentStockGroup.uniqueName, resp.queryString.stockGroupUniquename, null);
                 if (myGrp) {
-                  addItemAtIndex(groupArray, resp.request.parentStockGroupUniqueName, myGrp);
+                  myGrp.name = resp.body.name;
+                  myGrp.uniqueName = resp.body.uniqueName;
+                  addItemAtIndex(groupArray, resp.body.parentStockGroup.uniqueName, myGrp);
                   break;
                 }
               }
             }
           }
         }
-        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, isUpdateGroupInProcess: false });
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeGroup: null,
+          isUpdateGroupInProcess: false
+        });
       }
       return state;
     case InventoryActionsConst.RemoveGroup:
@@ -257,6 +295,90 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         return Object.assign({}, state, { stocksList: stockResponse.body });
       }
       return state;
+    case InventoryActionsConst.CreateStock:
+      return Object.assign({}, state, { createStockSuccess: false });
+    case InventoryActionsConst.CreateStockResponse:
+      let createStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
+      if (createStockResp.status === 'success') {
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        for (let el of groupArray) {
+          if (el.uniqueName === createStockResp.queryString.stockGroupUniqueName) {
+            el.stocks.push(createStockResp.body);
+            el.isOpen = true;
+            el.isActive = true;
+            break;
+          } else {
+            if (el.childStockGroups.length) {
+              activeGroupData = addNewStockToGroup(el.childStockGroups, createStockResp, null);
+              if (activeGroupData) {
+                el.isOpen = true;
+                el.isActive = true;
+                break;
+              }
+            }
+          }
+          activeGroupData = null;
+        }
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStockUniqueName: createStockResp.request.uniqueName,
+          activeStock: createStockResp.body,
+          createStockSuccess: true
+        });
+      }
+      return state;
+    case InventoryActionsConst.UpdateStock:
+      return state;
+    case InventoryActionsConst.UpdateStockResponse:
+      let updateStockResp: BaseResponse<StockDetailResponse, CreateStockRequest> = action.payload;
+      if (updateStockResp.status === 'success') {
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        let activeGroup = _.cloneDeep(state.activeGroup);
+        let stateActiveGrp: StockGroupResponse = null;
+        let myGrp = removeStockItemAndReturnIt(groupArray, activeGroup.uniqueName, updateStockResp.queryString.stockUniqueName, null);
+        if (myGrp) {
+          myGrp.name = updateStockResp.body.name;
+          myGrp.uniqueName = updateStockResp.body.uniqueName;
+          addStockItemAtIndex(groupArray, activeGroup.uniqueName, myGrp);
+        }
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStock: updateStockResp.body,
+          activeStockUniqueName: updateStockResp.body.uniqueName,
+          isUpdateGroupInProcess: false
+        });
+      }
+      return state;
+    case InventoryActionsConst.RemoveStock:
+      return state;
+    case InventoryActionsConst.RemoveStockResponse:
+      let remStockResp: BaseResponse<string, string> = action.payload;
+      if (remStockResp.status === 'success') {
+        groupArray = _.cloneDeep(state.groupsWithStocks);
+        removeStockItemAndReturnIt(groupArray, remStockResp.queryString.stockGroupUniqueName, remStockResp.queryString.stockUniqueName, null);
+
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeStock: null,
+          activeStockUniqueName: null
+        });
+      }
+      return state;
+    case InventoryActionsConst.GetInventoryStockResponse:
+      let stockDetailsResp: BaseResponse<StockDetailResponse, string> = action.payload;
+      if (stockDetailsResp.status === 'success') {
+        return Object.assign({}, state, {
+          activeStock: stockDetailsResp.body,
+          activeStockUniqueName: stockDetailsResp.body.uniqueName
+        });
+      }
+      return state;
+    case InventoryActionsConst.ShowLoadingForStockEditInProcess:
+      return Object.assign({}, state, { showLoadingForStockEditInProcess: true });
+    case InventoryActionsConst.HideLoadingForStockEditInProcess:
+      return Object.assign({}, state, { showLoadingForStockEditInProcess: false });
+    case InventoryActionsConst.ResetActiveStock:
+      return Object.assign({}, state, { activeStock: null, activeStockUniqueName: null });
     /*
      *Custom Stock Units...
      * */
@@ -268,6 +390,12 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       return Object.assign({}, state, { stockUnits: state.stockUnits.map(p => p.code === action.payload ? action.payload : p) });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
       return Object.assign({}, state, { stockUnits: state.stockUnits.filter(p => p.code !== action.payload) });
+    /*
+     * Inventory Stock Report
+     * */
+    case STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE:
+      return Object.assign({}, state, { stockReport: action.payload });
+
     default:
       return state;
   }
@@ -377,6 +505,7 @@ const removeGroupItem = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniq
 const addItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, group: IGroupsWithStocksHierarchyMinItem) => {
   for (let el of groups) {
     if (el.uniqueName === parentUniqueName) {
+      // debugger
       el.isActive = true;
       el.isOpen = true;
       el.childStockGroups.push({
@@ -430,4 +559,63 @@ const removeGroupItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[],
     }
   }
   return result;
+};
+
+const addNewStockToGroup = (groups: IGroupsWithStocksHierarchyMinItem[], stock: BaseResponse<StockDetailResponse, CreateStockRequest>, result: IGroupsWithStocksHierarchyMinItem) => {
+  for (let el of groups) {
+    if (el.uniqueName === stock.queryString.stockGroupUniqueName) {
+      el.isActive = true;
+      el.isOpen = true;
+      el.stocks.push(stock.body);
+      if (!result) {
+        result = el;
+        return result;
+      }
+    }
+    if (el.childStockGroups && el.childStockGroups.length > 0 && !result) {
+      result = addNewStockToGroup(el.childStockGroups, stock, result);
+      if (result) {
+        result = el;
+        return result;
+      }
+    }
+  }
+  return result;
+};
+
+const removeStockItemAndReturnIt = (groups: IGroupsWithStocksHierarchyMinItem[], grpUniqueName: string, stockUniqueName: string, result: INameUniqueName): INameUniqueName => {
+  for (let grp of groups) {
+    if (grp.uniqueName === grpUniqueName) {
+      let st = grp.stocks.findIndex(p => p.uniqueName === stockUniqueName);
+      result = grp.stocks[st];
+      grp.stocks.splice(st, 1);
+      return result;
+    }
+
+    if (grp.childStockGroups && grp.childStockGroups.length > 0) {
+      result = removeStockItemAndReturnIt(grp.childStockGroups, grpUniqueName, stockUniqueName, result);
+      if (result) {
+        return result;
+      }
+    }
+  }
+  return result;
+};
+
+const addStockItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, stock: INameUniqueName) => {
+  for (let el of groups) {
+    if (el.uniqueName === parentUniqueName) {
+      el.isActive = true;
+      el.isOpen = true;
+      el.stocks.push({
+        name: stock.name,
+        uniqueName: stock.uniqueName
+      });
+      return;
+    }
+    if (el.childStockGroups && el.childStockGroups.length > 0) {
+      addStockItemAtIndex(el.childStockGroups, parentUniqueName, stock);
+    }
+  }
+  return;
 };
