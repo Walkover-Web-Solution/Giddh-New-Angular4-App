@@ -43,14 +43,14 @@
         <div class="row">
           <div class="col-xs-12" *ngIf="!editMode">
             <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()"
-                    [disabled]="customUnitForm.invalid">Save
+                    [disabled]="customUnitForm.invalid" [ladda]="createCustomStockInProcess$ | async">Save
             </button>
             <button type="submit" class="btn btn-sm btn-primary" (click)="clearFields()">Clear</button>
           </div>
 
           <div class="col-xs-12" *ngIf="editMode">
             <button type="submit" class="btn btn-sm btn-success" (click)="saveUnit()"
-                    [disabled]="customUnitForm.invalid">Update
+                    [disabled]="customUnitForm.invalid" [ladda]="updateCustomStockInProcess$ | async">Update
             </button>
             <button type="submit" class="btn btn-sm btn-primary" (click)="clearFields()">Cancel</button>
           </div>
@@ -79,7 +79,9 @@
             <td>{{item.parentStockUnit?.name}}</td>
             <td class="action">
               <button href class="btn btn-default" (click)="editUnit(item)">Edit</button>
-              <button href class="btn btn-default" (click)="deleteUnit(item.code)">Delete</button>
+              <button href class="btn btn-default"
+              [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item.code) > -1"
+              (click)="deleteUnit(item.code)">Delete</button>
             </td>
           </tr>
           </tbody>
