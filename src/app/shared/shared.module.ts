@@ -21,8 +21,9 @@ import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComp
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
-import { DatePickerModule } from 'angular-io-datepicker';
-import { OverlayModule } from 'angular-io-overlay';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { ElementViewContainerRef } from './helpers/directives/element.viewchild.directive';
+import { DigitsValidatorDirective } from './helpers/directives/digitsOnly.directive';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -32,7 +33,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
-    AccountAddComponent, UniqueNameDirective
+    AccountAddComponent, UniqueNameDirective, DigitsValidatorDirective, ElementViewContainerRef
   ],
   imports: [
     CommonModule,
@@ -50,11 +51,10 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
-    OverlayModule,
-    DatePickerModule
+    ClickOutsideModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
-    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, OverlayModule, DatePickerModule],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent]
 })

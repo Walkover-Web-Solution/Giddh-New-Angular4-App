@@ -164,9 +164,8 @@
                 <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                   (click)="changeCompany(cmp.uniqueName)">
                   <span tooltip-placement="right">{{ cmp.name }}</span>
-                  <i id="deleteCmp"
-                  *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
-                  class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                  <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
+                    class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                 </li>
               </ul>
             </li>
@@ -202,11 +201,13 @@
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog">
+<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog" (onHidden)= "onHide()">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
-      </company-add>
+       <ng-template element-view-container-ref>
+      </ng-template>
+       <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
+      </company-add> -->
     </div>
   </div>
 </div>

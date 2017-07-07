@@ -1,6 +1,7 @@
+import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Rx';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -13,6 +14,7 @@ import { GroupWithAccountsAction } from '../../services/actions/groupwithaccount
 import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 
 @Component({
   selector: 'app-header',
@@ -20,6 +22,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public session$: Observable<boolean>;
+  @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 
@@ -48,11 +51,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor(private loginAction: LoginActions,
-              private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private groupWithAccountsAction: GroupWithAccountsAction,
-              private router: Router) {
+  constructor(
+    private loginAction: LoginActions,
+    private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private router: Router
+  ,
+    private componentFactoryResolver: ComponentFactoryResolver) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -118,6 +124,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public showAddCompanyModal() {
+    this.loadAddCompanyComponent();
     this.addCompanyModal.show();
   }
 
@@ -162,6 +169,21 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
 
+  }
+  public onHide() {
+    this.store.dispatch(this.companyActions.ResetCompanyPopup());
+  }
+  public loadAddCompanyComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
+    let viewContainerRef = this.elementViewContainerRef.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
+      this.hideAddCompanyModal();
+    });
+    (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
+      this.hideCompanyModalAndShowAddAndManage();
+    });
   }
 
   public ngOnDestroy() {

@@ -28,6 +28,8 @@ export class SidebarAction {
       let data: BaseResponse<StockGroupResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this.store.dispatch(this.OpenGroup(data.body.uniqueName));
       }
       return { type: '' };
     });
@@ -40,7 +42,6 @@ export class SidebarAction {
       this.store.select(p => p.inventory.activeGroup).take(1).subscribe(a => {
         activeGroup = a;
       }).unsubscribe();
-      debugger;
       return this._inventoryService.GetStockDetails(activeGroup.uniqueName, action.payload);
     })
     .map(response => {
