@@ -176,20 +176,6 @@ export class GroupService {
     }).catch((e) => HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName }));
   }
 
-  public GetSubGroup(groupUniqueName: string): Observable<BaseResponse<GroupResponse[], string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
-    return this._http.get(GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
-      let data: BaseResponse<GroupResponse[], string> = res.json();
-      data.request = groupUniqueName;
-      data.queryString = { groupUniqueName };
-      return data;
-    }).catch((e) => HandleCatch<GroupResponse[], string>(e, groupUniqueName, { groupUniqueName }));
-  }
 
   public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 1000, showEmptyGroups: string = ''): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
     this.store.take(1).subscribe(s => {

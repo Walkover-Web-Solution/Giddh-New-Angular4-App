@@ -5,27 +5,36 @@
         <p class="lead mrT2">Search</p>
         <div class="form-group">
           <label>Select Groups</label>
-          <input type="text" />
+          <input type="text" class="form-control" />
         </div>
 
-        <div class="form-group">
+        <div class="form-group" (clickOutside)="showFromDatePicker=false;">
           <label>From date</label>
-          <p class="input-group">
-            <input type="text" />
+          <div class="input-group" >
+            <input type="text" name="from" [ngModel]="moment(fromDate).format('DD/MM/YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
+              class="form-control" />
             <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="fromDatePickerOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
+                    <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+          </div>
+          <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <datepicker name="fromDate" [(ngModel)]="fromDate" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
+          </div>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" (clickOutside)="showToDatePicker=false;">
           <label>To date</label>
-          <p class="input-group">
-            <input type="text" />
+          <div class="input-group">
+            <input type="text" name="to" [ngModel]="moment(toDate).format('DD/MM/YYYY')" (focus)="showToDatePicker = true;showFromDatePicker=false;"
+              class="form-control" />
             <span class="input-group-btn">
-                    <button type="button" class="btn btn-default" ng-click="toDatePickerOpen()"><i class="glyphicon glyphicon-calendar"></i></button>
-            </span>
-          </p>
+                    <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+
+          </div>
+          <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="true"></datepicker>
+          </div>
         </div>
 
         <div class="mrB4">
