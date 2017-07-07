@@ -33,6 +33,8 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
   switch (action.type) {
     case CompanyActions.CREATE_COMPANY:
       return Object.assign({}, state, { isCompanyCreationInProcess: true });
+    case CompanyActions.RESET_CREATE_COMPANY_FLAG:
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE:
       let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {

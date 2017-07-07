@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "An Angular Webpack Starter kit featuring Angular (Router, Http, Forms, Services, Tests, E2E, Coverage), Karma, Protractor, Jasmine, Istanbul, TypeScript, and Webpack by AngularClass",
   "keywords": [
     "angular",
@@ -166,7 +166,9 @@
     "karma-remap-coverage": "^0.1.4",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "~2.0.3",
+    "moment": "^2.18.1",
     "ncp": "^2.0.0",
+    "ng-click-outside": "^2.3.5",
     "ng-router-loader": "^2.1.0",
     "ng2-ui-auth": "^6.2.0",
     "ngc-webpack": "~2.0.0",

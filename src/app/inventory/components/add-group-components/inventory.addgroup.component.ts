@@ -58,7 +58,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
           //
         } else {
-          this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+          if (this.groupUniqueName) {
+            this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+          }
         }
       });
     });
@@ -180,7 +182,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     if (!this.addGroupForm.value.isSelfParent) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.uniqueName;
     }
-    // this.router.navigate(['/pages', 'inventory', 'add-group', 'soda123']);
+    this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
+    this.router.navigate(['/pages', 'inventory', 'add-group']);
   }
 
   public removeGroup() {

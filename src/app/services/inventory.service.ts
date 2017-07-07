@@ -242,19 +242,19 @@ export class InventoryService {
   /**
    * Update Stock
    */
-  public UpdateStock(model: CreateStockRequest, stockGroupUniqueName: string): Observable<BaseResponse<StockDetailResponse, CreateStockRequest>> {
+  public UpdateStock(model: CreateStockRequest, stockGroupUniqueName: string, stockUniqueName: string): Observable<BaseResponse<StockDetailResponse, CreateStockRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(INVENTORY_API.UPDATE_STOCK.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName), model).map((res) => {
+    return this._http.put(INVENTORY_API.UPDATE_STOCK.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName).replace(':stockUniqueName', stockUniqueName), model).map((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
       data.request = model;
-      data.queryString = { stockGroupUniqueName };
+      data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
-    }).catch((e) => HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, { stockGroupUniqueName }));
+    }).catch((e) => HandleCatch<StockDetailResponse, CreateStockRequest>(e, model, { stockGroupUniqueName, stockUniqueName }));
   }
 
   /**

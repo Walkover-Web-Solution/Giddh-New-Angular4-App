@@ -165,7 +165,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
       if (gData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        groupArray.forEach(grp => {
+        for (let grp of groupArray) {
           if (grp.isActive) {
             let newData = new GroupsWithAccountsResponse();
             newData.accounts = [];
@@ -176,15 +176,16 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             newData.name = gData.body.name;
             newData.synonyms = gData.body.synonyms;
             newData.uniqueName = gData.body.uniqueName;
-            grp.groups.push(newData);
-            return;
+            grp.groups.push((newData as IGroupsWithAccounts));
+            break;
           }
           if (grp.groups) {
             if (AddAndActiveGroupFunc(grp.groups, gData)) {
-              return;
+              grp.isOpen = true;
+              break;
             }
           }
-        });
+        }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray
         });
@@ -303,7 +304,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
     case AccountsAction.RESET_ACTIVE_ACCOUNT:
       return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME:
-    return Object.assign({}, state, { fetchingAccUniqueName: true, isAccountNameAvailable: null });
+      return Object.assign({}, state, { fetchingAccUniqueName: true, isAccountNameAvailable: null });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE:
       let responseData: BaseResponse<AccountResponse, string> = action.payload;
       if (responseData.status === 'success') {
@@ -314,18 +315,18 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return state;
       }
-      case GroupWithAccountsAction.GET_GROUP_UNIQUENAME:
+    case GroupWithAccountsAction.GET_GROUP_UNIQUENAME:
       return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
-      case GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE:
-        let resData: BaseResponse<AccountResponse, string> = action.payload;
-        if (resData.status === 'success') {
-          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
-        } else {
-          if (resData.code === 'GROUP_NOT_FOUND') {
-            return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
-          }
-          return state;
+    case GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE:
+      let resData: BaseResponse<AccountResponse, string> = action.payload;
+      if (resData.status === 'success') {
+        return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
+      } else {
+        if (resData.code === 'GROUP_NOT_FOUND') {
+          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
         }
+        return state;
+      }
     default:
       return state;
   }
@@ -376,15 +377,15 @@ const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseRespons
       newData.name = gData.body.name;
       newData.synonyms = gData.body.synonyms;
       newData.uniqueName = gData.body.uniqueName;
+      grp.isOpen = true;
       grp.groups.push(newData);
       myChildElementIsOpen = true;
       return myChildElementIsOpen;
     }
     if (grp.groups) {
       if (AddAndActiveGroupFunc(grp.groups, gData)) {
+        grp.isOpen = true;
         return true;
-      } else {
-        return false;
       }
     }
   }
