@@ -16,7 +16,7 @@ import {
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -30,13 +30,14 @@ import {
 } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'account-operations',
   templateUrl: './account-operations.component.html',
   // changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AccountOperationsComponent implements OnInit, AfterViewInit {
+export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
@@ -95,11 +96,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       return $('<span>' + data.text + '</span>');
     }
   };
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private companyActions: CompanyActions, private accountsAction: AccountsAction) {
 
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup);
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.activeGroupSelected$ = this.store.select(state => {
       if (state.groupwithaccounts.activeAccount) {
         if (state.groupwithaccounts.activeAccountTaxHierarchy) {
@@ -112,18 +114,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
       }
 
       return [];
-    });
-    this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress);
-    this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith);
-    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith);
-    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts);
-    this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy);
-    this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy);
-    this.companyTaxes$ = this.store.select(state => state.company.taxes);
-    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen);
-    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount);
-    this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName);
-    this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable);
+    }).takeUntil(this.destroyed$);
+    this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress).takeUntil(this.destroyed$);
+    this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).takeUntil(this.destroyed$);
+    this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).takeUntil(this.destroyed$);
+    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
+    this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).takeUntil(this.destroyed$);
+    this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).takeUntil(this.destroyed$);
+    this.companyTaxes$ = this.store.select(state => state.company.taxes).takeUntil(this.destroyed$);
+    this.showAddAccountForm$ = this.store.select(state => state.groupwithaccounts.addAccountOpen).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
+    this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).takeUntil(this.destroyed$);
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
       if (state.company.taxes) {
@@ -155,7 +157,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
         }
       }
       return arr;
-    });
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -496,4 +498,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit {
     this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
     this.hideDeleteAccountModal();
   }
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
+
 }

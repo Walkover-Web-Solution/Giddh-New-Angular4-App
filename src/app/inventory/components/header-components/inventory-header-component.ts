@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -23,13 +23,13 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 </div>
   `
 })
-export class InventoryHearderComponent implements OnInit {
+export class InventoryHearderComponent implements  OnDestroy, OnInit {
   public activeGroup$: Observable<StockGroupResponse>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private router: Router, private store: Store<AppState>, private inventoryAction: InventoryAction) {}
   public ngOnInit() {
     // get activeGroup
-    this.activeGroup$ = this.store.select(s => s.inventory.activeGroup);
+    this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).takeUntil(this.destroyed$);
   }
 
   public goToAddGroup() {
@@ -40,5 +40,9 @@ export class InventoryHearderComponent implements OnInit {
     let groupName = null;
     this.activeGroup$.take(1).subscribe(s => groupName = s.uniqueName);
     this.router.navigate(['/pages', 'inventory', 'add-group', groupName, 'add-stock']);
+  }
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
