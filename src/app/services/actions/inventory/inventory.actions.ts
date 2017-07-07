@@ -115,6 +115,7 @@ export class InventoryAction {
       } else {
         this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock']);
         this._toasty.successToast('Stock Created Successfully');
+        return this.resetActiveStock();
       }
       return { type: '' };
     });

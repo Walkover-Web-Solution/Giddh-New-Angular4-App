@@ -30,7 +30,7 @@
 
             <div class="form-group col-xs-3 pdR">
               <label>Open. Qty</label>
-              <input type="text" name="openingQuantity" class="form-control" formControlName="openingQuantity">
+              <input type="text" name="openingQuantity" (change)="calCulateRate()" class="form-control" formControlName="openingQuantity">
             </div>
 
             <div class="form-group col-xs-3 pdL">
@@ -40,7 +40,7 @@
 
             <div class="form-group col-xs-3 pdL pdR0 ">
               <label>Amount</label>
-              <input type="text" name="openingAmount" class="form-control" formControlName="openingAmount">
+              <input type="text" name="openingAmount" (change)="calCulateRate()" class="form-control" formControlName="openingAmount">
             </div>
 
           </div>
@@ -236,15 +236,15 @@
   <div class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd pdT0">
 
-      <button type="submit" *ngIf="!isUpdatingStockForm" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid">Save</button>
+      <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid">Save</button>
 
-      <button type="button" *ngIf="isUpdatingStockForm" class="btn btn-md btn-success mrR1" (click)="update()" [disabled]="addStockForm.invalid">Update</button>
+      <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-md btn-success mrR1" (click)="update()" [disabled]="addStockForm.invalid">Update</button>
 
       <button type="button" (click)="resetStockForm()" class="btn btn-md btn-primary">
         Cancel
       </button>
 
-      <button *ngIf="isUpdatingStockForm" class="btn btn-md btn-danger pull-right gico-wrap" (click)="deleteStock()">
+      <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-md btn-danger pull-right gico-wrap" (click)="deleteStock()">
 			<span class="icon-trash"></span>
 			Delete Stock
 		</button>

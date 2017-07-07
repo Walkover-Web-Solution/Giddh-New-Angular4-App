@@ -30,18 +30,18 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public showToDatePicker: boolean;
   public toDate: Date;
   public fromDate: Date;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
   public moment = moment;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction, private stockReportActions: StockReportActions, private fb: FormBuilder) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport);
+    private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
+    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
+  // constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
+  //   private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
+  //   this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
 
