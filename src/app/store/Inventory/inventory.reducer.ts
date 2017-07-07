@@ -29,6 +29,9 @@ export interface InventoryState {
   isStockUpdateInProcess: boolean;
   isStockDeleteInProcess: boolean;
   showLoadingForStockEditInProcess: boolean;
+  createCustomStockInProcess: boolean;
+  updateCustomStockInProcess: boolean;
+  deleteCustomStockInProcessCode: any[];
 }
 
 const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStocksHierarchyMinItem[] => {
@@ -61,7 +64,10 @@ const initialState: InventoryState = {
   isStockAddInProcess: false,
   isStockUpdateInProcess: false,
   isStockDeleteInProcess: false,
-  showLoadingForStockEditInProcess: false
+  showLoadingForStockEditInProcess: false,
+  createCustomStockInProcess: false,
+  updateCustomStockInProcess: false,
+  deleteCustomStockInProcessCode: []
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -392,12 +398,21 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
      * */
     case CUSTOM_STOCK_UNIT_ACTIONS.GET_STOCK_UNIT_RESPONSE:
       return Object.assign({}, state, { stockUnits: action.payload });
+    case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
+      return Object.assign({}, state, { createCustomStockInProcess: true });
     case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: [...state.stockUnits, action.payload] });
+      return Object.assign({}, state, { stockUnits: [...state.stockUnits, action.payload], createCustomStockInProcess: false });
+    case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
+      return Object.assign({}, state, { updateCustomStockInProcess: true });
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: state.stockUnits.map(p => p.code === action.payload ? action.payload : p) });
+      return Object.assign({}, state, { stockUnits: state.stockUnits.map(p => p.code === action.payload.code ? action.payload.unit : p), updateCustomStockInProcess: false });
+    case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
+      return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload] });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: state.stockUnits.filter(p => p.code !== action.payload) });
+      return Object.assign({}, state, {
+        stockUnits: state.stockUnits.filter(p => p.code !== action.payload),
+        deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== action.payload)
+      });
     /*
      * Inventory Stock Report
      * */

@@ -48,8 +48,7 @@
           <div class="row mr0 col-xs-6 pdL0 pdR">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Purchase Acc</label>
-              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options"
-              formControlName="purchaseAccountUniqueName" [value]="addStockForm.controls['purchaseAccountUniqueName'].value"></select2>
+              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options" formControlName="purchaseAccountUniqueName" [value]="addStockForm.controls['purchaseAccountUniqueName'].value"></select2>
             </div>
 
             <div class="row mrB">
@@ -83,8 +82,7 @@
           <div class="row mr0 col-xs-6 pdL pdR0">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Sales Acc</label>
-              <select2 [data]="salesAccountsDropDown$ | async" [options]="options"
-              formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>
+              <select2 [data]="salesAccountsDropDown$ | async" [options]="options" formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>
             </div>
 
 
@@ -236,15 +234,18 @@
   <div class="col-xs-12 col-md-9 col-lg-7">
     <div class="pd pdT0">
 
-      <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-md btn-success mrR1 " [disabled]="addStockForm.invalid">Save</button>
+      <button type="submit" *ngIf="!isUpdatingStockForm" [ladda]="isStockAddInProcess$ | async" (click)="submit()" class="btn btn-md btn-success mrR1 "
+        [disabled]="addStockForm.invalid">Save</button>
 
-      <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-md btn-success mrR1" (click)="update()" [disabled]="addStockForm.invalid">Update</button>
+      <button type="button" *ngIf="isUpdatingStockForm" [ladda]="isStockUpdateInProcess$ | async" class="btn btn-md btn-success mrR1"
+        (click)="update()" [disabled]="addStockForm.invalid">Update</button>
 
       <button type="button" (click)="resetStockForm()" class="btn btn-md btn-primary">
         Cancel
       </button>
 
-      <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-md btn-danger pull-right gico-wrap" (click)="deleteStock()">
+      <button *ngIf="isUpdatingStockForm" [ladda]="isStockDeleteInProcess$ | async" class="btn btn-md btn-danger pull-right gico-wrap"
+        (click)="deleteStock()">
 			<span class="icon-trash"></span>
 			Delete Stock
 		</button>
@@ -256,28 +257,28 @@
 
 <div *ngIf="showLoadingForStockEditInProcess$ | async">
 
-    <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
+  <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
 
-      <div class="">
-        <div class="ng-busy-default-wrapper">
-          <div class="ng-busy-default-sign">
-            <div class="ng-busy-default-spinner">
-              <div class="bar1"></div>
-              <div class="bar2"></div>
-              <div class="bar3"></div>
-              <div class="bar4"></div>
-              <div class="bar5"></div>
-              <div class="bar6"></div>
-              <div class="bar7"></div>
-              <div class="bar8"></div>
-              <div class="bar9"></div>
-              <div class="bar10"></div>
-              <div class="bar11"></div>
-              <div class="bar12"></div>
-            </div>
-            <div class="ng-busy-default-text">Loading...</div>
+    <div class="">
+      <div class="ng-busy-default-wrapper">
+        <div class="ng-busy-default-sign">
+          <div class="ng-busy-default-spinner">
+            <div class="bar1"></div>
+            <div class="bar2"></div>
+            <div class="bar3"></div>
+            <div class="bar4"></div>
+            <div class="bar5"></div>
+            <div class="bar6"></div>
+            <div class="bar7"></div>
+            <div class="bar8"></div>
+            <div class="bar9"></div>
+            <div class="bar10"></div>
+            <div class="bar11"></div>
+            <div class="bar12"></div>
           </div>
+          <div class="ng-busy-default-text">Loading...</div>
         </div>
       </div>
     </div>
   </div>
+</div>
