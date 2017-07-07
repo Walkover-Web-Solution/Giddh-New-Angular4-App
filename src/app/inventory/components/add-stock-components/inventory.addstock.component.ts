@@ -42,6 +42,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public editModeForLinkedStokes: boolean = false;
   public createStockSuccess$: Observable<boolean>;
   public activeStock$: Observable<StockDetailResponse>;
+  public isStockAddInProcess$: Observable<boolean>;
+  public isStockUpdateInProcess$: Observable<boolean>;
+  public isStockDeleteInProcess$: Observable<boolean>;
   public showLoadingForStockEditInProcess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -53,6 +56,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).takeUntil(this.destroyed$);
     this.activeStock$ = this.store.select(s => s.inventory.activeStock).takeUntil(this.destroyed$);
     this.createStockSuccess$ = this.store.select(s => s.inventory.createStockSuccess).takeUntil(this.destroyed$);
+    this.isStockAddInProcess$ = this.store.select(s => s.inventory.isStockAddInProcess).takeUntil(this.destroyed$);
+    this.isStockUpdateInProcess$ = this.store.select(s => s.inventory.isStockUpdateInProcess).takeUntil(this.destroyed$);
+    this.isStockDeleteInProcess$ = this.store.select(s => s.inventory.isStockDeleteInProcess).takeUntil(this.destroyed$);
     this.showLoadingForStockEditInProcess$ = this.store.select(s => s.inventory.showLoadingForStockEditInProcess).takeUntil(this.destroyed$);
   }
   public ngOnInit() {
@@ -68,6 +74,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (this.groupUniqueName) {
         this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
       }
+      // if (this.stockUniqueName) {
+      //   this.store.select(p => p.inventory).subscribe(a => {
+      //     if (a.activeGroup && !a.activeStock) {
+      //       this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName));
+      //     }
+      //   });
+      // }
     });
 
     // get all stocks
@@ -154,7 +167,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
 
     // subscribe active stock if availabel fill form
-    this.activeStock$.delay(1000).subscribe(a => {
+    this.activeStock$.delay(1000).distinctUntilChanged((x, y) => {
+      if (!x && !y) {
+        return true;
+      }
+      return _.isEqual(x, y);
+    }).subscribe(a => {
       if (a) {
         this.isUpdatingStockForm = true;
         this.addStockForm.patchValue({
@@ -222,8 +240,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   // add purchaseUnitRates controls
   public addPurchaseUnitRates(i: number, item?: IUnitRateItem) {
-    const purchaseUnitRatesControls = this.addStockForm.get['purchaseUnitRates'] as FormArray;
-    const control = this.addStockForm.get['purchaseUnitRates'] as FormArray;
+    const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
+    const control = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
 
     // add purchaseUnitRates to the list
     if (item) {
@@ -284,9 +302,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public ngAfterViewInit() {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     manufacturingDetailsContorl.disable();
-    // calculate rate on changes of form values
-    this.addStockForm.controls['openingQuantity'].valueChanges.subscribe(() => this.calCulateRate());
-    this.addStockForm.controls['openingAmount'].valueChanges.subscribe(() => this.calCulateRate());
   }
   // generate uniquename
   public generateUniqueName() {
@@ -313,10 +328,10 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let quantity = this.addStockForm.value.openingQuantity;
     let amount = this.addStockForm.value.openingAmount;
 
-    if (Math.sign(quantity) !== Math.sign(amount)) {
-     this.addStockForm.controls['stockRate'].reset();
-     return;
-    }
+    // if (Math.sign(quantity) !== Math.sign(amount)) {
+    //  this.addStockForm.controls['stockRate'].reset();
+    //  return;
+    // }
     if (quantity && amount) {
       this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(3) });
     } else if (quantity === 0 || amount === 0) {
@@ -431,6 +446,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public resetStockForm() {
+    let activeStock: StockDetailResponse = null;
+    this.activeStock$.take(1).subscribe((a) => activeStock = a);
+
     const purchaseUnitRatesControls = this.addStockForm.controls['purchaseUnitRates'] as FormArray;
     const saleUnitRatesControls = this.addStockForm.controls['saleUnitRates'] as FormArray;
 
@@ -445,6 +463,49 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     linkedStocksControls.controls = [];
     this.addStockForm.reset();
+
+    if (activeStock) {
+      this.isUpdatingStockForm = true;
+      this.addStockForm.patchValue({
+        name: activeStock.name, uniqueName: activeStock.uniqueName,
+        stockUnitCode: activeStock.stockUnit ? activeStock.stockUnit.code : '', openingQuantity: activeStock.openingQuantity,
+        openingAmount: activeStock.openingAmount
+      });
+
+      if (activeStock.purchaseAccountDetails) {
+        this.addStockForm.patchValue({ purchaseAccountUniqueName: activeStock.purchaseAccountDetails.accountUniqueName });
+
+        // render unit rates
+        activeStock.purchaseAccountDetails.unitRates.map((item, i) => {
+          this.addPurchaseUnitRates(i, item);
+        });
+      }
+
+      if (activeStock.salesAccountDetails) {
+        this.addStockForm.patchValue({ salesAccountUniqueName: activeStock.salesAccountDetails.accountUniqueName });
+
+        // render unit rates
+        activeStock.salesAccountDetails.unitRates.map((item, i) => {
+          this.addSaleUnitRates(i, item);
+        });
+      }
+
+      // if manufacturingDetails is avilable
+      if (activeStock.manufacturingDetails) {
+        this.addStockForm.patchValue({
+          isFsStock: true,
+          manufacturingDetails: {
+            manufacturingQuantity: activeStock.manufacturingDetails.manufacturingQuantity,
+            manufacturingUnitCode: activeStock.manufacturingDetails.manufacturingUnitCode
+          }
+        });
+        activeStock.manufacturingDetails.linkedStocks.map((item, i) => {
+          this.addItemInLinkedStocks(item, i);
+        });
+      } else {
+        this.addStockForm.patchValue({ isFsStock: false });
+      }
+    }
   }
 
   // submit form
