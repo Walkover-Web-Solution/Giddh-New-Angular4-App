@@ -45,6 +45,7 @@ import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import { InventoryModule } from './inventory/inventory.module';
+import { SearchModule } from './search/search.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -96,6 +97,7 @@ if (ENV === 'development') {
     AboutModule,
     HomeModule,
     InventoryModule,
+    SearchModule,
     LoginModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),

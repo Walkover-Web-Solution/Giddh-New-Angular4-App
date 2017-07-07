@@ -30,17 +30,18 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public showToDatePicker: boolean;
   public toDate: Date;
   public fromDate: Date;
+  public moment = moment;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  public moment = moment;
 
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction, private stockReportActions: StockReportActions, private fb: FormBuilder) {
-    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
+
+    this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
+
     this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
@@ -82,10 +83,10 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
   }
-    public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-      }
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
+  }
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {
       this.store.dispatch(this.inventoryAction.showLoaderForStock());
