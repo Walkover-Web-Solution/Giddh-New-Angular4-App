@@ -28,7 +28,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
+  public isAddNewGroupInProcess$: Observable<boolean>;
   public isUpdateGroupInProcess$: Observable<boolean>;
+  public isDeleteGroupInProcess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -40,7 +42,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).takeUntil(this.destroyed$);
+    this.isAddNewGroupInProcess$ = this.store.select(state => state.inventory.isAddNewGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$);
+    this.isDeleteGroupInProcess$ = this.store.select(state => state.inventory.isDeleteGroupInProcess).takeUntil(this.destroyed$);
 
     this.store.take(1).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
