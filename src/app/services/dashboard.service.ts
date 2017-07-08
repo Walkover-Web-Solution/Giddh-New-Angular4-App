@@ -15,7 +15,7 @@ import { HandleCatch } from './catchManager/catchmanger';
 import { GroupSharedWithResponse, GroupResponse, GroupCreateRequest, ShareGroupRequest, MoveGroupRequest, FlattenGroupsAccountsResponse, GroupsTaxHierarchyResponse } from '../models/api-models/Group';
 import { AppState } from '../store/roots';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
-import { DashboardResponse } from '../models/api-models/Dashboard';
+import { DashboardResponse, GroupHistoryResponse, GroupHistoryRequest } from '../models/api-models/Dashboard';
 
 @Injectable()
 export class DashboardService {
@@ -38,6 +38,21 @@ export class DashboardService {
       data.request = '';
       return data;
     }).catch((e) => HandleCatch<DashboardResponse, string>(e, '', { fromDate, toDate, interval, refresh }));
+  }
+
+  public GetGroupHistory(model: GroupHistoryRequest, fromDate :string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(DASHBOARD_API.GROUP_HISTORY.replace(':companyUniqueName', this.companyUniqueName).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':interval', interval).replace(':refresh', refresh.toString()), model).map((res) => {
+      let data: BaseResponse<GroupHistoryResponse, GroupHistoryRequest> = res.json();
+      data.request = model;
+      data.queryString = { fromDate, toDate, interval, refresh };
+      return data;
+    }).catch((e) => HandleCatch<GroupHistoryResponse, GroupHistoryRequest>(e, model, { fromDate, toDate, interval, refresh }));
   }
 
 }
