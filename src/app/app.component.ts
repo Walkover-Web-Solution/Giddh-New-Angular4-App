@@ -1,16 +1,20 @@
+import { Router, ActivatedRoute } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
 import {
   Component,
   OnInit,
-  ViewEncapsulation
+  ViewEncapsulation,
+  AfterViewInit
 } from '@angular/core';
+import { Location } from '@angular/common';
+
 import { Observable } from 'rxjs/Observable';
 
 import { HomeState, HomeActions } from './services';
-import { AppState } from './reducers/roots';
 import { Store } from '@ngrx/store';
+import { AppState } from './store/roots';
 
 /**
  * App Component
@@ -30,13 +34,38 @@ import { Store } from '@ngrx/store';
     <router-outlet></router-outlet>
   `
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:no-empty
-  constructor() {
+  constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) {
+
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() { }
+  public ngAfterViewInit() {
+    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe((companyName) => {
+      // debugger;
+      if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
+        if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+          // debugger;
+          let path = [];
+          let parament = {};
+          this.activatedRoute.firstChild.firstChild.url.take(1).subscribe(p => {
+            // debugger;
+            if (p.length > 0) {
+              path = [p[0].path];
+              parament = { queryParams: p[0].parameters };
+            }
+          });
+
+          this.router.navigateByUrl('/pages/dummy', { skipLocationChange: true }).then(() => {
+            this.router.navigate(path, parament);
+            // this.router.navigate();
+          });
+        }
+      }
+    });
+  }
 
 }
 

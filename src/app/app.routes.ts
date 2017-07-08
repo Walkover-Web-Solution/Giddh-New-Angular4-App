@@ -19,6 +19,7 @@ export const ROUTES: Routes = [
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
       { path: 'search', component: SearchComponent, canActivate: [NeedsAuthentication] },
+      { path: 'dummy', component: AboutComponent },
     ]
   }
 ];
