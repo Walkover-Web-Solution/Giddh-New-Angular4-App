@@ -19,7 +19,7 @@ export class SearchActions {
     .ofType(SearchActions.SEARCH_REQUEST)
     .switchMap(action => {
       return this._searchService.Search(action.payload)
-        .map((r) => this.validateResponse<SearchRequest, SearchResponse>(r, {
+        .map((r) => this.validateResponse<SearchRequest, SearchResponse[]>(r, {
           type: SearchActions.SEARCH_RESPONSE,
           payload: r.body
         }));
