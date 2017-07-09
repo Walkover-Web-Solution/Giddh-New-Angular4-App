@@ -1,16 +1,12 @@
 import { CompanyActions } from './../../../../services/actions/company.actions';
-import { CompanyService } from './../../../../services/companyService.service';
-import { GeoLocationSearch } from './../../../../models/other-models/GeoLocationSearch';
 import { LocationService } from './../../../../services/location.service';
 import { CompanyRequest } from './../../../../models/api-models/Company';
-import { mobileValidator } from './../../../helpers/customValidationHelper';
 import { SignupWithMobile, VerifyMobileModel } from './../../../../models/api-models/loginModels';
-import { Observable, Subscription, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { VerifyMobileActions } from './../../../../services/actions/verifyMobile.actions';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { FormBuilder } from '@angular/forms';
-import { Component, OnInit, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 import { StateDetailsRequest } from '../../../../models/api-models/Company';
 
@@ -32,8 +28,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public dataSource: Observable<any>;
   public sub: Subscription;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService) { }
+              private _location: LocationService) {
+  }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
@@ -79,10 +77,12 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         }
       });
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   /**
    * addNumber
    */
@@ -121,6 +121,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public closeModalAndShowAddMangeModal() {
     this.closeCompanyModalAndShowAddManege.emit();
   }
+
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration
     let d, dateString, randomGenerate, strings;
@@ -132,11 +133,13 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     strings = [comnanyName, city, dateString, randomGenerate];
     return strings.join('');
   }
+
   private removeSpecialCharacters(str) {
     let finalString;
     finalString = str.replace(/[^a-zA-Z0-9]/g, '');
     return finalString.substr(0, 6).toLowerCase();
   }
+
   private getSixCharRandom() {
     return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
   }

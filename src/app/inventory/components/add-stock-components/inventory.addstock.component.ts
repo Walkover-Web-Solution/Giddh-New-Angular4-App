@@ -1,22 +1,25 @@
 import { AppState } from '../../../store/roots';
-import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
-import { Subscription } from 'rxjs/Rx';
 import { Observable } from 'rxjs/Observable';
-import { FormGroup, FormBuilder, Validators, FormArray, Validator } from '@angular/forms';
-import { uniqueNameValidator, stockManufacturingDetailsValidator, digitsOnly, decimalDigits, equalSigns } from '../../../shared/helpers/customValidationHelper';
-import { StockUnitRequest, CreateStockRequest, StockGroupResponse, StockDetailResponse } from '../../../models/api-models/Inventory';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  decimalDigits,
+  digitsOnly,
+  stockManufacturingDetailsValidator,
+  uniqueNameValidator
+} from '../../../shared/helpers/customValidationHelper';
+import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import * as  _ from 'lodash';
 import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { IStockItemDetail, IAccountDetails, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
+import { IStockItemDetail, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { Subject } from 'rxjs/Subject';
 
 @Component({
