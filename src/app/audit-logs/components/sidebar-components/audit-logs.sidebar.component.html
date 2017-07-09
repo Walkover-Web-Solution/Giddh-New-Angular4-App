@@ -1,0 +1,105 @@
+<h1 class="page-title" style="margin-left:0; margin-bottom:15px;">
+  Apply Log Filters</h1>
+<div class="clearfix mrT2">
+  <label>Filter By:</label>
+  <select2 [data]="vm.dateOptions" [options]="vm.options" [(value)]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>
+</div>
+
+<div class="clearfix mrT2" (clickOutside)="vm.showFromDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
+  <label>From date</label>
+  <div class="input-group">
+    <input type="text" name="from" [ngModel]="vm.moment(vm.selectedFromDate).format('DD/MM/YYYY')" (focus)="vm.showFromDatePicker = true; showToDatePicker=false;"
+      class="form-control" />
+    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="vm.showFromDatePicker = !vm.showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+  </div>
+  <div *ngIf="vm.showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+    <datepicker name="fromDate" [(ngModel)]="vm.selectedFromDate" (selectionDone)="vm.showFromDatePicker=!vm.showFromDatePicker"
+      [showWeeks]="true"></datepicker>
+  </div>
+</div>
+
+<div class="clearfix mrT2" (clickOutside)="vm.showToDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
+  <label>To date</label>
+  <div class="input-group">
+    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedToDate).format('DD/MM/YYYY')" (focus)="vm.showToDatePicker = true;showFromDatePicker=false;"
+      class="form-control" />
+    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="vm.showToDatePicker = !vm.showToDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+
+  </div>
+  <div *ngIf="vm.showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+    <datepicker name="toDate" [(ngModel)]="vm.selectedToDate" (selectionDone)="vm.showToDatePicker=!vm.showToDatePicker" [showWeeks]="true"></datepicker>
+  </div>
+</div>
+
+<div class="clearfix mrT2" (clickOutside)="vm.showLogDatePicker=false;" *ngIf="vm.selectedDateOption == '0'">
+  <!-- <label>Select Log Date or Entry Date</label> -->
+  <div class="row" style="margin-left:0">
+    <p class="input-group pull-left" for="entryDate">
+      <label>Entry Date
+          			<input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.selectedEntity" value="entryDate" />
+          		</label>
+    </p>
+    <p class="input-group pull-left mrL2" for="logDate">
+      <label>Log Date
+          			<input id="logDate" type="radio" name="logDate"  [(ngModel)]="vm.selectedEntity" value="logDate" />
+          		</label>
+    </p>
+    <br/>
+  </div>
+
+  <div class="input-group">
+    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedLogDate).format('DD/MM/YYYY')" (focus)="vm.showLogDatePicker = true"
+      class="form-control" />
+    <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" (click)="vm.showLogDatePicker = !vm.showLogDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
+                  </span>
+
+  </div>
+  <div *ngIf="vm.showLogDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+    <datepicker name="toDate" [(ngModel)]="vm.selectedLogDate" (selectionDone)="vm.showLogDatePicker=!vm.showLogDatePicker" [showWeeks]="true"></datepicker>
+  </div>
+</div>
+
+<div class="clearfix mrT2">
+  <label>Select Operation</label>
+  <!-- <input type="text" class="form-control" /> -->
+  <select2 [data]="vm.filters" [options]="vm.options" [(value)]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>
+  <!-- <ui-select ng-model="options.selectedOption" theme="bootstrap">
+      <ui-select-match placeholder="Select Option">
+        <span>{{$select.selected}}</span>
+      </ui-select-match>
+      <ui-select-choices repeat="option in options.filters | filter: $select.search ">
+        <span ng-bind="option"></span>
+      </ui-select-choices>
+    </ui-select> -->
+</div>
+
+<div class="clearfix mrT2">
+  <label>Select Entity</label>
+  <select2 [data]="vm.entities" [options]="vm.options" [(value)]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>
+</div>
+
+<div class="clearfix mrT2">
+  <label>Select Account</label>
+  <select2 [data]="vm.accounts$ | async" [options]="vm.options" [(value)]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>
+</div>
+
+<div class="clearfix mrT2">
+  <label>Select Group</label>
+  <input type="text" class="form-control" />
+</div>
+
+
+<div class="clearfix mrT2" ng-if="canManageCompany">
+  <label>Select User</label>
+  <input type="text" class="form-control" />
+</div>
+
+
+<button class="btn btn-warning pull-left mrT2 mrL" ng-click="resetFilters()">Reset</button>
+
+<br/>

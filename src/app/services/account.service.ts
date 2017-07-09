@@ -219,19 +219,19 @@ export class AccountService implements OnInit {
     }).catch((e) => HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName }));
   }
 
-  public GetFlattenAccounts(q: string, refresh: string): Observable<BaseResponse<FlattenAccountsResponse[], string>> {
+  public GetFlattenAccounts(q?: string, page?: string, count?: string): Observable<BaseResponse<FlattenAccountsResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':refresh', refresh)).map((res) => {
-      let data: BaseResponse<FlattenAccountsResponse[], string> = res.json();
+    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q || '').replace(':count', count || '').replace(':page', page || '')).map((res) => {
+      let data: BaseResponse<FlattenAccountsResponse, string> = res.json();
       data.request = '';
-      data.queryString = { q, refresh };
+      data.queryString = { q, page, count };
       return data;
-    }).catch((e) => HandleCatch<FlattenAccountsResponse[], string>(e));
+    }).catch((e) => HandleCatch<FlattenAccountsResponse, string>(e));
   }
 
   public GetFlatternAccountsOfGroup(groupUniqueNames: { groupUniqueNames: string[] }, count?: any, q?: string, page?: any): Observable<BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }>> {
