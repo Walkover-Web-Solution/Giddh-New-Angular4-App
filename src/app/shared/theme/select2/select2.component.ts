@@ -64,7 +64,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
   public check: boolean = false;
   public style: string = `CSS`;
 
-  constructor(public renderer: Renderer, public cd: ChangeDetectorRef ) {
+  constructor(public renderer: Renderer, public cd: ChangeDetectorRef) {
   }
   // tslint:disable-next-line:no-empty
   public onChangeCb: (_: any) => void = (e) => { };
@@ -134,12 +134,20 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
       this.setElementValue(this.value);
     }
 
-    this.element.on('select2:select select2:unselect', () => {
-      this.onChangeCb(that.element.val());
-      this.value = that.element.val();
-      that.valueChanged.emit({
-        value: that.element.val()
-      });
+    this.element.on('select2:select select2:unselect ', (event) => {
+      if (event.type === 'select2:unselect') {
+        this.onChangeCb(null);
+        this.value = null;
+        that.valueChanged.emit({
+          value: null
+        });
+      } else {
+        this.onChangeCb(that.element.val());
+        this.value = that.element.val();
+        that.valueChanged.emit({
+          value: that.element.val()
+        });
+      }
     });
   }
 
