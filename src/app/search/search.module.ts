@@ -6,13 +6,15 @@ import { SearchComponent } from './search.component';
 import { SearchRoutingModule } from './search.routing.module';
 import { SearchSidebarComponent } from './components/sidebar-components/search.sidebar.component';
 import { SearchGridComponent } from './components/search-grid/search-grid.component';
+import { SearchFilterComponent } from './components/search-filter/search-filter.component';
 
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
     SearchComponent,
     SearchSidebarComponent,
-    SearchGridComponent
+    SearchGridComponent,
+    SearchFilterComponent
   ],
   exports: [
     SearchComponent,

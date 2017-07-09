@@ -1,0 +1,64 @@
+<section class="greyBg pd2">
+
+  <p class="lead">Filter by:</p>
+  <form [formGroup]="searchQueryForm" novalidate name="searchQueryForm" id="searchQueryForm" class="">
+    <!-- repeater -->
+    <div class="clearfix form-group" formArrayName="searchQuery"
+         *ngFor="let item of searchQueryForm.get('searchQuery')['controls'];let i = index">
+      <div [formGroupName]="i">
+        <label>Get those account whose</label>
+        <span>
+    <select class="form-control" formControlName="queryType" required>
+      <option *ngFor="let queryType of queryTypes" value="{{queryType.uniqueName}}">{{queryType.name}}</option>
+    </select>
+      </span>
+        <label *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' ">balance
+          &nbsp;</label>
+        <label>is</label>
+        <span>
+        <select class="form-control" formControlName="queryDiffer" required>
+      <option *ngFor="let queryDiffer of queryDiffers" value="{{queryDiffer}}">{{queryDiffer}}</option>
+    </select>
+      </span>
+        <label *ngIf="item.value.queryDiffer === 'Less' || item.value.queryDiffer === 'Greater' ">than &nbsp;</label>
+        <label *ngIf="item.value.queryDiffer === 'Equals' ">to &nbsp;</label>
+        <span style="margin-right:0">
+        <input required style="width:100px" class="form-control" formControlName="amount" type="text"
+               placeholder="amount"/>
+      </span>
+        <span style="margin-left:0"
+              *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' ">
+        <select class="form-control" formControlName="balType">
+      <option *ngFor="let type of balType" value="{{type.uniqueName}}">{{type.name}}</option>
+    </select>
+      </span>
+        <label *ngIf="i === 0 && searchDataSet.controls.length > 1">and</label>
+        <label *ngIf="i === 1 && searchDataSet.controls.length > 2">and</label>
+        <label *ngIf="i === 2 && searchDataSet.controls.length > 3">and</label>
+      </div>
+    </div>
+    <!--end of clearfix first row -->
+    <!-- end repeater -->
+
+    <div class="clearfix form-group">
+      <button [disabled]="searchQueryForm.invalid" class="btn btn-primary mrR1"
+              (click)="filterData()">Search
+      </button>
+      <button [disabled]="searchDataSet.controls.length > 3 || searchQueryForm.invalid" class="btn btn-default mrR1"
+              (click)="addSearchRow()">Add New Query
+      </button>
+      <button *ngIf="searchDataSet.controls.length > 1" class="btn btn-default mrR1" (click)="removeSearchRow()">Delete
+        Row
+      </button>
+      <button *ngIf="isFiltered | async" (click)="resetQuery()" class="btn btn-info mrR1">Reset Query</button>
+
+      <!-- <button type="button" class="btn btn-success" ng-csv="searchResData" csv-header="getCSVHeader()"  filename="{{ searchFormData.group.name }}.csv" field-separator="," decimal-separator="." csv-column-order="order" ng-click="$event.stopPropagation()">Download CSV</button> -->
+      <button type="button" class="btn btn-success" (click)="createCsv.emit()">Download CSV</button>
+      <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog()">Send as Email</button>
+      <button type="button" class="btn btn-success mrL1" (click)="openSmsDialog()">Send as Sms</button>
+    </div>
+    <!-- end of second row -->
+  </form>
+
+</section>
+<!--end of query section grey bg-->
