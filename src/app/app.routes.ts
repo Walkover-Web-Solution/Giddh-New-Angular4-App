@@ -7,6 +7,7 @@ import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
 import { InventoryComponent } from './inventory/inventory.component';
 import { SearchComponent } from './search/search.component';
+import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -19,6 +20,7 @@ export const ROUTES: Routes = [
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
       { path: 'search', component: SearchComponent, canActivate: [NeedsAuthentication] },
+      { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
     ]
   }

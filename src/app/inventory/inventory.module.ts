@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { InventoryComponent } from './inventory.component';
 import { InventoryHearderComponent } from './components/header-components/inventory-header-component';
@@ -46,7 +45,6 @@ import { StockListComponent } from './components/sidebar-components/stockList.co
     FormsModule,
     ReactiveFormsModule,
     InventoryRoutingModule,
-    Ng2BootstrapModule.forRoot(),
     SharedModule
   ],
 })
