@@ -86,10 +86,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.vm.selectedFromDate = moment().toDate();
-    this.vm.selectedToDate = moment().toDate();
-    this.vm.selectedEntryDate = moment().toDate();
-    this.vm.selectedLogDate = moment().toDate();
+    this.vm.reset();
   }
   public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
@@ -115,6 +112,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.vm.reset();
+    this.store.dispatch(this._auditLogsActions.ResetLogs());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
@@ -145,11 +144,14 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     reqBody.toDate = moment(this.vm.selectedToDate).format('DD-MM-YYYY');
     reqBody.operation = this.vm.selectedOperation;
     reqBody.entity = this.vm.selectedEntity;
+    reqBody.entryDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
     reqBody.userUniqueName = this.vm.selectedUserUnq;
     reqBody.accountUniqueName = this.vm.selectedAccountUnq;
     reqBody.groupUniqueName = this.vm.selectedGroupUnq;
 
     if (this.vm.selectedDateOption === '0') {
+      reqBody.fromDate = null;
+      reqBody.toDate = null;
       if (this.vm.logOrEntry === 'logDate') {
         reqBody.logDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
         reqBody.fromDate = null;
@@ -163,6 +165,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       reqBody.logDate = null;
       reqBody.entryDate = null;
     }
-    this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, '1'));
+    this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
+  }
+  public resetFilters() {
+    this.vm.reset();
+    this.store.dispatch(this._auditLogsActions.ResetLogs());
   }
 }
