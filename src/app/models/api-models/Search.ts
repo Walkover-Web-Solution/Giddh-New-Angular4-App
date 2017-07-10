@@ -75,3 +75,17 @@ export class SearchDataSet {
   public queryDiffer: string = null;
   public amount: string = null;
 }
+
+export interface BulkEmailRequest {
+  params: BulkEmailRequestParams;
+  data: BulkEmailRequestData;
+}
+export interface BulkEmailRequestData {
+  message: string;
+  accounts: string[];
+}
+
+export interface BulkEmailRequestParams {
+  from: string;
+  to: string;
+}

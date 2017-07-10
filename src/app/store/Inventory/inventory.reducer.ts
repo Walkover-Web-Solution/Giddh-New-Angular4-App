@@ -1,9 +1,21 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import { StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest, CreateStockRequest } from '../../models/api-models/Inventory';
+import {
+  CreateStockRequest,
+  StockDetailResponse,
+  StockGroupRequest,
+  StockGroupResponse,
+  StockReportResponse,
+  StocksResponse,
+  StockUnitRequest
+} from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from 'lodash';
-import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../services/actions/inventory/inventory.const';
+import {
+  CUSTOM_STOCK_UNIT_ACTIONS,
+  InventoryActionsConst,
+  STOCKS_REPORT_ACTIONS
+} from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
@@ -135,7 +147,11 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
             activeGroupData = null;
           }
-          return Object.assign({}, state, { activeGroup: group, activeGroupUniqueName: group.uniqueName, groupsWithStocks: groupArray });
+          return Object.assign({}, state, {
+            activeGroup: group,
+            activeGroupUniqueName: group.uniqueName,
+            groupsWithStocks: groupArray
+          });
         }
       }
       return state;
@@ -287,7 +303,12 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
           }
         }
-        return Object.assign({}, state, { groupsWithStocks: groupArray, activeGroup: null, activeGroupUniqueName: '', isDeleteGroupInProcess: false });
+        return Object.assign({}, state, {
+          groupsWithStocks: groupArray,
+          activeGroup: null,
+          activeGroupUniqueName: '',
+          isDeleteGroupInProcess: false
+        });
       }
       return Object.assign({}, state, { isDeleteGroupInProcess: false });
     case InventoryActionsConst.ResetActiveGroup:
@@ -405,11 +426,17 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT:
       return Object.assign({}, state, { createCustomStockInProcess: true });
     case CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: [...state.stockUnits, action.payload], createCustomStockInProcess: false });
+      return Object.assign({}, state, {
+        stockUnits: [...state.stockUnits, action.payload],
+        createCustomStockInProcess: false
+      });
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT:
       return Object.assign({}, state, { updateCustomStockInProcess: true });
     case CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT_RESPONSE:
-      return Object.assign({}, state, { stockUnits: state.stockUnits.map(p => p.code === action.payload.code ? action.payload.unit : p), updateCustomStockInProcess: false });
+      return Object.assign({}, state, {
+        stockUnits: state.stockUnits.map(p => p.code === action.payload.code ? action.payload.unit : p),
+        updateCustomStockInProcess: false
+      });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
       return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload] });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:

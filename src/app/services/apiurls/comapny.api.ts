@@ -1,4 +1,3 @@
-
 import { Configuration } from '../../app.constant';
 
 export const COMPANY_API = {
@@ -6,6 +5,8 @@ export const COMPANY_API = {
   SET_STATE_DETAILS: Configuration.ApiUrl + 'state-details',
   COMPANY_LIST: Configuration.ApiUrl + 'users/:uniqueName/companies',
   CREATE_COMPANY: Configuration.ApiUrl + 'company',
+  SEND_EMAIL: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/bulk-email/?from=:from&to=:to',
+  SEND_SMS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/bulk-email',
   DELETE_COMPANY: Configuration.ApiUrl + 'company/:uniqueName',
   TAX: Configuration.ApiUrl + 'company/:companyUniqueName/tax', // get call
 };

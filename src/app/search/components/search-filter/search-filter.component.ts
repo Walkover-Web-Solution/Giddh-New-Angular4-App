@@ -14,6 +14,8 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   @Output() public searchQuery = new EventEmitter<SearchDataSet[]>();
   @Output() public isFiltered = new EventEmitter<boolean>();
   @Output() public createCsv = new EventEmitter();
+  @Output() public openEmailDialog = new EventEmitter();
+  @Output() public openSmsDialog = new EventEmitter();
   public queryTypes = [
     { name: 'Closing', uniqueName: 'closingBalance' },
     { name: 'Opening', uniqueName: 'openingBalance' },
@@ -86,12 +88,4 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
     arr.controls.splice(-1, 1);
   }
 
-
-  public  openEmailDialog() {
-
-  }
-
-  public openSmsDialog() {
-
-  }
 }
