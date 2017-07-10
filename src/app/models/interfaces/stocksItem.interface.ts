@@ -104,6 +104,19 @@ export interface Istock extends INameUniqueName {
  * Used in create stockunit create api call
  */
 export interface IStockUnit extends IStockItem {
-  parentStockUnit: IStockItem;
+  parentStockUnit?: IStockItem;
   quantityPerUnit: number;
+}
+
+
+export interface IStockUnitResponse extends IStockItem, IStockUnit {
+  hierarchicalQuantity: number;
+}
+
+export interface IInventory {
+  amount: number;
+  quantity: number;
+  rate: number;
+  stock: INameUniqueName;
+  unit: IStockUnitResponse;
 }
