@@ -135,7 +135,7 @@ export class CompanyService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(COMPANY_API.SEND_EMAIL
+    return this._http.post(COMPANY_API.SEND_SMS
         .replace(':companyUniqueName', this.companyUniqueName)
         .replace(':from', request.params.from)
         .replace(':to', request.params.to)
