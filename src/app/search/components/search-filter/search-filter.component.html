@@ -54,8 +54,8 @@
 
       <!-- <button type="button" class="btn btn-success" ng-csv="searchResData" csv-header="getCSVHeader()"  filename="{{ searchFormData.group.name }}.csv" field-separator="," decimal-separator="." csv-column-order="order" ng-click="$event.stopPropagation()">Download CSV</button> -->
       <button type="button" class="btn btn-success" (click)="createCsv.emit()">Download CSV</button>
-      <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog()">Send as Email</button>
-      <button type="button" class="btn btn-success mrL1" (click)="openSmsDialog()">Send as Sms</button>
+      <button type="button" class="btn btn-success mrL1" (click)="openEmailDialog.emit()">Send as Email</button>
+      <button type="button" class="btn btn-success mrL1" (click)="openSmsDialog.emit()">Send as Sms</button>
     </div>
     <!-- end of second row -->
   </form>

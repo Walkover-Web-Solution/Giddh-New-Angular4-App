@@ -1,17 +1,21 @@
 import { Action } from '@ngrx/store';
-import { AccountFlat, SearchDataSet, SearchResponse } from '../../models/api-models/Search';
+import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
 import { SearchActions } from '../../services/actions/search.actions';
 import * as _ from 'lodash';
 
 export interface SearchState {
   value?: AccountFlat[];
   searchLoader: boolean;
+  search: boolean;
   searchDataSet: SearchDataSet[];
+  searchRequest: SearchRequest;
 }
 
 export const initialState: SearchState = {
   value: [],
   searchLoader: false,
+  search: false,
+  searchRequest: null,
   searchDataSet: [{
     queryType: '',
     balType: 'CREDIT',
@@ -26,14 +30,17 @@ export function searchReducer(state = initialState, action: Action): SearchState
     case SearchActions.SEARCH_RESPONSE: {
       return Object.assign({}, state, {
         value: flattenSearchGroupsAndAccounts(action.payload),
-        searchLoader: false
+        searchLoader: false,
+        search: true
       });
     }
     case SearchActions.SEARCH_REQUEST: {
       return Object.assign({}, state, {
-        searchLoader: true
+        searchLoader: true,
+        searchRequest: action.payload
       });
     }
+
     default: {
       return state;
     }

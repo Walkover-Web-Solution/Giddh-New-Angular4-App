@@ -14,7 +14,7 @@ import { SearchFilterComponent } from './components/search-filter/search-filter.
     SearchComponent,
     SearchSidebarComponent,
     SearchGridComponent,
-    SearchFilterComponent
+    SearchFilterComponent,
   ],
   exports: [
     SearchComponent,
