@@ -29,7 +29,7 @@ export class LogsRequest implements ILogRequest {
  */
 export class LogsResponse {
   public logs: ILogsItem[];
-  public totalPages: string;
+  public totalPages: number;
   public size: number;
   public totalElements: number;
 }

@@ -7,5 +7,6 @@ export const COMPANY_API = {
   COMPANY_LIST: Configuration.ApiUrl + 'users/:uniqueName/companies',
   CREATE_COMPANY: Configuration.ApiUrl + 'company',
   DELETE_COMPANY: Configuration.ApiUrl + 'company/:uniqueName',
-  TAX: Configuration.ApiUrl + 'company/:companyUniqueName/tax', // get call
+  TAX: Configuration.ApiUrl + 'company/:companyUniqueName/users', // get call
+  GET_COMPANY_USERS: Configuration.ApiUrl + 'company/:uniqueName',
 };

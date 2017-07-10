@@ -8,7 +8,7 @@
 <div class="clearfix mrT2" (clickOutside)="vm.showFromDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
   <label>From date</label>
   <div class="input-group">
-    <input type="text" name="from" [ngModel]="vm.moment(vm.selectedFromDate).format('DD/MM/YYYY')" (focus)="vm.showFromDatePicker = true; showToDatePicker=false;"
+    <input type="text" name="from" [ngModel]="vm.moment(vm.selectedFromDate).format('DD-MM-YYYY')" (focus)="vm.showFromDatePicker = true; showToDatePicker=false;"
       class="form-control" />
     <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="vm.showFromDatePicker = !vm.showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -23,7 +23,7 @@
 <div class="clearfix mrT2" (clickOutside)="vm.showToDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
   <label>To date</label>
   <div class="input-group">
-    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedToDate).format('DD/MM/YYYY')" (focus)="vm.showToDatePicker = true;showFromDatePicker=false;"
+    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedToDate).format('DD-MM-YYYY')" (focus)="vm.showToDatePicker = true;showFromDatePicker=false;"
       class="form-control" />
     <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="vm.showToDatePicker = !vm.showToDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -52,7 +52,7 @@
   </div>
 
   <div class="input-group">
-    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedLogDate).format('DD/MM/YYYY')" (focus)="vm.showLogDatePicker = true"
+    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedLogDate).format('DD-MM-YYYY')" (focus)="vm.showLogDatePicker = true"
       class="form-control" />
     <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="vm.showLogDatePicker = !vm.showLogDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -94,12 +94,12 @@
 </div>
 
 
-<div class="clearfix mrT2" ng-if="canManageCompany">
+<div class="clearfix mrT2" *ngIf="vm.canManageCompany">
   <label>Select User</label>
-  <input type="text" class="form-control" />
+  <select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>
 </div>
 
-
+<button class='btn btn-success pull-left mrT2' [ladda]="vm.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs</button>
 <button class="btn btn-warning pull-left mrT2 mrL" ng-click="resetFilters()">Reset</button>
 
 <br/>

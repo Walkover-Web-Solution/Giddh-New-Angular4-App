@@ -1,11 +1,17 @@
+import { UserDetails } from '../../../models/api-models/loginModels';
+import { ComapnyResponse } from '../../../models/api-models/Company';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 
 import * as moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 export class AuditLogsSidebarVM {
+  public user$: Observable<UserDetails>;
+  public selectedCompany: Observable<ComapnyResponse>;
+  public getLogsInprocess$: Observable<boolean>;
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
   public showLogDatePicker: boolean = false;
+  public canManageCompany: boolean = false;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -42,6 +48,7 @@ export class AuditLogsSidebarVM {
   public selectedAccountUnq: string = '';
   public accounts$: Observable<Select2OptionData[]>;
   public groups$: Observable<Select2OptionData[]>;
+  public users$: Observable<Select2OptionData[]>;
   public selectedGroupUnq: string = '';
   public selectedFromDate: Date;
   public selectedToDate: Date;
