@@ -3,7 +3,7 @@ import { ILogRequest, ILogsItem } from '../interfaces/logs.interface';
  * Model for Audit Logs api request
  * API:: (Audit Logs) company/:companyUniqueName/logs?page=:page
  * Audit Logs API details
- * In Request Payload, either 
+ * In Request Payload, either
  * A.   "fromDate" and "toDate" params will be sent    OR
  * B.   "logDate"   OR
  * C.   "entryDate"

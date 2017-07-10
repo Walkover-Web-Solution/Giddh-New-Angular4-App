@@ -47,7 +47,6 @@ export class VerifyMobileResponseModel {
   public text: string;
 }
 
-
 /**
  * Model for login-with-number api response
  * API:: (login-with-number) login-with-number?countryCode=:countryCode&mobileNumber=:mobileNumber
@@ -56,13 +55,13 @@ export class VerifyMobileResponseModel {
  */
 
 export class LoginWithNumberResponse {
-  user: IUserDetail;
-  authKey: string;
-  isNewUser: boolean;
-  contactNumber?: string;
-  countryCode?: string;
-  statusCode?: string;
-  text?: string;
+  public user: IUserDetail;
+  public authKey: string;
+  public isNewUser: boolean;
+  public contactNumber?: string;
+  public countryCode?: string;
+  public statusCode?: string;
+  public text?: string;
 }
 
 /**
@@ -82,6 +81,6 @@ export class LoginWithNumberResponse {
  */
 
 export class VerifyLoginOTPResponse {
-  code: string;
-  refreshToken: string;
+  public code: string;
+  public refreshToken: string;
 }
