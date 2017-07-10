@@ -39,7 +39,8 @@ export class CompanyActions {
   @Effect()
   public createCompanyResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY_RESPONSE)
-    .map(response => {
+    .map(action => {
+      let response = action.payload as BaseResponse<ComapnyResponse, CompanyRequest>;
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };

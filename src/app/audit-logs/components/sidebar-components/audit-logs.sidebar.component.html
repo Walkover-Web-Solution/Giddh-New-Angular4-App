@@ -2,7 +2,7 @@
   Apply Log Filters</h1>
 <div class="clearfix mrT2">
   <label>Filter By:</label>
-  <select2 [data]="vm.dateOptions" [options]="vm.options" [(value)]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>
+  <select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>
 </div>
 
 <div class="clearfix mrT2" (clickOutside)="vm.showFromDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
@@ -67,7 +67,7 @@
 <div class="clearfix mrT2">
   <label>Select Operation</label>
   <!-- <input type="text" class="form-control" /> -->
-  <select2 [data]="vm.filters" [options]="vm.options" [(value)]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>
+  <select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>
   <!-- <ui-select ng-model="options.selectedOption" theme="bootstrap">
       <ui-select-match placeholder="Select Option">
         <span>{{$select.selected}}</span>
@@ -80,17 +80,17 @@
 
 <div class="clearfix mrT2">
   <label>Select Entity</label>
-  <select2 [data]="vm.entities" [options]="vm.options" [(value)]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>
+  <select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>
 </div>
 
 <div class="clearfix mrT2">
   <label>Select Account</label>
-  <select2 [data]="vm.accounts$ | async" [options]="vm.options" [(value)]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>
+  <select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>
 </div>
 
 <div class="clearfix mrT2">
   <label>Select Group</label>
-  <input type="text" class="form-control" />
+  <select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>
 </div>
 
 
