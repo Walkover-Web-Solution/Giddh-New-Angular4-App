@@ -44,11 +44,12 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.vm.accounts$ = Observable.of(accounts);
       }
     });
-    this._groupService.GetFlattenGroupsAccounts().takeUntil(this.destroyed$).subscribe(data => {
+    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
+        let accountList = this.flattenGroup(data.body, []);
         let groups: Select2OptionData[] = [];
-        data.body.results.map(d => {
-          groups.push({ text: d.groupName, id: d.groupUniqueName });
+        accountList.map((d: any) => {
+          groups.push({ text: d.name, id: d.uniqueName });
         });
         this.vm.groups$ = Observable.of(groups);
       }
@@ -66,16 +67,49 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     });
     return obj;
   }
+  public flattenGroup(rawList: any[], parents: any[] = []) {
+    let listofUN;
+    listofUN = _.map(rawList, (listItem) => {
+      let newParents;
+      let result;
+      newParents = _.union([], parents);
+      newParents.push({
+        name: listItem.name,
+        uniqueName: listItem.uniqueName
+      });
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem.parentGroups = newParents;
+      if (listItem.groups.length > 0) {
+        result = this.flattenGroup(listItem.groups, newParents);
+        result.push(_.omit(listItem, 'groups'));
+      } else {
+        result = _.omit(listItem, 'groups');
+      }
+      return result;
+    });
+    return _.flatten(listofUN);
+  }
+
   public ngOnDestroy() {
     //
   }
   public selectDateOption(v) {
-    this.vm.selectedDateOption = v.value;
+    this.vm.selectedDateOption = v.value || '';
   }
   public selectEntityOption(v) {
-    this.vm.selectedEntity = v.value;
+    this.vm.selectedEntity = v.value || '';
   }
   public selectOperationOption(v) {
-    this.vm.selectedOperation = v.value;
+    this.vm.selectedOperation = v.value || '';
+  }
+  public selectAccount(v) {
+    this.vm.selectedAccountUnq = v.value || '';
+  }
+
+  public selectGroup(v) {
+    this.vm.selectedGroupUnq = v.value || '';
+  }
+  public selectUser(v) {
+    this.vm.selectedUserUnq = v.value || '';
   }
 }
