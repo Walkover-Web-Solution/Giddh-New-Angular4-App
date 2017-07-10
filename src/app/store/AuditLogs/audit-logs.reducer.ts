@@ -39,15 +39,18 @@ export function auditLogsReducer(state = initialState, action: Action): AuditLog
     }
     case AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE: {
       data = action.payload as BaseResponse<LogsResponse, LogsRequest>;
-      newState = _.cloneDeep(state);
-      newState.CurrectPage = 1;
-      newState.CurrectLogsRequest = data.request;
-      newState.getLogInProcess = false;
-      newState.logs = data.body.logs;
-      newState.size = data.body.size;
-      newState.totalElements = data.body.totalElements;
-      newState.totalPages = data.body.totalPages;
-      return newState;
+      if (data.status === 'success') {
+        newState = _.cloneDeep(state);
+        newState.CurrectPage = 1;
+        newState.CurrectLogsRequest = data.request;
+        newState.getLogInProcess = false;
+        newState.logs = data.body.logs;
+        newState.size = data.body.size;
+        newState.totalElements = data.body.totalElements;
+        newState.totalPages = data.body.totalPages;
+        return newState;
+      }
+      return Object.assign({}, state, { getLogInProcess: false });
     }
     case AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS: {
       newState = _.cloneDeep(state);
@@ -68,7 +71,7 @@ export function auditLogsReducer(state = initialState, action: Action): AuditLog
         newState.totalPages = data.body.totalPages;
         return newState;
       }
-      return state;
+      return Object.assign({}, state, { getLogInProcess: false });
     }
     case AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET: {
       return Object.assign({}, state, initialState);

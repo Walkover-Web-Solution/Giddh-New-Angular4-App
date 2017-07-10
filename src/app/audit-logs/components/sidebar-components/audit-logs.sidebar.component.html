@@ -40,12 +40,12 @@
   <div class="row" style="margin-left:0">
     <p class="input-group pull-left" for="entryDate">
       <label>Entry Date
-          			<input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.selectedEntity" value="entryDate" />
+          			<input id="entryDate" type="radio" name="entryDate" [(ngModel)]="vm.logOrEntry" value="entryDate" />
           		</label>
     </p>
     <p class="input-group pull-left mrL2" for="logDate">
       <label>Log Date
-          			<input id="logDate" type="radio" name="logDate"  [(ngModel)]="vm.selectedEntity" value="logDate" />
+          			<input id="logDate" type="radio" name="logDate"  [(ngModel)]="vm.logOrEntry" value="logDate" />
           		</label>
     </p>
     <br/>
@@ -100,6 +100,6 @@
 </div>
 
 <button class='btn btn-success pull-left mrT2' [ladda]="vm.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs</button>
-<button class="btn btn-warning pull-left mrT2 mrL" ng-click="resetFilters()">Reset</button>
+<button class="btn btn-warning pull-left mrT2 mrL" (click)="resetFilters()">Reset</button>
 
 <br/>
