@@ -13,8 +13,29 @@ export class AuditLogsSidebarVM {
     allowClear: true
   };
   public moment = moment;
-  public filters: any[] = ['All', 'create', 'delete', 'share', 'unshare', 'move', 'merge', 'unmerge', 'delete-all', 'update', 'master-import', 'daybook-import', 'ledger-excel-import'];
-  public entities: any[] = ['All', 'company', 'group', 'account', 'ledger', 'voucher', 'logs'];
+  public filters: any[] = [
+    { text: 'All', id: 'All' },
+    { text: 'create', id: 'create' },
+    { text: 'delete', id: 'delete' },
+    { text: 'share', id: 'share' },
+    { text: 'unshare', id: 'unshare' },
+    { text: 'move', id: 'move' },
+    { text: 'merge', id: 'merge' },
+    { text: 'unmerge', id: 'unmerge' },
+    { text: 'delete-all', id: 'delete-all' },
+    { text: 'update', id: 'update' },
+    { text: 'master-import', id: 'master-import' },
+    { text: 'daybook-import', id: 'daybook-import' },
+    { text: 'ledger-excel-import', id: 'ledger-excel-import' }
+  ];
+  public entities: any[] = [
+    { text: 'All', id: 'All' },
+    { text: 'company', id: 'company' },
+    { text: 'group', id: 'group' },
+    { text: 'account', id: 'account' },
+    { text: 'ledger', id: 'ledger' },
+    { text: 'voucher', id: 'voucher' },
+    { text: 'logs', id: 'logs' }];
   public selectedOperation: string = '';
   public selectedEntity: string = '';
   public selectedUserUnq: string = '';
