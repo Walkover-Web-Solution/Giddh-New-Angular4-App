@@ -1,3 +1,4 @@
+import { LogsService } from './logs.service';
 import { StockReportActions } from './actions/inventory/stocks-report.actions';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { VerifyMobileActions } from './actions/verifyMobile.actions';
@@ -33,6 +34,7 @@ import { InventoryService } from './inventory.service';
 import { InventoryAction } from './actions/inventory/inventory.actions';
 import { SearchActions } from './actions/search.actions';
 import { SearchService } from './search.service';
+import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -51,7 +53,8 @@ import { SearchService } from './search.service';
     EffectsModule.run(SidebarAction),
     EffectsModule.run(CustomStockUnitAction),
     EffectsModule.run(StockReportActions),
-    EffectsModule.run(SearchActions)
+    EffectsModule.run(SearchActions),
+    EffectsModule.run(AuditLogsActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -73,7 +76,8 @@ export class ServiceModule {
         AccountService,
         InventoryService,
         ErrorHandler,
-        SearchService
+        SearchService,
+        LogsService
       ]
     };
   }

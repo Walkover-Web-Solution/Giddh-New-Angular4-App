@@ -1,3 +1,4 @@
+import { AccountSharedWithResponse } from '../models/api-models/Account';
 import { TaxResponse } from './../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -97,6 +98,18 @@ export class CompanyService {
       let data: BaseResponse<TaxResponse[], string> = res.json();
       return data;
     }).catch((e) => HandleCatch<TaxResponse[], string>(e));
+  }
+  public getComapnyUsers(): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<AccountSharedWithResponse[], string>(e));
   }
 
   public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<BulkEmailRequest, string>> {

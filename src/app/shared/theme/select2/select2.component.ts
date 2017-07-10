@@ -135,7 +135,6 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
     }
 
     this.element.on('select2:select select2:unselect ', (event) => {
-      debugger;
       if (event.type === 'select2:unselect') {
         this.onChangeCb('');
         this.value = '';
