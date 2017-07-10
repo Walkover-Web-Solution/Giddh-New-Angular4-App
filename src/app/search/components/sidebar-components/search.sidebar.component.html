@@ -5,14 +5,17 @@
         <p class="lead mrT2">Search</p>
         <div class="form-group">
           <label>Select Groups</label>
-          <input type="text" name="groupName" [(ngModel)]="groupName" class="form-control"/>
+          <input [typeahead]="dataSource" type="text" [(ngModel)]="groupName"
+                 typeaheadOptionField="name" required
+                 class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Select">
+
         </div>
 
         <div class="form-group" (clickOutside)="showFromDatePicker=false;">
           <label>From date</label>
           <div class="input-group" >
             <input type="text" name="from" [ngModel]="moment(fromDate).format('DD/MM/YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
-              class="form-control" />
+                   class="form-control" required/>
             <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
                   </span>
@@ -25,8 +28,9 @@
         <div class="form-group" (clickOutside)="showToDatePicker=false;">
           <label>To date</label>
           <div class="input-group">
-            <input type="text" name="to" [ngModel]="moment(toDate).format('DD/MM/YYYY')" (focus)="showToDatePicker = true;showFromDatePicker=false;"
-              class="form-control" />
+            <input type="text" name="to" required [ngModel]="moment(toDate).format('DD/MM/YYYY')"
+                   (focus)="showToDatePicker = true;showFromDatePicker=false;"
+                   class="form-control" />
             <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
                   </span>

@@ -22,6 +22,9 @@ export class SearchActions {
         .map((r) => this.validateResponse<SearchRequest, SearchResponse[]>(r, {
           type: SearchActions.SEARCH_RESPONSE,
           payload: r.body
+        }, true, {
+          type: SearchActions.SEARCH_RESPONSE,
+          payload: []
         }));
     });
 
