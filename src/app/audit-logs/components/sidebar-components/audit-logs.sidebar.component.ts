@@ -1,3 +1,7 @@
+import { LogsRequest } from '../../../models/api-models/Logs';
+import { UserDetails } from '../../../models/api-models/loginModels';
+import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../../services/account.service';
@@ -15,6 +19,7 @@ import { SearchActions } from '../../../services/actions/search.actions';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from 'lodash';
+import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 
 @Component({
   selector: 'audit-logs-sidebar',
@@ -26,15 +31,23 @@ import * as _ from 'lodash';
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService, private _groupService: GroupService) {
-  }
-
-  public ngOnInit() {
+  constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
+    private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
     this.vm = new AuditLogsSidebarVM();
-    this.vm.selectedFromDate = moment().toDate();
-    this.vm.selectedToDate = moment().toDate();
-    this.vm.selectedEntryDate = moment().toDate();
-    this.vm.selectedLogDate = moment().toDate();
+    this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
+    this.vm.selectedCompany = this.store.select(state => {
+      if (!state.company.companies) {
+        return;
+      }
+      return state.company.companies.find(cmp => {
+        return cmp.uniqueName === state.session.companyUniqueName;
+      });
+    }).takeUntil(this.destroyed$);
+    this.vm.user$ = this.store.select(state => {
+      if (state.session.user) {
+        return state.session.user.user;
+      }
+    }).takeUntil(this.destroyed$);
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
@@ -54,18 +67,29 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.vm.groups$ = Observable.of(groups);
       }
     });
-  }
-  public makeGroupListFlatwithLessDtl(rawList: any) {
-    let obj;
-    obj = _.map(rawList, (item: any) => {
-      obj = {};
-      obj.name = item.name;
-      obj.uniqueName = item.uniqueName;
-      obj.synonyms = item.synonyms;
-      obj.parentGroups = item.parentGroups;
-      return obj;
+    let selectedCompany: ComapnyResponse = null;
+    let loginUser: UserDetails = null;
+    this.vm.selectedCompany.take(1).subscribe((c) => selectedCompany = c);
+    this.vm.user$.take(1).subscribe((c) => loginUser = c);
+    this._companyService.getComapnyUsers().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let users: Select2OptionData[] = [];
+        data.body.map((d) => {
+          users.push({ text: d.userName, id: d.userUniqueName });
+        });
+        this.vm.canManageCompany = true;
+        this.vm.users$ = Observable.of(users);
+      } else {
+        this.vm.canManageCompany = false;
+      }
     });
-    return obj;
+  }
+
+  public ngOnInit() {
+    this.vm.selectedFromDate = moment().toDate();
+    this.vm.selectedToDate = moment().toDate();
+    this.vm.selectedEntryDate = moment().toDate();
+    this.vm.selectedLogDate = moment().toDate();
   }
   public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
@@ -91,7 +115,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    //
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
   public selectDateOption(v) {
     this.vm.selectedDateOption = v.value || '';
@@ -111,5 +136,33 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
   public selectUser(v) {
     this.vm.selectedUserUnq = v.value || '';
+  }
+
+  public getLogfilters() {
+    //
+    let reqBody: LogsRequest = new LogsRequest();
+    reqBody.fromDate = moment(this.vm.selectedFromDate).format('DD-MM-YYYY');
+    reqBody.toDate = moment(this.vm.selectedToDate).format('DD-MM-YYYY');
+    reqBody.operation = this.vm.selectedOperation;
+    reqBody.entity = this.vm.selectedEntity;
+    reqBody.userUniqueName = this.vm.selectedUserUnq;
+    reqBody.accountUniqueName = this.vm.selectedAccountUnq;
+    reqBody.groupUniqueName = this.vm.selectedGroupUnq;
+
+    if (this.vm.selectedDateOption === '0') {
+      if (this.vm.logOrEntry === 'logDate') {
+        reqBody.logDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
+        reqBody.fromDate = null;
+        reqBody.toDate = null;
+      } else if (this.vm.logOrEntry === 'entryDate') {
+        reqBody.entryDate = moment(this.vm.selectedEntryDate).format('DD-MM-YYYY');
+        reqBody.fromDate = null;
+        reqBody.toDate = null;
+      }
+    } else {
+      reqBody.logDate = null;
+      reqBody.entryDate = null;
+    }
+    this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, '1'));
   }
 }

@@ -22,7 +22,7 @@ export class LogsService {
   /**
    * get transactions
    */
-  public GetAuditLogs(model: LogsRequest, page: number = 0 ): Observable<BaseResponse<LogsResponse, LogsRequest>> {
+  public GetAuditLogs(model: LogsRequest, page: number = 1): Observable<BaseResponse<LogsResponse, LogsRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -33,9 +33,9 @@ export class LogsService {
       .map((res) => {
         let data: BaseResponse<LogsResponse, LogsRequest> = res.json();
         data.request = model;
-        data.queryString = {};
+        data.queryString = { page };
         return data;
       })
-      .catch((e) => HandleCatch<LogsResponse, LogsRequest>(e, model, {}));
+      .catch((e) => HandleCatch<LogsResponse, LogsRequest>(e, model, { page }));
   }
 }
