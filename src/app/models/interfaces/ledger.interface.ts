@@ -53,8 +53,6 @@ export interface ILedger {
   clearanceDate?: string;
   invoiceRequest?: IInvoiceRequest;
 }
-
-
 export interface ITransactions extends IPagination {
   closingBalance: IClosingBalance;
   creditTotal: number;
