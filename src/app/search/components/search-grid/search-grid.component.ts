@@ -5,7 +5,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store/roots';
-import { isNullOrUndefined, isUndefined } from 'util';
+import { isNullOrUndefined } from 'util';
 import { saveAs } from 'file-saver';
 import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -25,6 +25,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   public groupName: string;
   public companyUniqueName: string;
   public searchResponse$: Observable<AccountFlat[]>;
+  public searchResponseFiltered$: Observable<AccountFlat[]>;
   public searchLoader$: Observable<boolean>;
   public search$: Observable<boolean>;
   public messageBody = {
@@ -86,7 +87,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // sorting by sortype
   public set sortType(value: string) {
     this._sortType = value;
-    this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => a[this._sortType] > b[this._sortType] ? 1 : a[this._sortType] < b[this._sortType] ? -1 : 0)).subscribe(p => console.log(p));
+    this.sortReverse = this._sortReverse;
   }
 
   public get sortReverse(): boolean {
@@ -96,7 +97,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // reversing sort
   public set sortReverse(value: boolean) {
     this._sortReverse = value;
-    this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType] > b[this._sortType] ? 1 : a[this._sortType] < b[this._sortType] ? -1 : 0)).subscribe(p => console.log(p));
+    this.searchResponseFiltered$ = this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
   }
 
   private _sortReverse: boolean;
@@ -108,6 +109,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
    */
   constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
     this.searchResponse$ = this.store.select(p => p.search.value);
+    this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
@@ -126,8 +128,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // Filter data of table By Filters
   public filterData(searchQuery: SearchDataSet[]) {
     searchQuery.forEach((query) => {
-      this.searchResponse$ = this.searchResponse$.take(1).filter((accounts) => {
-        return !isUndefined(accounts.find((account) => {
+      this.searchResponseFiltered$ = this.searchResponse$.map((accounts) => {
+        return accounts.filter((account) => {
           let amount;
           amount = +query.amount;
           switch (query.queryDiffer) {
@@ -171,9 +173,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 }
               }
             default:
-
           }
-        }));
+        });
       });
     });
   }
@@ -181,7 +182,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // Reset Filters and show all
   public resetFilters(isFiltered) {
     if (!isFiltered) {
-      this.searchResponse$ = this.store.select(p => p.search.value);
+      this.searchResponseFiltered$ = this.searchResponse$;
     }
   }
 

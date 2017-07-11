@@ -52,7 +52,24 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
   listofUN = rawList.map((obj) => {
     let uniqueList: AccountFlat[] = [];
     if (!(_.isNull(obj.childGroups)) && obj.childGroups.length > 0) {
-      return flattenSearchGroupsAndAccounts(obj.childGroups as SearchResponse[]) as AccountFlat[];
+      uniqueList = flattenSearchGroupsAndAccounts(obj.childGroups as SearchResponse[]) as AccountFlat[];
+      _.each(obj.accounts, (account) => {
+        let accountFlat: AccountFlat = {
+          parent: obj.groupName,
+          closeBalType: account.closingBalance.type,
+          closingBalance: account.closingBalance.amount,
+          openBalType: account.openingBalance.type,
+          creditTotal: account.creditTotal,
+          debitTotal: account.debitTotal,
+          openingBalance: account.openingBalance,
+          uniqueName: account.uniqueName,
+          name: account.name
+        };
+        console.log(accountFlat);
+        uniqueList.push(accountFlat);
+        return accountFlat.openingBalance = account.openingBalance.amount;
+      });
+      return uniqueList;
     } else {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
@@ -63,8 +80,8 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
           creditTotal: account.creditTotal,
           debitTotal: account.debitTotal,
           openingBalance: account.openingBalance,
-          uniqueName: obj.uniqueName,
-          name: obj.groupName
+          uniqueName: account.uniqueName,
+          name: account.groupName
         };
         uniqueList.push(accountFlat);
         return accountFlat.openingBalance = account.openingBalance.amount;
