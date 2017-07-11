@@ -69,7 +69,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of searchResponse$ | async">
+      <tr *ngFor="let item of searchResponseFiltered$ | async">
         <td>{{item.name}}</td>
         <td>{{item.uniqueName}}</td>
         <td class="alR">
