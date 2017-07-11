@@ -50,14 +50,15 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
     let searchRequest: SearchRequest = {
       groupName: this.groupName,
       refresh: isRefresh,
-      toDate: moment(this.toDate).format('DD/MM/YYYY'),
-      fromDate: moment(this.fromDate).format('DD/MM/YYYY')
+      toDate: moment(this.toDate).format('DD-MM-YYYY'),
+      fromDate: moment(this.fromDate).format('DD-MM-YYYY')
     };
     this.store.dispatch(this.searchActions.GetStocksReport(searchRequest));
   }
 
   public ngOnDestroy() {
-    //
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   public flattenGroup(rawList: any[], parents: any[] = []) {

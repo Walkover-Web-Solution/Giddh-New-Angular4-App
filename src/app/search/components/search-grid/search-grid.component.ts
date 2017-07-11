@@ -16,13 +16,7 @@ import { ToasterService } from '../../../services/toaster.service';
   templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {
-
-  public showFromDatePicker: boolean;
-  public showToDatePicker: boolean;
-  public toDate: Date;
-  public fromDate: Date;
   public moment = moment;
-  public groupName: string;
   public companyUniqueName: string;
   public searchResponse$: Observable<AccountFlat[]>;
   public searchResponseFiltered$: Observable<AccountFlat[]>;
@@ -109,7 +103,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
    */
   constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
     this.searchResponse$ = this.store.select(p => p.search.value);
-    this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
+    // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
+    this.searchResponseFiltered$ = this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => (false ? -1 : 1) * a['name'].toString().localeCompare(b['name'])));
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
@@ -122,7 +117,8 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    //
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 
   // Filter data of table By Filters
