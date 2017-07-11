@@ -17,7 +17,7 @@ import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
 
-import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent } from './header/components';
+import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
@@ -33,7 +33,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
-    AccountAddComponent, UniqueNameDirective, DigitsValidatorDirective, ElementViewContainerRef
+    AccountAddComponent, UniqueNameDirective, DigitsValidatorDirective, ElementViewContainerRef, GroupsAccountSidebarComponent
   ],
   imports: [
     CommonModule,
@@ -56,7 +56,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule,
     BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent]
+    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {
