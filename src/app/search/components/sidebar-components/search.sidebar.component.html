@@ -14,7 +14,7 @@
         <div class="form-group" (clickOutside)="showFromDatePicker=false;">
           <label>From date</label>
           <div class="input-group" >
-            <input type="text" name="from" [ngModel]="moment(fromDate).format('DD/MM/YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
+            <input type="text" name="from" [ngModel]="moment(fromDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
                    class="form-control" required/>
             <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -28,7 +28,7 @@
         <div class="form-group" (clickOutside)="showToDatePicker=false;">
           <label>To date</label>
           <div class="input-group">
-            <input type="text" name="to" required [ngModel]="moment(toDate).format('DD/MM/YYYY')"
+            <input type="text" name="to" required [ngModel]="moment(toDate).format('DD-MM-YYYY')"
                    (focus)="showToDatePicker = true;showFromDatePicker=false;"
                    class="form-control" />
             <span class="input-group-btn">

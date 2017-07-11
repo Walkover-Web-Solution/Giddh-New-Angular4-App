@@ -54,14 +54,15 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
     if (!(_.isNull(obj.childGroups)) && obj.childGroups.length > 0) {
       uniqueList = flattenSearchGroupsAndAccounts(obj.childGroups as SearchResponse[]) as AccountFlat[];
       _.each(obj.accounts, (account) => {
+        debugger;
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
           closeBalType: account.closingBalance.type,
-          closingBalance: Number(account.closingBalance.amount).toFixed(2),
+          closingBalance: Number(account.closingBalance.amount),
           openBalType: account.openingBalance.type,
-          creditTotal: Number(account.creditTotal).toFixed(2),
-          debitTotal: Number(account.debitTotal).toFixed(2),
-          openingBalance: Number(account.openingBalance).toFixed(2),
+          creditTotal: Number(account.creditTotal),
+          debitTotal: Number(account.debitTotal),
+          openingBalance: Number(account.openingBalance),
           uniqueName: account.uniqueName,
           name: account.name
         };
@@ -72,14 +73,15 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       return uniqueList;
     } else {
       _.each(obj.accounts, (account) => {
+        debugger;
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
           closeBalType: account.closingBalance.type,
-          closingBalance: Number(account.closingBalance.amount).toFixed(2),
+          closingBalance: Number(account.closingBalance.amount),
           openBalType: account.openingBalance.type,
-          creditTotal: Number(account.creditTotal).toFixed(2),
-          debitTotal: Number(account.debitTotal).toFixed(2),
-          openingBalance: Number(account.openingBalance).toFixed(2),
+          creditTotal: Number(account.creditTotal),
+          debitTotal: Number(account.debitTotal),
+          openingBalance: Number(account.openingBalance),
           uniqueName: account.uniqueName,
           name: account.name
         };
@@ -91,3 +93,32 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
   });
   return _.flatten(listofUN);
 };
+
+// const flattenSearchGroupsAndAccounts = (rawList) => {
+//   let listofUN;
+//   listofUN = _.map(rawList, (obj: any) => {
+//     let uniqueList;
+//     if (!(_.isNull(obj.childGroups)) && obj.childGroups.length > 0) {
+//       uniqueList = flattenSearchGroupsAndAccounts(obj.childGroups);
+//       _.each(obj.accounts, (account) => {
+//         account.parent = obj.groupName;
+//         account.closeBalType = account.closingBalance.type;
+//         account.closingBalance = account.closingBalance.amount;
+//         account.openBalType = account.openingBalance.type;
+//         return account.openingBalance = account.openingBalance.amount;
+//       });
+//       uniqueList.push(obj.accounts);
+//       return uniqueList;
+//     } else {
+//       _.each(obj.accounts, (account) => {
+//         account.parent = obj.groupName;
+//         account.closeBalType = account.closingBalance.type;
+//         account.closingBalance = account.closingBalance.amount;
+//         account.openBalType = account.openingBalance.type;
+//         return account.openingBalance = account.openingBalance.amount;
+//       });
+//       return obj.accounts;
+//     }
+//   });
+//   return _.flatten(listofUN);
+// };
