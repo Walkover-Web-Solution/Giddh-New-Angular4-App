@@ -11,87 +11,84 @@
 
   <!-- result -->
   <section class="pd2" *ngIf="!(searchLoader$ | async) && (search$ | async)">
-    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()"
-                   (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()"
-                   (openSmsDialog)="openSmsDialog()"></search-filter>
+    <search-filter (isFiltered)="resetFilters($event)" (createCsv)="createCSV()" (searchQuery)="filterData($event)" (openEmailDialog)="openEmailDialog()"
+      (openSmsDialog)="openSmsDialog()"></search-filter>
     <table class="mrT2 table table-bordered table-striped">
       <thead>
-      <tr>
-        <th class="col-xs-2">
-          <div (click)="sortType = 'name'; sortReverse = !sortReverse">
-            Name
-            <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-        <th class="col-xs-2">
-          <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
-            UniqueName
-            <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-        <th class="col-xs-2">
-          <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
-            Opening Bal.
-            <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-        <th class="col-xs-1">
-          <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
-            DR Total
-            <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-        <th class="col-xs-1">
-          <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
-            CR Total
-            <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-        <th class="col-xs-2">
-          <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
-            Closing Bal.
-            <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-        <th class="col-xs-2">
-          <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
-            Parent
-            <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
-            <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
-          </div>
-        </th>
-      </tr>
+        <tr>
+          <th class="col-xs-2">
+            <div (click)="sortType = 'name'; sortReverse = !sortReverse">
+              Name
+              <span *ngIf="sortType == 'name' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType == 'name' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+          <th class="col-xs-2">
+            <div (click)="sortType = 'uniqueName'; sortReverse = !sortReverse">
+              UniqueName
+              <span *ngIf="sortType == 'uniqueName' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType == 'uniqueName' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+          <th class="col-xs-2">
+            <div (click)="sortType = 'openingBalance'; sortReverse = !sortReverse">
+              Opening Bal.
+              <span *ngIf="sortType=='openingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType=='openingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+          <th class="col-xs-1">
+            <div (click)="sortType = 'debitTotal'; sortReverse = !sortReverse">
+              DR Total
+              <span *ngIf="sortType == 'debitTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType == 'debitTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+          <th class="col-xs-1">
+            <div (click)="sortType = 'creditTotal'; sortReverse = !sortReverse">
+              CR Total
+              <span *ngIf="sortType == 'creditTotal' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType == 'creditTotal' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+          <th class="col-xs-2">
+            <div (click)="sortType = 'closingBalance'; sortReverse = !sortReverse">
+              Closing Bal.
+              <span *ngIf="sortType=='closingBalance' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType=='closingBalance' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+          <th class="col-xs-2">
+            <div (click)="sortType = 'parent'; sortReverse = !sortReverse">
+              Parent
+              <span *ngIf="sortType == 'parent' && !sortReverse" class="glyphicon glyphicon-chevron-down"></span>
+              <span *ngIf="sortType == 'parent' && sortReverse" class="glyphicon glyphicon-chevron-up"></span>
+            </div>
+          </th>
+        </tr>
       </thead>
       <tbody>
-      <tr *ngFor="let item of searchResponseFiltered$ | async">
-        <td>{{item.name}}</td>
-        <td>{{item.uniqueName}}</td>
-        <td class="alR">
-          <span *ngIf="item.openingBalance > 0">
+        <tr *ngFor="let item of searchResponseFiltered$ | async">
+          <td>{{item.name}}</td>
+          <td>{{item.uniqueName}}</td>
+          <td class="alR">
+            <span *ngIf="item.openingBalance > 0">
           <span class="text-success pull-left" *ngIf="item.openBalType === 'DEBIT'">DR</span>
-          <span class="text-danger pull-left" *ngIf="item.openBalType === 'CREDIT'">CR</span>
-          &nbsp;
-          </span>
-          {{item.openingBalance }}
-        </td>
-        <td class="alR">{{item.debitTotal }}</td>
-        <td class="alR">{{item.creditTotal}}</td>
-        <td class="alR">
-          <span *ngIf="item.closingBalance > 0">
-          <span class="text-success pull-left" *ngIf="item.closeBalType === 'DEBIT'">DR</span>
-          <span class="text-danger pull-left" *ngIf="item.closeBalType === 'CREDIT'">CR</span>
-          &nbsp;
-          </span>
-          {{item.closingBalance }}
-        </td>
-        <td>{{item.parent}}</td>
-      </tr>
+            <span class="text-danger pull-left" *ngIf="item.openBalType === 'CREDIT'">CR</span> &nbsp;
+            </span>
+            {{item.openingBalance.toFixed(2) }}
+          </td>
+          <td class="alR">{{item.debitTotal.toFixed(2) }}</td>
+          <td class="alR">{{item.creditTotal.toFixed(2)}}</td>
+          <td class="alR">
+            <span *ngIf="item.closingBalance > 0">
+            <span class="text-success pull-left" *ngIf="item.closeBalType === 'DEBIT'">DR</span>
+            <span class="text-danger pull-left" *ngIf="item.closeBalType === 'CREDIT'">CR</span> &nbsp;
+            </span>
+            {{item.closingBalance.toFixed(2) }}
+          </td>
+          <td>{{item.parent}}</td>
+        </tr>
       </tbody>
     </table>
   </section>
@@ -113,11 +110,9 @@
           <!-- 		<h1 class="mrB1" ng-if="messageBody.type == 'Email'">Enter Subject:</h1>
                   <input ng-if="messageBody.type == 'Email'" class="form-control mrB1" type="text" ng-model="messageBody.subject" placeholder="Enter subject here"/> -->
           <h1 class="mrB1">Type message body:</h1>
-          <textarea [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;"
-                    placeholder="start typing your message here"></textarea>
-          <p class="mrT mrB">Tip: Click on the tabs below to insert data in your message body. Anything followed by
-            '%s_'
-            represents the position where actual data will be placed.</p>
+          <textarea [(ngModel)]="messageBody.msg" class="form-control" rows="4" style="resize:none;" placeholder="start typing your message here"></textarea>
+          <p class="mrT mrB">Tip: Click on the tabs below to insert data in your message body. Anything followed by '%s_' represents the position
+            where actual data will be placed.</p>
 
           <div class="row">
             <ul class="list-inline pills">
@@ -134,4 +129,3 @@
 </div>
 
 <!--end Modal for Mail/SMS-->
-

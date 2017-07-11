@@ -27,12 +27,12 @@ export interface Account {
 }
 
 export interface AccountFlat {
-  creditTotal: number | string;
-  debitTotal: number | string;
+  creditTotal: number;
+  debitTotal: number;
   closeBalType: string;
   openBalType: string;
-  closingBalance: number | string;
-  openingBalance: number | string;
+  closingBalance: number;
+  openingBalance: number;
   uniqueName: string;
   name: string;
   parent: string;
