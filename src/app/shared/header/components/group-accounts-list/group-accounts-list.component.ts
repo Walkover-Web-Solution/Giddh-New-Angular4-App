@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -15,7 +15,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   selector: 'group-account-list',
   templateUrl: './group-accounts-list.component.html'
 })
-export class GroupAccountsListComponent implements OnInit {
+export class GroupAccountsListComponent implements OnInit, OnDestroy {
   public isRootLevlGroup$: Observable<boolean>;
   public accountsList$: Observable<IAccountsInfo[]>;
   public activeGroup$: Observable<GroupResponse>;
@@ -27,7 +27,7 @@ export class GroupAccountsListComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private accountsAcction: AccountsAction, private accountsAction: AccountsAction) {
+    private accountsAcction: AccountsAction) {
     this.accountsList$ = this.store.select(state => {
       let accountsList: IAccountsInfo[] = [];
       if (state.groupwithaccounts.groupswithaccounts) {
