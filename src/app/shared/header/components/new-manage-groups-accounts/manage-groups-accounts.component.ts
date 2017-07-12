@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ElementRef, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -12,8 +12,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   templateUrl: './manage-groups-accounts.component.html',
   styleUrls: ['./manage-groups-accounts.component.css']
 })
-export class ManageGroupsAccountsComponent implements OnInit, OnDestroy {
+export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterViewInit, AfterContentInit {
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @ViewChild('header') public header: ElementRef;
+  public headerRect: any;
+  @ViewChild('myModel') public myModel: ElementRef;
+  public myModelRect: any;
   public grpSrch: string;
   public searchLoad: Observable<boolean>;
 
@@ -34,6 +38,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy {
 
   }
 
+  public ngAfterViewInit() {
+    //
+  }
+  public ngAfterContentInit() {
+    //
+  }
   public closePopupEvent() {
     this.grpSrch = '';
     this.closeEvent.emit(true);
