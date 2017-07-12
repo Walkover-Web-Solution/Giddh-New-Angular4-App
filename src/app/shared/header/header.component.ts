@@ -57,7 +57,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
     private router: Router
-  ,
+    ,
     private componentFactoryResolver: ComponentFactoryResolver) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
