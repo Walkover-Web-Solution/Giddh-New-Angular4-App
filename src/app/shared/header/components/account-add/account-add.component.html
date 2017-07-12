@@ -1,12 +1,6 @@
 <div>
   <fieldset>
-    <ol class="breadcrumb mrB2" *ngIf="(activeAccount$ | async)?.parentGroups.length">
-      <li *ngFor="let value of (activeAccount$ | async)?.parentGroups;let i = index"
-      [ngClass]="{'active': i === ((activeAccount$ | async)?.parentGroups.length -1 ) }" >
-      <a href="javascript:void(0)" (click)="jumpToGroup(value.uniqueName)">{{ value.name }}
-      </a>
-      </li>
-    </ol>
+
 
     <div class="clearfix" style="display:none">
       <div class="col-xs-12">

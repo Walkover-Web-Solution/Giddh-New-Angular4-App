@@ -16,7 +16,7 @@ import {
 import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -34,10 +34,14 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'account-operations',
-  templateUrl: './account-operations.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './account-operations.component.html'
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
+  public showAddNewAccount$: Observable<boolean>;
+  public showAddNewGroup$: Observable<boolean>;
+  public showEditAccount$: Observable<boolean>;
+  public showEditGroup$: Observable<boolean>;
+  @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
@@ -50,6 +54,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
+  public showNewForm$: Observable<boolean>;
   public subGroupForm: FormGroup;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
@@ -99,6 +104,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+    this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew).takeUntil(this.destroyed$);
+    this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
+    this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
+    this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).takeUntil(this.destroyed$);
+    this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).takeUntil(this.destroyed$);
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
@@ -202,10 +212,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.showGroupForm = true;
+        this.ShowForm.emit(true);
         this.showEditTaxSection = false;
         this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
       } else {
         this.showGroupForm = false;
+        this.ShowForm.emit(false);
       }
     });
     this.activeAccount$.subscribe((a) => {

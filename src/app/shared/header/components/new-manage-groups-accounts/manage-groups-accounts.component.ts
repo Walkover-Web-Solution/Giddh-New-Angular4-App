@@ -1,9 +1,10 @@
+import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ElementRef, ViewChild, AfterViewInit, AfterContentInit } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
@@ -16,7 +17,12 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
   @ViewChild('header') public header: ElementRef;
   public headerRect: any;
+  public showForm: boolean = false;
   @ViewChild('myModel') public myModel: ElementRef;
+  @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: true };
+  @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
+
   public myModelRect: any;
   public grpSrch: string;
   public searchLoad: Observable<boolean>;
@@ -52,5 +58,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public ScrollToRight() {
+    this.directiveScroll.scrollToRight();
+  }
+  public ShowRightForm(e) {
+    // debugger;
   }
 }

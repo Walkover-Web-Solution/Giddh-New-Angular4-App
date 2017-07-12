@@ -32,6 +32,8 @@ import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 
 @Injectable()
 export class GroupWithAccountsAction {
+  public static SHOW_ADD_NEW_FORM = 'SHOW_ADD_NEW_FORM';
+  public static HIDE_ADD_NEW_FORM = 'HIDE_ADD_NEW_FORM';
   public static SET_ACTIVE_GROUP = 'SetActiveGroup';
   public static RESET_ACTIVE_GROUP = 'ResetActiveGroup';
   public static GET_GROUP_WITH_ACCOUNTS = 'GroupWithAccounts';
@@ -344,8 +346,10 @@ export class GroupWithAccountsAction {
         };
       } else {
         this._toasty.successToast('Group Updated Successfully');
+        return {
+          type: ''
+        };
       }
-      return this.getGroupWithAccounts('');
     });
 
   @Effect()
@@ -615,6 +619,16 @@ export class GroupWithAccountsAction {
     return {
       type: GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE,
       payload: value
+    };
+  }
+  public showAddNewForm(): Action {
+    return {
+      type: GroupWithAccountsAction.SHOW_ADD_NEW_FORM
+    };
+  }
+  public hideAddNewForm(): Action {
+    return {
+      type: GroupWithAccountsAction.HIDE_ADD_NEW_FORM
     };
   }
 }
