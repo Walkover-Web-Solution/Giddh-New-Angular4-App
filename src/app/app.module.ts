@@ -36,6 +36,7 @@ import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 
 import { PageComponent } from './page.component';
 import { AboutModule } from './about/about.module';
+import { PermissionModule } from './permissions/permission.module';
 import { HomeModule } from './home/home.module';
 import { LoginModule } from './login/login.module';
 
@@ -96,6 +97,7 @@ if (ENV === 'development') {
     ReactiveFormsModule,
     HttpModule,
     AboutModule,
+    PermissionModule,
     HomeModule,
     InventoryModule,
     SearchModule,
