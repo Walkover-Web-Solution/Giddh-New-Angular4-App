@@ -1,7 +1,7 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Subject } from 'rxjs/Rx';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, ViewChildren } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -15,6 +15,7 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
+import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
 
 @Component({
   selector: 'app-header',
@@ -22,7 +23,10 @@ import { ElementViewContainerRef } from '../helpers/directives/element.viewchild
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public session$: Observable<boolean>;
-  @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
+  @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
+  @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
+
+  @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
   @ViewChild('addCompanyModal') public addCompanyModal: ModalDirective;
 
@@ -57,7 +61,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
     private router: Router
-  ,
+    ,
     private componentFactoryResolver: ComponentFactoryResolver) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
@@ -116,6 +120,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public showManageGroupsModal() {
     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+    this.loadAddManageComponent();
     this.manageGroupsAccountsModal.show();
   }
 
@@ -173,9 +178,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public onHide() {
     this.store.dispatch(this.companyActions.ResetCompanyPopup());
   }
+  public onShown() {
+  }
   public loadAddCompanyComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
-    let viewContainerRef = this.elementViewContainerRef.viewContainerRef;
+    let viewContainerRef = this.companyadd.viewContainerRef;
     viewContainerRef.clear();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as CompanyAddComponent).closeCompanyModal.subscribe((a) => {
@@ -184,6 +191,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     (componentRef.instance as CompanyAddComponent).closeCompanyModalAndShowAddManege.subscribe((a) => {
       this.hideCompanyModalAndShowAddAndManage();
     });
+  }
+  public loadAddManageComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
+    let viewContainerRef = this.addmanage.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
+      this.hideManageGroupsModal();
+    });
+    this.manageGroupsAccountsModal.onShown.subscribe((a => {
+      (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
+      (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
+      debugger;
+    }));
   }
 
   public ngOnDestroy() {

@@ -23,7 +23,6 @@ export class GroupsAccountSidebarComponent implements OnInit {
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
     private accountsAcction: AccountsAction) {
     this.mc = new GroupAccountSidebarVM();
-    debugger;
   }
 
   // tslint:disable-next-line:no-empty
