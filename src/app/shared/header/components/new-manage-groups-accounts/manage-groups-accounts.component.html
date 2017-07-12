@@ -1,62 +1,34 @@
-<div id="getGroupModal" class="">
+<div id="getGroupModal" class="fullScreenMy" #myModel>
 
-  <div class="modal-header themeBg">
+  <div class="modal-header themeBg" #header>
     <button type="button" class="close" data-dismiss="modal" (click)="closePopupEvent()" aria-label="Close"><span aria-hidden="true">×</span></button>
     <h3 class="modal-title">Manage Groups &amp; Accounts</h3>
   </div>
   <!-- end header -->
 
-  <div class="modal-body pd0">
-    <div class="clearfix">
+  <div class="modal-body pd0" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}" >
+    <div class="clearfix" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
 
-      <div class="col-xs-7 grp_col bdrL bdrR pd0">
-        <div>
-
-          <!-- <div class="mrT1 mrB1 form-inline">
-            <div class="form-group">
-
-              <div class="input-group">
-
-                <div class="input-group-addon">
-                  <i class="glyphicon glyphicon-search"></i>
-                </div>
-
-                <input type="text" [(ngModel)]="grpSrch" name="grpSrch" #grpSrchEl class="form-control" placeholder="Search groups">
-              </div>
-            </div>
-          </div> -->
-          <!-- searchbar end -->
-          <div class="search-loading0" *ngIf="(searchLoad | async)">
-            <span class="spinner small"></span> Loading…
-          </div>
-
-          <perfect-scrollbar id="addMngGrpScrBar" class="scrClass" [config]="psConfig">
-            <!-- <div id="addMngGrpScrBar" class="scrClass ps-container" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
-            suppressscrollx="false" usebothwheelaxes="false" suppressscrolly="true"> -->
-            <div ng-transclude="">
-              <!-- ngIf: showListGroupsNow -->
-              <div *ngIf="!(searchLoad | async)">
-                <div class="grp_col fullWidth">
-                  <groups-account-sidebar [groups]="(groupList$ | async)"></groups-account-sidebar>
-                </div>
-              </div>
-              <!-- end ngIf: showListGroupsNow -->
-            </div>
-            <!-- <div class="ps-scrollbar-x-rail" style="width: 0px; display: none; left: 0px; bottom: 0px;">
-              <div class="ps-scrollbar-x" style="left: 0px; width: 0px;"></div>
-            </div>
-            <div class="ps-scrollbar-y-rail" style="top: 0px; height: 380px; display: none; right: 0px;">
-              <div class="ps-scrollbar-y" style="top: 0px; height: 0px;"></div>
-            </div> -->
-            <!-- </div> -->
-          </perfect-scrollbar>
+      <div class="col-xs-7 grp_col bdrL bdrR pd0" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+        <div class="search-loading0" *ngIf="(searchLoad | async)" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+          <span class="spinner small"></span> Loading…
         </div>
+
+
+        <div ng-transclude="" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+          <!-- ngIf: showListGroupsNow -->
+          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+            <groups-account-sidebar [groups]="(groupList$ | async)" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}"></groups-account-sidebar>
+          </div>
+          <!-- end ngIf: showListGroupsNow -->
+        </div>
+
       </div>
 
       <!-- middle body -->
-      <div class="col-xs-5 form_box">
+      <div class="col-xs-5 form_box" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
         <div class="row">
-          <account-operations></account-operations>
+          <account-operations [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}"></account-operations>
         </div>
       </div>
 

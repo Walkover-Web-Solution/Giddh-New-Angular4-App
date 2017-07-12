@@ -192,21 +192,23 @@
 </header>
 
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg modal-liq90">
-    <div class="modal-content">
-      <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts>
+<div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
+  <div class="modal-dialog modal-lg modal-liq90 fullScreenMy">
+    <div class="modal-content fullScreenMy">
+      <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
+      </ng-template>
+      <!-- <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts> -->
     </div>
   </div>
 </div>
 
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog" (onHidden)= "onHide()">
+<div bsModal #addCompanyModal="bs-modal" class="modal fade" role="dialog" (onHidden)="onHide()">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-       <ng-template element-view-container-ref>
+      <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
       </ng-template>
-       <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
+      <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
       </company-add> -->
     </div>
   </div>

@@ -1,4 +1,4 @@
-<div class="grp_col" [ngStyle]="{'width':mc.columns.length * 260 + 'px', 'left':mc.columns.length * 260 + 'px'}">
+<div class="grp_col" [ngStyle]="{'width':mc.columns.length * 260 + 'px', 'left':'-'+mc.columns.length * 260 + 'px'}">
   <div class="grp_wrapper" [ngStyle]="{'width':mc.columns.length * 255 + 'px'}">
     <!-- level 1 -->
     <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index" ng-click="mc.getColsCount()">
