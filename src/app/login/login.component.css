@@ -4,7 +4,7 @@
 
 
 .intro.login{
-  background: url('../images/new/login_bg.jpg') no-repeat top center scroll;
+  /* background: url('../images/new/login_bg.jpg') no-repeat top center scroll; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;

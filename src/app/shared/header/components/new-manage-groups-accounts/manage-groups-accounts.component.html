@@ -6,30 +6,25 @@
   </div>
   <!-- end header -->
 
-  <div class="modal-body pd0" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}" >
-    <div class="clearfix" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+  <div class="modal-body pd0" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect ? (headerRect.height + 20): 0 ))+'px'}">
+    <div class="clearfix" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
 
-      <div class="col-xs-7 grp_col bdrL bdrR pd0" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
-        <div class="search-loading0" *ngIf="(searchLoad | async)" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+      <div class="grp_col bdrL bdrR pd0" style="max-width:58.333%;height:auto" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
+        <div class="search-loading0" *ngIf="(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
           <span class="spinner small"></span> Loading…
         </div>
-
-
-        <div ng-transclude="" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
+        <div ng-transclude="" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
           <!-- ngIf: showListGroupsNow -->
-          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
-            <groups-account-sidebar [groups]="(groupList$ | async)" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}"></groups-account-sidebar>
+          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px','width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
+            <groups-account-sidebar #groupsidebar [groups]="(groupList$ | async)" (ScrollToRight)="ScrollToRight()"></groups-account-sidebar>
           </div>
           <!-- end ngIf: showListGroupsNow -->
         </div>
 
       </div>
-
       <!-- middle body -->
-      <div class="col-xs-5 form_box" [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}">
-        <div class="row">
-          <account-operations [ngStyle]="{'height':(myModelRect.height-headerRect.height)+'px'}"></account-operations>
-        </div>
+      <div class="form_box" style="height:auto;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+        <account-operations (ShowForm)="ShowRightForm($event)" #form [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}"></account-operations>
       </div>
 
 
