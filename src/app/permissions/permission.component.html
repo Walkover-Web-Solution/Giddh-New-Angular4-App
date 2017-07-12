@@ -1,0 +1,92 @@
+<div class="pd3 clearfix">
+
+    <div class="col-xs-12 mrT2 pd0 mrB2 role clearfix" *ngFor="let role of allRoles">
+        <div class="col-xs-3 pd0 rolehead">
+            <h1>{{role.name}}</h1>
+            <div class="onHover text-center">
+                <button class="btn btn-md btn-primary pull-left">Edit</button>
+                <button class="btn btn-md btn-danger">Delete</button>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <ul>
+                <li *ngFor="let item of role.scopes">{{ item.name }}</li>
+            </ul>
+        </div>
+    </div>
+
+    <!--<div class="col-xs-12 mrT2 pd0 mrB2 role clearfix">
+        <div class="col-xs-3 pd0 rolehead">
+            <h1>Admin</h1>
+            <div class="onHover text-center">
+                <button class="btn btn-md btn-primary pull-left">Edit</button>
+                <button class="btn btn-md btn-danger">Delete</button>
+            </div>
+        </div>
+        <div class="col-xs-9">
+            <ul>
+                <li>Dashboard</li>
+                <li>Invoice</li>
+                <li>Audit Logs</li>
+                <li>Settings</li>
+                <li>Recurring Entry</li>
+                <li>Search</li>
+                <li>TB/P&L</li>
+                <li>Reports</li>
+                <li>Manufacturing</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-xs-12 mrT2 pd0 mrB2 role clearfix">
+        <div class="col-xs-3 pd0 rolehead">
+            <h1>View Only</h1>
+        </div>
+        <div class="col-xs-9">
+            <ul>
+                <li>Dashboard</li>
+                <li>Invoice</li>
+                <li>Audit Logs</li>
+                <li>Settings</li>
+                <li class="not-allowed">Recurring Entry</li>
+                <li>Search</li>
+                <li>TB/P&L</li>
+                <li class="not-allowed">Reports</li>
+                <li>Manufacturing</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="col-xs-12 mrT2 pd0 mrB2 role clearfix">
+        <div class="col-xs-3 pd0 rolehead">
+            <h1>Edit Only</h1>
+        </div>
+        <div class="col-xs-9">
+            <ul>
+                <li>Dashboard</li>
+                <li>Invoice</li>
+                <li>Audit Logs</li>
+                <li>Settings</li>
+                <li class="not-allowed">Recurring Entry</li>
+                <li>Search</li>
+                <li>TB/P&L</li>
+                <li class="not-allowed">Reports</li>
+                <li>Manufacturing</li>
+            </ul>
+        </div>
+    </div>-->
+
+    <div class="col-xs-12 mrT2 mrB2 role text-center clearfix pd4 new_box">
+        <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">+ Add New Role</h1>
+    </div>
+
+</div>
+
+<!--add and manage group account modal -->
+<div bsModal #permissionModel="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg modal-liq90">
+        <div class="modal-content">
+            <permission-model (closeEvent)="closePopupEvent()"></permission-model>
+        </div>
+    </div>
+</div>

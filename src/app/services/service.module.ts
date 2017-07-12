@@ -28,6 +28,7 @@ import { AccountService } from './account.service';
 import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
+import { PermissionService } from './permission.service';
 /**
  * Home Module
  */
@@ -75,6 +76,7 @@ export class ServiceModule {
         GroupService,
         AccountService,
         InventoryService,
+        PermissionService,
         ErrorHandler,
         SearchService,
         LogsService
