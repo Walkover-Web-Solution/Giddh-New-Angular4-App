@@ -1,3 +1,4 @@
+import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
@@ -10,9 +11,10 @@ import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../../services/inventory.service';
 import { StockGroupRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
-import { IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { IGroupsWithStocksHierarchyMinItem, IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -20,11 +22,18 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public sub: Subscription;
+  public groupsData$: Observable<Select2OptionData[]>;
+  public options: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Option',
+    allowClear: true
+  };
   public parentStockSearchString: string;
   public groupUniqueName: string;
   public addGroupForm: FormGroup;
   public dataSource: Subject<any> = new Subject<any>();
-  public selectedGroup: IGroupsWithStocksFlattenItem;
+  public selectedGroup: Select2OptionData;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
@@ -45,7 +54,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.isAddNewGroupInProcess$ = this.store.select(state => state.inventory.isAddNewGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isDeleteGroupInProcess$ = this.store.select(state => state.inventory.isDeleteGroupInProcess).takeUntil(this.destroyed$);
-
+    this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let flattenData: Select2OptionData[] = [];
+        this.flattenDATA(data.body.results, flattenData);
+        this.dataSource.next(flattenData);
+        this.groupsData$ = Observable.of(flattenData);
+      }
+    });
     this.store.take(1).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
         this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
@@ -76,19 +92,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
       isSelfParent: [true]
     });
-
-    // source for parentgroup selection
-    this.addGroupForm.controls['parentStockGroupUniqueName'].valueChanges
-      .debounceTime(500)
-      .distinctUntilChanged()
-      .switchMap((value: string) => {
-        return this._inventoryService.GetGroupsWithStocksFlatten(value);
-      })
-      .takeUntil(this.destroyed$)
-      .subscribe(data => {
-        this.dataSource.next(data.body.results);
-      });
-
     // enable disable parentGroup select
     this.addGroupForm.controls['isSelfParent'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
@@ -117,9 +120,9 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         updGroupObj.uniqueName = a.uniqueName;
 
         if (a.parentStockGroup) {
-          this.selectedGroup = { name: a.parentStockGroup.name, uniqueName: a.parentStockGroup.uniqueName };
-          updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.name;
-          this.parentStockSearchString = a.parentStockGroup.name;
+          this.selectedGroup = { text: a.parentStockGroup.name, id: a.parentStockGroup.uniqueName };
+          updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.uniqueName;
+          this.parentStockSearchString = a.parentStockGroup.uniqueName;
           updGroupObj.isSelfParent = false;
         } else {
           updGroupObj.parentStockGroupUniqueName = '';
@@ -133,6 +136,19 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       }
     });
   }
+  public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: Select2OptionData[] = []) {
+    rawList.map(p => {
+      if (p) {
+        let newOption: Select2OptionData = { text: '', id: '' };
+        newOption.text = p.name;
+        newOption.id = p.uniqueName;
+        parents.push(newOption);
+        if (p.childStockGroups && p.childStockGroups.length > 0) {
+          this.flattenDATA(p.childStockGroups, parents);
+        }
+      }
+    });
+  }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -141,7 +157,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
 
   // group selected
   public groupSelected(event: any) {
-    this.selectedGroup = event.item;
+    let selected;
+    this.groupsData$.take(1).subscribe(p => {
+      selected = p.find(q => q.id = event.value);
+    });
+    this.selectedGroup = selected;
     this.addGroupForm.updateValueAndValidity();
   }
 
@@ -172,7 +192,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     let stockRequest = new StockGroupRequest();
     stockRequest = this.addGroupForm.value as StockGroupRequest;
     if (!this.addGroupForm.value.isSelfParent) {
-      stockRequest.parentStockGroupUniqueName = this.selectedGroup.uniqueName;
+      stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
     this.addGroupForm.reset();
@@ -184,7 +204,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.activeGroup$.take(1).subscribe(a => activeGroup = a);
     stockRequest = this.addGroupForm.value as StockGroupRequest;
     if (!this.addGroupForm.value.isSelfParent) {
-      stockRequest.parentStockGroupUniqueName = this.selectedGroup.uniqueName;
+      stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
     }
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
     this.store.select(p => p.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$).distinctUntilChanged().filter(p => !p).subscribe((a) => {
@@ -202,4 +222,5 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.addGroupForm.reset();
     this.router.navigateByUrl('/pages/inventory/add-group');
   }
+
 }
