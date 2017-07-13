@@ -30,7 +30,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService) {
+    private _location: LocationService) {
   }
 
   // tslint:disable-next-line:no-empty
@@ -77,7 +77,9 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         }
       });
   }
-
+  public textOnly(e) {
+    this.company.city = this.company.city.replace(/[^a-zA-Z]/g, '');
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
