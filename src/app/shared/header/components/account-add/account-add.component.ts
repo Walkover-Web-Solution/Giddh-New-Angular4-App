@@ -24,7 +24,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public activeAccount$: Observable<AccountResponse>;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
-  public statesSource$: Observable<Select2OptionData[]>;
+  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
     private groupWithAccountsAction: GroupWithAccountsAction, private _companyService: CompanyService) {
@@ -63,7 +63,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     this.activeAccount$.subscribe(acc => {
       if (acc) {
         this.addAccountForm.patchValue(acc);
-        this.statesSource$.take(1).subscribe((data) => {
+        this.statesSource$.subscribe((data) => {
           data.map(d => {
             if (d.text === acc.state) {
               this.addAccountForm.patchValue({state: d.id});
