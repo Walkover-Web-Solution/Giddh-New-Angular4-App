@@ -2,7 +2,7 @@
 
   <div class="clearfix mrB2">
     <button (click)="goToManageStock()" class="btn btn-primary btn-md gico-wrap">
-      <i class="icon-edit" aria-hidden="true"></i> Manage {{ stockUniqueName }} Stock
+      <i class="icon-edit" aria-hidden="true"></i> Manage {{ activeStock$  }} Stock
     </button>
   </div>
   <form #filter="ngForm">

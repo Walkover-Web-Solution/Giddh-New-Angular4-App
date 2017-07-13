@@ -447,7 +447,6 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
         });
       }
-      debugger;
       return Object.assign({}, state, {
         deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
       });
