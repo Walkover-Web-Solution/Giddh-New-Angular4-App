@@ -9,6 +9,7 @@ import * as moment from 'moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../services/actions/search.actions';
 import { GroupService } from '../../../services/group.service';
+import { TypeaheadMatch } from 'ngx-bootstrap';
 
 @Component({
   selector: 'search-sidebar',  // <home></home>
@@ -22,6 +23,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   public fromDate: Date;
   public moment = moment;
   public groupName: string;
+  public groupUniqueName: string;
   public dataSource = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -48,7 +50,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
 
   public getClosingBalance(isRefresh: boolean) {
     let searchRequest: SearchRequest = {
-      groupName: this.groupName,
+      groupName: this.groupUniqueName,
       refresh: isRefresh,
       toDate: moment(this.toDate).format('DD-MM-YYYY'),
       fromDate: moment(this.fromDate).format('DD-MM-YYYY')
@@ -59,6 +61,10 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public OnSelectGroup(g: TypeaheadMatch) {
+    this.groupName = g.item.name;
+    this.groupUniqueName = g.item.id;
   }
 
   public flattenGroup(rawList: any[], parents: any[] = []) {
