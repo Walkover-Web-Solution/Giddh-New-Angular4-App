@@ -1,25 +1,7 @@
-import {
-  AccountResponse,
-  AccountRequest
-} from './../../models/api-models/Account';
-import {
-  AppState
-} from './../../store/roots';
-import {
-  BaseResponse
-} from './../../models/api-models/BaseResponse';
-import {
-  GroupResponse,
-  FlattenGroupsAccountsRequest,
-  FlattenGroupsAccountsResponse,
-  GroupCreateRequest,
-  ShareGroupRequest,
-  GroupSharedWithResponse,
-  MoveGroupRequest,
-  MoveGroupResponse,
-  GroupsTaxHierarchyResponse,
-  GroupUpateRequest
-} from './../../models/api-models/Group';
+import { AccountResponse, AccountRequest } from '../../models/api-models/Account';
+import { AppState } from '../../store/roots';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest, MoveGroupResponse, GroupsTaxHierarchyResponse, GroupUpateRequest } from '../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -61,8 +43,16 @@ export class GroupWithAccountsAction {
   public static GET_GROUP_UNIQUENAME = 'GroupUniqueName';
   public static GET_GROUP_UNIQUENAME_RESPONSE = 'GroupUniqueNameResponse';
 
+  public static SHOW_ADD_GROUP_FORM = 'GroupShowAddGroupForm';
+  public static HIDE_ADD_GROUP_FORM = 'GroupHideAddGroupForm';
+  public static SHOW_EDIT_GROUP_FORM = 'GroupShowEditGroupForm';
+  public static HIDE_EDIT_GROUP_FORM = 'GroupHideEditGroupForm';
+
   public static SHOW_ADD_ACCOUNT_FORM = 'GroupShowAddAccountForm';
   public static HIDE_ADD_ACCOUNT_FORM = 'GroupHideAddAccountForm';
+  public static SHOW_EDIT_ACCOUNT_FORM = 'GroupShowEditAccountForm';
+  public static HIDE_EDIT_ACCOUNT_FORM = 'GroupHideEditAccountForm';
+
   public static RESET_GROUPS_STATE = 'GroupResetState';
   public static APPLY_GROUP_TAX = 'ApplyGroupTax';
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyGroupTaxResponse';
@@ -558,6 +548,30 @@ export class GroupWithAccountsAction {
     };
   }
 
+  public showAddGroupForm(): Action {
+    return {
+      type: GroupWithAccountsAction.SHOW_ADD_GROUP_FORM
+    };
+  }
+
+  public hideAddGroupForm(): Action {
+    return {
+      type: GroupWithAccountsAction.HIDE_ADD_GROUP_FORM
+    };
+  }
+
+  public showEditGroupForm(): Action {
+    return {
+      type: GroupWithAccountsAction.SHOW_EDIT_GROUP_FORM
+    };
+  }
+
+  public hideEditGroupForm(): Action {
+    return {
+      type: GroupWithAccountsAction.HIDE_EDIT_GROUP_FORM
+    };
+  }
+
   public showAddAccountForm(): Action {
     return {
       type: GroupWithAccountsAction.SHOW_ADD_ACCOUNT_FORM
@@ -567,6 +581,18 @@ export class GroupWithAccountsAction {
   public hideAddAccountForm(): Action {
     return {
       type: GroupWithAccountsAction.HIDE_ADD_ACCOUNT_FORM
+    };
+  }
+
+  public showEditAccountForm(): Action {
+    return {
+      type: GroupWithAccountsAction.SHOW_EDIT_ACCOUNT_FORM
+    };
+  }
+
+  public hideEditAccountForm(): Action {
+    return {
+      type: GroupWithAccountsAction.HIDE_EDIT_ACCOUNT_FORM
     };
   }
 

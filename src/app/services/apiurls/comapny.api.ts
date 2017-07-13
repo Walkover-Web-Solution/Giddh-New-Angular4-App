@@ -10,4 +10,5 @@ export const COMPANY_API = {
   DELETE_COMPANY: Configuration.ApiUrl + 'company/:uniqueName',
   TAX: Configuration.ApiUrl + 'company/:companyUniqueName/users', // get call
   GET_COMPANY_USERS: Configuration.ApiUrl + 'company/:uniqueName',
+  GET_ALL_STATES:  Configuration.ApiUrl + 'states'
 };
