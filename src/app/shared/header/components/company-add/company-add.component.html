@@ -60,8 +60,9 @@
                 </div>
                 <div class="form-group">
                   <input #city="ngModel" [typeahead]="dataSource" type="text" [ngClass]="{'hasError': city.invalid, 'has-success':city.valid}"
-                    [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off" required maxlength="50"
-                    placeholder="Company City">
+                    [(ngModel)]="company.city" class="form-control" name="city" pattern="[a-zA-Z^]" autocomplete="off" required
+                    maxlength="50" placeholder="Company City" (keyup)="textOnly($event)">
+                    <div *ngIf="createCompanyForm.submitted && !city.valid" class="help-block">Password is required</div>
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid">Create</button>
