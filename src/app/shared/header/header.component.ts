@@ -147,6 +147,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     e.stopPropagation();
     e.preventDefault();
     this.store.dispatch(this.companyActions.RefreshCompanies());
+    e.stopPropagation();
   }
 
   public changeCompany(selectedCompanyUniqueName: string) {
@@ -206,7 +207,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.manageGroupsAccountsModal.onShown.subscribe((a => {
       (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
       (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
-      debugger;
     }));
   }
 
