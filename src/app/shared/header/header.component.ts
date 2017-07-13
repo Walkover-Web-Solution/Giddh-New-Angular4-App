@@ -181,6 +181,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(this.companyActions.ResetCompanyPopup());
   }
   public onShown() {
+    //
   }
   public loadAddCompanyComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
