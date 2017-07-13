@@ -465,7 +465,6 @@ const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
 const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], updatedGroup: GroupResponse) => {
   for (let grp of groups) {
     if (grp.uniqueName === updatedGroup.uniqueName) {
-      // debugger;
       grp.name = updatedGroup.name;
       grp.uniqueName = updatedGroup.uniqueName;
       break;
