@@ -78,7 +78,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       });
   }
   public textOnly(e) {
-    this.company.city = this.company.city.replace(/[^a-zA-Z]/g, '');
+    this.company.city = this.company.city.replace(/[^a-zA-Z\s]/g, '');
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
