@@ -418,6 +418,24 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return state;
       }
+    case AccountsAction.DELETE_ACCOUNT_RESPONSE:
+      let d: BaseResponse<string, string> = action.payload;
+      if (d.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        groupArray.forEach(grp => {
+          if (grp.uniqueName === state.activeGroup.uniqueName) {
+            let index = grp.accounts.findIndex(a => a.uniqueName === d.request);
+            grp.accounts.splice(index, 1);
+            return;
+          } else {
+            removeAccountFunc(grp.groups, state.activeGroup.uniqueName, d.request);
+          }
+        });
+        return Object.assign({}, state, {
+          groupswithaccounts: groupArray
+        });
+      }
+      return state;
     default:
       return state;
   }
@@ -504,4 +522,16 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
     }
   }
   return result;
+};
+const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string) => {
+  for (let grp of groups) {
+    if (grp.uniqueName === uniqueName) {
+      let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+      grp.accounts.splice(index, 1);
+      break;
+    }
+    if (grp.groups) {
+      removeAccountFunc(grp.groups, uniqueName, accountUniqueName);
+    }
+  }
 };

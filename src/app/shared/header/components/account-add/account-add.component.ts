@@ -4,7 +4,7 @@ import { GroupResponse } from './../../../../models/api-models/Group';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AccountResponse } from '../../../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
@@ -13,6 +13,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { States } from '../../../../models/api-models/Company';
 import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'account-add',
@@ -24,6 +25,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public activeAccount$: Observable<AccountResponse>;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
+  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -124,6 +126,23 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     accountObj.state = states.find(st => st.id === this.addAccountForm.value.state).text;
     this.store.dispatch(this.accountsAction.updateAccount(activeAcc.uniqueName, accountObj));
   }
+
+  public showDeleteAccountModal() {
+    this.deleteAccountModal.show();
+  }
+
+  public hideDeleteAccountModal() {
+    this.deleteAccountModal.hide();
+  }
+
+  public deleteAccount() {
+    let activeAccUniqueName = null;
+    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
+    this.hideDeleteAccountModal();
+    this.addAccountForm.reset();
+  }
+
   public jumpToGroup(uniqueName: string) {
     this.store.dispatch(this.accountsAction.resetActiveAccount());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(uniqueName));
