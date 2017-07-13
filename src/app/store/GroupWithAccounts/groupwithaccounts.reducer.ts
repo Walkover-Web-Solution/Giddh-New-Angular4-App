@@ -274,6 +274,47 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case GroupWithAccountsAction.SHOW_ADD_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: true,
+        showEditGroup: false,
+        showEditAccount: false
+      });
+    case GroupWithAccountsAction.HIDE_ADD_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
+      });
+
+    case GroupWithAccountsAction.SHOW_EDIT_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: true,
+        showEditAccount: false
+      });
+    case GroupWithAccountsAction.HIDE_EDIT_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
+      });
     case GroupWithAccountsAction.SHOW_ADD_ACCOUNT_FORM:
       return Object.assign({}, state, {
         addAccountOpen: true,
@@ -285,6 +326,26 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showEditAccount: false
       });
     case GroupWithAccountsAction.HIDE_ADD_ACCOUNT_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
+      });
+    case GroupWithAccountsAction.SHOW_EDIT_ACCOUNT_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: true,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: true
+      });
+    case GroupWithAccountsAction.HIDE_EDIT_ACCOUNT_FORM:
       return Object.assign({}, state, {
         addAccountOpen: false,
         activeAccount: null,

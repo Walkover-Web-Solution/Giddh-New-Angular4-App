@@ -1,11 +1,11 @@
-<div class="bdrR bdrL row " id="middleBody" *ngIf="showGroupForm">
+<div class="bdrR bdrL row " id="middleBody" >
 
-
+  <!--breadcrumbs-->
   <div class="breadcrumbs pdL2 pdT1 pdR2 pdB1">
     <!-- ng-show="mc.updateBreadCrumbs" -->
     <div class="pull-left pdT1 col-xs-8 pdL0">
       <!-- ngIf: mc.breadCrumbList.length -->
-      <ol class="breadcrumb mrB2" *ngIf="(activeAccount$ | async)?.parentGroups.length">
+      <ol class="breadcrumb mrB2">
         <li *ngFor="let value of (activeAccount$ | async)?.parentGroups;let i = index" [ngClass]="{'active': i === ((activeAccount$ | async)?.parentGroups.length -1 ) }">
           <a href="javascript:void(0)">{{ value.name }}
               </a>
@@ -20,8 +20,8 @@
     <!-- end ngIf: mc.showOnUpdate && canUpdate -->
   </div>
 
-
-  <div class="view_forms form_box ng-scope" *ngIf="(showEditGroup$ | async)">
+  <!--add group form-->
+  <div class="view_forms form_box ng-scope" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
     <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm" (submit)="updateGroup()"
       novalidate [formGroup]="groupDetailForm" class="">
       <div class="form_bg pd2">
@@ -43,19 +43,24 @@
         </div>
         <div class="form-group clearfix">
           <label>Description</label>
-          <textarea maxlength="200" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
+          <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
         </div>
       </div>
 
       <div class="pd2 pdB clearfix">
-        <button class="btn btn-primary" *ngIf="!(activeGroup$ | async)?.fixed" [disabled]="!groupDetailForm.valid">Update
+        <button class="btn btn-success pull-right" *ngIf="(showAddNewGroup$ | async)" [disabled]="!groupDetailForm.valid">Add
+        </button>
+        <button class="btn btn-success" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" [disabled]="!groupDetailForm.valid">Update
         </button>
       </div>
     </form>
   </div>
-  <!--add aacount form  -->
+
+  <!--add account form  -->
   <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
+    <!--account add component-->
     <account-add></account-add>
+
     <!--taxes-->
     <div class="clearfix" *ngIf="isTaxableAccount$ | async">
       <div class="bdrB">
@@ -173,6 +178,7 @@
 
   </div>
 
+  <!--ng-busy-->
   <div class="" *ngIf="activeGroupInProgress$ | async ">
 
     <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
@@ -211,13 +217,16 @@
       </div>
     </div>
   </div>
+
+  <!--add new buttons-->
   <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
     <div class="vcenter">
-      <button class="btn isActive mrB2" ng-click="mc.getSelectedType('grp');mc.createNewForm()">Create Group</button>
+      <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
       <span class="clearfix"></span>
-      <button class="btn isActive" ng-click="mc.getSelectedType('acc');mc.createNewForm()" ng-hide="mc.addToIndex == 1">Create A/c</button>
+      <button class="btn isActive" (click)="showAddAccountForm()">Create A/c</button>
     </div>
   </div>
+
   <!--delete Account modal  -->
   <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
