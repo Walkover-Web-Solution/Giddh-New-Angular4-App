@@ -70,6 +70,6 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     this.directiveScroll.scrollToRight();
   }
   public ShowRightForm(e) {
-    // debugger;
+    //
   }
 }
