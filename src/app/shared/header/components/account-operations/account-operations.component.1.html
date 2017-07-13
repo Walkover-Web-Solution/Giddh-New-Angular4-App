@@ -200,8 +200,8 @@
   </div>
 
   <div class="view_forms form_box ng-scope" *ngIf="(showEditGroup$ | async)" >
-    <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm" (submit)="updateGroup()"
-      novalidate [formGroup]="groupDetailForm" class="">
+    <form class="horizontal-form ng-pristine ng-valid ng-valid-required" name="groupDetailForm" (submit)="updateGroup()"
+      novalidate [formGroup]="groupDetailForm">
       <div class="form_bg pd2">
         <div class="form-group clearfix">
           <div class="col-xs-7">
@@ -393,13 +393,16 @@
       </div>
     </div>
   </div>
+
+  <!--add new button-->
   <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
     <div class="vcenter">
-      <button class="btn isActive mrB2" ng-click="mc.getSelectedType('grp');mc.createNewForm()">Create Group</button>
+      <button class="btn isActive mrB2">Create Group</button>
       <span class="clearfix"></span>
-      <button class="btn isActive" ng-click="mc.getSelectedType('acc');mc.createNewForm()" ng-hide="mc.addToIndex == 1">Create A/c</button>
+      <button class="btn isActive" >Create A/c</button>
     </div>
   </div>
+
   <!--delete Account modal  -->
   <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">

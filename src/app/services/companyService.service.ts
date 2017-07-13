@@ -16,6 +16,7 @@ import {
 import { COMPANY_API } from './apiurls/comapny.api';
 import { HandleCatch } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
+import { States } from '../models/api-models/Company';
 
 @Injectable()
 export class CompanyService {
@@ -120,12 +121,12 @@ export class CompanyService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.post(COMPANY_API.SEND_EMAIL
-        .replace(':companyUniqueName', this.companyUniqueName)
-        .replace(':from', request.params.from)
-        .replace(':to', request.params.to)
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':from', request.params.from)
+      .replace(':to', request.params.to)
       , request.data).map((res) => {
-      return res.json();
-    }).catch((e) => HandleCatch<BulkEmailRequest, string>(e));
+        return res.json();
+      }).catch((e) => HandleCatch<BulkEmailRequest, string>(e));
   }
 
   public sendSms(request: BulkEmailRequest): Observable<BaseResponse<BulkEmailRequest, string>> {
@@ -136,11 +137,21 @@ export class CompanyService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.post(COMPANY_API.SEND_SMS
-        .replace(':companyUniqueName', this.companyUniqueName)
-        .replace(':from', request.params.from)
-        .replace(':to', request.params.to)
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':from', request.params.from)
+      .replace(':to', request.params.to)
       , request.data).map((res) => {
-      return res.json();
-    }).catch((e) => HandleCatch<BulkEmailRequest, string>(e));
+        return res.json();
+      }).catch((e) => HandleCatch<BulkEmailRequest, string>(e));
+  }
+
+  /**
+   * get all states
+   */
+  public getAllStates(): Observable<BaseResponse<States[], string>> {
+    return this._http.get(COMPANY_API.GET_ALL_STATES).map((res) => {
+      let data: BaseResponse<States[], string> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<States[], string>(e));
   }
 }
