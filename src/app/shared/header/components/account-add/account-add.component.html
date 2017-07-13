@@ -1,111 +1,3 @@
-<!--<div>-->
-<!--<fieldset>-->
-
-
-<!--<div class="clearfix" style="display:none">-->
-<!--<div class="col-xs-12">-->
-<!--<div class="alert alert-warning" ng-class="['alert-' + (type || 'warning'), closeable ? 'alert-dismissible' : null]"-->
-<!--role="alert" type="warning" ng-show="cantUpdate">-->
-<!--<button ng-show="closeable" type="button" class="close ng-hide" ng-click="close({$event: $event})">-->
-<!--<span aria-hidden="true">×</span>-->
-<!--<span class="sr-only">Close</span>-->
-<!--</button>-->
-<!--<div ng-transclude=""><span class="ng-scope">For security reasons, you can't update current account</span></div>-->
-<!--</div>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--<div class="clearfix bdrB">-->
-<!--<div class="dGryHead ng-binding" *ngIf="!(activeAccount$ | async)">Add Account</div>-->
-<!--<div class="dGryHead ng-binding" *ngIf="(activeAccount$ | async)">Update Account</div>-->
-<!--<form class="col-xs-12" name="addAccountForm" [formGroup]="addAccountForm" novalidate>-->
-
-<!--<div class="row pdT2 pdL pdR">-->
-
-<!--<div class="col-xs-6">-->
-<!--<section class="greyBox" style="min-height:300px;">-->
-<!--<p class="form-group">Basic Info (required)*</p>-->
-
-<!--<div class="form-group">-->
-<!--<input type="text" placeholder="Enter Account name" class="form-control" name="name" formControlName="name" required="" ng-disabled="isFixedAcc"-->
-<!--autocomplete="off" (change)="generateUniqueName()">-->
-<!--</div>-->
-<!--<div class="form-group">-->
-<!--<input type="text" placeholder="Unique Names" class="form-control " name="uniqueName" formControlName="uniqueName"-->
-<!--autocomplete="off" UniqueNameDirective>-->
-<!--</div>-->
-
-
-<!--<div class="row">-->
-<!--<p class="mrB small col-xs-12">Opening balance types</p>-->
-<!--</div>-->
-<!--<div class="row">-->
-<!--<div class="col-xs-6">-->
-<!--<select class="form-control" name="openingBalanceType" formControlName="openingBalanceType">-->
-<!--<option value="">&#45;&#45;Please select&#45;&#45;</option>-->
-<!--<option value="CREDIT" label="Credit">Credit</option>-->
-<!--<option value="DEBIT" label="Debit">Debit</option></select>-->
-<!--</div>-->
-<!--<div class="col-xs-6">-->
-<!--<input type="text" class="form-control" value="0" name="openingBalance" formControlName="openingBalance">-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</section>-->
-<!--</div>-->
-<!--<div class="col-xs-6">-->
-
-<!--<div class="form-group row">-->
-<!--<div class="col-xs-12">-->
-
-<!--<input type="text" formControlName="mobileNo" class="form-control"  placeholder="9198XXXXXXXX">-->
-
-<!--</div>-->
-<!--</div>-->
-
-<!--<div class="form-group">-->
-<!--<input type="email" placeholder="Email" class="form-control" name="email" formControlName="email">-->
-<!--</div>-->
-
-<!--<div class="form-group">-->
-<!--<input type="text" placeholder="Company Name" class="form-control" name="companyName" formControlName="companyName" ng-disabled="isFixedAcc">-->
-<!--</div>-->
-<!--<div class="form-group">-->
-<!--<input type="text" placeholder="Attention To (Name will be used in invoice)" class="form-control" name="attnTo" formControlName="attentionTo"-->
-<!--ng-disabled="isFixedAcc">-->
-<!--</div>-->
-
-<!--<div class="form-group">-->
-<!--<input type="text" placeholder="Description" class="form-control" name="description" formControlName="description" ng-disabled="isFixedAcc">-->
-<!--</div>-->
-
-<!--<div class="form-group">-->
-<!--<textarea placeholder="Address" class="form-control" name="address" formControlName="address" ng-disabled="isFixedAcc"></textarea>-->
-<!--</div>-->
-<!--</div>-->
-
-<!--</div>-->
-<!--&lt;!&ndash; end of clearfix &ndash;&gt;-->
-<!--<div class="row pdL pdR">-->
-<!--<div class="form-group col-xs-12 text-center">-->
-<!--<button *ngIf="!(activeAccount$ | async)" type="submit" (click)="submit()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Add</button>-->
-<!--<button *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed" type="submit" (click)="updateAccount()" class="btn btn-success" [disabled]="!addAccountForm.valid" style="width:250px;">Update</button>-->
-<!--</div>-->
-<!--</div>-->
-<!--</form>-->
-<!--</div>-->
-<!--</fieldset>-->
-<!--</div>-->
-
-<!--<div class="row">-->
-
-
-<!--  switch button -->
-<!-- ngIf: mc.createNew -->
-<!--  -->
-
-<!-- ngIf: mc.selectedType == 'acc' && !mc.createNew -->
-<!-- ngInclude: '/public/webapp/NewManageGroupsAndAccounts/accountOperations.html' -->
 <div>
 
   <div class="view_forms ng-scope" id="Addaccount" style="padding-bottom: 200px;">
@@ -150,7 +42,7 @@
         <div class="form-group col-xs-3">
           <div class="row">
             <label>Mobile Number</label>
-            <input type="text" formControlName="mobileNo" class="form-control"  placeholder="9198XXXXXXXX">
+            <input type="text" formControlName="mobileNo" class="form-control" placeholder="9198XXXXXXXX">
           </div>
         </div>
 
@@ -177,11 +69,10 @@
         </div>
         <div class="form-group mrB col-xs-5">
           <label>State</label>
-           <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-          (valueChanged)="stateSelected($event)" formControlName="state"></select2>
+          <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event)"
+            formControlName="state"></select2>
 
-          <input type="text" class="form-control mrT1" name="stateCode" formControlName="stateCode"
-            placeholder="State Code" readonly="readonly">
+          <input type="text" class="form-control mrT1" name="stateCode" formControlName="stateCode" placeholder="State Code" readonly="readonly">
         </div>
       </div>
       <div class="clearfix"></div>
@@ -208,42 +99,30 @@
       </div>
 
       <div class="pd2 clearfix pdB1">
-        <button class="btn btn-success pull-right" (click)="updateAccount()" [disabled]="addAccountForm.invalid">Update
+
+        <!--delete account  -->
+        <a class="btn isActive" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed" (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account
+        </a>
+
+        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" (click)="submit()" [disabled]="addAccountForm.invalid">Add
             </button>
+        <button class="btn btn-success pull-right" *ngIf="(activeAccount$ | async)" (click)="updateAccount()" [disabled]="addAccountForm.invalid">Update
+              </button>
       </div>
 
-
-      <!-- ngIf: mc.AccountCategory == 'income' || mc.AccountCategory == 'expenses' -->
-      <!-- taxes -->
-      <!-- ngIf: mc.AccountCategory == 'income' || mc.AccountCategory == 'expenses' -->
-      <!-- end taxes -->
     </form>
 
-    <!-- ngIf: mc.showOnUpdate && !mc.selectedAcc.fixed -->
-
-    <!-- ngIf: mc.showOnUpdate && !mc.selectedAcc.fixed -->
-
     <div class="clearfix"></div>
-
-    <!-- ngIf: mc.showOnUpdate && !mc.selectedAcc.fixed -->
-    <!-- pd2 -->
-
-    <!--  -->
-    <!-- ngIf: mc.showDeleteMove -->
-
   </div>
-
-
-  <script type="text/ng-template" id="moveaccount.html" class="ng-scope">
-    <a href="javascript:void(0)" class="account-list-item" set-drop-overflow style="border-bottom:1px solid #e0e0e0;">
-          <span class="account-list-item" ng-bind-html="match.label | uibTypeaheadHighlight:query"
-                style="display: block;font-size:12px"></span>
-          <span class="account-list-item" ng-bind-html="match.model.uniqueName | uibTypeaheadHighlight:query"
-                style="display: block;font-size:10px"></span>
-        </a>
-  </script>
 </div>
-<!-- end ngIf: mc.selectedType == 'acc' && !mc.createNew -->
-<!-- ngIf: mc.selectedType == 'grp' && !mc.createNew -->
 
-<!--</div>-->
+<!--delete Account modal  -->
+<div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()"
+        (successCallBack)="deleteAccount()">
+      </confirm-modal>
+    </div>
+  </div>
+</div>

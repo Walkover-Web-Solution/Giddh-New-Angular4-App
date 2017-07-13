@@ -169,10 +169,6 @@
         </div>
 
       </div>
-      <!--delete account  -->
-      <div class="pd2" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
-        <button class="btn btn-danger" (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account</button>
-      </div>
 
     </div>
 
@@ -227,14 +223,4 @@
     </div>
   </div>
 
-  <!--delete Account modal  -->
-  <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()"
-          (successCallBack)="deleteAccount()">
-        </confirm-modal>
-      </div>
-    </div>
-  </div>
 </div>
