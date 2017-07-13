@@ -274,6 +274,47 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case GroupWithAccountsAction.SHOW_ADD_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: true,
+        showEditGroup: false,
+        showEditAccount: false
+      });
+    case GroupWithAccountsAction.HIDE_ADD_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
+      });
+
+    case GroupWithAccountsAction.SHOW_EDIT_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: true,
+        showEditAccount: false
+      });
+    case GroupWithAccountsAction.HIDE_EDIT_GROUP_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
+      });
     case GroupWithAccountsAction.SHOW_ADD_ACCOUNT_FORM:
       return Object.assign({}, state, {
         addAccountOpen: true,
@@ -285,6 +326,26 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showEditAccount: false
       });
     case GroupWithAccountsAction.HIDE_ADD_ACCOUNT_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: false,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
+      });
+    case GroupWithAccountsAction.SHOW_EDIT_ACCOUNT_FORM:
+      return Object.assign({}, state, {
+        addAccountOpen: true,
+        activeAccount: null,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: true
+      });
+    case GroupWithAccountsAction.HIDE_EDIT_ACCOUNT_FORM:
       return Object.assign({}, state, {
         addAccountOpen: false,
         activeAccount: null,
@@ -357,6 +418,24 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return state;
       }
+    case AccountsAction.DELETE_ACCOUNT_RESPONSE:
+      let d: BaseResponse<string, string> = action.payload;
+      if (d.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        groupArray.forEach(grp => {
+          if (grp.uniqueName === state.activeGroup.uniqueName) {
+            let index = grp.accounts.findIndex(a => a.uniqueName === d.request);
+            grp.accounts.splice(index, 1);
+            return;
+          } else {
+            removeAccountFunc(grp.groups, state.activeGroup.uniqueName, d.request);
+          }
+        });
+        return Object.assign({}, state, {
+          groupswithaccounts: groupArray
+        });
+      }
+      return state;
     default:
       return state;
   }
@@ -443,4 +522,16 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
     }
   }
   return result;
+};
+const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string) => {
+  for (let grp of groups) {
+    if (grp.uniqueName === uniqueName) {
+      let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+      grp.accounts.splice(index, 1);
+      break;
+    }
+    if (grp.groups) {
+      removeAccountFunc(grp.groups, uniqueName, accountUniqueName);
+    }
+  }
 };
