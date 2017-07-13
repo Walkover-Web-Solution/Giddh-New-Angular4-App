@@ -144,6 +144,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public refreshCompanies(e: Event) {
+    e.stopPropagation();
+    e.preventDefault();
     this.store.dispatch(this.companyActions.RefreshCompanies());
   }
 
