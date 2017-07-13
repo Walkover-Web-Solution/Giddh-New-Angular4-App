@@ -47,8 +47,11 @@ export class CustomStockUnitAction {
       return this._inventoryService.DeleteStockUnit(action.payload)
         .map((r) => this.validateResponse(r, {
           type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
-          payload: action.payload
-        }, true, r.body));
+          payload: r
+        }, true, r.body, {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
+            payload: r
+          }));
     });
 
   constructor(private action$: Actions,
