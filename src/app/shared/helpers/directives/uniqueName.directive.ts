@@ -9,7 +9,8 @@ export class UniqueNameDirective  {
   @HostListener('keyup', ['$event'])
   public onChange(value: any) {
     let pattern = /^[a-zA-Z0-9]*$/;
-
+    debugger;
+    this.el.value = value.target.value.toLowerCase();
     if (pattern.test(value.key)) {
       this.el.value = value.target.value.replace(/^\s+|\s+$/gm, '').toLowerCase();
     } else {
