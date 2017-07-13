@@ -50,7 +50,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
-  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
@@ -513,10 +513,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.deleteGroupModal.hide();
   }
 
-  public hideDeleteAccountModal() {
-    this.deleteAccountModal.hide();
-  }
-
   public showAddGroupForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddGroupForm());
     this.groupDetailForm.reset();
@@ -530,22 +526,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.deleteGroupModal.show();
   }
 
-  public showDeleteAccountModal() {
-    this.deleteAccountModal.show();
-  }
-
   public deleteGroup() {
     let activeGrpUniqueName = null;
     this.activeGroup$.take(1).subscribe(s => activeGrpUniqueName = s.uniqueName);
     this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
     this.hideDeleteGroupModal();
-  }
-
-  public deleteAccount() {
-    let activeAccUniqueName = null;
-    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
-    this.hideDeleteAccountModal();
   }
 
   public ngOnDestroy() {

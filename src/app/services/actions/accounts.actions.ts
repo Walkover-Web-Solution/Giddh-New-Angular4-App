@@ -293,8 +293,6 @@ export class AccountsAction {
         this._toasty.successToast(action.payload.body, '');
         let activeGroup: GroupResponse = null;
         this.store.take(1).subscribe(s => activeGroup = s.groupwithaccounts.activeGroup);
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-        this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
       }
       return {
         type: ''
