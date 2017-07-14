@@ -54,7 +54,6 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
     if (!(_.isNull(obj.childGroups)) && obj.childGroups.length > 0) {
       uniqueList = flattenSearchGroupsAndAccounts(obj.childGroups as SearchResponse[]) as AccountFlat[];
       _.each(obj.accounts, (account) => {
-        debugger;
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
           closeBalType: account.closingBalance.type,
@@ -73,7 +72,6 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       return uniqueList;
     } else {
       _.each(obj.accounts, (account) => {
-        debugger;
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
           closeBalType: account.closingBalance.type,

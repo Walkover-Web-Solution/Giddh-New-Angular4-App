@@ -13,11 +13,11 @@ export class AuditLogsSidebarVM {
     multiple: false,
     width: '100%',
     placeholder: 'Select Option',
-    allowClear: true
+    allowClear: true,
   };
   public moment = moment;
   public filters: any[] = [
-    { text: 'All', id: '' },
+    { text: 'All', id: 'All' },
     { text: 'create', id: 'create' },
     { text: 'delete', id: 'delete' },
     { text: 'share', id: 'share' },
@@ -32,7 +32,7 @@ export class AuditLogsSidebarVM {
     { text: 'ledger-excel-import', id: 'ledger-excel-import' }
   ];
   public entities: any[] = [
-    { text: 'All', id: '' },
+    { text: 'All', id: 'All' },
     { text: 'company', id: 'company' },
     { text: 'group', id: 'group' },
     { text: 'account', id: 'account' },
