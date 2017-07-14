@@ -1,5 +1,5 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-      novalidate [formGroup]="groupDetailForm" class="">
+      novalidate [formGroup]="groupDetailForm">
   <div class="form_bg pd2">
     <div class="form-group clearfix">
       <div class="col-xs-7">
@@ -24,8 +24,22 @@
   </div>
 
   <div class="pd2 pdB clearfix">
-    <button class="btn btn-success" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
+    <a href="javascript:void(0);" class="btn isActive" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
+       (click)="showDeleteGroupModal()">DELETE {{ (activeGroup$ | async)?.name }}</a>
+    <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
             [disabled]="!groupDetailForm.valid" (click)="updateGroup()">Update
     </button>
   </div>
 </form>
+
+<!--delete Group modal  -->
+<div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete Group'"
+                     [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
+                     (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
+      </confirm-modal>
+    </div>
+  </div>
+</div>

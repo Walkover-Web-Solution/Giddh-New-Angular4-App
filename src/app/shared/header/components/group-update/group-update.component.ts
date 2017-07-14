@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
@@ -6,6 +6,7 @@ import { AppState } from '../../../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupResponse } from '../../../../models/api-models/Group';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'group-update',
@@ -19,6 +20,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy {
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public showEditGroup$: Observable<boolean>;
+  @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -41,6 +43,21 @@ export class GroupUpdateComponent implements OnInit, OnDestroy {
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
       }
     });
+  }
+
+  public showDeleteGroupModal() {
+    this.deleteGroupModal.show();
+  }
+
+  public hideDeleteGroupModal() {
+    this.deleteGroupModal.hide();
+  }
+
+  public deleteGroup() {
+    let activeGrpUniqueName = null;
+    this.activeGroup$.take(1).subscribe(s => activeGrpUniqueName = s.uniqueName);
+    this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
+    this.hideDeleteGroupModal();
   }
 
   public async updateGroup() {

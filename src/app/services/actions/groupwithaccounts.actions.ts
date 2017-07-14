@@ -1,7 +1,18 @@
 import { AccountResponse, AccountRequest } from '../../models/api-models/Account';
 import { AppState } from '../../store/roots';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest, MoveGroupResponse, GroupsTaxHierarchyResponse, GroupUpateRequest } from '../../models/api-models/Group';
+import {
+  GroupResponse,
+  FlattenGroupsAccountsRequest,
+  FlattenGroupsAccountsResponse,
+  GroupCreateRequest,
+  ShareGroupRequest,
+  GroupSharedWithResponse,
+  MoveGroupRequest,
+  MoveGroupResponse,
+  GroupsTaxHierarchyResponse,
+  GroupUpateRequest
+} from '../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
@@ -11,6 +22,7 @@ import { GroupService } from '../group.service';
 import { ToasterService } from '../toaster.service';
 import { AccountService } from '../account.service';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
+import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -75,7 +87,7 @@ export class GroupWithAccountsAction {
       let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       this._toasty.successToast(action.payload.body, action.payload.status);
       let grouName = null;
@@ -142,7 +154,7 @@ export class GroupWithAccountsAction {
       let data: BaseResponse<GroupResponse, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       return this.sharedGroupWith(data.body.uniqueName);
     });
@@ -347,6 +359,11 @@ export class GroupWithAccountsAction {
     .ofType(GroupWithAccountsAction.DELETE_GROUP)
     .switchMap(action => this._groupService.DeleteGroup(action.payload))
     .map(response => {
+      let activeGrp: IGroupsWithAccounts;
+      this.store.select(s => s.groupwithaccounts.groupswithaccounts).take(1).subscribe(a => {
+        activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null );
+      });
+      response.queryString = {groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
       return this.deleteGroupResponse(response);
     });
 
@@ -356,14 +373,15 @@ export class GroupWithAccountsAction {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {
-          type: ''
-        };
       } else {
         this._toasty.successToast(action.payload.body, '');
-        this.store.dispatch(this.getGroupWithAccounts(''));
-        return this.ResetActiveGroup();
+        if (action.payload.queryString.parentUniqueName) {
+          this.store.dispatch(this.getGroupDetails(action.payload.queryString.parentUniqueName));
+        }
       }
+      return {
+        type: ''
+      };
     });
 
   @Effect()
@@ -382,15 +400,15 @@ export class GroupWithAccountsAction {
         type: ''
       };
     });
-  constructor(
-    private action$: Actions,
-    private _groupService: GroupService,
-    private _accountService: AccountService,
-    private _toasty: ToasterService,
-    private store: Store<AppState>
-  ) {
+
+  constructor(private action$: Actions,
+              private _groupService: GroupService,
+              private _accountService: AccountService,
+              private _toasty: ToasterService,
+              private store: Store<AppState>) {
     //
   }
+
   public SetActiveGroup(uniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.SET_ACTIVE_GROUP,
@@ -400,7 +418,7 @@ export class GroupWithAccountsAction {
 
   public ResetActiveGroup(): Action {
     return {
-      type: GroupWithAccountsAction.RESET_ACTIVE_GROUP,
+      type: GroupWithAccountsAction.RESET_ACTIVE_GROUP
     };
   }
 
@@ -445,20 +463,21 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
+
   public createGroupResponse(value: BaseResponse<GroupResponse, GroupCreateRequest>): Action {
     return {
       type: GroupWithAccountsAction.CREATE_GROUP_RESPONSE,
       payload: value
     };
   }
-  public getFlattenGroupsAccounts(
-    value?: FlattenGroupsAccountsRequest
-  ): Action {
+
+  public getFlattenGroupsAccounts(value?: FlattenGroupsAccountsRequest): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_DETAILS,
       payload: value
     };
   }
+
   public getFlattenGroupsAccountsResponse(value: BaseResponse<FlattenGroupsAccountsResponse, string>): Action {
     return {
       type: GroupWithAccountsAction.GET_FLATTEN_GROUPS_ACCOUNTS_RESPONSE,
@@ -472,10 +491,11 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          groupUniqueName
-        })
+        groupUniqueName
+      })
     };
   }
+
   public shareGroupResponse(value: BaseResponse<string, ShareGroupRequest>): Action {
     return {
       type: GroupWithAccountsAction.SHARE_GROUP_RESPONSE,
@@ -489,10 +509,11 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-          groupUniqueName
-        })
+        groupUniqueName
+      })
     };
   }
+
   public unShareGroupResponse(value: BaseResponse<string, string>): Action {
     return {
       type: GroupWithAccountsAction.UNSHARE_GROUP_RESPONSE,
@@ -506,6 +527,7 @@ export class GroupWithAccountsAction {
       payload: groupUniqueName
     };
   }
+
   public sharedGroupWithResponse(value: BaseResponse<GroupSharedWithResponse[], string>): Action {
     return {
       type: GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE,
@@ -519,10 +541,11 @@ export class GroupWithAccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          groupUniqueName
-        })
+        groupUniqueName
+      })
     };
   }
+
   public moveGroupResponse(value: BaseResponse<MoveGroupResponse, MoveGroupRequest>): Action {
     return {
       type: GroupWithAccountsAction.MOVE_GROUP_RESPONSE,
@@ -536,12 +559,14 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
+
   public getTaxHierarchyResponse(value: BaseResponse<GroupsTaxHierarchyResponse, string>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY_RESPONSE,
       payload: value
     };
   }
+
   public resetAddAndMangePopup(): Action {
     return {
       type: GroupWithAccountsAction.RESET_GROUPS_STATE
@@ -599,9 +624,10 @@ export class GroupWithAccountsAction {
   public updateGroup(value: GroupUpateRequest, groupUniqueName: string): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP,
-      payload: Object.assign({}, { groupUniqueName }, { data: value })
+      payload: Object.assign({}, {groupUniqueName}, {data: value})
     };
   }
+
   public updateGroupResponse(value: BaseResponse<GroupResponse, GroupUpateRequest>): Action {
     return {
       type: GroupWithAccountsAction.UPDATE_GROUP_RESPONSE,
@@ -615,6 +641,7 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
+
   public applyGroupTaxResponse(value: BaseResponse<string, ApplyTaxRequest>): Action {
     return {
       type: GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE,
@@ -628,6 +655,7 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
+
   public deleteGroupResponse(value: BaseResponse<string, string>): Action {
     return {
       type: GroupWithAccountsAction.DELETE_GROUP_RESPONSE,
@@ -641,20 +669,40 @@ export class GroupWithAccountsAction {
       payload: value
     };
   }
+
   public getGroupUniqueNameResponse(value: BaseResponse<GroupResponse, string>): Action {
     return {
       type: GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE,
       payload: value
     };
   }
+
   public showAddNewForm(): Action {
     return {
       type: GroupWithAccountsAction.SHOW_ADD_NEW_FORM
     };
   }
+
   public hideAddNewForm(): Action {
     return {
       type: GroupWithAccountsAction.HIDE_ADD_NEW_FORM
     };
+  }
+
+  public findMyParent(groups: IGroupsWithAccounts[], uniqueName: string, parent: IGroupsWithAccounts): IGroupsWithAccounts {
+    if (groups && groups.length > 0) {
+      for (let grp of groups) {
+        if (grp.uniqueName === uniqueName) {
+          return Object.assign({}, parent);
+        }
+        if (grp.groups) {
+          let result = this.findMyParent(grp.groups, uniqueName,  grp);
+          if (result) {
+            return Object.assign({}, result);
+          }
+        }
+      }
+    }
+    return null;
   }
 }

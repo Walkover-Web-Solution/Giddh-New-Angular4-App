@@ -193,18 +193,6 @@
     </div>
   </div>
 
-  <!--delete Group modal  -->
-  <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <confirm-modal [title]="'Delete Group'"
-                       [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
-                       (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
-        </confirm-modal>
-      </div>
-    </div>
-  </div>
-
   <!--add new buttons-->
   <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
     <div class="vcenter">
