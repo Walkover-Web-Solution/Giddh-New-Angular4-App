@@ -61,7 +61,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     });
     this.isCompanyCreated$.subscribe(s => {
       if (s) {
-        this.wizard.next();
+        // this.wizard.next();
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
@@ -78,7 +78,9 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       });
   }
   public textOnly(e) {
-    this.company.city = this.company.city.replace(/[^a-zA-Z\s]/g, '');
+    if (this.company && this.company.city) {
+      this.company.city = this.company.city.replace(/[^a-zA-Z\s]/g, '');
+    }
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);

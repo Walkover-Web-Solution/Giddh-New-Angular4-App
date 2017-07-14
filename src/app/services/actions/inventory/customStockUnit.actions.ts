@@ -47,14 +47,17 @@ export class CustomStockUnitAction {
       return this._inventoryService.DeleteStockUnit(action.payload)
         .map((r) => this.validateResponse(r, {
           type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
-          payload: action.payload
-        }));
+          payload: r
+        }, true, r.body, {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
+            payload: r
+          }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private  _inventoryService: InventoryService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _inventoryService: InventoryService) {
   }
 
   public CreateStockUnit(unit: StockUnitRequest): Action {
@@ -84,12 +87,15 @@ export class CustomStockUnitAction {
     };
   }
 
-  private validateResponse(response: BaseResponse<any, any>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse(response: BaseResponse<any, any>, successAction: Action, showToast: boolean = false, ShowMessage: string = '', errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
       }
       return errorAction;
+    }
+    if (ShowMessage !== '') {
+      this._toasty.successToast(ShowMessage);
     }
     return successAction;
   }

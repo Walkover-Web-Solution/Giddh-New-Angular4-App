@@ -13,7 +13,7 @@
         <div class="search-loading0" *ngIf="(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
           <span class="spinner small"></span> Loading…
         </div>
-        <div ng-transclude="" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+        <div [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
           <!-- ngIf: showListGroupsNow -->
           <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px','width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
             <groups-account-sidebar #groupsidebar [groups]="(groupList$ | async)" (ScrollToRight)="ScrollToRight()"></groups-account-sidebar>
