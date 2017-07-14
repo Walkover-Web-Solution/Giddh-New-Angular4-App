@@ -437,17 +437,35 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       let d: BaseResponse<string, string> = action.payload;
       if (d.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        groupArray.forEach(grp => {
+        for (let grp of groupArray) {
           if (grp.uniqueName === state.activeGroup.uniqueName) {
             let index = grp.accounts.findIndex(a => a.uniqueName === d.request);
             grp.accounts.splice(index, 1);
-            return;
+            break;
           } else {
             removeAccountFunc(grp.groups, state.activeGroup.uniqueName, d.request);
           }
-        });
+        }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray
+        });
+      }
+      return state;
+    case GroupWithAccountsAction.DELETE_GROUP_RESPONSE:
+      let g: BaseResponse<string, string> = action.payload;
+      if (g.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        for (let i = 0; i < groupArray.length; i++) {
+          if (groupArray[i].uniqueName === g.request) {
+            groupArray.splice(i, 1);
+            break;
+          } else {
+            removeGroupFunc(groupArray[i].groups, g.request);
+          }
+        }
+        return Object.assign({}, state, {
+          groupswithaccounts: groupArray,
+          activeGroup: {uniqueName: g.queryString.parentUniqueName}
         });
       }
       return state;
@@ -536,6 +554,17 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
     }
   }
   return result;
+};
+const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string) => {
+  for (let i = 0; i < groups.length; i++) {
+    if (groups[i].uniqueName === uniqueName) {
+      groups.splice(i, 1);
+      break;
+    }
+    if (groups[i].groups) {
+      removeGroupFunc(groups[i].groups, uniqueName);
+    }
+  }
 };
 const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string) => {
   for (let grp of groups) {
