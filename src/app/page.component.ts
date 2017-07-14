@@ -21,23 +21,6 @@ export class PageComponent implements AfterViewInit {
   constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) {
   }
   public ngAfterViewInit() {
-    // this.store.select(p => p.session.companyUniqueName).delay(2000).distinctUntilChanged().subscribe((companyName) => {
-    //   debugger;
-    //   if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-
-    //     debugger;
-    //     this.router.navigateByUrl('/dummy', { skipLocationChange: true });
-    //     this.activatedRoute.firstChild.url.take(1).subscribe(p => {
-    //       debugger;
-    //       if (p.length > 0) {
-    //         setTimeout(() => {
-    //           this.router.navigate([p[0].path], { queryParams: p[0].parameters });
-    //         }, 1000);
-    //       }
-    //       console.log(p);
-    //     });
-
-    //   }
-    // });
+    //
   }
 }

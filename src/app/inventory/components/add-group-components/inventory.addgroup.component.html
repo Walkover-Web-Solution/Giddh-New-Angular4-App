@@ -31,9 +31,11 @@
               <label>Parent Group</label>
             </div>
             <div class="form-group mrB">
-              <input [typeahead]="dataSource" type="text" [(ngModel)]="parentStockSearchString" typeaheadAsync="true" formControlName="parentStockGroupUniqueName"
+              <!-- <input [typeahead]="dataSource" type="text" [(ngModel)]="parentStockSearchString" typeaheadAsync="true" formControlName="parentStockGroupUniqueName"
                 typeaheadOptionField="name" (typeaheadOnSelect)="groupSelected($event)" (typeaheadNoResults)="onGroupResult()"
-                class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Select">
+                class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Select"> -->
+
+              <select2 [data]="groupsData$ | async" [options]="options" formControlName="parentStockGroupUniqueName" [value]="parentStockSearchString" (valueChanged)="groupSelected($event)"></select2>
             </div>
           </div>
           <div class="col-xs-12">
@@ -49,11 +51,13 @@
 
         <div class="clearfix">
           <div *ngIf="!(activeGroup$ | async);">
-            <button type="submit" class="btn btn-md btn-success mrR1" [ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()" [disabled]="addGroupForm.invalid">Save</button>
+            <button type="submit" class="btn btn-md btn-success mrR1" [ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()"
+              [disabled]="addGroupForm.invalid">Save</button>
             <button type="reset" class="btn btn-md btn-primary">Cancel</button>
           </div>
           <div *ngIf="activeGroup$ | async;">
-            <button type="submit" [disabled]="addGroupForm.invalid" [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-md btn-success mrR1" (click)="updateGroup()">Update</button>
+            <button type="submit" [disabled]="addGroupForm.invalid" [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-md btn-success mrR1"
+              (click)="updateGroup()">Update</button>
             <button type="submit" class="btn btn-md btn-danger" [ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()">Delete</button>
           </div>
         </div>

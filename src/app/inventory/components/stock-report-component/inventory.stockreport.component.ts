@@ -1,4 +1,5 @@
-import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
+import { StockDetailResponse, StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../services/actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store/roots';
 
@@ -21,6 +22,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   templateUrl: './inventory.stockreport.component.html'
 })
 export class InventoryStockReportComponent implements OnInit, OnDestroy {
+  public activeStock$: string;
   public stockReport$: Observable<StockReportResponse>;
   public sub: Subscription;
   public groupUniqueName: string;
@@ -39,12 +41,43 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
-  // constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-  //   private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
-  //   this.stockReport$ = this.store.select(p => p.inventory.stockReport);
+    // this.activeStock$ = this.store.select(p => {
+    //   return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
+    // });
+    // constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
+    //   private stockReportActions: StockReportActions, private fb: FormBuilder, private router: Router, private inventoryAction: InventoryAction) {
+    //   this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
+  public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
+    if (grps && grps.length > 0) {
+      for (let key of grps) {
+        if (key.stocks && key.stocks.length > 0) {
 
+          let index = key.stocks.findIndex(p => p.uniqueName === stockUniqueName);
+          if (index === -1) {
+            let result = this.findStockNameFromId(key.childStockGroups, stockUniqueName);
+            if (result !== '') {
+              return result;
+            } else {
+              continue;
+            }
+          } else {
+            return key.stocks[index].name;
+          }
+        } else {
+          let result = this.findStockNameFromId(key.childStockGroups, stockUniqueName);
+          if (result !== '') {
+            return result;
+          } else {
+            continue;
+          }
+        }
+      }
+      return '';
+    }
+    return '';
+  }
   public ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
@@ -54,6 +87,9 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
         let activeStock = null;
         this.store.dispatch(this.sideBarAction.SetActiveStock(this.stockUniqueName));
         if (this.groupUniqueName && this.stockUniqueName) {
+          this.store.select(p => {
+            return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
+          }).take(1).subscribe(p => this.activeStock$ = p);
           this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
             if (!a) {
               this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
