@@ -99,19 +99,32 @@ export class InventoryService {
   /**
    * get Groups with Stocks
    */
-  public GetGroupsWithStocksFlatten(q: string = '', page: number = 1, count: string = ''): Observable<BaseResponse<GroupsWithStocksFlatten, string>> {
+  // public GetGroupsWithStocksFlatten(q: string = '', page: number = 1, count: string = '100000000'): Observable<BaseResponse<GroupsWithStocksFlatten, string>> {
+  //   this.store.take(1).subscribe(s => {
+  //     if (s.session.user) {
+  //       this.user = s.session.user.user;
+  //     }
+  //     this.companyUniqueName = s.session.companyUniqueName;
+  //   });
+  //   return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
+  //     let data: BaseResponse<GroupsWithStocksFlatten, string> = res.json();
+  //     data.request = '';
+  //     data.queryString = { q, page, count };
+  //     return data;
+  //   }).catch((e) => HandleCatch<GroupsWithStocksFlatten, string>(e, '', { q, page, count }));
+  // }
+  public GetGroupsWithStocksFlatten(): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
-      let data: BaseResponse<GroupsWithStocksFlatten, string> = res.json();
+    return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res.json();
       data.request = '';
-      data.queryString = { q, page, count };
       return data;
-    }).catch((e) => HandleCatch<GroupsWithStocksFlatten, string>(e, '', { q, page, count }));
+    }).catch((e) => HandleCatch<GroupsWithStocksHierarchyMin, string>(e, '', {}));
   }
 
   /**

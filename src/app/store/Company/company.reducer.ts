@@ -49,7 +49,8 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
       return;
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
-        isRefreshing: true
+        isRefreshing: true,
+        isCompanyCreated: false
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
       let companies: BaseResponse<ComapnyResponse[], string> = action.payload;

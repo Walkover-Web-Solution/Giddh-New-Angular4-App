@@ -106,3 +106,8 @@ export class TaxResponse implements ITax {
   public name: string;
   public uniqueName: string;
 }
+
+export class States {
+  public name: string;
+  public code: string;
+}
