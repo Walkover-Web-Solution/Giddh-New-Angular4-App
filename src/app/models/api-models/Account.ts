@@ -66,6 +66,7 @@ export class AccountRequest implements IAccount {
   public city: string;
   public pincode: string;
   public country: string;
+  public state?: string;
   public sacNumber: string;
   public stateCode: string;
 }

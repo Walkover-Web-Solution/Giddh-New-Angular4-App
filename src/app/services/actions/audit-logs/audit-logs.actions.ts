@@ -21,7 +21,10 @@ export class AuditLogsActions {
         .map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
           type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
           payload: r
-        }));
+        }, true, {
+            type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
+            payload: r
+          }));
     });
 
   @Effect() private LoadMore$: Observable<Action> = this.action$
@@ -31,7 +34,10 @@ export class AuditLogsActions {
         .map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
           type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
           payload: r
-        }));
+        }, true, {
+            type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
+            payload: r
+          }));
     });
 
   constructor(private action$: Actions,

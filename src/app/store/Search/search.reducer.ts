@@ -72,7 +72,6 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       return uniqueList;
     } else {
       _.each(obj.accounts, (account) => {
-        debugger;
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
           closeBalType: account.closingBalance.type,

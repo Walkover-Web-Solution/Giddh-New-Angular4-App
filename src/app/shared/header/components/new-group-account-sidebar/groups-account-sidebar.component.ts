@@ -115,6 +115,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.accountsAcction.getAccountDetails(item.uniqueName));
     this.mc.selectedType = 'acc';
+    this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
   }
   public ShowAddNewForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
