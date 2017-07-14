@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -8,8 +8,9 @@ import { Router } from '@angular/router';
 
 export class PermissionModelComponent {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Input() allRoles: Object;
 
-    private items = ['one', 'two', 'wwe']; //mock data
+    private items = ['one', 'two', 'three']; //mock data
 
     private role: object = {};
     constructor(private router: Router) {
