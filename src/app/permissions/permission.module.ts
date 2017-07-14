@@ -7,6 +7,7 @@ import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { PermissionRoutingModule } from './permission.routing.module';
 import { PermissionComponent } from './permission.component';
 import { PermissionModelComponent } from './model/permission.model.component';
+import { AddNewPermissionComponent } from './components/add-new-permission/permission.addnew.component';
 
 console.log('`Permission` bundle loaded asynchronously');
 
@@ -14,9 +15,10 @@ console.log('`Permission` bundle loaded asynchronously');
     declarations: [
         // Components / Directives/ Pipes
         PermissionComponent,
-        PermissionModelComponent
+        PermissionModelComponent,
+        AddNewPermissionComponent
     ],
-    exports: [PermissionComponent, PermissionModelComponent, Ng2BootstrapModule],
+    exports: [PermissionComponent, PermissionModelComponent, AddNewPermissionComponent, Ng2BootstrapModule],
     imports: [
         CommonModule,
         FormsModule,
