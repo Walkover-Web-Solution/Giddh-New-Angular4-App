@@ -1,3 +1,4 @@
+import {FlattenGroupsAccountsResponse} from '../../models/api-models/Group';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -19,7 +20,7 @@ export class FlyAccountsActions {
     .ofType(FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST)
     .switchMap(action => {
       return this._groupService.GetFlattenGroupsAccounts()
-        .map((r) => this.validateResponse<SearchRequest, SearchResponse[]>(r, {
+        .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
           type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
           payload: r.body
         }, true, {
