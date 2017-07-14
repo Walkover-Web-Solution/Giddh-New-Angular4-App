@@ -50,7 +50,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
-  @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
 
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
@@ -532,14 +531,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.shareGroupModal.hide();
   }
 
-  public showDeleteGroupModal() {
-    this.deleteGroupModal.show();
-  }
-
-  public hideDeleteGroupModal() {
-    this.deleteGroupModal.hide();
-  }
-
   public showAddGroupForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddGroupForm());
     this.groupDetailForm.reset();
@@ -547,13 +538,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showAddAccountForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
-  }
-
-  public deleteGroup() {
-    let activeGrpUniqueName = null;
-    this.activeGroup$.take(1).subscribe(s => activeGrpUniqueName = s.uniqueName);
-    this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
-    this.hideDeleteGroupModal();
   }
 
   public ngOnDestroy() {
