@@ -13,6 +13,8 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/element.vi
 import { CompanyActions } from '../services/actions/company.actions';
 import { Router } from '@angular/router';
 import { PermissionService } from '../services/permission.service';
+import { PermissionActions } from '../services/actions/permission.actions';
+
 
 @Component({
     selector: 'permissions',
@@ -25,7 +27,7 @@ export class PermissionComponent implements OnInit {
     @ViewChild('permissionModel') public permissionModel: ModalDirective;
 
     public localState: any;
-    public allRoles: Object;
+    public allRoles: object;
     constructor(
         private store: Store<AppState>,
         public route: ActivatedRoute,
@@ -33,7 +35,8 @@ export class PermissionComponent implements OnInit {
         private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private permissionService: PermissionService
+        private permissionService: PermissionService,
+        private permissionActions: PermissionActions
     ) { }
 
     public ngOnInit() {
@@ -59,8 +62,14 @@ export class PermissionComponent implements OnInit {
             this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
         });
 
-        this.permissionService
-            .GetAllRoles('walkpvindore14504197149880siqli').subscribe(response => this.allRoles = response.body);
+        // this.permissionService
+        //     .GetAllRoles('').subscribe(response => this.allRoles = response.body); //call this service in @Effect only
+
+        this.store.take(1).subscribe(store => {
+            if (store.permission === null) {
+                this.store.dispatch(this.permissionActions.getAllRoles(this.allRoles)); // It is not storing data
+            }
+        });
     }
     private asyncDataWithWebpack() {
         /**
@@ -85,12 +94,6 @@ export class PermissionComponent implements OnInit {
         this.permissionModel.show();
     }
 
-
-    // private addNewRole(data) {
-    //     console.log("The data is :", data);
-    //     this.router.navigate(['/pages/permissions']);
-    // }
-
     private hidePermissionModel() {
         this.permissionModel.hide();
     }
@@ -98,6 +101,4 @@ export class PermissionComponent implements OnInit {
     public closePopupEvent() {
         this.permissionModel.hide();
     }
-
-    //addNewRole I want here...
 }
