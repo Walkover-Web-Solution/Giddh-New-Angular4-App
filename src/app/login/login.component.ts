@@ -110,6 +110,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
   public getOtp() {
   }
+
   /**
    * Getting data from browser's local storage
    */
