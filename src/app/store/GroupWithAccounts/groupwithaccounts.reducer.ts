@@ -1,14 +1,23 @@
-import { GroupUpateRequest, GroupCreateRequest } from '../../models/api-models/Group';
+import { GroupCreateRequest, GroupUpateRequest } from '../../models/api-models/Group';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
-import { GroupResponse, FlattenGroupsAccountsResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from './../../models/api-models/Group';
+import {
+  FlattenGroupsAccountsResponse,
+  GroupResponse,
+  GroupSharedWithResponse,
+  GroupsTaxHierarchyResponse
+} from './../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AccountRequest, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
-import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
+import {
+  AccountRequest,
+  AccountResponse,
+  AccountSharedWithResponse,
+  AccountsTaxHierarchyResponse
+} from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -23,7 +32,7 @@ export interface CurrentGroupAndAccountState {
   isGroupWithAccountsLoading: boolean;
   activeGroup: GroupResponse;
   accountSearchString: string;
-  flattenGroupsAccounts?: IFlattenGroupsAccountsDetail[];
+  flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
   activeGroupInProgress: boolean;
   activeGroupSharedWith?: GroupSharedWithResponse[];
@@ -81,7 +90,8 @@ const initialState: CurrentGroupAndAccountState = {
   addAccountOpen: false,
   activeAccount: null,
   fetchingGrpUniqueName: false,
-  fetchingAccUniqueName: false
+  fetchingAccUniqueName: false,
+  flattenGroupsAccounts: []
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
