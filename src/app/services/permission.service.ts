@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest, AccountSharedWithResponse, FlattenAccountsResponse, AccountsTaxHierarchyResponse } from '../models/api-models/Account';
+import { PermissionResponse, PermissionRequest } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -28,24 +28,28 @@ export class PermissionService implements OnInit {
     /**
      * Get all roles
      */
-    public GetAllRoles(companyUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
-        // this.store.take(1).subscribe(s => {
-        //     if (s.session.user) {
-        //         this.user = s.session.user.user;
-        //     }
-        //     this.companyUniqueName = s.session.companyUniqueName;
-        // });
-        return this._http.get(PERMISSION_API.PERMISSION.replace(':companyUniqueName', companyUniqueName)).map((res) => {
-            let data: BaseResponse<AccountResponse, string> = res.json();
+    public GetAllRoles(companyUniqueName: string): Observable<BaseResponse<PermissionResponse, string>> {
+        this.store.take(1).subscribe(s => {
+
+            console.log("___ The value coming from store is :", s);
+
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+
+        return this._http.get(PERMISSION_API.PERMISSION.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+            let data: BaseResponse<PermissionResponse, string> = res.json();
             data.queryString = { companyUniqueName };
             return data;
-        }).catch((e) => HandleCatch<AccountResponse, string>(e));
+        }).catch((e) => HandleCatch<PermissionResponse, string>(e));
     }
 
     /**
      * Create Account Service
      */
-    // public CreateAccount(model: AccountRequest, groupUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
+    // public CreateAccount(model: AccountRequest, groupUniqueName: string): Observable<BaseResponse<PermissionResponse, AccountRequest>> {
     //     this.store.take(1).subscribe(s => {
     //         if (s.session.user) {
     //             this.user = s.session.user.user;
@@ -54,15 +58,15 @@ export class PermissionService implements OnInit {
     //     });
     //     return this._http.post(ACCOUNTS_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), model)
     //         .map((res) => {
-    //             let data: BaseResponse<AccountResponse, AccountRequest> = res.json();
+    //             let data: BaseResponse<PermissionResponse, AccountRequest> = res.json();
     //             data.request = model;
     //             data.queryString = { groupUniqueName };
     //             return data;
     //         })
-    //         .catch((e) => HandleCatch<AccountResponse, AccountRequest>(e, model, { groupUniqueName }));
+    //         .catch((e) => HandleCatch<PermissionResponse, AccountRequest>(e, model, { groupUniqueName }));
     // }
 
-    // public UpdateAccount(model: AccountRequest, accountName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
+    // public UpdateAccount(model: AccountRequest, accountName: string): Observable<BaseResponse<PermissionResponse, AccountRequest>> {
     //     this.store.take(1).subscribe(s => {
     //         if (s.session.user) {
     //             this.user = s.session.user.user;
@@ -71,15 +75,15 @@ export class PermissionService implements OnInit {
     //     });
     //     return this._http.put(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountName', accountName), model)
     //         .map((res) => {
-    //             let data: BaseResponse<AccountResponse, AccountRequest> = res.json();
+    //             let data: BaseResponse<PermissionResponse, AccountRequest> = res.json();
     //             data.request = model;
     //             data.queryString = { accountName };
     //             return data;
     //         })
-    //         .catch((e) => HandleCatch<AccountResponse, AccountRequest>(e));
+    //         .catch((e) => HandleCatch<PermissionResponse, AccountRequest>(e));
     // }
 
-    // public GetAccountUniqueName(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
+    // public GetAccountUniqueName(accountUniqueName: string): Observable<BaseResponse<PermissionResponse, string>> {
     //     this.store.take(1).subscribe(s => {
     //         if (s.session.user) {
     //             this.user = s.session.user.user;
@@ -87,11 +91,11 @@ export class PermissionService implements OnInit {
     //         this.companyUniqueName = s.session.companyUniqueName;
     //     });
     //     return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
-    //         let data: BaseResponse<AccountResponse, string> = res.json();
+    //         let data: BaseResponse<PermissionResponse, string> = res.json();
     //         data.queryString = { accountUniqueName };
     //         data.request = accountUniqueName;
     //         return data;
-    //     }).catch((e) => HandleCatch<AccountResponse, string>(e));
+    //     }).catch((e) => HandleCatch<PermissionResponse, string>(e));
     // }
 
     // public MergeAccount(model: AccountMergeRequest[], accountUniqueName: string): Observable<BaseResponse<string, AccountMergeRequest[]>> {
