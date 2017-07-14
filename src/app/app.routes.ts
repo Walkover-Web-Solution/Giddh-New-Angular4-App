@@ -23,7 +23,7 @@ export const ROUTES: Routes = [
       { path: 'search', component: SearchComponent, canActivate: [NeedsAuthentication] },
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
-      { path: 'permissions', component: PermissionComponent },
+      { path: 'permissions', component: PermissionComponent, canActivate: [NeedsAuthentication] },
     ]
   }
 ];

@@ -1,6 +1,7 @@
 import {
     Component,
     OnInit,
+    AfterViewInit,
     ViewChild,
     ComponentFactoryResolver
 } from '@angular/core';
@@ -19,7 +20,7 @@ import { PermissionActions } from '../services/actions/permission/permission.act
     templateUrl: './permission.component.html',
     styleUrls: ['./permission.component.css']
 })
-export class PermissionComponent implements OnInit {
+export class PermissionComponent implements OnInit, AfterViewInit {
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('permissionModel') public permissionModel: ModalDirective;
@@ -44,14 +45,19 @@ export class PermissionComponent implements OnInit {
             });
 
         this.store.take(1).subscribe(state => {
-            if (state.permission.roles) {
-               this.store.dispatch(this.PermissionActions.GetRoles());
+            if (!state.permission.roles.length) {
+                this.store.dispatch(this.PermissionActions.GetRoles());
             }
         });
     }
 
+    public ngAfterViewInit() {
+        this.store.select(p => p.permission.roles).subscribe((roles) => {
+            this.allRoles = roles;
+        });
+    }
+
     private openPermissionModal() {
-        console.log("Permission model will open now.");
         this.permissionModel.show();
     }
 
@@ -61,5 +67,6 @@ export class PermissionComponent implements OnInit {
 
     public closePopupEvent() {
         this.permissionModel.hide();
+        this.router.navigate(['/pages', 'permissions', 'add-new']);
     }
 }

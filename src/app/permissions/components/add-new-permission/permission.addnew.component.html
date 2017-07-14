@@ -1,0 +1,107 @@
+<div id="single_role">
+
+  <h2 class="role_title">Role Name</h2>
+
+  <div class="pd3 pdT1 pdB1 bdrB clearfix">
+    <button class="btn btn-md btn-primary pull-left" ng-click="goToRoles()">Back</button>
+    <button class="btn btn-md btn-success mrR1 pull-right" ng-click="updateRole()">Save</button>
+  </div>
+
+  <div class="pd3 clearfix">
+
+    <div class="col-xs-4">
+      <div class="headName">
+        Invoice
+        <i class="fa fa-times text-right close_modal" aria-hidden="true" ng-click="$dismiss()"></i>
+      </div>
+      <table class="table">
+        <thead>
+          <th>New Admin</th>
+          <th>Admin</th>
+          <th>View Only</th>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="3"><input type="checkbox" name="selectAll">Select All</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" name="View" ng-click="$event.stopPropagation();" />View</td>
+            <td><input type="checkbox" name="admin" /></td>
+            <td><input type="checkbox" name="viewOnly" ng-click="$event.stopPropagation();" /></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" name="Edit" />Edit</td>
+            <td><input type="checkbox" name="admin" /></td>
+            <td><input type="checkbox" name="viewOnly" /></td>
+          </tr>
+
+          <tr>
+            <td><input type="checkbox" name="Delete" />Delete</td>
+            <td><input type="checkbox" name="admin" /></td>
+            <td><input type="checkbox" name="viewOnly" /></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" name="Create" />Create</td>
+            <td><input type="checkbox" name="admin" /></td>
+            <td><input type="checkbox" name="viewOnly" /></td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" name="share" />Share</td>
+            <td><input type="checkbox" name="admin" /></td>
+            <td><input type="checkbox" name="viewOnly" /></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- new head -->
+
+    <div class="col-xs-4">
+      <div class="headName">
+        Add Head
+      </div>
+      <div class="new_col clearfix">
+        <div class="">
+          <div class="pd4 clearfix">
+            <div class="btn-group col-xs-8 pd0" uib-dropdown>
+              <button id="headsList" type="button" class="form-control text-left" uib-dropdown-toggle>
+                  Select Heads <span class="caret pull-right"></span>
+                </button>
+              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="headsList">
+                <li>
+                  <label>
+                    <input type="checkbox" ng-model="head">
+                      Dashboard
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" ng-model="head">
+                      Settings
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" ng-model="head">
+                      TB/P&L
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" ng-model="head">
+                      Invoice
+                  </label>
+                </li>
+              </ul>
+            </div>
+            <button type="submit" class="btn btn-md btn-success mrT4 clearfix pull-left" ng-click="addNewRole()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- new head -->
+  </div>
+
+</div>
