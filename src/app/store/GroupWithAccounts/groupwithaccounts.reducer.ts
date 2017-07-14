@@ -1,12 +1,12 @@
 import { GroupCreateRequest, GroupUpateRequest } from '../../models/api-models/Group';
 import { AccountsAction } from '../../services/actions/accounts.actions';
-import { BaseResponse } from './../../models/api-models/BaseResponse';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 import {
   FlattenGroupsAccountsResponse,
   GroupResponse,
   GroupSharedWithResponse,
   GroupsTaxHierarchyResponse
-} from './../../models/api-models/Group';
+} from '../../models/api-models/Group';
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
@@ -19,6 +19,7 @@ import {
   AccountsTaxHierarchyResponse
 } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { of } from 'rxjs/observable/of';
 /**
  * Keeping Track of the GroupAndAccountStates
  */
@@ -371,14 +372,17 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       if (activeGrpData.status === 'success') {
         let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        groupArray.forEach(grp => {
-          if (grp.uniqueName === activeGrpData.body.uniqueName) {
-            grp = Object.assign({}, grp, activeGrpData.body);
-            return;
+
+        for (let grp of groupArray) {
+          if (grp.uniqueName === activeGrpData.queryString.groupUniqueName) {
+            // grp = Object.assign({}, grp, activeGrpData.body);
+            grp.uniqueName = activeGrpData.body.uniqueName;
+            grp.name = activeGrpData.body.name;
+            break;
           } else {
-            updateActiveGroupFunc(grp.groups, activeGrpData.body);
+            updateActiveGroupFunc(grp.groups, activeGrpData.queryString.groupUniqueName, activeGrpData.body);
           }
-        });
+        }
         return Object.assign({}, state, {
           activeGroup: newObj,
           activeGroupInProgress: false,
@@ -473,15 +477,15 @@ const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
   }
   return myChildElementIsOpen;
 };
-const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], updatedGroup: GroupResponse) => {
+const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, updatedGroup: GroupResponse) => {
   for (let grp of groups) {
-    if (grp.uniqueName === updatedGroup.uniqueName) {
+    if (grp.uniqueName === uniqueName) {
       grp.name = updatedGroup.name;
       grp.uniqueName = updatedGroup.uniqueName;
       break;
     }
     if (grp.groups) {
-      updateActiveGroupFunc(grp.groups, updatedGroup);
+      updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup);
     }
   }
 };
