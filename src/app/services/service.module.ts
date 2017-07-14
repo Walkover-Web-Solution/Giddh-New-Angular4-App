@@ -29,6 +29,8 @@ import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
 import { PermissionService } from './permission.service';
+import { PermissionActions } from './actions/permission/permission.action'
+
 /**
  * Home Module
  */
@@ -55,7 +57,8 @@ import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
     EffectsModule.run(CustomStockUnitAction),
     EffectsModule.run(StockReportActions),
     EffectsModule.run(SearchActions),
-    EffectsModule.run(AuditLogsActions)
+    EffectsModule.run(AuditLogsActions),
+    EffectsModule.run(PermissionActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
