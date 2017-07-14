@@ -27,6 +27,7 @@ import { DigitsValidatorDirective } from './helpers/directives/digitsOnly.direct
 import { AccountUpdateComponent } from './header/components/account-update/account-update.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
+import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -37,7 +38,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsValidatorDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
-    GroupAddComponent, GroupUpdateComponent
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent
   ],
   imports: [
     CommonModule,

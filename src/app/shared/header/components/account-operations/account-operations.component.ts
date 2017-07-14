@@ -49,6 +49,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
+  @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
 
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -523,6 +524,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   }
 
+  public showShareGroupModal() {
+    this.shareGroupModal.show();
+  }
+
+  public hideShareGroupModal() {
+    this.shareGroupModal.hide();
+  }
+
+  public showDeleteGroupModal() {
+    this.deleteGroupModal.show();
+  }
+
   public hideDeleteGroupModal() {
     this.deleteGroupModal.hide();
   }
@@ -534,10 +547,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public showAddAccountForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
-  }
-
-  public showDeleteGroupModal() {
-    this.deleteGroupModal.show();
   }
 
   public deleteGroup() {
