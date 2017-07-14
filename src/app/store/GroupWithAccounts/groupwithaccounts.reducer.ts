@@ -187,7 +187,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       if (gData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         for (let grp of groupArray) {
-          if (grp.isActive) {
+          if (grp.uniqueName === gData.request.parentGroupUniqueName) {
             let newData = new GroupsWithAccountsResponse();
             newData.accounts = [];
             newData.category = grp.category;
@@ -196,7 +196,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             newData.name = gData.body.name;
             newData.synonyms = gData.body.synonyms;
             newData.uniqueName = gData.body.uniqueName;
-            grp.groups.push((newData as IGroupsWithAccounts));
+            grp.isOpen = true;
+            grp.groups.push(newData);
             break;
           }
           if (grp.groups) {
@@ -478,7 +479,7 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], updatedGroup: Grou
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>): boolean => {
   let myChildElementIsOpen = false;
   for (let grp of groups) {
-    if (grp.isActive) {
+    if (grp.uniqueName === gData.request.parentGroupUniqueName) {
       let newData = new GroupsWithAccountsResponse();
       newData.accounts = [];
       newData.category = grp.category;

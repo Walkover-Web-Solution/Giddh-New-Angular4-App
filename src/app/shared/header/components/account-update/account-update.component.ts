@@ -13,23 +13,23 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
-  selector: 'account-add',
-  templateUrl: './account-add.component.html'
+  selector: 'account-update',
+  templateUrl: './account-update.component.html'
 })
-export class AccountAddComponent implements OnInit, OnDestroy {
-  public addAccountForm: FormGroup;
+export class AccountUpdateComponent implements OnInit, OnDestroy {
+  public updateAccountForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
   public activeAccount$: Observable<AccountResponse>;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
+  public statesSource$: Subject<Select2OptionData[]> = new Subject<Select2OptionData[]>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private groupWithAccountsAction: GroupWithAccountsAction, private _companyService: CompanyService) {
+              private groupWithAccountsAction: GroupWithAccountsAction, private _companyService: CompanyService) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
@@ -40,17 +40,17 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       data.body.map(d => {
         states.push({ text: d.name, id: d.code });
       });
-      this.statesSource$ = Observable.of(states);
+      this.statesSource$.next(states);
     }, (err) => {
       console.log(err);
     });
   }
 
   public ngOnInit() {
-    this.addAccountForm = this._fb.group({
+    this.updateAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required], uniqueNameValidator],
-      openingBalanceType: ['CREDIT', [Validators.required]],
+      openingBalanceType: ['', [Validators.required]],
       openingBalance: [0, Validators.compose([Validators.required, Validators.pattern('\\d+(\\.\\d{2})*$')])],
       mobileNo: ['', Validators.pattern('[7-9][0-9]{9}')],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -62,44 +62,56 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       stateCode: ['']
     });
 
+    this.activeAccount$.subscribe(acc => {
+      if (acc) {
+        this.updateAccountForm.patchValue(acc);
+        this.statesSource$.takeUntil(this.destroyed$).delay(500).subscribe((data) => {
+          data.map(d => {
+            if (d.text === acc.state) {
+              this.updateAccountForm.patchValue({state: d.id});
+              this.stateSelected({value: d.id});
+            }
+          });
+        });
+      }
+    });
     this.fetchingAccUniqueName$.subscribe(f => {
       if (f) {
-        this.addAccountForm.controls['uniqueName'].disable();
+        this.updateAccountForm.controls['uniqueName'].disable();
       } else {
-        this.addAccountForm.controls['uniqueName'].enable();
+        this.updateAccountForm.controls['uniqueName'].enable();
       }
     });
   }
 
   public stateSelected(v) {
-    this.addAccountForm.patchValue({stateCode: v.value});
+    this.updateAccountForm.patchValue({stateCode: v.value});
   }
-
   public generateUniqueName() {
-    let val: string = this.addAccountForm.controls['name'].value;
+    let val: string = this.updateAccountForm.controls['name'].value;
     val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
     this.isAccountNameAvailable$.subscribe(a => {
       if (a !== null && a !== undefined) {
         if (a) {
-          this.addAccountForm.patchValue({ uniqueName: val });
+          this.updateAccountForm.patchValue({ uniqueName: val });
         } else {
           let num = 1;
-          this.addAccountForm.patchValue({ uniqueName: val + num });
+          this.updateAccountForm.patchValue({ uniqueName: val + num });
         }
       }
     });
   }
-  public async submit() {
-    let activeGroup = await this.activeGroup$.first().toPromise();
+
+  public async updateAccount() {
+    let activeAcc = await this.activeAccount$.first().toPromise();
     let states = await this.statesSource$.first().toPromise();
 
     let accountObj = new AccountRequest();
-    accountObj = this.addAccountForm.value as AccountRequest;
-    accountObj.state = states.find(st => st.id === this.addAccountForm.value.state).text;
-    this.store.dispatch(this.accountsAction.createAccount(activeGroup.uniqueName, accountObj));
-    this.addAccountForm.reset();
+    accountObj = this.updateAccountForm.value as AccountRequest;
+    accountObj.state = states.find(st => st.id === this.updateAccountForm.value.state).text;
+    this.store.dispatch(this.accountsAction.updateAccount(activeAcc.uniqueName, accountObj));
   }
 
   public showDeleteAccountModal() {
@@ -115,14 +127,13 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
     this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
     this.hideDeleteAccountModal();
-    this.addAccountForm.reset();
+    this.updateAccountForm.reset();
   }
 
   public jumpToGroup(uniqueName: string) {
     this.store.dispatch(this.accountsAction.resetActiveAccount());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(uniqueName));
   }
-
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

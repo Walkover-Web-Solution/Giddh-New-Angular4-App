@@ -24,6 +24,9 @@ import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewContainerRef } from './helpers/directives/element.viewchild.directive';
 import { DigitsValidatorDirective } from './helpers/directives/digitsOnly.directive';
+import { AccountUpdateComponent } from './header/components/account-update/account-update.component';
+import { GroupAddComponent } from './header/components/group-add/group-add.component';
+import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -33,7 +36,8 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
-    AccountAddComponent, UniqueNameDirective, DigitsValidatorDirective, ElementViewContainerRef, GroupsAccountSidebarComponent
+    AccountAddComponent, AccountUpdateComponent, DigitsValidatorDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
+    GroupAddComponent, GroupUpdateComponent
   ],
   imports: [
     CommonModule,
