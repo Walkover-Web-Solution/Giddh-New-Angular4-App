@@ -66,6 +66,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isTaxableGroup$: Observable<boolean>;
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
+  public isRootLevelGroup: boolean = false;
   public companyTaxes$: Observable<TaxResponse[]>;
   public companyTaxDropDown: Observable<Select2OptionData[]>;
   public accountList: any[];
@@ -216,6 +217,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
+        this.isRootLevelGroupFunc(a.uniqueName);
         let showAddForm: boolean = null;
         this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
         if (!showAddForm) {
@@ -332,7 +334,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public async updateGroup() {
     let activeGroup = await this.activeGroup$.first().toPromise();
-    let extendedObj = Object.assign({}, activeGroup, this.groupDetailForm.value);
     this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroup.uniqueName));
   }
 
@@ -413,6 +414,19 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       return result;
     });
     return _.flatten(listofUN);
+  }
+
+  public isRootLevelGroupFunc(uniqueName: string) {
+    this.groupList$.take(1).subscribe(list => {
+      for (let grp of list) {
+        if (grp.uniqueName === uniqueName) {
+          this.isRootLevelGroup = true;
+          return;
+        } else {
+          this.isRootLevelGroup = false;
+        }
+      }
+    });
   }
 
   public makeGroupListFlatwithLessDtl(rawList: any) {

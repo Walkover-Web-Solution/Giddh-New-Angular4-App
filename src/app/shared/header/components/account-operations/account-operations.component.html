@@ -22,44 +22,18 @@
 
   <!--add group form-->
   <div class="view_forms form_box ng-scope" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
-    <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm" (submit)="updateGroup()"
-      novalidate [formGroup]="groupDetailForm" class="">
-      <div class="form_bg pd2">
-        <div class="form-group clearfix">
-          <div class="col-xs-7">
-            <div class="row">
-              <label>Group Name</label>
-              <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
-            </div>
-          </div>
-        </div>
-        <div class="form-group clearfix">
-          <div class="col-xs-5">
-            <div class="row">
-              <label>Unique Name</label>
-              <input type="text" class="form-control" placeholder="Enter Unique Name" formControlName="uniqueName">
-            </div>
-          </div>
-        </div>
-        <div class="form-group clearfix">
-          <label>Description</label>
-          <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
-        </div>
-      </div>
+    <group-add *ngIf="(showAddNewGroup$ | async)"></group-add>
 
-      <div class="pd2 pdB clearfix">
-        <button class="btn btn-success pull-right" *ngIf="(showAddNewGroup$ | async)" [disabled]="!groupDetailForm.valid">Add
-        </button>
-        <button class="btn btn-success" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" [disabled]="!groupDetailForm.valid">Update
-        </button>
-      </div>
-    </form>
+    <group-update *ngIf="(showEditGroup$ | async)"></group-update>
   </div>
 
   <!--add account form  -->
   <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
+
     <!--account add component-->
-    <account-add></account-add>
+    <account-add *ngIf="!(activeAccount$ | async)"></account-add>
+    <!--account update component-->
+    <account-update *ngIf="(activeAccount$ | async)"></account-update>
 
     <!--taxes-->
     <div class="clearfix" *ngIf="isTaxableAccount$ | async">
@@ -219,7 +193,7 @@
     <div class="vcenter">
       <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
       <span class="clearfix"></span>
-      <button class="btn isActive" (click)="showAddAccountForm()">Create A/c</button>
+      <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">Create A/c</button>
     </div>
   </div>
 
