@@ -13,7 +13,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class AccountsSideBarComponent implements OnInit, OnDestroy {
   @Input() public flyAccounts: boolean;
   public flatAccountWGroupsList$: Observable<IFlattenGroupsAccountsDetail[]>;
-  public companyList: any;
+  public companyList$: Observable<any>;
   public showAccountList: boolean = true;
   public noGroups: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -22,6 +22,10 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>) {
     this.flatAccountWGroupsList$ = this.store.select(state => {
       return state.groupwithaccounts.flattenGroupsAccounts;
+    }).takeUntil(this.destroyed$);
+
+    this.companyList$ = this.store.select(state => {
+      return state.company.companies;
     }).takeUntil(this.destroyed$);
   }
 

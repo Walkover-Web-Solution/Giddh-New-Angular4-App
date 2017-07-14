@@ -441,9 +441,14 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
       return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload] });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
+      if ((action.payload as BaseResponse<string, string>).status === 'success') {
+        return Object.assign({}, state, {
+          stockUnits: state.stockUnits.filter(p => p.code !== (action.payload as BaseResponse<string, string>).request),
+          deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+        });
+      }
       return Object.assign({}, state, {
-        stockUnits: state.stockUnits.filter(p => p.code !== action.payload),
-        deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== action.payload)
+        deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
       });
     /*
      * Inventory Stock Report
