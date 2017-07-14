@@ -1,8 +1,8 @@
 <div>
 
-  <div class="view_forms ng-scope" id="Addaccount" style="padding-bottom: 200px;">
+  <div class="view_forms ng-scope" id="Updateaccount" style="padding-bottom: 200px;">
 
-    <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" novalidate autocomplete="off">
+    <form class="horizontal-form" name="addAccountForm" [formGroup]="updateAccountForm" novalidate autocomplete="off">
       <div class="form_bg pd2">
         <div class="form-group clearfix">
           <div class="col-xs-6">
@@ -24,9 +24,9 @@
             <div class="col-xs-8">
               <div class="row">
                 <select class="form-control" name="openingBalanceType" formControlName="openingBalanceType">-->
-                      <option value="">&#45;&#45;Please select&#45;&#45;</option>
-                      <option value="CREDIT" label="Credit">Credit</option>
-                      <option value="DEBIT" label="Debit">Debit</option></select>
+                  <option value="">&#45;&#45;Please select&#45;&#45;</option>
+                  <option value="CREDIT" label="Credit">Credit</option>
+                  <option value="DEBIT" label="Debit">Debit</option></select>
               </div>
             </div>
           </div>
@@ -70,7 +70,7 @@
         <div class="form-group mrB col-xs-5">
           <label>State</label>
           <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event)"
-            formControlName="state"></select2>
+                   formControlName="state"></select2>
 
           <input type="text" class="form-control mrT1" name="stateCode" formControlName="stateCode" placeholder="State Code" readonly="readonly">
         </div>
@@ -104,8 +104,8 @@
         <a class="btn isActive" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed" (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account
         </a>
 
-        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" (click)="submit()" [disabled]="addAccountForm.invalid">Add
-            </button>
+        <button class="btn btn-success pull-right" *ngIf="(activeAccount$ | async)" (click)="updateAccount()" [disabled]="updateAccountForm.invalid">Update
+        </button>
       </div>
 
     </form>
@@ -119,7 +119,7 @@
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()"
-        (successCallBack)="deleteAccount()">
+                     (successCallBack)="deleteAccount()">
       </confirm-modal>
     </div>
   </div>
