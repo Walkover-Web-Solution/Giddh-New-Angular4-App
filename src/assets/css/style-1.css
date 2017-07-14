@@ -959,7 +959,7 @@ header .navbar-nav > li.active {
 }
 
 #addMngGrpScrBar {
-  height: 380px;
+  /* height: 380px; */
 }
 
 #middleBody {
@@ -4526,7 +4526,7 @@ table.proforma-particulars {
 
 
 .parent-group > .stock-grp-list > li > div{
- 
+
   font-family: Roboto-Bold !important;
   text-transform: uppercase;
 }
@@ -4796,3 +4796,5 @@ table.proforma-particulars {
   bottom: 5px;
   left: -6px;
 }
+
+

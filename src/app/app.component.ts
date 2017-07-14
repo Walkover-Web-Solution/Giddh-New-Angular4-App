@@ -44,14 +44,13 @@ export class AppComponent implements OnInit, AfterViewInit {
   public ngOnInit() { }
   public ngAfterViewInit() {
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe((companyName) => {
-      // debugger;
       if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
         if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
-          // debugger;
+
           let path = [];
           let parament = {};
           this.activatedRoute.firstChild.firstChild.url.take(1).subscribe(p => {
-            // debugger;
+
             if (p.length > 0) {
               path = [p[0].path];
               parament = { queryParams: p[0].parameters };
