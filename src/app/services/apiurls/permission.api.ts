@@ -1,5 +1,3 @@
-import { Configuration } from '../../app.constant';
-
 export const PERMISSION_API = {
-    PERMISSION: Configuration.ApiUrl + 'company/:companyUniqueName/role', // get call
+	GET_ROLE: 'http://giddh-api-roles-test.eu-west-1.elasticbeanstalk.com/company/:companyUniqueName/role'
 };

@@ -12,9 +12,7 @@ import { GroupWithAccountsAction } from '../services/actions/groupwithaccounts.a
 import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
 import { CompanyActions } from '../services/actions/company.actions';
 import { Router } from '@angular/router';
-import { PermissionService } from '../services/permission.service';
-import { PermissionActions } from '../services/actions/permission.actions';
-
+import { PermissionActions } from '../services/actions/permission/permission.action';
 
 @Component({
     selector: 'permissions',
@@ -35,60 +33,23 @@ export class PermissionComponent implements OnInit {
         private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
         private componentFactoryResolver: ComponentFactoryResolver,
-        private permissionService: PermissionService,
-        private permissionActions: PermissionActions
+        private PermissionActions: PermissionActions
     ) { }
 
     public ngOnInit() {
         this.route
             .data
             .subscribe((data: any) => {
-                /**
-                 * Your resolved data from route.
-                 */
                 this.localState = data.yourData;
             });
 
-        console.log('hello `Permission` component');
-        /**
-         * static data that is bundled
-         * var mockData = require('assets/mock-data/mock-data.json');
-         * console.log('mockData', mockData);
-         * if you're working with mock data you can also use http.get('assets/mock-data/mock-data.json')
-         */
-        this.asyncDataWithWebpack();
-
-        this.permissionModel.onHidden.subscribe(e => {
-            this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
-        });
-
-        // this.permissionService
-        //     .GetAllRoles('').subscribe(response => this.allRoles = response.body); //call this service in @Effect only
-
-        this.store.take(1).subscribe(store => {
-            if (store.permission === null) {
-                this.store.dispatch(this.permissionActions.getAllRoles(this.allRoles)); // It is not storing data
+        this.store.take(1).subscribe(state => {
+            if (state.permission.roles) {
+               this.store.dispatch(this.PermissionActions.GetRoles());
             }
         });
     }
-    private asyncDataWithWebpack() {
-        /**
-         * you can also async load mock data with 'es6-promise-loader'
-         * you would do this if you don't want the mock-data bundled
-         * remember that 'es6-promise-loader' is a promise
-         */
-        setTimeout(() => {
 
-            System.import('../../assets/mock-data/mock-data.json')
-                .then((json) => {
-                    console.log('async mockData', json);
-                    this.localState = json;
-                });
-
-        });
-    }
-
-    //
     private openPermissionModal() {
         console.log("Permission model will open now.");
         this.permissionModel.show();
