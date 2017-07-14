@@ -142,8 +142,8 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     let reqBody: LogsRequest = new LogsRequest();
     reqBody.fromDate = moment(this.vm.selectedFromDate).format('DD-MM-YYYY');
     reqBody.toDate = moment(this.vm.selectedToDate).format('DD-MM-YYYY');
-    reqBody.operation = this.vm.selectedOperation;
-    reqBody.entity = this.vm.selectedEntity;
+    reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
+    reqBody.entity = this.vm.selectedEntity === 'All' ? '' : this.vm.selectedEntity;
     reqBody.entryDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
     reqBody.userUniqueName = this.vm.selectedUserUnq;
     reqBody.accountUniqueName = this.vm.selectedAccountUnq;
@@ -154,10 +154,12 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       reqBody.toDate = null;
       if (this.vm.logOrEntry === 'logDate') {
         reqBody.logDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
+        reqBody.entryDate = null;
         reqBody.fromDate = null;
         reqBody.toDate = null;
       } else if (this.vm.logOrEntry === 'entryDate') {
         reqBody.entryDate = moment(this.vm.selectedEntryDate).format('DD-MM-YYYY');
+        reqBody.logDate = null;
         reqBody.fromDate = null;
         reqBody.toDate = null;
       }
