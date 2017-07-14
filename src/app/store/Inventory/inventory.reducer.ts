@@ -243,8 +243,9 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case InventoryActionsConst.UpdateGroup:
       return Object.assign({}, state, { isUpdateGroupInProcess: true });
     case InventoryActionsConst.UpdateGroupResponse:
-      let resp = action.payload;
+      let resp = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
       if (resp.status === 'success') {
+        let data: StockGroupResponse = action.payload.body;
         groupArray = _.cloneDeep(state.groupsWithStocks);
         let activeGroup = _.cloneDeep(state.activeGroup);
         let stateActiveGrp: StockGroupResponse = null;
@@ -280,7 +281,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         }
         return Object.assign({}, state, {
           groupsWithStocks: groupArray,
-          activeGroup: null,
+          activeGroup: resp.body,
           activeGroupUniqueName: '',
           isUpdateGroupInProcess: false
         });
@@ -440,9 +441,14 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT:
       return Object.assign({}, state, { deleteCustomStockInProcessCode: [...state.deleteCustomStockInProcessCode, action.payload] });
     case CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE:
+      if ((action.payload as BaseResponse<string, string>).status === 'success') {
+        return Object.assign({}, state, {
+          stockUnits: state.stockUnits.filter(p => p.code !== (action.payload as BaseResponse<string, string>).request),
+          deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
+        });
+      }
       return Object.assign({}, state, {
-        stockUnits: state.stockUnits.filter(p => p.code !== action.payload),
-        deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== action.payload)
+        deleteCustomStockInProcessCode: state.deleteCustomStockInProcessCode.filter(p => p !== (action.payload as BaseResponse<string, string>).request)
       });
     /*
      * Inventory Stock Report

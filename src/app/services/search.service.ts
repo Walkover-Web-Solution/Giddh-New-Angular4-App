@@ -32,7 +32,7 @@ export class SearchService {
     return this._http.get(SEARCH_API.SEARCH
         .replace(':companyUniqueName', this.companyUniqueName)
         .replace(':groupName', request.groupName),
-      { fromDate: request.fromDate, toDate: request.toDate, refresh: request.refresh })
+      { from: request.fromDate, to: request.toDate, refresh: request.refresh })
       .map((res) => {
         return res.json();
       })

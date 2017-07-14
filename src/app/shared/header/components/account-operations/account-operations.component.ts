@@ -1,10 +1,10 @@
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { Select2Component } from '../../../theme/select2/select2.component';
-import { TaxResponse } from './../../../../models/api-models/Company';
-import { CompanyActions } from './../../../../services/actions/company.actions';
+import { TaxResponse } from '../../../../models/api-models/Company';
+import { CompanyActions } from '../../../../services/actions/company.actions';
 import { Observable } from 'rxjs/Observable';
-import { GroupsWithAccountsResponse } from './../../../../models/api-models/GroupsWithAccounts';
-import { GroupWithAccountsAction } from './../../../../services/actions/groupwithaccounts.actions';
+import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
+import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import {
   GroupCreateRequest,
   GroupResponse,
@@ -12,11 +12,11 @@ import {
   GroupsTaxHierarchyResponse,
   MoveGroupRequest,
   ShareGroupRequest
-} from './../../../../models/api-models/Group';
-import { IGroupsWithAccounts } from './../../../../models/interfaces/groupsWithAccounts.interface';
-import { AppState } from './../../../../store/roots';
+} from '../../../../models/api-models/Group';
+import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
+import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -34,10 +34,14 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'account-operations',
-  templateUrl: './account-operations.component.html',
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './account-operations.component.html'
 })
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy {
+  public showAddNewAccount$: Observable<boolean>;
+  public showAddNewGroup$: Observable<boolean>;
+  public showEditAccount$: Observable<boolean>;
+  public showEditGroup$: Observable<boolean>;
+  @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
@@ -46,10 +50,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
-  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
+  public showNewForm$: Observable<boolean>;
   public subGroupForm: FormGroup;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
@@ -85,20 +90,30 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     width: '100%',
     placeholder: 'Choose a project',
     templateResult: (data) => {
-      if (!data.id) { return data.text; }
+      if (!data.id) {
+        return data.text;
+      }
       // let text = this._translate.instant(data.text);
       return $('<span>' + data.text + '</span>');
     },
     templateSelection: (data) => {
 
-      if (!data.id) { return data.text; }
+      if (!data.id) {
+        return data.text;
+      }
       // let text = this._translate.instant(data.text);
       return $('<span>' + data.text + '</span>');
     }
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+    this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew).takeUntil(this.destroyed$);
+    this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
+    this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
+    this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).takeUntil(this.destroyed$);
+    this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).takeUntil(this.destroyed$);
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
@@ -132,26 +147,26 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             });
           }
         }
@@ -201,13 +216,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.showGroupForm = true;
-        this.showEditTaxSection = false;
-        this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
-      } else {
-        this.showGroupForm = false;
+        let showAddForm: boolean = null;
+        this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
+        if (!showAddForm) {
+          this.showGroupForm = true;
+          this.ShowForm.emit(true);
+          this.showEditTaxSection = false;
+          this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+          this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
+        }
       }
     });
+
     this.activeAccount$.subscribe((a) => {
       if (a) {
         this.showEditTaxSection = false;
@@ -280,6 +300,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
     });
   }
+
   public generateUniqueName() {
     let val: string = this.subGroupForm.controls['name'].value;
     val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
@@ -288,10 +309,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.isGroupNameAvailable$.subscribe(a => {
       if (a !== null && a !== undefined) {
         if (a) {
-          this.subGroupForm.patchValue({ uniqueName: val });
+          this.subGroupForm.patchValue({uniqueName: val});
         } else {
           let num = 1;
-          this.subGroupForm.patchValue({ uniqueName: val + num });
+          this.subGroupForm.patchValue({uniqueName: val + num});
         }
       }
     });
@@ -314,6 +335,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let extendedObj = Object.assign({}, activeGroup, this.groupDetailForm.value);
     this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroup.uniqueName));
   }
+
   public async shareGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
@@ -323,6 +345,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.groupWithAccountsAction.shareGroup(grpObject, activeGrp.uniqueName));
     this.shareGroupForm.reset();
   }
+
   public async shareAccount() {
     let activeAcc = await this.activeAccount$.first().toPromise();
     let accObject = new ShareAccountRequest();
@@ -331,12 +354,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.accountsAction.shareAccount(accObject, activeAcc.uniqueName));
     this.shareAccountForm.reset();
   }
+
   public moveToGroupSelected(event: any) {
-    this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
+    this.moveGroupForm.patchValue({moveto: event.item.uniqueName});
   }
+
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
+    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
   }
+
   public async moveGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
@@ -345,6 +371,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGrp.uniqueName));
     this.moveGroupForm.reset();
   }
+
   public async moveAccount() {
     let activeAcc = await this.activeAccount$.first().toPromise();
 
@@ -353,15 +380,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
     this.moveAccountForm.reset();
   }
+
   public async unShareGroup(val) {
     let activeGrp = await this.activeGroup$.first().toPromise();
 
     this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
   }
+
   public async unShareAccount(val) {
     let activeAcc = await this.activeAccount$.first().toPromise();
     this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
+
   public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
     listofUN = _.map(rawList, (listItem) => {
@@ -372,7 +402,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -384,6 +414,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     });
     return _.flatten(listofUN);
   }
+
   public makeGroupListFlatwithLessDtl(rawList: any) {
     let obj;
     obj = _.map(rawList, (item: any) => {
@@ -396,6 +427,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     });
     return obj;
   }
+
   public async taxHierarchy() {
     let activeAccount: AccountResponse = null;
     let activeGroup: GroupResponse = null;
@@ -416,6 +448,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
   }
+
   public getAccountFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: boolean): boolean {
     groupList.forEach(el => {
       if (el.accounts) {
@@ -430,6 +463,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     });
     return result;
   }
+
   public applyTax() {
     let activeAccount: AccountResponse = null;
     let activeGroup: GroupResponse = null;
@@ -474,30 +508,31 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     }
 
   }
+
   public hideDeleteGroupModal() {
     this.deleteGroupModal.hide();
   }
-  public hideDeleteAccountModal() {
-    this.deleteAccountModal.hide();
+
+  public showAddGroupForm() {
+    this.store.dispatch(this.groupWithAccountsAction.showAddGroupForm());
+    this.groupDetailForm.reset();
   }
+
+  public showAddAccountForm() {
+    this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
+  }
+
   public showDeleteGroupModal() {
     this.deleteGroupModal.show();
   }
-  public showDeleteAccountModal() {
-    this.deleteAccountModal.show();
-  }
+
   public deleteGroup() {
     let activeGrpUniqueName = null;
     this.activeGroup$.take(1).subscribe(s => activeGrpUniqueName = s.uniqueName);
     this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
     this.hideDeleteGroupModal();
   }
-  public deleteAccount() {
-    let activeAccUniqueName = null;
-    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
-    this.hideDeleteAccountModal();
-  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

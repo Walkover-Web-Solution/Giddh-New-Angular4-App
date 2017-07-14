@@ -1,9 +1,5 @@
-import { Store } from '@ngrx/store';
-
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SearchDataSet } from '../../../models/api-models/Search';
-import { AppState } from '../../../store/roots';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
@@ -35,12 +31,10 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
   public searchQueryForm: FormGroup;
   public searchDataSet: FormArray;
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
   /**
    * TypeScript public modifiers
    */
-  constructor(private store: Store<AppState>, private fb: FormBuilder) {
+  constructor(private fb: FormBuilder) {
     this.searchQueryForm = this.fb.group({
       searchQuery: this.fb.array([this.fb.group({
         queryType: ['', Validators.required],

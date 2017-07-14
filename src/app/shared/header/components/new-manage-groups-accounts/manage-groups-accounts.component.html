@@ -1,0 +1,37 @@
+<div id="getGroupModal" class="fullScreenMy" #myModel>
+
+  <div class="modal-header themeBg" #header>
+    <button type="button" class="close" data-dismiss="modal" (click)="closePopupEvent()" aria-label="Close"><span aria-hidden="true">×</span></button>
+    <h3 class="modal-title">Manage Groups &amp; Accounts</h3>
+  </div>
+  <!-- end header -->
+
+  <div class="modal-body pd0" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect ? (headerRect.height + 20): 0 ))+'px'}">
+    <div class="clearfix" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+
+      <div class="grp_col bdrL bdrR pd0" style="max-width:58.333%;height:auto" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
+        <div class="search-loading0" *ngIf="(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+          <span class="spinner small"></span> Loading…
+        </div>
+        <div [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+          <!-- ngIf: showListGroupsNow -->
+          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px','width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
+            <groups-account-sidebar #groupsidebar [groups]="(groupList$ | async)" (ScrollToRight)="ScrollToRight()"></groups-account-sidebar>
+          </div>
+          <!-- end ngIf: showListGroupsNow -->
+        </div>
+
+      </div>
+      <!-- middle body -->
+      <div class="form_box" style="height:auto;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+        <account-operations (ShowForm)="ShowRightForm($event)" #form [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}"></account-operations>
+      </div>
+
+
+    </div>
+
+  </div>
+  <!-- end modal body -->
+
+
+</div>
