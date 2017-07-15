@@ -267,10 +267,11 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        let data: BaseResponse<string, AccountMoveRequest> = action.payload;
         this._toasty.successToast('Account moved successfully', '');
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-        this.store.dispatch(this.groupWithAccountsAction.ResetActiveGroup());
-        this.store.dispatch(this.resetActiveAccount());
+        let activeGrp: GroupResponse = null;
+        this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
+        this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
       }
       return {
         type: ''
