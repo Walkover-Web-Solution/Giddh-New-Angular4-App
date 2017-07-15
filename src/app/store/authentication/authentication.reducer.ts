@@ -1,7 +1,7 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { VerifyEmailModel, UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
+import { VerifyMobileResponseModel, VerifyMobileModel, VerifyEmailModel, UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import * as _ from 'lodash';
@@ -10,10 +10,12 @@ import * as _ from 'lodash';
  * Keeping Track of the AuthenticationState
  */
 export interface AuthenticationState {
+  isVerifyMobileSuccess: boolean;
   isVerifyEmailSuccess: boolean;
   isLoginWithMobileInProcess: boolean; // if true then We are checking with
   isVerifyMobileInProcess: boolean;
   isLoginWithEmailSubmited: boolean;
+  isLoginWithMobileSubmited: boolean;
   isLoginWithEmailInProcess: boolean;
   isVerifyEmailInProcess: boolean;
   isLoginWithGoogleInProcess: boolean;
@@ -32,6 +34,7 @@ export interface SessionState {
  * Setting the InitialState for this Reducer's Store
  */
 const initialState = {
+  isVerifyMobileSuccess: false,
   isLoginWithMobileInProcess: false, // if true then We are checking with
   isVerifyMobileInProcess: false,
   isLoginWithEmailInProcess: false,
@@ -40,6 +43,7 @@ const initialState = {
   isLoginWithLinkedInInProcess: false,
   isLoginWithTwitterInProcess: false,
   isLoginWithEmailSubmited: false,
+  isLoginWithMobileSubmited: false,
   isVerifyEmailSuccess: false,
   user: null
 };
@@ -89,6 +93,42 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
           isVerifyEmailSuccess: false
         });
       }
+    case LoginActions.SignupWithMobileResponce:
+      if (action.payload.status === 'success') {
+        return Object.assign({}, state, {
+          isLoginWithMobileSubmited: true,
+          isLoginWithMobileInProcess: false
+        });
+      }
+      if (action.payload.status === 'error') {
+        return Object.assign({}, state, {
+          isLoginWithMobileSubmited: false,
+          isLoginWithMobileInProcess: false
+        });
+      }
+    case LoginActions.SignupWithMobileRequest:
+      return Object.assign({}, state, {
+        isLoginWithMobileInProcess: true
+      });
+
+    case LoginActions.VerifyMobileRequest:
+      return Object.assign({}, state, {
+        isVerifyMobileInProcess: true
+      });
+
+    case LoginActions.VerifyMobileResponce:
+      let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+      if (data1.status === 'success') {
+        return Object.assign({}, state, {
+          isVerifyMobileInProcess: false,
+          isVerifyMobileSuccess: true,
+        });
+      } else {
+        return Object.assign({}, state, {
+          isVerifyMobileInProcess: false,
+          isVerifyMobileSuccess: false
+        });
+      }
     case LoginActions.LogOut:
       return Object.assign({}, state, {
         isLoginWithMobileInProcess: false, // if true then We are checking with
@@ -114,6 +154,17 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       if (data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body
+        });
+      } else {
+        return Object.assign({}, state, {
+          user: null
+        });
+      }
+    case LoginActions.VerifyMobileResponce:
+      let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+      if (data1.status === 'success') {
+        return Object.assign({}, state, {
+          user: data1.body
         });
       } else {
         return Object.assign({}, state, {

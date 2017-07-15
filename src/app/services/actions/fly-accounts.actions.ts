@@ -1,4 +1,4 @@
-import {FlattenGroupsAccountsResponse} from '../../models/api-models/Group';
+import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -24,15 +24,15 @@ export class FlyAccountsActions {
           type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
           payload: r.body
         }, true, {
-          type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
-          payload: []
-        }));
+            type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
+            payload: []
+          }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _groupService: GroupService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _groupService: GroupService) {
   }
 
   public GetflatAccountWGroups(request: SearchRequest): Action {
