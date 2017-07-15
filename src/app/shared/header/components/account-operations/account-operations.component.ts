@@ -9,7 +9,7 @@ import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } fr
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -17,6 +17,7 @@ import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { AccountMoveRequest, AccountResponse, AccountSharedWithResponse, AccountsTaxHierarchyResponse, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 
 @Component({
   selector: 'account-operations',
@@ -28,6 +29,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showEditAccount$: Observable<boolean>;
   public showEditGroup$: Observable<boolean>;
   @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
+  @Input('columnsRef') public columnsRef: GroupAccountSidebarVM;
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
