@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { PermissionActions } from '../../services/actions/permission/permission.action';
 
 @Component({
     selector: 'permission-model',
@@ -18,7 +19,7 @@ export class PermissionModelComponent implements OnDestroy {
     private selectedPages = [];
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    constructor(private router: Router, private store: Store<AppState>) {
+    constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
         this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles) => {
             this.allRoles = roles;
             if (this.allRoles[1]) {
@@ -63,8 +64,12 @@ export class PermissionModelComponent implements OnDestroy {
             data.scopes = null;
         }
 
+        this.store.take(1).subscribe(state => {
+            this.store.dispatch(this.permissionActions.CreateNewRole(data));
+        });
+
         console.log("the data in addnewRole function is :", data);
 
-        this.closeEvent.emit(true);
+        this.closeEvent.emit(data);
     }
 }

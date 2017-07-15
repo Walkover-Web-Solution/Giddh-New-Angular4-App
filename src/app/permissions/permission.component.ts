@@ -27,6 +27,8 @@ export class PermissionComponent implements OnInit, AfterViewInit {
 
     public localState: any;
     public allRoles: object;
+    private createRoleStep: string = 'one';
+
     constructor(
         private store: Store<AppState>,
         public route: ActivatedRoute,
@@ -65,8 +67,10 @@ export class PermissionComponent implements OnInit, AfterViewInit {
         this.permissionModel.hide();
     }
 
-    public closePopupEvent() {
+    public closePopupEvent(data) {
+        console.log("The data in closePopupEvent function is :", data);
         this.permissionModel.hide();
+        this.createRoleStep = 'two';
         this.router.navigate(['/pages', 'permissions', 'add-new']);
     }
 }

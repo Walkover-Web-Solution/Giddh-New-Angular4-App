@@ -11,15 +11,12 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PermissionService } from "../../permission.service";
 import { PERMISSION_ACTIONS } from './permission.const';
-import { PermissionResponse } from '../../../models/api-models/Permission';
-
-
-
+import { NewRole, PermissionResponse } from '../../../models/api-models/Permission';
 
 @Injectable()
 export class PermissionActions {
 
-  @Effect() 
+  @Effect()
   private GetRoles$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ROLES)
     .switchMap(action => {
@@ -28,10 +25,10 @@ export class PermissionActions {
           return this.validateResponse<PermissionResponse[], string>(r, {
             type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
             payload: r
-          },true, {
-            type:PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
-            payload: r
-          });
+          }, true, {
+              type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
+              payload: r
+            });
         });
     });
 
@@ -41,13 +38,20 @@ export class PermissionActions {
     private _permissionService: PermissionService) {
   }
 
-  public GetRoles(){
-    return {type: PERMISSION_ACTIONS.GET_ROLES}
+  public GetRoles() {
+    return { type: PERMISSION_ACTIONS.GET_ROLES }
   }
 
-  public GetRolesResponse(value:BaseResponse<PermissionResponse[], string>){
+  public GetRolesResponse(value: BaseResponse<PermissionResponse[], string>) {
     return {
       type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
+      payload: value
+    }
+  }
+
+  public CreateNewRole(value): Action {
+    return {
+      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
       payload: value
     }
   }

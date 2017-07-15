@@ -13,3 +13,10 @@ export interface PermissionResponse {
 export interface PermissionRequest {
   companyUniqueName: string;
 }
+
+export interface NewRole {
+  name: string,
+  scopes: any,
+  copyoption: string,
+  pages: any,
+}
