@@ -1,5 +1,5 @@
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
-import { AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
+import { AccountUnMergeRequest, AccountMergeRequest, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { AccountService } from './../account.service';
 import { AppState } from './../../store/roots';
 import { ToasterService } from './../toaster.service';
@@ -39,6 +39,11 @@ export class AccountsAction {
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyAccountTaxResponse';
   public static DELETE_ACCOUNT = 'AccountDelete';
   public static DELETE_ACCOUNT_RESPONSE = 'AccountDeleteResponse';
+  public static MERGE_ACCOUNT = 'AccountMerge';
+  public static MERGE_ACCOUNT_RESPONSE = 'AccountMergeResponse';
+
+  public static UNMERGE_ACCOUNT = 'AccountUnMerge';
+  public static UNMERGE_ACCOUNT_RESPONSE = 'AccountUnMergeResponse';
 
   @Effect()
   public ApplyAccountTax$: Observable<Action> = this.action$
@@ -463,6 +468,31 @@ export class AccountsAction {
   public deleteAccountResponse(value: BaseResponse<string, string>): Action {
     return {
       type: AccountsAction.DELETE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+  public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): Action {
+    return {
+      type: AccountsAction.MERGE_ACCOUNT,
+      payload: { accountUniqueName, data }
+    };
+  }
+  public mergeAccountResponse(value: BaseResponse<string, AccountMergeRequest[]>): Action {
+    return {
+      type: AccountsAction.MERGE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public unmergeAccount(accountUniqueName: string, data: AccountUnMergeRequest[]): Action {
+    return {
+      type: AccountsAction.UNMERGE_ACCOUNT,
+      payload: { accountUniqueName, data }
+    };
+  }
+  public unmergeAccountResponse(value: BaseResponse<string, AccountUnMergeRequest>): Action {
+    return {
+      type: AccountsAction.UNMERGE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
