@@ -16,6 +16,7 @@ import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.
 import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import {
+  AccountMoveRequest,
   AccountRequest,
   AccountResponse,
   AccountSharedWithResponse,
@@ -23,6 +24,7 @@ import {
 } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { of } from 'rxjs/observable/of';
+import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -455,7 +457,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             grp.accounts.splice(index, 1);
             break;
           } else {
-            removeAccountFunc(grp.groups, state.activeGroup.uniqueName, d.request);
+            removeAccountFunc(grp.groups, state.activeGroup.uniqueName, d.request, null);
           }
         }
         return Object.assign({}, state, {
@@ -501,6 +503,30 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
           activeGroup: {uniqueName: m.request.parentGroupUniqueName}
+        });
+      }
+      return state;
+    case AccountsAction.MOVE_ACCOUNT_RESPONSE:
+      let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
+      if (mAcc.status === 'success') {
+        let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+        let activeGrp: GroupResponse = _.cloneDeep(state.activeGroup);
+        let deletedItem = removeAccountFunc(groupArray, activeGrp.uniqueName, mAcc.queryString.accountUniqueName, null);
+        for (let grp of groupArray) {
+          if (grp.uniqueName === mAcc.request.uniqueName) {
+            grp.accounts.push(deletedItem);
+            break;
+          }
+          if (grp.groups) {
+            if (addNewAccountFunc(grp.groups, deletedItem, mAcc.request.uniqueName)) {
+              grp.isOpen = true;
+              break;
+            }
+          }
+        }
+        return Object.assign({}, state, {
+          groupswithaccounts: groupArray,
+          activeGroup: {uniqueName: mAcc.request.uniqueName}
         });
       }
       return state;
@@ -605,15 +631,19 @@ const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, resu
     }
   }
 };
-const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string) => {
+const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo) => {
   for (let grp of groups) {
     if (grp.uniqueName === uniqueName) {
       let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+      result = grp.accounts[index];
       grp.accounts.splice(index, 1);
-      break;
+      return result;
     }
     if (grp.groups) {
-      removeAccountFunc(grp.groups, uniqueName, accountUniqueName);
+      result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
+      if (result) {
+        return result;
+      }
     }
   }
 };
@@ -628,6 +658,23 @@ const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccoun
     }
     if (grp.groups) {
       if (addNewGroupFunc(grp.groups, gData, parentUniqueName)) {
+        return true;
+      }
+    }
+  }
+  return myChildElementIsOpen;
+};
+const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, grpUniqueName: string): boolean => {
+  let myChildElementIsOpen = false;
+  for (let grp of groups) {
+    if (grp.uniqueName === grpUniqueName) {
+      grp.isOpen = true;
+      grp.accounts.push(aData);
+      myChildElementIsOpen = true;
+      return myChildElementIsOpen;
+    }
+    if (grp.groups) {
+      if (addNewAccountFunc(grp.groups, aData, grpUniqueName)) {
         return true;
       }
     }
