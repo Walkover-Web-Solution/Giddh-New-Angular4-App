@@ -18,6 +18,7 @@ import { AccountMoveRequest, AccountResponse, AccountSharedWithResponse, Account
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 
 @Component({
   selector: 'account-operations',
@@ -36,6 +37,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
@@ -95,7 +97,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+    private companyActions: CompanyActions, private accountsAction: AccountsAction) {
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew).takeUntil(this.destroyed$);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
@@ -134,26 +136,26 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             });
           }
         }
@@ -196,7 +198,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           this.showGroupForm = true;
           this.ShowForm.emit(true);
           this.showEditTaxSection = false;
-          this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+          this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
           this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         }
       }
@@ -277,7 +279,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
   }
 
   public async moveAccount() {
@@ -310,7 +312,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
