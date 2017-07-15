@@ -8,7 +8,7 @@ export const COMPANY_API = {
   SEND_EMAIL: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/bulk-email/?from=:from&to=:to',
   SEND_SMS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/bulk-sms/?from=:from&to=:to',
   DELETE_COMPANY: Configuration.ApiUrl + 'company/:uniqueName',
-  TAX: Configuration.ApiUrl + 'company/:companyUniqueName/users', // get call
+  TAX: Configuration.ApiUrl + 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: Configuration.ApiUrl + 'company/:uniqueName',
   GET_ALL_STATES:  Configuration.ApiUrl + 'states'
 };
