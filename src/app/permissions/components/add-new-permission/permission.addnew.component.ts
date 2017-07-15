@@ -11,7 +11,13 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export class AddNewPermissionComponent {
 
-  constructor(private router: Router, private store: Store<AppState>) {
+  private newRole: object = {};
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
+  constructor(private router: Router, private store: Store<AppState>) {
+    this.store.select(p => p.permission.newRole).takeUntil(this.destroyed$).subscribe((role) => {
+      this.newRole = role;
+      console.log("++++++++ Hello the newRole information is :", this.newRole);
+    });
   }
 }

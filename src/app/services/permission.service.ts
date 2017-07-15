@@ -15,6 +15,7 @@ export class PermissionService {
 
     private user: UserDetails;
     private companyUniqueName: string;
+
     constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
     }
 
@@ -36,6 +37,13 @@ export class PermissionService {
             data.queryString = {};
             return data;
         }).catch((e) => HandleCatch<PermissionResponse[], string>(e));
+    }
+
+    /*
+     * Create new role
+    */
+    public CreateNewRole(data): Observable<BaseResponse<object, string>> {
+        return data;
     }
 
 }
