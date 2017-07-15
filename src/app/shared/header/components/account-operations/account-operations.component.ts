@@ -5,14 +5,7 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import {
-  GroupCreateRequest,
-  GroupResponse,
-  GroupSharedWithResponse,
-  GroupsTaxHierarchyResponse,
-  MoveGroupRequest,
-  ShareGroupRequest
-} from '../../../../models/api-models/Group';
+import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -21,15 +14,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import {
-  AccountMoveRequest,
-  AccountResponse,
-  AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse,
-  ShareAccountRequest
-} from '../../../../models/api-models/Account';
+import { AccountMoveRequest, AccountResponse, AccountSharedWithResponse, AccountsTaxHierarchyResponse, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
-import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
