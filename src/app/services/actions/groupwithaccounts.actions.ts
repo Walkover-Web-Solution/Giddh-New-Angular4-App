@@ -301,9 +301,9 @@ export class GroupWithAccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        let data = action.payload as BaseResponse<MoveGroupResponse, MoveGroupRequest>;
         this._toasty.successToast('Group moved successfully', '');
-        this.store.dispatch(this.getGroupWithAccounts(''));
-        return this.ResetActiveGroup();
+        return this.getGroupDetails(data.request.parentGroupUniqueName);
       }
       return {
         type: ''
