@@ -16,6 +16,11 @@
     <div>
       <div class="pull-right col-xs-4 pdR0">
         <button class="btn isActive pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share</button>
+
+        <div class="primary_clr text-right pull-right mrT1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+          Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
+        </div>
+
       </div>
     </div>
     <!-- end ngIf: mc.showOnUpdate && canUpdate -->
