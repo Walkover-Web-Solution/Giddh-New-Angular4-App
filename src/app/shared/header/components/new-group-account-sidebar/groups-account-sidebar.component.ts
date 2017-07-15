@@ -19,6 +19,7 @@ import * as _ from 'lodash';
 export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   public mc: GroupAccountSidebarVM;
   @Output() public ScrollToRight: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public columnsChanged: EventEmitter<GroupAccountSidebarVM> = new EventEmitter();
   @Input() public groups: GroupsWithAccountsResponse[];
   public _groups: GroupsWithAccountsResponse[];
   @Input() public activeGroup: Observable<GroupResponse>;
@@ -59,8 +60,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
           }
         }
       }
-
     }
+    this.columnsChanged.emit(this.mc);
   }
   public polulateColms(grps: IGroupsWithAccounts[]): ColumnGroupsAccountVM {
     let activeGroup = null;

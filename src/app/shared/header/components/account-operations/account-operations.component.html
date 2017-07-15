@@ -2,22 +2,26 @@
 
   <!--breadcrumbs-->
   <div class="breadcrumbs pdL2 pdT1 pdR2 pdB1">
-    <!-- ng-show="mc.updateBreadCrumbs" -->
     <div class="pull-left pdT1 col-xs-8 pdL0">
-      <!-- ngIf: mc.breadCrumbList.length -->
       <ol class="breadcrumb mrB2">
-        <li *ngFor="let value of (activeAccount$ | async)?.parentGroups;let i = index"
-            [ngClass]="{'active': i === ((activeAccount$ | async)?.parentGroups.length -1 ) }">
+        <li *ngFor="let value of columnsRef?.columns | slice:1;let i = last;"
+            [ngClass]="{'active': (i && !(activeAccount$ | async))}">
           <a href="javascript:void(0)">{{ value.name }}
+          </a>
+        </li>
+        <li *ngIf="(activeAccount$ | async)" class="active">
+          <a href="javascript:void(0)">{{ ( activeAccount$ | async )?.name }}
           </a>
         </li>
       </ol>
     </div>
+
+    <!--share group-->
     <div>
       <div class="pull-right col-xs-4 pdR0">
         <button class="btn isActive pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share</button>
 
-        <div class="primary_clr text-right pull-right mrT1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+        <div class="primary_clr text-right pull-right mrT1" *ngIf="(showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
           Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
         </div>
 

@@ -16,7 +16,7 @@
         <div [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
           <!-- ngIf: showListGroupsNow -->
           <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px','width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
-            <groups-account-sidebar #groupsidebar [groups]="(groupList$ | async)" (ScrollToRight)="ScrollToRight()"></groups-account-sidebar>
+            <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [groups]="(groupList$ | async)" (ScrollToRight)="ScrollToRight()"></groups-account-sidebar>
           </div>
           <!-- end ngIf: showListGroupsNow -->
         </div>
@@ -24,7 +24,7 @@
       </div>
       <!-- middle body -->
       <div class="form_box" style="height:auto;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
-        <account-operations (ShowForm)="ShowRightForm($event)" #form [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}"></account-operations>
+        <account-operations [columnsRef]="currentColumns" (ShowForm)="ShowRightForm($event)" #form [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}"></account-operations>
       </div>
 
 
