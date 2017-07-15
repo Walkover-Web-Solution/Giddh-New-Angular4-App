@@ -1,4 +1,7 @@
-import { GroupCreateRequest, GroupUpateRequest } from '../../models/api-models/Group';
+import {
+  GroupCreateRequest, GroupUpateRequest, MoveGroupRequest,
+  MoveGroupResponse
+} from '../../models/api-models/Group';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import {
@@ -460,7 +463,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             groupArray.splice(i, 1);
             break;
           } else {
-            removeGroupFunc(groupArray[i].groups, g.request);
+            removeGroupFunc(groupArray[i].groups, g.request, null);
           }
         }
         return Object.assign({}, state, {
@@ -469,6 +472,29 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case GroupWithAccountsAction.MOVE_GROUP_RESPONSE:
+        let m: BaseResponse<MoveGroupResponse, MoveGroupRequest> = action.payload;
+        if (m.status === 'success') {
+          let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+          let deletedItem = removeGroupFunc(groupArray, m.queryString.groupUniqueName, null);
+          for (let grp of groupArray) {
+            if (grp.uniqueName === m.request.parentGroupUniqueName) {
+              grp.groups.push(deletedItem);
+              break;
+            }
+            if (grp.groups) {
+              if (addNewGroupFunc(grp.groups, deletedItem, m.request.parentGroupUniqueName)) {
+                grp.isOpen = true;
+                break;
+              }
+            }
+          }
+          return Object.assign({}, state, {
+            groupswithaccounts: groupArray,
+            activeGroup: {uniqueName: m.request.parentGroupUniqueName}
+          });
+        }
+        return state;
     default:
       return state;
   }
@@ -555,14 +581,18 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
   }
   return result;
 };
-const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string) => {
+const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
   for (let i = 0; i < groups.length; i++) {
     if (groups[i].uniqueName === uniqueName) {
+      result = groups[i];
       groups.splice(i, 1);
-      break;
+      return result;
     }
     if (groups[i].groups) {
-      removeGroupFunc(groups[i].groups, uniqueName);
+      result = removeGroupFunc(groups[i].groups, uniqueName, result);
+      if (result) {
+        return result;
+      }
     }
   }
 };
@@ -577,4 +607,21 @@ const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, ac
       removeAccountFunc(grp.groups, uniqueName, accountUniqueName);
     }
   }
+};
+const addNewGroupFunc = (groups: IGroupsWithAccounts[], gData: IGroupsWithAccounts, parentUniqueName: string): boolean => {
+  let myChildElementIsOpen = false;
+  for (let grp of groups) {
+    if (grp.uniqueName === parentUniqueName) {
+      grp.isOpen = true;
+      grp.groups.push(gData);
+      myChildElementIsOpen = true;
+      return myChildElementIsOpen;
+    }
+    if (grp.groups) {
+      if (addNewGroupFunc(grp.groups, gData, parentUniqueName)) {
+        return true;
+      }
+    }
+  }
+  return myChildElementIsOpen;
 };
