@@ -1,18 +1,7 @@
 import { AccountResponse, AccountRequest } from '../../models/api-models/Account';
 import { AppState } from '../../store/roots';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import {
-  GroupResponse,
-  FlattenGroupsAccountsRequest,
-  FlattenGroupsAccountsResponse,
-  GroupCreateRequest,
-  ShareGroupRequest,
-  GroupSharedWithResponse,
-  MoveGroupRequest,
-  MoveGroupResponse,
-  GroupsTaxHierarchyResponse,
-  GroupUpateRequest
-} from '../../models/api-models/Group';
+import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest, MoveGroupResponse, GroupsTaxHierarchyResponse, GroupUpateRequest } from '../../models/api-models/Group';
 import { Effect, Actions, toPayload } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
