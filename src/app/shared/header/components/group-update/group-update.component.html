@@ -51,6 +51,60 @@
   </form>
 </div>
 
+<!--taxes  -->
+<div class="clearfix bdrB">
+  <div class="clearfix" *ngIf="isTaxableGroup$ | async">
+    <div class="bdrB">
+      <div class="dGryHead">
+        Taxes
+      </div>
+      <div class="pd2 clearfix">
+        <div class="tax-list-wrap">
+          <div class="tax-label"><label>All Applied Taxes</label></div>
+
+          <span class="tax-bullet" *ngFor="let tax of (activeGroup$ | async)?.applicableTaxes">{{ tax.name }}</span>
+
+          <p *ngIf="!(activeGroup$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
+          <button id="editTax" class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
+            <i class="glyphicon glyphicon-edit"></i>
+          </button>
+        </div>
+
+        <div class="edit-tax-section" *ngIf="showEditTaxSection">
+          <div class="tax-list-wrap">
+            <div class="tax-label"><label>All Inherited Taxes</label></div>
+            <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
+              <ng-template #popTemplate>
+                <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+              </ng-template>
+              <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate"
+                    placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+                  </span>
+            </div>
+            <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+            <div class="tax-list-wrap">
+              <div class="tax-label"><label>All Applicable Taxes</label></div>
+              <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                <div class="clearfix max350 mrT1">
+                  <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
+                </ng-select> -->
+
+                  <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async"
+                           [options]="options" [value]="activeGroupSelected$ | async"></select2>
+
+                </div>
+                <button type="submit" class="btn btn-success mrT1"> Save</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
 <!--delete Group modal  -->
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
