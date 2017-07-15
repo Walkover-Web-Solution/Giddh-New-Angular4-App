@@ -187,12 +187,14 @@ export class AccountsAction {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
       } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast(action.payload.body, '');
+        return this.sharedAccountWith(data.queryString.accountUniqueName);
       }
-      return {
-        type: ''
-      };
     });
 
   @Effect()
