@@ -5,7 +5,7 @@
       <div class="col-xs-7">
         <div class="row">
           <label>Group Name</label>
-          <input type="text" class="form-control" placeholder="Enter Group Name"  formControlName="name">
+          <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
         </div>
       </div>
     </div>
@@ -19,18 +19,37 @@
     </div>
     <div class="form-group clearfix">
       <label>Description</label>
-      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
+      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
+                formControlName="description"></textarea>
     </div>
   </div>
 
   <div class="pd2 pdB clearfix">
-    <a href="javascript:void(0);" class="btn isActive" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
+    <a href="javascript:void(0);" class="btn isActive"
+       *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
        (click)="showDeleteGroupModal()">DELETE {{ (activeGroup$ | async)?.name }}</a>
-    <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-            [disabled]="!groupDetailForm.valid" (click)="updateGroup()">Update
+    <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async)"
+            [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid" (click)="updateGroup()">Update
     </button>
   </div>
 </form>
+
+<!--move group-->
+<div class="pd2 clearfix ng-scope" *ngIf="!(activeGroup$ | async)?.fixed">
+  <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="pd2 form-inline" [formGroup]="moveGroupForm">
+    <div>
+      <label class="mrR">Move to group</label>
+    </div>
+    <div class="form-group col-xs-5 pdL0 mr0">
+      <input formControlName="moveto" placeholder="Group name" (typeaheadOnSelect)="moveToGroupSelected($event)"
+             [typeahead]="accountList"
+             typeaheadOptionField="name" class="form-control">
+    </div>
+    <div class="form-group mr0">
+      <button class="btn isActive" [disabled]="!moveGroupForm.valid">Move</button>
+    </div>
+  </form>
+</div>
 
 <!--delete Group modal  -->
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
