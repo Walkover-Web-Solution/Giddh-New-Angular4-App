@@ -5,32 +5,19 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import {
-  GroupCreateRequest,
-  GroupResponse,
-  GroupSharedWithResponse,
-  GroupsTaxHierarchyResponse,
-  MoveGroupRequest,
-  ShareGroupRequest
-} from '../../../../models/api-models/Group';
+import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import {
-  AccountMoveRequest,
-  AccountResponse,
-  AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse,
-  ShareAccountRequest
-} from '../../../../models/api-models/Account';
+import { AccountMoveRequest, AccountResponse, AccountSharedWithResponse, AccountsTaxHierarchyResponse, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
-import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 
 @Component({
   selector: 'account-operations',
@@ -42,6 +29,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showEditAccount$: Observable<boolean>;
   public showEditGroup$: Observable<boolean>;
   @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
+  @Input('columnsRef') public columnsRef: GroupAccountSidebarVM;
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
@@ -50,15 +38,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroupSelected$: Observable<string[]>;
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
+  @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
 
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   // tslint:disable-next-line:no-empty
   public showNewForm$: Observable<boolean>;
-  public subGroupForm: FormGroup;
   public groupDetailForm: FormGroup;
-  public moveGroupForm: FormGroup;
-  public shareGroupForm: FormGroup;
   public taxGroupForm: FormGroup;
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
@@ -183,20 +169,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       description: ['']
     });
 
-    this.subGroupForm = this._fb.group({
-      name: ['', Validators.required],
-      uniqueName: ['', [Validators.required], uniqueNameValidator],
-      desc: ['']
-    });
-
-    this.moveGroupForm = this._fb.group({
-      moveto: ['', Validators.required]
-    });
-
-    this.shareGroupForm = this._fb.group({
-      userEmail: ['', [Validators.required, Validators.email]]
-    });
-
     this.taxGroupForm = this._fb.group({
       taxes: ['']
     });
@@ -233,14 +205,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeAccount$.subscribe((a) => {
       if (a) {
         this.showEditTaxSection = false;
-      }
-    });
-
-    this.fetchingGrpUniqueName$.subscribe(f => {
-      if (f) {
-        this.subGroupForm.controls['uniqueName'].disable();
-      } else {
-        this.subGroupForm.controls['uniqueName'].enable();
       }
     });
   }
@@ -303,50 +267,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  public generateUniqueName() {
-    let val: string = this.subGroupForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
-    this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
-
-    this.isGroupNameAvailable$.subscribe(a => {
-      if (a !== null && a !== undefined) {
-        if (a) {
-          this.subGroupForm.patchValue({uniqueName: val});
-        } else {
-          let num = 1;
-          this.subGroupForm.patchValue({uniqueName: val + num});
-        }
-      }
-    });
-  }
-
-  public async addNewGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
-    let grpObject = new GroupCreateRequest();
-    grpObject.parentGroupUniqueName = activeGrp.uniqueName;
-    grpObject.description = this.subGroupForm.controls['desc'].value;
-    grpObject.name = this.subGroupForm.controls['name'].value;
-    grpObject.uniqueName = this.subGroupForm.controls['uniqueName'].value;
-
-    this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
-    this.subGroupForm.reset();
-  }
-
-  public async updateGroup() {
-    let activeGroup = await this.activeGroup$.first().toPromise();
-    this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroup.uniqueName));
-  }
-
-  public async shareGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
-
-    let grpObject = new ShareGroupRequest();
-    grpObject.role = 'view_only';
-    grpObject.user = this.shareGroupForm.controls['userEmail'].value;
-    this.store.dispatch(this.groupWithAccountsAction.shareGroup(grpObject, activeGrp.uniqueName));
-    this.shareGroupForm.reset();
-  }
-
   public async shareAccount() {
     let activeAcc = await this.activeAccount$.first().toPromise();
     let accObject = new ShareAccountRequest();
@@ -356,21 +276,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.shareAccountForm.reset();
   }
 
-  public moveToGroupSelected(event: any) {
-    this.moveGroupForm.patchValue({moveto: event.item.uniqueName});
-  }
-
   public moveToAccountSelected(event: any) {
     this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
-  }
-
-  public async moveGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
-
-    let grpObject = new MoveGroupRequest();
-    grpObject.parentGroupUniqueName = this.moveGroupForm.controls['moveto'].value;
-    this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGrp.uniqueName));
-    this.moveGroupForm.reset();
   }
 
   public async moveAccount() {
@@ -529,6 +436,14 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
   public hideShareGroupModal() {
     this.shareGroupModal.hide();
+  }
+
+  public showShareAccountModal() {
+    this.shareAccountModal.show();
+  }
+
+  public hideShareAccountModal() {
+    this.shareAccountModal.hide();
   }
 
   public showAddGroupForm() {
