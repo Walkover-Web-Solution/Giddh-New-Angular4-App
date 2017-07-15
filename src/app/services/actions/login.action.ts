@@ -1,3 +1,4 @@
+import { VerifyMobileResponseModel, VerifyMobileModel, SignupWithMobileResponse, SignupWithMobile } from '../../models/api-models/loginModels';
 import { ToasterService } from '../toaster.service';
 import { AuthenticationService } from '../authentication.service';
 import { Injectable } from '@angular/core';
@@ -17,9 +18,14 @@ import { CompanyActions } from './company.actions';
 export class LoginActions {
   public static SignupWithEmailRequest = 'SignupWithEmailRequest';
   public static SignupWithEmailResponce = 'SignupWithEmailResponce';
+  public static SignupWithMobileRequest = 'SignupWithMobileRequest';
+  public static SignupWithMobileResponce = 'SignupWithMobileResponce';
 
   public static VerifyEmailRequest = 'VerifyEmailRequest';
   public static VerifyEmailResponce = 'VerifyEmailResponce';
+
+  public static VerifyMobileRequest = 'VerifyMobileRequest';
+  public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
 
@@ -61,6 +67,24 @@ export class LoginActions {
     });
 
   @Effect()
+  public signupWithMobile$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SignupWithMobileRequest)
+    .switchMap(action => this.auth.SignupWithMobile(action.payload))
+    .map(response => this.SignupWithMobileResponce(response));
+
+  @Effect()
+  public signupWithMobileResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SignupWithMobileResponce)
+    .map(action => {
+      if (action.payload.status === 'success') {
+        this._toaster.successToast(action.payload.body);
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
+
+  @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
     .map(action => {
@@ -75,6 +99,24 @@ export class LoginActions {
       return { type: '' };
     });
 
+  @Effect()
+  public verifyMobile$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyMobileRequest)
+    .switchMap(action =>
+      this.auth.VerifyOTP(action.payload as VerifyMobileModel)
+    )
+    .map(response => this.VerifyMobileResponce(response));
+
+  @Effect()
+  public verifyMobileResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyMobileResponce)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      }
+      return this.LoginSuccess();
+    });
   constructor(
     private actions$: Actions,
     private auth: AuthenticationService,
@@ -82,7 +124,6 @@ export class LoginActions {
     private store: Store<AppState>,
     private comapnyActions: CompanyActions
   ) { }
-
   public SignupWithEmailRequest(value: string): Action {
     return {
       type: LoginActions.SignupWithEmailRequest,
@@ -96,6 +137,19 @@ export class LoginActions {
     };
   }
 
+  public SignupWithMobileRequest(value: SignupWithMobile): Action {
+    return {
+      type: LoginActions.SignupWithMobileRequest,
+      payload: value
+    };
+  }
+  public SignupWithMobileResponce(value: BaseResponse<string, SignupWithMobile>): Action {
+    return {
+      type: LoginActions.SignupWithMobileResponce,
+      payload: value
+    };
+  }
+
   public VerifyEmailRequest(value: VerifyEmailModel): Action {
     return {
       type: LoginActions.VerifyEmailRequest,
@@ -105,6 +159,19 @@ export class LoginActions {
   public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): Action {
     return {
       type: LoginActions.VerifyEmailResponce,
+      payload: value
+    };
+  }
+
+  public VerifyMobileRequest(value: VerifyMobileModel): Action {
+    return {
+      type: LoginActions.VerifyMobileRequest,
+      payload: value
+    };
+  }
+  public VerifyMobileResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): Action {
+    return {
+      type: LoginActions.VerifyMobileResponce,
       payload: value
     };
   }
