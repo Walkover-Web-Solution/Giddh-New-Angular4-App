@@ -1,10 +1,12 @@
-<div class="bdrR bdrL row view_forms" id="middleBody"  #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config" style="height: 100%;min-height: 100%;margin:0">
+<div class="bdrR bdrL row view_forms" id="middleBody" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config"
+     style="height: 100%;min-height: 100%;margin:0">
 
   <!--breadcrumbs-->
   <div class="breadcrumbs pdL2 pdT1 pdR2 pdB1">
     <div class="pull-left pdT1 col-xs-8 pdL0">
       <ol class="breadcrumb mrB2">
-        <li *ngFor="let value of columnsRef?.columns | slice:1;let i = last;" [ngClass]="{'active': (i && !(activeAccount$ | async))}">
+        <li *ngFor="let value of columnsRef?.columns | slice:1;let i = last;"
+            [ngClass]="{'active': (i && !(activeAccount$ | async))}">
           <a href="javascript:void(0)">{{ value.name }}
           </a>
         </li>
@@ -22,7 +24,8 @@
         <button class="btn isActive pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
         </button>
 
-        <div class="primary_clr text-right pull-right mrT1" *ngIf="(showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
+        <div class="primary_clr text-right pull-right mrT1"
+             *ngIf="(showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
           Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
         </div>
       </div>
@@ -33,7 +36,8 @@
           Share
         </button>
 
-        <div class="primary_clr text-right pull-right mrT1" *ngIf="(showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
+        <div class="primary_clr text-right pull-right mrT1"
+             *ngIf="(showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
           Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
         </div>
 
@@ -58,13 +62,15 @@
 
     <!--move account-->
     <div class="pdR2 pdL2 detailed clearfix pdT1 pdB1">
-      <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="pd2 form-inline" [formGroup]="moveAccountForm">
+      <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="pd2 form-inline"
+            [formGroup]="moveAccountForm">
         <div>
           <label class="mrR">Move to group</label>
         </div>
         <div class="form-group col-xs-5 pdL0 mr0" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.fixed">
-          <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)" [typeahead]="accountList" typeaheadOptionField="name"
-            placeholder="Group name" class="form-control">
+          <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)" [typeahead]="accountList"
+                 typeaheadOptionField="name"
+                 placeholder="Group name" class="form-control">
         </div>
         <div class="form-group mr0">
           <button class="btn isActive" [disabled]="!moveAccountForm.valid">Move
@@ -72,113 +78,168 @@
         </div>
       </form>
     </div>
-
     <div class="clearfix"></div>
 
-    <!--taxes-->
-    <div class="clearfix" *ngIf="isTaxableAccount$ | async">
-      <div class="bdrB">
-        <div class="dGryHead">
-          Taxes
-        </div>
-        <div class="pd2 clearfix">
-          <div class="tax-list-wrap">
-            <div class="tax-label"><label>All Applied Taxes</label></div>
+    <!--merge-->
+    <div class="pd2 detailed clearfix pdT pdB1" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
 
-            <span class="tax-bullet" *ngFor="let tax of (activeAccount$ | async)?.applicableTaxes">{{ tax.name }}</span>
+      <div class="form-group col-xs-10 mrB">
+        <div class="row">
 
-            <p *ngIf="!(activeAccount$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
-            <button class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
-              <i class="glyphicon glyphicon-edit"></i>
-            </button>
+          <label class="col-xs-12 row">Select A/c to merge with <span class="primary_clr">{{(activeAccount$ | async)?.name}}</span></label>
+          <ul class="accmerge mrB1" *ngIf="(activeAccount$ | async)?.mergedAccounts.split(',').length > 0 && (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''">
+            <li *ngFor="let merged of (activeAccount$ | async)?.mergedAccounts.split(',')">
+              <a href="javascript:void(0);" [ngClass]="{'isActive': (selectedaccountForMerge === merged)}" (click)="selectAccountForUnMerge(merged)">
+                {{merged}}
+                <i class="fa fa-times" (click)="deleteMergedAccount(merged)"></i>
+              </a>
+            </li>
+          </ul>
+
+          <div class="col-xs-8 pdL0 merge_input">
+            <div class="form-inline">
+              <select2 [data]="accounts$ | async" [options]="accountOptions" [value]="selectedaccountForMerge" (valueChanged)="selectAccount($event)">
+              </select2>
+            </div>
           </div>
 
-          <div class="edit-tax-section" *ngIf="showEditTaxSection">
+          <div class="col-xs-4 row">
+            <button class="btn isActive" (click)="mergeAccounts()">Merge</button>
+          </div>
+        </div>
+
+        <div class="pd2 detailed clearfix pdT pdB mrB2" *ngIf="showDeleteMove">
+
+          <div>
+            <label>Move to other A/c</label>
+          </div>
+          <div class="form-group col-xs-5 pdL0 mr0">
+            <select2 [data]="accounts$ | async" [options]="accountOptions" [value]="selectedaccountForMove" (valueChanged)="selectAccountForMove($event)">
+            </select2>
+          </div>
+          <div class="form-group mr0">
+
+            <!-- ng-disabled="toMerge.moveToAcc.length < 1" -->
+            <button class="btn isActive" (click)="moveToAccount()">Move</button>
+          </div>
+          <div class="clearfix"></div>
+          <hr class="mrT1">
+        </div>
+
+      </div>
+      <div class="clearfix"></div>
+      <small>This option is risky and can not be undone</small>
+      <hr class="mrT1">
+
+      <!--taxes-->
+      <div class="clearfix" *ngIf="isTaxableAccount$ | async">
+        <div class="bdrB">
+          <div class="dGryHead">
+            Taxes
+          </div>
+          <div class="pd2 clearfix">
             <div class="tax-list-wrap">
-              <div class="tax-label"><label>All Inherited Taxes</label></div>
-              <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
-                <ng-template #popTemplate>
-                  <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
-                </ng-template>
-                <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
-              </span>
-              </div>
-              <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+              <div class="tax-label"><label>All Applied Taxes</label></div>
+
+              <span class="tax-bullet"
+                    *ngFor="let tax of (activeAccount$ | async)?.applicableTaxes">{{ tax.name }}</span>
+
+              <p *ngIf="!(activeAccount$ | async)?.applicableTaxes.length" class="ng-scope">No taxes Applied</p>
+              <button class="btn btn-sm btn-default edit-tax-btn" (click)="taxHierarchy()">
+                <i class="glyphicon glyphicon-edit"></i>
+              </button>
+            </div>
+
+            <div class="edit-tax-section" *ngIf="showEditTaxSection">
               <div class="tax-list-wrap">
-                <div class="tax-label"><label>All Applicable Taxes</label></div>
-                <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
-                  <div class="clearfix max350 mrT1">
-                    <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
-                </ng-select> -->
+                <div class="tax-label"><label>All Inherited Taxes</label></div>
+                <div *ngFor="let inTax of (activeAccountTaxHierarchy$ | async)?.inheritedTaxes">
+                  <ng-template #popTemplate>
+                    <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+                  </ng-template>
+                  <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate"
+                        placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+              </span>
+                </div>
+                <p *ngIf="!(activeAccountTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+                <div class="tax-list-wrap">
+                  <div class="tax-label"><label>All Applicable Taxes</label></div>
+                  <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                    <div class="clearfix max350 mrT1">
+                      <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
+                  </ng-select> -->
 
-                    <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async" [options]="options" [value]="activeGroupSelected$ | async"></select2>
+                      <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async"
+                               [options]="options" [value]="activeGroupSelected$ | async"></select2>
 
-                  </div>
-                  <button type="submit" class="btn btn-success mrT1"> Save</button>
-                </form>
+                    </div>
+                    <button type="submit" class="btn btn-success mrT1"> Save</button>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+
     </div>
 
-  </div>
+    <!--ng-busy-->
+    <div class="" *ngIf="activeGroupInProgress$ | async ">
 
-  <!--ng-busy-->
-  <div class="" *ngIf="activeGroupInProgress$ | async ">
+      <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
 
-    <div class="ng-busy ng-trigger ng-trigger-flyInOut" [ngStyle]="{'background-color': 'rgba(216, 216, 203, 0.5)'}">
-
-      <div class="">
-        <div class="ng-busy-default-wrapper">
-          <div class="ng-busy-default-sign">
-            <div class="ng-busy-default-spinner">
-              <div class="bar1"></div>
-              <div class="bar2"></div>
-              <div class="bar3"></div>
-              <div class="bar4"></div>
-              <div class="bar5"></div>
-              <div class="bar6"></div>
-              <div class="bar7"></div>
-              <div class="bar8"></div>
-              <div class="bar9"></div>
-              <div class="bar10"></div>
-              <div class="bar11"></div>
-              <div class="bar12"></div>
+        <div class="">
+          <div class="ng-busy-default-wrapper">
+            <div class="ng-busy-default-sign">
+              <div class="ng-busy-default-spinner">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+                <div class="bar4"></div>
+                <div class="bar5"></div>
+                <div class="bar6"></div>
+                <div class="bar7"></div>
+                <div class="bar8"></div>
+                <div class="bar9"></div>
+                <div class="bar10"></div>
+                <div class="bar11"></div>
+                <div class="bar12"></div>
+              </div>
+              <div class="ng-busy-default-text">Loading...</div>
             </div>
-            <div class="ng-busy-default-text">Loading...</div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <!--share Group modal  -->
-  <div bsModal #shareGroupModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <share-group-modal (closeShareGroupModal)="hideShareGroupModal()"></share-group-modal>
+    <!--share Group modal  -->
+    <div bsModal #shareGroupModal="bs-modal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <share-group-modal (closeShareGroupModal)="hideShareGroupModal()"></share-group-modal>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!--share Account modal  -->
-  <div bsModal #shareAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <share-account-modal (closeShareAccountModal)="hideShareAccountModal()"></share-account-modal>
+    <!--share Account modal  -->
+    <div bsModal #shareAccountModal="bs-modal" class="modal fade" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <share-account-modal (closeShareAccountModal)="hideShareAccountModal()"></share-account-modal>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!--add new buttons-->
-  <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
-    <div class="vcenter">
-      <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
-      <span class="clearfix"></span>
-      <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">Create A/c</button>
+    <!--add new buttons-->
+    <div class="inline-table new_form ng-scope" *ngIf="(showNewForm$ | async)">
+      <div class="vcenter">
+        <button class="btn isActive mrB2" (click)="showAddGroupForm()">Create Group</button>
+        <span class="clearfix"></span>
+        <button class="btn isActive" *ngIf="!isRootLevelGroup" (click)="showAddAccountForm()">Create A/c</button>
+      </div>
     </div>
+
   </div>
 
 </div>
