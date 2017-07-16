@@ -306,6 +306,7 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        this._toasty.successToast(action.payload.body, '');
         let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
         return this.getAccountDetails(data.queryString.accountUniqueName);
       }
@@ -333,6 +334,7 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        this._toasty.successToast(action.payload.body, '');
         let data: BaseResponse<string, AccountUnMergeRequest> = action.payload;
         return this.getAccountDetails(data.queryString.accountUniqueName);
       }

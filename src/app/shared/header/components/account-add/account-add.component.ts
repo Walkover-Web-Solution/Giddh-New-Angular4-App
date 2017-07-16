@@ -97,7 +97,9 @@ export class AccountAddComponent implements OnInit, OnDestroy {
 
     let accountObj = new AccountRequest();
     accountObj = this.addAccountForm.value as AccountRequest;
-    accountObj.state = states.find(st => st.id === this.addAccountForm.value.state).text;
+    if (this.addAccountForm.value.state) {
+      accountObj.state = states.find(st => st.id === this.addAccountForm.value.state).text;
+    }
     this.store.dispatch(this.accountsAction.createAccount(activeGroup.uniqueName, accountObj));
     this.addAccountForm.reset();
   }

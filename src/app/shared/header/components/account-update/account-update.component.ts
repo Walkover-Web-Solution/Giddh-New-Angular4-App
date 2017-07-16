@@ -110,7 +110,9 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
 
     let accountObj = new AccountRequest();
     accountObj = this.updateAccountForm.value as AccountRequest;
-    accountObj.state = states.find(st => st.id === this.updateAccountForm.value.state).text;
+    if (this.updateAccountForm.value.state) {
+      accountObj.state = states.find(st => st.id === this.updateAccountForm.value.state).text;
+    }
     this.store.dispatch(this.accountsAction.updateAccount(activeAcc.uniqueName, accountObj));
   }
 
