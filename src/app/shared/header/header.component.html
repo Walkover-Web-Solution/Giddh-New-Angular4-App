@@ -124,13 +124,13 @@
             <div class="ledger_search form-inline col-xs-12">
               <div class="form-group">
                 <div class="input-group">
-                  <input id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts" (blur)="flyAccounts.next(false)"
-                    (focus)="flyAccounts.next(true)">
-
-                  <div (click)="noGroups = !noGroups" class="input-group-addon cp" placement="right">
+                  <input #accountSearch id="accountSearch" (keyup)="filterAccounts(accountSearch.value)" type="text"
+                         name="searchGroup" class="form-control" placeholder="Search accounts"
+                         (focus)="flyAccounts.next(true)">
+                  <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp"
+                       placement="right">
                     <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                   </div>
-
                 </div>
               </div>
             </div>
@@ -188,7 +188,8 @@
       </ul>
     </nav>
   </div>
-  <accounts-side-bar [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups"
+                     [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
