@@ -2,8 +2,7 @@ import {
     Component,
     OnInit,
     AfterViewInit,
-    ViewChild,
-    ComponentFactoryResolver
+    ViewChild
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -35,7 +34,6 @@ export class PermissionComponent implements OnInit, AfterViewInit {
         private companyActions: CompanyActions,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private router: Router,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private PermissionActions: PermissionActions
     ) { }
 
@@ -54,6 +52,7 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     }
 
     public ngAfterViewInit() {
+        alert("ngOnINit called");
         this.store.select(p => p.permission.roles).subscribe((roles) => {
             this.allRoles = roles;
         });
