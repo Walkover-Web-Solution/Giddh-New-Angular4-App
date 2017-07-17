@@ -273,7 +273,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         isRefreshingFlattenGroupsAccounts: false,
         activeGroupInProgress: false,
         activeGroupSharedWith: [],
-        activeAccount: null
+        activeAccount: null,
+        addAccountOpen: false,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 

@@ -1,12 +1,7 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
-  AfterViewInit,
-  Component,
-  ComponentFactoryResolver,
-  OnDestroy,
-  OnInit,
-  ViewChild,
+  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild,
   ViewChildren
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -29,7 +24,7 @@ import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions'
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public session$: Observable<boolean>;
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
@@ -68,7 +63,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
               private groupWithAccountsAction: GroupWithAccountsAction,
               private router: Router,
               private flyAccountActions: FlyAccountsActions,
-              private componentFactoryResolver: ComponentFactoryResolver) {
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cdRef: ChangeDetectorRef) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -120,6 +116,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         this.router.navigate(['/login']);
       }
     });
+  }
+
+  public ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   public showManageGroupsModal() {

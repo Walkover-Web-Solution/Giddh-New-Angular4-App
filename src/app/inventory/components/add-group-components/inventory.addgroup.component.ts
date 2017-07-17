@@ -27,7 +27,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     multiple: false,
     width: '100%',
     placeholder: 'Select Option',
-    allowClear: true
+    allowClear: false
   };
   public parentStockSearchString: string;
   public groupUniqueName: string;
@@ -131,7 +131,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         }
         this.addGroupForm.patchValue(updGroupObj);
       } else {
-        this.addGroupForm.reset();
+        this.addGroupForm.patchValue({name: '', uniqueName: '', isSelfParent: true});
         this.parentStockSearchString = '';
       }
     });
@@ -191,7 +191,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public addNewGroup() {
     let stockRequest = new StockGroupRequest();
     stockRequest = this.addGroupForm.value as StockGroupRequest;
-    if (!this.addGroupForm.value.isSelfParent) {
+    if (!this.addGroupForm.value.isSelfParent && this.selectedGroup) {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
@@ -220,7 +220,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.activeGroup$.take(1).subscribe(a => activeGroup = a);
     this.store.dispatch(this.inventoryActions.removeGroup(activeGroup.uniqueName));
     this.addGroupForm.reset();
-    this.router.navigateByUrl('/pages/inventory/add-group');
+    this.router.navigateByUrl('/pages/inventory');
   }
 
 }
