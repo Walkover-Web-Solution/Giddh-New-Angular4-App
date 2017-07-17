@@ -4,7 +4,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenGroupsAccountsDetail } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-
+import { FlyAccountsActions } from '../../../../services/actions/fly-accounts.actions';
+import * as _ from 'lodash';
 @Component({
   selector: 'accounts-side-bar',
   templateUrl: './accounts-side-bar.component.html',
@@ -12,29 +13,50 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class AccountsSideBarComponent implements OnInit, OnDestroy {
   @Input() public flyAccounts: boolean;
-  public flatAccountWGroupsList$: Observable<IFlattenGroupsAccountsDetail[]>;
+  public flatAccountWGroupsList: IFlattenGroupsAccountsDetail[];
   public companyList$: Observable<any>;
   public showAccountList: boolean = true;
-  public noGroups: boolean;
+
+  @Input()
+  public set noGroups(val: boolean) {
+    this._noGroups = val;
+    this.toggleAccounts(val);
+  }
+
+  public get noGroups(): boolean {
+    return this._noGroups;
+  }
+
+  private _noGroups: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  // tslint:disable-next-line:no-empty
-  constructor(private store: Store<AppState>) {
-    this.flatAccountWGroupsList$ = this.store.select(state => {
-      return state.groupwithaccounts.flattenGroupsAccounts;
-    }).takeUntil(this.destroyed$);
+  constructor(private store: Store<AppState>, private _flyAccountActions: FlyAccountsActions) {
+    this.store.select(state => {
+      return state.flyAccounts.flattenGroupsAccounts;
+    }).takeUntil(this.destroyed$).subscribe(p => {
+      this.flatAccountWGroupsList = _.cloneDeep(p);
+      this.toggleAccounts(this._noGroups);
+      this._noGroups = true;
+    });
 
     this.companyList$ = this.store.select(state => {
       return state.company.companies;
     }).takeUntil(this.destroyed$);
   }
 
-  // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    this.store.dispatch(this._flyAccountActions.GetflatAccountWGroups());
   }
+
+  public toggleAccounts(noGroups: boolean) {
+    this.flatAccountWGroupsList.forEach(p => {
+        p.isOpen = noGroups;
+      }
+    );
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
 }
