@@ -53,6 +53,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public isStockUpdateInProcess$: Observable<boolean>;
   public isStockDeleteInProcess$: Observable<boolean>;
   public showLoadingForStockEditInProcess$: Observable<boolean>;
+  public showManufacturingItemsError: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -137,7 +138,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.initUnitAndRates()
       ]),
       manufacturingDetails: this._fb.group({
-        manufacturingQuantity: ['', [Validators.required]],
+        manufacturingQuantity: ['', [Validators.required, digitsOnly]],
         manufacturingUnitCode: ['', [Validators.required]],
         linkedStocks: this._fb.array([]),
         linkedStockUniqueName: [''],
@@ -371,6 +372,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     } else {
       if (manufacturingDetailsContorl.value.linkedStockUniqueName && manufacturingDetailsContorl.value.linkedStockUnitCode && manufacturingDetailsContorl.value.linkedQuantity) {
+        this.showManufacturingItemsError = false;
         let obj = new IStockItemDetail();
         obj.stockUniqueName = manufacturingDetailsContorl.value.linkedStockUniqueName;
         obj.stockUnitCode = manufacturingDetailsContorl.value.linkedStockUnitCode;
@@ -382,6 +384,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         manufacturingDetailsContorl.controls['linkedStockUniqueName'].reset();
         manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
         manufacturingDetailsContorl.controls['linkedQuantity'].reset();
+      } else {
+        this.showManufacturingItemsError = true;
       }
     }
   }
