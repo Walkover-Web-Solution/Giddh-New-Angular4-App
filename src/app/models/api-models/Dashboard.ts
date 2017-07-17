@@ -1,4 +1,4 @@
-import { IPeriodBalances, IGroupHistoryGroups } from '../interfaces/dashboard.interface';
+import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem } from '../interfaces/dashboard.interface';
 
 /**
  * Model for Audit Dashboard api request
@@ -38,4 +38,13 @@ export class GroupHistoryRequest {
 export class GroupHistoryResponse {
   accounts?: any;
   groups: IGroupHistoryGroups[];
+}
+
+/*
+ * Model: for closing balance
+ * API: /company/:companyUniqueName/groups/:groupUniqueName/closing-balance?fromDate=:date1&toDate=:date2&refresh=:refresh
+*/
+
+export class ClosingBalanceResponse {
+  body: IDashboardCbMainItem[];
 }

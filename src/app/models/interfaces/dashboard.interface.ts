@@ -25,3 +25,36 @@ export interface IIntervalBalancesItem {
   openingBalance: IForwardBalance;
   to: string;
 }
+
+export interface IDashboardCbMainItem {
+  forwardedBalance: IForwardBalance;
+  creditTotal: number;
+  debitTotal: number;
+  closingBalance: IClosingBalance;
+  childGroups: IChildGroups[];
+  accounts: ICbAccount[];
+  uniqueName: string;
+  category: string;
+  groupName: string;
+}
+
+export interface IChildGroups {
+  forwardedBalance: IForwardBalance;
+  creditTotal: number;
+  debitTotal: number;
+  closingBalance: IClosingBalance;
+  childGroups: IChildGroups[];
+  accounts: ICbAccount[];
+  uniqueName: string;
+  groupName: string;
+  category: any;
+}
+
+export interface ICbAccount {
+  creditTotal: number;
+  debitTotal: number;
+  closingBalance: IClosingBalance;
+  openingBalance: IForwardBalance;
+  uniqueName: string;
+  name: string;
+}
