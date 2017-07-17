@@ -7,7 +7,6 @@ import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
-import { SearchRequest, SearchResponse } from '../../models/api-models/Search';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { GroupService } from '../group.service';
@@ -19,26 +18,28 @@ export class FlyAccountsActions {
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST)
     .switchMap(action => {
-      return this._groupService.GetFlattenGroupsAccounts()
+      return this._groupService.GetFlattenGroupsAccounts(action.payload.q, action.payload.page, action.payload.count, action.payload.showEmptyGroups)
         .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
           type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
           payload: r.body
         }, true, {
-            type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
-            payload: []
-          }));
+          type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
+          payload: []
+        }));
     });
 
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _groupService: GroupService) {
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _groupService: GroupService) {
   }
 
-  public GetflatAccountWGroups(request: SearchRequest): Action {
+  public GetflatAccountWGroups(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Action {
     return {
       type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST,
-      payload: request
+      payload: {
+        q, page, count, showEmptyGroups
+      }
     };
   }
 
