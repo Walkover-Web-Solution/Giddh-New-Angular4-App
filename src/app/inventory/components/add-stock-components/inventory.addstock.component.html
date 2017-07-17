@@ -174,9 +174,11 @@
                   </div>
                 </div>
 
-                <div class="clearfix mrT1 mrB1" ng-if="vm.mfsCmbItemErrMsg">
+                <div class="clearfix mrT1 mrB1" *ngIf="showManufacturingItemsError">
                   <div class="col-xs-12">
-                    <!-- <p class="text-warning">{{vm.mfsCmbItemErrMsg}}</p> -->
+                     <p class="text-warning">
+                       All fields are required to add Item
+                     </p>
                   </div>
                 </div>
 
