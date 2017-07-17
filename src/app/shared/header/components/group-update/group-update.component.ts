@@ -299,7 +299,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
     });
-    data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+    if (this.applyTaxSelect2.value && Array.isArray(this.applyTaxSelect2.value)) {
+      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+    }
     data.uniqueName = activeGroup.uniqueName;
     this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     this.showEditTaxSection = false;
