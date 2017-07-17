@@ -120,5 +120,6 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   }
   public ShowAddNewForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
+    this.store.dispatch(this.accountsAcction.resetActiveAccount());
   }
 }
