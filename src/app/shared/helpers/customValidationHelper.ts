@@ -37,7 +37,7 @@ export const uniqueNameValidator = (control: FormControl) => {
 export const digitsOnly: ValidatorFn = (control: AbstractControl): { [key: string]: boolean } => {
   let v: string = control.value;
   if (control.dirty) {
-    return /^\\.\\-\[0-9]+$/.test(v) ? null : { digits: true };
+    return /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(v) ? null : { digits: true };
   }
 };
 

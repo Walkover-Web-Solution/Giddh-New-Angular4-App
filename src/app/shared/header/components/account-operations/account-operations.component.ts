@@ -5,7 +5,11 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
+import {
+  GroupResponse,
+  GroupSharedWithResponse,
+  GroupsTaxHierarchyResponse
+} from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -15,8 +19,13 @@ import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import {
-  AccountMergeRequest, AccountMoveRequest, AccountResponse, AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest
+  AccountMergeRequest,
+  AccountMoveRequest,
+  AccountResponse,
+  AccountSharedWithResponse,
+  AccountsTaxHierarchyResponse,
+  AccountUnMergeRequest,
+  ShareAccountRequest
 } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -41,15 +50,24 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
   @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
+  @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
+  @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
+  @ViewChild('accountSelect2') public accountSelect2: Select2Component;
+  @ViewChild('accountForMoveSelect2') public accountForMoveSelect2: Select2Component;
 
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
-  public selectedaccountForMerge: string;
-  public selectedaccountForMove: string;
+  public selectedaccountForMerge: any = [];
+  public selectedAccountForDelete: string;
+  public selectedAccountForMove: string;
+  public setAccountForMove: string;
+  public deleteMergedAccountModalBody: string;
+  public moveMergedAccountModalBody: string;
+
   // tslint:disable-next-line:no-empty
   public showNewForm$: Observable<boolean>;
   public groupDetailForm: FormGroup;
@@ -69,10 +87,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public accountOptions: Select2Options = {
     multiple: true,
     width: '100%',
-    placeholder: 'Select Option',
-    allowClear: true,
+    placeholder: 'Select Accounts',
+    allowClear: true
   };
-  public selectedAccountUnq: string = '';
+  public accountOptions2: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true
+  };
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
@@ -85,7 +108,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     </ul>
   </div>
   `;
-  public selectedTax: string[];
   public options: Select2Options = {
     minimumResultsForSearch: 9001,
     multiple: true,
@@ -111,8 +133,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private companyActions: CompanyActions, private accountsAction: AccountsAction, private _accountService: AccountService) {
-    this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew).takeUntil(this.destroyed$);
+              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _accountService: AccountService) {
+    this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
     this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).takeUntil(this.destroyed$);
@@ -150,26 +172,26 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return {text: p.name, id: p.uniqueName};
             });
           }
         }
@@ -180,7 +202,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
         data.body.results.map(d => {
-          accounts.push({ text: d.name, id: d.uniqueName });
+          accounts.push({text: d.name, id: d.uniqueName});
         });
         this.accounts$ = Observable.of(accounts);
       }
@@ -221,7 +243,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           this.showGroupForm = true;
           this.ShowForm.emit(true);
           this.showEditTaxSection = false;
-          this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
+          this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
           this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         }
       }
@@ -302,7 +324,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
+    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
   }
 
   public async moveAccount() {
@@ -335,7 +357,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -480,38 +502,90 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm());
   }
 
-  public selectAccountForUnMerge(merge: string) {
-    this.selectedaccountForMerge = merge;
+  public showDeleteMergedAccountModal(merge: string) {
+    this.deleteMergedAccountModalBody = `Are you sure you want to delete ${merge} Account ?`;
+    this.selectedAccountForDelete = merge;
+    this.deleteMergedAccountModal.show();
   }
 
-  public deleteMergedAccount(merge: string) {
+  public hideDeleteMergedAccountModal() {
+    this.deleteMergedAccountModal.hide();
+  }
+
+  public deleteMergedAccount() {
     let activeAccount: AccountResponse = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let obj = new AccountUnMergeRequest();
-    obj.uniqueNames = [merge];
+    obj.uniqueNames = [this.selectedAccountForDelete];
     this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+    this.showDeleteMove = false;
+    this.hideDeleteMergedAccountModal();
   }
 
   public selectAccount(v: any) {
-    this.selectedaccountForMerge = v.value;
+    if (v.value) {
+      if (v.value instanceof Array) {
+        let accounts = [];
+        v.value.map(a => {
+          accounts.push(a);
+        });
+        this.selectedaccountForMerge = accounts;
+      }
+    } else {
+      this.selectedaccountForMerge = '';
+    }
+  }
+
+  public setAccountForMoveFunc(v: string) {
+    this.setAccountForMove = v;
     this.showDeleteMove = true;
   }
 
   public selectAccountForMove(v: any) {
-    this.selectedaccountForMove = v.value;
+    if (v.value) {
+      this.selectedAccountForMove = v.value;
+    } else {
+      this.selectedAccountForMove = '';
+    }
   }
 
   public mergeAccounts() {
     let activeAccount: AccountResponse = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
-    let obj = new AccountMergeRequest();
-    obj.uniqueName = this.selectedaccountForMerge;
-    this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, [obj]));
-    this.selectedaccountForMerge = '';
+    let finalData: AccountMergeRequest[] = [];
+    if (this.selectedaccountForMerge) {
+      this.selectedaccountForMerge.map((acc) => {
+        let obj = new AccountMergeRequest();
+        obj.uniqueName = acc;
+        finalData.push(obj);
+      });
+      this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
+      this.selectedaccountForMerge = '';
+      this.accountSelect2.setElementValue('');
+      this.showDeleteMove = false;
+    }
   }
 
-  public moveToAccount() {
-  //
+  public showMoveMergedAccountModal() {
+    this.moveMergedAccountModalBody = `Are you sure you want to move ${this.setAccountForMove} Account to ${this.selectedAccountForMove} ?`;
+    this.moveMergedAccountModal.show();
+  }
+
+  public hideMoveMergedAccountModal() {
+    this.moveMergedAccountModal.hide();
+  }
+
+  public moveMergeAccountTo() {
+    let activeAccount: AccountResponse = null;
+    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    let obj = new AccountUnMergeRequest();
+    obj.uniqueNames = [this.setAccountForMove];
+    obj.moveTo = this.selectedAccountForMove;
+    this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
+    this.showDeleteMove = false;
+    this.hideDeleteMergedAccountModal();
+    this.accountForMoveSelect2.setElementValue('');
+    this.hideMoveMergedAccountModal();
   }
 
   public ngOnDestroy() {
