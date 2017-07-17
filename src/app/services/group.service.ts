@@ -189,10 +189,15 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.FLATTEN_GROUPS_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':showEmptyGroups', showEmptyGroups)).map((res) => {
+    return this._http.get(GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':q', q)
+      .replace(':page', page.toString())
+      .replace(':count', count.toString())
+      .replace(':showEmptyGroups', showEmptyGroups)).map((res) => {
       let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count, showEmptyGroups };
+      // data.response.results.forEach(p => p.isOpen = false);
       return data;
     }).catch((e) => HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups }));
   }

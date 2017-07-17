@@ -12,7 +12,7 @@ export const GROUP_API = {
   GET_GROUP_DETAILS: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
   DELETE_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName', // delete method,
   MOVE_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/move',
-  FLATTEN_GROUP_WITH_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-groups-with-accounts?q=',
+  FLATTEN_GROUP_WITH_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-groups-with-accounts?q=:q&page=:page&count=:count&showEmptyGroups=:showEmptyGroups',
   FLATTEN_GROUPS_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/groups/flatten-groups-accounts?q=:q&page=:page&count=:count&showEmptyGroups=:showEmptyGroups', // get call
   TAX_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/tax-hierarchy', // get call
 };

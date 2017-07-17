@@ -35,6 +35,7 @@ import { InventoryAction } from './actions/inventory/inventory.actions';
 import { SearchActions } from './actions/search.actions';
 import { SearchService } from './search.service';
 import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
+import { FlyAccountsActions } from './actions/fly-accounts.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -54,6 +55,7 @@ import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
     EffectsModule.run(CustomStockUnitAction),
     EffectsModule.run(StockReportActions),
     EffectsModule.run(SearchActions),
+    EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(AuditLogsActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
