@@ -105,9 +105,11 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
   }
 
   public async updateAccount() {
-    let activeAcc = await this.activeAccount$.first().toPromise();
-    let states = await this.statesSource$.first().toPromise();
+    let activeAcc;
+    let states;
 
+    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
+    this.statesSource$.take(1).subscribe(p => states = p);
     let accountObj = new AccountRequest();
     accountObj = this.updateAccountForm.value as AccountRequest;
     if (this.updateAccountForm.value.state) {
