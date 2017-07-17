@@ -54,14 +54,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.isAddNewGroupInProcess$ = this.store.select(state => state.inventory.isAddNewGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isDeleteGroupInProcess$ = this.store.select(state => state.inventory.isDeleteGroupInProcess).takeUntil(this.destroyed$);
-    this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let flattenData: Select2OptionData[] = [];
-        this.flattenDATA(data.body.results, flattenData);
-        this.dataSource.next(flattenData);
-        this.groupsData$ = Observable.of(flattenData);
-      }
-    });
     this.store.take(1).subscribe(state => {
       if (state.inventory.groupsWithStocks === null) {
         this.store.dispatch(this.sideBarAction.GetGroupsWithStocksHierarchyMin());
@@ -70,6 +62,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.getParentGroupData();
     // subscribe to url
     this.sub = this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
@@ -136,6 +129,19 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       }
     });
   }
+
+  public getParentGroupData() {
+    // parentgroup data
+    this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let flattenData: Select2OptionData[] = [];
+        this.flattenDATA(data.body.results, flattenData);
+        this.dataSource.next(flattenData);
+        this.groupsData$ = Observable.of(flattenData);
+      }
+    });
+  }
+
   public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: Select2OptionData[] = []) {
     rawList.map(p => {
       if (p) {
@@ -195,6 +201,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
+    this.getParentGroupData();
     this.addGroupForm.reset();
   }
 
