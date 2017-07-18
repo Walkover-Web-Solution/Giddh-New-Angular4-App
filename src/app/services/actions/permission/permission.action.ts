@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PermissionService } from "../../permission.service";
 import { PERMISSION_ACTIONS } from './permission.const';
-import { NewRole, PermissionResponse } from '../../../models/api-models/Permission';
+import { NewRole, CreateNewRoleRequest, PermissionResponse } from '../../../models/api-models/Permission';
 
 @Injectable()
 export class PermissionActions {
@@ -31,6 +31,18 @@ export class PermissionActions {
             });
         });
     });
+
+  @Effect()
+  private CreateStockUnit$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.CREATE_NEW_ROLE)
+    .switchMap(action => {
+      return this._permissionService.CreateNewRole(action.payload)
+        .map((r) => this.validateResponse(r, {
+          type: PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE,
+          payload: action.payload
+        }, true));
+    });
+
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
@@ -54,6 +66,13 @@ export class PermissionActions {
       type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
       payload: value
     }
+  }
+
+  public SaveNewRole(unit: CreateNewRoleRequest): Action {
+    return {
+      type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT,
+      payload: unit
+    };
   }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {

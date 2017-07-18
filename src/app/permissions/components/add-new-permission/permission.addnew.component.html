@@ -1,6 +1,6 @@
 <div id="single_role">
 
-  <h2 class="role_title">{{ newRole.name }}</h2>
+  <h2 class="role_title" align="center">{{ newRole.name }}</h2>
 
   <div class="pd3 pdT1 pdB1 bdrB clearfix">
     <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
@@ -26,29 +26,39 @@
           </tr>
           <tr>
             <td><input type="checkbox" name="View" />View</td>
-            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'view')" [disabled]="true" /></td>
-            <td><input type="checkbox" name="viewOnly" ng-click="$event.stopPropagation();" /></td>
+            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'view', 'admin')" [disabled]="true"
+              /></td>
+            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'view', 'view')" [disabled]="true"
+              /></td>
           </tr>
           <tr>
             <td><input type="checkbox" name="Edit" />Edit</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
+            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'edit', 'admin')" [disabled]="true"
+              /></td>
+            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'edit', 'view')" [disabled]="true"
+              /></td>
           </tr>
 
           <tr>
             <td><input type="checkbox" name="Delete" />Delete</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
+            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'delete', 'admin')" [disabled]="true"
+              /></td>
+            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'delete', 'view')" [disabled]="true"
+              /></td>
           </tr>
           <tr>
             <td><input type="checkbox" name="Create" />Create</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
+            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'create', 'admin')" [disabled]="true"
+              /></td>
+            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'create', 'view')" [disabled]="true"
+              /></td>
           </tr>
           <tr>
             <td><input type="checkbox" name="share" />Share</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
+            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'share', 'admin')" [disabled]="true"
+              /></td>
+            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'share', 'view')" [disabled]="true"
+              /></td>
           </tr>
         </tbody>
       </table>
@@ -56,51 +66,6 @@
         <input type="checkbox" [(ngModel)]="n.selected" (change)="checkIfAllSelected();"> {{n.name}}
       </li>-->
     </div>
-
-    <!--<div class="col-xs-4">
-      <div class="headName">
-        Invoice
-        <i class="fa fa-times text-right close_modal" aria-hidden="true" ng-click="$dismiss()"></i>
-      </div>
-      <table class="table">
-        <thead>
-          <th>New Admin</th>
-          <th>Admin</th>
-          <th>View Only</th>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="3"><input type="checkbox" name="selectAll" [(ngModel)]="selectedAll" (change)="selectAll();">Select All</td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="View" ng-click="$event.stopPropagation();" />View</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" ng-click="$event.stopPropagation();" /></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="Edit" />Edit</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" name="Delete" />Delete</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="Create" />Create</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="share" />Share</td>
-            <td><input type="checkbox" name="admin" /></td>
-            <td><input type="checkbox" name="viewOnly" /></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>-->
 
     <!-- new head -->
 
@@ -147,7 +112,6 @@
         </div>
       </div>
     </div>
-
     <!-- new head -->
   </div>
 
