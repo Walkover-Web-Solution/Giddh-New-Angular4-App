@@ -1,4 +1,5 @@
-import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem } from '../interfaces/dashboard.interface';
+import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem, IChildGroups, ICbAccount } from '../interfaces/dashboard.interface';
+import { IForwardBalance, IClosingBalance } from '../interfaces/ledger.interface';
 
 /**
  * Model for Audit Dashboard api request
@@ -11,8 +12,8 @@ import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem } from '../i
  * NOTE:: its response will be a hash containing a key logs
  */
 export class DashboardResponse {
-  networth: IPeriodBalances[];
-  profitLoss: IPeriodBalances[];
+  public networth: IPeriodBalances[];
+  public profitLoss: IPeriodBalances[];
 }
 
 /**
@@ -27,17 +28,17 @@ export class DashboardResponse {
  */
 
 export class GroupHistoryRequest {
-  groups?: string[];
-	accounts?: string[];
-	category?: string[];
+  public groups?: string[];
+  public accounts?: string[];
+  public category?: string[];
 }
 
 /**
  * NOTE:: as discussed accounts will be null always
  */
 export class GroupHistoryResponse {
-  accounts?: any;
-  groups: IGroupHistoryGroups[];
+  public accounts?: any;
+  public groups: IGroupHistoryGroups[];
 }
 
 /*
@@ -45,6 +46,14 @@ export class GroupHistoryResponse {
  * API: /company/:companyUniqueName/groups/:groupUniqueName/closing-balance?fromDate=:date1&toDate=:date2&refresh=:refresh
 */
 
-export class ClosingBalanceResponse {
-  body: IDashboardCbMainItem[];
+export class ClosingBalanceResponse implements IDashboardCbMainItem{
+  public forwardedBalance: IForwardBalance;
+  public creditTotal: number;
+  public debitTotal: number;
+  public closingBalance: IClosingBalance;
+  public childGroups: IChildGroups[];
+  public accounts: ICbAccount[];
+  public uniqueName: string;
+  public category: string;
+  public groupName: string;
 }
