@@ -20,3 +20,20 @@ export interface NewRole {
   copyoption: string,
   pages: any,
 }
+
+/*
+ * Model for create-new-role api request
+ * POST call
+ * API:: (create-stock-unit) company/:companyUniqueName/stock-unit
+ * used to create new role
+ * its response will be hash as StockUnitResponse
+ */
+export class CreateNewRoleRequest { //chages requied here
+  public name: string;
+  public code: string;
+}
+
+export class CreateNewRoleRespone { //chages requied here
+  public name: string;
+  public code: string;
+}
