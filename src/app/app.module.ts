@@ -34,6 +34,7 @@ import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-per
 import { InventoryModule } from './inventory/inventory.module';
 import { SearchModule } from './search/search.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { LedgerModule } from './ledger/ledger.module';
 import { TlPlModule } from './tl-pl/tl-pl.module';
 
 // Application wide providers
@@ -89,6 +90,7 @@ if (ENV === 'development') {
     SearchModule,
     TlPlModule,
     AuditLogsModule,
+    LedgerModule,
     LoginModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
