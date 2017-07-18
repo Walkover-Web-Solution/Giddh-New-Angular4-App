@@ -255,8 +255,15 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Send Email/Sms for Accounts
   public send() {
+    debugger;
     let accountsUnqList = [];
-    this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
+    this.searchResponseFiltered$.take(1).subscribe(p => {
+      p.map(i => accountsUnqList.push(i.uniqueName));
+    });
+    debugger;
+    accountsUnqList = _.uniq(accountsUnqList);
+    // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
+
     this.searchRequest$.take(1).subscribe(p => {
       if (isNullOrUndefined(p)) {
         return;
