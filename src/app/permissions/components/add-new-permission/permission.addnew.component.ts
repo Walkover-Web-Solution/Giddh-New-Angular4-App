@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { PermissionActions } from "../../../services/actions/permission/permission.action";
 
 export interface InewRole {
   name: string,
@@ -25,7 +26,11 @@ export class AddNewPermissionComponent {
   private names: any;
   private selectedAll: any;
 
-  constructor(private router: Router, private store: Store<AppState>, private _location: Location) {
+  constructor(private router: Router,
+    private store: Store<AppState>,
+    private _location: Location,
+    private permissionActions: PermissionActions
+  ) {
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((role) => {
       this.newRole = role.newRole;
       this.allRoles = role.roles;
@@ -115,4 +120,9 @@ export class AddNewPermissionComponent {
     }
     return false;
   }
+
+  public addNewRole(): any {
+    this.store.dispatch(this.permissionActions.SaveNewRole(this.newRole));
+  }
+
 }
