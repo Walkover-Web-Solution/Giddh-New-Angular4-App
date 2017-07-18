@@ -454,25 +454,29 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           });
         }
       });
-      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+      let a = [];
+      console.log(data);
+      if (this.applyTaxSelect2.value && Array.isArray(this.applyTaxSelect2.value)) {
+        data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+      }
       data.uniqueName = activeAccount.uniqueName;
       this.store.dispatch(this.accountsAction.applyAccountTax(data));
     } else {
-      let data: ApplyTaxRequest = new ApplyTaxRequest();
-      data.isAccount = false;
-      data.taxes = [];
-      this.activeGroupTaxHierarchy$.take(1).subscribe((t) => {
-        if (t) {
-          t.inheritedTaxes.forEach(tt => {
-            tt.applicableTaxes.forEach(ttt => {
-              data.taxes.push(ttt.uniqueName);
-            });
-          });
-        }
-      });
-      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
-      data.uniqueName = activeGroup.uniqueName;
-      this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
+      // let data: ApplyTaxRequest = new ApplyTaxRequest();
+      // data.isAccount = false;
+      // data.taxes = [];
+      // this.activeGroupTaxHierarchy$.take(1).subscribe((t) => {
+      //   if (t) {
+      //     t.inheritedTaxes.forEach(tt => {
+      //       tt.applicableTaxes.forEach(ttt => {
+      //         data.taxes.push(ttt.uniqueName);
+      //       });
+      //     });
+      //   }
+      // });
+      // data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+      // data.uniqueName = activeGroup.uniqueName;
+      // this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     }
 
   }

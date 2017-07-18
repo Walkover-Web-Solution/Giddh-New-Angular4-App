@@ -68,14 +68,6 @@
   <label>Select Operation</label>
   <!-- <input type="text" class="form-control" /> -->
   <select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>
-  <!-- <ui-select ng-model="options.selectedOption" theme="bootstrap">
-      <ui-select-match placeholder="Select Option">
-        <span>{{$select.selected}}</span>
-      </ui-select-match>
-      <ui-select-choices repeat="option in options.filters | filter: $select.search ">
-        <span ng-bind="option"></span>
-      </ui-select-choices>
-    </ui-select> -->
 </div>
 
 <div class="clearfix mrT2">

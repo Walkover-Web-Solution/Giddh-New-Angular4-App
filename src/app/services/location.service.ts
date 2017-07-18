@@ -44,7 +44,6 @@ export class LocationService {
           });
         });
         data = _.flatten(data).filter(p => p !== '');
-        console.log(r);
         return data;
       })
       .catch((e) => e);
