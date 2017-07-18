@@ -31,22 +31,22 @@ export class LedgerRequest implements ILedger {
  * API:: ( Create ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
  */
 export class LedgerResponse {
-  transactions: IReconcileTransaction[];
-  total: IClosingBalance;
-  uniqueName: string;
-  voucherNo: number;
-  chequeClearanceDate?: string;
-  taxes: string[];
-  entryDate?: string;
-  invoiceNumber?: string;
-  invoiceGenerated: boolean;
-  attachedFileName?: string;
-  unconfirmedEntry: boolean;
-  voucher: IVoucherItem;
-  attachedFile?: string;
-  chequeNumber?: string;
-  tag?: string;
-  description?: string;
+  public transactions: IReconcileTransaction[];
+  public total: IClosingBalance;
+  public uniqueName: string;
+  public voucherNo: number;
+  public chequeClearanceDate?: string;
+  public taxes: string[];
+  public entryDate?: string;
+  public invoiceNumber?: string;
+  public invoiceGenerated: boolean;
+  public attachedFileName?: string;
+  public unconfirmedEntry: boolean;
+  public voucher: IVoucherItem;
+  public attachedFile?: string;
+  public chequeNumber?: string;
+  public tag?: string;
+  public description?: string;
 }
 
 /*
@@ -80,8 +80,6 @@ export class DownloadLedgerRequest {
  * Reponse will be base 64 encoded string in body
  */
 
-
-
 /*
  * Model for transactions api response
  * GET call
@@ -111,7 +109,16 @@ export class TransactionsResponse implements ITransactions {
   public totalItems: number;
   public totalPages: number;
 }
-
+export class TransactionsRequest {
+  public q: string = '';
+  public page: number = 0;
+  public count: number = 15;
+  public accountUniqueName: string = '';
+  public fromDate: string = '';
+  public toDate: string = '';
+  public sort: string = 'asc';
+  public reversePage: boolean = false;
+}
 export class ReconcileResponse {
   public transactions: IReconcileTransaction[];
   public total: object;
