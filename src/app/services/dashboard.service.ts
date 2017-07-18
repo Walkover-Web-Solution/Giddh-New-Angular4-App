@@ -36,7 +36,7 @@ export class DashboardService {
     }).catch((e) => HandleCatch<DashboardResponse, string>(e, '', { fromDate, toDate, interval, refresh }));
   }
 
-  public GetGroupHistory(model: GroupHistoryRequest, fromDate :string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> {
+  public GetGroupHistory(model: GroupHistoryRequest, fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -51,7 +51,7 @@ export class DashboardService {
     }).catch((e) => HandleCatch<GroupHistoryResponse, GroupHistoryRequest>(e, model, { fromDate, toDate, interval, refresh }));
   }
 
-  public GetClosingBalance(groupUniqueName: string = '', fromDate :string = '', toDate: string = '',  refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
+  public GetClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '',  refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
