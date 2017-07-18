@@ -72,7 +72,7 @@ export class AuditLogsSidebarVM {
     this.selectedLogDate = moment().toDate();
     this.selectedEntryDate = moment().toDate();
     this.logOrEntry = 'entryDate';
-    this.selectedDateOption = '0';
+    this.selectedDateOption = '';
 
   }
 }
