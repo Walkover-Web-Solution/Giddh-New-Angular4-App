@@ -24,16 +24,30 @@ export interface NewRole {
 /*
  * Model for create-new-role api request
  * POST call
- * API:: (create-stock-unit) company/:companyUniqueName/stock-unit
+ * API:: (create-new-role) /company/:companyUniqueName/role
  * used to create new role
- * its response will be hash as StockUnitResponse
+ * its response will be hash as CreateNewRoleRespone
  */
-export class CreateNewRoleRequest { //chages requied here
-  public name: string;
-  public code: string;
+
+export interface Permission {
+  code: string;
 }
 
-export class CreateNewRoleRespone { //chages requied here
-  public name: string;
-  public code: string;
+export interface Scope {
+  name: string;
+  permissions: Permission[];
 }
+
+export interface CreateNewRoleRequest {
+  name: string;
+  scopes: Scope[];
+}
+
+export class CreateNewRoleRespone {
+  isFixed: boolean;
+  scopes: Scope[];
+  uniqueName: string;
+  name: string;
+}
+
+

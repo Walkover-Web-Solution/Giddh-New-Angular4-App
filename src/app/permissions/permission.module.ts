@@ -8,6 +8,7 @@ import { PermissionRoutingModule } from './permission.routing.module';
 import { PermissionComponent } from './permission.component';
 import { PermissionModelComponent } from './model/permission.model.component';
 import { AddNewPermissionComponent } from './components/add-new-permission/permission.addnew.component';
+import { DeleteRoleConfirmationModelComponent } from "./model/confirmation/confirmation.model.component";
 
 console.log('`Permission` bundle loaded asynchronously');
 
@@ -16,9 +17,10 @@ console.log('`Permission` bundle loaded asynchronously');
         // Components / Directives/ Pipes
         PermissionComponent,
         PermissionModelComponent,
+        DeleteRoleConfirmationModelComponent,
         AddNewPermissionComponent
     ],
-    exports: [PermissionComponent, PermissionModelComponent, AddNewPermissionComponent, Ng2BootstrapModule],
+    exports: [PermissionComponent, PermissionModelComponent, DeleteRoleConfirmationModelComponent, AddNewPermissionComponent, Ng2BootstrapModule],
     imports: [
         CommonModule,
         FormsModule,

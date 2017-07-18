@@ -33,16 +33,28 @@ export class PermissionActions {
     });
 
   @Effect()
-  private CreateStockUnit$: Observable<Action> = this.action$
+  private CreateNewRole$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.CREATE_NEW_ROLE)
     .switchMap(action => {
       return this._permissionService.CreateNewRole(action.payload)
-        .map((r) => this.validateResponse(r, {
-          type: PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE,
-          payload: action.payload
-        }, true));
+        .map((r) =>
+          this.validateResponse(r, {
+            type: PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE,
+            payload: action.payload
+          }, true));
     });
 
+  @Effect()
+  private DeleteRole$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.DELETE_ROLE)
+    .switchMap(action => {
+      return this._permissionService.DeleteRole(action.payload)
+        .map((r) =>
+          this.validateResponse(r, {
+            type: PERMISSION_ACTIONS.ROLE_DELETED,
+            payload: action.payload
+          }, true));
+    });
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
@@ -61,17 +73,24 @@ export class PermissionActions {
     }
   }
 
-  public CreateNewRole(value): Action {
+  public PushTempRoleInStore(value): Action {
     return {
-      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
+      type: PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE,
       payload: value
     }
   }
 
-  public SaveNewRole(unit: CreateNewRoleRequest): Action {
+  public SaveNewRole(data: CreateNewRoleRequest): Action {
     return {
-      type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT,
-      payload: unit
+      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
+      payload: data
+    };
+  }
+
+  public DeleteRole(data: any): Action {
+    return {
+      type: PERMISSION_ACTIONS.DELETE_ROLE,
+      payload: data.roleUniqueName
     };
   }
 
