@@ -48,7 +48,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
     });
   }
 
-  public getClosingBalance(isRefresh: boolean, event: any) {
+  public getClosingBalance(isRefresh: boolean) {
     let searchRequest: SearchRequest = {
       groupName: this.groupUniqueName,
       refresh: isRefresh,
@@ -56,13 +56,13 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
       fromDate: moment(this.fromDate).format('DD-MM-YYYY')
     };
     this.store.dispatch(this.searchActions.GetStocksReport(searchRequest));
-    event.target.blur();
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public OnSelectGroup(g: TypeaheadMatch) {
     this.groupName = g.item.name;
     this.groupUniqueName = g.item.id;
