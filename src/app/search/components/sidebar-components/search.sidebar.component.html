@@ -40,10 +40,10 @@
         </div>
 
         <div class="mrB4">
-          <button [disabled]="search.invalid" class="btn btn-primary btn-block" (click)=" getClosingBalance(false)">Go
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block" (click)="getClosingBalance(false,$event)">Go
           </button>
 
-          <button [disabled]="search.invalid" class="btn btn-primary btn-block mrT1" (click)=" getClosingBalance(true)">Refresh
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block mrT1" (click)="getClosingBalance(true,$event)">Refresh
           </button>
         </div>
       </form>
