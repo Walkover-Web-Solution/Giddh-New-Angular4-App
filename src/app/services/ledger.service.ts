@@ -9,7 +9,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest } from '../models/api-models/Ledger';
+import { TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
 
 @Injectable()
 export class LedgerService {
@@ -22,19 +22,28 @@ export class LedgerService {
   /**
    * get transactions
    */
-  public GetTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', fromDate: string = '', toDate: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, string>> {
+  public GetTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', fromDate: string = '', toDate: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
+    let request = new TransactionsRequest();
+    request.q = q;
+    request.accountUniqueName = accountUniqueName;
+    request.count = count;
+    request.fromDate = fromDate;
+    request.page = page;
+    request.reversePage = reversePage;
+    request.sort = sort;
+    request.toDate = toDate;
     return this._http.get(LEDGER_API.TRANSACTIONS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', accountUniqueName).replace(':fromDate', fromDate).replace(':sort', sort).replace(':toDate', toDate).replace(':reversePage', reversePage.toString())).map((res) => {
-      let data: BaseResponse<TransactionsResponse, string> = res.json();
-      data.request = '';
+      let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res.json();
+      data.request = request;
       data.queryString = { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort };
       return data;
-    }).catch((e) => HandleCatch<TransactionsResponse, string>(e, '', { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort }));
+    }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort }));
   }
 
   /**

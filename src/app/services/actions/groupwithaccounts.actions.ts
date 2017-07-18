@@ -384,7 +384,7 @@ export class GroupWithAccountsAction {
   public GetGroupUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE)
     .map(action => {
-      let data: BaseResponse<AccountResponse, string> = action.payload;
+      let data: BaseResponse<GroupResponse, string> = action.payload;
       return {
         type: ''
       };
