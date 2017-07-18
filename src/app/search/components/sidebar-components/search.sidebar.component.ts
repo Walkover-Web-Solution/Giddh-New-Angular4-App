@@ -25,6 +25,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   public groupName: string;
   public groupUniqueName: string;
   public dataSource = [];
+  public typeaheadNoResults: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -57,6 +58,11 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
     };
     this.store.dispatch(this.searchActions.GetStocksReport(searchRequest));
     event.target.blur();
+    this.groupUniqueName = '';
+  }
+
+  public changeTypeaheadNoResults(e: boolean): void {
+    this.typeaheadNoResults = e;
   }
 
   public ngOnDestroy() {
