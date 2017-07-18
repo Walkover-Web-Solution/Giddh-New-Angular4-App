@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { PermissionRequest, PermissionResponse } from '../../models/api-models/Permission';
+import { PermissionRequest, PermissionResponse, CreateNewRoleRespone } from '../../models/api-models/Permission';
 import { PERMISSION_ACTIONS } from '../../services/actions/permission/permission.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
@@ -27,13 +27,32 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
 				}
 				return state;
 			}
-		case PERMISSION_ACTIONS.CREATE_NEW_ROLE:
+		case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE:
 			{
 				let newState = _.cloneDeep(state);
 				let res = action.payload;
 				newState.newRole = res;
 				return Object.assign({}, state, newState);
 			}
+		case PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE:
+			{
+				let newState = _.cloneDeep(state);
+				let res = action.payload as BaseResponse<CreateNewRoleRespone[], string>;
+				if (res.status === 'success') {
+					newState.roles = res.body;
+					return Object.assign({}, state, newState);
+				}
+				return state;
+			}
+		case PERMISSION_ACTIONS.DELETE_ROLE:
+			{
+				//delete role action fired
+				return state;
+			}
+		case PERMISSION_ACTIONS.ROLE_DELETED: {
+			//role is successfully deleted
+			return state;
+		}
 		default: {
 			return state;
 		}

@@ -7,7 +7,7 @@
       <h1>{{role.name}}</h1>
       <div class="onHover text-center">
         <button class="btn btn-md btn-primary pull-left">Edit</button>
-        <button class="btn btn-md btn-danger">Delete</button>
+        <button class="btn btn-md btn-danger" (click)="deleteRole(role.uniqueName);">Delete</button>
       </div>
     </div>
     <div class="col-xs-9">
@@ -22,11 +22,22 @@
   </div>
 
 </div>
-<!--add and manage group account modal -->
+
+<!--add and manage role model -->
 <div bsModal #permissionModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg modal-liq90">
     <div class="modal-content">
       <permission-model (closeEvent)="closePopupEvent(data)"></permission-model>
+    </div>
+  </div>
+</div>
+
+<!--delete role confirmation model -->
+<div bsModal #permissionConfirmationModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content">
+      <delete-role-confirmation-model (closeEvent)="closePopupEvent(data)"></delete-role-confirmation-model>
     </div>
   </div>
 </div>

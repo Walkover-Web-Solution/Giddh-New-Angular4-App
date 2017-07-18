@@ -23,6 +23,7 @@ export class PermissionComponent implements OnInit, AfterViewInit {
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('permissionModel') public permissionModel: ModalDirective;
+    @ViewChild('permissionConfirmationModel') public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
     public allRoles: object;
@@ -52,7 +53,6 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        alert("ngOnINit called");
         this.store.select(p => p.permission.roles).subscribe((roles) => {
             this.allRoles = roles;
         });
@@ -71,5 +71,11 @@ export class PermissionComponent implements OnInit, AfterViewInit {
         this.permissionModel.hide();
         this.createRoleStep = 'two';
         this.router.navigate(['/pages', 'permissions', 'add-new']);
+    }
+
+    public deleteRole(roleUniqueName) {
+        console.log("The role unique name is :", roleUniqueName);
+        this.permissionConfirmationModel.show();
+        // this.store.dispatch(this.PermissionActions.DeleteRole({ roleUniqueName: roleUniqueName }));
     }
 }

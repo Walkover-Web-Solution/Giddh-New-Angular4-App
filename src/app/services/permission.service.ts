@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { PermissionResponse, PermissionRequest } from '../models/api-models/Permission';
+import { PermissionResponse, PermissionRequest, CreateNewRoleRequest, CreateNewRoleRespone } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -39,11 +39,39 @@ export class PermissionService {
         }).catch((e) => HandleCatch<PermissionResponse[], string>(e));
     }
 
-    /*
-     * Create new role
+    /**
+    * Create new role
     */
-    public CreateNewRole(data): Observable<BaseResponse<object, string>> {
-        return data;
+    public CreateNewRole(model: CreateNewRoleRequest): Observable<BaseResponse<CreateNewRoleRespone, CreateNewRoleRequest>> {
+        this.store.take(1).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+        return this._http.post(PERMISSION_API.CREATE_ROLE.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+            let data: BaseResponse<CreateNewRoleRespone, CreateNewRoleRequest> = res.json();
+            data.request = model;
+            return data;
+        }).catch((e) => HandleCatch<CreateNewRoleRespone, CreateNewRoleRequest>(e, model));
+    }
+
+    /**
+    * Delete role
+    */
+    public DeleteRole(roleUniqueName: string): Observable<BaseResponse<string, string>> {
+        this.store.take(1).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+        return this._http.delete(PERMISSION_API.DELETE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', roleUniqueName)).map((res) => {
+            let data: BaseResponse<string, string> = res.json();
+            data.request = '';
+            data.queryString = { roleUniqueName };
+            return data;
+        }).catch((e) => HandleCatch<string, string>(e, '', { roleUniqueName }));
     }
 
 }
