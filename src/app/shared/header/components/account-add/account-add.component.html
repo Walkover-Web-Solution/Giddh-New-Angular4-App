@@ -22,32 +22,40 @@
           </div>
           <div class="col-xs-6">
             <label class="col-xs-12 row">Opening Balance</label>
+
             <div class="col-xs-8">
               <div class="row">
-                <select class="form-control" name="openingBalanceType" formControlName="openingBalanceType">-->
+                <input type="text" class="form-control" name="openingBalance" formControlName="openingBalance"/>
+              </div>
+            </div>
+
+            <div class="col-xs-4">
+              <div class="row">
+                <select class="form-control" name="openingBalanceType" formControlName="openingBalanceType">
                   <option value="">&#45;&#45;Please select&#45;&#45;</option>
                   <option value="CREDIT" label="Credit">Credit</option>
                   <option value="DEBIT" label="Debit">Debit</option>
                 </select>
               </div>
             </div>
+
           </div>
         </div>
       </div>
 
       <div class="pd2 detailed clearfix">
 
-        <div  *ngIf="column?.uniqueName === 'revenuefromoperations' || column?.uniqueName === 'operatingcost'
-          || column?.uniqueName === 'indirectexpenses'" id="serviceCode">
+        <div *ngIf="column[1]?.uniqueName === 'revenuefromoperations' || column[1]?.uniqueName === 'operatingcost'
+          || column[1]?.uniqueName === 'indirectexpenses'" id="serviceCode">
           <div class="form-group col-xs-4">
             <div class="row">
               <label class="w100 mrL3">HSN</label>
               <div class="input-group">
             <span class="input-group-addon pdL0">
-              <input type="radio" formControlName="hsnOrSac" value='hsn' name="hsnOrSac" />
+              <input type="radio" formControlName="hsnOrSac" value='hsn' name="hsnOrSac"/>
             </span>
                 <input type="text" formControlName="hsnNumber" class="form-control" name="hsnNumber"
-                      maxLength="10" >
+                       maxLength="10">
               </div>
             </div>
           </div>
@@ -56,7 +64,7 @@
               <label class="w100 mrL3">SAC</label>
               <div class="input-group">
             <span class="input-group-addon pdL0">
-              <input type="radio" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+              <input type="radio" formControlName="hsnOrSac" value='sac' name="hsnOrSac"/>
             </span>
                 <input type="text" class="form-control" name="sacNumber"
                        maxLength="6" formControlName="sacNumber">
@@ -109,6 +117,55 @@
       </div>
       <div class="clearfix"></div>
 
+      <!--gst details-->
+      <hr
+        *ngIf="column[2].uniqueName == 'sundrycreditors' || column[2].uniqueName == 'sundrydebtors'"/>
+
+      <div class="pd2 clearfix gst_row"
+           *ngIf="column[2].uniqueName == 'sundrycreditors' || column[2].uniqueName == 'sundrydebtors'">
+
+        <div class="clearfix pdB1"
+             *ngIf="column[2].uniqueName == 'sundrycreditors' || column[2].uniqueName == 'sundrydebtors'">
+          <span class="pull-right">
+            <i class="fa fa-plus cursor-pointer" aria-hidden="true" (click)="addGstDetailsForm()"></i>
+            <i class="glyphicon glyphicon-triangle-right cursor-pointer" aria-hidden="true" (click)="toggleGstList()"
+               *ngIf="!showGstList && addAccountForm.get('gstDetails')['controls'].length > 2"></i>
+            <i class="glyphicon glyphicon-triangle-bottom cursor-pointer" aria-hidden="true" (click)="toggleGstList()"
+               *ngIf="showGstList && addAccountForm.get('gstDetails')['controls'].length > 2"></i>
+          </span>
+        </div>
+
+        <ul class="gstList" formArrayName="gstDetails">
+          <li
+            *ngFor="let gst of addAccountForm.get('gstDetails')['controls'] | slice: 0:showDefaultGstListLength;let i = index"
+            class="pos-rel gst"
+            [formGroupName]="i">
+            <div class="col-xs-5 pd0">
+              <span class="col-xs-12 pd0 pdB1">
+                <label class="w100">GST No.</label>
+                <input type="text" class="form-control" formControlName="gstNumber" maxlength="15" name="gstNumber"/>
+              </span>
+
+              <span class="col-xs-12 pd0" formGroupName="addressList">
+              <label class="w100">State</label>
+                <select2 [data]="statesSource$ | async"
+                         [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
+                         formControlName="stateCode"></select2>
+              </span>
+            </div>
+            <div class="col-xs-7 pd0">
+              <span class="col-xs-12" formGroupName="addressList">
+                <label class="w100">Address</label>
+                <textarea formControlName="address" class="form-control" rows="4"
+                          name="gstAddress"></textarea>
+              </span>
+            </div>
+            <i class="fa fa-times cursor-pointer" aria-hidden="true" (click)="removeGstDetailsForm(i)"></i>
+          </li>
+        </ul>
+
+      </div>
+      <!--gst details-->
 
       <div class="form_bg pd2">
         <div class="form-group col-xs-12">
@@ -136,7 +193,7 @@
            (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account
         </a>
 
-        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" (click)="submit()"
+        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" [ladda]="createAccountInProcess$ | async" (click)="submit()"
                 [disabled]="addAccountForm.invalid">Add
         </button>
       </div>
