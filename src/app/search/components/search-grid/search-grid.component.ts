@@ -11,7 +11,6 @@ import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
-
 @Component({
   selector: 'search-grid',  // <home></home>
   templateUrl: './search-grid.component.html'
@@ -92,7 +91,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // reversing sort
   public set sortReverse(value: boolean) {
     this._sortReverse = value;
-    this.searchResponseFiltered$ = this.searchResponseFiltered$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
+    this.searchResponseFiltered$ = this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => (value ? -1 : 1) * a[this._sortType].toString().localeCompare(b[this._sortType])));
   }
 
   private _sortReverse: boolean;
@@ -256,12 +255,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Send Email/Sms for Accounts
   public send() {
-    debugger;
     let accountsUnqList = [];
     this.searchResponseFiltered$.take(1).subscribe(p => {
       p.map(i => accountsUnqList.push(i.uniqueName));
     });
-    debugger;
     accountsUnqList = _.uniq(accountsUnqList);
     // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
 
@@ -281,10 +278,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       };
       if (this.messageBody.btn.set === 'Send Email') {
         return this._companyServices.sendEmail(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.message) : this._toaster.errorToast(r.message));
+          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
       } else if (this.messageBody.btn.set === 'Send Sms') {
         return this._companyServices.sendSms(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.message) : this._toaster.errorToast(r.message));
+          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
       }
     });
     this.mailModal.hide();
