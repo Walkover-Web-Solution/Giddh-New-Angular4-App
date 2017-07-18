@@ -79,3 +79,12 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
     return null;
   }
 };
+
+export const dateValidator = (control: FormControl) => {
+  let datePattern = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
+
+  if (!datePattern.test(control.value)) {
+    return { invalidDate: true };
+  }
+  return null;
+};
