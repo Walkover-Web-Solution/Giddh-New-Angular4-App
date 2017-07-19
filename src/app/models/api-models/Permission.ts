@@ -5,7 +5,7 @@
 export interface PermissionResponse {
   name: string,
   scopes: any,
-  uniqueName: string,
+  uniqueName: any,
   isFixed: boolean,
   companyUniqueName: string
 }
@@ -48,6 +48,7 @@ export class CreateNewRoleRespone {
   scopes: Scope[];
   uniqueName: string;
   name: string;
+  companyUniqueName: string
 }
 
 
