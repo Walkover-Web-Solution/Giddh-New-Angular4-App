@@ -23,9 +23,8 @@ import { WizardStepComponent } from './wizard-step.component';
     '.card-block { overflow-y: auto; }',
     '.card-footer { background-color: #fff; border-top: 0 none; }',
     '.nav-item { padding: 1rem 0rem; border-bottom: 0.5rem solid #ccc; }',
-    '.active { font-weight: bold; color: black; border-bottom-color: #1976D2 !important; }',
-    '.enabled { cursor: pointer; border-bottom-color: rgb(88, 162, 234); }',
     '.disabled { color: #ccc; }',
+    '.nav-item[_ngcontent-c8] {border-bottom: 0;}',
     '.completed { cursor: default; }'
   ]
 })

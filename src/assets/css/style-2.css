@@ -2839,3 +2839,57 @@ label {
 .no-result h1 {
   font-size: 1.3em;
 }
+
+
+/**************** Create company modal **********************/
+#setupWizardModal .nav-item, #setupWizardModal .nav-justified>li>a {
+ padding: 0;
+}
+#setupWizardModal .nav-justified>li>a {
+  color: grey;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-weight: 700;
+  transition: .25s;
+  cursor: pointer;
+}
+.steps-indicator li.active a:before {
+ background-color: grey;
+}
+.steps-indicator li a:before {
+  position: absolute;
+  top: -7px;
+  left: calc(50% - 7px);
+  width: 14px;
+  height: 14px;
+  border-radius: 100%;
+  transition: .25s;
+}
+.steps-indicator li a:before, .steps-indicator:before {
+  background-color: #e6e6e6;
+  content: '';  
+  top: -15px;
+}
+.steps-indicator .enabled[_ngcontent-c7], .steps-indicator .active[_ngcontent-c7], .steps-indicator .disabled[_ngcontent-c7] {
+  border-bottom: 0;
+}
+.steps-indicator:before {
+  position: absolute;
+  height: 1px;
+  top: -8px;
+  z-index: 0;
+  width: calc(100%/3);
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+}
+.steps-indicator.step-2:before {
+  width: calc(100%/2);
+}
+.steps-indicator li a:before, .steps-indicator:before {
+  background-color: #e6e6e6;
+  content: '';
+} 
+.steps-indicator>li>a:focus, .steps-indicator>li>a:hover { 
+ background: none;
+}
