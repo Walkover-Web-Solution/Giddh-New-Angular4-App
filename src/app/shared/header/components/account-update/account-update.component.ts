@@ -15,6 +15,7 @@ import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
+import { IGstDetailListItem } from '../../../../models/interfaces/gstDetailListItem.interface';
 
 @Component({
   selector: 'account-update',
@@ -153,9 +154,19 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addGstDetailsForm() {
+  public addGstDetailsForm(i?: number, item?) {
     const gstDetails = this.updateAccountForm.get('gstDetails') as FormArray;
-    gstDetails.push(this.initialGstDetailsForm());
+    if (i && item) {
+      let putObj: IGstDetailListItem = {gstNumber: item.gstNumber, addressList: Object.assign({})};
+      if (gstDetails[i]) {
+        gstDetails[i].patchValue(item);
+      } else {
+        gstDetails.push(this.initialGstDetailsForm());
+        gstDetails[i].patchValue(item);
+      }
+    } else {
+      gstDetails.push(this.initialGstDetailsForm());
+    }
   }
 
   public removeGstDetailsForm(i: number) {
