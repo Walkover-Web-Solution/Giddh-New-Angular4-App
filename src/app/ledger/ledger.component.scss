@@ -1,0 +1,147 @@
+.form-control, input {
+  color: #4d4d4d;
+}
+
+.ledgHead table td[class*=col-] {
+  padding: 8px !important;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  font-size: 13px;
+  color: #4d4d4d;
+  max-width:0;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  white-space: nowrap;
+}
+.ledgHead table td.pdR25imp{
+  padding-right: 25px !important;
+}
+.ledgHead.entry-popup table td[class*=col-] {
+  padding: 0px !important;
+  padding-bottom: 1px !important;
+  border-bottom: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  font-size: 13px;
+  color: #4d4d4d;
+  max-width:0;
+  text-overflow: ellipsis;
+  overflow:hidden;
+  white-space: nowrap;
+}
+.ledgHead.entry-popup table td.pdR25imp{
+  padding-right: 25px !important;
+}
+.ledgHead .ledger-main td[class*=col-] {
+  padding: 0px !important;
+}
+table td[class*=col-]:last-child {
+  border-right: 0;
+}
+table th[class*=col-]:last-child {
+  border-right: 0;
+}
+th {
+  font-weight: 700;
+}
+
+.total_col td {
+  border: 0 !important;
+}
+.ledger-main .form-control {
+  border: 0;
+}
+.ledger-main tr td:last-child {
+  border-right: 0;
+}
+.t-h-bg1 th {
+  border-left: 0;
+}
+.ledgHead input[type=search] {
+  min-width: auto;
+}
+.primary_color {
+  color: #d35f29 !important;
+}
+.ledger-stat {
+  padding: 50px 0;
+  background: #f7f7f7;
+  color: #808080;
+  font-size: 18px;
+  margin:100px 0;
+}
+.ledger-stat h3 {
+  font-size: 24px;
+  margin-top: 10px;
+}
+.icomoon_ico {
+  margin-left: 8px;
+}
+.account_Name {
+  font-size: 21px;
+  color: #858585;
+}
+.ledger-footer-1 {
+  position: absolute;
+  bottom: 0;
+}
+.ledger-head th {
+  color: #cccccc;
+}
+.total_col td {
+  border: 0;
+}
+.ledger-stat span {
+  display: inline-block;
+}
+.pageCount {
+  overflow: hidden;
+  width: 50%;
+  left:25%;
+  bottom:100px;
+  background: #fff;
+  padding:5px;
+  font-size: 12px;
+}
+#pagination {
+  margin: 0 auto;
+  overflow: hidden;
+  width: 100%;
+  text-align: center;
+}
+.pagination>li>a {
+  color: #4d4d4d;
+}
+.pagination>.active>a{
+  background: #d35f29 !important;
+  color: #fff !important;
+  border-color: #bd501d !important
+}
+/*.pagination-sm>li.pagination-first>a,
+.pagination>li.pagination-prev>a,
+.pagination>li.pagination-next>a,
+.pagination>li.pagination-last>a{
+    border-color: #fff !important
+}*/
+.pagination>li>a:hover{
+  color: #d35f29
+}
+
+.grey {
+  color: #4d4d4d;
+}
+.ledger-panel label{
+  font-weight: 400;
+}
+.upload_div{
+  float: left;
+  text-decoration: underline;
+  margin: 0px 5px;
+  border: 1px solid #ccc;
+}
+.upload_div label{
+  padding:6px;
+}
+
+.pdR25imp{
+  padding-right: 25px !important;
+}

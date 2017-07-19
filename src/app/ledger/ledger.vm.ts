@@ -1,4 +1,13 @@
+import { TransactionsResponse } from '../models/api-models/Ledger';
+import { Observable } from 'rxjs/Observable';
+import { AccountResponse } from '../models/api-models/Account';
+import { ITransactionItem } from '../models/interfaces/ledger.interface';
+
 export class LedgerVM {
+  public activeAccount$: Observable<AccountResponse>;
+  public transactionData$: Observable<TransactionsResponse>;
+  public selectedTxnUniqueName: string;
+  public currentTxn: ITransactionItem;
   public pageLoader: boolean = false;
   public today: Date = new Date();
   public fromDate: Date;
