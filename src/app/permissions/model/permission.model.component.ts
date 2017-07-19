@@ -68,7 +68,7 @@ export class PermissionModelComponent implements OnDestroy {
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
         });
 
-        console.log("the data in addnewRole function is :", data);
+        console.log('the data in addnewRole function is :', data);
 
         this.closeEvent.emit(data);
     }

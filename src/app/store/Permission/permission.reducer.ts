@@ -5,8 +5,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 
 export interface PermissionState {
-	roles: PermissionResponse[],
-	newRole: object
+	roles: PermissionResponse[];
+	newRole: object;
 }
 
 export const initialState: PermissionState = {
@@ -37,12 +37,9 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
 		case PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE:
 			{
 				let newState = _.cloneDeep(state);
-				let res = action.payload as BaseResponse<CreateNewRoleRespone[], string>;
-				if (res.status === 'success') {
-					newState.roles = res.body;
-					return Object.assign({}, state, newState);
-				}
-				return state;
+				let res = action.payload;
+				newState.roles.push(res);
+				return Object.assign({}, state, newState);
 			}
 		case PERMISSION_ACTIONS.DELETE_ROLE:
 			{
@@ -50,8 +47,12 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
 				return state;
 			}
 		case PERMISSION_ACTIONS.ROLE_DELETED: {
-			//role is successfully deleted
-			return state;
+			//role is successfully deleted now remove deleted role from store
+			let newState = _.cloneDeep(state);
+			let res = action.payload as BaseResponse<string, string>;
+			// res contains deleted role's uniqueName
+			newState.roles.splice(newState.roles.findIndex((role) => { return role.uniqueName == res }), 1);
+			return Object.assign({}, state, newState);
 		}
 		default: {
 			return state;

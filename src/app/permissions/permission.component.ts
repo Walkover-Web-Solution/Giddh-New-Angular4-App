@@ -13,6 +13,8 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/element.vi
 import { CompanyActions } from '../services/actions/company.actions';
 import { Router } from '@angular/router';
 import { PermissionActions } from '../services/actions/permission/permission.action';
+import { PermissionResponse } from '../models/api-models/Permission';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
     selector: 'permissions',
@@ -26,8 +28,11 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     @ViewChild('permissionConfirmationModel') public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
-    public allRoles: object;
+    public allRoles: PermissionResponse[];
     private createRoleStep: string = 'one';
+    private roleToDelete: string;
+    private roleToDeleteName: string;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
         private store: Store<AppState>,
@@ -53,9 +58,35 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        this.store.select(p => p.permission.roles).subscribe((roles) => {
+        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles) => {
             this.allRoles = roles;
         });
+    }
+
+    public closePopupEvent(data) {
+        console.log('The data in closePopupEvent function is :', data);
+        this.permissionModel.hide();
+        this.createRoleStep = 'two';
+        this.router.navigate(['/pages', 'permissions', 'add-new']);
+    }
+
+    public deleteRole(roleUniqueName) {
+        this.roleToDelete = roleUniqueName;
+        console.log('It is returning is :', this.allRoles.find((r) => r.uniqueName === roleUniqueName));
+        this.roleToDeleteName = this.allRoles.find((r) => r.uniqueName === roleUniqueName).name;
+        this.permissionConfirmationModel.show();
+    }
+    public deleteConfirmedRole() {
+        this.permissionConfirmationModel.hide();
+        this.store.dispatch(this.PermissionActions.DeleteRole({ roleUniqueName: this.roleToDelete }));
+        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles) => {
+            this.allRoles = roles;
+            console.log('Role refreshed...');
+        });
+    }
+
+    public closeConfirmationPopup() {
+        this.permissionConfirmationModel.hide();
     }
 
     private openPermissionModal() {
@@ -64,18 +95,5 @@ export class PermissionComponent implements OnInit, AfterViewInit {
 
     private hidePermissionModel() {
         this.permissionModel.hide();
-    }
-
-    public closePopupEvent(data) {
-        console.log("The data in closePopupEvent function is :", data);
-        this.permissionModel.hide();
-        this.createRoleStep = 'two';
-        this.router.navigate(['/pages', 'permissions', 'add-new']);
-    }
-
-    public deleteRole(roleUniqueName) {
-        console.log("The role unique name is :", roleUniqueName);
-        this.permissionConfirmationModel.show();
-        // this.store.dispatch(this.PermissionActions.DeleteRole({ roleUniqueName: roleUniqueName }));
     }
 }
