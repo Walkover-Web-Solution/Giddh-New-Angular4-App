@@ -36,6 +36,8 @@ import { SearchActions } from './actions/search.actions';
 import { SearchService } from './search.service';
 import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
 import { FlyAccountsActions } from './actions/fly-accounts.actions';
+import { LedgerActions } from './actions/ledger/ledger.actions';
+import { LedgerService } from './ledger.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -56,7 +58,8 @@ import { FlyAccountsActions } from './actions/fly-accounts.actions';
     EffectsModule.run(StockReportActions),
     EffectsModule.run(SearchActions),
     EffectsModule.run(FlyAccountsActions),
-    EffectsModule.run(AuditLogsActions)
+    EffectsModule.run(AuditLogsActions),
+    EffectsModule.run(LedgerActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -79,7 +82,8 @@ export class ServiceModule {
         InventoryService,
         ErrorHandler,
         SearchService,
-        LogsService
+        LogsService,
+        LedgerService
       ]
     };
   }
