@@ -1,17 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PermissionActions } from "../../../services/actions/permission/permission.action";
-
-export interface InewRole {
-  name: string,
-  copyoption: string,
-  pages: any[],
-  scopes: any[],
-}
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'delete-role-confirmation-model',
@@ -20,4 +7,15 @@ export interface InewRole {
 
 export class DeleteRoleConfirmationModelComponent {
 
+  @Input() public selectedRoleName: string;
+  @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+
+  public onConfirmation() {
+    this.confirmDeleteEvent.emit(true);
+  }
+
+  public onCancel() {
+    this.closeModelEvent.emit(true);
+  }
 }

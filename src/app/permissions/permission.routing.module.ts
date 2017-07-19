@@ -5,7 +5,6 @@ import { PageComponent } from '../page.component';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { AddNewPermissionComponent } from './components/add-new-permission/permission.addnew.component';
 
-
 @NgModule({
     imports: [
         // RouterModule.forChild([
