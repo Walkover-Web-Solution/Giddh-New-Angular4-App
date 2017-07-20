@@ -79,10 +79,10 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     public deleteConfirmedRole() {
         this.permissionConfirmationModel.hide();
         this.store.dispatch(this.PermissionActions.DeleteRole({ roleUniqueName: this.roleToDelete }));
-        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles) => {
-            this.allRoles = roles;
-            console.log('Role refreshed...');
-        });
+        // this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles) => {
+        //     this.allRoles = roles;
+        //     console.log('Role refreshed...');
+        // });
     }
 
     public closeConfirmationPopup() {
