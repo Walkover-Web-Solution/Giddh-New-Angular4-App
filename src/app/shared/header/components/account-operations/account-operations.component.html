@@ -1,5 +1,4 @@
-<div class="bdrR bdrL row view_forms" id="middleBody" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config"
-     style="height: 100%;min-height: 100%;margin:0">
+<div class="bdrR bdrL row view_forms" id="middleBody" style="height: 100%;min-height: 100%;margin:0">
 
   <!--breadcrumbs-->
   <div class="breadcrumbs pdL2 pdT1 pdR2 pdB1">
@@ -24,7 +23,7 @@
         <button class="btn isActive pull-right" *ngIf="(showEditGroup$ | async)" (click)="showShareGroupModal()">Share
         </button>
 
-        <div class="primary_clr text-right pull-right mrT1"
+        <div class="primary_clr text-right pull-right mrT1 clearfix"
              *ngIf="(showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length">
           Shared with {{ (activeGroupSharedWith$ | async)?.length }} people
         </div>
@@ -36,7 +35,7 @@
           Share
         </button>
 
-        <div class="primary_clr text-right pull-right mrT1"
+        <div class="primary_clr text-right pull-right mrT1 clearfix"
              *ngIf="(showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length">
           Shared with {{ (activeAccountSharedWith$ | async)?.length }} people
         </div>
@@ -62,7 +61,7 @@
 
     <!--move account-->
     <div class="pdR2 pdL2 detailed clearfix pdT1 pdB1" *ngIf="(activeAccount$ | async)">
-      <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="pd2 form-inline"
+      <form name="moveAccountForm" novalidate (submit)="moveAccount()"
             [formGroup]="moveAccountForm">
         <div>
           <label class="mrR">Move to group</label>
@@ -221,7 +220,7 @@
 
   <!--share Group modal  -->
   <div bsModal #shareGroupModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <share-group-modal (closeShareGroupModal)="hideShareGroupModal()"></share-group-modal>
       </div>
@@ -230,7 +229,7 @@
 
   <!--share Account modal  -->
   <div bsModal #shareAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <share-account-modal (closeShareAccountModal)="hideShareAccountModal()"></share-account-modal>
       </div>
@@ -260,7 +259,7 @@
 
   <!--moveMergedAccount account modal  -->
   <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <confirm-modal [title]="'Move Merged Account'" [body]='moveMergedAccountModalBody'
                        (cancelCallBack)="hideMoveMergedAccountModal()"
