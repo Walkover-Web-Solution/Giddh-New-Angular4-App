@@ -9,68 +9,7 @@
 
   <div class="pd3 clearfix">
 
-    <div class="col-xs-4" *ngFor="let item of newRole.scopes">
-      <div class="headName">
-        {{item.name}}
-        <!--<i class="fa fa-times text-right close_modal" aria-hidden="true" ng-click="$dismiss()"></i>-->
-      </div>
-      <table class="table">
-        <thead>
-          <th>{{ newRole.name }}</th>
-          <th>Admin</th>
-          <th>View Only</th>
-        </thead>
-        <tbody>
-          <tr>
-            <td colspan="3"><input type="checkbox" name="selectAll" (change)="selectAll(item.name, $event)">Select All</td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="View" [disabled]="checkBoxes[item.name]" [(ngModel)]="checkBoxes[item.name]" (click)="selectPageAndPermission(item.name, 'view', $event)"
-              />View</td>
-            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'view', 'admin')" [disabled]="true"
-              /></td>
-            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'view', 'view')" [disabled]="true"
-              /></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="Edit" [disabled]="checkBoxes[item.name]" [(ngModel)]="checkBoxes[item.name]" (click)="selectPageAndPermission(item.name, 'edit', $event)"
-              />Edit</td>
-            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'edit', 'admin')" [disabled]="true"
-              /></td>
-            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'edit', 'view')" [disabled]="true"
-              /></td>
-          </tr>
-
-          <tr>
-            <td><input type="checkbox" name="Delete" [disabled]="checkBoxes[item.name]" [(ngModel)]="checkBoxes[item.name]" (click)="selectPageAndPermission(item.name, 'delete', $event)"
-              />Delete</td>
-            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'delete', 'admin')" [disabled]="true"
-              /></td>
-            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'delete', 'view')" [disabled]="true"
-              /></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="Create" [disabled]="checkBoxes[item.name]" [(ngModel)]="checkBoxes[item.name]" (click)="selectPageAndPermission(item.name, 'create', $event)"
-              />Create</td>
-            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'create', 'admin')" [disabled]="true"
-              /></td>
-            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'create', 'view')" [disabled]="true"
-              /></td>
-          </tr>
-          <tr>
-            <td><input type="checkbox" name="share" [disabled]="checkBoxes[item.name]" [(ngModel)]="checkBoxes[item.name]" (click)="selectPageAndPermission(item.name, 'share', $event)"
-              />Share</td>
-            <td><input type="checkbox" name="admin" [checked]="checkPermission(item.name, 'share', 'admin')" [disabled]="true"
-              /></td>
-            <td><input type="checkbox" name="viewOnly" [checked]="checkPermission(item.name, 'share', 'view')" [disabled]="true"
-              /></td>
-          </tr>
-        </tbody>
-      </table>
-      <!--<li *ngFor="let n of names">
-        <input type="checkbox" [(ngModel)]="n.selected" (change)="checkIfAllSelected();"> {{n.name}}
-      </li>-->
-    </div>
+    <select-role-table [role]="newRole"></select-role-table>
 
     <!-- new head -->
 
