@@ -285,7 +285,7 @@
     <div class="clearfix bdrB">
       <div class="col-xs-6" *ngIf="!(activeGroup$ | async)?.fixed && activeAccount$ | async">
         <div class="row">
-          <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="pd2 form-inline" [formGroup]="moveAccountForm">
+          <form name="moveAccountForm" novalidate (submit)="moveAccount()" class="" [formGroup]="moveAccountForm">
             <div>
               <label class="mrR">Move to Group</label>
             </div>
@@ -385,7 +385,7 @@
 
   <!--delete Group modal  -->
   <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <confirm-modal [title]="'Delete Group'" [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
           (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
@@ -405,7 +405,7 @@
 
   <!--delete Account modal  -->
   <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
       <div class="modal-content">
         <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()"
           (successCallBack)="deleteAccount()">
