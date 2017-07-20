@@ -43,12 +43,18 @@ export interface CreateNewRoleRequest {
   scopes: Scope[];
 }
 
+export interface UpdateRoleRequest {
+  scopes: Scope[];
+  roleUniqueName: string;
+}
+
 export class CreateNewRoleRespone {
   isFixed: boolean;
   scopes: Scope[];
   uniqueName: string;
   name: string;
-  companyUniqueName: string
+  companyUniqueName: string;
 }
 
-
+export class UpdateRoleRespone {
+}

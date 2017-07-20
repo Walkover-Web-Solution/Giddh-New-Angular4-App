@@ -169,6 +169,7 @@ export class AddNewPermissionComponent {
   }
 
   public addNewRole(): any {
+    // this.newRole.scopes = this.newScope;
     this.store.dispatch(this.permissionActions.SaveNewRole(this.newRole));
     this.router.navigate(['/pages', 'permissions']);
   }
