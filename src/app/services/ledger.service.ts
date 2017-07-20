@@ -9,7 +9,10 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-import { TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
+import {
+  TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest,
+  DownloadLedgerRequest
+} from '../models/api-models/Ledger';
 
 @Injectable()
 export class LedgerService {
@@ -22,7 +25,7 @@ export class LedgerService {
   /**
    * get transactions
    */
-  public GetTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', fromDate: string = '', toDate: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
+  public GetTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', from: string = '', to: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -33,17 +36,17 @@ export class LedgerService {
     request.q = q;
     request.accountUniqueName = accountUniqueName;
     request.count = count;
-    request.fromDate = fromDate;
+    request.from = from;
     request.page = page;
     request.reversePage = reversePage;
     request.sort = sort;
-    request.toDate = toDate;
-    return this._http.get(LEDGER_API.TRANSACTIONS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', accountUniqueName).replace(':fromDate', fromDate).replace(':sort', sort).replace(':toDate', toDate).replace(':reversePage', reversePage.toString())).map((res) => {
+    request.to = to;
+    return this._http.get(LEDGER_API.TRANSACTIONS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', accountUniqueName).replace(':from', from).replace(':sort', sort).replace(':to', to).replace(':reversePage', reversePage.toString())).map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res.json();
       data.request = request;
-      data.queryString = { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort };
+      data.queryString = { q, page, count, accountUniqueName, from, to, reversePage, sort };
       return data;
-    }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, fromDate, toDate, reversePage, sort }));
+    }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
   }
 
   /**
@@ -79,5 +82,22 @@ export class LedgerService {
         return data;
       })
       .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName }));
+  }
+
+  public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string, DownloadLedgerRequest> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName };
+        return data;
+      })
+      .catch((e) => HandleCatch<string, LedgerRequest>(e, model, { accountUniqueName }));
   }
 }

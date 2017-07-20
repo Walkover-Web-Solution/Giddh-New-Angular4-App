@@ -1,6 +1,6 @@
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
-import { TransactionsResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
+import { TransactionsResponse, TransactionsRequest, DownloadLedgerRequest } from '../../../models/api-models/Ledger';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -21,14 +21,15 @@ export class LedgerActions {
     .ofType(LEDGER.GET_TRANSACTION)
     .switchMap(action => {
       let req: TransactionsRequest = action.payload as TransactionsRequest;
-      return this._ledgerService.GetTranscations(req.q, req.page, req.count, req.accountUniqueName, req.fromDate, req.toDate, req.sort, req.reversePage);
+      return this._ledgerService.GetTranscations(req.q, req.page, req.count, req.accountUniqueName, req.from, req.to, req.sort, req.reversePage);
     }).map(res => this.validateResponse<TransactionsResponse, TransactionsRequest>(res, {
       type: LEDGER.GET_TRANSACTION_RESPONSE,
       payload: res
     }, true, {
-        type: LEDGER.GET_TRANSACTION_RESPONSE,
-        payload: res
-      }));
+      type: LEDGER.GET_TRANSACTION_RESPONSE,
+      payload: res
+    }));
+
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_LEDGER_ACCOUNT)
@@ -37,14 +38,27 @@ export class LedgerActions {
       type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
       payload: res
     }, true, {
-        type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
-        payload: res
-      }));
+      type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
+      payload: res
+    }));
+
+  @Effect()
+  public DownloadInvoiceFile$: Observable<Action> = this.action$
+    .ofType(LEDGER.DOWNLOAD_LEDGER_INVOICE)
+    .switchMap(action => this._ledgerService.DownloadInvoice(action.payload.body, action.payload.accountUniqueName))
+    .map(res => this.validateResponse<string, DownloadLedgerRequest>(res, {
+      type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+      type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
+      payload: res
+    }));
+
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _ledgerService: LedgerService,
-    private _accountService: AccountService) {
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _ledgerService: LedgerService,
+              private _accountService: AccountService) {
   }
 
   public GetTransactions(request: TransactionsRequest): Action {
@@ -53,6 +67,7 @@ export class LedgerActions {
       payload: request
     };
   }
+
   public GetLedgerAccount(value: string): Action {
     return {
       type: LEDGER.GET_LEDGER_ACCOUNT,
@@ -60,7 +75,14 @@ export class LedgerActions {
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  public DownloadInvoice(value: DownloadLedgerRequest, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.DOWNLOAD_LEDGER_INVOICE,
+      payload: {body: value, accountUniqueName}
+    };
+  }
+
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
