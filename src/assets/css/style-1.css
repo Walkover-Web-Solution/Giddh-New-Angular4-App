@@ -954,7 +954,7 @@ header .navbar-nav > li.active {
 }
 
 #getGroupModal {
-  height: 550px;
+  height: 100%;
   overflow: hidden;
 }
 
