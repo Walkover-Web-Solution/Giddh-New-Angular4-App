@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { TransactionsResponse, TransactionsRequest } from '../../models/api-models/Ledger';
+import { TransactionsResponse, TransactionsRequest, DownloadLedgerRequest } from '../../models/api-models/Ledger';
 import { AccountResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
 import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
@@ -13,6 +13,7 @@ export interface LedgerState {
   transactionsResponse?: TransactionsResponse;
   transactionInprogress: boolean;
   accountInprogress: boolean;
+  downloadInvoiceInProcess?: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -55,6 +56,14 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
       return Object.assign({}, state, {
         transactionInprogress: false
       });
+    case  LEDGER.DOWNLOAD_LEDGER_INVOICE:
+      return Object.assign({}, state, {downloadInvoiceInProcess: true});
+    case  LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
+      let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
+      if (downloadData.status === 'success') {
+        return Object.assign({}, state, {downloadInvoiceInProcess: false});
+      }
+      return Object.assign({}, state, {downloadInvoiceInProcess: false});
     default: {
       return state;
     }
