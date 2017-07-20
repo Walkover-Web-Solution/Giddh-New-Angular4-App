@@ -2186,17 +2186,9 @@ select.form-control {
     overflow-y: auto;
 }
 #getGroupModal .modal-body {
-    min-height: calc(100% - 76px);
-    height: calc(100% - 76px);
+    min-height: calc(100% - 56px);
+    height: calc(100% - 56px);
     font-size: 14px;
-}
-.grp_wrapper {
-    min-height: 100%;
-    height: 100%;
-    /* overflow x css*/
-     overflow: hidden;
-    overflow-x: auto;
-    white-space: nowrap;
 }
 
 .form_bg {
@@ -2290,7 +2282,7 @@ label {
     -moz-column-count: 3;
     column-count: 3;
 }
-.form_box {
+.` {
     overflow-y: auto;
     height: 100%;
 }
@@ -2337,7 +2329,7 @@ label {
 .col_wrapper:nth-child(1) {
     background: #f4f5f5;
     position: fixed;
-    height: calc(100% - 78px);
+    height: calc(100% - 58px);
     min-height: 0;
     width: 255px;
     z-index: 9;
@@ -2851,7 +2843,7 @@ label {
   text-transform: uppercase;
   font-weight: 700;
   transition: .25s;
-  cursor: pointer;
+  cursor: default;
 }
 .steps-indicator li.active a:before {
  background-color: grey;
@@ -2893,3 +2885,31 @@ label {
 .steps-indicator>li>a:focus, .steps-indicator>li>a:hover { 
  background: none;
 }
+.grp_col::-webkit-scrollbar {
+  width: 2em;
+  position: relative;
+  margin-left: 255px;
+}
+
+.grp_col::-webkit-scrollbar-track {
+  background: #eee;
+  margin-left: 255px;
+}
+
+.grp_col::-webkit-scrollbar-thumb {
+  background-color: darkgrey;
+  outline: 1px solid slategrey;
+  margin-left: 255px;
+} 
+.col_wrapper:last-child {
+  border: 0;
+}
+.height100 {
+  height: 100%;
+  min-height: 100%;
+}
+
+.grp_col div {
+    height: 100%;
+}
+
