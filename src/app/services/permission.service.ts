@@ -2,7 +2,14 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { PermissionResponse, PermissionRequest, CreateNewRoleRequest, CreateNewRoleRespone } from '../models/api-models/Permission';
+import {
+    PermissionResponse,
+    PermissionRequest,
+    CreateNewRoleRequest,
+    CreateNewRoleRespone,
+    UpdateRoleRequest,
+    UpdateRoleRespone
+} from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -15,6 +22,7 @@ export class PermissionService {
 
     private user: UserDetails;
     private companyUniqueName: string;
+    private roleUniqueName: string;
 
     constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
     }
@@ -28,8 +36,9 @@ export class PermissionService {
             if (s.session.user) {
                 this.user = s.session.user.user;
             }
-            if (s.session.companyUniqueName)
+            if (s.session.companyUniqueName) {
                 this.companyUniqueName = s.session.companyUniqueName;
+            }
         });
 
         return this._http.get(PERMISSION_API.GET_ROLE.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
@@ -54,6 +63,23 @@ export class PermissionService {
             data.request = model;
             return data;
         }).catch((e) => HandleCatch<CreateNewRoleRespone, CreateNewRoleRequest>(e, model));
+    }
+
+    /**
+    * Update new role
+    */
+    public UpdateRole(model: UpdateRoleRequest): Observable<BaseResponse<UpdateRoleRespone, UpdateRoleRequest>> {
+        this.store.take(1).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+        return this._http.post(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', model.roleUniqueName), model).map((res) => {
+            let data: BaseResponse<UpdateRoleRespone, UpdateRoleRequest> = res.json();
+            data.request = model;
+            return data;
+        }).catch((e) => HandleCatch<UpdateRoleRespone, UpdateRoleRequest>(e, model));
     }
 
     /**
