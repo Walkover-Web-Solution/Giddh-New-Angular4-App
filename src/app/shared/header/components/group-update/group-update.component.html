@@ -36,7 +36,7 @@
 
 <!--move group-->
 <div class="pd2 clearfix ng-scope" *ngIf="!(activeGroup$ | async)?.fixed">
-  <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="pd2 form-inline" [formGroup]="moveGroupForm">
+  <form name="moveGroupForm" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
     <div>
       <label class="mrR">Move to group</label>
     </div>
@@ -107,7 +107,7 @@
 
 <!--delete Group modal  -->
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
+  <div class="modal-dialog">
     <div class="modal-content">
       <confirm-modal [title]="'Delete Group'"
                      [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
