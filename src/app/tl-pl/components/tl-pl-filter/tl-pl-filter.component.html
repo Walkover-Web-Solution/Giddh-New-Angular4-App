@@ -4,7 +4,7 @@
       <div class="form-group mrR1" (clickOutside)="showFromDatePicker=false;">
         <label>From date</label>
         <div class="input-group max150">
-          <input type="text" name="from" [ngModel]="moment(fromDate).format('DD-MM-YYYY')"
+          <input type="text" name="from" [ngModel]="moment(fromDate$| async).format('DD-MM-YYYY')"
                  (focus)="showFromDatePicker = true; showToDatePicker=false;"
                  class="form-control" required/>
           <span class="input-group-btn">
@@ -13,15 +13,20 @@
                   </span>
         </div>
         <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-          <datepicker name="fromDate" [(ngModel)]="fromDate" (selectionDone)="showFromDatePicker=!showFromDatePicker"
-                      [showWeeks]="true"></datepicker>
+          <datepicker name="fromDate"
+                      [(ngModel)]="fromDate"
+                      [minDate]="fromDate$ | async"
+                      [activeDate]="fromDate$ | async"
+                      [maxDate]="today"
+                      (selectionDone)="showFromDatePicker=!showFromDatePicker"
+          ></datepicker>
         </div>
       </div>
 
       <div class="form-group" (clickOutside)="showToDatePicker=false;">
         <label>To date</label>
         <div class="input-group">
-          <input type="text" name="to" required [ngModel]="moment(toDate).format('DD-MM-YYYY')"
+          <input type="text" name="to" required [ngModel]="moment((toDate$ | async)).format('DD-MM-YYYY')"
                  (focus)="showToDatePicker = true;showFromDatePicker=false;"
                  class="form-control"/>
           <span class="input-group-btn">
@@ -31,19 +36,25 @@
 
         </div>
         <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-          <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker"
-                      [showWeeks]="true"></datepicker>
+          <datepicker name="toDate"
+                      [(ngModel)]="toDate"
+                      [minDate]="fromDate$ | async"
+                      [maxDate]="today"
+                      [activeDate]="toDate$ | async"
+                      [showWeeks]="false"
+                      (selectionDone)="showToDatePicker=!showToDatePicker"
+          ></datepicker>
         </div>
       </div>
 
 
       <div class="form-group">
-        <button type="button" class="btn btn-success mrL1" ng-click="filterBydate()">
+        <button type="button" class="btn btn-success mrL1" (click)="filterData()">
           Apply
         </button>
       </div>
       <div class="form-group">
-        <button class="btn btn-success" ng-click="setRefresh(); filterBydate()">Refresh</button>
+        <button class="btn btn-success" (click)="filterData()">Refresh</button>
       </div>
     </form>
   </div>
