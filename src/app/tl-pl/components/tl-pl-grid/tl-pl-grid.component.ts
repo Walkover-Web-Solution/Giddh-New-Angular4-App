@@ -6,7 +6,7 @@ import { TlPlActions } from '../../../services/actions/tl-pl.actions';
 import { AccountDetails } from '../../../models/api-models/tl-pl';
 import { Observable } from 'rxjs/Observable';
 import { ChildGroup } from '../../../models/api-models/Search';
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 @Component({
   selector: 'tl-pl-grid',  // <home></home>
