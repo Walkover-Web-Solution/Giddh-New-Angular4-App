@@ -1,18 +1,19 @@
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AppState } from '../../../store/roots';
 import { TlPlActions } from '../../../services/actions/tl-pl.actions';
 import { AccountDetails } from '../../../models/api-models/tl-pl';
 import { Observable } from 'rxjs/Observable';
 import { ChildGroup } from '../../../models/api-models/Search';
-import _ = require('lodash');
+import * as _ from 'lodash';
 
 @Component({
   selector: 'tl-pl-grid',  // <home></home>
   templateUrl: './tl-pl-grid.component.html'
 })
 export class TlPlGridComponent implements OnInit, OnDestroy {
+
   public showTbplLoader: boolean;
   public noData: boolean;
   public showClearSearch: boolean;
