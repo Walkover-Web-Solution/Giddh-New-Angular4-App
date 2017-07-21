@@ -315,9 +315,8 @@
         <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
         <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
 
-        <div id="pagination" *ngIf="(lc.transactionData$ | async)?.totalPages > 1"
-             ng-if="ledgerCtrl.totalLedgerPages > 1">
-          <pagination [totalItems]="(lc.transactionData$ | async)?.totalItems"
+        <div id="pagination" *ngIf="(lc.transactionData$ | async)?.totalPages > 1">
+          <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count"
                       [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5"
                       class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
                       [boundaryLinks]="true"></pagination>
