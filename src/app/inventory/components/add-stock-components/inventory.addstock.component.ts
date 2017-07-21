@@ -198,7 +198,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (a.purchaseAccountDetails) {
           this.addStockForm.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
-          // render unit rates
+          // render purchase unit rates
           a.purchaseAccountDetails.unitRates.map((item, i) => {
             this.addPurchaseUnitRates(i, item);
           });
@@ -207,7 +207,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (a.salesAccountDetails) {
           this.addStockForm.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
 
-          // render unit rates
+          // render sale unit rates
           a.salesAccountDetails.unitRates.map((item, i) => {
             this.addSaleUnitRates(i, item);
           });

@@ -124,11 +124,9 @@
             <div class="ledger_search form-inline col-xs-12">
               <div class="form-group">
                 <div class="input-group">
-                  <input #accountSearch id="accountSearch" (keyup)="filterAccounts(accountSearch.value)" type="text"
-                         name="searchGroup" class="form-control" placeholder="Search accounts"
-                         (focus)="flyAccounts.next(true)">
-                  <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp"
-                       placement="right">
+                  <input #accountSearch id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts"
+                    (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+                  <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
                     <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                   </div>
                 </div>
@@ -188,13 +186,12 @@
       </ul>
     </nav>
   </div>
-  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups"
-                     [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
-  <div class="modal-dialog modal-lg modal-liq90 fullScreenMy">
+  <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
     <div class="modal-content fullScreenMy">
       <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
       </ng-template>

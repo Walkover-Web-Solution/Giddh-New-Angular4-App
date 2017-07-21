@@ -19,6 +19,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -26,6 +27,8 @@ import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions'
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public session$: Observable<boolean>;
+  public accountSearchValue: string = '';
+  public accountSearchControl: FormControl = new FormControl();
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
@@ -58,13 +61,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-              private store: Store<AppState>,
-              private companyActions: CompanyActions,
-              private groupWithAccountsAction: GroupWithAccountsAction,
-              private router: Router,
-              private flyAccountActions: FlyAccountsActions,
-              private componentFactoryResolver: ComponentFactoryResolver,
-              private cdRef: ChangeDetectorRef) {
+    private store: Store<AppState>,
+    private companyActions: CompanyActions,
+    private groupWithAccountsAction: GroupWithAccountsAction,
+    private router: Router,
+    private flyAccountActions: FlyAccountsActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private cdRef: ChangeDetectorRef) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -104,10 +107,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
-
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
+    this.accountSearchControl.valueChanges
+      .debounceTime(1000)
+      .subscribe((newValue) => {
+        this.accountSearchValue = newValue;
+        this.filterAccounts(newValue);
+      });
   }
 
   public ngAfterViewInit() {

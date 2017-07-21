@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AccountResponse } from '../../../../models/api-models/Account';
@@ -14,6 +14,7 @@ import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
+import _ from 'lodash';
 
 @Component({
   selector: 'account-add',
@@ -27,7 +28,11 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public isAccountNameAvailable$: Observable<boolean>;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
-  @Input() public column: ColumnGroupsAccountVM;
+  @Input() public column: ColumnGroupsAccountVM[];
+  public showGstList: boolean = false;
+  public showDefaultGstListLength: number = 2;
+  public createAccountInProcess$: Observable<boolean>;
+  public createAccountIsSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -36,6 +41,8 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
     this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
 
     this._companyService.getAllStates().subscribe((data) => {
       let states: Select2OptionData[] = [];
@@ -53,7 +60,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required], uniqueNameValidator],
       openingBalanceType: ['CREDIT', [Validators.required]],
-      openingBalance: [0, Validators.compose([Validators.required, Validators.pattern('\\d+(\\.\\d{2})*$')])],
+      openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: ['', Validators.pattern('[7-9][0-9]{9}')],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -63,8 +70,11 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       state: [''],
       stateCode: [''],
       hsnOrSac: [''],
-      hsnNumber: [{value: '', disabled: true}, [digitsOnly]],
-      sacNumber: [{value: '', disabled: true}, [digitsOnly]]
+      hsnNumber: [{value: '', disabled: true}, []],
+      sacNumber: [{value: '', disabled: true}, []],
+      gstDetails: this._fb.array([
+        this.initialGstDetailsForm()
+      ])
     });
 
     this.fetchingAccUniqueName$.subscribe(f => {
@@ -90,6 +100,11 @@ export class AccountAddComponent implements OnInit, OnDestroy {
         hsn.disable();
       }
     });
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
+      if (p) {
+        this.addAccountForm.reset();
+      }
+    });
   }
 
   public stateSelected(v) {
@@ -113,26 +128,75 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     });
   }
 
-  public async submit() {
-    let activeGroup = await this.activeGroup$.first().toPromise();
-    let states = await this.statesSource$.first().toPromise();
+  public initialGstDetailsForm(): FormGroup {
+    return this._fb.group({
+      gstNumber: [''],
+      addressList: this._fb.group({
+        address: [''],
+        stateCode: ['']
+      })
+    });
+  }
 
-    let accountObj = new AccountRequest();
-    accountObj = this.addAccountForm.value as AccountRequest;
-    if (this.addAccountForm.value.state) {
-      accountObj.state = states.find(st => st.id === this.addAccountForm.value.state).text;
+  public addGstDetailsForm() {
+    const gstDetails = this.addAccountForm.get('gstDetails') as FormArray;
+    gstDetails.push(this.initialGstDetailsForm());
+  }
+
+  public removeGstDetailsForm(i: number) {
+    const gstDetails = this.addAccountForm.get('gstDetails') as FormArray;
+    gstDetails.removeAt(i);
+  }
+
+  public toggleGstList() {
+    const gstDetails = this.addAccountForm.get('gstDetails') as FormArray;
+    if (this.showGstList) {
+      this.showDefaultGstListLength = 2;
+      this.showGstList = false;
+    } else {
+      this.showDefaultGstListLength = gstDetails.length;
+      this.showGstList = true;
+    }
+  }
+
+  public submit() {
+    let activeGroup = null;
+    let states = null;
+
+    this.activeGroup$.take(1).subscribe(p => activeGroup = p);
+    this.statesSource$.take(1).subscribe(p => states = p);
+    let accountObj: AccountRequest;
+    let formsValue = this.addAccountForm.value;
+
+    accountObj = formsValue as AccountRequest;
+    if (formsValue.state) {
+      accountObj.state = states.find(st => st.id === formsValue.state).text;
     }
 
-    if (this.addAccountForm.value.hsnOrSac) {
-      if (this.addAccountForm.value.hsnOrSac === 'hsn') {
-        accountObj.hsnNumber = this.addAccountForm.value.hsnNumber;
+    if (formsValue.hsnOrSac) {
+      if (formsValue.hsnOrSac === 'hsn') {
+        accountObj.hsnNumber = formsValue.hsnNumber;
       } else {
-        accountObj.sacNumber = this.addAccountForm.value.sacNumber;
+        accountObj.sacNumber = formsValue.sacNumber;
       }
       delete accountObj['hsnOrSac'];
     }
+
+    if (formsValue.gstDetails.length > 0) {
+      let gstDetailsArr = [];
+      let finalGstDetails = _.filter(formsValue.gstDetails, (gs: any) => {
+        return gs.gstNumber !== '';
+      });
+      finalGstDetails.map(f => {
+        gstDetailsArr.push({
+          gstNumber: f.gstNumber,
+          addressList: [{address: f.addressList.address, stateCode: f.addressList.stateCode}]
+        });
+      });
+      accountObj.gstDetails = gstDetailsArr;
+    }
+
     this.store.dispatch(this.accountsAction.createAccount(activeGroup.uniqueName, accountObj));
-    this.addAccountForm.reset();
   }
 
   public showDeleteAccountModal() {

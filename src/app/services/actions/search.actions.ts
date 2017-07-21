@@ -23,15 +23,15 @@ export class SearchActions {
           type: SearchActions.SEARCH_RESPONSE,
           payload: r.body
         }, true, {
-          type: SearchActions.SEARCH_RESPONSE,
-          payload: []
-        }));
+            type: SearchActions.SEARCH_RESPONSE,
+            payload: []
+          }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _searchService: SearchService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _searchService: SearchService) {
   }
 
   public GetStocksReport(request: SearchRequest): Action {
@@ -47,6 +47,10 @@ export class SearchActions {
         this._toasty.errorToast(response.message);
       }
       return errorAction;
+    } else {
+      if (showToast && typeof response.body === 'string') {
+        this._toasty.successToast(response.message);
+      }
     }
     return successAction;
   }
