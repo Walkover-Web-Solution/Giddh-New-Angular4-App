@@ -77,6 +77,7 @@ export class LedgerComponent implements OnInit {
   public selectedDate(value: any) {
     this.trxRequest.from = moment(value.start).format('DD-MM-YYYY');
     this.trxRequest.to = moment(value.end).format('DD-MM-YYYY');
+    this.trxRequest.page = 0;
 
     this.getTransactionData();
   }
@@ -116,6 +117,7 @@ export class LedgerComponent implements OnInit {
       .distinctUntilChanged()
       .subscribe(term => {
         this.trxRequest.q = term;
+        this.trxRequest.page = 0;
         this.getTransactionData();
       });
   }
