@@ -157,7 +157,6 @@ export class LedgerComponent implements OnInit {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    let blob = new Blob(byteArrays, {type: contentType});
-    return blob;
+    return new Blob(byteArrays, {type: contentType});
   }
 }
