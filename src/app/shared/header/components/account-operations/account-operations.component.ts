@@ -202,7 +202,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
         data.body.results.map(d => {
-          accounts.push({text: d.name, id: d.uniqueName});
+          accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
         });
         this.accounts$ = Observable.of(accounts);
       }

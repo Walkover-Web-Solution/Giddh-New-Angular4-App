@@ -113,7 +113,7 @@ export class CompanyService {
     }).catch((e) => HandleCatch<AccountSharedWithResponse[], string>(e));
   }
 
-  public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<BulkEmailRequest, string>> {
+  public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -126,10 +126,10 @@ export class CompanyService {
       .replace(':to', request.params.to)
       , request.data).map((res) => {
         return res.json();
-      }).catch((e) => HandleCatch<BulkEmailRequest, string>(e));
+      }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
   }
 
-  public sendSms(request: BulkEmailRequest): Observable<BaseResponse<BulkEmailRequest, string>> {
+  public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -142,7 +142,7 @@ export class CompanyService {
       .replace(':to', request.params.to)
       , request.data).map((res) => {
         return res.json();
-      }).catch((e) => HandleCatch<BulkEmailRequest, string>(e));
+      }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
   }
 
   /**

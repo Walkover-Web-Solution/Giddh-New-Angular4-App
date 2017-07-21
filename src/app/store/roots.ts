@@ -9,6 +9,7 @@ import * as fromSearch from './Search/search.reducer';
 import * as fromAuditLogs from './AuditLogs/audit-logs.reducer';
 import * as fromFlyAccounts from './header/fly-accounts.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
+import * as fromLedger from './Ledger/ledger.reducer';
 
 export interface AppState {
   router: RouterState;
@@ -23,6 +24,7 @@ export interface AppState {
   auditlog: fromAuditLogs.AuditLogsState;
   flyAccounts: fromFlyAccounts.FlyAccountsState;
   tlPl: fromTlPl.TlPlState;
+  ledger: fromLedger.LedgerState;
 }
 
 export const reducers = {
@@ -37,5 +39,6 @@ export const reducers = {
   search: fromSearch.searchReducer,
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,
-  tlPl: fromTlPl.tlPlReducer
+  tlPl: fromTlPl.tlPlReducer,
+  ledger: fromLedger.ledgerReducer
 };

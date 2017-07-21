@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { SearchDataSet } from '../../../models/api-models/Search';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
 
 @Component({
   selector: 'search-filter',  // <home></home>
@@ -40,7 +41,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
         queryType: ['', Validators.required],
         balType: ['CREDIT', Validators.required],
         queryDiffer: ['', Validators.required],
-        amount: ['', Validators.required],
+        amount: ['', [Validators.required, digitsOnly]],
       })])
     });
     this.searchDataSet = this.searchQueryForm.controls['searchQuery'] as FormArray;
