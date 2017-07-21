@@ -15,6 +15,8 @@ import { AppState } from '../../store/roots';
 export class SearchActions {
   public static readonly SEARCH_REQUEST = 'SEARCH_REQUEST';
   public static readonly SEARCH_RESPONSE = 'SEARCH_RESPONSE';
+  public static readonly SET_DIRTY_SEARCH_FORM = 'SET_DIRTY_SEARCH_FORM';
+
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(SearchActions.SEARCH_REQUEST)
     .switchMap(action => {
@@ -38,6 +40,12 @@ export class SearchActions {
     return {
       type: SearchActions.SEARCH_REQUEST,
       payload: request
+    };
+  }
+
+  public SetDirtySearchForm(): Action {
+    return {
+      type: SearchActions.SET_DIRTY_SEARCH_FORM
     };
   }
 

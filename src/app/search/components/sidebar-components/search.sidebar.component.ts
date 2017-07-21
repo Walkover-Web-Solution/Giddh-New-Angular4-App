@@ -42,7 +42,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
         let accountList = this.flattenGroup(data.body, []);
         let groups = [];
         accountList.map((d: any) => {
-          groups.push({ name: d.name, id: d.uniqueName });
+          groups.push({name: d.name, id: d.uniqueName});
         });
         this.dataSource = groups;
       }
@@ -58,17 +58,22 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
     };
     this.store.dispatch(this.searchActions.GetStocksReport(searchRequest));
     event.target.blur();
-    this.groupUniqueName = '';
   }
 
   public changeTypeaheadNoResults(e: boolean): void {
+    this.setSearchFormDirty();
     this.typeaheadNoResults = e;
+  }
+
+  public setSearchFormDirty() {
+    this.store.dispatch(this.searchActions.SetDirtySearchForm());
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public OnSelectGroup(g: TypeaheadMatch) {
     this.groupName = g.item.name;
     this.groupUniqueName = g.item.id;
@@ -84,7 +89,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
