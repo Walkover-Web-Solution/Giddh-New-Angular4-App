@@ -16,8 +16,19 @@ import { FooterComponent } from './footer/footer.component';
 import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
+import { Daterangepicker } from 'ng2-daterangepicker';
 
-import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent } from './header/components';
+import {
+  ManageGroupsAccountsComponent,
+  AccountsSideBarComponent,
+  CompanyAddComponent,
+  AccountOperationsComponent,
+  GroupsRecursiveListComponent,
+  GroupsRecursiveListItemComponent,
+  GroupAccountsListComponent,
+  AccountAddComponent,
+  GroupsAccountSidebarComponent
+} from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
@@ -33,6 +44,7 @@ import { ShareAccountModalComponent } from './header/components/share-account-mo
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
@@ -57,10 +69,12 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
-    ClickOutsideModule
+    ClickOutsideModule,
+    Daterangepicker
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
-    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective],
+    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
+    Daterangepicker],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent]
 })

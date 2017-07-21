@@ -1,5 +1,5 @@
-import { CompanyRequest } from './../models/api-models/Company';
-import { CompanyActions } from './../services/actions/company.actions';
+import { CompanyRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../services/actions/company.actions';
 import { Actions } from '@ngrx/effects';
 
 import { Store } from '@ngrx/store';
