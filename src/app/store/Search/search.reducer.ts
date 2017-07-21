@@ -20,7 +20,7 @@ export const initialState: SearchState = {
     queryType: '',
     balType: 'CREDIT',
     queryDiffer: '',
-    amount: '',
+    amount: ''
   }]
 };
 
@@ -38,6 +38,12 @@ export function searchReducer(state = initialState, action: Action): SearchState
       return Object.assign({}, state, {
         searchLoader: true,
         searchRequest: action.payload
+      });
+    }
+
+    case SearchActions.SET_DIRTY_SEARCH_FORM: {
+      return Object.assign({}, state, {
+        search: false
       });
     }
 
