@@ -8,6 +8,7 @@ import * as fromInventory from './Inventory/inventory.reducer';
 import * as fromSearch from './Search/search.reducer';
 import * as fromAuditLogs from './AuditLogs/audit-logs.reducer';
 import * as fromFlyAccounts from './header/fly-accounts.reducer';
+import * as fromTlPl from './tl-pl/tl-pl.reducer';
 
 export interface AppState {
   router: RouterState;
@@ -21,6 +22,7 @@ export interface AppState {
   search: fromSearch.SearchState;
   auditlog: fromAuditLogs.AuditLogsState;
   flyAccounts: fromFlyAccounts.FlyAccountsState;
+  tlPl: fromTlPl.TlPlState;
 }
 
 export const reducers = {
@@ -34,5 +36,6 @@ export const reducers = {
   inventory: fromInventory.InventoryReducer,
   search: fromSearch.searchReducer,
   auditlog: fromAuditLogs.auditLogsReducer,
-  flyAccounts: fromFlyAccounts.FlyAccountsReducer
+  flyAccounts: fromFlyAccounts.FlyAccountsReducer,
+  tlPl: fromTlPl.tlPlReducer
 };
