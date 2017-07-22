@@ -1,20 +1,18 @@
-import { Directive, forwardRef } from '@angular/core';
-import { NG_VALIDATORS, Validator, AbstractControl } from '@angular/forms';
-
-import { digitsOnly } from '../customValidationHelper';
-
-const DIGITS_VALIDATOR: any = {
-  provide: NG_VALIDATORS,
-  useExisting: forwardRef(() => DigitsValidatorDirective),
-  multi: true
-};
+import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
 
 @Directive({
-  selector: '[digits][formControlName],[digits][formControl],[digits][ngModel]',
-  providers: [DIGITS_VALIDATOR]
+  selector: '[digitsOnlyDirective]'
 })
-export class DigitsValidatorDirective implements Validator {
-  public validate(c: AbstractControl): {[key: string]: any} {
-    return digitsOnly(c);
+export class DigitsOnlyDirective  {
+  public el: HTMLInputElement;
+  @HostListener('keyup', ['$event'])
+  public onChange(value: any) {
+    this.el.value = this.el.value.replace(/[^0-9]/g, '');
   }
+
+  // tslint:disable-next-line:member-ordering
+  constructor(private elementRef: ElementRef) {
+    this.el = this.elementRef.nativeElement;
+  }
+
 }
