@@ -61,7 +61,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       uniqueName: ['', [Validators.required], uniqueNameValidator],
       openingBalanceType: ['CREDIT', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileNo: ['', Validators.pattern('[7-9][0-9]{9}')],
+      mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
