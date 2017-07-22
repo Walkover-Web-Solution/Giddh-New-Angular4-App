@@ -431,7 +431,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       if (updatedAccount.status === 'success') {
         return Object.assign({}, state, {
           activeAccount: action.payload.body,
-          updateAccountInProcess: true,
+          updateAccountInProcess: false,
           updateAccountIsSuccess: true
         });
       }
