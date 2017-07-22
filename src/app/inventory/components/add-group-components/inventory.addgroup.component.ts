@@ -14,7 +14,6 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
 import { IGroupsWithStocksHierarchyMinItem, IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -22,7 +21,7 @@ import * as _ from 'lodash';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public sub: Subscription;
-  public groupsData$: Observable<Select2OptionData[]>;
+  public groupsData$: Subject<Select2OptionData[]> = new Subject();
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -32,11 +31,11 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public parentStockSearchString: string;
   public groupUniqueName: string;
   public addGroupForm: FormGroup;
-  public dataSource: Subject<any> = new Subject<any>();
   public selectedGroup: Select2OptionData;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
+  public createGroupSuccess$: Observable<boolean>;
   public isAddNewGroupInProcess$: Observable<boolean>;
   public isUpdateGroupInProcess$: Observable<boolean>;
   public isDeleteGroupInProcess$: Observable<boolean>;
@@ -51,6 +50,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).takeUntil(this.destroyed$);
+    this.createGroupSuccess$ = this.store.select(state => state.inventory.createGroupSuccess).takeUntil(this.destroyed$);
     this.isAddNewGroupInProcess$ = this.store.select(state => state.inventory.isAddNewGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isDeleteGroupInProcess$ = this.store.select(state => state.inventory.isDeleteGroupInProcess).takeUntil(this.destroyed$);
@@ -62,6 +62,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    // get all groups
     this.getParentGroupData();
     // subscribe to url
     this.sub = this.route.params.takeUntil(this.destroyed$).subscribe(params => {
@@ -128,6 +129,14 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         this.parentStockSearchString = '';
       }
     });
+
+    // reset add form and get all groups data
+    this.createGroupSuccess$.subscribe(d => {
+      if (d) {
+        this.addGroupForm.reset();
+        this.getParentGroupData();
+      }
+    });
   }
 
   public getParentGroupData() {
@@ -136,8 +145,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let flattenData: Select2OptionData[] = [];
         this.flattenDATA(data.body.results, flattenData);
-        this.dataSource.next(flattenData);
-        this.groupsData$ = Observable.of(flattenData);
+        this.groupsData$.next(flattenData);
       }
     });
   }
@@ -201,8 +209,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
-    this.getParentGroupData();
-    this.addGroupForm.reset();
   }
 
   public updateGroup() {
@@ -215,7 +221,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
     this.store.select(p => p.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$).distinctUntilChanged().filter(p => !p).subscribe((a) => {
-      console.log('i am changed to ' + a);
       this.activeGroup$.take(1).subscribe(b => activeGroup = b);
       this.router.navigateByUrl('/pages/dummy', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/pages', 'inventory', 'add-group', activeGroup.uniqueName]);
