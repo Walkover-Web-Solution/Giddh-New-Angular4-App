@@ -6,12 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Observable } from 'rxjs/Observable';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  decimalDigits,
-  digitsOnly,
-  stockManufacturingDetailsValidator,
-  uniqueNameValidator
-} from '../../../shared/helpers/customValidationHelper';
+import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator, uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
