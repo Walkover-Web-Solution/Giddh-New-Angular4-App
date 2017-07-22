@@ -278,9 +278,9 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, AccountMoveRequest> = action.payload;
         this._toasty.successToast('Account moved successfully', '');
-        let activeGrp: GroupResponse = null;
-        this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
-        this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
+        // let activeGrp: GroupResponse = null;
+        // this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
+        // this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
       }
       return {
         type: ''
