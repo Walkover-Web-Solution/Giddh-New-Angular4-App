@@ -56,6 +56,7 @@ export interface CurrentGroupAndAccountState {
   createAccountIsSuccess?: boolean;
   updateAccountInProcess?: boolean;
   updateAccountIsSuccess?: boolean;
+  moveAccountSuccess?: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -540,10 +541,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
-          activeGroup: {uniqueName: mAcc.request.uniqueName}
+          moveAccountSuccess: true,
+          activeAccount: null
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        moveAccountSuccess: false
+      });
     case AccountsAction.CREATE_ACCOUNT:
       return Object.assign({}, state, {createAccountInProcess: true});
     case AccountsAction.CREATE_ACCOUNT_RESPONSE:
