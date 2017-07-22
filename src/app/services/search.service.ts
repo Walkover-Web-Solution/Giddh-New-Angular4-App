@@ -22,7 +22,7 @@ export class SearchService {
   /**
    * get GetStocksReport
    */
-  public Search(request: SearchRequest): Observable<BaseResponse<SearchRequest, SearchResponse[]>> {
+  public Search(request: SearchRequest): Observable<BaseResponse<SearchResponse[] , SearchRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -36,7 +36,7 @@ export class SearchService {
       .map((res) => {
         return res.json();
       })
-      .catch((e) => HandleCatch<SearchRequest, SearchResponse[]>(e));
+      .catch((e) => HandleCatch<SearchResponse[], SearchRequest>(e));
   }
 
 }

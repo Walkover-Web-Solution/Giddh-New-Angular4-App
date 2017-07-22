@@ -50,6 +50,11 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   }
 
   public getClosingBalance(isRefresh: boolean, event: any) {
+    if (this.typeaheadNoResults) {
+      this.groupName = '';
+      this.groupUniqueName = '';
+    }
+
     let searchRequest: SearchRequest = {
       groupName: this.groupUniqueName,
       refresh: isRefresh,
@@ -61,12 +66,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   }
 
   public changeTypeaheadNoResults(e: boolean): void {
-    this.setSearchFormDirty();
     this.typeaheadNoResults = e;
-  }
-
-  public setSearchFormDirty() {
-    this.store.dispatch(this.searchActions.SetDirtySearchForm());
   }
 
   public ngOnDestroy() {
