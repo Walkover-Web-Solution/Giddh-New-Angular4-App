@@ -49,7 +49,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     minimumResultsForSearch: 9001,
     multiple: true,
     width: '100%',
-    placeholder: 'Choose a project',
+    placeholder: 'Select Taxes',
     templateResult: (data) => {
       if (!data.id) {
         return data.text;
