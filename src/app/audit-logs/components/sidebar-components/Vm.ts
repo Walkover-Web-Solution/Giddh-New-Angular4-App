@@ -12,7 +12,8 @@ export class AuditLogsSidebarVM {
   public options: Select2Options = {
     multiple: false,
     width: '100%',
-    placeholder: 'Select Option'
+    placeholder: 'Select Option',
+    allowClear: true
   };
   public moment = moment;
   public filters: any[] = [
