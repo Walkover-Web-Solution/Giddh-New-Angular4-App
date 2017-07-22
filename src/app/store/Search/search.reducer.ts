@@ -2,6 +2,8 @@ import { Action } from '@ngrx/store';
 import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
 import { SearchActions } from '../../services/actions/search.actions';
 import * as _ from 'lodash';
+import { BaseResponseOptions } from '@angular/http';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 export interface SearchState {
   value?: AccountFlat[];
@@ -28,10 +30,17 @@ export function searchReducer(state = initialState, action: Action): SearchState
   switch (action.type) {
 
     case SearchActions.SEARCH_RESPONSE: {
+      let searchResp: BaseResponse<SearchResponse[], SearchRequest> = action.payload;
+      if (searchResp.status === 'success') {
+        return Object.assign({}, state, {
+          value: flattenSearchGroupsAndAccounts(searchResp.body),
+          searchLoader: false,
+          search: true,
+        });
+      }
       return Object.assign({}, state, {
-        value: flattenSearchGroupsAndAccounts(action.payload),
-        searchLoader: false,
-        search: true
+        search: false,
+        searchLoader: false
       });
     }
     case SearchActions.SEARCH_REQUEST: {
@@ -40,13 +49,6 @@ export function searchReducer(state = initialState, action: Action): SearchState
         searchRequest: action.payload
       });
     }
-
-    case SearchActions.SET_DIRTY_SEARCH_FORM: {
-      return Object.assign({}, state, {
-        search: false
-      });
-    }
-
     default: {
       return state;
     }

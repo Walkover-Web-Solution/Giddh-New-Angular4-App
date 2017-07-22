@@ -568,7 +568,6 @@ const removeGroupItem = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniq
 const addItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, group: IGroupsWithStocksHierarchyMinItem) => {
   for (let el of groups) {
     if (el.uniqueName === parentUniqueName) {
-      // debugger
       el.isActive = true;
       el.isOpen = true;
       el.childStockGroups.push({
