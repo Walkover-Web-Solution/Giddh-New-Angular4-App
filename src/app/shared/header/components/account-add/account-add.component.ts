@@ -182,20 +182,21 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       delete accountObj['hsnOrSac'];
     }
 
-    if (formsValue.gstDetails.length > 0) {
-      let gstDetailsArr = [];
-      let finalGstDetails = _.filter(formsValue.gstDetails, (gs: any) => {
-        return gs.gstNumber !== '';
-      });
-      finalGstDetails.map(f => {
-        gstDetailsArr.push({
-          gstNumber: f.gstNumber,
-          addressList: [{address: f.addressList.address, stateCode: f.addressList.stateCode}]
-        });
-      });
-      accountObj.gstDetails = gstDetailsArr;
-    }
-
+    // gst details
+    // if (formsValue.gstDetails.length > 0) {
+    //   let gstDetailsArr = [];
+    //   let finalGstDetails = _.filter(formsValue.gstDetails, (gs: any) => {
+    //     return gs.gstNumber !== '';
+    //   });
+    //   finalGstDetails.map(f => {
+    //     gstDetailsArr.push({
+    //       gstNumber: f.gstNumber,
+    //       addressList: [{address: f.addressList.address, stateCode: f.addressList.stateCode}]
+    //     });
+    //   });
+    //   accountObj.gstDetails = gstDetailsArr;
+    // }
+    delete accountObj['gstDetails'];
     this.store.dispatch(this.accountsAction.createAccount(activeGroup.uniqueName, accountObj));
   }
 

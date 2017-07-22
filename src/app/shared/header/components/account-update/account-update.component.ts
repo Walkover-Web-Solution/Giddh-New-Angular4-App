@@ -204,6 +204,7 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
       }
       delete accountObj['hsnOrSac'];
     }
+    delete accountObj['gstDetails'];
     this.store.dispatch(this.accountsAction.updateAccount(activeAcc.uniqueName, accountObj));
   }
 
