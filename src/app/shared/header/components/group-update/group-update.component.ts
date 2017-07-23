@@ -143,6 +143,15 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+        if (a.fixed) {
+          this.groupDetailForm.get('name').disable();
+          this.groupDetailForm.get('uniqueName').disable();
+          this.groupDetailForm.get('description').disable();
+        } else {
+          this.groupDetailForm.get('name').enable();
+          this.groupDetailForm.get('uniqueName').enable();
+          this.groupDetailForm.get('description').enable();
+        }
       }
     });
 
