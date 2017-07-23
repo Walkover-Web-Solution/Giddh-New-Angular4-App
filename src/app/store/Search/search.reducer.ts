@@ -35,7 +35,7 @@ export function searchReducer(state = initialState, action: Action): SearchState
         return Object.assign({}, state, {
           value: flattenSearchGroupsAndAccounts(searchResp.body),
           searchLoader: false,
-          search: true,
+          search: true
         });
       }
       return Object.assign({}, state, {
@@ -47,6 +47,20 @@ export function searchReducer(state = initialState, action: Action): SearchState
       return Object.assign({}, state, {
         searchLoader: true,
         searchRequest: action.payload
+      });
+    }
+    case SearchActions.RESET_SEARCH_STATE: {
+      return Object.assign({}, state, {
+        value: [],
+        searchLoader: false,
+        search: false,
+        searchRequest: null,
+        searchDataSet: [{
+          queryType: '',
+          balType: 'CREDIT',
+          queryDiffer: '',
+          amount: ''
+        }]
       });
     }
     default: {
