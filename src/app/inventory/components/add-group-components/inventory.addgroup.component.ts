@@ -21,12 +21,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public sub: Subscription;
-  public groupsData$: Subject<Select2OptionData[]> = new Subject();
+  public groupsData$: ReplaySubject<Select2OptionData[]> = new ReplaySubject();
   public options: Select2Options = {
     multiple: false,
     width: '100%',
-    placeholder: 'Select Option',
-    allowClear: false
+    placeholder: 'Select Parent Group',
+    allowClear: true
   };
   public parentStockSearchString: string;
   public groupUniqueName: string;
@@ -172,7 +172,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   // group selected
   public groupSelected(event: any) {
     let selected;
-    this.groupsData$.take(1).subscribe(p => {
+    this.groupsData$.subscribe(p => {
       selected = p.find(q => q.id = event.value);
     });
     this.selectedGroup = selected;
