@@ -21,7 +21,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public sub: Subscription;
-  public groupsData$: ReplaySubject<Select2OptionData[]> = new ReplaySubject();
+  public groupsData$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -145,7 +145,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let flattenData: Select2OptionData[] = [];
         this.flattenDATA(data.body.results, flattenData);
-        this.groupsData$.next(flattenData);
+        this.groupsData$ = Observable.of(flattenData);
       }
     });
   }
