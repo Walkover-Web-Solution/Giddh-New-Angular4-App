@@ -23,9 +23,9 @@ export class LedgerService {
   }
 
   /**
-   * get transactions
+   * ledger methods get,create,delete,update
    */
-  public GetTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', from: string = '', to: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
+  public GetLedgerTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', from: string = '', to: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -41,12 +41,46 @@ export class LedgerService {
     request.reversePage = reversePage;
     request.sort = sort;
     request.to = to;
-    return this._http.get(LEDGER_API.TRANSACTIONS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', accountUniqueName).replace(':from', from).replace(':sort', sort).replace(':to', to).replace(':reversePage', reversePage.toString())).map((res) => {
+    return this._http.get(LEDGER_API.GET.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', accountUniqueName).replace(':from', from).replace(':sort', sort).replace(':to', to).replace(':reversePage', reversePage.toString())).map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res.json();
       data.request = request;
       data.queryString = { q, page, count, accountUniqueName, from, to, reversePage, sort };
       return data;
     }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
+  }
+
+  public CreateLedger(model: LedgerRequest, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], LedgerRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(LEDGER_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<LedgerResponse[], LedgerRequest> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName };
+        return data;
+      })
+      .catch((e) => HandleCatch<LedgerResponse[], LedgerRequest>(e, model, { accountUniqueName }));
+  }
+
+  public UpdateLedgerTransactions(model: LedgerRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.put(LEDGER_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<LedgerResponse, LedgerRequest> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName };
+        return data;
+      })
+      .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName }));
   }
 
   /**
@@ -65,23 +99,6 @@ export class LedgerService {
       data.queryString = { accountUniqueName };
       return data;
     }).catch((e) => HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName }));
-  }
-
-  public CreateLEdger(model: LedgerRequest, accountUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerRequest>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-        this.companyUniqueName = s.session.companyUniqueName;
-      }
-    });
-    return this._http.post(LEDGER_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
-      .map((res) => {
-        let data: BaseResponse<LedgerResponse, LedgerRequest> = res.json();
-        data.request = model;
-        data.queryString = { accountUniqueName };
-        return data;
-      })
-      .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName }));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
