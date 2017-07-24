@@ -144,7 +144,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
           this.onTouchedCb();
           this.valueChanged.emit({
             value: null,
-            data: []
+            // data: []
           });
           return;
         }
@@ -152,7 +152,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
         this.onTouchedCb();
         this.valueChanged.emit({
           value: this.element.val(),
-          data: this.element.select2('data')
+          // data: this.element.select2('data')
         });
       } else {
         this.onChangeCb(that.element.val());
