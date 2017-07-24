@@ -1,12 +1,18 @@
 import { INameUniqueName } from './nameUniqueName.interface';
 import { IPagination } from './paginatedResponse.interface';
 
+/**
+ * interface used in transaction item everywhere
+ */
 export interface ILedgerTransactionItem {
-  amount: string;
-  particular: string;
-  type: string;
+  amount: number;
+  date?: string;
   isStock?: boolean;
   inventory?: IInventory;
+  isTax?: boolean;
+  isBaseAccount?: boolean;
+  particular: INameUniqueName;
+  type: string;
 }
 
 export interface IInventory {
@@ -38,20 +44,22 @@ export interface IInvoice {
 }
 
 export interface ILedger {
-  transactions: ILedgerTransactionItem[];
-  voucherType: string;
-  entryDate: string;
-  taxes?: string[];
   applyApplicableTaxes?: boolean;
-  isInclusiveTax?: boolean;
-  unconfirmedEntry?: boolean;
   attachedFile?: string;
-  tag?: string;
-  description?: string;
-  generateInvoice?: boolean;
+  attachedFileName?: string;
+  compoundTotal?: number;
   chequeNumber?: string;
-  clearanceDate?: string;
-  invoiceRequest?: IInvoiceRequest;
+  chequeClearanceDate?: string;
+  description?: string;
+  entryDate: string;
+  generateInvoice?: boolean;
+  isInclusiveTax?: boolean;
+  tag?: string;
+  taxes?: string[];
+  transactions: ILedgerTransactionItem[];
+  unconfirmedEntry?: boolean;
+  voucher: IVoucherItem;
+  voucherType: string;
 }
 
 export interface ITransactions extends IPagination {
@@ -96,22 +104,17 @@ export interface ITransactionItem {
 }
 
 /**
- * interface used in reconcile api's response
- * keeping inventory as "any" because I am not ure about the structure of inventory object
- */
-export interface IReconcileTransaction {
-  particular: INameUniqueName;
-  amount: number;
-  type: string;
-  inventory?: any;
-  isTax: boolean;
-  isBaseAccount: boolean;
-}
-
-/**
- * interface used in create ledger response
+ * interface used in create ledger request and response
  */
 export interface IVoucherItem {
   name: string;
   shortCode: string;
+}
+
+/**
+ * interface used in create ledger entry request and response
+ */
+export interface ITotalItem {
+  amount: number;
+  type: string;
 }
