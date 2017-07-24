@@ -1,0 +1,19 @@
+<div id="pie-chart" ng-init="getRevenueData()">
+  <div class="panel panel-default shadow">
+    <div class="panel-heading">
+      <label>Revenue</label><i class="glyphicon glyphicon-refresh pull-right" ng-click="getRevenueData()"></i>
+    </div>
+    <div class="panel-body pos-rel">
+      <div class="dashboard-reconnectdiv" *ngIf="false">
+        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+        <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+      </div>
+      <div class="chart-div" google-chart chart="myChartObject">
+        <chart [options]="options"></chart>
+      </div>
+      <!--<canvas id="pie" class="chart chart-pie" chart-data="chartData"-->
+      <!--chart-labels="labels" chart-series="series">-->
+      <!--</canvas>-->
+    </div>
+  </div>
+</div>
