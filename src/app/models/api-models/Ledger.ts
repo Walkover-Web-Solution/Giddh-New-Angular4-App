@@ -42,10 +42,11 @@ export class LedgerUpdateRequest extends LedgerRequest {
 
 /*
  * Model for Create, Update ledger entry api response
- * POST, PUT call
- * Note:: while creating ledger item LedgerResponse will be in array in body, and while put it will be a object in body
+ * POST, PUT, GET call
+ * Note:: while POST and GET LedgerResponse will be in array in body, and while put it will be a object in body
  * API:: ( Create ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
  * API:: ( Update ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
+ * API:: ( Get single transaction detail in ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
  */
 export class LedgerResponse {
   public attachedFile?: string;

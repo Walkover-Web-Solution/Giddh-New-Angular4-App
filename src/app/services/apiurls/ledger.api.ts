@@ -8,7 +8,7 @@ export const LEDGER_API = {
   UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
   // ledger utility related mail,share
   MAIL_LEDGER: UNIVERSAL_URI_LEDGER + 'mail', // post call
-
-  RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile', // get call
+  // get call
+  RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile',
   DOWNLOAD_INVOICE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
 };
