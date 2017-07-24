@@ -128,19 +128,20 @@ export class LedgerService {
    * Ledger get reconcile entries
    * It will internally call Eledger API with condition
    * Note in response user only get check number entries
+   * http://testapp.giddh.com/company/walkpvindore14504197149880siqli/accounts/icici_bank_ltd./ledgers/reconcile?from=24-06-2017&to=24-07-2017
    */
-  public GetReconcile(accountUniqueName: string = ''): Observable<BaseResponse<ReconcileResponse, string>> {
+  public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = '', ): Observable<BaseResponse<ReconcileResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+    return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).map((res) => {
       let data: BaseResponse<ReconcileResponse, string> = res.json();
-      data.queryString = { accountUniqueName };
+      data.queryString = { accountUniqueName, from, to, chequeNumber };
       return data;
-    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, accountUniqueName, { accountUniqueName }));
+    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName, from, to, chequeNumber }));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
