@@ -16,14 +16,19 @@ export interface ILedgerTransactionItem {
 }
 
 export interface IInventory {
-  stock?: INameUniqueName;
+  amount: number;
   quantity: number;
+  rate: number;
+  stock?: INameUniqueName;
   unit: IUnit;
 }
 
 export interface IUnit {
   name?: string;
-  code: string;
+  code?: string;
+  hierarchicalQuantity?: number;
+  parentStockUnit?: any;
+  quantityPerUnit?: number;
 }
 
 export interface IInvoiceRequest {
