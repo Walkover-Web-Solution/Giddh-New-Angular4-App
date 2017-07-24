@@ -23,7 +23,7 @@ export class LedgerService {
   }
 
   /**
-   * ledger methods get,create,delete,update
+   * get ledger transactions
    */
   public GetLedgerTranscations(q: string = '', page: number = 1, count: number = 15, accountUniqueName: string = '', from: string = '', to: string = '', sort: string = 'asc', reversePage: boolean = false): Observable<BaseResponse<TransactionsResponse, TransactionsRequest>> {
     this.store.take(1).subscribe(s => {
@@ -49,6 +49,10 @@ export class LedgerService {
     }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
   }
 
+  /*
+  * create Ledger transaction
+  */
+
   public CreateLedger(model: LedgerRequest, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], LedgerRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -66,6 +70,9 @@ export class LedgerService {
       .catch((e) => HandleCatch<LedgerResponse[], LedgerRequest>(e, model, { accountUniqueName }));
   }
 
+  /*
+  * update Ledger transaction
+  */
   public UpdateLedgerTransactions(model: LedgerRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -73,18 +80,54 @@ export class LedgerService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(LEDGER_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName), model)
+    return this._http.put(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName), model)
       .map((res) => {
         let data: BaseResponse<LedgerResponse, LedgerRequest> = res.json();
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = { accountUniqueName, entryUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName }));
+      .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName, entryUniqueName }));
+  }
+
+  /*
+  * delete Ledger transaction
+  */
+  public DeleteLedgerTransaction(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName)).map((res) => {
+      let data: BaseResponse<string, string> = res.json();
+      data.queryString = { accountUniqueName, entryUniqueName };
+      return data;
+    }).catch((e) => HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+  }
+
+  /*
+  * Ledger get transaction details
+  */
+  public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse[], string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName)).map((res) => {
+      let data: BaseResponse<LedgerResponse[], string> = res.json();
+      data.queryString = { accountUniqueName, entryUniqueName };
+      return data;
+    }).catch((e) => HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /**
-   * get reconcile
+   * Ledger get reconcile entries
+   * It will internally call Eledger API with condition
+   * Note in response user only get check number entries
    */
   public GetReconcile(accountUniqueName: string = ''): Observable<BaseResponse<ReconcileResponse, string>> {
     this.store.take(1).subscribe(s => {
@@ -95,10 +138,9 @@ export class LedgerService {
     });
     return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
       let data: BaseResponse<ReconcileResponse, string> = res.json();
-      data.request = '';
       data.queryString = { accountUniqueName };
       return data;
-    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName }));
+    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, accountUniqueName, { accountUniqueName }));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
