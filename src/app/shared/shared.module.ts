@@ -17,6 +17,7 @@ import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { ChartModule } from 'angular2-highcharts';
 
 import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
@@ -60,11 +61,12 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SelectModule,
     Select2Module, TagsModule,
     ClickOutsideModule,
-    Daterangepicker
+    Daterangepicker,
+    ChartModule.forRoot(require('highcharts'))
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
     BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
-    Daterangepicker, DigitsOnlyDirective],
+    Daterangepicker, DigitsOnlyDirective, ChartModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent]
 })

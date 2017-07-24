@@ -89,6 +89,8 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
+    "@types/highcharts": "^5.0.0",
+    "angular2-highcharts": "^0.5.5",
     "angular2-ladda": "^1.2.1",
     "electron-devtools-installer": "^2.2.0",
     "file-saver": "^1.3.3",
