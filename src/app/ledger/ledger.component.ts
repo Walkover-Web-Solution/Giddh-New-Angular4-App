@@ -15,6 +15,8 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
+import { AccountService } from '../services/account.service';
+import { TypeaheadMatch } from 'ngx-bootstrap';
 
 @Component({
   selector: 'ledger',
@@ -61,12 +63,19 @@ export class LedgerComponent implements OnInit {
   private ledgerSearchTerms = new Subject<string>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private ledgerActions: LedgerActions, private route: ActivatedRoute, private _ledgerService: LedgerService) {
+  constructor(private store: Store<AppState>, private ledgerActions: LedgerActions, private route: ActivatedRoute,
+              private _ledgerService: LedgerService, private _accountService: AccountService) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
+
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.lc.flatternAccountList = Observable.of(data.body.results);
+      }
+    });
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -80,6 +89,10 @@ export class LedgerComponent implements OnInit {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
+  }
+
+  public selectedAccount(e: TypeaheadMatch) {
+
   }
 
   // Push a search term into the observable stream.

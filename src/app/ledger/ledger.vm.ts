@@ -1,8 +1,9 @@
-import { TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { AccountResponse } from '../models/api-models/Account';
-import { ILedger, ITransactionItem } from '../models/interfaces/ledger.interface';
+import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -10,6 +11,8 @@ export class LedgerVM {
   public selectedTxnUniqueName: string;
   public currentTxn: ITransactionItem;
   public currentPage: number;
+  public flatternAccountList: Observable<IFlattenAccountsResultItem[]>;
+  public noAccountChosenForNewEntry: boolean;
   public pageLoader: boolean = false;
   public today: Date = new Date();
   public fromDate: Date;
@@ -38,6 +41,7 @@ export class LedgerVM {
   public cBlankTxn: any;
 
   constructor() {
+    this.noAccountChosenForNewEntry = false;
     this.blankLedger = {
       isBlankLedger: true,
       attachedFileName: '',
