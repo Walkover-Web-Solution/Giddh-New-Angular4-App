@@ -19,6 +19,8 @@ export class PageComponent implements AfterViewInit {
   constructor(private store: Store<AppState>, private router: Router, private activatedRoute: ActivatedRoute, private location: Location) {
   }
   public ngAfterViewInit() {
-    //
+    if (this.location.path() === '/pages') {
+      this.router.navigate(['/pages', 'home']);
+    }
   }
 }

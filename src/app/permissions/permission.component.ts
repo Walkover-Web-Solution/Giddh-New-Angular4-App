@@ -1,16 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
-  template:  `
-<a [routerLink]="['./details']">Details</a>
-<a [routerLink]="['./list']">List</a>
-<router-outlet></router-outlet>`
+  template: '<router-outlet></router-outlet>'
 })
 export class PermissionComponent implements OnInit {
-  constructor(private router: Router) {
+  constructor(private router: Router, private location: Location) {
   }
   public ngOnInit() {
-    // this.router.navigateByUrl('./list');
+    if (this.location.path() === '/pages/permissions' || this.location.path() === '/pages/permissions/') {
+      this.router.navigate(['/pages', 'permissions', 'list']);
+    }
   }
 }

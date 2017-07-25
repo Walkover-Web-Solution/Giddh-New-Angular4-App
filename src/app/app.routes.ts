@@ -22,8 +22,8 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
       { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
-      { path: '**', redirectTo: 'home' },
+      { path: '**', redirectTo: 'permissions' }
     ]
   },
-  { path: '**', redirectTo: 'login' }
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
