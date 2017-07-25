@@ -15,16 +15,18 @@ import { AppState } from '../../store/roots';
 export class SearchActions {
   public static readonly SEARCH_REQUEST = 'SEARCH_REQUEST';
   public static readonly SEARCH_RESPONSE = 'SEARCH_RESPONSE';
+  public static readonly RESET_SEARCH_STATE = 'RESET_SEARCH_STATE';
+
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(SearchActions.SEARCH_REQUEST)
     .switchMap(action => {
       return this._searchService.Search(action.payload)
-        .map((r) => this.validateResponse<SearchRequest, SearchResponse[]>(r, {
+        .map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
           type: SearchActions.SEARCH_RESPONSE,
-          payload: r.body
+          payload: r
         }, true, {
             type: SearchActions.SEARCH_RESPONSE,
-            payload: []
+            payload: r
           }));
     });
 
@@ -38,6 +40,12 @@ export class SearchActions {
     return {
       type: SearchActions.SEARCH_REQUEST,
       payload: request
+    };
+  }
+
+  public ResetSearchState(): Action {
+    return {
+      type: SearchActions.RESET_SEARCH_STATE
     };
   }
 

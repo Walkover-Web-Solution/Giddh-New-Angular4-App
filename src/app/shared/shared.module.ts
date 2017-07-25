@@ -17,24 +17,15 @@ import { FormWizardModule, ConfirmModalComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
+import { ChartModule } from 'angular2-highcharts';
 
-import {
-  ManageGroupsAccountsComponent,
-  AccountsSideBarComponent,
-  CompanyAddComponent,
-  AccountOperationsComponent,
-  GroupsRecursiveListComponent,
-  GroupsRecursiveListItemComponent,
-  GroupAccountsListComponent,
-  AccountAddComponent,
-  GroupsAccountSidebarComponent
-} from './header/components';
+import { ManageGroupsAccountsComponent, AccountsSideBarComponent, CompanyAddComponent, AccountOperationsComponent, GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewContainerRef } from './helpers/directives/element.viewchild.directive';
-import { DigitsValidatorDirective } from './helpers/directives/digitsOnly.directive';
+import { DigitsOnlyDirective } from './helpers/directives/digitsOnly.directive';
 import { AccountUpdateComponent } from './header/components/account-update/account-update.component';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
@@ -50,7 +41,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
-    AccountAddComponent, AccountUpdateComponent, DigitsValidatorDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
+    AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent
   ],
   imports: [
@@ -70,11 +61,12 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     SelectModule,
     Select2Module, TagsModule,
     ClickOutsideModule,
-    Daterangepicker
+    Daterangepicker,
+    ChartModule.forRoot(require('highcharts'))
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
     BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
-    Daterangepicker],
+    Daterangepicker, DigitsOnlyDirective, ChartModule],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent]
 })

@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AppState } from '../../../store/roots';
 import { TlPlActions } from '../../../services/actions/tl-pl.actions';
@@ -13,6 +13,7 @@ import * as _ from 'lodash';
   templateUrl: './tl-pl-grid.component.html'
 })
 export class TlPlGridComponent implements OnInit, OnDestroy {
+
   public showTbplLoader: boolean;
   public noData: boolean;
   public showClearSearch: boolean;
