@@ -128,7 +128,7 @@ export class LedgerService {
    * Ledger get reconcile entries
    * It will internally call Eledger API with condition
    * Note in response user only get check number entries
-   * http://testapp.giddh.com/company/walkpvindore14504197149880siqli/accounts/icici_bank_ltd./ledgers/reconcile?from=24-06-2017&to=24-07-2017
+   * /ledgers/reconcile?from=24-06-2017&to=24-07-2017
    */
   public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = '', ): Observable<BaseResponse<ReconcileResponse, string>> {
     this.store.take(1).subscribe(s => {
