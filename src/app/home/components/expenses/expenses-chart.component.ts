@@ -1,14 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/roots';
+import { Observable } from 'rxjs/Observable';
+import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'expenses-chart',
   templateUrl: 'expenses-chart.component.html'
 })
 
-export class ExpensesChartComponent implements OnInit {
+export class ExpensesChartComponent implements OnInit, OnDestroy {
   public options: Options;
-  constructor() {
+  public activeCompany: Observable<ComapnyResponse>;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private store: Store<AppState>) {
     this.options = {
       chart: {
         type: 'column'
@@ -70,9 +79,26 @@ export class ExpensesChartComponent implements OnInit {
         data: [1052, 954, 4250, 740, 38]
       }]
     };
+    this.activeCompany = this.store.select(state => {
+      if (!state.company.companies) {
+        return;
+      }
+      return state.company.companies.find(cmp => {
+        return cmp.uniqueName === state.session.companyUniqueName;
+      });
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
+    this.refreshData();
+  }
+
+  public refreshData() {
     //
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
