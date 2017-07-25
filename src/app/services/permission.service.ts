@@ -8,7 +8,8 @@ import {
     CreateNewRoleRequest,
     CreateNewRoleRespone,
     UpdateRoleRequest,
-    UpdateRoleRespone
+    UpdateRoleRespone,
+    LoadAllPageNamesResponse
 } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
 import { Store } from '@ngrx/store';
@@ -100,4 +101,15 @@ export class PermissionService {
         }).catch((e) => HandleCatch<string, string>(e, '', { roleUniqueName }));
     }
 
+    /*
+     * Get all page names
+    */
+    public GetAllPageNames(): Observable<BaseResponse<LoadAllPageNamesResponse[], string>> {
+
+        return this._http.get(PERMISSION_API.GET_ALL_PAGE_NAMES).map((res) => {
+            let data: BaseResponse<LoadAllPageNamesResponse[], string> = res.json();
+            data.queryString = {};
+            return data;
+        }).catch((e) => HandleCatch<LoadAllPageNamesResponse[], string>(e));
+    }
 }

@@ -9,9 +9,9 @@ import { Action, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { PermissionService } from "../../permission.service";
+import { PermissionService } from '../../permission.service';
 import { PERMISSION_ACTIONS } from './permission.const';
-import { NewRole, CreateNewRoleRequest, PermissionResponse } from '../../../models/api-models/Permission';
+import { NewRole, CreateNewRoleRequest, PermissionResponse, LoadAllPageNamesResponse } from '../../../models/api-models/Permission';
 
 @Injectable()
 export class PermissionActions {
@@ -56,6 +56,22 @@ export class PermissionActions {
           }, true));
     });
 
+  @Effect()
+  private AllPages$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.LOAD_ADD_PAGE_NAMES)
+    .switchMap(action => {
+      return this._permissionService.GetAllPageNames()
+        .map((r) => {
+          return this.validateResponse<LoadAllPageNamesResponse[], string>(r, {
+            type: PERMISSION_ACTIONS.ALL_PAGE_NAMES_LOADED,
+            payload: r
+          }, true, {
+              type: PERMISSION_ACTIONS.ALL_PAGE_NAMES_LOADED,
+              payload: r
+            });
+        });
+    });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
@@ -63,21 +79,27 @@ export class PermissionActions {
   }
 
   public GetRoles() {
-    return { type: PERMISSION_ACTIONS.GET_ROLES }
+    return { type: PERMISSION_ACTIONS.GET_ROLES };
   }
 
   public GetRolesResponse(value: BaseResponse<PermissionResponse[], string>) {
     return {
       type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
       payload: value
-    }
+    };
   }
 
   public PushTempRoleInStore(value): Action {
     return {
       type: PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE,
       payload: value
-    }
+    };
+  }
+
+  public LoadAllPageNames(): Action {
+    return {
+      type: PERMISSION_ACTIONS.LOAD_ADD_PAGE_NAMES,
+    };
   }
 
   public SaveNewRole(data: CreateNewRoleRequest): Action {
