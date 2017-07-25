@@ -59,3 +59,6 @@ export class CreateNewRoleRespone {
 
 export class UpdateRoleRespone {
 }
+
+export class LoadAllPageNamesResponse {
+}
