@@ -18,10 +18,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
     selector: 'permissions',
-    templateUrl: './permission.component.html',
+    templateUrl: './permission-component.html',
     styleUrls: ['./permission.component.css']
 })
-export class PermissionComponent implements OnInit, AfterViewInit {
+export class PermissionComponent implements OnInit {
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('permissionModel') public permissionModel: ModalDirective;
@@ -29,7 +29,6 @@ export class PermissionComponent implements OnInit, AfterViewInit {
 
     public localState: any;
     public allRoles: PermissionResponse[] = [];
-    private createRoleStep: string = 'one';
     private roleToDelete: string;
     private roleToDeleteName: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -55,10 +54,7 @@ export class PermissionComponent implements OnInit, AfterViewInit {
                 this.store.dispatch(this.PermissionActions.GetRoles());
             }
         });
-    }
-
-    public ngAfterViewInit() {
-        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles) => {
+        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: PermissionResponse[]) => {
             this.allRoles = roles;
         });
     }
@@ -66,13 +62,11 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     public closePopupEvent(data) {
         console.log('The data in closePopupEvent function is :', data);
         this.permissionModel.hide();
-        this.createRoleStep = 'two';
         this.router.navigate(['/pages', 'permissions', 'add-new']);
     }
 
     public deleteRole(roleUniqueName) {
         this.roleToDelete = roleUniqueName;
-        console.log('It is returning is :', this.allRoles.find((r) => r.uniqueName === roleUniqueName));
         this.roleToDeleteName = this.allRoles.find((r) => r.uniqueName === roleUniqueName).name;
         this.permissionConfirmationModel.show();
     }

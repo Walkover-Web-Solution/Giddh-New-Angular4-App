@@ -1,0 +1,22 @@
+<div class="pd3 clearfix" *ngIf="allRoles.length > 0">
+
+  <div class="col-xs-12 mrT2 pd0 mrB2 role clearfix" *ngFor="let role of allRoles">
+    <div class="col-xs-3 pd0 rolehead">
+      <h1>{{role.name}}</h1>
+      <div class="onHover text-center">
+        <button class="btn btn-md btn-primary pull-left">Edit</button>
+        <button class="btn btn-md btn-danger" (click)="deleteRole(role.uniqueName);">Delete</button>
+      </div>
+    </div>
+    <div class="col-xs-9">
+      <ul>
+        <li *ngFor="let item of role.scopes">{{ item.name }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="col-xs-12 mrT2 mrB2 role text-center clearfix pd4 new_box">
+    <h1 class="inline-block cursor-pointer" (click)="openPermissionModal()">+ Add New Role</h1>
+  </div>
+
+</div>
