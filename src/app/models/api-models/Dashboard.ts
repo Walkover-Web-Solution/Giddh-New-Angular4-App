@@ -1,4 +1,5 @@
-import { IPeriodBalances, IGroupHistoryGroups } from '../interfaces/dashboard.interface';
+import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem, IChildGroups, ICbAccount } from '../interfaces/dashboard.interface';
+import { IForwardBalance, IClosingBalance } from '../interfaces/ledger.interface';
 
 /**
  * Model for Audit Dashboard api request
@@ -38,4 +39,21 @@ export class GroupHistoryRequest {
 export class GroupHistoryResponse {
   public accounts?: any;
   public groups: IGroupHistoryGroups[];
+}
+
+/*
+ * Model: for closing balance
+ * API: /company/:companyUniqueName/groups/:groupUniqueName/closing-balance?fromDate=:date1&toDate=:date2&refresh=:refresh
+*/
+
+export class ClosingBalanceResponse implements IDashboardCbMainItem{
+  public forwardedBalance: IForwardBalance;
+  public creditTotal: number;
+  public debitTotal: number;
+  public closingBalance: IClosingBalance;
+  public childGroups: IChildGroups[];
+  public accounts: ICbAccount[];
+  public uniqueName: string;
+  public category: string;
+  public groupName: string;
 }
