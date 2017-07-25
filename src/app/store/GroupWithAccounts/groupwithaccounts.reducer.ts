@@ -52,6 +52,11 @@ export interface CurrentGroupAndAccountState {
   isGroupNameAvailable?: boolean;
   fetchingAccUniqueName: boolean;
   isAccountNameAvailable?: boolean;
+  createAccountInProcess?: boolean;
+  createAccountIsSuccess?: boolean;
+  updateAccountInProcess?: boolean;
+  updateAccountIsSuccess?: boolean;
+  moveAccountSuccess?: boolean;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -273,7 +278,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         isRefreshingFlattenGroupsAccounts: false,
         activeGroupInProgress: false,
         activeGroupSharedWith: [],
-        activeAccount: null
+        activeAccount: null,
+        addAccountOpen: false,
+        showAddNew: false,
+        showAddNewAccount: false,
+        showAddNewGroup: false,
+        showEditGroup: false,
+        showEditAccount: false
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
@@ -413,14 +424,18 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case AccountsAction.UPDATE_ACCOUNT:
+      return Object.assign({}, state, {updateAccountInProcess: true});
     case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
       let updatedAccount: BaseResponse<AccountResponse, AccountRequest> = action.payload;
       if (updatedAccount.status === 'success') {
         return Object.assign({}, state, {
-          activeAccount: action.payload.body
+          activeAccount: action.payload.body,
+          updateAccountInProcess: false,
+          updateAccountIsSuccess: true
         });
       }
-      return state;
+      return Object.assign({}, state, {updateAccountInProcess: false, updateAccountIsSuccess: false});
     case AccountsAction.RESET_ACTIVE_ACCOUNT:
       return Object.assign({}, state, {activeAccount: null, addAccountOpen: false});
     case AccountsAction.GET_ACCOUNT_UNIQUENAME:
@@ -526,10 +541,21 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
-          activeGroup: {uniqueName: mAcc.request.uniqueName}
+          moveAccountSuccess: true,
+          activeAccount: null
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        moveAccountSuccess: false
+      });
+    case AccountsAction.CREATE_ACCOUNT:
+      return Object.assign({}, state, {createAccountInProcess: true});
+    case AccountsAction.CREATE_ACCOUNT_RESPONSE:
+      let accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
+      if (accountData.status === 'success') {
+        return Object.assign({}, state, {createAccountInProcess: false, createAccountIsSuccess: true});
+      }
+      return Object.assign({}, state, {createAccountInProcess: false, createAccountIsSuccess: false});
     default:
       return state;
   }

@@ -15,23 +15,25 @@ import { AppState } from '../../store/roots';
 export class SearchActions {
   public static readonly SEARCH_REQUEST = 'SEARCH_REQUEST';
   public static readonly SEARCH_RESPONSE = 'SEARCH_RESPONSE';
+  public static readonly RESET_SEARCH_STATE = 'RESET_SEARCH_STATE';
+
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(SearchActions.SEARCH_REQUEST)
     .switchMap(action => {
       return this._searchService.Search(action.payload)
-        .map((r) => this.validateResponse<SearchRequest, SearchResponse[]>(r, {
+        .map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
           type: SearchActions.SEARCH_RESPONSE,
-          payload: r.body
+          payload: r
         }, true, {
-          type: SearchActions.SEARCH_RESPONSE,
-          payload: []
-        }));
+            type: SearchActions.SEARCH_RESPONSE,
+            payload: r
+          }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _searchService: SearchService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _searchService: SearchService) {
   }
 
   public GetStocksReport(request: SearchRequest): Action {
@@ -41,12 +43,22 @@ export class SearchActions {
     };
   }
 
+  public ResetSearchState(): Action {
+    return {
+      type: SearchActions.RESET_SEARCH_STATE
+    };
+  }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
       }
       return errorAction;
+    } else {
+      if (showToast && typeof response.body === 'string') {
+        this._toasty.successToast(response.message);
+      }
     }
     return successAction;
   }

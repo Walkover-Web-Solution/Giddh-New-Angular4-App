@@ -1,31 +1,46 @@
-<div>
-  <h1 class="sample-content">Your Content Here</h1>
-
-  <hr>
-
-  <div>
-    For hot module reloading run
-    <pre>npm run start:hmr</pre>
-
-
-  </div>
-
-
-  <hr>
-  <div style="width: 300px; margin-bottom: 20px;">
-    <h3>Select multiple cities</h3>
-    <ng-select [multiple]="true" (selectedOption)="selectedOption($event)" [items]="items" [UiLockChoice]="true" [active]="['Amsterdam', 'Antwerp']"  [disabled]="disabled" (data)="refreshValue($event)" (selected)="selected($event)"
-      (removed)="removed($event)" placeholder="No city selected"></ng-select>
-    <pre>{{itemsToString(value)}}</pre>
-    <div>
-      <button type="button" class="btn btn-primary" [(ngModel)]="disabledV" btnCheckbox btnCheckboxTrue="1" btnCheckboxFalse="0">
-          {{disabled? 'Enable' : 'Disable'}}
-        </button>
+<perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="20" min-scrollbar-length="20" auto-height>
+  <section id="dashboard" class="clearfix">
+    <div class="row pd2">
+      <button class="btn btn-default pull-right mrR3 shadow" (click)="hardRefresh()">Clear Cache & Refresh</button>
     </div>
-  </div>
-  <div>
-    <h4>Giddh State</h4>
-  </div>
 
-</div>
-<!-- <select2 [data]="exampleData"></select2> -->
+    <div class="container-fluid row">
+      <div class="col-xs-12">
+
+        <div class="col-xs-4">
+          <live-accounts></live-accounts>
+        </div>
+
+        <div class="col-xs-4">
+          <expenses-chart></expenses-chart>
+        </div>
+
+        <div class="col-xs-4">
+          <revenue-chart></revenue-chart>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid row">
+      <div class="col-xs-12">
+        <div class="col-xs-6">
+          <compare-chart></compare-chart>
+        </div>
+        <div class="col-xs-6">
+          <history-chart></history-chart>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid row mrT2">
+      <div class="col-xs-12">
+        <div class="col-xs-6">
+          <networth-chart></networth-chart>
+        </div>
+        <!--<div class="col-xs-6">-->
+        <!--<profit-loss ng-controller="profitlossController"></profit-loss>-->
+        <!--</div>-->
+        <!--<combined ng-controller="combinedController"></combined>-->
+      </div>
+    </div>
+  </section>
+</perfect-scrollbar>

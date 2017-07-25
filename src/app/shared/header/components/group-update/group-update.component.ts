@@ -49,7 +49,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     minimumResultsForSearch: 9001,
     multiple: true,
     width: '100%',
-    placeholder: 'Choose a project',
+    placeholder: 'Select Taxes',
     templateResult: (data) => {
       if (!data.id) {
         return data.text;
@@ -143,6 +143,15 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+        if (a.fixed) {
+          this.groupDetailForm.get('name').disable();
+          this.groupDetailForm.get('uniqueName').disable();
+          this.groupDetailForm.get('description').disable();
+        } else {
+          this.groupDetailForm.get('name').enable();
+          this.groupDetailForm.get('uniqueName').enable();
+          this.groupDetailForm.get('description').enable();
+        }
       }
     });
 
@@ -299,7 +308,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
     });
-    data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+    if (this.applyTaxSelect2.value && Array.isArray(this.applyTaxSelect2.value)) {
+      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
+    }
     data.uniqueName = activeGroup.uniqueName;
     this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     this.showEditTaxSection = false;
