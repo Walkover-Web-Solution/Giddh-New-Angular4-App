@@ -86,7 +86,7 @@
 </div>
 
 
-<div class="clearfix mrT2" *ngIf="vm.canManageCompany">
+<div class="clearfix mrT2">
   <label>Select User</label>
   <select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>
 </div>

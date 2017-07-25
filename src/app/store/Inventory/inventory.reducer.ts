@@ -34,6 +34,7 @@ export interface InventoryState {
   isGroupNameAvailable: boolean;
   fetchingStockUniqueName: boolean;
   isStockNameAvailable: boolean;
+  createGroupSuccess: boolean;
   createStockSuccess: boolean;
   stockReport?: StockReportResponse;
   isStockAddInProcess: boolean;
@@ -72,6 +73,7 @@ const initialState: InventoryState = {
   isGroupNameAvailable: false,
   fetchingStockUniqueName: false,
   isStockNameAvailable: false,
+  createGroupSuccess: false,
   createStockSuccess: false,
   isStockAddInProcess: false,
   isStockUpdateInProcess: false,
@@ -181,7 +183,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       });
 
     case InventoryActionsConst.AddNewGroup:
-      return Object.assign({}, state, { isAddNewGroupInProcess: true, activeStockUniqueName: null });
+      return Object.assign({}, state, { isAddNewGroupInProcess: true, activeStockUniqueName: null, createGroupSuccess: false });
 
     case InventoryActionsConst.AddNewGroupResponse:
       let groupStockResponse = action.payload as BaseResponse<StockGroupResponse, StockGroupRequest>;
@@ -223,11 +225,12 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         }
         return Object.assign({}, state, {
           isAddNewGroupInProcess: false,
+          createGroupSuccess: true,
           groupsWithStocks: groupArray,
           activeStockUniqueName: null
         });
       }
-      return Object.assign({}, state, { isAddNewGroupInProcess: false });
+      return Object.assign({}, state, { isAddNewGroupInProcess: false, createGroupSuccess: false });
     case InventoryActionsConst.GetGroupUniqueName:
       return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
     case InventoryActionsConst.GetGroupUniqueNameResponse:
@@ -565,7 +568,6 @@ const removeGroupItem = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniq
 const addItemAtIndex = (groups: IGroupsWithStocksHierarchyMinItem[], parentUniqueName: string, group: IGroupsWithStocksHierarchyMinItem) => {
   for (let el of groups) {
     if (el.uniqueName === parentUniqueName) {
-      // debugger
       el.isActive = true;
       el.isOpen = true;
       el.childStockGroups.push({

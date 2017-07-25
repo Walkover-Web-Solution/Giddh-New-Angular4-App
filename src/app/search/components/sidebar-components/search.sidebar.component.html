@@ -13,7 +13,7 @@
         <div class="form-group" (clickOutside)="showFromDatePicker=false;">
           <label>From date</label>
           <div class="input-group">
-            <input type="text" name="from" pattern="\d{1,2}\-\d{1,2}\-\d{4}$" [ngModel]="moment(fromDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
+            <input type="text" name="from"  pattern="\d{1,2}\-\d{1,2}\-\d{4}$" [ngModel]="moment(fromDate).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
               class="form-control" required/>
             <span class="input-group-btn">
                     <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker"><i class="glyphicon glyphicon-calendar"></i></button>
@@ -40,10 +40,10 @@
         </div>
 
         <div class="mrB4">
-          <button [disabled]="search.invalid || typeaheadNoResults" class="btn btn-primary btn-block" (click)="getClosingBalance(false,$event)">Go
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block" (click)="getClosingBalance(false,$event)">Go
           </button>
 
-          <button [disabled]="search.invalid || typeaheadNoResults" class="btn btn-primary btn-block mrT1" (click)="getClosingBalance(true,$event)">Refresh
+          <button [disabled]="search.invalid" class="btn btn-primary btn-block mrT1" (click)="getClosingBalance(true,$event)">Refresh
           </button>
         </div>
       </form>

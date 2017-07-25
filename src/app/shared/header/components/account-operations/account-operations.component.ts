@@ -32,6 +32,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { AccountService } from '../../../../services/account.service';
+import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'account-operations',
@@ -83,7 +84,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public companyTaxDropDown: Observable<Select2OptionData[]>;
   public accountList: any[];
   public showEditTaxSection: boolean = false;
-  public accounts$: Observable<Select2OptionData[]>;
+  public accounts$: Subject<Select2OptionData[]> = new Subject();
   public accountOptions: Select2Options = {
     multiple: true,
     width: '100%',
@@ -112,7 +113,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     minimumResultsForSearch: 9001,
     multiple: true,
     width: '100%',
-    placeholder: 'Choose a project',
+    placeholder: 'Select Taxes',
     templateResult: (data) => {
       if (!data.id) {
         return data.text;
@@ -129,6 +130,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       return $('<span>' + data.text + '</span>');
     }
   };
+  public moveAccountSuccess$: Observable<boolean>;
   public showDeleteMove: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -139,6 +141,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
     this.showEditAccount$ = this.store.select(state => state.groupwithaccounts.showEditAccount).takeUntil(this.destroyed$);
     this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).takeUntil(this.destroyed$);
+    this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).takeUntil(this.destroyed$);
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
@@ -198,13 +201,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
       return arr;
     }).takeUntil(this.destroyed$);
+
+    // get flatternaccounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
         data.body.results.map(d => {
           accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
         });
-        this.accounts$ = Observable.of(accounts);
+        this.accounts$.next(accounts);
       }
     });
   }
@@ -252,6 +257,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeAccount$.subscribe((a) => {
       if (a) {
         this.showEditTaxSection = false;
+      }
+    });
+
+    this.moveAccountSuccess$.subscribe(p => {
+      if (p) {
+        this.moveAccountForm.reset();
       }
     });
   }
@@ -314,8 +325,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     });
   }
 
-  public async shareAccount() {
-    let activeAcc = await this.activeAccount$.first().toPromise();
+  public shareAccount() {
+    let activeAcc;
+    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
     let accObject = new ShareAccountRequest();
     accObject.role = 'view_only';
     accObject.user = this.shareAccountForm.controls['userEmail'].value;
@@ -327,23 +339,25 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
   }
 
-  public async moveAccount() {
-    let activeAcc = await this.activeAccount$.first().toPromise();
+  public moveAccount() {
+    let activeAcc;
+    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
 
     let grpObject = new AccountMoveRequest();
     grpObject.uniqueName = this.moveAccountForm.controls['moveto'].value;
     this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc.uniqueName));
-    this.moveAccountForm.reset();
   }
 
-  public async unShareGroup(val) {
-    let activeGrp = await this.activeGroup$.first().toPromise();
+  public unShareGroup(val) {
+    let activeGrp;
+    this.activeGroup$.take(1).subscribe(p => activeGrp = p);
 
     this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
   }
 
-  public async unShareAccount(val) {
-    let activeAcc = await this.activeAccount$.first().toPromise();
+  public unShareAccount(val) {
+    let activeAcc;
+    this.activeAccount$.take(1).subscribe(p => activeAcc = p);
     this.store.dispatch(this.accountsAction.unShareAccount(val, activeAcc.uniqueName));
   }
 
@@ -396,7 +410,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     return obj;
   }
 
-  public async taxHierarchy() {
+  public taxHierarchy() {
     let activeAccount: AccountResponse = null;
     let activeGroup: GroupResponse = null;
     this.store.take(1).subscribe(s => {

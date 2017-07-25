@@ -61,7 +61,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       uniqueName: ['', [Validators.required], uniqueNameValidator],
       openingBalanceType: ['CREDIT', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileNo: ['', Validators.pattern('[7-9][0-9]{9}')],
+      mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
@@ -182,20 +182,21 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       delete accountObj['hsnOrSac'];
     }
 
-    if (formsValue.gstDetails.length > 0) {
-      let gstDetailsArr = [];
-      let finalGstDetails = _.filter(formsValue.gstDetails, (gs: any) => {
-        return gs.gstNumber !== '';
-      });
-      finalGstDetails.map(f => {
-        gstDetailsArr.push({
-          gstNumber: f.gstNumber,
-          addressList: [{address: f.addressList.address, stateCode: f.addressList.stateCode}]
-        });
-      });
-      accountObj.gstDetails = gstDetailsArr;
-    }
-
+    // gst details
+    // if (formsValue.gstDetails.length > 0) {
+    //   let gstDetailsArr = [];
+    //   let finalGstDetails = _.filter(formsValue.gstDetails, (gs: any) => {
+    //     return gs.gstNumber !== '';
+    //   });
+    //   finalGstDetails.map(f => {
+    //     gstDetailsArr.push({
+    //       gstNumber: f.gstNumber,
+    //       addressList: [{address: f.addressList.address, stateCode: f.addressList.stateCode}]
+    //     });
+    //   });
+    //   accountObj.gstDetails = gstDetailsArr;
+    // }
+    delete accountObj['gstDetails'];
     this.store.dispatch(this.accountsAction.createAccount(activeGroup.uniqueName, accountObj));
   }
 
