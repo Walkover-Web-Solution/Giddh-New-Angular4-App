@@ -28,7 +28,7 @@ export class PermissionComponent implements OnInit, AfterViewInit {
     @ViewChild('permissionConfirmationModel') public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
-    public allRoles: PermissionResponse[];
+    public allRoles: PermissionResponse[] = [];
     private createRoleStep: string = 'one';
     private roleToDelete: string;
     private roleToDeleteName: string;

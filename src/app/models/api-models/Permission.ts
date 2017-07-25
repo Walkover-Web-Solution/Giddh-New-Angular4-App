@@ -3,11 +3,11 @@
  */
 
 export interface PermissionResponse {
-  name: string,
-  scopes: any,
-  uniqueName: any,
-  isFixed: boolean,
-  companyUniqueName: string
+  name: string;
+  scopes: any;
+  uniqueName: any;
+  isFixed: boolean;
+  companyUniqueName: string;
 }
 
 export interface PermissionRequest {
@@ -15,10 +15,10 @@ export interface PermissionRequest {
 }
 
 export interface NewRole {
-  name: string,
-  scopes: any,
-  copyoption: string,
-  pages: any,
+  name: string;
+  scopes: Scope[];
+  copyoption: string;
+  pages: any;
 }
 
 /*
@@ -31,6 +31,7 @@ export interface NewRole {
 
 export interface Permission {
   code: string;
+  selected?: boolean;
 }
 
 export interface Scope {
@@ -49,11 +50,11 @@ export interface UpdateRoleRequest {
 }
 
 export class CreateNewRoleRespone {
-  isFixed: boolean;
-  scopes: Scope[];
-  uniqueName: string;
-  name: string;
-  companyUniqueName: string;
+  private isFixed: boolean;
+  private scopes: Scope[];
+  private uniqueName: string;
+  private name: string;
+  private companyUniqueName: string;
 }
 
 export class UpdateRoleRespone {

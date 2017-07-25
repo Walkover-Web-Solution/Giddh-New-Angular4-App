@@ -4,10 +4,31 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PermissionActions } from '../../services/actions/permission/permission.action';
+import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+
+export interface Permission {
+    code: string;
+}
+
+export interface Scopes {
+    name: string;
+    permissions: Permission[];
+}
+
+export interface Role {
+    name: string;
+    scopes: Scopes[];
+}
+
+export interface NewRole extends Role {
+    isFresh: boolean;
+}
 
 @Component({
     selector: 'permission-model',
-    templateUrl: './permission.model.component.html'
+    templateUrl: './permission.model.component.html',
+    styleUrls: ['./permission.model.component.css'],
+    providers: [{ provide: BsDropdownConfig, useValue: { autoClose: false } }]
 })
 
 export class PermissionModelComponent implements OnDestroy {
@@ -17,6 +38,9 @@ export class PermissionModelComponent implements OnDestroy {
     private newRole: object = {};
     private pageNames = [];
     private selectedPages = [];
+
+    private roleType: string;
+    private dropdownHeading: string = 'Select pages';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
@@ -37,20 +61,41 @@ export class PermissionModelComponent implements OnDestroy {
         this.closeEvent.emit(true);
     }
 
+    public onDDShown() {
+        this.dropdownHeading = 'Close list';
+    }
+
+    public onDDHidden() {
+        this.dropdownHeading = 'Select pages';
+    }
+
     public hideRoleModel() {
         this.closeEvent.emit(true);
     }
 
-    public selectPages(pageName) {
+    public selectPage(pageName) {
         let indx = this.selectedPages.findIndex(function (item) {
-            return item == pageName;
+            return item === pageName;
         });
         if (indx === -1) {
             this.selectedPages.push(pageName);
         } else {
             this.selectedPages.splice(indx, 1);
         }
+
+        console.log("Iside selectPage the this.selectedPages is :", this.selectedPages);
     }
+
+    // public selectPages(pageName) {
+    //     let indx = this.selectedPages.findIndex(function (item) {
+    //         return item == pageName;
+    //     });
+    //     if (indx === -1) {
+    //         this.selectedPages.push(pageName);
+    //     } else {
+    //         this.selectedPages.splice(indx, 1);
+    //     }
+    // }
 
     /**
      * addNewRole
