@@ -2,26 +2,14 @@ import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { LaddaModule } from 'angular2-ladda';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
-import { NgModule, ApplicationRef } from '@angular/core';
+import { ApplicationRef, NgModule } from '@angular/core';
 
-import {
-  removeNgStyles,
-  createNewHosts,
-  createInputTransfer
-} from '@angularclass/hmr';
-import {
-  RouterModule,
-  PreloadAllModules
-} from '@angular/router';
-
-import { EffectsModule } from '@ngrx/effects';
+import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
+import { PreloadAllModules, RouterModule } from '@angular/router';
 import { RouterStoreModule } from '@ngrx/router-store';
-import { StoreModule } from '@ngrx/store';
-import { Store } from '@ngrx/store';
+import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -42,11 +30,12 @@ import { LoginModule } from './login/login.module';
 import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { InventoryModule } from './inventory/inventory.module';
 import { SearchModule } from './search/search.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { LedgerModule } from './ledger/ledger.module';
+import { TlPlModule } from './tl-pl/tl-pl.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -99,7 +88,9 @@ if (ENV === 'development') {
     HomeModule,
     InventoryModule,
     SearchModule,
+    TlPlModule,
     AuditLogsModule,
+    LedgerModule,
     LoginModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),

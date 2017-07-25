@@ -1,0 +1,47 @@
+<div id="live" ng-init="getLiveData()">
+  <div class="panel panel-default shadow">
+    <div class="panel-heading">
+      <label>Bank accounts</label><i class="glyphicon glyphicon-refresh pull-right" ng-click="getLiveData()"></i>
+    </div>
+    <div class="panel-body pos-rel">
+      <div class="dashboard-reconnectdiv" ng-if="!dataAvailable">
+        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+        <label class="font-black" ng-if="errorMessage != ''">{{"a"}}</label>
+      </div>
+      <!--show bank data here-->
+      <div ng-repeat="live in showThis | orderBy: 'siteName'">
+        <section class="linked-accounts clearfix">
+          <aside class="title">{{"b"}}</aside>
+          <aside class="body">
+            <table class="width100">
+              <tr  ng-repeat="account in live.accounts">
+                <!--<div ng-if="account.reconnect" class="reconnectDiv">-->
+                <!--<button class="btn btn-default" ng-click="reconnectBank(account)">Reconnect</button>-->
+                <!--</div>-->
+                <td class="pos-rel width100">
+                  <table class="table table-bordered">
+                    <tbody>
+                    <tr>
+                      <td class="col-xs-6">{{"c"}}</td>
+                      <td class="col-xs-4">{{"d"}}  {{"e"}}</td>
+                      <td class="col-xs-2"><i class="glyphicon glyphicon-refresh" ng-click="refreshBank(account)"></i></td>
+                    </tr>
+                    <tr ng-if="account.reconnect" class="db-bnk-account">
+                      <td class="reconnectDiv text-center col-xs-12">
+                        <button class="btn btn-default" ng-click="reconnectBank(account)">Reconnect</button>
+                      </td>
+                    </tr>
+                    </tbody>
+                  </table>
+                  <!--                   <span class="error-overlay">
+
+                                    </span> -->
+                </td>
+              </tr>
+            </table>
+          </aside>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

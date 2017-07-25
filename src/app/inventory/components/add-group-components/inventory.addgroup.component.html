@@ -31,11 +31,10 @@
               <label>Parent Group</label>
             </div>
             <div class="form-group mrB">
-              <!-- <input [typeahead]="dataSource" type="text" [(ngModel)]="parentStockSearchString" typeaheadAsync="true" formControlName="parentStockGroupUniqueName"
-                typeaheadOptionField="name" (typeaheadOnSelect)="groupSelected($event)" (typeaheadNoResults)="onGroupResult()"
-                class="form-control" name="city" autocomplete="off" maxlength="50" placeholder="Select"> -->
 
-              <select2 [data]="groupsData$ | async" [options]="options" formControlName="parentStockGroupUniqueName" [value]="parentStockSearchString" (valueChanged)="groupSelected($event)"></select2>
+              <select2 [data]="groupsData$ | async" [options]="options" formControlName="parentStockGroupUniqueName"
+                       [disabled]="addGroupForm.get('isSelfParent').value" required
+                       [value]="parentStockSearchString" (valueChanged)="groupSelected($event)"></select2>
             </div>
           </div>
           <div class="col-xs-12">

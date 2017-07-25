@@ -954,7 +954,7 @@ header .navbar-nav > li.active {
 }
 
 #getGroupModal {
-  height: 550px;
+  height: 100%;
   overflow: hidden;
 }
 
@@ -3714,7 +3714,7 @@ ul.pills li {
 
 #setupWizardModal .wizard-container .steps-indicator {
   position: absolute;
-  bottom: -40px;
+  bottom: -25px;
 }
 
 #dashboard .panel-body {

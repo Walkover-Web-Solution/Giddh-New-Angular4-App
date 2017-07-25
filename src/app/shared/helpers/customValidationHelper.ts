@@ -13,6 +13,7 @@ export const emailValidator = (control: FormControl) => {
 
 export const mobileValidator = (control: FormControl) => {
   return new Promise<any>((resolve, reject) => {
+    // let pattern = /[7-9][0-9]{9}/;
     let pattern = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (!pattern.test(control.value)) {
       resolve({ notValid: true });
@@ -37,7 +38,7 @@ export const uniqueNameValidator = (control: FormControl) => {
 export const digitsOnly: ValidatorFn = (control: AbstractControl): { [key: string]: boolean } => {
   let v: string = control.value;
   if (control.dirty) {
-    return /^\\.\\-\[0-9]+$/.test(v) ? null : { digits: true };
+    return /^[+]?([0-9]+(?:[\.][0-9]*)?|\.[0-9]+)$/.test(v) ? null : { digits: true };
   }
 };
 
@@ -78,4 +79,13 @@ export const stockManufacturingDetailsValidator = (control: AbstractControl) => 
   } else {
     return null;
   }
+};
+
+export const dateValidator = (control: FormControl) => {
+  let datePattern = /^\d{1,2}\-\d{1,2}\-\d{4}$/;
+
+  if (!datePattern.test(control.value)) {
+    return { invalidDate: true };
+  }
+  return null;
 };
