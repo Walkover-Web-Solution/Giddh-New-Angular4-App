@@ -15,14 +15,10 @@ export interface Scopes {
     permissions: Permission[];
 }
 
-export interface Role {
-    name: string;
-    scopes: Scopes[];
-}
-
 export interface NewRole {
     name: string;
     selectedPages: Scopes[];
+    copiedRole: object;
     isFresh: boolean;
 }
 
@@ -42,13 +38,14 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
 
     public allRoles: object;
-    private newRole: NewRole = { name: '', selectedPages:[], isFresh: false };
+    private newRole: NewRole = { name: '', selectedPages: [], copiedRole: {}, isFresh: false };
     private pageNames: Page[] = [];
     private selectedPages = [];
 
     private roleType: string = '';
     private dropdownHeading: string = 'Select pages';
     private isSelectedAllPages: boolean;
+    private copiedRole: object;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
@@ -114,14 +111,11 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 data.selectedPages = this.selectedPages;
                 data.isFresh = true;
             } else if (this.roleType === 'copy') {
-                // data.pages = this.selectedPages;
-                // data.isFresh = false;
+                data.copiedRole = this.copiedRole;
+                data.copiedRole = JSON.parse(data.copiedRole);
+                data.isFresh = false;
             }
-
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
-
-            console.log('the data in addnewRole function is :', data);
-
             this.closeEvent.emit(data);
         }
     }
@@ -145,8 +139,9 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public isFormNotValid() {
         if (this.newRole.name && (this.roleType === 'fresh' && this.selectedPages.length)) {
             return false;
+        }else if (this.newRole.name && this.roleType === 'copy') {
+            return false;
         }
         return true;
     }
-
 }
