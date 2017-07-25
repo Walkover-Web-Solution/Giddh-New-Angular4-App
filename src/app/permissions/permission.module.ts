@@ -1,34 +1,30 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
-
-import { PermissionRoutingModule } from './permission.routing.module';
 import { PermissionComponent } from './permission.component';
 import { PermissionModelComponent } from './model/permission.model.component';
-import { AddNewPermissionComponent } from './components/add-new-permission/permission.addnew.component';
+import { PermissionDetailsComponent } from './components/details/permission.details.component';
 import { DeleteRoleConfirmationModelComponent } from './model/confirmation/confirmation.model.component';
 import { SelectRoleTableComponent } from './components/add-new-permission/table/table.component';
-
-console.log('`Permission` bundle loaded asynchronously');
+import { PermissionRoutingModule } from './permission-routing-module';
+import { PermissionParentComponent } from './permission.parent.component';
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
+        PermissionParentComponent,
         PermissionComponent,
         PermissionModelComponent,
         DeleteRoleConfirmationModelComponent,
-        AddNewPermissionComponent,
+        PermissionDetailsComponent,
         SelectRoleTableComponent
     ],
-    exports: [PermissionComponent, PermissionModelComponent, DeleteRoleConfirmationModelComponent, AddNewPermissionComponent, SelectRoleTableComponent, Ng2BootstrapModule],
+    exports: [],
     imports: [
         CommonModule,
         FormsModule,
-        PermissionRoutingModule,
-        Ng2BootstrapModule.forRoot()
+        PermissionRoutingModule
     ],
 })
-export class PermissionModule {
-}
+export class PermissionModule {}
