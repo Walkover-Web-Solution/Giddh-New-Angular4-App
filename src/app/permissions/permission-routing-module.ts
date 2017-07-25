@@ -9,6 +9,7 @@ import { PermissionDetailsComponent } from './components/details/permission.deta
 import { SelectRoleTableComponent } from './components/table/table.component';
 import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
 import { PermissionModelComponent } from './components/model/permission.model.component';
+import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 
 const PERMISSION_ROUTES: Routes = [
   {
@@ -18,14 +19,16 @@ const PERMISSION_ROUTES: Routes = [
       {
         path: 'list',
         component: PermissionListComponent,
+        canActivate: [NeedsAuthentication]
       },
       {
         path: 'details',
         component: PermissionDetailsComponent,
-      }
+        canActivate: [NeedsAuthentication]
+      },
+      { path: '*', redirectTo: 'list'}
     ]
   }
-  // { path: '**', redirectTo: 'list' }
 ];
 
 @NgModule({
