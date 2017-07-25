@@ -20,3 +20,22 @@
   </div>
 
 </div>
+
+<!--add and manage role model -->
+<div bsModal #permissionModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+       <permission-model (closeEvent)="closePopupEvent(data)"></permission-model> 
+    </div>
+  </div>
+</div>
+
+<!--delete role confirmation model -->
+<div bsModal #permissionConfirmationModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-md">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content">
+       <delete-role-confirmation-model [selectedRoleName]="roleToDeleteName" (confirmDeleteEvent)="deleteConfirmedRole()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model> 
+    </div>
+  </div>
+</div>

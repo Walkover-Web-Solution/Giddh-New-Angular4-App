@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AppState } from '../../../store/roots';
 
 export class ChkboxDefination {
   public view: boolean = false;
@@ -14,7 +14,7 @@ export class ChkboxDefination {
 
 @Component({
   selector: 'select-role-table',
-  templateUrl: './table.component.html'
+  templateUrl: './table.html'
 })
 
 export class SelectRoleTableComponent {

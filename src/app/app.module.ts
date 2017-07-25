@@ -108,13 +108,14 @@ if (ENV === 'development') {
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
-    RouterModule.forRoot(ROUTES, { enableTracing: true, useHash: true, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ...CONDITIONAL_IMPORTS,
     Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
   ],
   /**
    * Expose our Services and Providers into Angular's dependency injection.
+   * enableTracing: true,
    */
   providers: [
     ENV_PROVIDERS,

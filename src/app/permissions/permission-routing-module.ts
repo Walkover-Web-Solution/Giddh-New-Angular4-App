@@ -1,19 +1,23 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-
+import { Ng2BootstrapModule } from 'ngx-bootstrap';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { PermissionComponent } from './permission.component';
-import { PermissionParentComponent } from './permission.parent.component';
+import { PermissionListComponent } from './components/list/permission.list.component';
 import { PermissionDetailsComponent } from './components/details/permission.details.component';
-
+import { PermissionModelComponent } from './model/permission.model.component';
+import { DeleteRoleConfirmationModelComponent } from './model/confirmation/confirmation.model.component';
+import { SelectRoleTableComponent } from './components/table/table.component';
 
 const PERMISSION_ROUTES: Routes = [
   {
     path: '',
-    component: PermissionParentComponent,
+    component: PermissionComponent,
     children: [
       {
         path: 'list',
-        component: PermissionComponent,
+        component: PermissionListComponent,
       },
       {
         path: 'details',
@@ -21,11 +25,23 @@ const PERMISSION_ROUTES: Routes = [
       }
     ]
   }
+  // { path: '**', redirectTo: 'list' }
 ];
 
 @NgModule({
+  declarations: [
+    PermissionComponent,
+    PermissionListComponent,
+    PermissionDetailsComponent,
+    PermissionModelComponent,
+    DeleteRoleConfirmationModelComponent,
+    SelectRoleTableComponent
+  ],
   imports: [
-    RouterModule.forChild(PERMISSION_ROUTES)
+    CommonModule,
+    FormsModule,
+    RouterModule.forChild(PERMISSION_ROUTES),
+    Ng2BootstrapModule.forRoot()
   ],
   exports: [
     RouterModule

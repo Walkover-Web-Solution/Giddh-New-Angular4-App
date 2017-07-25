@@ -15,14 +15,15 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
-      { path: '', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
       { path: 'search', component: SearchComponent, canActivate: [NeedsAuthentication] },
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
-      { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]}
+      { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
+      { path: '**', redirectTo: 'home' },
     ]
-  }
+  },
+  { path: '**', redirectTo: 'login' }
 ];

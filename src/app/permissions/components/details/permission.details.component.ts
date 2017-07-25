@@ -14,9 +14,39 @@ export interface InewRole {
 }
 
 @Component({
-  // templateUrl: './permission.details.html'
-  template: 'Hey dude'
+  templateUrl: './permission.details.html'
 })
 
 export class PermissionDetailsComponent {
+  public allRoles: any;
+  private newRole: any = {};
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private names: any;
+  private selectedAll: any;
+
+  constructor(private router: Router,
+    private store: Store<AppState>,
+    private _location: Location,
+    private permissionActions: PermissionActions
+  ) {
+    this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((role) => {
+      this.newRole = role.newRole;
+      this.allRoles = role.roles;
+    });
+  }
+
+  public goToRoles() {
+    this._location.back();
+  }
+
+  public checkIfAllSelected() {
+    this.selectedAll = this.names.every(function (item: any) {
+      return item.selected === true;
+    });
+  }
+
+  public addNewRole(): any {
+    this.store.dispatch(this.permissionActions.SaveNewRole(this.newRole));
+    this.router.navigate(['/pages', 'permissions']);
+  }
 }
