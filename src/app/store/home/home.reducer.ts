@@ -1,4 +1,4 @@
-import { HomeActions } from '../../services/actions/home.actions';
+import { HomeActions } from '../../services/actions/home/home.actions';
 import { Action } from '@ngrx/store';
 
 export interface HomeState {
