@@ -3,8 +3,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PermissionActions } from '../../services/actions/permission/permission.action';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
+import { PermissionActions } from '../../../services/actions/permission/permission.action';
 
 export interface Permission {
     code: string;
