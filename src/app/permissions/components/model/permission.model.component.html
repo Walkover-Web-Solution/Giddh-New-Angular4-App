@@ -42,8 +42,8 @@
 
         <div class="form-group" *ngIf="roleType=='copy'">
           <label>Copy Permission</label>
-          <select class="form-control" name="somename">
-              <option value="{{role.name}}" *ngFor="let role of allRoles"> {{ role.name }} </option>
+          <select class="form-control" name="somename" [(ngModel)]="copiedRole">
+              <option value="{{role | json}}" *ngFor="let role of allRoles"> {{ role.name }} </option>
           </select>
         </div>
 
