@@ -25,16 +25,16 @@ export class SelectRoleTableComponent {
   private selectedAll: boolean;
   // TODO: This should be created dynamically
   private checkBoxes = {
-    RECURRING_ENTRY: ChkboxDefination,
-    INVENTORY: ChkboxDefination,
-    DASHBOARD: ChkboxDefination,
-    SEARCH: ChkboxDefination,
-    INVOICE: ChkboxDefination,
-    AUDIT_LOGS: ChkboxDefination,
-    REPORT: ChkboxDefination,
-    LEDGER: ChkboxDefination,
-    MANAGE: ChkboxDefination,
-    SETTINGS: ChkboxDefination
+    RECURRING_ENTRY: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    INVENTORY: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    DASHBOARD: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    SEARCH: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    INVOICE: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    AUDIT_LOGS: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    REPORT: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    LEDGER: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    MANAGE: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
+    SETTINGS: { view: false, edit: false, delete: false, create: false, share: false, checkAll: false },
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -157,4 +157,27 @@ export class SelectRoleTableComponent {
     }
     console.log('Inside sselectAll the this.newScope is :', this.newScope);
   }
+
+  // public neighbourhoods = [{"name":"Taito"},{"name":"Shinjuku"},{"name":"Shibuya"}];
+
+  public toggleSelect = function (pageName: string, event: any) {
+    console.log('The this.role is :', this.role);
+    let indx = this.role.scopes.findIndex((obj) => obj.name === pageName);
+    if (indx !== -1) {
+      this.role.scopes[indx].permissions.forEach(function (item) {
+        item.selected = event.target.checked;
+      });
+    }
+    // this.role[pageName].forEach(function (item) {
+    //   console.log('Hello the ITEM ', item);
+    //   item.selected = event.target.checked;
+    // });
+  };
+
+  // public ApplyFilters(isValid: boolean) {
+  //   let datas = this.neighbourhoods.filter(function (data) { return data.selected == true });
+  //   console.log(datas);
+  //   if (!isValid) { return; }
+  // }
+
 }
