@@ -6,9 +6,9 @@ import { FormsModule } from '@angular/forms';
 import { PermissionComponent } from './permission.component';
 import { PermissionListComponent } from './components/list/permission.list.component';
 import { PermissionDetailsComponent } from './components/details/permission.details.component';
-import { PermissionModelComponent } from './model/permission.model.component';
-import { DeleteRoleConfirmationModelComponent } from './model/confirmation/confirmation.model.component';
 import { SelectRoleTableComponent } from './components/table/table.component';
+import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
+import { PermissionModelComponent } from './components/model/permission.model.component';
 
 const PERMISSION_ROUTES: Routes = [
   {
