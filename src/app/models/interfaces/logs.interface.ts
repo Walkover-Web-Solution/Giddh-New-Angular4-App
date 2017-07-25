@@ -1,5 +1,5 @@
 import { IUserInfo } from './userInfo.interface';
-import { IReconcileTransaction } from './ledger.interface';
+import { ILedgerTransactionItem } from './ledger.interface';
 
 /**
  * interface for logs request
@@ -45,7 +45,7 @@ export interface ILogConcise {
   voucherNo: number;
   entryDate: string;
   sharedWith: IUser;
-  transactions: IReconcileTransaction[];
+  transactions: ILedgerTransactionItem[];
   old: IOld;
   updated: IOld;
 }
