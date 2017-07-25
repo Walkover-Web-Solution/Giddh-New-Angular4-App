@@ -29,9 +29,9 @@ export class PermissionDetailsComponent {
     private _location: Location,
     private permissionActions: PermissionActions
   ) {
-    this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((role) => {
-      this.newRole = role.newRole;
-      this.allRoles = role.roles;
+    this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
+      this.newRole = permission.newRole;
+      this.allRoles = permission.roles;
     });
   }
 

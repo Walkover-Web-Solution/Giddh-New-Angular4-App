@@ -60,6 +60,7 @@ export class PermissionListComponent implements OnInit {
 
     public closePopupEvent(data) {
         this.permissionModel.hide();
+        this.router.navigate(['/pages', 'permissions', 'details']);
     }
 
     public deleteRole(roleUniqueName) {
