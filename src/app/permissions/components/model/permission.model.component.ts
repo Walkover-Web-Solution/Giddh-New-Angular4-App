@@ -124,6 +124,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         let isChecked = event.target.checked;
         if (isChecked) {
             this.isSelectedAllPages = true;
+            this.selectedPages = [];
             this.pageNames.forEach((obj) => {
                 obj.selected = true;
                 this.selectedPages.push(obj.name);
