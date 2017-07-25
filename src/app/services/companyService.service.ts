@@ -107,7 +107,7 @@ export class CompanyService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(COMPANY_API.GET_COMPANY_USERS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
       let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
       return data;
     }).catch((e) => HandleCatch<AccountSharedWithResponse[], string>(e));

@@ -1,9 +1,14 @@
 import { Configuration } from '../../app.constant';
+const UNIVERSAL_URI_LEDGER = Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/';
 
 export const LEDGER_API = {
-  CREATE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers', // post call
-  MAIL_LEDGER: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/mail', // post call
+  // ledger methods get,create,delete,update
+  GET: UNIVERSAL_URI_LEDGER + 'transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to',
+  CREATE: UNIVERSAL_URI_LEDGER,
+  UNIVERSAL: UNIVERSAL_URI_LEDGER + ':entryUniqueName',
+  // ledger utility related mail,share
+  MAIL_LEDGER: UNIVERSAL_URI_LEDGER + 'mail', // post call
+  // get call
+  RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
   DOWNLOAD_INVOICE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
-  TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to', // get call
-  RECONCILE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/reconcile', // get call
 };

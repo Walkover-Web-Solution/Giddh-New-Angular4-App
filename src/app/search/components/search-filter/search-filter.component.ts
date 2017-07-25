@@ -80,7 +80,7 @@ export class SearchFilterComponent implements OnInit, OnDestroy {
 
   public removeSearchRow() {
     let arr = this.searchQueryForm.controls['searchQuery'] as FormArray;
-    arr.controls.splice(-1, 1);
+    arr.removeAt(-1);
   }
 
 }
