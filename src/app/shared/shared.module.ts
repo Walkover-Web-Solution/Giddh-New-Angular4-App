@@ -31,6 +31,7 @@ import { GroupAddComponent } from './header/components/group-add/group-add.compo
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
+import { checkscrollY } from "./helpers/directives/checkscroll";
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -42,7 +43,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, checkscrollY
   ],
   imports: [
     CommonModule,
@@ -66,7 +67,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
     BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
-    Daterangepicker, DigitsOnlyDirective, ChartModule],
+    Daterangepicker, DigitsOnlyDirective, ChartModule, checkscrollY],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent]
 })
