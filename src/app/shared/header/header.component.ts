@@ -1,7 +1,9 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Subject } from 'rxjs/Rx';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, ComponentFactoryResolver, ViewChildren } from '@angular/core';
+import {
+  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild,
+  ViewChildren
+} from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -16,13 +18,17 @@ import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
+import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html'
 })
-export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
+export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public session$: Observable<boolean>;
+  public accountSearchValue: string = '';
+  public accountSearchControl: FormControl = new FormControl();
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
   @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
@@ -32,7 +38,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild('deleteCompanyModal') public deleteCompanyModal: ModalDirective;
   public title: Observable<string>;
-  public flyAccounts: Subject<boolean> = new Subject<boolean>();
+  public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
     { name: 'ENGLISH', value: 'en' },
@@ -47,7 +53,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
-
   public userName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -55,14 +60,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
    *
    */
   // tslint:disable-next-line:no-empty
-  constructor(
-    private loginAction: LoginActions,
+  constructor(private loginAction: LoginActions,
     private store: Store<AppState>,
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router
-    ,
-    private componentFactoryResolver: ComponentFactoryResolver) {
+    private router: Router,
+    private flyAccountActions: FlyAccountsActions,
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private cdRef: ChangeDetectorRef) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -86,11 +91,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       });
     }).takeUntil(this.destroyed$);
     this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
+
   }
 
-  // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    console.log('header');
     this.store.dispatch(this.loginAction.LoginSuccess());
     this.user$.subscribe((u) => {
       if (u) {
@@ -103,19 +107,27 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       }
     });
-
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
+    this.accountSearchControl.valueChanges
+      .debounceTime(1000)
+      .subscribe((newValue) => {
+        this.accountSearchValue = newValue;
+        this.filterAccounts(newValue);
+      });
   }
 
-  // tslint:disable-next-line:no-empty
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
       if (!s) {
         this.router.navigate(['/login']);
       }
     });
+  }
+
+  public ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   public showManageGroupsModal() {
@@ -178,12 +190,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
     this.store.dispatch(this.loginAction.LogOut());
 
   }
+
   public onHide() {
     this.store.dispatch(this.companyActions.ResetCompanyPopup());
   }
+
   public onShown() {
     //
   }
+
   public loadAddCompanyComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(CompanyAddComponent);
     let viewContainerRef = this.companyadd.viewContainerRef;
@@ -196,6 +211,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       this.hideCompanyModalAndShowAddAndManage();
     });
   }
+
   public loadAddManageComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(ManageGroupsAccountsComponent);
     let viewContainerRef = this.addmanage.viewContainerRef;
@@ -208,6 +224,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy {
       (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
       (componentRef.instance as ManageGroupsAccountsComponent).myModelRect = (componentRef.instance as ManageGroupsAccountsComponent).myModel.nativeElement.getBoundingClientRect();
     }));
+  }
+
+  public filterAccounts(q: string) {
+    this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
+  }
+
+  public closeSidebar(targetId) {
+    if (targetId === 'accountSearch' || targetId === 'expandAllGroups') {
+      return;
+    }
+    this.flyAccounts.next(false);
   }
 
   public ngOnDestroy() {

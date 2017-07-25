@@ -31,22 +31,22 @@ export class LedgerRequest implements ILedger {
  * API:: ( Create ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
  */
 export class LedgerResponse {
-  transactions: IReconcileTransaction[];
-  total: IClosingBalance;
-  uniqueName: string;
-  voucherNo: number;
-  chequeClearanceDate?: string;
-  taxes: string[];
-  entryDate?: string;
-  invoiceNumber?: string;
-  invoiceGenerated: boolean;
-  attachedFileName?: string;
-  unconfirmedEntry: boolean;
-  voucher: IVoucherItem;
-  attachedFile?: string;
-  chequeNumber?: string;
-  tag?: string;
-  description?: string;
+  public transactions: IReconcileTransaction[];
+  public total: IClosingBalance;
+  public uniqueName: string;
+  public voucherNo: number;
+  public chequeClearanceDate?: string;
+  public taxes: string[];
+  public entryDate?: string;
+  public invoiceNumber?: string;
+  public invoiceGenerated: boolean;
+  public attachedFileName?: string;
+  public unconfirmedEntry: boolean;
+  public voucher: IVoucherItem;
+  public attachedFile?: string;
+  public chequeNumber?: string;
+  public tag?: string;
+  public description?: string;
 }
 
 /*
@@ -74,22 +74,20 @@ export class DownloadLedgerRequest {
  * GET call
  * API:: ( Export Ledger ) company/:companyUniqueName/accounts/:accountUniqueName/export-ledger
  * you can also pass three query arameters parameters as
- * 1) fromDate: this will be starting date
+ * 1) from: this will be starting date
  * 2) ltype: layout type values [ 'admin-detailed', 'admin-condensed', view-detailed]
- * 3) toDate: this will be ending date
+ * 3) to: this will be ending date
  * Reponse will be base 64 encoded string in body
  */
-
-
 
 /*
  * Model for transactions api response
  * GET call
- * API:: ( transactions ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/transactions?count=:count&fromDate=:fromDate&page=:page&q=:q&reversePage=:reversePage&sort=:sort&toDate=:toDate
+ * API:: ( transactions ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to
  * you can also pass query arameters parameters as
- * 1) fromDate: this will be starting date
+ * 1) from: this will be starting date
  * 2) count: number per page sent 15
- * 3) toDate: this will be ending date
+ * 3) to: this will be ending date
  * 4) q: query
  * 5) reversePage: boolean
  * 6) sort= asc or desc
@@ -111,7 +109,16 @@ export class TransactionsResponse implements ITransactions {
   public totalItems: number;
   public totalPages: number;
 }
-
+export class TransactionsRequest {
+  public q: string = '';
+  public page: number = 0;
+  public count: number = 15;
+  public accountUniqueName: string = '';
+  public from: string = '';
+  public to: string = '';
+  public sort: string = 'asc';
+  public reversePage: boolean = false;
+}
 export class ReconcileResponse {
   public transactions: IReconcileTransaction[];
   public total: object;

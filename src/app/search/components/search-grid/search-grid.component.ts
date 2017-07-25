@@ -104,7 +104,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _companyServices: CompanyService, private _toaster: ToasterService) {
     this.searchResponse$ = this.store.select(p => p.search.value);
     // this.searchResponse$.subscribe(p => this.searchResponseFiltered$ = this.searchResponse$);
-    this.searchResponseFiltered$ = this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => (false ? -1 : 1) * a['name'].toString().localeCompare(b['name'])));
+    this.searchResponseFiltered$ = this.searchResponse$.map(p => _.cloneDeep(p).sort((a, b) => a['name'].toString().localeCompare(b['name'])));
     this.searchLoader$ = this.store.select(p => p.search.searchLoader);
     this.search$ = this.store.select(p => p.search.search);
     this.searchRequest$ = this.store.select(p => p.search.searchRequest);
@@ -256,7 +256,12 @@ export class SearchGridComponent implements OnInit, OnDestroy {
   // Send Email/Sms for Accounts
   public send() {
     let accountsUnqList = [];
-    this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
+    this.searchResponseFiltered$.take(1).subscribe(p => {
+      p.map(i => accountsUnqList.push(i.uniqueName));
+    });
+    accountsUnqList = _.uniq(accountsUnqList);
+    // this.searchResponse$.forEach(p => accountsUnqList.push(_.reduce(p, (r, v, k) => v.uniqueName, '')));
+
     this.searchRequest$.take(1).subscribe(p => {
       if (isNullOrUndefined(p)) {
         return;
@@ -273,10 +278,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       };
       if (this.messageBody.btn.set === 'Send Email') {
         return this._companyServices.sendEmail(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.message) : this._toaster.errorToast(r.message));
+          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
       } else if (this.messageBody.btn.set === 'Send Sms') {
         return this._companyServices.sendSms(request)
-          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.message) : this._toaster.errorToast(r.message));
+          .subscribe((r) => r.status === 'success' ? this._toaster.successToast(r.body) : this._toaster.errorToast(r.message));
       }
     });
     this.mailModal.hide();

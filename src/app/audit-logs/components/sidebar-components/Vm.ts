@@ -13,7 +13,7 @@ export class AuditLogsSidebarVM {
     multiple: false,
     width: '100%',
     placeholder: 'Select Option',
-    allowClear: true,
+    allowClear: true
   };
   public moment = moment;
   public filters: any[] = [
@@ -72,7 +72,7 @@ export class AuditLogsSidebarVM {
     this.selectedLogDate = moment().toDate();
     this.selectedEntryDate = moment().toDate();
     this.logOrEntry = 'entryDate';
-    this.selectedDateOption = '0';
+    this.selectedDateOption = '';
 
   }
 }
