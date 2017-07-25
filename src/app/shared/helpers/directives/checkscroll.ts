@@ -1,26 +1,28 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
-import { DOCUMENT } from '@angular/platform-browser';
+import { Directive, HostListener, OnInit } from '@angular/core';
 
 @Directive({
   selector: '[checkscrollY]'
 })
-export class checkscrollY implements OnInit {
+export class CheckscrollDirective implements OnInit {
 
-  constructor (elem: ElementRef) {}
+  constructor() {
+  //
+  }
 
-  ngOnInit() { }
+  public ngOnInit() {
+    //
+  }
 
   @HostListener('scroll', ['$event, ElementRef'])
-  onScroll(event) {
+  public onScroll(event) {
     let ele = event.target;
     let scroll = $(ele).scrollTop();
-    
-      // check if target(ul) has scoll
-      if ($(ele).hasClass("fix")) {
-        return 0
-      }
-      else if (scroll <= 20) {
-        $(ele).addClass("fix");
-      }
+
+    // check if target(ul) has scoll
+    if ($(ele).hasClass('fix')) {
+      return 0;
+    } else if (scroll <= 20) {
+      $(ele).addClass('fix');
+    }
   }
 }
