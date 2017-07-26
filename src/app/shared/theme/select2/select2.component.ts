@@ -34,7 +34,7 @@ export const SELECT2_VALUE_ACCESSOR: any = {
   template: '<select #selector></select>',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [SELECT2_VALUE_ACCESSOR],
+  providers: [SELECT2_VALUE_ACCESSOR]
 })
 export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, OnInit, ControlValueAccessor {
   @ViewChild('selector') public selector: ElementRef;
@@ -66,10 +66,13 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 
   constructor(public renderer: Renderer, public cd: ChangeDetectorRef) {
   }
+
   // tslint:disable-next-line:no-empty
-  public onChangeCb: (_: any) => void = (e) => { };
+  public onChangeCb: (_: any) => void = (e) => {
+  }
   // tslint:disable-next-line:no-empty
-  public onTouchedCb: () => void = () => { };
+  public onTouchedCb: () => void = () => {
+  }
 
   public writeValue(value: any): void {
     if (value !== undefined && value !== '' && this.element !== undefined) {
@@ -136,10 +139,20 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
 
     this.element.on('select2:select select2:unselect ', (event) => {
       if (event.type === 'select2:unselect') {
-        this.onChangeCb('');
-        this.value = '';
-        that.valueChanged.emit({
-          value: ''
+        if (this.options.multiple !== true) {
+          this.onChangeCb(null);
+          this.onTouchedCb();
+          this.valueChanged.emit({
+            value: null,
+            // data: []
+          });
+          return;
+        }
+        this.onChangeCb(this.element.val());
+        this.onTouchedCb();
+        this.valueChanged.emit({
+          value: this.element.val(),
+          // data: this.element.select2('data')
         });
       } else {
         this.onChangeCb(that.element.val());

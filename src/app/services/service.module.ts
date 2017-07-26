@@ -38,6 +38,11 @@ import { InventoryAction } from './actions/inventory/inventory.actions';
 import { SearchActions } from './actions/search.actions';
 import { SearchService } from './search.service';
 import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
+import { FlyAccountsActions } from './actions/fly-accounts.actions';
+import { TlPlService } from './tl-pl.service';
+import { TlPlActions } from './actions/tl-pl.actions';
+import { LedgerActions } from './actions/ledger/ledger.actions';
+import { LedgerService } from './ledger.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -58,7 +63,10 @@ import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
     EffectsModule.run(StockReportActions),
     EffectsModule.run(SearchActions),
     EffectsModule.run(AuditLogsActions),
-    EffectsModule.run(PermissionActions)
+    EffectsModule.run(PermissionActions),
+    EffectsModule.run(FlyAccountsActions),
+    EffectsModule.run(TlPlActions),
+    EffectsModule.run(LedgerActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -82,7 +90,9 @@ export class ServiceModule {
         PermissionService,
         ErrorHandler,
         SearchService,
-        LogsService
+        LogsService,
+        TlPlService,
+        LedgerService
       ]
     };
   }

@@ -2,29 +2,31 @@
 
   <div class="modal-header themeBg" #header>
     <button type="button" class="close" data-dismiss="modal" (click)="closePopupEvent()" aria-label="Close"><span aria-hidden="true">×</span></button>
-    <h3 class="modal-title">Manage Groups &amp; Accounts</h3>
+    <h3 class="modal-title bg">Manage Groups &amp; Accounts</h3>
   </div>
   <!-- end header -->
 
-  <div class="modal-body pd0" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect ? (headerRect.height + 20): 0 ))+'px'}">
-    <div class="clearfix" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+  <div class="modal-body pd0">
+    <div class="clearfix height100">
 
-      <div class="grp_col bdrL bdrR pd0" style="max-width:58.333%;height:auto" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
-        <div class="search-loading0" *ngIf="(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+      <div class="grp_col pd0 height100" style="max-width:58.333%;">
+        <div class="search-loading" *ngIf="(searchLoad | async)">
+          <div class="vcenter">
           <span class="spinner small"></span> Loading…
+          </div>
         </div>
-        <div [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
+        <div>
           <!-- ngIf: showListGroupsNow -->
-          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px','width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
-            <groups-account-sidebar #groupsidebar [groups]="(groupList$ | async)" (ScrollToRight)="ScrollToRight()"></groups-account-sidebar>
+          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
+            <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [groups]="(groupList$ | async)"></groups-account-sidebar>
           </div>
           <!-- end ngIf: showListGroupsNow -->
         </div>
 
       </div>
       <!-- middle body -->
-      <div class="form_box" style="height:auto;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}">
-        <account-operations (ShowForm)="ShowRightForm($event)" #form [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height + 20):0))+'px'}"></account-operations>
+      <div class="form_box height100">
+        <account-operations [columnsRef]="currentColumns" (ShowForm)="ShowRightForm($event)" #form></account-operations>
       </div>
 
 

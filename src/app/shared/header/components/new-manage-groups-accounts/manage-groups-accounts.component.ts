@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 
 @Component({
   selector: 'app-manage-groups-accounts',
@@ -31,9 +32,8 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public searchLoad: Observable<boolean>;
 
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
-
+  public currentColumns: GroupAccountSidebarVM;
   public psConfig: PerfectScrollbarConfigInterface;
-  public addNewAccountForm: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef) {

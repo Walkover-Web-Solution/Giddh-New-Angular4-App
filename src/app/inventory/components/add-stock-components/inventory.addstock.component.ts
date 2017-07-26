@@ -6,12 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Observable } from 'rxjs/Observable';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  decimalDigits,
-  digitsOnly,
-  stockManufacturingDetailsValidator,
-  uniqueNameValidator
-} from '../../../shared/helpers/customValidationHelper';
+import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator, uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
@@ -53,6 +48,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public isStockUpdateInProcess$: Observable<boolean>;
   public isStockDeleteInProcess$: Observable<boolean>;
   public showLoadingForStockEditInProcess$: Observable<boolean>;
+  public showManufacturingItemsError: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
@@ -137,7 +133,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         this.initUnitAndRates()
       ]),
       manufacturingDetails: this._fb.group({
-        manufacturingQuantity: ['', [Validators.required]],
+        manufacturingQuantity: ['', [Validators.required, digitsOnly]],
         manufacturingUnitCode: ['', [Validators.required]],
         linkedStocks: this._fb.array([]),
         linkedStockUniqueName: [''],
@@ -197,7 +193,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (a.purchaseAccountDetails) {
           this.addStockForm.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
-          // render unit rates
+          // render purchase unit rates
           a.purchaseAccountDetails.unitRates.map((item, i) => {
             this.addPurchaseUnitRates(i, item);
           });
@@ -206,7 +202,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         if (a.salesAccountDetails) {
           this.addStockForm.patchValue({ salesAccountUniqueName: a.salesAccountDetails.accountUniqueName });
 
-          // render unit rates
+          // render sale unit rates
           a.salesAccountDetails.unitRates.map((item, i) => {
             this.addSaleUnitRates(i, item);
           });
@@ -371,6 +367,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     } else {
       if (manufacturingDetailsContorl.value.linkedStockUniqueName && manufacturingDetailsContorl.value.linkedStockUnitCode && manufacturingDetailsContorl.value.linkedQuantity) {
+        this.showManufacturingItemsError = false;
         let obj = new IStockItemDetail();
         obj.stockUniqueName = manufacturingDetailsContorl.value.linkedStockUniqueName;
         obj.stockUnitCode = manufacturingDetailsContorl.value.linkedStockUnitCode;
@@ -382,6 +379,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         manufacturingDetailsContorl.controls['linkedStockUniqueName'].reset();
         manufacturingDetailsContorl.controls['linkedStockUnitCode'].reset();
         manufacturingDetailsContorl.controls['linkedQuantity'].reset();
+      } else {
+        this.showManufacturingItemsError = true;
       }
     }
   }

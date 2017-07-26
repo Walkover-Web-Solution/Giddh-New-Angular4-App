@@ -1,0 +1,17 @@
+<div id="live" ng-init="getHistory(fromDate,toDate)">
+  <div class="panel panel-default shadow">
+    <div class="panel-heading">
+      <label>History (Revenue vs. Expense)</label><i class="glyphicon glyphicon-refresh pull-right"
+                                                     ng-click="getHistory(fromDate,toDate)"></i>
+    </div>
+    <div class="panel-body pos-rel">
+      <div class="dashboard-reconnectdiv" *ngIf="false">
+        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+        <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
+      </div>
+      <div class="chart-div" google-chart chart="chartData">
+        <chart [options]="options"></chart>
+      </div>
+    </div>
+  </div>
+</div>

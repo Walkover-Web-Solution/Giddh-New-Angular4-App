@@ -1,0 +1,131 @@
+<!-- loader -->
+<div class="loader" *ngIf="showTbplLoader">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+
+  <h1>loading ledger</h1>
+</div>
+
+<!-- no data start -->
+<div class="no-data" *ngIf="noData">
+  <h1>Sorry, No Data Found!</h1>
+  <img src="/assets/images/no-data.png" alt="">
+</div>
+<!-- nodata end -->
+
+<div *ngIf="!showTbplLoader">
+  <div *ngIf="!noData">
+    <div class="pd15">
+      <div class="row mrB2">
+        <div class="form-inline col-xs-6">
+          <div class="form-group mrR2">
+            <div class="input-group input-group-md">
+              <span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-search"></i></span>
+              <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3"
+                     ng-model="keyWord.query" trial-accordion='search' ng-keyup="logInputLength(keyWord.query)">
+              <i class="glyphicon glyphicon-remove close-icon" *ngIf="showClearSearch"></i>
+            </div>
+          </div>
+          <tl-pl-export-csv></tl-pl-export-csv>
+          <tl-pl-export-pdf></tl-pl-export-pdf>
+          <tl-pl-export-xls></tl-pl-export-xls>
+        </div>
+        <!-- end of column -->
+        <div class="col-xs-6">
+          <div class="pull-right">
+            <button class="btn btn-default mrL1" (click)="expandAll()">Expand All</button>
+            <button class="btn btn-default mrL1" (click)="collapseAll()">Collapse All</button>
+          </div>
+        </div>
+        <!-- end of column -->
+      </div>
+      <!-- end of row -->
+      <!-- End Head -->
+      <!-- start main content -->
+      <div class="table-container clearfix trial-balance">
+        <table class="col-xs-12 tb-head">
+          <thead>
+          <tr>
+            <th class="col-xs-4">Particular</th>
+            <th class="col-xs-2">Opening Bal</th>
+            <th class="col-xs-4 text-center">
+              Transactions
+              <table class="col-xs-12">
+                <thead>
+                <tr>
+                  <th class="col-xs-6 text-left">Debit(Dr.)</th>
+                  <th class="col-xs-6 text-left">Credit(Cr.)</th>
+                </tr>
+                </thead>
+              </table>
+            </th>
+            <th class="col-xs-2">Closing Bal</th>
+          </tr>
+          </thead>
+        </table>
+
+        <!--Start Grid-->
+        <section class="row row-1" *ngFor="let grp of (data$ | async).groupDetails" [ngClass]="grp.category"
+                 tl-pl-grid-row [groupDetail]="grp">
+          <section class="row " [ngClass]="{'isHidden': !grp.isVisible }" style="padding-left:30px"
+                   *ngIf="grp.childGroups.length">
+            <section class="row row-2" tl-pl-grid-row *ngFor="let childGroup of grp.childGroups"
+                     [groupDetail]="childGroup">
+              <section class="subGroups " *ngIf="childGroup.childGroups.length"
+                       style="padding-left:30px">
+                <section class="row row-2" tl-pl-grid-row *ngFor="let subChildGroup of grp.childGroups"
+                         [groupDetail]="subChildGroup" [ngClass]="{'isHidden': !subChildGroup.isVisible }">
+                </section>
+              </section>
+            </section>
+          </section>
+        </section>
+        <!--<section class="row row-1"-->
+        <!--*ngFor="let grp of (data$ | async).groupDetails"-->
+        <!--[ngClass]="grp.category">-->
+          <!--&lt;!&ndash; filter:filterTBSearch:index:data  &ndash;&gt;-->
+          <!--&lt;!&ndash; |  tbsearch:keyWord | filter:filterTBSearch:tbsearch &ndash;&gt;-->
+
+
+        <!--</section>-->
+        <!--End Grid-->
+        <div class="table-responsive">
+          <table class="table bdrL bdrR">
+            <thead>
+            <tr>
+              <th class="col-xs-4">
+                <span class="pdL1">Grand Total</span>
+              </th>
+              <th class="col-xs-2  text-right">{{ (data$ | async).forwardedBalance?.amount | number:'1.2-2' }}</th>
+              <th class="col-xs-4">
+                <table class="col-xs-12">
+                  <thead>
+                  <tr>
+                    <th class="col-xs-6 text-right">{{ (data$ | async).debitTotal | number:'1.2-2' }}</th>
+                    <th class="col-xs-6 text-right">{{ (data$ | async).creditTotal | number:'1.2-2' }}</th>
+                  </tr>
+                  </thead>
+                </table>
+              </th>
+              <th class="col-xs-2  text-right">
+                <span class="pdR1">{{  (data$ | async).closingBalance?.amount | number:'1.2-2' }}</span>
+              </th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+
+      <!-- end main content -->
+
+      <!-- start template trial bal -->
+      <!--<script type="text/ng-template" id="trialBalSubGroup">-->
+
+      <!--</script>-->
+      <!-- end template -->
+    </div>
+  </div>
+</div>

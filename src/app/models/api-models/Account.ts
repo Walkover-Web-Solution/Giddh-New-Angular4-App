@@ -90,7 +90,7 @@ export class AccountMergeRequest {
  */
 export class AccountUnMergeRequest {
   public uniqueNames: string[];
-  public moveTo: string;
+  public moveTo?: string;
 }
 
 /*

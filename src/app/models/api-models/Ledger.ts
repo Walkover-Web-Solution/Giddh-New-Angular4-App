@@ -1,4 +1,4 @@
-import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IReconcileTransaction, IVoucherItem } from '../interfaces/ledger.interface';
+import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IVoucherItem, ITotalItem } from '../interfaces/ledger.interface';
 
 /*
  * Model for ledger create api request
@@ -9,44 +9,62 @@ import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosi
  * its response wil be array of LedgerResponse
  */
 export class LedgerRequest implements ILedger {
-  public transactions: ILedgerTransactionItem[];
-  public voucherType: string;
-  public entryDate: string;
-  public taxes?: string[];
   public applyApplicableTaxes?: boolean;
-  public isInclusiveTax?: boolean;
-  public unconfirmedEntry?: boolean;
   public attachedFile?: string;
-  public tag?: string;
-  public description?: string;
-  public generateInvoice?: boolean;
+  public attachedFileName?: string;
+  public compoundTotal?: number;
   public chequeNumber?: string;
-  public clearanceDate?: string;
-  public invoiceRequest?: IInvoiceRequest;
+  public chequeClearanceDate?: string;
+  public description?: string;
+  public entryDate: string;
+  public generateInvoice?: boolean;
+  public isInclusiveTax?: boolean;
+  public tag?: string;
+  public taxes?: string[];
+  public transactions: ILedgerTransactionItem[];
+  public unconfirmedEntry?: boolean;
+  public voucher: IVoucherItem;
+  public voucherType: string;
 }
 
 /*
- * Model for Create ledger api response
- * POST call
+ * Model for update ledger transaction api request
+ * PUT call
+ * API:: ( mail ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
+ * its response will be success message in body in single object of LedgerResponse
+ */
+export class LedgerUpdateRequest extends LedgerRequest {
+  public invoiceNumber: string;
+  public invoiceGenerated: boolean;
+  public total: ITotalItem;
+  public voucherNo: string;
+}
+
+/*
+ * Model for Create, Update ledger entry api response
+ * POST, PUT, GET call
+ * Note:: while POST and GET LedgerResponse will be in array in body, and while put it will be a object in body
  * API:: ( Create ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers
+ * API:: ( Update ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
+ * API:: ( Get single transaction detail in ledger ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/:entryUniqueName
  */
 export class LedgerResponse {
-  transactions: IReconcileTransaction[];
-  total: IClosingBalance;
-  uniqueName: string;
-  voucherNo: number;
-  chequeClearanceDate?: string;
-  taxes: string[];
-  entryDate?: string;
-  invoiceNumber?: string;
-  invoiceGenerated: boolean;
-  attachedFileName?: string;
-  unconfirmedEntry: boolean;
-  voucher: IVoucherItem;
-  attachedFile?: string;
-  chequeNumber?: string;
-  tag?: string;
-  description?: string;
+  public attachedFile?: string;
+  public attachedFileName?: string;
+  public chequeClearanceDate?: string;
+  public chequeNumber?: string;
+  public description?: string;
+  public entryDate?: string;
+  public invoiceGenerated: boolean;
+  public invoiceNumber?: string;
+  public tag?: string;
+  public taxes: string[];
+  public total: IClosingBalance;
+  public transactions: ILedgerTransactionItem[];
+  public unconfirmedEntry: boolean;
+  public uniqueName: string;
+  public voucher: IVoucherItem;
+  public voucherNo: number;
 }
 
 /*
@@ -74,22 +92,20 @@ export class DownloadLedgerRequest {
  * GET call
  * API:: ( Export Ledger ) company/:companyUniqueName/accounts/:accountUniqueName/export-ledger
  * you can also pass three query arameters parameters as
- * 1) fromDate: this will be starting date
+ * 1) from: this will be starting date
  * 2) ltype: layout type values [ 'admin-detailed', 'admin-condensed', view-detailed]
- * 3) toDate: this will be ending date
+ * 3) to: this will be ending date
  * Reponse will be base 64 encoded string in body
  */
-
-
 
 /*
  * Model for transactions api response
  * GET call
- * API:: ( transactions ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/transactions?count=:count&fromDate=:fromDate&page=:page&q=:q&reversePage=:reversePage&sort=:sort&toDate=:toDate
+ * API:: ( transactions ) company/:companyUniqueName/accounts/:accountUniqueName/ledgers/transactions?count=:count&from=:from&page=:page&q=:q&reversePage=:reversePage&sort=:sort&to=:to
  * you can also pass query arameters parameters as
- * 1) fromDate: this will be starting date
+ * 1) from: this will be starting date
  * 2) count: number per page sent 15
- * 3) toDate: this will be ending date
+ * 3) to: this will be ending date
  * 4) q: query
  * 5) reversePage: boolean
  * 6) sort= asc or desc
@@ -111,9 +127,18 @@ export class TransactionsResponse implements ITransactions {
   public totalItems: number;
   public totalPages: number;
 }
-
+export class TransactionsRequest {
+  public q: string = '';
+  public page: number = 0;
+  public count: number = 15;
+  public accountUniqueName: string = '';
+  public from: string = '';
+  public to: string = '';
+  public sort: string = 'asc';
+  public reversePage: boolean = false;
+}
 export class ReconcileResponse {
-  public transactions: IReconcileTransaction[];
+  public transactions: ILedgerTransactionItem[];
   public total: object;
   public attachedFile: string;
   public invoiceGenerated: boolean;
