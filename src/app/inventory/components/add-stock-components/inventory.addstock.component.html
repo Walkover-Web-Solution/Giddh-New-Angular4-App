@@ -63,7 +63,7 @@
             </div>
 
             <div formArrayName="purchaseUnitRates">
-              <div class="row mrB1" *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index">
+              <div class="row mrB1" *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index;let f = first; let l = last">
                 <div [formGroupName]="i">
                   <div class="col-xs-5">
                     <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
@@ -73,8 +73,8 @@
                   </div>
                 </div>
                 <div class="col-xs-2 mutliple_unit">
-                  <button (click)="addPurchaseUnitRates(i)"><i class="fa fa-plus add_row"></i></button>
-                  <button (click)="removePurchaseUnitRates(i)"><i class="fa fa-times dlet"></i></button>
+                  <button (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
+                  <button (click)="removePurchaseUnitRates(i)" *ngIf="f && !l"><i class="fa fa-times dlet"></i></button>
                 </div>
               </div>
             </div>
@@ -99,7 +99,7 @@
             </div>
 
             <div formArrayName="saleUnitRates">
-              <div class="row mrB1" *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index">
+              <div class="row mrB1" *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index; let f = first; let l = last">
                 <div [formGroupName]="i">
                   <div class="col-xs-5">
                     <select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>
@@ -109,8 +109,8 @@
                   </div>
                 </div>
                 <div class="col-xs-2 mutliple_unit">
-                  <button (click)="addSaleUnitRates(i)"><i class="fa fa-plus add_row"></i></button>
-                  <button (click)="removeSaleUnitRates(i)"><i class="fa fa-times dlet"></i></button>
+                  <button (click)="addSaleUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
+                  <button (click)="removeSaleUnitRates(i)" *ngIf="f && !l"><i class="fa fa-times dlet"></i></button>
                 </div>
               </div>
             </div>
@@ -174,9 +174,11 @@
                   </div>
                 </div>
 
-                <div class="clearfix mrT1 mrB1" ng-if="vm.mfsCmbItemErrMsg">
+                <div class="clearfix mrT1 mrB1" *ngIf="showManufacturingItemsError">
                   <div class="col-xs-12">
-                    <!-- <p class="text-warning">{{vm.mfsCmbItemErrMsg}}</p> -->
+                     <p class="text-warning">
+                       All fields are required to add Item
+                     </p>
                   </div>
                 </div>
 

@@ -7,3 +7,4 @@ export * from './groups-recursive-list/groups-recursive-list.component';
 export * from './groups-recursive-list-item/groups-recursive-list-item.component';
 export * from './group-accounts-list/group-accounts-list.component';
 export * from './account-add/account-add.component';
+export * from './account-update/account-update.component';

@@ -1,5 +1,9 @@
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
-import { AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
+import {
+  AccountUnMergeRequest,
+  AccountMergeRequest,
+  AccountsTaxHierarchyResponse
+} from '../../models/api-models/Account';
 import { AccountService } from './../account.service';
 import { AppState } from './../../store/roots';
 import { ToasterService } from './../toaster.service';
@@ -39,6 +43,11 @@ export class AccountsAction {
   public static APPLY_GROUP_TAX_RESPONSE = 'ApplyAccountTaxResponse';
   public static DELETE_ACCOUNT = 'AccountDelete';
   public static DELETE_ACCOUNT_RESPONSE = 'AccountDeleteResponse';
+  public static MERGE_ACCOUNT = 'AccountMerge';
+  public static MERGE_ACCOUNT_RESPONSE = 'AccountMergeResponse';
+
+  public static UNMERGE_ACCOUNT = 'AccountUnMerge';
+  public static UNMERGE_ACCOUNT_RESPONSE = 'AccountUnMergeResponse';
 
   @Effect()
   public ApplyAccountTax$: Observable<Action> = this.action$
@@ -55,7 +64,7 @@ export class AccountsAction {
       let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       this._toasty.successToast(action.payload.body, action.payload.status);
       let accName = null;
@@ -89,7 +98,7 @@ export class AccountsAction {
       }
       this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
       this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-      return { type: '' };
+      return {type: ''};
     });
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
@@ -146,7 +155,7 @@ export class AccountsAction {
         this._toasty.successToast('Account Updated Successfully');
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -187,12 +196,14 @@ export class AccountsAction {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
       } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast(action.payload.body, '');
+        return this.sharedAccountWith(data.queryString.accountUniqueName);
       }
-      return {
-        type: ''
-      };
     });
 
   @Effect()
@@ -265,10 +276,67 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
+        let data: BaseResponse<string, AccountMoveRequest> = action.payload;
         this._toasty.successToast('Account moved successfully', '');
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-        this.store.dispatch(this.groupWithAccountsAction.ResetActiveGroup());
-        this.store.dispatch(this.resetActiveAccount());
+        // let activeGrp: GroupResponse = null;
+        // this.store.select(s => s.groupwithaccounts.activeGroup).take(1).subscribe(p => activeGrp = p);
+        // this.groupWithAccountsAction.getGroupDetails(activeGrp.uniqueName);
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
+  public mergeAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.MERGE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.MergeAccount(
+        action.payload.data,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.mergeAccountResponse(response);
+    });
+  @Effect()
+  public mergeAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.MERGE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+        let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
+        return this.getAccountDetails(data.queryString.accountUniqueName);
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
+  public unMergeAccount$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UNMERGE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.UnmergeAccount(
+        action.payload.data,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.unmergeAccountResponse(response);
+    });
+  @Effect()
+  public unMergeAccountResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UNMERGE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+        let data: BaseResponse<string, AccountUnMergeRequest> = action.payload;
+        return this.getAccountDetails(data.queryString.accountUniqueName);
       }
       return {
         type: ''
@@ -298,13 +366,12 @@ export class AccountsAction {
         type: ''
       };
     });
-  constructor(
-    private action$: Actions,
-    private _accountService: AccountService,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private groupWithAccountsAction: GroupWithAccountsAction
-  ) {
+
+  constructor(private action$: Actions,
+              private _accountService: AccountService,
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private groupWithAccountsAction: GroupWithAccountsAction) {
   }
 
   public createAccount(value: string, account: AccountRequest): Action {
@@ -313,154 +380,204 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
+
   public createAccountResponse(value: BaseResponse<AccountResponse, AccountRequest>): Action {
     return {
       type: AccountsAction.CREATE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
+
   public updateAccount(value: string, account: AccountRequest): Action {
     return {
       type: AccountsAction.UPDATE_ACCOUNT,
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
+
   public updateAccountResponse(value: BaseResponse<AccountResponse, AccountRequest>): Action {
     return {
       type: AccountsAction.UPDATE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
+
   public getAccountDetails(value: string): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_DETAILS,
       payload: value
     };
   }
+
   public getAccountDetailsResponse(value: BaseResponse<AccountResponse, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value
     };
   }
+
   public getAccountUniqueName(value: string): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_UNIQUENAME,
       payload: value
     };
   }
+
   public getAccountUniqueNameResponse(value: BaseResponse<AccountResponse, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE,
       payload: value
     };
   }
+
   public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
     return {
       type: AccountsAction.SHARE_ACCOUNT,
       payload: Object.assign({}, {
         body: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
+
   public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
     return {
       type: AccountsAction.SHARE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
+
   public unShareAccount(value: string, accountUniqueName: string): Action {
     return {
       type: AccountsAction.UNSHARE_ACCOUNT,
       payload: Object.assign({}, {
         user: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
+
   public unShareAccountResponse(value: BaseResponse<string, string>): Action {
     return {
       type: AccountsAction.UNSHARE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
+
   public moveAccount(value: AccountMoveRequest, accountUniqueName: string): Action {
     return {
       type: AccountsAction.MOVE_ACCOUNT,
       payload: Object.assign({}, {
         body: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
+
   public moveAccountResponse(value: BaseResponse<string, AccountMoveRequest>): Action {
     return {
       type: AccountsAction.MOVE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
+
   public sharedAccountWith(accountUniqueName: string): Action {
     return {
       type: AccountsAction.SHARED_ACCOUNT_WITH,
       payload: accountUniqueName
     };
   }
+
   public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): Action {
     return {
       type: AccountsAction.SHARED_ACCOUNT_WITH_RESPONSE,
       payload: value
     };
   }
+
   public resetActiveAccount(): Action {
     return {
       type: AccountsAction.RESET_ACTIVE_ACCOUNT
     };
   }
+
   public getTaxHierarchy(value: string): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_TAX_HIERARCHY,
       payload: value
     };
   }
+
   public getTaxHierarchyResponse(value: BaseResponse<AccountsTaxHierarchyResponse, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_TAX_HIERARCHY_RESPONSE,
       payload: value
     };
   }
+
   public applyAccountTax(value: ApplyTaxRequest): Action {
     return {
       type: AccountsAction.APPLY_GROUP_TAX,
       payload: value
     };
   }
+
   public applyAccountTaxResponse(value: BaseResponse<string, ApplyTaxRequest>): Action {
     return {
       type: AccountsAction.APPLY_GROUP_TAX_RESPONSE,
       payload: value
     };
   }
+
   public deleteAccount(accountUniqueName: string): Action {
     return {
       type: AccountsAction.DELETE_ACCOUNT,
       payload: accountUniqueName
     };
   }
+
   public deleteAccountResponse(value: BaseResponse<string, string>): Action {
     return {
       type: AccountsAction.DELETE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): Action {
+    return {
+      type: AccountsAction.MERGE_ACCOUNT,
+      payload: {accountUniqueName, data}
+    };
+  }
+
+  public mergeAccountResponse(value: BaseResponse<string, AccountMergeRequest[]>): Action {
+    return {
+      type: AccountsAction.MERGE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public unmergeAccount(accountUniqueName: string, data: AccountUnMergeRequest): Action {
+    return {
+      type: AccountsAction.UNMERGE_ACCOUNT,
+      payload: {accountUniqueName, data}
+    };
+  }
+
+  public unmergeAccountResponse(value: BaseResponse<string, AccountUnMergeRequest>): Action {
+    return {
+      type: AccountsAction.UNMERGE_ACCOUNT_RESPONSE,
       payload: value
     };
   }

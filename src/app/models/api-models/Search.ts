@@ -24,6 +24,7 @@ export interface Account {
   openingBalance: OpeningBalance;
   uniqueName: string;
   name: string;
+  isVisible: boolean;
 }
 
 export interface AccountFlat {
@@ -43,11 +44,12 @@ export interface ChildGroup {
   creditTotal: number;
   debitTotal: number;
   closingBalance: ClosingBalance;
-  childGroups: any[];
+  childGroups: ChildGroup[];
   accounts: Account[];
   uniqueName: string;
   category?: any;
   groupName: string;
+  isVisible: boolean;
 }
 
 export interface SearchResponse {

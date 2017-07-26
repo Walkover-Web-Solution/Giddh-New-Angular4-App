@@ -1,7 +1,5 @@
-import { AccountRequest, AccountResponse } from './../models/api-models/Account';
-import { UnShareGroupRequest, MoveGroupResponse, GroupUpateRequest } from './../models/api-models/Group';
-import { Injectable, EventEmitter } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
@@ -12,7 +10,15 @@ import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
-import { GroupSharedWithResponse, GroupResponse, GroupCreateRequest, ShareGroupRequest, MoveGroupRequest, FlattenGroupsAccountsResponse, GroupsTaxHierarchyResponse } from '../models/api-models/Group';
+import {
+  FlattenGroupsAccountsResponse,
+  GroupCreateRequest,
+  GroupResponse,
+  GroupSharedWithResponse,
+  GroupsTaxHierarchyResponse,
+  MoveGroupRequest,
+  ShareGroupRequest
+} from '../models/api-models/Group';
 import { AppState } from '../store/roots';
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -175,17 +181,23 @@ export class GroupService {
       return data;
     }).catch((e) => HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName }));
   }
-  public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
+
+  public  GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.FLATTEN_GROUPS_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':showEmptyGroups', showEmptyGroups)).map((res) => {
+    return this._http.get(GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':q', q)
+      .replace(':page', page.toString())
+      .replace(':count', count.toString())
+      .replace(':showEmptyGroups', showEmptyGroups)).map((res) => {
       let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count, showEmptyGroups };
+      // data.response.results.forEach(p => p.isOpen = false);
       return data;
     }).catch((e) => HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups }));
   }

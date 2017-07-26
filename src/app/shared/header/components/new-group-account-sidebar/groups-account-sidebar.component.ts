@@ -1,15 +1,14 @@
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { Component, OnInit, Input, ViewChild, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { GroupAccountSidebarVM, ColumnGroupsAccountVM } from './VM';
+import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from './VM';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
-import { PerfectScrollbarDirective, PerfectScrollbarComponent, PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 import * as _ from 'lodash';
 
 @Component({
@@ -19,6 +18,7 @@ import * as _ from 'lodash';
 export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   public mc: GroupAccountSidebarVM;
   @Output() public ScrollToRight: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public columnsChanged: EventEmitter<GroupAccountSidebarVM> = new EventEmitter();
   @Input() public groups: GroupsWithAccountsResponse[];
   public _groups: GroupsWithAccountsResponse[];
   @Input() public activeGroup: Observable<GroupResponse>;
@@ -59,8 +59,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
           }
         }
       }
-
     }
+    this.columnsChanged.emit(this.mc);
   }
   public polulateColms(grps: IGroupsWithAccounts[]): ColumnGroupsAccountVM {
     let activeGroup = null;
@@ -119,5 +119,6 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   }
   public ShowAddNewForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
+    this.store.dispatch(this.accountsAcction.resetActiveAccount());
   }
 }
