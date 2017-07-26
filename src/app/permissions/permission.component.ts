@@ -2,10 +2,6 @@ import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Location } from '@angular/common';
 
-class Dude extends NavigationStart {
-  public url: string;
-}
-
 @Component({
   template: '<router-outlet></router-outlet>'
 })
@@ -17,6 +13,4 @@ export class PermissionComponent {
       }
     });
   }
-
-  // public this.router.setUpLocationChangeListener() {}
 }
