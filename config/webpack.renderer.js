@@ -30,7 +30,7 @@ const ngcWebpack = require('ngc-webpack');
 const HMR = helpers.hasProcessFlag('hot');
 const AOT = process.env.BUILD_AOT || helpers.hasNpmFlag('aot');
 const METADATA = {
-  title: 'Angular2 Webpack Starter by @gdi2290 from @AngularClass',
+  title: 'Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software',
   baseUrl: '',
   isDevServer: helpers.isWebpackDevServer(),
   HMR: HMR,

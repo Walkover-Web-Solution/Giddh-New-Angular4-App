@@ -44,7 +44,6 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
   public stockUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup).takeUntil(this.destroyed$);
     this.activeStock$ = this.store.select(p => p.inventory.activeStock).takeUntil(this.destroyed$);

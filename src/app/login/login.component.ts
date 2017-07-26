@@ -8,7 +8,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { VerifyEmailModel } from '../models/api-models/loginModels';
+import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 @Component({
   selector: 'login',
@@ -16,6 +16,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit, OnDestroy {
+  public isLoginWithMobileSubmited$: Observable<boolean>;
   @ViewChild('emailVerifyModal') public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
@@ -53,11 +54,21 @@ export class LoginComponent implements OnInit, OnDestroy {
       return state.login.isVerifyMobileInProcess;
     }).takeUntil(this.destroyed$);
 
+    this.isLoginWithMobileSubmited$ = store.select(state => {
+      return state.login.isLoginWithMobileSubmited;
+    }).takeUntil(this.destroyed$);
     this.isLoginWithEmailSubmited$ = store.select(state => {
       return state.login.isLoginWithEmailSubmited;
     }).takeUntil(this.destroyed$);
     store.select(state => {
       return state.login.isVerifyEmailSuccess;
+    }).takeUntil(this.destroyed$).subscribe((value) => {
+      if (value) {
+        this.router.navigate(['home']);
+      }
+    });
+    store.select(state => {
+      return state.login.isVerifyMobileSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
         this.router.navigate(['home']);
@@ -94,6 +105,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     data.verificationCode = code;
     this.store.dispatch(this.loginAction.VerifyEmailRequest(data));
   }
+  public VerifyCode(mobile: string, code: string) {
+    let data = new VerifyMobileModel();
+    data.countryCode = 91;
+    data.mobileNumber = mobile;
+    data.oneTimePassword = code;
+    this.store.dispatch(this.loginAction.VerifyMobileRequest(data));
+  }
   public hideEmailModal() {
     this.emailVerifyModal.hide();
   }
@@ -108,8 +126,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   // tslint:disable-next-line:no-empty
-  public getOtp() {
+  public getOtp(mobileNumber: string) {
+    let data: SignupWithMobile = new SignupWithMobile();
+    data.mobileNumber = mobileNumber;
+    data.countryCode = 91;
+    this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
   }
+
   /**
    * Getting data from browser's local storage
    */

@@ -25,6 +25,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   public groupName: string;
   public groupUniqueName: string;
   public dataSource = [];
+  public typeaheadNoResults: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -41,14 +42,19 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
         let accountList = this.flattenGroup(data.body, []);
         let groups = [];
         accountList.map((d: any) => {
-          groups.push({ name: d.name, id: d.uniqueName });
+          groups.push({name: d.name, id: d.uniqueName});
         });
         this.dataSource = groups;
       }
     });
   }
 
-  public getClosingBalance(isRefresh: boolean) {
+  public getClosingBalance(isRefresh: boolean, event: any) {
+    if (this.typeaheadNoResults) {
+      this.groupName = '';
+      this.groupUniqueName = '';
+    }
+
     let searchRequest: SearchRequest = {
       groupName: this.groupUniqueName,
       refresh: isRefresh,
@@ -56,12 +62,18 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
       fromDate: moment(this.fromDate).format('DD-MM-YYYY')
     };
     this.store.dispatch(this.searchActions.GetStocksReport(searchRequest));
+    event.target.blur();
+  }
+
+  public changeTypeaheadNoResults(e: boolean): void {
+    this.typeaheadNoResults = e;
   }
 
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public OnSelectGroup(g: TypeaheadMatch) {
     this.groupName = g.item.name;
     this.groupUniqueName = g.item.id;
@@ -77,7 +89,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);

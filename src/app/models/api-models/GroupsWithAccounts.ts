@@ -1,6 +1,5 @@
 import { IAccountsInfo } from '../interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../interfaces/groupsWithAccounts.interface';
-import { GroupsWithAccountsVm } from '../view-models/GroupWithAccountsVm';
 
 /**
  * Model for getting group list api response
