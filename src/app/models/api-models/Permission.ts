@@ -47,6 +47,7 @@ export interface CreateNewRoleRequest {
 export interface UpdateRoleRequest {
   scopes: Scope[];
   roleUniqueName: string;
+  uniqueName?: string;
 }
 
 export class CreateNewRoleRespone {

@@ -1,6 +1,7 @@
 import {
     Component,
     OnInit,
+    OnDestroy,
     AfterViewInit,
     ViewChild
 } from '@angular/core';
@@ -15,12 +16,13 @@ import { Router } from '@angular/router';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { PermissionResponse } from '../../../models/api-models/Permission';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import * as _ from 'lodash';
 
 @Component({
     templateUrl: './permission-list.html',
     styleUrls: ['./permission.component.css']
 })
-export class PermissionListComponent implements OnInit {
+export class PermissionListComponent implements OnInit, OnDestroy {
 
     @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
     @ViewChild('permissionModel') public permissionModel: ModalDirective;
@@ -48,19 +50,30 @@ export class PermissionListComponent implements OnInit {
                 this.localState = data.yourData;
             });
 
-        this.store.take(1).subscribe(state => {
-            if (!state.permission.roles.length) {
-                this.store.dispatch(this.PermissionActions.GetRoles());
-            }
-        });
+        // this.store.take(1).subscribe(state => {
+        //     // if (!state.permission.roles.length) {
+        //     // }
+        // });
+        this.store.dispatch(this.PermissionActions.GetRoles()); // Refresh all time
         this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: PermissionResponse[]) => {
             this.allRoles = roles;
         });
     }
 
-    public closePopupEvent(data) {
+    public ngOnDestroy() {
+    //    this.store.dispatch(this.PermissionActions.RemoveNewlyCreatedRoleFromStore());
+    }
+
+    public closePopupEvent(userAction) {
+        console.log('The userAction is :', userAction);
         this.permissionModel.hide();
-        this.router.navigate(['/pages', 'permissions', 'details']);
+        if (userAction === 'save') {
+            this.router.navigate(['/pages', 'permissions', 'details']);
+        }
+    }
+
+    public updateRole(roleUniqueName) {
+        this.router.navigate(['/pages', 'permissions', 'details', roleUniqueName]);
     }
 
     public deleteRole(roleUniqueName) {
@@ -70,6 +83,7 @@ export class PermissionListComponent implements OnInit {
     }
     public deleteConfirmedRole() {
         this.permissionConfirmationModel.hide();
+        console.log('roleUniqueName is : ', this.roleToDelete);
         this.store.dispatch(this.PermissionActions.DeleteRole({ roleUniqueName: this.roleToDelete }));
     }
 

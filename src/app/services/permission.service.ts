@@ -70,13 +70,15 @@ export class PermissionService {
     * Update new role
     */
     public UpdateRole(model: UpdateRoleRequest): Observable<BaseResponse<UpdateRoleRespone, UpdateRoleRequest>> {
+        console.log('Hello Hello THe model is the service is ====:', model);
+        let roleUniqueName = model.roleUniqueName ? model.roleUniqueName : model.uniqueName;
         this.store.take(1).subscribe(s => {
             if (s.session.user) {
                 this.user = s.session.user.user;
             }
             this.companyUniqueName = s.session.companyUniqueName;
         });
-        return this._http.post(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', model.roleUniqueName), model).map((res) => {
+        return this._http.put(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', roleUniqueName), model).map((res) => {
             let data: BaseResponse<UpdateRoleRespone, UpdateRoleRequest> = res.json();
             data.request = model;
             return data;
