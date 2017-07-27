@@ -186,12 +186,12 @@ export class PermissionDetailsComponent {
         break;
       case 'SHR':
         result = 'share';
+        break;
       case 'VWDLT':
         result = 'view delete';
         break;
       default:
         result = '';
-        break;
     }
     return result;
   }
