@@ -1,13 +1,25 @@
 <div id="live">
   <div class="panel panel-default shadow">
+
     <div class="panel-heading">
-      <!--<label>Compare & judge</label><i class="glyphicon glyphicon-refresh pull-right" ng-click="getHistory()"></i>-->
-      <!--<uib-tabset justified="false" class="maxWidth250 background-transparent">-->
-        <!--<uib-tab heading="Revenue" class="background-transparent" select="selectedChart = 'sales';getData(selectedChart)"></uib-tab>-->
-        <!--<uib-tab heading="Expense" class="background-transparent" select="selectedChart = 'expense';getData(selectedChart)"></uib-tab>-->
-      <!--</uib-tabset>-->
-      <i class="glyphicon glyphicon-refresh pull-right pos-abs icon-center" ng-click="getData(selectedChart)"></i>
+      <label>Monthly</label>
+      <div class="pull-right">
+        <label>
+          <input type="checkbox" value="">LY
+        </label>
+        <label>
+          <input type="checkbox" value="" checked>Expenses
+        </label>
+        <label>
+          <input type="checkbox" value="" checked>Revenue
+        </label>
+        <label>
+          <input type="checkbox" value="" checked>Profit / Loss
+        </label>
+        <i class="glyphicon glyphicon-refresh"></i>
+      </div>
     </div>
+
     <div class="panel-body pos-rel">
       <div class="dashboard-reconnectdiv" *ngIf="false">
         <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
