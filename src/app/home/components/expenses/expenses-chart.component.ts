@@ -27,14 +27,12 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public lastYearAccounts: IChildGroups[] = [];
   public activeYearAccountsRanks: number[] = [];
   public lastYearAccountsRanks: number[] = [];
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.expensesChartData$ = this.store.select(p => p.home.expensesChart).takeUntil(this.destroyed$);
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
-    this.expensesChartData$ = this.store.select(p => p.home.expensesChart).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -51,7 +49,9 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
             if (cmp.uniqueName === activeCmpUniqueName) {
               if (cmp.financialYears.length > 1) {
                 financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.orderBy(financialYears, 'financialYearStarts', 'desc');
+                financialYears = _.orderBy(financialYears, (it) => {
+                  return moment(it.financialYearStarts, 'DD-MM-YYYY');
+                }, 'desc');
                 this.lastFinancialYear = financialYears[0];
               }
             }
@@ -165,11 +165,11 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
         }
       },
       series: [{
-        name: `${this.activeFinancialYear ? this.activeFinancialYear.financialYearStarts : ''} to ${this.activeFinancialYear ? this.activeFinancialYear.financialYearEnds : ''}`,
+        name: `This Year`,
         data: this.activeYearAccountsRanks
 
       }, {
-        name: `${this.lastFinancialYear ? this.lastFinancialYear.financialYearStarts : ''} to ${this.lastFinancialYear ? this.lastFinancialYear.financialYearEnds : ''}`,
+        name: `Last Year`,
         data: this.lastYearAccountsRanks
 
       }]

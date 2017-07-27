@@ -66,3 +66,10 @@ export interface IExpensesChartClosingBalanceResponse {
   indirectexpensesActiveyear?: ClosingBalanceResponse;
   indirectexpensesLastyear?: ClosingBalanceResponse;
 }
+
+export interface IRevenueChartClosingBalanceResponse {
+  revenuefromoperationsActiveyear?: ClosingBalanceResponse;
+  revenuefromoperationsLastyear?: ClosingBalanceResponse;
+  otherincomeActiveyear?: ClosingBalanceResponse;
+  otherincomeLastyear?: ClosingBalanceResponse;
+}
