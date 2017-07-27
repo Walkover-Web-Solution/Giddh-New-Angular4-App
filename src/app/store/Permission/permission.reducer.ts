@@ -5,7 +5,8 @@ import {
     PermissionRequest,
     PermissionResponse,
     CreateNewRoleRespone,
-    LoadAllPageNamesResponse
+    LoadAllPageNamesResponse,
+    ISingleRole
 } from '../../models/api-models/Permission';
 import {
     PERMISSION_ACTIONS
@@ -72,7 +73,7 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                 let res = action.payload as BaseResponse < string,
                     string > ;
                 // res contains deleted role's uniqueName
-                newState.roles.splice(newState.roles.findIndex((role) => {
+                newState.roles.splice(newState.roles.findIndex((role: ISingleRole) => {
                     return role.uniqueName === res;
                 }), 1);
                 return Object.assign({}, state, newState);

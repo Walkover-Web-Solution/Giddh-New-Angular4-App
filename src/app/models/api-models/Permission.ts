@@ -2,11 +2,14 @@
  * Created by arpit meena on 13-07-2017.
  */
 
-export interface PermissionResponse {
+export interface ISingleRole {
   name: string;
-  scopes: any;
+  scopes: Scope[];
   uniqueName: any;
   isFixed: boolean;
+}
+
+export interface PermissionResponse extends ISingleRole {
   companyUniqueName: string;
 }
 
@@ -31,7 +34,7 @@ export interface NewRole {
 
 export interface Permission {
   code: string;
-  selected?: boolean;
+  isSelected?: boolean;
 }
 
 export interface Scope {
