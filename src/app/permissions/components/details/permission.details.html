@@ -1,4 +1,4 @@
-<div id="single_role">
+<section id="single_role">
 
   <h2 class="role_title" align="center">{{ newRole.name }}</h2>
 
@@ -7,56 +7,44 @@
     <button class="btn btn-md btn-success mrR1 pull-right" (click)="addNewRole()">Save</button>
   </div>
 
-  <div class="pd3 clearfix">
+  <section class="pd3">
 
-    <select-role-table [role]="newRole" (roleToSave)="onPermissionSelection($event)"></select-role-table>
-
-    <!-- new head -->
-
-    <!--<div class="col-xs-4">
-      <div class="headName">
-        Add Head
-      </div>
-      <div class="new_col clearfix">
-        <div class="">
-          <div class="pd4 clearfix">
-            <div class="btn-group col-xs-8 pd0" uib-dropdown>
-              <button id="headsList" type="button" class="form-control text-left" uib-dropdown-toggle>
-                  Select Heads <span class="caret pull-right"></span>
-                </button>
-              <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="headsList">
-                <li>
-                  <label>
-                    <input type="checkbox" ng-model="head">
-                      Dashboard
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" ng-model="head">
-                      Settings
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" ng-model="head">
-                      TB/P&L
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" ng-model="head">
-                      Invoice
-                  </label>
-                </li>
-              </ul>
-            </div>
-            <button type="submit" class="btn btn-md btn-success mrT4 clearfix pull-left" (click)="addNewRole()">Save</button>
+    <!-- <select-role-table [role]="newRole" (roleToSave)="onPermissionSelection($event)"></select-role-table> -->
+    <div class="row">
+      <div class="col-xs-4" *ngFor="let page of roleObj.scopes; let idx = index">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            {{ page.name }}
+          </div>
+          <div class="panel-body">
+            <table class="table">
+              <thead><tr><th>{{ newRole.name }}</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td colspan="100%">
+                    <input 
+                      id="{{page.name}}+_{{idx}}"
+                      name="{{page.name}}+_{{idx}}"
+                      (change)="toggleItems(page.name, $event)"
+                      type="checkbox"
+                      [(ngModel)]="page.selectAll" />
+                    <label for="{{page.name}}+_{{idx}}"> Select All</label>
+                  </td>
+                </tr>
+                <tr *ngFor="let item of page.permissions; let i = index">
+                  <td>
+                    <input id="{{item.code}}+{{idx}}+{{i}}" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}" [(ngModel)]="item.isSelected" />
+                    <label for="{{item.code}}+{{idx}}+{{i}}"> {{this.getNameByCode(item.code)}}</label>
+                    </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </div>-->
-    <!-- new head -->
-  </div>
+    </div>
+    <!--end of row  -->
 
-</div>
+  </section>
+
+</section>
