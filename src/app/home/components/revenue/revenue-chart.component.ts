@@ -124,7 +124,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
     this.options = {
       chart: {
-        type: 'column'
+        type: 'column',
+        height: '320px'
       },
       title: {
         text: 'Monthly Average Rainfall'
