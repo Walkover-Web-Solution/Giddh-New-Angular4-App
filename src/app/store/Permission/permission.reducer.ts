@@ -56,6 +56,7 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
             {
                 let newState = _.cloneDeep(state);
                 let res = action.payload;
+                newState.newRole = {};
                 newState.roles.push(res);
                 return Object.assign({}, state, newState);
             }
@@ -86,9 +87,26 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                 }
                 return state;
             }
-        default:
-            {
+        case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE:
+        {
+            let newState = _.cloneDeep(state);
+            newState.newRole = {};
+            return Object.assign({}, state, newState);
+        }
+        case PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE:
+        {
+            let newState = _.cloneDeep(state);
+            let roleIndx = newState.roles.findIndex((role) => role.uniqueName === action.payload.roleUniqueName);
+            if (roleIndx > -1) {
+                newState.roles[roleIndx] = action.payload;
+                return Object.assign({}, state, newState);
+            } else {
                 return state;
             }
+        }
+        default:
+        {
+            return state;
+        }
     }
 }

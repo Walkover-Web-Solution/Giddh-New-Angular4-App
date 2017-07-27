@@ -45,6 +45,18 @@ export class PermissionActions {
     });
 
   @Effect()
+  private UpdateRole$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.UPDATE_ROLE)
+    .switchMap(action => {
+      return this._permissionService.UpdateRole(action.payload)
+        .map((r) =>
+          this.validateResponse(r, {
+            type: PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE,
+            payload: action.payload
+          }, true));
+    });
+
+  @Effect()
   private DeleteRole$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.DELETE_ROLE)
     .switchMap(action => {
@@ -109,10 +121,23 @@ export class PermissionActions {
     };
   }
 
+  public UpdateRole(data: CreateNewRoleRequest): Action {
+    return {
+      type: PERMISSION_ACTIONS.UPDATE_ROLE,
+      payload: data
+    };
+  }
+
   public DeleteRole(data: any): Action {
     return {
       type: PERMISSION_ACTIONS.DELETE_ROLE,
       payload: data.roleUniqueName
+    };
+  }
+
+   public RemoveNewlyCreatedRoleFromStore(): Action {
+    return {
+      type: PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE
     };
   }
 

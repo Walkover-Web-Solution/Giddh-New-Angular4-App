@@ -52,8 +52,8 @@
   </table>
 </div>-->
 <div class="row" *ngIf="role.isFresh">
-  <div class="col-xs-4">
-    <div class="panel panel-default" *ngFor="let page of role.selectedPages">
+  <div class="col-xs-4" *ngFor="let page of role.selectedPages">
+    <div class="panel panel-default">
       <div class="panel-heading">
         {{ page }}
       </div>
@@ -139,6 +139,201 @@
                 <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page, 'share', 'view')" [disabled]="true"/>-->
                 <i *ngIf="checkPermission(page, 'share', 'view')" class="fa fa-check" aria-hidden="true"></i>
                 <i *ngIf="!checkPermission(page, 'share', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--role for edit and copied create role-->
+<div class="row" *ngIf="!role.isFresh">
+  <div class="col-xs-4" *ngFor="let page of role.scopes">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ page.name }}
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th>{{ role.name }}</th>
+            <th>Admin</th>
+            <th>View Only</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="3"><input type="checkbox" name="selectAll" value="role" [(ngModel)]="checkBoxes[page.name].checkAll" (change)="toggleSelect(page.name, $event)">Select
+                All
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="View" [(ngModel)]="checkBoxes[page.name].view" (click)="selectPageAndPermission(page.name, 'view', $event)"
+                />View</td>
+              <td>
+                 <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'view', 'admin')" [disabled]="true" />-->
+                 <i *ngIf="checkPermission(page.name, 'view', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                 <i *ngIf="!checkPermission(page.name, 'view', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'view', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'view', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'view', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="Edit" [(ngModel)]="checkBoxes[page.name].edit" (click)="selectPageAndPermission(page.name, 'edit', $event)"
+                />Edit</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'edit', 'admin')" [disabled]="true" />-->
+                <i *ngIf="checkPermission(page.name, 'edit', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'edit', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'edit', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'edit', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'edit', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+
+            <tr>
+              <td><input type="checkbox" name="Delete" [(ngModel)]="checkBoxes[page.name].delete" (click)="selectPageAndPermission(page.name, 'delete', $event)"
+                />Delete</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'delete', 'admin')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'delete', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'delete', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'delete', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'delete', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'delete', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="Create" [(ngModel)]="checkBoxes[page.name].create" (click)="selectPageAndPermission(page.name, 'create', $event)"
+                />Create</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'create', 'admin')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'create', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'create', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'create', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'create', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'create', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="share" [(ngModel)]="checkBoxes[page.name].share" (click)="selectPageAndPermission(page.name, 'share', $event)"
+                />Share</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'share', 'admin')" [disabled]="true" />-->
+                <i *ngIf="checkPermission(page.name, 'share', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'share', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'share', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'share', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'share', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="!role.isFresh && role.copiedRole && role.copiedRole.scopes.length">
+    <div class="col-xs-4" *ngFor="let page of role.copiedRole.scopes">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ page.name }}
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead>
+            <th>{{ role.name }}</th>
+            <th>Admin</th>
+            <th>View Only</th>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="3"><input type="checkbox" name="selectAll" value="role" [(ngModel)]="checkBoxes[page.name].checkAll" (change)="toggleSelect(page.name, $event)">Select
+                All
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="View" [(ngModel)]="checkBoxes[page.name].view" (click)="selectPageAndPermission(page.name, 'view', $event)"
+                />View</td>
+              <td>
+                 <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'view', 'admin')" [disabled]="true" />-->
+                 <i *ngIf="checkPermission(page.name, 'view', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                 <i *ngIf="!checkPermission(page.name, 'view', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'view', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'view', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'view', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="Edit" [(ngModel)]="checkBoxes[page.name].edit" (click)="selectPageAndPermission(page.name, 'edit', $event)"
+                />Edit</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'edit', 'admin')" [disabled]="true" />-->
+                <i *ngIf="checkPermission(page.name, 'edit', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'edit', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'edit', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'edit', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'edit', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+
+            <tr>
+              <td><input type="checkbox" name="Delete" [(ngModel)]="checkBoxes[page.name].delete" (click)="selectPageAndPermission(page.name, 'delete', $event)"
+                />Delete</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'delete', 'admin')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'delete', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'delete', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'delete', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'delete', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'delete', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="Create" [(ngModel)]="checkBoxes[page.name].create" (click)="selectPageAndPermission(page.name, 'create', $event)"
+                />Create</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'create', 'admin')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'create', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'create', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'create', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'create', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'create', 'view')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+            </tr>
+            <tr>
+              <td><input type="checkbox" name="share" [(ngModel)]="checkBoxes[page.name].share" (click)="selectPageAndPermission(page.name, 'share', $event)"
+                />Share</td>
+              <td>
+                <!--<input type="checkbox" name="admin" [checked]="checkPermission(page.name, 'share', 'admin')" [disabled]="true" />-->
+                <i *ngIf="checkPermission(page.name, 'share', 'admin')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'share', 'admin')" class="fa fa-times" aria-hidden="true"></i>
+              </td>
+              <td>
+                <!--<input type="checkbox" name="viewOnly" [checked]="checkPermission(page.name, 'share', 'view')" [disabled]="true"/>-->
+                <i *ngIf="checkPermission(page.name, 'share', 'view')" class="fa fa-check" aria-hidden="true"></i>
+                <i *ngIf="!checkPermission(page.name, 'share', 'view')" class="fa fa-times" aria-hidden="true"></i>
               </td>
             </tr>
           </tbody>
