@@ -1,4 +1,35 @@
 <h1>Hey table component</h1>
 {{role | json}}<br>
-
-{{roleObj | json}}
+<div class="row">
+  <div class="col-xs-4" *ngFor="let page of roleObj.scopes; let idx = index">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        {{ page.name }}
+      </div>
+      <div class="panel-body">
+        <table class="table">
+          <thead><tr><th>{{ role.name }}</th></tr></thead>
+          <tbody>
+            <tr>
+              <td colspan="100%">
+                <input 
+                  id="{{page.name}}+_{{idx}}"
+                  name="{{page.name}}+_{{idx}}"
+                  (change)="toggleItems(page.name, $event)"
+                  type="checkbox"
+                  [(ngModel)]="page.selectAll" />
+                <label for="{{page.name}}+_{{idx}}"> Select All</label>
+              </td>
+            </tr>
+            <tr *ngFor="let item of page.permissions; let i = index">
+              <td>
+                <input id="{{item.code}}+{{idx}}+{{i}}" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}" [(ngModel)]="item.isSelected" />
+                <label for="{{item.code}}+{{idx}}+{{i}}"> {{this.getNameByCode(item.code)}}</label>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -14,7 +14,7 @@ class NewRoleObj {
   ) {  }
 }
 
-class NewPersmissionObj {
+class NewPermissionObj {
   constructor(
     public code: string,
     public isSelected: boolean
@@ -32,7 +32,8 @@ export class SelectRoleTableComponent implements OnInit {
   @Output() public roleToSave: EventEmitter<object> = new EventEmitter<object>();
   private allRoles: any;
   private singlePageForFreshStart: any;
-  // private selectedAll: boolean;
+  private rawDataForAllRoles: Permission[];
+  private allRolesOfPage: Permission[];
   private roleObj: any;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -43,11 +44,17 @@ export class SelectRoleTableComponent implements OnInit {
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: ISingleRole) {
         return o.uniqueName === 'super_admin_off_the_record';
       });
+      this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions)
+      this.allRolesOfPage = this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles));
     });
   }
 
   public ngOnInit() {
     this.roleObj = new NewRoleObj(this.role.name, this.setScopeForCurrentRole(), this.checkForIsFixed(), this.checkForRoleUniqueName());
+  }
+
+  private getAllRolesOfPageReady(arr) {
+    return _.forEach(arr, (o: Permission) => o.isSelected = false);
   }
 
   private setScopeForCurrentRole(): Scope[] {
@@ -66,10 +73,27 @@ export class SelectRoleTableComponent implements OnInit {
     });
     if (res) {
       _.forEach(res.scopes, (obj: Scope) => {
-        _.map(obj.permissions, (o: Permission) => o.isSelected = false);
+        _.map(obj.permissions, (o: Permission) => o.isSelected = true);
+        if(obj.permissions.length < 6){
+          obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles)));
+        }
       });
       return res.scopes;
     }
+  }
+
+  private pushNonExistRoles(arr1, arr2){
+    _.forEach(arr1, (o: Permission) => {
+      arr2 = _.map(arr2, (item: Permission) => {
+        if (o.code === item.code){
+          return new NewPermissionObj(o.code, o.isSelected);
+        }
+        else{
+          return new NewPermissionObj(item.code, false);
+        }
+      });
+    });
+    return arr2;
   }
 
   private generateFreshUI() {
@@ -78,8 +102,7 @@ export class SelectRoleTableComponent implements OnInit {
     _.forEach(this.role.selectedPages, (role: string) => {
       let res = _.find(allRoles, (o: Scope) => o.name === role);
       if (res) {
-        // new NewPersmissionObj(o.code, false)
-        _.map(res.permissions, (o: Permission) => o.isSelected = false);
+        _.map(res.permissions, (o: Permission) => new NewPermissionObj(o.code, false));
         arr.push(res);
       }
     });
@@ -95,6 +118,56 @@ export class SelectRoleTableComponent implements OnInit {
       return null;
     }else {
       return this.role.copiedRole;
+    }
+  }
+
+  private getNameByCode(code: string) {
+    let result: string;
+    switch (code) {
+      case 'VW':
+        result = 'view';
+        break;
+      case 'UPDT':
+        result = 'edit';
+        break;
+      case 'DLT':
+        result = 'delete';
+        break;
+      case 'ADD':
+        result = 'create';
+        break;
+      case 'SHR':
+        result = 'share';
+      case 'VWDLT':
+        result = 'view delete';
+        break;
+      default:
+        result = '';
+        break;
+    }
+    return result;
+  }
+
+  private toggleItems = function(pageName: string, event: any) {
+    let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+    if (res) {
+      _.map(res.permissions, (o: Permission) => o.isSelected = event.target.checked? true : false );
+    }
+  }
+
+  private toggleItem = function(pageName: string, item: Permission, event: any) {
+    let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+    if (event.target.checked){
+      let idx = _.findIndex(res.permissions, (o: Permission) => new NewPermissionObj(o.code, false));
+      if (idx !== -1){
+        return res.selectAll = false;
+      }
+      else{
+        return res.selectAll = true;
+      }
+    }
+    else{
+      return res.selectAll = false;
     }
   }
 

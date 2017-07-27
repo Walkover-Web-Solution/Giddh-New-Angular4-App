@@ -45,7 +45,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     private roleType: string = '';
     private dropdownHeading: string = 'Select pages';
     private isSelectedAllPages: boolean;
-    private copiedRole: object;
+    private copiedRole: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
@@ -111,8 +111,8 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 data.selectedPages = this.selectedPages;
                 data.isFresh = true;
             } else if (this.roleType === 'copy') {
-                data.copiedRole = this.copiedRole;
-                data.copiedRole = JSON.parse(data.copiedRole);
+                // data.copiedRole = this.copiedRole;
+                data.copiedRole = data.copiedRole.uniqueName;
                 data.isFresh = false;
             }
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));

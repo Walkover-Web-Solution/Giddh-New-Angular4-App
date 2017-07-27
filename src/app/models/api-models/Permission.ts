@@ -40,6 +40,7 @@ export interface Permission {
 export interface Scope {
   name: string;
   permissions: Permission[];
+  selectAll?: boolean;
 }
 
 export interface CreateNewRoleRequest {
