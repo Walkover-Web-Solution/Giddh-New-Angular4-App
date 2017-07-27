@@ -65,23 +65,31 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       if (exp) {
         if (exp.operatingcostActiveyear && exp.indirectexpensesActiveyear) {
           let accounts = [];
-          exp.operatingcostActiveyear.childGroups.map(grp => {
-            accounts.push(grp);
-          });
-          exp.indirectexpensesActiveyear.childGroups.map(grp => {
-            accounts.push(grp);
-          });
+          if (exp.operatingcostActiveyear.childGroups) {
+            exp.operatingcostActiveyear.childGroups.map(grp => {
+              accounts.push(grp);
+            });
+          }
+          if (exp.indirectexpensesActiveyear.childGroups) {
+            exp.indirectexpensesActiveyear.childGroups.map(grp => {
+              accounts.push(grp);
+            });
+          }
           this.activeYearAccounts = accounts;
         }
 
         if (exp.operatingcostLastyear && exp.indirectexpensesLastyear) {
           let lastAccounts = [];
-          exp.operatingcostActiveyear.childGroups.map(grp => {
-            lastAccounts.push(grp);
-          });
-          exp.indirectexpensesActiveyear.childGroups.map(grp => {
-            lastAccounts.push(grp);
-          });
+          if (exp.operatingcostLastyear.childGroups) {
+            exp.operatingcostLastyear.childGroups.map(grp => {
+              lastAccounts.push(grp);
+            });
+          }
+          if (exp.indirectexpensesLastyear.childGroups) {
+            exp.indirectexpensesLastyear.childGroups.map(grp => {
+              lastAccounts.push(grp);
+            });
+          }
           this.lastYearAccounts = lastAccounts;
         }
       }
@@ -123,13 +131,14 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
 
     this.options = {
       chart: {
-        type: 'column'
+        type: 'column',
+        height: '320px',
       },
       title: {
-        text: 'Monthly Average Rainfall'
+        text: ''
       },
       subtitle: {
-        text: 'Source: WorldClimate.com'
+        text: ''
       },
       xAxis: {
         categories: this.accountStrings,
