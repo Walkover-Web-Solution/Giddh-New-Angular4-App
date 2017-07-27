@@ -35,7 +35,7 @@ export interface Page {
 })
 
 export class PermissionModelComponent implements OnInit, OnDestroy {
-    @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter(true);
+    @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
 
     public allRoles: object;
     private newRole: NewRole = { name: '', selectedPages: [], copiedRole: {}, isFresh: false };
@@ -67,7 +67,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public closePopupEvent() {
-        this.closeEvent.emit(true);
+        this.closeEvent.emit('close');
     }
 
     public onDDShown() {
@@ -79,7 +79,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public hideRoleModel() {
-        this.closeEvent.emit(true);
+        this.closeEvent.emit('cancel');
     }
 
     public selectPage(pageName, event) {
@@ -116,7 +116,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 data.isFresh = false;
             }
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
-            this.closeEvent.emit(data);
+            this.closeEvent.emit('save');
         }
     }
 

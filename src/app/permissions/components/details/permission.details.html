@@ -4,12 +4,12 @@
 
   <div class="pd3 pdT1 pdB1 bdrB clearfix">
     <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
-    <button class="btn btn-md btn-success mrR1 pull-right" ng-click="updateRole()">Save</button>
+    <button class="btn btn-md btn-success mrR1 pull-right" (click)="addNewRole()">Save</button>
   </div>
 
   <div class="pd3 clearfix">
 
-    <select-role-table [role]="newRole"></select-role-table>
+    <select-role-table [role]="newRole" (roleToSave)="onPermissionSelection($event)"></select-role-table>
 
     <!-- new head -->
 
