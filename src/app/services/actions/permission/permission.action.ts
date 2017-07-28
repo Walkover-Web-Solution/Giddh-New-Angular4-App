@@ -11,7 +11,8 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PermissionService } from '../../permission.service';
 import { PERMISSION_ACTIONS } from './permission.const';
-import { NewRole, CreateNewRoleRequest, PermissionResponse } from '../../../models/api-models/Permission';
+import { CreateNewRoleRequest, CreateNewRoleResponseAndRequest, CreateNewRoleResponse } from '../../../models/api-models/Permission';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class PermissionActions {
@@ -19,29 +20,38 @@ export class PermissionActions {
   @Effect()
   private GetRoles$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ROLES)
-    .switchMap(action => {
-      return this._permissionService.GetAllRoles()
-        .map((r) => {
-          return this.validateResponse<PermissionResponse[], string>(r, {
-            type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
-            payload: r
-          }, true, {
-              type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
-              payload: r
-            });
-        });
+    .switchMap(action => this._permissionService.GetAllRoles())
+    .map(response => {
+      return this.GetRolesResponse(response);
     });
 
   @Effect()
-  private CreateNewRole$: Observable<Action> = this.action$
+  private GetRolesResponse$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE)
+    .map(action => {
+      return { type: '' };
+    });
+
+  @Effect()
+  private CreateRole$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.CREATE_NEW_ROLE)
     .switchMap(action => {
       return this._permissionService.CreateNewRole(action.payload)
-        .map((r) =>
-          this.validateResponse(r, {
-            type: PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE,
-            payload: action.payload
-          }, true));
+        .map(response => this.CreateRoleResponse(response));
+    });
+
+  @Effect()
+  private CreateRoleResponse$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('New Role Created Successfully');
+        this._router.navigate(['/pages', 'permissions', 'list']);
+      }
+      return { type: '' };
     });
 
   @Effect()
@@ -86,6 +96,7 @@ export class PermissionActions {
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
+    private _router: Router,
     private store: Store<AppState>,
     private _permissionService: PermissionService) {
   }
@@ -94,7 +105,7 @@ export class PermissionActions {
     return { type: PERMISSION_ACTIONS.GET_ROLES };
   }
 
-  public GetRolesResponse(value: BaseResponse<PermissionResponse[], string>) {
+  public GetRolesResponse(value: BaseResponse<CreateNewRoleResponseAndRequest[], string>) {
     return {
       type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
       payload: value
@@ -135,9 +146,23 @@ export class PermissionActions {
     };
   }
 
-   public RemoveNewlyCreatedRoleFromStore(): Action {
+  public RemoveNewlyCreatedRoleFromStore(): Action {
     return {
       type: PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE
+    };
+  }
+
+  public CreateRole(value: CreateNewRoleRequest): Action {
+    return {
+      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
+      payload: value
+    };
+  }
+
+  public CreateRoleResponse(value: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>): Action {
+    return {
+      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE,
+      payload: value
     };
   }
 

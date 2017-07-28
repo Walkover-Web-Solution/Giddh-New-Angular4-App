@@ -77,7 +77,7 @@ export class PermissionDetailsComponent implements OnInit {
     }else if (this.transactionMode === 'update') {
       this.store.dispatch(this.permissionActions.UpdateRole(data));
     }
-    this.router.navigate(['/pages', 'permissions', 'list']);
+    // this.router.navigate(['/pages', 'permissions', 'list']);
   }
 
   private getAllRolesOfPageReady(arr) {

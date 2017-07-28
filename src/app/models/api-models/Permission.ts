@@ -1,35 +1,9 @@
 /**
  * Created by arpit meena on 13-07-2017.
- */
-
-export interface ISingleRole {
-  name: string;
-  scopes: Scope[];
-  uniqueName: any;
-  isFixed: boolean;
-}
-
-export interface PermissionResponse extends ISingleRole {
-  companyUniqueName: string;
-}
-
-export interface PermissionRequest {
-  companyUniqueName: string;
-}
-
-export interface NewRole {
-  name: string;
-  scopes: Scope[];
-  copyoption: string;
-  pages: any;
-}
-
-/*
  * Model for create-new-role api request
  * POST call
  * API:: (create-new-role) /company/:companyUniqueName/role
  * used to create new role
- * its response will be hash as CreateNewRoleRespone
  */
 
 export interface Permission {
@@ -43,21 +17,36 @@ export interface Scope {
   selectAll?: boolean;
 }
 
-export interface CreateNewRoleRequest {
-  name: string;
-  scopes: Scope[];
-}
-
 export interface UpdateRoleRequest {
   scopes: Scope[];
   roleUniqueName: string;
   uniqueName?: string;
 }
 
-export class CreateNewRoleRespone {
-  private isFixed: boolean;
-  private scopes: Scope[];
-  private uniqueName: string;
-  private name: string;
-  private companyUniqueName: string;
+export class CreateNewRoleResponse {
+  public isFixed: boolean;
+  public scopes: Scope[];
+  public uniqueName: string;
+  public name: string;
+}
+
+export class CreateNewRoleRequest {
+  public name: string;
+  public scopes: Scope[];
+  public isFixed?: boolean;
+  public uniqueName?: string;
+}
+
+export class CreateNewRoleResponseAndRequest {
+  public name: string;
+  public scopes: Scope[];
+  public isFixed?: boolean;
+  public uniqueName?: string;
+}
+
+export interface ISingleRole {
+  name: string;
+  scopes: Scope[];
+  uniqueName: any;
+  isFixed: boolean;
 }
