@@ -104,7 +104,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   }
 
   public generateCharts() {
-    this.accountStrings = _.uniq(this.generateActiveYearString().concat(this.generateLastYearString()));
+    this.accountStrings = _.uniqBy(this.generateActiveYearString().concat(this.generateLastYearString()), 'uniqueName');
     this.accountStrings.forEach((ac) => {
       ac.activeYear = 0;
       ac.lastYear = 0;
