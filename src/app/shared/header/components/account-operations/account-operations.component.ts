@@ -32,7 +32,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { AccountService } from '../../../../services/account.service';
-import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'account-operations',
