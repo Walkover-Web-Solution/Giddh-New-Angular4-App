@@ -92,7 +92,7 @@ export class LedgerComponent implements OnInit {
   }
 
   public selectedAccount(e: TypeaheadMatch) {
-
+    //
   }
 
   // Push a search term into the observable stream.
