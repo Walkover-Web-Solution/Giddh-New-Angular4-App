@@ -8,7 +8,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import moment from 'moment';
 import * as _ from 'lodash';
-import { ICbAccount, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
+import { IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 
 @Component({
   selector: 'expenses-chart',
@@ -23,8 +23,8 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public activeCompanyUniqueName$: Observable<string>;
   public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
   public accountStrings: string[] = [];
-  public activeYearAccounts: ICbAccount[] = [];
-  public lastYearAccounts: ICbAccount[] = [];
+  public activeYearAccounts: IChildGroups[] = [];
+  public lastYearAccounts: IChildGroups[] = [];
   public activeYearAccountsRanks: number[] = [];
   public lastYearAccountsRanks: number[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -65,31 +65,31 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       if (exp) {
         if (exp.operatingcostActiveyear && exp.indirectexpensesActiveyear) {
           let accounts = [];
-          exp.operatingcostActiveyear.childGroups.map(grp => {
-            grp.accounts.map(ac => {
-              accounts.push(ac);
+          if (exp.operatingcostActiveyear.childGroups) {
+            exp.operatingcostActiveyear.childGroups.map(grp => {
+              accounts.push(grp);
             });
-          });
-          exp.indirectexpensesActiveyear.childGroups.map(grp => {
-            grp.accounts.map(ac => {
-              accounts.push(ac);
+          }
+          if (exp.indirectexpensesActiveyear.childGroups) {
+            exp.indirectexpensesActiveyear.childGroups.map(grp => {
+              accounts.push(grp);
             });
-          });
+          }
           this.activeYearAccounts = accounts;
         }
 
         if (exp.operatingcostLastyear && exp.indirectexpensesLastyear) {
           let lastAccounts = [];
-          exp.operatingcostLastyear.childGroups.map(grp => {
-            grp.accounts.map(ac => {
-              lastAccounts.push(ac);
+          if (exp.operatingcostLastyear.childGroups) {
+            exp.operatingcostLastyear.childGroups.map(grp => {
+              lastAccounts.push(grp);
             });
-          });
-          exp.indirectexpensesLastyear.childGroups.map(grp => {
-            grp.accounts.map(ac => {
-              lastAccounts.push(ac);
+          }
+          if (exp.indirectexpensesLastyear.childGroups) {
+            exp.indirectexpensesLastyear.childGroups.map(grp => {
+              lastAccounts.push(grp);
             });
-          });
+          }
           this.lastYearAccounts = lastAccounts;
         }
       }
@@ -106,71 +106,33 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   }
 
   public generateCharts() {
-    let displayStrings = _.uniqBy(this.generateActiveYearString().concat(this.generateLastYearString()), 'uniqueName');
-    let ranks = this.generateRanksObject(displayStrings);
-    //
-    // displayStrings.map((ds, index) => {
-    //   let f1 = ranks.find(r => r.uniqueName === ds.uniqueName);
-    //   if (!f1) {
-    //     displayStrings.splice(index, 1);
-    //   } else {
-    //     this.accountStrings.push(ds.name);
-    //   }
-    // });
-    // this.activeYearAccountsRanks = ranks.map(r => r.activeAmount);
-    // this.lastYearAccountsRanks = ranks.map(r => r.lastAmount);
+    let activeRanks = [];
+    let lastRanks = [];
 
-    // this.activeYearAccounts.map(acc => {
-    //     let findIndex = _.findIndex(displayStrings, p => p.uniqueName === acc.uniqueName);
-    //     if (findIndex > -1) {
-    //       if (acc.closingBalance.amount > 0) {
-    //         activeRanks.push(acc.closingBalance.amount);
-    //       } else {
-    //         displayStrings.splice(findIndex, 1);
-    //       }
-    //     } else {
-    //       activeRanks.push(0);
-    //     }
-    // });
-    //
-    // this.lastYearAccounts.map(acc => {
-    //   let findIndex = _.findIndex(displayStrings, p => p.uniqueName === acc.uniqueName);
-    //   if (findIndex > -1) {
-    //     if (acc.closingBalance.amount > 0) {
-    //       lastRanks.push(acc.closingBalance.amount);
-    //     } else {
-    //       displayStrings.splice(findIndex, 1);
-    //     }
-    //   } else {
-    //     lastRanks.push(0);
-    //   }
-    // });
-    // this.accountStrings = displayStrings.map(d => d.name);
-    // this.activeYearAccountsRanks = activeRanks;
-    // this.lastYearAccountsRanks = lastRanks;
+    this.accountStrings = _.uniq(this.generateActiveYearString().concat(this.generateLastYearString()));
 
-    // this.activeYearAccounts.map(acc => {
-    //   if (this.accountStrings.indexOf(acc.uniqueName) === -1) {
-    //     activeRanks.push(0);
-    //   } else {
-    //     activeRanks.push(acc.closingBalance.amount);
-    //   }
-    // });
-    //
-    // this.lastYearAccounts.map(acc => {
-    //   if (this.accountStrings.indexOf(acc.groupName) === -1) {
-    //     lastRanks.push(0);
-    //   } else {
-    //     lastRanks.push(acc.closingBalance.amount);
-    //   }
-    // });
-    // this.activeYearAccountsRanks = activeRanks;
-    // this.lastYearAccountsRanks = lastRanks;
+    this.activeYearAccounts.map(acc => {
+      if (this.accountStrings.indexOf(acc.groupName) === -1) {
+        activeRanks.push(0);
+      } else {
+        activeRanks.push(acc.closingBalance.amount);
+      }
+    });
+
+    this.lastYearAccounts.map(acc => {
+      if (this.accountStrings.indexOf(acc.groupName) === -1) {
+        lastRanks.push(0);
+      } else {
+        lastRanks.push(acc.closingBalance.amount);
+      }
+    });
+    this.activeYearAccountsRanks = activeRanks;
+    this.lastYearAccountsRanks = lastRanks;
 
     this.options = {
       chart: {
         type: 'column',
-        height: '320px'
+        height: '320px',
       },
       title: {
         text: ''
@@ -185,7 +147,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       yAxis: {
         min: 0,
         title: {
-          text: ''
+          text: 'Rainfall (mm)'
         }
       },
       tooltip: {
@@ -214,37 +176,18 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     };
   }
 
-  public generateRanksObject(displayStrings: any[]) {
-    let rankArray = [];
-    this.activeYearAccounts.map(acc => {
-      let f = displayStrings.find(a => acc.uniqueName === a.uniqueName);
-      if (f) {
-        rankArray.push(new ChartData(acc.name, acc.uniqueName, acc.closingBalance.amount));
-      }
-    });
-
-    this.lastYearAccounts.map(acc => {
-      let f = displayStrings.find(a => acc.uniqueName === a.uniqueName);
-      if (f) {
-        rankArray.push(new ChartData(acc.name, acc.uniqueName, 0, acc.closingBalance.amount));
-      }
-    });
-
-    return rankArray;
-  }
-
-  public generateActiveYearString(): any[] {
+  public generateActiveYearString(): string[] {
     let activeStrings = [];
     this.activeYearAccounts.map(acc => {
-      activeStrings.push({name: acc.name, uniqueName: acc.uniqueName});
+      activeStrings.push(acc.groupName);
     });
     return activeStrings;
   }
 
-  public generateLastYearString(): any[] {
+  public generateLastYearString(): string[] {
     let lastStrings = [];
     this.lastYearAccounts.map(acc => {
-      lastStrings.push({name: acc.name, uniqueName: acc.uniqueName});
+      lastStrings.push(acc.groupName);
     });
     return lastStrings;
   }
@@ -252,11 +195,5 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
-}
-
-class ChartData {
-  constructor(public name: string, public uniqueName: string, public activeAmount: number = 0, public lastAmount: number = 0) {
-    //
   }
 }

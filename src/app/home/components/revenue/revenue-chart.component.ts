@@ -128,10 +128,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         height: '320px'
       },
       title: {
-        text: 'Monthly Average Rainfall'
+        text: ''
       },
       subtitle: {
-        text: 'Source: WorldClimate.com'
+        text: ''
       },
       xAxis: {
         categories: this.accountStrings,
