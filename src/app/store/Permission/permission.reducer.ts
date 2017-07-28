@@ -2,9 +2,7 @@ import {
     Action
 } from '@ngrx/store';
 import {
-    PermissionRequest,
-    PermissionResponse,
-    CreateNewRoleRespone,
+    CreateNewRoleResponseAndRequest,
     ISingleRole
 } from '../../models/api-models/Permission';
 import {
@@ -16,7 +14,7 @@ import {
 import * as _ from 'lodash';
 
 export interface PermissionState {
-    roles: PermissionResponse[];
+    roles: CreateNewRoleResponseAndRequest[];
     newRole: object;
     pages: string[];
 }
@@ -33,7 +31,7 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
         case PERMISSION_ACTIONS.GET_ROLES_RESPONSE:
             {
                 let newState = _.cloneDeep(state);
-                let res = action.payload as BaseResponse < PermissionResponse[],
+                let res = action.payload as BaseResponse < CreateNewRoleResponseAndRequest[],
                     string > ;
                 if (res.status === 'success') {
                     newState.roles = res.body;
