@@ -1,31 +1,14 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
-
-export interface Permission {
-    code: string;
-}
-
-export interface Scopes {
-    name: string;
-    permissions: Permission[];
-}
-
-export interface NewRole {
-    name: string;
-    selectedPages: Scopes[];
-    copiedRole: object;
-    isFresh: boolean;
-}
-
-export interface Page {
-    name: string;
-    selected: boolean;
-}
+import { NewRoleClass, NewRoleFormClass, IPage, INewRoleFormObj } from '../../permission.utility';
+import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import * as _ from 'lodash';
 
 @Component({
     selector: 'permission-model',
@@ -37,28 +20,27 @@ export interface Page {
 export class PermissionModelComponent implements OnInit, OnDestroy {
     @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
 
-    public allRoles: object;
-    private newRole: NewRole = { name: '', selectedPages: [], copiedRole: {}, isFresh: false };
-    private pageNames: Page[] = [];
-    private selectedPages = [];
-
-    private roleType: string = '';
+    private allRoles: INameUniqueName[] = [];
+    private newRoleObj: INewRoleFormObj = new NewRoleFormClass();
     private dropdownHeading: string = 'Select pages';
-    private isSelectedAllPages: boolean;
-    private copiedRole: string;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
         this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
-            this.allRoles = permission.roles;
-            if (!this.pageNames.length) {
-                permission.pages.forEach((page) => this.pageNames.push({ name: String(page), selected: false }) );
-            }
+            this.allRoles = [];
+            permission.roles.forEach((role) => {
+                this.allRoles.push({name: role.name, uniqueName: role.uniqueName});
+            });
+            this.newRoleObj.pageList = [];
+            permission.pages.forEach((page) => {
+                this.newRoleObj.pageList.push({name: page, selected: false});
+            });
         });
     }
 
     public ngOnInit() {
         this.store.dispatch(this.permissionActions.LoadAllPageNames());
+        this.newRoleObj.isFresh = true;
     }
 
     public ngOnDestroy() {
@@ -66,83 +48,77 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    public closePopupEvent() {
+    private closePopupEvent() {
         this.closeEvent.emit('close');
     }
 
-    public onDDShown() {
+    private onDDShown() {
         this.dropdownHeading = 'Close list';
     }
 
-    public onDDHidden() {
+    private onDDHidden() {
         this.dropdownHeading = 'Select pages';
-    }
-
-    public hideRoleModel() {
-        this.closeEvent.emit('cancel');
-    }
-
-    public selectPage(pageName, event) {
-        let isChecked = event.target.checked;
-        let pageIndx = this.pageNames.findIndex((obj) => obj.name === pageName);
-        if (!isChecked && this.isSelectedAllPages) {
-            this.isSelectedAllPages = false;
-            this.selectedPages.splice(this.selectedPages.indexOf(pageName), 1);
-            this.pageNames[pageIndx].selected = false;
-        }else if (!this.isSelectedAllPages && isChecked) {
-            this.selectedPages.push(pageName);
-            this.pageNames[pageIndx].selected = true;
-            if (this.pageNames.length === this.selectedPages.length) {
-                this.isSelectedAllPages = true;
-            }
-        }else if (!isChecked && !this.isSelectedAllPages) {
-            this.pageNames[pageIndx].selected = false;
-            this.selectedPages.splice(this.selectedPages.indexOf(pageName), 1);
-        }
-        console.log('Iside selectPage the this.selectedPages is :', this.selectedPages);
     }
 
     /**
      * addNewRole
-     */
-    public addNewRole(data) {
-        if (!this.isFormNotValid()) {
-            if (this.roleType === 'fresh') {
-                data.selectedPages = this.selectedPages;
-                data.isFresh = true;
-            } else if (this.roleType === 'copy') {
-                // data.copiedRole = this.copiedRole;
-                data.copiedRole = data.copiedRole.uniqueName;
-                data.isFresh = false;
+    */
+    private addNewRole() {
+        if (this.isFormValid) {
+            let data;
+            if (this.newRoleObj.isFresh) {
+                data = _.omit(this.newRoleObj, 'uniqueName');
+            }else {
+                data = _.omit(this.newRoleObj, 'pageList');
             }
             this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
             this.closeEvent.emit('save');
         }
     }
 
-    public selectAllPages(event) {
-        let isChecked = event.target.checked;
-        if (isChecked) {
-            this.isSelectedAllPages = true;
-            this.selectedPages = [];
-            this.pageNames.forEach((obj) => {
-                obj.selected = true;
-                this.selectedPages.push(obj.name);
-            });
-        } else {
-            this.isSelectedAllPages = false;
-            this.selectedPages = [];
-            this.pageNames.forEach((obj) => obj.selected = false );
-        }
-        console.log('Inside selectAllPages the this.selectedPages is :', this.selectedPages);
+    private assignPagesForScope(){
+        return [];
     }
 
-    public isFormNotValid() {
-        if (this.newRole.name && (this.roleType === 'fresh' && this.selectedPages.length)) {
-            return false;
-        }else if (this.newRole.name && this.roleType === 'copy') {
+    private selectAllPages(event) {
+        if (event.target.checked) {
+            this.newRoleObj.isSelectedAllPages = true;
+            this.newRoleObj.pageList.forEach((item) => item.selected = true);
+        } else {
+            this.newRoleObj.isSelectedAllPages = false;
+            this.newRoleObj.pageList.forEach((item) => item.selected = false);
+        }
+    }
+
+    private makeCount() {
+        let count: number = 0;
+        this.newRoleObj.pageList.forEach((item) => {
+            if (item.selected) {
+                count += 1;
+            }
+        });
+        return count;
+    }
+
+    private selectPage(event) {
+        if (event.target.checked) {
+            if (this.makeCount() === this.newRoleObj.pageList.length) {
+                this.newRoleObj.isSelectedAllPages = true;
+            }
+        } else {
+            if (this.makeCount() === this.newRoleObj.pageList.length) {
+                this.newRoleObj.isSelectedAllPages = false;
+            }
+        }
+    }
+
+    get isFormValid() {
+        if (this.newRoleObj.name && this.newRoleObj.isFresh && this.makeCount() > 0 ) {
+            return true;
+        } else if (this.newRoleObj.name && !this.newRoleObj.isFresh && this.newRoleObj.uniqueName) {
+            return true;
+        } else {
             return false;
         }
-        return true;
     }
 }

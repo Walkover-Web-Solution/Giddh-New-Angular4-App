@@ -16,14 +16,10 @@ import {
 } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 
-export interface Page {
-
-}
-
 export interface PermissionState {
     roles: PermissionResponse[];
     newRole: object;
-    pages: Page[];
+    pages: string[];
 }
 
 export const initialState: PermissionState = {
