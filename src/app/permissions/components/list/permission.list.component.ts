@@ -44,20 +44,10 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     ) { }
 
     public ngOnInit() {
-        this.route
-            .data
-            .subscribe((data: any) => {
-                this.localState = data.yourData;
-            });
-
-        // this.store.take(1).subscribe(state => {
-        //     // if (!state.permission.roles.length) {
-        //     // }
-        // });
-        this.store.dispatch(this.PermissionActions.GetRoles()); // Refresh all time
-        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: PermissionResponse[]) => {
-            this.allRoles = roles;
-        });
+        this.route.data.subscribe((data: any) => this.localState = data.yourData);
+        // Getting roles every time user refresh page
+        this.store.dispatch(this.PermissionActions.GetRoles());
+        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: PermissionResponse[]) => this.allRoles = roles);
     }
 
     public ngOnDestroy() {
@@ -65,7 +55,6 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     }
 
     public closePopupEvent(userAction) {
-        console.log('The userAction is :', userAction);
         this.permissionModel.hide();
         if (userAction === 'save') {
             this.router.navigate(['/pages', 'permissions', 'details']);
