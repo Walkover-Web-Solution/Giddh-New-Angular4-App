@@ -3,10 +3,9 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import {
-    PermissionResponse,
-    PermissionRequest,
+    CreateNewRoleResponseAndRequest,
     CreateNewRoleRequest,
-    CreateNewRoleRespone,
+    CreateNewRoleResponse,
     UpdateRoleRequest
 } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
@@ -29,7 +28,7 @@ export class PermissionService {
     /*
      * Get all roles
     */
-    public GetAllRoles(): Observable<BaseResponse<PermissionResponse[], string>> {
+    public GetAllRoles(): Observable<BaseResponse<CreateNewRoleResponseAndRequest[], string>> {
 
         this.store.take(1).subscribe(s => {
             if (s.session.user) {
@@ -41,16 +40,16 @@ export class PermissionService {
         });
 
         return this._http.get(PERMISSION_API.GET_ROLE.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-            let data: BaseResponse<PermissionResponse[], string> = res.json();
+            let data: BaseResponse<CreateNewRoleResponseAndRequest[], string> = res.json();
             data.queryString = {};
             return data;
-        }).catch((e) => HandleCatch<PermissionResponse[], string>(e));
+        }).catch((e) => HandleCatch<CreateNewRoleResponseAndRequest[], string>(e));
     }
 
     /**
     * Create new role
     */
-    public CreateNewRole(model: CreateNewRoleRequest): Observable<BaseResponse<CreateNewRoleRespone, CreateNewRoleRequest>> {
+    public CreateNewRole(model: CreateNewRoleRequest): Observable<BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>> {
         this.store.take(1).subscribe(s => {
             if (s.session.user) {
                 this.user = s.session.user.user;
@@ -58,10 +57,10 @@ export class PermissionService {
             this.companyUniqueName = s.session.companyUniqueName;
         });
         return this._http.post(PERMISSION_API.CREATE_ROLE.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
-            let data: BaseResponse<CreateNewRoleRespone, CreateNewRoleRequest> = res.json();
+            let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res.json();
             data.request = model;
             return data;
-        }).catch((e) => HandleCatch<CreateNewRoleRespone, CreateNewRoleRequest>(e, model));
+        }).catch((e) => HandleCatch<CreateNewRoleResponse, CreateNewRoleRequest>(e, model));
     }
 
     /**
