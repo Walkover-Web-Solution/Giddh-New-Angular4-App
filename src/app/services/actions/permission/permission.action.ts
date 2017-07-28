@@ -11,7 +11,7 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PermissionService } from '../../permission.service';
 import { PERMISSION_ACTIONS } from './permission.const';
-import { NewRole, CreateNewRoleRequest, PermissionResponse, LoadAllPageNamesResponse } from '../../../models/api-models/Permission';
+import { NewRole, CreateNewRoleRequest, PermissionResponse } from '../../../models/api-models/Permission';
 
 @Injectable()
 export class PermissionActions {
@@ -74,7 +74,7 @@ export class PermissionActions {
     .switchMap(action => {
       return this._permissionService.GetAllPageNames()
         .map((r) => {
-          return this.validateResponse<LoadAllPageNamesResponse[], string>(r, {
+          return this.validateResponse<string[], string>(r, {
             type: PERMISSION_ACTIONS.ALL_PAGE_NAMES_LOADED,
             payload: r
           }, true, {
