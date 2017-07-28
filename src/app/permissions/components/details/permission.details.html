@@ -1,4 +1,4 @@
-<section id="single_role">
+<section id="single_role" *ngIf="roleObj">
 
   <h2 class="role_title" align="center">{{ newRole.name }}</h2>
 
@@ -8,8 +8,6 @@
   </div>
 
   <section class="pd3">
-
-    <!-- <select-role-table [role]="newRole" (roleToSave)="onPermissionSelection($event)"></select-role-table> -->
     <div class="row">
       <div class="col-xs-4" *ngFor="let page of roleObj.scopes; let idx = index">
         <div class="panel panel-default">
@@ -18,7 +16,13 @@
           </div>
           <div class="panel-body">
             <table class="table">
-              <thead><tr><th>{{ newRole.name }}</th></tr></thead>
+              <thead>
+                <tr>
+                  <th>{{ newRole.name }}</th>
+                  <th>Admin</th>
+                  <th>View</th>
+                </tr>
+              </thead>
               <tbody>
                 <tr>
                   <td colspan="100%">
@@ -35,7 +39,14 @@
                   <td>
                     <input id="{{item.code}}+{{idx}}+{{i}}" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}" [(ngModel)]="item.isSelected" />
                     <label for="{{item.code}}+{{idx}}+{{i}}"> {{this.getNameByCode(item.code)}}</label>
-                    </td>
+                  </td>
+                  <td>
+                    <!--checkPermission(page.name, 'share', 'view')" fa-times fa-check-->
+                    <i class="fa" [ngClass]="true ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
+                  </td>
+                  <td>
+                    <i class="fa" [ngClass]="false ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
+                  </td>
                 </tr>
               </tbody>
             </table>
