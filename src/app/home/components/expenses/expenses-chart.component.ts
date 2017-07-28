@@ -230,7 +230,6 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    debugger
     return rankArray;
   }
 

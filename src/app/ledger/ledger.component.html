@@ -153,15 +153,22 @@
                       </a>
                     </ng-template>
 
+                    <!--<input class="form-control" type="text"-->
+                           <!--[(ngModel)]="txn.particular.name"-->
+                           <!--ngxTypeahead-->
+                           <!--[typeahead]="lc.flatternAccountList"-->
+                           <!--typeaheadAsync="true"-->
+                           <!--typeaheadOptionField="name"-->
+                           <!--(typeaheadNoResults)="lc.noAccountChosenForNewEntry = $event"-->
+                           <!--[typeaheadItemTemplate]="accountPopUpTmpl"-->
+                           <!--popoverTitle="Dynamic html inside"-->
+                           <!--placement="bottom"-->
+                    <!--/>-->
+
                     <input class="form-control" type="text"
                            [(ngModel)]="txn.particular.name"
-                           [typeahead]="lc.flatternAccountList"
-                           typeaheadAsync="true"
-                           typeaheadOptionField="name"
-                           (typeaheadNoResults)="lc.noAccountChosenForNewEntry = $event"
-                           [typeaheadItemTemplate]="accountPopUpTmpl"
-                           popoverTitle="Dynamic html inside"
-                           placement="bottom"
+                           ngxTypeahead
+                           [sourceData]="lc.flatternAccountList | async"
                     />
 
                     <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
