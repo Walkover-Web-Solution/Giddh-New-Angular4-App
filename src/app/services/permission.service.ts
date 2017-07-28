@@ -7,9 +7,7 @@ import {
     PermissionRequest,
     CreateNewRoleRequest,
     CreateNewRoleRespone,
-    UpdateRoleRequest,
-    UpdateRoleRespone,
-    LoadAllPageNamesResponse
+    UpdateRoleRequest
 } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
 import { Store } from '@ngrx/store';
@@ -69,8 +67,7 @@ export class PermissionService {
     /**
     * Update new role
     */
-    public UpdateRole(model: UpdateRoleRequest): Observable<BaseResponse<UpdateRoleRespone, UpdateRoleRequest>> {
-        console.log('Hello Hello THe model is the service is ====:', model);
+    public UpdateRole(model: UpdateRoleRequest): Observable<BaseResponse<any, UpdateRoleRequest>> {
         let roleUniqueName = model.roleUniqueName ? model.roleUniqueName : model.uniqueName;
         this.store.take(1).subscribe(s => {
             if (s.session.user) {
@@ -79,10 +76,10 @@ export class PermissionService {
             this.companyUniqueName = s.session.companyUniqueName;
         });
         return this._http.put(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', roleUniqueName), model).map((res) => {
-            let data: BaseResponse<UpdateRoleRespone, UpdateRoleRequest> = res.json();
+            let data: BaseResponse<any, UpdateRoleRequest> = res.json();
             data.request = model;
             return data;
-        }).catch((e) => HandleCatch<UpdateRoleRespone, UpdateRoleRequest>(e, model));
+        }).catch((e) => HandleCatch<any, UpdateRoleRequest>(e, model));
     }
 
     /**
@@ -106,12 +103,12 @@ export class PermissionService {
     /*
      * Get all page names
     */
-    public GetAllPageNames(): Observable<BaseResponse<LoadAllPageNamesResponse[], string>> {
+    public GetAllPageNames(): Observable<BaseResponse<string[], string>> {
 
         return this._http.get(PERMISSION_API.GET_ALL_PAGE_NAMES).map((res) => {
-            let data: BaseResponse<LoadAllPageNamesResponse[], string> = res.json();
+            let data: BaseResponse<string[], string> = res.json();
             data.queryString = {};
             return data;
-        }).catch((e) => HandleCatch<LoadAllPageNamesResponse[], string>(e));
+        }).catch((e) => HandleCatch<string[], string>(e));
     }
 }

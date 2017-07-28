@@ -5,7 +5,6 @@ import {
     PermissionRequest,
     PermissionResponse,
     CreateNewRoleRespone,
-    LoadAllPageNamesResponse,
     ISingleRole
 } from '../../models/api-models/Permission';
 import {
@@ -77,7 +76,7 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
         case PERMISSION_ACTIONS.ALL_PAGE_NAMES_LOADED:
             {
                 let newState = _.cloneDeep(state);
-                let res = action.payload as BaseResponse <LoadAllPageNamesResponse[], string> ;
+                let res = action.payload as BaseResponse<string[], string> ;
                 if (res.status === 'success') {
                     newState.pages = res.body;
                     return Object.assign({}, state, newState);

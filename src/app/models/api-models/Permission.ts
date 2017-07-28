@@ -61,9 +61,3 @@ export class CreateNewRoleRespone {
   private name: string;
   private companyUniqueName: string;
 }
-
-export class UpdateRoleRespone {
-}
-
-export class LoadAllPageNamesResponse {
-}
