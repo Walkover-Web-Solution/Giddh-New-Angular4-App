@@ -1,16 +1,7 @@
-import {
-    Action
-} from '@ngrx/store';
-import {
-    CreateNewRoleResponseAndRequest,
-    ISingleRole
-} from '../../models/api-models/Permission';
-import {
-    PERMISSION_ACTIONS
-} from '../../services/actions/permission/permission.const';
-import {
-    BaseResponse
-} from '../../models/api-models/BaseResponse';
+import { Action } from '@ngrx/store';
+import { CreateNewRoleResponseAndRequest } from '../../models/api-models/Permission';
+import { PERMISSION_ACTIONS } from '../../services/actions/permission/permission.const';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 
 export interface PermissionState {
@@ -63,10 +54,9 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
             {
                 // role is successfully deleted now remove deleted role from store
                 let newState = _.cloneDeep(state);
-                let res = action.payload as BaseResponse < string,
-                    string > ;
+                let res = action.payload;
                 // res contains deleted role's uniqueName
-                newState.roles.splice(newState.roles.findIndex((role: ISingleRole) => {
+                newState.roles.splice(newState.roles.findIndex((role: CreateNewRoleResponseAndRequest) => {
                     return role.uniqueName === res;
                 }), 1);
                 return Object.assign({}, state, newState);

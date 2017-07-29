@@ -6,7 +6,7 @@ import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
-import { NewRoleClass, NewRoleFormClass, IPage, INewRoleFormObj } from '../../permission.utility';
+import { NewRoleClass, NewRoleFormClass, IPageStr, IPage, INewRoleFormObj } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 import * as _ from 'lodash';
 
@@ -32,8 +32,8 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
                 this.allRoles.push({name: role.name, uniqueName: role.uniqueName});
             });
             this.newRoleObj.pageList = [];
-            permission.pages.forEach((page) => {
-                this.newRoleObj.pageList.push({name: page, selected: false});
+            permission.pages.forEach((page: IPageStr) => {
+                this.newRoleObj.pageList.push({name: page, isSelected: false});
             });
         });
     }
@@ -76,24 +76,20 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         }
     }
 
-    private assignPagesForScope(){
-        return [];
-    }
-
     private selectAllPages(event) {
         if (event.target.checked) {
             this.newRoleObj.isSelectedAllPages = true;
-            this.newRoleObj.pageList.forEach((item) => item.selected = true);
+            this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = true);
         } else {
             this.newRoleObj.isSelectedAllPages = false;
-            this.newRoleObj.pageList.forEach((item) => item.selected = false);
+            this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = false);
         }
     }
 
     private makeCount() {
         let count: number = 0;
-        this.newRoleObj.pageList.forEach((item) => {
-            if (item.selected) {
+        this.newRoleObj.pageList.forEach((item: IPage) => {
+            if (item.isSelected) {
                 count += 1;
             }
         });
