@@ -25,7 +25,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     private dropdownHeading: string = 'Select pages';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
+    constructor(private router: Router, private store: Store<AppState>, private PermissionActions: PermissionActions) {
         this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
             this.allRoles = [];
             permission.roles.forEach((role) => {
@@ -39,7 +39,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.permissionActions.GetAllPages());
+        this.store.dispatch(this.PermissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
     }
 
@@ -71,7 +71,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             }else {
                 data = _.omit(this.newRoleObj, 'pageList');
             }
-            this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
+            this.store.dispatch(this.PermissionActions.PushTempRoleInStore(data));
             this.closeEvent.emit('save');
         }
     }
