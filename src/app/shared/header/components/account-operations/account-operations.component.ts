@@ -32,7 +32,6 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { AccountService } from '../../../../services/account.service';
-import { Subject } from 'rxjs/Subject';
 
 @Component({
   selector: 'account-operations',
@@ -84,7 +83,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public companyTaxDropDown: Observable<Select2OptionData[]>;
   public accountList: any[];
   public showEditTaxSection: boolean = false;
-  public accounts$: Subject<Select2OptionData[]> = new Subject();
+  public accounts$: Observable<Select2OptionData[]>;
   public accountOptions: Select2Options = {
     multiple: true,
     width: '100%',
@@ -209,7 +208,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         data.body.results.map(d => {
           accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
         });
-        this.accounts$.next(accounts);
+        this.accounts$ = Observable.of(accounts);
       }
     });
   }

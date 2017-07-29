@@ -43,6 +43,8 @@ import { TlPlService } from './tl-pl.service';
 import { TlPlActions } from './actions/tl-pl.actions';
 import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
+import { HomeActions } from './actions/home/home.actions';
+import { DashboardService } from './dashboard.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -51,6 +53,7 @@ import { LedgerService } from './ledger.service';
 @NgModule({
   imports: [CommonModule, RouterModule,
     SharedModule.forRoot(),
+    EffectsModule.run(HomeActions),
     EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions),
     EffectsModule.run(GroupWithAccountsAction),
@@ -80,6 +83,7 @@ export class ServiceModule {
         AuthenticationService,
         ErrorHandlerService,
         ToasterService,
+        DashboardService,
         CompanyService,
         NeedsAuthentication,
         LocationService,
