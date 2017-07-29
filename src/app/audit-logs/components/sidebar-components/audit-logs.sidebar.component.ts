@@ -14,8 +14,6 @@ import { LoginActions } from '../services/actions/login.action';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
-import { SearchRequest } from '../../../models/api-models/Search';
-import { SearchActions } from '../../../services/actions/search.actions';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from 'lodash';

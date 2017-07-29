@@ -46,7 +46,7 @@ export class GroupHistoryResponse {
  * API: /company/:companyUniqueName/groups/:groupUniqueName/closing-balance?fromDate=:date1&toDate=:date2&refresh=:refresh
 */
 
-export class ClosingBalanceResponse implements IDashboardCbMainItem{
+export class ClosingBalanceResponse implements IDashboardCbMainItem, IChildGroups {
   public forwardedBalance: IForwardBalance;
   public creditTotal: number;
   public debitTotal: number;
