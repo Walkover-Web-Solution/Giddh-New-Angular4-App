@@ -1,7 +1,7 @@
 import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { LedgerVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -15,6 +15,9 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
+import { AccountService } from '../services/account.service';
+import { TypeaheadMatch } from 'ngx-bootstrap';
+import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 
 @Component({
   selector: 'ledger',
@@ -22,7 +25,7 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./ledger.component.scss']
 })
 export class LedgerComponent implements OnInit {
-  public lc: LedgerVM = new LedgerVM();
+  public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
     locale: {
@@ -58,15 +61,62 @@ export class LedgerComponent implements OnInit {
     }
   };
   public trxRequest: TransactionsRequest;
+  public accountsOptions: Select2Options = {
+    multiple: true,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true,
+    maximumSelectionLength: 1,
+    templateSelection: (data) => data.text,
+    templateResult: (data: any) => {
+      if (data.text === 'Searching…') {
+        return;
+      }
+      if (!data.additional.stock) {
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">${ data.additional.uniqueName }</span>
+                      </a>`);
+      } else {
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">${ data.additional.uniqueName }</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">
+                            Stock: ${data.additional.stock.name}
+                        </span>
+                      </a>`);
+      }
+
+    }
+  };
+
   private ledgerSearchTerms = new Subject<string>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private ledgerActions: LedgerActions, private route: ActivatedRoute, private _ledgerService: LedgerService) {
+  constructor(private store: Store<AppState>, private ledgerActions: LedgerActions, private route: ActivatedRoute,
+              private _ledgerService: LedgerService, private _accountService: AccountService, private cdRef: ChangeDetectorRef) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
+
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let accountsArray: Select2OptionData[] = [];
+        data.body.results.map(acc => {
+          if (acc.stocks) {
+            acc.stocks.map(as => {
+              accountsArray.push({id: acc.uniqueName, text: acc.name, additional: Object.assign({}, acc, {stock: as})});
+            });
+            accountsArray.push({id: acc.uniqueName, text: acc.name, additional: acc});
+          } else {
+            accountsArray.push({id: acc.uniqueName, text: acc.name, additional: acc});
+          }
+        });
+        this.lc.flatternAccountList = Observable.of(_.orderBy(accountsArray, 'text'));
+      }
+    });
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -80,6 +130,11 @@ export class LedgerComponent implements OnInit {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
+    this.lc = new LedgerVM();
+  }
+
+  public selectedAccount(e: TypeaheadMatch) {
+    //
   }
 
   // Push a search term into the observable stream.
@@ -139,6 +194,14 @@ export class LedgerComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+  }
+
+  public showNewLedgerEntryPopup() {
+    this.lc.showNewLedgerPanel = true;
+  }
+
+  public hideNewLedgerEntryPopup() {
+    this.lc.showNewLedgerPanel = false;
   }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {
