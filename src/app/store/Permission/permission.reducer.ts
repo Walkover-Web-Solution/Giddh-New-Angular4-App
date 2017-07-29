@@ -70,7 +70,7 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                 let newState = _.cloneDeep(state);
                 // res contains deleted role's uniqueName
                 newState.roles.splice(newState.roles.findIndex((role: IRoleCommonResponseAndRequest) => {
-                    return role.uniqueName === action.payload;
+                    return role.uniqueName === action.payload.queryString.roleUniqueName;
                 }), 1);
                 return Object.assign({}, state, newState);
             }

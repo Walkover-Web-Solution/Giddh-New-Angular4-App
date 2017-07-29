@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 
 @Component({
   selector: 'delete-role-confirmation-model',
@@ -7,7 +8,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 export class DeleteRoleConfirmationModelComponent {
 
-  @Input() public selectedRoleName: string;
+  @Input() public selectedRoleForDelete: IRoleCommonResponseAndRequest;
   @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
