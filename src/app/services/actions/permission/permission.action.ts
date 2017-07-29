@@ -30,7 +30,7 @@ export class PermissionActions {
   private GetAllPagesResponse$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE)
     .map(response => {
-      return { type: '' };
+      return { type : ''};
     });
 
   @Effect()
@@ -44,8 +44,8 @@ export class PermissionActions {
   @Effect()
   private GetRolesResponse$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ROLES_RESPONSE)
-    .map(action => {
-      return { type: '' };
+    .map(response => {
+      return { type: ''};
     });
 
   @Effect()
@@ -137,22 +137,6 @@ export class PermissionActions {
       return { type: '' };
     });
 
-  // @Effect()
-  // private AllPages$: Observable<Action> = this.action$
-  //   .ofType(PERMISSION_ACTIONS.GET_ALL_PAGES)
-  //   .switchMap(action => {
-  //     return this._permissionService.GetAllPageNames()
-  //       .map((r) => {
-  //         return this.validateResponse<string[], string>(r, {
-  //           type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
-  //           payload: r
-  //         }, true, {
-  //             type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
-  //             payload: r
-  //           });
-  //       });
-  //   });
-
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private _router: Router,
@@ -168,12 +152,12 @@ export class PermissionActions {
 
   public GetAllPagesResponse(value: any): Action {
     return {
-      type: PERMISSION_ACTIONS.GET_ALL_PAGES,
+      type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
       payload: value
     };
   }
 
-  public GetRoles() {
+  public GetRoles(): Action {
     return { type: PERMISSION_ACTIONS.GET_ROLES };
   }
 
@@ -207,7 +191,7 @@ export class PermissionActions {
 
   public UpdateRoleResponse(value: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>): Action {
     return {
-      type: PERMISSION_ACTIONS.UPDATE_ROLE,
+      type: PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE,
       payload: value
     };
   }
@@ -221,7 +205,7 @@ export class PermissionActions {
 
   public DeleteRoleResponse(value: BaseResponse<string, string>): Action {
     return {
-      type: PERMISSION_ACTIONS.DELETE_ROLE,
+      type: PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE,
       payload: value
     };
   }
