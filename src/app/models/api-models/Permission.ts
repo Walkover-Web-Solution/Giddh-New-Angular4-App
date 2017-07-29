@@ -37,7 +37,7 @@ export interface CreateNewRoleRequest {
   uniqueName?: string;
 }
 
-export interface CreateNewRoleResponseAndRequest {
+export interface IRoleCommonResponseAndRequest {
   name: string;
   scopes: Scope[];
   isFixed?: boolean;

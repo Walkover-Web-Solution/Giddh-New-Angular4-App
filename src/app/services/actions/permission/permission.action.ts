@@ -11,11 +11,27 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { PermissionService } from '../../permission.service';
 import { PERMISSION_ACTIONS } from './permission.const';
-import { CreateNewRoleRequest, CreateNewRoleResponseAndRequest, CreateNewRoleResponse } from '../../../models/api-models/Permission';
+import { CreateNewRoleRequest, IRoleCommonResponseAndRequest, CreateNewRoleResponse } from '../../../models/api-models/Permission';
 import { Router } from '@angular/router';
+import { IPageStr } from '../../../permissions/permission.utility';
 
 @Injectable()
 export class PermissionActions {
+
+  @Effect()
+  private GetAllPages$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.GET_ALL_PAGES)
+    .switchMap(action => this._permissionService.GetAllPageNames())
+    .map(response => {
+      return this.GetAllPagesResponse(response);
+    });
+
+  @Effect()
+  private GetAllPagesResponse$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE)
+    .map(response => {
+      return { type: '' };
+    });
 
   @Effect()
   private GetRoles$: Observable<Action> = this.action$
@@ -34,7 +50,7 @@ export class PermissionActions {
 
   @Effect()
   private CreateRole$: Observable<Action> = this.action$
-    .ofType(PERMISSION_ACTIONS.CREATE_NEW_ROLE)
+    .ofType(PERMISSION_ACTIONS.CREATE_ROLE)
     .switchMap(action => {
       return this._permissionService.CreateNewRole(action.payload)
         .map(response => this.CreateRoleResponse(response));
@@ -42,7 +58,7 @@ export class PermissionActions {
 
   @Effect()
   private CreateRoleResponse$: Observable<Action> = this.action$
-    .ofType(PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE)
+    .ofType(PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE)
     .map(response => {
       let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = response.payload;
       if (data.status === 'error') {
@@ -57,42 +73,85 @@ export class PermissionActions {
   @Effect()
   private UpdateRole$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.UPDATE_ROLE)
-    .switchMap(action => {
-      return this._permissionService.UpdateRole(action.payload)
-        .map((r) =>
-          this.validateResponse(r, {
-            type: PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE,
-            payload: action.payload
-          }, true));
+    .switchMap(action => this._permissionService.UpdateRole(action.payload))
+    .map(response => {
+      return this.UpdateRoleResponse(response);
     });
+
+  @Effect()
+  private UpdateRoleResponse$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Role Updated Successfully');
+        this._router.navigate(['/pages', 'permissions', 'list']);
+      }
+      return { type: '' };
+    });
+
+  // @Effect()
+  // private UpdateRole$: Observable<Action> = this.action$
+  //   .ofType(PERMISSION_ACTIONS.UPDATE_ROLE)
+  //   .switchMap(action => {
+  //     return this._permissionService.UpdateRole(action.payload)
+  //       .map((r) =>
+  //         this.validateResponse(r, {
+  //           type: PERMISSION_ACTIONS.UPDATE_ROLE_RESPONSE,
+  //           payload: action.payload
+  //         }, true));
+  //   });
+
+  // @Effect()
+  // private DeleteRole$: Observable<Action> = this.action$
+  //   .ofType(PERMISSION_ACTIONS.DELETE_ROLE)
+  //   .switchMap(action => {
+  //     return this._permissionService.DeleteRole(action.payload)
+  //       .map((r) =>
+  //         this.validateResponse(r, {
+  //           type: PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE,
+  //           payload: action.payload
+  //         }, true));
+  //   });
 
   @Effect()
   private DeleteRole$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.DELETE_ROLE)
-    .switchMap(action => {
-      return this._permissionService.DeleteRole(action.payload)
-        .map((r) =>
-          this.validateResponse(r, {
-            type: PERMISSION_ACTIONS.ROLE_DELETED,
-            payload: action.payload
-          }, true));
+    .switchMap(action => this._permissionService.DeleteRole(action.payload))
+    .map(response => {
+      return this.DeleteRoleResponse(response);
     });
 
   @Effect()
-  private AllPages$: Observable<Action> = this.action$
-    .ofType(PERMISSION_ACTIONS.LOAD_ADD_PAGE_NAMES)
-    .switchMap(action => {
-      return this._permissionService.GetAllPageNames()
-        .map((r) => {
-          return this.validateResponse<string[], string>(r, {
-            type: PERMISSION_ACTIONS.ALL_PAGE_NAMES_LOADED,
-            payload: r
-          }, true, {
-              type: PERMISSION_ACTIONS.ALL_PAGE_NAMES_LOADED,
-              payload: r
-            });
-        });
+  private DeleteRoleResponse$: Observable<Action> = this.action$
+    .ofType(PERMISSION_ACTIONS.DELETE_ROLE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<string, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Role Deleted Successfully');
+      }
+      return { type: '' };
     });
+
+  // @Effect()
+  // private AllPages$: Observable<Action> = this.action$
+  //   .ofType(PERMISSION_ACTIONS.GET_ALL_PAGES)
+  //   .switchMap(action => {
+  //     return this._permissionService.GetAllPageNames()
+  //       .map((r) => {
+  //         return this.validateResponse<string[], string>(r, {
+  //           type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
+  //           payload: r
+  //         }, true, {
+  //             type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
+  //             payload: r
+  //           });
+  //       });
+  //   });
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
@@ -101,13 +160,68 @@ export class PermissionActions {
     private _permissionService: PermissionService) {
   }
 
+  public GetAllPages(): Action {
+    return {
+      type: PERMISSION_ACTIONS.GET_ALL_PAGES,
+    };
+  }
+
+  public GetAllPagesResponse(value: any): Action {
+    return {
+      type: PERMISSION_ACTIONS.GET_ALL_PAGES,
+      payload: value
+    };
+  }
+
   public GetRoles() {
     return { type: PERMISSION_ACTIONS.GET_ROLES };
   }
 
-  public GetRolesResponse(value: BaseResponse<CreateNewRoleResponseAndRequest[], string>) {
+  public GetRolesResponse(value: BaseResponse<IRoleCommonResponseAndRequest[], string>) {
     return {
       type: PERMISSION_ACTIONS.GET_ROLES_RESPONSE,
+      payload: value
+    };
+  }
+
+  public CreateRole(value: CreateNewRoleRequest): Action {
+    return {
+      type: PERMISSION_ACTIONS.CREATE_ROLE,
+      payload: value
+    };
+  }
+
+  public CreateRoleResponse(value: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>): Action {
+    return {
+      type: PERMISSION_ACTIONS.CREATE_ROLE_RESPONSE,
+      payload: value
+    };
+  }
+
+  public UpdateRole(value: IRoleCommonResponseAndRequest): Action {
+    return {
+      type: PERMISSION_ACTIONS.UPDATE_ROLE,
+      payload: value
+    };
+  }
+
+  public UpdateRoleResponse(value: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>): Action {
+    return {
+      type: PERMISSION_ACTIONS.UPDATE_ROLE,
+      payload: value
+    };
+  }
+
+  public DeleteRole(value: string): Action {
+    return {
+      type: PERMISSION_ACTIONS.DELETE_ROLE,
+      payload: value
+    };
+  }
+
+  public DeleteRoleResponse(value: BaseResponse<string, string>): Action {
+    return {
+      type: PERMISSION_ACTIONS.DELETE_ROLE,
       payload: value
     };
   }
@@ -119,50 +233,9 @@ export class PermissionActions {
     };
   }
 
-  public LoadAllPageNames(): Action {
-    return {
-      type: PERMISSION_ACTIONS.LOAD_ADD_PAGE_NAMES,
-    };
-  }
-
-  public SaveNewRole(data: CreateNewRoleRequest): Action {
-    return {
-      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
-      payload: data
-    };
-  }
-
-  public UpdateRole(data: CreateNewRoleRequest): Action {
-    return {
-      type: PERMISSION_ACTIONS.UPDATE_ROLE,
-      payload: data
-    };
-  }
-
-  public DeleteRole(data: any): Action {
-    return {
-      type: PERMISSION_ACTIONS.DELETE_ROLE,
-      payload: data.roleUniqueName
-    };
-  }
-
   public RemoveNewlyCreatedRoleFromStore(): Action {
     return {
       type: PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE
-    };
-  }
-
-  public CreateRole(value: CreateNewRoleRequest): Action {
-    return {
-      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE,
-      payload: value
-    };
-  }
-
-  public CreateRoleResponse(value: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>): Action {
-    return {
-      type: PERMISSION_ACTIONS.CREATE_NEW_ROLE_RESPONSE,
-      payload: value
     };
   }
 
