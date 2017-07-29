@@ -30,8 +30,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
     public localState: any;
     public allRoles: IRoleCommonResponseAndRequest[] = [];
-    private roleToDelete: string;
-    private roleToDeleteName: string;
+    private selectedRoleForDelete: IRoleCommonResponseAndRequest;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
     constructor(
@@ -65,14 +64,13 @@ export class PermissionListComponent implements OnInit, OnDestroy {
         this.router.navigate(['/pages', 'permissions', 'details', roleUniqueName]);
     }
 
-    public deleteRole(roleUniqueName) {
-        this.roleToDelete = roleUniqueName;
-        this.roleToDeleteName = this.allRoles.find((r) => r.uniqueName === roleUniqueName).name;
+    public deleteRole(role: IRoleCommonResponseAndRequest) {
+        this.selectedRoleForDelete = role;
         this.permissionConfirmationModel.show();
     }
     public deleteConfirmedRole() {
         this.permissionConfirmationModel.hide();
-        this.store.dispatch(this.PermissionActions.DeleteRole(this.roleToDelete));
+        this.store.dispatch(this.PermissionActions.DeleteRole(this.selectedRoleForDelete.uniqueName));
     }
 
     public closeConfirmationPopup() {
