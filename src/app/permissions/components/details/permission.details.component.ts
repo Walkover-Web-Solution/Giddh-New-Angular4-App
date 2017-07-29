@@ -7,16 +7,16 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { Scope, IRoleCommonResponseAndRequest, Permission } from '../../../models/api-models/Permission';
 import * as _ from 'lodash';
-import { NewRoleClass, NewPermissionObj, IPage } from '../../permission.utility';
+import { NewRoleClass, NewPermissionObj, IPage, IPageStr } from '../../permission.utility';
 
 @Component({
   templateUrl: './permission.details.html'
 })
 
 export class PermissionDetailsComponent implements OnInit {
+  private pageList: IPageStr[];
   private newRole: any = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private transactionMode: string;
   private allRoles: any;
   private singlePageForFreshStart: any;
   private rawDataForAllRoles: Permission[];
@@ -31,29 +31,49 @@ export class PermissionDetailsComponent implements OnInit {
   ) {
 
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
-      let roleId = this.activatedRoute.snapshot.params.id;
       this.allRoles = _.cloneDeep(permission.roles);
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'super_admin_off_the_record';
       });
       this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
       this.allRolesOfPage = this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles));
-
-      if (roleId) {
-        this.transactionMode = 'update';
-        this.newRole = permission.roles.find((role) => role.uniqueName === roleId);
-      } else {
-        this.transactionMode = 'create';
-        this.newRole = permission.newRole;
-      }
+      this.newRole = permission.newRole;
+      this.pageList = permission.pages;
     });
   }
 
   public ngOnInit() {
     if (_.isEmpty(this.newRole)) {
       this.router.navigate(['/pages', 'permissions', 'list']);
-    }else {
+    }else if (this.newRole.isUpdateCase) {
+      this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), false, this.newRole.uniqueName, this.newRole.isUpdateCase);
+    } else {
       this.roleObj = new NewRoleClass(this.newRole.name, this.setScopeForCurrentRole(), this.newRole.isFresh, this.checkForRoleUniqueName());
+    }
+  }
+
+  private addNewPage(page: string) {
+    if (!this.checkForAlreadyExistInPageArray(page)) {
+      let pageObj = _.find(this.singlePageForFreshStart.scopes, (o: Scope) => o.name === page);
+      pageObj.permissions = pageObj.permissions.map((o: Permission) => {
+        return o = new NewPermissionObj(o.code, false);
+      });
+      this.roleObj.scopes.push(pageObj);
+    }
+  }
+
+  private removePageFromScope(page: string) {
+    this.roleObj.scopes.splice(this.roleObj.scopes.findIndex((o: Scope) => o.name === page), 1);
+  }
+
+  private checkForAlreadyExistInPageArray(page: string): boolean {
+    let idx = _.findIndex(this.roleObj.scopes, (o: Scope) => {
+      return o.name === page;
+    });
+    if (idx !== -1) {
+      return true;
+    }else {
+      return false;
     }
   }
 
@@ -72,11 +92,14 @@ export class PermissionDetailsComponent implements OnInit {
   private addNewRole(): any {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
-    if (this.transactionMode === 'create') {
-      this.store.dispatch(this.permissionActions.CreateRole(data));
-    }else if (this.transactionMode === 'update') {
-      this.store.dispatch(this.permissionActions.UpdateRole(data));
-    }
+    this.store.dispatch(this.permissionActions.CreateRole(data));
+  }
+
+  private updateRole() {
+    let data = _.cloneDeep(this.roleObj);
+    data.scopes = this.getScopeDataReadyForAPI(data);
+    console.log( 'updateRole', data );
+    // this.store.dispatch(this.permissionActions.UpdateRole(data));
   }
 
   private getAllRolesOfPageReady(arr) {

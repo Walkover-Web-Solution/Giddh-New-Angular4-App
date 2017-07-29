@@ -8,11 +8,25 @@
   </div>
 
   <section class="pd3">
+    <div class="row mrB2" *ngIf="this.roleObj.isUpdateCase">
+      <div class="col-xs-12 form-inline">
+        <div class="form-group">
+          <select class="form-control" required [(ngModel)]="pageName" name="pageName">
+            <option [ngValue]="select">Select Pages</option>
+             <option [disabled]="checkForAlreadyExistInPageArray(page)" *ngFor="let page of pageList;" [ngValue]="page">{{page}}</option> 
+          </select>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-info" (click)="addNewPage(pageName)">Add</button>
+        </div>
+      </div>
+    </div>
     <div class="row">
       <div class="col-xs-4" *ngFor="let page of roleObj.scopes; let idx = index">
         <div class="panel panel-default">
           <div class="panel-heading">
             {{ page.name }}
+            <i *ngIf="this.roleObj.isUpdateCase" class="fa fa-times pull-right text-danger" aria-hidden="true" (click)="removePageFromScope(page.name)"></i>
           </div>
           <div class="panel-body">
             <table class="table">
@@ -41,7 +55,6 @@
                     <label for="{{item.code}}+{{idx}}+{{i}}"> {{this.getNameByCode(item.code)}}</label>
                   </td>
                   <td>
-                    <!--checkPermission(page.name, 'share', 'view')" fa-times fa-check-->
                     <i class="fa" [ngClass]="true ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
                   </td>
                   <td>

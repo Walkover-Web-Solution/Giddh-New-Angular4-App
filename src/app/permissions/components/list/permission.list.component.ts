@@ -17,6 +17,7 @@ import { PermissionActions } from '../../../services/actions/permission/permissi
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
+import { NewRoleClass } from '../../permission.utility';
 
 @Component({
     templateUrl: './permission-list.html',
@@ -60,8 +61,10 @@ export class PermissionListComponent implements OnInit, OnDestroy {
         }
     }
 
-    public updateRole(roleUniqueName) {
-        this.router.navigate(['/pages', 'permissions', 'details', roleUniqueName]);
+    public updateRole(role: NewRoleClass) {
+        let data = new NewRoleClass(role.name, role.scopes, role.isFixed, role.uniqueName, true);
+        this.store.dispatch(this.PermissionActions.PushTempRoleInStore(data));
+        this.router.navigate(['/pages', 'permissions', 'details']);
     }
 
     public deleteRole(role: IRoleCommonResponseAndRequest) {
