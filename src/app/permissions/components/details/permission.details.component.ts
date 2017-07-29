@@ -99,7 +99,7 @@ export class PermissionDetailsComponent implements OnInit {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
     console.log( 'updateRole', data );
-    // this.store.dispatch(this.permissionActions.UpdateRole(data));
+    this.store.dispatch(this.permissionActions.UpdateRole(data));
   }
 
   private getAllRolesOfPageReady(arr) {
