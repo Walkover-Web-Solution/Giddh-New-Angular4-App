@@ -23,30 +23,23 @@ export interface UpdateRoleRequest {
   uniqueName?: string;
 }
 
-export class CreateNewRoleResponse {
-  public isFixed: boolean;
-  public scopes: Scope[];
-  public uniqueName: string;
-  public name: string;
+export interface CreateNewRoleResponse {
+  isFixed: boolean;
+  scopes: Scope[];
+  uniqueName: string;
+  name: string;
 }
 
-export class CreateNewRoleRequest {
-  public name: string;
-  public scopes: Scope[];
-  public isFixed?: boolean;
-  public uniqueName?: string;
-}
-
-export class CreateNewRoleResponseAndRequest {
-  public name: string;
-  public scopes: Scope[];
-  public isFixed?: boolean;
-  public uniqueName?: string;
-}
-
-export interface ISingleRole {
+export interface CreateNewRoleRequest {
   name: string;
   scopes: Scope[];
-  uniqueName: any;
-  isFixed: boolean;
+  isFixed?: boolean;
+  uniqueName?: string;
+}
+
+export interface CreateNewRoleResponseAndRequest {
+  name: string;
+  scopes: Scope[];
+  isFixed?: boolean;
+  uniqueName?: string;
 }
