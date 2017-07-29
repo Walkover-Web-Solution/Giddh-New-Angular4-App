@@ -39,7 +39,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.permissionActions.LoadAllPageNames());
+        this.store.dispatch(this.permissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
     }
 

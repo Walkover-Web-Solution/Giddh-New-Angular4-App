@@ -3,7 +3,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
 import {
-    CreateNewRoleResponseAndRequest,
+    IRoleCommonResponseAndRequest,
     CreateNewRoleRequest,
     CreateNewRoleResponse,
     UpdateRoleRequest
@@ -14,6 +14,7 @@ import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
+import { IPageStr } from '../permissions/permission.utility';
 
 @Injectable()
 export class PermissionService {
@@ -28,7 +29,7 @@ export class PermissionService {
     /*
      * Get all roles
     */
-    public GetAllRoles(): Observable<BaseResponse<CreateNewRoleResponseAndRequest[], string>> {
+    public GetAllRoles(): Observable<BaseResponse<IRoleCommonResponseAndRequest[], string>> {
 
         this.store.take(1).subscribe(s => {
             if (s.session.user) {
@@ -40,10 +41,10 @@ export class PermissionService {
         });
 
         return this._http.get(PERMISSION_API.GET_ROLE.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-            let data: BaseResponse<CreateNewRoleResponseAndRequest[], string> = res.json();
+            let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res.json();
             data.queryString = {};
             return data;
-        }).catch((e) => HandleCatch<CreateNewRoleResponseAndRequest[], string>(e));
+        }).catch((e) => HandleCatch<IRoleCommonResponseAndRequest[], string>(e));
     }
 
     /**
@@ -66,19 +67,18 @@ export class PermissionService {
     /**
     * Update new role
     */
-    public UpdateRole(model: UpdateRoleRequest): Observable<BaseResponse<any, UpdateRoleRequest>> {
-        let roleUniqueName = model.roleUniqueName ? model.roleUniqueName : model.uniqueName;
+    public UpdateRole(model: IRoleCommonResponseAndRequest): Observable<BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>> {
         this.store.take(1).subscribe(s => {
             if (s.session.user) {
                 this.user = s.session.user.user;
             }
             this.companyUniqueName = s.session.companyUniqueName;
         });
-        return this._http.put(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', roleUniqueName), model).map((res) => {
-            let data: BaseResponse<any, UpdateRoleRequest> = res.json();
+        return this._http.put(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', this.companyUniqueName).replace(':roleUniqueName', model.uniqueName), model).map((res) => {
+            let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res.json();
             data.request = model;
             return data;
-        }).catch((e) => HandleCatch<any, UpdateRoleRequest>(e, model));
+        }).catch((e) => HandleCatch<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>(e, model));
     }
 
     /**
@@ -102,12 +102,11 @@ export class PermissionService {
     /*
      * Get all page names
     */
-    public GetAllPageNames(): Observable<BaseResponse<string[], string>> {
-
+    public GetAllPageNames(): Observable<BaseResponse<IPageStr[], string>> {
         return this._http.get(PERMISSION_API.GET_ALL_PAGE_NAMES).map((res) => {
-            let data: BaseResponse<string[], string> = res.json();
+            let data: BaseResponse<IPageStr[], string> = res.json();
             data.queryString = {};
             return data;
-        }).catch((e) => HandleCatch<string[], string>(e));
+        }).catch((e) => HandleCatch<IPageStr[], string>(e));
     }
 }
