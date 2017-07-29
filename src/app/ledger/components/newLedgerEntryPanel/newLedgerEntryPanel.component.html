@@ -4,9 +4,8 @@
     <div class="basic_detail" ng-if="ledgerCtrl.showTaxationDiscountBox">
       <table>
         <tbody>
-        <tr>
-          <td class="pItem" ng-if="ledgerCtrl.selectedTxn.particular.stocks != null"
-          >
+        <tr *ngIf="selectedAccount">
+          <td class="pItem" *ngIf="selectedAccount.stock">
             <table>
               <tbody>
               <tr>
@@ -28,16 +27,16 @@
             </table>
           </td>
 
-          <td class="pItem" ng-if="ledgerCtrl.selectedTxn.particular.stocks != null">
+          <td class="pItem" *ngIf="selectedAccount.stock">
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">x</label>
           </td>
-          <td style="max-width:150px" class="pItem" ng-if=" ledgerCtrl.selectedTxn.particular.stocks != null">
+          <td style="max-width:150px" class="pItem" *ngIf="selectedAccount.stock">
             <label>Price</label>
             <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.price"
                    ng-change="ledgerCtrl.onNewPanelChange().price(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
           </td>
-          <td class="pItem" ng-if="ledgerCtrl.selectedTxn.particular.stocks != null">
+          <td class="pItem" *ngIf="selectedAccount.stock">
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">=</label>
           </td>
@@ -50,11 +49,13 @@
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">-</label>
           </td>
+
           <!--discount-->
           <td style="max-width:150px" class="pItem"
-              ng-if="ledgerCtrl.discountAccount != undefined && ledgerCtrl.discountAccount.accountDetails.length > 0">
-						    <ledger-discount></ledger-discount>
+              *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
+            <ledger-discount></ledger-discount>
           </td>
+
           <td class="pItem"
               ng-if="ledgerCtrl.taxList.length > 0 && ledgerCtrl.discountAccount != undefined && ledgerCtrl.discountAccount.accountDetails.length > 0">
             <label>&nbsp;</label>
@@ -113,7 +114,7 @@
 
     <div class="col-xs-12 mrT mrB">
       <div class="row">
-        <div class="cheq col-xs-6 pdT" ng-show="showAdvanced">
+        <div class="cheq col-xs-6 pdT" *ngIf="showAdvanced">
           <div class="row">
             <table>
               <tbody>
@@ -137,8 +138,9 @@
         <div class="file_attached col-xs-5 pull-right text-right"
              ng-if="ledgerCtrl.selectedLedger.attachedFileName.length > 0">
           <div class="row">
-            <span ng-bind="ledgerCtrl.selectedLedger.attachedFileName"></span><label class="remove cp mrL1"
-                                                                                     ng-click="ledgerCtrl.deleteAttachedFile()">(remove)</label>
+            <span ng-bind="ledgerCtrl.selectedLedger.attachedFileName"></span>
+            <label class="remove cp mrL1" *ngIf="false"
+                   ng-click="ledgerCtrl.deleteAttachedFile()">(remove)</label>
           </div>
         </div>
       </div>
@@ -146,7 +148,7 @@
     <!--map bank transactions-->
 
     <div class="row">
-      <div class="col-xs-7 form-group pr" ng-if="ledgerCtrl.selectedLedger.isBankTransaction">
+      <div class="col-xs-7 form-group pr" *ngIf="false" ng-if="ledgerCtrl.selectedLedger.isBankTransaction">
         <a href="javascript:void(0)" ng-click="ledgerCtrl.matchBankTransaction()">Map Transaction
           <span ng-if="ledgerCtrl.showMatchingEntries">with</span>
         </a>
@@ -168,20 +170,20 @@
       </div>
     </div>
 
-    <div class="row bdrB pdB1 mrB1" ng-show="showAdvanced">
+    <div class="row bdrB pdB1 mrB1" *ngIf="showAdvanced">
       <div class="col-xs-12 pdT">
         <table>
           <tr>
             <td class="pdR1"><label class="default_clr pull-left">Voucher type</label></td>
             <td colspan="4">
               <!--<ui-select ng-model="ledgerCtrl.selectedLedger.voucher" theme="bootstrap"-->
-                         <!--ng-click="$event.stopPropagation()">-->
-                <!--<ui-select-match>-->
-                  <!--<span>{{$select.selected.name}}</span>-->
-                <!--</ui-select-match>-->
-                <!--<ui-select-choices repeat="item in ledgerCtrl.voucherTypeList| filter: $select.search ">-->
-                  <!--<span ng-bind="item.name"></span>-->
-                <!--</ui-select-choices>-->
+              <!--ng-click="$event.stopPropagation()">-->
+              <!--<ui-select-match>-->
+              <!--<span>{{$select.selected.name}}</span>-->
+              <!--</ui-select-match>-->
+              <!--<ui-select-choices repeat="item in ledgerCtrl.voucherTypeList| filter: $select.search ">-->
+              <!--<span ng-bind="item.name"></span>-->
+              <!--</ui-select-choices>-->
               <!--</ui-select>-->
             </td>
             <td class="pdL1">
@@ -194,11 +196,11 @@
 
     <div class="row">
       <div class="col-xs-6">
-        <button class="no-btn" ng-click="showAdvanced = !showAdvanced">Advance <i
-          class="glyphicon glyphicon-triangle-bottom" ng-class="{rotate180:showAdvanced}"></i></button>
+        <button class="no-btn" (click)="showAdvanced = !showAdvanced">Advance <i
+          class="glyphicon glyphicon-triangle-bottom" [ngClass]="{rotate180:showAdvanced}"></i></button>
       </div>
       <div class="col-xs-6 text-right">
-        <span class="primary_color">Compound Total: {{""}}</span>
+        <span class="primary_color">Compound Total: {{ currentTxn?.amount }}</span>
       </div>
     </div>
 

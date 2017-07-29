@@ -5,6 +5,7 @@ import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
+import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -13,8 +14,10 @@ export class LedgerVM {
   public currentTxn: ITransactionItem;
   public currentPage: number;
   public flatternAccountList: Observable<Select2OptionData[]>;
+  public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
+  public selectedAccount: IFlattenAccountsResultItem = null;
   public pageLoader: boolean = false;
   public today: Date = new Date();
   public fromDate: Date;
