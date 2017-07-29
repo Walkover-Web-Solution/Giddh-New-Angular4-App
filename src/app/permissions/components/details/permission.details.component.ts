@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
-import { Scope, ISingleRole, Permission } from '../../../models/api-models/Permission';
+import { Scope, CreateNewRoleResponseAndRequest, Permission } from '../../../models/api-models/Permission';
 import * as _ from 'lodash';
 import { NewRoleClass, NewPermissionObj, IPage } from '../../permission.utility';
 
@@ -33,7 +33,7 @@ export class PermissionDetailsComponent implements OnInit {
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
       let roleId = this.activatedRoute.snapshot.params.id;
       this.allRoles = _.cloneDeep(permission.roles);
-      this.singlePageForFreshStart = _.find(this.allRoles, function(o: ISingleRole) {
+      this.singlePageForFreshStart = _.find(this.allRoles, function(o: CreateNewRoleResponseAndRequest) {
         return o.uniqueName === 'super_admin_off_the_record';
       });
       this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
@@ -77,7 +77,6 @@ export class PermissionDetailsComponent implements OnInit {
     }else if (this.transactionMode === 'update') {
       this.store.dispatch(this.permissionActions.UpdateRole(data));
     }
-    // this.router.navigate(['/pages', 'permissions', 'list']);
   }
 
   private getAllRolesOfPageReady(arr) {
@@ -96,7 +95,7 @@ export class PermissionDetailsComponent implements OnInit {
 
   private generateUIFromExistedRole() {
     let pRole: string = this.newRole.uniqueName || 'super_admin_off_the_record';
-    let res = _.find(this.allRoles, function(o: ISingleRole) {
+    let res = _.find(this.allRoles, function(o: CreateNewRoleResponseAndRequest) {
       return o.uniqueName === pRole;
     });
     if (res) {
@@ -136,7 +135,7 @@ export class PermissionDetailsComponent implements OnInit {
     let arr = [];
     let allRoles = _.cloneDeep(this.singlePageForFreshStart.scopes);
     _.forEach(this.newRole.pageList, (item: IPage) => {
-      if (item.selected) {
+      if (item.isSelected) {
         let res = _.find(allRoles, (o: Scope) => o.name === item.name);
         if (res) {
           res.permissions = _.map(res.permissions, (o: Permission) => new NewPermissionObj(o.code, false));

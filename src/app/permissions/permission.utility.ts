@@ -18,9 +18,13 @@ export class NewPermissionObj {
   ) {  }
 }
 
+export interface IPageStr {
+  [index: number]: string;
+}
+
 export interface IPage {
     name: string;
-    selected?: boolean;
+    isSelected: boolean;
 }
 
 export interface Pages {
