@@ -14,7 +14,7 @@ import { ElementViewContainerRef } from '../../../shared/helpers/directives/elem
 import { CompanyActions } from '../../../services/actions/company.actions';
 import { Router } from '@angular/router';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
-import { CreateNewRoleResponseAndRequest } from '../../../models/api-models/Permission';
+import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
 
@@ -29,7 +29,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     @ViewChild('permissionConfirmationModel') public permissionConfirmationModel: ModalDirective;
 
     public localState: any;
-    public allRoles: CreateNewRoleResponseAndRequest[] = [];
+    public allRoles: IRoleCommonResponseAndRequest[] = [];
     private roleToDelete: string;
     private roleToDeleteName: string;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -47,7 +47,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
         this.route.data.subscribe((data: any) => this.localState = data.yourData);
         // Getting roles every time user refresh page
         this.store.dispatch(this.PermissionActions.GetRoles());
-        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: CreateNewRoleResponseAndRequest[]) => this.allRoles = roles);
+        this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
     }
 
     public ngOnDestroy() {
@@ -72,8 +72,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     }
     public deleteConfirmedRole() {
         this.permissionConfirmationModel.hide();
-        console.log('roleUniqueName is : ', this.roleToDelete);
-        this.store.dispatch(this.PermissionActions.DeleteRole({ roleUniqueName: this.roleToDelete }));
+        this.store.dispatch(this.PermissionActions.DeleteRole(this.roleToDelete));
     }
 
     public closeConfirmationPopup() {

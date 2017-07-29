@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
-import { Scope, CreateNewRoleResponseAndRequest, Permission } from '../../../models/api-models/Permission';
+import { Scope, IRoleCommonResponseAndRequest, Permission } from '../../../models/api-models/Permission';
 import * as _ from 'lodash';
 import { NewRoleClass, NewPermissionObj, IPage } from '../../permission.utility';
 
@@ -33,7 +33,7 @@ export class PermissionDetailsComponent implements OnInit {
     this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
       let roleId = this.activatedRoute.snapshot.params.id;
       this.allRoles = _.cloneDeep(permission.roles);
-      this.singlePageForFreshStart = _.find(this.allRoles, function(o: CreateNewRoleResponseAndRequest) {
+      this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'super_admin_off_the_record';
       });
       this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
@@ -73,7 +73,7 @@ export class PermissionDetailsComponent implements OnInit {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
     if (this.transactionMode === 'create') {
-      this.store.dispatch(this.permissionActions.SaveNewRole(data));
+      this.store.dispatch(this.permissionActions.CreateRole(data));
     }else if (this.transactionMode === 'update') {
       this.store.dispatch(this.permissionActions.UpdateRole(data));
     }
@@ -95,7 +95,7 @@ export class PermissionDetailsComponent implements OnInit {
 
   private generateUIFromExistedRole() {
     let pRole: string = this.newRole.uniqueName || 'super_admin_off_the_record';
-    let res = _.find(this.allRoles, function(o: CreateNewRoleResponseAndRequest) {
+    let res = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
       return o.uniqueName === pRole;
     });
     if (res) {
