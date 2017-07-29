@@ -4,7 +4,8 @@
 
   <div class="pd3 pdT1 pdB1 bdrB clearfix">
     <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
-    <button class="btn btn-md btn-success mrR1 pull-right" (click)="addNewRole()">Save</button>
+    <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success mrR1 pull-right" (click)="addNewRole()">Save</button>
+    <button *ngIf="newRole.isUpdateCase" class="btn btn-md btn-success mrR1 pull-right" (click)="updateRole()">Update</button>
   </div>
 
   <section class="pd3">
