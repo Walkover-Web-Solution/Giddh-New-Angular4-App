@@ -8,6 +8,8 @@ export interface IFlattenGroupsAccountsDetailItem {
   groupSynonyms?: string;
   groupUniqueName: string;
   isOpen: boolean;
+  name?: string;
+  amount?: number;
 }
 
 export interface IFlattenGroupsAccountsDetail extends IFlattenGroupsAccountsDetailItem {
