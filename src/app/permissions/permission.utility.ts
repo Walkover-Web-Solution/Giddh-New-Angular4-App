@@ -7,7 +7,8 @@ export class NewRoleClass {
     public name: string,
     public scopes: Scope[],
     public isFixed?: boolean,
-    public uniqueName?: string
+    public uniqueName?: string,
+    public isUpdateCase?: boolean,
   ) {  }
 }
 
