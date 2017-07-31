@@ -123,3 +123,9 @@ export interface ITotalItem {
   amount: number;
   type: string;
 }
+
+export interface ILedgerDiscount {
+  name: string;
+  uniqueName: string;
+  amount: number;
+}

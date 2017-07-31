@@ -1,7 +1,7 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnInit } from '@angular/core';
-import { LedgerVM } from './ledger.vm';
+import { LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute } from '@angular/router';
@@ -11,6 +11,7 @@ import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
 import { AccountService } from '../services/account.service';
@@ -73,12 +74,12 @@ export class LedgerComponent implements OnInit {
       if (!data.additional.stock) {
         return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
                         <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:10px">${ data.additional.uniqueName }</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">${data.additional.uniqueName}</span>
                       </a>`);
       } else {
         return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
                         <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:10px">${ data.additional.uniqueName }</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">${data.additional.uniqueName}</span>
                         <span class="account-list-item" style="display: block;font-size:10px">
                             Stock: ${data.additional.stock.name}
                         </span>
@@ -99,18 +100,22 @@ export class LedgerComponent implements OnInit {
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
 
-    // get flattern_accounts list
+    // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accountsArray: Select2OptionData[] = [];
         data.body.results.map(acc => {
           if (acc.stocks) {
             acc.stocks.map(as => {
-              accountsArray.push({id: acc.uniqueName, text: acc.name, additional: Object.assign({}, acc, {stock: as})});
+              accountsArray.push({
+                id: uuid.v4(),
+                text: acc.name,
+                additional: Object.assign({}, acc, {stock: as})
+              });
             });
-            accountsArray.push({id: acc.uniqueName, text: acc.name, additional: acc});
+            accountsArray.push({id: uuid.v4(), text: acc.name, additional: acc});
           } else {
-            accountsArray.push({id: acc.uniqueName, text: acc.name, additional: acc});
+            accountsArray.push({id: uuid.v4(), text: acc.name, additional: acc});
           }
         });
         this.lc.flatternAccountList = Observable.of(_.orderBy(accountsArray, 'text'));
@@ -128,13 +133,14 @@ export class LedgerComponent implements OnInit {
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
+    this.lc.currentBlankTxn = null;
     this.lc.currentTxn = txn;
     this.lc.selectedTxnUniqueName = txn.entryUniqueName;
   }
 
-  public selectBlankTxn(txn: ITransactionItem, e: Event) {
-    e.stopPropagation();
-    this.lc.currentTxn = txn;
+  public selectBlankTxn(txn: TransactionVM) {
+    this.lc.currentTxn = null;
+    this.lc.currentBlankTxn = txn;
     this.lc.selectedTxnUniqueName = undefined;
   }
 
@@ -156,6 +162,7 @@ export class LedgerComponent implements OnInit {
       data.map(fa => {
           if (fa.id === e.value[0]) {
             this.lc.selectedAccount = fa.additional;
+            return;
           }
         }
       );
@@ -204,6 +211,11 @@ export class LedgerComponent implements OnInit {
 
   public getTransactionData() {
     this.store.dispatch(this.ledgerActions.GetTransactions(_.cloneDeep(this.trxRequest)));
+  }
+
+  public toggleTransactionType(event: string) {
+    let trx = this.lc.blankLedger.transactions.find(t => t.type === event);
+    this.selectBlankTxn(trx);
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {

@@ -42,7 +42,7 @@
           </td>
           <td class="pItem">
             <label class="primary_color">Amount</label>
-            <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.amount"
+            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount" ng-model="ledgerCtrl.selectedTxn.panel.amount"
                    ng-change="ledgerCtrl.onNewPanelChange().amount(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
           </td>
           <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
@@ -108,7 +108,7 @@
     <div class="row">
       <div class="col-xs-12">
         <textarea rows="4" cols="" class="form-control" placeholder="Description"
-                  ng-model="ledgerCtrl.selectedLedger.description"></textarea>
+                  [(ngModel)]="blankLedger.description"></textarea>
       </div>
     </div>
 
@@ -122,12 +122,11 @@
                 <td class="pdR">
                   <label class="default_clr">Cheque Number</label>
                   <input type="text" placeholder="XXXX2619" class="form-control"
-                         ng-model="ledgerCtrl.selectedLedger.chequeNumber"/>
+                         [(ngModel)]="blankLedger.chequeNumber"/>
                 </td>
                 <td>
                   <label class="default_clr">Cheque Date</label>
-                  <input type="text" class="form-control" ng-model="ledgerCtrl.selectedLedger.chequeClearanceDate"
-                         ui-mask="99-99-9999" model-view-value="true"/>
+                  <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate"/>
                 </td>
               </tr>
               </tbody>
@@ -136,7 +135,7 @@
         </div>
 
         <div class="file_attached col-xs-5 pull-right text-right"
-             ng-if="ledgerCtrl.selectedLedger.attachedFileName.length > 0">
+             *ngIf="blankLedger.attachedFile.length > 0">
           <div class="row">
             <span ng-bind="ledgerCtrl.selectedLedger.attachedFileName"></span>
             <label class="remove cp mrL1" *ngIf="false"
@@ -176,6 +175,7 @@
           <tr>
             <td class="pdR1"><label class="default_clr pull-left">Voucher type</label></td>
             <td colspan="4">
+              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
               <!--<ui-select ng-model="ledgerCtrl.selectedLedger.voucher" theme="bootstrap"-->
               <!--ng-click="$event.stopPropagation()">-->
               <!--<ui-select-match>-->
@@ -207,7 +207,7 @@
     <div class="row">
       <div class="col-xs-3 pdT1">
         <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger"
-                ng-click="ledgerCtrl.resetBlankLedger()">Reset
+                (click)="resetPanel()">Reset
         </button>
       </div>
       <div class="col-xs-9 pdT1">
@@ -215,7 +215,7 @@
           <div class="mrR1 pull-left" ng-if="ledgerCtrl.showGenInvOpts">
             <label class="checkbox oh">
               <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice"
-                     ng-model="ledgerCtrl.selectedLedger.generateInvoice" ng-click="$event.stopPropagation()">
+                     [(ngModel)]="blankLedger.generateInvoice" ng-click="$event.stopPropagation()">
               <span class="pull-left">Generate Invoice</span>
             </label>
           </div>
@@ -225,10 +225,10 @@
             <label for="invoiceFile"><i class="glyphicon glyphicon-paperclip"></i></label>
           </div>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  ng-click="ledgerCtrl.addBlankTxn('DEBIT')">Add to DR
+                  (click)="addToDrOrCr('DEBIT')" [disabled]="currentTxn.type === 'DEBIT'">Add to DR
           </button>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  ng-click="ledgerCtrl.addBlankTxn('CREDIT')">Add to CR
+                  (click)="addToDrOrCr('CREDIT')" [disabled]="currentTxn.type === 'CREDIT'">Add to CR
           </button>
           <button id="saveLedger" class="btn btn-success" ng-click="ledgerCtrl.saveUpdateLedger()">Save</button>
 
