@@ -1,49 +1,79 @@
 import { INameUniqueName } from './nameUniqueName.interface';
+
+// some common interface used in module everywhere
+export interface IOnlyUniqueName {
+  uniqueName: string;
+}
+
+export interface IOnlyAmount {
+  amount: number;
+}
+
+export interface IStockItem {
+  stockName: string;
+  stockUniqueName: string;
+}
+
+export interface IMfItem {
+  manufacturingQuantity: number;
+  manufacturingUnit: string;
+}
+
 /*
- * Model for get manufacting item details
- * GET call
- * API:: (taxes) company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufacturingUniqueName
- * response will be object of CommonResponseOfManufactureItem
+ * Model for get manufacturing item details
  */
 
-export interface ICommonResponseOfManufactureItem {
+export interface ICommonResponseOfManufactureItem extends IStockItem, IMfItem, IOnlyUniqueName {
   consumptionCost: number;
   costPerProduct: number;
   date: string;
   grandTotal: number;
   linkedStocks: ILinkedStock[];
-  manufacturingQuantity: number;
-  manufacturingUnit: string;
   otherExpenses: OtherExpenses[];
-  stockName: string;
-  stockUniqueName: string;
-  uniqueName: string;
   voucher: string;
   voucherNumber: number;
 }
 
-export interface ILinkedStock {
-    amount: number;
-    manufacturingQuantity: number;
-    manufacturingUnit: string;
-    rate: number;
-    stockName: string;
-    stockUniqueName: string;
+export interface ILinkedStock extends IOnlyAmount, IStockItem, IMfItem {
+  rate: number;
 }
 
-export interface ITransaction {
-    account: INameUniqueName;
-    amount: number;
-    type: string;
+export interface ITransaction extends IOnlyAmount {
+  account: INameUniqueName;
+  type: string;
 }
 
-export interface OtherExpenses {
-    baseAccount: INameUniqueName;
-    transactions: ITransaction[];
-    uniqueName: string;
+export interface OtherExpenses extends IOnlyUniqueName {
+  baseAccount: INameUniqueName;
+  transactions: ITransaction[];
 }
 
-export interface IGetManufacturingItemDetailsObj {
-    stockUniqueName: string;
-    manufacturingUniqueName: string;
+export interface IManufacturingUnqItemObj {
+  stockUniqueName: string;
+  manufacturingUniqueName: string;
+}
+
+/*
+ * Model for create manufacturing item request
+ */
+
+export interface IManufacturingItemRequest {
+  date: string;
+  linkedStocks: ILinkedStockForCreate[];
+  multipleOf?: number;
+  manufacturingMultipleOf?: number;
+  otherExpenses: IOtherExpensesForCreate[];
+}
+
+ export interface ILinkedStockForCreate extends IStockItem {
+  quantity: string;
+}
+
+export interface Transaction extends IOnlyAmount {
+  account: IOnlyUniqueName;
+}
+
+export interface IOtherExpensesForCreate {
+  baseAccount: IOnlyUniqueName;
+  transactions: Transaction[];
 }
