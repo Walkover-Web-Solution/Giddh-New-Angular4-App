@@ -9,6 +9,7 @@ import { AppState } from '../../../store/roots';
 import moment from 'moment';
 import * as _ from 'lodash';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'compare-chart',
@@ -50,7 +51,6 @@ export class ComparisionChartComponent implements OnInit {
                 financialYears = _.orderBy(financialYears, (it) => {
                   return moment(it.financialYearStarts, 'DD-MM-YYYY');
                 }, 'desc');
-                console.log(financialYears);
                 this.lastFinancialYear = financialYears[0];
               }
             }
@@ -59,6 +59,19 @@ export class ComparisionChartComponent implements OnInit {
         this.fetchChartData();
       }
     });
+    this.comparisionChartData$.subscribe(chartData => {
+    });
+
+    this.comparisionChartData$
+      .skipWhile(p => isNullOrUndefined(p))
+      // .zip(p => p.revenueActiveYear, p => p.revenueLastYear, p => p.ExpensesActiveYear, p => p.ExpensesLastYear)
+      .map(p => p.revenueActiveYear[0])
+      .groupBy(p => p.category)
+      .flatMap(p => p)
+      .flatMap(p => p.intervalBalances)
+      .groupBy(p => p.to)
+      .flatMap(p => p)
+      .subscribe(p => console.log(p));
   }
 
   public fetchChartData() {
