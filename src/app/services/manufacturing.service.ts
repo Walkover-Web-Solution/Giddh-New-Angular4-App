@@ -43,7 +43,7 @@ export class CompanyService {
    * URL:: company/:companyUniqueName/stock/:stockUniqueName/manufacture
    * get resuest model and stock uniquename
    */
-  public CreateManufacturingItem(model: IManufacturingItemRequest, stockUniqueName): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
+  public CreateManufacturingItem(model: IManufacturingItemRequest, stockUniqueName: string): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
     this.store.take(1).subscribe(s => {
         if (s.session.user) {
             this.user = s.session.user.user;
@@ -53,7 +53,7 @@ export class CompanyService {
     return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', stockUniqueName), model).map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
         data.request = model;
-        data.queryString = stockUniqueName;
+        data.queryString = {stockUniqueName};
         return data;
     }).catch((e) => HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
   }
