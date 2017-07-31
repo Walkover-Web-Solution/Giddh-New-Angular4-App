@@ -1,11 +1,16 @@
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from './../companyService.service';
-import { Effect, Actions, toPayload } from '@ngrx/effects';
-import { CompanyRequest, ComapnyResponse, StateDetailsResponse, StateDetailsRequest, TaxResponse } from './../../models/api-models/Company';
+import { Actions, Effect } from '@ngrx/effects';
+import {
+  ComapnyResponse,
+  CompanyRequest,
+  StateDetailsRequest,
+  StateDetailsResponse,
+  TaxResponse
+} from './../../models/api-models/Company';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
-import { of } from 'rxjs/observable/of';
 import { ToasterService } from '../toaster.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
@@ -139,6 +144,7 @@ export class CompanyActions {
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
 
   }
+
   public CreateCompany(value: CompanyRequest): Action {
     return {
       type: CompanyActions.CREATE_COMPANY,
@@ -156,6 +162,13 @@ export class CompanyActions {
     return {
       type: CompanyActions.REFRESH_COMPANIES_RESPONSE,
       payload: response
+    };
+  }
+
+  public SetActiveCompany(value: string): Action {
+    return {
+      type: CompanyActions.SET_ACTIVE_COMPANY,
+      payload: value
     };
   }
 
@@ -213,18 +226,21 @@ export class CompanyActions {
       type: CompanyActions.GET_TAX
     };
   }
+
   public getTaxResponse(value: BaseResponse<TaxResponse[], string>): Action {
     return {
       type: CompanyActions.GET_TAX_RESPONSE,
       payload: value
     };
   }
+
   public SetContactNumber(value: string): Action {
     return {
       type: CompanyActions.SET_CONTACT_NO,
       payload: value
     };
   }
+
   public ResetCompanyPopup(): Action {
     return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
   }
