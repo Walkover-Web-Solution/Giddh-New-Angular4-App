@@ -165,7 +165,8 @@
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
-                                        (changeTransactionType)="toggleTransactionType($event)">
+                                        (changeTransactionType)="toggleTransactionType($event)"
+                                        (resetBlankLedger)="resetBlankTransaction()">
 
                 </new-ledger-entry-panel>
               </div>
@@ -283,7 +284,8 @@
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
-                                        (changeTransactionType)="toggleTransactionType($event)">
+                                        (changeTransactionType)="toggleTransactionType($event)"
+                                        (resetBlankLedger)="resetBlankTransaction()">
 
                 </new-ledger-entry-panel>
               </div>
