@@ -10,6 +10,7 @@ import { SearchComponent } from './search/search.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { TlPlComponent } from './tl-pl/tl-pl.component';
 import { LedgerComponent } from './ledger/ledger.component';
+import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,6 +27,7 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
+      { path: 'manufacturing', component: ManufacturingComponent },
     ]
   }
 ];
