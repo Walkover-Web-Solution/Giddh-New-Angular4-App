@@ -1,4 +1,3 @@
-import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnInit } from '@angular/core';
@@ -6,8 +5,7 @@ import { LedgerVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute } from '@angular/router';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
-import { AccountResponse } from '../models/api-models/Account';
+import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { Subject } from 'rxjs/Subject';
@@ -15,6 +13,9 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
+import { AccountService } from '../services/account.service';
+import { Select2OptionData } from '../shared/theme/select2/select2.interface';
+import { GroupService } from '../services/group.service';
 
 @Component({
   selector: 'ledger',
@@ -22,7 +23,7 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./ledger.component.scss']
 })
 export class LedgerComponent implements OnInit {
-  public lc: LedgerVM = new LedgerVM();
+  public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
     locale: {
@@ -58,20 +59,83 @@ export class LedgerComponent implements OnInit {
     }
   };
   public trxRequest: TransactionsRequest;
+  public accountsOptions: Select2Options = {
+    multiple: true,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true,
+    maximumSelectionLength: 1,
+    templateSelection: (data) => data.text,
+    templateResult: (data: any) => {
+      if (data.text === 'Searching…') {
+        return;
+      }
+      if (!data.additional.stock) {
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">${ data.additional.uniqueName }</span>
+                      </a>`);
+      } else {
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">${ data.additional.uniqueName }</span>
+                        <span class="account-list-item" style="display: block;font-size:10px">
+                            Stock: ${data.additional.stock.name}
+                        </span>
+                      </a>`);
+      }
+
+    }
+  };
+
   private ledgerSearchTerms = new Subject<string>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private ledgerActions: LedgerActions, private route: ActivatedRoute, private _ledgerService: LedgerService) {
+  constructor(private store: Store<AppState>, private ledgerActions: LedgerActions, private route: ActivatedRoute,
+              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
+
+    // get flattern_accounts list
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let accountsArray: Select2OptionData[] = [];
+        data.body.results.map(acc => {
+          if (acc.stocks) {
+            acc.stocks.map(as => {
+              accountsArray.push({id: acc.uniqueName, text: acc.name, additional: Object.assign({}, acc, {stock: as})});
+            });
+            accountsArray.push({id: acc.uniqueName, text: acc.name, additional: acc});
+          } else {
+            accountsArray.push({id: acc.uniqueName, text: acc.name, additional: acc});
+          }
+        });
+        this.lc.flatternAccountList = Observable.of(_.orderBy(accountsArray, 'text'));
+      }
+    });
+
+    // get discount accounts list
+    this._groupService.GetFlattenGroupsAccounts('discount').subscribe(data => {
+      if (data.status === 'success') {
+        this.lc.discountAccountsList = data.body.results;
+      } else {
+        this.lc.discountAccountsList = [];
+      }
+    });
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
     this.lc.currentTxn = txn;
     this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+  }
+
+  public selectBlankTxn(txn: ITransactionItem, e: Event) {
+    e.stopPropagation();
+    this.lc.currentTxn = txn;
+    this.lc.selectedTxnUniqueName = undefined;
   }
 
   public selectedDate(value: any) {
@@ -80,6 +144,22 @@ export class LedgerComponent implements OnInit {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
+    this.lc = new LedgerVM();
+  }
+
+  public selectAccount(e: any) {
+    if (!e.value) {
+      this.lc.selectedAccount = null;
+      return;
+    }
+    this.lc.flatternAccountList.take(1).subscribe(data => {
+      data.map(fa => {
+          if (fa.id === e.value[0]) {
+            this.lc.selectedAccount = fa.additional;
+          }
+        }
+      );
+    });
   }
 
   // Push a search term into the observable stream.
@@ -139,6 +219,14 @@ export class LedgerComponent implements OnInit {
     }, error => {
       console.log(error);
     });
+  }
+
+  public showNewLedgerEntryPopup() {
+    this.lc.showNewLedgerPanel = true;
+  }
+
+  public hideNewLedgerEntryPopup() {
+    this.lc.showNewLedgerPanel = false;
   }
 
   public base64ToBlob(b64Data, contentType, sliceSize) {

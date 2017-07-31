@@ -28,6 +28,9 @@ import { AccountService } from './account.service';
 import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
+import { PermissionService } from './permission.service';
+import { PermissionActions } from './actions/permission/permission.action'
+
 /**
  * Home Module
  */
@@ -40,6 +43,8 @@ import { TlPlService } from './tl-pl.service';
 import { TlPlActions } from './actions/tl-pl.actions';
 import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
+import { HomeActions } from './actions/home/home.actions';
+import { DashboardService } from './dashboard.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -48,6 +53,7 @@ import { LedgerService } from './ledger.service';
 @NgModule({
   imports: [CommonModule, RouterModule,
     SharedModule.forRoot(),
+    EffectsModule.run(HomeActions),
     EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions),
     EffectsModule.run(GroupWithAccountsAction),
@@ -59,8 +65,9 @@ import { LedgerService } from './ledger.service';
     EffectsModule.run(CustomStockUnitAction),
     EffectsModule.run(StockReportActions),
     EffectsModule.run(SearchActions),
-    EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(AuditLogsActions),
+    EffectsModule.run(PermissionActions),
+    EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TlPlActions),
     EffectsModule.run(LedgerActions)
   ],
@@ -76,6 +83,7 @@ export class ServiceModule {
         AuthenticationService,
         ErrorHandlerService,
         ToasterService,
+        DashboardService,
         CompanyService,
         NeedsAuthentication,
         LocationService,
@@ -83,6 +91,7 @@ export class ServiceModule {
         GroupService,
         AccountService,
         InventoryService,
+        PermissionService,
         ErrorHandler,
         SearchService,
         LogsService,
