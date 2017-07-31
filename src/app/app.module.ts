@@ -36,6 +36,7 @@ import { SearchModule } from './search/search.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { LedgerModule } from './ledger/ledger.module';
 import { TlPlModule } from './tl-pl/tl-pl.module';
+import { ManufacturingModule } from './manufacturing/manufacturing.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -89,6 +90,7 @@ if (ENV === 'development') {
     InventoryModule,
     SearchModule,
     TlPlModule,
+    ManufacturingModule,
     AuditLogsModule,
     LedgerModule,
     LoginModule,
