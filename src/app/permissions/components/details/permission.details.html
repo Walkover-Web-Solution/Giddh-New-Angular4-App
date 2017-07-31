@@ -10,7 +10,7 @@
   </div>
 
   <section class="pd3">
-    <div class="row mrB2" *ngIf="this.roleObj.isUpdateCase">
+    <div class="row mrB2" *ngIf="roleObj.isUpdateCase">
       <div class="col-xs-12 form-inline">
         <div class="form-group">
           <select class="form-control" required [(ngModel)]="pageName" name="pageName">
@@ -19,7 +19,7 @@
           </select>
         </div>
         <div class="form-group">
-          <button class="btn btn-info" (click)="addNewPage(pageName)">Add</button>
+          <button class="btn btn-info" (click)="addNewPage(pageName)" [disabled]="!pageName">Add</button>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
         <div class="panel panel-default">
           <div class="panel-heading">
             {{ page.name }}
-            <i *ngIf="this.roleObj.isUpdateCase" class="fa fa-times pull-right text-danger" aria-hidden="true" (click)="removePageFromScope(page.name)"></i>
+            <i *ngIf="roleObj.isUpdateCase" class="fa fa-times pull-right text-danger" aria-hidden="true" (click)="removePageFromScope(page.name)"></i>
           </div>
           <div class="panel-body">
             <table class="table">
@@ -54,7 +54,7 @@
                 <tr *ngFor="let item of page.permissions; let i = index">
                   <td>
                     <input id="{{item.code}}+{{idx}}+{{i}}" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}" [(ngModel)]="item.isSelected" />
-                    <label for="{{item.code}}+{{idx}}+{{i}}"> {{this.getNameByCode(item.code)}}</label>
+                    <label for="{{item.code}}+{{idx}}+{{i}}"> {{getNameByCode(item.code)}}</label>
                   </td>
                   <td>
                     <i class="fa" [ngClass]="true ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
