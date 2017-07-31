@@ -12,7 +12,7 @@ import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flatten
 
 export class LedgerDiscountComponent implements OnInit, OnDestroy {
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
-
+  public discountMenu: { isopen: boolean } = { isopen: false };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
