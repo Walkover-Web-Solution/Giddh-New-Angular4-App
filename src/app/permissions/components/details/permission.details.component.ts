@@ -230,14 +230,14 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private toggleItems = function(pageName: string, event: any) {
+  private toggleItems(pageName: string, event: any) {
     let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
     if (res) {
       _.map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false );
     }
   }
 
-  private toggleItem = function(pageName: string, item: Permission, event: any) {
+  private toggleItem(pageName: string, item: Permission, event: any) {
     let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
     if (event.target.checked) {
       let idx = _.findIndex(res.permissions, (o: Permission) => o.isSelected === false);
