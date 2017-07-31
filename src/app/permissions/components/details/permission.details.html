@@ -51,7 +51,7 @@
                     <label for="{{page.name}}+_{{idx}}"> Select All</label>
                   </td>
                 </tr>
-                <tr *ngFor="let item of page.permissions | orderBy : ['item.code']; let i = index">
+                <tr *ngFor="let item of page.permissions | mySortBy : ['code']; let i = index">
                   <td>
                     <input id="{{item.code}}+{{idx}}+{{i}}" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}" [(ngModel)]="item.isSelected" />
                     <label for="{{item.code}}+{{idx}}+{{i}}"> {{getNameByCode(item.code)}}</label>
