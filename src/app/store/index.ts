@@ -6,9 +6,9 @@
 import { compose } from '@ngrx/core/compose';
 import { ActionReducer, combineReducers } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
-import { storeLogger } from 'ngrx-store-logger';
-import { reducers, AppState } from './roots';
+import { AppState, reducers } from './roots';
 import { localStorageSync } from 'ngrx-store-localstorage';
+
 export { reducers, AppState } from './roots';
 
 declare const ENV: string;
@@ -23,7 +23,7 @@ function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
   };
 }
 
-const DEV_REDUCERS = [stateSetter, storeFreeze, storeLogger()];
+const DEV_REDUCERS = [stateSetter, storeFreeze];
 
 const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);
 const productionReducer = compose(localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);

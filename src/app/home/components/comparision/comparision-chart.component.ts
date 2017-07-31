@@ -32,11 +32,13 @@ export class ComparisionChartComponent implements OnInit {
     // get activeFinancialYear and lastFinancialYear
     this.companies$.subscribe(c => {
       if (c) {
+        let activeCompany: ComapnyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
-          this.activeFinancialYear = c.find(p => p.uniqueName === a).activeFinancialYear;
+          activeCompany = c.find(p => p.uniqueName === a);
+          this.activeFinancialYear = activeCompany.activeFinancialYear;
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {
@@ -46,24 +48,29 @@ export class ComparisionChartComponent implements OnInit {
                 financialYears = _.orderBy(financialYears, (it) => {
                   return moment(it.financialYearStarts, 'DD-MM-YYYY');
                 }, 'desc');
+                console.log(financialYears);
                 this.lastFinancialYear = financialYears[0];
               }
             }
           }
         }
+        this.generateCharts();
       }
     });
+
+
   }
 
   public generateCharts() {
-    this.options = {
-      title: {
-        text: 'Solar Employment Growth by Sector, 2010-2016'
-      },
 
-      subtitle: {
-        text: 'Source: thesolarfoundation.com'
-      },
+    this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+      this.activeFinancialYear.financialYearStarts,
+      this.activeFinancialYear.financialYearEnds, false));
+
+    this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+      this.lastFinancialYear.financialYearStarts,
+      this.lastFinancialYear.financialYearEnds, false));
+    this.options = {
 
       yAxis: {
         title: {
@@ -71,9 +78,10 @@ export class ComparisionChartComponent implements OnInit {
         }
       },
       legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
+        layout: 'horizontal',
+        align: 'center',
+        verticalAlign: 'bottom',
+        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
       },
 
       plotOptions: {
@@ -83,20 +91,20 @@ export class ComparisionChartComponent implements OnInit {
       },
 
       series: [{
-        name: 'Installation',
+        name: 'Expense',
         data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
       }, {
-        name: 'Manufacturing',
+        name: 'Revenue',
         data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
       }, {
-        name: 'Sales & Distribution',
+        name: 'Profit/Loss',
         data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
       }, {
-        name: 'Project Development',
-        data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+        name: 'LY Expense',
       }, {
-        name: 'Other',
-        data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+        name: 'LY Revenue',
+      }, {
+        name: 'LY Profit/Loss',
       }]
     };
   }
