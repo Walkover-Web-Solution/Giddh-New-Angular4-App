@@ -26,12 +26,9 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
-<<<<<<< HEAD
       { path: 'manufacturing', component: ManufacturingComponent },
-=======
       { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
       { path: '**', redirectTo: 'permissions' }
->>>>>>> permission-module
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
