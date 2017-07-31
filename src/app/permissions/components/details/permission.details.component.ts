@@ -18,6 +18,8 @@ export class PermissionDetailsComponent implements OnInit {
   private newRole: any = {};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private allRoles: any;
+  private adminPageObj: IRoleCommonResponseAndRequest;
+  private viewPageObj: IRoleCommonResponseAndRequest;
   private singlePageForFreshStart: any;
   private rawDataForAllRoles: Permission[];
   private allRolesOfPage: Permission[];
@@ -34,6 +36,12 @@ export class PermissionDetailsComponent implements OnInit {
       this.allRoles = _.cloneDeep(permission.roles);
       this.singlePageForFreshStart = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
         return o.uniqueName === 'super_admin_off_the_record';
+      });
+      this.adminPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
+        return o.uniqueName === 'admin';
+      });
+      this.viewPageObj = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
+        return o.uniqueName === 'view';
       });
       this.rawDataForAllRoles = _.cloneDeep(this.singlePageForFreshStart.scopes[0].permissions);
       this.allRolesOfPage = this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles));
@@ -53,7 +61,7 @@ export class PermissionDetailsComponent implements OnInit {
   }
 
   private addNewPage(page: string) {
-    if (!this.checkForAlreadyExistInPageArray(page)) {
+    if (page && !this.checkForAlreadyExistInPageArray(page)) {
       let pageObj = _.find(this.singlePageForFreshStart.scopes, (o: Scope) => o.name === page);
       pageObj.permissions = pageObj.permissions.map((o: Permission) => {
         return o = new NewPermissionObj(o.code, false);
@@ -128,7 +136,6 @@ export class PermissionDetailsComponent implements OnInit {
         obj.permissions = obj.permissions.map((o: Permission) => {
           return o = new NewPermissionObj(o.code, true);
         });
-        console.log (obj.permissions.length, 'length');
         if (obj.permissions.length < 6) {
           obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles)));
         }
@@ -207,6 +214,20 @@ export class PermissionDetailsComponent implements OnInit {
         result = '';
     }
     return result;
+  }
+
+  private isHavePermission(pageName: string, item: Permission, type: string): boolean {
+    let page;
+    if (type === 'admin') {
+      page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
+    }else {
+      page = _.find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
+    }
+    if (page) {
+      return _.find(page.permissions, (p: Permission) => p.code === item.code) ? true : false;
+    }else {
+      return false;
+    }
   }
 
   private toggleItems = function(pageName: string, event: any) {

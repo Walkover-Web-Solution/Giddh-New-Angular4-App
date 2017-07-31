@@ -51,16 +51,16 @@
                     <label for="{{page.name}}+_{{idx}}"> Select All</label>
                   </td>
                 </tr>
-                <tr *ngFor="let item of page.permissions; let i = index">
+                <tr *ngFor="let item of page.permissions | orderBy : ['item.code']; let i = index">
                   <td>
                     <input id="{{item.code}}+{{idx}}+{{i}}" (change)="toggleItem(page.name, item, $event)" type="checkbox" name="{{item.code}}" [(ngModel)]="item.isSelected" />
                     <label for="{{item.code}}+{{idx}}+{{i}}"> {{getNameByCode(item.code)}}</label>
                   </td>
                   <td>
-                    <i class="fa" [ngClass]="true ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
+                    <i class="fa" [ngClass]="isHavePermission(page.name, item, 'admin') ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
                   </td>
                   <td>
-                    <i class="fa" [ngClass]="false ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
+                    <i class="fa" [ngClass]="isHavePermission(page.name, item, 'view') ? 'fa-check text-success' : 'fa-times text-danger'" aria-hidden="true"></i>
                   </td>
                 </tr>
               </tbody>
