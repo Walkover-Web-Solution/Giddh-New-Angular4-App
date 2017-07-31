@@ -1,5 +1,5 @@
 import { PageComponent } from './page.component';
-import { Routes } from '@angular/router';
+import { Routes, LoadChildren } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -18,7 +18,6 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
-      { path: '', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
@@ -27,7 +26,13 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
+<<<<<<< HEAD
       { path: 'manufacturing', component: ManufacturingComponent },
+=======
+      { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
+      { path: '**', redirectTo: 'permissions' }
+>>>>>>> permission-module
     ]
-  }
+  },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];

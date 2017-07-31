@@ -20,18 +20,18 @@ describe(`App`, () => {
   // async beforeEach
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppComponent ],
-      imports: [ StoreModule.provideStore(rootReducer) ],
+      declarations: [AppComponent],
+      imports: [StoreModule.provideStore(rootReducer)],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [HomeActions]
     })
-    .compileComponents(); // compile template and css
+      .compileComponents(); // compile template and css
   }));
 
   // synchronous beforeEach
   beforeEach(() => {
     fixture = TestBed.createComponent(AppComponent);
-    comp    = fixture.componentInstance;
+    comp = fixture.componentInstance;
 
     fixture.detectChanges(); // trigger initial data binding
   });

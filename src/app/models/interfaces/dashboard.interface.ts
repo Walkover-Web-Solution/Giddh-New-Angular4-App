@@ -1,5 +1,6 @@
 import { INameUniqueName } from './nameUniqueName.interface';
 import { IClosingBalance, IForwardBalance } from './ledger.interface';
+import { ClosingBalanceResponse, DashboardResponse } from '../api-models/Dashboard';
 
 export interface IPeriodBalances {
   periodBalances: IPeriodBalancesitem[];
@@ -57,4 +58,30 @@ export interface ICbAccount {
   openingBalance: IForwardBalance;
   uniqueName: string;
   name: string;
+}
+
+export interface IExpensesChartClosingBalanceResponse {
+  operatingcostActiveyear?: ClosingBalanceResponse;
+  operatingcostLastyear?: ClosingBalanceResponse;
+  indirectexpensesActiveyear?: ClosingBalanceResponse;
+  indirectexpensesLastyear?: ClosingBalanceResponse;
+}
+
+export interface IRevenueChartClosingBalanceResponse {
+  revenuefromoperationsActiveyear?: ClosingBalanceResponse;
+  revenuefromoperationsLastyear?: ClosingBalanceResponse;
+  otherincomeActiveyear?: ClosingBalanceResponse;
+  otherincomeLastyear?: ClosingBalanceResponse;
+}
+
+export interface IComparisionChartResponse {
+  // revenue
+  revenueActiveYear?: IGroupHistoryGroups[];
+  revenueLastYear?: IGroupHistoryGroups[];
+  // expenses
+  ExpensesActiveYear?: IGroupHistoryGroups[];
+  ExpensesLastYear?: IGroupHistoryGroups[];
+  // P/L
+  ProfitLossActiveYear?: DashboardResponse;
+  ProfitLossLastYear?: DashboardResponse;
 }

@@ -2,13 +2,14 @@ import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { TaxResponse } from './../../models/api-models/Company';
 import { CompanyActions } from './../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { CompanyRequest, ComapnyResponse } from '../../models/api-models/Company';
+import { ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
 
 /**
  * Keeping Track of the CompanyState
  */
 export interface CurrentCompanyState {
   companies?: ComapnyResponse[];
+  activeCompany?: ComapnyResponse;
   isRefreshing: boolean;
   taxes: TaxResponse[];
   isCompanyCreationInProcess: boolean;
@@ -85,6 +86,9 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
       return Object.assign({}, state, {
         isTaxesLoading: false
       });
+    case CompanyActions.SET_ACTIVE_COMPANY:
+      console.log(action.payload);
+      return state;
     default:
       return state;
   }
