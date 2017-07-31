@@ -241,6 +241,38 @@ export class LedgerComponent implements OnInit {
     this.lc.showNewLedgerPanel = false;
   }
 
+  public resetBlankTransaction() {
+    this.lc.blankLedger = {
+      transactions: [
+        {
+          amount: 0,
+          particular: '',
+          type: 'DEBIT',
+          taxes: [],
+          discounts: []
+        },
+        {
+          amount: 0,
+          particular: '',
+          type: 'CREDIT',
+          taxes: [],
+          discounts: []
+        }],
+      voucherType: 'Purchases',
+      entryDate: moment().format('DD-MM-YYYY'),
+      applyApplicableTaxes: true,
+      isInclusiveTax: true,
+      unconfirmedEntry: false,
+      attachedFile: '',
+      tag: null,
+      description: '',
+      generateInvoice: false,
+      chequeNumber: '',
+      chequeClearanceDate: moment().format('DD-MM-YYYY')
+    };
+    this.hideNewLedgerEntryPopup();
+  }
+
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
