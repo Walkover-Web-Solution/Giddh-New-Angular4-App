@@ -9,6 +9,7 @@ import { PermissionDetailsComponent } from './components/details/permission.deta
 import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
 import { PermissionModelComponent } from './components/model/permission.model.component';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
+import { SortByPipe } from './sort.pipe';
 
 const PERMISSION_ROUTES: Routes = [
   {
@@ -41,7 +42,8 @@ const PERMISSION_ROUTES: Routes = [
     PermissionListComponent,
     PermissionDetailsComponent,
     PermissionModelComponent,
-    DeleteRoleConfirmationModelComponent
+    DeleteRoleConfirmationModelComponent,
+    SortByPipe
   ],
   imports: [
     CommonModule,
