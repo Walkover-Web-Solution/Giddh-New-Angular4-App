@@ -37,7 +37,7 @@ const prepare = (data: IFlattenGroupsAccountsDetail[]) => {
     isOpen: false,
     groupUniqueName: p.groupUniqueName
   });
-}
+};
 const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
   let listofUN;
   listofUN = rawList.map((obj) => {
@@ -63,7 +63,6 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       return uniqueList;
     } else {
       _.each(obj.accounts, (account) => {
-        debugger;
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
           closeBalType: account.closingBalance.type,
@@ -83,4 +82,3 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
   });
   return _.flatten(listofUN);
 };
-
