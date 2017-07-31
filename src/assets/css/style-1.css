@@ -323,7 +323,7 @@ header .navbar-nav > li.active {
 }
 
 .dshUl > li {
-  background: rgba(25, 25, 25, .85);
+  background: rgb(0, 0, 0);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
 }
 
