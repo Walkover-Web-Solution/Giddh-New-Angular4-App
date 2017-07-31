@@ -7,9 +7,11 @@ import { DashboardService } from '../../dashboard.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import {
+  IComparisionChartResponse,
   IExpensesChartClosingBalanceResponse,
   IRevenueChartClosingBalanceResponse
 } from '../../../models/interfaces/dashboard.interface';
+import { GroupHistoryRequest } from '../../../models/api-models/Dashboard';
 
 @Injectable()
 
@@ -111,6 +113,74 @@ export class HomeActions {
       };
     });
 
+  @Effect()
+  public GetComparisionChartActiveYear$: Observable<Action> = this.action$
+    .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR)
+    .switchMap(action => {
+      let revenueModel: GroupHistoryRequest = {
+        groups: ['revenuefromoperations']
+      };
+      let expenseModel: GroupHistoryRequest = {
+        groups: ['indirectexpenses', 'operatingcost']
+      };
+
+      return Observable.zip(
+        this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+      );
+    }).map((res) => {
+      console.log(res);
+      if (res[0].status === 'success' && res[1].status === 'success' && res[2].status === 'success') {
+        let obj: IComparisionChartResponse = {
+          revenueActiveYear: res[0].body.groups,
+          ExpensesActiveYear: res[1].body.groups,
+          ProfitLossActiveYear: res[2].body,
+        };
+        return {
+          type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE,
+          payload: obj
+        };
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
+  public GetComparisionChartLastYear$: Observable<Action> = this.action$
+    .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR)
+    .switchMap(action => {
+      let revenueModel: GroupHistoryRequest = {
+        groups: ['revenuefromoperations']
+      };
+      let expenseModel: GroupHistoryRequest = {
+        groups: ['indirectexpenses', 'operatingcost']
+      };
+
+      return Observable.zip(
+        this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+      );
+    }).map((res) => {
+      console.log(res);
+      if (res[0].status === 'success' && res[1].status === 'success') {
+        let obj: IComparisionChartResponse = {
+          revenueLastYear: res[0].body.groups,
+          ExpensesLastYear: res[1].body.groups,
+          ProfitLossLastYear: res[2].body,
+        };
+        return {
+          type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
+          payload: obj
+        };
+      }
+      return {
+        type: ''
+      };
+    });
+
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
   }
@@ -118,32 +188,46 @@ export class HomeActions {
   public getExpensesChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
     return {
       type: HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR,
-      payload: {fromDate, toDate, refresh}
+      payload: { fromDate, toDate, refresh }
     };
   }
 
   public getExpensesChartDataOfLastYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
     return {
       type: HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR,
-      payload: {fromDate, toDate, refresh}
+      payload: { fromDate, toDate, refresh }
     };
   }
 
   public getRevenueChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
     return {
       type: HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR,
-      payload: {fromDate, toDate, refresh}
+      payload: { fromDate, toDate, refresh }
     };
   }
 
   public getRevenueChartDataOfLastYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
     return {
       type: HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR,
-      payload: {fromDate, toDate, refresh}
+      payload: { fromDate, toDate, refresh }
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public getComparisionChartDataOfLastYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
+    return {
+      type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR,
+      payload: { fromDate, toDate, refresh }
+    };
+  }
+
+  public getComparisionChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
+    return {
+      type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR,
+      payload: { fromDate, toDate, refresh }
+    };
+  }
+
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
