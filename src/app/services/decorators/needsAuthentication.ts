@@ -19,8 +19,6 @@ export class NeedsAuthentication implements CanActivate {
     if (this.user && this.user.authKey) {
       return true;
     } else {
-      console.log('Request is unauthorized, redirect to Login Component!');
-      // this._auth.Authorize();
       this._router.navigate(['/login']);
     }
   }

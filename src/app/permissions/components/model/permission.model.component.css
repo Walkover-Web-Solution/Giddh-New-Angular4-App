@@ -1,0 +1,4 @@
+.add-new-role-modal .open>#pageListDD {
+  display: inline-block;
+  min-width: 200px;
+}
