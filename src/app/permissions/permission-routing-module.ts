@@ -12,8 +12,9 @@ import { NeedsAuthentication } from '../services/decorators/needsAuthentication'
 import { SortByPipe } from './sort.pipe';
 
 const PERMISSION_ROUTES: Routes = [
+  { path: 'permissions', redirectTo: 'pages/permission', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   {
-    path: '',
+    path: 'permissions',
     component: PermissionComponent,
     children: [
       {
