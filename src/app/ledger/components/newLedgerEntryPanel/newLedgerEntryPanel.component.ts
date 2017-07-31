@@ -20,6 +20,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
+  @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
 
   public voucherDropDownOptions: Select2Options = {
@@ -76,6 +77,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
   public resetPanel() {
     this.currentTxn = null;
+    this.resetBlankLedger.emit(true);
   }
 
   public ngOnDestroy(): void {
