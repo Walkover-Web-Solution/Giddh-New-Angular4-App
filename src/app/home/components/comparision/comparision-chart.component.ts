@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import moment from 'moment';
 import * as _ from 'lodash';
+import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 
 @Component({
   selector: 'compare-chart',
@@ -20,12 +21,13 @@ export class ComparisionChartComponent implements OnInit {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-
+  public comparisionChartData$: Observable<IComparisionChartResponse>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
+    this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -54,24 +56,23 @@ export class ComparisionChartComponent implements OnInit {
             }
           }
         }
-        this.generateCharts();
+        this.fetchChartData();
       }
     });
-
-
   }
 
-  public generateCharts() {
-
+  public fetchChartData() {
     this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
       this.activeFinancialYear.financialYearStarts,
       this.activeFinancialYear.financialYearEnds, false));
 
-    this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+    this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
       this.lastFinancialYear.financialYearStarts,
       this.lastFinancialYear.financialYearEnds, false));
-    this.options = {
+  }
 
+  public generateCharts() {
+    this.options = {
       yAxis: {
         title: {
           text: 'Number of Employees'
