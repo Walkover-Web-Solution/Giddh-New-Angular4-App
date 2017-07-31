@@ -28,6 +28,9 @@ import { AccountService } from './account.service';
 import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
+import { PermissionService } from './permission.service';
+import { PermissionActions } from './actions/permission/permission.action'
+
 /**
  * Home Module
  */
@@ -62,8 +65,9 @@ import { DashboardService } from './dashboard.service';
     EffectsModule.run(CustomStockUnitAction),
     EffectsModule.run(StockReportActions),
     EffectsModule.run(SearchActions),
-    EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(AuditLogsActions),
+    EffectsModule.run(PermissionActions),
+    EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TlPlActions),
     EffectsModule.run(LedgerActions)
   ],
@@ -87,6 +91,7 @@ export class ServiceModule {
         GroupService,
         AccountService,
         InventoryService,
+        PermissionService,
         ErrorHandler,
         SearchService,
         LogsService,
