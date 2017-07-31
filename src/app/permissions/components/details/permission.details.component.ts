@@ -98,12 +98,14 @@ export class PermissionDetailsComponent implements OnInit {
   private updateRole() {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
-    console.log( 'updateRole', data );
     this.store.dispatch(this.permissionActions.UpdateRole(data));
   }
 
   private getAllRolesOfPageReady(arr) {
-    return _.forEach(arr, (o: Permission) => o.isSelected = false);
+    return arr.map((o: Permission) => {
+      return o = new NewPermissionObj(o.code, false);
+    });
+    //  _.forEach(arr, (o: Permission) => o.isSelected = false);
   }
 
   private setScopeForCurrentRole(): Scope[] {
@@ -117,13 +119,16 @@ export class PermissionDetailsComponent implements OnInit {
   }
 
   private generateUIFromExistedRole() {
-    let pRole: string = this.newRole.uniqueName || 'super_admin_off_the_record';
+    let pRole: string = this.newRole.uniqueName;
     let res = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
       return o.uniqueName === pRole;
     });
     if (res) {
       _.forEach(res.scopes, (obj: Scope) => {
-        _.map(obj.permissions, (o: Permission) => o.isSelected = true);
+        obj.permissions = obj.permissions.map((o: Permission) => {
+          return o = new NewPermissionObj(o.code, true);
+        });
+        console.log (obj.permissions.length, 'length');
         if (obj.permissions.length < 6) {
           obj.permissions = this.pushNonExistRoles(obj.permissions, this.getAllRolesOfPageReady(_.cloneDeep(this.rawDataForAllRoles)));
         }
@@ -143,15 +148,11 @@ export class PermissionDetailsComponent implements OnInit {
 
   private pushNonExistRoles(arr1, arr2) {
     _.forEach(arr1, (o: Permission) => {
-      arr2 = _.map(arr2, (item: Permission) => {
-        if (o.code === item.code){
-          return new NewPermissionObj(o.code, o.isSelected);
-        }else {
-          return new NewPermissionObj(item.code, false);
-        }
+      _.remove(arr2, (item: Permission) => {
+        return item.code === o.code;
       });
     });
-    return arr2;
+    return _.concat(arr1, arr2);
   }
 
   private generateFreshUI() {

@@ -1,8 +1,9 @@
 <section id="single_role" *ngIf="roleObj">
 
-  <h2 class="role_title" align="center">{{ newRole.name }}</h2>
+  
 
-  <div class="pd3 pdT1 pdB1 bdrB clearfix">
+  <div class="pd3 pdT1 pdB1 bdrB clearfix text-center">
+    <span class="lead">{{ newRole.name }}</span>
     <button class="btn btn-md btn-primary pull-left" (click)="goToRoles()">Back</button>
     <button *ngIf="!newRole.isUpdateCase" class="btn btn-md btn-success mrR1 pull-right" (click)="addNewRole()">Save</button>
     <button *ngIf="newRole.isUpdateCase" class="btn btn-md btn-success mrR1 pull-right" (click)="updateRole()">Update</button>
