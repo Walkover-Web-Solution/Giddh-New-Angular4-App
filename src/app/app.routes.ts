@@ -1,3 +1,6 @@
+import { PermissionDetailsComponent } from './permissions/components/details/permission.details.component';
+import { PermissionListComponent } from './permissions/components/list/permission.list.component';
+import { PermissionComponent } from './permissions/permission.component';
 import { PageComponent } from './page.component';
 import { Routes, LoadChildren } from '@angular/router';
 import { HomeComponent } from './home/home.component';
@@ -25,7 +28,21 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
-      { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
+      {
+        path: 'permissions', component: PermissionComponent, children: [
+          {
+            path: 'list',
+            component: PermissionListComponent,
+            canActivate: [NeedsAuthentication]
+          },
+          {
+            path: 'details',
+            component: PermissionDetailsComponent,
+            canActivate: [NeedsAuthentication]
+          },
+          { path: '*', redirectTo: 'list' }
+        ], canActivate: [NeedsAuthentication]
+      },
       { path: '**', redirectTo: 'permissions' }
     ]
   },
