@@ -1,6 +1,7 @@
 import { HOME } from '../../services/actions/home/home.const';
 import { Action } from '@ngrx/store';
 import {
+  IComparisionChartResponse,
   IExpensesChartClosingBalanceResponse,
   IRevenueChartClosingBalanceResponse
 } from '../../models/interfaces/dashboard.interface';
@@ -9,6 +10,7 @@ export interface HomeState {
   value?: string;
   expensesChart?: IExpensesChartClosingBalanceResponse;
   revenueChart?: IRevenueChartClosingBalanceResponse;
+  comparisionChart?: IComparisionChartResponse;
   isExpensesChartDataInProcess: boolean;
   isExpensesChartDataAvailable: boolean;
   isRevenueChartDataInProcess: boolean;
@@ -70,7 +72,28 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
-
+    case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      return Object.assign({}, state, {
+        comparisionChart: {
+          ...state.comparisionChart,
+          revenueActiveYear: data.revenueActiveYear,
+          ExpensesActiveYear: data.ExpensesActiveYear,
+          ProfitLossActiveYear: data.ProfitLossActiveYear,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      return Object.assign({}, state, {
+        comparisionChart: {
+          ...state.comparisionChart,
+          revenueLastYear: data.revenueLastYear,
+          ExpensesLastYear: data.ExpensesLastYear,
+          ProfitLossLastYear: data.ProfitLossLastYear,
+        }
+      });
+    }
     default: {
       return state;
     }

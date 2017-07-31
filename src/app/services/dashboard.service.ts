@@ -1,5 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +10,12 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
 import { AppState } from '../store/roots';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
-import { DashboardResponse, GroupHistoryResponse, GroupHistoryRequest, ClosingBalanceResponse } from '../models/api-models/Dashboard';
+import {
+  ClosingBalanceResponse,
+  DashboardResponse,
+  GroupHistoryRequest,
+  GroupHistoryResponse
+} from '../models/api-models/Dashboard';
 
 @Injectable()
 export class DashboardService {
