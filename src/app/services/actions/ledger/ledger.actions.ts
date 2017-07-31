@@ -1,6 +1,6 @@
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
-import { TransactionsResponse, TransactionsRequest, DownloadLedgerRequest } from '../../../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse } from '../../../models/api-models/Ledger';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -13,6 +13,8 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AppState } from '../../../store/roots';
 import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../ledger.service';
+import { GroupService } from '../../group.service';
+import { FlattenGroupsAccountsResponse } from '../../../models/api-models/Group';
 
 @Injectable()
 export class LedgerActions {
@@ -54,11 +56,24 @@ export class LedgerActions {
       payload: res
     }));
 
+  @Effect()
+  public GetDiscountAccounts$: Observable<Action> = this.action$
+    .ofType(LEDGER.GET_DISCOUNT_ACCOUNTS_LIST)
+    .switchMap(action => this._groupService.GetFlattenGroupsAccounts('discount'))
+    .map(res => this.validateResponse<FlattenGroupsAccountsResponse, string>(res, {
+      type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
+      payload: res
+    }, true, {
+      type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
+      payload: res
+    }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
               private _ledgerService: LedgerService,
-              private _accountService: AccountService) {
+              private _accountService: AccountService,
+              private _groupService: GroupService) {
   }
 
   public GetTransactions(request: TransactionsRequest): Action {
@@ -79,6 +94,12 @@ export class LedgerActions {
     return {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE,
       payload: {body: value, accountUniqueName}
+    };
+  }
+
+  public GetDiscountAccounts(): Action {
+    return {
+      type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST
     };
   }
 

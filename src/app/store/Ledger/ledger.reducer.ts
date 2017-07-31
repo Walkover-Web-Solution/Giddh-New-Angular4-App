@@ -1,11 +1,10 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { TransactionsResponse, TransactionsRequest, DownloadLedgerRequest } from '../../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
-import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
-import { SearchActions } from '../../services/actions/search.actions';
-import * as _ from 'lodash';
 import { LEDGER } from '../../services/actions/ledger/ledger.const';
+import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -14,6 +13,7 @@ export interface LedgerState {
   transactionInprogress: boolean;
   accountInprogress: boolean;
   downloadInvoiceInProcess?: boolean;
+  discountAccountsList?: IFlattenGroupsAccountsDetail;
 }
 
 export const initialState: LedgerState = {
@@ -56,14 +56,22 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
       return Object.assign({}, state, {
         transactionInprogress: false
       });
-    case  LEDGER.DOWNLOAD_LEDGER_INVOICE:
+    case LEDGER.DOWNLOAD_LEDGER_INVOICE:
       return Object.assign({}, state, {downloadInvoiceInProcess: true});
-    case  LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
+    case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
       let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
       if (downloadData.status === 'success') {
         return Object.assign({}, state, {downloadInvoiceInProcess: false});
       }
       return Object.assign({}, state, {downloadInvoiceInProcess: false});
+    case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
+      let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
+      if (discountData.status === 'success') {
+        return Object.assign({}, state, {
+          discountAccountsList: discountData.body.results.find(r => r.groupUniqueName === 'discount')
+        });
+      }
+      return state;
     default: {
       return state;
     }
