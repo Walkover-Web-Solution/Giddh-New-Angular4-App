@@ -43,7 +43,7 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
  *
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
-module.exports = function(options) {
+module.exports = function (options) {
     return webpackMerge(commonConfig({ env: ENV }), {
 
         /**
@@ -246,7 +246,7 @@ module.exports = function(options) {
              *
              * See: https://webpack.github.io/docs/webpack-dev-server.html
              */
-            setup: function(app) {
+            setup: function (app) {
                 // For example, to define custom handlers for some paths:
                 // app.get('/some/path', function(req, res) {
                 //   res.json({ custom: 'response' });

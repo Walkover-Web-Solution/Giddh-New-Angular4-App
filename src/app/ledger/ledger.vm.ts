@@ -1,8 +1,11 @@
-import { TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
+import { TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { AccountResponse } from '../models/api-models/Account';
-import { ILedger, ITransactionItem } from '../models/interfaces/ledger.interface';
+import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment';
+import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
+import { Select2OptionData } from '../shared/theme/select2/select2.interface';
+import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -10,6 +13,11 @@ export class LedgerVM {
   public selectedTxnUniqueName: string;
   public currentTxn: ITransactionItem;
   public currentPage: number;
+  public flatternAccountList: Observable<Select2OptionData[]>;
+  public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
+  public showNewLedgerPanel: boolean = false;
+  public noAccountChosenForNewEntry: boolean;
+  public selectedAccount: IFlattenAccountsResultItem = null;
   public pageLoader: boolean = false;
   public today: Date = new Date();
   public fromDate: Date;
@@ -25,7 +33,7 @@ export class LedgerVM {
   public pageAccount = {};
   public showLoader: boolean = true;
   public showExportOption: boolean = false;
-  public showLedgerPopover: boolean = false;
+  public showLedgerPopover: boolean;
   public adjustHeight = 0;
   public dLedgerLimit = 10;
   public cLedgerLimit = 10;
@@ -38,51 +46,34 @@ export class LedgerVM {
   public cBlankTxn: any;
 
   constructor() {
+    this.noAccountChosenForNewEntry = false;
     this.blankLedger = {
-      isBlankLedger: true,
-      attachedFileName: '',
-      attachedFile: '',
-      description: '',
+      transactions: [
+        {
+          amount: '',
+          particular: '',
+          type: 'DEBIT',
+          taxes: [],
+          discounts: []
+        },
+        {
+          amount: '',
+          particular: '',
+          type: 'CREDIT',
+          taxes: [],
+          discounts: []
+        }],
+      voucherType: 'sales',
       entryDate: moment().format('DD-MM-YYYY'),
-      invoiceGenerated: false,
-      isCompoundEntry: false,
-      applyApplicableTaxes: false,
-      tag: '',
-      transactions: [],
-      unconfirmedEntry: false,
-      uniqueName: '',
+      applyApplicableTaxes: true,
       isInclusiveTax: true,
-      voucher: {
-        name: 'Sales',
-        shortCode: 'sal'
-      },
-      tax: [],
-      taxList: [],
-      taxes: [],
-      voucherNo: ''
+      unconfirmedEntry: false,
+      attachedFile: '',
+      tag: null,
+      description: '',
+      generateInvoice: false,
+      chequeNumber: '123456',
+      clearanceDate: moment().format('DD-MM-YYYY')
     };
-
-    this.dBlankTxn = {
-      date: moment().format('DD-MM-YYYY'),
-      particular: {
-        name: '',
-        uniqueName: ''
-      },
-      amount: '',
-      type: 'DEBIT'
-    };
-
-    this.cBlankTxn = {
-      date: moment().format('DD-MM-YYYY'),
-      particular: {
-        name: '',
-        uniqueName: ''
-      },
-      amount: '',
-      type: 'CREDIT'
-    };
-
-    this.blankLedger.transactions.push(this.dBlankTxn);
-    this.blankLedger.transactions.push(this.cBlankTxn);
   }
 }
