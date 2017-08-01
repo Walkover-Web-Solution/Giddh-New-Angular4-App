@@ -9,6 +9,7 @@ import { AppState } from '../../../store/roots';
 import moment from 'moment';
 import * as _ from 'lodash';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
+import { isNullOrUndefined } from 'util';
 
 @Component({
   selector: 'compare-chart',
@@ -22,7 +23,15 @@ export class ComparisionChartComponent implements OnInit {
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   public comparisionChartData$: Observable<IComparisionChartResponse>;
+  public requestInFlight = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+  private expenseData = [];
+  private expenseDataLY = [];
+  private revenueData = [];
+  private revenueDataLY = [];
+  private profitLossData = [];
+  private profitLossDataLY = [];
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
@@ -58,9 +67,25 @@ export class ComparisionChartComponent implements OnInit {
         this.fetchChartData();
       }
     });
+
+    this.comparisionChartData$
+      .skipWhile(p => isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear))
+      .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
+      .subscribe(p => {
+        console.log(p);
+        this.expenseData = (p.ExpensesActiveMonthly);
+        this.expenseDataLY = (p.ExpensesLastYearMonthly);
+        this.revenueData = (p.revenueActiveYearMonthly);
+        this.revenueDataLY = (p.revenueLastYearMonthly);
+        this.profitLossData = p.ProfitLossActiveYearMonthly;
+        this.generateCharts();
+        this.requestInFlight = false;
+      });
   }
 
   public fetchChartData() {
+    this.expenseData = [];
+    this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
       this.activeFinancialYear.financialYearStarts,
       this.activeFinancialYear.financialYearEnds, false));
@@ -72,10 +97,16 @@ export class ComparisionChartComponent implements OnInit {
 
   public generateCharts() {
     this.options = {
+      title: {
+        text: ''
+      },
       yAxis: {
         title: {
-          text: 'Number of Employees'
+          text: ''
         }
+      },
+      xAxis: {
+        categories: this.monthArray
       },
       legend: {
         layout: 'horizontal',
@@ -83,28 +114,24 @@ export class ComparisionChartComponent implements OnInit {
         verticalAlign: 'bottom',
         itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
       },
-
-      plotOptions: {
-        series: {
-          pointStart: 2010
-        }
-      },
-
       series: [{
         name: 'Expense',
-        data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+        data: this.expenseData
       }, {
         name: 'Revenue',
-        data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+        data: this.revenueData
       }, {
         name: 'Profit/Loss',
-        data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+        data: this.profitLossData
       }, {
         name: 'LY Expense',
+        data: this.expenseDataLY
       }, {
         name: 'LY Revenue',
+        data: this.revenueDataLY
       }, {
         name: 'LY Profit/Loss',
+        data: this.profitLossDataLY
       }]
     };
   }
