@@ -1,5 +1,8 @@
+import { PermissionDetailsComponent } from './permissions/components/details/permission.details.component';
+import { PermissionListComponent } from './permissions/components/list/permission.list.component';
+import { PermissionComponent } from './permissions/permission.component';
 import { PageComponent } from './page.component';
-import { Routes } from '@angular/router';
+import { Routes, LoadChildren } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
@@ -17,7 +20,6 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
-      { path: '', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
@@ -26,6 +28,23 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
+      {
+        path: 'permissions', component: PermissionComponent, children: [
+          {
+            path: 'list',
+            component: PermissionListComponent,
+            canActivate: [NeedsAuthentication]
+          },
+          {
+            path: 'details',
+            component: PermissionDetailsComponent,
+            canActivate: [NeedsAuthentication]
+          },
+          { path: '*', redirectTo: 'list' }
+        ], canActivate: [NeedsAuthentication]
+      },
+      { path: '**', redirectTo: 'permissions' }
     ]
-  }
+  },
+  { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
