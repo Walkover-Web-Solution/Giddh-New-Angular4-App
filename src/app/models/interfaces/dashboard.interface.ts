@@ -1,6 +1,6 @@
 import { INameUniqueName } from './nameUniqueName.interface';
 import { IClosingBalance, IForwardBalance } from './ledger.interface';
-import { ClosingBalanceResponse, DashboardResponse } from '../api-models/Dashboard';
+import { ClosingBalanceResponse } from '../api-models/Dashboard';
 
 export interface IPeriodBalances {
   periodBalances: IPeriodBalancesitem[];
@@ -76,12 +76,25 @@ export interface IRevenueChartClosingBalanceResponse {
 
 export interface IComparisionChartResponse {
   // revenue
-  revenueActiveYear?: IGroupHistoryGroups[];
-  revenueLastYear?: IGroupHistoryGroups[];
+  revenueActiveYear?: any[];
+  revenueActiveYearMonthly?: any[];
+  revenueActiveYearYearly?: any[];
+  revenueLastYear?: any[];
+  revenueLastYearMonthly?: any[];
+  revenueLastYearYearly?: any[];
   // expenses
-  ExpensesActiveYear?: IGroupHistoryGroups[];
-  ExpensesLastYear?: IGroupHistoryGroups[];
+  ExpensesActiveYear?: any[];
+  ExpensesActiveMonthly?: any[];
+  ExpensesActiveYearly?: any[];
+  ExpensesLastYear?: any[];
+  ExpensesLastYearMonthly?: any[];
+  ExpensesLastYearYearly?: any[];
+
   // P/L
-  ProfitLossActiveYear?: DashboardResponse;
-  ProfitLossLastYear?: DashboardResponse;
+  ProfitLossActiveYear?: any;
+  ProfitLossActiveYearMonthly?: any[];
+  ProfitLossActiveYearYearly?: any[];
+  ProfitLossLastYear?: any;
+  ProfitLossLastYearMonthly?: any[];
+  ProfitLossLastYearYearly?: any[];
 }
