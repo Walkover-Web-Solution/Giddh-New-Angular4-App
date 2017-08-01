@@ -5,7 +5,8 @@ import { Component, OnInit } from '@angular/core';
 import { ManufacturingActions } from '../services/actions/manufacturing/manufacturing.actions';
 
 @Component({
-  templateUrl: './manufacturing.component.html'
+  templateUrl: './manufacturing.component.html',
+  styleUrls: ['./manufacturing.component.css']
 })
 
 export class ManufacturingComponent implements OnInit {

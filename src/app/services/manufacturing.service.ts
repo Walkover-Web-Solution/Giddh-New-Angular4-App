@@ -10,7 +10,7 @@ import { MANUFACTURING_API } from './apiurls/manufacturing.api';
 import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest } from '../models/interfaces/manufacturing.interface';
 
 @Injectable()
-export class CompanyService {
+export class ManufacturingService {
 
   private user: UserDetails;
   private companyUniqueName: string;
@@ -81,7 +81,7 @@ export class CompanyService {
   * Delete manufacturing item
   * URL:: company/:companyUniqueName/stock/:stockUniqueName/manufacture/:manufacturingUniqueName
   */
-  public DeleteRole(model: IManufacturingUnqItemObj): Observable<BaseResponse<string, string>> {
+  public DeleteManufacturingItem(model: IManufacturingUnqItemObj): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
           this.user = s.session.user.user;
