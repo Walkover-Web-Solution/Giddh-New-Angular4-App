@@ -42,7 +42,8 @@
           </td>
           <td class="pItem">
             <label class="primary_color">Amount</label>
-            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount" ng-model="ledgerCtrl.selectedTxn.panel.amount"
+            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount"
+                   ng-model="ledgerCtrl.selectedTxn.panel.amount"
                    ng-change="ledgerCtrl.onNewPanelChange().amount(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
           </td>
           <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
@@ -61,29 +62,13 @@
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">+</label>
           </td>
-          <td style="max-width:150px" ng-if="ledgerCtrl.taxList.length > 0">
-	        		<span uib-dropdown auto-close="outsideClick">
-					      <a href id="tax" uib-dropdown-toggle>
-                              <label>Tax %</label>
-                              <div class="multi-select adjust">
-                                  <input type="number" readonly name="" class="form-control cursor-pointer"
-                                         ng-model="ledgerCtrl.selectedTxn.panel.tax" disabled/>
-                                  <span class="caret"></span>
-                              </div>
-
-                          </a>
-					      <!--<ul class="dropdown-menu pd" uib-dropdown-menu>-->
-                              <!--<li class="oh width100 bdrB pdB" ng-repeat="tax in ledgerCtrl.taxList">-->
-                                  <!--<label class="checkbox" ng-click="$event.stopPropagation()">-->
-                                      <!--<input class="pull-left" style="margin-top:5px;" type="checkbox"-->
-                                             <!--ng-model="tax.isChecked"-->
-                                             <!--ng-change="ledgerCtrl.onNewPanelChange().tax(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"-->
-                                             <!--ng-click="$event.stopPropagation()"/>-->
-                                      <!--<span class="pull-left" style="display:block;max-width:125px">{{""}}</span>-->
-                                  <!--</label>-->
-                              <!--</li>-->
-                          <!--</ul>-->
-              </span>
+          <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length">
+            <!--tax control component-->
+            <tax-control [taxes]="companyTaxesList$ | async"
+                         [applicableTaxes]="selectedAccount?.applicableTaxes"
+                         (selectedTaxesEvent)="currentTxn.taxes = $event"
+                         (taxAmountSumEvent)="currentTxn.tax = $event">
+            </tax-control>
           </td>
           <td class="pItem">
             <label>&nbsp;</label>
@@ -126,7 +111,8 @@
                 </td>
                 <td>
                   <label class="default_clr">Cheque Date</label>
-                  <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate"/>
+                  <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control"
+                         [(ngModel)]="blankLedger.chequeClearanceDate"/>
                 </td>
               </tr>
               </tbody>
@@ -175,7 +161,8 @@
           <tr>
             <td class="pdR1"><label class="default_clr pull-left">Voucher type</label></td>
             <td colspan="4">
-              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
+              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async"
+                       [options]="voucherDropDownOptions"></select2>
               <!--<ui-select ng-model="ledgerCtrl.selectedLedger.voucher" theme="bootstrap"-->
               <!--ng-click="$event.stopPropagation()">-->
               <!--<ui-select-match>-->

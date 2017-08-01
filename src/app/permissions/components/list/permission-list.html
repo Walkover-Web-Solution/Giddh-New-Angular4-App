@@ -35,7 +35,7 @@
   <div class="modal-dialog modal-md">
     <!-- modal-liq90 class is removed for now-->
     <div class="modal-content">
-       <delete-role-confirmation-model [selectedRoleForDelete]="selectedRoleForDelete" (confirmDeleteEvent)="deleteConfirmedRole($event)" (closeModelEvent)="closeConfirmationPopup($event)"></delete-role-confirmation-model> 
+       <delete-role-confirmation-model [selectedRoleForDelete]="selectedRoleForDelete" (confirmDeleteEvent)="deleteConfirmedRole()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
     </div>
   </div>
 </div>

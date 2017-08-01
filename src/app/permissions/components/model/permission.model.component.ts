@@ -20,9 +20,9 @@ import * as _ from 'lodash';
 export class PermissionModelComponent implements OnInit, OnDestroy {
     @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
 
-    private allRoles: INameUniqueName[] = [];
-    private newRoleObj: INewRoleFormObj = new NewRoleFormClass();
-    private dropdownHeading: string = 'Select pages';
+    public allRoles: INameUniqueName[] = [];
+    public newRoleObj: INewRoleFormObj = new NewRoleFormClass();
+    public dropdownHeading: string = 'Select pages';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(private router: Router, private store: Store<AppState>, private PermissionActions: PermissionActions) {
@@ -48,22 +48,22 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
     }
 
-    private closePopupEvent() {
+    public closePopupEvent() {
         this.closeEvent.emit('close');
     }
 
-    private onDDShown() {
+    public onDDShown() {
         this.dropdownHeading = 'Close list';
     }
 
-    private onDDHidden() {
+    public onDDHidden() {
         this.dropdownHeading = 'Select pages';
     }
 
     /**
      * addNewRole
     */
-    private addNewRole() {
+    public addNewRole() {
         if (this.isFormValid) {
             let data;
             if (this.newRoleObj.isFresh) {
@@ -76,7 +76,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         }
     }
 
-    private selectAllPages(event) {
+    public selectAllPages(event) {
         if (event.target.checked) {
             this.newRoleObj.isSelectedAllPages = true;
             this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = true);
@@ -86,7 +86,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         }
     }
 
-    private makeCount() {
+    public makeCount() {
         let count: number = 0;
         this.newRoleObj.pageList.forEach((item: IPage) => {
             if (item.isSelected) {
@@ -96,7 +96,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         return count;
     }
 
-    private selectPage(event) {
+    public selectPage(event) {
         if (event.target.checked) {
             if (this.makeCount() === this.newRoleObj.pageList.length) {
                 this.newRoleObj.isSelectedAllPages = true;

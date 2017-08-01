@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store/roots';
@@ -9,6 +9,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { createAutoCorrectedDatePipe } from '../../../shared/helpers/autoCorrectedDatePipe';
+import { CompanyActions } from '../../../services/actions/company.actions';
+import { TaxResponse } from '../../../models/api-models/Company';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -22,6 +24,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
+  public companyTaxesList$: Observable<TaxResponse[]>;
 
   public voucherDropDownOptions: Select2Options = {
     multiple: false,
@@ -36,8 +39,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions) {
+  constructor(
+    private store: Store<AppState>,
+    private _ledgerActions: LedgerActions,
+    private _companyActions: CompanyActions) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
+    this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
       text: 'Sales',
       id: 'Sales'
@@ -65,16 +72,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
     }]);
 
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+    this.store.dispatch(this._companyActions.getTax());
   }
 
   public ngOnInit() {
     this.showAdvanced = false;
   }
-
+  /**
+   * add to debit or credit
+   * @param {string} type
+   */
   public addToDrOrCr(type: string) {
     this.changeTransactionType.emit(type);
   }
 
+  /**
+   * reset panel form
+   */
   public resetPanel() {
     this.currentTxn = null;
     this.resetBlankLedger.emit(true);

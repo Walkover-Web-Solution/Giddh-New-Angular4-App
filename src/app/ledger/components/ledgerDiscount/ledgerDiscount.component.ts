@@ -7,12 +7,32 @@ import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flatten
 
 @Component({
   selector: 'ledger-discount',
-  templateUrl: 'ledgerDiscount.component.html'
+  templateUrl: 'ledgerDiscount.component.html',
+  styles: [`
+    .discount-dropdown-menu {
+      position: absolute;
+      /*top: 100%;*/
+      left: 0;
+      z-index: 1000;
+      min-width: 160px;
+      padding: 5px 0;
+      margin: 2px 0 0;
+      font-size: 14px;
+      text-align: left;
+      list-style: none;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ccc;
+      border: 1px solid rgba(0, 0, 0, .15);
+      border-radius: 4px;
+      -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
+    }`]
 })
 
 export class LedgerDiscountComponent implements OnInit, OnDestroy {
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
-  public discountMenu: { isopen: boolean } = { isopen: false };
+  public discountMenu: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {

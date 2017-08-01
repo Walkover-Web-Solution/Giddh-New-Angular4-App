@@ -31,7 +31,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   public localState: any;
   public allRoles: IRoleCommonResponseAndRequest[] = [];
-  private selectedRoleForDelete: IRoleCommonResponseAndRequest;
+  public selectedRoleForDelete: IRoleCommonResponseAndRequest;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
