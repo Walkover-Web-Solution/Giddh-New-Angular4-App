@@ -1,17 +1,17 @@
-<span dropdown >
-    <a href dropdownToggle (click)="false" id="discount"  >
+<span>
+    <a (click)="$event.stopPropagation();discountMenu = !discountMenu" id="discount">
         <label>Discount</label>
         <input type="number" name="" class="form-control cursor-pointer"
                ng-model="ledgerCtrl.selectedTxn.panel.discount"/>
     </a>
-    <ul *dropdownMenu class="dropdown-menu">
+    <ul class="discount-dropdown-menu pd" *ngIf="discountMenu">
       <li>
           <table>
-              <tr ng-repeat="discount in ledgerCtrl.discountAccount.accountDetails"
-                  *ngFor="let discount of (discountAccountsList$ | async)?.accountDetails">
+              <tr
+                *ngFor="let discount of (discountAccountsList$ | async)?.accountDetails">
                   <td class="pdL w100">{{ discount.name }}</td>
                   <td class="pdR pdT w50">
-                      <input type="number" class="form-control" [(ngModel)]="discount.amount"
+                      <input type="number" class="form-control"
                              ng-change="ledgerCtrl.onNewPanelChange().discount(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
                   </td>
               </tr>
