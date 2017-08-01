@@ -1,10 +1,10 @@
 <span>
-    <a href (click)="false" id="discount" dropdownToggle>
+    <a (click)="$event.stopPropagation();discountMenu = !discountMenu" id="discount">
         <label>Discount</label>
         <input type="number" name="" class="form-control cursor-pointer"
                ng-model="ledgerCtrl.selectedTxn.panel.discount"/>
     </a>
-    <ul class="dropdown-menu" dropdown [isOpen]="discountMenu.isopen">
+    <ul class="discount-dropdown-menu pd" *ngIf="discountMenu">
       <li>
           <table>
               <tr

@@ -100,5 +100,6 @@ export class TransactionVM {
   public particular: string;
   public type: string;
   public taxes: string[];
+  public tax?: number;
   public discounts: ILedgerDiscount[];
 }
