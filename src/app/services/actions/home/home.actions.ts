@@ -130,7 +130,6 @@ export class HomeActions {
         this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
       );
     }).map((res) => {
-      console.log(res);
       if (res[0].status === 'success' && res[1].status === 'success' && res[2].status === 'success') {
         let obj: IComparisionChartResponse = {
           revenueActiveYear: res[0].body.groups,
@@ -164,7 +163,6 @@ export class HomeActions {
         this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
       );
     }).map((res) => {
-      console.log(res);
       if (res[0].status === 'success' && res[1].status === 'success') {
         let obj: IComparisionChartResponse = {
           revenueLastYear: res[0].body.groups,

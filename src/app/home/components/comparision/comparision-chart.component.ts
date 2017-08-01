@@ -50,7 +50,6 @@ export class ComparisionChartComponent implements OnInit {
                 financialYears = _.orderBy(financialYears, (it) => {
                   return moment(it.financialYearStarts, 'DD-MM-YYYY');
                 }, 'desc');
-                console.log(financialYears);
                 this.lastFinancialYear = financialYears[0];
               }
             }
