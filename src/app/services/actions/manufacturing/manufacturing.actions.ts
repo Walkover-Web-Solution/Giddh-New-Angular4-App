@@ -5,38 +5,62 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { AppState } from '../../../store/roots';
-
-const MANUFACTURING_ACTIONS = {
-  GET_STOCK_LIST: 'GET_STOCK_LIST',
-  GET_STOCK_LIST_LOADED: 'GET_STOCK_LIST_LOADED'
-};
+import { MANUFACTURING_ACTIONS } from './manufacturing.const';
 
 @Injectable()
-
-
-
 export class ManufacturingActions {
 
-  // @Effect()
-  // private AllPages$: Observable<Action> = this.action$
-  //   .ofType(MANUFACTURING_ACTIONS.GET_STOCK_LIST)
-  //   .switchMap(action => {
-  //     return this._eledgerService.GetAllPageNames()
-  //       .map((r) => {
-  //         return this.validateResponse<LoadAllPageNamesResponse[], string>(r, {
-  //           type: MANUFACTURING_ACTIONS.GET_STOCK_LIST_LOADED,
-  //           payload: r
-  //         }, true, {
-  //             type: MANUFACTURING_ACTIONS.GET_STOCK_LIST_LOADED,
-  //             payload: r
-  //           });
-  //       });
-  //   });
   constructor(private action$: Actions) {}
 
   public GetStockList(): Action {
     return {
       type: MANUFACTURING_ACTIONS.GET_STOCK_LIST
+    };
+  }
+  public GetStockListResponse(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.GET_STOCK_LIST_RESPONSE
+    };
+  }
+  public GetMfItemDetails(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS
+    };
+  }
+  public GetMfItemDetailsResponse(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS_RESPONSE
+    };
+  }
+  public CreateMfItem(value): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.CREATE_MF_ITEM,
+      payload: value
+    };
+  }
+  public CreateMfItemResponse(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.CREATE_MF_ITEM_RESPONSE
+    };
+  }
+  public UpdateMfItem(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.UPDATE_MF_ITEM
+    };
+  }
+  public UpdateMfItemResponse(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.UPDATE_MF_ITEM_RESPONSE
+    };
+  }
+  public DeleteMfItem(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.DELETE_MF_ITEM
+    };
+  }
+  public DeleteMfItemResponse(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.DELETE_MF_ITEM_RESPONSE
     };
   }
 }
