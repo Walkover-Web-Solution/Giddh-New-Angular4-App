@@ -108,10 +108,18 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(MANUFACTURING_API.MF_REPORT.replace(':companyUniqueName', this.companyUniqueName))
+    return this._http.get(MANUFACTURING_API.MF_REPORT
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':product', (model.product) ? model.product : '')
+      .replace(':searchBy', (model.searchBy) ? model.searchBy : '')
+      .replace(':searchOperation', (model.searchOperation) ? model.searchOperation : '')
+      .replace(':searchValue', (model.searchValue) ? model.searchValue : '')
+      .replace(':from', (model.from) ? model.from : '' )
+      .replace(':to', (model.to) ? model.to : '')
+      )
       .map((res) => {
         let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
-        data.request = model;
+        data.request = '';
         data.queryString = model;
         return data;
       })

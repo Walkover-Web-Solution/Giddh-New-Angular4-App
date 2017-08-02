@@ -7,9 +7,10 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ManufacturingService } from '../../manufacturing.service';
 import { AppState } from '../../../store/roots';
 import { MANUFACTURING_ACTIONS } from './manufacturing.const';
-import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest } from '../../../models/interfaces/manufacturing.interface';
+import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest, IMfStockSearchRequest } from '../../../models/interfaces/manufacturing.interface';
 import { ToasterService } from '../../toaster.service';
 import { Router } from '@angular/router';
+import { StocksResponse } from '../../../models/api-models/Inventory';
 
 @Injectable()
 export class ManufacturingActions {
@@ -118,12 +119,13 @@ export class ManufacturingActions {
     private _router: Router
 ) {}
 
-  public GetMfReport(): Action {
+  public GetMfReport(value: IMfStockSearchRequest): Action {
     return {
-      type: MANUFACTURING_ACTIONS.MF_REPORT
+      type: MANUFACTURING_ACTIONS.MF_REPORT,
+      payload: value
     };
   }
-  public GetMfReportResponse(value: any): Action {
+  public GetMfReportResponse(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE,
       payload: value

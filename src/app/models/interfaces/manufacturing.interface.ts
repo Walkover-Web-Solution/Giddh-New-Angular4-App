@@ -93,6 +93,7 @@ export interface IMfStockSearchRequest {
   searchValue?: string;
   from?: string;
   to?: string;
+  count?: number;
 }
 
 /*

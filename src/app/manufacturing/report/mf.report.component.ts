@@ -24,6 +24,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { StocksResponse } from '../../models/api-models/Inventory';
 
 @Component({
   templateUrl: './mf.report.component.html',
@@ -37,6 +38,7 @@ export class MfReportComponent implements OnInit {
   private filtersForSearchOperation: any[] = filter1;
   private stockListDropDown: Select2OptionData[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private reportData: StocksResponse = null;
   constructor(
     private store: Store<AppState>,
     private manufacturingActions: ManufacturingActions,
@@ -57,11 +59,15 @@ export class MfReportComponent implements OnInit {
         this.store.dispatch(this.inventoryAction.GetStock());
       }
     });
-    console.log(this.mfStockSearchRequest);
+    this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (o.reportData) {
+        this.reportData = o.reportData;
+      }
+    });
   }
 
   private getReports() {
-    console.log ('in getReports', this.mfStockSearchRequest);
+    this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
   }
 
 }
