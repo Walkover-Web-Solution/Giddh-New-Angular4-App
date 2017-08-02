@@ -28,6 +28,7 @@ export interface AppState {
   flyAccounts: fromFlyAccounts.FlyAccountsState;
   tlPl: fromTlPl.TlPlState;
   ledger: fromLedger.LedgerState;
+  manufacturing: fromManufacturing.ManufacturingState;
 }
 
 export const reducers = {
