@@ -1999,7 +1999,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 
 /*input[type=radio]:before {
-    content: ' ';
+    design-filters: ' ';
     position: absolute;
     width: 18px;
     height: 18px;
@@ -2010,7 +2010,7 @@ a.btn.btn-xs.btn-link.pull-right {
     border-radius: 50%;
 }
 input[type=radio]:checked:after {
-    content: ' ';
+    design-filters: ' ';
     position: absolute;
     width: 6px;
     height: 6px;
