@@ -7,7 +7,8 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { MANUFACTURING_API } from './apiurls/manufacturing.api';
-import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest } from '../models/interfaces/manufacturing.interface';
+import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest, IMfStockSearchRequest } from '../models/interfaces/manufacturing.interface';
+import { StocksResponse } from '../models/api-models/Inventory';
 
 @Injectable()
 export class ManufacturingService {
@@ -94,5 +95,26 @@ export class ManufacturingService {
       data.queryString = { model };
       return data;
     }).catch((e) => HandleCatch<string, string>(e, '', { model }));
+  }
+
+  /**
+   * get manufacturing report details
+   * URL:: company/:companyUniqueName/stock/manufacture-report
+   */
+  public GetMfReport(model: IMfStockSearchRequest): Observable<BaseResponse<StocksResponse, IMfStockSearchRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(MANUFACTURING_API.MF_REPORT.replace(':companyUniqueName', this.companyUniqueName))
+      .map((res) => {
+        let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
+        data.request = model;
+        data.queryString = model;
+        return data;
+      })
+      .catch((e) => HandleCatch<StocksResponse, IMfStockSearchRequest>(e, ''));
   }
 }
