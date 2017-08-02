@@ -130,7 +130,7 @@ module.exports = function (options) {
 
         /**
          * Raw loader support for *.css files
-         * Returns file content as string
+         * Returns file design-filters as string
          *
          * See: https://github.com/webpack/raw-loader
          */
@@ -153,7 +153,7 @@ module.exports = function (options) {
 
         /**
          * Raw loader support for *.html
-         * Returns file content as string
+         * Returns file design-filters as string
          *
          * See: https://github.com/webpack/raw-loader
          */
