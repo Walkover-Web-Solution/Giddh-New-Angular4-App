@@ -17,7 +17,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
   templateUrl: 'newLedgerEntryPanel.component.html'
 })
 
-export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
+export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public selectedAccount: IFlattenAccountsResultItem | any = null;
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
@@ -39,10 +39,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private store: Store<AppState>,
-    private _ledgerActions: LedgerActions,
-    private _companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>,
+              private _ledgerActions: LedgerActions,
+              private _companyActions: CompanyActions) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
@@ -78,12 +77,29 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.showAdvanced = false;
   }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes['currentTxn'] && JSON.stringify(changes['currentTxn'].previousValue) !== JSON.stringify(changes['currentTxn'].currentValue)) {
+      this.calculateTotal();
+    }
+  }
+
   /**
    * add to debit or credit
    * @param {string} type
    */
   public addToDrOrCr(type: string) {
     this.changeTransactionType.emit(type);
+  }
+
+  public calculateTotal() {
+    let total = this.currentTxn.amount - this.currentTxn.discount;
+    this.currentTxn.total = total + (( total * this.currentTxn.tax) / 100);
+  }
+
+  public calculateAmount() {
+    let total = this.currentTxn.total + this.currentTxn.discount;
+    this.currentTxn.amount = total - ((total * this.currentTxn.tax) / 100);
   }
 
   /**
