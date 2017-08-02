@@ -1,3 +1,4 @@
+import { SharedModule } from './../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -20,7 +21,8 @@ import { PaginationModule } from 'ngx-bootstrap';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    PaginationModule
+    PaginationModule,
+    SharedModule
   ],
 })
 export class ManufacturingModule {
