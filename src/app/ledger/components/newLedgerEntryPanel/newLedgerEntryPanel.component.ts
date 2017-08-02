@@ -21,6 +21,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public selectedAccount: IFlattenAccountsResultItem | any = null;
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
+  @Input() public needToReCalculate: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
@@ -79,7 +80,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['currentTxn'] && JSON.stringify(changes['currentTxn'].previousValue) !== JSON.stringify(changes['currentTxn'].currentValue)) {
+    if (changes['needToReCalculate'] && JSON.stringify(changes['needToReCalculate'].previousValue) !== JSON.stringify(changes['needToReCalculate'].currentValue)) {
       this.calculateTotal();
     }
   }
@@ -98,8 +99,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateAmount() {
-    let total = this.currentTxn.total + this.currentTxn.discount;
-    this.currentTxn.amount = total - ((total * this.currentTxn.tax) / 100);
+    this.currentTxn.amount = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax) * this.currentTxn.discount) / (100 + this.currentTxn.tax);
   }
 
   /**
