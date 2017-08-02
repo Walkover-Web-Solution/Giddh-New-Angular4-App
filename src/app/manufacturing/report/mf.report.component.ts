@@ -25,6 +25,7 @@ import { InventoryAction } from '../../services/actions/inventory/inventory.acti
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
+import { PaginationModule } from 'ngx-bootstrap';
 
 @Component({
   templateUrl: './mf.report.component.html',
@@ -48,6 +49,8 @@ export class MfReportComponent implements OnInit {
   public ngOnInit() {
     this.mfStockSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
     this.mfStockSearchRequest.to = moment().format('DD-MM-YYYY');
+    this.mfStockSearchRequest.page = 1;
+    this.mfStockSearchRequest.count = 10;
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (o.stocksList) {
         if (o.stocksList.results) {
@@ -68,6 +71,12 @@ export class MfReportComponent implements OnInit {
 
   private getReports() {
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
+  }
+
+  private pageChanged(event: any): void {
+    let data = _.cloneDeep(this.mfStockSearchRequest);
+    data.page = event.page;
+    this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
 
 }

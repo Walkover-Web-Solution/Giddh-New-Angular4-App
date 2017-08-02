@@ -20,6 +20,7 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
@@ -36,7 +37,6 @@ export const ROUTES: Routes = [
         ]
       },
       { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
-      { path: '**', redirectTo: 'permissions' }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }

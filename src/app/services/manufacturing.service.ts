@@ -116,6 +116,8 @@ export class ManufacturingService {
       .replace(':searchValue', (model.searchValue) ? model.searchValue : '')
       .replace(':from', (model.from) ? model.from : '' )
       .replace(':to', (model.to) ? model.to : '')
+      .replace(':page', (model.page) ? model.page.toString() : '1')
+      .replace(':count', (model.count) ? model.count.toString() : '10')
       )
       .map((res) => {
         let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
