@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ManufacturingComponent } from './manufacturing.component';
 import { MfReportComponent } from './report/mf.report.component';
 import { MfEditComponent } from './edit/mf.edit.component';
+import { PaginationModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { MfEditComponent } from './edit/mf.edit.component';
     RouterModule,
     CommonModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    PaginationModule
   ],
 })
 export class ManufacturingModule {

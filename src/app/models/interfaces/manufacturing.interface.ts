@@ -94,6 +94,7 @@ export interface IMfStockSearchRequest {
   from?: string;
   to?: string;
   count?: number;
+  page?: number;
 }
 
 /*

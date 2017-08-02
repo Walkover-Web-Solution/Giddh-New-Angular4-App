@@ -9,92 +9,114 @@
   <div class="row mfStockSearchRequestForm pdBth4">
     <div class="col-xs-2 pull-right">
       <label class="small">&nbsp;</label><br>
-      <button class="btn btn-success" [routerLink]="['edit']" type="button">Create Manufacture</button>
+      <button class="btn btn-success" [routerLink]="['/pages/manufacturing/edit']" type="button">Create Manufacture</button>
     </div>
     <form #mfStockSearchRequestForm="ngForm" class="col-xs-10" (submit)="getReports()" autocomplete="off">
-      <div class="form-group col-xs-1">
-        <label class="small">Final Product</label>
-        <select class="form-control" name="product" [(ngModel)]="mfStockSearchRequest.product">
-          <option [ngValue]="select">Please Select</option>
-          <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option> 
-        </select>
-      </div>
-      <div class="form-group col-xs-1">
-        <label class="small">From Date</label>
-        <input type="text" class="form-control" name="from"  [(ngModel)]="mfStockSearchRequest.from" />
-      </div>
-      <div class="form-group col-xs-1">
-        <label class="small">To Date</label>
-        <input type="text" class="form-control" name="to" [(ngModel)]="mfStockSearchRequest.to" />
-      </div>
-      <div class="form-group col-xs-1">
-        <label class="small">Others</label>
-        <select class="form-control" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
-          <option [ngValue]="select">Please Select</option>
-          <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option> 
-        </select>
-      </div>
-      <div class="form-group col-xs-1">
-        <label class="small">&nbsp;</label>
-        <select class="form-control" name="searchOperation"  [(ngModel)]="mfStockSearchRequest.searchOperation">
-          <option [ngValue]="select">Please Select</option> 
-          <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option> 
-        </select>
-      </div>
-      <div class="form-group col-xs-1">
-        <label class="small">Number</label>
-        <input type="number" class="form-control" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
-      </div>
-      <div class="form-group col-xs-1">
-        <label class="small">&nbsp;</label><br>
-        <button class="btn btn-info" type="submit" [disabled]="!mfStockSearchRequest.product">Go</button>
+      <div class="row">
+        <div class="form-group col-xs-1">
+          <label class="small">Final Product</label>
+          <select class="form-control" name="product" [(ngModel)]="mfStockSearchRequest.product">
+            <option [ngValue]="select">Please Select</option>
+            <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option> 
+          </select>
+        </div>
+        <div class="form-group col-xs-1">
+          <label class="small">From Date</label>
+          <input type="text" class="form-control" name="from"  [(ngModel)]="mfStockSearchRequest.from" />
+        </div>
+        <div class="form-group col-xs-1">
+          <label class="small">To Date</label>
+          <input type="text" class="form-control" name="to" [(ngModel)]="mfStockSearchRequest.to" />
+        </div>
+        <div class="form-group col-xs-1">
+          <label class="small">Others</label>
+          <select class="form-control" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
+            <option [ngValue]="select">Please Select</option>
+            <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option> 
+          </select>
+        </div>
+        <div class="form-group col-xs-1">
+          <label class="small">&nbsp;</label>
+          <select class="form-control" name="searchOperation"  [(ngModel)]="mfStockSearchRequest.searchOperation">
+            <option [ngValue]="select">Please Select</option> 
+            <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option> 
+          </select>
+        </div>
+        <div class="form-group col-xs-1">
+          <label class="small">Number</label>
+          <input type="number" class="form-control" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
+        </div>
+        <div class="form-group col-xs-1">
+          <label class="small">&nbsp;</label><br>
+          <button class="btn btn-info" type="submit" [disabled]="!mfStockSearchRequest.product">Go</button>
+        </div>
       </div>
     </form>
   </div>
   <!-- search form end -->
 
-  
-  <div class="row" *ngIf="reportData" id="mfReportTbl">
-    <div class="col-xs-12">
-      <div class="table-responsive pdBth4">
-        <table class="table">
-          <thead>
-            <tr class="form_title">
-              <th width="15%">Date</th>
-              <th width="10%">Vch. No.</th>
-              <th width="15%">Final Product</th>
-              <th width="24%" class="alC">Raw Products</th>
-              <th width="12%" class="alC">Quantity Inwards</th>
-              <th width="24%" class="alC">Quantity Outwards</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of reportData.results">
-              <td>{{item.date}}</td>
-              <td>{{item.voucherNumber}}</td>
-              <td>{{item.stockName}}</td>
-              <td colspan="3" class="">
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td width="40%">&nbsp;</td>
-                      <td width="20%">{{item.manufacturingQuantity}}</td>
-                      <td width="40%">&nbsp;</td>
-                    </tr>
-                    <tr *ngFor="let row of item.linkedStocks">
-                      <td>{{row.stockName}}</td>
-                      <td>&nbsp;</td>
-                      <td>{{row.manufacturingQuantity}}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+  <section *ngIf="reportData">
+    <div class="row" id="mfReportTbl">
+      <div class="col-xs-12">
+        <div class="table-responsive pdBth4">
+          <table class="table">
+            <thead>
+              <tr class="form_title">
+                <th width="15%">Date</th>
+                <th width="10%">Vch. No.</th>
+                <th width="15%">Final Product</th>
+                <th width="24%" class="alC">Raw Products</th>
+                <th width="12%" class="alC">Quantity Inwards</th>
+                <th width="24%" class="alC">Quantity Outwards</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of reportData.results">
+                <td>{{item.date}}</td>
+                <td>{{item.voucherNumber}}</td>
+                <td>{{item.stockName}}</td>
+                <td colspan="3" class="">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <td width="40%">&nbsp;</td>
+                        <td width="20%">{{item.manufacturingQuantity}}</td>
+                        <td width="40%">&nbsp;</td>
+                      </tr>
+                      <tr *ngFor="let row of item.linkedStocks">
+                        <td>{{row.stockName}}</td>
+                        <td>&nbsp;</td>
+                        <td>{{row.manufacturingQuantity}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
+
+    <div class="row alC">
+      <pagination 
+        [totalItems]="reportData.totalItems" 
+        [(ngModel)]="reportData.page" 
+        [maxSize]="5" 
+        class="pagination-sm"
+        [boundaryLinks]="true" 
+        [rotate]="false" 
+        (pageChanged)="pageChanged($event)">
+      </pagination>
+    </div>
+      <!--
+        public maxSize:number = 5;
+  public bigTotalItems:number = 175;
+  public bigCurrentPage:number = 1;
+  public numPages:number = 0;
+        -->
+
+  </section>
       <!-- <nav aria-label="Page navigation" class="text-center">
         <ul class="pagination pagination-sm">
           <li>

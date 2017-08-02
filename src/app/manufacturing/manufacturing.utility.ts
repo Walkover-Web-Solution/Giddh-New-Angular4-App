@@ -6,6 +6,8 @@ export class MfStockSearchRequestClass {
   public searchValue: string;
   public from: string;
   public to: string;
+  public count: number;
+  public page: number;
 }
 
 /*
