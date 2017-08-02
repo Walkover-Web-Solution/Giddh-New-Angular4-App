@@ -1,4 +1,5 @@
 import { INameUniqueName } from './nameUniqueName.interface';
+import { IPagination } from './paginatedResponse.interface';
 
 // some common interface used in module everywhere
 export interface IOnlyUniqueName {
@@ -77,3 +78,28 @@ export interface IOtherExpensesForCreate {
   baseAccount: IOnlyUniqueName;
   transactions: Transaction[];
 }
+
+/*
+ * Model for get stocks with rates and response of request
+*/
+
+// StocksResponse
+// this.store.dispatch(this.inventoryAction.GetStock());
+
+export interface IMfStockSearchRequest {
+  product?: string;
+  searchOperation?: string;
+  searchBy?: string;
+  searchValue?: string;
+  from?: string;
+  to?: string;
+}
+
+/*
+product( string: uniquename stock ) ,
+searchOperation(greaterThan , lessThan, greaterThanOrEquals, lessThanOrEquals, equals),
+searchBy (quantityInward , quantityOutward, voucherNumber),
+searchValue( any integer number),
+from (date string),
+to(date string)
+*/

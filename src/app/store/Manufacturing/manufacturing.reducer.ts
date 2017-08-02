@@ -14,10 +14,10 @@ export const initialState: ManufacturingState = {
 
 export function ManufacturingReducer(state = initialState, action: Action): ManufacturingState {
     switch (action.type) {
-        case MANUFACTURING_ACTIONS.GET_STOCK_LIST: {
+        case MANUFACTURING_ACTIONS.MF_REPORT: {
             return state;
         }
-        case MANUFACTURING_ACTIONS.GET_STOCK_LIST_RESPONSE: {
+        case MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE: {
             return state;
         }
         case MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS: {

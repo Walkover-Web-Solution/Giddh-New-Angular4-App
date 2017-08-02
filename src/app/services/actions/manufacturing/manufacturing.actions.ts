@@ -13,18 +13,18 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class ManufacturingActions {
-  // GET STOCK LIST
+  // GET MF Report
   @Effect()
-  private GetStockList$: Observable<Action> = this.action$
-    .ofType(MANUFACTURING_ACTIONS.GET_STOCK_LIST)
-    .switchMap(action => this._manufacturingService.GetStockList()) // TBD
+  private GetMfReport$: Observable<Action> = this.action$
+    .ofType(MANUFACTURING_ACTIONS.MF_REPORT)
+    .switchMap(action => this._manufacturingService.GetMfReport(action.payload))
     .map(response => {
-      return this.GetStockListResponse(response);
+      return this.GetMfReportResponse(response);
     });
 
   @Effect()
-  private GetStockResponse$: Observable<Action> = this.action$
-    .ofType(MANUFACTURING_ACTIONS.GET_STOCK_LIST_RESPONSE)
+  private GetMfReportResponse$: Observable<Action> = this.action$
+    .ofType(MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE)
     .map(response => {
       return { type : ''};
     });
@@ -118,14 +118,14 @@ export class ManufacturingActions {
     private _router: Router
 ) {}
 
-  public GetStockList(): Action {
+  public GetMfReport(): Action {
     return {
-      type: MANUFACTURING_ACTIONS.GET_STOCK_LIST
+      type: MANUFACTURING_ACTIONS.MF_REPORT
     };
   }
-  public GetStockListResponse(value: any): Action {
+  public GetMfReportResponse(value: any): Action {
     return {
-      type: MANUFACTURING_ACTIONS.GET_STOCK_LIST_RESPONSE,
+      type: MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE,
       payload: value
     };
   }
