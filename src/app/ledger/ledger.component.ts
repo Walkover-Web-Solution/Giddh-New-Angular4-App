@@ -246,16 +246,22 @@ export class LedgerComponent implements OnInit {
       transactions: [
         {
           amount: 0,
+          tax: 0,
+          total: 0,
           particular: '',
           type: 'DEBIT',
           taxes: [],
+          discount: 0,
           discounts: []
         },
         {
           amount: 0,
           particular: '',
+          tax: 0,
+          total: 0,
           type: 'CREDIT',
           taxes: [],
+          discount: 0,
           discounts: []
         }],
       voucherType: 'Purchases',

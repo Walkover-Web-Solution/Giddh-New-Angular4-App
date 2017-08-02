@@ -43,8 +43,7 @@
           <td class="pItem">
             <label class="primary_color">Amount</label>
             <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount"
-                   ng-model="ledgerCtrl.selectedTxn.panel.amount"
-                   ng-change="ledgerCtrl.onNewPanelChange().amount(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
+                   ng-model="ledgerCtrl.selectedTxn.panel.amount" (keyup)="calculateTotal()"/>
           </td>
           <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
             <label>&nbsp;</label>
@@ -54,7 +53,9 @@
           <!--discount-->
           <td style="max-width:150px" class="pItem"
               *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
-            <ledger-discount></ledger-discount>
+            <ledger-discount (discountUpdatedEvent)="currentTxn.discounts = $event"
+                             (discountTotalUpdatedEvent)="currentTxn.discount = $event;calculateTotal()">
+            </ledger-discount>
           </td>
 
           <td class="pItem"
@@ -67,7 +68,7 @@
             <tax-control [taxes]="companyTaxesList$ | async"
                          [applicableTaxes]="selectedAccount?.applicableTaxes"
                          (selectedTaxesEvent)="currentTxn.taxes = $event"
-                         (taxAmountSumEvent)="currentTxn.tax = $event">
+                         (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()">
             </tax-control>
           </td>
           <td class="pItem">
@@ -76,8 +77,7 @@
           </td>
           <td class="pItem">
             <label class="primary_color">Total</label>
-            <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.total"
-                   ng-change="ledgerCtrl.onNewPanelChange().total(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
+            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.total" (keyup)="calculateAmount()"/>
           </td>
         </tr>
         </tbody>
@@ -86,7 +86,7 @@
 
     <div class="row pd1 inWords">
       <div class="col-xs-12">
-        {{""}}
+        {{ currentTxn.total | myNumberToWordsPipe }}
       </div>
     </div>
 
@@ -163,15 +163,6 @@
             <td colspan="4">
               <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async"
                        [options]="voucherDropDownOptions"></select2>
-              <!--<ui-select ng-model="ledgerCtrl.selectedLedger.voucher" theme="bootstrap"-->
-              <!--ng-click="$event.stopPropagation()">-->
-              <!--<ui-select-match>-->
-              <!--<span>{{$select.selected.name}}</span>-->
-              <!--</ui-select-match>-->
-              <!--<ui-select-choices repeat="item in ledgerCtrl.voucherTypeList| filter: $select.search ">-->
-              <!--<span ng-bind="item.name"></span>-->
-              <!--</ui-select-choices>-->
-              <!--</ui-select>-->
             </td>
             <td class="pdL1">
               <span>{{""}}</span>
@@ -187,7 +178,7 @@
           class="glyphicon glyphicon-triangle-bottom" [ngClass]="{rotate180:showAdvanced}"></i></button>
       </div>
       <div class="col-xs-6 text-right">
-        <span class="primary_color">Compound Total: {{ currentTxn?.amount }}</span>
+        <span class="primary_color">Compound Total: {{ currentTxn?.total }}</span>
       </div>
     </div>
 

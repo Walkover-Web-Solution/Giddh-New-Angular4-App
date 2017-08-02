@@ -11,27 +11,7 @@ import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
 
 @Component({
   selector: 'ledger-discount',
-  templateUrl: 'ledgerDiscount.component.html',
-  styles: [`
-    .discount-dropdown-menu {
-      position: absolute;
-      /*top: 100%;*/
-      left: 0;
-      z-index: 1000;
-      min-width: 160px;
-      padding: 5px 0;
-      margin: 2px 0 0;
-      font-size: 14px;
-      text-align: left;
-      list-style: none;
-      background-color: #fff;
-      background-clip: padding-box;
-      border: 1px solid #ccc;
-      border: 1px solid rgba(0, 0, 0, .15);
-      border-radius: 4px;
-      -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
-    }`]
+  templateUrl: 'ledgerDiscount.component.html'
 })
 
 export class LedgerDiscountComponent implements OnInit, OnDestroy {
@@ -53,7 +33,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * prepare discountobj
+   * prepare discount obj
    */
   public prepareDiscountList() {
     let discountAccountsList: IFlattenGroupsAccountsDetail = null;
@@ -66,7 +46,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
         isOpen: acc.isOpen,
         groupName: acc.groupName,
         groupSynonyms: acc.groupSynonyms,
-        amount: acc.amount
+        amount: acc.amount || 0
       };
       this.discountAccountsDetails.push(disObj);
     });
@@ -79,7 +59,6 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
     this.discountTotal = this.generateTotal();
     this.discountTotalUpdatedEvent.emit(this.discountTotal);
     this.discountUpdatedEvent.emit(this.generateDiscountObject());
-    // this.discountUpdatedEvent.emit(this.discountAccountsDetails as ILedgerDiscount[]);
   }
 
   /**
@@ -88,7 +67,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
    */
   public generateTotal() {
     return this.discountAccountsDetails.reduce((pv, cv) => {
-      return cv.amount ?  pv + cv.amount : pv;
+      return cv.amount ? pv + cv.amount : pv;
     }, 0);
   }
 
@@ -106,6 +85,14 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
       });
     });
     return discountObj;
+  }
+
+  public trackByFn(index) {
+    return index; // or item.id
+  }
+
+  public hideDiscountMenu() {
+    this.discountMenu = false;
   }
 
   public ngOnDestroy(): void {
