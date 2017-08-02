@@ -11,7 +11,7 @@
       <div class="form-group col-xs-4">
         <label>Product Name</label>
         <select2 [data]="stockListDropDown$ | async" [options]="options"
-        (valueChanged)="checkIfLinkedStockIsUnique($event)"></select2>
+        (valueChanged)="getStocksWithRate($event)"></select2>
         <!--<select class="form-control">
 						<option value="computer">Computer</option>
 						<option value="bag">Bag</option>
@@ -51,11 +51,16 @@
           </thead>
           <tbody>
             <tr>
-              <td colspan="9"><input type="text" class="form-control"></td>
+              <td colspan="9">
+                <select class="form-control">
+                  <option (value)="stock.id" *ngFor="let stock of stockListDropDown$ | async" >{{stock.text}}</option>
+                </select>
+              </td>
               <td><input type="text" class="form-control"></td>
               <td><input type="text" class="form-control"></td>
               <td><input type="text" class="form-control"></td>
-              <td class="action"><i class="fa fa-times text-danger" aria-hidden="true"></i>
+              <td class="action">
+                <button (click)="addConsumption()"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
               </td>
             </tr>
             <!--<tr>
