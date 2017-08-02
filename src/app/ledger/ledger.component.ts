@@ -60,6 +60,7 @@ export class LedgerComponent implements OnInit {
     }
   };
   public trxRequest: TransactionsRequest;
+  public needToReCalculate: boolean = false;
   public accountsOptions: Select2Options = {
     multiple: true,
     width: '100%',
