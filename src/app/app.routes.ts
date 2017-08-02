@@ -11,6 +11,8 @@ import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { TlPlComponent } from './tl-pl/tl-pl.component';
 import { LedgerComponent } from './ledger/ledger.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
+import { MfReportComponent } from './manufacturing/report/mf.report.component';
+import { MfEditComponent } from './manufacturing/edit/mf.edit.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,7 +28,13 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
-      { path: 'manufacturing', component: ManufacturingComponent },
+      { path: 'manufacturing', component: ManufacturingComponent,
+        children: [
+          { path: '', redirectTo: 'report', pathMatch: 'full' },
+          { path: 'report', component: MfReportComponent},
+          { path: 'edit', component: MfEditComponent }
+        ]
+      },
       { path: 'permissions', loadChildren: 'app/permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication]},
       { path: '**', redirectTo: 'permissions' }
     ]
