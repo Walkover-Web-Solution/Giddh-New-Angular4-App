@@ -3,13 +3,15 @@ import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufactur
 import { MANUFACTURING_ACTIONS } from '../../services/actions/manufacturing/manufacturing.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
+import { StocksResponse } from '../../models/api-models/Inventory';
+import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 
 export interface ManufacturingState {
-    someKey: object;
+    reportData: StocksResponse;
 }
 
 export const initialState: ManufacturingState = {
-    someKey: {}
+    reportData: null
 };
 
 export function ManufacturingReducer(state = initialState, action: Action): ManufacturingState {
@@ -18,6 +20,12 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             return state;
         }
         case MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<StocksResponse, IMfStockSearchRequest> = action.payload;
+            if (res.status === 'success') {
+                newState.reportData = res.body;
+                return Object.assign({}, state, newState);
+            }
             return state;
         }
         case MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS: {

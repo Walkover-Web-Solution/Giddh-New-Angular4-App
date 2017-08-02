@@ -1,9 +1,9 @@
 import { Configuration } from '../../app.constant';
-let COMMON_URL = Configuration.ApiUrl + '/stock/:stockUniqueName/manufacture';
+let COMMON_URL = Configuration.ApiUrl + '/company/:companyUniqueName/stock/:stockUniqueName/manufacture';
 export const MANUFACTURING_API = {
   GET: COMMON_URL + '/:manufacturingUniqueName',
   CREATE: COMMON_URL,
   UPDATE: COMMON_URL + '/:manufacturingUniqueName',
   DELETE: COMMON_URL + '/:manufacturingUniqueName',
-  MF_REPORT: Configuration.ApiUrl + 'stock/manufacture-report'
+  MF_REPORT: Configuration.ApiUrl + 'company/:companyUniqueName/stock/manufacture-report?product=:product&searchOperation=:searchOperation&searchBy=:searchBy&searchValue=:searchValue&from=:from&to=:to'
 };
