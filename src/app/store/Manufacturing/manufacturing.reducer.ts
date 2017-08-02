@@ -28,6 +28,12 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             }
             return state;
         }
+        case MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE: {
+            return state;
+        }
+        case MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE_RESPONSE: {
+            return state;
+        }
         case MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS: {
             return state;
         }

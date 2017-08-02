@@ -30,6 +30,22 @@ export class ManufacturingActions {
       return { type : ''};
     });
 
+  // GET STOCK WITH RATE
+  @Effect()
+  private GetStockWithRate$: Observable<Action> = this.action$
+    .ofType(MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE)
+    .switchMap(action => this._manufacturingService.GetStockWithRate(action.payload))
+    .map(response => {
+      return this.GetStockWithRateResponse(response);
+    });
+
+  @Effect()
+  private GetStockWithRateResponse$: Observable<Action> = this.action$
+    .ofType(MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE_RESPONSE)
+    .map(response => {
+      return { type : ''};
+    });
+
   // GET MANUFACTURING ITEM DETAIL
   @Effect()
   private GetMFItemDetail$: Observable<Action> = this.action$
@@ -118,6 +134,20 @@ export class ManufacturingActions {
     private _toasty: ToasterService,
     private _router: Router
 ) {}
+
+  public GetStockWithRate(value: string): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE,
+      payload: { stockUniqueName: value }
+    };
+  }
+
+  public GetStockWithRateResponse(value: BaseResponse<ICommonResponseOfManufactureItem, string>): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE_RESPONSE,
+      payload: value
+    };
+  }
 
   public GetMfReport(value: IMfStockSearchRequest): Action {
     return {

@@ -16,6 +16,7 @@ export class MfEditComponent implements OnInit {
 
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public consumptionDetail = [];
+  public manufacturingDetails = {};
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -46,15 +47,27 @@ export class MfEditComponent implements OnInit {
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: unit.name , id: unit.uniqueName };
+            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
           });
         }
       }
     }).takeUntil(this.destroyed$);
+    // get stock details
+    this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (!o.stocksList) {
+        this.store.dispatch(this.inventoryAction.GetStock());
+      }
+    });
   }
 
-  private checkIfLinkedStockIsUnique(ev) {
-    console.log('list updated the val is :', ev.value);
+  public getStocksWithRate(data) {
+    if (data.value) {
+      this.store.dispatch(this.manufacturingActions.GetStockWithRate(data.value));
+    }
+  }
+
+  private addConsumption() {
+    console.log('the data to push is : AAA');
   }
 
   private addExpense() {
