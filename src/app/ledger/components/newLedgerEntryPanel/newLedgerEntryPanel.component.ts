@@ -1,4 +1,8 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import {
+  AfterViewChecked,
+  ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+  SimpleChanges
+} from '@angular/core';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store/roots';
@@ -17,7 +21,7 @@ import { TaxResponse } from '../../../models/api-models/Company';
   templateUrl: 'newLedgerEntryPanel.component.html'
 })
 
-export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges {
+export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked {
   @Input() public selectedAccount: IFlattenAccountsResultItem | any = null;
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
@@ -42,7 +46,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   constructor(private store: Store<AppState>,
               private _ledgerActions: LedgerActions,
-              private _companyActions: CompanyActions) {
+              private _companyActions: CompanyActions,
+              private cdRef: ChangeDetectorRef) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
@@ -80,9 +85,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['needToReCalculate'] && JSON.stringify(changes['needToReCalculate'].previousValue) !== JSON.stringify(changes['needToReCalculate'].currentValue)) {
+    if (changes['needToReCalculate']) {
       this.calculateTotal();
     }
+  }
+
+  public ngAfterViewChecked() {
+    this.cdRef.detectChanges();
   }
 
   /**
