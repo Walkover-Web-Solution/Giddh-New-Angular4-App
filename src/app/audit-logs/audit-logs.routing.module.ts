@@ -8,14 +8,8 @@ import { AuditLogsComponent } from './audit-logs.component';
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full', canActivate: [NeedsAuthentication] },
       {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
-        children: [
-          {
-            path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication]
-          }
-        ]
+        path: '', component: AuditLogsComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],
