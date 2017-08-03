@@ -11,12 +11,14 @@ import * as fromAuditLogs from './AuditLogs/audit-logs.reducer';
 import * as fromFlyAccounts from './header/fly-accounts.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
 import * as fromLedger from './Ledger/ledger.reducer';
+import * as fromInvoice from './Invoice/invoice.reducer';
 
 export interface AppState {
   router: RouterState;
   home: fromHome.HomeState;
   login: fromLogin.AuthenticationState;
   session: fromLogin.SessionState;
+  invoice: fromInvoice.InvoiceState;
   company: fromCompany.CurrentCompanyState;
   groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
   verifyMobile: fromVerifyMobileReducer.VerifyMobileState;
@@ -43,5 +45,6 @@ export const reducers = {
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,
   tlPl: fromTlPl.tlPlReducer,
-  ledger: fromLedger.ledgerReducer
+  ledger: fromLedger.ledgerReducer,
+  invoice: fromInvoice.invoiceReducer
 };
