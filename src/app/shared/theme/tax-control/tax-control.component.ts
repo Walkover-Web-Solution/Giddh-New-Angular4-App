@@ -53,8 +53,8 @@ export class TaxControlComponent implements OnInit {
 
   public taxRenderData: TaxControlData[] = [];
   public showTaxPopup: boolean = false;
-  private sum: number = 0;
-  private selectedTaxes: string[] = [];
+  public sum: number = 0;
+  public selectedTaxes: string[] = [];
 
   constructor() {
     //
