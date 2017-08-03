@@ -108,17 +108,33 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(MANUFACTURING_API.MF_REPORT
-      .replace(':companyUniqueName', this.companyUniqueName)
-      .replace(':product', (model.product) ? model.product : '')
-      .replace(':searchBy', (model.searchBy) ? model.searchBy : '')
-      .replace(':searchOperation', (model.searchOperation) ? model.searchOperation : '')
-      .replace(':searchValue', (model.searchValue) ? model.searchValue : '')
-      .replace(':from', (model.from) ? model.from : '' )
-      .replace(':to', (model.to) ? model.to : '')
-      .replace(':page', (model.page) ? model.page.toString() : '1')
-      .replace(':count', (model.count) ? model.count.toString() : '10')
-      )
+    // create url conditionally
+    let url = MANUFACTURING_API.MF_REPORT;
+    if ((model.product)) {
+      url = url + 'product=' + model.product + '&';
+    }
+    if ((model.searchBy)) {
+      url = url + 'searchBy=' + model.searchBy + '&';
+    }
+    if ((model.searchOperation)) {
+      url = url + 'searchOperation=' + model.searchOperation + '&';
+    }
+    if ((model.searchValue)) {
+      url = url + 'searchValue=' + model.searchValue + '&';
+    }
+    if ((model.from)) {
+      url = url + 'from=' + model.from + '&';
+    }
+    if ((model.to)) {
+      url = url + 'to=' + model.to + '&';
+    }
+    if ((model.page)) {
+      url = url + 'page=' + model.page + '&';
+    }
+    if ((model.count)) {
+      url = url + 'count=' + model.count;
+    }
+    return this._http.get(url.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
         let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
         data.request = '';
