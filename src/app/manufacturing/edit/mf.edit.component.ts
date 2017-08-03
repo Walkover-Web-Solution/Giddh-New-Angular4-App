@@ -7,6 +7,11 @@ import { InventoryAction } from '../../services/actions/inventory/inventory.acti
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
+import { StockDetailResponse } from '../../models/api-models/Inventory';
+import { IManufacturingDetails, IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
+import * as _ from 'lodash';
+import { LinkedStocks } from '../manufacturing.utility';
+import { GroupService } from '../../services/group.service';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -16,7 +21,12 @@ export class MfEditComponent implements OnInit {
 
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public consumptionDetail = [];
-  public manufacturingDetails = {};
+  public manufacturingDetails: any = {};
+  public otherExpenses: any = {};
+  public linkedStocks: IStockItemDetail = new IStockItemDetail();
+  public expenseGroupAccounts: any = [];
+  public liabilityGroupAccounts: any = [];
+  public selectedProduct: string = null;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -27,8 +37,24 @@ export class MfEditComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private manufacturingActions: ManufacturingActions,
-    private inventoryAction: InventoryAction
+    private inventoryAction: InventoryAction,
+    private _groupService: GroupService
   ) {
+    // Get group with accounts
+    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        console.log('Groups loaded success 1:', data.body);
+        let groups: Select2OptionData[] = [];
+        data.body.map((d: any) => {
+          if (d.category === 'expenses') {
+            this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
+          }
+          if (d.category === 'liabilities') {
+            this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
+          }
+        });
+      }
+    });
   }
 
   public ngOnInit() {
@@ -52,10 +78,11 @@ export class MfEditComponent implements OnInit {
         }
       }
     }).takeUntil(this.destroyed$);
-    // get stock details
-    this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (!o.stocksList) {
-        this.store.dispatch(this.inventoryAction.GetStock());
+    // get stock with rate details
+    this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (o.stockWithRate) {
+        this.manufacturingDetails = _.cloneDeep(o.stockWithRate.manufacturingDetails);
+        console.log('the stockWithRate is :', this.manufacturingDetails);
       }
     });
   }
@@ -66,8 +93,25 @@ export class MfEditComponent implements OnInit {
     }
   }
 
-  private addConsumption() {
-    console.log('the data to push is : AAA');
+  private addConsumption(data) {
+    let val = new LinkedStocks();
+    val.amount = data.amount;
+    val.rate = data.rate;
+    val.stockUniqueName = data.stockUniqueName;
+    val.quantity = data.quantity;
+
+    if (this.manufacturingDetails.linkedStocks) {
+      this.manufacturingDetails.linkedStocks.push(val);
+      console.log('the data to push is : ', val);
+    } else {
+      this.manufacturingDetails.linkedStocks = [val];
+    }
+  }
+
+  private removeConsumptionItem(indx) {
+    if (indx > -1) {
+      this.manufacturingDetails.linkedStocks.splice(indx, 1);
+    }
   }
 
   private addExpense() {
