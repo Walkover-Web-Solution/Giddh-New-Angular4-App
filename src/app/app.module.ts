@@ -37,8 +37,9 @@ import { SearchModule } from './search/search.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { LedgerModule } from './ledger/ledger.module';
 import { TlPlModule } from './tl-pl/tl-pl.module';
-import {WebToPdfComponent} from "./invoice/invoice.component";
-import {ConModule} from "./invoice/invoice.module";
+import { EditInvoiceModule } from './invoice/edit-invoice/edit.invoice.module';
+import {EditFiltersModule} from "./invoice/edit-invoice/filters-container/edit.filters.module";
+import {DesignFiltersContainerModule} from "./invoice/edit-invoice/filters-container/design-filters/design.filters.module";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -96,7 +97,9 @@ if (ENV === 'development') {
     AuditLogsModule,
     LedgerModule,
     LoginModule,
-    ConModule,
+    DesignFiltersContainerModule,
+    EditFiltersModule,
+    EditInvoiceModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),

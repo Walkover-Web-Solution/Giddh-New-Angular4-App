@@ -45,6 +45,7 @@ import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
 import { HomeActions } from './actions/home/home.actions';
 import { DashboardService } from './dashboard.service';
+import {InvoiceAction} from "./actions/invoice/invoice.actions";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -60,6 +61,7 @@ import { DashboardService } from './dashboard.service';
     EffectsModule.run(VerifyMobileActions),
     EffectsModule.run(AccountsAction),
     EffectsModule.run(SidebarAction),
+    EffectsModule.run(InvoiceAction),
     EffectsModule.run(InventoryAction),
     EffectsModule.run(SidebarAction),
     EffectsModule.run(CustomStockUnitAction),

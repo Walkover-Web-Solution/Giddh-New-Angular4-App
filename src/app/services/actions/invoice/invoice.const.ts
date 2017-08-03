@@ -1,0 +1,5 @@
+export const INVOICE = {
+  TEMPLATE: {
+    SELECT_TEMPLATE: 'SELECT_TEMPLATE'
+  }
+};
