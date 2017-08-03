@@ -50,6 +50,14 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
 
+export function highchartsFactory() {
+  const hc = require('highcharts');
+  const dd = require('highcharts/modules/drilldown');
+  dd(hc);
+
+  return hc;
+}
+
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
@@ -89,7 +97,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NgxTypeAheadComponent],
   providers: [{
     provide: HighchartsStatic,
-    useValue: highcharts
+    useFactory: highchartsFactory
   }]
 })
 export class SharedModule {
