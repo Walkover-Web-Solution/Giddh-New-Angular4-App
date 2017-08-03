@@ -10,6 +10,13 @@ export class MfStockSearchRequestClass {
   public page: number;
 }
 
+export class LinkedStocks {
+  public stockUniqueName: string;
+  public rate: number;
+  public quantity: number;
+  public amount: number;
+}
+
 /*
 product( string: uniquename stock ) ,
 searchOperation(greaterThan , lessThan, greaterThanOrEquals, lessThanOrEquals, equals),

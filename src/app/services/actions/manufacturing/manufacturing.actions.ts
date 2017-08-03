@@ -43,6 +43,10 @@ export class ManufacturingActions {
   private GetStockWithRateResponse$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE_RESPONSE)
     .map(response => {
+      let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
       return { type : ''};
     });
 

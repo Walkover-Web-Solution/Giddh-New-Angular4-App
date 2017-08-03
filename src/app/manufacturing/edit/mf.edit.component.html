@@ -7,10 +7,10 @@
 
   <!-- form -->
   <div class="col-xs-12 clearfix pd0 mrT2 mrB2">
-    <form class="col-xs-6 pdL4">
+    <form class="col-xs-6 pdL4" name="stockForm">
       <div class="form-group col-xs-4">
         <label>Product Name</label>
-        <select2 [data]="stockListDropDown$ | async" [options]="options"
+        <select2 [(ngModel)]="selectedProduct" name="selectedProduct" [data]="stockListDropDown$ | async" [options]="options"
         (valueChanged)="getStocksWithRate($event)"></select2>
         <!--<select class="form-control">
 						<option value="computer">Computer</option>
@@ -39,7 +39,7 @@
     <div class="col-xs-6 source bdrR">
       <p class="width100 mrB2">Source(Consumption)</p>
       <section class="linkstock">
-        <table class="col-xs-12 linkStockTbl">
+        <table class="col-xs-12 linkStockTbl" *ngIf="selectedProduct">
           <thead>
             <tr>
               <th colspan="9">Product Name</th>
@@ -49,29 +49,16 @@
               <th></th>
             </tr>
           </thead>
-          <tbody>
-            <tr>
-              <td colspan="9">
-                <select class="form-control">
-                  <option (value)="stock.id" *ngFor="let stock of stockListDropDown$ | async" >{{stock.text}}</option>
-                </select>
-              </td>
-              <td><input type="text" class="form-control"></td>
-              <td><input type="text" class="form-control"></td>
-              <td><input type="text" class="form-control"></td>
-              <td class="action">
-                <button (click)="addConsumption()"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+          <tbody *ngIf='manufacturingDetails'>
+            <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
+              <td colspan="9"><span class="hr"></span>{{stock.stockUniqueName}}</td>
+              <td>{{stock.quantity}}</td>
+              <td>{{stock.rate}}</td>
+              <td>{{stock.amount}}</td>
+              <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
               </td>
             </tr>
             <!--<tr>
-              <td colspan="9"><span class="hr"></span>Hard Disk</td>
-              <td>2</td>
-              <td>1000.00</td>
-              <td>2000.00</td>
-              <td class="action"><i class="fa fa-times" aria-hidden="true"></i>
-              </td>
-            </tr>
-            <tr>
               <td colspan="9"><span class="hr"></span>Mother Board</td>
               <td>2</td>
               <td>1000.00</td>
@@ -102,11 +89,24 @@
               <td>--</td>
               <td class="action"><i class="fa fa-times" aria-hidden="true"></i>
               </td>
-            </tr>
+            </tr>-->
             <tr>
               <td colspan="5"><a href="javascript:void(0);">Add New</a>
               </td>
-            </tr>-->
+            </tr>
+            <tr>
+              <td colspan="9">
+                <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName">
+                  <option [ngValue]="stock.id" *ngFor="let stock of stockListDropDown$ | async" >{{stock.text}}</option>
+                </select>
+              </td>
+              <td><input type="text" class="form-control" [(ngModel)]="linkedStocks.quantity"></td>
+              <td><input type="text" class="form-control" [(ngModel)]="linkedStocks.rate"></td>
+              <td><input type="text" class="form-control" [(ngModel)]="linkedStocks.amount"></td>
+              <td class="action">
+                <button (click)="addConsumption(linkedStocks)"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+              </td>
+            </tr>
           </tbody>
           <tfoot class="bdrT pdT2 pdB2 bdrB">
             <tr>
@@ -143,20 +143,23 @@
             <tr>
               <td colspan="1">
                 <select class="form-control">
-                                    <option value="directexpense">Direct Expense</option>
-                                </select>
+                    <option value="select">select</option>
+                    <option [ngValue]="account.id" *ngFor="let account of expenseGroupAccounts">{{account.text}}</option>
+                </select>
                 <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                 <label>to</label>
                 <select class="form-control">
-                                    <option value="Liability">Liability</option>
-                                </select>
+                    <option value="select">select</option>
+                    <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{account.text}}</option>                    
+                </select>
                 <span class="select_drop"><i class="fa fa-caret-down"></i></span>
               </td>
-              <td class="pull-right">2000.00</td>
-              <td><i class="fa fa-times" aria-hidden="true"></i>
+              <td class="pull-right"><input type="text" class="form-control"></td>
+              <td class="action">
+                <button style="margin-top: 12px;"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
               </td>
             </tr>
-            <tr>
+            <!--<tr>
               <td colspan="1">
                 <select class="form-control">
                                     <option value="directexpense">Direct Expense</option>
@@ -187,7 +190,7 @@
               <td class="pull-right">2000.00</td>
               <td><i class="fa fa-times" aria-hidden="true"></i>
               </td>
-            </tr>
+            </tr>-->
           </tbody>
         </table>
         <div class="pdB2 bdrT clearfix pdT2 mrT1">
