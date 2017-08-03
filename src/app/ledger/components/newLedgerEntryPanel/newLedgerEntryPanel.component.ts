@@ -1,6 +1,13 @@
 import {
   AfterViewChecked,
-  ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
   SimpleChanges
 } from '@angular/core';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
@@ -104,11 +111,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public calculateTotal() {
     let total = this.currentTxn.amount - this.currentTxn.discount;
-    this.currentTxn.total = total + (( total * this.currentTxn.tax) / 100);
+    this.currentTxn.total = Number((total + (( total * this.currentTxn.tax) / 100)).toFixed(2));
   }
 
   public calculateAmount() {
     this.currentTxn.amount = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax) * this.currentTxn.discount) / (100 + this.currentTxn.tax);
+  }
+
+  public saveLedger() {
+    // debugger;
   }
 
   /**
