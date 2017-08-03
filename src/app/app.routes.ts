@@ -13,11 +13,12 @@ import { SearchComponent } from './search/search.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { TlPlComponent } from './tl-pl/tl-pl.component';
 import { LedgerComponent } from './ledger/ledger.component';
-import {WebToPdfComponent} from './invoice/invoice.component';
+import { EditInvoiceComponent } from './invoice/edit-invoice/edit.invoice.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [UserAuthenticated] },
+  { path: 'invoice', component: EditInvoiceComponent}, // Add Authentication check
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -29,7 +30,6 @@ export const ROUTES: Routes = [
       { path: 'audit-logs', component: AuditLogsComponent, canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: AboutComponent },
-      {path: 'web-to-pdf', component:  WebToPdfComponent},
       {
         path: 'permissions', component: PermissionComponent, children: [
           {

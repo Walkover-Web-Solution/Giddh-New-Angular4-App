@@ -1,0 +1,16 @@
+<div>
+<div class="tab">
+  <button class="tablinks" (click)="openTab('design')" id="defaultOpen">Design</button>
+  <button class="tablinks" (click)="openTab('content')">Content</button>
+  <button class="tablinks" (click)="openTab('email')">Email</button>
+</div>
+  <design-filters *ngIf = "ifDesignSelected" [design]="ifDesignSelected"> </design-filters>
+
+  <div id="content" class="tabcontent" *ngIf = "ifContentSelected">
+    <h3>Content</h3>
+  </div>
+
+  <div id="emails" class="tabcontent" *ngIf = "ifEmailSelected">
+    <h3>Emails</h3>
+  </div>
+</div>
