@@ -18,6 +18,7 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
 import { NewRoleClass } from '../../permission.utility';
+import { CapitalizePipe } from './capitalize.pipe';
 
 @Component({
   templateUrl: './permission-list.html',
