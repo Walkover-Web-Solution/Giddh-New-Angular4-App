@@ -6,7 +6,6 @@ import * as moment from 'moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -20,32 +19,12 @@ export class LedgerVM {
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
   public selectedAccount: IFlattenAccountsResultItem = null;
-  public pageLoader: boolean = false;
   public today: Date = new Date();
   public fromDate: Date;
   public toDate: Date;
-  public fromDatePickerIsOpen: boolean = false;
-  public toDatePickerIsOpen: boolean = false;
   public format: string = 'dd-MM-yyyy';
-  public showPanel: boolean = false;
   public accountUnq: string = ''; // $stateParams.unqName
-  public accountToShow = {};
-  public mergeTransaction: boolean = false;
-  public showEledger: boolean = true;
-  public pageAccount = {};
-  public showLoader: boolean = true;
-  public showExportOption: boolean = false;
-  public showLedgerPopover: boolean;
-  public adjustHeight = 0;
-  public dLedgerLimit = 10;
-  public cLedgerLimit = 10;
-  public entrySettings = {};
-  public firstLoad: boolean = true;
-  public showTaxList: boolean = true;
-  public hasTaxTransactions: boolean = true;
   public blankLedger: BlankLedgerVM;
-  public dBlankTxn: any;
-  public cBlankTxn: any;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -56,6 +35,9 @@ export class LedgerVM {
           particular: '',
           type: 'DEBIT',
           taxes: [],
+          tax: 0,
+          total: 0,
+          discount: 0,
           discounts: []
         },
         {
@@ -63,6 +45,9 @@ export class LedgerVM {
           particular: '',
           type: 'CREDIT',
           taxes: [],
+          tax: 0,
+          total: 0,
+          discount: 0,
           discounts: []
         }],
       voucherType: 'Purchases',
@@ -101,5 +86,7 @@ export class TransactionVM {
   public type: string;
   public taxes: string[];
   public tax?: number;
+  public total: number;
   public discounts: ILedgerDiscount[];
+  public discount?: number;
 }
