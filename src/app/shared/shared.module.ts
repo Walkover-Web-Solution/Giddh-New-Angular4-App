@@ -44,10 +44,19 @@ import { CheckscrollDirective } from './helpers/directives/checkscroll';
 import { TextMaskModule } from 'angular2-text-mask';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import * as highcharts from 'highcharts';
+import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+export function highchartsFactory() {
+  const hc = require('highcharts');
+  const dd = require('highcharts/modules/drilldown');
+  dd(hc);
+
+  return hc;
+}
 
 @NgModule({
   declarations: [
@@ -56,7 +65,7 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
-    TaxControlComponent],
+    TaxControlComponent, NumberToWordsPipe],
   imports: [
     CommonModule,
     RouterModule,
@@ -80,14 +89,14 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
      AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
-    TaxControlComponent
+    TaxControlComponent, NumberToWordsPipe
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent],
   providers: [{
     provide: HighchartsStatic,
-    useValue: highcharts
+    useFactory: highchartsFactory
   }]
 })
 export class SharedModule {
