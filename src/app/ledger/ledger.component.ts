@@ -242,6 +242,10 @@ export class LedgerComponent implements OnInit {
     this.lc.showNewLedgerPanel = false;
   }
 
+  public trackByFn(index) {
+    return index; // or item.id
+  }
+
   public resetBlankTransaction() {
     this.lc.blankLedger = {
       transactions: [
