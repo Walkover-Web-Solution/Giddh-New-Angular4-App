@@ -148,6 +148,8 @@
 
                   <td class="col-xs-3 pos-rel" *ngIf="txn.type === 'DEBIT'">
                     <input class="form-control alR" type="number" [(ngModel)]="txn.amount"
+                           (focus)="needToReCalculate = true"
+                           (blur)="needToReCalculate = false"
                            ng-click="ledgerCtrl.selectBlankTxn(txn, $event)"
                            is-open="txn.isOpen"
                            ng-keyup="ledgerCtrl.getCompoundTotal();ledgerCtrl.reDrawPanelForCompoundCase(txn, $event)"
@@ -165,9 +167,9 @@
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
+                                        [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         (resetBlankLedger)="resetBlankTransaction()">
-
                 </new-ledger-entry-panel>
               </div>
             </td>

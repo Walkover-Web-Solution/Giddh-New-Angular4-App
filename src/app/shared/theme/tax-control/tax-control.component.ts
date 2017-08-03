@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TaxResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment';
@@ -21,27 +21,6 @@ export class TaxControlData {
 @Component({
   selector: 'tax-control',
   templateUrl: 'tax-control.component.html',
-  styles: [`
-    .tax-dropdown-menu {
-      position: absolute;
-      /*top: 100%;*/
-      left: 0;
-      z-index: 1000;
-      min-width: 160px;
-      padding: 5px 0;
-      margin: 2px 0 0;
-      font-size: 14px;
-      text-align: left;
-      list-style: none;
-      background-color: #fff;
-      background-clip: padding-box;
-      border: 1px solid #ccc;
-      border: 1px solid rgba(0, 0, 0, .15);
-      border-radius: 4px;
-      -webkit-box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
-      box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
-    }
-  `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class TaxControlComponent implements OnInit {
@@ -54,7 +33,7 @@ export class TaxControlComponent implements OnInit {
   public taxRenderData: TaxControlData[] = [];
   public showTaxPopup: boolean = false;
   public sum: number = 0;
-  public selectedTaxes: string[] = [];
+  private selectedTaxes: string[] = [];
 
   constructor() {
     //
@@ -79,6 +58,10 @@ export class TaxControlComponent implements OnInit {
       taxObj.isChecked = this.applicableTaxes.indexOf(tx.uniqueName) > -1;
       this.taxRenderData.push(taxObj);
     });
+  }
+
+  public trackByFn(index) {
+    return index; // or item.id
   }
 
   /**

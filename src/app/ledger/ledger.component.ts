@@ -60,6 +60,7 @@ export class LedgerComponent implements OnInit {
     }
   };
   public trxRequest: TransactionsRequest;
+  public needToReCalculate: boolean = false;
   public accountsOptions: Select2Options = {
     multiple: true,
     width: '100%',
@@ -246,16 +247,22 @@ export class LedgerComponent implements OnInit {
       transactions: [
         {
           amount: 0,
+          tax: 0,
+          total: 0,
           particular: '',
           type: 'DEBIT',
           taxes: [],
+          discount: 0,
           discounts: []
         },
         {
           amount: 0,
           particular: '',
+          tax: 0,
+          total: 0,
           type: 'CREDIT',
           taxes: [],
+          discount: 0,
           discounts: []
         }],
       voucherType: 'Purchases',
