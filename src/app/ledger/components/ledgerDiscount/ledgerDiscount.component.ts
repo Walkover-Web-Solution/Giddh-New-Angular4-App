@@ -41,6 +41,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
     discountAccountsList.accountDetails.map(acc => {
       let disObj: IFlattenGroupsAccountsDetailItem = {
         name: acc.name,
+        uniqueName: acc.uniqueName,
         applicableTaxes: acc.applicableTaxes,
         groupUniqueName: acc.groupUniqueName,
         isOpen: acc.isOpen,
@@ -80,7 +81,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
     this.discountAccountsDetails.map(d => {
       discountObj.push({
         name: d.name,
-        uniqueName: d.groupUniqueName,
+        particular: d.uniqueName,
         amount: d.amount
       });
     });

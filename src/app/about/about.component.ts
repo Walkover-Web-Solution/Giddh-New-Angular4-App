@@ -27,7 +27,7 @@ export class AboutComponent implements OnInit {
   public localState: any;
   constructor(
     public route: ActivatedRoute
-  ) {}
+  ) { }
 
   public ngOnInit() {
     this.route

@@ -22,6 +22,7 @@ import { Select2OptionData } from '../../../shared/theme/select2/select2.interfa
 import { createAutoCorrectedDatePipe } from '../../../shared/helpers/autoCorrectedDatePipe';
 import { CompanyActions } from '../../../services/actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -33,10 +34,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: boolean = false;
+  @Input() public accountUnq: string;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
+  public isLedgerCreateSuccess$: Observable<boolean>;
 
   public voucherDropDownOptions: Select2Options = {
     multiple: false,
@@ -54,41 +57,51 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   constructor(private store: Store<AppState>,
               private _ledgerActions: LedgerActions,
               private _companyActions: CompanyActions,
-              private cdRef: ChangeDetectorRef) {
+              private cdRef: ChangeDetectorRef,
+              private _router: Router) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
       text: 'Sales',
-      id: 'Sales'
+      id: 'sal'
     }, {
       text: 'Purchases',
-      id: 'Purchases'
+      id: 'pur'
     }, {
       text: 'Receipt',
-      id: 'Receipt'
+      id: 'rcpt'
     }, {
       text: 'Payment',
-      id: 'Payment'
+      id: 'pay'
     }, {
       text: 'Journal',
-      id: 'Journal'
+      id: 'jr'
     }, {
       text: 'Contra',
-      id: 'Contra'
+      id: 'cntr'
     }, {
       text: 'Debit Note',
-      id: 'Debit Note'
+      id: 'debit note'
     }, {
       text: 'Credit Note',
-      id: 'Credit Note'
+      id: 'credit note'
     }]);
 
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     this.store.dispatch(this._companyActions.getTax());
+    this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     this.showAdvanced = false;
+
+    this.isLedgerCreateSuccess$.subscribe(s => {
+      if (s) {
+        this._router.navigate(['/pages/dummy'], {skipLocationChange: true}).then(() => {
+          this._router.navigate(['/pages', 'ledger', this.accountUnq]);
+        });
+      }
+    });
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -119,7 +132,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public saveLedger() {
-    // debugger;
+    let blankTransactionObj: BlankLedgerVM;
+    blankTransactionObj = Object.assign({}, this.blankLedger);
+
+    blankTransactionObj.transactions = blankTransactionObj.transactions.filter(c => c.type === this.currentTxn.type);
+    blankTransactionObj.transactions.map(bl => {
+      bl.particular = this.selectedAccount.uniqueName;
+      delete bl['tax'];
+      delete bl['discount'];
+    });
+    this.store.dispatch(this._ledgerActions.CreateBlankLedger(blankTransactionObj, this.accountUnq));
   }
 
   /**
