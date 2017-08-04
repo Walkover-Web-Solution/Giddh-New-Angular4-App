@@ -38,8 +38,10 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { LedgerModule } from './ledger/ledger.module';
 import { TlPlModule } from './tl-pl/tl-pl.module';
 import { EditInvoiceModule } from './invoice/edit-invoice/edit.invoice.module';
-import {EditFiltersModule} from "./invoice/edit-invoice/filters-container/edit.filters.module";
-import {DesignFiltersContainerModule} from "./invoice/edit-invoice/filters-container/design-filters/design.filters.module";
+import { EditFiltersModule } from "./invoice/edit-invoice/filters-container/edit.filters.module";
+import { DesignFiltersContainerModule } from "./invoice/edit-invoice/filters-container/design-filters/design.filters.module";
+import { FileSelectDirective } from "ng2-file-upload";
+import { FileUploadModule } from "ng2-file-upload/ng2-file-upload";
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -91,12 +93,14 @@ if (ENV === 'development') {
     AboutModule,
     PermissionModule,
     HomeModule,
+    FileUploadModule,
     InventoryModule,
     SearchModule,
     TlPlModule,
     AuditLogsModule,
     LedgerModule,
     LoginModule,
+    FileUploadModule,
     DesignFiltersContainerModule,
     EditFiltersModule,
     EditInvoiceModule,

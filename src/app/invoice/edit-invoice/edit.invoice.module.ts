@@ -7,8 +7,9 @@ import { EditInvoiceRoutingModule } from './edit.invoice.routing.module';
 
 import { EditFiltersModule } from './filters-container/edit.filters.module';
 import { SharedModule } from '../../shared/shared.module';
-import { OutTemplateComponent } from './out-tempate/out.template.component';
+
 import { EditFiltersContainersComponent } from './filters-container/edit.filters.component';
+import {OutTemplateComponent} from "./out-tempate/out.template.component";
 
 @NgModule({
   imports: [
@@ -21,7 +22,8 @@ import { EditFiltersContainersComponent } from './filters-container/edit.filters
   declarations: [EditInvoiceComponent, OutTemplateComponent, EditFiltersContainersComponent],
   exports: [
     EditFiltersModule,
-    EditInvoiceComponent
+    EditInvoiceComponent,
+    OutTemplateComponent
   ]
 })
 export class EditInvoiceModule {

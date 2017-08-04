@@ -1,5 +1,8 @@
 export const INVOICE = {
   TEMPLATE: {
     SELECT_TEMPLATE: 'SELECT_TEMPLATE'
+  },
+  CONTENT: {
+    SET_HEADING: 'SET_HEADING'
   }
 };
