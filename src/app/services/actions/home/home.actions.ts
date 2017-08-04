@@ -11,7 +11,7 @@ import {
   IExpensesChartClosingBalanceResponse,
   IRevenueChartClosingBalanceResponse
 } from '../../../models/interfaces/dashboard.interface';
-import { GroupHistoryRequest } from '../../../models/api-models/Dashboard';
+import { GroupHistoryRequest, BankAccountsResponse } from '../../../models/api-models/Dashboard';
 
 @Injectable()
 
@@ -148,6 +148,7 @@ export class HomeActions {
 
   @Effect()
   public GetComparisionChartLastYear$: Observable<Action> = this.action$
+
     .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR)
     .switchMap(action => {
       let revenueModel: GroupHistoryRequest = {
@@ -178,6 +179,20 @@ export class HomeActions {
         type: ''
       };
     });
+
+  @Effect()
+  public GetBankAccounts$: Observable<Action> = this.action$
+
+    .ofType(HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS)
+    .switchMap(action => {
+      return this._dashboardService.GetBankAccounts();
+    }).map((res) => this.validateResponse<BankAccountsResponse, string>(res, {
+      type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
+        payload: res
+      }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
@@ -224,17 +239,17 @@ export class HomeActions {
       payload: { fromDate, toDate, refresh }
     };
   }
-
+  public GetBankAccount() {
+    return {
+      type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
       }
       return errorAction;
-    } else {
-      if (showToast && typeof response.body === 'string') {
-        this._toasty.successToast(response.body);
-      }
     }
     return successAction;
   }

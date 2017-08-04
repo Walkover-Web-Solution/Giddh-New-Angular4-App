@@ -1,3 +1,4 @@
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { HOME } from '../../services/actions/home/home.const';
 import { Action } from '@ngrx/store';
 import {
@@ -8,6 +9,7 @@ import {
 } from '../../models/interfaces/dashboard.interface';
 import moment from 'moment';
 import * as _ from 'lodash';
+import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 
 export interface HomeState {
   value?: string;
@@ -18,6 +20,8 @@ export interface HomeState {
   isExpensesChartDataAvailable: boolean;
   isRevenueChartDataInProcess: boolean;
   isRevenueChartDataAvailable: boolean;
+  isGetBankAccountsInProcess: boolean;
+  BankAccounts?: BankAccountsResponse[];
 }
 
 export const initialState: HomeState = {
@@ -27,6 +31,7 @@ export const initialState: HomeState = {
   isExpensesChartDataAvailable: false,
   isRevenueChartDataInProcess: false,
   isRevenueChartDataAvailable: false,
+  isGetBankAccountsInProcess: false
 };
 
 export function homeReducer(state = initialState, action: Action): HomeState {
@@ -63,7 +68,16 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
-
+    case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
+      return Object.assign({}, state, { isGetBankAccountsInProcess: true });
+    }
+    case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
+      let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
+      if (bankresponse.status === 'success') {
+        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body });
+      }
+      return Object.assign({}, state, { isGetBankAccountsInProcess: false });
+    }
     case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IRevenueChartClosingBalanceResponse;
       return Object.assign({}, state, {
