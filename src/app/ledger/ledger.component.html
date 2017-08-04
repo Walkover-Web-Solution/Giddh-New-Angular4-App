@@ -162,7 +162,8 @@
 
               <!--new ledge popup-->
               <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT'">
-                <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
+                <new-ledger-entry-panel [accountUnq]="lc.accountUnq"
+                                        [blankLedger]="lc.blankLedger"
                                         [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
@@ -277,7 +278,8 @@
 
               <!--new ledge popup-->
               <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
-                <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
+                <new-ledger-entry-panel [accountUnq]="lc.accountUnq"
+                                        [blankLedger]="lc.blankLedger"
                                         [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
