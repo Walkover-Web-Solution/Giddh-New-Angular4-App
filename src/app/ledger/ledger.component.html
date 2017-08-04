@@ -64,8 +64,9 @@
     </table>
     <!--account table end-->
 
+    <!--transaction-->
     <div style="border:1px solid #ccc;overflow:hidden;position:relative;">
-      <!--debit-->
+      <!--debit transaction-->
       <div class="left-col-new"
            [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
         <table class="width100">
@@ -96,7 +97,7 @@
               <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
             </td>
           </tr>
-          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions"
+          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;trackBy:trackByFn"
               ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
               (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
@@ -124,7 +125,7 @@
             <td class="width100">
               <table class="width100">
                 <tbody class="ledger-main">
-                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions"
+                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;trackBy:trackByFn"
                     [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
                     (click)="showNewLedgerEntryPopup();selectBlankTxn(txn)">
 
@@ -148,13 +149,10 @@
 
                   <td class="col-xs-3 pos-rel" *ngIf="txn.type === 'DEBIT'">
                     <input class="form-control alR" type="number" [(ngModel)]="txn.amount"
-                           (focus)="needToReCalculate = true"
-                           (blur)="needToReCalculate = false"
+                           (keydown)="needToReCalculate = true"
+                           (keyup)="needToReCalculate = false"
                            ng-click="ledgerCtrl.selectBlankTxn(txn, $event)"
-                           is-open="txn.isOpen"
-                           ng-keyup="ledgerCtrl.getCompoundTotal();ledgerCtrl.reDrawPanelForCompoundCase(txn, $event)"
-                           ng-change="ledgerCtrl.onNewPanelChange().txnAmount(txn, ledgerCtrl.blankLedger)"
-                           ng-keydown="ledgerCtrl.onEnterPress($event, $index, ledgerCtrl.blankLedger)">
+                           is-open="txn.isOpen">
                   </td>
 
                 </tr>
@@ -179,7 +177,7 @@
 
       </div>
 
-      <!--credit-->
+      <!--credit transaction-->
       <div class="right-col-new"
            [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
         <table class="width100">
@@ -209,11 +207,10 @@
             </td>
           </tr>
 
-          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions"
+          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;trackBy:trackByFn"
               ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
               (click)="selectCompoundEntry(txn)"
-              [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}"
-              [tooltip]="txn.description">
+              [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
             <td class="col-xs-2">{{ txn.entryDate }}</td>
             <td class="col-xs-7">
               {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
@@ -244,9 +241,9 @@
             <td class="width100">
               <table class="width100">
                 <tbody class="ledger-main">
-                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions"
+                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;trackBy:trackByFn"
                     [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();selectBlankTxn(txn, $event)">
+                    (click)="showNewLedgerEntryPopup();selectBlankTxn(txn)">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'CREDIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -267,16 +264,13 @@
 
                   <td class="col-xs-3 pos-rel" *ngIf="txn.type === 'CREDIT'">
                     <input class="form-control alR" type="number" [(ngModel)]="txn.amount"
-                           ng-click="ledgerCtrl.selectBlankTxn(txn, $event)" is-open="txn.isOpen"
-                           ng-keyup="ledgerCtrl.getCompoundTotal();ledgerCtrl.reDrawPanelForCompoundCase(txn, $event)"
-                           ng-change="ledgerCtrl.onNewPanelChange().txnAmount(txn, ledgerCtrl.blankLedger)"
-                           ng-keydown="ledgerCtrl.onEnterPress($event, $index, ledgerCtrl.blankLedger)">
+                           (keydown)="needToReCalculate = true"
+                           (keyup)="needToReCalculate = false"
+                           ng-click="ledgerCtrl.selectBlankTxn(txn, $event)"
+                           is-open="txn.isOpen">
                   </td>
 
                 </tr>
-
-                <!--new ledger popup-->
-
 
                 </tbody>
               </table>
@@ -286,9 +280,9 @@
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
+                                        [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"
                                         (resetBlankLedger)="resetBlankTransaction()">
-
                 </new-ledger-entry-panel>
               </div>
 
@@ -299,7 +293,7 @@
 
       </div>
 
-
+      <!--footer-->
       <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;">
         <tbody>
 
@@ -338,7 +332,7 @@
         </tr>
         </tbody>
       </table>
-
+      <!--footer-->
 
       <div class="text-center mrT2 pageCount pa">
         <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
@@ -354,12 +348,13 @@
 
       </div>
     </div>
+    <!--transaction end-->
   </div>
   <!-- ledger table end -->
 
 </section>
 
-<!--total-->
+<!--total section-->
 <section class="ledger-stat mrT3"
          *ngIf="(lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
   <div class="container">
