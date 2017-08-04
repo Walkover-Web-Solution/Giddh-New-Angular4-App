@@ -77,7 +77,7 @@ export class DashboardService {
     }).catch((e) => HandleCatch<ClosingBalanceResponse, string>(e, '', { fromDate, toDate, groupUniqueName, refresh }));
   }
 
-  public GetBankAccounts(): Observable<BaseResponse<BankAccountsResponse, string>> {
+  public GetBankAccounts(): Observable<BaseResponse<BankAccountsResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -85,10 +85,10 @@ export class DashboardService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(DASHBOARD_API.BANK_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-      let data: BaseResponse<BankAccountsResponse, string> = res.json();
+      let data: BaseResponse<BankAccountsResponse[], string> = res.json();
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<BankAccountsResponse, string>(e, '', ));
+    }).catch((e) => HandleCatch<BankAccountsResponse[], string>(e, '', ));
   }
 
   public RefreshBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {

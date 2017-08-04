@@ -21,7 +21,7 @@ export interface HomeState {
   isRevenueChartDataInProcess: boolean;
   isRevenueChartDataAvailable: boolean;
   isGetBankAccountsInProcess: boolean;
-  BankAccounts?: BankAccountsResponse;
+  BankAccounts?: BankAccountsResponse[];
 }
 
 export const initialState: HomeState = {
@@ -72,7 +72,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       return Object.assign({}, state, { isGetBankAccountsInProcess: true });
     }
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
-      let bankresponse: BaseResponse<BankAccountsResponse, string> = action.payload;
+      let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (bankresponse.status === 'success') {
         return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body });
       }
