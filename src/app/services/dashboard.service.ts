@@ -14,7 +14,9 @@ import {
   ClosingBalanceResponse,
   DashboardResponse,
   GroupHistoryRequest,
-  GroupHistoryResponse
+  GroupHistoryResponse,
+  BankAccountsResponse,
+  RefreshBankAccountResponse
 } from '../models/api-models/Dashboard';
 
 @Injectable()
@@ -34,10 +36,10 @@ export class DashboardService {
     });
     return this._http.get(DASHBOARD_API.DASHBOARD.replace(':companyUniqueName', this.companyUniqueName).replace(':from', fromDate).replace(':to', toDate).replace(':interval', interval).replace(':refresh', refresh.toString())).map((res) => {
       let data: BaseResponse<DashboardResponse, string> = res.json();
-      data.queryString = {fromDate, toDate, interval, refresh};
+      data.queryString = { fromDate, toDate, interval, refresh };
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<DashboardResponse, string>(e, '', {fromDate, toDate, interval, refresh}));
+    }).catch((e) => HandleCatch<DashboardResponse, string>(e, '', { fromDate, toDate, interval, refresh }));
   }
 
   public GetGroupHistory(model: GroupHistoryRequest, fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> {
@@ -50,7 +52,7 @@ export class DashboardService {
     return this._http.post(DASHBOARD_API.GROUP_HISTORY.replace(':companyUniqueName', this.companyUniqueName).replace(':from', fromDate).replace(':to', toDate).replace(':interval', interval).replace(':refresh', refresh.toString()), model).map((res) => {
       let data: BaseResponse<GroupHistoryResponse, GroupHistoryRequest> = res.json();
       data.request = model;
-      data.queryString = {fromDate, toDate, interval, refresh};
+      data.queryString = { fromDate, toDate, interval, refresh };
       return data;
     }).catch((e) => HandleCatch<GroupHistoryResponse, GroupHistoryRequest>(e, model, {
       fromDate,
@@ -60,7 +62,7 @@ export class DashboardService {
     }));
   }
 
-  public GetClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '',  refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
+  public GetClosingBalance(groupUniqueName: string = '', fromDate: string = '', toDate: string = '', refresh: boolean = false): Observable<BaseResponse<ClosingBalanceResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -75,4 +77,44 @@ export class DashboardService {
     }).catch((e) => HandleCatch<ClosingBalanceResponse, string>(e, '', { fromDate, toDate, groupUniqueName, refresh }));
   }
 
+  public GetBankAccounts(): Observable<BaseResponse<BankAccountsResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(DASHBOARD_API.BANK_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<BankAccountsResponse, string> = res.json();
+      data.request = '';
+      return data;
+    }).catch((e) => HandleCatch<BankAccountsResponse, string>(e, '', ));
+  }
+
+  public RefreshBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(DASHBOARD_API.REFRESH_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
+      data.request = '';
+      return data;
+    }).catch((e) => HandleCatch<RefreshBankAccountResponse, string>(e, '', ));
+  }
+  public ReconnectBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(DASHBOARD_API.RECONNECT_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+      let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
+      data.request = '';
+      return data;
+    }).catch((e) => HandleCatch<RefreshBankAccountResponse, string>(e, '', ));
+  }
 }

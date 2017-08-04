@@ -1,4 +1,4 @@
-import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem, IChildGroups, ICbAccount } from '../interfaces/dashboard.interface';
+import { IPeriodBalances, IGroupHistoryGroups, IDashboardCbMainItem, IChildGroups, ICbAccount, IBankAccount } from '../interfaces/dashboard.interface';
 import { IForwardBalance, IClosingBalance } from '../interfaces/ledger.interface';
 
 /**
@@ -56,4 +56,17 @@ export class ClosingBalanceResponse implements IDashboardCbMainItem, IChildGroup
   public uniqueName: string;
   public category: string;
   public groupName: string;
+}
+
+export class BankAccountsResponse {
+  public accounts: IBankAccount[];
+  public siteName: string;
+  public siteId: number;
+}
+
+export class RefreshBankAccountResponse {
+  public token: string;
+  public connectUrl: string;
+  // tslint:disable-next-line:variable-name
+  public token_URL: string;
 }
