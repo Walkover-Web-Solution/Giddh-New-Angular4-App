@@ -127,7 +127,7 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;trackBy:trackByFn"
                     [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();selectBlankTxn(txn)">
+                    (click)="showNewLedgerEntryPopup();toggleTransactionType('DEBIT')">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'DEBIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -244,7 +244,7 @@
                 <tbody class="ledger-main">
                 <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;trackBy:trackByFn"
                     [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();selectBlankTxn(txn)">
+                    (click)="showNewLedgerEntryPopup();toggleTransactionType('CREDIT')">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'CREDIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"

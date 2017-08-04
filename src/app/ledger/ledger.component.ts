@@ -215,8 +215,10 @@ export class LedgerComponent implements OnInit {
   }
 
   public toggleTransactionType(event: string) {
+    this.lc.selectedAccount = null;
     let trx = this.lc.blankLedger.transactions.find(t => t.type === event);
     this.selectBlankTxn(trx);
+    this.selectAccount({value: trx.particular});
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {

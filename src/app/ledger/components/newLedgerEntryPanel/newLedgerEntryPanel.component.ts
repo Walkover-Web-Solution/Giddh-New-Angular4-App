@@ -94,8 +94,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public ngOnInit() {
     this.showAdvanced = false;
-
-    this.isLedgerCreateSuccess$.subscribe(s => {
+    this.isLedgerCreateSuccess$.distinctUntilChanged().subscribe(s => {
       if (s) {
         this._router.navigate(['/pages/dummy'], {skipLocationChange: true}).then(() => {
           this._router.navigate(['/pages', 'ledger', this.accountUnq]);
@@ -111,7 +110,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngAfterViewChecked() {
-    this.cdRef.detectChanges();
+    // this.cdRef.detectChanges();
   }
 
   /**
@@ -138,8 +137,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     blankTransactionObj.transactions = blankTransactionObj.transactions.filter(c => c.type === this.currentTxn.type);
     blankTransactionObj.transactions.map(bl => {
       bl.particular = this.selectedAccount.uniqueName;
-      delete bl['tax'];
-      delete bl['discount'];
+      // delete bl['tax'];
+      // delete bl['discount'];
     });
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(blankTransactionObj, this.accountUnq));
   }
