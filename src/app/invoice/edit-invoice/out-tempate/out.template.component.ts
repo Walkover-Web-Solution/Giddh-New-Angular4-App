@@ -6,6 +6,7 @@ import { Store} from '@ngrx/store';
 import { AppState} from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
+
 @Component({
   selector: 'invoice-template',
 
@@ -14,16 +15,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 
 export class OutTemplateComponent implements OnInit {
-  public templateId: string;
-  public templateID$: Observable<string>;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  @Input() public templateId: string = 'template1';
+  @Input() public heading: string;
   constructor( private store: Store<AppState>) {
     console.log('out-template-component constructor called');
-    this.templateID$ = store.select(state => {
-      return state.invoice.templateId;
-    }).takeUntil(this.destroyed$);
-    this.templateID$.subscribe(val => {console.log(val);
-    });
   }
 
   public ngOnInit() {

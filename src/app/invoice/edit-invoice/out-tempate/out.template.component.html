@@ -31,8 +31,9 @@ table.table td small{color:#777}
 }
 </style>
 </head>
-<body te>
-<section class="container">
+<body>
+<section class="container" *ngIf = "templateId == 'template1'">
+
 <div class="clearfix">
 <div class="col-xs-12">
 <div class="col-xs-12">
@@ -276,7 +277,53 @@ table.table td small{color:#777}
 <p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
 </div>
 </div>
+</section >
+<section class="container" *ngIf = "templateId == 'template2'">
+
+  <div>
+
+    <h3> Template 2</h3>
+
+    <h2> {{heading}}</h2>
+
+    <!--<h2> {{data.para}}</h2>-->
+  </div>
 
 </section>
+
+<section class="container" *ngIf = "templateId == 'template3'">
+
+  <div>
+
+    <h3> Template 3</h3>
+  </div>
+
+</section>
+<section class="container" *ngIf = "templateId == 'template4'">
+
+  <div>
+
+    <h3> Template 4</h3>
+  </div>
+
+</section>
+
+<section class="container" *ngIf = "templateId == 'template5'">
+
+  <div>
+
+    <h3> Template 5</h3>
+  </div>
+
+</section>
+<section class="container" *ngIf = "templateId == 'template6'">
+
+  <div>
+
+    <h3> Template 6</h3>
+  </div>
+
+</section>
+
 </body>
 </html>

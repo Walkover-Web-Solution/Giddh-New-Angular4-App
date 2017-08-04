@@ -2,7 +2,7 @@
 
 
   <p style="margin-bottom: 20px" *ngIf = "!ifTemplateSelected"> <button (click)="selectTemplate()" type="submit" class="btn btn-primary">1</button> Change up to template </p>
-  <template-selector *ngIf = "design"></template-selector>
+  <template-selector *ngIf = "ifTemplateSelected"></template-selector>
   <p style="margin-bottom: 20px" *ngIf = "!ifLogoSelected"> <button (click)="selectLogo()" type="submit" class="btn btn-primary">2</button> Make logo edit </p>
   <p style="margin-bottom: 20px" *ngIf = "!ifColorSelected"> <button (click)="selectColor()" type="submit" class="btn btn-primary">3</button> Try other color </p>
   <p style="margin-bottom: 20px" *ngIf = "!ifFontSelected"> <button (click)="selectFonts()" type="submit" class="btn btn-primary">4</button> Select different fonts </p>
