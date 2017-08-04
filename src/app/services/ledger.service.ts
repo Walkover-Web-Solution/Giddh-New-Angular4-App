@@ -13,6 +13,7 @@ import {
   TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest,
   DownloadLedgerRequest
 } from '../models/api-models/Ledger';
+import { BlankLedgerVM } from '../ledger/ledger.vm';
 
 @Injectable()
 export class LedgerService {
@@ -53,7 +54,7 @@ export class LedgerService {
   * create Ledger transaction
   */
 
-  public CreateLedger(model: LedgerRequest, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], LedgerRequest>> {
+  public CreateLedger(model: BlankLedgerVM, accountUniqueName: string): Observable<BaseResponse<LedgerResponse[], BlankLedgerVM>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -62,12 +63,12 @@ export class LedgerService {
     });
     return this._http.post(LEDGER_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<LedgerResponse[], LedgerRequest> = res.json();
+        let data: BaseResponse<LedgerResponse[], BlankLedgerVM> = res.json();
         data.request = model;
         data.queryString = { accountUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<LedgerResponse[], LedgerRequest>(e, model, { accountUniqueName }));
+      .catch((e) => HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName }));
   }
 
   /*
