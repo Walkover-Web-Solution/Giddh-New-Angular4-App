@@ -1,0 +1,7 @@
+<div id="design" class="tabcontent" *ngIf = "content">
+    <input type="checkbox" [(ngModel)]="enableheading" (ngModelChange)="onClickHeadingCheck(enableheading)" /> <br/> <br/>
+    <input type="text" [(ngModel)]='contentData' (ngModelChange)='onEditChange(contentData)' [disabled]="!enableheading"/>
+    <!--<input type="text" [(ngModel)]='contentData' (ngModelChange)='onEditChange(contentData.para)' />-->
+    <!--<input type="text"  [ngModel]='text2'  ng-change='cbSelected2(text2)'/>-->
+  <!--<h2> rewqwrw {{data}} fwrwewrwrw</h2>-->
+</div>

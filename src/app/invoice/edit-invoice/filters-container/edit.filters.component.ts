@@ -16,11 +16,7 @@ export class EditFiltersContainersComponent implements OnInit {
   public ifDesignSelected: boolean = true;
   public ifContentSelected: boolean = false;
   public ifEmailSelected: boolean = false;
-  public ifTemplateSelected: boolean = false;
-  public ifLogoSelected: boolean = false;
-  public ifColorSelected: boolean = false;
-  public ifFontSelected: boolean = false;
-  public ifPrintSelected: boolean = false;
+
   constructor() {
     console.log('filters-container constructor called');
   }

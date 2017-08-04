@@ -13,4 +13,12 @@ export class InvoiceAction {
       payload: {id}
     };
   }
+
+  public setHeading(data: string): Action {
+    console.log('action method called')
+    return {
+      type: INVOICE.CONTENT.SET_HEADING,
+      payload: {data}
+    };
+  }
 }
