@@ -67,6 +67,14 @@ export class MfReportComponent implements OnInit {
         this.reportData = o.reportData;
       }
     });
+    this.getReportDataOnFresh();
+  }
+
+  private getReportDataOnFresh() {
+    let data = _.cloneDeep(this.mfStockSearchRequest);
+    data.from = null;
+    data.to = null;
+    this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
 
   private getReports() {
