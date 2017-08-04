@@ -49,6 +49,12 @@ export interface OtherExpenses extends IOnlyUniqueName {
   transactions: ITransaction[];
 }
 
+export class COtherExpenses implements IOnlyUniqueName {
+  public baseAccount: INameUniqueName;
+  public transactions: ITransaction[];
+  public uniqueName: string;
+}
+
 export interface IManufacturingUnqItemObj {
   stockUniqueName: string;
   manufacturingUniqueName: string;
@@ -68,6 +74,8 @@ export interface IManufacturingItemRequest {
 
  export interface ILinkedStockForCreate extends IStockItem {
   quantity: string;
+  rate?: number;
+  amount?: number;
 }
 
 export interface Transaction extends IOnlyAmount {
@@ -77,6 +85,15 @@ export interface Transaction extends IOnlyAmount {
 export interface IOtherExpensesForCreate {
   baseAccount: IOnlyUniqueName;
   transactions: Transaction[];
+}
+
+export class ManufacturingItemRequest {
+  public date: string;
+  public stockUniqueName?: string;
+  public quantity?: number;
+  public multipleOf?: number;
+  public linkedStocks: ILinkedStockForCreate[];
+  public otherExpenses: IOtherExpensesForCreate[];
 }
 
 /*

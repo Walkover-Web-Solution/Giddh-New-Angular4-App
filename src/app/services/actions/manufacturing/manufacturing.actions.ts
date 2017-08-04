@@ -71,7 +71,7 @@ export class ManufacturingActions {
   private CreateMFItem$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.CREATE_MF_ITEM)
     .switchMap(action => {
-      return this._manufacturingService.CreateManufacturingItem(action.payload, 'stockUniqueName')
+      return this._manufacturingService.CreateManufacturingItem(action.payload, action.payload.stockUniqueName)
         .map(response => this.CreateMfItemResponse(response));
     });
 
