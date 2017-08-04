@@ -98,3 +98,15 @@ export interface IComparisionChartResponse {
   ProfitLossLastYearMonthly?: any[];
   ProfitLossLastYearYearly?: any[];
 }
+
+export interface IBankAccount {
+  amount: number;
+  transactionDate: string;
+  loginId: string;
+  reconnect: boolean;
+  accountNumber?: any;
+  currencyCode: string;
+  accountId: number;
+  linkedAccount: INameUniqueName;
+  name: string;
+}
