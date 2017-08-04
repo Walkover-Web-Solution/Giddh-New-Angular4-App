@@ -8,10 +8,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { StockDetailResponse } from '../../models/api-models/Inventory';
-import { IManufacturingDetails, IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
+import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { LinkedStocks } from '../manufacturing.utility';
 import { GroupService } from '../../services/group.service';
+import { OtherExpenses, COtherExpenses, IManufacturingItemRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -21,12 +23,14 @@ export class MfEditComponent implements OnInit {
 
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public consumptionDetail = [];
-  public manufacturingDetails: any = {};
+  public manufacturingDetails: ManufacturingItemRequest;
   public otherExpenses: any = {};
+  public toggleAddExpenses: boolean = false;
+  public toggleAddLinkedStocks: boolean = false;
   public linkedStocks: IStockItemDetail = new IStockItemDetail();
   public expenseGroupAccounts: any = [];
   public liabilityGroupAccounts: any = [];
-  public selectedProduct: string = null;
+  public selectedProduct: string;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -40,6 +44,8 @@ export class MfEditComponent implements OnInit {
     private inventoryAction: InventoryAction,
     private _groupService: GroupService
   ) {
+    this.manufacturingDetails = new ManufacturingItemRequest();
+    console.log('first of all the manufacturingDetailis :', this.manufacturingDetails);
     // Get group with accounts
     this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
@@ -80,8 +86,10 @@ export class MfEditComponent implements OnInit {
     }).takeUntil(this.destroyed$);
     // get stock with rate details
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.stockWithRate) {
-        this.manufacturingDetails = _.cloneDeep(o.stockWithRate.manufacturingDetails);
+      if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
+        // In create only
+        this.manufacturingDetails.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
+        // this.manufacturingDetails.stockUniqueName = '';
         console.log('the stockWithRate is :', this.manufacturingDetails);
       }
     });
@@ -89,23 +97,37 @@ export class MfEditComponent implements OnInit {
 
   public getStocksWithRate(data) {
     if (data.value) {
-      this.store.dispatch(this.manufacturingActions.GetStockWithRate(data.value));
+      let selectedValue = _.cloneDeep(data.value);
+      this.selectedProduct = selectedValue;
+      let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+      manufacturingObj.stockUniqueName = selectedValue;
+      this.manufacturingDetails = manufacturingObj;
+      this.store.dispatch(this.manufacturingActions.GetStockWithRate(selectedValue));
     }
   }
 
   private addConsumption(data) {
-    let val = new LinkedStocks();
-    val.amount = data.amount;
-    val.rate = data.rate;
-    val.stockUniqueName = data.stockUniqueName;
-    val.quantity = data.quantity;
+    console.log('The data to push is :', data);
+    let val = {
+      amount: data.amount,
+      rate: data.rate,
+      stockName: data.stockUniqueName,
+      stockUniqueName: data.stockUniqueName,
+      quantity: data.quantity,
+      // stockUnitCode: 'm' // TODO: Remove hardcoded value
+    };
 
-    if (this.manufacturingDetails.linkedStocks) {
-      this.manufacturingDetails.linkedStocks.push(val);
-      console.log('the data to push is : ', val);
+    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+
+    if (manufacturingObj.linkedStocks) {
+      manufacturingObj.linkedStocks.push(val);
     } else {
-      this.manufacturingDetails.linkedStocks = [val];
+      manufacturingObj.linkedStocks = [val];
     }
+
+    manufacturingObj.stockUniqueName = this.selectedProduct;
+    this.manufacturingDetails = manufacturingObj;
+    this.linkedStocks = new IStockItemDetail();
   }
 
   private removeConsumptionItem(indx) {
@@ -114,26 +136,65 @@ export class MfEditComponent implements OnInit {
     }
   }
 
-  private addExpense() {
-    // Add new expense
+  private addExpense(data) {
+    let objToPush = {
+        baseAccount: {
+            uniqueName: data.baseAccountUniqueName
+        },
+        transactions: [
+            {
+                account: {
+                    uniqueName: data.transactionAccountUniqueName
+                },
+                amount: data.transactionAmount
+            }
+        ]
+    };
+    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+
+    if (manufacturingObj.otherExpenses) {
+      manufacturingObj.otherExpenses.push(objToPush);
+    } else {
+      manufacturingObj.otherExpenses = [objToPush];
+    }
+
+    this.manufacturingDetails = manufacturingObj;
+
+    console.log('After push the otherExpanse is :', this.manufacturingDetails);
+
+    this.otherExpenses = {};
   }
 
-  private addProduct() {
-    // Add new product
+  private removeExpenseItem(indx) {
+    if (indx > -1) {
+      this.manufacturingDetails.otherExpenses.splice(indx, 1);
+    }
   }
 
-  private save() {
-    // create expense in db
-    // this.store.dispatch(this.manufacturingActions.CreateMfItem(data));
+  private createEntry() {
+    let dataToSave = _.cloneDeep(this.manufacturingDetails);
+    dataToSave.stockUniqueName = this.selectedProduct;
+    dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+    // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
+    // dataToSave.multipleOf = dataToSave.quantity;
+    console.log('THe data is :', dataToSave);
+    this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
+  }
+
+  private getTotal(from, field) {
+    let total: number = 0;
+    if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
+      _.forEach(this.manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
+    }
+    if (from === 'otherExpenses' && this.manufacturingDetails.otherExpenses) {
+      _.forEach(this.manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
+    }
+
+    return total;
   }
 
   private update() {
     // update expense
     // this.store.dispatch(this.manufacturingActions.Update(data));
-  }
-
-  private delete() {
-    // delete expense
-    // this.store.dispatch(this.manufacturingActions.Delete(data));
   }
 }
