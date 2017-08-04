@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TaxResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment';
@@ -23,10 +23,11 @@ export class TaxControlData {
   templateUrl: 'tax-control.component.html',
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
-export class TaxControlComponent implements OnInit {
+export class TaxControlComponent implements OnInit, OnDestroy {
 
   @Input() public taxes: TaxResponse[];
   @Input() public applicableTaxes: any[];
+  @Input() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
   @Output() public selectedTaxesEvent: EventEmitter<string[]> = new EventEmitter();
 
@@ -64,6 +65,12 @@ export class TaxControlComponent implements OnInit {
     return index; // or item.id
   }
 
+  public ngOnDestroy() {
+    this.selectedTaxesEvent.unsubscribe();
+    this.taxAmountSumEvent.unsubscribe();
+    this.isApplicableTaxesEvent.unsubscribe();
+  }
+
   /**
    * select/deselect tax checkbox
    */
@@ -73,6 +80,13 @@ export class TaxControlComponent implements OnInit {
     this.selectedTaxes = this.generateSelectedTaxes();
     this.selectedTaxesEvent.emit(this.selectedTaxes);
     this.taxAmountSumEvent.emit(this.sum);
+
+    let diff = _.difference(this.applicableTaxes, this.selectedTaxes);
+    if (diff) {
+      this.isApplicableTaxesEvent.emit(true);
+    } else {
+      this.isApplicableTaxesEvent.emit(false);
+    }
   }
 
   private isTaxApplicable(tax): boolean {
