@@ -7,17 +7,22 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { InvoiceAction } from '../../../../services/actions/invoice/invoice.actions';
 import { Content } from '../../../../models/api-models/invoice';
+import { NouisliderModule } from 'ng2-nouislider';
+import { MdSliderModule } from '@angular/material';
 
 @Component({
   selector: 'content-selector',
 
-  templateUrl: 'content.filters.component.html'
+  templateUrl: 'content.filters.component.html',
+  styleUrls: ['content.filters.component.css']
 })
 
 export class ContentFilterComponent  {
   @Input() public content: boolean;
   @Input() public contentData: Content;
   public enableheading: boolean = true;
+  public myValue: number;
+  public someRange =  [1, 50];
   // public data: Content = null;
 
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceAction) {
@@ -37,5 +42,8 @@ export class ContentFilterComponent  {
     if (check === 'false') {
       this.enableheading = false;
     }
+  }
+  public onChangeWidth(value, colName) {
+    this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
   }
 }
