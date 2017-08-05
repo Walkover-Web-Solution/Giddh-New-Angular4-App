@@ -8,6 +8,7 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { GroupCreateRequest, GroupResponse } from '../../../../models/api-models/Group';
+import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
 
 @Component({
   selector: 'group-add',
@@ -34,7 +35,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
-      uniqueName: ['', Validators.required],
+      uniqueName: ['', Validators.required, uniqueNameValidator],
       description: ['']
     });
   }
