@@ -16,6 +16,7 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
+import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
 
 @Component({
   selector: 'group-update',
@@ -48,7 +49,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public options: Select2Options = {
     minimumResultsForSearch: 9001,
     multiple: true,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Taxes',
     templateResult: (data) => {
       if (!data.id) {
@@ -130,7 +131,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit() {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
-      uniqueName: ['', Validators.required],
+      uniqueName: ['', Validators.required, uniqueNameValidator],
       description: ['']
     });
     this.moveGroupForm = this._fb.group({
@@ -158,6 +159,23 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.groupList$.subscribe((a) => {
       if (a) {
         this.accountList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+      }
+    });
+  }
+
+  public generateUniqueName() {
+    let val: string = this.groupDetailForm.controls['name'].value;
+    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+
+    this.isGroupNameAvailable$.subscribe(a => {
+      if (a !== null && a !== undefined) {
+        if (a) {
+          this.groupDetailForm.patchValue({uniqueName: val});
+        } else {
+          let num = 1;
+          this.groupDetailForm.patchValue({uniqueName: val + num});
+        }
       }
     });
   }
