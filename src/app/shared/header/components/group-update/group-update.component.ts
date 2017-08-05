@@ -49,7 +49,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public options: Select2Options = {
     minimumResultsForSearch: 9001,
     multiple: true,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Taxes',
     templateResult: (data) => {
       if (!data.id) {
