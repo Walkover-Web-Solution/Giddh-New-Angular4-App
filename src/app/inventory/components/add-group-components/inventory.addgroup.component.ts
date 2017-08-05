@@ -24,7 +24,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public groupsData$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Parent Group',
     allowClear: true
   };
