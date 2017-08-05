@@ -186,7 +186,7 @@ export class HomeActions {
     .ofType(HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS)
     .switchMap(action => {
       return this._dashboardService.GetBankAccounts();
-    }).map((res) => this.validateResponse<BankAccountsResponse, string>(res, {
+    }).map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
       type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
       payload: res
     }, true, {
