@@ -63,7 +63,7 @@ export class LedgerComponent implements OnInit {
   public needToReCalculate: boolean = false;
   public accountsOptions: Select2Options = {
     multiple: true,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Accounts',
     allowClear: true,
     maximumSelectionLength: 1,
