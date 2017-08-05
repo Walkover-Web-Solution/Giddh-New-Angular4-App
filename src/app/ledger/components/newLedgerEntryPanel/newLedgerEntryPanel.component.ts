@@ -44,7 +44,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public voucherDropDownOptions: Select2Options = {
     multiple: false,
     allowClear: true,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Vouchers'
   };
   public voucherTypeList: Observable<Select2OptionData[]>;

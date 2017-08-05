@@ -159,7 +159,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     e.stopPropagation();
     e.preventDefault();
     this.store.dispatch(this.companyActions.RefreshCompanies());
-    e.stopPropagation();
   }
 
   public changeCompany(selectedCompanyUniqueName: string) {
@@ -170,9 +169,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
-  public deleteCompany() {
+  public deleteCompany(e: Event) {
+    e.stopPropagation();
     this.store.dispatch(this.companyActions.DeleteCompany(this.markForDeleteCompany.uniqueName));
-    this.hideDeleteCompanyModal();
+    this.hideDeleteCompanyModal(e);
   }
 
   public showDeleteCompanyModal(company: ComapnyResponse, e: Event) {
@@ -182,7 +182,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     e.stopPropagation();
   }
 
-  public hideDeleteCompanyModal() {
+  public hideDeleteCompanyModal(e: Event) {
+    e.stopPropagation();
     this.deleteCompanyModal.hide();
   }
 
