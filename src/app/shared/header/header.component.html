@@ -226,7 +226,7 @@
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal()" (successCallBack)="deleteCompany()"></confirm-modal>
+      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
     </div>
   </div>
 </div>
