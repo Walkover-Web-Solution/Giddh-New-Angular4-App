@@ -9,7 +9,7 @@ import {
 } from '../../models/interfaces/dashboard.interface';
 import moment from 'moment';
 import * as _ from 'lodash';
-import { BankAccountsResponse } from '../../models/api-models/Dashboard';
+import { RefreshBankAccountResponse, BankAccountsResponse } from '../../models/api-models/Dashboard';
 
 export interface HomeState {
   value?: string;
@@ -22,6 +22,10 @@ export interface HomeState {
   isRevenueChartDataAvailable: boolean;
   isGetBankAccountsInProcess: boolean;
   BankAccounts?: BankAccountsResponse[];
+  isRefereshBankAccount: boolean;
+  RefereshBankAccount?: RefreshBankAccountResponse;
+  isReConnectBankAccount: boolean;
+  ReConnectBankAccount?: RefreshBankAccountResponse;
 }
 
 export const initialState: HomeState = {
@@ -31,7 +35,9 @@ export const initialState: HomeState = {
   isExpensesChartDataAvailable: false,
   isRevenueChartDataInProcess: false,
   isRevenueChartDataAvailable: false,
-  isGetBankAccountsInProcess: false
+  isGetBankAccountsInProcess: false,
+  isRefereshBankAccount: false,
+  isReConnectBankAccount: false
 };
 
 export function homeReducer(state = initialState, action: Action): HomeState {
@@ -127,6 +133,32 @@ export function homeReducer(state = initialState, action: Action): HomeState {
           ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
         }
       });
+    }
+    case HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT: {
+      return Object.assign({}, state, { isReConnectBankAccount: true });
+    }
+    case HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE: {
+      let reconnectResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
+      if (reconnectResponse.status === '') {
+        return Object.assign({}, state, { isReConnectBankAccount: false, ReConnectBankAccount: reconnectResponse.response });
+      }
+      return Object.assign({}, state, { isReConnectBankAccount: false });
+    }
+    case HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT: {
+      return Object.assign({}, state, { isRefereshBankAccount: true });
+    }
+    case HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE: {
+      let refereshResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
+      if (refereshResponse.status === '') {
+        return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: refereshResponse.response });
+      }
+      return Object.assign({}, state, { isRefereshBankAccount: false });
+    }
+    case HOME.BANK_ACCOUNTS.RESET_RECONNECT_BANK_ACCOUNT: {
+      return Object.assign({}, state, { isReConnectBankAccount: false, ReConnectBankAccount: null });
+    }
+    case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
+      return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
     }
     default: {
       return state;
