@@ -16,6 +16,7 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
+import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
 
 @Component({
   selector: 'group-update',
@@ -130,7 +131,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit() {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
-      uniqueName: ['', Validators.required],
+      uniqueName: ['', Validators.required, uniqueNameValidator],
       description: ['']
     });
     this.moveGroupForm = this._fb.group({
