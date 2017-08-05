@@ -163,6 +163,23 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     });
   }
 
+  public generateUniqueName() {
+    let val: string = this.groupDetailForm.controls['name'].value;
+    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+
+    this.isGroupNameAvailable$.subscribe(a => {
+      if (a !== null && a !== undefined) {
+        if (a) {
+          this.groupDetailForm.patchValue({uniqueName: val});
+        } else {
+          let num = 1;
+          this.groupDetailForm.patchValue({uniqueName: val + num});
+        }
+      }
+    });
+  }
+
   public ngAfterViewInit() {
     this.isTaxableGroup$ = this.store.select(state => {
       let result: boolean = false;
