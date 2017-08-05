@@ -89,9 +89,11 @@ export class ComparisionChartComponent implements OnInit {
       this.activeFinancialYear.financialYearStarts,
       this.activeFinancialYear.financialYearEnds, false));
 
-    this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
-      this.lastFinancialYear.financialYearStarts,
-      this.lastFinancialYear.financialYearEnds, false));
+    if (this.lastFinancialYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
+        this.lastFinancialYear.financialYearStarts,
+        this.lastFinancialYear.financialYearEnds, false));
+    }
   }
 
   public generateCharts() {
@@ -114,7 +116,7 @@ export class ComparisionChartComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
+        itemStyle: {color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold'}
       },
       series: [{
         name: 'Expense',
