@@ -7,7 +7,6 @@ import { Injectable } from '@angular/core';
 export class InvoiceAction {
 
   public setTemplateId(id: string): Action {
-    console.log('action method called')
     return {
       type: INVOICE.TEMPLATE.SELECT_TEMPLATE,
       payload: {id}
@@ -15,10 +14,16 @@ export class InvoiceAction {
   }
 
   public setHeading(data: string): Action {
-    console.log('action method called')
     return {
       type: INVOICE.CONTENT.SET_HEADING,
       payload: {data}
     };
+  }
+  public setColumnWidth(width: number, colName: string): Action {
+    return {
+      type: INVOICE.CONTENT.SET_COLUMN_WIDTH,
+      payload: {width, colName}
+    };
+
   }
 }

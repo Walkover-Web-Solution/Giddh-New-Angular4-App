@@ -11,8 +11,8 @@ import { DesignFiltersContainerModule } from './design-filters/design.filters.mo
 import { SharedModule } from '../../../shared/shared.module';
 import { DesignFiltersContainerComponent } from './design-filters/design.filters.component';
 import { SelectTemplateComponent } from './design-filters/select-template/select.template.component';
-import { SelectLogoComponent } from './design-filters/select-logo/select.logo.component';
 import { ContentFilterComponent } from './content-filters/content.filters.component';
+import {NouisliderModule} from "ng2-nouislider";
 
 @NgModule({
   imports: [
@@ -20,14 +20,16 @@ import { ContentFilterComponent } from './content-filters/content.filters.compon
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
+    NouisliderModule
+
   ],
-  declarations: [DesignFiltersContainerComponent, SelectTemplateComponent, SelectLogoComponent, ContentFilterComponent],
+  declarations: [DesignFiltersContainerComponent, SelectTemplateComponent],
   exports: [
     DesignFiltersContainerModule,
     DesignFiltersContainerComponent,
     SelectTemplateComponent,
-    SelectLogoComponent,
-    ContentFilterComponent
+    NouisliderModule
+
   ]
 })
 export class EditFiltersModule {

@@ -9,7 +9,9 @@ import { EditFiltersModule } from './filters-container/edit.filters.module';
 import { SharedModule } from '../../shared/shared.module';
 
 import { EditFiltersContainersComponent } from './filters-container/edit.filters.component';
-import {OutTemplateComponent} from "./out-tempate/out.template.component";
+import { OutTemplateComponent } from './out-tempate/out.template.component';
+import {MaterialModule, MdSliderModule} from "@angular/material";
+import {ContentFilterComponent} from "./filters-container/content-filters/content.filters.component";
 
 @NgModule({
   imports: [
@@ -17,13 +19,16 @@ import {OutTemplateComponent} from "./out-tempate/out.template.component";
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    EditFiltersModule
+    EditFiltersModule,
+    MdSliderModule,
   ],
-  declarations: [EditInvoiceComponent, OutTemplateComponent, EditFiltersContainersComponent],
+  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent],
   exports: [
     EditFiltersModule,
-    EditInvoiceComponent,
-    OutTemplateComponent
+    OutTemplateComponent,
+    MdSliderModule,
+    ContentFilterComponent,
+    EditInvoiceComponent
   ]
 })
 export class EditInvoiceModule {
