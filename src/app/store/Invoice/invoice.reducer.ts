@@ -1,17 +1,31 @@
-import { Action } from '@ngrx/store';
+import {Action, combineReducers} from '@ngrx/store';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
+import {TableColumnMeta} from "../../models/api-models/invoice";
 
-export interface InvoiceState {
+export interface InvoiceTemplateState {
   templateId: string;
   heading: string;
+
 }
 
-export const initialState: InvoiceState = {
+export interface InvoiceTableState {
+  [colName: string]: number;
+
+}
+
+export interface InvoiceState {
+
+  template: InvoiceTemplateState;
+  table: InvoiceTableState;
+}
+
+export const initialState: InvoiceTemplateState = {
   templateId: 'template1',
   heading: ''
+
 };
 
-export function invoiceReducer(state = initialState, action: Action): InvoiceState {
+export function invoiceTemplateReducer(state = initialState, action: Action): InvoiceTemplateState {
   switch (action.type) {
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
       return Object.assign({}, state, {
@@ -26,3 +40,26 @@ export function invoiceReducer(state = initialState, action: Action): InvoiceSta
     }
   }
 }
+
+export const initialStateTable: InvoiceTableState = {
+
+};
+
+export function invoiceTableReducer(state = initialStateTable, action: Action): InvoiceTableState {
+  switch (action.type) {
+    case INVOICE.CONTENT.SET_COLUMN_WIDTH:
+      return Object.assign({}, state, {
+        [action.payload.colName]: action.payload.width
+      });
+    default: {
+      return state;
+    }
+  }
+}
+
+export const invoiceReducers = {
+  template: invoiceTemplateReducer,
+  table: invoiceTableReducer
+};
+
+export const invoiceReducer = combineReducers(invoiceReducers);

@@ -42,6 +42,8 @@ import { EditFiltersModule } from "./invoice/edit-invoice/filters-container/edit
 import { DesignFiltersContainerModule } from "./invoice/edit-invoice/filters-container/design-filters/design.filters.module";
 import { FileSelectDirective } from "ng2-file-upload";
 import { FileUploadModule } from "ng2-file-upload/ng2-file-upload";
+import { MdSliderModule } from '@angular/material';
+import { NouisliderModule } from 'ng2-nouislider';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -102,7 +104,9 @@ if (ENV === 'development') {
     LoginModule,
     FileUploadModule,
     DesignFiltersContainerModule,
+    MdSliderModule,
     EditFiltersModule,
+    NouisliderModule,
     EditInvoiceModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
@@ -123,6 +127,7 @@ if (ENV === 'development') {
     APP_PROVIDERS
   ]
 })
+
 export class AppModule {
 
   constructor(
