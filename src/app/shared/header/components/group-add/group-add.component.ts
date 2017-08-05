@@ -40,9 +40,26 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     });
   }
 
+  public generateUniqueName() {
+    let val: string = this.groupDetailForm.controls['name'].value;
+    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+
+    this.isGroupNameAvailable$.subscribe(a => {
+      if (a !== null && a !== undefined) {
+        if (a) {
+          this.groupDetailForm.patchValue({uniqueName: val});
+        } else {
+          let num = 1;
+          this.groupDetailForm.patchValue({uniqueName: val + num});
+        }
+      }
+    });
+  }
+
   public async addNewGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
-    let grpObject = new GroupCreateRequest();
+    let grpObject: GroupCreateRequest;
     grpObject = this.groupDetailForm.value as GroupCreateRequest;
     grpObject.parentGroupUniqueName = activeGrp.uniqueName;
 

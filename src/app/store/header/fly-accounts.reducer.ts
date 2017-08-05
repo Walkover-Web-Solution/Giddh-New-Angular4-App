@@ -56,7 +56,6 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
           uniqueName: account.uniqueName,
           name: account.name
         };
-        console.log(accountFlat);
         uniqueList.push(accountFlat);
         return accountFlat.openingBalance = account.openingBalance.amount;
       });
