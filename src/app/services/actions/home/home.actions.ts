@@ -11,7 +11,7 @@ import {
   IExpensesChartClosingBalanceResponse,
   IRevenueChartClosingBalanceResponse
 } from '../../../models/interfaces/dashboard.interface';
-import { GroupHistoryRequest, BankAccountsResponse } from '../../../models/api-models/Dashboard';
+import { RefreshBankAccountResponse, GroupHistoryRequest, BankAccountsResponse } from '../../../models/api-models/Dashboard';
 
 @Injectable()
 
@@ -193,6 +193,31 @@ export class HomeActions {
         type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
         payload: res
       }));
+  @Effect()
+  public RefereshBankAccounts$: Observable<Action> = this.action$
+    .ofType(HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT)
+    .switchMap(action => {
+      return this._dashboardService.RefreshBankAccount(action.payload);
+    }).map((res) => this.validateResponse<RefreshBankAccountResponse, string>(res, {
+      type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE,
+        payload: res
+      }));
+
+  @Effect()
+  public ReConnectBankAccounts$: Observable<Action> = this.action$
+    .ofType(HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT)
+    .switchMap(action => {
+      return this._dashboardService.ReconnectBankAccount(action.payload);
+    }).map((res) => this.validateResponse<RefreshBankAccountResponse, string>(res, {
+      type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE,
+        payload: res
+      }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
@@ -242,6 +267,19 @@ export class HomeActions {
   public GetBankAccount() {
     return {
       type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS
+    };
+  }
+
+  public RefereshBankAccount(loginid: string) {
+    return {
+      type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT,
+      payload: loginid
+    };
+  }
+  public ReConnectBankAccount(loginid: string) {
+    return {
+      type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT,
+      payload: loginid
     };
   }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
