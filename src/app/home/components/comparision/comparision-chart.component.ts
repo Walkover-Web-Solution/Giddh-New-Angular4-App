@@ -98,6 +98,9 @@ export class ComparisionChartComponent implements OnInit {
 
   public generateCharts() {
     this.options = {
+      chart: {
+        height: '320px',
+      },
       title: {
         text: ''
       },
