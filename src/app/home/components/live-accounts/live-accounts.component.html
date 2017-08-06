@@ -28,7 +28,7 @@
                       </tr>
                       <tr *ngIf="item.reconnect" class="db-bnk-account">
                         <td class="reconnectDiv text-center col-xs-12">
-                          <button class="btn btn-default" ng-click="reconnectBank(account)">Reconnect</button>
+                          <button class="btn btn-default" (click)="reconnect(item.loginId)">Reconnect</button>
                         </td>
                       </tr>
                     </tbody>
@@ -45,24 +45,18 @@
     </div>
   </div>
 </div>
-
-
 <!--delete company modal  -->
 <div bsModal #refreshBankAccountModal="bs-modal" class="modal fade" role="dialog">
-
   <div class="modal-dialog modal-lg">
-
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" ng-click="$dismiss()" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button>
         <h3 class="modal-title">Refresh Account</h3>
       </div>
-
-
       <div class="modal-body" style="height:400px">
         <div class="embed-responsive embed-responsive-16by9">
-          <iframe class="embed-responsive-item" *ngIf="connectUrl" src="{{connectUrl}}"></iframe>
+          <iframe class="embed-responsive-item" *ngIf="(refreshBankAccount$ | async)?.connectUrl" [attr.src]="connectUrl"></iframe>
         </div>
       </div>
 

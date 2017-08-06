@@ -139,8 +139,8 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE: {
       let reconnectResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
-      if (reconnectResponse.status === '') {
-        return Object.assign({}, state, { isReConnectBankAccount: false, ReConnectBankAccount: reconnectResponse.response });
+      if (reconnectResponse.status === 'success') {
+        return Object.assign({}, state, { isReConnectBankAccount: false, ReConnectBankAccount: reconnectResponse.body });
       }
       return Object.assign({}, state, { isReConnectBankAccount: false });
     }
@@ -149,8 +149,9 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE: {
       let refereshResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
-      if (refereshResponse.status === '') {
-        return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: refereshResponse.response });
+      debugger;
+      if (refereshResponse.status === 'success') {
+        return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: refereshResponse.body });
       }
       return Object.assign({}, state, { isRefereshBankAccount: false });
     }
