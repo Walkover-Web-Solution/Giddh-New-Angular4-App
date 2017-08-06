@@ -71,8 +71,8 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
       state: [''],
       stateCode: [''],
       hsnOrSac: [''],
-      hsnNumber: [{value: '', disabled: true}, [digitsOnly]],
-      sacNumber: [{value: '', disabled: true}, [digitsOnly]],
+      hsnNumber: [{value: '', disabled: false}, [digitsOnly]],
+      sacNumber: [{value: '', disabled: false}, [digitsOnly]],
       gstDetails: this._fb.array([
         this.initialGstDetailsForm()
       ])
@@ -110,12 +110,12 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
       const hsn: AbstractControl = this.updateAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.updateAccountForm.get('sacNumber');
       if (a === 'hsn') {
-        hsn.reset();
+        // hsn.reset();
         sac.reset();
         hsn.enable();
         sac.disable();
       } else {
-        sac.reset();
+        // sac.reset();
         hsn.reset();
         sac.enable();
         hsn.disable();
