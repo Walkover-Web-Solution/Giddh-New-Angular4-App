@@ -5,11 +5,21 @@ import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/se
 import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass } from '../../models/api-models/SettingsIntegraion';
 
 export interface SettingsState {
+<<<<<<< HEAD
   integration: IntegrationPage;
 }
 
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass()
+=======
+    integration: IntegrationPage;
+    profile: object;
+}
+
+export const initialState: SettingsState = {
+    integration: new IntegrationPageClass(),
+    profile: {}
+>>>>>>> Setting profile midway.
 };
 
 export function SettingsReducer(state = initialState, action: Action): SettingsState {

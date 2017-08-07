@@ -47,6 +47,7 @@ import { HomeActions } from './actions/home/home.actions';
 import { DashboardService } from './dashboard.service';
 import { SettingsIntegrationService } from './settings.integraion.service';
 import { SettingsIntegrationActions } from './actions/settings/settings.integration.action';
+import { SettingsProfileService } from './settings.profile.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -100,7 +101,8 @@ export class ServiceModule {
         LogsService,
         TlPlService,
         LedgerService,
-        SettingsIntegrationService
+        SettingsIntegrationService,
+        SettingsProfileService
       ]
     };
   }
