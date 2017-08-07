@@ -4800,7 +4800,7 @@ table.proforma-particulars {
 .my-dropdown-menu {
   position: absolute;
   /*top: 100%;*/
-  left: 0;
+  /* left: 0; */
   z-index: 1000;
   min-width: 160px;
   padding: 5px 0;
