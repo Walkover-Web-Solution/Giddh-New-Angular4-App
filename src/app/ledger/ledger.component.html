@@ -97,7 +97,7 @@
               <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
             </td>
           </tr>
-          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;trackBy:trackByFn"
+          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;"
               ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
               (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
@@ -125,9 +125,9 @@
             <td class="width100">
               <table class="width100">
                 <tbody class="ledger-main">
-                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;trackBy:trackByFn"
+                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;"
                     [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();toggleTransactionType('DEBIT')">
+                    (click)="showNewLedgerEntryPopup();toggleTransactionType(txn.id)">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'DEBIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -138,7 +138,7 @@
 
                     <select2 [data]="lc.flatternAccountList | async" [(ngModel)]="txn.particular"
                              [options]="accountsOptions"
-                             (valueChanged)="selectAccount($event)"></select2>
+                             (valueChanged)="selectAccount($event,txn)"></select2>
 
                     <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                       <li>Create New Account</li>
@@ -164,7 +164,6 @@
               <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT'">
                 <new-ledger-entry-panel [accountUnq]="lc.accountUnq"
                                         [blankLedger]="lc.blankLedger"
-                                        [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"
@@ -208,7 +207,7 @@
             </td>
           </tr>
 
-          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;trackBy:trackByFn"
+          <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;"
               ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
               (click)="selectCompoundEntry(txn)"
               [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
@@ -242,9 +241,9 @@
             <td class="width100">
               <table class="width100">
                 <tbody class="ledger-main">
-                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;trackBy:trackByFn"
+                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;"
                     [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();toggleTransactionType('CREDIT')">
+                    (click)="showNewLedgerEntryPopup();toggleTransactionType(txn.id)">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'CREDIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -253,7 +252,7 @@
                   </td>
                   <td class="col-xs-7" *ngIf="txn.type === 'CREDIT'">
 
-                    <select2 [data]="lc.flatternAccountList | async" (valueChanged)="selectAccount($event)"
+                    <select2 [data]="lc.flatternAccountList | async" (valueChanged)="selectAccount($event,txn)"
                              [(ngModel)]="txn.particular" [options]="accountsOptions"></select2>
 
                     <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
@@ -280,7 +279,6 @@
               <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
                 <new-ledger-entry-panel [accountUnq]="lc.accountUnq"
                                         [blankLedger]="lc.blankLedger"
-                                        [selectedAccount]="lc.selectedAccount"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"

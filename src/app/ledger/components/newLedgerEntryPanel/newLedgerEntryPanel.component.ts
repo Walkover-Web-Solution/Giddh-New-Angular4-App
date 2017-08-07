@@ -23,6 +23,7 @@ import { createAutoCorrectedDatePipe } from '../../../shared/helpers/autoCorrect
 import { CompanyActions } from '../../../services/actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { Router } from '@angular/router';
+import { cloneDeep } from 'lodash';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -30,7 +31,6 @@ import { Router } from '@angular/router';
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked {
-  @Input() public selectedAccount: IFlattenAccountsResultItem | any = null;
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: boolean = false;
@@ -110,15 +110,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngAfterViewChecked() {
-    // this.cdRef.detectChanges();
+    this.cdRef.detectChanges();
   }
 
   /**
    * add to debit or credit
-   * @param {string} type
+   * @param {string} id
    */
-  public addToDrOrCr(type: string) {
-    this.changeTransactionType.emit(type);
+  public addToDrOrCr(id: string) {
+    this.changeTransactionType.emit(id);
   }
 
   public calculateTotal() {
@@ -132,15 +132,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public saveLedger() {
     let blankTransactionObj: BlankLedgerVM;
-    blankTransactionObj = Object.assign({}, this.blankLedger);
-
-    blankTransactionObj.transactions = blankTransactionObj.transactions.filter(c => c.type === this.currentTxn.type);
+    blankTransactionObj = cloneDeep(this.blankLedger);
+    blankTransactionObj.transactions = blankTransactionObj.transactions.filter(bl => bl.particular);
     blankTransactionObj.transactions.map(bl => {
-      bl.particular = this.selectedAccount.uniqueName;
-      // delete bl['tax'];
-      // delete bl['discount'];
+      bl.particular = bl.selectedAccount.uniqueName;
+      delete bl['id'];
     });
-    this.store.dispatch(this._ledgerActions.CreateBlankLedger(blankTransactionObj, this.accountUnq));
+    this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.accountUnq));
   }
 
   /**
