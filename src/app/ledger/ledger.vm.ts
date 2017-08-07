@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
+import * as uuid from 'uuid';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -31,6 +32,7 @@ export class LedgerVM {
     this.blankLedger = {
       transactions: [
         {
+          id: uuid.v4(),
           amount: 0,
           particular: '',
           type: 'DEBIT',
@@ -38,9 +40,11 @@ export class LedgerVM {
           tax: 0,
           total: 0,
           discount: 0,
-          discounts: []
+          discounts: [],
+          selectedAccount: null
         },
         {
+          id: uuid.v4(),
           amount: 0,
           particular: '',
           type: 'CREDIT',
@@ -48,7 +52,8 @@ export class LedgerVM {
           tax: 0,
           total: 0,
           discount: 0,
-          discounts: []
+          discounts: [],
+          selectedAccount: null
         }],
       voucherType: 'Purchases',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -81,6 +86,7 @@ export class BlankLedgerVM {
 }
 
 export class TransactionVM {
+  public id?: string;
   public amount: number;
   public particular: string;
   public type: string;
@@ -89,4 +95,5 @@ export class TransactionVM {
   public total: number;
   public discounts: ILedgerDiscount[];
   public discount?: number;
+  public selectedAccount?: IFlattenAccountsResultItem | any;
 }
