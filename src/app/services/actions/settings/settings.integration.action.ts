@@ -9,7 +9,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../settings.integraion.service';
-import { SmsKeyClass } from '../../../models/api-models/SettingsIntegraion';
+import { SmsKeyClass, EmailKeyClass } from '../../../models/api-models/SettingsIntegraion';
 
 @Injectable()
 export class SettingsIntegrationActions {
@@ -26,6 +26,18 @@ export class SettingsIntegrationActions {
       payload: res
     }));
 
+  @Effect()
+  public GetEmailKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY)
+    .switchMap(action => this.settingsIntegrationService.GetEmailKey())
+    .map(res => this.validateResponse<EmailKeyClass, string>(res, {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
+      payload: res
+    }, true, {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
+      payload: res
+    }));
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -36,6 +48,12 @@ export class SettingsIntegrationActions {
   public GetSMSKey(): Action {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY,
+    };
+  }
+
+  public GetEmailKey(): Action {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY,
     };
   }
 
