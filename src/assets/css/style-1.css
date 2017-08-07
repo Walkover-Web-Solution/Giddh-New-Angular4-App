@@ -4817,10 +4817,27 @@ table.proforma-particulars {
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
 }
 
-/*box styles  */
+/*box styles  on settings integration page*/
 .box{
   padding: 20px;
   background-color: white;
   border: 2px solid #D8D8D8;
   margin: 20px 0;
+}
+
+#settingTab .nav.nav-tabs {
+  background: #f0efef;
+}
+
+#settingTab .nav>li>a {
+  color: #231f20;
+  border: 0;
+  border-bottom: 2px solid transparent;
+}
+
+#settingTab .nav-tabs>li.active>a {
+  color: #d36029;
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid #d36029;
 }
