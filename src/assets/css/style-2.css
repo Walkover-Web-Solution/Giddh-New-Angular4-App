@@ -2147,11 +2147,13 @@ select.form-control {
 
 .linkStockTbl>tbody>tr>td {
     padding: 10px 15px;
+    font-size: 14px;
 }
 
 .linkStockTbl>tbody>tr>td:first-child {
     padding-left: 0;
     position: relative;
+    text-transform: capitalize
 }
 
 .list-row span {
@@ -2940,7 +2942,7 @@ label {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 0 7px !important;
+    padding: 0 20px 0 7px !important;
     background: transparent !important;
 }
 
@@ -2966,7 +2968,8 @@ label {
     color: #777;
 }
 
-#manufacture .source .linkstock thead th {
+#manufacture .source .linkstock thead th,
+#manufacture .source .linkstock tfoot tr td {
     color: #333;
 }
 
@@ -2984,6 +2987,7 @@ label {
 #manufacture .source .linkStockTbl>tbody>tr>td:first-child,
 #manufacture .source table tfoot td {
     padding: 10px 15px;
+    font-size: 14px;
 }
 
 #manufacture .source .linkStockTbl {
@@ -3008,14 +3012,14 @@ label {
     content: '';
     height: 100%;
     position: absolute;
-    top: 21px;
+    top: 20px;
     width: 2px;
     background: #ddd;
     left: -2px;
 }
 
 #manufacture .source tbody tr:nth-last-child(3) td:before {
-    height: 120%;
+    height: 105%;
 }
 
 #manufacture .source tbody tr:last-child td:before,
@@ -3259,6 +3263,7 @@ label {
     padding: 6px !important;
     outline: 0;
     color: #616161;
+    font-size: 14px;
     box-shadow: none;
 }
 
@@ -3276,4 +3281,29 @@ label {
 
 .select2-results__option[aria-selected] {
     font-size: 14px;
+}
+
+#manufacture .form-theme {
+    font-size: 14px;
+}
+
+.ico-btn {
+    border: 0;
+    background: none;
+}
+
+#manufacture .source tbody tr td .form-control {
+    background: transparent !important
+}
+
+.new-row td {
+    padding: 3px 15px !important;
+}
+
+.table-hover tr:hover {
+    cursor: pointer
+}
+
+#manufacture .form-theme tbody tr td select {
+    width: 43%;
 }

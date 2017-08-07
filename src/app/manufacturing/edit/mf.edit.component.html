@@ -63,12 +63,15 @@
                                 </td>
                             </tr>
 
-                            <tr *ngIf="toggleAddLinkedStocks">
-                                <td colspan="9">
+                            <tr *ngIf="toggleAddLinkedStocks" class="new-row">
+                                <td colspan="9" class="custom-select pos-rel">
+                                    <span class="hr"></span>
                                     <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel">
                   <option value="select" [selected]="true">select</option>
                   <option [ngValue]="stock.id" *ngFor="let stock of stockListDropDown$ | async" >{{ stock.text }}</option>
                 </select>
+                                    <span class="select_drop" style="right: 16px;top: 18px;"><i class="fa fa-caret-down"></i></span>
+
                                 </td>
                                 <td>
                                     <input type="number" required class="form-control" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
@@ -78,7 +81,7 @@
                                 <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>
 
                                 <td class="action">
-                                    <button [disabled]="linkedStockQuantity.invalid || linkedStockAmount.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks)"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                    <button [disabled]="linkedStockQuantity.invalid || linkedStockAmount.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks)" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
 
@@ -152,7 +155,7 @@
                                 <td class="pull-right">
                                     <input type="number" required [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control" #transactionAmount="ngModel"></td>
                                 <td class="action">
-                                    <button [disabled]="transactionAmount.invalid || transactionAccountUniqueName.invalid || baseAccountUniqueName.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                    <button [disabled]="transactionAmount.invalid || transactionAccountUniqueName.invalid || baseAccountUniqueName.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
                                 </td>
                             </tr>
                             <!--<tr>
@@ -174,16 +177,16 @@
                         </tbody>
                     </table>
                     <div class="pdB2 bdrT clearfix pdT2 mrT1">
-                        <p class="col-xs-9 pd0">Total Manufacturing Cost:</p>
-                        <p class="col-xs-3 text-right">{{ getTotal('otherExpenses', 'amount') | currency:'INR':true:'1.2' }}</p>
+                        <p class="col-xs-9 pd0"><strong>Total Manufacturing Cost:</strong></p>
+                        <p class="col-xs-3 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | currency:'INR':true:'1.2' }}</strong></p>
                     </div>
                     <div class="mrB1 pdB2 clearfix">
-                        <p class="col-xs-9 pd0">Grand Total:</p>
-                        <p class="col-xs-3 text-right">{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.2' }}</p>
+                        <p class="col-xs-9 pd0"><strong>Grand Total:</strong></p>
+                        <p class="col-xs-3 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.2' }}</strong></p>
                     </div>
                     <div class="mrB1 pdB2 clearfix">
-                        <p class="col-xs-9 pd0">Cost per Computer:</p>
-                        <p class="col-xs-3 text-right">{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</p>
+                        <p class="col-xs-9 pd0"><strong>Cost per Computer:</strong></p>
+                        <p class="col-xs-3 text-right"><strong>{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</strong></p>
                     </div>
                     <div class="pull-right" *ngIf="!isUpdateCase">
                         <button type="submit" class="btn btn-md btn-success mrR1" (click)="createEntry();">Save</button>
