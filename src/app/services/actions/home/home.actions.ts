@@ -135,6 +135,7 @@ export class HomeActions {
           revenueActiveYear: res[0].body.groups,
           ExpensesActiveYear: res[1].body.groups,
           ProfitLossActiveYear: res[2].body,
+          NetworthActiveYear: res[2].body
         };
         return {
           type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE,

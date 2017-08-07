@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'networth-chart',
@@ -8,7 +9,14 @@ import { Options } from 'highcharts';
 
 export class NetworthChartComponent implements OnInit {
   public options: Options;
-
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
+  private expenseData = [];
+  private expenseDataLY = [];
+  private revenueData = [];
+  private revenueDataLY = [];
+  private profitLossData = [];
+  private profitLossDataLY = [];
   constructor() {
     this.options = {
       chart: {
