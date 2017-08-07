@@ -1,16 +1,27 @@
 .mfStockSearchRequestForm .col-xs-1 {
-  width: 11.33333333%;
+    width: 11.33333333%;
 }
-#mfReportTbl .table .table td{
-  border: none;
-  text-align: center
+
+#mfReportTbl .table .table td {
+    border: none;
+    text-align: center
 }
-#mfReportTbl .table td{
-  vertical-align: middle;
+
+#mfReportTbl .table td {
+    vertical-align: middle;
+    text-transform: capitalize
 }
-#mfReportTbl .table td.noBdr{
-  border: none
+
+#mfReportTbl .table td.noBdr {
+    border: none
 }
-.pdBth4{
-  padding: 0 40px;
+
+.pdBth4 {
+    padding: 0 40px;
+}
+
+.section_title {
+    color: #616161;
+    letter-spacing: 0;
+    font-size: 20px;
 }

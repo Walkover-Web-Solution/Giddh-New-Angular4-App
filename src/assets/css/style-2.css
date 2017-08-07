@@ -1452,7 +1452,7 @@ footer small a {
 }
 
 .form_title {
-    padding: 12px 26px;
+    padding: 12px 20px;
     background: #525252;
     color: #fff;
 }
@@ -3197,4 +3197,83 @@ label {
 
 .col_wrapper:first-child .grp_list {
     padding-top: 10px;
+}
+
+.d-inline-block {
+    display: inline-block!important;
+}
+
+.custom-select select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+}
+
+.custom-select .select_drop {
+    position: absolute;
+    bottom: 16px;
+    top: inherit;
+    z-index: 9;
+    right: 6px;
+}
+
+#mfReportTbl table>tbody>tr>td>table.table {
+    background: transparent;
+}
+
+.pagination>li>a,
+.pagination>li>span {
+    color: #525252;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background: #d35f29;
+    border-color: #d35f29;
+    color: #fff;
+}
+
+.pagination>li>a:focus,
+.pagination>li>a:hover,
+.pagination>li>span:focus,
+.pagination>li>span:hover {
+    background-color: #eee;
+    border-color: #ddd;
+    color: #d35f29;
+}
+
+#manufacture .section_title {
+    color: #616161;
+    letter-spacing: 0;
+    font-size: 20px;
+}
+
+.select2-container--default .select2-selection--single {
+    background: #f9f7f2 !important;
+    border: 1px solid #ded3c0 !important;
+    border-radius: 0px !important;
+    padding: 6px !important;
+    outline: 0;
+    color: #616161;
+    box-shadow: none;
+}
+
+.select2-container .select2-selection--single {
+    height: 34px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: inherit !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #d35f29 !important;
+}
+
+.select2-results__option[aria-selected] {
+    font-size: 14px;
 }
