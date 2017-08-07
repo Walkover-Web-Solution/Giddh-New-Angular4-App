@@ -13,6 +13,7 @@ import { SearchComponent } from './search/search.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { TlPlComponent } from './tl-pl/tl-pl.component';
 import { LedgerComponent } from './ledger/ledger.component';
+import { SettingsComponent } from './settings/settings.component';
 import { DummyComponent } from './dummy.component';
 
 export const ROUTES: Routes = [
@@ -38,6 +39,7 @@ export const ROUTES: Routes = [
             { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthentication] },
             { path: 'dummy', component: DummyComponent },
             { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication] },
+            { path: 'settings', component: SettingsComponent, canActivate: [NeedsAuthentication]  },
             { path: '**', redirectTo: 'permissions' }
         ]
     },
