@@ -11,6 +11,7 @@ import * as fromAuditLogs from './AuditLogs/audit-logs.reducer';
 import * as fromFlyAccounts from './header/fly-accounts.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
 import * as fromLedger from './Ledger/ledger.reducer';
+import * as fromSettings from './Settings/Settings.reducer';
 
 export interface AppState {
   router: RouterState;
@@ -27,12 +28,14 @@ export interface AppState {
   flyAccounts: fromFlyAccounts.FlyAccountsState;
   tlPl: fromTlPl.TlPlState;
   ledger: fromLedger.LedgerState;
+  settings: fromSettings.SettingsState;
 }
 
 export const reducers = {
   router: routerReducer,
   home: fromHome.homeReducer,
   permission: fromPermission.PermissionReducer,
+  settings: fromSettings.SettingsReducer,
   company: fromCompany.CompanyReducer,
   login: fromLogin.AuthenticationReducer,
   session: fromLogin.SessionReducer,
