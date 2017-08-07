@@ -98,7 +98,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.REFRESH_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(DASHBOARD_API.REFRESH_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
       data.request = '';
       return data;
@@ -111,7 +111,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.RECONNECT_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(DASHBOARD_API.RECONNECT_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
       data.request = '';
       return data;
