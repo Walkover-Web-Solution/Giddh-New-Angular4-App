@@ -26,6 +26,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { PaginationModule } from 'ngx-bootstrap';
+import { Router } from '@angular/router';
 
 @Component({
   templateUrl: './mf.report.component.html',
@@ -43,7 +44,8 @@ export class MfReportComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private manufacturingActions: ManufacturingActions,
-    private inventoryAction: InventoryAction
+    private inventoryAction: InventoryAction,
+    private router: Router
   ) {}
 
   public ngOnInit() {
@@ -87,4 +89,15 @@ export class MfReportComponent implements OnInit {
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
 
+  private editMFItem(item) {
+    if (item.uniqueName) {
+      this.store.dispatch(this.manufacturingActions.SetMFItemUniqueNameInStore(item.uniqueName));
+      this.router.navigate(['/pages/manufacturing/edit']);
+    }
+  }
+
+  private goToCreateNewPage() {
+      this.store.dispatch(this.manufacturingActions.RemoveMFItemUniqueNameFomStore());
+      this.router.navigate(['/pages/manufacturing/edit']);
+  }
 }

@@ -84,6 +84,7 @@ export class ManufacturingActions {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Manufacturing Entry Created Successfully');
+        this._router.navigate(['/pages', 'manufacturing', 'report']);
       }
       return { type: '' };
     });
@@ -93,7 +94,7 @@ export class ManufacturingActions {
   private UpdateMFItem$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.UPDATE_MF_ITEM)
     .switchMap(action => {
-      return this._manufacturingService.UpdateManufacturingItem(action.payload, action.payload) // Check here the parameter
+      return this._manufacturingService.UpdateManufacturingItem(action.payload, { stockUniqueName: action.payload.stockUniqueName, manufacturingUniqueName: action.payload.uniqueName })
         .map(response => this.UpdateMfItemResponse(response));
     });
 
@@ -106,6 +107,7 @@ export class ManufacturingActions {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Manufacturing Entry Updated Successfully');
+        this._router.navigate(['/pages', 'manufacturing', 'report']);
       }
       return { type: '' };
     });
@@ -128,6 +130,7 @@ export class ManufacturingActions {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Manufacturing Entry Deleted Successfully');
+        this._router.navigate(['/pages', 'manufacturing', 'report']);
       }
       return { type: '' };
     });
@@ -159,55 +162,79 @@ export class ManufacturingActions {
       payload: value
     };
   }
+
   public GetMfReportResponse(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE,
       payload: value
     };
   }
+
   public GetMfItemDetails(): Action {
     return {
       type: MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS
     };
   }
+
   public GetMfItemDetailsResponse(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS_RESPONSE,
       payload: value
     };
   }
+
   public CreateMfItem(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.CREATE_MF_ITEM,
       payload: value
     };
   }
+
   public CreateMfItemResponse(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.CREATE_MF_ITEM_RESPONSE,
       payload: value
     };
   }
-  public UpdateMfItem(): Action {
+
+  public UpdateMfItem(value): Action {
     return {
-      type: MANUFACTURING_ACTIONS.UPDATE_MF_ITEM
+      type: MANUFACTURING_ACTIONS.UPDATE_MF_ITEM,
+      payload: value
     };
   }
+
   public UpdateMfItemResponse(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.UPDATE_MF_ITEM_RESPONSE,
       payload: value
     };
   }
-  public DeleteMfItem(): Action {
+
+  public DeleteMfItem(value): Action {
     return {
-      type: MANUFACTURING_ACTIONS.DELETE_MF_ITEM
+      type: MANUFACTURING_ACTIONS.DELETE_MF_ITEM,
+      payload: value
     };
   }
+
   public DeleteMfItemResponse(value): Action {
     return {
       type: MANUFACTURING_ACTIONS.DELETE_MF_ITEM_RESPONSE,
       payload: value
+    };
+  }
+
+  public SetMFItemUniqueNameInStore(value: string): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.SET_MF_ITEM_UNIQUENAME_IN_STORE,
+      payload: value
+    };
+  }
+
+  public RemoveMFItemUniqueNameFomStore(): Action {
+    return {
+      type: MANUFACTURING_ACTIONS.REMOVE_MF_ITEM_UNIQUENAME_FROM_STORE
     };
   }
 }

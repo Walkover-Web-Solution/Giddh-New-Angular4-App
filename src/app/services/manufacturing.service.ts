@@ -134,6 +134,7 @@ export class ManufacturingService {
     if ((model.count)) {
       url = url + 'count=' + model.count;
     }
+
     return this._http.get(url.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
         let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
