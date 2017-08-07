@@ -29,7 +29,7 @@ import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
 import { PermissionService } from './permission.service';
-import { PermissionActions } from './actions/permission/permission.action'
+import { PermissionActions } from './actions/permission/permission.action';
 
 /**
  * Home Module
@@ -45,6 +45,8 @@ import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
 import { HomeActions } from './actions/home/home.actions';
 import { DashboardService } from './dashboard.service';
+import { SettingsIntegrationService } from './settings.integraion.service';
+import { SettingsIntegrationActions } from './actions/settings/settings.integration.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -69,7 +71,8 @@ import { DashboardService } from './dashboard.service';
     EffectsModule.run(PermissionActions),
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TlPlActions),
-    EffectsModule.run(LedgerActions)
+    EffectsModule.run(LedgerActions),
+    EffectsModule.run(SettingsIntegrationActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -96,7 +99,8 @@ export class ServiceModule {
         SearchService,
         LogsService,
         TlPlService,
-        LedgerService
+        LedgerService,
+        SettingsIntegrationService
       ]
     };
   }
