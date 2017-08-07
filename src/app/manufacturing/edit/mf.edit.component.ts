@@ -2,6 +2,7 @@ import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit } from '@angular/core';
+import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -23,6 +24,7 @@ export class MfEditComponent implements OnInit {
 
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public consumptionDetail = [];
+  public isUpdateCase: boolean  = false;
   public manufacturingDetails: ManufacturingItemRequest;
   public otherExpenses: any = {};
   public toggleAddExpenses: boolean = false;
@@ -42,9 +44,28 @@ export class MfEditComponent implements OnInit {
     private store: Store<AppState>,
     private manufacturingActions: ManufacturingActions,
     private inventoryAction: InventoryAction,
-    private _groupService: GroupService
+    private _groupService: GroupService,
+    private _location: Location
   ) {
     this.manufacturingDetails = new ManufacturingItemRequest();
+
+    // Update/Delete condition
+    this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
+      if (o.stockToUpdate) {
+        this.isUpdateCase = true;
+        let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
+        manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
+        manufacturingObj.date = new Date(manufacturingObj.date);
+        delete manufacturingObj.manufacturingQuantity;
+        manufacturingObj.linkedStocks.forEach((item) => {
+          item.quantity = item.manufacturingQuantity;
+          delete item.manufacturingQuantity;
+        });
+        this.manufacturingDetails = manufacturingObj;
+        console.log('In edit this.manufacturingDetails is :', this.manufacturingDetails);
+      }
+    });
+
     console.log('first of all the manufacturingDetailis :', this.manufacturingDetails);
     // Get group with accounts
     this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
@@ -125,7 +146,7 @@ export class MfEditComponent implements OnInit {
       manufacturingObj.linkedStocks = [val];
     }
 
-    manufacturingObj.stockUniqueName = this.selectedProduct;
+    // manufacturingObj.stockUniqueName = this.selectedProduct;
     this.manufacturingDetails = manufacturingObj;
     this.linkedStocks = new IStockItemDetail();
   }
@@ -181,6 +202,25 @@ export class MfEditComponent implements OnInit {
     this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
   }
 
+  private updateEntry() {
+    let dataToSave = _.cloneDeep(this.manufacturingDetails);
+    dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+    // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
+    // dataToSave.multipleOf = dataToSave.quantity;
+    // dataToSave.manufacturingUniqueName =
+    console.log('THe data is ---:', dataToSave);
+    this.store.dispatch(this.manufacturingActions.UpdateMfItem(dataToSave));
+  }
+
+  private deleteEntry() {
+    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+    console.log('THe data is ---:', manufacturingObj);
+    this.store.dispatch(this.manufacturingActions.DeleteMfItem({
+      stockUniqueName: manufacturingObj.stockUniqueName,
+      manufacturingUniqueName: manufacturingObj.uniqueName
+    }));
+  }
+
   private getTotal(from, field) {
     let total: number = 0;
     if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
@@ -193,8 +233,17 @@ export class MfEditComponent implements OnInit {
     return total;
   }
 
-  private update() {
-    // update expense
-    // this.store.dispatch(this.manufacturingActions.Update(data));
+  private getCosePerProduct() {
+    let quantity = _.cloneDeep(this.manufacturingDetails).quantity;
+    quantity = (quantity && quantity > 0) ? quantity : 1;
+    let cost = ((this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount')) / quantity);
+    if (!isNaN(cost)) {
+      return cost;
+    }
+    return 0;
+  }
+
+  private goBackToListPage() {
+    this._location.back();
   }
 }

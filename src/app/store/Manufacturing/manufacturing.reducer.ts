@@ -4,16 +4,18 @@ import { MANUFACTURING_ACTIONS } from '../../services/actions/manufacturing/manu
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 import { StocksResponse, StockDetailResponse } from '../../models/api-models/Inventory';
-import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
+import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 
 export interface ManufacturingState {
     reportData: StocksResponse;
     stockWithRate: StockDetailResponse;
+    stockToUpdate: string;
 }
 
 export const initialState: ManufacturingState = {
     reportData: null,
-    stockWithRate: null
+    stockWithRate: null,
+    stockToUpdate: null
 };
 
 export function ManufacturingReducer(state = initialState, action: Action): ManufacturingState {
@@ -60,13 +62,42 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             return state;
         }
         case MANUFACTURING_ACTIONS.UPDATE_MF_ITEM_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<StockDetailResponse, ManufacturingItemRequest> = action.payload;
+            if (res.status === 'success') {
+                newState.stockToUpdate = null;
+                return Object.assign({}, state, newState);
+            }
             return state;
         }
         case MANUFACTURING_ACTIONS.DELETE_MF_ITEM: {
             return state;
         }
         case MANUFACTURING_ACTIONS.DELETE_MF_ITEM_RESPONSE: {
+            let res: BaseResponse<any, any> = action.payload;
+            if (res.status === 'success') {
+                let newState = _.cloneDeep(state);
+                let indx = newState.reportData.results.findIndex((MFitem) => MFitem.uniqueName === res.queryString.model.manufacturingUniqueName);
+                if (indx > -1) {
+                    newState.reportData.results.splice(indx, 1);
+                }
+                newState.stockToUpdate = null;
+                return Object.assign({}, state, newState);
+            }
             return state;
+        }
+        case MANUFACTURING_ACTIONS.SET_MF_ITEM_UNIQUENAME_IN_STORE: {
+            if (action.payload) {
+                let newState = _.cloneDeep(state);
+                newState.stockToUpdate = action.payload;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case MANUFACTURING_ACTIONS.REMOVE_MF_ITEM_UNIQUENAME_FROM_STORE: {
+            let newState = _.cloneDeep(state);
+            newState.stockToUpdate = null;
+            return Object.assign({}, state, newState);
         }
         default:
         {

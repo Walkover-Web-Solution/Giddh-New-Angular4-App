@@ -88,6 +88,7 @@ export interface IOtherExpensesForCreate {
 }
 
 export class ManufacturingItemRequest {
+  public uniqueName?: string;
   public date: string;
   public stockUniqueName?: string;
   public quantity?: number;
