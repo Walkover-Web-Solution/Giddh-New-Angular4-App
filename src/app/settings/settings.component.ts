@@ -3,7 +3,7 @@ import { TabsetComponent } from 'ngx-bootstrap';
 
 @Component({
   templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.css'],
+  styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
   @ViewChild('staticTabs') private staticTabs: TabsetComponent;

@@ -3,20 +3,3 @@
   height: 100%;
   min-height: 500px;
 }
-
-#settingTab .nav.nav-tabs {
-  background: #f0efef;
-}
-
-#settingTab .nav>li>a {
-  color: #231f20;
-  border: 0;
-  border-bottom: 2px solid transparent;
-}
-
-#settingTab .nav-tabs>li.active>a {
-  color: #d36029;
-  background: transparent;
-  border: 0;
-  border-bottom: 2px solid #d36029;
-}
