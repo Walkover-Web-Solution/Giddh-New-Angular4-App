@@ -2,13 +2,16 @@
 
   <!-- page Title -->
   <div class="pd2 bdrB pdL4">
-    <h1 class="section_title pdL4">Manufacture of Material {{manufacturingDetails | json}} <span class="no."></span></h1>
+    <span class="section_title pdL4">Manufacture of Material <span class="no."></span> <button class="btn btn-info pull-right" (click)="goBackToListPage();">Back</button></span>
+    <!--<pre> 
+      {{manufacturingDetails | json}}
+    </pre>-->
   </div>
 
   <!-- form -->
   <div class="col-xs-12 clearfix pd0 mrT2 mrB2">
     <form class="col-xs-6 pdL4" name="manufaturingForm" #manufaturingForm="ngForm">
-      <div class="form-group col-xs-3">
+      <div class="form-group col-xs-4">
         <label>Product Name</label>
         <select2 
           [(ngModel)]="manufacturingDetails.stockUniqueName"
@@ -18,16 +21,15 @@
           (valueChanged)="getStocksWithRate($event)">
         </select2>
       </div>
-      <div class="form-group col-xs-3">
+      <!--<div class="form-group col-xs-4">
         <label>Quantity</label>
         <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="manufaturingQuanity" />
-        <!--<small class="pull-right">multiple of 1</small>-->
-      </div>
-      <div class="form-group col-xs-3">
+      </div>-->
+      <div class="form-group col-xs-4">
         <label>Multiple of</label>
-        <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.multipleOf" name="multipleOf" />
+        <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
       </div>
-      <div class="form-group col-xs-3">
+      <div class="form-group col-xs-4">
         <label>Date</label>
         <input type="Date" class="form-control" name="manufaturingDate" [(ngModel)]="manufacturingDetails.date"/> </div>
     </form>
@@ -135,20 +137,20 @@
             </tr>
             <tr *ngIf="toggleAddExpenses">
               <td colspan="1">
-                    <select class="form-control" required #baseAccountUniqueName [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName">
+                    <select class="form-control" required #baseAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName">
                       <option value="select">select</option>
                       <option [ngValue]="account.id" *ngFor="let account of expenseGroupAccounts">{{ account.text }}</option>
                   </select>
                   <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                   <label>to</label>
-                  <select class="form-control" required #transactionAccountUniqueName [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
+                  <select class="form-control" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
                       <option value="select">select</option>
                       <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{ account.text }}</option>                    
                   </select>
                 <span class="select_drop"><i class="fa fa-caret-down"></i></span>
               </td>
               <td class="pull-right">
-                <input type="number" required [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control" #transactionAmount></td>
+                <input type="number" required [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control" #transactionAmount="ngModel"></td>
               <td class="action">
                 <button [disabled]="transactionAmount.invalid || transactionAccountUniqueName.invalid || baseAccountUniqueName.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
               </td>
@@ -181,15 +183,15 @@
         </div>
         <div class="mrB1 pdB2 clearfix">
           <p class="col-xs-9 pd0">Cost per Computer:</p>
-          <p class="col-xs-3 text-right">12,000.00</p>
+          <p class="col-xs-3 text-right">{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</p>
         </div>
-        <div class="pull-right">
+        <div class="pull-right" *ngIf="!isUpdateCase">
           <button type="submit" class="btn btn-md btn-success mrR1" (click)="createEntry();">Save</button>
-          <button type="button" class="btn btn-md btn-primary">Cancel</button>
+          <button type="button" class="btn btn-md btn-primary" (click)="goBackToListPage()">Cancel</button>
         </div>
-        <div class="pull-right">
-          <button type="submit" class="btn btn-md btn-success mrR1">Update</button>
-          <button type="button" class="btn btn-md btn-danger">Delete</button>
+        <div class="pull-right" *ngIf="isUpdateCase">
+          <button type="submit" class="btn btn-md btn-success mrR1" (click)="updateEntry()">Update</button>
+          <button type="button" class="btn btn-md btn-danger" (click)="deleteEntry()">Delete</button>
         </div>
       </form>
     </div>
