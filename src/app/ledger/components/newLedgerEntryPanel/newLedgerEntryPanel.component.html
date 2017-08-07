@@ -4,8 +4,8 @@
     <div class="basic_detail" ng-if="ledgerCtrl.showTaxationDiscountBox">
       <table>
         <tbody>
-        <tr *ngIf="selectedAccount">
-          <td class="pItem" *ngIf="selectedAccount.stock">
+        <tr *ngIf="currentTxn.selectedAccount">
+          <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <table>
               <tbody>
               <tr>
@@ -27,16 +27,16 @@
             </table>
           </td>
 
-          <td class="pItem" *ngIf="selectedAccount.stock">
+          <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">x</label>
           </td>
-          <td style="max-width:150px" class="pItem" *ngIf="selectedAccount.stock">
+          <td style="max-width:150px" class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
             <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.price"
                    ng-change="ledgerCtrl.onNewPanelChange().price(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
           </td>
-          <td class="pItem" *ngIf="selectedAccount.stock">
+          <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">=</label>
           </td>
@@ -66,7 +66,7 @@
           <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length">
             <!--tax control component-->
             <tax-control [taxes]="companyTaxesList$ | async"
-                         [applicableTaxes]="selectedAccount?.applicableTaxes"
+                         [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes"
                          (selectedTaxesEvent)="currentTxn.taxes = $event"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
                          (isApplicableTaxesEvent)="blankLedger.applyApplicableTaxes = $event">
@@ -205,10 +205,10 @@
             <label for="invoiceFile"><i class="glyphicon glyphicon-paperclip"></i></label>
           </div>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  (click)="addToDrOrCr('DEBIT')" [disabled]="currentTxn.type === 'DEBIT'">Add to DR
+                  (click)="addToDrOrCr(currentTxn)" [disabled]="currentTxn.type === 'DEBIT'">Add to DR
           </button>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  (click)="addToDrOrCr('CREDIT')" [disabled]="currentTxn.type === 'CREDIT'">Add to CR
+                  (click)="addToDrOrCr(currentTxn)" [disabled]="currentTxn.type === 'CREDIT'">Add to CR
           </button>
           <button id="saveLedger" class="btn btn-success" (click)="saveLedger()">Save</button>
 

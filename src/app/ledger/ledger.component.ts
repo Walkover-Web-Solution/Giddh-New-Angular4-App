@@ -142,7 +142,7 @@ export class LedgerComponent implements OnInit {
   public selectBlankTxn(txn: TransactionVM) {
     this.lc.currentTxn = null;
     this.lc.currentBlankTxn = txn;
-    this.lc.selectedTxnUniqueName = undefined;
+    this.lc.selectedTxnUniqueName = txn ? txn.id : null;
   }
 
   public selectedDate(value: any) {
@@ -154,15 +154,15 @@ export class LedgerComponent implements OnInit {
     this.lc = new LedgerVM();
   }
 
-  public selectAccount(e: any) {
+  public selectAccount(e: any, txn) {
     if (!e.value) {
-      this.lc.selectedAccount = null;
+      txn.selectedAccount = null;
       return;
     }
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
           if (fa.id === e.value[0]) {
-            this.lc.selectedAccount = fa.additional;
+            txn.selectedAccount = fa.additional;
             return;
           }
         }
@@ -215,10 +215,23 @@ export class LedgerComponent implements OnInit {
   }
 
   public toggleTransactionType(event: string) {
-    this.lc.selectedAccount = null;
-    let trx = this.lc.blankLedger.transactions.find(t => t.type === event);
+    let trx = this.lc.blankLedger.transactions.find(t => t.id === event);
     this.selectBlankTxn(trx);
-    this.selectAccount({value: trx.particular});
+  }
+
+  public addNewTransaction(type: string = 'DEBIT') {
+    return {
+      id: uuid.v4(),
+      amount: 0,
+      tax: 0,
+      total: 0,
+      particular: '',
+      type,
+      taxes: [],
+      discount: 0,
+      discounts: [],
+      selectedAccount: null
+    };
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {
@@ -244,10 +257,6 @@ export class LedgerComponent implements OnInit {
     this.lc.showNewLedgerPanel = false;
   }
 
-  public trackByFn(index) {
-    return index; // or item.id
-  }
-
   public resetBlankTransaction() {
     this.lc.blankLedger = {
       transactions: [
@@ -259,7 +268,8 @@ export class LedgerComponent implements OnInit {
           type: 'DEBIT',
           taxes: [],
           discount: 0,
-          discounts: []
+          discounts: [],
+          selectedAccount: null
         },
         {
           amount: 0,
@@ -269,7 +279,8 @@ export class LedgerComponent implements OnInit {
           type: 'CREDIT',
           taxes: [],
           discount: 0,
-          discounts: []
+          discounts: [],
+          selectedAccount: null
         }],
       voucherType: 'Purchases',
       entryDate: moment().format('DD-MM-YYYY'),
