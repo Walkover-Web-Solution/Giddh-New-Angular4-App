@@ -1,161 +1,161 @@
-<section id="manufacture">
+<section id="manufacture" class="container-fluid">
+    <div class="row">
+        <!-- page Title -->
+        <div class="col-xs-12 bdrB">
+            <div class="row mrL3 mrR3 pd1 pdL0">
+                <h1 class="section_title d-inline-block"><strong>Manufacture of Material</strong></h1>
+                <button class="btn btn-primary pull-right" (click)="goBackToListPage();">Back</button>
+            </div>
+        </div>
 
-  <!-- page Title -->
-  <div class="pd2 bdrB pdL4">
-    <span class="section_title pdL4">Manufacture of Material <span class="no."></span> <button class="btn btn-info pull-right" (click)="goBackToListPage();">Back</button></span>
-    <!--<pre> 
-      {{manufacturingDetails | json}}
-    </pre>-->
-  </div>
-
-  <!-- form -->
-  <div class="col-xs-12 clearfix pd0 mrT2 mrB2">
-    <form class="col-xs-6 pdL4" name="manufaturingForm" #manufaturingForm="ngForm">
-      <div class="form-group col-xs-4">
-        <label>Product Name</label>
-        <select2 
-          [(ngModel)]="manufacturingDetails.stockUniqueName"
-          name="stockUniqueName" 
-          [data]="stockListDropDown$ | async" 
-          [options]="options"
-          (valueChanged)="getStocksWithRate($event)">
-        </select2>
-      </div>
-      <!--<div class="form-group col-xs-4">
+        <!-- form -->
+        <div class="col-xs-12">
+            <div class="row mrL3 mrR3 pd1 pdL0 pdB0">
+                <form class="" name="manufaturingForm" #manufaturingForm="ngForm">
+                    <div class="form-group col-xs-2">
+                        <div class="row">
+                            <label class="small">Product Name</label>
+                            <select2 [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" [data]="stockListDropDown$ | async" [options]="options" (valueChanged)="getStocksWithRate($event)">
+                            </select2>
+                        </div>
+                    </div>
+                    <!--<div class="form-group col-xs-4">
         <label>Quantity</label>
         <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="manufaturingQuanity" />
       </div>-->
-      <div class="form-group col-xs-4">
-        <label>Multiple of</label>
-        <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
-      </div>
-      <div class="form-group col-xs-4">
-        <label>Date</label>
-        <input type="Date" class="form-control" name="manufaturingDate" [(ngModel)]="manufacturingDetails.date"/> </div>
-    </form>
-  </div>
+                    <div class="form-group col-xs-2">
+                        <label class="small">Multiple of</label>
+                        <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
+                    </div>
+                    <div class="form-group col-xs-2">
+                        <label class="small">Date</label>
+                        <input type="Date" class="form-control" name="manufaturingDate" [(ngModel)]="manufacturingDetails.date" /> </div>
+                </form>
+            </div>
+        </div>
 
-  <!-- form end -->
+        <!-- form end -->
 
-  <!--  -->
-  <div class="container-fluid col-xs-offset-1 clearfix pdT2 bdrT" *ngIf="manufacturingDetails.stockUniqueName">
+        <!--  -->
+        <div class="container-fluid col-xs-offset-1 clearfix pdT2 bdrT" *ngIf="manufacturingDetails.stockUniqueName">
 
-    <!-- right column / add more resources -->
-    <div class="col-xs-6 source bdrR">
-      <p class="width100 mrB2">Source(Consumption)</p>
-      <section class="linkstock">
-        <table class="col-xs-12 linkStockTbl" *ngIf="manufacturingDetails">
-          <thead>
-            <tr>
-              <th colspan="9">Product Name</th>
-              <th>Quantity</th>
-              <th>Rate</th>
-              <th>Amount</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody *ngIf="manufacturingDetails">
-            <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
-              <td colspan="9"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
-              <td>{{ stock.quantity }}</td>
-              <td>{{ stock.rate }}</td>
-              <td>{{ stock.amount }}</td>
-              <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
-              </td>
-            </tr>
-            
-            <tr>
-              <td colspan="5"><a href="javascript:void(0);" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</a>
-              </td>
-            </tr>
-            <tr *ngIf="toggleAddLinkedStocks">
-              <td colspan="9">
-                <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel">
+            <!-- right column / add more resources -->
+            <div class="col-xs-6 source bdrR">
+                <p class="width100 mrB2">Source(Consumption)</p>
+                <section class="linkstock">
+                    <table class="col-xs-12 linkStockTbl" *ngIf="manufacturingDetails">
+                        <thead>
+                            <tr>
+                                <th colspan="9">Product Name</th>
+                                <th>Quantity</th>
+                                <th>Rate</th>
+                                <th>Amount</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="manufacturingDetails">
+                            <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
+                                <td colspan="9"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
+                                <td>{{ stock.quantity }}</td>
+                                <td>{{ stock.rate }}</td>
+                                <td>{{ stock.amount }}</td>
+                                <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="toggleAddLinkedStocks">
+                                <td colspan="9">
+                                    <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel">
                   <option value="select" [selected]="true">select</option>
                   <option [ngValue]="stock.id" *ngFor="let stock of stockListDropDown$ | async" >{{ stock.text }}</option>
                 </select>
-              </td>
-              <td>
-                <input type="number" required class="form-control" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
-              </td>
+                                </td>
+                                <td>
+                                    <input type="number" required class="form-control" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
+                                </td>
 
-              <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
-              <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>
+                                <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
+                                <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>
 
-              <td class="action">
-                <button [disabled]="linkedStockQuantity.invalid || linkedStockAmount.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks)"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
-              </td>
-            </tr>
-          </tbody>
-          <tfoot class="bdrT pdT2 pdB2 bdrB">
-            <tr>
-              <td colspan="9">Total:</td>
-              <td class="text-right"> {{ getTotal('linkedStocks', 'quantity') }} </td>
-              <td></td>
-              <td class="text-right"> {{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.2' }} </td>
-              <td></td>
-            </tr>
-          </tfoot>
-        </table>
-      </section>
-    </div>
-    <!-- end right column -->
+                                <td class="action">
+                                    <button [disabled]="linkedStockQuantity.invalid || linkedStockAmount.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks)"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
 
-    <!-- left column / total cost table -->
-    <div class="col-xs-5">
-      <div class="form_title">
-        <p>Total Cost</p>
-      </div>
-      <form class="form-theme clearfix" name="expenseForm">
-        <div class="mrB2 clearfix">
-          <p class="col-xs-9 pd0">Total Consumption Cost:</p>
-          <p class="col-xs-3 text-right">{{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.2' }}</p>
-        </div>
-        <table class="width100">
-          <thead class="tcaption">
-            <tr>
-              <td colspan="5">Add Expense <i class="fa fa-plus cursor-pointer" (click)="toggleAddExpenses = !toggleAddExpenses" aria-hidden="true"></i>
-              </td>
-            </tr>
-          </thead>
-          <tbody *ngIf="manufacturingDetails">
-            <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
-              <td colspan="1">
-                <select class="form-control">
+                            <tr>
+                                <td colspan="5"><a href="javascript:void(0);" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="bdrT pdT2 pdB2 bdrB">
+                            <tr>
+                                <td colspan="9">Total:</td>
+                                <td class="text-right"> {{ getTotal('linkedStocks', 'quantity') }} </td>
+                                <td></td>
+                                <td class="text-right"> {{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.2' }} </td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </section>
+            </div>
+            <!-- end right column -->
+
+            <!-- left column / total cost table -->
+            <div class="col-xs-5">
+                <div class="form_title">
+                    <p>Total Cost</p>
+                </div>
+                <form class="form-theme clearfix" name="expenseForm">
+                    <div class="mrB2 clearfix">
+                        <p class="col-xs-9 pd0">Total Consumption Cost:</p>
+                        <p class="col-xs-3 text-right">{{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.2' }}</p>
+                    </div>
+                    <table class="width100">
+                        <thead class="tcaption">
+                            <tr>
+                                <td colspan="5">Add Expense <i class="fa fa-plus cursor-pointer" (click)="toggleAddExpenses = !toggleAddExpenses" aria-hidden="true"></i>
+                                </td>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="manufacturingDetails">
+                            <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
+                                <td colspan="1">
+                                    <select class="form-control">
                     <option value="directexpense" (value)="expense.baseAccount.uniqueName">{{ expense.baseAccount.uniqueName }}</option>
                 </select>
-                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                <label>to</label>
-                <select class="form-control">
+                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <label>to</label>
+                                    <select class="form-control">
                     <option (value)="expense.transactions[0].account.uniqueName">{{ expense.transactions[0].account.uniqueName }}</option>
                 </select>
-                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-              </td>
-              <td class="pull-right">{{ expense.transactions[0].amount }}</td>
-              <td><i class="fa fa-times" aria-hidden="true" (click)="removeExpenseItem(i)" ></i>
-              </td>
-            </tr>
-            <tr *ngIf="toggleAddExpenses">
-              <td colspan="1">
-                    <select class="form-control" required #baseAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName">
+                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                </td>
+                                <td class="pull-right">{{ expense.transactions[0].amount }}</td>
+                                <td><i class="fa fa-times" aria-hidden="true" (click)="removeExpenseItem(i)"></i>
+                                </td>
+                            </tr>
+                            <tr *ngIf="toggleAddExpenses">
+                                <td colspan="1">
+                                    <select class="form-control" required #baseAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName">
                       <option value="select">select</option>
                       <option [ngValue]="account.id" *ngFor="let account of expenseGroupAccounts">{{ account.text }}</option>
                   </select>
-                  <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                  <label>to</label>
-                  <select class="form-control" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
+                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                    <label>to</label>
+                                    <select class="form-control" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
                       <option value="select">select</option>
                       <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{ account.text }}</option>                    
                   </select>
-                <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-              </td>
-              <td class="pull-right">
-                <input type="number" required [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control" #transactionAmount="ngModel"></td>
-              <td class="action">
-                <button [disabled]="transactionAmount.invalid || transactionAccountUniqueName.invalid || baseAccountUniqueName.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
-              </td>
-            </tr>
-            <!--<tr>
+                                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                </td>
+                                <td class="pull-right">
+                                    <input type="number" required [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control" #transactionAmount="ngModel"></td>
+                                <td class="action">
+                                    <button [disabled]="transactionAmount.invalid || transactionAccountUniqueName.invalid || baseAccountUniqueName.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                            <!--<tr>
               <td colspan="1">
                 <select class="form-control">
                                     <option value="directexpense">Direct Expense</option>
@@ -171,38 +171,38 @@
               <td><i class="fa fa-times" aria-hidden="true"></i>
               </td>
             </tr>-->
-          </tbody>
-        </table>
-        <div class="pdB2 bdrT clearfix pdT2 mrT1">
-          <p class="col-xs-9 pd0">Total Manufacturing Cost:</p>
-          <p class="col-xs-3 text-right">{{ getTotal('otherExpenses', 'amount') | currency:'INR':true:'1.2' }}</p>
+                        </tbody>
+                    </table>
+                    <div class="pdB2 bdrT clearfix pdT2 mrT1">
+                        <p class="col-xs-9 pd0">Total Manufacturing Cost:</p>
+                        <p class="col-xs-3 text-right">{{ getTotal('otherExpenses', 'amount') | currency:'INR':true:'1.2' }}</p>
+                    </div>
+                    <div class="mrB1 pdB2 clearfix">
+                        <p class="col-xs-9 pd0">Grand Total:</p>
+                        <p class="col-xs-3 text-right">{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.2' }}</p>
+                    </div>
+                    <div class="mrB1 pdB2 clearfix">
+                        <p class="col-xs-9 pd0">Cost per Computer:</p>
+                        <p class="col-xs-3 text-right">{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</p>
+                    </div>
+                    <div class="pull-right" *ngIf="!isUpdateCase">
+                        <button type="submit" class="btn btn-md btn-success mrR1" (click)="createEntry();">Save</button>
+                        <button type="button" class="btn btn-md btn-primary" (click)="goBackToListPage()">Cancel</button>
+                    </div>
+                    <div class="pull-right" *ngIf="isUpdateCase">
+                        <button type="submit" class="btn btn-md btn-success mrR1" (click)="updateEntry()">Update</button>
+                        <button type="button" class="btn btn-md btn-danger" (click)="deleteEntry()">Delete</button>
+                    </div>
+                </form>
+            </div>
+            <!-- end left column -->
+
         </div>
-        <div class="mrB1 pdB2 clearfix">
-          <p class="col-xs-9 pd0">Grand Total:</p>
-          <p class="col-xs-3 text-right">{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.2' }}</p>
-        </div>
-        <div class="mrB1 pdB2 clearfix">
-          <p class="col-xs-9 pd0">Cost per Computer:</p>
-          <p class="col-xs-3 text-right">{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</p>
-        </div>
-        <div class="pull-right" *ngIf="!isUpdateCase">
-          <button type="submit" class="btn btn-md btn-success mrR1" (click)="createEntry();">Save</button>
-          <button type="button" class="btn btn-md btn-primary" (click)="goBackToListPage()">Cancel</button>
-        </div>
-        <div class="pull-right" *ngIf="isUpdateCase">
-          <button type="submit" class="btn btn-md btn-success mrR1" (click)="updateEntry()">Update</button>
-          <button type="button" class="btn btn-md btn-danger" (click)="deleteEntry()">Delete</button>
-        </div>
-      </form>
     </div>
-    <!-- end left column -->
-
-  </div>
-
 </section>
 
 <style>
-  /*.ng-touched.ng-invalid:not(form)  {
+    /*.ng-touched.ng-invalid:not(form)  {
     border: 2px solid #f04945;
   }*/
 </style>
