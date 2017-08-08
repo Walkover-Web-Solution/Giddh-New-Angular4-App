@@ -93,6 +93,17 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
       return Object.assign({}, state, {
         ledgerCreateSuccess: false
       });
+    case LEDGER.RESET_LEDGER:
+      return Object.assign({}, state, {
+        account: null,
+        transcationRequest: null,
+        transactionsResponse: null,
+        transactionInprogress: false,
+        accountInprogress: false,
+        downloadInvoiceInProcess: false,
+        discountAccountsList: null,
+        ledgerCreateSuccess: false
+      });
     default: {
       return state;
     }

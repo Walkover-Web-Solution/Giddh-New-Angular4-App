@@ -61,6 +61,7 @@ export class LedgerVM {
       isInclusiveTax: true,
       unconfirmedEntry: false,
       attachedFile: '',
+      attachedFileName: '',
       tag: null,
       description: '',
       generateInvoice: false,
@@ -78,6 +79,7 @@ export class BlankLedgerVM {
   public isInclusiveTax: boolean;
   public unconfirmedEntry: boolean;
   public attachedFile: string;
+  public attachedFileName?: string;
   public tag: any;
   public description: string;
   public generateInvoice: boolean;
