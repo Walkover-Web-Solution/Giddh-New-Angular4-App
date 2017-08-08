@@ -69,13 +69,16 @@ export class HistoryChartComponent implements OnInit {
   public fetchChartData() {
     this.requestInFlight = true;
     this.expenseData = [];
-    this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-      this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, this.refresh));
-
-    this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
-      this.lastFinancialYear.financialYearStarts,
-      this.lastFinancialYear.financialYearEnds, this.refresh));
+    if (this.activeFinancialYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+        this.activeFinancialYear.financialYearStarts,
+        this.activeFinancialYear.financialYearEnds, this.refresh));
+    }
+    if (this.lastFinancialYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
+        this.lastFinancialYear.financialYearStarts,
+        this.lastFinancialYear.financialYearEnds, this.refresh));
+    }
     this.refresh = false;
   }
 
@@ -150,7 +153,7 @@ export class HistoryChartComponent implements OnInit {
   public ngOnInit() {
     //
     this.comparisionChartData$
-      .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear)))
+      .skipWhile(p => (isNullOrUndefined(p)))
       // .distinctUntilChanged((p, q) => p.ExpensesActiveYearly === this.expenseData)
       .subscribe(p => {
         this.expenseData = (p.ExpensesActiveYearly);
