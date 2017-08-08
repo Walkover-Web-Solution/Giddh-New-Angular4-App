@@ -23,8 +23,10 @@ export class EditInvoiceComponent implements OnInit {
   public templateID$: Observable<string>;
   public heading$: Observable<string>;
   public tableMeta$: Observable<TableMetaMap>;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>) {
+
     console.log('edit-invoice-component');
     // TODO: Fetch current template object and bind to template component
     this.templateID$ = store.select(state => {
@@ -46,12 +48,12 @@ export class EditInvoiceComponent implements OnInit {
       console.log(val);
     });
 
-    this.tableMeta$ = this.store.select( state => {
-      return state.invoice.table;
-      }).takeUntil(this.destroyed$);
-      this.tableMeta$.subscribe(val => {
-        console.log(val);
-      });
+    // this.tableMeta$ = this.store.select( state => {
+    //   return state.invoice.table;
+    //   }).takeUntil(this.destroyed$);
+    //   this.tableMeta$.subscribe(val => {
+    //     console.log(val);
+    //   });
   }
   public ngOnInit() {
     console.log('edit-invoice-component');
