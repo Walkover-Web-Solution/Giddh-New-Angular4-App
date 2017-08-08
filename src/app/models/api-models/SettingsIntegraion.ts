@@ -4,14 +4,18 @@
  * API:: /company/:companyUniqueName/sms-key
  */
 
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+
 export interface IntegrationPage {
   smsForm: any;
   emailForm: any;
+  razorPayForm: any;
 }
 
 export class IntegrationPageClass {
   public smsForm: SmsKeyClass;
   public emailForm: EmailKeyClass;
+  public razorPayForm: RazorPayDetailsResponse;
 }
 
 export class SmsKeyClass {
@@ -27,6 +31,13 @@ export class EmailKeyClass {
 export class RazorPayClass {
   public userName: string;
   public password: string;
-  public account: any;
+  public account: INameUniqueName;
+  public autoCapturePayment: boolean;
+}
+
+export class RazorPayDetailsResponse {
+  public companyName?: string;
+  public userName: string;
+  public account: INameUniqueName;
   public autoCapturePayment: boolean;
 }
