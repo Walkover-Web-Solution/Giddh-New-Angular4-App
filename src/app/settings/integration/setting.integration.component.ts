@@ -33,6 +33,7 @@ export class SettingIntegrationComponent implements OnInit {
     placeholder: 'Select Accounts',
     allowClear: true
   };
+  private updateRazor: boolean = false;
 
   constructor(
     private router: Router,
@@ -42,9 +43,9 @@ export class SettingIntegrationComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.setDummyData();
     this.store.dispatch(this.SettingsIntegrationActions.GetSMSKey());
     this.store.dispatch(this.SettingsIntegrationActions.GetEmailKey());
+    this.store.dispatch(this.SettingsIntegrationActions.GetRazorPayDetails());
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).takeUntil(this.destroyed$).subscribe((o) => {
       // set sms form data
@@ -54,6 +55,15 @@ export class SettingIntegrationComponent implements OnInit {
       // set email form data
       if (o.emailForm) {
         this.emailFormObj = o.emailForm;
+      }
+      // set razor pay form data
+      if (o.razorPayForm) {
+        this.razorPayObj = _.cloneDeep(o.razorPayForm);
+        this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+        this.updateRazor = true;
+      } else {
+        this.setDummyData();
+        this.updateRazor = false;
       }
     });
 
@@ -70,9 +80,9 @@ export class SettingIntegrationComponent implements OnInit {
   }
 
   private setDummyData() {
-    this.razorPayObj.userName = 'dude';
-    this.razorPayObj.password = 'haklg89u3430';
-    this.razorPayObj.account = {};
+    this.razorPayObj.userName = '';
+    this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
+    this.razorPayObj.account = { name: null, uniqueName: null };
     this.razorPayObj.autoCapturePayment = true;
   }
 
@@ -81,17 +91,11 @@ export class SettingIntegrationComponent implements OnInit {
       this.store.dispatch(this.SettingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
     }
   }
-  private onCancelMsgform() {
-    console.log('onCancelMsgform');
-  }
 
   private onSubmitEmailform(f: NgForm) {
     if (f.valid) {
       this.store.dispatch(this.SettingsIntegrationActions.SaveEmailKey(f.value));
     }
-  }
-  private onCancelEmailform() {
-    console.log('onCancelEmailform');
   }
 
   private toggleCheckBox() {
@@ -99,6 +103,28 @@ export class SettingIntegrationComponent implements OnInit {
   }
 
   private selectAccount(event) {
-    console.log (event, 'event');
+    if (event.value) {
+      this.accounts$.subscribe((arr: Select2OptionData[]) => {
+        let res = _.find(arr, function(o) { return o.id === event.value; });
+        if (res) {
+          this.razorPayObj.account.name = res.text;
+        }
+      });
+    }
   }
+
+  private saveRazorPayDetails() {
+    let data = _.cloneDeep(this.razorPayObj);
+    this.store.dispatch(this.SettingsIntegrationActions.SaveRazorPayDetails(data));
+  }
+
+  private updateRazorPayDetails() {
+    let data = _.cloneDeep(this.razorPayObj);
+    this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
+  }
+
+  private deleteRazorPayDetails() {
+    this.store.dispatch(this.SettingsIntegrationActions.DeleteRazorPayDetails());
+  }
+
 }

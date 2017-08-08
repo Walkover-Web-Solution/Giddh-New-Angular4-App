@@ -9,7 +9,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../settings.integraion.service';
-import { SmsKeyClass, EmailKeyClass, RazorPayClass } from '../../../models/api-models/SettingsIntegraion';
+import { SmsKeyClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse } from '../../../models/api-models/SettingsIntegraion';
 
 @Injectable()
 export class SettingsIntegrationActions {
@@ -66,7 +66,7 @@ export class SettingsIntegrationActions {
   public GetRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS)
     .switchMap(action => this.settingsIntegrationService.GetRazorPayDetails())
-    .map(res => this.validateResponse<any, string>(res, {
+    .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
     }, true, {
@@ -78,7 +78,7 @@ export class SettingsIntegrationActions {
   public SaveRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS)
     .switchMap(action => this.settingsIntegrationService.SaveRazorPayDetails(action.payload))
-    .map(res => this.validateResponse<string, RazorPayClass>(res, {
+    .map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
     }, true, {
@@ -102,7 +102,7 @@ export class SettingsIntegrationActions {
   public UpdateRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS)
     .switchMap(action => this.settingsIntegrationService.UpdateRazorPayDetails(action.payload))
-    .map(res => this.validateResponse<RazorPayClass, RazorPayClass>(res, {
+    .map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
     }, true, {
@@ -162,9 +162,10 @@ export class SettingsIntegrationActions {
     };
   }
 
-  public UpdateRazorPayDetails(): Action {
+  public UpdateRazorPayDetails(value: RazorPayClass): Action {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS,
+      payload: value
     };
   }
 
