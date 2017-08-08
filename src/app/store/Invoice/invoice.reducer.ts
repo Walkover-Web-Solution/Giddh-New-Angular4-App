@@ -1,10 +1,26 @@
 import {Action, combineReducers} from '@ngrx/store';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
-import {TableColumnMeta} from "../../models/api-models/invoice";
+import {Content, TableColumnMeta} from "../../models/api-models/invoice";
 
 export interface InvoiceTemplateState {
   templateId: string;
   heading: string;
+  GSTIN: string;
+  PAN: string;
+  invoiceDate: string;
+  dueDate: string;
+  shipDate: string;
+  shipVia: string;
+  trackingNo: string;
+  invoiceNo: string;
+  invoiceTempTitle: string;
+  customerName: string;
+  companyName: string;
+  emailId: string;
+  mobileno: string;
+  billingAddress: string;
+  billingGSTIN: string;
+  // content: Content;
 
 }
 
@@ -21,8 +37,22 @@ export interface InvoiceState {
 
 export const initialState: InvoiceTemplateState = {
   templateId: 'template1',
-  heading: ''
-
+  heading: 'WAlkover',
+  GSTIN: 'fr41243tasgdgfadg',
+  PAN: 'tqwtqwtrqereqt',
+  invoiceDate: '10/05/2017',
+  dueDate: '15/05/2017',
+  shipDate: '20/05/2017',
+  shipVia: '20/07/2017',
+  trackingNo: '53252q34terg3',
+  invoiceNo: '4314235252',
+  invoiceTempTitle: 'INVOICE',
+  customerName: 'kunal',
+  companyName: 'walkover',
+  emailId: 'kunal1991@hotmail.com',
+  mobileno: '9789065478',
+  billingAddress: '4321 321fweqf f qwfwfewqf',
+  billingGSTIN: '4314321rt2fr1'
 };
 
 export function invoiceTemplateReducer(state = initialState, action: Action): InvoiceTemplateState {
@@ -31,10 +61,18 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
       return Object.assign({}, state, {
         templateId: action.payload.id
       });
+    case INVOICE.TEMPLATE.SELECT_TEMPLATE_STATE:
+      return Object.assign({}, state, {
+        [action.payload.sections['uniqueName']]: action.payload.sections
+      });
+      case INVOICE.CONTENT.SET_HEADING:
+      return Object.assign({}, state, {
+      heading: action.payload.data.heading
+    });
     case INVOICE.CONTENT.SET_HEADING:
       return Object.assign({}, state, {
-      heading: action.payload.data
-    });
+        heading: action.payload.data
+      });
     default: {
       return state;
     }
