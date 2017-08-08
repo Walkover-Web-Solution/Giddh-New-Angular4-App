@@ -41,18 +41,18 @@ export class SettingIntegrationComponent implements OnInit {
   }
 
   private onSubmitMsgform(f: NgForm) {
-    console.log(f.value);
-    console.log(f.valid);
-    console.log(f.value.smsFormObj);
+    if (f.valid) {
+      this.store.dispatch(this.SettingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
+    }
   }
   private onCancelMsgform() {
     console.log('onCancelMsgform');
   }
 
   private onSubmitEmailform(f: NgForm) {
-    console.log(f.value);
-    console.log(f.valid);
-    console.log(f.value.emailFormObj);
+    if (f.valid) {
+      this.store.dispatch(this.SettingsIntegrationActions.SaveEmailKey(f.value));
+    }
   }
   private onCancelEmailform() {
     console.log('onCancelEmailform');

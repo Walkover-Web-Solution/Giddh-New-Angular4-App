@@ -16,16 +16,30 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
   let newState = _.cloneDeep(state);
   switch (action.type) {
     case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:
-      let res: BaseResponse<SmsKeyClass, string> = action.payload;
-      if (res.status === 'success') {
-        newState.integration.smsForm = res.body;
+      let gtsmsres: BaseResponse<SmsKeyClass, string> = action.payload;
+      if (gtsmsres.status === 'success') {
+        newState.integration.smsForm = gtsmsres.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE:
+      let crtsmsres: BaseResponse<string, SmsKeyClass> = action.payload;
+      if (crtsmsres.status === 'success') {
+        newState.integration.smsForm = crtsmsres.request;
         return Object.assign({}, state, newState);
       }
       return state;
     case SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE:
-      let r: BaseResponse<EmailKeyClass, string> = action.payload;
-      if (r.status === 'success') {
-        newState.integration.emailForm = r.body;
+      let gtemlres: BaseResponse<EmailKeyClass, string> = action.payload;
+      if (gtemlres.status === 'success') {
+        newState.integration.emailForm = gtemlres.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    case SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE:
+      let crtemlres: BaseResponse<string, EmailKeyClass> = action.payload;
+      if (crtemlres.status === 'success') {
+        newState.integration.emailForm = crtemlres.request;
         return Object.assign({}, state, newState);
       }
       return state;
