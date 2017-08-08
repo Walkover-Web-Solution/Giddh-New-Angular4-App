@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -18,6 +18,7 @@ import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.inter
 })
 
 export class ExpensesChartComponent implements OnInit, OnDestroy {
+  @Input() public refresh: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -94,11 +95,12 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     });
   }
   public refreshData() {
-    this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds));
+    this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
 
     if (this.lastFinancialYear) {
-      this.store.dispatch(this._homeActions.getExpensesChartDataOfLastYear(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds));
+      this.store.dispatch(this._homeActions.getExpensesChartDataOfLastYear(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds, this.refresh));
     }
+    this.refresh = false;
   }
 
   public generateCharts() {

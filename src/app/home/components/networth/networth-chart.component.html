@@ -4,10 +4,10 @@
       <label>Net worth</label>
       <div class="pull-right">
         <label>
-        <input type="radio" name="chart" checked='true'  value="Monthly" (click)="togle('Monthly')" checked>Monthly
+        <input type="radio" name="chart"   (click)="togle('Monthly')" checked />Monthly
       </label>
         <label>
-        <input type="radio" name="chart"  value="Yearly" (click)="togle('Yearly')" checked>Yearly
+        <input type="radio" name="chart"   (click)="togle('Yearly')" />Yearly
       </label>
         <i class="glyphicon glyphicon-refresh pull-right" (click)="fetchChartData()"></i>
       </div>

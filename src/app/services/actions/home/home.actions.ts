@@ -123,7 +123,6 @@ export class HomeActions {
       let expenseModel: GroupHistoryRequest = {
         groups: ['indirectexpenses', 'operatingcost']
       };
-
       return Observable.zip(
         this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
         this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),

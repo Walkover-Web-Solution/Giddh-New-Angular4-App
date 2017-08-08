@@ -1,6 +1,6 @@
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -19,6 +19,7 @@ import { AccountChartDataLastCurrentYear } from '../../../models/view-models/Acc
 })
 
 export class RevenueChartComponent implements OnInit, OnDestroy {
+  @Input() public refresh: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -96,11 +97,13 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     });
   }
   public refreshData() {
-    this.store.dispatch(this._homeActions.getRevenueChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds));
+    this.store.dispatch(this._homeActions.getRevenueChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts,
+      this.activeFinancialYear.financialYearEnds, this.refresh));
 
     if (this.lastFinancialYear) {
-      this.store.dispatch(this._homeActions.getRevenueChartDataOfLastYear(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds));
+      this.store.dispatch(this._homeActions.getRevenueChartDataOfLastYear(this.lastFinancialYear.financialYearStarts, this.lastFinancialYear.financialYearEnds, this.refresh));
     }
+    this.refresh = false;
   }
 
   public generateCharts() {
