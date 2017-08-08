@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -10,6 +10,7 @@ import moment from 'moment';
 import * as _ from 'lodash';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
+import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
 
 @Component({
   selector: 'compare-chart',
@@ -17,6 +18,7 @@ import { isNullOrUndefined } from 'util';
 })
 
 export class ComparisionChartComponent implements OnInit {
+  @Input() public refresh: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -32,11 +34,36 @@ export class ComparisionChartComponent implements OnInit {
   private revenueDataLY = [];
   private profitLossData = [];
   private profitLossDataLY = [];
-
+  private AllSeries: IndividualSeriesOptionsExtension[];
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
     this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
+    this.AllSeries = [{
+      name: 'Expense',
+      data: this.expenseData,
+      visible: true
+    }, {
+      name: 'Revenue',
+      data: [],
+      visible: true
+    }, {
+      name: 'Profit/Loss',
+      data: [],
+      visible: true
+    }, {
+      name: 'LY Expense',
+      data: [],
+      visible: true
+    }, {
+      name: 'LY Revenue',
+      data: [],
+      visible: true
+    }, {
+      name: 'LY Profit/Loss',
+      data: [],
+      visible: true
+    }];
   }
 
   public ngOnInit() {
@@ -69,8 +96,8 @@ export class ComparisionChartComponent implements OnInit {
     });
 
     this.comparisionChartData$
-      .skipWhile(p => isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear))
-      .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
+      .skipWhile(p => (isNullOrUndefined(p)))
+      // .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
       .subscribe(p => {
         this.expenseData = (p.ExpensesActiveMonthly);
         this.expenseDataLY = (p.ExpensesLastYearMonthly);
@@ -85,18 +112,62 @@ export class ComparisionChartComponent implements OnInit {
   public fetchChartData() {
     this.expenseData = [];
     this.requestInFlight = true;
-    this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-      this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, false));
-
+    if (this.activeFinancialYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+        this.activeFinancialYear.financialYearStarts,
+        this.activeFinancialYear.financialYearEnds, this.refresh));
+    }
     if (this.lastFinancialYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
-        this.lastFinancialYear.financialYearEnds, false));
+        this.lastFinancialYear.financialYearEnds, this.refresh));
     }
+    this.refresh = false;
   }
-
+  public toggle(str: string) {
+    _.each(this.AllSeries, (p) => {
+      if (p.name === str) {
+        p.visible = !p.visible;
+      }
+      if (p.name === str) {
+        p.visible = !p.visible;
+      }
+      if (p.name === str) {
+        p.visible = !p.visible;
+      }
+      if (p.name === 'LY Expense' && str === 'LY') {
+        p.visible = !p.visible;
+      }
+      if (p.name === 'LY Revenue' && str === 'LY') {
+        p.visible = !p.visible;
+      }
+      if (p.name === 'LY Profit/Loss' && str === 'LY') {
+        p.visible = !p.visible;
+      }
+    });
+    this.generateCharts();
+  }
   public generateCharts() {
+    _.each(this.AllSeries, (p) => {
+      if (p.name === 'Expense') {
+        p.data = this.expenseData;
+      }
+      if (p.name === 'Revenue') {
+        p.data = this.revenueData;
+      }
+      if (p.name === 'Profit/Loss') {
+        p.data = this.profitLossData;
+      }
+      if (p.name === 'LY Expense') {
+        p.data = this.expenseDataLY;
+      }
+      if (p.name === 'LY Revenue') {
+        p.data = this.revenueDataLY;
+      }
+      if (p.name === 'LY Profit/Loss') {
+        p.data = this.profitLossDataLY;
+      }
+    });
     this.options = {
       chart: {
         height: '320px',
@@ -116,27 +187,9 @@ export class ComparisionChartComponent implements OnInit {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: {color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold'}
+        itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
       },
-      series: [{
-        name: 'Expense',
-        data: this.expenseData
-      }, {
-        name: 'Revenue',
-        data: this.revenueData
-      }, {
-        name: 'Profit/Loss',
-        data: this.profitLossData
-      }, {
-        name: 'LY Expense',
-        data: this.expenseDataLY
-      }, {
-        name: 'LY Revenue',
-        data: this.revenueDataLY
-      }, {
-        name: 'LY Profit/Loss',
-        data: this.profitLossDataLY
-      }]
+      series: this.AllSeries.filter(p => p.visible)
     };
   }
 }

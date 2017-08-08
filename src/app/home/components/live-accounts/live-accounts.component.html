@@ -24,7 +24,7 @@
                       <tr>
                         <td class="col-xs-6">{{item.name}}</td>
                         <td class="col-xs-4">{{item.currencyCode}} {{item.amount}}</td>
-                        <td class="col-xs-2"><i class="glyphicon glyphicon-refresh" (click)="refresh(item.loginId)"></i></td>
+                        <td class="col-xs-2"><i class="glyphicon glyphicon-refresh" (click)="refreshBank(item.loginId)"></i></td>
                       </tr>
                       <tr *ngIf="item.reconnect" class="db-bnk-account">
                         <td class="reconnectDiv text-center col-xs-12">
@@ -56,7 +56,7 @@
       </div>
       <div class="modal-body" style="height:400px">
         <div class="embed-responsive embed-responsive-16by9">
-          <iframe class="embed-responsive-item" *ngIf="(refreshBankAccount$ | async)?.connectUrl" [attr.src]="connectUrl"></iframe>
+          <iframe class="embed-responsive-item" *ngIf="(refreshBankAccount$ | async)?.connectUrl" attr.src="{{connectUrl}}"></iframe>
         </div>
       </div>
 

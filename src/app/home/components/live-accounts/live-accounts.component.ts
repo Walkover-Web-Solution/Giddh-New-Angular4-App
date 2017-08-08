@@ -1,7 +1,7 @@
 import { RefreshBankAccountResponse, BankAccountsResponse } from '../../../models/api-models/Dashboard';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import { AppState } from '../../../store/roots';
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -14,6 +14,7 @@ import { DomSanitizer, SafeUrl, SafeResourceUrl } from '@angular/platform-browse
 })
 
 export class LiveAccountsComponent implements OnInit, OnDestroy {
+  @Input() public refresh: boolean = false;
   @ViewChild('refreshBankAccountModal') public refreshBankAccountModal: ModalDirective;
   public reconnectBankAccount$: Observable<RefreshBankAccountResponse>;
   public refreshBankAccount$: Observable<RefreshBankAccountResponse>;
@@ -51,7 +52,7 @@ export class LiveAccountsComponent implements OnInit, OnDestroy {
   public reload() {
     this.store.dispatch(this._homeActions.GetBankAccount());
   }
-  public refresh(loginid: string) {
+  public refreshBank(loginid: string) {
     this.store.dispatch(this._homeActions.RefereshBankAccount(loginid));
   }
   public reconnect(loginid: string) {
