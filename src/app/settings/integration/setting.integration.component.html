@@ -44,4 +44,39 @@
 <h3 class="fs16 mrB1">Invoice Payment</h3>
 <div class="box">
   <h3 class="fs16 mrB1">Razorpay Details</h3>
+  <form #razorPayform="ngForm" (ngSubmit)="onSubmitRazorPayform(razorPayform)">
+    <div class="row">
+      <div class="form-group col-xs-4">
+        <label>Key Id <span class="required">*</span></label>
+        <input class="form-control" type="text" placeholder="Key Id" name="userName" [ngModel]="razorPayObj.userName" required>
+      </div>
+      <div class="form-group col-xs-4">
+        <label>Secret<span class="required">*</span></label>
+        <input class="form-control" type="password" placeholder="Secret key" name="password" [ngModel]="razorPayObj.password" required>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-4">
+        <label>Link Account</label>
+        <div class="input-group">
+           <select2 class="select2-parent" [data]="accounts$ | async" [value]="razorPayObj.account" [options]="select2Options" (valueChanged)="selectAccount($event)"></select2>
+          <div class="input-group-addon cp" (click)="unlinkAccount()"><span class="glyphicon glyphicon-trash"></span></div>
+        </div>
+      </div>
+      <div class="form-group col-xs-4" id="inlnImg">
+        <label>&nbsp;</label><br>
+        <img src="/assets/images/unchecked.png" *ngIf="!razorPayObj.autoCapturePayment" (click)="razorPayObj.autoCapturePayment = true">
+        <img src="/assets/images/checked.png" *ngIf="razorPayObj.autoCapturePayment" (click)="razorPayObj.autoCapturePayment = false">
+        <label class="cp" (click)="toggleCheckBox()">Automatic capture on payment</label>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xs-12 form-group ">
+        <!-- <button *ngIf="!updateRazor" class="btn btn-default" (click)="saveRazorPayDetails(razorPayDetail)">Save</button>
+        <button *ngIf="updateRazor" class="btn btn-default" (click)="updateRazorPayDetails(razorPayDetail)">Update</button>
+        <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">Delete</button> -->
+      </div>
+    </div>
+  </form>
 </div>
