@@ -173,6 +173,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
       return Object.assign({}, state, {
         comparisionChart: {
+          ...state.comparisionChart,
           NetworthActiveYear,
           NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
           NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,

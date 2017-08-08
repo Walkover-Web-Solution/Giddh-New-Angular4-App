@@ -19,6 +19,7 @@ import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.inter
 
 export class ExpensesChartComponent implements OnInit, OnDestroy {
   @Input() public refresh: boolean = false;
+  public requestInFlight: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -81,6 +82,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
         }
       }
       this.generateCharts();
+      this.requestInFlight = false;
     });
   }
   public flattenGroup(tree: IChildGroups[]) {
@@ -95,6 +97,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     });
   }
   public refreshData() {
+    this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
 
     if (this.lastFinancialYear) {

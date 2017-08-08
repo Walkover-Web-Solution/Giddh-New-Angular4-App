@@ -96,7 +96,8 @@ export class ComparisionChartComponent implements OnInit {
     });
 
     this.comparisionChartData$
-      .skipWhile(p => isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear))
+      .skipWhile(p => (isNullOrUndefined(p)))
+      // .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
       .subscribe(p => {
         this.expenseData = (p.ExpensesActiveMonthly);
         this.expenseDataLY = (p.ExpensesLastYearMonthly);
@@ -111,10 +112,11 @@ export class ComparisionChartComponent implements OnInit {
   public fetchChartData() {
     this.expenseData = [];
     this.requestInFlight = true;
-    this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-      this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, this.refresh));
-
+    if (this.activeFinancialYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+        this.activeFinancialYear.financialYearStarts,
+        this.activeFinancialYear.financialYearEnds, this.refresh));
+    }
     if (this.lastFinancialYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
