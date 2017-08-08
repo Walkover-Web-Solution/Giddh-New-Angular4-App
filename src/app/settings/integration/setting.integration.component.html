@@ -1,7 +1,7 @@
-<h3 class="fs16 mrB1 mrT2">SMS Integration</h3>
+<h3 class="fs18 mrB1 mrT2">SMS Integration</h3>
 <div class="box">
-  <h3 class="fs16 mrB1">MSG91</h3>
-  <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)">
+  <h3 class="fs18 mrB1">MSG91</h3>
+  <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="pdBth20">
     <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup" class="row">
       <div class="form-group col-xs-4">
         <label>Auth Key</label><br>
@@ -20,10 +20,10 @@
 </div>
 
 
-<h3 class="fs16 mrB1 mrT2">Email Integration</h3>
+<h3 class="fs18 mrB1 mrT2">Email Integration</h3>
 <div class="box">
-  <h3 class="fs16 mrB1">SendGrid</h3>
-  <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="row">
+  <h3 class="fs18 mrB1">SendGrid</h3>
+  <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="row pdBth20">
     <div class="form-group col-xs-4">
       <label>Auth Key</label><br>
       <input type="text" placeholder="Enter auth-key" class="form-control"  [ngModel]="emailFormObj.authKey" name="authKey" required/>
@@ -39,10 +39,10 @@
   </form>
 </div>
 
-<h3 class="fs16 mrB1">Invoice Payment</h3>
+<h3 class="fs18 mrB1">Invoice Payment</h3>
 <div class="box">
-  <h3 class="fs16 mrB1">Razorpay Details</h3>
-  <form #razorPayform="ngForm" novalidate>
+  <h3 class="fs18 mrB1">Razorpay Details</h3>
+  <form #razorPayform="ngForm" novalidate class="pdBth20">
     <div class="row">
       <div class="form-group col-xs-4">
         <label>Key Id <span class="required">*</span></label>

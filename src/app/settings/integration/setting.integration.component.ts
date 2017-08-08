@@ -18,6 +18,12 @@ import { AccountService } from '../../services/account.service';
     #inlnImg img{
       max-height:18px;
     }
+    .fs18{
+      font-weight: bold;
+    }
+    .pdBth20{
+      padding: 0 20px;
+    }
   `]
 })
 export class SettingIntegrationComponent implements OnInit {
