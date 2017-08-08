@@ -136,19 +136,19 @@ table.table td small{color:#777}
 </div>
 </div>
 
-<table class="table">
-<thead style="background: #f5f5f5;">
+<table class="table" style="width: 100%">
+<thead style="background: #f5f5f5; width: 100%">
 <tr>
-<th>Item</th>
-<th>HSN/SAC</th>
-<th>Qty.</th>
-<th>Rate/<br />Item(₹)</th>
-<th>Discount/<br />Item(₹)</th>
-<th>Taxable <br />Value(₹)</th>
-<th>SGST<br />₹</th>
-<th>CGST<br />₹</th>
-<th>CESS<br />₹</th>
-<th>Total<br />₹</th>
+<th width="{{itemWidth + '%' }}">Item</th>
+<th width="{{itemCodeWidth + '%' }}" >HSN/SAC</th>
+<th ng-style="{ 'width': qtyWidth + '%' }">Item>Qty.</th>
+<th ng-style="{ 'width': rateWidth + '%' }" >Rate/<br />Item(₹)</th>
+<th ng-style="{ 'width': discountWidth + '%' }" >Discount/<br />Item(₹)</th>
+<th ng-style="{ 'width': taxWidth + '%' }">Taxable <br />Value(₹)</th>
+<!--<th>SGST<br />₹</th>-->
+<!--<th>CGST<br />₹</th>-->
+<!--<th>CESS<br />₹</th>-->
+<th ng-style="{ 'width': totalWidth + '%' }">Total<br />₹</th>
 </tr>
 </thead>
 <tbody>
@@ -159,9 +159,9 @@ table.table td small{color:#777}
 <td>1000.00</td>
 <td>300.00</td>
 <td>9700.00</td>
-<td>970.00<br /><small>@10%</small></td>
-<td>970.00<br /><small>@10%</small></td>
-<td>00.00<br /><small>@0%</small></td>
+<!--<td>970.00<br /><small>@10%</small></td>-->
+<!--<td>970.00<br /><small>@10%</small></td>-->
+<!--<td>00.00<br /><small>@0%</small></td>-->
 <td>11000640.00</td>
 </tr>
 
@@ -172,9 +172,9 @@ table.table td small{color:#777}
 <td>1000.00</td>
 <td>300.00</td>
 <td>9700.00</td>
-<td>970.00<br /><small>@10%</small></td>
-<td>970.00<br /><small>@10%</small></td>
-<td>00.00<br /><small>@0%</small></td>
+<!--<td>970.00<br /><small>@10%</small></td>-->
+<!--<td>970.00<br /><small>@10%</small></td>-->
+<!--<td>00.00<br /><small>@0%</small></td>-->
 <td>11640.00</td>
 </tr>
 
@@ -185,9 +185,9 @@ table.table td small{color:#777}
 <td>1000.00</td>
 <td>300.00</td>
 <td>9700.00</td>
-<td>970.00<br /><small>@10%</small></td>
-<td>970.00<br /><small>@10%</small></td>
-<td>00.00<br /><small>@0%</small></td>
+<!--<td>970.00<br /><small>@10%</small></td>-->
+<!--<td>970.00<br /><small>@10%</small></td>-->
+<!--<td>00.00<br /><small>@0%</small></td>-->
 <td>11640.00</td>
 </tr>
 
@@ -198,9 +198,9 @@ table.table td small{color:#777}
 <td>1000.00</td>
 <td>--</td>
 <td>1000.00</td>
-<td>50.00<br /><small>@10%</small></td>
-<td>50.00<br /><small>@10%</small></td>
-<td>00.00<br /><small>@0%</small></td>
+<!--<td>50.00<br /><small>@10%</small></td>-->
+<!--<td>50.00<br /><small>@10%</small></td>-->
+<!--<td>00.00<br /><small>@0%</small></td>-->
 <td>1100.00</td>
 </tr>
 </tbody>

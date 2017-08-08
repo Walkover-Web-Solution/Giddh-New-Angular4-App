@@ -14,7 +14,8 @@ export class DesignFiltersContainerComponent implements OnInit {
   public ifLogoSelected: boolean = false;
   public ifColorSelected: boolean = false;
   public ifFontSelected: boolean = false;
-  public ifPrintSelected: boolean = false
+  public ifPrintSelected: boolean = false;
+  public sampleJsonString: string;
   @Input() public design: boolean;
   constructor() {
     console.log('design-filters-container constructor called');

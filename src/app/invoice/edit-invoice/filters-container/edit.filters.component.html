@@ -10,7 +10,13 @@
 
   <div id="content" class="tabcontent" *ngIf = "ifContentSelected">
     <h3>Content</h3>
-    <content-selector *ngIf = "ifContentSelected" [content]="ifContentSelected"> </content-selector>
+    <div class="tab">
+      <button class="tablinks" (click)="openTab('header')" id="defaultcontent">Header</button>
+      <button class="tablinks" (click)="openTab('invoiceGrid')"> Invoice Grid</button>
+      <button class="tablinks" (click)="openTab('footer')">Footer</button>
+    </div>
+    <content-selector *ngIf = "ifContentSelected" [content]="ifContentSelected">
+      </content-selector>
     <!--<logo-uploader></logo-uploader>-->
   </div>
 
