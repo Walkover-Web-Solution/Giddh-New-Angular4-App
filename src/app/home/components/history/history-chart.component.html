@@ -5,16 +5,16 @@
       <label>Financial Year</label>
       <div class="pull-right">
         <label>
-          <input type="checkbox" value="">LY
+          <input type="checkbox" checked='true' (click)="toggle('LY')" value="">LY
         </label>
         <label>
-          <input type="checkbox" value="" checked>Expenses
+          <input type="checkbox" checked='true' (click)="toggle('Expense')" value="" checked>Expenses
         </label>
         <label>
-          <input type="checkbox" value="" checked>Revenue
+          <input type="checkbox" checked='true' (click)="toggle('Revenue')" value="" checked>Revenue
         </label>
         <label>
-          <input type="checkbox" value="" checked>Profit / Loss
+          <input type="checkbox" checked='true' (click)="toggle('Profit/Loss')" value="" checked>Profit / Loss
         </label>
         <i class="glyphicon glyphicon-refresh" (click)="fetchChartData();"></i>
       </div>
