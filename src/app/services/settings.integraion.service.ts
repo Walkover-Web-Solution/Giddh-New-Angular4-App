@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
-import { SmsKeyClass, EmailKeyClass, RazorPayClass } from '../models/api-models/SettingsIntegraion';
+import { SmsKeyClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 
 @Injectable()
@@ -90,7 +90,7 @@ export class SettingsIntegrationService {
   /*
   * Get Razor pay details
   */
-  public GetRazorPayDetails(): Observable<BaseResponse<any, string>> {
+  public GetRazorPayDetails(): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -98,15 +98,15 @@ export class SettingsIntegrationService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-      let data: BaseResponse<any, string> = res.json();
+      let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<any, string>(e));
+    }).catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
   }
 
   /*
   * Save Razor pay details
   */
-  public SaveRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<string, RazorPayClass>> {
+  public SaveRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayDetailsResponse, RazorPayClass>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -114,16 +114,16 @@ export class SettingsIntegrationService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.post(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
-      let data: BaseResponse<string, RazorPayClass> = res.json();
+      let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<string, RazorPayClass>(e, model));
+    }).catch((e) => HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
   }
 
   /*
   * Update Razor pay details
   */
-  public UpdateRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayClass, RazorPayClass>> {
+  public UpdateRazorPayDetails(model: RazorPayClass): Observable<BaseResponse<RazorPayDetailsResponse, RazorPayClass>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -131,10 +131,10 @@ export class SettingsIntegrationService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.put(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
-      let data: BaseResponse<RazorPayClass, RazorPayClass> = res.json();
+      let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<RazorPayClass, RazorPayClass>(e, model));
+    }).catch((e) => HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
   }
 
   /*
