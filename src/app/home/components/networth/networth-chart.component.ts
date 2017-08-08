@@ -2,7 +2,7 @@ import { AppState } from '../../../store/roots';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { ComapnyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
@@ -18,6 +18,7 @@ import { Store } from '@ngrx/store';
 })
 
 export class NetworthChartComponent implements OnInit {
+  @Input() public refresh: boolean = false;
   public options: Options;
   public monthlyOption = {
     chart: {
@@ -91,12 +92,13 @@ export class NetworthChartComponent implements OnInit {
     this.networthData = [];
     this.store.dispatch(this._homeActions.getNetworthChartDataOfActiveYear(
       this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, false));
+      this.activeFinancialYear.financialYearEnds, this.refresh));
+    this.refresh = false;
   }
   public ngOnInit() {
     this.comparisionChartData$
       .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
-      .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
+      // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
       .subscribe(p => {
         this.networthData = p.NetworthActiveYear;
         this.generateCharts();
