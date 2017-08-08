@@ -99,7 +99,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let revenueActiveYear = processDataForGroupHistory(data.revenueActiveYear);
       let ExpensesActiveYear = processDataForGroupHistory(data.ExpensesActiveYear);
       let ProfitLossActiveYear = processDataForProfitLoss(data.ProfitLossActiveYear);
-      let NetworthActiveYear = processDataForProfitLoss(data.NetworthActiveYear);
+      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
       return Object.assign({}, state, {
         comparisionChart: {
           ...state.comparisionChart,
@@ -123,7 +123,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let revenueLastYear = processDataForGroupHistory(data.revenueLastYear);
       let ExpensesLastYear = processDataForGroupHistory(data.ExpensesLastYear);
       let ProfitLossLastYear = processDataForProfitLoss(data.ProfitLossLastYear);
-      let NetworthLastYear = processDataForProfitLoss(data.NetworthLastYear);
+      let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
       return Object.assign({}, state, {
         comparisionChart: {
           ...state.comparisionChart,
@@ -167,6 +167,17 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
       return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
+    }
+    case HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
+      return Object.assign({}, state, {
+        comparisionChart: {
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        }
+      });
     }
     default: {
       return state;
@@ -258,15 +269,17 @@ const processDataForProfitLoss = plData => {
   let nwLabels = [];
   monthlyBalances = [];
   yearlyBalances = [];
-  _.each(plData.profitLoss.periodBalances, nw => {
-    let str;
-    str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
-    nwLabels.push(str);
-    monthlyBalances.push(nw.monthlyBalance);
-    nwSeries.push('Monthly Balances');
-    yearlyBalances.push(nw.yearlyBalance);
-    nwSeries.push('Yearly Balances');
-  });
+  if (plData.profitLoss) {
+    _.each(plData.profitLoss.periodBalances, nw => {
+      let str;
+      str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
+      nwLabels.push(str);
+      monthlyBalances.push(nw.monthlyBalance);
+      nwSeries.push('Monthly Balances');
+      yearlyBalances.push(nw.yearlyBalance);
+      nwSeries.push('Yearly Balances');
+    });
+  }
   return { monthlyBalances, yearlyBalances };
 };
 
@@ -277,14 +290,16 @@ const processDataForNetworth = plData => {
   let nwLabels = [];
   monthlyBalances = [];
   yearlyBalances = [];
-  _.each(plData.networth.periodBalances, nw => {
-    let str;
-    str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
-    nwLabels.push(str);
-    monthlyBalances.push(nw.monthlyBalance);
-    nwSeries.push('Monthly Balances');
-    yearlyBalances.push(nw.yearlyBalance);
-    nwSeries.push('Yearly Balances');
-  });
+  if (plData.networth) {
+    _.each(plData.networth.periodBalances, nw => {
+      let str;
+      str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
+      nwLabels.push(str);
+      monthlyBalances.push(nw.monthlyBalance);
+      nwSeries.push('Monthly Balances');
+      yearlyBalances.push(nw.yearlyBalance);
+      nwSeries.push('Yearly Balances');
+    });
+  }
   return { monthlyBalances, yearlyBalances };
 };

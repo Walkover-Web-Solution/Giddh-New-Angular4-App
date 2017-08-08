@@ -21,7 +21,7 @@ export const initialState: FlyAccountsState = {
 export function FlyAccountsReducer(state = initialState, action: Action): FlyAccountsState {
   switch (action.type) {
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE:
-      return Object.assign({}, state, { flattenGroupsAccounts: prepare(action.payload.results) });
+      return Object.assign({}, state, { flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
     default: {
       return state;
     }
@@ -29,7 +29,7 @@ export function FlyAccountsReducer(state = initialState, action: Action): FlyAcc
 }
 
 const prepare = (data: IFlattenGroupsAccountsDetail[]) => {
-  return data.map(p => <IFlattenGroupsAccountsDetail> {
+  return data.map(p => <IFlattenGroupsAccountsDetail>{
     accountDetails: p.accountDetails,
     groupName: p.groupName,
     applicableTaxes: p.applicableTaxes,
