@@ -1,7 +1,9 @@
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import {
-  DownloadLedgerRequest, LedgerResponse, TransactionsRequest,
+  DownloadLedgerRequest,
+  LedgerResponse,
+  TransactionsRequest,
   TransactionsResponse
 } from '../../../models/api-models/Ledger';
 /**
@@ -123,6 +125,12 @@ export class LedgerActions {
     return {
       type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
       payload: {model, accountUniqueName}
+    };
+  }
+
+  public ResetLedger(): Action {
+    return {
+      type: LEDGER.RESET_LEDGER
     };
   }
 

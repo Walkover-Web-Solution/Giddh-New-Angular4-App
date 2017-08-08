@@ -125,9 +125,9 @@
         <div class="file_attached col-xs-5 pull-right text-right"
              *ngIf="blankLedger.attachedFile.length > 0">
           <div class="row">
-            <span ng-bind="ledgerCtrl.selectedLedger.attachedFileName"></span>
-            <label class="remove cp mrL1" *ngIf="false"
-                   ng-click="ledgerCtrl.deleteAttachedFile()">(remove)</label>
+            <span>{{ blankLedger.attachedFileName }}</span>
+            <label class="remove cp mrL1"
+                   (click)="deleteAttachedFile()">(remove)</label>
           </div>
         </div>
       </div>
@@ -192,31 +192,46 @@
       </div>
       <div class="col-xs-9 pdT1">
         <div class="pull-right">
-          <div class="mrR1 pull-left" ng-if="ledgerCtrl.showGenInvOpts">
+          <div class="mrR1 pull-left" [ngClass]="{hide:blankLedger.attachedFile}">
             <label class="checkbox oh">
               <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice"
-                     [(ngModel)]="blankLedger.generateInvoice" ng-click="$event.stopPropagation()">
+                     [(ngModel)]="blankLedger.generateInvoice">
               <span class="pull-left">Generate Invoice</span>
             </label>
           </div>
-          <div class="upload_div" ng-if="ledgerCtrl.selectedLedger.attachedFileName.length == 0">
-            <input type="file" name="invoiceFile" id="invoiceFile" ng-click="$event.stopPropagation()"
-                   onchange="angular.element(this).scope().getInvoiceFile(this.files)">
+
+          <div class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
+            <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
+                   (uploadOutput)="onUploadOutput($event)">
             <label for="invoiceFile"><i class="glyphicon glyphicon-paperclip"></i></label>
           </div>
+
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  (click)="addToDrOrCr(currentTxn)" [disabled]="currentTxn.type === 'DEBIT'">Add to DR
+                  (click)="addToDrOrCr('DEBIT')" [disabled]="currentTxn.type === 'DEBIT'">Add to DR
           </button>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  (click)="addToDrOrCr(currentTxn)" [disabled]="currentTxn.type === 'CREDIT'">Add to CR
+                  (click)="addToDrOrCr('CREDIT')" [disabled]="currentTxn.type === 'CREDIT'">Add to CR
           </button>
-          <button id="saveLedger" class="btn btn-success" (click)="saveLedger()">Save</button>
+          <button id="saveLedger" class="btn btn-success" [disabled]="isFileUploading" (click)="saveLedger()">Save
+          </button>
 
         </div>
       </div>
     </div>
     <div class="row">
 
+    </div>
+  </div>
+</div>
+
+<!--deleteAttachedFile  -->
+<div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
+                     (cancelCallBack)="hideDeleteAttachedFileModal()"
+                     (successCallBack)="deleteAttachedFile()">
+      </confirm-modal>
     </div>
   </div>
 </div>
