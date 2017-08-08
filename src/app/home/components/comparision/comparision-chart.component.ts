@@ -98,7 +98,6 @@ export class ComparisionChartComponent implements OnInit {
     this.comparisionChartData$
       .skipWhile(p => isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear))
       .subscribe(p => {
-        debugger;
         this.expenseData = (p.ExpensesActiveMonthly);
         this.expenseDataLY = (p.ExpensesLastYearMonthly);
         this.revenueData = (p.revenueActiveYearMonthly);
