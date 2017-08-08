@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
@@ -18,6 +18,7 @@ import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExten
 })
 
 export class HistoryChartComponent implements OnInit {
+  @Input() public refresh: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -35,7 +36,6 @@ export class HistoryChartComponent implements OnInit {
   private profitLossDataLY = [];
   private AllSeries: IndividualSeriesOptionsExtension[];
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    //
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
     this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
@@ -71,12 +71,12 @@ export class HistoryChartComponent implements OnInit {
     this.expenseData = [];
     this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
       this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, false));
+      this.activeFinancialYear.financialYearEnds, this.refresh));
 
     this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
       this.lastFinancialYear.financialYearStarts,
-      this.lastFinancialYear.financialYearEnds, false));
-
+      this.lastFinancialYear.financialYearEnds, this.refresh));
+    this.refresh = false;
   }
 
   public generateCharts() {
@@ -151,8 +151,9 @@ export class HistoryChartComponent implements OnInit {
     //
     this.comparisionChartData$
       .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear)))
-      .distinctUntilChanged((p, q) => p.ExpensesActiveYearly === this.expenseData)
+      // .distinctUntilChanged((p, q) => p.ExpensesActiveYearly === this.expenseData)
       .subscribe(p => {
+        debugger;
         this.expenseData = (p.ExpensesActiveYearly);
         this.expenseDataLY = (p.ExpensesLastYearYearly);
         this.revenueData = (p.revenueActiveYearYearly);

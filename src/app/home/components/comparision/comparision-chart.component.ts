@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -18,6 +18,7 @@ import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOpt
 })
 
 export class ComparisionChartComponent implements OnInit {
+  @Input() public refresh: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -96,8 +97,8 @@ export class ComparisionChartComponent implements OnInit {
 
     this.comparisionChartData$
       .skipWhile(p => isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear))
-      .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
       .subscribe(p => {
+        debugger;
         this.expenseData = (p.ExpensesActiveMonthly);
         this.expenseDataLY = (p.ExpensesLastYearMonthly);
         this.revenueData = (p.revenueActiveYearMonthly);
@@ -113,13 +114,14 @@ export class ComparisionChartComponent implements OnInit {
     this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
       this.activeFinancialYear.financialYearStarts,
-      this.activeFinancialYear.financialYearEnds, false));
+      this.activeFinancialYear.financialYearEnds, this.refresh));
 
     if (this.lastFinancialYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
-        this.lastFinancialYear.financialYearEnds, false));
+        this.lastFinancialYear.financialYearEnds, this.refresh));
     }
+    this.refresh = false;
   }
   public toggle(str: string) {
     _.each(this.AllSeries, (p) => {
