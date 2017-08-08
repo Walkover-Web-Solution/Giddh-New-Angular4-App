@@ -1677,24 +1677,22 @@ li:last-child .angular-ui-tree-handle {
 .vAccordion--default.root > v-pane > v-pane-content > div > v-accordion {
   margin-top: 0;
 }
-
+/*
 .vAccordion--default.root > v-pane > v-pane-content > div > v-accordion > div > v-pane {
-    /*border-left:2px solid;*/;
-}
+    border-left:2px solid;;
+} */
 
 .vAccordion--default.root > v-pane > v-pane-content > div > v-accordion > div > v-pane > v-pane-header {
   border-bottom-color: rgba(51, 122, 183, 0.6);
 }
 
-.vAccordion--default.root > v-pane > v-pane-content > div > v-accordion > div > v-pane > v-pane-content v-accordion > v-pane {
-    /*border-left:2px solid;*/;
-}
+/* .vAccordion--default.root > v-pane > v-pane-content > div > v-accordion > div > v-pane > v-pane-content v-accordion > v-pane {
+    border-left:2px solid;;
+} */
 
 .vAccordion--default.root > v-pane > v-pane-content > div > v-accordion > div > v-pane > v-pane-content v-accordion > v-pane > v-pane-header {
   border-bottom-color: rgba(51, 122, 183, 0.3) !important;
 }
-
-/* ui-tree border-left style as per color codes */
 
 #tree-root > ol > .angular-ui-tree-node {
   border-left: 5px solid;

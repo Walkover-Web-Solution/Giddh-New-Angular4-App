@@ -117,8 +117,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    * add to debit or credit
    * @param {string} id
    */
-  public addToDrOrCr(id: string) {
-    this.changeTransactionType.emit(id);
+  public addToDrOrCr(id: TransactionVM) {
+    // this.changeTransactionType.emit(id);
   }
 
   public calculateTotal() {
