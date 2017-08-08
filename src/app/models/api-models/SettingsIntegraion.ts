@@ -23,3 +23,10 @@ export class EmailKeyClass {
   public subject: string;
   public authKey: string;
 }
+
+export class RazorPayClass {
+  public userName: string;
+  public password: string;
+  public account: any;
+  public autoCapturePayment: boolean;
+}
