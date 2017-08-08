@@ -1,10 +1,19 @@
-<div id="net-worth" class="col-lg-4" ng-init="getNetWorthData()">
+<div id="net-worth" ng-init="getNetWorthData()">
   <div class="panel panel-default shadow">
     <div class="panel-heading">
-      <label>Net worth</label><i class="glyphicon glyphicon-refresh pull-right" ng-click="getNetWorthData()"></i>
+      <label>Net worth</label>
+      <div class="pull-right">
+        <label>
+        <input type="radio" name="chart" checked='true'  value="Monthly" (click)="togle('Monthly')" checked>Monthly
+      </label>
+        <label>
+        <input type="radio" name="chart"  value="Yearly" (click)="togle('Yearly')" checked>Yearly
+      </label>
+        <i class="glyphicon glyphicon-refresh pull-right" (click)="fetchChartData()"></i>
+      </div>
     </div>
     <div class="panel-body pos-rel">
-      <div class="dashboard-reconnectdiv" *ngIf="false" >
+      <div class="dashboard-reconnectdiv" *ngIf="false">
         <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
         <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
       </div>
