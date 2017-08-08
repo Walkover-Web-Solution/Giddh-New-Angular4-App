@@ -153,7 +153,6 @@ export class HistoryChartComponent implements OnInit {
       .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.ProfitLossActiveYear) || isNullOrUndefined(p.revenueLastYear) || isNullOrUndefined(p.revenueActiveYear)))
       // .distinctUntilChanged((p, q) => p.ExpensesActiveYearly === this.expenseData)
       .subscribe(p => {
-        debugger;
         this.expenseData = (p.ExpensesActiveYearly);
         this.expenseDataLY = (p.ExpensesLastYearYearly);
         this.revenueData = (p.revenueActiveYearYearly);
