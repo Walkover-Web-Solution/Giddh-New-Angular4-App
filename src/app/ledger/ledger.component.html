@@ -126,8 +126,8 @@
               <table class="width100">
                 <tbody class="ledger-main">
                 <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;"
-                    [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();toggleTransactionType(txn.id)">
+                    [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}"
+                    (click)="showNewLedgerEntryPopup(txn);">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'DEBIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -162,12 +162,12 @@
 
               <!--new ledge popup-->
               <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT'">
-                <new-ledger-entry-panel [accountUnq]="lc.accountUnq"
-                                        [blankLedger]="lc.blankLedger"
+                <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"
-                                        (resetBlankLedger)="resetBlankTransaction()">
+                                        (resetBlankLedger)="resetBlankTransaction()"
+                                        (saveBlankLedger)="saveBlankTransaction()">
                 </new-ledger-entry-panel>
               </div>
             </td>
@@ -242,8 +242,8 @@
               <table class="width100">
                 <tbody class="ledger-main">
                 <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;"
-                    [ngClass]="{'compoundEntry': txn.isOpen || lc.blankLedger.isCompoundEntry}"
-                    (click)="showNewLedgerEntryPopup();toggleTransactionType(txn.id)">
+                    [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}"
+                    (click)="showNewLedgerEntryPopup(txn);">
 
                   <td class="col-xs-2" *ngIf="txn.type === 'CREDIT'">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
@@ -277,12 +277,12 @@
 
               <!--new ledge popup-->
               <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
-                <new-ledger-entry-panel [accountUnq]="lc.accountUnq"
-                                        [blankLedger]="lc.blankLedger"
+                <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
                                         (changeTransactionType)="toggleTransactionType($event)"
-                                        (resetBlankLedger)="resetBlankTransaction()">
+                                        (resetBlankLedger)="resetBlankTransaction()"
+                                        (saveBlankLedger)="saveBlankTransaction()">
                 </new-ledger-entry-panel>
               </div>
 

@@ -8,9 +8,9 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -22,8 +22,10 @@ import { Select2OptionData } from '../../../shared/theme/select2/select2.interfa
 import { createAutoCorrectedDatePipe } from '../../../shared/helpers/autoCorrectedDatePipe';
 import { CompanyActions } from '../../../services/actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { Router } from '@angular/router';
-import { cloneDeep } from 'lodash';
+import { UploadInput, UploadOutput } from 'ngx-uploader';
+import { LEDGER_API } from '../../../services/apiurls/ledger.api';
+import { ToasterService } from '../../../services/toaster.service';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -34,12 +36,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: boolean = false;
-  @Input() public accountUnq: string;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
+  @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
+  public uploadInput: EventEmitter<UploadInput>;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
-  public isLedgerCreateSuccess$: Observable<boolean>;
+  public authKey$: Observable<string>;
+  public companyName$: Observable<string>;
 
   public voucherDropDownOptions: Select2Options = {
     multiple: false,
@@ -51,6 +55,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public showAdvanced: boolean;
   public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
   public datePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
+  public isFileUploading: boolean = false;
+  @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -58,9 +64,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
               private _ledgerActions: LedgerActions,
               private _companyActions: CompanyActions,
               private cdRef: ChangeDetectorRef,
-              private _router: Router) {
+              private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
+    this.authKey$ = this.store.select(p => p.session.user.authKey).takeUntil(this.destroyed$);
+    this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
       text: 'Sales',
       id: 'sal'
@@ -89,18 +97,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     this.store.dispatch(this._companyActions.getTax());
-    this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     this.showAdvanced = false;
-    this.isLedgerCreateSuccess$.distinctUntilChanged().subscribe(s => {
-      if (s) {
-        this._router.navigate(['/pages/dummy'], {skipLocationChange: true}).then(() => {
-          this._router.navigate(['/pages', 'ledger', this.accountUnq]);
-        });
-      }
-    });
+    this.uploadInput = new EventEmitter<UploadInput>();
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -115,10 +116,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   /**
    * add to debit or credit
-   * @param {string} id
+   * @param {string} type
    */
-  public addToDrOrCr(id: string) {
-    this.changeTransactionType.emit(id);
+  public addToDrOrCr(type: string) {
+    this.changeTransactionType.emit(type);
   }
 
   public calculateTotal() {
@@ -127,18 +128,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateAmount() {
-    this.currentTxn.amount = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax) * this.currentTxn.discount) / (100 + this.currentTxn.tax);
+    let total = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax)
+      * this.currentTxn.discount);
+    this.currentTxn.amount = Number((total / (100 + this.currentTxn.tax)).toFixed(2));
   }
 
   public saveLedger() {
-    let blankTransactionObj: BlankLedgerVM;
-    blankTransactionObj = cloneDeep(this.blankLedger);
-    blankTransactionObj.transactions = blankTransactionObj.transactions.filter(bl => bl.particular);
-    blankTransactionObj.transactions.map(bl => {
-      bl.particular = bl.selectedAccount.uniqueName;
-      delete bl['id'];
-    });
-    this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.accountUnq));
+    this.saveBlankLedger.emit(true);
   }
 
   /**
@@ -147,6 +143,54 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public resetPanel() {
     this.currentTxn = null;
     this.resetBlankLedger.emit(true);
+  }
+
+  public onUploadOutput(output: UploadOutput): void {
+
+    if (output.type === 'allAddedToQueue') {
+      let authKey = null;
+      let companyUniqueName = null;
+      this.authKey$.take(1).subscribe(a => authKey = a);
+      this.companyName$.take(1).subscribe(a => companyUniqueName = a);
+      const event: UploadInput = {
+        type: 'uploadAll',
+        url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+        method: 'POST',
+        fieldName: 'file',
+        data: {company: companyUniqueName},
+        headers: {'Auth-Key': authKey},
+        concurrency: 1
+      };
+
+      this.uploadInput.emit(event);
+    } else if (output.type === 'start') {
+      this.isFileUploading = true;
+    } else if (output.type === 'done') {
+      if (output.file.response.status === 'success') {
+        this.isFileUploading = false;
+        this.blankLedger.attachedFile = output.file.response.body.uniqueName;
+        this.blankLedger.attachedFileName = output.file.response.body.name;
+        this._toasty.successToast('file uploaded successfully');
+      } else {
+        this.isFileUploading = false;
+        this.blankLedger.attachedFile = '';
+        this.blankLedger.attachedFileName = '';
+        this._toasty.errorToast(output.file.response.message);
+      }
+    }
+  }
+
+  public showDeleteAttachedFileModal(merge: string) {
+    this.deleteAttachedFileModal.show();
+  }
+
+  public hideDeleteAttachedFileModal() {
+    this.deleteAttachedFileModal.hide();
+  }
+
+  public deleteAttachedFile() {
+    this.blankLedger.attachedFile = '';
+    this.blankLedger.attachedFileName = '';
   }
 
   public ngOnDestroy(): void {
