@@ -24,22 +24,20 @@
 <h3 class="fs16 mrB1 mrT2">Email Integration</h3>
 <div class="box">
   <h3 class="fs16 mrB1">SendGrid</h3>
-  <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)">
-    <section ngModelGroup="emailFormObj" #emailFormObjCtrl="ngModelGroup" class="row">
-      <div class="form-group col-xs-4">
-        <label>Auth Key</label><br>
-        <input type="text" placeholder="Enter auth-key" class="form-control"  [ngModel]="emailFormObj.authKey" name="authKey" required/>
-      </div>
-      <div class="form-group col-xs-4">
-        <label>Email Subject</label><br>
-        <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="senderId" required />
-      </div>
-      <div class="form-group col-xs-4">
-        <label>&nbsp;</label><br>
-        <button type="submit" class="btn btn-success mrR1" [disabled]="emailFormObjCtrl.invalid">Save</button>
-        <button type="button" class="btn btn-primary" (click)="onCancelEmailform()">Cancel</button>
-      </div>
-    </section>
+  <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="row">
+    <div class="form-group col-xs-4">
+      <label>Auth Key</label><br>
+      <input type="text" placeholder="Enter auth-key" class="form-control"  [ngModel]="emailFormObj.authKey" name="authKey" required/>
+    </div>
+    <div class="form-group col-xs-4">
+      <label>Email Subject</label><br>
+      <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
+    </div>
+    <div class="form-group col-xs-4">
+      <label>&nbsp;</label><br>
+      <button type="submit" class="btn btn-success mrR1" [disabled]="emailform.invalid">Save</button>
+      <button type="button" class="btn btn-primary" (click)="onCancelEmailform()">Cancel</button>
+    </div>
   </form>
 </div>
 

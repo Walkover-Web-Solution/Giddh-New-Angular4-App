@@ -38,6 +38,30 @@ export class SettingsIntegrationActions {
       payload: res
     }));
 
+  @Effect()
+  public SaveSMSKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY)
+    .switchMap(action => this.settingsIntegrationService.SaveSMSKey(action.payload))
+    .map(res => this.validateResponse<string, SmsKeyClass>(res, {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
+      payload: res
+    }, true, {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
+      payload: res
+    }));
+
+  @Effect()
+  public SaveEmailKey$: Observable<Action> = this.action$
+    .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY)
+    .switchMap(action => this.settingsIntegrationService.SaveEmailKey(action.payload))
+    .map(res => this.validateResponse<string, EmailKeyClass>(res, {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
+      payload: res
+    }, true, {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
+      payload: res
+    }));
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -54,6 +78,20 @@ export class SettingsIntegrationActions {
   public GetEmailKey(): Action {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY,
+    };
+  }
+
+  public SaveSMSKey(value: SmsKeyClass): Action {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY,
+      payload: value
+    };
+  }
+
+  public SaveEmailKey(value: EmailKeyClass): Action {
+    return {
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY,
+      payload: value
     };
   }
 
