@@ -18,10 +18,11 @@ import { EditInvoiceComponent } from './invoice/edit-invoice/edit.invoice.compon
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent, canActivate: [UserAuthenticated] },
-  { path: 'invoice', component: EditInvoiceComponent}, // Add Authentication check
+   // Add Authentication check
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
+      { path: 'invoice', component: EditInvoiceComponent, canActivate: [NeedsAuthentication]},
       { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', component: AboutComponent, canActivate: [NeedsAuthentication] },
       { path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication] },
