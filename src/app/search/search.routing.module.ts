@@ -7,14 +7,8 @@ import { SearchComponent } from './search.component';
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: 'search', redirectTo: 'pages/search', pathMatch: 'full', canActivate: [NeedsAuthentication] },
       {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
-        children: [
-          {
-            path: 'search', component: SearchComponent, canActivate: [NeedsAuthentication]
-          }
-        ]
+        path: '', component: SearchComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],

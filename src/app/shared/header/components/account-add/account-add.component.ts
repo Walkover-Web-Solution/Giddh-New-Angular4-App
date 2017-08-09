@@ -70,8 +70,8 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       state: [''],
       stateCode: [''],
       hsnOrSac: [''],
-      hsnNumber: [{value: '', disabled: true}, []],
-      sacNumber: [{value: '', disabled: true}, []],
+      hsnNumber: [{value: '', disabled: false}, []],
+      sacNumber: [{value: '', disabled: false}, []],
       gstDetails: this._fb.array([
         this.initialGstDetailsForm()
       ])
@@ -89,12 +89,12 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
       if (a === 'hsn') {
-        hsn.reset();
+        // hsn.reset();
         sac.reset();
         hsn.enable();
         sac.disable();
       } else {
-        sac.reset();
+        // sac.reset();
         hsn.reset();
         sac.enable();
         hsn.disable();

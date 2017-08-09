@@ -22,7 +22,7 @@
                 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
                   <ul class="dshUl clearfix list-inline">
                     <li class="dmLi trialB">
-                      <a href="">
+                      <a [routerLink]="['home']">
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Dashboard</div>
@@ -41,7 +41,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi" ui-sref="company.content.tbpl">
+                    <li class="dmLi">
                       <a [routerLink]="['trial-balance-and-profit-loss']">
                         <div class="media">
                           <div class="media-body">
@@ -226,7 +226,7 @@
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal()" (successCallBack)="deleteCompany()"></confirm-modal>
+      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
     </div>
   </div>
 </div>

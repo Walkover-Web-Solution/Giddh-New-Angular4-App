@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.0.6",
+  "version": "6.0.7",
   "description": "An Angular Webpack Starter kit featuring Angular (Router, Http, Forms, Services, Tests, E2E, Coverage), Karma, Protractor, Jasmine, Istanbul, TypeScript, and Webpack by AngularClass",
   "keywords": [
     "angular",
@@ -53,7 +53,7 @@
     "package:linux": "rimraf packages/linux/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  build --linux --x64",
     "package:mac": "rimraf packages/mac/* && npm run build:aot:prod:renderer  && npm run build:main:prod &&  build --macos --x64",
     "package:windows": "rimraf packages/win/* && npm run build:aot:prod:renderer  && npm run build:main:prod && build --win --x64",
-    "postinstall": "node ./config/install-app-deps",
+    "painstall": "node ./config/install-app-deps",
     "postversion": "git push && git push --tags",
     "preclean:install": "npm run clean",
     "preversion": "npm test",
@@ -101,9 +101,8 @@
     "jusas-angularjs-slider": "^0.1.36",
     "lodash": "4.17.4",
     "ng-select": "^1.0.0-beta.5",
-    "ng2-file-upload": "^1.2.1",
-    "ng2-nouislider": "^1.6.1",
-    "nouislider": "^10.1.0",
+
+    "ngx-uploader": "^3.3.6",
     "rxjs": "~5.4.1"
   },
   "devDependencies": {

@@ -9,6 +9,7 @@ export interface IFlattenGroupsAccountsDetailItem {
   groupUniqueName: string;
   isOpen: boolean;
   name?: string;
+  uniqueName?: string;
   amount?: number;
 }
 
