@@ -1,4 +1,4 @@
-import { AccountRequest } from '../../../../models/api-models/Account';
+import { AccountRequest, AccountResponse } from '../../../../models/api-models/Account';
 import { Observable } from 'rxjs';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store/roots';
@@ -6,9 +6,8 @@ import { Store } from '@ngrx/store';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { AccountResponse } from '../../../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { digitsOnly, uniqueNameValidator } from '../../../helpers/customValidationHelper';
+import { digitsOnly } from '../../../helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -59,7 +58,7 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.updateAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
-      uniqueName: ['', [Validators.required], uniqueNameValidator],
+      uniqueName: ['', [Validators.required]],
       openingBalanceType: ['', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
@@ -125,23 +124,6 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
 
   public stateSelected(v) {
     this.updateAccountForm.patchValue({stateCode: v.value});
-  }
-
-  public generateUniqueName() {
-    let val: string = this.updateAccountForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
-    this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
-
-    this.isAccountNameAvailable$.subscribe(a => {
-      if (a !== null && a !== undefined) {
-        if (a) {
-          this.updateAccountForm.patchValue({uniqueName: val});
-        } else {
-          let num = 1;
-          this.updateAccountForm.patchValue({uniqueName: val + num});
-        }
-      }
-    });
   }
 
   public initialGstDetailsForm(): FormGroup {
