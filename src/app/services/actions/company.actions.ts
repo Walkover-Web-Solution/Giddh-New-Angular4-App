@@ -50,7 +50,6 @@ export class CompanyActions {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };
       }
-      console.log('Response ' + response);
       return this.RefreshCompanies();
     });
   @Effect()
@@ -62,7 +61,6 @@ export class CompanyActions {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };
       }
-      console.log('Response ' + response);
       return this.RefreshCompaniesResponse(response);
     });
 
@@ -85,7 +83,6 @@ export class CompanyActions {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };
       }
-      console.log('Response ' + response);
       return this.GetStateDetailsResponse(response);
     });
 

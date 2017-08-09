@@ -1,0 +1,21 @@
+<span>
+  <a id="tax" (click)="$event.stopPropagation();showTaxPopup = !showTaxPopup">
+      <label>Tax %</label>
+      <div class="multi-select adjust">
+          <input type="number" readonly name="" class="form-control cursor-pointer"
+                 [(ngModel)]="sum" disabled/>
+          <span class="caret"></span>
+      </div>
+
+  </a>
+  <ul class="my-dropdown-menu pd" *ngIf="showTaxPopup">
+    <li class="oh width100 bdrB pdB" *ngFor="let tax of taxRenderData;trackBy: trackByFn">
+      <label class="checkbox" (click)="$event.stopPropagation()">
+        <input class="pull-left" style="margin-top:5px;" type="checkbox" [(ngModel)]="tax.isChecked"
+               (change)="change()"
+               (click)="$event.stopPropagation()"/>
+        <span class="pull-left" style="display:block;max-width:125px">{{tax.name}}</span>
+      </label>
+    </li>
+  </ul>
+</span>

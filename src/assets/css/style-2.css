@@ -3198,3 +3198,117 @@ label {
 .col_wrapper:first-child .grp_list {
     padding-top: 10px;
 }
+<<<<<<< HEAD
+=======
+
+.onHover {
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    transition: all 0.5s ease;
+}
+
+.role:hover .onHover {
+    opacity: 1;
+    z-index: 9;
+    position: relative
+}
+
+.custom-select select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+}
+
+.custom-select .select_drop {
+    position: absolute;
+    bottom: 16px;
+    top: inherit;
+    z-index: 9;
+    right: 6px;
+}
+
+.btn-group.open .dropdown-toggle {
+    box-shadow: none;
+}
+
+.add-new-role-modal .dropdown-menu {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.dropdown-toggle .select_drop {
+    right: 0;
+}
+
+.add-new-role-modal .dropdown-menu li {
+    padding: 4px 0;
+}
+
+.add-new-role-modal .dropdown-menu li label {
+    color: #858585;
+    font-weight: normal;
+}
+
+.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:after,
+#single_role table tbody tr td input[type="checkbox"]:after {
+    border-width: 1px;
+    top: 0;
+    width: 16px;
+    height: 16px
+}
+
+.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:checked:before,
+#single_role table tbody tr td input[type="checkbox"]:checked:before {
+    left: 3px;
+    top: 3px;
+    z-index: 1;
+    width: 11px;
+    height: 6px;
+}
+
+#single_role .panel {
+    border-radius: 0;
+    margin-bottom: 40px;
+}
+
+#single_role .panel-heading {
+    background: #d4602a;
+    color: #fff;
+    border-radius: 0;
+}
+
+#single_role tbody tr td:first-child,
+#single_role thead tr th:first-child {
+    border-right: 1px solid #c2cdd3
+}
+
+#single_role .lead {
+    font-size: 2em;
+}
+
+#single_role thead tr th:first-child {
+    padding-left: 18px;
+    text-transform: capitalize
+}
+
+#single_role .panel-body {
+    background: #f1f1f2;
+}
+
+#single_role .panel-body tbody tr:nth-child(1) td {
+    background: #fff;
+    border-right: 0;
+}
+
+#single_role .panel-body label {
+    font-size: 14px;
+    text-transform: capitalize;
+    color: #858585;
+}
+
+#single_role table {
+    margin-bottom: 0;
+}
+>>>>>>> master

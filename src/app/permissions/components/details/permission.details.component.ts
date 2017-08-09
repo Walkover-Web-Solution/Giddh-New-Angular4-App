@@ -14,16 +14,16 @@ import { NewRoleClass, NewPermissionObj, IPage, IPageStr } from '../../permissio
 })
 
 export class PermissionDetailsComponent implements OnInit {
-  private pageList: IPageStr[];
-  private newRole: any = {};
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private allRoles: any;
-  private adminPageObj: IRoleCommonResponseAndRequest;
-  private viewPageObj: IRoleCommonResponseAndRequest;
-  private singlePageForFreshStart: any;
-  private rawDataForAllRoles: Permission[];
-  private allRolesOfPage: Permission[];
-  private roleObj: NewRoleClass;
+  public pageList: IPageStr[];
+  public newRole: any = {};
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public allRoles: any;
+  public adminPageObj: IRoleCommonResponseAndRequest;
+  public viewPageObj: IRoleCommonResponseAndRequest;
+  public singlePageForFreshStart: any;
+  public rawDataForAllRoles: Permission[];
+  public allRolesOfPage: Permission[];
+  public roleObj: NewRoleClass;
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -60,7 +60,7 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private addNewPage(page: string) {
+  public addNewPage(page: string) {
     if (page && !this.checkForAlreadyExistInPageArray(page)) {
       let pageObj = _.find(this.singlePageForFreshStart.scopes, (o: Scope) => o.name === page);
       pageObj.permissions = pageObj.permissions.map((o: Permission) => {
@@ -70,11 +70,11 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private removePageFromScope(page: string) {
+  public removePageFromScope(page: string) {
     this.roleObj.scopes.splice(this.roleObj.scopes.findIndex((o: Scope) => o.name === page), 1);
   }
 
-  private checkForAlreadyExistInPageArray(page: string): boolean {
+  public checkForAlreadyExistInPageArray(page: string): boolean {
     let idx = _.findIndex(this.roleObj.scopes, (o: Scope) => {
       return o.name === page;
     });
@@ -85,11 +85,11 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private goToRoles() {
+  public goToRoles() {
     this._location.back();
   }
 
-  private getScopeDataReadyForAPI(data): Scope[] {
+  public getScopeDataReadyForAPI(data): Scope[] {
     let arr: Scope[];
     arr = _.forEach(data.scopes, (page: Scope) => {
       _.remove(page.permissions, (o: Permission) => !o.isSelected );
@@ -97,26 +97,26 @@ export class PermissionDetailsComponent implements OnInit {
     return arr;
   }
 
-  private addNewRole(): any {
+  public addNewRole(): any {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
     this.store.dispatch(this.permissionActions.CreateRole(data));
   }
 
-  private updateRole() {
+  public updateRole() {
     let data = _.cloneDeep(this.roleObj);
     data.scopes = this.getScopeDataReadyForAPI(data);
     this.store.dispatch(this.permissionActions.UpdateRole(data));
   }
 
-  private getAllRolesOfPageReady(arr) {
+  public getAllRolesOfPageReady(arr) {
     return arr.map((o: Permission) => {
       return o = new NewPermissionObj(o.code, false);
     });
     //  _.forEach(arr, (o: Permission) => o.isSelected = false);
   }
 
-  private setScopeForCurrentRole(): Scope[] {
+  public setScopeForCurrentRole(): Scope[] {
     if (this.newRole.isFresh) {
       // fresh role logic here
       return this.generateFreshUI();
@@ -126,7 +126,7 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private generateUIFromExistedRole() {
+  public generateUIFromExistedRole() {
     let pRole: string = this.newRole.uniqueName;
     let res = _.find(this.allRoles, function(o: IRoleCommonResponseAndRequest) {
       return o.uniqueName === pRole;
@@ -153,7 +153,7 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private pushNonExistRoles(arr1, arr2) {
+  public pushNonExistRoles(arr1, arr2) {
     _.forEach(arr1, (o: Permission) => {
       _.remove(arr2, (item: Permission) => {
         return item.code === o.code;
@@ -162,7 +162,7 @@ export class PermissionDetailsComponent implements OnInit {
     return _.concat(arr1, arr2);
   }
 
-  private generateFreshUI() {
+  public generateFreshUI() {
     let arr = [];
     let allRoles = _.cloneDeep(this.singlePageForFreshStart.scopes);
     _.forEach(this.newRole.pageList, (item: IPage) => {
@@ -177,11 +177,11 @@ export class PermissionDetailsComponent implements OnInit {
     return arr;
   }
 
-  private checkForIsFixed(): boolean {
+  public checkForIsFixed(): boolean {
     return !this.newRole.isFresh;
   }
 
-  private checkForRoleUniqueName(): string {
+  public checkForRoleUniqueName(): string {
     if (this.newRole.isFresh) {
       return null;
     }else {
@@ -189,7 +189,7 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private getNameByCode(code: string) {
+  public getNameByCode(code: string) {
     let result: string;
     switch (code) {
       case 'VW':
@@ -216,7 +216,7 @@ export class PermissionDetailsComponent implements OnInit {
     return result;
   }
 
-  private isHavePermission(pageName: string, item: Permission, type: string): boolean {
+  public isHavePermission(pageName: string, item: Permission, type: string): boolean {
     let page;
     if (type === 'admin') {
       page = _.find(this.adminPageObj.scopes, (o: Scope) => o.name === pageName);
@@ -230,14 +230,14 @@ export class PermissionDetailsComponent implements OnInit {
     }
   }
 
-  private toggleItems(pageName: string, event: any) {
+  public toggleItems(pageName: string, event: any) {
     let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
     if (res) {
       _.map(res.permissions, (o: Permission) => o.isSelected = event.target.checked ? true : false );
     }
   }
 
-  private toggleItem(pageName: string, item: Permission, event: any) {
+  public toggleItem(pageName: string, item: Permission, event: any) {
     let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
     if (event.target.checked) {
       let idx = _.findIndex(res.permissions, (o: Permission) => o.isSelected === false);

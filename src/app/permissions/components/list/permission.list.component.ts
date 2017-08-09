@@ -18,6 +18,7 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
 import { NewRoleClass } from '../../permission.utility';
+import { CapitalizePipe } from './capitalize.pipe';
 
 @Component({
   templateUrl: './permission-list.html',
@@ -31,7 +32,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   public localState: any;
   public allRoles: IRoleCommonResponseAndRequest[] = [];
-  private selectedRoleForDelete: IRoleCommonResponseAndRequest;
+  public selectedRoleForDelete: IRoleCommonResponseAndRequest;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(

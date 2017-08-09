@@ -6,7 +6,7 @@ import * as moment from 'moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
+import * as uuid from 'uuid';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -20,50 +20,40 @@ export class LedgerVM {
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
   public selectedAccount: IFlattenAccountsResultItem = null;
-  public pageLoader: boolean = false;
   public today: Date = new Date();
   public fromDate: Date;
   public toDate: Date;
-  public fromDatePickerIsOpen: boolean = false;
-  public toDatePickerIsOpen: boolean = false;
   public format: string = 'dd-MM-yyyy';
-  public showPanel: boolean = false;
   public accountUnq: string = ''; // $stateParams.unqName
-  public accountToShow = {};
-  public mergeTransaction: boolean = false;
-  public showEledger: boolean = true;
-  public pageAccount = {};
-  public showLoader: boolean = true;
-  public showExportOption: boolean = false;
-  public showLedgerPopover: boolean;
-  public adjustHeight = 0;
-  public dLedgerLimit = 10;
-  public cLedgerLimit = 10;
-  public entrySettings = {};
-  public firstLoad: boolean = true;
-  public showTaxList: boolean = true;
-  public hasTaxTransactions: boolean = true;
   public blankLedger: BlankLedgerVM;
-  public dBlankTxn: any;
-  public cBlankTxn: any;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
     this.blankLedger = {
       transactions: [
         {
+          id: uuid.v4(),
           amount: 0,
           particular: '',
           type: 'DEBIT',
           taxes: [],
-          discounts: []
+          tax: 0,
+          total: 0,
+          discount: 0,
+          discounts: [],
+          selectedAccount: null
         },
         {
+          id: uuid.v4(),
           amount: 0,
           particular: '',
           type: 'CREDIT',
           taxes: [],
-          discounts: []
+          tax: 0,
+          total: 0,
+          discount: 0,
+          discounts: [],
+          selectedAccount: null
         }],
       voucherType: 'Purchases',
       entryDate: moment().format('DD-MM-YYYY'),
@@ -71,6 +61,7 @@ export class LedgerVM {
       isInclusiveTax: true,
       unconfirmedEntry: false,
       attachedFile: '',
+      attachedFileName: '',
       tag: null,
       description: '',
       generateInvoice: false,
@@ -88,6 +79,7 @@ export class BlankLedgerVM {
   public isInclusiveTax: boolean;
   public unconfirmedEntry: boolean;
   public attachedFile: string;
+  public attachedFileName?: string;
   public tag: any;
   public description: string;
   public generateInvoice: boolean;
@@ -96,9 +88,14 @@ export class BlankLedgerVM {
 }
 
 export class TransactionVM {
+  public id?: string;
   public amount: number;
   public particular: string;
   public type: string;
   public taxes: string[];
+  public tax?: number;
+  public total: number;
   public discounts: ILedgerDiscount[];
+  public discount?: number;
+  public selectedAccount?: IFlattenAccountsResultItem | any;
 }

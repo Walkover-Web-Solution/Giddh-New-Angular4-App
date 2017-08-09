@@ -86,13 +86,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public accounts$: Observable<Select2OptionData[]>;
   public accountOptions: Select2Options = {
     multiple: true,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Accounts',
     allowClear: true
   };
   public accountOptions2: Select2Options = {
     multiple: false,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Accounts',
     allowClear: true
   };
@@ -111,7 +111,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public options: Select2Options = {
     minimumResultsForSearch: 9001,
     multiple: true,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Taxes',
     templateResult: (data) => {
       if (!data.id) {
