@@ -27,11 +27,10 @@ export class TaxControlComponent implements OnInit, OnDestroy {
 
   @Input() public taxes: TaxResponse[];
   @Input() public applicableTaxes: any[];
-  @Input() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
+  @Input() public taxRenderData: TaxControlData[];
+  @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
-  @Output() public selectedTaxesEvent: EventEmitter<string[]> = new EventEmitter();
 
-  public taxRenderData: TaxControlData[] = [];
   public showTaxPopup: boolean = false;
   public sum: number = 0;
   private selectedTaxes: string[] = [];
@@ -50,15 +49,16 @@ export class TaxControlComponent implements OnInit, OnDestroy {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    this.taxRenderData = [];
-    this.taxes.map(tx => {
-      let taxObj = new TaxControlData();
-      taxObj.name = tx.name;
-      taxObj.uniqueName = tx.uniqueName;
-      taxObj.amount = tx.taxDetail[0].taxValue;
-      taxObj.isChecked = this.applicableTaxes.indexOf(tx.uniqueName) > -1;
-      this.taxRenderData.push(taxObj);
-    });
+    if (!this.taxRenderData.length) {
+      this.taxes.map(tx => {
+        let taxObj = new TaxControlData();
+        taxObj.name = tx.name;
+        taxObj.uniqueName = tx.uniqueName;
+        taxObj.amount = tx.taxDetail[0].taxValue;
+        taxObj.isChecked = this.applicableTaxes.indexOf(tx.uniqueName) > -1;
+        this.taxRenderData.push(taxObj);
+      });
+    }
   }
 
   public trackByFn(index) {
@@ -66,7 +66,6 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
-    this.selectedTaxesEvent.unsubscribe();
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
   }
@@ -78,7 +77,6 @@ export class TaxControlComponent implements OnInit, OnDestroy {
     this.selectedTaxes = [];
     this.sum = this.calculateSum();
     this.selectedTaxes = this.generateSelectedTaxes();
-    this.selectedTaxesEvent.emit(this.selectedTaxes);
     this.taxAmountSumEvent.emit(this.sum);
 
     let diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
