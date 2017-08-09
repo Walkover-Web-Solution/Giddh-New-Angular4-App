@@ -1,4 +1,4 @@
-<section class="container nopad ng-scope" ng-show="ledgerCtrl.showLedgers">
+<section class="container nopad">
 
   <!--ledger table-->
   <div class="ledgHead transactions-page mrT3 pos-rel">
@@ -119,22 +119,21 @@
         </table>
 
         <!--blank ledger-->
-        <table class="width100" (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
+        <table class="width100" (click)="$event.stopPropagation();" (clickOutside)="hideNewLedgerEntryPopup()">
           <tbody>
-          <tr>
-            <td class="width100">
+          <tr *ngFor="let txn of lc.blankLedger.transactions;"
+              (click)="showNewLedgerEntryPopup(txn);">
+            <td class="width100" *ngIf="txn.type === 'DEBIT'">
               <table class="width100">
                 <tbody class="ledger-main">
-                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;"
-                    [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}"
-                    (click)="showNewLedgerEntryPopup(txn);">
+                <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
 
-                  <td class="col-xs-2" *ngIf="txn.type === 'DEBIT'">
+                  <td class="col-xs-2">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
-                           ng-click="ledgerCtrl.selectBlankTxn(txn)"
+
                            is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
-                  <td class="col-xs-7" *ngIf="txn.type === 'DEBIT'">
+                  <td class="col-xs-7">
 
                     <select2 [data]="lc.flatternAccountList | async" [(ngModel)]="txn.particular"
                              [options]="accountsOptions"
@@ -147,7 +146,7 @@
 
                   </td>
 
-                  <td class="col-xs-3 pos-rel" *ngIf="txn.type === 'DEBIT'">
+                  <td class="col-xs-3 pos-rel">
                     <input class="form-control alR" type="number" [(ngModel)]="txn.amount"
                            (keydown)="needToReCalculate = true"
                            (keyup)="needToReCalculate = false"
@@ -159,9 +158,9 @@
 
                 </tbody>
               </table>
-
               <!--new ledge popup-->
-              <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT'">
+              <div style="position: absolute"
+                *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
@@ -170,8 +169,10 @@
                                         (saveBlankLedger)="saveBlankTransaction()">
                 </new-ledger-entry-panel>
               </div>
+
             </td>
           </tr>
+
           </tbody>
         </table>
 
@@ -237,20 +238,19 @@
         <!--blank ladger-->
         <table class="width100" (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
           <tbody>
-          <tr>
-            <td class="width100">
+          <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
+            <td class="width100" *ngIf="txn.type === 'CREDIT'">
               <table class="width100">
                 <tbody class="ledger-main">
-                <tr class="ledger-row" *ngFor="let txn of lc.blankLedger.transactions;"
-                    [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}"
-                    (click)="showNewLedgerEntryPopup(txn);">
+                <tr class="ledger-row"
+                    [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
 
-                  <td class="col-xs-2" *ngIf="txn.type === 'CREDIT'">
+                  <td class="col-xs-2">
                     <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
                            ng-click="ledgerCtrl.selectBlankTxn(txn, $event)"
                            is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
-                  <td class="col-xs-7" *ngIf="txn.type === 'CREDIT'">
+                  <td class="col-xs-7">
 
                     <select2 [data]="lc.flatternAccountList | async" (valueChanged)="selectAccount($event,txn)"
                              [(ngModel)]="txn.particular" [options]="accountsOptions"></select2>
@@ -262,7 +262,7 @@
 
                   </td>
 
-                  <td class="col-xs-3 pos-rel" *ngIf="txn.type === 'CREDIT'">
+                  <td class="col-xs-3 pos-rel">
                     <input class="form-control alR" type="number" [(ngModel)]="txn.amount"
                            (keydown)="needToReCalculate = true"
                            (keyup)="needToReCalculate = false"
@@ -276,7 +276,7 @@
               </table>
 
               <!--new ledge popup-->
-              <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
+              <div style="position: absolute" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
@@ -288,6 +288,7 @@
 
             </td>
           </tr>
+
           </tbody>
         </table>
 

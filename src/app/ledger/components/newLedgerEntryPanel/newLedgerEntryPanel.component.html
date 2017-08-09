@@ -1,5 +1,4 @@
-<div ng-click="$event.stopPropagation()" class="ledger-panel"
-     ng-class="{'pop-panel':!popover.draggable, 'fixed-panel': ledgerCtrl.showPanel, 'top0':hideHeader}">
+<div class="ledger-panel">
   <div class="wrapper">
     <div class="basic_detail" ng-if="ledgerCtrl.showTaxationDiscountBox">
       <table>
@@ -53,8 +52,9 @@
           <!--discount-->
           <td style="max-width:150px" class="pItem"
               *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
-            <ledger-discount (discountUpdatedEvent)="currentTxn.discounts = $event"
-                             (discountTotalUpdatedEvent)="currentTxn.discount = $event;calculateTotal()">
+            <ledger-discount
+              [discountAccountsDetails]="currentTxn.discounts"
+              (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
             </ledger-discount>
           </td>
 
@@ -67,7 +67,7 @@
             <!--tax control component-->
             <tax-control [taxes]="companyTaxesList$ | async"
                          [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes"
-                         (selectedTaxesEvent)="currentTxn.taxes = $event"
+                         [taxRenderData]="currentTxn.taxes"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
                          (isApplicableTaxesEvent)="blankLedger.applyApplicableTaxes = $event">
             </tax-control>
@@ -127,7 +127,7 @@
           <div class="row">
             <span>{{ blankLedger.attachedFileName }}</span>
             <label class="remove cp mrL1"
-                   (click)="deleteAttachedFile()">(remove)</label>
+                   (click)="showDeleteAttachedFileModal()">(remove)</label>
           </div>
         </div>
       </div>
@@ -207,10 +207,10 @@
           </div>
 
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  (click)="addToDrOrCr('DEBIT')" [disabled]="currentTxn.type === 'DEBIT'">Add to DR
+                  (click)="addToDrOrCr('DEBIT',$event)">Add to DR
           </button>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  (click)="addToDrOrCr('CREDIT')" [disabled]="currentTxn.type === 'CREDIT'">Add to CR
+                  (click)="addToDrOrCr('CREDIT',$event)">Add to CR
           </button>
           <button id="saveLedger" class="btn btn-success" [disabled]="isFileUploading" (click)="saveLedger()">Save
           </button>
