@@ -30,8 +30,6 @@ export class EditInvoiceComponent implements OnInit {
   constructor(private store: Store<AppState>, private invoiceAction: InvoiceAction) {
 
     this.store.dispatch(this.invoiceAction.getTemplateState());
-
-
     // this.tableMeta$ = this.store.select( state => {
     //   return state.invoice.table;
     //   }).takeUntil(this.destroyed$);
@@ -43,24 +41,7 @@ export class EditInvoiceComponent implements OnInit {
 
     console.log('edit-invoice-component');
     // TODO: Fetch current template object and bind to template component
-    this.templateID$ = this.store.select(state => {
-      return state.invoice.template.templateId;
-    }).takeUntil(this.destroyed$);
-    this.templateID$.subscribe(val => {
-      this.templateId = val;
-      // console.log(this.templateId);
-    });
 
-    this.heading$ = this.store.select(state => {
-      return state.invoice.template.heading;
-    }).takeUntil(this.destroyed$);
-    this.heading$.subscribe(val => {
-      this.heading = val;
-      console.log(this.heading);
-    });
-    this.store.subscribe(val => {
-      console.log(val);
-    });
   }
 
 }
