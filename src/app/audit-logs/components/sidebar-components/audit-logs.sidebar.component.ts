@@ -128,6 +128,14 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.vm.selectedAccountUnq = v.value || '';
   }
 
+  public clearDate(model: string) {
+    this.setToday(model);
+  }
+
+  public setToday(model: string) {
+    this.vm[model] = new Date();
+  }
+
   public selectGroup(v) {
     this.vm.selectedGroupUnq = v.value || '';
   }
