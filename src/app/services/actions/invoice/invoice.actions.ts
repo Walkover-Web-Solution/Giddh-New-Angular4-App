@@ -23,6 +23,18 @@ export class InvoiceAction {
   constructor(private store: Store<AppState>, private _invoiceService: InvoiceService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {
   }
+  public getTemplateState(): Action {
+    return {
+      type: INVOICE.TEMPLATE.GET_USER_TEMPLATES
+    };
+  }
+  public getCurrentTemplateSate(uniqueName: string): Action{
+    return{
+      payload: uniqueName,
+      type: INVOICE.TEMPLATE.GET_CURRENT_TEMPLATE
+    };
+  }
+
   public setTemplateState(temp: Template): Action {
     return {
       type: INVOICE.TEMPLATE.SELECT_TEMPLATE_STATE,
