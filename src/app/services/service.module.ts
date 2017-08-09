@@ -46,6 +46,7 @@ import { LedgerService } from './ledger.service';
 import { HomeActions } from './actions/home/home.actions';
 import { DashboardService } from './dashboard.service';
 import {InvoiceAction} from "./actions/invoice/invoice.actions";
+import {InvoiceService} from "./invoice.services";
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -94,6 +95,7 @@ export class ServiceModule {
         AccountService,
         InventoryService,
         PermissionService,
+        InvoiceService,
         ErrorHandler,
         SearchService,
         LogsService,
