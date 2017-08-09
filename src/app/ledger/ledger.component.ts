@@ -10,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment';
-import { cloneDeep, filter, last, orderBy } from 'lodash';
+import { cloneDeep, filter, find, orderBy } from 'lodash';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
@@ -225,15 +225,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public toggleTransactionType(event: string) {
-    let trx = last(
-      filter(this.lc.blankLedger.transactions, bl => bl.type === event)
-    );
-    if (trx.selectedAccount) {
+    let allTrx: TransactionVM[] = filter(this.lc.blankLedger.transactions, bl => bl.type === event);
+    let unAccountedTrx = find(allTrx, a => !a.selectedAccount);
+
+    if (unAccountedTrx) {
+      this.selectBlankTxn(unAccountedTrx);
+    } else {
       let newTrx = this.addNewTransaction(event);
       this.lc.blankLedger.transactions.push(newTrx);
       this.selectBlankTxn(newTrx);
-    } else {
-      this.selectBlankTxn(trx);
     }
   }
 
@@ -267,9 +267,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
   }
 
-  public showNewLedgerEntryPopup(trx) {
-    this.lc.showNewLedgerPanel = true;
+  public showNewLedgerEntryPopup(trx: TransactionVM) {
     this.selectBlankTxn(trx);
+    this.lc.showNewLedgerPanel = true;
   }
 
   public hideNewLedgerEntryPopup() {
