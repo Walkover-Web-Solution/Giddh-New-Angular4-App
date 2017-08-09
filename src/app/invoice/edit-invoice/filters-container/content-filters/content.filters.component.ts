@@ -14,7 +14,7 @@ import { AppState } from '../../../../store/roots';
 
 export class ContentFilterComponent  {
   @Input() public content: boolean;
-  @Input() public contentData: Content;
+  // @Input() public contentData: Content;
   public enableheading: boolean = true;
   public enableGSTIN: boolean = true;
   public enablePAN: boolean = true;
@@ -212,7 +212,7 @@ export class ContentFilterComponent  {
   }
 }
 import { InvoiceAction } from '../../../../services/actions/invoice/invoice.actions';
-import { Content } from '../../../../models/api-models/invoice';
+
 import { NouisliderModule } from 'ng2-nouislider';
 
 import { MdSliderModule } from '@angular/material';
