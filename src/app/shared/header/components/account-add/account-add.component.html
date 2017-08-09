@@ -8,7 +8,7 @@
           <div class="col-xs-6">
             <div class="row">
               <label>A/c Name</label>
-              <input type="text" name="accName" maxlength="100" class="form-control" formControlName="name">
+              <input type="text" name="accName" (change)="generateUniqueName()" maxlength="100" class="form-control" formControlName="name">
             </div>
           </div>
         </div>
