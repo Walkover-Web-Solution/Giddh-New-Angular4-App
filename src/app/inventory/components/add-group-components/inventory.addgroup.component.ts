@@ -3,7 +3,7 @@ import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
-import { Subject, Subscription } from 'rxjs/Rx';
+import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -11,8 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../../services/inventory.service';
 import { StockGroupRequest, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
-import { IGroupsWithStocksHierarchyMinItem, IGroupsWithStocksFlattenItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { uniqueNameValidator } from '../../../shared/helpers/customValidationHelper';
+import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
@@ -82,7 +81,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     // add group form
     this.addGroupForm = this._fb.group({
       name: ['', [Validators.required]],
-      uniqueName: ['', [Validators.required], uniqueNameValidator],
+      uniqueName: ['', [Validators.required]],
       parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
       isSelfParent: [true]
     });
@@ -186,6 +185,12 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
 
   // generate uniquename
   public generateUniqueName() {
+    let activeGrp = null;
+    this.activeGroup$.take(1).subscribe(ag => activeGrp = ag);
+    // if updating group don't generate uniqueName
+    if (activeGrp) {
+      return true;
+    }
     let val: string = this.addGroupForm.controls['name'].value;
     val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
     this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
