@@ -8,12 +8,8 @@ import { NeedsAuthentication } from '../services/decorators/needsAuthentication'
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: 'home', redirectTo: 'pages/home', pathMatch: 'full', canActivate: [NeedsAuthentication] },
       {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
-        children: [
-          { path: 'home', component: HomeComponent, canActivate: [NeedsAuthentication] }
-        ]
+        path: '', component: HomeComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],

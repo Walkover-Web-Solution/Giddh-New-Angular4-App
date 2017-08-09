@@ -131,6 +131,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       }
     case LoginActions.LogOut:
       return Object.assign({}, state, {
+        isVerifyMobileSuccess: false,
         isLoginWithMobileInProcess: false, // if true then We are checking with
         isVerifyMobileInProcess: false,
         isLoginWithEmailInProcess: false,
@@ -139,6 +140,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithLinkedInInProcess: false,
         isLoginWithTwitterInProcess: false,
         isLoginWithEmailSubmited: false,
+        isLoginWithMobileSubmited: false,
         isVerifyEmailSuccess: false,
         user: null
       });
@@ -173,6 +175,17 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
     case LoginActions.LogOut:
       return Object.assign({}, state, {
+        isVerifyMobileSuccess: false,
+        isLoginWithMobileInProcess: false, // if true then We are checking with
+        isVerifyMobileInProcess: false,
+        isLoginWithEmailInProcess: false,
+        isVerifyEmailInProcess: false,
+        isLoginWithGoogleInProcess: false,
+        isLoginWithLinkedInInProcess: false,
+        isLoginWithTwitterInProcess: false,
+        isLoginWithEmailSubmited: false,
+        isLoginWithMobileSubmited: false,
+        isVerifyEmailSuccess: false,
         user: null
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
