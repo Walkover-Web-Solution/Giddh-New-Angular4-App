@@ -14,6 +14,7 @@ import { DomSanitizer, SafeUrl, SafeResourceUrl } from '@angular/platform-browse
 })
 
 export class LiveAccountsComponent implements OnInit, OnDestroy {
+  public bankAccountsError$: Observable<string>;
   @Input() public refresh: boolean = false;
   @ViewChild('refreshBankAccountModal') public refreshBankAccountModal: ModalDirective;
   public reconnectBankAccount$: Observable<RefreshBankAccountResponse>;
@@ -26,6 +27,7 @@ export class LiveAccountsComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions, private _sanitizer: DomSanitizer) {
     this.isGetBankAccountsInProcess$ = this.store.select(p => p.home.isGetBankAccountsInProcess).takeUntil(this.destroyed$);
     this.bankAccounts$ = this.store.select(p => p.home.BankAccounts).takeUntil(this.destroyed$);
+    this.bankAccountsError$ = this.store.select(p => p.home.getBankAccountError).takeUntil(this.destroyed$);
     this.refreshBankAccount$ = this.store.select(p => p.home.RefereshBankAccount).takeUntil(this.destroyed$);
     this.reconnectBankAccount$ = this.store.select(p => p.home.ReConnectBankAccount).takeUntil(this.destroyed$);
   }

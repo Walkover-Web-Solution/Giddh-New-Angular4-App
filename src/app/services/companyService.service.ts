@@ -64,7 +64,7 @@ export class CompanyService {
     return this._http.delete(COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName))
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
-        data.queryString = {uniqueName};
+        data.queryString = { uniqueName };
         return data;
       }).catch((e) => HandleCatch<string, string>(e, ''));
   }
@@ -73,7 +73,13 @@ export class CompanyService {
    * get state details
    */
   public getStateDetails(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
-    return this._http.get(COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', cmpUniqueName ? cmpUniqueName : '')).map((res) => {
+    let url = '';
+    if (cmpUniqueName) {
+      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', cmpUniqueName ? cmpUniqueName : '');
+    } else {
+      url = COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
+    }
+    return this._http.get(url).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
       return data;
     }).catch((e) => HandleCatch<StateDetailsResponse, string>(e));
@@ -122,12 +128,12 @@ export class CompanyService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.post(COMPANY_API.SEND_EMAIL
-        .replace(':companyUniqueName', this.companyUniqueName)
-        .replace(':from', request.params.from)
-        .replace(':to', request.params.to)
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':from', request.params.from)
+      .replace(':to', request.params.to)
       , request.data).map((res) => {
-      return res.json();
-    }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
+        return res.json();
+      }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
   }
 
   public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
@@ -138,12 +144,12 @@ export class CompanyService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.post(COMPANY_API.SEND_SMS
-        .replace(':companyUniqueName', this.companyUniqueName)
-        .replace(':from', request.params.from)
-        .replace(':to', request.params.to)
+      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':from', request.params.from)
+      .replace(':to', request.params.to)
       , request.data).map((res) => {
-      return res.json();
-    }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
+        return res.json();
+      }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
   }
 
   /**
