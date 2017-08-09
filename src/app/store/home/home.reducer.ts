@@ -14,13 +14,17 @@ import { RefreshBankAccountResponse, BankAccountsResponse } from '../../models/a
 export interface HomeState {
   value?: string;
   expensesChart?: IExpensesChartClosingBalanceResponse;
+  expensesChartError?: string;
   revenueChart?: IRevenueChartClosingBalanceResponse;
+  revenueChartError?: string;
   comparisionChart?: IComparisionChartResponse;
+  comparisionChartError?: string;
   isExpensesChartDataInProcess: boolean;
   isExpensesChartDataAvailable: boolean;
   isRevenueChartDataInProcess: boolean;
   isRevenueChartDataAvailable: boolean;
   isGetBankAccountsInProcess: boolean;
+  getBankAccountError?: string;
   BankAccounts?: BankAccountsResponse[];
   isRefereshBankAccount: boolean;
   RefereshBankAccount?: RefreshBankAccountResponse;
@@ -52,6 +56,20 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
+    case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE: {
+      let data = action.payload;
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.operatingcostActiveyear.message
+        });
+      }
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.indirectexpensesActiveyear.message
+        });
+      }
+      return state;
+    }
 
     case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IExpensesChartClosingBalanceResponse;
@@ -63,7 +81,20 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
-
+    case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR_ERROR_RESPONSE: {
+      let data = action.payload;
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.operatingcostActiveyear.message
+        });
+      }
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.operatingcostActiveyear.message
+        });
+      }
+      return state;
+    }
     case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IRevenueChartClosingBalanceResponse;
       return Object.assign({}, state, {
@@ -74,15 +105,29 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
+    case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE: {
+      let data = action.payload;
+      if (data.revenuefromoperationsActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          revenueChartError: data.revenuefromoperationsActiveyear.message
+        });
+      }
+      if (data.otherincomeActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          revenueChartError: data.otherincomeActiveyear.message
+        });
+      }
+      return state;
+    }
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
-      return Object.assign({}, state, { isGetBankAccountsInProcess: true });
+      return Object.assign({}, state, { isGetBankAccountsInProcess: true, });
     }
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
       let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (bankresponse.status === 'success') {
-        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body });
+        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: null });
       }
-      return Object.assign({}, state, { isGetBankAccountsInProcess: false });
+      return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
     }
     case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IRevenueChartClosingBalanceResponse;

@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.loginAction.LoginSuccess());
+    //
     this.user$.subscribe((u) => {
       if (u) {
         if (u.name.match(/\s/g)) {

@@ -147,7 +147,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       yAxis: {
         min: 0,
         title: {
-          text: 'Rainfall (mm)'
+          text: ''
         }
       },
       tooltip: {
