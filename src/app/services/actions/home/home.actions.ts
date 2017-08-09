@@ -37,7 +37,8 @@ export class HomeActions {
         };
       }
       return {
-        type: ''
+        type: HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
+        payload: { operatingcostActiveyear: res[0], indirectexpensesActiveyear: res[1] }
       };
     });
 
@@ -85,7 +86,8 @@ export class HomeActions {
         };
       }
       return {
-        type: ''
+        type: HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
+        payload: { revenuefromoperationsActiveyear: res[0], otherincomeActiveyear: res[1] }
       };
     });
 
