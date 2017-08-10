@@ -4841,3 +4841,22 @@ table.proforma-particulars {
   border: 0;
   border-bottom: 2px solid #d36029;
 }
+.select2-parent .select2-container--default .select2-selection--single{
+  border-radius: 0;
+  background-color: #f9f7f2;
+  border: 1px solid #ded3c0;
+}
+.select2-parent .select2-container .select2-selection--single{
+  height: 34px
+}
+.select2-parent .select2-container--default .select2-selection--single .select2-selection__rendered{
+  line-height: 32px;
+  color: #616161;
+  font-size: 14px;
+}
+.select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow{
+  height: 32px
+}
+.select2-parent .select2-container--default .select2-results>.select2-results__options{
+  font-size: 14px;
+}
