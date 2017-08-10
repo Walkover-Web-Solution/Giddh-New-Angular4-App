@@ -5,6 +5,7 @@ import { TabsModule } from 'ngx-bootstrap';
 import { SettingsComponent } from './settings.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { SettingProfileComponent } from './profile/setting.profile.component';
+import { SharedModule } from '../shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
   imports: [
     CommonModule,
     FormsModule,
-    TabsModule.forRoot()
+    TabsModule.forRoot(),
+    SharedModule
   ]
 })
 export class SettingsModule {}
