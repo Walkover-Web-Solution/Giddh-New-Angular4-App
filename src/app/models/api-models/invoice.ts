@@ -25,38 +25,22 @@
 //   public width: number;
 // }
 
-export class Template {
-  public sections: Section[];
+import { IContent, ISection, ITemplate, ITemplateBody } from '../interfaces/parseInvoice.interface';
+
+export class Template implements ITemplate {
+  public status: string;
+  public body: ITemplateBody[];
 }
 
-export class Section {
-  public header: HeaderContents[];
-  public table: TableContents[];
-  public footer: FooterContents[];
-  public isDefault: boolean;
+export class TemplateBody implements ITemplateBody {
+  public sections: ISection[];
+  public  isDefault: boolean;
   public uniqueName: string;
-  public sample: false;
+  public sample: boolean;
   public name: string;
 }
 
-export class HeaderContents {
- public display: boolean;
- public label: string;
- public field: string;
- public width: number;
-
-}
-
-export class TableContents {
-  public display: boolean;
-  public label: string;
-  public field: string;
-  public width: number;
-}
-
-export class FooterContents {
-  public display: boolean;
-  public label: string;
-  public field: string;
-  public width: number;
+export class Section implements ISection{
+  public sectionName: string;
+  public content: IContent[];
 }

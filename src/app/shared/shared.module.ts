@@ -44,8 +44,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { NgUploaderModule } from 'ngx-uploader';
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
-
-
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -83,14 +81,10 @@ export function highchartsFactory() {
     Select2Module, TagsModule,
     ClickOutsideModule,
     Daterangepicker,
-<<<<<<< HEAD
-    TextMaskModule,
-    ChartModule.forRoot(require('highcharts'))
-=======
     ChartModule,
     TextMaskModule,
     NgUploaderModule
->>>>>>> master
+
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
      AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,

@@ -26,14 +26,17 @@ export class NeedsAuthentication implements CanActivate {
         }
       });
       if (cmpUniqueName === '') {
+        console.log('I am setting company unique name');
         let resp = this._companyService.getStateDetails('').toPromise();
         return resp.then(p => {
           this.store.dispatch(this.companyActions.GetStateDetailsResponse(p));
           return true;
         });
       }
+      console.log('I have company uniqe name');
       return true;
     } else {
+      console.log('I ham not logged in');
       this._router.navigate(['/login']);
     }
   }

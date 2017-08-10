@@ -12,6 +12,7 @@ import { EditFiltersContainersComponent } from './filters-container/edit.filters
 import { OutTemplateComponent } from './out-tempate/out.template.component';
 import {MaterialModule, MdSliderModule} from "@angular/material";
 import {ContentFilterComponent} from "./filters-container/content-filters/content.filters.component";
+import {InvoiceRoutingModule} from "./edit-invoice.routing.module";
 
 @NgModule({
   imports: [
@@ -20,13 +21,12 @@ import {ContentFilterComponent} from "./filters-container/content-filters/conten
     ReactiveFormsModule,
     SharedModule,
     EditFiltersModule,
-    MdSliderModule,
+    InvoiceRoutingModule
   ],
   declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent],
   exports: [
     EditFiltersModule,
     OutTemplateComponent,
-    MdSliderModule,
     ContentFilterComponent,
     EditInvoiceComponent
   ]
