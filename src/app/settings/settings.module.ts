@@ -15,6 +15,7 @@ import { SharedModule } from '../shared/shared.module';
     SettingProfileComponent
   ],
   imports: [
+    SharedModule,
     CommonModule,
     FormsModule,
     TabsModule.forRoot(),
