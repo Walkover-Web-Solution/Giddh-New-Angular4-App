@@ -3,7 +3,7 @@ import { TaxResponse } from './../../models/api-models/Company';
 import { CompanyActions } from './../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
-
+import * as _ from 'lodash';
 /**
  * Keeping Track of the CompanyState
  */
@@ -39,10 +39,11 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
     case CompanyActions.CREATE_COMPANY_RESPONSE:
       let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
-        return Object.assign({}, state, {
-          isCompanyCreationInProcess: false,
-          isCompanyCreated: true
-        });
+        let newState = _.cloneDeep(state);
+        newState.isCompanyCreationInProcess = false;
+        newState.isCompanyCreated = false;
+        newState.companies.push(companyResp.body);
+        return newState;
       }
       return state;
     case 'CATCH_ERROR':
