@@ -48,6 +48,9 @@ import { DashboardService } from './dashboard.service';
 import { SettingsIntegrationService } from './settings.integraion.service';
 import { SettingsIntegrationActions } from './actions/settings/settings.integration.action';
 import { SettingsProfileService } from './settings.profile.service';
+import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
+// import { SettingsProfileActions } from './actions/settings/settings.profile.action';
+
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -73,7 +76,8 @@ import { SettingsProfileService } from './settings.profile.service';
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TlPlActions),
     EffectsModule.run(LedgerActions),
-    EffectsModule.run(SettingsIntegrationActions)
+    EffectsModule.run(SettingsIntegrationActions),
+    EffectsModule.run(SettingsProfileActions),
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })

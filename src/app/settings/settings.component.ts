@@ -10,7 +10,7 @@ export class SettingsComponent implements OnInit {
 
   public ngOnInit() {
     console.log('hello from Settings');
-    this.selectTab(1);
+    this.selectTab(3);
   }
 
   private selectTab(id: number) {
