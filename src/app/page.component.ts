@@ -1,6 +1,6 @@
 import { CompanyActions } from './services/actions/company.actions';
 import { LoginActions } from './services/actions/login.action';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { AppState } from './store/roots';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
@@ -27,7 +27,15 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   public ngOnInit() {
     this.store.dispatch(this.comapnyActions.RefreshCompanies());
     // this.store.dispatch(this.loginAction.LoginSuccess());
-    this.router.events.takeUntil(this.destroyed$).subscribe((event) => {
+    document.onreadystatechange = (e) => {
+      // debugger;
+      if (e.returnValue) {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 500);
+      }
+    };
+    this.router.events.takeUntil(this.destroyed$).delay(300).subscribe((event) => {
       window.scrollTo(0, 0);
     });
   }
