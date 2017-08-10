@@ -100,7 +100,8 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     });
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
       if (p) {
-        this.addAccountForm.reset();
+        // reset with default values
+        this.addAccountForm.reset({openingBalanceType: 'CREDIT', openingBalance: 0});
       }
     });
   }
