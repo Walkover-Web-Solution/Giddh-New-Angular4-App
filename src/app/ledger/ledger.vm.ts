@@ -41,7 +41,9 @@ export class LedgerVM {
           total: 0,
           discount: 0,
           discounts: [],
-          selectedAccount: null
+          selectedAccount: null,
+          applyApplicableTaxes: true,
+          isInclusiveTax: true
         },
         {
           id: uuid.v4(),
@@ -53,12 +55,12 @@ export class LedgerVM {
           total: 0,
           discount: 0,
           discounts: [],
-          selectedAccount: null
+          selectedAccount: null,
+          applyApplicableTaxes: true,
+          isInclusiveTax: true
         }],
-      voucherType: 'Purchases',
+      voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
-      applyApplicableTaxes: true,
-      isInclusiveTax: true,
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
@@ -66,7 +68,7 @@ export class LedgerVM {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: moment().format('DD-MM-YYYY')
+      chequeClearanceDate: ''
     };
   }
 }
@@ -75,8 +77,6 @@ export class BlankLedgerVM {
   public transactions: TransactionVM[];
   public voucherType: string;
   public entryDate: string;
-  public applyApplicableTaxes: boolean;
-  public isInclusiveTax: boolean;
   public unconfirmedEntry: boolean;
   public attachedFile: string;
   public attachedFileName?: string;
@@ -91,6 +91,8 @@ export class TransactionVM {
   public id?: string;
   public amount: number;
   public particular: string;
+  public applyApplicableTaxes: boolean;
+  public isInclusiveTax: boolean;
   public type: string;
   public taxes: string[];
   public tax?: number;

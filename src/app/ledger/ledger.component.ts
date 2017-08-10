@@ -201,7 +201,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.currentPage = lc.page;
       }
     });
-    this.isLedgerCreateSuccess$.distinctUntilChanged().subscribe(s => {
+    this.isLedgerCreateSuccess$.distinct().subscribe(s => {
       if (s) {
         this._router.navigate(['/pages/dummy'], {skipLocationChange: true}).then(() => {
           this._router.navigate(['/pages', 'ledger', this.lc.accountUnq]);
@@ -248,7 +248,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
       taxes: [],
       discount: 0,
       discounts: [],
-      selectedAccount: null
+      selectedAccount: null,
+      applyApplicableTaxes: true,
+      isInclusiveTax: true
     };
   }
 
@@ -280,6 +282,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.blankLedger = {
       transactions: [
         {
+          id: uuid.v4(),
           amount: 0,
           tax: 0,
           total: 0,
@@ -288,9 +291,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
           taxes: [],
           discount: 0,
           discounts: [],
-          selectedAccount: null
+          selectedAccount: null,
+          applyApplicableTaxes: true,
+          isInclusiveTax: true
         },
         {
+          id: uuid.v4(),
           amount: 0,
           particular: '',
           tax: 0,
@@ -299,12 +305,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
           taxes: [],
           discount: 0,
           discounts: [],
-          selectedAccount: null
+          selectedAccount: null,
+          applyApplicableTaxes: true,
+          isInclusiveTax: true
         }],
-      voucherType: 'Purchases',
+      voucherType: 'voucherType',
       entryDate: moment().format('DD-MM-YYYY'),
-      applyApplicableTaxes: true,
-      isInclusiveTax: true,
       unconfirmedEntry: false,
       attachedFile: '',
       attachedFileName: '',
@@ -312,7 +318,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: moment().format('DD-MM-YYYY')
+      chequeClearanceDate: ''
     };
     this.hideNewLedgerEntryPopup();
   }
@@ -321,8 +327,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let blankTransactionObj: BlankLedgerVM;
     blankTransactionObj = cloneDeep(this.lc.blankLedger);
     blankTransactionObj.transactions = blankTransactionObj.transactions.filter(bl => bl.particular);
-    blankTransactionObj.transactions.map(bl => {
+    blankTransactionObj.transactions.map((bl: any) => {
       bl.particular = bl.selectedAccount.uniqueName;
+      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       delete bl['id'];
     });
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));

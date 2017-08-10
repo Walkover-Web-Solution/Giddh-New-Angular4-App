@@ -69,7 +69,7 @@
                          [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes"
                          [taxRenderData]="currentTxn.taxes"
                          (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
-                         (isApplicableTaxesEvent)="blankLedger.applyApplicableTaxes = $event">
+                         (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
             </tax-control>
           </td>
           <td class="pItem">
