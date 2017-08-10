@@ -101,7 +101,6 @@
     "jusas-angularjs-slider": "^0.1.36",
     "lodash": "4.17.4",
     "ng-select": "^1.0.0-beta.5",
-
     "ngx-uploader": "^3.3.6",
     "rxjs": "~5.4.1"
   },

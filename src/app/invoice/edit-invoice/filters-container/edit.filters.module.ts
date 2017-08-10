@@ -12,7 +12,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { DesignFiltersContainerComponent } from './design-filters/design.filters.component';
 import { SelectTemplateComponent } from './design-filters/select-template/select.template.component';
 import { ContentFilterComponent } from './content-filters/content.filters.component';
-import {NouisliderModule} from "ng2-nouislider";
+
 
 @NgModule({
   imports: [
@@ -20,16 +20,12 @@ import {NouisliderModule} from "ng2-nouislider";
     FormsModule,
     ReactiveFormsModule,
     SharedModule,
-    NouisliderModule
-
   ],
   declarations: [DesignFiltersContainerComponent, SelectTemplateComponent],
   exports: [
     DesignFiltersContainerModule,
     DesignFiltersContainerComponent,
-    SelectTemplateComponent,
-    NouisliderModule
-
+    SelectTemplateComponent
   ]
 })
 export class EditFiltersModule {

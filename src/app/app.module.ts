@@ -28,12 +28,7 @@ import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { InventoryModule } from './inventory/inventory.module';
-import { SearchModule } from './search/search.module';
-import { AuditLogsModule } from './audit-logs/audit-logs.module';
-import { LedgerModule } from './ledger/ledger.module';
-import { TlPlModule } from './tl-pl/tl-pl.module';
-import { EditInvoiceModule } from './invoice/edit-invoice/edit.invoice.module';
+
 import { DummyComponent } from './dummy.component';
 
 // Application wide providers
@@ -85,20 +80,6 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    AboutModule,
-    PermissionModule,
-    HomeModule,
-    FileUploadModule,
-    InventoryModule,
-    SearchModule,
-    TlPlModule,
-    AuditLogsModule,
-    LedgerModule,
-    LoginModule,
-    FileUploadModule,
-    DesignFiltersContainerModule,
-    EditFiltersModule,
-    EditInvoiceModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),

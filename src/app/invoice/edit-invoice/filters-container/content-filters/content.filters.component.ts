@@ -5,6 +5,7 @@ import {
 import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../../store/roots';
+import {InvoiceAction} from "../../../../services/actions/invoice/invoice.actions";
 @Component({
   selector: 'content-selector',
 
@@ -211,8 +212,6 @@ export class ContentFilterComponent  {
     this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
   }
 }
-import { InvoiceAction } from '../../../../services/actions/invoice/invoice.actions';
 
-import { NouisliderModule } from 'ng2-nouislider';
 
-import { MdSliderModule } from '@angular/material';
+

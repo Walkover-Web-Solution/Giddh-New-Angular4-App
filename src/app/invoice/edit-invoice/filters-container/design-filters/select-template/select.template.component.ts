@@ -13,11 +13,7 @@ import { InvoiceAction } from '../../../../../services/actions/invoice/invoice.a
 })
 
 export class SelectTemplateComponent  {
-
-  @Input() public ifTemplateSelected: boolean;
-
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceAction) {
-    console.log('design-filters-container constructor called');
   }
 
   public showTemplate(id) {

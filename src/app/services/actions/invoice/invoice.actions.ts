@@ -7,9 +7,10 @@ import {InvoiceService} from "../../invoice.services";
 import {AppState} from "../../../store/roots";
 import {Router} from "@angular/router";
 import {ToasterService} from "../../toaster.service";
-import {Section, Template} from "../../../models/api-models/invoice";
-import {map} from "rxjs/operator/map";
-import {BaseResponse} from "../../../models/api-models/BaseResponse";
+import {Section, Template, TemplateBody} from "../../../models/api-models/invoice";
+import {map} from 'rxjs/operator/map';
+import {ITemplateBody} from "../../../models/interfaces/parseInvoice.interface";
+
 
 @Injectable()
 export class InvoiceAction {
@@ -19,13 +20,21 @@ export class InvoiceAction {
     .switchMap(action =>  this._invoiceService.getTemplates())
     .map((response: Template) => {
       console.log('API Response', response);
-      return this.setTemplateState(response.sections);
+     // console.log('TEMPLATE BODY', response.body);
+      return this.setTemplateState(response);
       // console.log('GET_USER_TEMPLATE effect callee');
     // this.store.dispatch(this.setTemplateState());
     });
   constructor(private store: Store<AppState>, private _invoiceService: InvoiceService, private action$: Actions,
               private _toasty: ToasterService, private router: Router) {
   }
+  public setTemplateData(section: Section[]) {
+    return {
+      payload: section,
+      type: INVOICE.TEMPLATE.SET_TEMPLATE_DATA
+    };
+  }
+
   public getTemplateState(): Action {
     console.log('GET TEMPLATE ACTION CALLED');
     return {
@@ -39,11 +48,11 @@ export class InvoiceAction {
     };
   }
 
-  public setTemplateState(sections: Section[]): Action {
-    console.log('SET_TEMPLATE_PAYLOAD', sections);
+  public setTemplateState(temp: Template): Action {
+    console.log('SET_TEMPLATE_PAYLOAD', temp);
     return {
       type: INVOICE.TEMPLATE.SET_TEMPLATE_STATE,
-      payload: {sections}
+      payload: {temp}
     };
   }
   public setTemplateId(id: string): Action {
