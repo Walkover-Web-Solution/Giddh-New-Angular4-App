@@ -159,8 +159,7 @@
                 </tbody>
               </table>
               <!--new ledge popup-->
-              <div style="position: absolute"
-                *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+              <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
@@ -276,7 +275,7 @@
               </table>
 
               <!--new ledge popup-->
-              <div style="position: absolute" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
+              <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"

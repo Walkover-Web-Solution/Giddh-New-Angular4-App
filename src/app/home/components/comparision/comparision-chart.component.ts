@@ -171,6 +171,7 @@ export class ComparisionChartComponent implements OnInit {
     this.options = {
       chart: {
         height: '320px',
+        width: 400
       },
       title: {
         text: ''
