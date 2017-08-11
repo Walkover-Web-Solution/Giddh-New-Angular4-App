@@ -133,6 +133,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     this.lastYearAccountsRanks = this.accountStrings.map(p => p.lastYear);
 
     this.options = {
+      colors: ['#c45022', '#d37c59'],
       chart: {
         type: 'column',
         height: '320px'
