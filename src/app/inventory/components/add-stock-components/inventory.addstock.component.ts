@@ -35,7 +35,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public formDivBoundingRect: Subject<any> = new Subject<any>();
   public options: Select2Options = {
     multiple: false,
-    width: '200px',
+    width: '180px',
     placeholder: 'Choose a parent unit'
   };
   public groupUniqueName: string;
