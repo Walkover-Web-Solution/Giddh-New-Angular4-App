@@ -101,7 +101,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
-    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
+    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$);
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
 
     // get flatten_accounts list
@@ -154,7 +154,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
-    this.lc = new LedgerVM();
   }
 
   public selectAccount(e: any, txn) {
@@ -250,6 +249,51 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
     });
+  }
+
+  public resetBlankTransaction() {
+    this.lc.blankLedger = {
+      transactions: [
+        {
+          id: uuid.v4(),
+          amount: 0,
+          tax: 0,
+          total: 0,
+          particular: '',
+          type: 'DEBIT',
+          taxes: [],
+          discount: 0,
+          discounts: [],
+          selectedAccount: null,
+          applyApplicableTaxes: true,
+          isInclusiveTax: true
+        },
+        {
+          id: uuid.v4(),
+          amount: 0,
+          particular: '',
+          tax: 0,
+          total: 0,
+          type: 'CREDIT',
+          taxes: [],
+          discount: 0,
+          discounts: [],
+          selectedAccount: null,
+          applyApplicableTaxes: true,
+          isInclusiveTax: true
+        }],
+      voucherType: 'sal',
+      entryDate: moment().format('DD-MM-YYYY'),
+      unconfirmedEntry: false,
+      attachedFile: '',
+      attachedFileName: '',
+      tag: null,
+      description: '',
+      generateInvoice: false,
+      chequeNumber: '',
+      chequeClearanceDate: ''
+    };
+    this.hideNewLedgerEntryPopup();
   }
 
   public showNewLedgerEntryPopup(trx: TransactionVM) {
