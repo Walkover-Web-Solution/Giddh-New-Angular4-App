@@ -231,27 +231,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     if (unAccountedTrx) {
       this.selectBlankTxn(unAccountedTrx);
     } else {
-      let newTrx = this.addNewTransaction(event);
+      let newTrx = this.lc.addNewTransaction(event);
       this.lc.blankLedger.transactions.push(newTrx);
       this.selectBlankTxn(newTrx);
     }
-  }
-
-  public addNewTransaction(type: string = 'DEBIT') {
-    return {
-      id: uuid.v4(),
-      amount: 0,
-      tax: 0,
-      total: 0,
-      particular: '',
-      type,
-      taxes: [],
-      discount: 0,
-      discounts: [],
-      selectedAccount: null,
-      applyApplicableTaxes: true,
-      isInclusiveTax: true
-    };
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {
@@ -278,60 +261,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showNewLedgerPanel = false;
   }
 
-  public resetBlankTransaction() {
-    this.lc.blankLedger = {
-      transactions: [
-        {
-          id: uuid.v4(),
-          amount: 0,
-          tax: 0,
-          total: 0,
-          particular: '',
-          type: 'DEBIT',
-          taxes: [],
-          discount: 0,
-          discounts: [],
-          selectedAccount: null,
-          applyApplicableTaxes: true,
-          isInclusiveTax: true
-        },
-        {
-          id: uuid.v4(),
-          amount: 0,
-          particular: '',
-          tax: 0,
-          total: 0,
-          type: 'CREDIT',
-          taxes: [],
-          discount: 0,
-          discounts: [],
-          selectedAccount: null,
-          applyApplicableTaxes: true,
-          isInclusiveTax: true
-        }],
-      voucherType: 'voucherType',
-      entryDate: moment().format('DD-MM-YYYY'),
-      unconfirmedEntry: false,
-      attachedFile: '',
-      attachedFileName: '',
-      tag: null,
-      description: '',
-      generateInvoice: false,
-      chequeNumber: '',
-      chequeClearanceDate: ''
-    };
-    this.hideNewLedgerEntryPopup();
-  }
-
   public saveBlankTransaction() {
-    let blankTransactionObj: BlankLedgerVM;
-    blankTransactionObj = cloneDeep(this.lc.blankLedger);
-    blankTransactionObj.transactions = blankTransactionObj.transactions.filter(bl => bl.particular);
-    blankTransactionObj.transactions.map((bl: any) => {
-      bl.particular = bl.selectedAccount.uniqueName;
-      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
-      delete bl['id'];
-    });
+    let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
   }
 
