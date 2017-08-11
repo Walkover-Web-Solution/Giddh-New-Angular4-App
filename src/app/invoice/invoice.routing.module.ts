@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { TooltipModule } from 'ngx-bootstrap';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { SharedModule } from '../shared/shared.module';
@@ -9,6 +10,7 @@ import { InvoiceGenerateComponent } from './generate/invoice.generate.component'
 import { InvoiceTemplatesComponent } from './templates/invoice.templates.component';
 import { InvoiceSettingsComponent } from './settings/invoice.settings.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
+import { InvoiceCreateComponent } from './create/invoice.create.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -30,17 +32,20 @@ const INVOICE_ROUTES: Routes = [
     InvoicePreviewComponent,
     InvoiceGenerateComponent,
     InvoiceTemplatesComponent,
-    InvoiceSettingsComponent
+    InvoiceSettingsComponent,
+    InvoiceCreateComponent
   ],
   imports: [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
     SharedModule,
-    RouterModule.forChild(INVOICE_ROUTES)
+    RouterModule.forChild(INVOICE_ROUTES),
+    TooltipModule.forRoot()
   ],
   exports: [
-    RouterModule
+    RouterModule,
+    TooltipModule
   ],
   providers: []
 })

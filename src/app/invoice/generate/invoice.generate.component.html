@@ -1,1 +1,116 @@
-Hey dude invoice generate component
+<form #invoiceForm="ngForm" (ngSubmit)="getInvoiceByFilters(invoiceForm)" novalidate class="form-inline filterForm">
+  <div class="form-group">
+    <label>From</label>
+    <input type="text" class="form-control" placeholder="from date" />
+  </div>
+  <div class="form-group">
+    <label>To</label>
+    <input type="text" class="form-control" placeholder="to date" />
+  </div>
+  <div class="form-group">
+    <label>Account</label>
+    <div class="input-group">
+      <input type="text" class="form-control" placeholder="to date" />
+      <span class="input-group-btn">
+        <button type="button" (click)="filtersLedger.account = undefined" class="btn btn-default">
+          <span class="glyphicon glyphicon-trash"></span>
+        </button>
+      </span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>Description</label>
+    <input type="text" class="form-control" placeholder="By description">
+  </div>
+  <div class="form-group">
+    <label>Count</label>
+    <select class="form-control col-xs-2" >
+      <option [ngValue]="select">Select</option>
+      <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>Amount</label>
+    <select class="form-control">
+      <option>Greater than</option>
+      <option>Greater than and Equals</option>
+      <option>Less than</option>
+      <option>Less than and Equals</option>
+      <option>Equals</option>
+    </select>
+  </div>
+  <div class="form-group">
+    <label>&nbsp;</label>
+    <input type="text" class="form-control col-xs-2" placeholder="By amount">
+  </div>
+  <div class="form-group">
+    <label>&nbsp;</label>
+    <button class="btn btn-primary">GO</button>
+  </div>
+    
+</form>
+
+
+<div class="clearfix pdT2">
+  <ul class="list-inline pull-left">
+    <li><button disabled="!canGenerateInvoice" class="btn btn-primary" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
+    <li><button disabled="!canGenerateInvoice" class="btn btn-primary" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
+    <li><button disabled="!showPreview" class="btn btn-primary" (click)="prevAndGenInv()">Preview &amp; Generate</button></li>
+    <li><button class="btn btn-info" (click)="showInvoiceModal(invoiceTemplate)">Create New</button></li>
+    <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li>
+  </ul>
+  <div class="form-group pull-right">
+    <input type="search" class="form-control maxW150" placeholder="Search">
+  </div>
+</div>
+
+<!--list of data  -->
+
+<table class="table basic">
+  <thead class="t-h-bg1">
+    <tr>
+      <th style="width:3%">
+        <img style="max-height:18px;" src="assets/images/unchecked.png" *ngIf="!checkall" (click)="selectAllLedger(true)">
+        <img style="max-height:18px;" src="assets/images/checked.png" *ngIf="checkall" (click)="selectAllLedger(false)">
+      </th>
+      <th style="width:10%">Date</th>
+      <th style="width:23.5%">Particular</th>
+      <th style="width:7%">Amount</th>
+      <th style="width:30%">Description</th>
+      <th style="width:7%">Total</th>
+      <th style="width:20%">Account</th>
+    </tr>
+  </thead>
+  <tfoot>
+    <tr>
+      <td colspan="100%">
+        <div class="pagination pull-right">
+          <!-- <ul class="list-inline">
+            <li>
+              <button class="btn btn-default" ng-disabled="ledgerCurrentPage == 1" ng-click="prevPageLed(); getAllTransaction()">Prev</button>
+            </li>
+            <li>{{ledgerCurrentPage}}/{{ledgers.totalPages}}</li>
+            <li>
+              <button class="btn btn-default" ng-disabled="ledgerCurrentPage == ledgers.totalPages" ng-click="nextPageLed(); getAllTransaction()">Next</button>
+            </li>
+          </ul> -->
+        </div>
+      </td>
+    </tr>
+  </tfoot>
+  <tbody>
+    <tr>
+      <td colspan="100%">
+      </td>
+  </tbody>
+</table>
+
+<!--modal dialog  -->
+<ng-template #invoiceTemplate>
+  <div class="modal-header">
+    <h4 class="modal-title">Invoice</h4>
+  </div>
+  <div class="modal-body">
+    <invoice-create [actionType]="actionType" (closeInvoiceModel)="closeInvoiceModel($event)"></invoice-create>
+  </div>
+</ng-template>
