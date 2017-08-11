@@ -1,29 +1,29 @@
 <div id="net-worth" ng-init="getNetWorthData()">
-  <div class="panel panel-default shadow">
-    <div class="panel-heading">
-      <label>Net worth</label>
-      <div class="pull-right">
-        <label>
-        <input type="radio" name="chart"   (click)="togle('Monthly')" checked />Monthly
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Net worth</strong>
+            <div class="pull-right">
+                <label>
+        <input type="radio" name="chart" class="radio_theme"  (click)="togle('Monthly')" checked />Monthly
       </label>
-        <label>
-        <input type="radio" name="chart"   (click)="togle('Yearly')" />Yearly
+                <label>
+        <input type="radio" name="chart"  class="radio_theme" (click)="togle('Yearly')" />Yearly
       </label>
-        <i class="glyphicon glyphicon-refresh pull-right" (click)="fetchChartData()"></i>
-      </div>
+                <i class="glyphicon glyphicon-refresh pull-right mrL1" (click)="fetchChartData()"></i>
+            </div>
+        </div>
+        <div class="panel-body pos-rel">
+            <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
+                <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
+                <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
+            </div>
+            <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a>
+            <div class="chart-div" google-chart chart="myChartData">
+                <chart [options]="options"></chart>
+            </div>
+            <!--<canvas id="line" class="chart-div chart chart-line" chart-data="chartData"-->
+            <!--chart-labels="labels" chart-legend="true" chart-series="series" chart-options="chartOptions">-->
+            <!--</canvas>-->
+        </div>
     </div>
-    <div class="panel-body pos-rel">
-      <div class="dashboard-reconnectdiv" *ngIf="requestInFlight">
-        <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
-        <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
-      </div>
-      <a ng-if="chartDataAvailable" class="pull-right pos-abs" ng-click="goToReports()">view detailed</a>
-      <div class="chart-div" google-chart chart="myChartData">
-        <chart [options]="options"></chart>
-      </div>
-      <!--<canvas id="line" class="chart-div chart chart-line" chart-data="chartData"-->
-      <!--chart-labels="labels" chart-legend="true" chart-series="series" chart-options="chartOptions">-->
-      <!--</canvas>-->
-    </div>
-  </div>
 </div>
