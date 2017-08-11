@@ -41,7 +41,7 @@ table.table td small{color:#777}
 <tbody>
 <tr>
 <td>
-<h3 style="color:#E14926 !important;">Walkover Web Solutions Private Limited</h3>
+<h3 style="color:#E14926 !important;">{{this.companyName$| async }}</h3>
 <table class="with-pd">
 <tbody>
 <tr>
@@ -51,9 +51,9 @@ table.table td small{color:#777}
 <p><b>PAN</b></p>
 </td>
 <td>
-<p>11AAAAAA000A1Z0</p>
-<p>Indore</p>
-<p>AAACW9768L</p>
+<p>{{this.GSTIN$| async }}</p>
+<p>{{this.address$| async }}</p>
+<p>{{this.PAN$| async }}</p>
 </td>
 </tr>
 </tbody>
@@ -72,8 +72,8 @@ table.table td small{color:#777}
 <p><b>Reference No.</b></p>
 </td>
 <td>
-<p>23/06/2017</p>
-<p>201770323-64</p>
+<p>{{this.invoiceDate$| async }}</p>
+<p>{{this.invoiceNo$| async }}</p>
 <p>PO-9987</p>
 </td>
 </tr>
@@ -99,10 +99,10 @@ table.table td small{color:#777}
 <tr>
 <td style="padding-right: 15px;">
 <p><b>Customer Name</b></p>
-<p>Mr. Shubhendra Agrawal</p>
+<p>{{this.customeName$ | async }}</p>
 <br />
 <p><b>Due Date</b></p>
-<p>30/06/2017</p>
+<p>{{this.dueDate$| async }}</p>
 </td>
 
 <td style="padding-right: 15px;">

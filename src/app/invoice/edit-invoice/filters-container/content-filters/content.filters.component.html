@@ -3,14 +3,15 @@
 <div id="design" class="tabcontent" *ngIf = "content">
 
    <!--<nouislider [(ngModel)]="someRange" [min]="0" [max]="60"(ngModelChange)="onChangeWidth(someRange, 'col1')"> Hi Thr</nouislider>-->
-  <label><input type="checkbox" [(ngModel)]="enableCompanyName" (ngModelChange)="onCheckCompanyName(enableCompanyName )"> Company Name</label><br/>
-  <label><input type="checkbox" [(ngModel)]="enableCompanyAddress" (ngModelChange)="onCheckCompanyAddress(enableCompanyAddress)"> Company Address</label><br/>
+  <label><input type="checkbox"> Company Name</label><br/>
+  <label><input type="checkbox"> Company Address</label><br/>
 
-  <!--<input type="checkbox" [(ngModel)]="enableGSTIN" (ngModelChange)="onCheckGSTIN(enableGSTIN)" /> <br/> <br/>-->
-  <!--<input type="text" [(ngModel)]='contentData.GSTIN' (ngModelChange)='onGSTINChange(contentData.GSTIN)' [disabled]="!enableGSTIN"/>-->
 
-  <!--<input type="checkbox" [(ngModel)]="enablePAN" (ngModelChange)="onCheckPAN(enablePAN)" /> <br/> <br/>-->
-  <!--<input type="text" [(ngModel)]='contentData.PAN' (ngModelChange)='onPANChange(contentData.PAN)' [disabled]="!enablePAN"/>-->
+  //<input type="checkbox" [(ngModel)]="enableGSTIN" (ngModelChange)="onCheckGSTIN(enableGSTIN)" /><br/><br/>
+ <input type="text" [(ngModel)]='GSTIN' (ngModelChange)='onGSTINChange(GSTIN)'/>
+
+  //<input type="checkbox" [(ngModel)]="enablePAN" (ngModelChange)="onCheckPAN(enablePAN)" /><br/><br/>
+  <input type="text" [(ngModel)]='PAN' (ngModelChange)='onPANChange(PAN)'/>
 
   <!--<input type="checkbox" [(ngModel)]="enableInvoiceDate" (ngModelChange)="onCheckPAN(enablePAN)" /> <br/> <br/>-->
   <!--<input type="text" [(ngModel)]='contentData.' (ngModelChange)='onInvoiceDateChange(contentData.)' [disabled]="!enableInvoiceDate"/>-->
