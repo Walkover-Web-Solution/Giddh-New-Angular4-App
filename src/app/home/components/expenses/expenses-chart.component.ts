@@ -130,6 +130,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     this.lastYearAccountsRanks = this.accountStrings.map(p => p.lastYear);
 
     this.options = {
+      colors: ['#28283c', '#aeaec4'],
       chart: {
         type: 'column',
         height: '320px',
