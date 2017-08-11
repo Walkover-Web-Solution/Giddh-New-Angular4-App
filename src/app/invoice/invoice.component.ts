@@ -10,7 +10,7 @@ import * as _ from 'lodash';
     .invoice-bg{
       background-color: #f4f5f8;
       padding: 20px;
-      min-height:500px;
+      height: 100vh;
     }
     .invoice-nav.navbar-nav>li>a{
       padding: 6px 30px;

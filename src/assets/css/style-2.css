@@ -116,13 +116,20 @@ input {
 /*input*/
 
 .form-control {
-    background: #f9f7f2 !important;
-    border: 1px solid #ded3c0;
+    background: #fff !important;
+    border: 1px solid #d6d6d6;
     border-radius: 0px;
     padding: 6px !important;
     outline: 0;
-    color: #616161;
+    color: #666666;
     box-shadow: none;
+}
+.form-control::-webkit-input-placeholder, 
+.form-control::-webkit-input-placeholder,
+.form-control::-moz-placeholder,
+.form-control:-ms-input-placeholder,
+.form-control:-moz-placeholder{
+    color: #b3b3b3;
 }
 
 .form-control:focus {
@@ -182,9 +189,9 @@ header .navbar {
 }
 
 .t-h-bg1 th {
-    background: #f3f0e6;
+    background: #fff;
     color: #4d4d4d;
-    border: 1px solid #c4c6c7;
+    border: none;
     padding: 11px !important;
     font-weight: 400;
 }
@@ -892,16 +899,12 @@ input[type="checkbox"]:checked:after {
     border-radius: 0 !important;
 }
 
-.filterForm .form-control {
-    background-color: #fff!important;
-}
-
 .filterForm .form-group.col-xs-2 {
     padding: 0 7px;
 }
 
 .filterForm label {
-    width: 100%;
+    display: block;
     font-size: 13px;
     font-weight: 400;
 }
