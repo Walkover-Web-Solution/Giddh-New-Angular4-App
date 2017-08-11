@@ -13,6 +13,7 @@ import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
+import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 
 @Component({
   selector: 'account-add',
@@ -112,7 +113,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
 
   public generateUniqueName() {
     let val: string = this.addAccountForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    val = uniqueNameInvalidStringReplace(val);
     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
     this.isAccountNameAvailable$.subscribe(a => {

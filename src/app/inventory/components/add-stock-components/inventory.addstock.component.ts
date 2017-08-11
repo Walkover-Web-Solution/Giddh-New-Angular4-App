@@ -20,6 +20,7 @@ import { CustomStockUnitAction } from '../../../services/actions/inventory/custo
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IStockItemDetail, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { Subject } from 'rxjs/Subject';
+import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'invetory-add-stock',  // <home></home>
@@ -329,7 +330,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       groupName = s.uniqueName;
     });
     let val: string = this.addStockForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    val = uniqueNameInvalidStringReplace(val);
     this.store.dispatch(this.inventoryAction.GetStockUniqueName(groupName, val));
 
     this.isStockNameAvailable$.subscribe(a => {
