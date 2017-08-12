@@ -4,3 +4,9 @@
   align-items: flex-start;
   flex-flow: row wrap;
 }
+.table.basic tbody tr td{
+  background-color: #fff;
+}
+.table.basic .table tbody tr td{
+  border: none;
+}
