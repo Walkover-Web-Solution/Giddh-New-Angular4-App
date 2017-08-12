@@ -24,13 +24,12 @@ export class SettingTaxesComponent implements OnInit {
   @ViewChild('taxConfirmationModel') public taxConfirmationModel: ModalDirective;
 
   public availableTaxes: TaxResponse[] = [];
-  public newTaxObj: any = {};
+  public newTaxObj: TaxResponse = new TaxResponse();
   public moment = moment;
   public days: number[] = [];
-  public records = [];
-  public taxToEdit = [];
+  public records = []; // This array is just for generating dynamic ngModel
+  public taxToEdit = []; // It is for edit toogle
   public showFromDatePicker: boolean = false;
-  public isUpdateCondition: boolean = false;
   public selectedTaxForDelete: string;
   public accounts$: Select2OptionData[];
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
@@ -91,11 +90,7 @@ export class SettingTaxesComponent implements OnInit {
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
     dataToSave.taxDetail = [{ date: dataToSave.date , taxValue: dataToSave.taxValue}];
 
-    if (!this.isUpdateCondition) { // create
-      this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
-    } else { // Update
-      this.store.dispatch(this._settingsTaxesActions.UpdateTax(dataToSave));
-    }
+    this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
   }
 
   private deleteTax(taxUniqueName) {
@@ -104,27 +99,40 @@ export class SettingTaxesComponent implements OnInit {
     this.taxConfirmationModel.show();
   }
 
-  private updateTax(taxUniqueName) {
-    this.isUpdateCondition = true;
-    let taxes = _.cloneDeep(this.availableTaxes);
-    let selectedTax = taxes.find((tax) => tax.uniqueName === taxUniqueName);
-    if (selectedTax) {
-      selectedTax.taxValue =  selectedTax.taxDetail[0].taxValue;
-      // console.log('before converion: ', new Date(String(selectedTax.taxDetail[0].date)));
-      // selectedTax.date =  selectedTax.taxDetail[0].date; // TODO: Assign date also
-      this.newTaxObj = selectedTax;
-    }
+  private updateTax(taxIndex: number) {
+    let taxToUpdate = _.cloneDeep(this.availableTaxes[taxIndex]);
+    this.store.dispatch(this._settingsTaxesActions.UpdateTax(taxToUpdate));
   }
 
   private onCancel() {
-    this.newTaxObj = {};
-    this.isUpdateCondition = false;
+    this.newTaxObj = new TaxResponse();
   }
 
-  private deleteConfirmedTax(userResponse) { // userResponse is a boolean value
+  private deleteConfirmedTax(userResponse: boolean) {
     this.taxConfirmationModel.hide();
     if (userResponse) {
       this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
     }
+  }
+
+  private addMoreDateAndPercentage(taxIndex: number) {
+    let taxes = _.cloneDeep(this.availableTaxes);
+    taxes[taxIndex].taxDetail.push({ date: null, taxValue: null});
+    this.availableTaxes = taxes;
+  }
+
+  private removeDateAndPercentage(parentIndex: number, childIndex: number) {
+    let taxes = _.cloneDeep(this.availableTaxes);
+    taxes[parentIndex].taxDetail.splice(childIndex, 1);
+    this.availableTaxes = taxes;
+  }
+
+  private reloadTaxList() {
+    this.store.select(p => p.company).take(1).subscribe((o) => {
+      if (o.taxes) {
+        this.onCancel();
+        this.availableTaxes = _.cloneDeep(o.taxes);
+      }
+    });
   }
 }
