@@ -129,7 +129,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public clearDate(model: string) {
-    this.setToday(model);
+    this.vm[model] = '';
   }
 
   public setToday(model: string) {
@@ -146,11 +146,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public getLogfilters() {
     //
     let reqBody: LogsRequest = new LogsRequest();
-    reqBody.fromDate = moment(this.vm.selectedFromDate).format('DD-MM-YYYY');
-    reqBody.toDate = moment(this.vm.selectedToDate).format('DD-MM-YYYY');
+    reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
+    reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
     reqBody.entity = this.vm.selectedEntity === 'All' ? '' : this.vm.selectedEntity;
-    reqBody.entryDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
+    reqBody.entryDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
     reqBody.userUniqueName = this.vm.selectedUserUnq;
     reqBody.accountUniqueName = this.vm.selectedAccountUnq;
     reqBody.groupUniqueName = this.vm.selectedGroupUnq;
@@ -159,12 +159,12 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       reqBody.fromDate = null;
       reqBody.toDate = null;
       if (this.vm.logOrEntry === 'logDate') {
-        reqBody.logDate = moment(this.vm.selectedLogDate).format('DD-MM-YYYY');
+        reqBody.logDate = this.vm.selectedLogDate ? moment(this.vm.selectedLogDate).format('DD-MM-YYYY') : '';
         reqBody.entryDate = null;
         reqBody.fromDate = null;
         reqBody.toDate = null;
       } else if (this.vm.logOrEntry === 'entryDate') {
-        reqBody.entryDate = moment(this.vm.selectedEntryDate).format('DD-MM-YYYY');
+        reqBody.entryDate = this.vm.selectedEntryDate ? moment(this.vm.selectedEntryDate).format('DD-MM-YYYY') : '';
         reqBody.logDate = null;
         reqBody.fromDate = null;
         reqBody.toDate = null;
