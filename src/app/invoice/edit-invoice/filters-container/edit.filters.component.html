@@ -1,26 +1,40 @@
+<div class="btn-group btn-group-lg" role="group" aria-label="">
+    <button type="button" class="btn btn-default" (click)="openTab('design')" id="defaultOpen">Design</button>
+    <button type="button" class="btn btn-default" (click)="openTab('content')">Content</button>
+    <button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>
 
+    <p class="clearfix grey_clr pdT1">Everything saves automatically.</p>
+</div>
+
+
+
+<!-- <div class="tab">
+    <button class="tablinks" (click)="openTab('design')" id="defaultOpen">Design</button>
+    <button class="tablinks" (click)="openTab('content')">Content</button>
+    <button class="tablinks" (click)="openTab('email')">Email</button>
+</div> -->
 
 <div class="tab">
-  <button class="tablinks" (click)="openTab('design')" id="defaultOpen">Design</button>
-  <button class="tablinks" (click)="openTab('content')">Content</button>
-  <button class="tablinks" (click)="openTab('email')">Email</button>
-</div>
-    <div class="tab">
-  <design-filters *ngIf = "ifDesignSelected" [design]="ifDesignSelected"> </design-filters>
+    <design-filters *ngIf="ifDesignSelected" [design]="ifDesignSelected"> </design-filters>
 
-  <div id="content" class="tabcontent" *ngIf = "ifContentSelected">
-    <h3>Content</h3>
-    <div class="tab">
-      <button class="tablinks" (click)="openTab('header')" id="defaultcontent">Header</button>
-      <button class="tablinks" (click)="openTab('invoiceGrid')"> Invoice Grid</button>
-      <button class="tablinks" (click)="openTab('footer')">Footer</button>
+    <div id="content" class="tabcontent" *ngIf="ifContentSelected">
+        <!-- <h3>Content</h3>
+        <div class="tab">
+            <button class="tablinks" (click)="openTab('header')" id="defaultcontent">Header</button>
+            <button class="tablinks" (click)="openTab('invoiceGrid')"> Invoice Grid</button>
+            <button class="tablinks" (click)="openTab('footer')">Footer</button>
+        </div> -->
+        <content-selector *ngIf="ifContentSelected" [content]="ifContentSelected">
+        </content-selector>
+        <!--<logo-uploader></logo-uploader>-->
     </div>
-    <content-selector *ngIf = "ifContentSelected" [content]="ifContentSelected">
-      </content-selector>
-    <!--<logo-uploader></logo-uploader>-->
-  </div>
 
-  <div id="emails" class="tabcontent" *ngIf = "ifEmailSelected">
-    <h3>Emails</h3>
-  </div>
+    <div id="emails" class="tabcontent" *ngIf="ifEmailSelected">
+        <h3>Emails</h3>
+    </div>
+
+    <div class="sticky-footer pd2">
+        <button class="btn btn-default">Preview</button>
+        <button class="btn btn-success">Save</button>
+    </div>
 </div>
