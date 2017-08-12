@@ -1,6 +1,9 @@
 import { Configuration } from '../../app.constant';
-let COMMON_URL = Configuration.ApiUrl + 'company/:companyUniqueName/stock/:stockUniqueName/manufacture';
+let COMMON_URL = Configuration.ApiUrl + 'company/:companyUniqueName/';
 export const INVOICE_API = {
-  GET_ALL_INVOICES: Configuration.ApiUrl + 'company/:companyUniqueName/invoices?',
-  GET_ALL_LEDGERS_FOR_INVOICE: Configuration.ApiUrl + 'company/:companyUniqueName/ledgers?',
+  GET_ALL_INVOICES: COMMON_URL + 'invoices?',
+  GET_ALL_LEDGERS_FOR_INVOICE: COMMON_URL + 'ledgers?',
+  GENERATE_BULK_INVOICE: COMMON_URL + 'invoices/bulk-generate?combined',
+  PREVIEW_INVOICE: COMMON_URL + 'accounts/:accountUniqueName/invoices/generate',
+  GET_INVOICE_TEMPLATES: COMMON_URL + 'templates/all'
 };
