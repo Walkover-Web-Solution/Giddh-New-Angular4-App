@@ -2,7 +2,22 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 import { INVOICE_ACTIONS } from '../../services/actions/invoice/invoice.const';
-import { GeneratePage, CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, PreviewPage, GetAllInvoicesPaginatedResponse, InvoiceState } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse } from '../../models/api-models/Invoice';
+
+export class GeneratePage {
+  public ledgers: GetAllLedgersOfInvoicesResponse;
+}
+
+export class PreviewPage {
+  public invoices: GetAllInvoicesPaginatedResponse;
+}
+
+export interface InvoiceState {
+    preview: PreviewPage;
+    generate: GeneratePage;
+    templates: string;
+    settings: string;
+}
 
 export const initialState: InvoiceState = {
     preview: {invoices: null},
