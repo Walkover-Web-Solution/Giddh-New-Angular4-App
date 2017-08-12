@@ -101,7 +101,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
-    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$);
+    this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
 
     // get flatten_accounts list
@@ -158,13 +158,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public selectAccount(e: any, txn) {
     if (!e.value) {
+      // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
+      // reset taxes and discount on selected account change
+      txn.tax = 0;
+      txn.taxes = [];
+      txn.discount = 0;
+      txn.discounts = [];
       return;
     }
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
           if (fa.id === e.value[0]) {
             txn.selectedAccount = fa.additional;
+            // reset taxes and discount on selected account change
+            txn.tax = 0;
+            txn.taxes = [];
+            txn.discount = 0;
+            txn.discounts = [];
             return;
           }
         }
