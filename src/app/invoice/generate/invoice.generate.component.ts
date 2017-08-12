@@ -14,7 +14,7 @@ import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
-  {name: 'Greater', uniqueName: 'greaterThan'},
+  {name: 'Greater Than', uniqueName: 'greaterThan'},
   {name: 'Less Than', uniqueName: 'lessThan'},
   {name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals'},
   {name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals'},
@@ -39,6 +39,8 @@ export class InvoiceGenerateComponent implements OnInit {
   private ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   private filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
   private ledgersData: GetAllLedgersOfInvoicesResponse;
+  private selectedLedgerItems: string[] = [];
+  private allItemsSelected: boolean = false;
 
   constructor(
     private modalService: BsModalService,
@@ -128,28 +130,50 @@ export class InvoiceGenerateComponent implements OnInit {
 
   private toggleItem(item: any, action: boolean) {
     item.isSelected = action;
-    // this.ledgersData.results = _.map(this.ledgersData.results, (o: any) => {
-    //   if (o.uniqueName === item.uniqueName) {
-    //     o.isSelected = event.target.checked ? true : false;
-    //     return o;
-    //   }else {
-    //     return o;
-    //   }
-    // });
   }
 
-  // public toggleItem(pageName: string, item: Permission, event: any) {
-  //   let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
-  //   if (event.target.checked) {
-  //     let idx = _.findIndex(res.permissions, (o: Permission) => o.isSelected === false);
-  //     if (idx !== -1) {
-  //       return res.selectAll = false;
-  //     }else {
-  //       return res.selectAll = true;
-  //     }
-  //   }else {
-  //     return res.selectAll = false;
-  //   }
-  // }
+  private toggleAllItems(type: boolean) {
+    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      item.isSelected = this.allItemsSelected ? true : false;
+      return item;
+    });
+    if (type) {
+      this.allItemsSelected = true;
+    }else {
+      this.allItemsSelected = false;
+    }
+  }
+
+  private insertItemsIntoArr(type: boolean) {
+    if (type) {
+      _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+        this.selectedLedgerItems.push(item.uniqueName);
+      });
+    }else {
+      this.selectedLedgerItems = [];
+    }
+  }
+
+  private prevAndGenInv() {
+    let model = {
+      uniqueNames: _.uniq(this.selectedLedgerItems)
+    };
+    console.log ('before api', model);
+  }
+
+  private generateBulkInvoice(type: boolean) {
+    if (this.selectedLedgerItems.length <= 0) {
+      return false;
+    }
+    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      if (item.isSelected) {
+        //
+      }else {
+        //
+      }
+    });
+  }
+
+  // account list only for sundry debtors
 
 }
