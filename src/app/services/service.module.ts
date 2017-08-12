@@ -49,8 +49,8 @@ import { SettingsIntegrationService } from './settings.integraion.service';
 import { SettingsIntegrationActions } from './actions/settings/settings.integration.action';
 import { SettingsProfileService } from './settings.profile.service';
 import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
-// import { SettingsProfileActions } from './actions/settings/settings.profile.action';
-
+import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
+import { SettingsTaxesService } from './settings.taxes.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -78,6 +78,7 @@ import { SettingsProfileActions } from './actions/settings/profile/settings.prof
     EffectsModule.run(LedgerActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
+    EffectsModule.run(SettingsTaxesActions),
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -106,7 +107,8 @@ export class ServiceModule {
         TlPlService,
         LedgerService,
         SettingsIntegrationService,
-        SettingsProfileService
+        SettingsProfileService,
+        SettingsTaxesService
       ]
     };
   }

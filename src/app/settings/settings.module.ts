@@ -6,13 +6,17 @@ import { SettingsComponent } from './settings.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SharedModule } from '../shared/shared.module';
+import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
+import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 
 @NgModule({
   declarations: [
     // components here
     SettingsComponent,
     SettingIntegrationComponent,
-    SettingProfileComponent
+    SettingProfileComponent,
+    SettingTaxesComponent,
+    DeleteTaxConfirmationModelComponent
   ],
   imports: [
     SharedModule,
