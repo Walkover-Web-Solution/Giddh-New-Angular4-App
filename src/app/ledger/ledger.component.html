@@ -129,9 +129,8 @@
                 <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
 
                   <td class="col-xs-2">
-                    <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
-
-                           is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
+                    <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate"
+                           [textMask]="{mask: lc.dateMask, pipe: lc.datePipe, guide: true}">
                   </td>
                   <td class="col-xs-7">
 
@@ -245,7 +244,7 @@
                     [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
 
                   <td class="col-xs-2">
-                    <input class="form-control" type="text" [(ngModel)]="lc.blankLedger.entryDate"
+                    <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate"
                            ng-click="ledgerCtrl.selectBlankTxn(txn, $event)"
                            is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
@@ -275,7 +274,7 @@
               </table>
 
               <!--new ledge popup-->
-              <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT'">
+              <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                 <new-ledger-entry-panel [blankLedger]="lc.blankLedger"
                                         [currentTxn]="lc.currentBlankTxn"
                                         [needToReCalculate]="needToReCalculate"
