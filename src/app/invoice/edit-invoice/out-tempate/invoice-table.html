@@ -3,31 +3,29 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta http-equiv="X-UA-Compatible" design-filters="IE=edge,chrome=1" />
     <title>Invoice</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" design-filters="" />
+    <meta name="viewport" design-filters="width=device-width, initial-scale=1" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
     <style>
         @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
         body {
             font-family: 'Open Sans', sans-serif;
             font-size: 15px;
             font-weight: 400;
-            background: #f2f2f2;
-            border: 1px solid #bfbfbf;
+            background: #272c30
         }
         
         .container {
             padding: 20px 10px;
-            margin: 30px;
-            max-width: 100%;
+            margin: 60px auto;
+            max-width: 900px;
             border: 1px solid #eee;
-            /* box-shadow: 0 2px 6px #000; */
-            background: #fff;
-            width: calc(100% - 60px);
+            box-shadow: 0 2px 6px #000;
+            background: #fff
         }
         
         h3 {
@@ -95,7 +93,8 @@
 </head>
 
 <body>
-    <section class="container">
+    <section class="container" *ngIf="templateId == 'common_template_a'">
+
         <div class="clearfix">
             <div class="col-xs-12">
                 <div class="col-xs-12">
@@ -103,7 +102,7 @@
                         <tbody>
                             <tr>
                                 <td>
-                                    <h3 style="color:#E14926 !important;">Walkover Web Solutions Private Limited</h3>
+                                    <h3 style="color:#E14926 !important;">{{this.companyName$| async }}</h3>
                                     <table class="with-pd">
                                         <tbody>
                                             <tr>
@@ -113,9 +112,9 @@
                                                     <p><b>PAN</b></p>
                                                 </td>
                                                 <td>
-                                                    <p>11AAAAAA000A1Z0</p>
-                                                    <p>Indore</p>
-                                                    <p>AAACW9768L</p>
+                                                    <p>{{this.GSTIN$| async }}</p>
+                                                    <p>{{this.address$| async }}</p>
+                                                    <p>{{this.PAN$| async }}</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -134,8 +133,8 @@
                                                     <p><b>Reference No.</b></p>
                                                 </td>
                                                 <td>
-                                                    <p>23/06/2017</p>
-                                                    <p>201770323-64</p>
+                                                    <p>{{this.invoiceDate$| async }}</p>
+                                                    <p>{{this.invoiceNo$| async }}</p>
                                                     <p>PO-9987</p>
                                                 </td>
                                             </tr>
@@ -163,10 +162,10 @@
                             <tr>
                                 <td style="padding-right: 15px;">
                                     <p><b>Customer Name</b></p>
-                                    <p>Mr. Shubhendra Agrawal</p>
+                                    <p>{{this.customeName$ | async }}</p>
                                     <br />
                                     <p><b>Due Date</b></p>
-                                    <p>30/06/2017</p>
+                                    <p>{{this.dueDate$| async }}</p>
                                 </td>
 
                                 <td style="padding-right: 15px;">
@@ -200,19 +199,19 @@
             </div>
         </div>
 
-        <table class="table">
-            <thead style="background: #f5f5f5;">
+        <table class="table" style="width: 100%">
+            <thead style="background: #f5f5f5; width: 100%">
                 <tr>
-                    <th>Item</th>
-                    <th>HSN/SAC</th>
-                    <th>Qty.</th>
-                    <th>Rate/<br />Item(₹)</th>
-                    <th>Discount/<br />Item(₹)</th>
-                    <th>Taxable <br />Value(₹)</th>
-                    <th>SGST<br />₹</th>
-                    <th>CGST<br />₹</th>
-                    <th>CESS<br />₹</th>
-                    <th>Total<br />₹</th>
+                    <th width="{{itemWidth + '%' }}">Item</th>
+                    <th width="{{itemCodeWidth + '%' }}">HSN/SAC</th>
+                    <th ng-style="{ 'width': qtyWidth + '%' }">Item>Qty.</th>
+                    <th ng-style="{ 'width': rateWidth + '%' }">Rate/<br />Item(₹)</th>
+                    <th ng-style="{ 'width': discountWidth + '%' }">Discount/<br />Item(₹)</th>
+                    <th ng-style="{ 'width': taxWidth + '%' }">Taxable <br />Value(₹)</th>
+                    <!--<th>SGST<br />₹</th>-->
+                    <!--<th>CGST<br />₹</th>-->
+                    <!--<th>CESS<br />₹</th>-->
+                    <th ng-style="{ 'width': totalWidth + '%' }">Total<br />₹</th>
                 </tr>
             </thead>
             <tbody>
@@ -223,9 +222,9 @@
                     <td>1000.00</td>
                     <td>300.00</td>
                     <td>9700.00</td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
+                    <!--<td>970.00<br /><small>@10%</small></td>-->
+                    <!--<td>970.00<br /><small>@10%</small></td>-->
+                    <!--<td>00.00<br /><small>@0%</small></td>-->
                     <td>11000640.00</td>
                 </tr>
 
@@ -236,9 +235,9 @@
                     <td>1000.00</td>
                     <td>300.00</td>
                     <td>9700.00</td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
+                    <!--<td>970.00<br /><small>@10%</small></td>-->
+                    <!--<td>970.00<br /><small>@10%</small></td>-->
+                    <!--<td>00.00<br /><small>@0%</small></td>-->
                     <td>11640.00</td>
                 </tr>
 
@@ -249,9 +248,9 @@
                     <td>1000.00</td>
                     <td>300.00</td>
                     <td>9700.00</td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
+                    <!--<td>970.00<br /><small>@10%</small></td>-->
+                    <!--<td>970.00<br /><small>@10%</small></td>-->
+                    <!--<td>00.00<br /><small>@0%</small></td>-->
                     <td>11640.00</td>
                 </tr>
 
@@ -262,9 +261,9 @@
                     <td>1000.00</td>
                     <td>--</td>
                     <td>1000.00</td>
-                    <td>50.00<br /><small>@10%</small></td>
-                    <td>50.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
+                    <!--<td>50.00<br /><small>@10%</small></td>-->
+                    <!--<td>50.00<br /><small>@10%</small></td>-->
+                    <!--<td>00.00<br /><small>@0%</small></td>-->
                     <td>1100.00</td>
                 </tr>
             </tbody>
@@ -340,6 +339,51 @@
                 <p><b>Walkover Web Solutions Private Limited</b></p>
                 <p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
             </div>
+        </div>
+    </section>
+    <section class="container" *ngIf="templateId == 'gst_template_a'">
+
+        <div>
+
+            <h3> Template 2</h3>
+
+            <!--<h2> {{heading}}</h2>-->
+
+            <!--<h2> {{data.para}}</h2>-->
+        </div>
+
+    </section>
+
+    <section class="container" *ngIf="templateId == 'gst_template_b'">
+
+        <div>
+
+            <h3> Template 3</h3>
+        </div>
+
+    </section>
+    <section class="container" *ngIf="templateId == 'gst_template_c'">
+
+        <div>
+
+            <h3> Template 4</h3>
+        </div>
+
+    </section>
+
+    <section class="container" *ngIf="templateId == 'gst_template_d'">
+
+        <div>
+
+            <h3> Template 5</h3>
+        </div>
+
+    </section>
+    <section class="container" *ngIf="templateId == 'gst_template_e'">
+
+        <div>
+
+            <h3> Template 6</h3>
         </div>
 
     </section>
