@@ -75,3 +75,121 @@ export class GetAllLedgersOfInvoicesResponse {
   public totalItems: number;
   public totalPages: number;
 }
+
+/**
+ * Generate Bulk Invoice Request
+ * method: 'POST'
+ * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
+ */
+
+export class GenerateBulkInvoiceRequest {
+  public accountUniqueName: string;
+  public entries: string[];
+}
+
+/**
+ * Action On Invoice Request
+ * method: 'POST'
+ * url: '/company/:companyUniqueName/invoices/action'
+ */
+
+export class ActionOnInvoiceRequest {
+  public amount: number;
+  public action: string;
+}
+
+/**
+ * Get Template Response
+ * method: 'GET'
+ * url: '/company/:companyUniqueName/invoices/proforma/templates'
+ */
+
+export class GetTemplateResponse {
+  public templates: Template[];
+  public templateData: TemplateData;
+}
+
+export interface Template {
+    uniqueName: string;
+    template: string;
+    sections: Sections;
+    isDefault: boolean;
+    name: string;
+}
+
+export interface TemplateData {
+    email?: any;
+    emailVerified?: any;
+    account: Account;
+    companyIdentities: CompanyIdentities;
+    company: Company;
+    terms: any[];
+    taxes?: any;
+    template?: any;
+    invoiceDetails: InvoiceDetails;
+    logo: Logo;
+    totalAmount: TotalAmount;
+    signature: Signature;
+    entries?: any;
+}
+
+export interface Sections {
+    logo: boolean;
+    company: boolean;
+    invoiceDetails: boolean;
+    companyIdentities: boolean;
+    account: boolean;
+    signature: boolean;
+    terms: boolean;
+    entries: boolean;
+    taxes: boolean;
+    signatureType: string;
+}
+
+export interface Account {
+    name: string;
+    data: any[];
+    attentionTo?: any;
+}
+
+export interface CompanyIdentities {
+    data: string;
+}
+
+export interface Company {
+    name: string;
+    data: any[];
+}
+
+export interface InvoiceDetails {
+    invoiceNumber: string;
+    invoiceDate: string;
+    dueDate: string;
+}
+
+export interface Logo {
+    path: string;
+}
+
+export interface TotalAmount {
+    subTotal?: any;
+    taxTotal?: any;
+    grandTotal?: any;
+}
+
+export interface Signature {
+    name: string;
+    data: string;
+    path: string;
+}
+
+/**
+ * Send Mail Request
+ * method: 'POST'
+ * url: '/company/:companyUniqueName/invoices/proforma/mail'
+ */
+
+export class SendMailRequest {
+  public emailId: string[];
+  public invoiceNumber: string[];
+}
