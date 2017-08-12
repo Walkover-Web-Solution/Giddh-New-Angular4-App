@@ -34,7 +34,8 @@
 
               <select2 [data]="groupsData$ | async" [options]="options" formControlName="parentStockGroupUniqueName"
                        [disabled]="addGroupForm.get('isSelfParent').value" required
-                       [value]="parentStockSearchString" (valueChanged)="groupSelected($event)"></select2>
+                       [value]="addGroupForm.get('parentStockGroupUniqueName').value"
+                       (valueChanged)="groupSelected($event)"></select2>
             </div>
           </div>
           <div class="col-xs-12">
