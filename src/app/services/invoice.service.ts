@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, GetAllInvoicesResponse, GetAllLedgersForInvoiceResponse } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass } from '../models/api-models/Invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -22,7 +22,7 @@ export class InvoiceService {
    * get INVOICES
    * URL:: company/:companyUniqueName/invoices?from=&to=
    */
-  public GetAllInvoices(model: CommonPaginatedRequest): Observable<BaseResponse<GetAllInvoicesResponse, CommonPaginatedRequest>> {
+  public GetAllInvoices(model: CommonPaginatedRequest): Observable<BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -34,19 +34,19 @@ export class InvoiceService {
 
     return this._http.get(url.replace(':companyUniqueName', this.companyUniqueName))
       .map((res) => {
-        let data: BaseResponse<GetAllInvoicesResponse, CommonPaginatedRequest> = res.json();
+        let data: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest> = res.json();
         data.request = model;
         data.queryString = { model };
         return data;
       })
-      .catch((e) => HandleCatch<GetAllInvoicesResponse, CommonPaginatedRequest>(e, ''));
+      .catch((e) => HandleCatch<IGetAllInvoicesResponse, CommonPaginatedRequest>(e, ''));
   }
 
   /*
   * get all Ledgers for Invoice
   */
 
-  public GetAllLedgersForInvoice(reqObj: CommonPaginatedRequest, model): Observable<BaseResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>> {
+  public GetAllLedgersForInvoice(reqObj: CommonPaginatedRequest, model: InvoiceFilterClass): Observable<BaseResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;

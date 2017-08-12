@@ -21,9 +21,18 @@ export interface IInvoiceResult {
   balanceDue: number;
 }
 
-export interface GetAllInvoicesResponse extends IPagination {
+export interface IGetAllInvoicesResponse extends IPagination {
   size: number;
   results: IInvoiceResult[];
+}
+
+export class GetAllInvoicesPaginatedResponse {
+  public count: number;
+  public page: number;
+  public results: ILedgersInvoiceResult[];
+  public size: number;
+  public totalItems: number;
+  public totalPages: number;
 }
 
 export class CommonPaginatedRequest {
@@ -34,12 +43,13 @@ export class CommonPaginatedRequest {
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
-  public totalIsMore?: string;
-  public totalIsLess?: string;
-  public totalIsEqual?: string;
+  public totalIsMore?: boolean;
+  public totalIsLess?: boolean;
+  public totalIsEqual?: boolean;
   public description?: string;
   public accountUniqueName?: string;
   public entryTotal?: string;
+  public entryTotalBy?: string;
 }
 
 export interface ILedgersInvoiceResult {
@@ -54,4 +64,28 @@ export interface ILedgersInvoiceResult {
 export interface GetAllLedgersForInvoiceResponse extends IPagination {
   size: number;
   results: ILedgersInvoiceResult[];
+}
+
+export class GetAllLedgersOfInvoicesResponse {
+  public count: number;
+  public page: number;
+  public results: ILedgersInvoiceResult[];
+  public size: number;
+  public totalItems: number;
+  public totalPages: number;
+}
+
+export class GeneratePage {
+  public ledgers: GetAllLedgersOfInvoicesResponse;
+}
+
+export class PreviewPage {
+  public invoices: GetAllInvoicesPaginatedResponse;
+}
+
+export interface InvoiceState {
+    preview: PreviewPage;
+    generate: GeneratePage;
+    templates: string;
+    settings: string;
 }
