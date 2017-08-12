@@ -6,7 +6,7 @@ export interface ITaxDetail {
 }
 
 export interface ITax extends INameUniqueName {
-  account: INameUniqueName;
+  account?: INameUniqueName;
   duration: string;
   taxDetail: ITaxDetail[];
   taxFileDate: number;
