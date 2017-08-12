@@ -59,6 +59,7 @@ export interface ILedgersInvoiceResult {
   total: ITotalItem;
   entryDate: string;
   uniqueName: string;
+  isSelected?: boolean;
 }
 
 export interface GetAllLedgersForInvoiceResponse extends IPagination {
@@ -73,19 +74,4 @@ export class GetAllLedgersOfInvoicesResponse {
   public size: number;
   public totalItems: number;
   public totalPages: number;
-}
-
-export class GeneratePage {
-  public ledgers: GetAllLedgersOfInvoicesResponse;
-}
-
-export class PreviewPage {
-  public invoices: GetAllInvoicesPaginatedResponse;
-}
-
-export interface InvoiceState {
-    preview: PreviewPage;
-    generate: GeneratePage;
-    templates: string;
-    settings: string;
 }

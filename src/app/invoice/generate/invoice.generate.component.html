@@ -72,9 +72,9 @@
 <table class="table basic" *ngIf="ledgersData && ledgersData.results.length > 0">
   <thead class="t-h-bg1">
     <tr>
-      <th style="width:3%">
-        <img style="max-height:18px;" src="assets/images/unchecked.png" *ngIf="!checkall" (click)="selectAllLedger(true)">
-        <img style="max-height:18px;" src="assets/images/checked.png" *ngIf="checkall" (click)="selectAllLedger(false)">
+      <th style="width:3%" class="mh18_img">
+        <img src="assets/images/unchecked.png" *ngIf="!checkall" (click)="selectAllLedger(true)">
+        <img src="assets/images/checked.png" *ngIf="checkall" (click)="selectAllLedger(false)">
       </th>
       <th style="width:10%">Date</th>
       <th style="width:23.5%">Particular</th>
@@ -104,9 +104,9 @@
   <tbody>
     <!--ng-class="{'danger': checkTransaction(ledger.uniqueName)}"  -->
     <tr *ngFor="let item of ledgersData.results">
-      <td>
-        <!-- <img style="max-height:18px;" src="assets/images/unchecked.png"> -->
-        <img style="max-height:18px;" src="assets/images/checked.png" />
+      <td class="mh18_img">
+        <img *ngIf="!item.isSelected" src="assets/images/unchecked.png" (click)="toggleItem(item, true)" />
+        <img *ngIf="item.isSelected" src="assets/images/checked.png" (click)="toggleItem(item, false)" />
       </td>
       <td>{{item.entryDate}}</td>
       <td colspan="2">

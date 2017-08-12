@@ -45,7 +45,7 @@ export class InvoiceActions {
   @Effect()
   public GetAllLedgersForInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE)
-    .switchMap(action => this._invoiceService.GetAllLedgersForInvoice(action.payload.body, action.payload.model))
+    .switchMap(action => this._invoiceService.GetAllLedgersForInvoice(action.payload.model, action.payload.body))
     .map(res => this.validateResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(res, {
       type: INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE,
       payload: res
