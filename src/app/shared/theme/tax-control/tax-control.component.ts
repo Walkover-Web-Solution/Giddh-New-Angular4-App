@@ -58,10 +58,6 @@ export class TaxControlComponent implements OnInit, OnDestroy {
         taxObj.isChecked = this.applicableTaxes.indexOf(tx.uniqueName) > -1;
         this.taxRenderData.push(taxObj);
       });
-    } else {
-      this.taxRenderData.map(tx => {
-        tx.isChecked = this.applicableTaxes.indexOf(tx.uniqueName) > -1;
-      });
     }
   }
 

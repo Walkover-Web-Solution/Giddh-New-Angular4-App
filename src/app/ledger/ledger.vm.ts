@@ -8,6 +8,7 @@ import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as uuid from 'uuid';
 import { cloneDeep } from 'lodash';
+import { createAutoCorrectedDatePipe } from '../shared/helpers/autoCorrectedDatePipe';
 
 export class LedgerVM {
   public activeAccount$: Observable<AccountResponse>;
@@ -27,6 +28,8 @@ export class LedgerVM {
   public format: string = 'dd-MM-yyyy';
   public accountUnq: string = ''; // $stateParams.unqName
   public blankLedger: BlankLedgerVM;
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
