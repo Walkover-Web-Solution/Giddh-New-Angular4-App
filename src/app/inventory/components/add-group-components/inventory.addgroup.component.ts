@@ -135,6 +135,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       if (d) {
         this.addGroupForm.reset();
         this.getParentGroupData();
+        this.router.navigate(['/pages', 'inventory', 'add-group']);
       }
     });
   }
