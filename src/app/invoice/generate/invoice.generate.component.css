@@ -10,3 +10,7 @@
 .table.basic .table tbody tr td{
   border: none;
 }
+.mh18_img img{
+  max-height: 20px;
+  cursor: pointer
+}

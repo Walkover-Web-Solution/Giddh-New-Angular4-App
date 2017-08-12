@@ -54,11 +54,11 @@ export class InvoiceService {
       }
     });
     // create url conditionally
-    let url = this.createQueryString(INVOICE_API.GET_ALL_LEDGERS_FOR_INVOICE, model);
+    let url = this.createQueryString(INVOICE_API.GET_ALL_LEDGERS_FOR_INVOICE, reqObj);
     return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model)
       .map((res) => {
         let data: BaseResponse<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest> = res.json();
-        data.request = reqObj;
+        data.request = model;
         data.queryString = { reqObj };
         return data;
       })

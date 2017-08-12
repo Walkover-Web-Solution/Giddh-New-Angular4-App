@@ -7,9 +7,10 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceState, InvoiceFilterClass, GetAllLedgersOfInvoicesResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
@@ -55,7 +56,10 @@ export class InvoiceGenerateComponent implements OnInit {
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
       if (o.generate && o.generate.ledgers) {
         this.ledgersData = _.cloneDeep(o.generate.ledgers);
-        console.log('bingo', this.ledgersData);
+        _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+            item.isSelected = false;
+            return o;
+        });
       }
     });
     this.getLedgersOfInvoice();
@@ -121,5 +125,31 @@ export class InvoiceGenerateComponent implements OnInit {
       page: o.page
     };
   }
+
+  private toggleItem(item: any, action: boolean) {
+    item.isSelected = action;
+    // this.ledgersData.results = _.map(this.ledgersData.results, (o: any) => {
+    //   if (o.uniqueName === item.uniqueName) {
+    //     o.isSelected = event.target.checked ? true : false;
+    //     return o;
+    //   }else {
+    //     return o;
+    //   }
+    // });
+  }
+
+  // public toggleItem(pageName: string, item: Permission, event: any) {
+  //   let res = _.find(this.roleObj.scopes, (o: Scope) => o.name === pageName);
+  //   if (event.target.checked) {
+  //     let idx = _.findIndex(res.permissions, (o: Permission) => o.isSelected === false);
+  //     if (idx !== -1) {
+  //       return res.selectAll = false;
+  //     }else {
+  //       return res.selectAll = true;
+  //     }
+  //   }else {
+  //     return res.selectAll = false;
+  //   }
+  // }
 
 }
