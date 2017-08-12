@@ -1,8 +1,8 @@
 const filter1 = [
   {name: 'Greater', uniqueName: 'greaterThan'},
   {name: 'Less Than', uniqueName: 'lessThan'},
-  {name: 'Greater Thank or Equals', uniqueName: 'greaterThanOrEquals'},
-  {name: 'Less Thank or Equals', uniqueName: 'lessThanOrEquals'},
+  {name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals'},
+  {name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals'},
   {name: 'Equals', uniqueName: 'equals'}
 ];
 
