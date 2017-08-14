@@ -60,7 +60,11 @@ export interface InvoiceTemplateMetaState {
   totalWidth: number;
   quantityLabel: string;
   quantityWidth: number;
-
+  fontFamily: string;
+  topMargin: number;
+  leftMargin: number;
+  bottomMargin: number;
+  rightMargin: number;
 }
 
 export interface InvoiceState {
@@ -151,7 +155,12 @@ taxWidth: 10,
 totalLabel: '',
 totalWidth: 10,
 quantityLabel: '',
-quantityWidth: 10
+quantityWidth: 10,
+fontFamily : 'Open Sans, sans-serif',
+topMargin: 20,
+leftMargin: 0,
+bottomMargin: 0,
+rightMargin: 10,
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -229,6 +238,22 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         PAN: action.payload.data
       });
 
+    case INVOICE.TEMPLATE.UPDATE_TOP_MARGIN:
+      return Object.assign({}, state, {
+        topMargin: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_LEFT_MARGIN:
+      return Object.assign({}, state, {
+        leftMargin: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_BOTTOM_MARGIN:
+      return Object.assign({}, state, {
+        bottomMargin: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_RIGHT_MARGIN:
+      return Object.assign({}, state, {
+        rightMargin: action.payload.data
+      });
     default: {
       return state;
     }

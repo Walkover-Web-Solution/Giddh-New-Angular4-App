@@ -40,7 +40,7 @@ export class TemplateBody implements ITemplateBody {
   public name: string;
 }
 
-export class Section implements ISection{
+export class Section implements ISection {
   public sectionName: string;
   public content: IContent[];
 }

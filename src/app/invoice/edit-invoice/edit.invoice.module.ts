@@ -13,6 +13,7 @@ import { OutTemplateComponent } from './out-tempate/out.template.component';
 import {MaterialModule, MdSliderModule} from "@angular/material";
 import {ContentFilterComponent} from "./filters-container/content-filters/content.filters.component";
 import {InvoiceRoutingModule} from "./edit-invoice.routing.module";
+import {PrintSettingsComponent} from "./filters-container/design-filters/select-print-settings/print.settings.component";
 
 @NgModule({
   imports: [
@@ -23,13 +24,12 @@ import {InvoiceRoutingModule} from "./edit-invoice.routing.module";
     EditFiltersModule,
     InvoiceRoutingModule
   ],
-  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent, PrintSettingsComponent],
+  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent],
   exports: [
     EditFiltersModule,
     OutTemplateComponent,
     ContentFilterComponent,
-    EditInvoiceComponent,
-    PrintSettingsComponent
+    EditInvoiceComponent
   ]
 })
 export class EditInvoiceModule {
