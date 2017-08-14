@@ -1,34 +1,32 @@
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { CommonModule } from '@angular/common';
-import { NgModule, ModuleWithProviders } from '@angular/core';
+import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
 
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { FormWizardModule, ConfirmModalComponent, NgxTypeAheadComponent } from './theme';
+import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent } from './theme';
 import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { ChartModule } from 'angular2-highcharts';
 
 import {
-  ManageGroupsAccountsComponent,
+  AccountAddComponent,
+  AccountOperationsComponent,
   AccountsSideBarComponent,
   CompanyAddComponent,
-  AccountOperationsComponent,
+  GroupAccountsListComponent,
+  GroupsAccountSidebarComponent,
   GroupsRecursiveListComponent,
   GroupsRecursiveListItemComponent,
-  GroupAccountsListComponent,
-  AccountAddComponent,
-  GroupsAccountSidebarComponent
+  ManageGroupsAccountsComponent
 } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
@@ -42,10 +40,22 @@ import { GroupUpdateComponent } from './header/components/group-update/group-upd
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
 import { CheckscrollDirective } from './helpers/directives/checkscroll';
+import { TextMaskModule } from 'angular2-text-mask';
+import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
+import { NgUploaderModule } from 'ngx-uploader';
+import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
+
+export function highchartsFactory() {
+  const hc = require('highcharts');
+  const dd = require('highcharts/modules/drilldown');
+  dd(hc);
+
+  return hc;
+}
 
 @NgModule({
   declarations: [
@@ -53,34 +63,41 @@ const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent
-  ],
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
+    TaxControlComponent, NumberToWordsPipe],
   imports: [
     CommonModule,
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
-    PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
+    PerfectScrollbarModule.forChild(),
     Ng2BootstrapModule.forRoot(),
     LaddaModule.forRoot({
       style: 'slide-left',
       spinnerSize: 30
     }),
-    BrowserAnimationsModule,
     ToastrModule.forRoot(),
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
     ClickOutsideModule,
     Daterangepicker,
-    ChartModule.forRoot(require('highcharts'))
+    ChartModule,
+    TextMaskModule,
+    NgUploaderModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
-    BrowserAnimationsModule, AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
-    Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent],
+     AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
+    Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
+    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent
+  ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent,
-    NgxTypeAheadComponent]
+    NgxTypeAheadComponent],
+  providers: [{
+    provide: HighchartsStatic,
+    useFactory: highchartsFactory
+  }]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

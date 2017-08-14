@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ApplicationRef, NgModule } from '@angular/core';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { PreloadAllModules, RouterModule } from '@angular/router';
 import { RouterStoreModule } from '@ngrx/router-store';
@@ -21,13 +21,7 @@ import { rootReducer } from './store';
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-
 import { PageComponent } from './page.component';
-import { AboutModule } from './about/about.module';
-import { PermissionModule } from './permissions/permission.module';
-import { HomeModule } from './home/home.module';
-import { LoginModule } from './login/login.module';
-
 import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
@@ -38,6 +32,11 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { LedgerModule } from './ledger/ledger.module';
 import { TlPlModule } from './tl-pl/tl-pl.module';
 import { ManufacturingModule } from './manufacturing/manufacturing.module';
+import { DummyComponent } from './dummy.component';
+import { AboutModule } from './about/about.module';
+import { PermissionModule } from './permissions/permission.module';
+import { HomeModule } from './home/home.module';
+import { LoginModule } from './login/login.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -76,13 +75,15 @@ if (ENV === 'development') {
   declarations: [
     AppComponent,
     PageComponent,
-    NoContentComponent
+    NoContentComponent,
+    DummyComponent
   ],
   /**
    * Import Angular's modules.
    */
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpModule,

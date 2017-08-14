@@ -8,18 +8,7 @@ import { TlPlComponent } from './tl-pl.component';
   imports: [
     RouterModule.forChild([
       {
-        path: 'trial-balance-and-profit-loss',
-        redirectTo: 'pages/trial-balance-and-profit-loss',
-        pathMatch: 'full',
-        canActivate: [NeedsAuthentication]
-      },
-      {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
-        children: [
-          {
-            path: 'trial-balance-and-profit-loss', component: TlPlComponent, canActivate: [NeedsAuthentication]
-          }
-        ]
+        path: '', component: TlPlComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],

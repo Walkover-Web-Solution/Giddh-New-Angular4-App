@@ -10,8 +10,10 @@ import { DeleteRoleConfirmationModelComponent } from './components/confirmation/
 import { PermissionModelComponent } from './components/model/permission.model.component';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { SortByPipe } from './sort.pipe';
+import { CapitalizePipe } from './capitalize.pipe';
 
 const PERMISSION_ROUTES: Routes = [
+  { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   {
     path: '',
     component: PermissionComponent,
@@ -31,7 +33,7 @@ const PERMISSION_ROUTES: Routes = [
       //   component: PermissionDetailsComponent,
       //   canActivate: [NeedsAuthentication]
       // },
-      { path: '*', redirectTo: 'list'}
+      { path: '*', redirectTo: 'list' }
     ]
   }
 ];
@@ -43,7 +45,8 @@ const PERMISSION_ROUTES: Routes = [
     PermissionDetailsComponent,
     PermissionModelComponent,
     DeleteRoleConfirmationModelComponent,
-    SortByPipe
+    SortByPipe,
+    CapitalizePipe
   ],
   imports: [
     CommonModule,

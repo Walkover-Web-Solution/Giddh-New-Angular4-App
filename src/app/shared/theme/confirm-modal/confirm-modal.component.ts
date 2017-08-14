@@ -17,11 +17,11 @@ export class ConfirmModalComponent  {
   // tslint:disable-next-line:no-empty
   constructor() { }
 
-  public onSuccess() {
-    this.successCallBack.emit();
+  public onSuccess(e: Event) {
+    this.successCallBack.emit(e);
   }
 
-  public onCancel() {
-    this.cancelCallBack.emit();
+  public onCancel(e: Event) {
+    this.cancelCallBack.emit(e);
   }
 }

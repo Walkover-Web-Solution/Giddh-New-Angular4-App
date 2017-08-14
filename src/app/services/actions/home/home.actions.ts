@@ -11,8 +11,8 @@ import {
   IExpensesChartClosingBalanceResponse,
   IRevenueChartClosingBalanceResponse
 } from '../../../models/interfaces/dashboard.interface';
-import { GroupHistoryRequest } from '../../../models/api-models/Dashboard';
-
+import { RefreshBankAccountResponse, GroupHistoryRequest, BankAccountsResponse } from '../../../models/api-models/Dashboard';
+import * as _ from 'lodash';
 @Injectable()
 
 export class HomeActions {
@@ -37,7 +37,8 @@ export class HomeActions {
         };
       }
       return {
-        type: ''
+        type: HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
+        payload: { operatingcostActiveyear: res[0], indirectexpensesActiveyear: res[1] }
       };
     });
 
@@ -85,7 +86,8 @@ export class HomeActions {
         };
       }
       return {
-        type: ''
+        type: HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
+        payload: { revenuefromoperationsActiveyear: res[0], otherincomeActiveyear: res[1] }
       };
     });
 
@@ -123,19 +125,18 @@ export class HomeActions {
       let expenseModel: GroupHistoryRequest = {
         groups: ['indirectexpenses', 'operatingcost']
       };
-
       return Observable.zip(
         this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
         this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
         this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
       );
     }).map((res) => {
-      console.log(res);
       if (res[0].status === 'success' && res[1].status === 'success' && res[2].status === 'success') {
         let obj: IComparisionChartResponse = {
           revenueActiveYear: res[0].body.groups,
           ExpensesActiveYear: res[1].body.groups,
           ProfitLossActiveYear: res[2].body,
+          NetworthActiveYear: _.cloneDeep(res[2].body)
         };
         return {
           type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE,
@@ -148,7 +149,30 @@ export class HomeActions {
     });
 
   @Effect()
+  public GetNetworthChartActiveYear$: Observable<Action> = this.action$
+    .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR)
+    .switchMap(action => {
+      return Observable.zip(
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+      );
+    }).map((res) => {
+      if (res[0].status === 'success') {
+        let obj: IComparisionChartResponse = {
+          NetworthActiveYear: res[0].body
+        };
+        return {
+          type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
+          payload: obj
+        };
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
   public GetComparisionChartLastYear$: Observable<Action> = this.action$
+
     .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR)
     .switchMap(action => {
       let revenueModel: GroupHistoryRequest = {
@@ -164,12 +188,12 @@ export class HomeActions {
         this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
       );
     }).map((res) => {
-      console.log(res);
       if (res[0].status === 'success' && res[1].status === 'success') {
         let obj: IComparisionChartResponse = {
           revenueLastYear: res[0].body.groups,
           ExpensesLastYear: res[1].body.groups,
           ProfitLossLastYear: res[2].body,
+          NetworthLastYear: _.cloneDeep(res[2].body)
         };
         return {
           type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
@@ -180,6 +204,45 @@ export class HomeActions {
         type: ''
       };
     });
+
+  @Effect()
+  public GetBankAccounts$: Observable<Action> = this.action$
+
+    .ofType(HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS)
+    .switchMap(action => {
+      return this._dashboardService.GetBankAccounts();
+    }).map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
+      type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE,
+        payload: res
+      }));
+  @Effect()
+  public RefereshBankAccounts$: Observable<Action> = this.action$
+    .ofType(HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT)
+    .switchMap(action => {
+      return this._dashboardService.RefreshBankAccount(action.payload);
+    }).map((res) => this.validateResponse<RefreshBankAccountResponse, string>(res, {
+      type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE,
+        payload: res
+      }));
+
+  @Effect()
+  public ReConnectBankAccounts$: Observable<Action> = this.action$
+    .ofType(HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT)
+    .switchMap(action => {
+      return this._dashboardService.ReconnectBankAccount(action.payload);
+    }).map((res) => this.validateResponse<RefreshBankAccountResponse, string>(res, {
+      type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE,
+      payload: res
+    }, true, {
+        type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT_RESPONSE,
+        payload: res
+      }));
 
   constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
     //
@@ -226,17 +289,36 @@ export class HomeActions {
       payload: { fromDate, toDate, refresh }
     };
   }
+  public getNetworthChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
+    return {
+      type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR,
+      payload: { fromDate, toDate, refresh }
+    };
+  }
+  public GetBankAccount() {
+    return {
+      type: HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS
+    };
+  }
 
+  public RefereshBankAccount(loginid: string) {
+    return {
+      type: HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT,
+      payload: loginid
+    };
+  }
+  public ReConnectBankAccount(loginid: string) {
+    return {
+      type: HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT,
+      payload: loginid
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
       }
       return errorAction;
-    } else {
-      if (showToast && typeof response.body === 'string') {
-        this._toasty.successToast(response.body);
-      }
     }
     return successAction;
   }

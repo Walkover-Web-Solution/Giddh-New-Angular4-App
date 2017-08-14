@@ -1,20 +1,19 @@
-import { AccountRequest } from '../../../../models/api-models/Account';
+import { AccountRequest, AccountResponse } from '../../../../models/api-models/Account';
 import { Observable } from 'rxjs';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { AccountResponse } from '../../../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { uniqueNameValidator, digitsOnly } from '../../../helpers/customValidationHelper';
+import { digitsOnly } from '../../../helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
-import _ from 'lodash';
+import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 
 @Component({
   selector: 'account-add',
@@ -58,7 +57,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
-      uniqueName: ['', [Validators.required], uniqueNameValidator],
+      uniqueName: ['', [Validators.required]],
       openingBalanceType: ['CREDIT', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
@@ -70,8 +69,8 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       state: [''],
       stateCode: [''],
       hsnOrSac: [''],
-      hsnNumber: [{value: '', disabled: true}, []],
-      sacNumber: [{value: '', disabled: true}, []],
+      hsnNumber: [{value: '', disabled: false}, []],
+      sacNumber: [{value: '', disabled: false}, []],
       gstDetails: this._fb.array([
         this.initialGstDetailsForm()
       ])
@@ -89,12 +88,12 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
       if (a === 'hsn') {
-        hsn.reset();
+        // hsn.reset();
         sac.reset();
         hsn.enable();
         sac.disable();
       } else {
-        sac.reset();
+        // sac.reset();
         hsn.reset();
         sac.enable();
         hsn.disable();
@@ -102,7 +101,8 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     });
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
       if (p) {
-        this.addAccountForm.reset();
+        // reset with default values
+        this.addAccountForm.reset({openingBalanceType: 'CREDIT', openingBalance: 0});
       }
     });
   }
@@ -113,7 +113,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
 
   public generateUniqueName() {
     let val: string = this.addAccountForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    val = uniqueNameInvalidStringReplace(val);
     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
     this.isAccountNameAvailable$.subscribe(a => {
