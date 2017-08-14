@@ -9,14 +9,11 @@
   </div>
   <div class="form-group">
     <label>Account</label>
-    <div class="input-group">
-      <input type="text" name="accountUniqueName" class="form-control" placeholder="Account" [(ngModel)]="ledgerSearchRequest.accountUniqueName" />
-      <span class="input-group-btn">
-        <button type="button" (click)="filtersLedger.account = undefined" class="btn btn-default">
-          <span class="glyphicon glyphicon-trash"></span>
-        </button>
-      </span>
-    </div>
+    <select2
+      class="form-control"
+      [data]="accounts$ | async" 
+      [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" >
+    </select2>
   </div>
   <div class="form-group">
     <label>Description</label>
