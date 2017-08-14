@@ -211,7 +211,8 @@ export class InvoiceGenerateComponent implements OnInit {
     let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       return item.uniqueName === this.selectedLedgerItems[0];
     });
-    console.log ('before api', model, res.uniqueName);
+    console.log ('before api', model, res.account.uniqueName);
+    this.store.dispatch(this.invoiceActions.PreviewAndGenerateInvoice(res.account.uniqueName, model));
   }
 
   private generateBulkInvoice(action: boolean) {

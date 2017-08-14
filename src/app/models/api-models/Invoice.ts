@@ -201,123 +201,118 @@ export class PreviewAndGenerateInvoiceRequest {
 }
 
 export class PreviewAndGenerateInvoiceResponse {
-  public logo: Logo;
+  public logo: string;
   public company: Company;
+  public customerName: string;
   public account: Account;
   public signature: Signature;
-  public companyIdentities: CompanyIdentities;
-  public terms: string[];
-  public template: Template;
-  public entries: Entry[];
-  public taxes: Tax[];
-  public totalAsWords?: any;
-  public roundOff?: any;
+  public templateUniqueName: string;
+  public roundOff: RoundOff;
   public balanceStatus: string;
-  public sealPath: string;
+  public balanceStatusSealPath: string;
   public commonDiscounts: any[];
-  public gstDetails: GstDetails;
-  public other?: any;
-  public invoiceDetails: InvoiceDetails;
-  public ledgerUniqueNames: string[];
-  public taxTotal: number;
-  public subTotal: number;
+  public entries: Entry[];
+  public totalTaxableValue: number;
   public grandTotal: number;
-  public discountTotal: number;
+  public totalInWords?: any;
+  public subTotal: number;
+  public totalDiscount: number;
+  public totaltaxBreakdown: TotaltaxBreakdown[];
+  public totalTax?: any;
+  public invoiceDetails: InvoiceDetails;
+  public other?: any;
+}
+
+ export interface TotaltaxBreakdown {
+  amount: number;
+  visibleTaxRate: number;
+  accountName: string;
+  accountUniqueName: string;
+  hasError: boolean;
+  taxRate: number;
+  errorMessage: string;
+}
+
+export interface RoundOff {
+  transaction: Transaction;
+  uniqueName: string;
+  isTransaction: boolean;
+  balanceType: string;
 }
 
 export interface Account {
-    name: string;
-    uniqueName: string;
-    data: string[];
-    attentionTo: string;
-    email: string;
-    mobileNumber?: any;
+  name: string;
+  uniqueName: string;
+  data: string[];
+  attentionTo: string;
+  email: string;
+  mobileNumber?: any;
 }
 
-export interface Transaction {
-    amount: number;
-    accountUniqueName: string;
-    discount: any[];
-    accountName: string;
-    description: string;
+export interface ICommonItemOfTransaction {
+  amount: number;
+  accountUniqueName: string;
+  accountName: string;
+}
+
+export interface Transaction extends ICommonItemOfTransaction {
+  discount: any[];
+  description: string;
+}
+
+export interface IInvoiceTransaction extends ICommonItemOfTransaction {
+  hsnNumber?: any;
+  sacNumber?: any;
+  description: string;
+  quantity?: any;
+  stockUnit?: any;
+  rate?: any;
 }
 
 export interface Entry {
-    uniqueName: string;
-    transactions: Transaction[];
+  uniqueName: string;
+  transactions: Transaction[];
 }
 
-export interface Tax {
-    hasError: boolean;
-    amount: number;
-    visibleTaxRate: number;
-    taxRate: number;
-    accountName: string;
-    accountUniqueName: string;
-    errorMessage: string;
+export interface Tax extends ICommonItemOfTransaction {
+  hasError: boolean;
+  visibleTaxRate: number;
+  taxRate: number;
+  errorMessage: string;
 }
 
-export interface Tax2 {
-    accountName: string;
-    accountUniqueName: string;
-    amount: number;
-    rate: number;
-}
-
-export interface Transaction2 {
-    accountName: string;
-    accountUniqueName: string;
-    amount: number;
-    hsnNumber?: any;
-    sacNumber?: any;
-    description: string;
-    quantity?: any;
-    stockUnit?: any;
-    rate?: any;
+export interface IInvoiceTax extends ICommonItemOfTransaction {
+  rate: number;
 }
 
 export interface GstEntry {
-    uniqueName: string;
-    discounts: any[];
-    taxes: Tax2[];
-    transactions: Transaction2[];
-    description: string;
-    taxableValue: number;
-    entryTotal: number;
+  uniqueName: string;
+  discounts: any[];
+  taxes: IInvoiceTax[];
+  transactions: IInvoiceTransaction[];
+  description: string;
+  taxableValue: number;
+  entryTotal: number;
 }
 
-export interface CompanyGstDetails {
-    gstNumber?: any;
-    address: string[];
-    stateCode?: any;
-    panNumber?: any;
-}
-
-export interface AccountGstBillingDetails {
-    gstNumber?: any;
-    address: string[];
-    stateCode?: any;
-    panNumber?: any;
-}
-
-export interface AccountGstShippingDetails {
-    gstNumber?: any;
-    address: string[];
-    stateCode?: any;
-    panNumber?: any;
+export interface IGstDetails {
+  gstNumber?: any;
+  address: string[];
+  stateCode?: any;
+  panNumber?: any;
 }
 
 export interface GstTaxesTotal {
-    uniqueName: string;
-    name: string;
-    total: number;
+  uniqueName: string;
+  name: string;
+  total: number;
 }
 
 export interface GstDetails {
   gstEntries: GstEntry[];
-  companyGstDetails: CompanyGstDetails;
-  accountGstBillingDetails: AccountGstBillingDetails;
-  accountGstShippingDetails: AccountGstShippingDetails;
+  companyGstDetails: IGstDetails;
+  accountGstBillingDetails: IGstDetails;
+  accountGstShippingDetails: IGstDetails;
   gstTaxableValueTotal: number;
   gstEntriesTotal: number;
   gstTaxesTotal: GstTaxesTotal[];
@@ -328,6 +323,7 @@ export interface GstDetails {
   showQty: boolean;
   showRate: boolean;
 }
+
 /*
 *
 */
