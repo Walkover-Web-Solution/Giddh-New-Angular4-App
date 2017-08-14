@@ -12,7 +12,7 @@ import { SharedModule } from '../../../shared/shared.module';
 import { DesignFiltersContainerComponent } from './design-filters/design.filters.component';
 import { SelectTemplateComponent } from './design-filters/select-template/select.template.component';
 import { ContentFilterComponent } from './content-filters/content.filters.component';
-
+import { PrintSettingsComponent } from './design-filters/select-print-settings/print.settings.component';
 
 @NgModule({
   imports: [
@@ -21,11 +21,12 @@ import { ContentFilterComponent } from './content-filters/content.filters.compon
     ReactiveFormsModule,
     SharedModule,
   ],
-  declarations: [DesignFiltersContainerComponent, SelectTemplateComponent],
+  declarations: [DesignFiltersContainerComponent, SelectTemplateComponent, PrintSettingsComponent],
   exports: [
     DesignFiltersContainerModule,
     DesignFiltersContainerComponent,
-    SelectTemplateComponent
+    SelectTemplateComponent,
+    PrintSettingsComponent,
   ]
 })
 export class EditFiltersModule {

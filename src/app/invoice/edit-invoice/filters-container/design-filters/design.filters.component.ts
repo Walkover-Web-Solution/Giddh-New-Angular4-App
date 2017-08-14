@@ -35,7 +35,7 @@ export class DesignFiltersContainerComponent implements OnInit {
   }
 
   public selectLogo() {
-    this.ifLogoSelected = true;
+    this.ifLogoSelected = false;
     this.ifColorSelected = false;
     this.ifPrintSelected = false;
     this.ifFontSelected = false;
