@@ -23,7 +23,8 @@ import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html'
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public session$: Observable<boolean>;
@@ -95,7 +96,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.loginAction.LoginSuccess());
+    //
     this.user$.subscribe((u) => {
       if (u) {
         if (u.name.match(/\s/g)) {

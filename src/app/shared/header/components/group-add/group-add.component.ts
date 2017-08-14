@@ -8,7 +8,7 @@ import { CompanyActions } from '../../../../services/actions/company.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { GroupCreateRequest, GroupResponse } from '../../../../models/api-models/Group';
-import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
+import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 
 @Component({
   selector: 'group-add',
@@ -35,14 +35,14 @@ export class GroupAddComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
-      uniqueName: ['', Validators.required, uniqueNameValidator],
+      uniqueName: ['', Validators.required],
       description: ['']
     });
   }
 
   public generateUniqueName() {
     let val: string = this.groupDetailForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    val = uniqueNameInvalidStringReplace(val);
     this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
     this.isGroupNameAvailable$.subscribe(a => {

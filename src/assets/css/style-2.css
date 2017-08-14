@@ -276,8 +276,8 @@ header .navbar {
 }
 
 .btn-default {
-    background: #eee;
-    border: 1px solid #ccc;
+    background: #f8f7f2;
+    border: 1px solid #949494;
 }
 
 
@@ -686,11 +686,11 @@ input[type="checkbox"]:before {
     content: "";
     position: absolute;
     left: 3px;
-    top: 1px;
+    top: 4px;
     z-index: 1;
     width: 12px;
-    height: 8px;
-    border: 2px solid #fff;
+    height: 7px;
+    border: 2px solid #ff5f00;
     border-top-style: none;
     border-right-style: none;
 }
@@ -698,17 +698,14 @@ input[type="checkbox"]:before {
 input[type="checkbox"]:after {
     content: "";
     position: absolute;
-    top: -0.125rem;
+    top: 0;
     left: 0;
-    border: 2px solid #555;
+    border: 2px solid #969696;
     width: 18px;
     height: 18px;
     background: #fff;
     cursor: pointer;
-}
-
-input[type="checkbox"]:checked:after {
-    background: #555;
+    border-radius: 2px;
 }
 
 .tab-pane .list-inline>li {
@@ -1452,7 +1449,7 @@ footer small a {
 }
 
 .form_title {
-    padding: 12px 26px;
+    padding: 12px 20px;
     background: #525252;
     color: #fff;
 }
@@ -2147,11 +2144,13 @@ select.form-control {
 
 .linkStockTbl>tbody>tr>td {
     padding: 10px 15px;
+    font-size: 14px;
 }
 
 .linkStockTbl>tbody>tr>td:first-child {
     padding-left: 0;
     position: relative;
+    text-transform: capitalize
 }
 
 .list-row span {
@@ -2940,7 +2939,7 @@ label {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    padding: 0 7px !important;
+    padding: 0 20px 0 7px !important;
     background: transparent !important;
 }
 
@@ -2966,7 +2965,8 @@ label {
     color: #777;
 }
 
-#manufacture .source .linkstock thead th {
+#manufacture .source .linkstock thead th,
+#manufacture .source .linkstock tfoot tr td {
     color: #333;
 }
 
@@ -2984,6 +2984,7 @@ label {
 #manufacture .source .linkStockTbl>tbody>tr>td:first-child,
 #manufacture .source table tfoot td {
     padding: 10px 15px;
+    font-size: 14px;
 }
 
 #manufacture .source .linkStockTbl {
@@ -3008,14 +3009,14 @@ label {
     content: '';
     height: 100%;
     position: absolute;
-    top: 21px;
+    top: 20px;
     width: 2px;
     background: #ddd;
     left: -2px;
 }
 
 #manufacture .source tbody tr:nth-last-child(3) td:before {
-    height: 120%;
+    height: 105%;
 }
 
 #manufacture .source tbody tr:last-child td:before,
@@ -3199,6 +3200,9 @@ label {
     padding-top: 10px;
 }
 
+.d-inline-block {
+    display: inline-block!important;
+}
 .onHover {
     opacity: 0;
     z-index: -1;
@@ -3226,6 +3230,93 @@ label {
     right: 6px;
 }
 
+<<<<<<< HEAD
+#mfReportTbl table>tbody>tr>td>table.table {
+    background: transparent;
+}
+
+.pagination>li>a,
+.pagination>li>span {
+    color: #525252;
+}
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    background: #d35f29;
+    border-color: #d35f29;
+    color: #fff;
+}
+
+.pagination>li>a:focus,
+.pagination>li>a:hover,
+.pagination>li>span:focus,
+.pagination>li>span:hover {
+    background-color: #eee;
+    border-color: #ddd;
+    color: #d35f29;
+}
+
+#manufacture .section_title {
+    color: #616161;
+    letter-spacing: 0;
+    font-size: 20px;
+}
+
+.select2-container--default .select2-selection--single {
+    background: #f9f7f2 !important;
+    border: 1px solid #ded3c0 !important;
+    border-radius: 0px !important;
+    padding: 6px !important;
+    outline: 0;
+    color: #616161;
+    font-size: 14px;
+    box-shadow: none;
+}
+
+.select2-container .select2-selection--single {
+    height: 34px !important;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    line-height: inherit !important;
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background-color: #d35f29 !important;
+}
+
+.select2-results__option[aria-selected] {
+    font-size: 14px;
+}
+
+#manufacture .form-theme {
+    font-size: 14px;
+}
+
+.ico-btn {
+    border: 0;
+    background: none;
+}
+
+#manufacture .source tbody tr td .form-control {
+    background: transparent !important
+}
+
+.new-row td {
+    padding: 3px 15px !important;
+}
+
+.table-hover tr:hover {
+    cursor: pointer
+}
+
+#manufacture .form-theme tbody tr td select {
+    width: 43%;
+=======
 .btn-group.open .dropdown-toggle {
     box-shadow: none;
 }
@@ -3308,4 +3399,64 @@ label {
 
 #single_role table {
     margin-bottom: 0;
+}
+
+
+/*************************************************** Dashboard CSS  ****************************************************/
+
+#dashboard .panel-default {
+    color: #4d4d4d;
+    border-color: #949494;
+    padding: 0 10px;
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+#dashboard .panel-default>.panel-heading {
+    color: inherit;
+    background-color: transparent;
+    border-color: #949494;
+}
+
+#dashboard .panel-heading i {
+    cursor: pointer
+}
+
+#dashboard .panel-heading i {
+    position: relative;
+    top: 4px;
+}
+
+
+/*************************************************** input CSS  ****************************************************/
+
+.radio_theme {
+    position: relative;
+    margin: 0px 5px !important;
+}
+
+.radio_theme:before {
+    content: ' ';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    top: 0;
+    right: -2px;
+    border: 2px solid #969696;
+    border-radius: 50%;
+}
+
+.radio_theme:checked:after {
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ff5f00;
+    left: 4px;
+    top: 6px;
+    border-radius: 50%;
+    right: 0;
+    text-align: center;
+>>>>>>> master
 }
