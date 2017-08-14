@@ -82,7 +82,6 @@ export class InvoiceAction {
     };
   }
 
-
   public setColumnWidth(width: number, colName: string): Action {
     return {
       type: INVOICE.CONTENT.SET_COLUMN_WIDTH,
@@ -321,19 +320,24 @@ export class InvoiceAction {
       payload: {data}
     };
   }
-  public setTopPageMargin(data: string): Action {
+
+  public setTopPageMargin(data: number): Action {
+
     return {
       type: INVOICE.TEMPLATE.UPDATE_TOP_MARGIN,
       payload: {data}
     };
   }
-  public setLeftPageMargin(data: string): Action {
+
+  public setLeftPageMargin(data: number): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_LEFT_MARGIN,
       payload: {data}
     };
   }
-  public setBottomPageMargin(data: string): Action {
+
+  public setBottomPageMargin(data: number): Action {
+
     return {
       type: INVOICE.TEMPLATE.UPDATE_BOTTOM_MARGIN,
       payload: {data}
@@ -341,7 +345,8 @@ export class InvoiceAction {
   }
 
 
-  public setRightPageMargin(data: string): Action {
+  public setRightPageMargin(data: number): Action {
+
     return {
       type: INVOICE.TEMPLATE.UPDATE_RIGHT_MARGIN,
       payload: {data}
