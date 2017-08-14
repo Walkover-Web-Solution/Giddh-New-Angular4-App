@@ -85,6 +85,7 @@ export class GetAllLedgersOfInvoicesResponse {
 export class GenerateBulkInvoiceRequest {
   public accountUniqueName: string;
   public entries: string[];
+  public combined: boolean;
 }
 
 /**
@@ -112,6 +113,7 @@ export class GetTemplateResponse {
 export interface Template {
     uniqueName: string;
     template: string;
+    sectionsV2: any[];
     sections: Sections;
     isDefault: boolean;
     name: string;
@@ -144,12 +146,6 @@ export interface Sections {
     entries: boolean;
     taxes: boolean;
     signatureType: string;
-}
-
-export interface Account {
-    name: string;
-    data: any[];
-    attentionTo?: any;
 }
 
 export interface CompanyIdentities {
@@ -192,4 +188,143 @@ export interface Signature {
 export class SendMailRequest {
   public emailId: string[];
   public invoiceNumber: string[];
+}
+
+/**
+ * Preview and Generate Invoice
+ * method: 'POST'
+ * url: '/company/:companyUniqueName'accounts/:accountUniqueName/invoices/preview''
+ */
+
+export class PreviewAndGenerateInvoiceRequest {
+  public uniqueNames: string[];
+}
+
+export class PreviewAndGenerateInvoiceResponse {
+  public logo: Logo;
+  public company: Company;
+  public account: Account;
+  public signature: Signature;
+  public companyIdentities: CompanyIdentities;
+  public terms: string[];
+  public template: Template;
+  public entries: Entry[];
+  public taxes: Tax[];
+  public totalAsWords?: any;
+  public roundOff?: any;
+  public balanceStatus: string;
+  public sealPath: string;
+  public commonDiscounts: any[];
+  public gstDetails: GstDetails;
+  public other?: any;
+  public invoiceDetails: InvoiceDetails;
+  public ledgerUniqueNames: string[];
+  public taxTotal: number;
+  public subTotal: number;
+  public grandTotal: number;
+  public discountTotal: number;
+}
+
+export interface Account {
+    name: string;
+    uniqueName: string;
+    data: string[];
+    attentionTo: string;
+    email: string;
+    mobileNumber?: any;
+}
+
+export interface Transaction {
+    amount: number;
+    accountUniqueName: string;
+    discount: any[];
+    accountName: string;
+    description: string;
+}
+
+export interface Entry {
+    uniqueName: string;
+    transactions: Transaction[];
+}
+
+export interface Tax {
+    hasError: boolean;
+    amount: number;
+    visibleTaxRate: number;
+    taxRate: number;
+    accountName: string;
+    accountUniqueName: string;
+    errorMessage: string;
+}
+
+export interface Tax2 {
+    accountName: string;
+    accountUniqueName: string;
+    amount: number;
+    rate: number;
+}
+
+export interface Transaction2 {
+    accountName: string;
+    accountUniqueName: string;
+    amount: number;
+    hsnNumber?: any;
+    sacNumber?: any;
+    description: string;
+    quantity?: any;
+    stockUnit?: any;
+    rate?: any;
+}
+
+export interface GstEntry {
+    uniqueName: string;
+    discounts: any[];
+    taxes: Tax2[];
+    transactions: Transaction2[];
+    description: string;
+    taxableValue: number;
+    entryTotal: number;
+}
+
+export interface CompanyGstDetails {
+    gstNumber?: any;
+    address: string[];
+    stateCode?: any;
+    panNumber?: any;
+}
+
+export interface AccountGstBillingDetails {
+    gstNumber?: any;
+    address: string[];
+    stateCode?: any;
+    panNumber?: any;
+}
+
+export interface AccountGstShippingDetails {
+    gstNumber?: any;
+    address: string[];
+    stateCode?: any;
+    panNumber?: any;
+}
+
+export interface GstTaxesTotal {
+    uniqueName: string;
+    name: string;
+    total: number;
+}
+
+export interface GstDetails {
+    gstEntries: GstEntry[];
+    companyGstDetails: CompanyGstDetails;
+    accountGstBillingDetails: AccountGstBillingDetails;
+    accountGstShippingDetails: AccountGstShippingDetails;
+    gstTaxableValueTotal: number;
+    gstEntriesTotal: number;
+    gstTaxesTotal: GstTaxesTotal[];
+    showTaxes: boolean;
+    showDiscount: boolean;
+    showHsn: boolean;
+    showSac: boolean;
+    showQty: boolean;
+    showRate: boolean;
 }

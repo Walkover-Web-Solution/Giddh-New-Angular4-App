@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewAndGenerateInvoiceRequest, PreviewAndGenerateInvoiceResponse, ActionOnInvoiceRequest } from '../models/api-models/Invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -85,5 +85,53 @@ export class InvoiceService {
       url = url + 'count=' + model.count;
     }
     return url;
+  }
+
+  /*
+  * Generate Bulk Invoice
+  * method: 'POST'
+  * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
+  */
+
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest): Observable<BaseResponse<string, GenerateBulkInvoiceRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    // create url
+    let url = INVOICE_API.GENERATE_BULK_INVOICE +  '=' + reqObj.combined;
+    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string, GenerateBulkInvoiceRequest> = res.json();
+        data.request = model;
+        data.queryString = { reqObj };
+        return data;
+      })
+      .catch((e) => HandleCatch<string, GenerateBulkInvoiceRequest>(e, reqObj, model));
+  }
+
+  /*
+  * Preview and Generate Invoice
+  * method: 'POST'
+  * url: '/company/:companyUniqueName/accounts/:accountUniqueName/invoices/preview'
+  */
+
+  public PreviewAndGenerateInvoice(model: PreviewAndGenerateInvoiceRequest): Observable<BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+
+    return this._http.post(INVOICE_API.PREVIEW_AND_GENERATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', String(model.uniqueNames)), model)
+      .map((res) => {
+        let data: BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest> = res.json();
+        data.request = model;
+        return data;
+      })
+      .catch((e) => HandleCatch<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>(e, model));
   }
 }
