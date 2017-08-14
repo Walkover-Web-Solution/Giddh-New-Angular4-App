@@ -337,3 +337,26 @@ export class GenBulkInvoiceFinalObj {
   public accountUniqueName: string;
   public entries: string[];
 }
+
+/*
+* Get invoice template details response model
+*/
+export interface GetInvoiceTemplateDetailsResponse {
+  sections: ISection[];
+  isDefault: boolean;
+  sample: boolean;
+  uniqueName: string;
+  name: string;
+}
+
+export interface ISection {
+  sectionName: string;
+  content: IContent[];
+}
+
+export interface IContent {
+  display: boolean;
+  label: string;
+  field: string;
+  width: string;
+}
