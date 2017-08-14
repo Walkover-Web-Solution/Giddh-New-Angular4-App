@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -71,12 +71,12 @@ export class InvoiceGenerateComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
         data.body.results.map(d => {
+          // Select only sundry debtors account
           if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ text: d.name, id: d.uniqueName }); // Select only sundry debtors account
+            accounts.push({ text: d.name, id: d.uniqueName });
           }
         });
         this.accounts$ = Observable.of(accounts);
-        // console.log('this.accounts$ :', this.accounts$);
       }
     });
 
@@ -156,9 +156,23 @@ export class InvoiceGenerateComponent implements OnInit {
   private toggleItem(item: any, action: boolean) {
     item.isSelected = action;
     if (action) {
-      // this.allItemsSelected = true;
+      this.countAndToggleVar();
     }else {
       this.allItemsSelected = false;
+    }
+    this.insertItemsIntoArr();
+  }
+
+  private countAndToggleVar() {
+    let total: number = this.ledgersData.results.length;
+    let count: number = 0;
+    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      if (item.isSelected) {
+        count ++;
+      }
+    });
+    if (count === total) {
+      this.allItemsSelected = true;
     }
   }
 
@@ -172,37 +186,56 @@ export class InvoiceGenerateComponent implements OnInit {
       item.isSelected = this.allItemsSelected ? true : false;
       return item;
     });
+    this.insertItemsIntoArr();
   }
 
-  private insertItemsIntoArr(type: boolean) {
-    if (type) {
-      _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-        this.selectedLedgerItems.push(item.uniqueName);
-      });
-    }else {
-      this.selectedLedgerItems = [];
-    }
+  private insertItemsIntoArr() {
+    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
+      if (item.isSelected) {
+        if (idx === -1) {
+          this.selectedLedgerItems.push(item.uniqueName);
+        }
+      }else {
+        if (idx !== -1) {
+          this.selectedLedgerItems.splice(idx);
+        }
+      }
+    });
   }
 
   private prevAndGenInv() {
     let model = {
       uniqueNames: _.uniq(this.selectedLedgerItems)
     };
-    console.log ('before api', model);
+    let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      return item.uniqueName === this.selectedLedgerItems[0];
+    });
+    console.log ('before api', model, res.uniqueName);
   }
 
-  private generateBulkInvoice(type: boolean) {
+  private generateBulkInvoice(action: boolean) {
     if (this.selectedLedgerItems.length <= 0) {
       return false;
     }
+    let arr: GenBulkInvoiceGroupByObj[] = [];
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       if (item.isSelected) {
-        //
-      }else {
-        //
+        arr.push({accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName});
       }
     });
+    let res = _.groupBy(arr, 'accUniqueName');
+    let final = [];
+    _.forEach(res, (items: GenBulkInvoiceGroupByObj) => {
+      let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
+      obj.entries = [];
+      _.forEach(items, (o: GenBulkInvoiceGroupByObj) => {
+        obj.accountUniqueName = o.accUniqueName;
+        obj.entries.push(o.uniqueName);
+      });
+      final.push(obj);
+    });
+    console.log ('before api', action, final);
   }
-  // account list only for sundry debtors
 
 }
