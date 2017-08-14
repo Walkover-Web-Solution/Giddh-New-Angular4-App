@@ -53,8 +53,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   };
   public voucherTypeList: Observable<Select2OptionData[]>;
   public showAdvanced: boolean;
-  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-  public datePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public isFileUploading: boolean = false;
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
 

@@ -13,6 +13,7 @@ import { StockGroupRequest, StockGroupResponse } from '../../../models/api-model
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -134,6 +135,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       if (d) {
         this.addGroupForm.reset();
         this.getParentGroupData();
+        this.router.navigate(['/pages', 'inventory', 'add-group']);
       }
     });
   }
@@ -192,7 +194,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
       return true;
     }
     let val: string = this.addGroupForm.controls['name'].value;
-    val = val.replace(/[^a-zA-Z0-9]/g, '').toLocaleLowerCase();
+    val = uniqueNameInvalidStringReplace(val);
     this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
 
     this.isGroupNameAvailable$.subscribe(a => {

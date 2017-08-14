@@ -154,18 +154,28 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest.page = 0;
 
     this.getTransactionData();
-    this.lc = new LedgerVM();
   }
 
   public selectAccount(e: any, txn) {
     if (!e.value) {
+      // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
+      // reset taxes and discount on selected account change
+      txn.tax = 0;
+      txn.taxes = [];
+      txn.discount = 0;
+      txn.discounts = [];
       return;
     }
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
           if (fa.id === e.value[0]) {
             txn.selectedAccount = fa.additional;
+            // reset taxes and discount on selected account change
+            txn.tax = 0;
+            txn.taxes = [];
+            txn.discount = 0;
+            txn.discounts = [];
             return;
           }
         }
@@ -231,27 +241,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     if (unAccountedTrx) {
       this.selectBlankTxn(unAccountedTrx);
     } else {
-      let newTrx = this.addNewTransaction(event);
+      let newTrx = this.lc.addNewTransaction(event);
       this.lc.blankLedger.transactions.push(newTrx);
       this.selectBlankTxn(newTrx);
     }
-  }
-
-  public addNewTransaction(type: string = 'DEBIT') {
-    return {
-      id: uuid.v4(),
-      amount: 0,
-      tax: 0,
-      total: 0,
-      particular: '',
-      type,
-      taxes: [],
-      discount: 0,
-      discounts: [],
-      selectedAccount: null,
-      applyApplicableTaxes: true,
-      isInclusiveTax: true
-    };
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {
@@ -267,15 +260,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }, error => {
       console.log(error);
     });
-  }
-
-  public showNewLedgerEntryPopup(trx: TransactionVM) {
-    this.selectBlankTxn(trx);
-    this.lc.showNewLedgerPanel = true;
-  }
-
-  public hideNewLedgerEntryPopup() {
-    this.lc.showNewLedgerPanel = false;
   }
 
   public resetBlankTransaction() {
@@ -309,7 +293,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           applyApplicableTaxes: true,
           isInclusiveTax: true
         }],
-      voucherType: 'voucherType',
+      voucherType: 'sal',
       entryDate: moment().format('DD-MM-YYYY'),
       unconfirmedEntry: false,
       attachedFile: '',
@@ -323,15 +307,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.hideNewLedgerEntryPopup();
   }
 
+  public showNewLedgerEntryPopup(trx: TransactionVM) {
+    this.selectBlankTxn(trx);
+    this.lc.showNewLedgerPanel = true;
+  }
+
+  public hideNewLedgerEntryPopup() {
+    this.lc.showNewLedgerPanel = false;
+  }
+
   public saveBlankTransaction() {
-    let blankTransactionObj: BlankLedgerVM;
-    blankTransactionObj = cloneDeep(this.lc.blankLedger);
-    blankTransactionObj.transactions = blankTransactionObj.transactions.filter(bl => bl.particular);
-    blankTransactionObj.transactions.map((bl: any) => {
-      bl.particular = bl.selectedAccount.uniqueName;
-      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
-      delete bl['id'];
-    });
+    let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
   }
 

@@ -74,7 +74,7 @@
                 </div>
                 <div class="col-xs-2 mutliple_unit">
                   <button (click)="addPurchaseUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
-                  <button (click)="removePurchaseUnitRates(i)" *ngIf="f && !l"><i class="fa fa-times dlet"></i></button>
+                  <button (click)="removePurchaseUnitRates(i)" *ngIf="f || !l"><i class="fa fa-times dlet"></i></button>
                 </div>
               </div>
             </div>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="col-xs-2 mutliple_unit">
                   <button (click)="addSaleUnitRates(i)" *ngIf="l"><i class="fa fa-plus add_row"></i></button>
-                  <button (click)="removeSaleUnitRates(i)" *ngIf="f && !l"><i class="fa fa-times dlet"></i></button>
+                  <button (click)="removeSaleUnitRates(i)" *ngIf="f || !l"><i class="fa fa-times dlet"></i></button>
                 </div>
               </div>
             </div>
