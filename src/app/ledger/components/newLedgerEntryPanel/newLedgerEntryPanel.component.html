@@ -1,11 +1,10 @@
-<div ng-click="$event.stopPropagation()" class="ledger-panel"
-     ng-class="{'pop-panel':!popover.draggable, 'fixed-panel': ledgerCtrl.showPanel, 'top0':hideHeader}">
+<div class="ledger-panel">
   <div class="wrapper">
     <div class="basic_detail" ng-if="ledgerCtrl.showTaxationDiscountBox">
       <table>
         <tbody>
-        <tr *ngIf="selectedAccount">
-          <td class="pItem" *ngIf="selectedAccount.stock">
+        <tr *ngIf="currentTxn.selectedAccount">
+          <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <table>
               <tbody>
               <tr>
@@ -27,23 +26,23 @@
             </table>
           </td>
 
-          <td class="pItem" *ngIf="selectedAccount.stock">
+          <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">x</label>
           </td>
-          <td style="max-width:150px" class="pItem" *ngIf="selectedAccount.stock">
+          <td style="max-width:150px" class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <label>Price</label>
             <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.price"
                    ng-change="ledgerCtrl.onNewPanelChange().price(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
           </td>
-          <td class="pItem" *ngIf="selectedAccount.stock">
+          <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">=</label>
           </td>
           <td class="pItem">
             <label class="primary_color">Amount</label>
-            <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.amount"
-                   ng-change="ledgerCtrl.onNewPanelChange().amount(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
+            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount"
+                   ng-model="ledgerCtrl.selectedTxn.panel.amount" (keyup)="calculateTotal()"/>
           </td>
           <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
             <label>&nbsp;</label>
@@ -53,7 +52,10 @@
           <!--discount-->
           <td style="max-width:150px" class="pItem"
               *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
-            <ledger-discount></ledger-discount>
+            <ledger-discount
+              [discountAccountsDetails]="currentTxn.discounts"
+              (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
+            </ledger-discount>
           </td>
 
           <td class="pItem"
@@ -61,29 +63,14 @@
             <label>&nbsp;</label>
             <label class="pdR pdL default_clr">+</label>
           </td>
-          <td style="max-width:150px" ng-if="ledgerCtrl.taxList.length > 0">
-	        		<span uib-dropdown auto-close="outsideClick">
-					      <a href id="tax" uib-dropdown-toggle>
-                              <label>Tax %</label>
-                              <div class="multi-select adjust">
-                                  <input type="number" readonly name="" class="form-control cursor-pointer"
-                                         ng-model="ledgerCtrl.selectedTxn.panel.tax" disabled/>
-                                  <span class="caret"></span>
-                              </div>
-
-                          </a>
-					      <ul class="dropdown-menu pd" uib-dropdown-menu>
-                              <li class="oh width100 bdrB pdB" ng-repeat="tax in ledgerCtrl.taxList">
-                                  <label class="checkbox" ng-click="$event.stopPropagation()">
-                                      <input class="pull-left" style="margin-top:5px;" type="checkbox"
-                                             ng-model="tax.isChecked"
-                                             ng-change="ledgerCtrl.onNewPanelChange().tax(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"
-                                             ng-click="$event.stopPropagation()"/>
-                                      <span class="pull-left" style="display:block;max-width:125px">{{""}}</span>
-                                  </label>
-                              </li>
-                          </ul>
-              </span>
+          <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length">
+            <!--tax control component-->
+            <tax-control [taxes]="companyTaxesList$ | async"
+                         [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes"
+                         [taxRenderData]="currentTxn.taxes"
+                         (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()"
+                         (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+            </tax-control>
           </td>
           <td class="pItem">
             <label>&nbsp;</label>
@@ -91,8 +78,8 @@
           </td>
           <td class="pItem">
             <label class="primary_color">Total</label>
-            <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.total"
-                   ng-change="ledgerCtrl.onNewPanelChange().total(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)"/>
+            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.total"
+                   (keyup)="calculateAmount()"/>
           </td>
         </tr>
         </tbody>
@@ -101,14 +88,14 @@
 
     <div class="row pd1 inWords">
       <div class="col-xs-12">
-        {{""}}
+        {{ currentTxn.total | myNumberToWordsPipe }}
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-12">
         <textarea rows="4" cols="" class="form-control" placeholder="Description"
-                  ng-model="ledgerCtrl.selectedLedger.description"></textarea>
+                  [(ngModel)]="blankLedger.description"></textarea>
       </div>
     </div>
 
@@ -122,12 +109,12 @@
                 <td class="pdR">
                   <label class="default_clr">Cheque Number</label>
                   <input type="text" placeholder="XXXX2619" class="form-control"
-                         ng-model="ledgerCtrl.selectedLedger.chequeNumber"/>
+                         [(ngModel)]="blankLedger.chequeNumber"/>
                 </td>
                 <td>
                   <label class="default_clr">Cheque Date</label>
-                  <input type="text" class="form-control" ng-model="ledgerCtrl.selectedLedger.chequeClearanceDate"
-                         ui-mask="99-99-9999" model-view-value="true"/>
+                  <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control"
+                         [(ngModel)]="blankLedger.chequeClearanceDate"/>
                 </td>
               </tr>
               </tbody>
@@ -136,11 +123,11 @@
         </div>
 
         <div class="file_attached col-xs-5 pull-right text-right"
-             ng-if="ledgerCtrl.selectedLedger.attachedFileName.length > 0">
+             *ngIf="blankLedger.attachedFile.length > 0">
           <div class="row">
-            <span ng-bind="ledgerCtrl.selectedLedger.attachedFileName"></span>
-            <label class="remove cp mrL1" *ngIf="false"
-                   ng-click="ledgerCtrl.deleteAttachedFile()">(remove)</label>
+            <span>{{ blankLedger.attachedFileName }}</span>
+            <label class="remove cp mrL1"
+                   (click)="showDeleteAttachedFileModal()">(remove)</label>
           </div>
         </div>
       </div>
@@ -176,15 +163,8 @@
           <tr>
             <td class="pdR1"><label class="default_clr pull-left">Voucher type</label></td>
             <td colspan="4">
-              <!--<ui-select ng-model="ledgerCtrl.selectedLedger.voucher" theme="bootstrap"-->
-              <!--ng-click="$event.stopPropagation()">-->
-              <!--<ui-select-match>-->
-              <!--<span>{{$select.selected.name}}</span>-->
-              <!--</ui-select-match>-->
-              <!--<ui-select-choices repeat="item in ledgerCtrl.voucherTypeList| filter: $select.search ">-->
-              <!--<span ng-bind="item.name"></span>-->
-              <!--</ui-select-choices>-->
-              <!--</ui-select>-->
+              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async"
+                       [options]="voucherDropDownOptions"></select2>
             </td>
             <td class="pdL1">
               <span>{{""}}</span>
@@ -200,43 +180,58 @@
           class="glyphicon glyphicon-triangle-bottom" [ngClass]="{rotate180:showAdvanced}"></i></button>
       </div>
       <div class="col-xs-6 text-right">
-        <span class="primary_color">Compound Total: {{ currentTxn?.amount }}</span>
+        <span class="primary_color">Compound Total: {{ currentTxn?.total }}</span>
       </div>
     </div>
 
     <div class="row">
       <div class="col-xs-3 pdT1">
         <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger"
-                ng-click="ledgerCtrl.resetBlankLedger()">Reset
+                (click)="resetPanel()">Reset
         </button>
       </div>
       <div class="col-xs-9 pdT1">
         <div class="pull-right">
-          <div class="mrR1 pull-left" ng-if="ledgerCtrl.showGenInvOpts">
+          <div class="mrR1 pull-left" [ngClass]="{hide:blankLedger.attachedFile}">
             <label class="checkbox oh">
               <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice"
-                     ng-model="ledgerCtrl.selectedLedger.generateInvoice" ng-click="$event.stopPropagation()">
+                     [(ngModel)]="blankLedger.generateInvoice">
               <span class="pull-left">Generate Invoice</span>
             </label>
           </div>
-          <div class="upload_div" ng-if="ledgerCtrl.selectedLedger.attachedFileName.length == 0">
-            <input type="file" name="invoiceFile" id="invoiceFile" ng-click="$event.stopPropagation()"
-                   onchange="angular.element(this).scope().getInvoiceFile(this.files)">
+
+          <div class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
+            <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
+                   (uploadOutput)="onUploadOutput($event)">
             <label for="invoiceFile"><i class="glyphicon glyphicon-paperclip"></i></label>
           </div>
+
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  ng-click="ledgerCtrl.addBlankTxn('DEBIT')">Add to DR
+                  (click)="addToDrOrCr('DEBIT',$event)">Add to DR
           </button>
           <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success"
-                  ng-click="ledgerCtrl.addBlankTxn('CREDIT')">Add to CR
+                  (click)="addToDrOrCr('CREDIT',$event)">Add to CR
           </button>
-          <button id="saveLedger" class="btn btn-success" ng-click="ledgerCtrl.saveUpdateLedger()">Save</button>
+          <button id="saveLedger" class="btn btn-success" [disabled]="isFileUploading" (click)="saveLedger()">Save
+          </button>
 
         </div>
       </div>
     </div>
     <div class="row">
 
+    </div>
+  </div>
+</div>
+
+<!--deleteAttachedFile  -->
+<div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'"
+                     (cancelCallBack)="hideDeleteAttachedFileModal()"
+                     (successCallBack)="deleteAttachedFile()">
+      </confirm-modal>
     </div>
   </div>
 </div>

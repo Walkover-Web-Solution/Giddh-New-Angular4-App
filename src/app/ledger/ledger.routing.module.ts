@@ -8,14 +8,8 @@ import { LedgerComponent } from './ledger.component';
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full', canActivate: [NeedsAuthentication] },
       {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
-        children: [
-          {
-            path: 'ledger/:accountUniqueName', component: LedgerComponent, canActivate: [NeedsAuthentication]
-          }
-        ]
+        path: '', component: LedgerComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],

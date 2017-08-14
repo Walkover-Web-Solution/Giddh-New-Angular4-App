@@ -12,23 +12,18 @@ import { InventoryStockReportComponent } from './components/stock-report-compone
 @NgModule({
   imports: [
     RouterModule.forChild([
-      { path: 'inventory', redirectTo: 'pages/inventory', pathMatch: 'full', canActivate: [NeedsAuthentication] },
       {
-        path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
+        path: '', component: InventoryComponent, canActivate: [NeedsAuthentication],
         children: [
-          {
-            path: 'inventory', component: InventoryComponent, canActivate: [NeedsAuthentication],
-            children: [
-              { path: 'add-group', pathMatch: 'full', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication] },
-              { path: 'add-group/:groupUniqueName', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication], },
-              { path: 'add-group/:groupUniqueName/add-stock', component: InventoryAddStockComponent, canActivate: [NeedsAuthentication] },
-              { path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent, canActivate: [NeedsAuthentication] },
-              { path: 'add-group/:groupUniqueName/stock-report/:stockUniqueName', component: InventoryStockReportComponent, canActivate: [NeedsAuthentication] },
-              { path: 'custom-stock', component: InventoryCustomStockComponent, canActivate: [NeedsAuthentication] },
-            ]
-          }
+          { path: 'add-group', pathMatch: 'full', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication] },
+          { path: 'add-group/:groupUniqueName', component: InventoryAddGroupComponent, canActivate: [NeedsAuthentication], },
+          { path: 'add-group/:groupUniqueName/add-stock', component: InventoryAddStockComponent, canActivate: [NeedsAuthentication] },
+          { path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent, canActivate: [NeedsAuthentication] },
+          { path: 'add-group/:groupUniqueName/stock-report/:stockUniqueName', component: InventoryStockReportComponent, canActivate: [NeedsAuthentication] },
+          { path: 'custom-stock', component: InventoryCustomStockComponent, canActivate: [NeedsAuthentication] },
         ]
       }
+
     ])
   ],
   exports: [RouterModule]

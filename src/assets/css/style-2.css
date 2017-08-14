@@ -276,8 +276,8 @@ header .navbar {
 }
 
 .btn-default {
-    background: #eee;
-    border: 1px solid #ccc;
+    background: #f8f7f2;
+    border: 1px solid #949494;
 }
 
 
@@ -686,11 +686,11 @@ input[type="checkbox"]:before {
     content: "";
     position: absolute;
     left: 3px;
-    top: 1px;
+    top: 4px;
     z-index: 1;
     width: 12px;
-    height: 8px;
-    border: 2px solid #fff;
+    height: 7px;
+    border: 2px solid #ff5f00;
     border-top-style: none;
     border-right-style: none;
 }
@@ -698,17 +698,14 @@ input[type="checkbox"]:before {
 input[type="checkbox"]:after {
     content: "";
     position: absolute;
-    top: -0.125rem;
+    top: 0;
     left: 0;
-    border: 2px solid #555;
+    border: 2px solid #969696;
     width: 18px;
     height: 18px;
     background: #fff;
     cursor: pointer;
-}
-
-input[type="checkbox"]:checked:after {
-    background: #555;
+    border-radius: 2px;
 }
 
 .tab-pane .list-inline>li {
@@ -3206,6 +3203,18 @@ label {
 .d-inline-block {
     display: inline-block!important;
 }
+.onHover {
+    opacity: 0;
+    z-index: -1;
+    position: absolute;
+    transition: all 0.5s ease;
+}
+
+.role:hover .onHover {
+    opacity: 1;
+    z-index: 9;
+    position: relative
+}
 
 .custom-select select {
     -moz-appearance: none;
@@ -3221,6 +3230,7 @@ label {
     right: 6px;
 }
 
+<<<<<<< HEAD
 #mfReportTbl table>tbody>tr>td>table.table {
     background: transparent;
 }
@@ -3306,4 +3316,147 @@ label {
 
 #manufacture .form-theme tbody tr td select {
     width: 43%;
+=======
+.btn-group.open .dropdown-toggle {
+    box-shadow: none;
+}
+
+.add-new-role-modal .dropdown-menu {
+    width: 100%;
+    box-shadow: none;
+    border-radius: 0;
+}
+
+.dropdown-toggle .select_drop {
+    right: 0;
+}
+
+.add-new-role-modal .dropdown-menu li {
+    padding: 4px 0;
+}
+
+.add-new-role-modal .dropdown-menu li label {
+    color: #858585;
+    font-weight: normal;
+}
+
+.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:after,
+#single_role table tbody tr td input[type="checkbox"]:after {
+    border-width: 1px;
+    top: 0;
+    width: 16px;
+    height: 16px
+}
+
+.add-new-role-modal .dropdown-menu li label input[type="checkbox"]:checked:before,
+#single_role table tbody tr td input[type="checkbox"]:checked:before {
+    left: 3px;
+    top: 3px;
+    z-index: 1;
+    width: 11px;
+    height: 6px;
+}
+
+#single_role .panel {
+    border-radius: 0;
+    margin-bottom: 40px;
+}
+
+#single_role .panel-heading {
+    background: #d4602a;
+    color: #fff;
+    border-radius: 0;
+}
+
+#single_role tbody tr td:first-child,
+#single_role thead tr th:first-child {
+    border-right: 1px solid #c2cdd3
+}
+
+#single_role .lead {
+    font-size: 2em;
+}
+
+#single_role thead tr th:first-child {
+    padding-left: 18px;
+    text-transform: capitalize
+}
+
+#single_role .panel-body {
+    background: #f1f1f2;
+}
+
+#single_role .panel-body tbody tr:nth-child(1) td {
+    background: #fff;
+    border-right: 0;
+}
+
+#single_role .panel-body label {
+    font-size: 14px;
+    text-transform: capitalize;
+    color: #858585;
+}
+
+#single_role table {
+    margin-bottom: 0;
+}
+
+
+/*************************************************** Dashboard CSS  ****************************************************/
+
+#dashboard .panel-default {
+    color: #4d4d4d;
+    border-color: #949494;
+    padding: 0 10px;
+    -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+}
+
+#dashboard .panel-default>.panel-heading {
+    color: inherit;
+    background-color: transparent;
+    border-color: #949494;
+}
+
+#dashboard .panel-heading i {
+    cursor: pointer
+}
+
+#dashboard .panel-heading i {
+    position: relative;
+    top: 4px;
+}
+
+
+/*************************************************** input CSS  ****************************************************/
+
+.radio_theme {
+    position: relative;
+    margin: 0px 5px !important;
+}
+
+.radio_theme:before {
+    content: ' ';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    top: 0;
+    right: -2px;
+    border: 2px solid #969696;
+    border-radius: 50%;
+}
+
+.radio_theme:checked:after {
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ff5f00;
+    left: 4px;
+    top: 6px;
+    border-radius: 50%;
+    right: 0;
+    text-align: center;
+>>>>>>> master
 }

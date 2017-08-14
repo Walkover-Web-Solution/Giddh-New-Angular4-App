@@ -1,6 +1,11 @@
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse } from '../../../models/api-models/Ledger';
+import {
+  DownloadLedgerRequest,
+  LedgerResponse,
+  TransactionsRequest,
+  TransactionsResponse
+} from '../../../models/api-models/Ledger';
 /**
  * Created by ad on 04-07-2017.
  */
@@ -15,6 +20,7 @@ import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../ledger.service';
 import { GroupService } from '../../group.service';
 import { FlattenGroupsAccountsResponse } from '../../../models/api-models/Group';
+import { BlankLedgerVM } from '../../../ledger/ledger.vm';
 
 @Injectable()
 export class LedgerActions {
@@ -68,6 +74,18 @@ export class LedgerActions {
       payload: res
     }));
 
+  @Effect()
+  public CreateBlankLedger$: Observable<Action> = this.action$
+    .ofType(LEDGER.CREATE_BLANK_LEDGER_REQUEST)
+    .switchMap(action => this._ledgerService.CreateLedger(action.payload.model, action.payload.accountUniqueName))
+    .map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
+      type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
+      payload: res
+    }, true, {
+      type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
+      payload: res
+    }));
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -100,6 +118,19 @@ export class LedgerActions {
   public GetDiscountAccounts(): Action {
     return {
       type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST
+    };
+  }
+
+  public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
+      payload: {model, accountUniqueName}
+    };
+  }
+
+  public ResetLedger(): Action {
+    return {
+      type: LEDGER.RESET_LEDGER
     };
   }
 

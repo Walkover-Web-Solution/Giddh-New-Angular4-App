@@ -11,12 +11,12 @@ import {
   ComapnyResponse,
   CompanyRequest,
   StateDetailsRequest,
-  StateDetailsResponse
+  StateDetailsResponse,
+  States
 } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { HandleCatch } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
-import { States } from '../models/api-models/Company';
 
 @Injectable()
 export class CompanyService {
@@ -73,7 +73,13 @@ export class CompanyService {
    * get state details
    */
   public getStateDetails(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
-    return this._http.get(COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', cmpUniqueName ? cmpUniqueName : '')).map((res) => {
+    let url = '';
+    if (cmpUniqueName) {
+      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', cmpUniqueName ? cmpUniqueName : '');
+    } else {
+      url = COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
+    }
+    return this._http.get(url).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
       return data;
     }).catch((e) => HandleCatch<StateDetailsResponse, string>(e));
@@ -100,6 +106,7 @@ export class CompanyService {
       return data;
     }).catch((e) => HandleCatch<TaxResponse[], string>(e));
   }
+
   public getComapnyUsers(): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {

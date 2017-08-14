@@ -1,10 +1,16 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { DownloadLedgerRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
+import {
+  DownloadLedgerRequest,
+  LedgerResponse,
+  TransactionsRequest,
+  TransactionsResponse
+} from '../../models/api-models/Ledger';
 import { AccountResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
 import { LEDGER } from '../../services/actions/ledger/ledger.const';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { BlankLedgerVM } from '../../ledger/ledger.vm';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -14,6 +20,7 @@ export interface LedgerState {
   accountInprogress: boolean;
   downloadInvoiceInProcess?: boolean;
   discountAccountsList?: IFlattenGroupsAccountsDetail;
+  ledgerCreateSuccess?: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -72,6 +79,31 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         });
       }
       return state;
+    case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
+      return Object.assign({}, state, {
+        ledgerCreateSuccess: false
+      });
+    case LEDGER.CREATE_BLANK_LEDGER_RESPONSE:
+      let ledgerResponse: BaseResponse<LedgerResponse[], BlankLedgerVM> = action.payload;
+      if (ledgerResponse.status === 'success') {
+        return Object.assign({}, state, {
+          ledgerCreateSuccess: true
+        });
+      }
+      return Object.assign({}, state, {
+        ledgerCreateSuccess: false
+      });
+    case LEDGER.RESET_LEDGER:
+      return Object.assign({}, state, {
+        account: null,
+        transcationRequest: null,
+        transactionsResponse: null,
+        transactionInprogress: false,
+        accountInprogress: false,
+        downloadInvoiceInProcess: false,
+        discountAccountsList: null,
+        ledgerCreateSuccess: false
+      });
     default: {
       return state;
     }
