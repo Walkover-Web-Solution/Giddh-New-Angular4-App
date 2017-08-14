@@ -6,11 +6,11 @@
         <label class="d-block"><input type="checkbox" /> Company Address</label>
         <label class="d-block">
             <input type="checkbox" /> GSTIN
-            <span class="mrL3"><input type="text" class="form-control" /></span>
+            <span class="mrL3"><input type="text" class="form-control" [(ngModel)]='GSTIN' (ngModelChange)='onGSTINChange(GSTIN)'/></span>
         </label>
         <label class="d-block">
             <input type="checkbox" /> PAN
-            <span class="mrL3"><input type="text" class="form-control" /></span>
+            <span class="mrL3"><input type="text" class="form-control" [(ngModel)]='PAN' (ngModelChange)='onPANChange(PAN)' /></span>
         </label>
         <label class="d-block">
             <input type="checkbox" /> Invoice Date

@@ -63,7 +63,7 @@ export class EditInvoiceComponent implements OnInit {
         });
          this.currentTemplate = _. cloneDeep(currentTemplate);
          this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
-         // console.log('CURRENT TEMPLATE', this.currentTemplate.common_template_a.sections);
+         console.log('CURRENT TEMPLATE', this.currentTemplate.common_template_a.sections);
          this.store.dispatch(this.invoiceAction.setTemplateData(this.currentTemplateSections));
         }
     });

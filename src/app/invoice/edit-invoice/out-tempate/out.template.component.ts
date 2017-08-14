@@ -46,7 +46,7 @@ export class OutTemplateComponent implements OnInit {
   public customField3$: Observable<string>;
   public formNameInvoice$: Observable<string>;
   public formNameTaxInvoice$: Observable<string>;
-  public sNoLabel$: Observable<string>;;
+  public sNoLabel$: Observable<string>;
   public sNoWidth$: Observable<number>;
   public dateLabel$: Observable<string>;
   public dateWidth$: Observable<number>;
@@ -70,11 +70,15 @@ export class OutTemplateComponent implements OnInit {
   public totalWidth$: Observable<number>;
   public quantityLabel$: Observable<string>;
   public quantityWidth$: Observable<number>;
+  public value: string;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor( private store: Store<AppState>, private invoiceAction: InvoiceAction, private invoiceService: InvoiceService) {
     console.log('out-template-component constructor called');
     this.companyName$ = this.invoiceService.getCompanyName();
+    // this.companyName$.subscribe((value) => {
+    //   console.log(value);
+    // });
     this.GSTIN$ = this.invoiceService.getGSTIN();
     this.PAN$ = this.invoiceService.getPAN();
     this.address$ = this.invoiceService.getAddress();
@@ -136,7 +140,7 @@ export class OutTemplateComponent implements OnInit {
   //   });
   }
 
-  public ngOnInit() {
+  public ngOnInit(){
 
   }
 }
