@@ -9,7 +9,7 @@
 <div class="clearfix mrT2" (clickOutside)="vm.showFromDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
   <label>From date</label>
   <div class="input-group">
-    <input type="text" name="from" [ngModel]="vm.moment(vm.selectedFromDate).format('DD-MM-YYYY')"
+    <input type="text" name="from" [ngModel]="vm.selectedFromDate | date: 'dd-MM-yyyy'"
            (focus)="vm.showFromDatePicker = true; showToDatePicker=false;"
            class="form-control"/>
     <span class="input-group-btn">
@@ -47,7 +47,7 @@
 <div class="clearfix mrT2" (clickOutside)="vm.showToDatePicker=false;" *ngIf="vm.selectedDateOption == '1'">
   <label>To date</label>
   <div class="input-group">
-    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedToDate).format('DD-MM-YYYY')"
+    <input type="text" name="to" [ngModel]="vm.selectedToDate | date: 'dd-MM-yyyy'"
            (focus)="vm.showToDatePicker = true;showFromDatePicker=false;"
            class="form-control"/>
     <span class="input-group-btn">
@@ -100,7 +100,7 @@
   </div>
 
   <div class="input-group">
-    <input type="text" name="to" [ngModel]="vm.moment(vm.selectedLogDate).format('DD-MM-YYYY')"
+    <input type="text" name="to" [ngModel]="vm.selectedLogDate | date: 'dd-MM-yyyy'"
            (focus)="vm.showLogDatePicker = true"
            class="form-control"/>
     <span class="input-group-btn">
