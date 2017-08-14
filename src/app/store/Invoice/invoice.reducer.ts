@@ -51,6 +51,18 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                 return Object.assign({}, state, newState);
             }
         }
+        case INVOICE_ACTIONS.GENERATE_BULK_INVOICE: {
+            return state;
+        }
+        case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
+            return state; // TODO: add your logic here
+        }
+        case INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE: {
+            return state;
+        }
+        case INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE_RESPONSE: {
+            return state; // TODO: add your logic here
+        }
         default:
         {
             return state;
