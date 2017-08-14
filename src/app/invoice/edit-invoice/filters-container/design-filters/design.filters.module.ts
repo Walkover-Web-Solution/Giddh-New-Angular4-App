@@ -17,10 +17,11 @@ import {Actions} from "@ngrx/effects";
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    SharedModule
+    SharedModule,
   ],
   declarations: [],
   exports: [
+
 ]
 })
 export class DesignFiltersContainerModule {
