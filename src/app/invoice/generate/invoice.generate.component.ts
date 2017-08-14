@@ -88,6 +88,10 @@ export class InvoiceGenerateComponent implements OnInit {
             return o;
         });
       }
+      if (o.generate && o.generate.invoiceData) {
+        // open modal
+        document.getElementById('createNew').click();
+      }
     });
     this.getLedgersOfInvoice();
   }
@@ -212,7 +216,7 @@ export class InvoiceGenerateComponent implements OnInit {
       return item.uniqueName === this.selectedLedgerItems[0];
     });
     console.log ('before api', model, res.account.uniqueName);
-    this.store.dispatch(this.invoiceActions.PreviewAndGenerateInvoice(res.account.uniqueName, model));
+    this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
   }
 
   private generateBulkInvoice(action: boolean) {
