@@ -12,7 +12,7 @@ import {
   IRevenueChartClosingBalanceResponse
 } from '../../../models/interfaces/dashboard.interface';
 import { RefreshBankAccountResponse, GroupHistoryRequest, BankAccountsResponse } from '../../../models/api-models/Dashboard';
-
+import * as _ from 'lodash';
 @Injectable()
 
 export class HomeActions {
@@ -37,7 +37,8 @@ export class HomeActions {
         };
       }
       return {
-        type: ''
+        type: HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
+        payload: { operatingcostActiveyear: res[0], indirectexpensesActiveyear: res[1] }
       };
     });
 
@@ -85,7 +86,8 @@ export class HomeActions {
         };
       }
       return {
-        type: ''
+        type: HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE,
+        payload: { revenuefromoperationsActiveyear: res[0], otherincomeActiveyear: res[1] }
       };
     });
 
@@ -123,7 +125,6 @@ export class HomeActions {
       let expenseModel: GroupHistoryRequest = {
         groups: ['indirectexpenses', 'operatingcost']
       };
-
       return Observable.zip(
         this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
         this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
@@ -135,9 +136,32 @@ export class HomeActions {
           revenueActiveYear: res[0].body.groups,
           ExpensesActiveYear: res[1].body.groups,
           ProfitLossActiveYear: res[2].body,
+          NetworthActiveYear: _.cloneDeep(res[2].body)
         };
         return {
           type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE,
+          payload: obj
+        };
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
+  public GetNetworthChartActiveYear$: Observable<Action> = this.action$
+    .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR)
+    .switchMap(action => {
+      return Observable.zip(
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+      );
+    }).map((res) => {
+      if (res[0].status === 'success') {
+        let obj: IComparisionChartResponse = {
+          NetworthActiveYear: res[0].body
+        };
+        return {
+          type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
           payload: obj
         };
       }
@@ -169,6 +193,7 @@ export class HomeActions {
           revenueLastYear: res[0].body.groups,
           ExpensesLastYear: res[1].body.groups,
           ProfitLossLastYear: res[2].body,
+          NetworthLastYear: _.cloneDeep(res[2].body)
         };
         return {
           type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
@@ -261,6 +286,12 @@ export class HomeActions {
   public getComparisionChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
     return {
       type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR,
+      payload: { fromDate, toDate, refresh }
+    };
+  }
+  public getNetworthChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
+    return {
+      type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR,
       payload: { fromDate, toDate, refresh }
     };
   }

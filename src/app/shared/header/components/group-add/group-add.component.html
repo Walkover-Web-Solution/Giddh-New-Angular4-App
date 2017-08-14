@@ -5,7 +5,7 @@
       <div class="col-xs-7">
         <div class="row">
           <label>Group Name</label>
-          <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
+          <input type="text" class="form-control" (change)="generateUniqueName()" placeholder="Enter Group Name" formControlName="name">
         </div>
       </div>
     </div>

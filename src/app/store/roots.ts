@@ -2,6 +2,7 @@ import * as fromVerifyMobileReducer from './authentication/verifyMobile.reducer'
 import { routerReducer, RouterState } from '@ngrx/router-store';
 import * as fromHome from './home/home.reducer';
 import * as fromPermission from './Permission/permission.reducer';
+import * as fromManufacturing from './Manufacturing/manufacturing.reducer';
 import * as fromLogin from './authentication/authentication.reducer';
 import * as fromCompany from './Company/company.reducer';
 import * as fromGroupAndAccounts from './GroupWithAccounts/groupwithaccounts.reducer';
@@ -29,6 +30,7 @@ export interface AppState {
   tlPl: fromTlPl.TlPlState;
   ledger: fromLedger.LedgerState;
   settings: fromSettings.SettingsState;
+  manufacturing: fromManufacturing.ManufacturingState;
 }
 
 export const reducers = {
@@ -36,6 +38,7 @@ export const reducers = {
   home: fromHome.homeReducer,
   permission: fromPermission.PermissionReducer,
   settings: fromSettings.SettingsReducer,
+  manufacturing: fromManufacturing.ManufacturingReducer,
   company: fromCompany.CompanyReducer,
   login: fromLogin.AuthenticationReducer,
   session: fromLogin.SessionReducer,

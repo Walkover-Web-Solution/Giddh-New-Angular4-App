@@ -175,18 +175,9 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
     case LoginActions.LogOut:
       return Object.assign({}, state, {
-        isVerifyMobileSuccess: false,
-        isLoginWithMobileInProcess: false, // if true then We are checking with
-        isVerifyMobileInProcess: false,
-        isLoginWithEmailInProcess: false,
-        isVerifyEmailInProcess: false,
-        isLoginWithGoogleInProcess: false,
-        isLoginWithLinkedInInProcess: false,
-        isLoginWithTwitterInProcess: false,
-        isLoginWithEmailSubmited: false,
-        isLoginWithMobileSubmited: false,
-        isVerifyEmailSuccess: false,
-        user: null
+        user: null,
+        companyUniqueName: '',
+        lastState: ''
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
