@@ -11,11 +11,12 @@ export class AuditLogsSidebarVM {
   public users$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
-    width: '100%',
+    width: '200px',
     placeholder: 'Select Option',
     allowClear: true
   };
   public moment = moment;
+  public maxDate: Date = moment().toDate();
   public filters: any[] = [
     { text: 'All', id: 'All' },
     { text: 'create', id: 'create' },

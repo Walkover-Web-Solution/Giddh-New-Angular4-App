@@ -25,7 +25,7 @@
         <label *ngIf="item.value.queryDiffer === 'Equals' ">to &nbsp;</label>
         <span style="margin-right:0">
         <input required style="width:100px" class="form-control" formControlName="amount" type="text"
-               placeholder="amount"/>
+               placeholder="amount" digitsOnlyDirective/>
       </span>
         <span style="margin-left:0"
               *ngIf="item.value.queryType === 'closingBalance' || item.value.queryType === 'openingBalance' ">
