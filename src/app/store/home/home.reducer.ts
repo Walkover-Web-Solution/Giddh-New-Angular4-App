@@ -14,13 +14,17 @@ import { RefreshBankAccountResponse, BankAccountsResponse } from '../../models/a
 export interface HomeState {
   value?: string;
   expensesChart?: IExpensesChartClosingBalanceResponse;
+  expensesChartError?: string;
   revenueChart?: IRevenueChartClosingBalanceResponse;
+  revenueChartError?: string;
   comparisionChart?: IComparisionChartResponse;
+  comparisionChartError?: string;
   isExpensesChartDataInProcess: boolean;
   isExpensesChartDataAvailable: boolean;
   isRevenueChartDataInProcess: boolean;
   isRevenueChartDataAvailable: boolean;
   isGetBankAccountsInProcess: boolean;
+  getBankAccountError?: string;
   BankAccounts?: BankAccountsResponse[];
   isRefereshBankAccount: boolean;
   RefereshBankAccount?: RefreshBankAccountResponse;
@@ -52,6 +56,20 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
+    case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE: {
+      let data = action.payload;
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.operatingcostActiveyear.message
+        });
+      }
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.indirectexpensesActiveyear.message
+        });
+      }
+      return state;
+    }
 
     case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IExpensesChartClosingBalanceResponse;
@@ -63,7 +81,20 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
-
+    case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_LAST_YEAR_ERROR_RESPONSE: {
+      let data = action.payload;
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.operatingcostActiveyear.message
+        });
+      }
+      if (data.operatingcostActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          expensesChartError: data.operatingcostActiveyear.message
+        });
+      }
+      return state;
+    }
     case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IRevenueChartClosingBalanceResponse;
       return Object.assign({}, state, {
@@ -74,15 +105,29 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
+    case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_ERROR_RESPONSE: {
+      let data = action.payload;
+      if (data.revenuefromoperationsActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          revenueChartError: data.revenuefromoperationsActiveyear.message
+        });
+      }
+      if (data.otherincomeActiveyear.status !== 'success') {
+        return Object.assign({}, state, {
+          revenueChartError: data.otherincomeActiveyear.message
+        });
+      }
+      return state;
+    }
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
-      return Object.assign({}, state, { isGetBankAccountsInProcess: true });
+      return Object.assign({}, state, { isGetBankAccountsInProcess: true, });
     }
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
       let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (bankresponse.status === 'success') {
-        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body });
+        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: null });
       }
-      return Object.assign({}, state, { isGetBankAccountsInProcess: false });
+      return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
     }
     case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IRevenueChartClosingBalanceResponse;
@@ -99,6 +144,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let revenueActiveYear = processDataForGroupHistory(data.revenueActiveYear);
       let ExpensesActiveYear = processDataForGroupHistory(data.ExpensesActiveYear);
       let ProfitLossActiveYear = processDataForProfitLoss(data.ProfitLossActiveYear);
+      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
       return Object.assign({}, state, {
         comparisionChart: {
           ...state.comparisionChart,
@@ -111,6 +157,9 @@ export function homeReducer(state = initialState, action: Action): HomeState {
           ProfitLossActiveYear,
           ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
           ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
         }
       });
     }
@@ -119,6 +168,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let revenueLastYear = processDataForGroupHistory(data.revenueLastYear);
       let ExpensesLastYear = processDataForGroupHistory(data.ExpensesLastYear);
       let ProfitLossLastYear = processDataForProfitLoss(data.ProfitLossLastYear);
+      let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
       return Object.assign({}, state, {
         comparisionChart: {
           ...state.comparisionChart,
@@ -131,6 +181,9 @@ export function homeReducer(state = initialState, action: Action): HomeState {
           ProfitLossLastYear,
           ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
           ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
         }
       });
     }
@@ -149,7 +202,6 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.BANK_ACCOUNTS.REFRESH_BANK_ACCOUNT_RESPONSE: {
       let refereshResponse: BaseResponse<RefreshBankAccountResponse, string> = action.payload;
-      debugger;
       if (refereshResponse.status === 'success') {
         return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: refereshResponse.body });
       }
@@ -160,6 +212,18 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
       return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
+    }
+    case HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
+      return Object.assign({}, state, {
+        comparisionChart: {
+          ...state.comparisionChart,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        }
+      });
     }
     default: {
       return state;
@@ -251,14 +315,37 @@ const processDataForProfitLoss = plData => {
   let nwLabels = [];
   monthlyBalances = [];
   yearlyBalances = [];
-  _.each(plData.networth.periodBalances, nw => {
-    let str;
-    str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
-    nwLabels.push(str);
-    monthlyBalances.push(nw.monthlyBalance);
-    nwSeries.push('Monthly Balances');
-    yearlyBalances.push(nw.yearlyBalance);
-    nwSeries.push('Yearly Balances');
-  });
+  if (plData.profitLoss) {
+    _.each(plData.profitLoss.periodBalances, nw => {
+      let str;
+      str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
+      nwLabels.push(str);
+      monthlyBalances.push(nw.monthlyBalance);
+      nwSeries.push('Monthly Balances');
+      yearlyBalances.push(nw.yearlyBalance);
+      nwSeries.push('Yearly Balances');
+    });
+  }
+  return { monthlyBalances, yearlyBalances };
+};
+
+const processDataForNetworth = plData => {
+  let monthlyBalances;
+  let yearlyBalances;
+  let nwSeries = [];
+  let nwLabels = [];
+  monthlyBalances = [];
+  yearlyBalances = [];
+  if (plData.networth) {
+    _.each(plData.networth.periodBalances, nw => {
+      let str;
+      str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
+      nwLabels.push(str);
+      monthlyBalances.push(nw.monthlyBalance);
+      nwSeries.push('Monthly Balances');
+      yearlyBalances.push(nw.yearlyBalance);
+      nwSeries.push('Yearly Balances');
+    });
+  }
   return { monthlyBalances, yearlyBalances };
 };

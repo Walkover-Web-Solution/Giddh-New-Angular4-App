@@ -16,6 +16,7 @@ export class AuditLogsSidebarVM {
     allowClear: true
   };
   public moment = moment;
+  public maxDate: Date = moment().toDate();
   public filters: any[] = [
     { text: 'All', id: 'All' },
     { text: 'create', id: 'create' },

@@ -4,7 +4,6 @@ import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
@@ -43,7 +42,7 @@ import { ShareAccountModalComponent } from './header/components/share-account-mo
 import { CheckscrollDirective } from './helpers/directives/checkscroll';
 import { TextMaskModule } from 'angular2-text-mask';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-import * as highcharts from 'highcharts';
+import { NgUploaderModule } from 'ngx-uploader';
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -84,12 +83,13 @@ export function highchartsFactory() {
     ClickOutsideModule,
     Daterangepicker,
     ChartModule,
-    TextMaskModule
+    TextMaskModule,
+    NgUploaderModule
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
      AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
-    TaxControlComponent, NumberToWordsPipe
+    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
     GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent,
