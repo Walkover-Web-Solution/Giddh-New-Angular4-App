@@ -5,7 +5,6 @@ import {
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceAction } from '../../../../../services/actions/invoice/invoice.actions';
-
 import { InvoiceService} from '../../../../../services/invoice.services';
 @Component({
   selector: 'print-settings',
@@ -24,6 +23,7 @@ export class PrintSettingsComponent implements OnInit {
     console.log('design-filters-container initialised');
 
   }
+
   public onPageMarginChange(value, margin) {
     if (margin === 'topMargin') {
       this.store.dispatch(this.invoiceAction.setTopPageMargin(value));
