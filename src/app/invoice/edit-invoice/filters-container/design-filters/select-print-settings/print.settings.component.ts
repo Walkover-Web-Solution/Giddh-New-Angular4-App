@@ -5,26 +5,27 @@ import {
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceAction } from '../../../../../services/actions/invoice/invoice.actions';
-import {InvoiceService} from '../../../../../services/invoice.services';
+
+import { InvoiceService} from '../../../../../services/invoice.services';
 @Component({
   selector: 'print-settings',
   templateUrl: 'print.settings.component.html'
 })
-
 export class PrintSettingsComponent implements OnInit {
+
   public top: string;
   public left: string;
   public bottom: string;
   public right: string;
+
   constructor( private store: Store<AppState>, private invoiceAction: InvoiceAction, private invoiceService: InvoiceService) {
   }
   public ngOnInit() {
     console.log('design-filters-container initialised');
 
   }
-  public onPageMarginChange(value: number, margin: string) {
+  public onPageMarginChange(value, margin) {
     if (margin === 'topMargin') {
-      console.log('MARGINACTion', margin);
       this.store.dispatch(this.invoiceAction.setTopPageMargin(value));
     }
     if (margin === 'leftMargin') {
@@ -35,6 +36,7 @@ export class PrintSettingsComponent implements OnInit {
     }
     if (margin === 'rightMargin') {
       this.store.dispatch(this.invoiceAction.setRightPageMargin(value));
+
     }
   }
 
