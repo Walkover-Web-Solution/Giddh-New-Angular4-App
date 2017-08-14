@@ -32,6 +32,7 @@ import { PermissionService } from './permission.service';
 import { PermissionActions } from './actions/permission/permission.action';
 import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { InvoiceService } from './invoice.service';
+import { ManufacturingService } from './manufacturing.service';
 
 /**
  * Home Module
@@ -47,6 +48,13 @@ import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
 import { HomeActions } from './actions/home/home.actions';
 import { DashboardService } from './dashboard.service';
+import { SettingsIntegrationService } from './settings.integraion.service';
+import { SettingsIntegrationActions } from './actions/settings/settings.integration.action';
+import { SettingsProfileService } from './settings.profile.service';
+import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
+import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
+import { SettingsTaxesService } from './settings.taxes.service';
+import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
 
 
 /**
@@ -70,10 +78,14 @@ import { DashboardService } from './dashboard.service';
     EffectsModule.run(SearchActions),
     EffectsModule.run(AuditLogsActions),
     EffectsModule.run(PermissionActions),
+    EffectsModule.run(ManufacturingActions),
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TlPlActions),
     EffectsModule.run(LedgerActions),
-    EffectsModule.run(InvoiceActions)
+    EffectsModule.run(InvoiceActions),
+    EffectsModule.run(SettingsIntegrationActions),
+    EffectsModule.run(SettingsProfileActions),
+    EffectsModule.run(SettingsTaxesActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -96,12 +108,16 @@ export class ServiceModule {
         AccountService,
         InventoryService,
         PermissionService,
+        ManufacturingService,
         ErrorHandler,
         SearchService,
         LogsService,
         TlPlService,
         LedgerService,
-        InvoiceService
+        InvoiceService,
+        SettingsIntegrationService,
+        SettingsProfileService,
+        SettingsTaxesService
       ]
     };
   }

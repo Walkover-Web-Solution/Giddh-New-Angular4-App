@@ -21,6 +21,7 @@ export class NetworthChartComponent implements OnInit {
   @Input() public refresh: boolean = false;
   public options: Options;
   public monthlyOption = {
+    colors: ['#c45022'],
     chart: {
       type: 'column', height: '320px'
     },
@@ -36,6 +37,7 @@ export class NetworthChartComponent implements OnInit {
     series: []
   };
   public yearlyOption = {
+    colors: ['#c45022'],
     chart: {
       type: 'line', height: '320px'
     },

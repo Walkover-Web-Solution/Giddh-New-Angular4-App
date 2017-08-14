@@ -1,7 +1,7 @@
 /**
  * interface used in transaction item everywhere
  */
-export interface IEledgerTransactionRemarks{
+export interface IEledgerTransactionRemarks {
   description?: string;
   method?: string;
   email?: any;

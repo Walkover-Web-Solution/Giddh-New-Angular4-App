@@ -1,0 +1,206 @@
+<div class="box">
+  <h1 style="padding:20px 0px;font-weight:bold;">Create New Tax</h1>
+   <form (ngSubmit)="onSubmit(newTaxObj)">
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>Select Tax</label><br>
+        <select [(ngModel)]="newTaxObj.taxType" name="taxType" id="" class="form-control" >
+         <option value="">Select tax</option>
+         <option value="GST">GST</option>
+         <option value="InputGST">Input GST</option>
+         <option value="others">Others</option>
+        </select>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Unique No.</label><br>
+        <input type="text" [(ngModel)]="newTaxObj.taxNumber" name="taxNumber" placeholder="Unique Number" class="form-control" />
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Name</label><br>
+        <input type="text" placeholder="Unique Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control"/>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Linked Account</label><br>
+        <select [disabled]="newTaxObj.taxType != 'others'" id="" [(ngModel)]="newTaxObj.account" name="account" class="form-control">
+         <option value="">Select Account</option>
+         <option (ngValue)="account.id" *ngFor="let account of accounts$">{{ account.id }}</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>-100 to 100</label><br>
+        <input type="number" [(ngModel)]="newTaxObj.taxValue" name="taxValue" placeholder="-100 to 100" min="-100" max="100" class="form-control" />
+      </div>
+       <!--<div class="form-group col-xs-3">
+        <label>Apply Tax From {{newTaxObj.date}}</label><br>
+        <input type="date" [(ngModel)]="newTaxObj.date" name="date" placeholder="Date" class="form-control" />
+      </div>-->
+      <div class="form-group col-xs-3" (clickOutside)="showFromDatePicker=false;">
+        <label>Apply Tax From</label>
+        <div class="input-group">
+          <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
+            class="form-control" required/>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
+              <i class="glyphicon glyphicon-calendar"></i>
+            </button>
+          </span>
+        </div>
+        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+          <datepicker name="fromDate" [(ngModel)]="newTaxObj.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
+        </div>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Tax Duration</label><br>
+        <select [(ngModel)]="newTaxObj.duration" name="duration" id="" class="form-control">
+         <option value="">Select Duration</option>
+         <option value="MONTHLY">Monthly</option>
+         <option value="QUARTERLY">Quarterly</option>
+         <option value="HALFYEARLY">Half-Yearly</option>
+         <option value="YEARLY">Yearly</option>
+        </select>
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Tax File Date</label><br>
+        <select class="form-control" [(ngModel)]="newTaxObj.taxFileDate" name="taxFileDate">
+          <option (value)="num" *ngFor="let num of days">{{num}}</option>
+        </select>
+        <!--<input type="date" [(ngModel)]="newTaxObj.taxFileDate" name="taxFileDate" placeholder="Tax File Date" class="form-control" />-->
+      </div>
+    </div>
+    <div class="row">
+     <div class=col-xs-12>
+         <button type="submit" class="btn btn-success">Add</button>
+         <button type="button" (click)="onCancel()" class="btn btn-primary">Cancel</button>
+     </div>
+    </div>
+    <div class="row"> 
+      <div class="col-xs-12">
+       <h1 style="padding:20px 0px;font-weight:bold;">Added Taxes</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Tax#</th>
+                        <th>Unique Name</th>
+                        <th>Linked Account</th>
+                        <th>Applied From</th>
+                        <th>Tax Percentage</th>
+                        <th>File Date</th>
+                        <th>Duration</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                        <!--<th>Applied Till</th>-->
+                    </tr>
+                </thead>
+                <tbody *ngIf="availableTaxes.length">
+                    <tr *ngFor="let tax of availableTaxes; let i = index">
+
+                        <td>{{i+1}}</td>
+
+                        <td *ngIf="!taxToEdit[i]">{{tax.taxNumber}}</td>
+                        <td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>
+
+                        <td *ngIf="!taxToEdit[i]">{{tax.uniqueName}}</td>
+                        <td *ngIf="taxToEdit[i]">
+                          <input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">
+                        </td>
+                      
+                        <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
+                        <td *ngIf="tax.accounts[0] && !taxToEdit[i]">{{tax.accounts[0].name}}</td>
+                        <td *ngIf="tax.accounts[0] && taxToEdit[i]"> <input class="form-control" type="text" [(ngModel)]="availableTaxes[i].accounts[0].name" name="acc_0_name{{i}}"></td>
+
+                        <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
+                        <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]">
+                            <div *ngFor="let t of tax.taxDetail">
+                              {{t.date}}
+                            </div>
+                        </td>
+                        <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
+                            <div *ngFor="let t of tax.taxDetail; let j = index; let last = last">
+                              <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> 
+                            </div>
+                        </td>
+
+                        <!--<td *ngIf="!tax.taxDetail[0] && !taxToEdit[i]">--</td>
+                        <td *ngIf="tax.taxDetail[0] && !taxToEdit[i]">{{tax.taxDetail[0].date}}</td>
+                        <td *ngIf="tax.taxDetail[0] && taxToEdit[i]">
+                          <input type="text" [(ngModel)]="availableTaxes[i].taxDetail[0].date" name="acc_0_date{{i}}"> <i (click)="addMoreDateAndPercentage(i)" class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
+                        </td>-->
+
+                        <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
+                        <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]">
+                            <div *ngFor="let t of tax.taxDetail">
+                              {{t.taxValue}}
+                            </div>
+                        </td>
+                        <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
+                            <div class="input-group" *ngFor="let t of tax.taxDetail; let j = index; let last = last">
+                              <input type="text" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}"> 
+                              <span class="input-group-addon cursor-pointer">
+                                <i *ngIf="!last" (click)="removeDateAndPercentage(i, j)" class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
+                                <i *ngIf="last" (click)="addMoreDateAndPercentage(i)" class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
+                              </span>
+                            </div>
+                        </td>
+
+                        <!--<td *ngIf="!tax.taxDetail[0] && !taxToEdit[i]">--</td>
+                        <td *ngIf="tax.taxDetail[0] && !taxToEdit[i]">{{tax.taxDetail[0].taxValue}}</td>
+                        <td *ngIf="tax.taxDetail[0] && taxToEdit[i]"><input type="text" [(ngModel)]="availableTaxes[i].taxDetail[0].taxValue" name="acc_0_txx_detail{{i}}"></td>-->
+
+                        <td *ngIf="!taxToEdit[i]">{{tax.taxFileDate}}</td>
+                        <td *ngIf="taxToEdit[i]">
+                          <!--<input type="text" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}">-->
+                          <select class="form-control" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}">
+                            <option (value)="num" *ngFor="let num of days">{{num}}</option>
+                          </select>
+                        </td>
+
+                        <td *ngIf="!taxToEdit[i]">{{tax.duration}}</td>
+                        <td *ngIf="taxToEdit[i]">
+                          <select [(ngModel)]="availableTaxes[i].duration" name="duration{{i}}" class="form-control">
+                            <option value="">Select Duration</option>
+                            <option value="MONTHLY">Monthly</option>
+                            <option value="QUARTERLY">Quarterly</option>
+                            <option value="HALFYEARLY">Half-Yearly</option>
+                            <option value="YEARLY">Yearly</option>
+                          </select>
+                        </td>
+
+                        <td *ngIf="!taxToEdit[i]">{{tax.taxType}}</td>
+                        <td *ngIf="taxToEdit[i]">
+                          <select [(ngModel)]="availableTaxes[i].taxType" name="taxType{{i}}" class="form-control" >
+                            <option value="">Select tax</option>
+                            <option value="GST">GST</option>
+                            <option value="InputGST">Input GST</option>
+                            <option value="others">Others</option>
+                          </select>
+                        </td>
+
+                        <td style="text-align:center;">
+                         <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="taxToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                         <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax.uniqueName);"><i class="fa fa-trash" aria-hidden="true"></i></button>
+
+                         <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="updateTax(i); taxToEdit[i] = false"><i class="fa fa-check" aria-hidden="true"></i></button>
+                         <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="reloadTaxList(); taxToEdit[i] = false"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </form> 
+</div>
+
+<!--delete Tax confirmation model -->
+<div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <delete-tax-confirmation-model [selectedTaxForDelete]="selectedTaxForDelete" (confirmDeleteEvent)="deleteConfirmedTax($event)"></delete-tax-confirmation-model>
+        </div>
+    </div>
+</div>
