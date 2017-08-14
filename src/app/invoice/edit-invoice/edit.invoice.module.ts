@@ -23,12 +23,13 @@ import {InvoiceRoutingModule} from "./edit-invoice.routing.module";
     EditFiltersModule,
     InvoiceRoutingModule
   ],
-  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent],
+  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent, PrintSettingsComponent],
   exports: [
     EditFiltersModule,
     OutTemplateComponent,
     ContentFilterComponent,
-    EditInvoiceComponent
+    EditInvoiceComponent,
+    PrintSettingsComponent
   ]
 })
 export class EditInvoiceModule {
