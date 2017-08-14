@@ -32,6 +32,25 @@ export class InvoiceService {
       return data;
     }).catch((e) => HandleCatch<Template, string>(e));
   }
+  public getTopMargin(): Observable<number> {
+    return this.store.select((state: AppState) => state.invoice.templateMeta.topMargin);
+  }
+
+  public getBottomMargin(): Observable<number> {
+    return this.store.select((state: AppState) => state.invoice.templateMeta.bottomMargin);
+  }
+
+  public getLeftMargin(): Observable<number> {
+    return this.store.select((state: AppState) => state.invoice.templateMeta.leftMargin);
+  }
+
+  public getRightMargin(): Observable<number> {
+    return this.store.select((state: AppState) => state.invoice.templateMeta.rightMargin);
+  }
+
+  public getFontFamily(): Observable<string> {
+    return this.store.select((state: AppState) => state.invoice.templateMeta.fontFamily);
+  }
 
   public getCompanyName(): Observable<string> {
     return this.store.select((state: AppState) => state.invoice.templateMeta.companyName);

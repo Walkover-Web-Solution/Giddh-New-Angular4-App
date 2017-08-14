@@ -322,28 +322,28 @@ export class InvoiceAction {
     };
   }
 
-  public setTopPageMargin(data: string): Action {
+  public setTopPageMargin(data: number): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TOP_MARGIN,
       payload: {data}
     };
   }
 
-  public setLeftPageMargin(data: string): Action {
+  public setLeftPageMargin(data: number): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_LEFT_MARGIN,
       payload: {data}
     };
   }
 
-  public setBottomPageMargin(data: string): Action {
+  public setBottomPageMargin(data: number): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_BOTTOM_MARGIN,
       payload: {data}
     };
   }
 
-  public setRightPageMargin(data: string): Action {
+  public setRightPageMargin(data: number): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_RIGHT_MARGIN,
       payload: {data}

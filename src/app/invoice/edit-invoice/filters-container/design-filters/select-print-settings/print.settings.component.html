@@ -1,4 +1,4 @@
-<p><input name="top" id="top-margin" type="text" [(ngModel)]='Top' (ngModelChange)='onPageMarginChange(Top)' />
-  <input name="left" id="left-margin" type="text" [(ngModel)]='Left' (ngModelChange)='onPageMarginChange(Left)'/>
-  <input name="bottom" id="bottom-margin" type="text" [(ngModel)]='Bottom' (ngModelChange)='onPageMarginChange(Bottom)'/>
-  <input name="right" id="right-margin" type="text" [(ngModel)]='Right' (ngModelChange)='onPageMarginChange(Right)'/></p>
+<p><input name="top" id="top-margin" type="text" [(ngModel)]=top (ngModelChange)='onPageMarginChange(top,"topMargin")' />
+  <input name="left" id="left-margin" type="text" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMrgin")'/>
+  <input name="bottom" id="bottom-margin" type="text" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")'/>
+  <input name="right" id="right-margin" type="text" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMArgin")'/></p>

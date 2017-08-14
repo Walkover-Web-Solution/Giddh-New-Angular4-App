@@ -5,33 +5,36 @@ import {
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceAction } from '../../../../../services/actions/invoice/invoice.actions';
-
+import {InvoiceService} from '../../../../../services/invoice.services';
 @Component({
   selector: 'print-settings',
-
   templateUrl: 'print.settings.component.html'
 })
 
 export class PrintSettingsComponent implements OnInit {
+  public top: string;
+  public left: string;
+  public bottom: string;
+  public right: string;
   constructor( private store: Store<AppState>, private invoiceAction: InvoiceAction, private invoiceService: InvoiceService) {
   }
-
   public ngOnInit() {
     console.log('design-filters-container initialised');
 
   }
-  public onPageMarginChange(margin){
-    if (margin === 'Top') {
-      this.store.dispatch(this.invoiceAction.setTopPageMargin(margin));
+  public onPageMarginChange(value: number, margin: string) {
+    if (margin === 'topMargin') {
+      console.log('MARGINACTion', margin);
+      this.store.dispatch(this.invoiceAction.setTopPageMargin(value));
     }
-    if (margin === 'Left') {
-      this.store.dispatch(this.invoiceAction.setLeftPageMargin(margin));
+    if (margin === 'leftMargin') {
+      this.store.dispatch(this.invoiceAction.setLeftPageMargin(value));
     }
-    if (margin === 'Bottom') {
-      this.store.dispatch(this.invoiceAction.setBottomPageMargin(margin));
+    if (margin === 'bottomMargin') {
+      this.store.dispatch(this.invoiceAction.setBottomPageMargin(value));
     }
-    if (margin === 'Right') {
-      this.store.dispatch(this.invoiceAction.setRightPageMargin(margin));
+    if (margin === 'rightMargin') {
+      this.store.dispatch(this.invoiceAction.setRightPageMargin(value));
     }
   }
 
