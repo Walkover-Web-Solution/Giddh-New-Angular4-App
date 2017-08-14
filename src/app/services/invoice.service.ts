@@ -118,20 +118,40 @@ export class InvoiceService {
   * url: '/company/:companyUniqueName/accounts/:accountUniqueName/invoices/preview'
   */
 
-  public PreviewAndGenerateInvoice(model: PreviewAndGenerateInvoiceRequest): Observable<BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>> {
+  public PreviewAndGenerateInvoice(accountUniqueName: string, model: PreviewAndGenerateInvoiceRequest): Observable<BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-
-    return this._http.post(INVOICE_API.PREVIEW_AND_GENERATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', String(model.uniqueNames)), model)
+    return this._http.post(INVOICE_API.PREVIEW_AND_GENERATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
         let data: BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest> = res.json();
         data.request = model;
         return data;
       })
       .catch((e) => HandleCatch<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>(e, model));
+  }
+
+  /**
+   * get template by uniquename
+   * URL:: company/:companyUniqueName/templates-v2/templateUniqueName
+   */
+  public GetTemplateDetails(templateUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.GET_INVOICE_TEMPLATE.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = templateUniqueName;
+        data.queryString = { templateUniqueName };
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e, templateUniqueName));
   }
 }
