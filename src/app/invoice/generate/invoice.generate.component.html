@@ -10,9 +10,11 @@
   <div class="form-group">
     <label>Account</label>
     <select2
-      class="form-control"
+      name="a"
+      [(ngModel)]="ledgerSearchRequest.accountUniqueName"
+      class="select2-parent"
       [data]="accounts$ | async" 
-      [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" >
+      [options]="select2Options" >
     </select2>
   </div>
   <div class="form-group">

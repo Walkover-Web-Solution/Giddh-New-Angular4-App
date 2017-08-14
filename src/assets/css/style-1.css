@@ -4864,7 +4864,7 @@ table.proforma-particulars {
   border: 0;
   border-bottom: 2px solid #d36029;
 }
-.select2-parent .select2-container--default .select2-selection--single{
+/* .select2-parent .select2-container--default .select2-selection--single{
   border-radius: 0;
   background-color: #f9f7f2;
   border: 1px solid #ded3c0;
@@ -4882,4 +4882,4 @@ table.proforma-particulars {
 }
 .select2-parent .select2-container--default .select2-results>.select2-results__options{
   font-size: 14px;
-}
+} */
