@@ -314,17 +314,30 @@ export interface GstTaxesTotal {
 }
 
 export interface GstDetails {
-    gstEntries: GstEntry[];
-    companyGstDetails: CompanyGstDetails;
-    accountGstBillingDetails: AccountGstBillingDetails;
-    accountGstShippingDetails: AccountGstShippingDetails;
-    gstTaxableValueTotal: number;
-    gstEntriesTotal: number;
-    gstTaxesTotal: GstTaxesTotal[];
-    showTaxes: boolean;
-    showDiscount: boolean;
-    showHsn: boolean;
-    showSac: boolean;
-    showQty: boolean;
-    showRate: boolean;
+  gstEntries: GstEntry[];
+  companyGstDetails: CompanyGstDetails;
+  accountGstBillingDetails: AccountGstBillingDetails;
+  accountGstShippingDetails: AccountGstShippingDetails;
+  gstTaxableValueTotal: number;
+  gstEntriesTotal: number;
+  gstTaxesTotal: GstTaxesTotal[];
+  showTaxes: boolean;
+  showDiscount: boolean;
+  showHsn: boolean;
+  showSac: boolean;
+  showQty: boolean;
+  showRate: boolean;
+}
+/*
+*
+*/
+
+export class GenBulkInvoiceGroupByObj {
+  public accUniqueName: string;
+  public uniqueName: string;
+}
+
+export class GenBulkInvoiceFinalObj {
+  public accountUniqueName: string;
+  public entries: string[];
 }
