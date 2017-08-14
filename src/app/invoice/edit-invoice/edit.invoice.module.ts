@@ -24,12 +24,13 @@ import {PrintSettingsComponent} from "./filters-container/design-filters/select-
     EditFiltersModule,
     InvoiceRoutingModule
   ],
-  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent],
+  declarations: [ OutTemplateComponent, EditFiltersContainersComponent, ContentFilterComponent, EditInvoiceComponent, PrintSettingsComponent],
   exports: [
     EditFiltersModule,
     OutTemplateComponent,
     ContentFilterComponent,
-    EditInvoiceComponent
+    EditInvoiceComponent,
+    PrintSettingsComponent
   ]
 })
 export class EditInvoiceModule {
