@@ -7,6 +7,7 @@ import { AppState} from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 // import {TableMetaMap} from '../edit.invoice.component';
 import ownKeys = Reflect.ownKeys;
+import { NgStyle } from '@angular/common';
 import {Section} from '../../../models/api-models/invoice';
 import {InvoiceAction} from '../../../services/actions/invoice/invoice.actions';
 import * as _ from 'lodash';
@@ -70,6 +71,11 @@ export class OutTemplateComponent implements OnInit {
   public totalWidth$: Observable<number>;
   public quantityLabel$: Observable<string>;
   public quantityWidth$: Observable<number>;
+  public topMargin: number;
+  public leftMargin: number;
+  public bottomMargin: number;
+  public rightMargin: number;
+  public fontFamily: string;
   public value: string;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -126,6 +132,33 @@ export class OutTemplateComponent implements OnInit {
     this.totalLabel$ = this.invoiceService.getTaxLabel();
     this.quantityLabel$ = this.invoiceService.getQuantityLabel();
     this.quantityWidth$ = this.invoiceService.getQuantityWidth();
+    this.invoiceService.getTopMargin().subscribe( val => {
+      if (val) {
+        console.log('TOP MARGIN', val);
+        this.topMargin = val;
+      }
+    });
+    this.invoiceService.getLeftMargin().subscribe( val => {
+      if (val) {
+
+        this.leftMargin = val;
+      }
+    });
+    this.invoiceService.getRightMargin().subscribe( val => {
+      if (val) {
+        this.rightMargin = val;
+      }
+    });
+    this.invoiceService.getBottomMargin().subscribe( val => {
+      if (val) {
+        this.bottomMargin = val;
+      }
+    });
+    this.invoiceService.getFontFamily().subscribe( val => {
+      if (val) {
+        this.fontFamily = val;
+      }
+    });
   //   this.tableMeta$ = this.store.select( state => {
   //     return state.invoice.table;
   //   }).takeUntil(this.destroyed$);
