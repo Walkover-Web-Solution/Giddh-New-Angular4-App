@@ -11,6 +11,9 @@ import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceRes
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
+import { AccountService } from '../../services/account.service';
+import { Observable } from 'rxjs/Observable';
+import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
@@ -27,6 +30,7 @@ const COMPARISION_FILTER = [
 })
 export class InvoiceGenerateComponent implements OnInit {
 
+  public accounts$: Observable<Select2OptionData[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private modalRef: BsModalRef;
   private config = {
@@ -45,7 +49,8 @@ export class InvoiceGenerateComponent implements OnInit {
   constructor(
     private modalService: BsModalService,
     private store: Store<AppState>,
-    private invoiceActions: InvoiceActions
+    private invoiceActions: InvoiceActions,
+    private _accountService: AccountService
   ) {}
 
   public ngOnInit() {
@@ -54,6 +59,20 @@ export class InvoiceGenerateComponent implements OnInit {
     this.ledgerSearchRequest.to = moment().format('DD-MM-YYYY');
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
+
+    // Get accounts
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let accounts: Select2OptionData[] = [];
+        data.body.results.map(d => {
+          if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
+            accounts.push({ text: d.name, id: d.uniqueName }); // Select only sundry debtors account
+          }
+        });
+        this.accounts$ = Observable.of(accounts);
+        // console.log('this.accounts$ :', this.accounts$);
+      }
+    });
 
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
       if (o.generate && o.generate.ledgers) {
@@ -173,7 +192,6 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
   }
-
   // account list only for sundry debtors
 
 }
