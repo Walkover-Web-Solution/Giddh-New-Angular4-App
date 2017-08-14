@@ -39,6 +39,12 @@ export class InvoiceGenerateComponent implements OnInit {
     backdrop: true,
     ignoreBackdropClick: true
   };
+  private select2Options: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true
+  };
   private counts: number[] = COUNTS;
   private ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   private filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
@@ -149,18 +155,23 @@ export class InvoiceGenerateComponent implements OnInit {
 
   private toggleItem(item: any, action: boolean) {
     item.isSelected = action;
+    if (action) {
+      // this.allItemsSelected = true;
+    }else {
+      this.allItemsSelected = false;
+    }
   }
 
   private toggleAllItems(type: boolean) {
-    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      item.isSelected = this.allItemsSelected ? true : false;
-      return item;
-    });
     if (type) {
       this.allItemsSelected = true;
     }else {
       this.allItemsSelected = false;
     }
+    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      item.isSelected = this.allItemsSelected ? true : false;
+      return item;
+    });
   }
 
   private insertItemsIntoArr(type: boolean) {
