@@ -8,7 +8,7 @@ import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SharedModule } from '../shared/shared.module';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
-
+import { SettingRountingModule } from './settings.routing.module';
 @NgModule({
   declarations: [
     // components here
@@ -22,6 +22,7 @@ import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confir
     SharedModule,
     CommonModule,
     FormsModule,
+    SettingRountingModule,
     TabsModule.forRoot(),
     SharedModule
   ]
