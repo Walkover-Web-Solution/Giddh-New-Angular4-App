@@ -13,7 +13,7 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'groups-account-sidebar',
-  templateUrl: './groups-account-sidebar.component.html',
+  templateUrl: './groups-account-sidebar.component.html'
 })
 export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   public mc: GroupAccountSidebarVM;
@@ -26,15 +26,17 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private accountsAcction: AccountsAction) {
+              private accountsAcction: AccountsAction) {
     this.mc = new GroupAccountSidebarVM();
     this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup);
   }
+
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['groups']) {
       this.resetData();
     }
   }
+
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.resetData();
@@ -42,7 +44,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   }
 
   public resetData() {
-    this._groups = _.cloneDeep(this.groups);
+    this._groups = this.orderByCategory(_.cloneDeep(this.groups));
     this.mc.columns = [];
     this.mc.columns.push(new ColumnGroupsAccountVM(new GroupsWithAccountsResponse()));
     this.mc.columns[0].groups = [];
@@ -62,6 +64,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
     }
     this.columnsChanged.emit(this.mc);
   }
+
   public polulateColms(grps: IGroupsWithAccounts[]): ColumnGroupsAccountVM {
     let activeGroup = null;
     this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(a => activeGroup = a);
@@ -111,14 +114,44 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
     this.mc.selectGroup(item, currentIndex);
     this.ScrollToRight.emit(true);
   }
+
   public onAccountClick(item: IAccountsInfo, currentIndex: number) {
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.accountsAcction.getAccountDetails(item.uniqueName));
     this.mc.selectedType = 'acc';
     this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
   }
+
   public ShowAddNewForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAcction.resetActiveAccount());
+  }
+
+  // order group by category
+  public orderByCategory(groups: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] {
+    const orderedGroups: GroupsWithAccountsResponse[] = [];
+    const assets = [];
+    const liabilities = [];
+    const income = [];
+    const expenses = [];
+    _.each(groups, (grp) => {
+      switch (grp.category) {
+        case 'assets':
+          return assets.push(grp);
+        case 'liabilities':
+          return liabilities.push(grp);
+        case 'income':
+          return income.push(grp);
+        case 'expenses':
+          return expenses.push(grp);
+        default:
+          return assets.push(grp);
+      }
+    });
+    _.each(liabilities, liability => orderedGroups.push(liability));
+    _.each(assets, asset => orderedGroups.push(asset));
+    _.each(income, inc => orderedGroups.push(inc));
+    _.each(expenses, exp => orderedGroups.push(exp));
+    return orderedGroups;
   }
 }

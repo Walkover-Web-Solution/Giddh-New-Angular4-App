@@ -1,10 +1,8 @@
 import { Action, combineReducers } from '@ngrx/store';
-import { TemplateBody } from '../../models/api-models/invoice';
-import { INVOICE } from '../../services/actions/invoice/invoice.const';
-
-export interface InvoiceTemplateState {
-  [uniqueName: string]: TemplateBody;
-}
+import { BaseResponse } from '../../models/api-models/BaseResponse';
+import * as _ from 'lodash';
+import { INVOICE_ACTIONS, INVOICE } from '../../services/actions/invoice/invoice.const';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest, GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
 
 export interface InvoiceTemplateMetaState {
   templateId: string;
@@ -66,18 +64,101 @@ export interface InvoiceTemplateMetaState {
   rightMargin: number;
 }
 
-export interface InvoiceState {
-
-  template: InvoiceTemplateState;
-  templateMeta: InvoiceTemplateMetaState;
-}
-
-export const initialState: InvoiceTemplateState = {
+export const initialStateTempMeta: InvoiceTemplateMetaState = {
+  templateId: 'common_template_a',
+  companyName: 'Walkover',
+  GSTIN: '',
+  PAN: '',
+  address: '',
+  invoiceDate: '',
+  invoiceNumber: '',
+  shippingDate: '',
+  shippingNo: '',
+  shippingVia: '',
+  trackingNumber: '',
+  trackingDate: '',
+  trackingRecord: '',
+  customerName: '',
+  customerEmail: '',
+  customerMobileNumber: '',
+  dueDate: '',
+  billingState: '',
+  billingAddress: '',
+  billingGstin: '',
+  shippingAddress: '',
+  shippingState: '',
+  shippinGstin: '',
+  customField1: '',
+  customField2: '',
+  customField3: '',
+  formNameInvoice: '',
+  formNameTaxInvoice: '',
+  sNoLabel: '',
+  sNoWidth: 10,
+  dateLabel: '',
+  dateWidth: 10,
+  itemLabel: '',
+  itemWidth: 10,
+  hsnSacLabel: '',
+  hsnSacWidth: 10,
+  itemCodeLabel: '',
+  itemCodeWidth: 10,
+  descLabel: '',
+  descWidth: 10,
+  rateLabel: '',
+  rateWidth: 10,
+  discountLabel: '',
+  discountWidth: 10,
+  taxableValueLabel: '',
+  taxableValueWidth: 10,
+  taxLabel: '',
+  taxWidth: 10,
+  totalLabel: '',
+  totalWidth: 10,
+  quantityLabel: '',
+  quantityWidth: 10,
+  fontFamily: 'Open Sans, sans-serif',
+  topMargin: 20,
+  leftMargin: 0,
+  bottomMargin: 0,
+  rightMargin: 10,
 };
 
-export function invoiceTemplateReducer(state = initialState, action: Action): InvoiceTemplateState {
-  switch (action.type) {
+// export interface InvoiceTemplateState {
+//   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
+// }
 
+export class GeneratePage {
+  public ledgers: GetAllLedgersOfInvoicesResponse;
+  public invoiceData: PreviewAndGenerateInvoiceResponse;
+  public invoiceTemplateConditions: GetInvoiceTemplateDetailsResponse;
+}
+
+export class PreviewPage {
+  public invoices: GetAllInvoicesPaginatedResponse;
+}
+
+export class TemplatesPage {
+  public templatesList: GetInvoiceTemplateDetailsResponse[];
+  public templateMetaData: InvoiceTemplateMetaState;
+}
+
+export interface InvoiceState {
+    preview: PreviewPage;
+    generate: GeneratePage;
+    templates: TemplatesPage;
+    settings: string;
+}
+
+export const initialState: InvoiceState = {
+    preview: {invoices: null},
+    generate: {ledgers: null, invoiceData: null, invoiceTemplateConditions: null},
+    templates: {templatesList: null, templateMetaData: null},
+    settings: null
+};
+
+export function templatesReducer(state = initialState, action: Action): InvoiceState {
+  switch (action.type) {
     case INVOICE.TEMPLATE.SET_TEMPLATE_STATE: {
       let result = action.payload.temp.body;
       let newState = []; // Array
@@ -96,73 +177,13 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
     }
   }
 }
-export const initialStateTempMeta: InvoiceTemplateMetaState = {
-  templateId: 'common_template_a',
-  companyName: 'Walkover',
-  GSTIN: '',
-  PAN : '',
-  address: '',
-  invoiceDate: '' ,
-  invoiceNumber: '' ,
-  shippingDate: '' ,
-    shippingNo: '' ,
-  shippingVia: '' ,
-  trackingNumber: '' ,
-  trackingDate: '',
-  trackingRecord: '' ,
-  customerName: '' ,
-  customerEmail: '',
-  customerMobileNumber: '',
-  dueDate: '' ,
-  billingState: '',
-  billingAddress: '',
-  billingGstin: '',
-  shippingAddress: '',
-  shippingState: '',
-  shippinGstin: '',
-  customField1: '',
-  customField2: '',
-  customField3: '',
-  formNameInvoice: '' ,
-  formNameTaxInvoice: '',
-  sNoLabel: '',
-  sNoWidth: 10,
-  dateLabel: '',
-  dateWidth: 10,
-  itemLabel: '',
-  itemWidth: 10,
-  hsnSacLabel: '',
-  hsnSacWidth: 10,
-  itemCodeLabel: '',
-  itemCodeWidth: 10,
-  descLabel: '' ,
-  descWidth: 10 ,
-  rateLabel: '' ,
-  rateWidth: 10 ,
-  discountLabel: '' ,
-  discountWidth: 10 ,
-  taxableValueLabel: '',
-  taxableValueWidth: 10,
-  taxLabel: '',
-  taxWidth: 10,
-  totalLabel: '',
-  totalWidth: 10,
-  quantityLabel: '',
-  quantityWidth: 10,
-  fontFamily : 'Open Sans, sans-serif',
-  topMargin: 20,
-  leftMargin: 0,
-  bottomMargin: 0,
-  rightMargin: 10,
-};
 
-export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
+export function templateMetaReducer(state = initialState, action: Action): InvoiceState {
   switch (action.type) {
     case INVOICE.TEMPLATE.SET_TEMPLATE_DATA:
       let headerSection = action.payload[0].content;
       let tableSection = action.payload[1].content;
-      // let footerSection = action.payload[2].content;
-      console.log('SET TEMPLATE DATA', tableSection );
+      let newState = _.cloneDeep(state);
       return Object.assign({}, state, {
         companyName: headerSection[0].label,
         GSTIN: headerSection[1].label,
@@ -212,16 +233,14 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         totalLabel: tableSection[10].label,
         totalWidth: tableSection[10].width,
         quantityLabel: tableSection[11].label,
-        quantityWidth: tableSection[11].width,
-
-        // companyName: action.payload.
+        quantityWidth: tableSection[11].width
       });
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
       return Object.assign({}, state, {
         templateId: action.payload.id
       });
 
-      case INVOICE.TEMPLATE.UPDATE_GSTIN:
+    case INVOICE.TEMPLATE.UPDATE_GSTIN:
       return Object.assign({}, state, {
         GSTIN: action.payload.data
       });
@@ -253,9 +272,55 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
   }
 }
 
-export const invoiceReducers = {
-  template: invoiceTemplateReducer,
-  templateMeta: invoiceTemplateMetaReducer
+// above kunal
+// preview and generate related below
+export function prevAndGenReducer(state = initialState, action: Action): InvoiceState {
+  switch (action.type) {
+    case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
+        let newState = _.cloneDeep(state);
+        let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
+        if (res.status === 'success') {
+            newState.preview.invoices = res.body;
+            return Object.assign({}, state, newState);
+        }
+        return state;
+    }
+    case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE: {
+        let newState = _.cloneDeep(state);
+        let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
+        if (res.status === 'success') {
+            newState.generate.ledgers = res.body;
+            return Object.assign({}, state, newState);
+        }
+    }
+    case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
+        let newState = _.cloneDeep(state);
+        let res: BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest> = action.payload;
+        if (res.status === 'success') {
+            newState.generate.invoiceData = res.body;
+            return Object.assign({}, state, newState);
+        }
+        return state;
+    }
+    case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
+        let newState = _.cloneDeep(state);
+        let res: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = action.payload;
+        if (res.status === 'success') {
+            newState.generate.invoiceTemplateConditions = res.body;
+            return Object.assign({}, state, newState);
+        }
+        return state;
+    }
+    default: {
+        return state;
+    }
+  }
+}
+
+export const InvoiceReducers = {
+  template: templatesReducer,
+  templateMeta: templateMetaReducer,
+  prevAndGen: prevAndGenReducer
 };
 
-export const invoiceReducer = combineReducers(invoiceReducers);
+export const InvoiceReducer = combineReducers(InvoiceReducers);

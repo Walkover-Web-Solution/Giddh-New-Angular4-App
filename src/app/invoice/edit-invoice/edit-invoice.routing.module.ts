@@ -1,9 +1,7 @@
-
-
-import {NgModule} from "@angular/core";
-import {RouterModule} from "@angular/router";
-import {EditInvoiceComponent} from "./edit.invoice.component";
-import {NeedsAuthentication} from "../../services/decorators/needsAuthentication";
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { EditInvoiceComponent } from './edit.invoice.component';
+import { NeedsAuthentication } from '../../services/decorators/needsAuthentication';
 
 @NgModule({
   imports: [
@@ -15,4 +13,4 @@ import {NeedsAuthentication} from "../../services/decorators/needsAuthentication
   ],
   exports: [RouterModule]
 })
-export class InvoiceRoutingModule { }
+export class EditInvoiceRoutingModule { }
