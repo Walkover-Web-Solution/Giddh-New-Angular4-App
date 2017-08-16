@@ -9,7 +9,7 @@ import { AppState } from '../../../store/roots';
 import { INVOICE_ACTIONS } from './invoice.const';
 import { ToasterService } from '../../toaster.service';
 import { Router } from '@angular/router';
-import { IGetAllInvoicesResponse, CommonPaginatedRequest, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, PreviewAndGenerateInvoiceRequest, PreviewAndGenerateInvoiceResponse } from '../../../models/api-models/Invoice';
+import { IGetAllInvoicesResponse, CommonPaginatedRequest, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, PreviewAndGenerateInvoiceRequest, PreviewAndGenerateInvoiceResponse, GetInvoiceTemplateDetailsResponse } from '../../../models/api-models/Invoice';
 
 @Injectable()
 export class InvoiceActions {
@@ -45,32 +45,16 @@ export class InvoiceActions {
 
   // Preview and Generate Invoice
   @Effect()
-  public PreviewAndGenerateInvoice$: Observable<Action> = this.action$
-    .ofType(INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE)
-    .switchMap(action => this._invoiceService.PreviewAndGenerateInvoice(action.payload.accountUniqueName, action.payload.body))
+  public PreviewInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.PREVIEW_INVOICE)
+    .switchMap(action => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body))
     .map(res => this.validateResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>(res, {
-      type: INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE_RESPONSE,
+      type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: res
     }, true, {
-      type: INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE_RESPONSE,
+      type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: res
     }));
-
-  // GET Template Details
-  @Effect()
-  public GetTemplateDetails$: Observable<Action> = this.action$
-    .ofType(INVOICE_ACTIONS.GET_TEMPLATE_DETAILS)
-    .switchMap(action => this._invoiceService.GetTemplateDetails(action.payload))
-    .map(response => {
-      return this.GetTemplateDetailsResponse(response);
-    });
-
-  @Effect()
-  public GetTemplateDetailsResponse$: Observable<Action> = this.action$
-    .ofType(INVOICE_ACTIONS.GET_TEMPLATE_DETAILS_RESPONSE)
-    .map(response => {
-      return { type : ''};
-    });
 
   // Delete Invoice
   @Effect()
@@ -151,6 +135,16 @@ export class InvoiceActions {
   //   .map(response => {
   //     return { type : ''};
   //   });
+  public GetTemplateDetailsOfInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS)
+    .switchMap(action => this._invoiceService.GetInvoiceTemplateDetails(action.payload))
+    .map(res => this.validateResponse<GetInvoiceTemplateDetailsResponse, string>(res, {
+      type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
+      payload: res
+    }));
 
   constructor(
     private action$: Actions,
@@ -187,30 +181,30 @@ export class InvoiceActions {
     };
   }
 
-  public PreviewAndGenerateInvoice(accountUniqueName: string, model: PreviewAndGenerateInvoiceRequest): Action {
+  public PreviewInvoice(accountUniqueName: string, model: PreviewAndGenerateInvoiceRequest): Action {
     return {
-      type: INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE,
+      type: INVOICE_ACTIONS.PREVIEW_INVOICE,
       payload: {accountUniqueName, body: model}
     };
   }
 
-  public PreviewAndGenerateInvoiceResponse(model: PreviewAndGenerateInvoiceResponse): Action {
+  public PreviewInvoiceResponse(model: PreviewAndGenerateInvoiceResponse): Action {
     return {
-      type: INVOICE_ACTIONS.PREVIEW_AND_GENERATE_INVOICE_RESPONSE,
+      type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: model
     };
   }
 
-  public GetTemplateDetails(templateUniqueName: string): Action {
+  public GetTemplateDetailsOfInvoice(model: string): Action {
     return {
-      type: INVOICE_ACTIONS.GET_ALL_INVOICES,
-      payload: templateUniqueName
+      type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS,
+      payload: model
     };
   }
 
-  public GetTemplateDetailsResponse(model: BaseResponse<string, string>): Action {
+  public GetTemplateDetailsOfInvoiceResponse(model: BaseResponse<GetInvoiceTemplateDetailsResponse, string>): Action {
     return {
-      type: INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE,
+      type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
       payload: model
     };
   }
