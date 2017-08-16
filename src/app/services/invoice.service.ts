@@ -154,4 +154,25 @@ export class InvoiceService {
       })
       .catch((e) => HandleCatch<string, string>(e, templateUniqueName));
   }
+
+  /**
+   * Delete invoice
+   * URL:: company/:companyUniqueName/templates-v2/templateUniqueName
+   */
+  public DeleteInvoice(templateUniqueName: string): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.GET_INVOICE_TEMPLATE.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = templateUniqueName;
+        data.queryString = { templateUniqueName };
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e, templateUniqueName));
+  }
 }
