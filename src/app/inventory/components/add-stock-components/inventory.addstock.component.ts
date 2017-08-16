@@ -181,7 +181,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
-    // subscribe active stock if available fill form
+    // subscribe active stock if availabel fill form
     this.activeStock$.delay(1000).distinctUntilChanged((x, y) => {
       if (!x && !y) {
         return true;
@@ -331,6 +331,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
     let val: string = this.addStockForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
+
     if (val) {
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(groupName, val));
 
