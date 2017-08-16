@@ -2156,27 +2156,27 @@ table.borderless td, table.borderless th {
   display: none;
 }
 
-.profitLoss.table-container > section {
+.profitLoss.table-container > div > section {
   border-left: 1px solid #e0e0e0;
 }
 
-.trial-balance.table-container > section {
+.trial-balance.table-container > div > section {
   border-left: 10px solid #e0e0e0;
 }
 
-.table-container > section.assets {
+.table-container > div > section.assets {
   border-left: 10px solid #FFD800;
 }
 
-.table-container > section.liabilities {
+.table-container > div > section.liabilities {
   border-left: 10px solid #587058;
 }
 
-.table-container > section.income {
+.table-container > div > section.income {
   border-left: 10px solid #6495ED;
 }
 
-.table-container > section.expenses {
+.table-container > div > section.expenses {
   border-left: 10px solid #E86850;
 }
 
