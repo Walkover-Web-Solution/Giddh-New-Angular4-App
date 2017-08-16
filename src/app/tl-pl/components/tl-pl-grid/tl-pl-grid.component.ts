@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AppState } from '../../../store/roots';
 import { TlPlActions } from '../../../services/actions/tl-pl.actions';
@@ -12,9 +12,9 @@ import * as _ from 'lodash';
   selector: 'tl-pl-grid',  // <home></home>
   templateUrl: './tl-pl-grid.component.html'
 })
-export class TlPlGridComponent implements OnInit, OnDestroy {
+export class TlPlGridComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public showTbplLoader: boolean;
+  public showTbplLoader: Observable<boolean>;
   public noData: boolean;
   public showClearSearch: boolean;
   public expanded = false;
@@ -22,13 +22,21 @@ export class TlPlGridComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private _tlPlAction: TlPlActions) {
-
+  constructor(private store: Store<AppState>, private _tlPlAction: TlPlActions, private cd: ChangeDetectorRef) {
+    // this.showTbplLoader = true;
     this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.data));
+    this.showTbplLoader = this.store.select(p => p.tlPl.showTbplLoader);
   }
 
   public ngOnInit() {
     //
+    this.data$.subscribe(p => {
+      if (p) {
+        // this.showTbplLoader = false;
+        debugger;
+      }
+      this.cd.detectChanges();
+    });
   }
 
   public collapseAll() {
@@ -61,7 +69,9 @@ export class TlPlGridComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-
+  public ngAfterViewInit() {
+    this.cd.detectChanges();
+  }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;
@@ -81,5 +91,4 @@ export class TlPlGridComponent implements OnInit, OnDestroy {
       });
     });
   }
-
 }
