@@ -79,25 +79,19 @@ export const initialState: InvoiceTemplateState = {
 export function invoiceTemplateReducer(state = initialState, action: Action): InvoiceTemplateState {
   switch (action.type) {
 
-    case INVOICE.TEMPLATE.SET_TEMPLATE_STATE:
+    case INVOICE.TEMPLATE.SET_TEMPLATE_STATE: {
       let result = action.payload.temp.body;
       let newState = []; // Array
-      result.forEach((obj) => {
-        let key = obj.uniqueName;
-        let obj1 = {};
-        obj1[obj.uniqueName] = obj;
-        newState.push(obj1);
-      });
+      if (result && result.length) {
+        result.forEach((obj) => {
+          let key = obj.uniqueName;
+          let obj1 = {};
+          obj1[obj.uniqueName] = obj;
+          newState.push(obj1);
+        });
+      }
       return Object.assign({}, state, newState);
-
-    //   case INVOICE.CONTENT.SET_HEADING:
-    //   return Object.assign({}, state, {
-    //   heading: action.payload.data.heading
-    // });
-    // case INVOICE.CONTENT.SET_HEADING:
-    //   return Object.assign({}, state, {
-    //     heading: action.payload.data
-    //   });
+    }
     default: {
       return state;
     }
