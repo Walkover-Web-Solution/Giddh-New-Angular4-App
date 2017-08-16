@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { TlPlActions } from '../../services/actions/tl-pl.actions';
-import { AccountDetails } from '../../models/api-models/tl-pl';
+import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
+import { AccountDetails } from '../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { ChildGroup } from '../../models/api-models/Search';
 import * as moment from 'moment';
@@ -12,8 +12,6 @@ export interface TlPlState {
   detailedGroups: any;
   showTbplLoader: boolean;
   noData: boolean;
-  toDate?: Date;
-  fromDate?: Date;
 }
 
 export const initialState: TlPlState = {
@@ -23,11 +21,12 @@ export const initialState: TlPlState = {
   exportData: [],
   count: 0,
   detailedGroups: [],
+
 };
 
 export function tlPlReducer(state = initialState, action: Action): TlPlState {
   switch (action.type) {
-    case TlPlActions.GET_TRIAL_BALANCE_RESPONSE: {
+    case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE: {
       let data: AccountDetails = _.cloneDeep(action.payload) as AccountDetails;
       addUIKey(data.groupDetails);
       data.groupDetails = removeZeroAmountAccount((data.groupDetails));
@@ -40,13 +39,24 @@ export function tlPlReducer(state = initialState, action: Action): TlPlState {
         data, noData, showTbplLoader
       });
     }
-    case TlPlActions.GET_TRIAL_BALANCE_REQUEST: {
+    case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST: {
       return Object.assign({}, state, {
         fromDate: moment(action.payload.fromDate, 'DD-MM-YYYY').toDate(),
         toDate: moment(action.payload.toDate, 'DD-MM-YYYY').toDate()
       });
     }
-    case TlPlActions.SET_DATE:
+
+    case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
+      //
+      return;
+    }
+
+    case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
+      //
+      return;
+    }
+
+    case TBPlBsActions.SET_DATE:
       return Object.assign({}, state, { fromDate: action.payload.fromDate, toDate: action.payload.toDate });
     default: {
       return state;

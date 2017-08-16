@@ -1,16 +1,19 @@
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
-import { Component, EventEmitter, Input, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
-import { SearchRequest } from '../models/api-models/Search';
-import { ComapnyResponse } from '../models/api-models/Company';
-import { TlPlActions } from '../services/actions/tl-pl.actions';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
+import { ComapnyResponse } from '../../../models/api-models/Company';
+import { SearchRequest } from '../../../models/api-models/Search';
+import { AppState } from '../../../store/roots';
+import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
 
 @Component({
-  selector: 'search',
-  templateUrl: './tl-pl.component.html'
+  selector: 'pl',
+  template: `
+    <tb-pl-bs-filter></tb-pl-bs-filter>
+    <pl-grid></pl-grid>
+  `
 })
-export class TlPlComponent implements OnInit, AfterViewInit {
+export class PlComponent implements OnInit, AfterViewInit {
   public request: {
     refresh: boolean;
     fromDate: any;
@@ -30,7 +33,7 @@ export class TlPlComponent implements OnInit, AfterViewInit {
     return this._searchRequest;
   }
 
-  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TlPlActions) {
+  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
     this.store.select(p => p.company.companies && p.company.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
       this.selectedCompany = p;
       if (p) {
@@ -49,6 +52,7 @@ export class TlPlComponent implements OnInit, AfterViewInit {
     // this.exampleData = [
     // ];
   }
+
   public ngAfterViewInit() {
     this.cd.detectChanges();
   }
