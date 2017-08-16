@@ -7,7 +7,7 @@ import { OutTempalteComponent } from './out-tempate/out.template.component';
 import { EditFiltersContainersComponent } from './edit.filters.component';
 import { EditFiltersContainerRoutingModule } from './edit.filters.routing.module';
 import { DesignFiltersContainerComponent } from './design.filters.component';
-import { SharedModule } from '../../../../shared/shared.module';
+import { SharedModule } from '../../../../../shared/shared.module';
 import { SelectTemplateComponent } from './select-template/select.template.component';
 import { Actions } from '@ngrx/effects';
 

@@ -52,4 +52,3 @@ export const ROUTES: Routes = [
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];
-// loadChildren: './invoice/edit-invoice/edit.invoice.module#EditInvoiceModule', canActivate: [NeedsAuthentication]
