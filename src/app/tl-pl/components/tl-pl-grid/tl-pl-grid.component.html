@@ -1,5 +1,5 @@
 <!-- loader -->
-<div class="loader" *ngIf="showTbplLoader">
+<div class="loader" *ngIf="(showTbplLoader | async)">
   <span></span>
   <span></span>
   <span></span>
@@ -16,7 +16,7 @@
 </div>
 <!-- nodata end -->
 
-<div *ngIf="!showTbplLoader">
+<div *ngIf="!(showTbplLoader | async)">
   <div *ngIf="!noData">
     <div class="pd15">
       <div class="row mrB2">
@@ -24,8 +24,8 @@
           <div class="form-group mrR2">
             <div class="input-group input-group-md">
               <span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-search"></i></span>
-              <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3"
-                     ng-model="keyWord.query" trial-accordion='search' ng-keyup="logInputLength(keyWord.query)">
+              <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3" ng-model="keyWord.query"
+                trial-accordion='search' ng-keyup="logInputLength(keyWord.query)">
               <i class="glyphicon glyphicon-remove close-icon" *ngIf="showClearSearch"></i>
             </div>
           </div>
@@ -48,74 +48,73 @@
       <div class="table-container clearfix trial-balance">
         <table class="col-xs-12 tb-head">
           <thead>
-          <tr>
-            <th class="col-xs-4">Particular</th>
-            <th class="col-xs-2">Opening Bal</th>
-            <th class="col-xs-4 text-center">
-              Transactions
-              <table class="col-xs-12">
-                <thead>
-                <tr>
-                  <th class="col-xs-6 text-left">Debit(Dr.)</th>
-                  <th class="col-xs-6 text-left">Credit(Cr.)</th>
-                </tr>
-                </thead>
-              </table>
-            </th>
-            <th class="col-xs-2">Closing Bal</th>
-          </tr>
+            <tr>
+              <th class="col-xs-4">Particular</th>
+              <th class="col-xs-2">Opening Bal</th>
+              <th class="col-xs-4 text-center">
+                Transactions
+                <table class="col-xs-12">
+                  <thead>
+                    <tr>
+                      <th class="col-xs-6 text-left">Debit(Dr.)</th>
+                      <th class="col-xs-6 text-left">Credit(Cr.)</th>
+                    </tr>
+                  </thead>
+                </table>
+              </th>
+              <th class="col-xs-2">Closing Bal</th>
+            </tr>
           </thead>
         </table>
 
         <!--Start Grid-->
-        <section class="row row-1" *ngFor="let grp of (data$ | async).groupDetails" [ngClass]="grp.category"
-                 tl-pl-grid-row [groupDetail]="grp">
-          <section class="row " [ngClass]="{'isHidden': !grp.isVisible }" style="padding-left:30px"
-                   *ngIf="grp.childGroups.length">
-            <section class="row row-2" tl-pl-grid-row *ngFor="let childGroup of grp.childGroups"
-                     [groupDetail]="childGroup">
-              <section class="subGroups " *ngIf="childGroup.childGroups.length"
-                       style="padding-left:30px">
-                <section class="row row-2" tl-pl-grid-row *ngFor="let subChildGroup of grp.childGroups"
-                         [groupDetail]="subChildGroup" [ngClass]="{'isHidden': !subChildGroup.isVisible }">
+        <div *ngIf="(data$ | async) as o">
+          <section class="row row-1" *ngFor="let grp of o.groupDetails" [ngClass]="grp.category" tl-pl-grid-row [groupDetail]="grp">
+            <section class="row " [ngClass]="{'isHidden': !grp.isVisible }" style="padding-left:30px" *ngIf="grp.childGroups.length">
+              <section class="row row-2" tl-pl-grid-row *ngFor="let childGroup of grp.childGroups" [groupDetail]="childGroup">
+                <section class="subGroups " *ngIf="childGroup.childGroups.length" style="padding-left:30px">
+                  <section class="row row-2" tl-pl-grid-row *ngFor="let subChildGroup of grp.childGroups" [groupDetail]="subChildGroup" [ngClass]="{'isHidden': !subChildGroup.isVisible }">
+                  </section>
                 </section>
               </section>
             </section>
           </section>
-        </section>
+        </div>
         <!--<section class="row row-1"-->
         <!--*ngFor="let grp of (data$ | async).groupDetails"-->
         <!--[ngClass]="grp.category">-->
-          <!--&lt;!&ndash; filter:filterTBSearch:index:data  &ndash;&gt;-->
-          <!--&lt;!&ndash; |  tbsearch:keyWord | filter:filterTBSearch:tbsearch &ndash;&gt;-->
+        <!--&lt;!&ndash; filter:filterTBSearch:index:data  &ndash;&gt;-->
+        <!--&lt;!&ndash; |  tbsearch:keyWord | filter:filterTBSearch:tbsearch &ndash;&gt;-->
 
 
         <!--</section>-->
         <!--End Grid-->
-        <div class="table-responsive">
-          <table class="table bdrL bdrR">
-            <thead>
-            <tr>
-              <th class="col-xs-4">
-                <span class="pdL1">Grand Total</span>
-              </th>
-              <th class="col-xs-2  text-right">{{ (data$ | async).forwardedBalance?.amount | number:'1.2-2' }}</th>
-              <th class="col-xs-4">
-                <table class="col-xs-12">
-                  <thead>
-                  <tr>
-                    <th class="col-xs-6 text-right">{{ (data$ | async).debitTotal | number:'1.2-2' }}</th>
-                    <th class="col-xs-6 text-right">{{ (data$ | async).creditTotal | number:'1.2-2' }}</th>
-                  </tr>
-                  </thead>
-                </table>
-              </th>
-              <th class="col-xs-2  text-right">
-                <span class="pdR1">{{  (data$ | async).closingBalance?.amount | number:'1.2-2' }}</span>
-              </th>
-            </tr>
-            </thead>
-          </table>
+        <div *ngIf="(data$ | async) as o">
+          <div class="table-responsive">
+            <table class="table bdrL bdrR">
+              <thead>
+                <tr>
+                  <th class="col-xs-4">
+                    <span class="pdL1">Grand Total</span>
+                  </th>
+                  <th class="col-xs-2  text-right">{{ o.forwardedBalance?.amount | number:'1.2-2' }}</th>
+                  <th class="col-xs-4">
+                    <table class="col-xs-12">
+                      <thead>
+                        <tr>
+                          <th class="col-xs-6 text-right">{{ o.debitTotal | number:'1.2-2' }}</th>
+                          <th class="col-xs-6 text-right">{{ o.creditTotal | number:'1.2-2' }}</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </th>
+                  <th class="col-xs-2  text-right">
+                    <span class="pdR1">{{  o.closingBalance?.amount | number:'1.2-2' }}</span>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+          </div>
         </div>
       </div>
 

@@ -713,7 +713,7 @@ input[type="checkbox"]:after {
 }
 
 .tab-pane input[type=search] {
-    min-width: 220px;
+    /* min-width: 220px; */
 }
 
 .tab-pane input[type=search]:after {
