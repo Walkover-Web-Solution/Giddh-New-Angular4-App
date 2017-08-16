@@ -67,9 +67,37 @@ export class InvoiceActions {
 
   @Effect()
   public DeleteInvoiceResponse$: Observable<Action> = this.action$
-    .ofType(INVOICE_ACTIONS.GET_TEMPLATE_DETAILS_RESPONSE)
+    .ofType(INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE)
     .map(response => {
-      return { type : ''};
+      let data: BaseResponse<string, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Invoice Deleted Successfully');
+      }
+      return { type: '' };
+    });
+
+  // Action On Invoice
+  @Effect()
+  public ActionOnInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE)
+    .switchMap(action => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action))
+    .map(response => {
+      return this.ActionOnInvoiceResponse(response);
+    });
+
+  @Effect()
+  public ActionOnInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<string, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Invoice Successfully Updated.');
+      }
+      return { type: '' }; // Refresh the list
     });
 
   // Generate Bulk Invoice
@@ -84,22 +112,6 @@ export class InvoiceActions {
   // @Effect()
   // public GenerateBulkInvoiceResponse$: Observable<Action> = this.action$
   //   .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE)
-  //   .map(response => {
-  //     return { type : ''};
-  //   });
-
-  // Action On Invoice
-  // @Effect()
-  // public ActionOnInvoice$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE)
-  //   .switchMap(action => this._invoiceService.PerformActionOnInvoice(action.payload))
-  //   .map(response => {
-  //     return this.ActionOnInvoiceResponse(response);
-  //   });
-
-  // @Effect()
-  // public ActionOnInvoiceResponse$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE)
   //   .map(response => {
   //     return { type : ''};
   //   });
@@ -216,9 +228,23 @@ export class InvoiceActions {
     };
   }
 
-  public DeleteInvoiceResponse(model: string): Action {
+  public DeleteInvoiceResponse(model): Action {
     return {
       type: INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public ActionOnInvoice(invoiceUniqueName: string, action: object, ): Action {
+    return {
+      type: INVOICE_ACTIONS.ACTION_ON_INVOICE,
+      payload: {invoiceUniqueName, action}
+    };
+  }
+
+  public ActionOnInvoiceResponse(model: any): Action {
+    return {
+      type: INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE,
       payload: model
     };
   }
@@ -233,20 +259,6 @@ export class InvoiceActions {
   // public GenerateBulkInvoiceResponse(model: any): Action {
   //   return {
   //     type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
-  //     payload: model
-  //   };
-  // }
-
-  // public ActionOnInvoice(model: any): Action {
-  //   return {
-  //     type: INVOICE_ACTIONS.ACTION_ON_INVOICE,
-  //     payload: model
-  //   };
-  // }
-
-  // public ActionOnInvoiceResponse(model: any): Action {
-  //   return {
-  //     type: INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE,
   //     payload: model
   //   };
   // }

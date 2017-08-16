@@ -65,6 +65,18 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             }
             return state;
         }
+        case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+                let indx = newState.preview.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
+                if (indx > -1) {
+                    newState.preview.invoices.results.splice(indx, 1);
+                }
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
         default: {
             return state;
         }

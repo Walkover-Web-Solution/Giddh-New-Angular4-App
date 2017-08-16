@@ -58,6 +58,7 @@
 <table class="table basic table-bordered pdT2" *ngIf="ledgersData && ledgersData.results.length > 0">
   <thead class="t-h-bg1">
     <tr>
+      <th style="width:10%">#</th>
       <th style="width:10%">invoiceNumber</th>
       <th style="width:23.5%">account</th>
       <th style="width:7%">Date</th>
@@ -73,7 +74,8 @@
     <!--{{ ledgersData.results | json}}-->
    </tr>
     <!--ng-class="{'danger': checkTransaction(ledger.uniqueName)}"  -->
-    <tr *ngFor="let item of ledgersData.results">
+    <tr *ngFor="let item of ledgersData.results; let i = index">
+      <td>{{ i + 1}}</td>
       <td>{{item.invoiceNumber}}</td>
       <td>{{item.account.name}}</td>
       <td>{{item.invoiceDate}}</td>
@@ -94,8 +96,18 @@
   </tbody>
 </table>
 
-<!--delete invoice confirmation model -->
+<!-- Delete invoice confirmation model -->
 <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+          <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoiceForDelete" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
+        </div>
+    </div>
+</div>
+
+<!-- Perform action on invoice model -->
+<div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">

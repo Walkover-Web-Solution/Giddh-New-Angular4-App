@@ -157,22 +157,43 @@ export class InvoiceService {
 
   /**
    * Delete invoice
-   * URL:: company/:companyUniqueName/templates-v2/templateUniqueName
+   * URL:: company/:companyUniqueName/invoices/:invoiceUniqueName
    */
-  public DeleteInvoice(templateUniqueName: string): Observable<BaseResponse<string, string>> {
+  public DeleteInvoice(invoiceNumber: string): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVOICE_API.GET_INVOICE_TEMPLATE.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
+    return this._http.delete(INVOICE_API.DELETE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceNumber', invoiceNumber))
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
-        data.request = templateUniqueName;
-        data.queryString = { templateUniqueName };
+        data.request = invoiceNumber;
+        data.queryString = { invoiceNumber };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e, templateUniqueName));
+      .catch((e) => HandleCatch<string, string>(e, invoiceNumber));
+  }
+
+  /**
+   * Perform Action On Invoice
+   * URL:: company/:companyUniqueName/invoices/:invoiceUniqueName
+   */
+  public PerformActionOnInvoice(invoiceUniqueName: string, action: { action: string, amount?: number }): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(INVOICE_API.ACTION_ON_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':invoiceUniqueName', invoiceUniqueName), action)
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = invoiceUniqueName;
+        data.queryString = { invoiceUniqueName };
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e, invoiceUniqueName));
   }
 }
