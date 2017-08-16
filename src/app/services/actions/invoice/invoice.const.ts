@@ -50,4 +50,3 @@ export const INVOICE = {
     SET_COLUMN_WIDTH: 'SET_COLUMN_WIDTH',
   }
 };
-
