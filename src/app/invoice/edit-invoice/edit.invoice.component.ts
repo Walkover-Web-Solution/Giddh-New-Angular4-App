@@ -10,11 +10,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceAction } from '../../services/actions/invoice/invoice.actions';
-import {Section, TemplateBody} from '../../models/api-models/invoice';
+import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
+import { ISection, GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
 import * as _ from 'lodash';
-
-
 
 @Component({
   selector: 'edit-invoice',
@@ -25,21 +23,21 @@ import * as _ from 'lodash';
 export class EditInvoiceComponent implements OnInit {
   public templateId: string = 'common_template_a';
   public heading: string = 'Walkover Web Soluitons';
-  public template: TemplateBody[];
+  public template: GetInvoiceTemplateDetailsResponse[];
   public currentTemplate: any;
-  public currentTemplateSections: Section[];
+  public currentTemplateSections: ISection[];
 
   // public templateID$: Observable<string>;
   // public heading$: Observable<string>;
   // public tableMeta$: Observable<TableMetaMap>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private invoiceAction: InvoiceAction) {
+  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions) {
 
-    this.store.dispatch(this.invoiceAction.getTemplateState());
+    this.store.dispatch(this.invoiceActions.getTemplateState());
 
     this.store.select(state => {
-      return state.invoice.templateMeta.templateId;
+      return state.invoice.templates.templateMetaData.templateId;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (!_.isEmpty(value)) {
         let copyValue = _ .cloneDeep(value);
@@ -47,27 +45,22 @@ export class EditInvoiceComponent implements OnInit {
       }
     });
 
-    this.store.select(state => {
-      // let key = this.templateId;
-      return Object.keys(state.invoice.template).map(key => state.invoice.template[key]);
-    }).takeUntil(this.destroyed$).take(10).subscribe((value) => {
-        if (!_.isEmpty(value)) {
-         let copyValue = _ .cloneDeep(value);
-         this.template = copyValue;
-        // console.log("TEMPLATE ID", this.templateId);
-        // console.log("TEMPLATES", this.template);
-         let currentTemplate = this.template.find((te) => {
-          if (te[this.templateId]) {
-            return te[this.templateId];
-          }
-        });
-         this.currentTemplate = _. cloneDeep(currentTemplate);
-         this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
-         console.log('CURRENT TEMPLATE', this.currentTemplate.common_template_a.sections);
-         this.store.dispatch(this.invoiceAction.setTemplateData(this.currentTemplateSections));
-        }
-    });
-
+    // this.store.select(state => {
+    //   return Object.keys(state.invoice.templates.templatesList).map(key => state.invoice.template[key]);
+    // }).takeUntil(this.destroyed$).take(10).subscribe((value) => {
+    //     if (!_.isEmpty(value)) {
+    //      let copyValue = _ .cloneDeep(value);
+    //      this.template = copyValue;
+    //      let currentTemplate = this.template.find((te) => {
+    //       if (te[this.templateId]) {
+    //         return te[this.templateId];
+    //       }
+    //     });
+    //      this.currentTemplate = _. cloneDeep(currentTemplate);
+    //      this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
+    //      this.store.dispatch(this.invoiceActions.setTemplateData(this.currentTemplateSections));
+    //     }
+    // });
 
     // this.tableMeta$ = this.store.select( state = > {
     //   return state.invoice.table;
@@ -77,7 +70,6 @@ export class EditInvoiceComponent implements OnInit {
     //   });
   }
   public ngOnInit() {
-
     // TODO: Fetch current template object and bind to template component
   }
 

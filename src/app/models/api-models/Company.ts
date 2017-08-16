@@ -98,7 +98,9 @@ export interface ActiveFinancialYear {
  * response will be array of TaxResponse
  */
 export class TaxResponse implements ITax {
-  public account: INameUniqueName;
+  public account?: INameUniqueName;
+  public accounts?: INameUniqueName;
+  public taxType?: string;
   public duration: string;
   public taxDetail: ITaxDetail[];
   public taxFileDate: number;

@@ -1,0 +1,122 @@
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate class="clearfix mrB2">
+  
+  <div class="row pdT2 bdrB">
+    <div class="col-xs-6">
+      <div class="form-group size_360">
+        <label>Customer Name</label>
+        <input type="text" name="customer" class="form-control" [(ngModel)]="invoiceFormData.customerName" />
+      </div>
+    </div>
+    <div class="col-xs-6 text-right">
+      <p class="lead b">Balance Due: Rs9750</p>
+    </div>
+  </div>
+
+  <section class="form-inline col-xs-12">
+    <div class="pdT2 clearfix">
+      <div class="form-group size_240">
+        <label>Attention to</label>
+        <input type="text" name="attention" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>Invoice Date</label>
+        <input type="text" name="invoicedate" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>Invoice Number</label>
+        <input type="text" name="invoicenumber" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>Due Date</label>
+        <input type="text" name="duedate" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>Country</label>
+        <input type="text" name="country" class="form-control" ngModel />
+      </div>
+    </div>
+
+    <div class="pdT2 clearfix">
+      <div class="form-group size_240">
+        <label>Billing Address</label>
+        <textarea name="attention" class="form-control" ngModel></textarea>
+      </div>
+      <div class="form-group">
+        <label>State</label>
+        <input type="text" name="invoicedate" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>GSTIN</label>
+        <select class="form-control" name="pageName" ngModel>
+          <option [ngValue]="select">Select GSTIN</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="pdT2 clearfix">
+      <div class="form-group size_240">
+        <label>Billing Address</label>
+        <textarea name="attention" class="form-control" ngModel></textarea>
+      </div>
+      <div class="form-group">
+        <label>State</label>
+        <input type="text" name="invoicedate" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>GSTIN</label>
+        <select class="form-control" name="pageName" ngModel>
+          <option [ngValue]="select">Select GSTIN</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Ship Date</label>
+        <input type="text" name="shipDate" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>Ship Via</label>
+        <input type="text" name="duedate" class="form-control" ngModel />
+      </div>
+      <div class="form-group">
+        <label>Tracking No.</label>
+        <input type="text" name="country" class="form-control" ngModel />
+      </div>
+    </div>
+  </section>
+
+  <section class="clearfix pdT2 mrB2">
+    <table class="table">
+      <thead class="t-h-bg1">
+        <tr>
+          <th>Sno.</th>
+          <th>Date</th>
+          <th>HSN/SAC</th>
+        </tr>
+      </thead>
+    </table>
+  </section>
+  
+</form>
+
+<section class="row">
+  <section id="actionPane" class="text-center">
+    <div class="col-xs-12">
+      <button class="btn btn-default mrR1 pull-left" (click)="onCancelModal($event)">Close</button>
+      <button class="btn btn-default pull-left" (click)="onCancelModal($event)">Clear</button>
+      <button class="btn btn-default" (click)="onCancelModal($event)">Print or Preview</button>
+
+      <div class="pull-right pr">
+        Subtotal 
+        <div class="btn-group" dropdown [dropup]="true">
+          <button type="button" class="btn btn-default">Generate Invoice</button>
+          <button type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split">
+            <span class="caret"></span>
+            <span class="sr-only">Split button!</span>
+          </button>
+          <ul *dropdownMenu class="dropdown-menu" role="menu">
+            <li role="menuitem"><a class="dropdown-item" href="#">Generate &amp; Share</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+</section>

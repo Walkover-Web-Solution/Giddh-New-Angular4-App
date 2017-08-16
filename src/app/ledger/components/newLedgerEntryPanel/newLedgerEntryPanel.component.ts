@@ -53,8 +53,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   };
   public voucherTypeList: Observable<Select2OptionData[]>;
   public showAdvanced: boolean;
-  public dateMask = [/\d/, /\d/, '/', /\d/, /\d/, '/', /\d/, /\d/, /\d/, /\d/];
-  public datePipe = createAutoCorrectedDatePipe('mm/dd/yyyy');
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public isFileUploading: boolean = false;
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
 
@@ -115,11 +115,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   /**
-   * add to debit or credit
+   *
    * @param {string} type
+   * @param {Event} e
    */
-  public addToDrOrCr(type: string) {
+  public addToDrOrCr(type: string, e: Event) {
     this.changeTransactionType.emit(type);
+    e.stopPropagation();
   }
 
   public calculateTotal() {
@@ -191,6 +193,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public deleteAttachedFile() {
     this.blankLedger.attachedFile = '';
     this.blankLedger.attachedFileName = '';
+    this.hideDeleteAttachedFileModal();
   }
 
   public ngOnDestroy(): void {

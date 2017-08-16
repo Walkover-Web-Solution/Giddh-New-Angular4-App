@@ -21,15 +21,23 @@ import { rootReducer } from './store';
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
-
 import { PageComponent } from './page.component';
-
 import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
+import { InventoryModule } from './inventory/inventory.module';
+import { SearchModule } from './search/search.module';
+import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { LedgerModule } from './ledger/ledger.module';
+import { TlPlModule } from './tl-pl/tl-pl.module';
+import { ManufacturingModule } from './manufacturing/manufacturing.module';
 import { DummyComponent } from './dummy.component';
+import { SettingsModule } from './settings/settings.module';
+import { AboutModule } from './about/about.module';
+import { PermissionModule } from './permissions/permission.module';
+import { HomeModule } from './home/home.module';
+import { LoginModule } from './login/login.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -80,6 +88,17 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    SettingsModule,
+    AboutModule,
+    PermissionModule,
+    HomeModule,
+    InventoryModule,
+    SearchModule,
+    TlPlModule,
+    ManufacturingModule,
+    AuditLogsModule,
+    LedgerModule,
+    LoginModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),

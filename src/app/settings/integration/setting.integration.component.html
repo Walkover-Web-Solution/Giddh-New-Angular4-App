@@ -1,0 +1,80 @@
+<h3 class="fs18 mrB1 mrT2">SMS Integration</h3>
+<div class="box">
+  <h3 class="fs18 mrB1">MSG91</h3>
+  <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="pdBth20">
+    <section ngModelGroup="smsFormObj" #smsFormObjCtrl="ngModelGroup" class="row">
+      <div class="form-group col-xs-4">
+        <label>Auth Key</label><br>
+        <input type="text" placeholder="Enter auth-key" class="form-control"  [ngModel]="smsFormObj.authKey" name="authKey" required/>
+      </div>
+      <div class="form-group col-xs-4">
+        <label>Sender ID</label><br>
+        <input type="text" placeholder="Enter sender Id" class="form-control" [ngModel]="smsFormObj.senderId" name="senderId" required />
+      </div>
+      <div class="form-group col-xs-4">
+        <label>&nbsp;</label><br>
+        <button type="submit" class="btn btn-success mrR1" [disabled]="smsFormObjCtrl.invalid">Save</button>
+      </div>
+    </section>
+  </form>
+</div>
+
+
+<h3 class="fs18 mrB1 mrT2">Email Integration</h3>
+<div class="box">
+  <h3 class="fs18 mrB1">SendGrid</h3>
+  <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="row pdBth20">
+    <div class="form-group col-xs-4">
+      <label>Auth Key</label><br>
+      <input type="text" placeholder="Enter auth-key" class="form-control"  [ngModel]="emailFormObj.authKey" name="authKey" required/>
+    </div>
+    <div class="form-group col-xs-4">
+      <label>Email Subject</label><br>
+      <input type="text" placeholder="Enter email subject" class="form-control" [ngModel]="emailFormObj.subject" name="subject" required />
+    </div>
+    <div class="form-group col-xs-4">
+      <label>&nbsp;</label><br>
+      <button type="submit" class="btn btn-success mrR1" [disabled]="emailform.invalid">Save</button>
+    </div>
+  </form>
+</div>
+
+<h3 class="fs18 mrB1">Invoice Payment</h3>
+<div class="box">
+  <h3 class="fs18 mrB1">Razorpay Details</h3>
+  <form #razorPayform="ngForm" novalidate class="pdBth20">
+    <div class="row">
+      <div class="form-group col-xs-4">
+        <label>Key Id <span class="required">*</span></label>
+        <input class="form-control" type="text" placeholder="Key Id" name="userName" [(ngModel)]="razorPayObj.userName" required autocomplete="off">
+      </div>
+      <div class="form-group col-xs-4">
+        <label>Secret<span class="required">*</span></label>
+        <input class="form-control" type="password" placeholder="Secret key" name="password" [(ngModel)]="razorPayObj.password" required autocomplete="off">
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-4">
+        <label>Link Account</label>
+        <div class="input-group">
+           <select2 required *ngIf="razorPayObj.account" class="select2-parent" name="razorPayObj.account" [data]="accounts$ | async" [(ngModel)]="razorPayObj.account.uniqueName" [options]="select2Options" (valueChanged)="selectAccount($event)"></select2>
+          <div class="input-group-addon cp" (click)="unlinkAccount()"><span class="glyphicon glyphicon-trash"></span></div>
+        </div>
+      </div>
+      <div class="form-group col-xs-4" id="inlnImg">
+        <label>&nbsp;</label><br>
+        <img src="/assets/images/unchecked.png" *ngIf="!razorPayObj.autoCapturePayment" (click)="razorPayObj.autoCapturePayment = true">
+        <img src="/assets/images/checked.png" *ngIf="razorPayObj.autoCapturePayment" (click)="razorPayObj.autoCapturePayment = false">
+        <label class="cp" (click)="toggleCheckBox()">Automatic capture on payment</label>
+      </div>
+    </div>
+  
+    <div class="row">
+      <div class="col-xs-12 form-group ">
+        <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save</button>
+        <button *ngIf="updateRazor" class="btn btn-info mrR1" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update</button>
+        <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">Delete</button> 
+      </div>
+    </div>
+  </form>
+</div>

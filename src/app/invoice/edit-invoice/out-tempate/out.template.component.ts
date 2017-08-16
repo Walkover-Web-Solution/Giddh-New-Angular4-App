@@ -1,17 +1,18 @@
 import {
   Component, Input, EventEmitter, Output, OnInit, OnChanges
 } from '@angular/core';
-import { Observable} from 'rxjs/Observable';
-import { Store} from '@ngrx/store';
-import { AppState} from '../../../store/roots';
+import { Observable } from 'rxjs/Observable';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 // import {TableMetaMap} from '../edit.invoice.component';
 import ownKeys = Reflect.ownKeys;
 import { NgStyle } from '@angular/common';
-import {Section} from '../../../models/api-models/invoice';
-import {InvoiceAction} from '../../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
 import * as _ from 'lodash';
-import {InvoiceService} from "../../../services/invoice.services";
+import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
+import { ISection } from '../../../models/api-models/Invoice';
+
 @Component({
   selector: 'invoice-template',
 
@@ -21,7 +22,7 @@ import {InvoiceService} from "../../../services/invoice.services";
 
 export class OutTemplateComponent implements OnInit {
   @Input() public templateId: string;
-  @Input() public templateSections: Section[];
+  @Input() public templateSections: ISection[];
   public companyName$: Observable<string>;
   public GSTIN$: Observable<string>;
   public PAN$: Observable<string>;
@@ -79,82 +80,78 @@ export class OutTemplateComponent implements OnInit {
   public value: string;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor( private store: Store<AppState>, private invoiceAction: InvoiceAction, private invoiceService: InvoiceService) {
-    console.log('out-template-component constructor called');
-    this.companyName$ = this.invoiceService.getCompanyName();
-    // this.companyName$.subscribe((value) => {
-    //   console.log(value);
-    // });
-    this.GSTIN$ = this.invoiceService.getGSTIN();
-    this.PAN$ = this.invoiceService.getPAN();
-    this.address$ = this.invoiceService.getAddress();
-    this.invoiceDate$ = this.invoiceService.getInvoiceDate();
-    this.invoiceNo$ = this.invoiceService.getInvoiceNo();
-    this.shippingDate$ = this.invoiceService.getShippingDate();
-    this.shippingNo$ = this.invoiceService.getShippingNo();
-    this.trackingDate$ = this.invoiceService.getTrackingDate();
-    this.trackingNo$ = this.invoiceService.getTrackingNumber();
-    this.customeName$ = this.invoiceService.getCustomerName();
-    this.customeEmail$ = this.invoiceService.getCustomerEmail();
-    this.customerMobileNo$ = this.invoiceService.getCustomerMobileNo();
-    this.dueDate$ = this.invoiceService.getDueDate();
-    this.billingAddress$ = this.invoiceService.getBillingAddress();
-    this.billingGSTIN$ = this.invoiceService.getBillingGSTIN();
-    this.billingState$ = this.invoiceService.getBillingState();
-    this.shippingAddress$ = this.invoiceService.getShippingAddress();
-    this.shippingGSTIN$ = this.invoiceService.getShippingGSTIN();
-    this.customField1$ = this.invoiceService.getCustomField1();
-    this.customField2$ = this.invoiceService.getCustomField2();
-    this.customField3$ = this.invoiceService.getCustomField3();
-    this.formNameInvoice$ = this.invoiceService.getFormNameInvoice();
-    this.formNameTaxInvoice$ = this.invoiceService.getFormNameTaxInvoice();
-    this.sNoLabel$ = this.invoiceService.getSnoLabel();
-    this.sNoWidth$ = this.invoiceService.getSnoWidth();
-    this.dateLabel$ = this.invoiceService.getDateLabel();
-    this.dateWidth$ = this.invoiceService.getDateWidth();
-    this.itemLabel$ = this.invoiceService.getItemLabel();
-    this.itemWidth$ = this.invoiceService.getItemWidth();
-    this.hsnSacLabel$ = this.invoiceService.getHsnSacLabel();
-    this.hsnSacWidth$ = this.invoiceService.getHsnSaceWidth();
-    this.itemCodeLabel$ = this.invoiceService.getItemCodeLabel();
-    this.itemCodeWidth$ = this.invoiceService.getItemCodeWidth();
-    this.descLabel$ = this.invoiceService.getDescLabel();
-    this.descWidth$ = this.invoiceService.getDescWidth();
-    this.rateLabel$ = this.invoiceService.getRateLabel();
-    this.rateWidth$ = this.invoiceService.getRateWidth();
-    this.discountLabel$ = this.invoiceService.getDiscountLabel();
-    this.discountWidth$ = this.invoiceService.getDiscountWidth();
-    this.taxableValueLabel$ = this.invoiceService.getTaxableValueLabel();
-    this.taxableValueWidth$ = this.invoiceService.getTaxableValueWidth();
-    this.taxLabel$ = this.invoiceService.getTaxLabel();
-    this.taxWidth$ = this.invoiceService.getTaxWidth();
-    this.totalWidth$ = this.invoiceService.getTotalWidth();
-    this.totalLabel$ = this.invoiceService.getTaxLabel();
-    this.quantityLabel$ = this.invoiceService.getQuantityLabel();
-    this.quantityWidth$ = this.invoiceService.getQuantityWidth();
-    this.invoiceService.getTopMargin().subscribe( val => {
+  constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
+    this.companyName$ = this.invoiceTemplatesService.getCompanyName();
+    this.GSTIN$ = this.invoiceTemplatesService.getGSTIN();
+    this.PAN$ = this.invoiceTemplatesService.getPAN();
+    this.address$ = this.invoiceTemplatesService.getAddress();
+    this.invoiceDate$ = this.invoiceTemplatesService.getInvoiceDate();
+    this.invoiceNo$ = this.invoiceTemplatesService.getInvoiceNo();
+    this.shippingDate$ = this.invoiceTemplatesService.getShippingDate();
+    this.shippingNo$ = this.invoiceTemplatesService.getShippingNo();
+    this.trackingDate$ = this.invoiceTemplatesService.getTrackingDate();
+    this.trackingNo$ = this.invoiceTemplatesService.getTrackingNumber();
+    this.customeName$ = this.invoiceTemplatesService.getCustomerName();
+    this.customeEmail$ = this.invoiceTemplatesService.getCustomerEmail();
+    this.customerMobileNo$ = this.invoiceTemplatesService.getCustomerMobileNo();
+    this.dueDate$ = this.invoiceTemplatesService.getDueDate();
+    this.billingAddress$ = this.invoiceTemplatesService.getBillingAddress();
+    this.billingGSTIN$ = this.invoiceTemplatesService.getBillingGSTIN();
+    this.billingState$ = this.invoiceTemplatesService.getBillingState();
+    this.shippingAddress$ = this.invoiceTemplatesService.getShippingAddress();
+    this.shippingGSTIN$ = this.invoiceTemplatesService.getShippingGSTIN();
+    this.customField1$ = this.invoiceTemplatesService.getCustomField1();
+    this.customField2$ = this.invoiceTemplatesService.getCustomField2();
+    this.customField3$ = this.invoiceTemplatesService.getCustomField3();
+    this.formNameInvoice$ = this.invoiceTemplatesService.getFormNameInvoice();
+    this.formNameTaxInvoice$ = this.invoiceTemplatesService.getFormNameTaxInvoice();
+    this.sNoLabel$ = this.invoiceTemplatesService.getSnoLabel();
+    this.sNoWidth$ = this.invoiceTemplatesService.getSnoWidth();
+    this.dateLabel$ = this.invoiceTemplatesService.getDateLabel();
+    this.dateWidth$ = this.invoiceTemplatesService.getDateWidth();
+    this.itemLabel$ = this.invoiceTemplatesService.getItemLabel();
+    this.itemWidth$ = this.invoiceTemplatesService.getItemWidth();
+    this.hsnSacLabel$ = this.invoiceTemplatesService.getHsnSacLabel();
+    this.hsnSacWidth$ = this.invoiceTemplatesService.getHsnSaceWidth();
+    this.itemCodeLabel$ = this.invoiceTemplatesService.getItemCodeLabel();
+    this.itemCodeWidth$ = this.invoiceTemplatesService.getItemCodeWidth();
+    this.descLabel$ = this.invoiceTemplatesService.getDescLabel();
+    this.descWidth$ = this.invoiceTemplatesService.getDescWidth();
+    this.rateLabel$ = this.invoiceTemplatesService.getRateLabel();
+    this.rateWidth$ = this.invoiceTemplatesService.getRateWidth();
+    this.discountLabel$ = this.invoiceTemplatesService.getDiscountLabel();
+    this.discountWidth$ = this.invoiceTemplatesService.getDiscountWidth();
+    this.taxableValueLabel$ = this.invoiceTemplatesService.getTaxableValueLabel();
+    this.taxableValueWidth$ = this.invoiceTemplatesService.getTaxableValueWidth();
+    this.taxLabel$ = this.invoiceTemplatesService.getTaxLabel();
+    this.taxWidth$ = this.invoiceTemplatesService.getTaxWidth();
+    this.totalWidth$ = this.invoiceTemplatesService.getTotalWidth();
+    this.totalLabel$ = this.invoiceTemplatesService.getTaxLabel();
+    this.quantityLabel$ = this.invoiceTemplatesService.getQuantityLabel();
+    this.quantityWidth$ = this.invoiceTemplatesService.getQuantityWidth();
+    this.invoiceTemplatesService.getTopMargin().subscribe( val => {
       if (val) {
         console.log('TOP MARGIN', val);
         this.topMargin = val;
       }
     });
-    this.invoiceService.getLeftMargin().subscribe( val => {
+    this.invoiceTemplatesService.getLeftMargin().subscribe( val => {
       if (val) {
 
         this.leftMargin = val;
       }
     });
-    this.invoiceService.getRightMargin().subscribe( val => {
+    this.invoiceTemplatesService.getRightMargin().subscribe( val => {
       if (val) {
         this.rightMargin = val;
       }
     });
-    this.invoiceService.getBottomMargin().subscribe( val => {
+    this.invoiceTemplatesService.getBottomMargin().subscribe( val => {
       if (val) {
         this.bottomMargin = val;
       }
     });
-    this.invoiceService.getFontFamily().subscribe( val => {
+    this.invoiceTemplatesService.getFontFamily().subscribe( val => {
       if (val) {
         this.fontFamily = val;
       }
@@ -173,8 +170,8 @@ export class OutTemplateComponent implements OnInit {
   //   });
   }
 
-  public ngOnInit(){
-
+  public ngOnInit() {
+    // do something
   }
 }
 //
