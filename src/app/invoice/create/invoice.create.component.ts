@@ -50,13 +50,4 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
   private onCancelModal(e) {
     this.closeInvoiceModel.emit(Object.assign({}, e, {message: 'hey from InvoiceCreateComponent'}));
   }
-
-  private getInvoiceTemplateDetails(templateUniqueName: string) {
-    console.log ('bingo call api with: ', templateUniqueName);
-    // due to some api side issue calling api by static value
-    // this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
-    this.invoiceService.GetInvoiceTemplateDetails(templateUniqueName).subscribe((data) => {
-      console.log (data);
-    });
-  }
 }

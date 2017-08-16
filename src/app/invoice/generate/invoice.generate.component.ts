@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewAndGenerateInvoiceResponse } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -17,11 +17,11 @@ import { Select2OptionData } from '../../shared/theme/select2/select2.interface'
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
-  {name: 'Greater Than', uniqueName: 'greaterThan'},
-  {name: 'Less Than', uniqueName: 'lessThan'},
-  {name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals'},
-  {name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals'},
-  {name: 'Equals', uniqueName: 'equals'}
+  { name: 'Greater Than', uniqueName: 'greaterThan' },
+  { name: 'Less Than', uniqueName: 'lessThan' },
+  { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
+  { name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals' },
+  { name: 'Equals', uniqueName: 'equals' }
 ];
 
 @Component({
@@ -57,7 +57,7 @@ export class InvoiceGenerateComponent implements OnInit {
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService
-  ) {}
+  ) { }
 
   public ngOnInit() {
     // set initial values
@@ -84,24 +84,42 @@ export class InvoiceGenerateComponent implements OnInit {
       if (o.generate && o.generate.ledgers) {
         this.ledgersData = _.cloneDeep(o.generate.ledgers);
         _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            item.isSelected = false;
-            return o;
+          item.isSelected = false;
+          return o;
         });
       }
       if (o.generate && o.generate.invoiceData) {
         // open modal
-        document.getElementById('createNew').click();
+        // document.getElementById('createNew').click();
+        console.log('in loop');
+      }
+    });
+    this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p, q) => {
+      if (p && q) {
+        return (p.templateUniqueName === q.templateUniqueName);
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+    }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
+      if (o) {
+        this.getInvoiceTemplateDetails('gst_template_a');
       }
     });
     this.getLedgersOfInvoice();
+
+  }
+
+  private getInvoiceTemplateDetails(templateUniqueName: string) {
+    this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
   }
 
   private showInvoiceModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, Object.assign({}, this.config, {class: 'gray modal-liquid'}));
+    this.modalRef = this.modalService.show(template, Object.assign({}, this.config, { class: 'gray modal-liquid' }));
   }
 
   private closeInvoiceModel(e) {
-    console.log(e, 'closeInvoiceModel');
     this.modalRef.hide();
   }
 
@@ -112,7 +130,7 @@ export class InvoiceGenerateComponent implements OnInit {
   }
 
   private showNewInvoiceCreate() {
-    console.log ('showNewInvoiceCreate open modal');
+    console.log('showNewInvoiceCreate open modal');
   }
 
   private getLedgersOfInvoice() {
@@ -133,15 +151,15 @@ export class InvoiceGenerateComponent implements OnInit {
     }
     if (o.entryTotalBy === COMPARISION_FILTER[0].uniqueName) {
       model.totalIsMore = true;
-    }else if (o.entryTotalBy === COMPARISION_FILTER[1].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISION_FILTER[1].uniqueName) {
       model.totalIsLess = true;
-    }else if (o.entryTotalBy === COMPARISION_FILTER[2].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISION_FILTER[2].uniqueName) {
       model.totalIsMore = true;
       model.totalIsEqual = true;
-    }else if (o.entryTotalBy === COMPARISION_FILTER[3].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISION_FILTER[3].uniqueName) {
       model.totalIsLess = true;
       model.totalIsEqual = true;
-    }else if (o.entryTotalBy === COMPARISION_FILTER[4].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISION_FILTER[4].uniqueName) {
       model.totalIsEqual = true;
     }
     return model;
@@ -161,7 +179,7 @@ export class InvoiceGenerateComponent implements OnInit {
     item.isSelected = action;
     if (action) {
       this.countAndToggleVar();
-    }else {
+    } else {
       this.allItemsSelected = false;
     }
     this.insertItemsIntoArr();
@@ -172,7 +190,7 @@ export class InvoiceGenerateComponent implements OnInit {
     let count: number = 0;
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       if (item.isSelected) {
-        count ++;
+        count++;
       }
     });
     if (count === total) {
@@ -183,7 +201,7 @@ export class InvoiceGenerateComponent implements OnInit {
   private toggleAllItems(type: boolean) {
     if (type) {
       this.allItemsSelected = true;
-    }else {
+    } else {
       this.allItemsSelected = false;
     }
     this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
@@ -200,7 +218,7 @@ export class InvoiceGenerateComponent implements OnInit {
         if (idx === -1) {
           this.selectedLedgerItems.push(item.uniqueName);
         }
-      }else {
+      } else {
         if (idx !== -1) {
           this.selectedLedgerItems.splice(idx);
         }
@@ -215,7 +233,7 @@ export class InvoiceGenerateComponent implements OnInit {
     let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       return item.uniqueName === this.selectedLedgerItems[0];
     });
-    console.log ('before api', model, res.account.uniqueName);
+    console.log('before api', model, res.account.uniqueName);
     this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
   }
 
@@ -226,7 +244,7 @@ export class InvoiceGenerateComponent implements OnInit {
     let arr: GenBulkInvoiceGroupByObj[] = [];
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       if (item.isSelected) {
-        arr.push({accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName});
+        arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
       }
     });
     let res = _.groupBy(arr, 'accUniqueName');
@@ -240,7 +258,7 @@ export class InvoiceGenerateComponent implements OnInit {
       });
       final.push(obj);
     });
-    console.log ('before api', action, final);
+    console.log('before api', action, final);
   }
 
 }

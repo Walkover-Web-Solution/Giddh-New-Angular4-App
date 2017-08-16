@@ -56,16 +56,15 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             }
             return state;
         }
-        // case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
-        //     let newState = _.cloneDeep(state);
-        //     let res: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = action.payload;
-        //     console.log ('from state ', res.body);
-        //     if (res.status === 'success') {
-        //         newState.generate.invoiceTemplateConditions = res.body;
-        //         return Object.assign({}, state, newState);
-        //     }
-        //     return state;
-        // }
+        case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = action.payload;
+            if (res.status === 'success') {
+                newState.generate.invoiceTemplateConditions = res.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
         default: {
             return state;
         }
