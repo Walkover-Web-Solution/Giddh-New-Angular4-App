@@ -114,18 +114,22 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public generateUniqueName() {
     let val: string = this.addAccountForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
-    this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+    if (val) {
+      this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
 
-    this.isAccountNameAvailable$.subscribe(a => {
-      if (a !== null && a !== undefined) {
-        if (a) {
-          this.addAccountForm.patchValue({uniqueName: val});
-        } else {
-          let num = 1;
-          this.addAccountForm.patchValue({uniqueName: val + num});
+      this.isAccountNameAvailable$.subscribe(a => {
+        if (a !== null && a !== undefined) {
+          if (a) {
+            this.addAccountForm.patchValue({uniqueName: val});
+          } else {
+            let num = 1;
+            this.addAccountForm.patchValue({uniqueName: val + num});
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.addAccountForm.patchValue({uniqueName: ''});
+    }
   }
 
   public initialGstDetailsForm(): FormGroup {
