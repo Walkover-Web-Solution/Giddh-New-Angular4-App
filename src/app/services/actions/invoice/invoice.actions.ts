@@ -72,6 +72,22 @@ export class InvoiceActions {
       return { type : ''};
     });
 
+  // Delete Invoice
+  @Effect()
+  public DeleteInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DELETE_INVOICE)
+    .switchMap(action => this._invoiceService.DeleteInvoice(action.payload))
+    .map(response => {
+      return this.DeleteInvoiceResponse(response);
+    });
+
+  @Effect()
+  public DeleteInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.GET_TEMPLATE_DETAILS_RESPONSE)
+    .map(response => {
+      return { type : ''};
+    });
+
   // Generate Bulk Invoice
   // @Effect()
   // public GenerateBulkInvoice$: Observable<Action> = this.action$
@@ -195,6 +211,20 @@ export class InvoiceActions {
   public GetTemplateDetailsResponse(model: BaseResponse<string, string>): Action {
     return {
       type: INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE,
+      payload: model
+    };
+  }
+
+  public DeleteInvoice(model: string): Action {
+    return {
+      type: INVOICE_ACTIONS.DELETE_INVOICE,
+      payload: model
+    };
+  }
+
+  public DeleteInvoiceResponse(model: string): Action {
+    return {
+      type: INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE,
       payload: model
     };
   }
