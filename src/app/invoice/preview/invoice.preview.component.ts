@@ -245,8 +245,12 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   private onPerformAction(item, ele: HTMLInputElement) {
-    console.log('ele is :', ele.value);
-    console.log('item is :', item);
+    let actionToPerform = ele.value;
+    if (actionToPerform === 'paid') {
+      this.invoiceConfirmationModel.show();
+    } else {
+      this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
+    }
   }
 
   private onDeleteBtnClick(uniqueName) {
@@ -257,7 +261,7 @@ export class InvoicePreviewComponent implements OnInit {
 
   private deleteConfirmedInvoice() {
     this.invoiceConfirmationModel.hide();
-    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoiceForDelete.uniqueName);
+    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoiceForDelete.invoiceNumber);
   }
 
   private closeConfirmationPopup() {
