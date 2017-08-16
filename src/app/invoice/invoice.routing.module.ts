@@ -11,6 +11,8 @@ import { InvoiceTemplatesComponent } from './templates/invoice.templates.compone
 import { InvoiceSettingsComponent } from './settings/invoice.settings.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceCreateComponent } from './create/invoice.create.component';
+import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
+import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -20,11 +22,19 @@ const INVOICE_ROUTES: Routes = [
     children: [
       { path: 'preview',  component: InvoicePreviewComponent  },
       { path: 'generate',  component: InvoiceGenerateComponent },
-      { path: 'templates',  component: InvoiceTemplatesComponent  },
+      {
+        path: 'templates',  children: [
+          { path: '', component: InvoiceTemplatesComponent  },
+          { path: 'list', component: EditInvoiceComponent },
+          { path: 'list/:templateUniqueName',   },
+          // { path: ':templateUniqueName',  component: InvoiceTemplatesComponent }
+        ]
+      },
       { path: 'settings',  component: InvoiceSettingsComponent  }
     ]
   }
 ];
+
 
 @NgModule({
   declarations: [
@@ -41,7 +51,8 @@ const INVOICE_ROUTES: Routes = [
     ReactiveFormsModule,
     SharedModule,
     RouterModule.forChild(INVOICE_ROUTES),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    InvoiceTemplatesModule
   ],
   exports: [
     RouterModule,

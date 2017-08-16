@@ -3,19 +3,17 @@ import {
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-// import {TableMetaMap} from '../edit.invoice.component';
 import ownKeys = Reflect.ownKeys;
 import { NgStyle } from '@angular/common';
-import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../../../services/actions/invoice/invoice.actions';
 import * as _ from 'lodash';
-import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
-import { ISection } from '../../../models/api-models/Invoice';
+import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
+import { ISection } from '../../../../models/api-models/Invoice';
 
 @Component({
   selector: 'invoice-template',
-
   templateUrl: 'out.template.component.html',
   styleUrls: ['out.template.component.css']
 })

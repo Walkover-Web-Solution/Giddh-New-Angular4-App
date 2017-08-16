@@ -13,6 +13,7 @@ import * as fromFlyAccounts from './header/fly-accounts.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
 import * as fromLedger from './Ledger/ledger.reducer';
 import * as fromInvoice from './Invoice/invoice.reducer';
+import * as fromInvoiceTemp from './Invoice/invoice.template.reducer';
 import * as fromSettings from './Settings/Settings.reducer';
 
 export interface AppState {
@@ -31,6 +32,7 @@ export interface AppState {
   tlPl: fromTlPl.TlPlState;
   ledger: fromLedger.LedgerState;
   invoice: fromInvoice.InvoiceState;
+  invtemp: fromInvoiceTemp.InvoiceTempState;
   settings: fromSettings.SettingsState;
   manufacturing: fromManufacturing.ManufacturingState;
 }
@@ -52,5 +54,6 @@ export const reducers = {
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,
   tlPl: fromTlPl.tlPlReducer,
   ledger: fromLedger.ledgerReducer,
-  invoice: fromInvoice.InvoiceReducer
+  invoice: fromInvoice.InvoiceReducer,
+  invtemp: fromInvoiceTemp.InvoiceTemplateReducer
 };

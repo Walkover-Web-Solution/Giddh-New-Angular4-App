@@ -3,8 +3,8 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../store/roots';
-import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
+import { AppState } from '../../../../../../store/roots';
+import { InvoiceActions } from '../../../../../../services/actions/invoice/invoice.actions';
 
 @Component({
   selector: 'template-selector',

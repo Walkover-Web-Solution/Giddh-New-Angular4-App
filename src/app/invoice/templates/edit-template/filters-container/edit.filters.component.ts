@@ -3,12 +3,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 
-
 @Component({
   selector: 'edit-template-filters',
-
-  templateUrl: 'edit.filters.component.html',
-
+  templateUrl: 'edit.filters.component.html'
 })
 
 export class EditFiltersContainersComponent implements OnInit {
@@ -23,15 +20,14 @@ export class EditFiltersContainersComponent implements OnInit {
 
   public ngOnInit() {
     console.log('filters-container initialised');
-
   }
 
   public openTab(tab) {
     if (tab === 'design') {
-    this.ifDesignSelected = true;
-    this.ifContentSelected = false;
-    this.ifEmailSelected = false;
-}
+      this.ifDesignSelected = true;
+      this.ifContentSelected = false;
+      this.ifEmailSelected = false;
+    }
 
     if (tab === 'content') {
       this.ifDesignSelected = false;

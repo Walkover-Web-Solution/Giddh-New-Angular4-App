@@ -7,16 +7,15 @@ import {
   SimpleChanges, Component
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
-import { ISection, GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
+import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
+import { ISection, GetInvoiceTemplateDetailsResponse } from '../../../models/api-models/Invoice';
 import * as _ from 'lodash';
 
 @Component({
   selector: 'edit-invoice',
-
   templateUrl: 'edit.invoice.component.html'
 })
 
@@ -36,17 +35,17 @@ export class EditInvoiceComponent implements OnInit {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
 
-    this.store.select(state => {
-      return state.invoice.templates.templateMetaData.templateId;
-    }).takeUntil(this.destroyed$).subscribe((value) => {
-      if (!_.isEmpty(value)) {
-        let copyValue = _ .cloneDeep(value);
-        this.templateId = copyValue;
-      }
-    });
+    // this.store.select(state => {
+    //   return state.invtemp.templateMeta.templateId;
+    // }).takeUntil(this.destroyed$).subscribe((value) => {
+    //   if (!_.isEmpty(value)) {
+    //     let copyValue = _ .cloneDeep(value);
+    //     this.templateId = copyValue;
+    //   }
+    // });
 
     // this.store.select(state => {
-    //   return Object.keys(state.invoice.templates.templatesList).map(key => state.invoice.template[key]);
+    //   return Object.keys(state.invtemp.template).map(key => state.invtemp.template[key]);
     // }).takeUntil(this.destroyed$).take(10).subscribe((value) => {
     //     if (!_.isEmpty(value)) {
     //      let copyValue = _ .cloneDeep(value);
