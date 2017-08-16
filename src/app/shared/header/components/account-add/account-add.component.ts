@@ -173,9 +173,10 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     let formsValue = this.addAccountForm.value;
 
     accountObj = formsValue as AccountRequest;
-    if (formsValue.state) {
-      accountObj.state = states.find(st => st.id === formsValue.state).text;
-    }
+    // temporary commented out because new gst design changes
+    // if (formsValue.state) {
+    //   accountObj.state = states.find(st => st.id === formsValue.state).text;
+    // }
 
     if (formsValue.hsnOrSac) {
       if (formsValue.hsnOrSac === 'hsn') {
