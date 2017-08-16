@@ -169,6 +169,7 @@ export class ComparisionChartComponent implements OnInit {
       }
     });
     this.options = {
+      colors: ['#005b77', '#d37c59', '#aeaec4', '#77a1b8', '#c45022', '#28283c'],
       chart: {
         height: '320px',
       },

@@ -2,7 +2,7 @@ import {
   Component, Input, EventEmitter, Output, OnInit, OnChanges,
   SimpleChanges
 } from '@angular/core';
-import { Font } from 'ngx-font-picker';
+// import { Font } from 'ngx-font-picker';
 
 @Component({
   selector: 'design-filters',
@@ -11,12 +11,12 @@ import { Font } from 'ngx-font-picker';
 
 export class DesignFiltersContainerComponent implements OnInit {
 
-  public font: Font = new Font({
-    family: 'Roboto',
-    size: '14px',
-    style: 'regular',
-    styles: ['regular']
-  });
+  // public font: Font = new Font({
+  //   family: 'Roboto',
+  //   size: '14px',
+  //   style: 'regular',
+  //   styles: ['regular']
+  // });
   public ifTemplateSelected: boolean = false;
   public ifLogoSelected: boolean = false;
   public ifColorSelected: boolean = false;

@@ -25,10 +25,7 @@ export class InventorySidebarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello sidebar');
     this.store.dispatch(this.sidebarAction.GetGroupsWithStocksHierarchyMin());
-    // this.exampleData = [
-    // ];
   }
 
   public ngOnDestroy() {

@@ -4,8 +4,8 @@ import {
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
-import { InvoiceAction } from '../../../../../services/actions/invoice/invoice.actions';
-import { InvoiceService} from '../../../../../services/invoice.services';
+import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
+import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 @Component({
   selector: 'print-settings',
   templateUrl: 'print.settings.component.html'
@@ -17,7 +17,7 @@ export class PrintSettingsComponent implements OnInit {
   public bottom: string;
   public right: string;
 
-  constructor( private store: Store<AppState>, private invoiceAction: InvoiceAction, private invoiceService: InvoiceService) {
+  constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
   }
   public ngOnInit() {
     console.log('design-filters-container initialised');
