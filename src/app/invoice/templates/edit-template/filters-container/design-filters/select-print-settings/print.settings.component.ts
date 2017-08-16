@@ -3,9 +3,9 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../../store/roots';
-import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
-import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
+import { AppState } from '../../../../../../store/roots';
+import { InvoiceActions } from '../../../../../../services/actions/invoice/invoice.actions';
+import { InvoiceTemplatesService } from '../../../../../../services/invoice.templates.service';
 @Component({
   selector: 'print-settings',
   templateUrl: 'print.settings.component.html'
