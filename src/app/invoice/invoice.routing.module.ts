@@ -14,6 +14,15 @@ import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 
+import { FontPickerModule } from 'ngx-font-picker';
+import { FontPickerConfigInterface } from 'ngx-font-picker';
+import { NgUploaderModule } from 'ngx-uploader';
+
+const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
+  // Change this to your Google API key
+  apiKey: 'AIzaSyAPcvNvidnjQL-a_2xW2QYox3hT7DQBWyo'
+};
+
 const INVOICE_ROUTES: Routes = [
   {
     path: '',
@@ -35,7 +44,6 @@ const INVOICE_ROUTES: Routes = [
   }
 ];
 
-
 @NgModule({
   declarations: [
     InvoiceComponent,
@@ -52,7 +60,9 @@ const INVOICE_ROUTES: Routes = [
     SharedModule,
     RouterModule.forChild(INVOICE_ROUTES),
     TooltipModule.forRoot(),
-    InvoiceTemplatesModule
+    InvoiceTemplatesModule,
+    FontPickerModule.forRoot(FONT_PICKER_CONFIG),
+    NgUploaderModule
   ],
   exports: [
     RouterModule,
