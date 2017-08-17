@@ -720,7 +720,7 @@ input[type="checkbox"]:after {
 }
 
 .tab-pane input[type=search] {
-    min-width: 220px;
+    /* min-width: 220px; */
 }
 
 .tab-pane input[type=search]:after {
@@ -3461,8 +3461,7 @@ label {
     border-radius: 50%;
     right: 0;
     text-align: center;
-}
-
+  }
 
 /*************************************************** Custom Invoice CSS  ****************************************************/
 
