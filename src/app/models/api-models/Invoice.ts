@@ -19,6 +19,7 @@ export interface IInvoiceResult {
   grandTotal: number;
   account: INameUniqueName;
   balanceDue: number;
+  isSelected?: boolean;
 }
 
 export interface IGetAllInvoicesResponse extends IPagination {
@@ -29,7 +30,8 @@ export interface IGetAllInvoicesResponse extends IPagination {
 export class GetAllInvoicesPaginatedResponse {
   public count: number;
   public page: number;
-  public results: ILedgersInvoiceResult[];
+  // public results: ILedgersInvoiceResult[];
+  public results: IInvoiceResult[];
   public size: number;
   public totalItems: number;
   public totalPages: number;
