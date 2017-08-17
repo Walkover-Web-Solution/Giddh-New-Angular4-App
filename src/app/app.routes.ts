@@ -22,6 +22,8 @@ export const ROUTES: Routes = [
   { path: 'home', redirectTo: 'pages/home', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'search', redirectTo: 'pages/search', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'permissions', redirectTo: 'pages/permissions', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+  { path: 'settings', redirectTo: 'pages/settings', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+  { path: 'manufacturing', redirectTo: 'pages/manufacturing', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'about', redirectTo: 'pages/about', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full', canActivate: [NeedsAuthentication] },
@@ -38,15 +40,8 @@ export const ROUTES: Routes = [
       { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthentication] },
       { path: 'dummy', component: DummyComponent },
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication] },
-      { path: 'settings', component: SettingsComponent, canActivate: [NeedsAuthentication]  },
-      { path: 'manufacturing', component: ManufacturingComponent,
-        children: [
-          { path: '', redirectTo: 'report', pathMatch: 'full' },
-          { path: 'report', component: MfReportComponent},
-          { path: 'edit', component: MfEditComponent }
-        ]
-      },
-      { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthentication] },
+      { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthentication] },
+      { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthentication] },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

@@ -331,18 +331,23 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     });
     let val: string = this.addStockForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
-    this.store.dispatch(this.inventoryAction.GetStockUniqueName(groupName, val));
 
-    this.isStockNameAvailable$.subscribe(a => {
-      if (a !== null && a !== undefined) {
-        if (a) {
-          this.addStockForm.patchValue({uniqueName: val});
-        } else {
-          let num = 1;
-          this.addStockForm.patchValue({uniqueName: val + num});
+    if (val) {
+      this.store.dispatch(this.inventoryAction.GetStockUniqueName(groupName, val));
+
+      this.isStockNameAvailable$.subscribe(a => {
+        if (a !== null && a !== undefined) {
+          if (a) {
+            this.addStockForm.patchValue({uniqueName: val});
+          } else {
+            let num = 1;
+            this.addStockForm.patchValue({uniqueName: val + num});
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.addStockForm.patchValue({uniqueName: ''});
+    }
   }
 
   // calculate rate

@@ -86,7 +86,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         </span>
                       </a>`);
       }
-
     }
   };
   public isLedgerCreateSuccess$: Observable<boolean>;
