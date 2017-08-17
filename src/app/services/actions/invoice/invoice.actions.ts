@@ -489,4 +489,18 @@ export class InvoiceActions {
       payload: {data}
     };
   }
+
+  public updateMessage1(data: string): Action {
+    return{
+      type: INVOICE.TEMPLATE.UPDATE_MESSAGE1,
+      payload: {data}
+    };
+  }
+
+  public updateMessage2(data: string): Action {
+    return{
+      type: INVOICE.TEMPLATE.UPDATE_MESSAGE2,
+      payload: {data}
+    };
+  }
 }

@@ -14,38 +14,38 @@
         </div>
         <div class="form-group">
             <input type="checkbox" /> Invoice Date
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceDate' (ngModelChange)='onInvoiceDateChange(invoiceDate)' /></div>
         </div>
         <div class="form-group">
             <input type="checkbox" /> Invoice Number
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceNo' (ngModelChange)='onInvoiceNoChange(invoiceNo)' /></div>
         </div>
         <div class="form-group">
             <input type="checkbox" /> Due Date
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='dueDate' (ngModelChange)='onDueDateChange(dueDate)' /></div>
         </div>
     </div>
     <div class="clearfix">
         <h3>Transport Details</h3>
         <div class="form-group">
             <input type="checkbox" /> Ship Date
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingDate' (ngModelChange)='onShippingDateChange(shippingDate)' /></div>
         </div>
         <div class="form-group">
             <input type="checkbox" /> Ship Via
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingVia' (ngModelChange)='onShippingViaChange(shippingVia)' /></div>
         </div>
         <div class="form-group">
             <input type="checkbox" /> Tracking No.
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='trackingNo' (ngModelChange)='onTrackingNoChange(trackingNo)'/></div>
         </div>
     </div>
     <div class="clearfix">
         <h3>Form</h3>
         <div class="form-group">
             <input type="checkbox" /> Form Name
-            <div class="mrL3 mrT1">Invoice <input type="text" class="form-control" /></div>
-            <div class="mrL3">Tax Invoice <input type="text" class="form-control" /></div>
+            <div class="mrL3 mrT1">Invoice <input type="text" class="form-control" [(ngModel)]='invoice' (ngModelChange)='onInvoiceChange(invoice)'/></div>
+            <div class="mrL3">Tax Invoice <input type="text" class="form-control" [(ngModel)]='taxInvoice' (ngModelChange)='onTaxInvoiceChange(taxInvoice)'/></div>
         </div>
     </div>
 
@@ -61,42 +61,42 @@
         <h3>Billing Details</h3>
         <div class="form-group">
             <input type="checkbox" /> Billing Address
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingAddress' (ngModelChange)='onBillingAddressChange(billingAddress)'/></div>
         </div>
         <div class="form-group">
             <input type="checkbox" /> State
         </div>
         <div class="form-group">
             <input type="checkbox" /> GSTIN
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)'/></div>
         </div>
     </div>
 
     <div class="clearfix">
         <h3>Shipping Details</h3>
         <div class="form-group">
-            <input type="checkbox" /> Billing Address
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <input type="checkbox" /> Shipping Address
+            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingGstin' (ngModelChange)='onShippingGstinChange(shippingGstin)' /></div>
         </div>
         <div class="form-group">
             <input type="checkbox" /> State
         </div>
         <div class="form-group">
             <input type="checkbox" /> GSTIN
-            <div class="mrL3"><input type="text" class="form-control" /></div>
+            <div class="mrL3"><input type="text" class="form-control"  /></div>
         </div>
     </div>
 
     <div class="clearfix customField mrB2">
         <h3>Custom Field</h3>
         <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" /></span>
+            <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom1' (ngModelChange)='onCustom1Change(custom1)' /></span>
         </div>
         <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" /></span>
+            <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom2' (ngModelChange)='onCustom2Change(custom2)'/></span>
         </div>
         <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" /></span>
+            <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom3' (ngModelChange)='onCustom3Change(custom3)' /></span>
         </div>
         <div class="form-group clearfix">
             <input type="checkbox" /><span><input type="text" class="form-control" /></span>
@@ -118,52 +118,52 @@
                 <tr>
                     <td><label><input type="checkbox" /> Number</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" class="range-input" /></td>
+                    <td><input type="range" value="0" class="range-input" min="0" max="10" step="0.1" [(ngModel)]="numSlider" (ngModelChange)="onChangeWidth(numSlider, 'num')" /></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" />Date</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0"  [(ngModel)]="dateSlider" (ngModelChange)="onChangeWidth(dateSlider, 'date')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Item</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" min="0" max="10" step="0.1" [(ngModel)]="itemSlider" (ngModelChange)="onChangeWidth(itemSlider, 'item')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> HSN/SAC</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" max="10" step="0.1" [(ngModel)]="itemCodeSlider" (ngModelChange)="onChangeWidth(itemCodeSlider, 'itemCode')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Quantity</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" max="10" step="0.1" [(ngModel)]="quantitySlider" (ngModelChange)="onChangeWidth(quantitySlider, 'qty')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Rate/Item</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" min="0" max="10" step="0.1" [(ngModel)]="rateSlider" (ngModelChange)="onChangeWidth(rateSlider, 'rate')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Discount/Item</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" min="0" max="10" step="0.1" [(ngModel)]="discountSlider" (ngModelChange)="onChangeWidth(discountSlider, 'discount')" /></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Taxable Value</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" min="0" max="10" step="0.1" [(ngModel)]="taxValueSlider" (ngModelChange)="onChangeWidth(taxValueSlider, 'taxValue')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Tax</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" min="0" max="10" step="0.1" [(ngModel)]="taxSlider" (ngModelChange)="onChangeWidth(taxSlider, 'tax')"/></td>
                 </tr>
                 <tr>
                     <td><label><input type="checkbox" /> Total</label></td>
                     <td><input type="text" class="form-control" /></td>
-                    <td><input type="range" value="0" /></td>
+                    <td><input type="range" value="0" min="0" max="10" step="0.1" [(ngModel)]="totalSlider" (ngModelChange)="onChangeWidth(totalSlider, 'total')"/></td>
                 </tr>
             </tbody>
         </table>
@@ -199,7 +199,7 @@
         <div class="form-group mrL3 clearfix">
             <div class="col-xs-8">
                 <div class="row">
-                    <textarea class="form-control" placeholder="Enter any other text you would like in the footer. "></textarea>
+                    <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='message1' (ngModelChange)='onMessage1Change(message1)'></textarea>
                 </div>
             </div>
             <div class="col-xs-4">
@@ -217,7 +217,7 @@
         <div class="form-group mrL3 clearfix">
             <div class="col-xs-8">
                 <div class="row">
-                    <textarea class="form-control">Note:Contact us for queries on these questions</textarea>
+                    <textarea class="form-control" [(ngModel)]='message2' (ngModelChange)='onMessage2Change(message2)'>Note:Contact us for queries on these questions</textarea>
                 </div>
             </div>
             <div class="col-xs-4">
