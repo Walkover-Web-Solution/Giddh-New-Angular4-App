@@ -48,6 +48,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     this.route.data.subscribe((data: any) => this.localState = data.yourData);
     // Getting roles every time user refresh page
     this.store.dispatch(this.PermissionActions.GetRoles());
+    this.store.dispatch(this.PermissionActions.RemoveNewlyCreatedRoleFromStore());
     this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
   }
 
