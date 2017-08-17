@@ -76,6 +76,7 @@ export class OutTemplateComponent implements OnInit {
   public rightMargin: number;
   public fontFamily: string;
   public value: string;
+  public color: string;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
@@ -152,6 +153,11 @@ export class OutTemplateComponent implements OnInit {
     this.invoiceTemplatesService.getFontFamily().subscribe( val => {
       if (val) {
         this.fontFamily = val;
+      }
+    });
+    this.invoiceTemplatesService.getColor().subscribe( val => {
+      if (val) {
+        this.color = val;
       }
     });
   //   this.tableMeta$ = this.store.select( state => {
