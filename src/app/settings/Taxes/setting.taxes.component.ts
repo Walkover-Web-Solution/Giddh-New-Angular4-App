@@ -71,7 +71,7 @@ export class SettingTaxesComponent implements OnInit {
 
   }
 
-  private onSubmit(data) {
+  public onSubmit(data) {
     let dataToSave = _.cloneDeep(data);
     dataToSave.taxDetail = [{
       taxValue: dataToSave.taxValue,
@@ -93,41 +93,41 @@ export class SettingTaxesComponent implements OnInit {
     this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
   }
 
-  private deleteTax(taxUniqueName) {
+  public deleteTax(taxUniqueName) {
     this.newTaxObj.uniqueName = taxUniqueName;
     this.selectedTaxForDelete = this.availableTaxes.find((tax) => tax.uniqueName === taxUniqueName).name;
     this.taxConfirmationModel.show();
   }
 
-  private updateTax(taxIndex: number) {
+  public updateTax(taxIndex: number) {
     let taxToUpdate = _.cloneDeep(this.availableTaxes[taxIndex]);
     this.store.dispatch(this._settingsTaxesActions.UpdateTax(taxToUpdate));
   }
 
-  private onCancel() {
+  public onCancel() {
     this.newTaxObj = new TaxResponse();
   }
 
-  private deleteConfirmedTax(userResponse: boolean) {
+  public deleteConfirmedTax(userResponse: boolean) {
     this.taxConfirmationModel.hide();
     if (userResponse) {
       this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
     }
   }
 
-  private addMoreDateAndPercentage(taxIndex: number) {
+  public addMoreDateAndPercentage(taxIndex: number) {
     let taxes = _.cloneDeep(this.availableTaxes);
     taxes[taxIndex].taxDetail.push({ date: null, taxValue: null});
     this.availableTaxes = taxes;
   }
 
-  private removeDateAndPercentage(parentIndex: number, childIndex: number) {
+  public removeDateAndPercentage(parentIndex: number, childIndex: number) {
     let taxes = _.cloneDeep(this.availableTaxes);
     taxes[parentIndex].taxDetail.splice(childIndex, 1);
     this.availableTaxes = taxes;
   }
 
-  private reloadTaxList() {
+  public reloadTaxList() {
     this.store.select(p => p.company).take(1).subscribe((o) => {
       if (o.taxes) {
         this.onCancel();

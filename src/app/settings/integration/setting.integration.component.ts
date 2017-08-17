@@ -28,18 +28,18 @@ import { AccountService } from '../../services/account.service';
 })
 export class SettingIntegrationComponent implements OnInit {
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private smsFormObj: SmsKeyClass = new SmsKeyClass();
-  private emailFormObj: EmailKeyClass = new EmailKeyClass();
-  private razorPayObj: RazorPayClass = new RazorPayClass();
-  private accounts$: Observable<Select2OptionData[]>;
-  private select2Options: Select2Options = {
+  public smsFormObj: SmsKeyClass = new SmsKeyClass();
+  public emailFormObj: EmailKeyClass = new EmailKeyClass();
+  public razorPayObj: RazorPayClass = new RazorPayClass();
+  public accounts$: Observable<Select2OptionData[]>;
+  public select2Options: Select2Options = {
     multiple: false,
     width: '100%',
     placeholder: 'Select Accounts',
     allowClear: true
   };
-  private updateRazor: boolean = false;
+  public updateRazor: boolean = false;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private router: Router,
@@ -85,30 +85,30 @@ export class SettingIntegrationComponent implements OnInit {
     });
   }
 
-  private setDummyData() {
+  public setDummyData() {
     this.razorPayObj.userName = '';
     this.razorPayObj.password = 'YOU_ARE_NOT_ALLOWED';
     this.razorPayObj.account = { name: null, uniqueName: null };
     this.razorPayObj.autoCapturePayment = true;
   }
 
-  private onSubmitMsgform(f: NgForm) {
+  public onSubmitMsgform(f: NgForm) {
     if (f.valid) {
       this.store.dispatch(this.SettingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
     }
   }
 
-  private onSubmitEmailform(f: NgForm) {
+  public onSubmitEmailform(f: NgForm) {
     if (f.valid) {
       this.store.dispatch(this.SettingsIntegrationActions.SaveEmailKey(f.value));
     }
   }
 
-  private toggleCheckBox() {
+  public toggleCheckBox() {
     return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
   }
 
-  private selectAccount(event) {
+  public selectAccount(event) {
     if (event.value) {
       this.accounts$.subscribe((arr: Select2OptionData[]) => {
         let res = _.find(arr, function(o) { return o.id === event.value; });
@@ -119,17 +119,17 @@ export class SettingIntegrationComponent implements OnInit {
     }
   }
 
-  private saveRazorPayDetails() {
+  public saveRazorPayDetails() {
     let data = _.cloneDeep(this.razorPayObj);
     this.store.dispatch(this.SettingsIntegrationActions.SaveRazorPayDetails(data));
   }
 
-  private updateRazorPayDetails() {
+  public updateRazorPayDetails() {
     let data = _.cloneDeep(this.razorPayObj);
     this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
   }
 
-  private deleteRazorPayDetails() {
+  public deleteRazorPayDetails() {
     this.store.dispatch(this.SettingsIntegrationActions.DeleteRazorPayDetails());
   }
 
