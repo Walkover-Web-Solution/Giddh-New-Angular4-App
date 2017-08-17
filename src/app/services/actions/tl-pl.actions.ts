@@ -9,22 +9,38 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TlPlService } from '../tl-pl.service';
-import { TrialBalanceRequest } from '../../models/api-models/tl-pl';
+import { TrialBalanceRequest } from '../../models/api-models/tb-pl-bs';
 
 @Injectable()
-export class TlPlActions {
+export class TBPlBsActions {
   public static readonly GET_TRIAL_BALANCE_REQUEST = 'GET_TRIAL_BALANCE_REQUEST';
   public static readonly GET_TRIAL_BALANCE_RESPONSE = 'GET_TRIAL_BALANCE_RESPONSE';
+  public static readonly GET_PROFIT_LOSS_REQUEST = 'GET_PROFIT_LOSS_REQUEST';
+  public static readonly GET_PROFIT_LOSS_RESPONSE = 'GET_PROFIT_LOSS_RESPONSE';
+
   public static readonly SET_DATE = 'SET_DATE';
   @Effect() private GetTrialBalance$: Observable<Action> = this.action$
-    .ofType(TlPlActions.GET_TRIAL_BALANCE_REQUEST)
+    .ofType(TBPlBsActions.GET_TRIAL_BALANCE_REQUEST)
     .switchMap(action => {
       return this._tlPlService.GetTrailBalance(action.payload)
         .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
-          type: TlPlActions.GET_TRIAL_BALANCE_RESPONSE,
+          type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
           payload: r.body
         }, true, {
-          type: TlPlActions.GET_TRIAL_BALANCE_RESPONSE,
+          type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
+          payload: []
+        }));
+    });
+
+  @Effect() private GetProfitLoss$: Observable<Action> = this.action$
+    .ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST)
+    .switchMap(action => {
+      return this._tlPlService.GetProfitLoss(action.payload)
+        .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
+          type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
+          payload: r.body
+        }, true, {
+          type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
           payload: []
         }));
     });
@@ -36,14 +52,21 @@ export class TlPlActions {
 
   public GetTrialBalance(request: TrialBalanceRequest): Action {
     return {
-      type: TlPlActions.GET_TRIAL_BALANCE_REQUEST,
+      type: TBPlBsActions.GET_TRIAL_BALANCE_REQUEST,
+      payload: request
+    };
+  }
+
+  public GetProfitLoss(request: TrialBalanceRequest): Action {
+    return {
+      type: TBPlBsActions.GET_PROFIT_LOSS_REQUEST,
       payload: request
     };
   }
 
   public SetDate(fromDate: Date, toDate: Date): Action {
     return {
-      type: TlPlActions.SET_DATE,
+      type: TBPlBsActions.SET_DATE,
       payload: { fromDate, toDate }
     };
   }

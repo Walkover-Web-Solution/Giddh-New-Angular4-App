@@ -1,18 +1,17 @@
-import { PageComponent } from '../page.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
-import { TlPlComponent } from './tl-pl.component';
+import { TbPlBsComponent } from './tb-pl-bs.component';
 
 @NgModule({
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: TlPlComponent, canActivate: [NeedsAuthentication]
+        path: '', component: TbPlBsComponent, canActivate: [NeedsAuthentication]
       }
     ])
   ],
   exports: [RouterModule]
 })
-export class TlPlRoutingModule {
+export class TbPlBsRoutingModule {
 }
