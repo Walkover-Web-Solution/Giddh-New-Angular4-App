@@ -6,17 +6,17 @@ import { TabsetComponent } from 'ngx-bootstrap';
   styleUrls: ['./settings.component.css']
 })
 export class SettingsComponent implements OnInit {
-  @ViewChild('staticTabs') private staticTabs: TabsetComponent;
+  @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
   public ngOnInit() {
     console.log('hello from Settings');
     this.selectTab(0);
   }
 
-  private selectTab(id: number) {
+  public selectTab(id: number) {
     this.staticTabs.tabs[id].active = true;
   }
-  private disableEnable() {
+  public disableEnable() {
     this.staticTabs.tabs[2].disabled = ! this.staticTabs.tabs[2].disabled;
   }
 }

@@ -57,7 +57,7 @@ export class SettingProfileComponent implements OnInit {
     console.log('hello from SettingProfileComponent');
   }
 
-  private addGst() {
+  public addGst() {
     let companyDetails = _.cloneDeep(this.companyProfileObj);
 
     let newGstObj = {
@@ -75,7 +75,7 @@ export class SettingProfileComponent implements OnInit {
     this.companyProfileObj = companyDetails;
   }
 
-  private stateSelected(v, indx) {
+  public stateSelected(v, indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     let selectedStateCode = v.value;
     let selectedState = this.states.find((state) => state.id === selectedStateCode);
@@ -86,7 +86,7 @@ export class SettingProfileComponent implements OnInit {
     console.log('The selected state is :', selectedState);
   }
 
-  private updateProfile(data) {
+  public updateProfile(data) {
     let dataToSave = _.cloneDeep(data);
     if (dataToSave.gstDetails.length > 0) {
       for (let entry of dataToSave.gstDetails) {
@@ -103,7 +103,7 @@ export class SettingProfileComponent implements OnInit {
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
   }
 
-  private removeGstEntry(indx) {
+  public removeGstEntry(indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     if (indx > -1 ) {
       profileObj.gstDetails.splice(indx, 1);
@@ -111,7 +111,7 @@ export class SettingProfileComponent implements OnInit {
     this.companyProfileObj = profileObj;
   }
 
-  private setGstAsDefault(indx, ev) {
+  public setGstAsDefault(indx, ev) {
     if (indx > -1 && ev.target.checked) {
       for (let entry of this.companyProfileObj.gstDetails) {
           entry.addressList[0].isDefault = false;
@@ -120,7 +120,7 @@ export class SettingProfileComponent implements OnInit {
     }
   }
 
-  private getDefaultGstNumber() {
+  public getDefaultGstNumber() {
     if (this.companyProfileObj && this.companyProfileObj.gstDetails) {
       let profileObj = this.companyProfileObj;
       let defaultGstObjIndx;
