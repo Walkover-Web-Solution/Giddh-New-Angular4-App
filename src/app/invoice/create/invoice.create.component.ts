@@ -31,21 +31,30 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
   ) {}
 
   public ngOnInit() {
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o && o.generate && o.generate.invoiceData) {
-        this.invFormData = _.cloneDeep(o.generate.invoiceData);
-      }else {
-        this.invFormData = new PreviewAndGenerateInvoiceResponse();
+    this.store.select(p => p.invoice.generate.invoiceData)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((o: PreviewAndGenerateInvoiceResponse) => {
+        if (o) {
+          this.invFormData = _.cloneDeep(o);
+        }else {
+          this.invFormData = new PreviewAndGenerateInvoiceResponse();
+        }
       }
-    });
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o && o.generate && o.generate.invoiceTemplateConditions) {
-        this.invTempCond =  _.cloneDeep(o.generate.invoiceTemplateConditions);
-        // find table condition in object and assign it to local var
-        let obj =  _.cloneDeep(o.generate.invoiceTemplateConditions);
-        this.tableCond = _.find(obj.sections, ['sectionName', 'table']);
+    );
+
+    this.store.select(p => p.invoice.generate.invoiceTemplateConditions)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((o) => {
+        if (o) {
+          this.invTempCond =  _.cloneDeep(o);
+          // find table condition in object and assign it to local var
+          let obj =  _.cloneDeep(o);
+          this.tableCond = _.find(obj.sections, ['sectionName', 'table']);
+        }
       }
-    });
+    );
   }
 
   public ngAfterViewInit() {

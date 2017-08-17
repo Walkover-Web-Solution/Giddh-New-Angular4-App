@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewAndGenerateInvoiceResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewAndGenerateInvoiceResponse, GetAllLedgersForInvoiceResponse } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -80,21 +80,29 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o.generate && o.generate.ledgers) {
-        this.ledgersData = _.cloneDeep(o.generate.ledgers);
-        _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-          item.isSelected = false;
-          return o;
-        });
+    this.store.select(p => p.invoice.generate.ledgers)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((o: GetAllLedgersForInvoiceResponse) => {
+        if (o && o.results) {
+          this.ledgersData = _.cloneDeep(o);
+          _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+            item.isSelected = false;
+            return o;
+          });
+        }
+      }
+    );
+
+    this.store.select(p => p.invoice.generate.invoiceTemplateConditions).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o) => {
+      // open modal
+      if (o && this.selectedLedgerItems.length === 1) {
+        document.getElementById('createNew').click();
       }
     });
-    this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p, q) => {
+
+    this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p: PreviewAndGenerateInvoiceResponse, q: PreviewAndGenerateInvoiceResponse) => {
       if (p && q) {
-        // open modal
-        if (this.selectedLedgerItems.length === 1) {
-          document.getElementById('createNew').click();
-        }
         return (p.templateUniqueName === q.templateUniqueName);
       }
       if ((p && !q) || (!p && q)) {
@@ -103,7 +111,6 @@ export class InvoiceGenerateComponent implements OnInit {
       return true;
     }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
       if (o) {
-        // this.getInvoiceTemplateDetails('gst_template_a');
         this.getInvoiceTemplateDetails(o.templateUniqueName);
       }
     });
