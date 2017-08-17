@@ -1,17 +1,17 @@
-<form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline filterForm">
+<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline filterForm">
   <div class="form-group">
     <label>From</label>
-    <input type="text" class="form-control" name="from" placeholder="from date" [(ngModel)]="ledgerSearchRequest.from" />
+    <input type="text" class="form-control" name="from" placeholder="from date" [(ngModel)]="invoiceSearchRequest.from" />
   </div>
   <div class="form-group">
     <label>To</label>
-    <input type="text" class="form-control" name="to" placeholder="to date" [(ngModel)]="ledgerSearchRequest.to" />
+    <input type="text" class="form-control" name="to" placeholder="to date" [(ngModel)]="invoiceSearchRequest.to" />
   </div>
   <div class="form-group">
     <label>Account</label>
     <select2
       name="a"
-      [(ngModel)]="ledgerSearchRequest.accountUniqueName"
+      [(ngModel)]="invoiceSearchRequest.accountUniqueName"
       class="select2-parent"
       [data]="accounts$ | async" 
       [options]="select2Options" >
@@ -19,25 +19,25 @@
   </div>
   <div class="form-group">
     <label>Description</label>
-    <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="ledgerSearchRequest.description">
+    <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
   </div>
   <div class="form-group">
     <label>Count</label>
-    <select class="form-control col-xs-2" name="count" [(ngModel)]="ledgerSearchRequest.count">
-      <option [ngValue]="select">Select</option>
+    <select class="form-control col-xs-2" name="count" [(ngModel)]="invoiceSearchRequest.count">
+      <option value="select">Select</option>
       <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
     </select>
   </div>
   <div class="form-group">
     <label>Amount</label>
-    <select class="form-control" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy">
-      <option [ngValue]="select">Please Select</option>
+    <select class="form-control" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
+      <option value="select">Please Select</option>
       <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
     </select>
   </div>
   <div class="form-group">
     <label>&nbsp;</label>
-    <input type="text" class="form-control col-xs-2" name="entryTotal"  [(ngModel)]="ledgerSearchRequest.entryTotal" placeholder="By amount">
+    <input type="text" class="form-control col-xs-2" name="entryTotal"  [(ngModel)]="invoiceSearchRequest.entryTotal" placeholder="By amount">
   </div>
   <div class="form-group">
     <label>&nbsp;</label>
@@ -49,13 +49,13 @@
 <br>
 <br>
 <br>
-<div class="no-data" *ngIf="!ledgersData">
+<div class="no-data" *ngIf="!invoiceData">
   <h1>No Entry found in sales!</h1>
   <h1>Have to do some sales before creating invoice</h1>
   <a class="btn btn-primary">Go to Sales</a>
 </div>
 
-<table class="table basic table-bordered pdT2" *ngIf="ledgersData && ledgersData.results.length > 0">
+<table class="table basic table-bordered pdT2" *ngIf="invoiceData && invoiceData.results.length > 0">
   <thead class="t-h-bg1">
     <tr>
       <th style="width:10%">#</th>
@@ -70,11 +70,7 @@
     </tr>
   </thead>
   <tbody>
-   <tr>
-    <!--{{ ledgersData.results | json}}-->
-   </tr>
-    <!--ng-class="{'danger': checkTransaction(ledger.uniqueName)}"  -->
-    <tr *ngFor="let item of ledgersData.results; let i = index">
+    <tr *ngFor="let item of invoiceData.results; let i = index">
       <td>{{ i + 1}}</td>
       <td>{{item.invoiceNumber}}</td>
       <td>{{item.account.name}}</td>

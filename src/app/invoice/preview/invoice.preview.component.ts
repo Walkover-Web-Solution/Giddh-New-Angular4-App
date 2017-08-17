@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -33,8 +33,18 @@ export class InvoicePreviewComponent implements OnInit {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
 
-  public selectedInvoiceForDelete: ILedgersInvoiceResult;
+  public selectedInvoiceForDelete: IInvoiceResult;
+  public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+  public invoiceData: GetAllInvoicesPaginatedResponse;
+  public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
+  public counts: number[] = COUNTS;
   public accounts$: Observable<Select2OptionData[]>;
+  public select2Options: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true
+  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private modalRef: BsModalRef;
   private config = {
@@ -43,18 +53,6 @@ export class InvoicePreviewComponent implements OnInit {
     backdrop: true,
     ignoreBackdropClick: true
   };
-  private select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
-  private counts: number[] = COUNTS;
-  private ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-  private filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
-  private ledgersData: GetAllLedgersOfInvoicesResponse;
-  private selectedLedgerItems: string[] = [];
-  private allItemsSelected: boolean = false;
 
   constructor(
     private modalService: BsModalService,
@@ -65,10 +63,10 @@ export class InvoicePreviewComponent implements OnInit {
 
   public ngOnInit() {
     // set initial values
-    this.ledgerSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    this.ledgerSearchRequest.to = moment().format('DD-MM-YYYY');
-    this.ledgerSearchRequest.page = 1;
-    this.ledgerSearchRequest.count = 12;
+    this.invoiceSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
+    this.invoiceSearchRequest.to = moment().format('DD-MM-YYYY');
+    this.invoiceSearchRequest.page = 1;
+    this.invoiceSearchRequest.count = 12;
 
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -86,43 +84,29 @@ export class InvoicePreviewComponent implements OnInit {
 
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
       if (o.preview && o.preview.invoices) {
-        this.ledgersData = _.cloneDeep(o.preview.invoices);
-        _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+        this.invoiceData = _.cloneDeep(o.preview.invoices);
+        _.map(this.invoiceData.results, (item: IInvoiceResult) => {
           item.isSelected = false;
           return o;
         });
-        console.log('this.ledgersData is :', this.ledgersData);
       }
     });
-    this.getLedgersOfInvoice();
+    this.getInvoices();
   }
 
-  private showInvoiceModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, Object.assign({}, this.config, { class: 'gray modal-liquid' }));
-  }
-
-  private closeInvoiceModel(e) {
-    console.log(e, 'closeInvoiceModel');
-    this.modalRef.hide();
-  }
-
-  private getLedgersByFilters(f: NgForm) {
+  private getInvoicesByFilters(f: NgForm) {
     if (f.valid) {
-      this.getLedgersOfInvoice();
+      this.getInvoices();
     }
   }
 
-  private showNewInvoiceCreate() {
-    console.log('showNewInvoiceCreate open modal');
+  private getInvoices() {
+    this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi()));
   }
 
-  private getLedgersOfInvoice() {
-    this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForLedgerApi()));
-  }
-
-  private prepareModelForLedgerApi() {
+  private prepareModelForInvoiceApi() {
     let model: InvoiceFilterClass = {};
-    let o = _.cloneDeep(this.ledgerSearchRequest);
+    let o = _.cloneDeep(this.invoiceSearchRequest);
     if (o.accountUniqueName) {
       model.accountUniqueName = o.accountUniqueName;
     }
@@ -148,100 +132,14 @@ export class InvoicePreviewComponent implements OnInit {
     return model;
   }
 
-  private prepareQueryParamsForLedgerApi() {
-    let o = _.cloneDeep(this.ledgerSearchRequest);
+  private prepareQueryParamsForInvoiceApi() {
+    let o = _.cloneDeep(this.invoiceSearchRequest);
     return {
       from: o.from,
       to: o.to,
       count: o.count,
       page: o.page
     };
-  }
-
-  private toggleItem(item: any, action: boolean) {
-    item.isSelected = action;
-    if (action) {
-      this.countAndToggleVar();
-    } else {
-      this.allItemsSelected = false;
-    }
-    this.insertItemsIntoArr();
-  }
-
-  private countAndToggleVar() {
-    let total: number = this.ledgersData.results.length;
-    let count: number = 0;
-    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      if (item.isSelected) {
-        count++;
-      }
-    });
-    if (count === total) {
-      this.allItemsSelected = true;
-    }
-  }
-
-  private toggleAllItems(type: boolean) {
-    if (type) {
-      this.allItemsSelected = true;
-    } else {
-      this.allItemsSelected = false;
-    }
-    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      item.isSelected = this.allItemsSelected ? true : false;
-      return item;
-    });
-    this.insertItemsIntoArr();
-  }
-
-  private insertItemsIntoArr() {
-    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
-      if (item.isSelected) {
-        if (idx === -1) {
-          this.selectedLedgerItems.push(item.uniqueName);
-        }
-      } else {
-        if (idx !== -1) {
-          this.selectedLedgerItems.splice(idx);
-        }
-      }
-    });
-  }
-
-  private prevAndGenInv() {
-    let model = {
-      uniqueNames: _.uniq(this.selectedLedgerItems)
-    };
-    let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      return item.uniqueName === this.selectedLedgerItems[0];
-    });
-    console.log('before api', model, res.account.uniqueName);
-    this.store.dispatch(this.invoiceActions.PreviewAndGenerateInvoice(res.account.uniqueName, model));
-  }
-
-  private generateBulkInvoice(action: boolean) {
-    if (this.selectedLedgerItems.length <= 0) {
-      return false;
-    }
-    let arr: GenBulkInvoiceGroupByObj[] = [];
-    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      if (item.isSelected) {
-        arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
-      }
-    });
-    let res = _.groupBy(arr, 'accUniqueName');
-    let final = [];
-    _.forEach(res, (items: GenBulkInvoiceGroupByObj) => {
-      let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
-      obj.entries = [];
-      _.forEach(items, (o: GenBulkInvoiceGroupByObj) => {
-        obj.accountUniqueName = o.accUniqueName;
-        obj.entries.push(o.uniqueName);
-      });
-      final.push(obj);
-    });
-    console.log('before api', action, final);
   }
 
   private onPerformAction(item, ele: HTMLInputElement) {
@@ -254,14 +152,14 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   private onDeleteBtnClick(uniqueName) {
-    let allInvoices = _.cloneDeep(this.ledgersData.results);
+    let allInvoices = _.cloneDeep(this.invoiceData.results);
     this.selectedInvoiceForDelete = allInvoices.find((o) => o.uniqueName === uniqueName);
     this.invoiceConfirmationModel.show();
   }
 
   private deleteConfirmedInvoice() {
     this.invoiceConfirmationModel.hide();
-    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoiceForDelete.invoiceNumber);
+    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoiceForDelete.invoiceNumber));
   }
 
   private closeConfirmationPopup() {
