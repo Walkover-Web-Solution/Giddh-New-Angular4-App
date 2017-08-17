@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { ChildGroup } from '../../../models/api-models/Search';
+import { ChildGroup } from '../../models/api-models/Search';
 
 @Component({
-  selector: '[tl-pl-grid-row]',  // <home></home>
+  selector: '[tb-pl-bs-grid-row]',  // <home></home>
   template: `
     <!-- filter:filterTBSearch:index:data  -->
     <!-- |  tbsearch:keyWord | filter:filterTBSearch:tbsearch -->

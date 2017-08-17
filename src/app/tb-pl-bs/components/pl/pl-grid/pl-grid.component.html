@@ -1,0 +1,37 @@
+<!-- loader -->
+<div class="loader" *ngIf="(showTbplLoader | async)">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+
+  <h1>loading ledger</h1>
+</div>
+
+<!-- no data start -->
+<div class="no-data" *ngIf="noData">
+  <h1>Sorry, No Data Found!</h1>
+  <img src="/assets/images/no-data.png" alt="">
+</div>
+<!-- nodata end -->
+
+<div *ngIf="!(showTbplLoader | async)">
+  <div *ngIf="!noData">
+    <div class="pd15">
+
+
+      <!-- End Head -->
+      <!-- start main content -->
+
+
+      <!-- end main content -->
+
+      <!-- start template trial bal -->
+      <!--<script type="text/ng-template" id="trialBalSubGroup">-->
+
+      <!--</script>-->
+      <!-- end template -->
+    </div>
+  </div>
+</div>
