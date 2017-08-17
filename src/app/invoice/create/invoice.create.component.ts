@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PreviewAndGenerateInvoiceResponse, GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
+import { PreviewAndGenerateInvoiceResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 
@@ -22,6 +22,7 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private invFormData: PreviewAndGenerateInvoiceResponse;
   private invTempCond: GetInvoiceTemplateDetailsResponse;
+  private tableCond: ISection;
 
   constructor(
     private store: Store<AppState>,
@@ -40,6 +41,9 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
       if (o && o.generate && o.generate.invoiceTemplateConditions) {
         this.invTempCond =  _.cloneDeep(o.generate.invoiceTemplateConditions);
+        // find table condition in object and assign it to local var
+        let obj =  _.cloneDeep(o.generate.invoiceTemplateConditions);
+        this.tableCond = _.find(obj.sections, ['sectionName', 'table']);
       }
     });
   }
