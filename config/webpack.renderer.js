@@ -159,7 +159,7 @@ module.exports = function (options) {
 
         /**
          * To string and css loader support for *.css files (from Angular components)
-         * Returns file content as string
+         * Returns file design-filters as string
          *
          */
         {
@@ -170,7 +170,7 @@ module.exports = function (options) {
 
         /**
          * To string and sass loader support for *.scss files (from Angular components)
-         * Returns compiled css content as string
+         * Returns compiled css design-filters as string
          *
          */
         {
@@ -181,7 +181,7 @@ module.exports = function (options) {
 
         /**
          * Raw loader support for *.html
-         * Returns file content as string
+         * Returns file design-filters as string
          *
          * See: https://github.com/webpack/raw-loader
          */
@@ -396,7 +396,7 @@ module.exports = function (options) {
          * A path to a file (resource) that will replace all resource referenced in @Components.
          * For each `@Component` the AOT compiler compiles it creates new representation for the templates (html, styles)
          * of that `@Components`. It means that there is no need for the source templates, they take a lot of
-         * space and they will be replaced by the content of this resource.
+         * space and they will be replaced by the design-filters of this resource.
          *
          * To leave the template as is set to a falsy value (the default).
          *
