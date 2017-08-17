@@ -175,9 +175,10 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
     this.statesSource$.take(1).subscribe(p => states = p);
     let accountObj = new AccountRequest();
     accountObj = this.updateAccountForm.value as AccountRequest;
-    if (this.updateAccountForm.value.state) {
-      accountObj.state = states.find(st => st.id === this.updateAccountForm.value.state).text;
-    }
+    // temporary commented out because new gst design changes
+    // if (this.updateAccountForm.value.state) {
+    //   accountObj.state = states.find(st => st.id === this.updateAccountForm.value.state).text;
+    // }
     if (this.updateAccountForm.value.hsnOrSac) {
       if (this.updateAccountForm.value.hsnOrSac === 'hsn') {
         accountObj.hsnNumber = this.updateAccountForm.value.hsnNumber;

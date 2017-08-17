@@ -49,6 +49,7 @@ export class TaxControlComponent implements OnInit, OnDestroy {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
+    debugger;
     if (!this.taxRenderData.length) {
       this.taxes.map(tx => {
         let taxObj = new TaxControlData();
