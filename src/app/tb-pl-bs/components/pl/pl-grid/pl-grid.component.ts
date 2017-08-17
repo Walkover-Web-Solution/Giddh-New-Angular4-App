@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AppState } from '../../../../store/roots';
 import { TBPlBsActions } from '../../../../services/actions/tl-pl.actions';
@@ -20,47 +20,37 @@ export class PlGridComponent implements OnInit, OnDestroy, AfterViewInit {
   public expanded = false;
   public data$: Observable<AccountDetails>;
 
+  @Input()
+  public set expandAll(value: boolean) {
+    this.data$ = this.data$.map(p => {
+      if (p) {
+        return {
+          forwardedBalance: p.forwardedBalance,
+          creditTotal: p.creditTotal,
+          debitTotal: p.debitTotal,
+          closingBalance: p.closingBalance,
+          openingBalance: p.openingBalance,
+          groupDetails: this.toggleVisibility(p.groupDetails, value)
+        };
+      }
+    });
+
+  }
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _tlPlAction: TBPlBsActions, private cd: ChangeDetectorRef) {
-    // this.showTbplLoader = true;
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.data));
-    this.showTbplLoader = this.store.select(p => p.tlPl.showTbplLoader);
+    // this.showLoader = true;
+    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.pl.data)).takeUntil(this.destroyed$);
+    this.showTbplLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     //
     this.data$.subscribe(p => {
       if (p) {
-        // this.showTbplLoader = false;
+        // this.showLoader = false;
       }
       this.cd.detectChanges();
-    });
-  }
-
-  public collapseAll() {
-    this.data$ = this.data$.map(p => {
-      return {
-        forwardedBalance: p.forwardedBalance,
-        creditTotal: p.creditTotal,
-        debitTotal: p.debitTotal,
-        closingBalance: p.closingBalance,
-        openingBalance: p.openingBalance,
-        groupDetails: this.toggleVisibility(p.groupDetails, false)
-      };
-    });
-  }
-
-  public expandAll() {
-    this.data$ = this.data$.map(p => {
-      return {
-        forwardedBalance: p.forwardedBalance,
-        creditTotal: p.creditTotal,
-        debitTotal: p.debitTotal,
-        closingBalance: p.closingBalance,
-        openingBalance: p.openingBalance,
-        groupDetails: this.toggleVisibility(p.groupDetails, true)
-      };
     });
   }
 
