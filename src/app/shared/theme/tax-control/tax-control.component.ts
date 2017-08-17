@@ -28,10 +28,10 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   @Input() public taxes: TaxResponse[];
   @Input() public applicableTaxes: any[];
   @Input() public taxRenderData: TaxControlData[];
+  @Input() public showTaxPopup: boolean = false;
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
 
-  public showTaxPopup: boolean = false;
   public sum: number = 0;
   private selectedTaxes: string[] = [];
 
@@ -49,7 +49,6 @@ export class TaxControlComponent implements OnInit, OnDestroy {
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    debugger;
     if (!this.taxRenderData.length) {
       this.taxes.map(tx => {
         let taxObj = new TaxControlData();
@@ -69,6 +68,10 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
+  }
+
+  public clicked(e) {
+    debugger;
   }
 
   /**
