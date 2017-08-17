@@ -49,7 +49,7 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
             {
                 let newState = _.cloneDeep(state);
                 let res = action.payload;
-                newState.newRole = {};
+                // newState.newRole = {};
                 if (res.status === 'success') {
                     newState.roles.push(res.body);
                     return Object.assign({}, state, newState);
