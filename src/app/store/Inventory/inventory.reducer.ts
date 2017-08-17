@@ -201,6 +201,10 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             isOpen: false,
             isActive: false
           });
+          groupArray.map(grp => {
+            grp.isOpen = false;
+            grp.isActive = false;
+          });
         } else {
           for (let el of groupArray) {
             if (el.uniqueName === groupStockResponse.request.parentStockGroupUniqueName) {
