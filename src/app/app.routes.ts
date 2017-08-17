@@ -1,3 +1,6 @@
+import { PermissionDetailsComponent } from './permissions/components/details/permission.details.component';
+import { PermissionListComponent } from './permissions/components/list/permission.list.component';
+import { PermissionComponent } from './permissions/permission.component';
 import { PageComponent } from './page.component';
 import { Routes, LoadChildren } from '@angular/router';
 import { HomeComponent } from './home/home.component';
@@ -5,6 +8,7 @@ import { AboutComponent } from './about/about.component';
 import { LoginComponent } from './login/login.component';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
+import { InventoryComponent } from './inventory/inventory.component';
 import { SearchComponent } from './search/search.component';
 import { AuditLogsComponent } from './audit-logs/audit-logs.component';
 import { TlPlComponent } from './tl-pl/tl-pl.component';
