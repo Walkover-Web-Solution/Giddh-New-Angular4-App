@@ -20,6 +20,7 @@ import {
   GetInvoiceTemplateDetailsResponse,
   Template
 } from '../../../models/api-models/Invoice';
+import {Font} from "ngx-font-picker";
 // import {Section, Template} from "../../../models/api-models/invoice";
 
 @Injectable()
@@ -201,7 +202,18 @@ export class InvoiceActions {
       payload: {id}
     };
   }
-
+  public setFont(font: string): Action {
+  return {
+  type: INVOICE.TEMPLATE.SET_FONT,
+  payload: {font}
+ };
+}
+  public setColor(color: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.SET_COLOR,
+      payload: {color}
+    };
+  }
   public updateGSTIN(data: string): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_GSTIN,

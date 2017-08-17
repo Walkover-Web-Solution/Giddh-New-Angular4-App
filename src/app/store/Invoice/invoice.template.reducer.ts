@@ -1,6 +1,7 @@
 import { Action, combineReducers } from '@ngrx/store';
 import { GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
+import {Font} from "ngx-font-picker";
 
 export interface InvoiceTemplateState {
   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
@@ -59,11 +60,12 @@ export interface InvoiceTemplateMetaState {
   totalWidth: number;
   quantityLabel: string;
   quantityWidth: number;
-  fontFamily: string;
   topMargin: number;
   leftMargin: number;
   bottomMargin: number;
   rightMargin: number;
+  font: string;
+  color: string;
 }
 
 export interface InvoiceTableState {
@@ -111,12 +113,14 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
     case INVOICE.TEMPLATE.SET_TEMPLATE_STATE:
       let result = action.payload.temp.body;
       let newState = []; // Array
-      result.forEach((obj) => {
-        let key = obj.uniqueName;
-        let obj1 = {};
-        obj1[obj.uniqueName] = obj;
-        newState.push(obj1);
-      });
+      if (result && result.templateId) {
+        result.forEach((obj) => {
+          let key = obj.uniqueName;
+          let obj1 = {};
+          obj1[obj.uniqueName] = obj;
+          newState.push(obj1);
+        });
+      }
       return Object.assign({}, state, newState);
 
     //   case INVOICE.CONTENT.SET_HEADING:
@@ -185,11 +189,12 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   totalWidth: 10,
   quantityLabel: '',
   quantityWidth: 10,
-  fontFamily: 'Open Sans, sans-serif',
   topMargin: 20,
   leftMargin: 0,
   bottomMargin: 0,
   rightMargin: 10,
+  font: 'Open Sans',
+  color: '',
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -324,6 +329,15 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
     case INVOICE.TEMPLATE.UPDATE_BILLING_GSTIN:
       return Object.assign({}, state, {
         shippingGstin: action.payload.data
+      });
+    case INVOICE.TEMPLATE.SET_FONT:
+      console.log("FONT UPDATE ACTION", action.payload);
+      return Object.assign({}, state, {
+        font: action.payload.font
+      });
+    case INVOICE.TEMPLATE.SET_COLOR:
+      return Object.assign({}, state, {
+        color : action.payload.color
       });
     default: {
       return state;

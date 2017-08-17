@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoiceTemplatesComponent } from './templates/invoice.templates.component';
-import { InvoiceSettingsComponent } from './settings/invoice.settings.component';
+
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
@@ -17,6 +17,8 @@ import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.com
 import { FontPickerModule } from 'ngx-font-picker';
 import { FontPickerConfigInterface } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
+import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
+import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
 
 const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -38,8 +40,8 @@ const INVOICE_ROUTES: Routes = [
           { path: 'list/:templateUniqueName',   },
           // { path: ':templateUniqueName',  component: InvoiceTemplatesComponent }
         ]
-      },
-      { path: 'settings',  component: InvoiceSettingsComponent  }
+       },
+      { path: 'settings',   },
     ]
   }
 ];
@@ -50,8 +52,10 @@ const INVOICE_ROUTES: Routes = [
     InvoicePreviewComponent,
     InvoiceGenerateComponent,
     InvoiceTemplatesComponent,
-    InvoiceSettingsComponent,
-    InvoiceCreateComponent
+    EditInvoiceComponent,
+    InvoiceCreateComponent,
+    DesignFiltersContainerComponent,
+    EditFiltersContainersComponent
   ],
   imports: [
     FormsModule,
