@@ -324,7 +324,7 @@ module.exports = function (env) {
         /**
          * Plugin: BundleAnalyzerPlugin
          * Description: Webpack plugin and CLI utility that represents
-         * bundle content as convenient interactive zoomable treemap
+         * bundle design-filters as convenient interactive zoomable treemap
          *
          * `npm run build:prod -- --env.analyze` to use
          *
