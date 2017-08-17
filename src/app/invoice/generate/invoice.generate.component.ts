@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
@@ -14,6 +14,8 @@ import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
+import { ModalDirective } from 'ngx-bootstrap';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
@@ -29,7 +31,8 @@ const COMPARISION_FILTER = [
   templateUrl: './invoice.generate.component.html'
 })
 export class InvoiceGenerateComponent implements OnInit {
-
+  @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
+  @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   public accounts$: Observable<Select2OptionData[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private modalRef: BsModalRef;
@@ -86,22 +89,17 @@ export class InvoiceGenerateComponent implements OnInit {
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
           this.ledgersData = _.cloneDeep(o);
-          _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-            item.isSelected = false;
-            return o;
-          });
+          // _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+          //   item.isSelected = false;
+          //   return o;
+          // });
         }
       }
     );
 
-    this.store.select(p => p.invoice.generate.invoiceTemplateConditions).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o) => {
-      // open modal
-      if (o && this.selectedLedgerItems.length === 1) {
-        document.getElementById('createNew').click();
-      }
-    });
-
-    this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p: PreviewAndGenerateInvoiceResponse, q: PreviewAndGenerateInvoiceResponse) => {
+    this.store.select(p => p.invoice.generate.invoiceData)
+    .takeUntil(this.destroyed$)
+    .distinctUntilChanged((p: PreviewAndGenerateInvoiceResponse, q: PreviewAndGenerateInvoiceResponse) => {
       if (p && q) {
         return (p.templateUniqueName === q.templateUniqueName);
       }
@@ -122,22 +120,18 @@ export class InvoiceGenerateComponent implements OnInit {
     this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
   }
 
-  private showInvoiceModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, Object.assign({}, this.config, { class: 'gray modal-liquid' }));
+  private showInvoiceModal() {
+    this.invoiceGenerateModel.show();
   }
 
-  private closeInvoiceModel(e) {
-    this.modalRef.hide();
+  private closeInvoiceModel() {
+    this.invoiceGenerateModel.hide();
   }
 
   private getLedgersByFilters(f: NgForm) {
     if (f.valid) {
       this.getLedgersOfInvoice();
     }
-  }
-
-  private showNewInvoiceCreate() {
-    console.log('showNewInvoiceCreate open modal');
   }
 
   private getLedgersOfInvoice() {
@@ -240,8 +234,8 @@ export class InvoiceGenerateComponent implements OnInit {
     let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       return item.uniqueName === this.selectedLedgerItems[0];
     });
-    console.log('before api', model, res.account.uniqueName);
     this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+    this.showInvoiceModal();
   }
 
   private generateBulkInvoice(action: boolean) {

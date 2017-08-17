@@ -13,6 +13,7 @@ import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
 import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
+import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -37,7 +38,8 @@ const INVOICE_ROUTES: Routes = [
     InvoiceSettingsComponent,
     InvoiceCreateComponent,
     DeleteInvoiceConfirmationModelComponent,
-    PerformActionOnInvoiceModelComponent
+    PerformActionOnInvoiceModelComponent,
+    InvoiceGenerateModelComponent
   ],
   imports: [
     FormsModule,

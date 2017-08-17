@@ -15,10 +15,7 @@ import { InvoiceService } from '../../services/invoice.service';
   templateUrl: './invoice.create.component.html'
 })
 
-export class InvoiceCreateComponent implements OnInit, AfterViewInit {
-
-  @Input() public actionType: string;
-  @Output() public closeInvoiceModel: EventEmitter<boolean> = new EventEmitter(true);
+export class InvoiceCreateComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private invFormData: PreviewAndGenerateInvoiceResponse;
   private invTempCond: GetInvoiceTemplateDetailsResponse;
@@ -57,16 +54,8 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
     );
   }
 
-  public ngAfterViewInit() {
-    // this.getInvoiceTemplateDetails('gst_template_a');
-  }
-
   private onSubmitInvoiceForm(f: NgForm) {
     console.log (f, 'onSubmitInvoiceForm');
     console.log (this.invFormData, 'actual class object');
-  }
-
-  private onCancelModal(e) {
-    this.closeInvoiceModel.emit(Object.assign({}, e, {message: 'hey from InvoiceCreateComponent'}));
   }
 }
