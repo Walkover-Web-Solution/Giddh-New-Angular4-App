@@ -1,0 +1,153 @@
+<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design">
+
+
+    <div class="clearfix">
+        <div class="col-xs-9">
+            <div class="row">
+                <label><input type="text" class="form-control" placeholder="My Invoice Template" /></label>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="clearfix">
+        <ul class="designTool">
+            <li>
+                <!-- <div [fontPicker]="font" [fpWidth]="'320px'" [fpPosition]="'bottom'">Click to open the font picker</div>  -->
+            </li>
+            <li>
+                <i class="ico-template"></i> <label>Change up to template</label>
+            </li>
+            <li *ngIf="ifTemplateSelected">
+                <template-selector></template-selector>
+            </li>
+            <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
+                <i class="ico-edit"></i> <label>Make logo edit</label>
+            </li>
+            <li *ngIf="!ifColorSelected" (click)="selectColor()">
+                <i class="ico-swatch"></i> <label>Try other colour</label>
+            </li>
+            <li *ngIf="!ifFontSelected" (click)="selectFonts()">
+                <i class="ico-txt"></i> <label>Select different fonts</label>
+            </li>
+            <li *ngIf="!ifPrintSelected" (click)="printSettings()">
+                <i class="ico-print"></i> <label>Edit print setting</label>
+            </li>
+        </ul>
+    </div>
+
+    <!-- edit template  start -->
+    <div class="clearfix">
+        <ul class="templateView">
+            <li>
+                <img src="./assets/images/template1.jpg" />
+            </li>
+            <li>
+                <img src="./assets/images/template1.jpg" />
+            </li>
+            <li>
+                <img src="./assets/images/template1.jpg" />
+            </li>
+            <li>
+                <img src="./assets/images/template1.jpg" />
+            </li>
+            <li>
+                <img src="./assets/images/template1.jpg" />
+            </li>
+            <li>
+                <img src="./assets/images/template1.jpg" />
+            </li>
+        </ul>
+    </div>
+    <!-- edit template  end -->
+
+    <!-- edit logo  start -->
+    <div class="clearfix mrT2">
+        <div class="logoTool">
+            <span class="logo-preview"><img src="./assets/images/google-plus-icon.png" alt="" /></span>
+            <div class="pull-left mrL1 mrT1">
+                <p>Size</p>
+                <ul>
+                    <li>S</li>
+                    <li>M</li>
+                    <li>L</li>
+                </ul>
+                <a href="javascript:void(0);" class="primary_clr">Hide logo</a>
+            </div>
+        </div>
+    </div>
+    <!-- edit logo end -->
+
+    <!-- edit color  start -->
+    <div class="clearfix mrT2">
+        <div class="swatch">
+            <span class="swatch-preview"><span class="" style="background-color: #ddd;"></span>
+            <p class="text-center">#0191db</p>
+            </span>
+            <div class="mrL1 pull-left">
+                <ul>
+                    <li class="black"></li>
+                    <li class="grey"></li>
+                    <li class="yellow"></li>
+                    <li class="cyan"></li>
+                    <li class="red"></li>
+                    <li class="orange"></li>
+                    <li class="blue"></li>
+                    <li class="purple"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- edit color end -->
+
+    <!-- edit print setting  start -->
+    <div class="clearfix mrT2">
+        <div class="printTool pos-rel">
+            <p>Page margins</p>
+            <table class="table mr0">
+                <thead>
+                    <tr>
+                        <th>Top</th>
+                        <th>Left</th>
+                        <th>Bottom</th>
+                        <th>Right</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                        <td><input type="text" class="form-control" /></td>
+                    </tr>
+                </tbody>
+            </table>
+            <a href="javascript:void(0);" class="pos-abs pull-right pdR1">Reset</a>
+        </div>
+    </div>
+    <!-- edit print setting  end -->
+
+
+    <!-- <p style="margin-bottom: 20px" *ngIf="!ifTemplateSelected"> <button (click)="selectTemplate()" type="submit" class="btn btn-primary">1</button> Change up to template </p>
+    <template-selector *ngIf="ifTemplateSelected"></template-selector>
+    <p style="margin-bottom: 20px" *ngIf="!ifLogoSelected"> <button (click)="selectLogo()" type="submit" class="btn btn-primary">2</button> Make logo edit </p>
+    <p style="margin-bottom: 20px" *ngIf="!ifColorSelected"> <button (click)="selectColor()" type="submit" class="btn btn-primary">3</button> Try other color </p>
+    <p style="margin-bottom: 20px" *ngIf="!ifFontSelected"> <button (click)="selectFonts()" type="submit" class="btn btn-primary">4</button> Select different fonts </p>
+    <p style="margin-bottom: 20px" *ngIf="!ifPrintSelected"> <button (click)="printSettings()" type="submit" class="btn btn-primary">5</button> Edit print settings </p> -->
+
+    <!-- <div class="swatch">
+        <ul>
+            <li class="black"></li>
+            <li class="grey"></li>
+            <li class="yellow"></li>
+            <li class="cyan"></li>
+            <li class="red"></li>
+            <li class="orange"></li>
+            <li class="blue"></li>
+            <li class="purple"></li>
+        </ul>
+    </div>  -->
+
+    <print-settings></print-settings>
+
+</div>

@@ -72,7 +72,7 @@
                     if ( -1 === suggestion ) {
                         //console.log("tag:" + tag + " not in tagList, not adding it");
                         return;
-                    } 
+                    }
                 }
 
             }
@@ -152,7 +152,7 @@
                         lastTagObj.after($el);
                     } else {
                         $self.before($el);
-                    }                
+                    }
                 }
 
                 $el.find("#" + newTagRemoveId).on("click", $self, function(e) {
@@ -445,7 +445,7 @@
                     });
                 }
 
-                // on tag pop fill back the tag's content to the input field
+                // on tag pop fill back the tag's design-filters to the input field
                 if (opts.fillInputOnTagRemove) {
                     $self.on('tm:popped', function(e, tag) {
                         $(this).val(tag);

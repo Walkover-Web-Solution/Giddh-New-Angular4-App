@@ -4192,7 +4192,7 @@ tr.db-bnk-account > td.reconnectDiv {
     border-bottom: 1px solid #ebebeb;
     border-radius: 5px 5px 0 0;
 }
-.popover-content {
+.popover-design-filters {
     padding: 9px 14px;
 }
 .popover > .arrow,
@@ -4208,7 +4208,7 @@ tr.db-bnk-account > td.reconnectDiv {
     border-width: 11px;
 }
 .popover > .arrow:after {
-    content: "";
+    design-filters: "";
     border-width: 10px;
 }
 .popover.top > .arrow {
@@ -4222,7 +4222,7 @@ tr.db-bnk-account > td.reconnectDiv {
 .popover.top > .arrow:after {
     bottom: 1px;
     margin-left: -10px;
-    content: " ";
+    design-filters: " ";
     border-top-color: #fff;
     border-bottom-width: 0;
 }
@@ -4237,7 +4237,7 @@ tr.db-bnk-account > td.reconnectDiv {
 .popover.bottom > .arrow:after {
     top: 1px;
     margin-left: -10px;
-    content: " ";
+    design-filters: " ";
     border-top-width: 0;
     border-bottom-color: #fff;
 }
@@ -4815,6 +4815,31 @@ table.proforma-particulars {
   box-shadow: 0 6px 12px rgba(0, 0, 0, .175)
 }
 
+/*invoice pages global styles  */
+/*full width modal  */
+.modal-liquid.modal-dialog{
+  width: 100%;
+  margin: 0;
+  position: relative;
+  z-index: 1060;
+}
+.modal-dialog.gray .modal-content {
+  background: #f4f5f8;
+  border-radius: 0;
+}
+.modal-liquid.modal-dialog .modal-content{
+  position: fixed;
+  z-index: 1099;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: auto;
+  height: 100vh;
+}
+.modal-liquid.modal-dialog .modal-content .modal-header, .modal-liquid.modal-dialog .modal-content .modal-body{
+  background: #f4f5f8;
+}
 /*box styles  on settings integration page*/
 .box{
   padding: 20px;
@@ -4839,7 +4864,7 @@ table.proforma-particulars {
   border: 0;
   border-bottom: 2px solid #d36029;
 }
-.select2-parent .select2-container--default .select2-selection--single{
+/* .select2-parent .select2-container--default .select2-selection--single{
   border-radius: 0;
   background-color: #f9f7f2;
   border: 1px solid #ded3c0;
@@ -4857,4 +4882,4 @@ table.proforma-particulars {
 }
 .select2-parent .select2-container--default .select2-results>.select2-results__options{
   font-size: 14px;
-}
+} */

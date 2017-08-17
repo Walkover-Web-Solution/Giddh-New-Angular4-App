@@ -231,7 +231,7 @@ var Overlay = (function () {
         return pane;
     };
     /**
-     * Create a DomPortalHost into which the overlay content can be loaded.
+     * Create a DomPortalHost into which the overlay design-filters can be loaded.
      * @param pane The DOM element to turn into a portal host.
      * @returns A portal host for the given DOM element.
      */
