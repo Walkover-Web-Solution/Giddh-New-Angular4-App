@@ -1,59 +1,55 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnInit } from '@angular/core';
-import * as _ from 'lodash';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import { ComapnyResponse } from '../../../models/api-models/Company';
-import { SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
+import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'pl',
   template: `
-    <tb-pl-bs-filter></tb-pl-bs-filter>
-    <pl-grid></pl-grid>
+    <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany"
+                     (onPropertyChanged)="filterData($event)"></tb-pl-bs-filter>
+    <pl-grid [expandAll]="filter.expandAll"></pl-grid>
   `
 })
 export class PlComponent implements OnInit, AfterViewInit {
-  public request: {
-    refresh: boolean;
-    fromDate: any;
-    toDate: any;
-  };
-  public selectedCompany: ComapnyResponse;
-  public searchRequestEmitter = new EventEmitter<SearchRequest>();
-  public _searchRequest: SearchRequest;
 
+  public get selectedCompany(): ComapnyResponse {
+    return this._selectedCompany;
+  }
+
+  // set company and fetch data...
   @Input()
-  public set searchRequest(search: SearchRequest) {
-    this.searchRequestEmitter.emit(search);
-    this._searchRequest = search;
+  public set selectedCompany(value: ComapnyResponse) {
+    this._selectedCompany = value;
+    if (value) {
+      this.request = {
+        refresh: false,
+        fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
+      };
+      this.filterData(this.request);
+    }
   }
 
-  public get searchRequest(): SearchRequest {
-    return this._searchRequest;
-  }
+  public request: TrialBalanceRequest;
+  private _selectedCompany: ComapnyResponse;
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
-    this.store.select(p => p.company.companies && p.company.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
-      this.selectedCompany = p;
-      if (p) {
-        this.request = {
-          refresh: false,
-          fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
-          toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
-        };
-        this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(this.request)));
-      }
-    });
   }
 
   public ngOnInit() {
-    console.log('hello TlPl module');
-    // this.exampleData = [
-    // ];
+    console.log('hello Tb Component');
   }
 
   public ngAfterViewInit() {
     this.cd.detectChanges();
+  }
+
+  public filterData(request: TrialBalanceRequest) {
+    this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
+
   }
 }
