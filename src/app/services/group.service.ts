@@ -1,4 +1,4 @@
-import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
+
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
@@ -15,8 +15,8 @@ import {
   GroupCreateRequest,
   GroupResponse,
   GroupSharedWithResponse,
-  GroupsTaxHierarchyResponse,
-  MoveGroupRequest,
+  GroupsTaxHierarchyResponse, GroupUpateRequest,
+  MoveGroupRequest, MoveGroupResponse,
   ShareGroupRequest
 } from '../models/api-models/Group';
 import { AppState } from '../store/roots';
