@@ -14,7 +14,7 @@ import * as _ from 'lodash';
 })
 export class TbGridComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  public showTbplLoader: Observable<boolean>;
+  public showLoader: Observable<boolean>;
   public noData: boolean;
   public showClearSearch: boolean;
   public data$: Observable<AccountDetails>;
@@ -39,21 +39,20 @@ export class TbGridComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _tlPlAction: TBPlBsActions, private cd: ChangeDetectorRef) {
-    // this.showTbplLoader = true;
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.data));
-    this.showTbplLoader = this.store.select(p => p.tlPl.showTbplLoader);
+    // this.showLoader = true;
+    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.tb.data)).takeUntil(this.destroyed$);
+    this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     //
     this.data$.subscribe(p => {
       if (p) {
-        // this.showTbplLoader = false;
+        // this.showLoader = false;
       }
       this.cd.detectChanges();
     });
   }
-
 
   public ngOnDestroy() {
     this.destroyed$.next(true);

@@ -47,7 +47,7 @@ export class TlPlService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(TB_PL_BS_API.GET_TRIAL_BALANCE
+    return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
       .replace(':companyUniqueName', this.companyUniqueName), request)
       .map((res) => {
         return res.json();

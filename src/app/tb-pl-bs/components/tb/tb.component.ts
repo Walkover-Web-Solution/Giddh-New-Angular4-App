@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
@@ -9,30 +9,39 @@ import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 @Component({
   selector: 'tb',
   template: `
-    <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany" (onPropertyChanged)="filterData($event)"></tb-pl-bs-filter>
+    <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany"
+                     (onPropertyChanged)="filterData($event)"></tb-pl-bs-filter>
     <tb-grid [expandAll]="filter.expandAll"></tb-grid>
   `
 })
 export class TbComponent implements OnInit, AfterViewInit {
+
+  public get selectedCompany(): ComapnyResponse {
+    return this._selectedCompany;
+  }
+
+  // set company and fetch data...
+  @Input()
+  public set selectedCompany(value: ComapnyResponse) {
+    this._selectedCompany = value;
+    if (value) {
+      this.request = {
+        refresh: false,
+        fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
+      };
+      this.filterData(this.request);
+    }
+  }
+
   public request: TrialBalanceRequest;
-  public selectedCompany: ComapnyResponse;
+  private _selectedCompany: ComapnyResponse;
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
-    this.store.select(p => p.company.companies && p.company.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
-      this.selectedCompany = p;
-      if (p) {
-        this.request = {
-          refresh: false,
-          fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
-          toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
-        };
-        this.filterData(this.request);
-      }
-    });
   }
 
   public ngOnInit() {
-    console.log('hello Tb module');
+    console.log('hello Tb Component');
   }
 
   public ngAfterViewInit() {
