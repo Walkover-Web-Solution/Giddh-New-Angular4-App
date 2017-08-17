@@ -20,14 +20,14 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
   templateUrl: './account-add.component.html'
 })
 export class AccountAddComponent implements OnInit, OnDestroy {
+  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+  @Input() public column: ColumnGroupsAccountVM[];
   public addAccountForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
   public activeAccount$: Observable<AccountResponse>;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
-  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
-  @Input() public column: ColumnGroupsAccountVM[];
   public showGstList: boolean = false;
   public showDefaultGstListLength: number = 2;
   public createAccountInProcess$: Observable<boolean>;
