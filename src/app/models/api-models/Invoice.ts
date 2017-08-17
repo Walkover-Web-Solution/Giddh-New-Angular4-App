@@ -62,6 +62,7 @@ export interface ILedgersInvoiceResult {
   entryDate: string;
   uniqueName: string;
   isSelected?: boolean;
+  invoiceNumber?: string;
 }
 
 export interface GetAllLedgersForInvoiceResponse extends IPagination {
