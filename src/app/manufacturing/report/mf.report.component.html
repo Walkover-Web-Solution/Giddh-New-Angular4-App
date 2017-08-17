@@ -15,8 +15,8 @@
                         <div class="row">
                             <label class="small">Final Product</label>
                             <select class="form-control" name="product" [(ngModel)]="mfStockSearchRequest.product">
-               <option [ngValue]="select">Please Select</option>
-               <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option> 
+               <option [ngValue]="'select'">Please Select</option>
+               <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option>
                </select>
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                         </div>
@@ -32,16 +32,16 @@
                     <div class="form-group col-xs-1 pdR0 custom-select pos-rel">
                         <label class="small">Others</label>
                         <select class="form-control" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
-               <option [ngValue]="select">Please Select</option>
-               <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option> 
+               <option [ngValue]="'select'">Please Select</option>
+               <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option>
                </select>
                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                     </div>
                     <div class="form-group col-xs-1 pdR0 custom-select pos-rel">
                         <label class="small">&nbsp;</label>
                         <select class="form-control" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation">
-               <option [ngValue]="select">Please Select</option>
-               <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option> 
+               <option [ngValue]="'select'">Please Select</option>
+               <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option>
                </select>
                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                     </div>

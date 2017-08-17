@@ -29,6 +29,15 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                     string > ;
                 if (res.status === 'success') {
                     newState.roles = res.body;
+                    newState.roles = _.sortBy(newState.roles, [ (o) => o.name ]);
+                    newState.roles = _.sortBy(newState.roles, [ (o) => !o.isFixed ]);
+
+                    let sortedRoles = _.cloneDeep(newState);
+                    sortedRoles.roles.forEach((role) => {
+                        role.scopes = _.sortBy(role.scopes, [ (o) => o.name ]);
+                    });
+
+                    newState = sortedRoles;
                     return Object.assign({}, state, newState);
                 }
                 return state;

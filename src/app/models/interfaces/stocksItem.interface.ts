@@ -5,6 +5,11 @@ export interface IStocksItem extends INameUniqueName {
   mappedPurchaseAccount: INameUniqueName;
   mappedSalesAccount: INameUniqueName;
   stockGroup: INameUniqueName;
+  date?: any;
+  voucherNumber?: any;
+  stockName?: any;
+  manufacturingQuantity?: any;
+  linkedStocks?: any;
 }
 
 /**
