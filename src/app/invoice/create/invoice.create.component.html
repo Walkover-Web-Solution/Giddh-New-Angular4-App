@@ -87,9 +87,7 @@
     <table class="table">
       <thead class="t-h-bg1">
         <tr>
-          <th>Sno.</th>
-          <th>Date</th>
-          <th>HSN/SAC</th>
+          <th *ngFor="let item of tableCond.content;" [hidden]="!item.display">{{item.field}}</th>
         </tr>
       </thead>
       <tbody>

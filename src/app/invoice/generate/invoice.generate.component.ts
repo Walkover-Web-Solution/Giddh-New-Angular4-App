@@ -92,7 +92,9 @@ export class InvoiceGenerateComponent implements OnInit {
     this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p, q) => {
       if (p && q) {
         // open modal
-        document.getElementById('createNew').click();
+        if (this.selectedLedgerItems.length === 1) {
+          document.getElementById('createNew').click();
+        }
         return (p.templateUniqueName === q.templateUniqueName);
       }
       if ((p && !q) || (!p && q)) {
@@ -101,8 +103,8 @@ export class InvoiceGenerateComponent implements OnInit {
       return true;
     }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
       if (o) {
-        this.getInvoiceTemplateDetails('gst_template_a');
-        // this.getInvoiceTemplateDetails(o.templateUniqueName);
+        // this.getInvoiceTemplateDetails('gst_template_a');
+        this.getInvoiceTemplateDetails(o.templateUniqueName);
       }
     });
     this.getLedgersOfInvoice();
