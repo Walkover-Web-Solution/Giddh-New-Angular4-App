@@ -64,8 +64,8 @@ export class PermissionActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
-        this._toasty.successToast('New Role Created Successfully');
-        this._router.navigate(['/pages', 'permissions', 'list']);
+        this._toasty.successToast('New Role Created Successfully.');
+        // this._router.navigate(['/pages', 'permissions', 'list']);
       }
       return { type: '' };
     });
@@ -86,8 +86,8 @@ export class PermissionActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
-        this._toasty.successToast('Role Updated Successfully');
-        this._router.navigate(['/pages', 'permissions', 'list']);
+        this._toasty.successToast('Role Updated Successfully.');
+        // this._router.navigate(['/pages', 'permissions', 'list']);
       }
       return { type: '' };
     });
@@ -132,7 +132,7 @@ export class PermissionActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
-        this._toasty.successToast('Role Deleted Successfully');
+        this._toasty.successToast('Role Deleted Successfully.');
       }
       return { type: '' };
     });
