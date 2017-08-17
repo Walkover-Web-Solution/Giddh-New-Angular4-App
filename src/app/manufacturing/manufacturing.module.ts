@@ -7,7 +7,7 @@ import { ManufacturingComponent } from './manufacturing.component';
 import { MfReportComponent } from './report/mf.report.component';
 import { MfEditComponent } from './edit/mf.edit.component';
 import { PaginationModule } from 'ngx-bootstrap';
-
+import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 @NgModule({
   declarations: [
     ManufacturingComponent,
@@ -21,6 +21,7 @@ import { PaginationModule } from 'ngx-bootstrap';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    ManufacturingRoutingModule,
     PaginationModule,
     SharedModule
   ],

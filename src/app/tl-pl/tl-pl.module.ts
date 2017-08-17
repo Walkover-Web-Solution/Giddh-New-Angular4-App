@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { TlPlComponent } from './tl-pl.component';
-import { SearchSidebarComponent } from './components/sidebar-components/search.sidebar.component';
 import { TlPlGridComponent } from './components/tl-pl-grid/tl-pl-grid.component';
 import { TlPlFilterComponent } from './components/tl-pl-filter/tl-pl-filter.component';
 import { TlPlRoutingModule } from './tl-pl.routing.module';
@@ -17,7 +16,6 @@ import { TrialAccordionDirective } from './components/tl-pl-grid/trial-accordion
 @NgModule({
   declarations: [
     TlPlComponent,
-    SearchSidebarComponent,
     TlPlGridComponent,
     TlPlFilterComponent,
     TlPlExportComponent,
@@ -28,8 +26,7 @@ import { TrialAccordionDirective } from './components/tl-pl-grid/trial-accordion
     TrialAccordionDirective
   ],
   exports: [
-    TlPlComponent,
-    SearchSidebarComponent
+    TlPlComponent
   ],
   providers: [],
   imports: [

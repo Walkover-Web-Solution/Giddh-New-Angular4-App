@@ -6,7 +6,7 @@ import { ChildGroup } from '../../models/api-models/Search';
 import * as moment from 'moment';
 
 export interface TlPlState {
-  data: AccountDetails;
+  data?: AccountDetails;
   exportData: any;
   count: 0;
   detailedGroups: any;
@@ -17,14 +17,7 @@ export interface TlPlState {
 }
 
 export const initialState: TlPlState = {
-  data: {
-    forwardedBalance: null,
-    closingBalance: null,
-    debitTotal: 0,
-    groupDetails: [],
-    openingBalance: null,
-    creditTotal: 0
-  },
+  data: null,
   noData: true,
   showTbplLoader: false,
   exportData: [],
@@ -34,7 +27,7 @@ export const initialState: TlPlState = {
 
 export function tlPlReducer(state = initialState, action: Action): TlPlState {
   switch (action.type) {
-    case  TlPlActions.GET_TRIAL_BALANCE_RESPONSE: {
+    case TlPlActions.GET_TRIAL_BALANCE_RESPONSE: {
       let data: AccountDetails = _.cloneDeep(action.payload) as AccountDetails;
       addUIKey(data.groupDetails);
       data.groupDetails = removeZeroAmountAccount((data.groupDetails));

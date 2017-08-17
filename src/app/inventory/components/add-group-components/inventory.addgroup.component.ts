@@ -45,8 +45,8 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
-    private router: Router) {
+              private _fb: FormBuilder, private _inventoryService: InventoryService, private inventoryActions: InventoryAction,
+              private router: Router) {
     this.fetchingGrpUniqueName$ = this.store.select(state => state.inventory.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.inventory.isGroupNameAvailable).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.inventory.activeGroup).takeUntil(this.destroyed$);
@@ -83,7 +83,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.addGroupForm = this._fb.group({
       name: ['', [Validators.required]],
       uniqueName: ['', [Validators.required]],
-      parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
+      parentStockGroupUniqueName: [{value: '', disabled: true}, [Validators.required]],
       isSelfParent: [true]
     });
     // enable disable parentGroup select
@@ -93,7 +93,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
       } else {
         this.addGroupForm.controls['parentStockGroupUniqueName'].enable();
-        this.addGroupForm.setErrors({ groupNameInvalid: true });
+        this.addGroupForm.setErrors({groupNameInvalid: true});
       }
     });
 
@@ -114,7 +114,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
         updGroupObj.uniqueName = a.uniqueName;
 
         if (a.parentStockGroup) {
-          this.selectedGroup = { text: a.parentStockGroup.name, id: a.parentStockGroup.uniqueName };
+          this.selectedGroup = {text: a.parentStockGroup.name, id: a.parentStockGroup.uniqueName};
           updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.uniqueName;
           this.parentStockSearchString = a.parentStockGroup.uniqueName;
           updGroupObj.isSelfParent = false;
@@ -154,7 +154,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: Select2OptionData[] = []) {
     rawList.map(p => {
       if (p) {
-        let newOption: Select2OptionData = { text: '', id: '' };
+        let newOption: Select2OptionData = {text: '', id: ''};
         newOption.text = p.name;
         newOption.id = p.uniqueName;
         parents.push(newOption);
@@ -182,7 +182,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
 
   // if there's no matched result
   public onGroupResult() {
-    this.addGroupForm.setErrors({ groupNameInvalid: true });
+    this.addGroupForm.setErrors({groupNameInvalid: true});
   }
 
   // generate uniquename
@@ -195,18 +195,24 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     }
     let val: string = this.addGroupForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
-    this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
 
-    this.isGroupNameAvailable$.subscribe(a => {
-      if (a !== null && a !== undefined) {
-        if (a) {
-          this.addGroupForm.patchValue({ uniqueName: val });
-        } else {
-          let num = 1;
-          this.addGroupForm.patchValue({ uniqueName: val + num });
+    // if val then check for uniqueName is available or not
+    if (val) {
+      this.store.dispatch(this.sideBarAction.GetGroupUniqueName(val));
+
+      this.isGroupNameAvailable$.subscribe(a => {
+        if (a !== null && a !== undefined) {
+          if (a) {
+            this.addGroupForm.patchValue({uniqueName: val});
+          } else {
+            let num = 1;
+            this.addGroupForm.patchValue({uniqueName: val + num});
+          }
         }
-      }
-    });
+      });
+    } else {
+      this.addGroupForm.patchValue({uniqueName: ''});
+    }
   }
 
   public addNewGroup() {
@@ -229,11 +235,12 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
     this.store.select(p => p.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$).distinctUntilChanged().filter(p => !p).subscribe((a) => {
       this.activeGroup$.take(1).subscribe(b => activeGroup = b);
-      this.router.navigateByUrl('/pages/dummy', { skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl('/pages/dummy', {skipLocationChange: true}).then(() => {
         this.router.navigate(['/pages', 'inventory', 'add-group', activeGroup.uniqueName]);
       });
     });
   }
+
   public removeGroup() {
     let activeGroup: StockGroupResponse = null;
     this.activeGroup$.take(1).subscribe(a => activeGroup = a);
