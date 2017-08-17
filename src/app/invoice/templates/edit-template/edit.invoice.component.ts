@@ -35,31 +35,31 @@ export class EditInvoiceComponent implements OnInit {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
 
-    // this.store.select(state => {
-    //   return state.invtemp.templateMeta.templateId;
-    // }).takeUntil(this.destroyed$).subscribe((value) => {
-    //   if (!_.isEmpty(value)) {
-    //     let copyValue = _ .cloneDeep(value);
-    //     this.templateId = copyValue;
-    //   }
-    // });
+    this.store.select(state => {
+      return state.invtemp.templateMeta.templateId;
+    }).takeUntil(this.destroyed$).subscribe((value) => {
+      if (!_.isEmpty(value)) {
+        let copyValue = _ .cloneDeep(value);
+        this.templateId = copyValue;
+      }
+    });
 
-    // this.store.select(state => {
-    //   return Object.keys(state.invtemp.template).map(key => state.invtemp.template[key]);
-    // }).takeUntil(this.destroyed$).take(10).subscribe((value) => {
-    //     if (!_.isEmpty(value)) {
-    //      let copyValue = _ .cloneDeep(value);
-    //      this.template = copyValue;
-    //      let currentTemplate = this.template.find((te) => {
-    //       if (te[this.templateId]) {
-    //         return te[this.templateId];
-    //       }
-    //     });
-    //      this.currentTemplate = _. cloneDeep(currentTemplate);
-    //      this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
-    //      this.store.dispatch(this.invoiceActions.setTemplateData(this.currentTemplateSections));
-    //     }
-    // });
+    this.store.select(state => {
+      return Object.keys(state.invtemp.template).map(key => state.invtemp.template[key]);
+    }).takeUntil(this.destroyed$).take(10).subscribe((value) => {
+        if (!_.isEmpty(value)) {
+         let copyValue = _ .cloneDeep(value);
+         this.template = copyValue;
+         let currentTemplate = this.template.find((te) => {
+          if (te[this.templateId]) {
+            return te[this.templateId];
+          }
+        });
+         this.currentTemplate = _. cloneDeep(currentTemplate);
+         this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
+         this.store.dispatch(this.invoiceActions.setTemplateData(this.currentTemplateSections));
+        }
+    });
 
     // this.tableMeta$ = this.store.select( state = > {
     //   return state.invoice.table;

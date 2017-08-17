@@ -9,8 +9,24 @@
         </div>
     </div>
 
+  <div class="action-button" fxLayout="column"  (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'" [fpPresetFonts]="presetFonts" >
+    {{font.family}}
+  </div>
 
-    <div class="clearfix">
+  <label class="upload-button">
+    <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple>
+    or choose file(s)
+  </label>
+
+  <img src="" height="200" alt="Image preview...">
+
+
+  <button type="button" class="start-upload-btn" (click)="startUpload()">
+    Start Upload
+  </button>
+
+  {{imagePreview}}
+  <div class="clearfix">
         <ul class="designTool">
             <li>
                 <!-- <div [fontPicker]="font" [fpWidth]="'320px'" [fpPosition]="'bottom'">Click to open the font picker</div>  -->
@@ -19,7 +35,7 @@
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li *ngIf="ifTemplateSelected">
-                <template-selector></template-selector>
+                <!--<template-selector></template-selector>-->
             </li>
             <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
@@ -36,29 +52,43 @@
         </ul>
     </div>
 
+
+
     <!-- edit template  start -->
-    <div class="clearfix">
-        <ul class="templateView">
-            <li>
-                <img src="./assets/images/template1.jpg" />
-            </li>
-            <li>
-                <img src="./assets/images/template1.jpg" />
-            </li>
-            <li>
-                <img src="./assets/images/template1.jpg" />
-            </li>
-            <li>
-                <img src="./assets/images/template1.jpg" />
-            </li>
-            <li>
-                <img src="./assets/images/template1.jpg" />
-            </li>
-            <li>
-                <img src="./assets/images/template1.jpg" />
-            </li>
-        </ul>
-    </div>
+    <!--<div class="clearfix">-->
+        <!--<ul class="templateView">-->
+            <!--<li>-->
+                <!--<img src="./assets/images/template1.jpg" />-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<img src="./assets/images/template1.jpg" />-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<img src="./assets/images/template1.jpg" />-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<img src="./assets/images/template1.jpg" />-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<img src="./assets/images/template1.jpg" />-->
+            <!--</li>-->
+            <!--<li>-->
+                <!--<img src="./assets/images/template1.jpg" />-->
+            <!--</li>-->
+        <!--</ul>-->
+    <!--</div>-->
+
+   <div class="tab">
+      <button class="tablinks" (click)="showTemplate('common_template_a')" id="defaultOpen">template1</button>
+      <button class="tablinks" (click)="showTemplate('gst_template_a')">template2</button>
+      <button class="tablinks" (click)="showTemplate('gst_template_b')">template3</button>
+  </div>
+
+  <div class="tab">
+      <button class="tablinks" (click)="showTemplate('gst_template_c')">template4</button>
+      <button class="tablinks" (click)="showTemplate('gst_template_d')">template5</button>
+      <button class="tablinks" (click)="showTemplate('gst_template_e')">template6</button>
+  </div>
     <!-- edit template  end -->
 
     <!-- edit logo  start -->
@@ -81,50 +111,50 @@
     <!-- edit color  start -->
     <div class="clearfix mrT2">
         <div class="swatch">
-            <span class="swatch-preview"><span class="" style="background-color: #ddd;"></span>
+            <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': currentColor}"></span>
             <p class="text-center">#0191db</p>
             </span>
             <div class="mrL1 pull-left">
                 <ul>
-                    <li class="black"></li>
-                    <li class="grey"></li>
-                    <li class="yellow"></li>
-                    <li class="cyan"></li>
-                    <li class="red"></li>
-                    <li class="orange"></li>
-                    <li class="blue"></li>
-                    <li class="purple"></li>
+                    <li class="black" (click)="changeColor('black')"></li>
+                    <li class="grey" (click)="changeColor('grey')"></li>
+                    <li class="yellow" (click)="changeColor('yellow')"></li>
+                    <li class="cyan" (click)="changeColor('cyan')"></li>
+                    <li class="red" (click)="changeColor('red')"></li>
+                    <li class="orange" (click)="changeColor('orange')"></li>
+                    <li class="blue" (click)="changeColor('blue')"></li>
+                    <li class="purple" (click)="changeColor('purple')"></li>
                 </ul>
             </div>
         </div>
     </div>
     <!-- edit color end -->
 
-    <!-- edit print setting  start -->
-    <div class="clearfix mrT2">
-        <div class="printTool pos-rel">
-            <p>Page margins</p>
-            <table class="table mr0">
-                <thead>
-                    <tr>
-                        <th>Top</th>
-                        <th>Left</th>
-                        <th>Bottom</th>
-                        <th>Right</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                        <td><input type="text" class="form-control" /></td>
-                    </tr>
-                </tbody>
-            </table>
-            <a href="javascript:void(0);" class="pos-abs pull-right pdR1">Reset</a>
-        </div>
-    </div>
+    <!--&lt;!&ndash; edit print setting  start &ndash;&gt;-->
+    <!--<div class="clearfix mrT2">-->
+        <!--<div class="printTool pos-rel">-->
+            <!--<p>Page margins</p>-->
+            <!--<table class="table mr0">-->
+                <!--<thead>-->
+                    <!--<tr>-->
+                        <!--<th >Top</th>-->
+                        <!--<th>Left</th>-->
+                        <!--<th>Bottom</th>-->
+                        <!--<th>Right</th>-->
+                    <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                    <!--<tr>-->
+                        <!--<td><input type="text" class="form-control" /></td>-->
+                        <!--<td><input type="text" class="form-control" /></td>-->
+                        <!--<td><input type="text" class="form-control" /></td>-->
+                        <!--<td><input type="text" class="form-control" /></td>-->
+                    <!--</tr>-->
+                <!--</tbody>-->
+            <!--</table>-->
+            <!--<a href="javascript:void(0);" class="pos-abs pull-right pdR1">Reset</a>-->
+        <!--</div>-->
+    <!--</div>-->
     <!-- edit print setting  end -->
 
 
@@ -148,6 +178,11 @@
         </ul>
     </div>  -->
 
-    <print-settings></print-settings>
+  <p><input name="top" id="top-margin" type="text" [(ngModel)]=top (ngModelChange)='onPageMarginChange(top,"topMargin")' />
+    <input name="left" id="left-margin" type="text" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMargin")'/>
+    <input name="bottom" id="bottom-margin" type="text" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")'/>
+    <input name="right" id="right-margin" type="text" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMargin")'/></p>
+
+
 
 </div>

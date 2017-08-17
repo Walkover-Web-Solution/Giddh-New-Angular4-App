@@ -12,6 +12,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
 
+
 @Injectable()
 export class InvoiceTemplatesService {
   private companyUniqueName: string;
@@ -26,8 +27,9 @@ export class InvoiceTemplatesService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVOICE_API.GET_USER_TEMPLATES.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(INVOICE_API.GET_USER_TEMPLATES).map((res) => {
       let data: Template = res.json();
+      console.log('API RESPONSE', data);
       return data;
     }).catch((e) => HandleCatch<Template, string>(e));
   }
@@ -48,9 +50,11 @@ export class InvoiceTemplatesService {
   }
 
   public getFontFamily(): Observable<string> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.fontFamily);
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.font);
   }
-
+  public getColor(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.color);
+  }
   public getCompanyName(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.companyName);
   }
