@@ -95,7 +95,6 @@ if (ENV === 'development') {
     APP_PROVIDERS
   ]
 })
-
 export class AppModule {
 
   constructor(
