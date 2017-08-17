@@ -345,9 +345,18 @@ export class GenBulkInvoiceFinalObj {
 * Get invoice template details response model
 */
 export interface GetInvoiceTemplateDetailsResponse {
+  sample?: any;
+  color: string;
   sections: ISection[];
   isDefault: boolean;
-  sample: boolean;
+  fontSize: string;
+  font: string;
+  topMargin: number;
+  leftMargin: number;
+  rightMargin: number;
+  bottomMargin: number;
+  logoPosition: string;
+  logoSize: string;
   uniqueName: string;
   name: string;
 }
