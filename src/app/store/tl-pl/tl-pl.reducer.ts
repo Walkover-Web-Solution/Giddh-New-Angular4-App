@@ -1,33 +1,44 @@
 import { Action } from '@ngrx/store';
-import { TlPlActions } from '../../services/actions/tl-pl.actions';
-import { AccountDetails } from '../../models/api-models/tl-pl';
+import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
+import { AccountDetails } from '../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { ChildGroup } from '../../models/api-models/Search';
-import * as moment from 'moment';
 
-export interface TlPlState {
+interface TbState {
   data?: AccountDetails;
   exportData: any;
   count: 0;
   detailedGroups: any;
-  showTbplLoader: boolean;
+  showLoader: boolean;
   noData: boolean;
-  toDate?: Date;
-  fromDate?: Date;
 }
 
-export const initialState: TlPlState = {
-  data: null,
-  noData: true,
-  showTbplLoader: false,
-  exportData: [],
-  count: 0,
-  detailedGroups: [],
+interface PlState {
+  data?: AccountDetails;
+  exportData: any;
+  showLoader: boolean;
+  noData: boolean;
+}
+
+export interface TBPlBsState {
+  tb?: TbState;
+  pl?: PlState;
+}
+
+export const initialState: TBPlBsState = {
+  tb: {
+    data: null,
+    noData: true,
+    showLoader: false,
+    exportData: [],
+    count: 0,
+    detailedGroups: [],
+  }
 };
 
-export function tlPlReducer(state = initialState, action: Action): TlPlState {
+export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState {
   switch (action.type) {
-    case TlPlActions.GET_TRIAL_BALANCE_RESPONSE: {
+    case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE: {
       let data: AccountDetails = _.cloneDeep(action.payload) as AccountDetails;
       addUIKey(data.groupDetails);
       data.groupDetails = removeZeroAmountAccount((data.groupDetails));
@@ -37,17 +48,21 @@ export function tlPlReducer(state = initialState, action: Action): TlPlState {
         noData = true;
       }
       return Object.assign({}, state, {
-        data, noData, showTbplLoader
+        tb: { data, noData, showTbplLoader }
       });
     }
-    case TlPlActions.GET_TRIAL_BALANCE_REQUEST: {
-      return Object.assign({}, state, {
-        fromDate: moment(action.payload.fromDate, 'DD-MM-YYYY').toDate(),
-        toDate: moment(action.payload.toDate, 'DD-MM-YYYY').toDate()
-      });
+    case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST: {
+      return { ...state, tb: { ...state.tb, showLoader: true } };
     }
-    case TlPlActions.SET_DATE:
-      return Object.assign({}, state, { fromDate: action.payload.fromDate, toDate: action.payload.toDate });
+
+    case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
+      //
+      return;
+    }
+
+    case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
+      return { ...state, pl: { ...state.pl, showLoader: true } };
+    }
     default: {
       return state;
     }
