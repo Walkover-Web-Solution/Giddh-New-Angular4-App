@@ -100,53 +100,7 @@ export class InvoiceActions {
       return { type: '' }; // Refresh the list
     });
 
-  // Generate Bulk Invoice
-  // @Effect()
-  // public GenerateBulkInvoice$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
-  //   .switchMap(action => this._invoiceService.GenerateBulkInvoice(action.payload.model, action.payload.data))
-  //   .map(response => {
-  //     return this.GenerateBulkInvoiceResponse(response);
-  //   });
-
-  // @Effect()
-  // public GenerateBulkInvoiceResponse$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE)
-  //   .map(response => {
-  //     return { type : ''};
-  //   });
-
-  // Get ALL TemplateS
-  // @Effect()
-  // public GetAllTemplates$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.GET_TEMPLATE)
-  //   .switchMap(action => this._invoiceService.GetAllTemplates())
-  //   .map(response => {
-  //     return this.GetAllTemplatesResponse(response);
-  //   });
-
-  // @Effect()
-  // public GetAllTemplatesResponse$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.GET_TEMPLATE_RESPONSE)
-  //   .map(response => {
-  //     return { type : ''};
-  //   });
-
-  // Send Mail
-  // @Effect()
-  // public SendMail$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.SEND_MAIL)
-  //   .switchMap(action => this._invoiceService.SendMail(action.payload))
-  //   .map(response => {
-  //     return this.SendMailResponse(response);
-  //   });
-
-  // @Effect()
-  // public SendMailResponse$: Observable<Action> = this.action$
-  //   .ofType(INVOICE_ACTIONS.SEND_MAIL_RESPONSE)
-  //   .map(response => {
-  //     return { type : ''};
-  //   });
+  @Effect()
   public GetTemplateDetailsOfInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS)
     .switchMap(action => this._invoiceService.GetInvoiceTemplateDetails(action.payload))
