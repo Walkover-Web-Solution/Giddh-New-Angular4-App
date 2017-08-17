@@ -21,12 +21,34 @@ export class ContentFilterComponent {
   public myValue: number;
   public itemSlider: string;
   public item: string;
+  public custom1: string;
+  public custom2: string;
+  public custom3: string;
   public itemCodeSlider: string;
   public qtySlider: string;
   public rateSlider: string;
   public discountSlider: string;
   public taxSlider: string;
   public totalSlider: string;
+  public numSlider: string;
+  public quantitySlider: string;
+  public taxValueSlider: string;
+  public dateSlider: string;
+  public invoiceNo: string;
+  public invoiceDate: string;
+  public dueDate: string;
+  public shippingDate: string;
+  public shippingVia: string;
+  public trackingNo: string;
+  public invoice: string;
+  public taxInvoice: string;
+  public billingAddress: string;
+  public billingGstin: string;
+  public shippingAddress: string;
+  public shippingGstin: string;
+  public message1: string;
+  public message2: string;
+
 
   // public data: Content = null;
 
@@ -105,19 +127,12 @@ export class ContentFilterComponent {
     this.store.dispatch(this.invoiceAction.updateShippingState(data));
     console.log(data);
   }
-//
-//   public onCheckShipVia(check) {
-//     if (check === 'false') {
-//       this.enableShipVia = false;
-//     }
-//   }
-//   // -------------------TrackingNo----------------
-//   public onTrackingNoChange(data) {
-//     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
-//     // this.store.dispatch(this.invoiceAction.setTrackingNo(data));
-//     console.log(data);
-//   }
-//
+  public onTrackingNoChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateTrackingNo(data));
+    console.log(data);
+  }
+
 //   public onCheckTrackingNo(check) {
 //     if (check === 'false') {
 //       this.enableTrackingNo = false;
@@ -125,12 +140,18 @@ export class ContentFilterComponent {
 //   }
 //
 //   // ------------------InvoiceTitleName-------------
-//   public onInvoiceChange(data) {
-//     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
-//     // this.store.dispatch(this.invoiceAction.setInvoiceTitle(data));
-//     console.log(data);
-//   }
-//
+  public onInvoiceChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateFormNameInvoice(data));
+    console.log(data);
+  }
+
+  public onTaxInvoiceChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(data));
+    console.log(data);
+  }
+
 //   // --------------------CustomerDetails-----------------
 //
 //   public onCheckCustomerName(check) {
@@ -158,11 +179,46 @@ export class ContentFilterComponent {
 //   }
 // // ------------------------BillingDetails-------------------
 //
-//   public onShippingAddressChange(data) {
-//     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
-//     // this.store.dispatch(this.invoiceAction.setShippingAddress(data));
-//     console.log(data);
-//   }
+  public onShippingAddressChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateShippingAddress(data));
+    console.log(data);
+  }
+
+  public onShippingGstinChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateShippingGSTIN(data));
+    console.log(data);
+  }
+
+  public onBillingAddressChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateBillingAddress(data));
+    console.log(data);
+  }
+
+  public onBillingGstinChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateBillingGSTIN(data));
+    console.log(data);
+  }
+  public onMessage1Change(data) {
+    this.store.dispatch(this.invoiceAction.updateMessage1(data));
+  }
+  public onMessage2Change(data) {
+    this.store.dispatch(this.invoiceAction.updateMessage2(data));
+  }
+
+  public onCustom1Change(data) {
+    this.store.dispatch(this.invoiceAction.updateCustomField1(data));
+  }
+  public onCustom2Change(data) {
+    this.store.dispatch(this.invoiceAction.updateCustomField2(data));
+  }
+
+  public onCustom3Change(data) {
+    this.store.dispatch(this.invoiceAction.updateCustomField3(data));
+  }
 //
 //   public onCheckShippingAddress(check) {
 //     if (check === 'false') {
@@ -177,12 +233,10 @@ export class ContentFilterComponent {
 //   }
 //
 //   // ----------------------InvoiceGrid-----------------------
-//   public onChangeWidth(value, colName) {
-//     this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
-//   }
+  public onChangeWidth(value, colName) {
+    this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
+  }
 // }
 //
 //
-
-
 }
