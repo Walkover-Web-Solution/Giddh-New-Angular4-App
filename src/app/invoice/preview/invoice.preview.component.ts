@@ -32,8 +32,9 @@ const COMPARISION_FILTER = [
 export class InvoicePreviewComponent implements OnInit {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
+  @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
 
-  public selectedInvoiceForDelete: IInvoiceResult;
+  public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
@@ -145,7 +146,8 @@ export class InvoicePreviewComponent implements OnInit {
   private onPerformAction(item, ele: HTMLInputElement) {
     let actionToPerform = ele.value;
     if (actionToPerform === 'paid') {
-      this.invoiceConfirmationModel.show();
+      this.selectedInvoice = item;
+      this.performActionOnInvoiceModel.show();
     } else {
       this.store.dispatch(this.invoiceActions.ActionOnInvoice(item.uniqueName, { action: actionToPerform }));
     }
@@ -153,16 +155,21 @@ export class InvoicePreviewComponent implements OnInit {
 
   private onDeleteBtnClick(uniqueName) {
     let allInvoices = _.cloneDeep(this.invoiceData.results);
-    this.selectedInvoiceForDelete = allInvoices.find((o) => o.uniqueName === uniqueName);
+    this.selectedInvoice = allInvoices.find((o) => o.uniqueName === uniqueName);
     this.invoiceConfirmationModel.show();
   }
 
   private deleteConfirmedInvoice() {
     this.invoiceConfirmationModel.hide();
-    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoiceForDelete.invoiceNumber));
+    this.store.dispatch(this.invoiceActions.DeleteInvoice(this.selectedInvoice.invoiceNumber));
   }
 
   private closeConfirmationPopup() {
     this.invoiceConfirmationModel.hide();
+  }
+
+  private closePerformActionPopup(data) {
+    this.performActionOnInvoiceModel.hide();
+    this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, { action: 'paid', amount: data }));
   }
 }

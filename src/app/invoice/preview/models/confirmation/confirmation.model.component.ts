@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ILedgersInvoiceResult } from '../../../models/api-models/Invoice';
+import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
 
 @Component({
   selector: 'delete-role-confirmation-model',

@@ -97,7 +97,7 @@
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-          <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoiceForDelete" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
+          <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoice" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
         </div>
     </div>
 </div>
@@ -107,7 +107,7 @@
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-          <delete-role-confirmation-model [selectedInvoiceForDelete]="selectedInvoiceForDelete" (confirmDeleteEvent)="deleteConfirmedInvoice()" (closeModelEvent)="closeConfirmationPopup()"></delete-role-confirmation-model>
+          <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
         </div>
     </div>
 </div>
