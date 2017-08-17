@@ -1,34 +1,34 @@
 <form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate class="clearfix mrB2">
   
-  <div class="row pdT2 bdrB">
-    <div class="col-xs-6">
-      <div class="form-group size_360">
-        <label>Customer Name</label>
-        <input type="text" name="customer" class="form-control" [(ngModel)]="invoiceFormData.customerName" />
+    <div class="pdT2 bdrB clearfix">
+      <div class="col-xs-6">
+        <div class="form-group size_360">
+          <label>Customer Name</label>
+          <input type="text" name="customer" class="form-control" [(ngModel)]="invFormData.customerName" />
+        </div>
+      </div>
+      <div class="col-xs-6 text-right">
+        <p class="lead b">Balance Due: Rs9750</p>
       </div>
     </div>
-    <div class="col-xs-6 text-right">
-      <p class="lead b">Balance Due: Rs9750</p>
-    </div>
-  </div>
 
   <section class="form-inline col-xs-12">
     <div class="pdT2 clearfix">
       <div class="form-group size_240">
         <label>Attention to</label>
-        <input type="text" name="attention" class="form-control" ngModel />
+        <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
       </div>
       <div class="form-group">
         <label>Invoice Date</label>
-        <input type="text" name="invoicedate" class="form-control" ngModel />
+        <input type="text" name="invoicedate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
       </div>
       <div class="form-group">
         <label>Invoice Number</label>
-        <input type="text" name="invoicenumber" class="form-control" ngModel />
+        <input type="text" name="invoicenumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
       </div>
       <div class="form-group">
         <label>Due Date</label>
-        <input type="text" name="duedate" class="form-control" ngModel />
+        <input type="text" name="duedate" class="form-control" [(ngModel)]="invFormData.invoiceDetails.dueDate" />
       </div>
       <div class="form-group">
         <label>Country</label>
@@ -39,15 +39,15 @@
     <div class="pdT2 clearfix">
       <div class="form-group size_240">
         <label>Billing Address</label>
-        <textarea name="attention" class="form-control" ngModel></textarea>
+        <textarea name="attention" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address"></textarea>
       </div>
       <div class="form-group">
         <label>State</label>
-        <input type="text" name="invoicedate" class="form-control" ngModel />
+        <input type="text" name="invoicedate" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateCode" />
       </div>
       <div class="form-group">
         <label>GSTIN</label>
-        <select class="form-control" name="pageName" ngModel>
+        <select class="form-control" name="pageName" [(ngModel)]="invFormData.account.billingDetails.gstNumber">
           <option [ngValue]="select">Select GSTIN</option>
         </select>
       </div>
@@ -55,16 +55,16 @@
 
     <div class="pdT2 clearfix">
       <div class="form-group size_240">
-        <label>Billing Address</label>
-        <textarea name="attention" class="form-control" ngModel></textarea>
+        <label>Shipping Address</label>
+        <textarea name="attention" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address"></textarea>
       </div>
       <div class="form-group">
         <label>State</label>
-        <input type="text" name="invoicedate" class="form-control" ngModel />
+        <input type="text" name="invoicedate" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateCode" />
       </div>
       <div class="form-group">
         <label>GSTIN</label>
-        <select class="form-control" name="pageName" ngModel>
+        <select class="form-control" name="pageName" [(ngModel)]="invFormData.account.shippingDetails.gstNumber">
           <option [ngValue]="select">Select GSTIN</option>
         </select>
       </div>
@@ -92,31 +92,35 @@
           <th>HSN/SAC</th>
         </tr>
       </thead>
+      <tbody>
+        <!-- <tr *ngFor="let transaction of invFormData.entries; let i = index">
+          <td></td>
+        </tr> -->
+      </tbody>
     </table>
   </section>
-  
-</form>
 
-<section class="row">
-  <section id="actionPane" class="text-center">
-    <div class="col-xs-12">
-      <button class="btn btn-default mrR1 pull-left" (click)="onCancelModal($event)">Close</button>
-      <button class="btn btn-default pull-left" (click)="onCancelModal($event)">Clear</button>
-      <button class="btn btn-default" (click)="onCancelModal($event)">Print or Preview</button>
+  <section class="row">
+    <section id="actionPane" class="text-center">
+      <div class="col-xs-12">
+        <button type="button" class="btn btn-default mrR1 pull-left" (click)="onCancelModal($event)">Close</button>
+        <button type="button" class="btn btn-default pull-left" (click)="onCancelModal($event)">Clear</button>
+        <button type="button" class="btn btn-default" (click)="onCancelModal($event)">Print or Preview</button>
 
-      <div class="pull-right pr">
-        Subtotal 
-        <div class="btn-group" dropdown [dropup]="true">
-          <button type="button" class="btn btn-default">Generate Invoice</button>
-          <button type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split">
-            <span class="caret"></span>
-            <span class="sr-only">Split button!</span>
-          </button>
-          <ul *dropdownMenu class="dropdown-menu" role="menu">
-            <li role="menuitem"><a class="dropdown-item" href="#">Generate &amp; Share</a></li>
-          </ul>
+        <div class="pull-right pr">
+          Subtotal 
+          <div class="btn-group" dropdown [dropup]="true">
+            <button type="submit" class="btn btn-default">Generate Invoice</button>
+            <button type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split">
+              <span class="caret"></span>
+              <span class="sr-only">Split button!</span>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu" role="menu">
+              <li role="menuitem"><a class="dropdown-item" href="#">Generate &amp; Share</a></li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   </section>
-</section>
+</form>

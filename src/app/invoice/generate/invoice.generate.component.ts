@@ -88,14 +88,11 @@ export class InvoiceGenerateComponent implements OnInit {
           return o;
         });
       }
-      if (o.generate && o.generate.invoiceData) {
-        // open modal
-        // document.getElementById('createNew').click();
-        console.log('in loop');
-      }
     });
     this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p, q) => {
       if (p && q) {
+        // open modal
+        document.getElementById('createNew').click();
         return (p.templateUniqueName === q.templateUniqueName);
       }
       if ((p && !q) || (!p && q)) {
@@ -105,6 +102,7 @@ export class InvoiceGenerateComponent implements OnInit {
     }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
       if (o) {
         this.getInvoiceTemplateDetails('gst_template_a');
+        // this.getInvoiceTemplateDetails(o.templateUniqueName);
       }
     });
     this.getLedgersOfInvoice();

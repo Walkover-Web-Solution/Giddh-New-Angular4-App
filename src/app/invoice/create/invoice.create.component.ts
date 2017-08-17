@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PreviewAndGenerateInvoiceResponse } from '../../models/api-models/Invoice';
+import { PreviewAndGenerateInvoiceResponse, GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 
@@ -20,7 +20,8 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
   @Input() public actionType: string;
   @Output() public closeInvoiceModel: EventEmitter<boolean> = new EventEmitter(true);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private invoiceFormData: PreviewAndGenerateInvoiceResponse;
+  private invFormData: PreviewAndGenerateInvoiceResponse;
+  private invTempCond: GetInvoiceTemplateDetailsResponse;
 
   constructor(
     private store: Store<AppState>,
@@ -30,10 +31,15 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
 
   public ngOnInit() {
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o.generate && o.generate.invoiceData) {
-        this.invoiceFormData = _.cloneDeep(o.generate.invoiceData);
+      if (o && o.generate && o.generate.invoiceData) {
+        this.invFormData = _.cloneDeep(o.generate.invoiceData);
       }else {
-        this.invoiceFormData = new PreviewAndGenerateInvoiceResponse();
+        this.invFormData = new PreviewAndGenerateInvoiceResponse();
+      }
+    });
+    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
+      if (o && o.generate && o.generate.invoiceTemplateConditions) {
+        this.invTempCond =  _.cloneDeep(o.generate.invoiceTemplateConditions);
       }
     });
   }
@@ -44,7 +50,7 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
 
   private onSubmitInvoiceForm(f: NgForm) {
     console.log (f, 'onSubmitInvoiceForm');
-    console.log (this.invoiceFormData, 'actual class object');
+    console.log (this.invFormData, 'actual class object');
   }
 
   private onCancelModal(e) {
