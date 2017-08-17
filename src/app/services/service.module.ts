@@ -29,8 +29,11 @@ import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
 import { PermissionService } from './permission.service';
-import { ManufacturingService } from './manufacturing.service';
 import { PermissionActions } from './actions/permission/permission.action';
+import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { InvoiceService } from './invoice.service';
+import { InvoiceTemplatesService } from './invoice.templates.service';
+import { ManufacturingService } from './manufacturing.service';
 
 /**
  * Home Module
@@ -53,6 +56,7 @@ import { SettingsProfileActions } from './actions/settings/profile/settings.prof
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
+
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -79,9 +83,10 @@ import { ManufacturingActions } from './actions/manufacturing/manufacturing.acti
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TlPlActions),
     EffectsModule.run(LedgerActions),
+    EffectsModule.run(InvoiceActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
-    EffectsModule.run(SettingsTaxesActions),
+    EffectsModule.run(SettingsTaxesActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -110,6 +115,8 @@ export class ServiceModule {
         LogsService,
         TlPlService,
         LedgerService,
+        InvoiceService,
+        InvoiceTemplatesService,
         SettingsIntegrationService,
         SettingsProfileService,
         SettingsTaxesService
