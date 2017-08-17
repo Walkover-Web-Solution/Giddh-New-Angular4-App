@@ -1,4 +1,3 @@
-import { Actions } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit } from '@angular/core';
@@ -8,13 +7,11 @@ import { InventoryAction } from '../../services/actions/inventory/inventory.acti
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import { StockDetailResponse } from '../../models/api-models/Inventory';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
 import * as _ from 'lodash';
 import * as moment from 'moment';
-import { LinkedStocks } from '../manufacturing.utility';
 import { GroupService } from '../../services/group.service';
-import { OtherExpenses, COtherExpenses, IManufacturingItemRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
+import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -24,7 +21,7 @@ export class MfEditComponent implements OnInit {
 
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public consumptionDetail = [];
-  public isUpdateCase: boolean  = false;
+  public isUpdateCase: boolean = false;
   public manufacturingDetails: ManufacturingItemRequest;
   public otherExpenses: any = {};
   public toggleAddExpenses: boolean = false;
@@ -40,13 +37,11 @@ export class MfEditComponent implements OnInit {
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private store: Store<AppState>,
-    private manufacturingActions: ManufacturingActions,
-    private inventoryAction: InventoryAction,
-    private _groupService: GroupService,
-    private _location: Location
-  ) {
+  constructor(private store: Store<AppState>,
+              private manufacturingActions: ManufacturingActions,
+              private inventoryAction: InventoryAction,
+              private _groupService: GroupService,
+              private _location: Location) {
     this.manufacturingDetails = new ManufacturingItemRequest();
 
     // Update/Delete condition
@@ -74,10 +69,10 @@ export class MfEditComponent implements OnInit {
         let groups: Select2OptionData[] = [];
         data.body.map((d: any) => {
           if (d.category === 'expenses') {
-            this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
+            this.expenseGroupAccounts.push({text: d.name, id: d.uniqueName});
           }
           if (d.category === 'liabilities') {
-            this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
+            this.liabilityGroupAccounts.push({text: d.name, id: d.uniqueName});
           }
         });
       }
@@ -100,7 +95,7 @@ export class MfEditComponent implements OnInit {
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
+            return {text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName};
           });
         }
       }
@@ -127,6 +122,10 @@ export class MfEditComponent implements OnInit {
     }
   }
 
+  public goBackToListPage() {
+    this._location.back();
+  }
+
   private addConsumption(data) {
     console.log('The data to push is :', data);
     let val = {
@@ -134,7 +133,7 @@ export class MfEditComponent implements OnInit {
       rate: data.rate,
       stockName: data.stockUniqueName,
       stockUniqueName: data.stockUniqueName,
-      quantity: data.quantity,
+      quantity: data.quantity
       // stockUnitCode: 'm' // TODO: Remove hardcoded value
     };
 
@@ -159,17 +158,17 @@ export class MfEditComponent implements OnInit {
 
   private addExpense(data) {
     let objToPush = {
-        baseAccount: {
-            uniqueName: data.baseAccountUniqueName
-        },
-        transactions: [
-            {
-                account: {
-                    uniqueName: data.transactionAccountUniqueName
-                },
-                amount: data.transactionAmount
-            }
-        ]
+      baseAccount: {
+        uniqueName: data.baseAccountUniqueName
+      },
+      transactions: [
+        {
+          account: {
+            uniqueName: data.transactionAccountUniqueName
+          },
+          amount: data.transactionAmount
+        }
+      ]
     };
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
@@ -241,9 +240,5 @@ export class MfEditComponent implements OnInit {
       return cost;
     }
     return 0;
-  }
-
-  private goBackToListPage() {
-    this._location.back();
   }
 }
