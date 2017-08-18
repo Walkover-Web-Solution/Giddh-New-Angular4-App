@@ -11,7 +11,7 @@ export class AuditLogsSidebarVM {
   public users$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
-    width: '200px',
+    width: '100%',
     placeholder: 'Select Option',
     allowClear: true
   };
