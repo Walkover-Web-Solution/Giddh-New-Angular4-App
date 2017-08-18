@@ -128,8 +128,8 @@ export class DesignFiltersContainerComponent implements OnInit {
 
         this.files.push(output.file);
         console.log(this.files);
-        this.previewFile(this.files);
-      // });
+        // this.previewFile(this.files);
+       // });
       // when all files added in queue
       // uncomment this if you want to auto upload files when added
       // const event: UploadInput = {
@@ -146,11 +146,7 @@ export class DesignFiltersContainerComponent implements OnInit {
       //   console.log(this.imagePreview);
       //   // The image preview
         this.files.push(output.file);
-      }
-      // add file to array when added
-      // this.files.push(output.file);
-      // console.log(this.files);
-      else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
+      } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
       // update current data in files array for uploading file
       const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
       this.files[index] = output.file;
@@ -189,21 +185,21 @@ export class DesignFiltersContainerComponent implements OnInit {
     this.uploadInput.emit(event);
   }
 
-   public previewFile(files: any) {
-    let preview = document.querySelector('img');
-    let file    = document.querySelector('input[type=file]').files[0];
-    let reader  = new FileReader();
-
-    reader.onloadend = function() {
-      preview.src = reader.result;
-    }
-
-    if (file) {
-      reader.readAsDataURL(file);
-    } else {
-      preview.src = ' ';
-    }
-  }
+  //  public previewFile(files: any) {
+  //   let preview = document.querySelector('img');
+  //   let file    = document.querySelector('input[type=file]').files[0];
+  //   let reader  = new FileReader();
+  //
+  //   reader.onloadend = function() {
+  //     preview.src = reader.result;
+  //   }
+  //
+  //   if (file) {
+  //     reader.readAsDataURL(file);
+  //   } else {
+  //     preview.src = ' ';
+  //   }
+  // }
   public cancelUpload(id: string): void {
     this.uploadInput.emit({ type: 'cancel', id });
   }

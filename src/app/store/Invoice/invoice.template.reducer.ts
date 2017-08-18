@@ -66,6 +66,17 @@ export interface InvoiceTemplateMetaState {
   rightMargin: number;
   font: string;
   color: string;
+  taxableAmount: string;
+  totalTax: string;
+  otherDeduction: string;
+  total: string;
+  totalInWords: string;
+  thanks: string;
+  message1: string;
+  message2: string;
+  companyAddress: string;
+  imageSignature: string;
+  slogan: string;
 }
 
 export interface InvoiceTableState {
@@ -195,6 +206,17 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   rightMargin: 10,
   font: 'Open Sans',
   color: '',
+  taxableAmount: '',
+  totalTax: '',
+  otherDeduction: '',
+  total: '',
+  totalInWords: '',
+  message1: '',
+  message2: '',
+  thanks: '',
+  companyAddress: '',
+  imageSignature: '',
+  slogan: '',
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -202,7 +224,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
     case INVOICE.TEMPLATE.SET_TEMPLATE_DATA:
       let headerSection = action.payload[0].content;
       let tableSection = action.payload[1].content;
-      // let footerSection = action.payload[2].content;
+      let footerSection = action.payload[2].content;
       return Object.assign({}, state, {
         companyName: headerSection[0].label,
         GSTIN: headerSection[1].label,
@@ -253,7 +275,17 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         totalWidth: tableSection[10].width,
         quantityLabel: tableSection[11].label,
         quantityWidth: tableSection[11].width,
-
+        taxableAmount: footerSection[0].label,
+        totalTax: footerSection[1].label,
+        otherDeduction: footerSection[2].label,
+        total: footerSection[3].label,
+        totalInWords: footerSection[4].label,
+        message1: footerSection[5].label,
+        message2: footerSection[6].label,
+        thanks: footerSection[7].label,
+        companyAddress: footerSection[8].label,
+        imageSignature: footerSection[9].label,
+        slogan: footerSection[10].label
         // companyName: action.payload.
       });
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
@@ -331,13 +363,20 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         shippingGstin: action.payload.data
       });
     case INVOICE.TEMPLATE.SET_FONT:
-      console.log("FONT UPDATE ACTION", action.payload);
       return Object.assign({}, state, {
         font: action.payload.font
       });
     case INVOICE.TEMPLATE.SET_COLOR:
       return Object.assign({}, state, {
         color : action.payload.color
+      });
+    case INVOICE.TEMPLATE.UPDATE_MESSAGE1:
+      return Object.assign({}, state, {
+        message1 : action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_MESSAGE2:
+      return Object.assign({}, state, {
+        message2 : action.payload.data
       });
     default: {
       return state;
