@@ -105,17 +105,16 @@
                             <tr>
                                 <td>
                                     <h3 [ngStyle] = "{ 'background-color': color}">{{this.companyName$| async }}</h3>
-                                    <table class="with-pd"><tbody>
+                                  <img [src]="logoSrc" height="200" alt="Image preview...">
+                                  <table class="with-pd"><tbody>
                                             <tr>
                                                 <td style="padding-right: 15px;">
-                                                    <p><b>GSTIN</b></p>
-                                                    <p><b>Branch</b></p>
-                                                    <p><b>PAN</b></p>
+                                                    <p><b>{{this.GSTIN$| async }}</b></p>
+                                                    <p><b>{{this.PAN$| async }}</b></p>
                                                 </td>
                                                 <td>
-                                                  <p>{{this.GSTIN$| async }}</p>
-                                                  <p>{{this.address$| async }}</p>
-                                                  <p>{{this.PAN$| async }}</p>
+                                                  <p>12345678901234</p>
+                                                  <p>1234567890</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -129,14 +128,12 @@
                                         <tbody>
                                             <tr>
                                                 <td style="padding-right: 15px;">
-                                                    <p><b>Invoice Date</b></p>
-                                                    <p><b>Invoice No.</b></p>
-                                                    <p><b>Reference No.</b></p>
+                                                    <p><b>{{this.invoiceDate$| async }}</b></p>
+                                                    <p><b>{{this.invoiceNo$| async }}</b></p>
                                                 </td>
                                                 <td>
-                                                  <p>{{this.invoiceDate$| async }}</p>
-                                                  <p>{{this.invoiceNo$| async }}</p>
-                                                    <p>PO-9987</p>
+                                                  <p>12/08/17</p>
+                                                  <p>123456-7</p>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -155,6 +152,7 @@
             <h3 class="invHd" style="background: #fff !important; color:#E14926 !important;">TEXT INVOICE</h3>
         </div>
 
+
         <div class="clearfix">
             <div class="col-xs-12">
                 <div class="col-xs-12">
@@ -162,7 +160,6 @@
                         <tbody>
                             <tr>
                                 <td style="padding-right: 15px;">
-                                    <p><b>Customer Name</b></p>
                                     <p>Mr. Shubhendra Agrawal</p>
                                     <br />
                                     <p><b>Due Date</b></p>
@@ -177,19 +174,19 @@
                                     <p>15 A.B. Road</p>
                                     <p>Indore (M.P.) 452000</p>
                                     <br />
-                                    <b>GSTIN</b>
+                                    <b>{{this.billingGSTIN$ | async}}</b>
                                     <p>22BBBBBB000A1Z0</p>
                                 </td>
 
                                 <td>
-                                    <p><b>Billing Address</b></p>
+                                    <p><b>Shipping Address</b></p>
                                     <p>Company Dummy Name</p>
                                     <p>24 Building Name</p>
                                     <p>3rd Floor</p>
                                     <p>15 A.B. Road</p>
                                     <p>Indore (M.P.) 452000</p>
                                     <br />
-                                    <b>GSTIN</b>
+                                    <b>{{this.shippingGSTIN$ | async}}</b>
                                     <p>22BBBBBB000A1Z0</p>
                                 </td>
 
@@ -317,6 +314,7 @@
                                     </td>
                                     <td style="text-align: center;">
                                         <div class="signature">
+                                          <img [src]="imageSignatureSrc" height="100" alt="Image preview...">
                                             <p><b>Walkover Web Solutions Private Limited</b></p>
                                             <p><b class="text-muted">(Signature)</b></p>
                                         </div>

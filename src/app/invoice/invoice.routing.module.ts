@@ -19,6 +19,7 @@ import { FontPickerConfigInterface } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
+import {InvoiceUiDataService} from "../services/invoice.ui.data.service";
 
 const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
@@ -72,6 +73,6 @@ const INVOICE_ROUTES: Routes = [
     RouterModule,
     TooltipModule
   ],
-  providers: []
+  providers: [InvoiceUiDataService]
 })
 export class InvoiceRoutingModule { }

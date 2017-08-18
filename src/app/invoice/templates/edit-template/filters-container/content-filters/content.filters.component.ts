@@ -6,6 +6,9 @@ import { Store } from '@ngrx/store';
 
 import { AppState } from '../../../../../store/roots';
 import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
+import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
+import {Observable} from "rxjs/Observable";
+import {InvoiceUiDataService} from "../../../../../services/invoice.ui.data.service";
 @Component({
   selector: 'content-selector',
   templateUrl: 'content.filters.component.html',
@@ -48,11 +51,19 @@ export class ContentFilterComponent {
   public shippingGstin: string;
   public message1: string;
   public message2: string;
+  public files: UploadFile[];
+  public uploadInput: EventEmitter<UploadInput>;
+  public humanizeBytes: any;
+  public dragOver: boolean;
+  public imagePreview: any;
 
 
   // public data: Content = null;
 
-  constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions) {
+  constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService) {
+    this.files = []; // local uploading files array
+    this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
+    this.humanizeBytes = humanizeBytes;
     // console.log('design-filters-container constructor called');
   }
 
@@ -236,7 +247,68 @@ export class ContentFilterComponent {
   public onChangeWidth(value, colName) {
     this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
   }
-// }
+
+  public onUploadOutput(output: UploadOutput): void {
+
+    if (output.type === 'allAddedToQueue') {
+      this.files.push(output.file);
+      console.log(this.files);
+      debugger;
+      this.previewFile(this.files);
+    } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
+      this.files.push(output.file);
+    } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
+      const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
+      this.files[index] = output.file;
+      console.log(this.files);
+    } else if (output.type === 'removed') {
+      // remove file from array when removed
+      this.files = this.files.filter((file: UploadFile) => file !== output.file);
+    } else if (output.type === 'dragOver') {
+      this.dragOver = true;
+    } else if (output.type === 'dragOut') {
+      this.dragOver = false;
+    } else if (output.type === 'drop') {
+      this.dragOver = false;
+    }
+  }
+
+  public startUpload(): void {
+    const event: UploadInput = {
+      type: 'uploadAll',
+      url: 'http://ngx-uploader.com/upload',
+      method: 'POST',
+      data: { foo: 'bar' },
+      // concurrency: this.formData.concurrency
+    };
+
+    this.uploadInput.emit(event);
+  }
+
+  public previewFile(files: any) {
+    let preview = document.querySelector('img');
+    let file    = document.querySelector('input[type=file]').files[0];
+    let reader  = new FileReader();
+    let imgSrc$: Observable<any>;
+
+    reader.onloadend = () => {
+      preview.src = reader.result;
+      this._invoiceUiDataService.setImageSignatgurePath(preview.src);
+    };
+
+    // imgSrc$.subscribe((val) => {
+    //   if (val) {
+    //     this._invoiceUiDataService.setLogoPath(imgSrc);
+    //   }
+    // });
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = ' ';
+    }
+  }
+
 //
 //
 }

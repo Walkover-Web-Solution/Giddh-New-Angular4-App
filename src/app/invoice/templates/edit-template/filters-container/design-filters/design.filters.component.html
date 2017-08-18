@@ -14,7 +14,7 @@
   </div>
 
   <label class="upload-button">
-    <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput" multiple>
+    <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
     or choose file(s)
   </label>
 
@@ -31,15 +31,58 @@
             <li>
                 <!-- <div [fontPicker]="font" [fpWidth]="'320px'" [fpPosition]="'bottom'">Click to open the font picker</div>  -->
             </li>
-            <li>
+            <li *ngIf="!ifTemplateSelected" (click)="selectTemplate()">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li *ngIf="ifTemplateSelected">
+              <!-- edit template  start -->
+              <div class="clearfix">
+                <ul class="templateView">
+
+                <li (click)="showTemplate('gst_template_a')">
+                <img src="./assets/images/template1.jpg" />
+                </li>
+                <li (click)="showTemplate('common_template_a')">
+                <img src="./assets/images/template1.jpg" />
+                </li>
+                <li (click)="showTemplate('gst_template_b')">
+                <img src="./assets/images/template1.jpg" />
+                </li>
+                <li (click)="showTemplate('gst_template_c')">
+                <img src="./assets/images/template1.jpg" />
+                </li>
+                <li (click)="showTemplate('gst_template_d')">
+                <img src="./assets/images/template1.jpg" />
+                </li>
+                <li (click)="showTemplate('gst_template_e')">
+                  <img src="./assets/images/template1.jpg" />
+                </li>
+                </ul>
+              </div>
                 <!--<template-selector></template-selector>-->
             </li>
             <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
+            <li *ngIf="ifLogoSelected">
+              <!-- edit logo  start -->
+              <div class="clearfix mrT2">
+                <div class="logoTool">
+                  <span class="logo-preview"><img src="" alt="" id="logoImage" /></span>
+                  <div class="pull-left mrL1 mrT1">
+                    <p>Size</p>
+                    <ul>
+                      <li>S</li>
+                      <li>M</li>
+                      <li>L</li>
+                    </ul>
+                    <a href="javascript:void(0);" class="primary_clr">Hide logo</a>
+                  </div>
+                </div>
+              </div>
+              <!-- edit logo end -->
+            </li>
+
             <li *ngIf="!ifColorSelected" (click)="selectColor()">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
@@ -54,29 +97,7 @@
 
 
 
-    <!-- edit template  start -->
-    <!--<div class="clearfix">-->
-        <!--<ul class="templateView">-->
-            <!--<li>-->
-                <!--<img src="./assets/images/template1.jpg" />-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<img src="./assets/images/template1.jpg" />-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<img src="./assets/images/template1.jpg" />-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<img src="./assets/images/template1.jpg" />-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<img src="./assets/images/template1.jpg" />-->
-            <!--</li>-->
-            <!--<li>-->
-                <!--<img src="./assets/images/template1.jpg" />-->
-            <!--</li>-->
-        <!--</ul>-->
-    <!--</div>-->
+
 
    <div class="tab">
       <button class="tablinks" (click)="showTemplate('common_template_a')" id="defaultOpen">template1</button>
@@ -91,22 +112,7 @@
   </div>
     <!-- edit template  end -->
 
-    <!-- edit logo  start -->
-    <div class="clearfix mrT2">
-        <div class="logoTool">
-            <span class="logo-preview"><img src="./assets/images/google-plus-icon.png" alt="" /></span>
-            <div class="pull-left mrL1 mrT1">
-                <p>Size</p>
-                <ul>
-                    <li>S</li>
-                    <li>M</li>
-                    <li>L</li>
-                </ul>
-                <a href="javascript:void(0);" class="primary_clr">Hide logo</a>
-            </div>
-        </div>
-    </div>
-    <!-- edit logo end -->
+
 
     <!-- edit color  start -->
     <div class="clearfix mrT2">
