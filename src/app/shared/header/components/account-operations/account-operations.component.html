@@ -4,8 +4,8 @@
   <div class="breadcrumbs pdL2 pdT1 pdR2 pdB1">
     <div class="pull-left pdT1 col-xs-8 pdL0">
       <ol class="breadcrumb mrB2">
-        <li *ngFor="let value of columnsRef?.columns | slice:1;let i = last;"
-            [ngClass]="{'active': (i && !(activeAccount$ | async))}">
+        <li *ngFor="let value of columnsRef?.columns | slice:1;let last = last;"
+            [ngClass]="{'active': (last && !(activeAccount$ | async))}">
           <a href="javascript:void(0)">{{ value.name }}
           </a>
         </li>
