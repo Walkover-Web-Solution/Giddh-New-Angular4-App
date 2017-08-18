@@ -1,5 +1,5 @@
 <!-- loader -->
-<div class="loader" *ngIf="(showTbplLoader | async)">
+<div class="loader" *ngIf="showLoader | async ">
   <span></span>
   <span></span>
   <span></span>
@@ -16,22 +16,162 @@
 </div>
 <!-- nodata end -->
 
-<div *ngIf="!(showTbplLoader | async)">
+<div *ngIf="!(showLoader | async)">
   <div *ngIf="!noData">
     <div class="pd15">
+      <!--top heading  labels-->
+      <div class="row mrB1">
+        <div class="col-xs-6">
+          <h3 class="fs20">Expenses</h3>
+        </div>
+        <div class="col-xs-6">
+          <h3 class="fs20">Income</h3>
+        </div>
+      </div>
 
+      <!--Main Grid-->
+      <div class="row">
+        <div class="expenses col-xs-6">
+          <div class="table-container clearfix profitLoss table-responsive">
+            <table class="table tb-head">
+              <thead>
+              <tr>
+                <th class="col-xs-6">Particular</th>
+                <th class="col-xs-6">Amount</th>
+              </tr>
+              </thead>
+            </table>
+            <!--Grid-->
 
-      <!-- End Head -->
-      <!-- start main content -->
+            <!--<section class="row row-1" ng-repeat="expGrp in plData.expArr">
+              <div class="row" trial-accordion>
+                <div class="col-xs-6  group" ng-bind-html=" expGrp.groupName | uppercase"></div>
+                &lt;!&ndash; ng-bind-html="expGrp.closingBalance.amount | uppercase" &ndash;&gt;
+                <div class="col-xs-6  group text-right">
+                    <span>
+                      {{expGrp.closingBalance.amount | number:2}}{{expGrp.closingBalance.type | recType}}
+                    </span>
+                </div>
+              </div>
+              <section class="row row-2 isHidden" ng-repeat="subGrp in expGrp.childGroups">
+                <div class="row" trial-accordion>
+                  <div class="col-xs-6  account" ng-style="{'padding-left':padLeft}" ng-bind-html=" subGrp.groupName | uppercase">
+                  </div>
+                  &lt;!&ndash; ng-bind-html=" subGrp.closingBalance.amount | uppercase" &ndash;&gt;
+                  <div class="col-xs-6  account text-right">
+                      <span>
+                        {{subGrp.closingBalance.amount | number:2}}{{subGrp.closingBalance.type | recType}}
+                      </span>
+                  </div>
+                </div>
+                <section class="row row-2 isHidden" ng-repeat="acc in subGrp.accounts">
+                  <div class="row">
+                    <div class="col-xs-6  account" ng-style="{'padding-left':padLeft + 10}" ng-bind-html=" acc.name | lowercase">
+                    </div>
+                    &lt;!&ndash;  ng-bind-html=" acc.closingBalance.amount | lowercase" &ndash;&gt;
+                    <div class="col-xs-6  account text-right">
+                        <span>
+                          {{acc.closingBalance.amount | number:2}}{{acc.closingBalance.type | recType}}
+                        </span>
+                    </div>
+                  </div>
+                </section>
+              </section>
+            </section>-->
+            <!--/Grid-->
+          </div>
+        </div>
+        <!-- end of expenses -->
+        <div class="income col-xs-6 ">
+          <div class="table-container clearfix profitLoss">
+            <table class="col-xs-12 tb-head">
+              <thead>
+              <tr>
+                <th class="col-xs-6 ">Particular</th>
+                <th class="col-xs-6 ">Amount</th>
+              </tr>
+              </thead>
+            </table>
+            <!--Grid-->
 
+            <!--<section class="row row-1" ng-repeat="incGrp in plData.incArr">
+              <div class="row"  trial-accordion>
+                <div class="col-xs-6  group" ng-bind-html=" incGrp.groupName | uppercase"></div>
+                <div class="col-xs-6  group text-right">
+                  &lt;!&ndash; ng-bind-html=" incGrp.closingBalance.amount | uppercase" &ndash;&gt;
+                  <span>
+                      {{incGrp.closingBalance.amount | number:2}}{{incGrp.closingBalance.type | recType}}
+                    </span>
+                </div>
+              </div>
+              <section class="row row-2 isHidden" ng-repeat="subGrp in incGrp.childGroups">
+                <div class="row" trial-accordion>
+                  <div class="col-xs-6  account" ng-style="{'padding-left':padLeft}" ng-bind-html=" subGrp.groupName | uppercase">
+                  </div>
+                  <div class="col-xs-6  account text-right">
+                    &lt;!&ndash;  ng-bind-html=" subGrp.closingBalance.amount | uppercase" &ndash;&gt;
+                    <span>
+                        {{subGrp.closingBalance.amount | number:2}}{{subGrp.closingBalance.type | recType}}
+                      </span>
+                  </div>
+                </div>
+                <section class="row row-2 isHidden" ng-repeat="acc in subGrp.accounts">
+                  <div class="row">
+                    <div class="col-xs-6  account" ng-style="{'padding-left':padLeft + 10}" ng-bind-html=" acc.name | lowercase">
+                    </div>
+                    <div class="col-xs-6  account text-right">
+                      &lt;!&ndash; ng-bind-html=" acc.closingBalance.amount | lowercase" &ndash;&gt;
+                      <span>
+                          {{acc.closingBalance.amount | number:2}}{{acc.closingBalance.type | recType}}
+                        </span>
+                    </div>
+                  </div>
+                </section>
+              </section>
+            </section>-->
+            <!--/Grid-->
+          </div>
+        </div>
+      </div>
+      <!-- end row -->
 
-      <!-- end main content -->
-
-      <!-- start template trial bal -->
-      <!--<script type="text/ng-template" id="trialBalSubGroup">-->
-
-      <!--</script>-->
-      <!-- end template -->
+      <!-- bottom table start -->
+      <!--<div class="table-responsive">
+        <table class="table plBtTbl">
+          <thead>
+          <tr>
+            <th class="col-xs-6">
+              <div class="pdR25 pdL-5" ng-show="inProfit">
+                Profit
+                <span class="pull-right">{{ plData.closingBalance | number:2 }}</span>
+              </div>
+            </th>
+            <th class="col-xs-6">
+              <div class="pdL2 pdR1" ng-hide="inProfit">
+                Loss
+                <span class="pull-right">{{ plData.closingBalance | number:2 }}</span>
+              </div>
+            </th>
+          </tr>
+          </thead>
+          <tfoot>
+          <tr>
+            <th class="col-xs-6">
+              <div class="pdR25 pdL-5">
+                Total
+                <span class="pull-right" ng-bind-html="plData.expenseTotal | number:2 "></span>
+              </div>
+            </th>
+            <th class="col-xs-6">
+              <div class="pdL2 pdR1">
+                Total
+                <span class="pull-right" ng-bind-html="plData.incomeTotal | number:2 "></span>
+              </div>
+            </th>
+          </tr>
+          </tfoot>
+        </table>
+      </div>-->
     </div>
   </div>
 </div>
