@@ -13,8 +13,8 @@ import * as _ from 'lodash';
 
 export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
     @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
+    public goAhead: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    private goAhead: boolean = false;
     constructor(
         private store: Store<AppState>,
     ) {}
