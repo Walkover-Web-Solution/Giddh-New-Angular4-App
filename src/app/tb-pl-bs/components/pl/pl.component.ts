@@ -1,25 +1,37 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
-import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import { AccountDetails, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
+import { Observable } from 'rxjs/Observable';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'pl',
   template: `
-    <tb-pl-bs-filter #filter [selectedCompany]="selectedCompany"
-                     (onPropertyChanged)="filterData($event)"></tb-pl-bs-filter>
-    <pl-grid [expandAll]="filter.expandAll"></pl-grid>
+    <tb-pl-bs-filter
+      #filter
+      [selectedCompany]="selectedCompany"
+      (onPropertyChanged)="filterData($event)"
+      [showLoader]="showLoader | async"
+    ></tb-pl-bs-filter>
+    <pl-grid
+      [expandAll]="filter.expandAll"
+      [showLoader]="showLoader"
+      [data$]="data$"
+    ></pl-grid>
   `
 })
-export class PlComponent implements OnInit, AfterViewInit {
+export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
+  public showLoader: Observable<boolean>;
+  public data$: Observable<AccountDetails>;
+  public request: ProfitLossRequest;
 
   public get selectedCompany(): ComapnyResponse {
     return this._selectedCompany;
   }
-
   // set company and fetch data...
   @Input()
   public set selectedCompany(value: ComapnyResponse) {
@@ -34,10 +46,12 @@ export class PlComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public request: TrialBalanceRequest;
   private _selectedCompany: ComapnyResponse;
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
+  constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions) {
+    this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
+    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.pl.data)).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -45,11 +59,14 @@ export class PlComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
-    this.cd.detectChanges();
   }
 
-  public filterData(request: TrialBalanceRequest) {
-    this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
+  public filterData(request: ProfitLossRequest) {
+    this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
+  }
 
+  public ngOnDestroy(): void {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

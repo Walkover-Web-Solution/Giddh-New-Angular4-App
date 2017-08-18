@@ -2,7 +2,6 @@
 
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -48,7 +47,6 @@ export const DATEPICKER_VALUE_ACCESSOR: any = {
     </div>
   `,
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [DATEPICKER_VALUE_ACCESSOR]
 })
 export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy, OnInit, ControlValueAccessor {

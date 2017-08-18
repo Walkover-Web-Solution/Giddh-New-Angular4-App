@@ -1,8 +1,4 @@
-import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AppState } from '../../../../store/roots';
-import { TBPlBsActions } from '../../../../services/actions/tl-pl.actions';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ChildGroup } from '../../../../models/api-models/Search';
@@ -10,15 +6,15 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'pl-grid',  // <home></home>
-  templateUrl: './pl-grid.component.html'
+  templateUrl: './pl-grid.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlGridComponent implements OnInit, OnDestroy, AfterViewInit {
-
-  public showTbplLoader: Observable<boolean>;
+export class PlGridComponent implements OnInit, AfterViewInit {
   public noData: boolean;
   public showClearSearch: boolean;
-  public expanded = false;
-  public data$: Observable<AccountDetails>;
+
+  @Input() public showLoader: boolean;
+  @Input() public data$: Observable<AccountDetails>;
 
   @Input()
   public set expandAll(value: boolean) {
@@ -37,35 +33,17 @@ export class PlGridComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
-  constructor(private store: Store<AppState>, private _tlPlAction: TBPlBsActions, private cd: ChangeDetectorRef) {
-    // this.showLoader = true;
-    this.data$ = this.store.select(p => {
-      return p && p.tlPl && p.tlPl.pl && _.cloneDeep(p.tlPl.pl.data);
-    }).takeUntil(this.destroyed$);
-    this.showTbplLoader = this.store.select(p => {
-      return p && p.tlPl && p.tlPl.pl && p.tlPl.pl.showLoader;
-    }).takeUntil(this.destroyed$);
+  constructor() {
+//
   }
 
   public ngOnInit() {
     //
-    this.data$.subscribe(p => {
-      if (p) {
-        // this.showLoader = false;
-      }
-      this.cd.detectChanges();
-    });
   }
 
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
 
   public ngAfterViewInit() {
-    this.cd.detectChanges();
+    //
   }
 
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {

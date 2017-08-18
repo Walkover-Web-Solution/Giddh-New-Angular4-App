@@ -111,7 +111,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi">
+                    <li class="dmLi" *ngIf="userIsSuperUser">
                       <a [routerLink]="['permissions']">
                         <div class="media">
                           <div class="media-body">
