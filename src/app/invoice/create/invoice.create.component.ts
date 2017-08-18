@@ -16,10 +16,11 @@ import { InvoiceService } from '../../services/invoice.service';
 })
 
 export class InvoiceCreateComponent implements OnInit {
+
+  public invFormData: PreviewAndGenerateInvoiceResponse;
+  public tableCond: ISection;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private invFormData: PreviewAndGenerateInvoiceResponse;
   private invTempCond: GetInvoiceTemplateDetailsResponse;
-  private tableCond: ISection;
 
   constructor(
     private store: Store<AppState>,
@@ -54,7 +55,7 @@ export class InvoiceCreateComponent implements OnInit {
     );
   }
 
-  private onSubmitInvoiceForm(f: NgForm) {
+  public onSubmitInvoiceForm(f: NgForm) {
     console.log (f, 'onSubmitInvoiceForm');
     console.log (this.invFormData, 'actual class object');
   }
