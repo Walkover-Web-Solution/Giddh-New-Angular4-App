@@ -115,11 +115,11 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     this.permissionConfirmationModel.hide();
   }
 
-  private openPermissionModal() {
+  public openPermissionModal() {
     this.permissionModel.show();
   }
 
-  private hidePermissionModel() {
+  public hidePermissionModel() {
     this.permissionModel.hide();
   }
 }
