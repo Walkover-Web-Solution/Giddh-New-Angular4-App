@@ -69,7 +69,15 @@ export class OutTemplateComponent implements OnInit {
   public totalLabel$: Observable<string>;
   public totalWidth$: Observable<number>;
   public quantityLabel$: Observable<string>;
-  public quantityWidth$: Observable<number>;
+  public message1$: Observable<string>;
+  public message2$: Observable<string>;
+  public taxableAmount$: Observable<string>;
+  public total$: Observable<string>;
+  public otherDeduction$: Observable<string>;
+  public totalTax$: Observable<string>;
+  public totalInWords$: Observable<string>;
+  public slogan$: Observable<string>;
+  public thanks$: Observable<string>;
   public topMargin: number;
   public leftMargin: number;
   public bottomMargin: number;
@@ -105,29 +113,17 @@ export class OutTemplateComponent implements OnInit {
     this.formNameInvoice$ = this.invoiceTemplatesService.getFormNameInvoice();
     this.formNameTaxInvoice$ = this.invoiceTemplatesService.getFormNameTaxInvoice();
     this.sNoLabel$ = this.invoiceTemplatesService.getSnoLabel();
-    this.sNoWidth$ = this.invoiceTemplatesService.getSnoWidth();
     this.dateLabel$ = this.invoiceTemplatesService.getDateLabel();
-    this.dateWidth$ = this.invoiceTemplatesService.getDateWidth();
     this.itemLabel$ = this.invoiceTemplatesService.getItemLabel();
-    this.itemWidth$ = this.invoiceTemplatesService.getItemWidth();
     this.hsnSacLabel$ = this.invoiceTemplatesService.getHsnSacLabel();
-    this.hsnSacWidth$ = this.invoiceTemplatesService.getHsnSaceWidth();
     this.itemCodeLabel$ = this.invoiceTemplatesService.getItemCodeLabel();
-    this.itemCodeWidth$ = this.invoiceTemplatesService.getItemCodeWidth();
     this.descLabel$ = this.invoiceTemplatesService.getDescLabel();
-    this.descWidth$ = this.invoiceTemplatesService.getDescWidth();
     this.rateLabel$ = this.invoiceTemplatesService.getRateLabel();
-    this.rateWidth$ = this.invoiceTemplatesService.getRateWidth();
     this.discountLabel$ = this.invoiceTemplatesService.getDiscountLabel();
-    this.discountWidth$ = this.invoiceTemplatesService.getDiscountWidth();
     this.taxableValueLabel$ = this.invoiceTemplatesService.getTaxableValueLabel();
-    this.taxableValueWidth$ = this.invoiceTemplatesService.getTaxableValueWidth();
     this.taxLabel$ = this.invoiceTemplatesService.getTaxLabel();
-    this.taxWidth$ = this.invoiceTemplatesService.getTaxWidth();
-    this.totalWidth$ = this.invoiceTemplatesService.getTotalWidth();
     this.totalLabel$ = this.invoiceTemplatesService.getTaxLabel();
     this.quantityLabel$ = this.invoiceTemplatesService.getQuantityLabel();
-    this.quantityWidth$ = this.invoiceTemplatesService.getQuantityWidth();
     this.invoiceTemplatesService.getTopMargin().subscribe( val => {
       if (val) {
         console.log('TOP MARGIN', val);
@@ -160,6 +156,16 @@ export class OutTemplateComponent implements OnInit {
         this.color = val;
       }
     });
+    this.message1$ = this.invoiceTemplatesService.getMessage1();
+    this.message2$ = this.invoiceTemplatesService.getMessage2();
+    this.taxableAmount$ = this.invoiceTemplatesService.getTaxableAmount();
+    this.totalTax$ = this.invoiceTemplatesService.getTotalTax();
+    this.total$ = this.invoiceTemplatesService.getTotal();
+    this.totalInWords$ = this.invoiceTemplatesService.getTotalInWords();
+    this.otherDeduction$ = this.invoiceTemplatesService.getOtherDeduction();
+    this.thanks$ = this.invoiceTemplatesService.getThanks();
+    this.slogan$ = this.invoiceTemplatesService.getSlogan();
+
   //   this.tableMeta$ = this.store.select( state => {
   //     return state.invoice.table;
   //   }).takeUntil(this.destroyed$);
