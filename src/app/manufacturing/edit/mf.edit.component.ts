@@ -126,7 +126,7 @@ export class MfEditComponent implements OnInit {
     this._location.back();
   }
 
-  private addConsumption(data) {
+  public addConsumption(data) {
     console.log('The data to push is :', data);
     let val = {
       amount: data.amount,
@@ -150,13 +150,13 @@ export class MfEditComponent implements OnInit {
     this.linkedStocks = new IStockItemDetail();
   }
 
-  private removeConsumptionItem(indx) {
+  public removeConsumptionItem(indx) {
     if (indx > -1) {
       this.manufacturingDetails.linkedStocks.splice(indx, 1);
     }
   }
 
-  private addExpense(data) {
+  public addExpense(data) {
     let objToPush = {
       baseAccount: {
         uniqueName: data.baseAccountUniqueName
@@ -185,13 +185,13 @@ export class MfEditComponent implements OnInit {
     this.otherExpenses = {};
   }
 
-  private removeExpenseItem(indx) {
+  public removeExpenseItem(indx) {
     if (indx > -1) {
       this.manufacturingDetails.otherExpenses.splice(indx, 1);
     }
   }
 
-  private createEntry() {
+  public createEntry() {
     let dataToSave = _.cloneDeep(this.manufacturingDetails);
     dataToSave.stockUniqueName = this.selectedProduct;
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
@@ -201,7 +201,7 @@ export class MfEditComponent implements OnInit {
     this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
   }
 
-  private updateEntry() {
+  public updateEntry() {
     let dataToSave = _.cloneDeep(this.manufacturingDetails);
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
@@ -211,7 +211,7 @@ export class MfEditComponent implements OnInit {
     this.store.dispatch(this.manufacturingActions.UpdateMfItem(dataToSave));
   }
 
-  private deleteEntry() {
+  public deleteEntry() {
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
     console.log('THe data is ---:', manufacturingObj);
     this.store.dispatch(this.manufacturingActions.DeleteMfItem({
@@ -220,7 +220,7 @@ export class MfEditComponent implements OnInit {
     }));
   }
 
-  private getTotal(from, field) {
+  public getTotal(from, field) {
     let total: number = 0;
     if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
       _.forEach(this.manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
@@ -232,7 +232,7 @@ export class MfEditComponent implements OnInit {
     return total;
   }
 
-  private getCosePerProduct() {
+  public getCosePerProduct() {
     let quantity = _.cloneDeep(this.manufacturingDetails).quantity;
     quantity = (quantity && quantity > 0) ? quantity : 1;
     let cost = ((this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount')) / quantity);
