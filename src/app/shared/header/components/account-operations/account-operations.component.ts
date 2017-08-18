@@ -32,6 +32,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
+import { ToasterService } from '../../../../services/toaster.service';
 
 @Component({
   selector: 'account-operations',
@@ -134,7 +135,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _toaster: ToasterService) {
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
@@ -581,7 +582,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let activeAccount: AccountResponse = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let finalData: AccountMergeRequest[] = [];
-    if (this.selectedaccountForMerge) {
+    if (this.selectedaccountForMerge.length) {
       this.selectedaccountForMerge.map((acc) => {
         let obj = new AccountMergeRequest();
         obj.uniqueName = acc;
@@ -591,6 +592,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       this.selectedaccountForMerge = '';
       this.accountSelect2.setElementValue('');
       this.showDeleteMove = false;
+    } else {
+      this._toaster.errorToast('Please Select at least one account');
+      return;
     }
   }
 
