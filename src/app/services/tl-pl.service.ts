@@ -32,6 +32,7 @@ export class TlPlService {
     return this._http.get(TB_PL_BS_API.GET_TRIAL_BALANCE
       .replace(':companyUniqueName', this.companyUniqueName), request)
       .map((res) => {
+        debugger;
         return res.json();
       })
       .catch((e) => HandleCatch<any, any>(e));
@@ -50,6 +51,7 @@ export class TlPlService {
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
       .replace(':companyUniqueName', this.companyUniqueName), request)
       .map((res) => {
+        debugger;
         return res.json();
       })
       .catch((e) => HandleCatch<any, any>(e));
