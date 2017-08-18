@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
-import { AccountDetails } from '../../models/api-models/tb-pl-bs';
+import { AccountDetails, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { ChildGroup } from '../../models/api-models/Search';
 
@@ -14,7 +14,7 @@ interface TbState {
 }
 
 interface PlState {
-  data?: AccountDetails;
+  data?: ProfitLossData;
   exportData: any;
   showLoader: boolean;
   noData: boolean;
@@ -33,6 +33,12 @@ export const initialState: TBPlBsState = {
     exportData: [],
     count: 0,
     detailedGroups: [],
+  },
+  pl: {
+    data: null,
+    noData: true,
+    showLoader: false,
+    exportData: [],
   }
 };
 
@@ -43,12 +49,12 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
       addUIKey(data.groupDetails);
       data.groupDetails = removeZeroAmountAccount((data.groupDetails));
       let noData = false;
-      let showTbplLoader = false;
+      let showLoader = false;
       if (data.closingBalance.amount === 0 && data.creditTotal === 0 && data.debitTotal === 0 && data.forwardedBalance.amount === 0) {
         noData = true;
       }
       return Object.assign({}, state, {
-        tb: { data, noData, showTbplLoader }
+        tb: { data, noData, showLoader }
       });
     }
     case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST: {
@@ -57,7 +63,8 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
       //
-      return;
+      console.log(prepareProfitLossData(action.payload));
+      return state;
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
@@ -69,6 +76,7 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
   }
 }
 
+// TB Functions
 const removeZeroAmountAccount = (grpList: ChildGroup[]) => {
   _.each(grpList, (grp) => {
     let count = 0;
@@ -183,4 +191,66 @@ const addUIKey = (data: ChildGroup[]) => {
       }
     });
   });
+};
+
+// PL Functions
+
+const filterProfitLossData = data => {
+  let filterPlData: ProfitLossData = {};
+  filterPlData.incArr = [];
+  filterPlData.expArr = [];
+  filterPlData.othArr = [];
+  _.each(data, grp => {
+    switch (grp.category) {
+      case 'income':
+        return filterPlData.othArr.push(grp);
+      case 'expenses':
+        return filterPlData.incArr.push(grp);
+      default:
+        return filterPlData.expArr.push(grp);
+    }
+  });
+  return filterPlData;
+};
+
+const prepareProfitLossData = data => {
+  let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
+  plData.expenseTotal = calculateTotalExpense(plData.expArr);
+  plData.incomeTotal = calculateTotalIncome(plData.incArr);
+  plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
+  if (plData.incomeTotal >= plData.expenseTotal) {
+    plData.inProfit = true;
+    plData.expenseTotal += plData.closingBalance;
+  }
+  if (plData.incomeTotal < plData.expenseTotal) {
+    plData.inProfit = false;
+    return plData.incomeTotal += plData.closingBalance;
+  }
+  return plData;
+};
+
+const calculateTotalIncome = data => {
+  let eTtl;
+  eTtl = 0;
+  _.each(data, item => {
+    if (item.closingBalance.type === 'DEBIT') {
+      return eTtl -= Number(item.closingBalance.amount);
+    } else {
+      return eTtl += Number(item.closingBalance.amount);
+    }
+  });
+  return Number(eTtl.toFixed(2));
+};
+
+const calculateTotalExpense = data => {
+  let eTtl;
+  eTtl = 0;
+  _.each(data, item => {
+    if (item.closingBalance.type === 'CREDIT') {
+      return eTtl -= Number(item.closingBalance.amount);
+    } else {
+      return eTtl += Number(item.closingBalance.amount);
+    }
+  });
+  return Number(eTtl.toFixed(2));
 };
