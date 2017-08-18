@@ -27,6 +27,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
+  public userIsSuperUser: boolean = false; // Protect permission module
   public session$: Observable<boolean>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
@@ -87,12 +88,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!state.company.companies) {
         return;
       }
-      return state.company.companies.find(cmp => {
+      let selectedCmp =  state.company.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
+
+      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
+          this.userIsSuperUser = true;
+      } else {
+         this.userIsSuperUser = false;
+      }
+      return selectedCmp;
+
     }).takeUntil(this.destroyed$);
     this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
-
   }
 
   public ngOnInit() {
