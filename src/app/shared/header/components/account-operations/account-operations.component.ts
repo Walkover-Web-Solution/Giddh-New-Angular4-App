@@ -532,6 +532,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public showDeleteMergedAccountModal(merge: string) {
+    merge = merge.trim();
     this.deleteMergedAccountModalBody = `Are you sure you want to delete ${merge} Account ?`;
     this.selectedAccountForDelete = merge;
     this.deleteMergedAccountModal.show();
