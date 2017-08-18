@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
@@ -12,12 +12,14 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   templateUrl: './mf.edit.component.html'
 })
 
 export class MfEditComponent implements OnInit {
+  @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
 
   public stockListDropDown$: Observable<Select2OptionData[]>;
   public consumptionDetail = [];
@@ -30,6 +32,8 @@ export class MfEditComponent implements OnInit {
   public expenseGroupAccounts: any = [];
   public liabilityGroupAccounts: any = [];
   public selectedProduct: string;
+  public showFromDatePicker: boolean = false;
+  public moment = moment;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -50,7 +54,7 @@ export class MfEditComponent implements OnInit {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
         manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
-        manufacturingObj.date = new Date(manufacturingObj.date);
+        manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
         delete manufacturingObj.manufacturingQuantity;
         manufacturingObj.linkedStocks.forEach((item) => {
           item.quantity = item.manufacturingQuantity;
@@ -212,12 +216,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public deleteEntry() {
-    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-    console.log('THe data is ---:', manufacturingObj);
-    this.store.dispatch(this.manufacturingActions.DeleteMfItem({
-      stockUniqueName: manufacturingObj.stockUniqueName,
-      manufacturingUniqueName: manufacturingObj.uniqueName
-    }));
+    this.manufacturingConfirmationModal.show();
   }
 
   public getTotal(from, field) {
@@ -240,5 +239,16 @@ export class MfEditComponent implements OnInit {
       return cost;
     }
     return 0;
+  }
+
+  public closeConfirmationPopup(userResponse: boolean) {
+    if (userResponse) {
+      let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+      this.store.dispatch(this.manufacturingActions.DeleteMfItem({
+      stockUniqueName: manufacturingObj.stockUniqueName,
+      manufacturingUniqueName: manufacturingObj.uniqueName
+    }));
+  }
+  this.manufacturingConfirmationModal.hide();
   }
 }
