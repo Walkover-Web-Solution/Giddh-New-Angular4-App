@@ -159,7 +159,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupResponse, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = { groupUniqueName };

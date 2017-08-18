@@ -44,7 +44,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     let val: string = this.groupDetailForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
     if (val) {
-      this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+      this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
 
       this.isGroupNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
