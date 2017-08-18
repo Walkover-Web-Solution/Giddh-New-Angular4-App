@@ -17,6 +17,7 @@ import { HandleCatch } from './catchManager/catchmanger';
 export class InvoiceTemplatesService {
   private companyUniqueName: string;
   private user: UserDetails;
+
   constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
@@ -33,6 +34,7 @@ export class InvoiceTemplatesService {
       return data;
     }).catch((e) => HandleCatch<Template, string>(e));
   }
+
   public getTopMargin(): Observable<number> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.topMargin);
   }
@@ -52,9 +54,11 @@ export class InvoiceTemplatesService {
   public getFontFamily(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.font);
   }
+
   public getColor(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.color);
   }
+
   public getCompanyName(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.companyName);
   }
@@ -202,52 +206,34 @@ export class InvoiceTemplatesService {
   public getQuantityLabel(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.quantityLabel);
   }
-
-  public getQuantityWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.quantityWidth);
+  public getMessage1(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.message1);
   }
-
-  public getTaxWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.taxWidth);
+  public getMessage2(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.message2);
   }
-
-  public getTaxableValueWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.taxableValueWidth);
+  public getTaxableAmount(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.taxableAmount);
   }
-
-  public getTotalWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.totalWidth);
+  public getTotalTax(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.totalTax);
   }
-
-  public getDiscountWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.discountWidth);
+  public getOtherDeduction(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.otherDeduction);
   }
-
-  public getRateWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.rateWidth);
+  public getTotal(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.total);
   }
-
-  public getDescWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.descWidth);
+  public getTotalInWords(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.totalInWords);
   }
-
-  public getItemCodeWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.itemCodeWidth);
+  public getThanks(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.thanks);
   }
-
-  public getHsnSaceWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.hsnSacWidth);
+  public getImageSignature(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.imageSignature);
   }
-
-  public getItemWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.itemWidth);
-  }
-
-  public getDateWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.dateWidth);
-  }
-
-  public getSnoWidth(): Observable<number> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.sNoWidth);
+  public getSlogan(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.slogan);
   }
 }

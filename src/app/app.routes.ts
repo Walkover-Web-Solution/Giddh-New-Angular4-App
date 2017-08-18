@@ -32,6 +32,7 @@ export const ROUTES: Routes = [
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthentication] },
+      { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule', canActivate: [NeedsAuthentication]},
       { path: 'about', loadChildren: './about/about.module#AboutModule', canActivate: [NeedsAuthentication] },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthentication] },
       { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthentication] },
