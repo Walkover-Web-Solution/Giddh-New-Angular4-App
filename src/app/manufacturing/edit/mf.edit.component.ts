@@ -32,13 +32,15 @@ export class MfEditComponent implements OnInit {
   public expenseGroupAccounts: any = [];
   public liabilityGroupAccounts: any = [];
   public selectedProduct: string;
+  public showFromDatePicker: boolean = false;
+  public moment = moment;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
     placeholder: 'Select'
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  
+
   constructor(private store: Store<AppState>,
               private manufacturingActions: ManufacturingActions,
               private inventoryAction: InventoryAction,
@@ -52,7 +54,7 @@ export class MfEditComponent implements OnInit {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
         manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
-        manufacturingObj.date = new Date(manufacturingObj.date);
+        manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
         delete manufacturingObj.manufacturingQuantity;
         manufacturingObj.linkedStocks.forEach((item) => {
           item.quantity = item.manufacturingQuantity;
