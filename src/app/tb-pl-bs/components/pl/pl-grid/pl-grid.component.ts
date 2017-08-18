@@ -36,12 +36,17 @@ export class PlGridComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
   }
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _tlPlAction: TBPlBsActions, private cd: ChangeDetectorRef) {
     // this.showLoader = true;
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.pl.data)).takeUntil(this.destroyed$);
-    this.showTbplLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
+    this.data$ = this.store.select(p => {
+      return p && p.tlPl && p.tlPl.pl && _.cloneDeep(p.tlPl.pl.data);
+    }).takeUntil(this.destroyed$);
+    this.showTbplLoader = this.store.select(p => {
+      return p && p.tlPl && p.tlPl.pl && p.tlPl.pl.showLoader;
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
