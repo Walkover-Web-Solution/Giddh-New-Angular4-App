@@ -203,6 +203,13 @@ export class InvoiceActions {
     };
   }
 
+  public ModifiedInvoiceStateData(model: string[]): Action {
+    return {
+      type: INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA,
+      payload: model
+    };
+  }
+
   // public GenerateBulkInvoice(model: any, data: any): Action {
   //   return {
   //     type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,

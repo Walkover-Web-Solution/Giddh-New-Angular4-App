@@ -45,11 +45,25 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             if (res.status === 'success') {
                 let body = _.cloneDeep(res.body);
                 body.results.map((item: ILedgersInvoiceResult) => {
-                    item.isSelected = false;
+                    item.isSelected = (item.isSelected) ? true : false;
                 });
                 newState.generate.ledgers = body;
                 return Object.assign({}, state, newState);
             }
+        }
+        case INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA: {
+            let newState = _.cloneDeep(state);
+            let uniq: string[] = action.payload;
+            _.forEach(uniq, (value) => {
+                newState.generate.ledgers.results.map((item: ILedgersInvoiceResult) => {
+                    if (item.uniqueName === value) {
+                        item.isSelected = true;
+                    }else {
+                        item.isSelected = false;
+                    }
+                });
+            });
+            return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
