@@ -1,5 +1,5 @@
 <!-- loader -->
-<div class="loader" *ngIf="(showLoader | async)">
+<div class="loader" *ngIf="(showLoader)">
   <span></span>
   <span></span>
   <span></span>
@@ -16,7 +16,7 @@
 </div>
 <!-- nodata end -->
 
-<div *ngIf="!(showLoader | async)">
+<div *ngIf="!showLoader">
   <div *ngIf="!noData">
     <div class="pd15">
       <!-- start main content -->
