@@ -6,6 +6,7 @@ import { EditInvoiceComponent } from './edit-template/edit.invoice.component';
 import { EditFiltersContainersComponent } from './edit-template/filters-container/edit.filters.component';
 import { OutTemplateComponent } from './edit-template/out-tempate/out.template.component';
 import { ContentFilterComponent } from './edit-template/filters-container/content-filters/content.filters.component';
+
 @NgModule({
   imports: [
     CommonModule,

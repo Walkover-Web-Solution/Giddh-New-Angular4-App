@@ -6,15 +6,15 @@
         <div class="form-group"><input type="checkbox" /> Company Address</div>
         <div class="form-group">
             <input type="checkbox" /> GSTIN
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='GSTIN' (ngModelChange)='onGSTINChange(GSTIN)' /></div>
+            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='GSTIN' (ngModelChange)='onGSTINChange(GSTIN)' /></div>-->
         </div>
         <div class="form-group">
             <input type="checkbox" /> PAN
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='PAN' (ngModelChange)='onPANChange(PAN)' /></div>
+            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='PAN' (ngModelChange)='onPANChange(PAN)' /></div>-->
         </div>
-        <div class="form-group">
-            <input type="checkbox" /> Invoice Date
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceDate' (ngModelChange)='onInvoiceDateChange(invoiceDate)' /></div>
+        <div class="form-group label-value">
+            <input type="checkbox" />
+            <input type="text" class="form-control" placeholder="Invoice Date" [(ngModel)]='invoiceDate' (ngModelChange)='onInvoiceDateChange(invoiceDate)' />
         </div>
         <div class="form-group">
             <input type="checkbox" /> Invoice Number
@@ -61,14 +61,14 @@
         <h3>Billing Details</h3>
         <div class="form-group">
             <input type="checkbox" /> Billing Address
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingAddress' (ngModelChange)='onBillingAddressChange(billingAddress)'/></div>
+            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingAddress' (ngModelChange)='onBillingAddressChange(billingAddress)'/></div>-->
         </div>
         <div class="form-group">
             <input type="checkbox" /> State
         </div>
         <div class="form-group">
             <input type="checkbox" /> GSTIN
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)'/></div>
+            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)'/></div>-->
         </div>
     </div>
 
@@ -76,14 +76,14 @@
         <h3>Shipping Details</h3>
         <div class="form-group">
             <input type="checkbox" /> Shipping Address
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingGstin' (ngModelChange)='onShippingGstinChange(shippingGstin)' /></div>
+            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingGstin' (ngModelChange)='onShippingGstinChange(shippingGstin)' /></div>-->
         </div>
         <div class="form-group">
             <input type="checkbox" /> State
         </div>
         <div class="form-group">
             <input type="checkbox" /> GSTIN
-            <div class="mrL3"><input type="text" class="form-control"  /></div>
+            <!--<div class="mrL3"><input type="text" class="form-control"  /></div>-->
         </div>
     </div>
 
@@ -172,8 +172,8 @@
     <div class="clearfix">
         <h2>Footer</h2>
         <div class="clearfix bdrB">
-            <div class="form-group"><input type="checkbox" /> Company Name</div>
-            <div class="form-group"><input type="checkbox" /> Company Address</div>
+            <div class="form-group"><input type="checkbox" /> Your Company Name</div>
+            <!--<div class="form-group"><input type="checkbox" /> Company Address</div>-->
             <div class="form-group">
                 <input type="checkbox" /> Taxable Amount
             </div>
@@ -282,6 +282,9 @@
 
     </div>
 
+  <div class="row">
+    <input type="file" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+  </div>
 
 
 </div>

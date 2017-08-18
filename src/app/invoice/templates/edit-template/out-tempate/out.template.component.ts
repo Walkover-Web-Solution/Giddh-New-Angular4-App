@@ -11,6 +11,7 @@ import { InvoiceActions } from '../../../../services/actions/invoice/invoice.act
 import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { ISection } from '../../../../models/api-models/Invoice';
+import {InvoiceUiDataService} from "../../../../services/invoice.ui.data.service";
 
 @Component({
   selector: 'invoice-template',
@@ -85,9 +86,11 @@ export class OutTemplateComponent implements OnInit {
   public fontFamily: string;
   public value: string;
   public color: string;
+  public logoSrc: string;
+  public imageSignatureSrc: string;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
+  constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
     this.companyName$ = this.invoiceTemplatesService.getCompanyName();
     this.GSTIN$ = this.invoiceTemplatesService.getGSTIN();
     this.PAN$ = this.invoiceTemplatesService.getPAN();
@@ -178,6 +181,14 @@ export class OutTemplateComponent implements OnInit {
   //       this.itemCodeWidth = 30 + val['itemCode'];
   //     }
   //   });
+
+    this._invoiceUiDataService.logoPath.subscribe((val) => {
+      this.logoSrc = val;
+    });
+
+    this._invoiceUiDataService.imageSignaturePath.subscribe((val) => {
+      this.imageSignatureSrc = val;
+    });
   }
 
   public ngOnInit() {
