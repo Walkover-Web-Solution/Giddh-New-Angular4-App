@@ -2,7 +2,7 @@
   <div class="col-xs-6">
     <div class="pull-left mrL1">
       <form [formGroup]="filterForm" (submit)="filterData()" class="form-inline" name="fromToDateForm" novalidate>
-        <div class="form-group">
+        <div class="form-group" *ngIf="showLabels">
           <label>Select</label>
           <div class="input-group max150" style="display:table">
             <select2 [data]="dateOptions" [options]="options" [value]="selectedDateOption"
@@ -42,7 +42,7 @@
   <!-- end of second coloumn -->
 </div>
 
-<div class="row pd15">
+<div class="row pd15" *ngIf="!(showLoader)">
   <div class="form-inline col-xs-4">
     <div class="form-group mrR2">
       <div class="input-group input-group-md">
@@ -61,7 +61,7 @@
     </div>
   </div>
   <!-- end of column -->
-  <div class="col-xs-6">
+  <div class="col-xs-6" *ngIf="showLabels">
     <div class="tbplList ">
       <ul class="list-inline color-codes pull-right">
         <li><span class="circle liabilities"></span><span>Liabilities</span></li>
