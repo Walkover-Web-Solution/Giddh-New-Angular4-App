@@ -62,7 +62,10 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
-      //
+      debugger;
+      let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
+      // addUIKey(data.);
+
       console.log(prepareProfitLossData(action.payload));
       return state;
     }
@@ -154,24 +157,6 @@ const orderGroups = (data) => {
   });
   return orderedGroups;
 };
-// const removeSd = (data) => {
-//   let count = 0;
-//   return _.each(data, (grp) => {
-//     if (grp.childGroups.length > 0) {
-//       return _.each(grp.childGroups, (ch) => {
-//         count = $scope.countAccounts(ch);
-//         if (ch.uniqueName === $rootScope.groupName.sundryDebtors) {
-//           if (count > 50) {
-//             ch.accounts = [];
-//             if (ch.childGroups.length > 0) {
-//               return $scope.removeAcc(ch);
-//             }
-//           }
-//         }
-//       });
-//     }
-//   });
-// };
 
 const addUIKey = (data: ChildGroup[]) => {
   return _.each(data, (grp) => {
@@ -201,19 +186,20 @@ const filterProfitLossData = data => {
   filterPlData.expArr = [];
   filterPlData.othArr = [];
   _.each(data, grp => {
+    grp.isVisible = false;
     switch (grp.category) {
       case 'income':
-        return filterPlData.othArr.push(grp);
-      case 'expenses':
         return filterPlData.incArr.push(grp);
-      default:
+      case 'expenses':
         return filterPlData.expArr.push(grp);
+      default:
+        return filterPlData.othArr.push(grp);
     }
   });
   return filterPlData;
 };
 
-const prepareProfitLossData = data => {
+const prepareProfitLossData = (data) => {
   let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
   plData.expenseTotal = calculateTotalExpense(plData.expArr);
   plData.incomeTotal = calculateTotalIncome(plData.incArr);
@@ -224,7 +210,7 @@ const prepareProfitLossData = data => {
   }
   if (plData.incomeTotal < plData.expenseTotal) {
     plData.inProfit = false;
-    return plData.incomeTotal += plData.closingBalance;
+    plData.incomeTotal += plData.closingBalance;
   }
   return plData;
 };
