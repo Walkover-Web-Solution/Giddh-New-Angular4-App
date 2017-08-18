@@ -50,7 +50,7 @@
           <div class="row mr0 col-xs-6 pdL0 pdR">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Purchase Acc</label>
-              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="options" formControlName="purchaseAccountUniqueName" [value]="addStockForm.controls['purchaseAccountUniqueName'].value"></select2>
+              <select2 [data]="purchaseAccountsDropDown$ | async" [options]="PurchaseDropDownOptions" formControlName="purchaseAccountUniqueName" [value]="addStockForm.controls['purchaseAccountUniqueName'].value"></select2>
             </div>
 
             <div class="row mrB">
@@ -84,7 +84,7 @@
           <div class="row mr0 col-xs-6 pdL pdR0">
             <div class="form-group col-xs-12 pdL0 pdR">
               <label class="boldHead">Sales Acc</label>
-              <select2 [data]="salesAccountsDropDown$ | async" [options]="options" formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>
+              <select2 [data]="salesAccountsDropDown$ | async" [options]="SalesDropDownOptions" formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>
             </div>
 
 
