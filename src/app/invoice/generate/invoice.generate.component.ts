@@ -89,10 +89,6 @@ export class InvoiceGenerateComponent implements OnInit {
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
           this.ledgersData = _.cloneDeep(o);
-          // _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-          //   item.isSelected = false;
-          //   return o;
-          // });
         }
       }
     );
@@ -234,6 +230,7 @@ export class InvoiceGenerateComponent implements OnInit {
     let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       return item.uniqueName === this.selectedLedgerItems[0];
     });
+    this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model.uniqueNames));
     this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
     this.showInvoiceModal();
   }
