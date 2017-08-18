@@ -5,6 +5,7 @@ export interface TrialBalanceExportRequest {
   toDate?: string;
   export?: string;
 }
+
 export interface TrialBalanceExportResponse {
   fromDate?: string;
   toDate?: string;
@@ -15,6 +16,20 @@ export interface TrialBalanceRequest {
   fromDate?: string;
   toDate?: string;
   refresh?: boolean;
+}
+
+export interface ProfitLossRequest extends TrialBalanceRequest {
+  fy?: number;
+}
+
+export interface ProfitLossData {
+  inProfit?: boolean;
+  incArr?: AccountDetails[];
+  expArr?: AccountDetails[];
+  othArr?: AccountDetails[];
+  expenseTotal?: number;
+  incomeTotal?: number;
+  closingBalance?: number;
 }
 
 export interface AccountDetails {

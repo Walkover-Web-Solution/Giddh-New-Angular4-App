@@ -9,7 +9,7 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TlPlService } from '../tl-pl.service';
-import { TrialBalanceRequest } from '../../models/api-models/tb-pl-bs';
+import { ProfitLossRequest, TrialBalanceRequest } from '../../models/api-models/tb-pl-bs';
 
 @Injectable()
 export class TBPlBsActions {
@@ -37,7 +37,7 @@ export class TBPlBsActions {
     .switchMap(action => {
       return this._tlPlService.GetProfitLoss(action.payload)
         .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
-          type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
+          type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
           payload: r.body
         }, true, {
           type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
@@ -57,17 +57,10 @@ export class TBPlBsActions {
     };
   }
 
-  public GetProfitLoss(request: TrialBalanceRequest): Action {
+  public GetProfitLoss(request: ProfitLossRequest): Action {
     return {
       type: TBPlBsActions.GET_PROFIT_LOSS_REQUEST,
       payload: request
-    };
-  }
-
-  public SetDate(fromDate: Date, toDate: Date): Action {
-    return {
-      type: TBPlBsActions.SET_DATE,
-      payload: { fromDate, toDate }
     };
   }
 
