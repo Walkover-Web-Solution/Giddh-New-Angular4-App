@@ -80,7 +80,7 @@
             </a>
           </ng-template>
 
-          <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)" [typeahead]="accountList"
+          <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)" [typeahead]="groupsList"
                  typeaheadOptionField="name"
                  [typeaheadItemTemplate]="moveGroupTemplate"
                  placeholder="Group name"
@@ -96,7 +96,7 @@
 
   </div>
 
-  <!--merge-->
+  <!--merge and taxes-->
   <div class="pd2 detailed clearfix pdT pdB1" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed">
 
     <div class="form-group col-xs-10 mrB">
