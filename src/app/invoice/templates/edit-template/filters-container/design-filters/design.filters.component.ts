@@ -9,6 +9,8 @@ import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../store/roots";
 import {InvoiceActions} from "../../../../../services/actions/invoice/invoice.actions";
 import {InvoiceTemplatesService} from "../../../../../services/invoice.templates.service";
+import {InvoiceUiDataService} from "../../../../../services/invoice.ui.data.service";
+import {Observable} from "rxjs/Observable";
 
 
 // import { Font } from 'ngx-font-picker';
@@ -55,7 +57,7 @@ export class DesignFiltersContainerComponent implements OnInit {
   public sizeSelect: boolean = true;
   public styleSelect: boolean = true;
   public presetFonts = this._presetFonts;
-  constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
+  constructor(private _invoiceUiDataService: InvoiceUiDataService, private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
     console.log('design-filters-container constructor called');
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
@@ -75,7 +77,7 @@ export class DesignFiltersContainerComponent implements OnInit {
   }
 
   public selectLogo() {
-    this.ifLogoSelected = false;
+    this.ifLogoSelected = true;
     this.ifColorSelected = false;
     this.ifPrintSelected = false;
     this.ifFontSelected = false;
@@ -128,7 +130,7 @@ export class DesignFiltersContainerComponent implements OnInit {
 
         this.files.push(output.file);
         console.log(this.files);
-        // this.previewFile(this.files);
+         this.previewFile(this.files);
        // });
       // when all files added in queue
       // uncomment this if you want to auto upload files when added
@@ -185,21 +187,29 @@ export class DesignFiltersContainerComponent implements OnInit {
     this.uploadInput.emit(event);
   }
 
-  //  public previewFile(files: any) {
-  //   let preview = document.querySelector('img');
-  //   let file    = document.querySelector('input[type=file]').files[0];
-  //   let reader  = new FileReader();
-  //
-  //   reader.onloadend = function() {
-  //     preview.src = reader.result;
-  //   }
-  //
-  //   if (file) {
-  //     reader.readAsDataURL(file);
-  //   } else {
-  //     preview.src = ' ';
-  //   }
-  // }
+   public previewFile(files: any) {
+    let preview = document.querySelector('img');
+    let file    = document.querySelector('input[type=file]').files[0];
+    let reader  = new FileReader();
+    let imgSrc$: Observable<any>;
+
+    reader.onloadend = () => {
+      preview.src = reader.result;
+      this._invoiceUiDataService.setLogoPath(preview.src);
+    };
+
+    // imgSrc$.subscribe((val) => {
+    //   if (val) {
+    //     this._invoiceUiDataService.setLogoPath(imgSrc);
+    //   }
+    // });
+
+    if (file) {
+      reader.readAsDataURL(file);
+    } else {
+      preview.src = ' ';
+    }
+  }
   public cancelUpload(id: string): void {
     this.uploadInput.emit({ type: 'cancel', id });
   }

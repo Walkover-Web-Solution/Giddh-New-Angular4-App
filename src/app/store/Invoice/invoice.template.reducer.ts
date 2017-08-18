@@ -150,11 +150,11 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
 export const initialStateTempMeta: InvoiceTemplateMetaState = {
   templateId: 'common_template_a',
   companyName: 'Walkover',
-  GSTIN: '',
-  PAN: '',
+  GSTIN: 'GSTIN',
+  PAN: 'PAN',
   address: '',
-  invoiceDate: '',
-  invoiceNumber: '',
+  invoiceDate: 'Invoice Date',
+  invoiceNumber: 'Invoice No.',
   shippingDate: '',
   shippingNo: '',
   shippingVia: '',
@@ -167,10 +167,10 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   dueDate: '',
   billingState: '',
   billingAddress: '',
-  billingGstin: '',
+  billingGstin: 'GSTIN',
   shippingAddress: '',
   shippingState: '',
-  shippinGstin: '',
+  shippinGstin: 'GSTIN',
   customField1: '',
   customField2: '',
   customField3: '',
@@ -360,7 +360,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.UPDATE_BILLING_GSTIN:
       return Object.assign({}, state, {
-        shippingGstin: action.payload.data
+        billingGstin: action.payload.data
       });
     case INVOICE.TEMPLATE.SET_FONT:
       return Object.assign({}, state, {
