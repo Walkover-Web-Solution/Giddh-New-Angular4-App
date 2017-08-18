@@ -39,6 +39,16 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     width: '180px',
     placeholder: 'Choose a parent unit'
   };
+  public PurchaseDropDownOptions: Select2Options = {
+    multiple: false,
+    width: '180px',
+    placeholder: 'select purchase account'
+  };
+  public SalesDropDownOptions: Select2Options = {
+    multiple: false,
+    width: '180px',
+    placeholder: 'select sales account'
+  };
   public groupUniqueName: string;
   public stockUniqueName: string;
   public addStockForm: FormGroup;
