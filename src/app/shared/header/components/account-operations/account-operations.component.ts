@@ -13,7 +13,7 @@ import {
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild, Output, EventEmitter, Input } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -31,7 +31,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
-import { AccountService } from '../../../../services/account.service';
+import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 
 @Component({
   selector: 'account-operations',
@@ -43,7 +43,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showEditAccount$: Observable<boolean>;
   public showEditGroup$: Observable<boolean>;
   @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
-  @Input('columnsRef') public columnsRef: GroupAccountSidebarVM;
+  @Input() public columnsRef: GroupAccountSidebarVM;
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
@@ -81,7 +81,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isRootLevelGroup: boolean = false;
   public companyTaxes$: Observable<TaxResponse[]>;
   public companyTaxDropDown: Observable<Select2OptionData[]>;
-  public accountList: any[];
+  public groupsList: any[];
   public showEditTaxSection: boolean = false;
   public accounts$: Observable<Select2OptionData[]>;
   public accountOptions: Select2Options = {
@@ -134,7 +134,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _accountService: AccountService) {
+              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
@@ -200,17 +200,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
       return arr;
     }).takeUntil(this.destroyed$);
-
-    // get flatternaccounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
-        data.body.results.map(d => {
-          accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
-        });
-        this.accounts$ = Observable.of(accounts);
-      }
-    });
   }
 
   public ngOnInit() {
@@ -234,7 +223,13 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.groupList$.subscribe((a) => {
       if (a) {
-        this.accountList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+        this.groupsList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+        let flattenAccounts: IAccountsInfo[] = this.flattenAccounts(a, []);
+        let accounts: Select2OptionData[] = [];
+        flattenAccounts.map(d => {
+          accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
+        });
+        this.accounts$ = Observable.of(accounts);
       }
     });
 
@@ -394,6 +389,16 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         }
       }
     });
+  }
+
+  public flattenAccounts(groups: GroupsWithAccountsResponse[] = [], accounts: IAccountsInfo[]): IAccountsInfo[] {
+    _.each(groups, grp => {
+      accounts.push(...grp.accounts);
+      if (grp.groups) {
+        this.flattenAccounts(grp.groups, accounts);
+      }
+    });
+    return accounts;
   }
 
   public makeGroupListFlatwithLessDtl(rawList: any) {
