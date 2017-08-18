@@ -42,7 +42,7 @@ import { ShareAccountModalComponent } from './header/components/share-account-mo
 import { CheckscrollDirective } from './helpers/directives/checkscroll';
 import { TextMaskModule } from 'angular2-text-mask';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-import { NgUploaderModule } from 'ngx-uploader';
+import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 import { DatePickerModule } from './theme/datepicker/date-picker.module';
 
