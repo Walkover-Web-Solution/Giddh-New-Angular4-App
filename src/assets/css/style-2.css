@@ -690,6 +690,7 @@ input[type="checkbox"]:before {
 }
 
 input[type="checkbox"]:after {
+<<<<<<< HEAD
   content: "";
   position: absolute;
   top: 0;
@@ -700,6 +701,18 @@ input[type="checkbox"]:after {
   background: #fff;
   cursor: pointer;
   border-radius: 2px;
+=======
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 0;
+    border: 2px solid #969696;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 2px;
+>>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .tab-pane .list-inline > li {
@@ -3214,8 +3227,13 @@ label {
   right: 6px;
 }
 
+<<<<<<< HEAD
 #mfReportTbl table > tbody > tr > td > table.table {
   background: transparent;
+=======
+#mfReportTbl table>tbody>tr>td>table.table {
+    background: transparent;
+>>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .pagination > li > a,
@@ -3298,7 +3316,11 @@ label {
 }
 
 #manufacture .form-theme tbody tr td select {
+<<<<<<< HEAD
   width: 43%;
+=======
+    width: 43%;
+>>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .btn-group.open .dropdown-toggle {
@@ -3430,6 +3452,7 @@ label {
 }
 
 .radio_theme:checked:after {
+<<<<<<< HEAD
   content: ' ';
   position: absolute;
   width: 6px;
@@ -3440,4 +3463,31 @@ label {
   border-radius: 50%;
   right: 0;
   text-align: center;
+=======
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ff5f00;
+    left: 4px;
+    top: 6px;
+    border-radius: 50%;
+    right: 0;
+    text-align: center;
+>>>>>>> +mustafa | midway: fixing ledger design issues
+}
+
+.open>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-container .dropdown-menu {
+    display: block;
+    height: 200px;
+    overflow: auto;
+}
+
+.dropdown-container .dropdown-menu li label {
+    overflow: hidden;
+    margin: 0;
 }
