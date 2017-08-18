@@ -3,7 +3,7 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/cor
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
-import { AccountDetails, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
+import { AccountDetails, ProfitLossRequest, ProfitLossData } from '../../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -26,7 +26,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public showLoader: Observable<boolean>;
-  public data$: Observable<AccountDetails>;
+  public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
 
   public get selectedCompany(): ComapnyResponse {
@@ -59,6 +59,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
+    //
   }
 
   public filterData(request: ProfitLossRequest) {
