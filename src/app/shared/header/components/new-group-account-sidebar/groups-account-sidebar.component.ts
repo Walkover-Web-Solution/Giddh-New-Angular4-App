@@ -1,6 +1,6 @@
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../../store/roots';
@@ -10,12 +10,14 @@ import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from './VM';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import * as _ from 'lodash';
+import { AccountResponse } from '../../../../models/api-models/Account';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'groups-account-sidebar',
   templateUrl: './groups-account-sidebar.component.html'
 })
-export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
+export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy {
   public mc: GroupAccountSidebarVM;
   @Output() public ScrollToRight: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public columnsChanged: EventEmitter<GroupAccountSidebarVM> = new EventEmitter();
@@ -23,12 +25,16 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   public _groups: GroupsWithAccountsResponse[];
   @Input() public activeGroup: Observable<GroupResponse>;
   @Input() public padLeft: number = 30;
+  public activeAccount: Observable<AccountResponse>;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private accountsAcction: AccountsAction) {
+              private accountsAction: AccountsAction) {
     this.mc = new GroupAccountSidebarVM();
     this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -109,22 +115,22 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
-    this.store.dispatch(this.accountsAcction.resetActiveAccount());
+    this.store.dispatch(this.accountsAction.resetActiveAccount());
     this.mc.selectedType = 'grp';
     this.mc.selectGroup(item, currentIndex);
     this.ScrollToRight.emit(true);
   }
 
-  public onAccountClick(item: IAccountsInfo, currentIndex: number) {
+  public onAccountClick(item: any, currentIndex: number) {
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
-    this.store.dispatch(this.accountsAcction.getAccountDetails(item.uniqueName));
+    this.store.dispatch(this.accountsAction.getAccountDetails(item.uniqueName));
     this.mc.selectedType = 'acc';
     this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
   }
 
   public ShowAddNewForm() {
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
-    this.store.dispatch(this.accountsAcction.resetActiveAccount());
+    this.store.dispatch(this.accountsAction.resetActiveAccount());
   }
 
   // order group by category
@@ -153,5 +159,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges {
     _.each(income, inc => orderedGroups.push(inc));
     _.each(expenses, exp => orderedGroups.push(exp));
     return orderedGroups;
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

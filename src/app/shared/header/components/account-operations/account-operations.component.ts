@@ -254,6 +254,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
+    this.showNewForm$.subscribe(s => {
+      if (s) {
+        console.log(this.columnsRef);
+      }
+    });
+
     this.moveAccountSuccess$.subscribe(p => {
       if (p) {
         this.moveAccountForm.reset();
