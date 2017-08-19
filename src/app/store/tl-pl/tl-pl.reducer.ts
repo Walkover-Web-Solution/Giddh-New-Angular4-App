@@ -46,7 +46,6 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
   switch (action.type) {
     case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE: {
       let data: AccountDetails = _.cloneDeep(action.payload) as AccountDetails;
-      addUIKey(data.groupDetails);
       data.groupDetails = removeZeroAmountAccount((data.groupDetails));
       let noData = false;
       let showLoader = false;
@@ -62,12 +61,9 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
-      debugger;
       let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
-      // addUIKey(data.);
-
-      console.log(prepareProfitLossData(action.payload));
-      return state;
+      console.log(data);
+      return { ...state, pl: { ...state.pl, showLoader: false, data } };
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
@@ -156,26 +152,6 @@ const orderGroups = (data) => {
     return orderedGroups.push(exp);
   });
   return orderedGroups;
-};
-
-const addUIKey = (data: ChildGroup[]) => {
-  return _.each(data, (grp) => {
-    grp.isVisible = false;
-    _.each(grp.accounts, (acc) => {
-      return acc.isVisible = false;
-    });
-    return _.each(grp.childGroups, (chld) => {
-      if (chld.accounts.length > 0) {
-        _.each(chld.accounts, (acc) => {
-          return acc.isVisible = false;
-        });
-      }
-      chld.isVisible = false;
-      if (chld.childGroups.length > 0) {
-        return addUIKey(chld.childGroups);
-      }
-    });
-  });
 };
 
 // PL Functions

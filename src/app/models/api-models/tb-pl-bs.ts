@@ -24,9 +24,9 @@ export interface ProfitLossRequest extends TrialBalanceRequest {
 
 export interface ProfitLossData {
   inProfit?: boolean;
-  incArr?: AccountDetails[];
-  expArr?: AccountDetails[];
-  othArr?: AccountDetails[];
+  incArr?: ChildGroup[];
+  expArr?: ChildGroup[];
+  othArr?: ChildGroup[];
   expenseTotal?: number;
   incomeTotal?: number;
   closingBalance?: number;

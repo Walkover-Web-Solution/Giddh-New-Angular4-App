@@ -3,7 +3,7 @@ import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/cor
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
-import { AccountDetails, ProfitLossRequest, ProfitLossData } from '../../../models/api-models/tb-pl-bs';
+import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -19,8 +19,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     ></tb-pl-bs-filter>
     <pl-grid
       [expandAll]="filter.expandAll"
-      [showLoader]="showLoader"
-      [data$]="data$"
+      [showLoader]="showLoader | async"
+      [plData]="data$ | async"
     ></pl-grid>
   `
 })
