@@ -1,5 +1,5 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-      novalidate [formGroup]="groupDetailForm" class="">
+      novalidate [formGroup]="groupDetailForm" (submit)="addNewGroup()">
   <div class="form_bg pd2">
     <div class="form-group clearfix">
       <div class="col-xs-7">
@@ -25,7 +25,7 @@
   </div>
 
   <div class="pd2 pdB clearfix">
-    <button class="btn btn-success pull-right" [disabled]="!groupDetailForm.valid" (click)="addNewGroup()">Add
+    <button class="btn btn-success pull-right" [disabled]="!groupDetailForm.valid">Add
     </button>
   </div>
 </form>
