@@ -30,6 +30,7 @@ export interface ProfitLossData {
   expenseTotal?: number;
   incomeTotal?: number;
   closingBalance?: number;
+  dates?: ProfitLossRequest;
 }
 
 export interface AccountDetails {

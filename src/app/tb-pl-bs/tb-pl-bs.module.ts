@@ -15,6 +15,7 @@ import { TrialAccordionDirective } from './components/trial-accordion.directive'
 import { TbComponent } from './components/tb/tb.component';
 import { PlComponent } from './components/pl/pl.component';
 import { PlGridComponent } from './components/pl/pl-grid/pl-grid.component';
+import { PlGridRowComponent } from './components/pl/pl-grid/pl-grid-row.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { PlGridComponent } from './components/pl/pl-grid/pl-grid.component';
     TbComponent,
     PlComponent,
     PlGridComponent,
+    PlGridRowComponent,
     TrialAccordionDirective
   ],
   exports: [
