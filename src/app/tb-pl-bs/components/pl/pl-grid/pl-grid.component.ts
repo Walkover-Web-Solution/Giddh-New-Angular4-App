@@ -1,6 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
-import { Observable } from 'rxjs/Observable';
+import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
 
@@ -14,23 +13,11 @@ export class PlGridComponent implements OnInit, AfterViewInit {
   public showClearSearch: boolean;
 
   @Input() public showLoader: boolean;
-  @Input() public data$: Observable<AccountDetails>;
-
+  @Input() public plData: ProfitLossData;
+  @Input() public padLeft: number = 30;
   @Input()
   public set expandAll(value: boolean) {
-    this.data$ = this.data$.map(p => {
-      if (p) {
-        return {
-          forwardedBalance: p.forwardedBalance,
-          creditTotal: p.creditTotal,
-          debitTotal: p.debitTotal,
-          closingBalance: p.closingBalance,
-          openingBalance: p.openingBalance,
-          groupDetails: this.toggleVisibility(p.groupDetails, value)
-        };
-      }
-    });
-
+    this.plData = { ...this.plData }
   }
 
   constructor() {
@@ -40,7 +27,6 @@ export class PlGridComponent implements OnInit, AfterViewInit {
   public ngOnInit() {
     //
   }
-
 
   public ngAfterViewInit() {
     //

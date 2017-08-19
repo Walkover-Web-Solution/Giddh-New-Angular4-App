@@ -36,7 +36,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     if (!value) {
       return;
     }
-    this._selectedCompany = value
+    this._selectedCompany = value;
     this.filterForm.patchValue({
       toDate: value.activeFinancialYear.financialYearEnds,
       fromDate: value.activeFinancialYear.financialYearEnds
@@ -51,9 +51,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
   private _selectedCompany: ComapnyResponse;
 
-  /**
-   * TypeScript public modifiers
-   */
   constructor(private fb: FormBuilder) {
     this.filterForm = this.fb.group({
       fromDate: [''],

@@ -9,24 +9,25 @@ import { ChildGroup } from '../../models/api-models/Search';
     <div class="row" trial-accordion>
       <div class="col-xs-4 group">{{ groupDetail.groupName | uppercase }}</div>
       <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | number:'1.2-2' }}
-        {{groupDetail.forwardedBalance?.type | titlecase | slice:0:1 }}r.
+        {{groupDetail.forwardedBalance | recType }}
       </div>
       <div class="col-xs-2 group text-right">{{ groupDetail.debitTotal | number:'1.2-2' }}</div>
       <div class="col-xs-2 group text-right">{{ groupDetail.creditTotal | number:'1.2-2' }}</div>
       <div class="col-xs-2 group text-right">{{ groupDetail.closingBalance?.amount | number:'1.2-2' }}
-        {{groupDetail.closingBalance?.type | titlecase | slice:0:1 }}r.
+        {{groupDetail.closingBalance | recType }}
       </div>
     </div>
-    <section class="row row-2 account isHidden" *ngFor="let account of groupDetail.accounts" (click)="account.isVisible=!account.isVisible;$event.preventDefault()"  >
+    <section class="row row-2 account isHidden" *ngFor="let account of groupDetail.accounts"
+             (click)="account.isVisible=!account.isVisible;$event.preventDefault()">
       <div class="row">
         <div class="col-xs-4 account" [ngStyle]="{'padding-left':'10px'}">{{account.name | lowercase}}</div>
         <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | number:'1.2-2' }}
-          {{account.openingBalance?.type | titlecase | slice:0:1 }}r.
+          {{account.openingBalance | recType }}
         </div>
         <div class="col-xs-2 account text-right">{{ account.debitTotal | number:'1.2-2' }}</div>
         <div class="col-xs-2 account text-right">{{ account.creditTotal | number:'1.2-2' }}</div>
         <div class="col-xs-2 account text-right">{{ account.closingBalance?.amount | number:'1.2-2' }}
-          {{account.closingBalance?.type | titlecase | slice:0:1 }}r.
+          {{account.closingBalance | recType }}
         </div>
       </div>
     </section>
