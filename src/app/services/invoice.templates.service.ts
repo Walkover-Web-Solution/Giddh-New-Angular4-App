@@ -160,7 +160,7 @@ export class InvoiceTemplatesService {
   }
 
   public getSnoLabel(): Observable<string> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.formNameTaxInvoice);
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.sNoLabel);
   }
 
   public getDateLabel(): Observable<string> {

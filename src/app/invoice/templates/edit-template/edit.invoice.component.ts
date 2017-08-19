@@ -16,7 +16,8 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'edit-invoice',
-  templateUrl: 'edit.invoice.component.html'
+  templateUrl: 'edit.invoice.component.html',
+  styleUrls: ['edit-template.component.css']
 })
 
 export class EditInvoiceComponent implements OnInit {

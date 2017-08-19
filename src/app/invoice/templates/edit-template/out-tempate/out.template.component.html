@@ -1,347 +1,774 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html id="default" *ngIf="templateId == 'common_template_a'">
 
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Invoice</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" /> -->
-    <style>
-        @import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
-        body {
-
-            font-size: 15px;
-            font-weight: 400;
+    <title></title>
+    <style type="text/css">
+        /* reset */
+        
+        * {
+            border: 0;
+            box-sizing: content-box;
+            color: #262626;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            vertical-align: top;
+        }
+        /* heading */
+        
+        #default header h1 {
+            /* color: #df4927; */
+            font-size: 16px;
+        }
+        
+        #default header h2 {
+            /* color: #df4927; */
+            font-size: 18px;
+        }
+        /* table */
+        
+        #default table {
+            font-size: 93%;
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: inherit
+        }
+        
+        #default table {}
+        
+        #default .item th,
+        #default tfoot tr th {
+            /* background: #f2f2f2; */
+            border: 0;
+        }
+        /* page */
+        
+        #default {
+            /* font: 14px/1 'Open Sans', sans-serif; */
+            overflow: auto;
+            font-size: 12px;
+            padding: 0;
+            font-size: 93%;
+        }
+        
+        #default {
             background: #f2f2f2;
+            cursor: default;
             border: 1px solid #bfbfbf;
+            padding: 0;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
-
-        .container {
-            /*padding: 20px 10px;*/
-            margin: 30px;
-            max-width: 100%;
-            border: 1px solid #eee;
-            /* box-shadow: 0 2px 6px #000; */
+        
+        #default body {
+            box-sizing: border-box;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0.1in;
+            letter-spacing: 0;
+            width: 100%;
+        }
+        
+        #default body {
+            background: #FFF;
+            border-radius: 1px;
+            /* box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); */
+        }
+        /* header */
+        
+        #default header {
+            margin: 0;
             background: #fff;
-            width: calc(100% - 60px);
+            padding: 0.23in 0.23in 0.03in
         }
-
-        h3 {
-            font-weight: 700;
-            margin-bottom: 20px;
-            font-size: 17px;
+        
+        #default header:after {
+            clear: both;
+            content: "";
+            display: table;
         }
-
-        p {
-            margin-bottom: 5px;
+        
+        .pull-right tr td {
+            text-align: right !important;
         }
-
-        .invHd {
-            display: inline-block;
-            padding: 10px 16px;
-            background: #fff;
+        
+        #default header .numDetail strong {
+            width: 50px;
+            float: left;
+        }
+        
+        #default .meta {
+            padding: 0 0.23in 0.03in;
+            margin-bottom: 10px;
+        }
+        
+        #default .meta tbody tr td,
+        #default .meta tbody tr th {
+            border: 0;
+            padding: 5px 0;
+        }
+        
+        #default .meta tbody tr th {
+            background: none;
+            border: 0;
+            padding: 0;
+            text-align: left;
+            color: #262626;
+        }
+        
+        #default .meta tbody tr td {
+            padding: 7px 0;
+            line-height: 1.3rem;
+        }
+        /*#default .meta tbody tr td:nth-child(2)>table tbody tr td{background: #f2f2f2;padding: 0 10px;line-height: 2rem;margin: 4px 0; display: -webkit-box;}*/
+        
+        #default header figure {
+            float: left;
+            font-style: normal;
+            line-height: 1.25;
+            margin: 0 0 0.3em 0;
+        }
+        
+        #default header figure p {
+            margin: 0 0 0.25em;
+        }
+        
+        #default header span,
+        header img {
+            display: block;
+            float: right;
+        }
+        
+        #default header span {
+            margin: 0 0 1em 1em;
+            max-height: 25%;
+            max-width: 60%;
             position: relative;
-            top: -20px;
-            margin: 0
         }
-
-        table.table {
-            font-size: 13px;
-            margin-top: 30px;
+        
+        #default header img {
+            max-height: 100%;
+            max-width: 100%;
         }
-
-        table.table td,
-        table.table th {
-            vertical-align: middle !important;
+        
+        #default header table tr td {
+            border: 0;
+            padding: 4px 0;
+        }
+        /* article */
+        
+        #default article {
+            margin-bottom: 10px;
+        }
+        
+        #default article:after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+        
+        #default article h1 {
+            clip: rect(0 0 0 0);
+            position: absolute;
+        }
+        
+        #default article address {
+            float: left;
+            font-weight: bold;
+        }
+        
+        .text-right {
             text-align: right;
         }
-
-        table.table td:first-child,
-        table.table th:first-child {
+        /* table items */
+        
+        #default table.item {
+            clear: both;
+            width: 100%;
+            table-layout: auto;
+        }
+        
+        #default table.item th,
+        #default table.item tfoot tr th {
+            text-align: right;
+            position: relative;
+            padding: 14px 7px;
+            line-height: 1.2rem;
+        }
+        
+        #default table.item tr th:nth-child(2) {
             text-align: left;
         }
-
-        table.table td small {
-            color: #777
+        
+        #default table.item tfoot tr th {
+            padding-right: 7px;
         }
-
-        .signature {
-            border-top: 1px solid #ccc;
-            margin-top: 60px;
-            padding-top: 8px;
-            width: 260px;
-            float: right
+        
+        #default table.item tr th,
+        #default table.item tfoot tr th {
+            font-weight: bold;
         }
-
-        .thankyou {
-            border-bottom: 2px solid #E14926;
-            margin-bottom: 5px
+        
+        #default table.item tfoot tr th {
+            border-top: 1px solid rgba(89, 89, 89, 0.6);
         }
-
-        .thankyou h3 {
-            margin-bottom: 5px
+        
+        #default table.item td {
+            border-radius: 0;
+            padding: 7px;
+            border-top: 1px solid rgba(89, 89, 89, 0.6);
+            text-align: right;
+            line-height: 1.2rem;
         }
-
-        @media (max-width:767px) {
-            .container {
-                margin: 0
+        
+        #default table.item td p {
+            color: #595959;
+        }
+        
+        #default table.item td:nth-child(1) {
+            width: 26%;
+        }
+        
+        #default table.item td:nth-child(2) {
+            width: 38%;
+            text-align: left;
+        }
+        
+        #default table.item td:nth-child(3) {
+            text-align: right;
+            width: 12%;
+        }
+        
+        #default table.item td:nth-child(4) {
+            text-align: right;
+            width: 12%;
+        }
+        
+        #default table.item td:nth-child(5) {
+            text-align: right;
+            width: 12%;
+        }
+        /* table balance */
+        
+        #default table.balance {
+            width: 75%;
+            float: right;
+            margin: 0px 7px 40px;
+        }
+        
+        #default table.balance th,
+        #default table.balance td {
+            width: 50%;
+            text-align: right;
+            padding: 4px;
+        }
+        /* aside */
+        
+        #default aside h1 {
+            border: none;
+            border-width: 0 0 1px;
+            margin: 0 0 1em;
+        }
+        
+        #default aside h1 {
+            border-color: #999;
+            border-bottom-style: solid;
+        }
+        /*footer*/
+        
+        #default footer {
+            border-top: 2px solid #df4927;
+            padding: 15px 0;
+            margin: 8px 0 0;
+            background: #fff;
+        }
+        
+        #default aside {
+            line-height: 1.5rem;
+        }
+        
+        #default .subfooter {
+            padding: 0 20px;
+        }
+        
+        #default .subfooter hr {
+            width: 100%;
+            border-bottom: 1px solid #000;
+            margin: 3px 0;
+        }
+        
+        #default .subfooter h4 {
+            font-size: 17px;
+            color: #df4927;
+            margin: 10px 0 0
+        }
+        
+        @page {
+            margin: 0;
+            size: A4 portrait;
+        }
+        
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact;
             }
+            #default {
+                background: none;
+                padding: 0;
+            }
+            #default body {
+                box-shadow: none;
+                margin: 0;
+            }
+            #default span:empty {
+                display: none;
+            }
+            #default footer {
+                position: fixed;
+                bottom: 0px;
+                right: 0;
+                left: 0;
+            }
+            #default header {
+                position: fixed;
+                top: 0px;
+                right: 0;
+                left: 0;
+            }
+            #default table.item {
+                page-break-inside: always;
+                page-break-after: auto;
+            }
+            #default table.balance {
+                page-break-inside: auto;
+                page-break-before: always;
+            }
+            #default tr {
+                page-break-inside: avoid;
+                page-break-after: auto
+            }
+            /*#default article {margin: 10in 0;}*/
+            #default .cargoDetail {
+                margin-top: 1.2in
+            }
+            #default .subfooter {
+                padding-bottom: 4in
+            }
+        }
+        
+        #default .docTitle {
+            width: 100%;
+            line-height: 20px;
+            text-align: center;
+            height: 30px;
+            position: relative;
+        }
+        
+        #default .docTitle h2 {
+            text-align: center;
+            position: absolute;
+            right: 0;
+            left: -21px;
+            width: 105.5%;
+        }
+        /* #default .docTitle h2:before {
+            content: " ";
+            position: absolute;
+            top: 50%;
+            height: 20px;
+            width: 100%;
+            right: 0;
+            left: 0;
+            background: #df4927;
+            height: 2px;
+            margin: 0 auto;
+        } */
+        
+        #default .docTitle h2:after {
+            content: attr(title);
+            width: auto;
+            position: relative;
+            background: #fff;
+            margin: 0 auto;
+            padding: 6px 16px;
+            right: 0;
+            line-height: 40px;
+            vertical-align: middle;
+            z-index: 0;
+            left: 0;
+        }
+        
+        #default p {
+            margin: 0;
+        }
+        
+        #default h2 {
+            margin: 0;
+            font-size: inherit
+        }
+        
+        #default table.item th .bgClr {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background: aqua;
+            left: 0;
+            right: 0;
+            width: 100%;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .docTitle hr {
+            position: absolute;
+            height: 2px;
+            top: 50%;
+            width: 100%;
+        }
+        
+        strong {
+            font-weight: bold;
+        }
+        /* common template css  */
+        
+        .disabled-area {
+            position: relative
+        }
+        
+        .disabled-area:after {
+            content: ' ';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            background: rgba(204, 204, 204, 0.5);
+            border: 1px dashed #808080;
+        }
+        
+        .edit-template {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 4px;
+            height: 15px;
+            background: #fff;
+        }
+        
+        .edit-template i {
+            color: #000;
+            font: normal normal normal 14px/1 FontAwesome;
         }
     </style>
 </head>
 
-<body >
-{{fontFamily}}
-    <section class="container" [ngStyle] = "{ 'padding': topMargin+'px'+' '+rightMargin+'px'+' '+bottomMargin+'px'+' '+leftMargin+'px', 'font-family': fontFamily}"  *ngIf="templateId == 'common_template_a'">
-        <div class="clearfix">
-            <div class="col-xs-12">
-                <div class="col-xs-12">
-                    <table style="width: 100%;">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <h3 [ngStyle] = "{ 'background-color': color}">{{this.companyName$| async }}</h3>
-                                  <img [src]="logoSrc" height="200" alt="Image preview...">
-                                  <table class="with-pd"><tbody>
-                                            <tr>
-                                                <td style="padding-right: 15px;">
-                                                    <p><b>{{this.GSTIN$| async }}</b></p>
-                                                    <p><b>{{this.PAN$| async }}</b></p>
-                                                </td>
-                                                <td>
-                                                  <p>12345678901234</p>
-                                                  <p>1234567890</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+<body [ngStyle]="{'font-family': fontFamily}">
+    <!--[ngStyle]="{ 'padding': topMargin+'px'+' '+rightMargin+'px'+' '+bottomMargin+'px'+' '+leftMargin+'px', 'font-family': fontFamily}"  -->
+    <div>
+        <div id="Template-header" class="disabled-area">
+            <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
+            <header>
+                <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="{{this.companyName$ | async}}"></figure>
+                <figure class="col-xs-6">
+                    <strong><h2 [ngStyle]="{ 'color': color}">{{this.companyName$ | async}}</h2></strong>
+                </figure>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table class="numDetail">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>GSTIN</strong> 01234567890123</td>
 
-                                </td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>PAN</strong> 1234567890</td>
 
-                                <td style="text-align: right">
-                                    <h3 style="color:#E14926 !important;">Total ₹ 5920.00</h3>
-                                    <table style="float: right;">
-                                        <tbody>
-                                            <tr>
-                                                <td style="padding-right: 15px;">
-                                                    <p><b>{{this.invoiceDate$| async }}</b></p>
-                                                    <p><b>{{this.invoiceNo$| async }}</b></p>
-                                                </td>
-                                                <td>
-                                                  <p>12/08/17</p>
-                                                  <p>123456-7</p>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td colspan="2">
+
+                            </td>
+                            <td class="pull-right">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>{{this.invoiceDate$ | async }}</strong></td>
+                                            <td>23/06/2017</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{this.invoiceNo$ | async}}</strong></td>
+                                            <td>201770323-64</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="docTitle">
+                    <h2 [ngStyle]="{ 'color': color}" title="{{this.formNameInvoice$ | async}}">
+                        <hr [ngStyle]="{ 'background-color': color}" />
+                    </h2>
                 </div>
-            </div>
-
-        </div>
-
-        <div style="border-bottom:2px solid #E14926 !important; margin-top: 10px;">&nbsp;</div>
-        <div class="text-center">
-            <h3 class="invHd" style="background: #fff !important; color:#E14926 !important;">TEXT INVOICE</h3>
-        </div>
-
-
-        <div class="clearfix">
-            <div class="col-xs-12">
-                <div class="col-xs-12">
-                    <table style="width: 100%">
-                        <tbody>
-                            <tr>
-                                <td style="padding-right: 15px;">
-                                    <p>Mr. Shubhendra Agrawal</p>
-                                    <br />
-                                    <p><b>Due Date</b></p>
-                                    <p>30/06/2017</p>
-                                </td>
-
-                                <td style="padding-right: 15px;">
-                                    <p><b>Billing Address</b></p>
-                                    <p>Company Dummy Name</p>
-                                    <p>24 Building Name</p>
-                                    <p>3rd Floor</p>
-                                    <p>15 A.B. Road</p>
-                                    <p>Indore (M.P.) 452000</p>
-                                    <br />
-                                    <b>{{this.billingGSTIN$ | async}}</b>
-                                    <p>22BBBBBB000A1Z0</p>
-                                </td>
-
-                                <td>
-                                    <p><b>Shipping Address</b></p>
-                                    <p>Company Dummy Name</p>
-                                    <p>24 Building Name</p>
-                                    <p>3rd Floor</p>
-                                    <p>15 A.B. Road</p>
-                                    <p>Indore (M.P.) 452000</p>
-                                    <br />
-                                    <b>{{this.shippingGSTIN$ | async}}</b>
-                                    <p>22BBBBBB000A1Z0</p>
-                                </td>
-
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="docTitle">
+                    <h2 [ngStyle]="{ 'color': color}" title="{{this.formNameTaxInvoice$ | async}}">
+                        <hr [ngStyle]="{ 'background-color': color}" />
+                    </h2>
                 </div>
-            </div>
-        </div>
+            </header>
 
-        <table class="table">
-            <thead style="background: #f5f5f5;">
-                <tr>
-                    <th>Item</th>
-                    <th>HSN/SAC</th>
-                    <th>Qty.</th>
-                    <th>Rate/<br />Item(₹)</th>
-                    <th>Discount/<br />Item(₹)</th>
-                    <th>Taxable <br />Value(₹)</th>
-                    <th>SGST<br />₹</th>
-                    <th>CGST<br />₹</th>
-                    <th>CESS<br />₹</th>
-                    <th>Total<br />₹</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Dummy Product<br />Edition 2</td>
-                    <td>123456</td>
-                    <td>10 No.</td>
-                    <td>1000.00</td>
-                    <td>300.00</td>
-                    <td>9700.00</td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
-                    <td>11000640.00</td>
-                </tr>
-
-                <tr>
-                    <td>Dummy Product<br />Edition 2</td>
-                    <td>123456</td>
-                    <td>10 No.</td>
-                    <td>1000.00</td>
-                    <td>300.00</td>
-                    <td>9700.00</td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
-                    <td>11640.00</td>
-                </tr>
-
-                <tr>
-                    <td>Dummy Product<br />Edition 2</td>
-                    <td>123456</td>
-                    <td>10 No.</td>
-                    <td>1000.00</td>
-                    <td>300.00</td>
-                    <td>9700.00</td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>970.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
-                    <td>11640.00</td>
-                </tr>
-
-                <tr>
-                    <td>Freight Charges</td>
-                    <td>--</td>
-                    <td>10 No.</td>
-                    <td>1000.00</td>
-                    <td>--</td>
-                    <td>1000.00</td>
-                    <td>50.00<br /><small>@10%</small></td>
-                    <td>50.00<br /><small>@10%</small></td>
-                    <td>00.00<br /><small>@0%</small></td>
-                    <td>1100.00</td>
-                </tr>
-            </tbody>
-            <tfoot style="background: #f5f5f5;">
-                <tr>
-                    <th colspan="5"></th>
-                    <th>30100.00</th>
-                    <th>2960.00</th>
-                    <th>2960.00</th>
-                    <th>00.00</th>
-                    <th>36020.00</th>
-                </tr>
-            </tfoot>
-        </table>
-
-        <div class="clearfix text-right">
-            <table style="width: 100%;">
+            <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
                         <td>
-                            <p><b>Taxable Amount</b></p>
-                            <p><b>Total Tax*</b></p>
-                            <p><b>Invoice Total</b></p>
-                            <p><b>Invoice Total (In words)</b></p>
+                            <p><strong>{{this.customerName$ | async}}</strong></p>
+                            <p>{{this.customerEmail$ | async}}</p>
+                            <p>{{this.customerMobileNo$ | async}}</p>
                         </td>
                         <td>
-                            <p><b>₹30100.00</b></p>
-                            <p><b>₹5920.00</b></p>
-                            <p><b>₹36020.00</b></p>
-                            <p><b>Thirty Six Thousand Twenty Only</b></p>
+                            <p><strong>{{this.billingAddress$ | async}}</strong></p>
+                            <p>Green Soft Solutions
+                                <p>24 Building Name</p>
+                                <p>3rd Floor</p>
+                                <p>5 A.B. Road</p>
+                                <p>Indore (M.P.) 452000</p>
+                        </td>
+                        <td>
+                            <p><strong>{{this.shippingAddress$ | async}}</strong></p>
+                            <p>Green Soft Solutions
+                                <p>24 Building Name</p>
+                                <p>3rd Floor</p>
+                                <p>5 A.B. Road</p>
+                                <p>Indore (M.P.) 452000</p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <p><strong>{{this.dueDate$ | async}}</strong></p>
+                            <p>30/06/2017</p>
+                        </td>
+                        <td>
+                            <p><strong>{{this.GSTIN$ | async}}</strong></p>
+                            <p>22BBBBBB000A1Z0</p>
+                        </td>
+                        <td>
+                            <p><strong>{{this.GSTIN$ | async}}</strong></p>
+                            <p>22BBBBBB000A1Z0</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="meta">
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>{{this.shippingDate$ | async}}</strong>
+                            <p>30/06/2017</p>
+                        </td>
+
+                        <td>
+                            <strong>{{this.GSTIN$ | async}}</strong>
+                            <p>30/06/2017</p>
+                        </td>
+
+                        <td>
+                            <strong>{{this.trackingNo$ | async}}</strong>
+                            <p>323443242342</p>
+                        </td>
+
+                        <td>
+                            <strong>{{this.customField1$ | async}}</strong>
+                            <p>Hello this is custom field</p>
+                        </td>
+
+                        <td>
+                            <strong>{{this.customField2$ | async}}</strong>
+                            <p>2324342424432</p>
+                        </td>
+
+                        <td>
+                            <strong>{{this.customField3$ | async}}</strong>
+                            <p>Field 3</p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+        <div id="Template-table" class="disabled-area">
+            <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
+            <article>
+                <table class="item" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span> {{this.sNoLabel$ | async}}</th>
+                            <th colspan="2"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span> {{this.itemLabel$ | async}}</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.hsnSacLabel$ | async}}</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.quantityLabel$ | async}}</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.rateLabel$ | async}} (₹)</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.discountLabel$ | async}} (₹)</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.taxableValueLabel$ | async}}(₹)</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.taxLabel$ | async}} (₹)</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.taxLabel$ | async}} (₹)</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.taxLabel$ | async}} (₹)</th>
+                            <th colspan="2"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.totalLabel$ | async}} (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="2">Dummy Product Edition 2</td>
+                            <td>123456</td>
+                            <td>10 No.</td>
+                            <td>1000.00</td>
+                            <td>30.00</td>
+                            <td>9700.00</td>
+                            <td>9700.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td colspan="2">11000344640.00</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="2">Dummy Product Edition 2</td>
+                            <td>123456</td>
+                            <td>10 No.</td>
+                            <td>1000.00</td>
+                            <td>30.00</td>
+                            <td>9700.00</td>
+                            <td>9700.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td colspan="2">11000344640.00</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="2">Dummy Product Edition 2</td>
+                            <td>123456</td>
+                            <td>10 No.</td>
+                            <td>1000.00</td>
+                            <td>30.00</td>
+                            <td>9700.00</td>
+                            <td>9700.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td colspan="2">11000344640.00</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td colspan="2">Dummy Product Edition 2</td>
+                            <td>123456</td>
+                            <td>10 No.</td>
+                            <td>1000.00</td>
+                            <td>30.00</td>
+                            <td>9700.00</td>
+                            <td>9700.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td>970.00
+                                <p>@10%</p>
+                            </td>
+                            <td colspan="2">11000344640.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="6"> <span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>&nbsp;</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
+                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
+                            <th colspan="2"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </article>
+        </div>
+        <div id="Template-footer" class="disabled-area">
+            <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
+            <aside>
+                <table class="balance">
+                    <tr>
+                        <th><strong>{{this.taxableAmount$ | async}}</strong></th>
+                        <td><span>₹30100.00</span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>{{this.totalTax$ | async}}</strong></th>
+                        <td><span>₹5920.00</span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>{{this.total$ | async}}</strong></th>
+                        <td><span>₹36020.00</span></td>
+                    </tr>
+                    <tr>
+                        <th><strong>{{this.totalInWords$ | async}}</strong></th>
+                        <td>Thirty Six Thousand Twenty Only</td>
+                    </tr>
+                </table>
+                <table cellpadding="0" cellspacing="0" class="subfooter">
+                    <tbody>
+                        <tr>
+                            <td colspan="2">
+                                <p style="margin-bottom: 15px;"><strong>*Tax to be paid on Reverse Charge</strong></p>
+                                <section>
+                                    <strong><h2>Notes</h2></strong>
+                                    <p>All payments to be made in cash</p>
+                                    <p>Contact us for queries on these quotations.</p>
+                                </section>
+                            </td>
+                            <td style="text-align: center;vertical-align: bottom;">
+                                <hr />
+                                <strong><h3>{{this.slogan$ | async}}</h3></strong>
+                                <strong><small>(Signature)</small></strong>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong><h4 [ngStyle]="{ 'color': color}">{{this.thanks$ | async}}</h4></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
 
-        <div class="clearfix small" style="margin-top:60px">
-            <div class="clearfix">
-                <div class="col-xs-12">
-                    <div class="col-xs-12">
-                        <table style="width: 100%;">
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <p><b>*Tax to be paid on Reverse Charge</b></p>
-                                        <br />
-                                        <p><b>Notes</b></p>
-                                        <p>All payments to be made in cash</p>
-                                        <p>Contact us for queries on these quotations.</p>
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <div class="signature">
-                                          <img [src]="imageSignatureSrc" height="100" alt="Image preview...">
-                                            <p><b>Walkover Web Solutions Private Limited</b></p>
-                                            <p><b class="text-muted">(Signature)</b></p>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
+            </aside>
+            <footer style="text-align: center;" [ngStyle]="{ 'border-color': color}">
+                <!-- not confirmed  -->
+                {{this.address$ | async }}
+            </footer>
         </div>
 
-        <div class="clearfix">
-            <div class="col-sm-12">
-                <div class="col-xs-12 thankyou">
-                    <h3 style="color: #E14926 !important;">Thank you for your business</h3>
-                </div>
-            </div>
-
-            <div class="small text-center">
-                <p><b>Walkover Web Solutions Private Limited</b></p>
-                <p>405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)</p>
-            </div>
-        </div>
-
-    </section>
-
+    </div>
 </body>
 
 </html>
