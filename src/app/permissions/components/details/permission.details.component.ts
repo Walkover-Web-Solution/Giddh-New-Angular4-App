@@ -24,6 +24,7 @@ export class PermissionDetailsComponent implements OnInit {
   public rawDataForAllRoles: Permission[];
   public allRolesOfPage: Permission[];
   public roleObj: NewRoleClass;
+  public pageName: string = '';
 
   constructor(private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -224,7 +225,11 @@ export class PermissionDetailsComponent implements OnInit {
       page = _.find(this.viewPageObj.scopes, (o: Scope) => o.name === pageName);
     }
     if (page) {
-      return _.find(page.permissions, (p: Permission) => p.code === item.code) ? true : false;
+      let access = _.find(page.permissions, (p: Permission) => p.code === item.code);
+      if (access && access.isSelected) {
+        return true;
+      }
+      return false;
     }else {
       return false;
     }

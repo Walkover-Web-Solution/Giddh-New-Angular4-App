@@ -76,3 +76,4 @@ packages/
 POSTMAN/
 
 yarn.lock
+tsconfig.main.temp.json
