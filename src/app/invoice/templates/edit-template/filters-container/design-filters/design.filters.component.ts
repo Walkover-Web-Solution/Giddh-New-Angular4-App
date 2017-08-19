@@ -17,7 +17,8 @@ import {Observable} from "rxjs/Observable";
 
 @Component({
   selector: 'design-filters',
-  templateUrl: 'design.filters.component.html'
+  templateUrl: 'design.filters.component.html',
+  styleUrls: ['design.filters.component.css']
 })
 
 export class DesignFiltersContainerComponent implements OnInit {
@@ -188,7 +189,7 @@ export class DesignFiltersContainerComponent implements OnInit {
   }
 
    public previewFile(files: any) {
-    let preview = document.querySelector('img');
+    let preview = document.getElementById('logoImage');
     let file    = document.querySelector('input[type=file]').files[0];
     let reader  = new FileReader();
     let imgSrc$: Observable<any>;
