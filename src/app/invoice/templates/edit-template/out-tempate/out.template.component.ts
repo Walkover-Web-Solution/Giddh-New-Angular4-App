@@ -32,8 +32,8 @@ export class OutTemplateComponent implements OnInit {
   public shippingNo$: Observable<string>;
   public trackingDate$: Observable<string>;
   public trackingNo$: Observable<string>;
-  public customeName$: Observable<string>;
-  public customeEmail$: Observable<string>;
+  public customerName$: Observable<string>;
+  public customerEmail$: Observable<string>;
   public customerMobileNo$: Observable<string>;
   public dueDate$: Observable<string>;
   public billingState$: Observable<string>;
@@ -101,8 +101,8 @@ export class OutTemplateComponent implements OnInit {
     this.shippingNo$ = this.invoiceTemplatesService.getShippingNo();
     this.trackingDate$ = this.invoiceTemplatesService.getTrackingDate();
     this.trackingNo$ = this.invoiceTemplatesService.getTrackingNumber();
-    this.customeName$ = this.invoiceTemplatesService.getCustomerName();
-    this.customeEmail$ = this.invoiceTemplatesService.getCustomerEmail();
+    this.customerName$ = this.invoiceTemplatesService.getCustomerName();
+    this.customerEmail$ = this.invoiceTemplatesService.getCustomerEmail();
     this.customerMobileNo$ = this.invoiceTemplatesService.getCustomerMobileNo();
     this.dueDate$ = this.invoiceTemplatesService.getDueDate();
     this.billingAddress$ = this.invoiceTemplatesService.getBillingAddress();
@@ -125,7 +125,7 @@ export class OutTemplateComponent implements OnInit {
     this.discountLabel$ = this.invoiceTemplatesService.getDiscountLabel();
     this.taxableValueLabel$ = this.invoiceTemplatesService.getTaxableValueLabel();
     this.taxLabel$ = this.invoiceTemplatesService.getTaxLabel();
-    this.totalLabel$ = this.invoiceTemplatesService.getTaxLabel();
+    this.totalLabel$ = this.invoiceTemplatesService.getTotalLabel();
     this.quantityLabel$ = this.invoiceTemplatesService.getQuantityLabel();
     this.invoiceTemplatesService.getTopMargin().subscribe( val => {
       if (val) {

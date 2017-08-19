@@ -108,7 +108,7 @@ export class ContentFilterComponent {
   // }
 
   // ---------------InvoiceNumber----------
-  public onInvoiceNumberChange(data) {
+  public onInvoiceNoChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateInvoiceNo(data));
     console.log(data);
