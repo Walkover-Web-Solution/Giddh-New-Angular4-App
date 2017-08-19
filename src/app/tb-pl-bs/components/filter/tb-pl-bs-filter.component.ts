@@ -55,6 +55,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     this.filterForm = this.fb.group({
       fromDate: [''],
       toDate: [''],
+      fy: [''],
       refresh: [false]
     });
 
@@ -78,9 +79,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   public selectFinancialYearOption(v) {
     this.selectedFinancialYearOption = v.value || '';
     let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === this.selectedFinancialYearOption);
+    let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === this.selectedFinancialYearOption);
     this.filterForm.patchValue({
       toDate: financialYear.financialYearEnds,
-      fromDate: financialYear.financialYearEnds
+      fromDate: financialYear.financialYearEnds,
+      fy: index === 0 ? 0 : index * -1
     });
   }
 

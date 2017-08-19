@@ -47,8 +47,12 @@ export class TlPlService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
+    let filteredRequest = (Object.keys(request)
+      .filter(p => request[p] != null)
+      .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
+
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
-      .replace(':companyUniqueName', this.companyUniqueName), request)
+      .replace(':companyUniqueName', this.companyUniqueName), filteredRequest)
       .map((res) => {
         return res.json();
       })

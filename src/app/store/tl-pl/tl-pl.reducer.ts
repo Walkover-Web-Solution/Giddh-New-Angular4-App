@@ -3,6 +3,7 @@ import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
 import { AccountDetails, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { ChildGroup } from '../../models/api-models/Search';
+import * as moment from 'moment';
 
 interface TbState {
   data?: AccountDetails;
@@ -62,12 +63,16 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
 
     case TBPlBsActions.GET_PROFIT_LOSS_RESPONSE: {
       let data: ProfitLossData = prepareProfitLossData(_.cloneDeep(action.payload));
-      console.log(data);
-      return { ...state, pl: { ...state.pl, showLoader: false, data } };
+      return { ...state, pl: { ...state.pl, showLoader: false, data: { ...state.pl.data, ...data } } };
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
-      return { ...state, pl: { ...state.pl, showLoader: true } };
+      let fromDate = moment(action.payload.fromDate, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
+      let toDate = moment(action.payload.toDate, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
+      return {
+        ...state,
+        pl: { ...state.pl, showLoader: true, data: { ...state.pl.data, dates: { fromDate, toDate } } }
+      };
     }
     default: {
       return state;

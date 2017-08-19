@@ -6,7 +6,7 @@ import { ChildGroup } from '../../models/api-models/Search';
   template: `
     <!-- filter:filterTBSearch:index:data  -->
     <!-- |  tbsearch:keyWord | filter:filterTBSearch:tbsearch -->
-    <div class="row" trial-accordion>
+    <div class="row tb-pl-bs-grid-row" trial-accordion *ngIf="groupDetail.groupName">
       <div class="col-xs-4 group">{{ groupDetail.groupName | uppercase }}</div>
       <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | number:'1.2-2' }}
         {{groupDetail.forwardedBalance | recType }}
@@ -17,8 +17,8 @@ import { ChildGroup } from '../../models/api-models/Search';
         {{groupDetail.closingBalance | recType }}
       </div>
     </div>
-    <section class="row row-2 account isHidden" *ngFor="let account of groupDetail.accounts"
-             (click)="account.isVisible=!account.isVisible;$event.preventDefault()">
+    <section class="row row-2 account " *ngFor="let account of groupDetail.accounts"
+             [ngClass]="{'isHidden': !account.isVisible }">
       <div class="row">
         <div class="col-xs-4 account" [ngStyle]="{'padding-left':'10px'}">{{account.name | lowercase}}</div>
         <div class="col-xs-2 account text-right">{{ account.openingBalance?.amount | number:'1.2-2' }}
@@ -32,6 +32,7 @@ import { ChildGroup } from '../../models/api-models/Search';
       </div>
     </section>
     <ng-content></ng-content>
+
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
