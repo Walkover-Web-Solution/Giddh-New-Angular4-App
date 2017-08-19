@@ -53,14 +53,16 @@ export class MfEditComponent implements OnInit {
       if (o.stockToUpdate) {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
-        manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
-        manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
-        delete manufacturingObj.manufacturingQuantity;
-        manufacturingObj.linkedStocks.forEach((item) => {
-          item.quantity = item.manufacturingQuantity;
-          delete item.manufacturingQuantity;
-        });
-        this.manufacturingDetails = manufacturingObj;
+        if (manufacturingObj) {
+          manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
+          manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
+          delete manufacturingObj.manufacturingQuantity;
+          manufacturingObj.linkedStocks.forEach((item) => {
+            item.quantity = item.manufacturingQuantity;
+            delete item.manufacturingQuantity;
+          });
+          this.manufacturingDetails = manufacturingObj;
+        }
         console.log('In edit this.manufacturingDetails is :', this.manufacturingDetails);
       }
     });
