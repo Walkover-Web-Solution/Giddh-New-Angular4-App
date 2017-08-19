@@ -1,21 +1,27 @@
-import { Directive, ElementRef, HostListener } from '@angular/core';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
   selector: '[trial-accordion]'
 })
 export class TrialAccordionDirective {
   // @HostBinding('trial-accordion') public type = '';
+  @Input('trial-accordion') data;
 
   constructor(private el: ElementRef) {
     //
+
   }
 
   @HostListener('click')
   public onClick() {
-    // console.log(this.type);
-
+    if (this.data.accounts) {
+      //this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
+      this.data.childGroups = this.data.childGroups.map(p => ({ ...p, isVisible: !p.isVisible }));
+      this.data.isVisible = true;
+      console.log(this.data);
+    }
     if (this.el.nativeElement.nextElementSibling) {
-      this.toggleClass(this.el.nativeElement);
+      //this.toggleClass(this.el.nativeElement);
     }
   }
 

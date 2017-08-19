@@ -46,16 +46,14 @@
         <div *ngIf="(data$ | async) as o">
           <section class="row row-1" *ngFor="let grp of o.groupDetails" [ngClass]="grp.category" tb-pl-bs-grid-row
                    [groupDetail]="grp">
-            <section class="row " [ngClass]="{'isHidden': !grp.isVisible }" style="padding-left:30px"
-                     *ngIf="grp.childGroups.length">
-              <section class="row row-2" tb-pl-bs-grid-row *ngFor="let childGroup of grp.childGroups"
-                       [groupDetail]="childGroup">
-                <section class="subGroups " *ngIf="childGroup.childGroups.length" style="padding-left:30px">
-                  <section class="row row-2" tb-pl-bs-grid-row *ngFor="let subChildGroup of grp.childGroups"
-                           [groupDetail]="subChildGroup" [ngClass]="{'isHidden': !subChildGroup.isVisible }">
-                  </section>
-                </section>
-              </section>
+            <section class="row row-2 " style="padding-left:30px" tb-pl-bs-grid-row
+                     *ngFor="let account of grp.accounts"
+                     [groupDetail]="account" [ngClass]="{'isHidden': !account.isVisible }">
+            </section>
+            <section class="row row-2 " [ngClass]="{'isHidden': !childGroup.isVisible }" style="padding-left:30px"
+                     tb-pl-bs-grid-row
+                     *ngFor="let childGroup of grp.childGroups"
+                     [groupDetail]="childGroup">
             </section>
           </section>
         </div>

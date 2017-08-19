@@ -20,7 +20,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     <pl-grid
       [expandAll]="filter.expandAll"
       [showLoader]="showLoader | async"
-      [plData]="data$ | async"
+      [plData]="data$"
     ></pl-grid>
   `
 })
@@ -32,6 +32,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public get selectedCompany(): ComapnyResponse {
     return this._selectedCompany;
   }
+
   // set company and fetch data...
   @Input()
   public set selectedCompany(value: ComapnyResponse) {
@@ -39,8 +40,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     if (value) {
       this.request = {
         refresh: false,
-        fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
-        toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
+        fy: 0
       };
       this.filterData(this.request);
     }
@@ -63,6 +63,8 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public filterData(request: ProfitLossRequest) {
+    request.fromDate = null;
+    request.toDate = null;
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }
 
