@@ -68,6 +68,11 @@ export class MfReportComponent implements OnInit {
       }
     });
     this.getReportDataOnFresh();
+
+    // Refresh stock list on company change
+    this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).distinct((val) => val === 'companyUniqueName').subscribe((value: any) => {
+      this.store.dispatch(this.inventoryAction.GetStock());
+    });
   }
 
   public goToCreateNewPage() {

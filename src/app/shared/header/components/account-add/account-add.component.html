@@ -2,7 +2,8 @@
 
   <div class="ng-scope" id="Addaccount">
 
-    <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" novalidate autocomplete="off">
+    <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm"
+          novalidate autocomplete="off" (submit)="submit()">
       <div class="form_bg pd2">
         <div class="form-group clearfix">
           <div class="col-xs-6">
@@ -194,8 +195,7 @@
            (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account
         </a>
 
-        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" [ladda]="createAccountInProcess$ | async" (click)="submit()"
-                [disabled]="addAccountForm.invalid">Add
+        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Add
         </button>
       </div>
 
