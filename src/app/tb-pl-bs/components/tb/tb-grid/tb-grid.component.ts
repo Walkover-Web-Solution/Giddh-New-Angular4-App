@@ -13,6 +13,7 @@ export class TbGridComponent implements OnInit, AfterViewInit {
 
   public noData: boolean;
   public showClearSearch: boolean;
+  @Input() public padLeft: number = 30;
 
   @Input() public showLoader: boolean;
   @Input() public data$: Observable<AccountDetails>;

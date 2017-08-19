@@ -15,7 +15,16 @@ export class TrialAccordionDirective {
     // console.log(this.type);
 
     if (this.el.nativeElement.nextElementSibling) {
-      this.el.nativeElement.nextElementSibling.classList.toggle('isHidden');
+      this.toggleClass(this.el.nativeElement);
+    }
+  }
+
+  private toggleClass(ele) {
+    if (ele.nextElementSibling && ele.nextElementSibling.nextElementSibling) {
+      ele.nextElementSibling.classList.toggle('isHidden');
+      this.toggleClass(ele.nextElementSibling);
+    } else {
+      ele.nextElementSibling.classList.toggle('isHidden');
     }
   }
 }
