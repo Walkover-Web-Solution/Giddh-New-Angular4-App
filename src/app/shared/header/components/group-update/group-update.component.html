@@ -1,5 +1,5 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-      novalidate [formGroup]="groupDetailForm">
+      novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
   <div class="form_bg pd2">
     <div class="form-group clearfix">
       <div class="col-xs-7">
@@ -29,7 +29,7 @@
        *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
        (click)="showDeleteGroupModal()">DELETE {{ (activeGroup$ | async)?.name }}</a>
     <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async)"
-            [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid" (click)="updateGroup()">Update
+            [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
     </button>
   </div>
 </form>

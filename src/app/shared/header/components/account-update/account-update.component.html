@@ -2,7 +2,8 @@
 
   <div class="" id="Updateaccount">
 
-    <form class="horizontal-form" name="addAccountForm" [formGroup]="updateAccountForm" novalidate autocomplete="off">
+    <form class="horizontal-form" name="addAccountForm" [formGroup]="updateAccountForm"
+          novalidate autocomplete="off" (submit)="updateAccount()">
       <div class="form_bg pd2">
         <div class="form-group clearfix">
           <div class="col-xs-6">
@@ -193,7 +194,7 @@
         </a>
 
         <button class="btn btn-success pull-right" *ngIf="(activeAccount$ | async)"
-                [ladda]="updateAccountInProcess$ | async" (click)="updateAccount()"
+                [ladda]="updateAccountInProcess$ | async"
                 [disabled]="updateAccountForm.invalid">Update
         </button>
       </div>
