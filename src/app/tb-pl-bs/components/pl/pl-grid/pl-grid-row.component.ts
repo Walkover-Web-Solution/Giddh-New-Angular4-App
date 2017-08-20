@@ -1,11 +1,9 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, SimpleChanges, OnChanges } from '@angular/core';
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
   selector: '[pl-grid-row]',  // <home></home>
   template: `
-    <!-- filter:filterTBSearch:index:data  -->
-    <!-- |  tbsearch:keyWord | filter:filterTBSearch:tbsearch -->
     <div class="row pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName">
       <div class="col-xs-3  group">{{ groupDetail.groupName | uppercase}}</div>
       <div class="col-xs-3  group">2.0</div>
@@ -19,7 +17,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     </div>
     <section class="row row-2 account pl-grid-row" *ngFor="let account of groupDetail.accounts"
              [ngClass]="{'isHidden': !account.isVisible }">
-      <div class="row" trial-accordion *ngIf="account.name">
+      <div class="row"*ngIf="account.name">
         <div class="col-xs-3  group" [ngStyle]="{'padding-left':'10px'}">{{ account.name | uppercase}}</div>
         <!-- ng-bind-html="groupDetail.closingBalance.amount | uppercase" -->
         <div class="col-xs-3  group text-right">
@@ -34,13 +32,15 @@ import { ChildGroup } from '../../../../models/api-models/Search';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class PlGridRowComponent implements OnInit {
+export class PlGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
 
   constructor() {
     //
   }
-
+  public ngOnChanges(changes: SimpleChanges) {
+    // debugger;
+  }
   public ngOnInit() {
     //
   }

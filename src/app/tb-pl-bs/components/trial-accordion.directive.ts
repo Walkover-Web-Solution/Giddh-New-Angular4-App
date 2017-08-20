@@ -5,7 +5,8 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 })
 export class TrialAccordionDirective {
   // @HostBinding('trial-accordion') public type = '';
-  @Input('trial-accordion') data;
+  // tslint:disable-next-line:no-input-rename
+  @Input('trial-accordion') public data;
 
   constructor(private el: ElementRef) {
     //
@@ -15,13 +16,13 @@ export class TrialAccordionDirective {
   @HostListener('click')
   public onClick() {
     if (this.data.accounts) {
-      //this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
+      // this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
       this.data.childGroups = this.data.childGroups.map(p => ({ ...p, isVisible: !p.isVisible }));
       this.data.isVisible = true;
       console.log(this.data);
     }
     if (this.el.nativeElement.nextElementSibling) {
-      //this.toggleClass(this.el.nativeElement);
+      // this.toggleClass(this.el.nativeElement);
     }
   }
 

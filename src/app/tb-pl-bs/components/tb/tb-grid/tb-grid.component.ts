@@ -20,15 +20,13 @@ export class TbGridComponent implements OnInit, AfterViewInit {
 
   @Input()
   public set expandAll(value: boolean) {
+    // debugger;
     this.data$ = this.data$.map(p => {
       if (p) {
+        let data = this.toggleVisibility(p.groupDetails, value);
+        console.log(data);
         return {
-          forwardedBalance: p.forwardedBalance,
-          creditTotal: p.creditTotal,
-          debitTotal: p.debitTotal,
-          closingBalance: p.closingBalance,
-          openingBalance: p.openingBalance,
-          groupDetails: this.toggleVisibility(p.groupDetails, value)
+          ...p
         };
       }
     });
@@ -36,7 +34,7 @@ export class TbGridComponent implements OnInit, AfterViewInit {
   }
 
   constructor() {
-//
+    //
   }
 
   public ngOnInit() {
