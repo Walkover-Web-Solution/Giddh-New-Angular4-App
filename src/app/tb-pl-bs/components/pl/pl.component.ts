@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
@@ -7,6 +7,7 @@ import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { PlGridComponent } from './pl-grid/pl-grid.component';
 
 @Component({
   selector: 'pl',
@@ -16,19 +17,31 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       [selectedCompany]="selectedCompany"
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
+      (expandAll)="expandAllEmit($event)"
     ></tb-pl-bs-filter>
-    <pl-grid
-      [expandAll]="filter.expandAll"
-      [showLoader]="showLoader | async"
-      [plData]="data$"
-    ></pl-grid>
+    <div *ngIf="!(data$ | async)">
+         <!-- loader -->
+         <div class="loader" >
+           <span></span>
+           <span></span>
+           <span></span>
+           <span></span>
+           <span></span>
+          <h1>loading ledger</h1>
+        </div>
+    </div>
+    <div *ngIf="(data$ | async)">
+      <pl-grid #plGrid
+        [plData]="data$ | async"
+      ></pl-grid>
+    </div>
   `
 })
 export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public showLoader: Observable<boolean>;
   public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
-
+  @ViewChild('plGrid') public plGrid: PlGridComponent;
   public get selectedCompany(): ComapnyResponse {
     return this._selectedCompany;
   }
@@ -57,11 +70,14 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnInit() {
     console.log('hello Tb Component');
   }
-
+  public expandAllEmit(v) {
+    if (this.plGrid) {
+      this.plGrid.expandAll = v;
+    }
+  }
   public ngAfterViewInit() {
     //
   }
-
   public filterData(request: ProfitLossRequest) {
     request.fromDate = null;
     request.toDate = null;

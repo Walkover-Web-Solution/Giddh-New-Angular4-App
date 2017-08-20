@@ -4,9 +4,7 @@ import { ChildGroup } from '../../models/api-models/Search';
 @Component({
   selector: '[tb-pl-bs-grid-row]',  // <home></home>
   template: `
-    <!-- filter:filterTBSearch:index:data  -->
-    <!-- |  tbsearch:keyWord | filter:filterTBSearch:tbsearch -->
-    <div class="row tb-pl-bs-grid-row" trial-accordion *ngIf="groupDetail.groupName">
+    <div class="row tb-pl-bs-grid-row"  [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName">
       <div class="col-xs-4 group">{{ groupDetail.groupName | uppercase }}</div>
       <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | number:'1.2-2' }}
         {{groupDetail.forwardedBalance | recType }}
