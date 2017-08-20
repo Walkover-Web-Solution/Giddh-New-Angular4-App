@@ -14,7 +14,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   public selectedFinancialYearOption: string = '';
   public filterForm: FormGroup;
   public financialOptions = [];
-  public expandAll = false;
+  // public expandAll?: boolean = null;
+  @Output()
+  public expandAll: EventEmitter<boolean> = new EventEmitter<boolean>();
   public showClearSearch: boolean;
   public request: TrialBalanceRequest = {};
   public dateOptions: any[] = [{ text: 'Date Range', id: 1 }, { text: 'Financial Year', id: 0 }];

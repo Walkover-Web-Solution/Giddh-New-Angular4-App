@@ -17,9 +17,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       [showLoader]="showLoader | async"
       [showLabels]="true"
       (onPropertyChanged)="filterData($event)"
+      (expandAll)="tbGrid.expandAll= $event"
     ></tb-pl-bs-filter>
-    <tb-grid
-      [expandAll]="filter.expandAll"
+    <tb-grid #tbGrid
+      [expandAll]="false"
       [showLoader]="showLoader | async"
       [data$]="data$"
     ></tb-grid>
