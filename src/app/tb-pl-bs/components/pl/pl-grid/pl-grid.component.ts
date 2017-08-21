@@ -17,9 +17,9 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
 
   @Input()
   public set expandAll(value: boolean) {
-    if (this.plData && this.plData.expArr) {
-      this.toggleVisibility(this.plData.expArr, value);
-      this.toggleVisibility(this.plData.incArr, value);
+    if (this.plData) {
+      if (this.plData.expArr) { this.toggleVisibility(this.plData.expArr, value); }
+      if (this.plData.incArr) { this.toggleVisibility(this.plData.incArr, value); }
       // console.log(value);
       this.cd.markForCheck();
       console.log(this.plData);

@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
@@ -7,6 +7,7 @@ import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
 import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { TbGridComponent } from "./tb-grid/tb-grid.component";
 
 @Component({
   selector: 'tb',
@@ -17,20 +18,32 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       [showLoader]="showLoader | async"
       [showLabels]="true"
       (onPropertyChanged)="filterData($event)"
-      (expandAll)="tbGrid.expandAll= $event"
+      (expandAll)="expandAllEmit($event)"
     ></tb-pl-bs-filter>
-    <tb-grid #tbGrid
-      [expandAll]="false"
-      [showLoader]="showLoader | async"
-      [data$]="data$"
-    ></tb-grid>
+    <div *ngIf="!(data$ | async)">
+      <!-- loader -->
+      <div class="loader" >
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+       <h1>loading ledger</h1>
+      </div>
+    </div>
+    <div *ngIf="(data$ | async)">
+      <tb-grid #tbGrid
+        [expandAll]="false"
+        [data$]="data$  | async"
+      ></tb-grid>
+    </div>
   `
 })
 export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   public showLoader: Observable<boolean>;
   public data$: Observable<AccountDetails>;
   public request: TrialBalanceRequest;
-
+  @ViewChild('tbGrid') public tbGrid: TbGridComponent;
   public get selectedCompany(): ComapnyResponse {
     return this._selectedCompany;
   }
@@ -67,6 +80,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public filterData(request: TrialBalanceRequest) {
     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
+  }
+  public expandAllEmit(v) {
+    if (this.tbGrid) {
+      this.tbGrid.expandAll = v;
+    }
   }
 
   public ngOnDestroy(): void {
