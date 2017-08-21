@@ -87,6 +87,7 @@
     height: 100px;
     vertical-align: middle;
     border: 4px dashed #969696;
+    cursor: pointer;
 }
 
 .upload-button input[type="file"] {
@@ -102,4 +103,23 @@
 
 .logoTool {
     float: left
+}
+
+.logoTool ul li {
+    margin-right: 5px;
+    cursor: pointer;
+    transition: all 0.5s ease;
+}
+
+.swatch {
+    float: left;
+    margin-bottom: 20px;
+}
+
+.font-selector .form-control {
+    margin: 0 !important;
+}
+
+#logoImage {
+    padding: 4px;
 }
