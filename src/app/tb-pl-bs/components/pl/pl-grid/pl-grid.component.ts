@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
   public showClearSearch: boolean;
-
+  @Input() public search: string = '';
   @Input() public plData: ProfitLossData;
 
   @Input()
