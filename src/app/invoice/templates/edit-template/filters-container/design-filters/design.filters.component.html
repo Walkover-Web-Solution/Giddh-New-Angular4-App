@@ -9,12 +9,12 @@
         </div>
     </div>
 
-    <img src="" height="200" alt="Image preview...">
+    <!-- <img src="" height="200" alt="Image preview...">
 
 
     <button type="button" class="start-upload-btn" (click)="startUpload()">
     Start Upload
-  </button> {{imagePreview}}
+  </button> {{imagePreview}} -->
     <div class="clearfix">
         <ul class="designTool">
             <li>
@@ -29,22 +29,22 @@
                     <ul class="templateView">
 
                         <li (click)="showTemplate('gst_template_a')">
-                            <img src="./assets/images/template1.jpg" />
+                            <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="showTemplate('common_template_a')">
-                            <img src="./assets/images/template1.jpg" />
+                            <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="showTemplate('gst_template_b')">
-                            <img src="./assets/images/template1.jpg" />
+                            <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="showTemplate('gst_template_c')">
-                            <img src="./assets/images/template1.jpg" />
+                            <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="showTemplate('gst_template_d')">
-                            <img src="./assets/images/template1.jpg" />
+                            <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                         <li (click)="showTemplate('gst_template_e')">
-                            <img src="./assets/images/template1.jpg" />
+                            <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                     </ul>
                 </div>
@@ -55,7 +55,7 @@
             </li>
             <li *ngIf="ifLogoSelected">
                 <!-- edit logo  start -->
-                <div class="clearfix mrT2">
+                <div class="clearfix">
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit">
@@ -84,10 +84,9 @@
             </li>
             <li *ngIf="ifColorSelected">
                 <!-- edit color  start -->
-                <div class="clearfix mrT2">
-                    <div class="swatch">
-                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': currentColor}"></span>
-                        <p class="text-center">#0191db</p>
+                <div class="clearfix">
+                    <div class="swatch text-center">
+                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': currentColor}"></span> {{this.currentColor}}
                         </span>
                         <div class="mrL1 pull-left">
                             <ul>
@@ -119,10 +118,13 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
             <li *ngIf="ifFontSelected">
-                <div>
-                    <div class="action-button" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
-                        [fpPresetFonts]="presetFonts">
-                        {{font.family}}
+                <div class="col-xs-9 font-selector">
+                    <div class="row">
+                        <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
+                            [fpPresetFonts]="presetFonts">
+                            {{font.family}}
+                            <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                        </div>
                     </div>
                 </div>
             </li>
@@ -131,7 +133,7 @@
             </li>
             <li *ngIf="ifPrintSelected">
                 <!-- edit print setting  start  -->
-                <div class="clearfix mrT2">
+                <div class="clearfix">
                     <div class="printTool pos-rel">
                         <p>Page margins</p>
                         <table class="table mr0">
@@ -164,7 +166,7 @@
 
 
 
-    <div class="tab">
+    <!-- <div class="tab">
         <button class="tablinks" (click)="showTemplate('common_template_a')" id="defaultOpen">template1</button>
         <button class="tablinks" (click)="showTemplate('gst_template_a')">template2</button>
         <button class="tablinks" (click)="showTemplate('gst_template_b')">template3</button>
@@ -174,7 +176,7 @@
         <button class="tablinks" (click)="showTemplate('gst_template_c')">template4</button>
         <button class="tablinks" (click)="showTemplate('gst_template_d')">template5</button>
         <button class="tablinks" (click)="showTemplate('gst_template_e')">template6</button>
-    </div>
+    </div> -->
     <!-- edit template  end -->
 
 

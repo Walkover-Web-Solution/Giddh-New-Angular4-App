@@ -192,7 +192,7 @@ export class DesignFiltersContainerComponent implements OnInit {
     let preview = document.getElementById('logoImage');
     let file    = document.querySelector('input[type=file]').files[0];
     let reader  = new FileReader();
-    let imgSrc$: Observable<any>;
+    // let imgSrc$: Observable<any>;
 
     reader.onloadend = () => {
       preview.src = reader.result;
