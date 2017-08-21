@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ChildGroup } from '../../../../models/api-models/Search';
@@ -16,24 +16,18 @@ export class TbGridComponent implements OnInit, AfterViewInit {
   @Input() public padLeft: number = 30;
 
   @Input() public showLoader: boolean;
-  @Input() public data$: Observable<AccountDetails>;
+  @Input() public data$: AccountDetails;
 
   @Input()
   public set expandAll(value: boolean) {
     // debugger;
-    this.data$ = this.data$.map(p => {
-      if (p) {
-        let data = this.toggleVisibility(p.groupDetails, value);
-        console.log(data);
-        return {
-          ...p
-        };
-      }
-    });
-
+    if (this.data$) {
+      let data = this.toggleVisibility(this.data$.groupDetails, value);
+      this.cd.markForCheck();
+    }
   }
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
     //
   }
 
