@@ -10,6 +10,7 @@ export interface IStocksItem extends INameUniqueName {
   stockName?: any;
   manufacturingQuantity?: any;
   linkedStocks?: any;
+  manufacturingUnit?: any;
 }
 
 /**
