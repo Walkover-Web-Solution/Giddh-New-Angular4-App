@@ -3,7 +3,7 @@
     <!-- page Title -->
     <div class="col-xs-12 bdrB">
       <div class="row mrL3 mrR3 pd1 pdL0">
-        <h1 class="section_title d-inline-block"><strong>Manufacture of Material</strong></h1>
+        <h1 class="section_title d-inline-block"><strong>Manufacture of Material {{manufacturingDetails | json}}</strong></h1>
         <button class="btn btn-primary pull-right" (click)="goBackToListPage();">Back</button>
       </div>
     </div>
@@ -15,7 +15,7 @@
           <div class="form-group col-xs-2">
             <div class="row">
               <label class="small">Product Name</label>
-              <select2 [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" [data]="stockListDropDown$ | async" [options]="options"
+              <select2 [disabled]="isUpdateCase" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" [data]="stockListDropDown$ | async" [options]="options"
                 (valueChanged)="getStocksWithRate($event)">
               </select2>
             </div>
@@ -25,8 +25,9 @@
         <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="manufaturingQuanity" />
       </div>-->
           <div class="form-group col-xs-2">
-            <label class="small">Multiple of</label>
+            <label class="small">Quantity</label>
             <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
+            <small class="pull-right">Multiple of 2</small>
           </div>
           <!--<div class="form-group col-xs-2">
             <label class="small">Date</label>
@@ -207,7 +208,7 @@
             <p class="col-xs-3 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.2' }}</strong></p>
           </div>
           <div class="mrB1 pdB2 clearfix">
-            <p class="col-xs-9 pd0"><strong>Cost per Computer:</strong></p>
+            <p class="col-xs-9 pd0"><strong>Cost per {{manufacturingDetails.stockUniqueName}}:</strong></p>
             <p class="col-xs-3 text-right"><strong>{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</strong></p>
           </div>
           <div class="pull-right" *ngIf="!isUpdateCase">
