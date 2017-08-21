@@ -1,234 +1,250 @@
 <div id="contentTab" class="tabcontent mrT2 templateEditor" *ngIf="content">
-    <h2>Header</h2>
 
-    <div class="clearfix">
-        <div class="form-group"><input type="checkbox" /> Company Name</div>
-        <div class="form-group"><input type="checkbox" /> Company Address</div>
+    <!--start header  -->
+    <div class="scrollAuto" id="headerDiv" PageHeight>
+        <h2>Header</h2>
 
-        <div class="form-group">
-            <input type="checkbox" /> Invoice Date
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceDate' (ngModelChange)='onInvoiceDateChange(invoiceDate)' /></div>
-        </div>
+        <div class="clearfix">
+            <div class="form-group"><input type="checkbox" /> Company Name</div>
+            <div class="form-group"><input type="checkbox" /> Company Address</div>
 
-        <div class="form-group">
-            <input type="checkbox" /> Invoice Number
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceNo' (ngModelChange)='onInvoiceNoChange(invoiceNo)' /></div>
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> Due Date
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='dueDate' (ngModelChange)='onDueDateChange(dueDate)' /></div>
-        </div>
-    </div>
-    <div class="clearfix">
-        <h3>Transport Details</h3>
-        <div class="form-group">
-            <input type="checkbox" /> Ship Date
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingDate' (ngModelChange)='onShipDateChange(shippingDate)' /></div>
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> Ship Via
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingVia' (ngModelChange)='onShipViaChange(shippingVia)' /></div>
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> Tracking No.
-            <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='trackingNo' (ngModelChange)='onTrackingNoChange(trackingNo)' /></div>
-        </div>
-    </div>
-    <div class="clearfix">
-        <h3>Form</h3>
-        <div class="form-group">
-            <input type="checkbox" /> Document Title
-            <div class="mrL3 mrT1">Invoice <input type="text" class="form-control" [(ngModel)]='invoice' (ngModelChange)='onInvoiceChange(invoice)' /></div>
-            <div class="mrL3">Tax Invoice <input type="text" class="form-control" [(ngModel)]='taxInvoice' (ngModelChange)='onTaxInvoiceChange(taxInvoice)' /></div>
-        </div>
-    </div>
-
-    <div class="clearfix">
-        <h3>Customer Details</h3>
-        <div class="form-group"><input type="checkbox" /> Customer Name</div>
-        <div class="form-group"><input type="checkbox" /> Customer Address</div>
-        <div class="form-group"><input type="checkbox" /> Email ID</div>
-        <div class="form-group"><input type="checkbox" /> Mobile Number</div>
-    </div>
-
-    <div class="clearfix">
-        <h3>Billing Details</h3>
-        <div class="form-group">
-            <input type="checkbox" /> Billing Address
-            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingAddress' (ngModelChange)='onBillingAddressChange(billingAddress)'/></div>-->
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> State
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> GSTIN
-            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)'/></div>-->
-        </div>
-    </div>
-
-    <div class="clearfix">
-        <h3>Shipping Details</h3>
-        <div class="form-group">
-            <input type="checkbox" /> Shipping Address
-            <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingGstin' (ngModelChange)='onShippingGstinChange(shippingGstin)' /></div>-->
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> State
-        </div>
-        <div class="form-group">
-            <input type="checkbox" /> GSTIN
-            <!--<div class="mrL3"><input type="text" class="form-control"  /></div>-->
-        </div>
-    </div>
-
-    <div class="clearfix customField mrB2">
-        <h3>Custom Field</h3>
-        <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom1' (ngModelChange)='onCustom1Change(custom1)' /></span>
-        </div>
-        <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom2' (ngModelChange)='onCustom2Change(custom2)'/></span>
-        </div>
-        <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom3' (ngModelChange)='onCustom3Change(custom3)' /></span>
-        </div>
-        <div class="form-group clearfix">
-            <input type="checkbox" /><span><input type="text" class="form-control" /></span>
-        </div>
-    </div>
-
-    <h2>Table</h2>
-
-    <div class="clearfix">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Table</th>
-                    <th>Label</th>
-                    <th>Width</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><label><input type="checkbox" /> Number</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='sNo' (ngModelChange)='onSnoLabelChange(sNo)'/></td>
-                    <td><input type="range" value="0" class="range-input" min="0" max="10" step="0.1"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" />Date</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='date' (ngModelChange)='onDateLabelChange(date)'/></td>
-                    <td><input type="range" value="0"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Item</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='item' (ngModelChange)='onItemLabelChange(item)'/></td>
-                    <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> HSN/SAC</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='hsnSac' (ngModelChange)='onHsnLabelChange(hsnSac)'/></td>
-                    <td><input type="range" value="0" max="10" step="0.1"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Quantity</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='qty' (ngModelChange)='onQtyLabelChange(qty)'/></td>
-                    <td><input type="range" value="0" max="10" step="0.1"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Rate/Item</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='rate' (ngModelChange)='onRateLabelChange(qty)'/></td>
-                    <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Discount/Item</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='discount' (ngModelChange)='onDiscountLabelChange(discount)'/></td>
-                    <td><input type="range" value="0" min="0" max="10" step="0.1"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Taxable Value</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='taxableValue' (ngModelChange)='onTaxableValueLabelChange(taxableValue)'/></td>
-                    <td><input type="range" value="0" min="0" max="10" step="0.1"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Tax</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='tax' (ngModelChange)='onTaxLabelChange(tax)'/></td>
-                    <td><input type="range" value="0" min="0" max="10" step="0.1"  /></td>
-                </tr>
-                <tr>
-                    <td><label><input type="checkbox" /> Total</label></td>
-                    <td><input type="text" class="form-control" [(ngModel)]='total' (ngModelChange)='onTotalLabelChange(total)'/></td>
-                    <td><input type="range" value="0" min="0" max="10" step="0.1"  /></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="clearfix">
-        <h2>Footer</h2>
-        <div class="clearfix bdrB">
-            <div class="form-group"><input type="checkbox" /> Your Company Name</div>
-            <!--<div class="form-group"><input type="checkbox" /> Company Address</div>-->
             <div class="form-group">
-                <input type="checkbox" /> Taxable Amount
+                <input type="checkbox" /> Invoice Date
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceDate' (ngModelChange)='onInvoiceDateChange(invoiceDate)' /></div>
+            </div>
+
+            <div class="form-group">
+                <input type="checkbox" /> Invoice Number
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='invoiceNo' (ngModelChange)='onInvoiceNoChange(invoiceNo)' /></div>
             </div>
             <div class="form-group">
-                <input type="checkbox" /> Total Tax
+                <input type="checkbox" /> Due Date
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='dueDate' (ngModelChange)='onDueDateChange(dueDate)' /></div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <!--ngclass ="fa fa-plus-minor-o" when field is enabled -->
+            <h3> <i class="fa fa-plus-square-o" aria-hidden="true"></i> Transport Details</h3>
+            <div class="form-group">
+                <input type="checkbox" /> Ship Date
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingDate' (ngModelChange)='onShipDateChange(shippingDate)' /></div>
             </div>
             <div class="form-group">
-                <input type="checkbox" /> Other Deduction/Additions
+                <input type="checkbox" /> Ship Via
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingVia' (ngModelChange)='onShipViaChange(shippingVia)' /></div>
             </div>
             <div class="form-group">
-                <input type="checkbox" /> Invoice Total
+                <input type="checkbox" /> Tracking No.
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='trackingNo' (ngModelChange)='onTrackingNoChange(trackingNo)' /></div>
+            </div>
+        </div>
+        <div class="clearfix">
+            <h3>Form</h3>
+            <div class="form-group">
+                <input type="checkbox" /> Document Title
+                <div class="mrL3 mrT1">Invoice <input type="text" class="form-control" [(ngModel)]='invoice' (ngModelChange)='onInvoiceChange(invoice)' /></div>
+                <div class="mrL3">Tax Invoice <input type="text" class="form-control" [(ngModel)]='taxInvoice' (ngModelChange)='onTaxInvoiceChange(taxInvoice)' /></div>
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <h3>Customer Details</h3>
+            <div class="form-group"><input type="checkbox" /> Customer Name</div>
+            <div class="form-group"><input type="checkbox" /> Customer Address</div>
+            <div class="form-group"><input type="checkbox" /> Email ID</div>
+            <div class="form-group"><input type="checkbox" /> Mobile Number</div>
+        </div>
+
+        <div class="clearfix">
+            <h3>Billing Details</h3>
+            <div class="form-group">
+                <input type="checkbox" /> Billing Address
+                <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingAddress' (ngModelChange)='onBillingAddressChange(billingAddress)'/></div>-->
             </div>
             <div class="form-group">
-                <input type="checkbox" /> Invoice Total(in words)
+                <input type="checkbox" /> State
+            </div>
+            <div class="form-group">
+                <input type="checkbox" /> GSTIN
+                <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)'/></div>-->
+            </div>
+        </div>
+
+        <div class="clearfix">
+            <h3>Shipping Details</h3>
+            <div class="form-group">
+                <input type="checkbox" /> Shipping Address
+                <!--<div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingGstin' (ngModelChange)='onShippingGstinChange(shippingGstin)' /></div>-->
+            </div>
+            <div class="form-group">
+                <input type="checkbox" /> State
+            </div>
+            <div class="form-group">
+                <input type="checkbox" /> GSTIN
+                <!--<div class="mrL3"><input type="text" class="form-control"  /></div>-->
+            </div>
+        </div>
+
+        <div class="clearfix customField mrB2">
+            <!--ngclass ="fa-plus-minor-o" when field is enabled -->
+            <h3> <i class="fa fa-plus-square-o" aria-hidden="true"></i> Custom Field</h3>
+            <div class="form-group clearfix">
+                <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom1' (ngModelChange)='onCustom1Change(custom1)' /></span>
+            </div>
+            <div class="form-group clearfix">
+                <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom2' (ngModelChange)='onCustom2Change(custom2)'/></span>
+            </div>
+            <div class="form-group clearfix">
+                <input type="checkbox" /><span><input type="text" class="form-control" [(ngModel)]='custom3' (ngModelChange)='onCustom3Change(custom3)' /></span>
+            </div>
+            <div class="form-group clearfix">
+                <input type="checkbox" /><span><input type="text" class="form-control" /></span>
             </div>
         </div>
     </div>
+    <!-- end header  -->
 
-    <div class="clearfix mrT1">
-        <div>
-            <input type="checkbox" /> Message 1
+    <!--start table  -->
+    <div class="scrollAuto" id="tableDiv" PageHeight>
+
+        <h2>Table</h2>
+
+        <div class="clearfix">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Table</th>
+                        <th>Label</th>
+                        <th>Width</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><label><input type="checkbox" /> Number</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='sNo' (ngModelChange)='onSnoLabelChange(sNo)' /></td>
+                        <td><input type="range" value="0" class="range-input" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" />Date</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='date' (ngModelChange)='onDateLabelChange(date)' /></td>
+                        <td><input type="range" value="0" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Item</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='item' (ngModelChange)='onItemLabelChange(item)' /></td>
+                        <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> HSN/SAC</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='hsnSac' (ngModelChange)='onHsnLabelChange(hsnSac)' /></td>
+                        <td><input type="range" value="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Quantity</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='qty' (ngModelChange)='onQtyLabelChange(qty)' /></td>
+                        <td><input type="range" value="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Rate/Item</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='rate' (ngModelChange)='onRateLabelChange(qty)' /></td>
+                        <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Discount/Item</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='discount' (ngModelChange)='onDiscountLabelChange(discount)' /></td>
+                        <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Taxable Value</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='taxableValue' (ngModelChange)='onTaxableValueLabelChange(taxableValue)' /></td>
+                        <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Tax</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='tax' (ngModelChange)='onTaxLabelChange(tax)' /></td>
+                        <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                    <tr>
+                        <td><label><input type="checkbox" /> Total</label></td>
+                        <td><input type="text" class="form-control" [(ngModel)]='total' (ngModelChange)='onTotalLabelChange(total)' /></td>
+                        <td><input type="range" value="0" min="0" max="10" step="0.1" /></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-        <div class="form-group mrL3 clearfix">
-            <div class="col-xs-8">
-                <div class="row">
-                    <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='message1' (ngModelChange)='onMessage1Change(message1)'></textarea>
+    </div>
+    <!-- end table -->
+
+    <!-- start footer -->
+    <div id="footerDiv" PageHeight class="scrollAuto">
+        <div class="clearfix">
+            <h2>Footer</h2>
+            <div class="clearfix bdrB">
+                <div class="form-group"><input type="checkbox" /> Your Company Name</div>
+                <!--<div class="form-group"><input type="checkbox" /> Company Address</div>-->
+                <div class="form-group">
+                    <input type="checkbox" /> Taxable Amount
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" /> Total Tax
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" /> Other Deduction/Additions
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" /> Invoice Total
+                </div>
+                <div class="form-group">
+                    <input type="checkbox" /> Invoice Total(in words)
                 </div>
             </div>
-            <div class="col-xs-4">
-                <select class="form-control">
+        </div>
+
+        <div class="clearfix mrT1">
+            <div>
+                <input type="checkbox" /> Message 1
+            </div>
+            <div class="form-group mrL3 clearfix">
+                <div class="col-xs-8">
+                    <div class="row">
+                        <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='message1' (ngModelChange)='onMessage1Change(message1)'></textarea>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <select class="form-control">
                         <option value="10">10px</option>
                     </select>
-            </div>
-        </div>
-    </div>
-
-    <div class="clearfix">
-        <div>
-            <input type="checkbox" /> Message 2
-        </div>
-        <div class="form-group mrL3 clearfix">
-            <div class="col-xs-8">
-                <div class="row">
-                    <textarea class="form-control" [(ngModel)]='message2' (ngModelChange)='onMessage2Change(message2)'>Note:Contact us for queries on these questions</textarea>
                 </div>
             </div>
-            <div class="col-xs-4">
-                <select class="form-control">
+        </div>
+
+        <div class="clearfix">
+            <div>
+                <input type="checkbox" /> Message 2
+            </div>
+            <div class="form-group mrL3 clearfix">
+                <div class="col-xs-8">
+                    <div class="row">
+                        <textarea class="form-control" [(ngModel)]='message2' (ngModelChange)='onMessage2Change(message2)'>Note:Contact us for queries on these questions</textarea>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <select class="form-control">
                         <option value="10">10px</option>
                     </select>
+                </div>
             </div>
         </div>
+
+
+
+        <div class="clearfix mrT1">
+            <div class="form-group"> <input type="checkbox" /> Thank you for your business</div>
+            <div class="form-group"> <input type="checkbox" /> Company Address</div>
+        </div>
+
     </div>
-
-
-
-    <div class="clearfix mrT1">
-        <div class="form-group"> <input type="checkbox" /> Thank you for your business</div>
-        <div class="form-group"> <input type="checkbox" /> Company Address</div>
-    </div>
-
+    <!-- end footer  -->
 
 
 
