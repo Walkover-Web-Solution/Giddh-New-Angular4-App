@@ -11,6 +11,7 @@ import { map } from 'rxjs/operator/map';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { HandleCatch } from './catchManager/catchmanger';
+import {IsDivVisible} from "../invoice/templates/edit-template/filters-container/content-filters/content.filters.component";
 
 
 @Injectable()
@@ -242,5 +243,8 @@ export class InvoiceTemplatesService {
   }
   public getSlogan(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.slogan);
+  }
+  public getDivStatus(): Observable<IsDivVisible> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.div);
   }
 }

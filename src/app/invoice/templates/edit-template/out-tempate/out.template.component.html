@@ -470,10 +470,11 @@
     </style>
 </head>
 
-<body [ngStyle]="{'font-family': fontFamily}">
-    <!--[ngStyle]="{ 'padding': topMargin+'px'+' '+rightMargin+'px'+' '+bottomMargin+'px'+' '+leftMargin+'px', 'font-family': fontFamily}"  -->
+<body [ngStyle]="{ 'padding': topMargin+'px'+' '+rightMargin+'px'+' '+bottomMargin+'px'+' '+leftMargin+'px', 'font-family': fontFamily}"  >
+<!--class="disabled-area"-->
     <div>
-        <div id="Template-header" class="disabled-area">
+      {{activeHeader}}
+        <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[activeHeader]" (click)="onClickHeader()">
             <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
             <header>
                 <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="{{this.companyName$ | async}}"></figure>
@@ -607,7 +608,7 @@
                 </tbody>
             </table>
         </div>
-        <div id="Template-table" class="disabled-area">
+        <div id="Template-table" [ngClass]="{false: 'disabled-area', true: ' ' }[activeGrid]" (click)="onClickGrid()">
             <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
             <article>
                 <table class="item" cellpadding="0" cellspacing="0">
@@ -717,7 +718,7 @@
                 </table>
             </article>
         </div>
-        <div id="Template-footer" class="disabled-area">
+        <div id="Template-footer" [ngClass]="{false: 'disabled-area', true: ' ' }[activeFooter]" (click)="onClickFooter()">
             <a href="javascript:void(0);" class="edit-template"><i class="fa fa-pencil"></i></a>
             <aside>
                 <table class="balance">

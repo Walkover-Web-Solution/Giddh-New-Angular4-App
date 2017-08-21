@@ -2,6 +2,7 @@ import { Action, combineReducers } from '@ngrx/store';
 import { GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
 import {Font} from "ngx-font-picker";
+import { IsDivVisible } from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 export interface InvoiceTemplateState {
   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
@@ -78,6 +79,7 @@ export interface InvoiceTemplateMetaState {
   imageSignature: string;
   slogan: string;
   setInvoiceFlag: boolean;
+  div: IsDivVisible;
 }
 
 export interface InvoiceTableState {
@@ -219,6 +221,7 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   imageSignature: '',
   slogan: 'Walkover Web Solutions Private Limited',
   setInvoiceFlag: false,
+  div: null
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -389,6 +392,15 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       return Object.assign({}, state, {
         quantityLabel: action.payload.data
       });
+    case INVOICE.TEMPLATE.SET_VISIBLE:
+      console.log('DIV VISIBLE REDUCER CALLED');
+      return Object.assign({}, state, {
+        div: {
+          header: action.payload.divVis.header,
+          grid: action.payload.divVis.grid,
+          footer: action.payload.divVis.footer
+        },
+      });
     case INVOICE.TEMPLATE.UPDATE_DISCOUNT_LABEL:
       return Object.assign({}, state, {
         discountLabel: action.payload.data
@@ -447,6 +459,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         formNameTaxInvoice : action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
+
     default: {
       return state;
     }

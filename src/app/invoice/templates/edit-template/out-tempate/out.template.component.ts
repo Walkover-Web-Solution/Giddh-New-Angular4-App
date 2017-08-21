@@ -12,6 +12,7 @@ import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { ISection } from '../../../../models/api-models/Invoice';
 import {InvoiceUiDataService} from "../../../../services/invoice.ui.data.service";
+import {IsDivVisible} from "../filters-container/content-filters/content.filters.component";
 
 @Component({
   selector: 'invoice-template',
@@ -90,6 +91,14 @@ export class OutTemplateComponent implements OnInit {
   public logoSrc: string;
   public imageSignatureSrc: string;
   public taxInvoiceLabelFlag$: Observable<boolean>;
+  public activeHeader: boolean = true;
+  public activeGrid: boolean = false;
+  public activeFooter: boolean = false;
+  public divVis: IsDivVisible={
+    header: true,
+    grid: false,
+    footer: false,
+  }
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
@@ -128,7 +137,7 @@ export class OutTemplateComponent implements OnInit {
         this.formNameTaxInvoice = val;
       }
     });
-    this.formNameTaxInvoice$ = this.invoiceTemplatesService.getFormNameTaxInvoice();
+    // this.formNameTaxInvoice$ = this.invoiceTemplatesService.getFormNameTaxInvoice();
     this.taxInvoiceLabelFlag$ = this.invoiceTemplatesService.getFormNameTaxInvoiceFlag();
     this.sNoLabel$ = this.invoiceTemplatesService.getSnoLabel();
     this.dateLabel$ = this.invoiceTemplatesService.getDateLabel();
@@ -209,8 +218,39 @@ export class OutTemplateComponent implements OnInit {
   public ngOnInit() {
     // do something
   }
+
+  public onClickHeader() {
+    this.activeHeader = true;
+    this.activeGrid = false;
+    this.activeFooter = false;
+    this.divVis = {
+      header: true,
+      grid: false,
+      footer: false
+    }
+
+    this._invoiceUiDataService.setDivStatus(this.divVis);
+  }
+  public onClickGrid() {
+    this.activeHeader = false;
+    this.activeGrid = true;
+    this.activeFooter = false;
+    this.divVis = {
+      header: false,
+      grid: true,
+      footer: false
+    }
+    this._invoiceUiDataService.setDivStatus(this.divVis);
+  }
+  public onClickFooter() {
+    this.activeHeader = false;
+    this.activeGrid = false;
+    this.activeFooter = true;
+    this.divVis = {
+      header: false,
+      grid: false,
+      footer: true
+    }
+    this._invoiceUiDataService.setDivStatus(this.divVis);
+  }
 }
-//
-// export interface TableMetaMap {
-//   [ colName: string ]: number;
-// }
