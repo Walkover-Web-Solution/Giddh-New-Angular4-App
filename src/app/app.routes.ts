@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
 import { DummyComponent } from './dummy.component';
+import { SalesComponent } from './sales/sales.component';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -21,6 +22,7 @@ export const ROUTES: Routes = [
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthentication] },
+      { path: 'sales', component: SalesComponent },
       { path: 'about', loadChildren: './about/about.module#AboutModule', canActivate: [NeedsAuthentication] },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthentication] },
       { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthentication] },
