@@ -1,7 +1,7 @@
 <div id="contentTab" class="tabcontent mrT2 templateEditor" *ngIf="content">
 
     <!--start header  -->
-    <div class="scrollAuto" id="headerDiv" PageHeight>
+    <div class="scrollAuto" id="headerDiv" PageHeight *ngIf="header" >
         <h2>Header</h2>
 
         <div class="clearfix">
@@ -105,7 +105,7 @@
     <!-- end header  -->
 
     <!--start table  -->
-    <div class="scrollAuto" id="tableDiv" PageHeight>
+    <div class="scrollAuto" id="tableDiv" *ngIf="grid" PageHeight>
 
         <h2>Table</h2>
 
@@ -176,7 +176,7 @@
     <!-- end table -->
 
     <!-- start footer -->
-    <div id="footerDiv" PageHeight class="scrollAuto">
+    <div id="footerDiv" PageHeight  *ngIf="footer" class="scrollAuto">
         <div class="clearfix">
             <h2>Footer</h2>
             <div class="clearfix bdrB">
