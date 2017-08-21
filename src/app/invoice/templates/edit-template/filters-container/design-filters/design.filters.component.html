@@ -17,9 +17,6 @@
   </button> {{imagePreview}} -->
     <div class="clearfix">
         <ul class="designTool">
-            <li>
-                <!-- <div [fontPicker]="font" [fpWidth]="'320px'" [fpPosition]="'bottom'">Click to open the font picker</div>  -->
-            </li>
             <li *ngIf="!ifTemplateSelected" (click)="selectTemplate()">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
