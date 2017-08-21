@@ -438,13 +438,11 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         message2 : action.payload.data
       });
     case INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE:
-      console.log("INVOICETITLE" action.payload.ti);
       return Object.assign({}, state, {
         formNameInvoice : action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
     case INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE:
-      console.log("INVOICETAXTITLE" action.payload.ti);
       return Object.assign({}, state, {
         formNameTaxInvoice : action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
