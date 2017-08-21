@@ -671,7 +671,7 @@ input[type="checkbox"] {
     text-align: center;
     margin: 0 1rem 0 0;
     cursor: pointer;
-    left: 8px;
+    left: 0px;
 }
 
 input[type="checkbox"]:checked:before {
