@@ -42,10 +42,10 @@ export class MfEditComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private manufacturingActions: ManufacturingActions,
-              private inventoryAction: InventoryAction,
-              private _groupService: GroupService,
-              private _location: Location) {
+    private manufacturingActions: ManufacturingActions,
+    private inventoryAction: InventoryAction,
+    private _groupService: GroupService,
+    private _location: Location) {
     this.manufacturingDetails = new ManufacturingItemRequest();
 
     // Update/Delete condition
@@ -75,10 +75,10 @@ export class MfEditComponent implements OnInit {
         let groups: Select2OptionData[] = [];
         data.body.map((d: any) => {
           if (d.category === 'expenses') {
-            this.expenseGroupAccounts.push({text: d.name, id: d.uniqueName});
+            this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
           }
           if (d.category === 'liabilities') {
-            this.liabilityGroupAccounts.push({text: d.name, id: d.uniqueName});
+            this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
           }
         });
       }
@@ -101,7 +101,7 @@ export class MfEditComponent implements OnInit {
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return {text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName};
+            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
           });
         }
       }
@@ -247,10 +247,10 @@ export class MfEditComponent implements OnInit {
     if (userResponse) {
       let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
       this.store.dispatch(this.manufacturingActions.DeleteMfItem({
-      stockUniqueName: manufacturingObj.stockUniqueName,
-      manufacturingUniqueName: manufacturingObj.uniqueName
-    }));
-  }
-  this.manufacturingConfirmationModal.hide();
+        stockUniqueName: manufacturingObj.stockUniqueName,
+        manufacturingUniqueName: manufacturingObj.uniqueName
+      }));
+    }
+    this.manufacturingConfirmationModal.hide();
   }
 }
