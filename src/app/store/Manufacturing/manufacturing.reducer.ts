@@ -65,7 +65,7 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             let newState = _.cloneDeep(state);
             let res: BaseResponse<StockDetailResponse, ManufacturingItemRequest> = action.payload;
             if (res.status === 'success') {
-                newState.stockToUpdate = null;
+                // newState.stockToUpdate = null;
                 return Object.assign({}, state, newState);
             }
             return state;

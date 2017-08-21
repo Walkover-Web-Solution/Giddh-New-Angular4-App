@@ -63,15 +63,12 @@ export class MfEditComponent implements OnInit {
           });
           this.manufacturingDetails = manufacturingObj;
         }
-        console.log('In edit this.manufacturingDetails is :', this.manufacturingDetails);
       }
     });
 
-    console.log('first of all the manufacturingDetailis :', this.manufacturingDetails);
     // Get group with accounts
     this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        console.log('Groups loaded success 1:', data.body);
         let groups: Select2OptionData[] = [];
         data.body.map((d: any) => {
           if (d.category === 'expenses') {
@@ -84,19 +81,23 @@ export class MfEditComponent implements OnInit {
       }
     });
   }
-
   public ngOnInit() {
     console.log('hello from MfEditComponent');
+    if (this.isUpdateCase) {
+      this.store.dispatch(this.inventoryAction.GetStockUniqueName(this.manufacturingDetails.uniqueName, this.manufacturingDetails.stockUniqueName));
+    }
     // dispatch stocklist request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (!o.stocksList) {
         this.store.dispatch(this.inventoryAction.GetStock());
       }
+      if (this.isUpdateCase && o.activeStock) {
+        this.manufacturingDetails.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
+      }
     });
     // get all stocks
     this.stockListDropDown$ = this.store.select(p => {
       if (p.inventory.stocksList) {
-        console.log('The Stock List is available :', p.inventory.stocksList);
         if (p.inventory.stocksList.results) {
           let units = p.inventory.stocksList.results;
 
@@ -112,7 +113,6 @@ export class MfEditComponent implements OnInit {
         // In create only
         this.manufacturingDetails.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
         // this.manufacturingDetails.stockUniqueName = '';
-        console.log('the stockWithRate is :', this.manufacturingDetails);
       }
     });
   }
@@ -133,7 +133,6 @@ export class MfEditComponent implements OnInit {
   }
 
   public addConsumption(data) {
-    console.log('The data to push is :', data);
     let val = {
       amount: data.amount,
       rate: data.rate,
@@ -186,8 +185,6 @@ export class MfEditComponent implements OnInit {
 
     this.manufacturingDetails = manufacturingObj;
 
-    console.log('After push the otherExpanse is :', this.manufacturingDetails);
-
     this.otherExpenses = {};
   }
 
@@ -203,7 +200,6 @@ export class MfEditComponent implements OnInit {
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     // dataToSave.multipleOf = dataToSave.quantity;
-    console.log('THe data is :', dataToSave);
     this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
   }
 
@@ -213,7 +209,6 @@ export class MfEditComponent implements OnInit {
     // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     // dataToSave.multipleOf = dataToSave.quantity;
     // dataToSave.manufacturingUniqueName =
-    console.log('THe data is ---:', dataToSave);
     this.store.dispatch(this.manufacturingActions.UpdateMfItem(dataToSave));
   }
 
@@ -252,5 +247,14 @@ export class MfEditComponent implements OnInit {
       }));
     }
     this.manufacturingConfirmationModal.hide();
+  }
+
+  public getCalculatredAmount(quantity, rate) {
+    if (quantity.model && rate.model) {
+      let amount = quantity.model * rate.model;
+      this.linkedStocks.amount = amount;
+      return amount;
+    }
+    return 0;
   }
 }

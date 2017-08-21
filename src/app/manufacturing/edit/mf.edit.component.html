@@ -3,7 +3,7 @@
     <!-- page Title -->
     <div class="col-xs-12 bdrB">
       <div class="row mrL3 mrR3 pd1 pdL0">
-        <h1 class="section_title d-inline-block"><strong>Manufacture of Material {{manufacturingDetails | json}}</strong></h1>
+        <h1 class="section_title d-inline-block"><strong>Manufacture of Material</strong> &nbsp; &nbsp;<label *ngIf="isUpdateCase">No. {{manufacturingDetails.voucherNumber}}</label></h1>
         <button class="btn btn-primary pull-right" (click)="goBackToListPage();">Back</button>
       </div>
     </div>
@@ -27,7 +27,7 @@
           <div class="form-group col-xs-2">
             <label class="small">Quantity</label>
             <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
-            <small class="pull-right">Multiple of 2</small>
+            <small class="pull-right">Multiple of {{manufacturingDetails.multipleOf | json}}</small>
           </div>
           <!--<div class="form-group col-xs-2">
             <label class="small">Date</label>
@@ -96,10 +96,11 @@
                 </td>
 
                 <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
-                <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>
+                <td> {{ getCalculatredAmount(linkedStockQuantity, linkedStockRate) }} </td>
+                <!--<td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>-->
 
                 <td class="action">
-                  <button [disabled]="linkedStockQuantity.invalid || linkedStockAmount.invalid || linkedStockRate.invalid || linkedStockList.invalid"
+                  <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid"
                     (click)="addConsumption(linkedStocks)" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
                 </td>
               </tr>
