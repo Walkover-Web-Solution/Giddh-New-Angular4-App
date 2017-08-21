@@ -34,12 +34,13 @@
 
       <!--Start Grid-->
       <div>
-        <section class="row row-1" *ngFor="let grp of data$.groupDetails" [ngClass]="grp.category" tb-pl-bs-grid-row [groupDetail]="grp">
-          <section class="row row-2 " style="padding-left:30px" tb-pl-bs-grid-row *ngFor="let account of grp.accounts" [groupDetail]="account"
+        <section class="row row-1" *ngFor="let grp of data$.groupDetails | tbsearch: search" [ngClass]="grp.category" tb-pl-bs-grid-row
+          [groupDetail]="grp" [search]="search">
+          <section class="row row-2 " style="padding-left:30px" tb-pl-bs-grid-row *ngFor="let account of grp.accounts" [groupDetail]="account"  [search]="search"
             [ngClass]="{'isHidden': !account.isVisible }">
           </section>
           <section class="row row-2 " [ngClass]="{'isHidden': !childGroup.isVisible }" style="padding-left:30px" tb-pl-bs-grid-row
-            *ngFor="let childGroup of grp.childGroups" [groupDetail]="childGroup">
+            *ngFor="let childGroup of grp.childGroups" [groupDetail]="childGroup"  [search]="search">
           </section>
         </section>
       </div>

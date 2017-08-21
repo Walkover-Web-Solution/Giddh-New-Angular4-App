@@ -32,6 +32,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
     </div>
     <div *ngIf="(data$ | async)">
       <pl-grid #plGrid
+      [search]="filter.search"
         [plData]="data$ | async"
       ></pl-grid>
     </div>

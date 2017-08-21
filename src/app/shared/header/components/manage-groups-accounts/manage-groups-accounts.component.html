@@ -36,7 +36,7 @@
             <div ng-transclude="">
               <!-- ngIf: showListGroupsNow -->
               <div *ngIf="!(searchLoad | async)">
-                <groups-recursive-list [groupList]="(groupList$ | async) | myAccountFilter: grpSrch"></groups-recursive-list>
+                <groups-recursive-list [groupList]="(groupList$ | async) | grpsrch: grpSrch"></groups-recursive-list>
               </div>
               <!-- end ngIf: showListGroupsNow -->
             </div>
