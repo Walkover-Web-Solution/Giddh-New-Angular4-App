@@ -9,6 +9,7 @@ import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
 import {Observable} from "rxjs/Observable";
 import {InvoiceUiDataService} from "../../../../../services/invoice.ui.data.service";
+import {InvoiceTemplatesService} from "../../../../../services/invoice.templates.service";
 @Component({
   selector: 'content-selector',
   templateUrl: 'content.filters.component.html',
@@ -53,14 +54,29 @@ export class ContentFilterComponent {
   public humanizeBytes: any;
   public dragOver: boolean;
   public ti: TaxInvoiceLabel;
-
-
+  public div$: Observable<IsDivVisible>;
+  public divStatus: IsDivVisible;
+  public header: boolean = true;
+  public grid: boolean = false;
+  public footer: boolean = false;
   // public data: Content = null;
 
-  constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService, private invoiceTemplatesService: InvoiceTemplatesService) {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
+    this.div$ = this.invoiceTemplatesService.getDivStatus();
+    this.div$.subscribe(val => {
+      console.log(val);
+    });
+    this._invoiceUiDataService.setDivVisible.subscribe((val) => {
+      console.log(val);
+      if (val) {
+        this.header = val.header;
+        this.grid = val.grid;
+        this.footer = val.footer;
+      }
+    });
     // console.log('design-filters-container constructor called');
   }
 
@@ -158,7 +174,7 @@ export class ContentFilterComponent {
     this.ti = {
       data: data,
       setTaxInvoiceActive: false
-    }
+    };
     this.store.dispatch(this.invoiceAction.updateFormNameInvoice(this.ti));
     console.log(data);
   }
@@ -167,7 +183,7 @@ export class ContentFilterComponent {
     this.ti = {
       data: data,
       setTaxInvoiceActive: true
-    }
+    };
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(this.ti));
     console.log(data);
@@ -291,12 +307,13 @@ export class ContentFilterComponent {
     this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
   }
 
+
+
   public onUploadOutput(output: UploadOutput): void {
 
     if (output.type === 'allAddedToQueue') {
       this.files.push(output.file);
       console.log(this.files);
-      debugger;
       this.previewFile(this.files);
     } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
       this.files.push(output.file);
@@ -346,6 +363,7 @@ export class ContentFilterComponent {
   }
 
 
+
 //
 //
 }
@@ -353,4 +371,10 @@ export class ContentFilterComponent {
 export interface TaxInvoiceLabel {
   setTaxInvoiceActive: boolean;
   data: string;
+}
+
+export interface IsDivVisible {
+  header: boolean;
+  grid: boolean;
+  footer: boolean;
 }

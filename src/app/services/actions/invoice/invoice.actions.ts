@@ -21,7 +21,10 @@ import {
   Template
 } from '../../../models/api-models/Invoice';
 import {Font} from "ngx-font-picker";
-import {TaxInvoiceLabel} from "../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component";
+import {
+  IsDivVisible,
+  TaxInvoiceLabel
+} from "../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component";
 // import {Section, Template} from "../../../models/api-models/invoice";
 
 @Injectable()
@@ -521,6 +524,13 @@ export class InvoiceActions {
     return{
       type: INVOICE.TEMPLATE.UPDATE_MESSAGE2,
       payload: {data}
+    };
+  }
+  public setDivVisible(div: IsDivVisible): Action {
+    console.log(div);
+    return{
+      type: INVOICE.TEMPLATE.SET_VISIBLE,
+      payload: {div}
     };
   }
 }
