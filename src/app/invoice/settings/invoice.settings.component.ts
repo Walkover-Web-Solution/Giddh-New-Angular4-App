@@ -94,3 +94,20 @@
 //     this.uploadInput.emit({ type: 'removeAll' });
 //   }
 // }
+
+import { Component, OnInit } from '@angular/core';
+import * as _ from 'lodash';
+
+@Component({
+  templateUrl: './invoice.settings.component.html'
+})
+export class InvoiceSettingComponent implements OnInit {
+
+  constructor() {
+    console.log('Hello');
+  }
+
+  public ngOnInit() {
+    console.log('from InvoiceSettingComponent');
+  }
+}
