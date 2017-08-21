@@ -21,22 +21,19 @@ export class ContentFilterComponent {
   public GSTIN: string;
   public PAN: string;
   public companyName: string;
-  public myValue: number;
   public itemSlider: string;
   public item: string;
   public custom1: string;
   public custom2: string;
   public custom3: string;
-  public itemCodeSlider: string;
-  public qtySlider: string;
-  public rateSlider: string;
-  public discountSlider: string;
-  public taxSlider: string;
-  public totalSlider: string;
-  public numSlider: string;
-  public quantitySlider: string;
-  public taxValueSlider: string;
-  public dateSlider: string;
+  public sNo: string;
+  public qty: string;
+  public rate: string;
+  public discount: string;
+  public tax: string;
+  public total: string;
+  public taxableValue: string;
+  public date: string;
   public invoiceNo: string;
   public invoiceDate: string;
   public dueDate: string;
@@ -45,7 +42,7 @@ export class ContentFilterComponent {
   public trackingNo: string;
   public invoice: string;
   public taxInvoice: string;
-  public billingAddress: string;
+  public hsnSac: string;
   public billingGstin: string;
   public shippingAddress: string;
   public shippingGstin: string;
@@ -55,7 +52,7 @@ export class ContentFilterComponent {
   public uploadInput: EventEmitter<UploadInput>;
   public humanizeBytes: any;
   public dragOver: boolean;
-  public imagePreview: any;
+  public ti: TaxInvoiceLabel;
 
 
   // public data: Content = null;
@@ -97,7 +94,13 @@ export class ContentFilterComponent {
   public onInvoiceDateChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateInvoiceDate(data));
-    console.log(data);
+
+  }
+
+  public onDueDateChange(data) {
+    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
+    this.store.dispatch(this.invoiceAction.updateDueDate(data));
+
   }
 
   //
@@ -124,7 +127,6 @@ export class ContentFilterComponent {
   public onShipDateChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateShippingDate(data));
-    console.log(data);
   }
 //
 //   public onCheckShipDAte(check) {
@@ -135,7 +137,7 @@ export class ContentFilterComponent {
 //   // -------------------ShipVia-------------------
   public onShipViaChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
-    this.store.dispatch(this.invoiceAction.updateShippingState(data));
+    this.store.dispatch(this.invoiceAction.updateShippingVia(data));
     console.log(data);
   }
   public onTrackingNoChange(data) {
@@ -153,13 +155,21 @@ export class ContentFilterComponent {
 //   // ------------------InvoiceTitleName-------------
   public onInvoiceChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
-    this.store.dispatch(this.invoiceAction.updateFormNameInvoice(data));
+    this.ti = {
+      data: data,
+      setTaxInvoiceActive: false
+    }
+    this.store.dispatch(this.invoiceAction.updateFormNameInvoice(this.ti));
     console.log(data);
   }
 
   public onTaxInvoiceChange(data) {
+    this.ti = {
+      data: data,
+      setTaxInvoiceActive: true
+    }
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
-    this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(data));
+    this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(this.ti));
     console.log(data);
   }
 
@@ -230,6 +240,39 @@ export class ContentFilterComponent {
   public onCustom3Change(data) {
     this.store.dispatch(this.invoiceAction.updateCustomField3(data));
   }
+
+  public onSnoLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateSnoLabel(data));
+  }
+  public onDateLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateDateLabel(data));
+  }
+  public onItemLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateItemLabel(data));
+  }
+
+  public onHsnLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateItemLabel(data));
+  }
+  public onQtyLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateQuantityLabel(data));
+  }
+  public onRateLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateRateLabel(data));
+  }
+  public onDiscountLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateDiscountLabel(data));
+  }
+  public onTaxableValueLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateTaxableValueLabel(data));
+  }
+  public onTaxLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateTaxLabel(data));
+  }
+  public onTotalLabelChange(data) {
+    this.store.dispatch(this.invoiceAction.updateTotalLabel(data));
+  }
+
 //
 //   public onCheckShippingAddress(check) {
 //     if (check === 'false') {
@@ -295,13 +338,6 @@ export class ContentFilterComponent {
       preview.src = reader.result;
       this._invoiceUiDataService.setImageSignatgurePath(preview.src);
     };
-
-    // imgSrc$.subscribe((val) => {
-    //   if (val) {
-    //     this._invoiceUiDataService.setLogoPath(imgSrc);
-    //   }
-    // });
-
     if (file) {
       reader.readAsDataURL(file);
     } else {
@@ -309,6 +345,12 @@ export class ContentFilterComponent {
     }
   }
 
+
 //
 //
+}
+
+export interface TaxInvoiceLabel {
+  setTaxInvoiceActive: boolean;
+  data: string;
 }
