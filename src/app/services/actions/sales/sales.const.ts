@@ -1,0 +1,4 @@
+export const SALES_ACTIONS = {
+  GET: 'GET',
+  GET_RESPONSE: 'GET_RESPONSE'
+};
