@@ -1,0 +1,32 @@
+.form-group input, .form-group select, .form-group textarea{
+  max-width: 140px;
+}
+.form-group.size_240 input, .form-group.size_240 select, .form-group.size_240 textarea{
+  max-width: 240px;
+  width: 240px;
+}
+.form-group.size_360 input, .form-group.size_360 select, .form-group.size_360 textarea{
+  max-width: 360px;
+}
+.form-group label {
+  display: block;
+  font-weight: 400;
+  margin-bottom: 5px;
+}
+.form-inline .form-group{
+  margin-right: 20px;
+  vertical-align: top;
+}
+.form-group textarea{
+  height: 140px;
+  resize: none
+}
+#actionPane{
+  width: 100%;
+  height: 80px;
+  padding: 20px 0;
+  background-color: #7d7d7d;
+}
+.dropup .dropdown-menu{
+  left: -80px;
+}

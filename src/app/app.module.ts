@@ -27,6 +27,7 @@ import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
+import { SalesModule } from './sales/sales.module';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -76,6 +77,7 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    SalesModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),
