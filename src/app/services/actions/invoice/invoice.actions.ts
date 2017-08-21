@@ -21,6 +21,7 @@ import {
   Template
 } from '../../../models/api-models/Invoice';
 import {Font} from "ngx-font-picker";
+import {TaxInvoiceLabel} from "../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component";
 // import {Section, Template} from "../../../models/api-models/invoice";
 
 @Injectable()
@@ -271,6 +272,13 @@ export class InvoiceActions {
     };
   }
 
+  public updateShippingVia(data: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.UPDATE_SHIPPING_VIA,
+      payload: {data}
+    };
+  }
+
   public updateTrackingDate(data: string): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_TRACKING_DATE,
@@ -376,100 +384,100 @@ export class InvoiceActions {
     };
   }
 
-  public updateFormNameInvoice(data: string): Action {
+  public updateFormNameInvoice(ti: TaxInvoiceLabel): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE,
-      payload: {data}
+      payload: {ti}
     };
   }
 
-  public updateFormNameTaxInvoice(data: string): Action {
+  public updateFormNameTaxInvoice(ti: TaxInvoiceLabel): Action {
     return {
       type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE,
+      payload: {ti}
+    };
+  }
+
+  public updateSnoLabel(data: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.UPDATE_SNOLABEL,
       payload: {data}
     };
   }
 
-  public updateSnoWidth(data: number): Action {
+  public updateDateLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_SNOWIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_DATE_LABEL,
       payload: {data}
     };
   }
 
-  public updateDateWidth(data: number): Action {
+  public updateItemLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_DATE_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_ITEM_LABEL,
       payload: {data}
     };
   }
 
-  public updateItemWidth(data: number): Action {
+  public updateHsnSacLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_ITEM_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_HSNSAC_LABEL,
       payload: {data}
     };
   }
 
-  public updateHsnSacWidth(data: number): Action {
+  public updateItemCodeLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_HSNSAC_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_ITEM_CODE_LABEL,
       payload: {data}
     };
   }
 
-  public updateItemCodeWidth(data: number): Action {
+  public updateDescLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_ITEM_CODE_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_DESC_LABEL,
       payload: {data}
     };
   }
 
-  public updateDescWidth(data: number): Action {
+  public updateRateLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_DESC_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_RATE_LABEL,
       payload: {data}
     };
   }
 
-  public updateRateWidth(data: number): Action {
+  public updateDiscountLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_RATE_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_DISCOUNT_LABEL,
       payload: {data}
     };
   }
 
-  public updateDiscountWidth(data: number): Action {
+  public updateTaxableValueLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_DISCOUNT_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_TAXABLE_VALUE_LABEL,
       payload: {data}
     };
   }
 
-  public updateTaxableValueWidth(data: number): Action {
+  public updateTaxLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_TAXABLE_VALUE_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_TAX_LABEL,
       payload: {data}
     };
   }
 
-  public updateTaxWidth(data: number): Action {
+  public updateTotalLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_TAX_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_TOTAL_LABEL,
       payload: {data}
     };
   }
 
-  public updateTotalWidth(data: number): Action {
+  public updateQuantityLabel(data: string): Action {
     return {
-      type: INVOICE.TEMPLATE.UPDATE_TOTAL_WIDTH,
-      payload: {data}
-    };
-  }
-
-  public updateQuantityWidth(data: number): Action {
-    return {
-      type: INVOICE.TEMPLATE.UPDATE_QUANTITY_WIDTH,
+      type: INVOICE.TEMPLATE.UPDATE_QUANTITY_LABEL,
       payload: {data}
     };
   }

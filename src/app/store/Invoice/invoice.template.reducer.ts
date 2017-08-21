@@ -77,6 +77,7 @@ export interface InvoiceTemplateMetaState {
   companyAddress: string;
   imageSignature: string;
   slogan: string;
+  setInvoiceFlag: boolean;
 }
 
 export interface InvoiceTableState {
@@ -211,12 +212,13 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   otherDeduction: 'Other Deduction',
   total: 'Invoice Total',
   totalInWords: 'Invoice Total (In words)',
-  message1: '',
-  message2: '',
+  message1: 'sample message 1',
+  message2: 'sample message 2',
   thanks: 'Thank You for your business.',
   companyAddress: 'Walkover Web Solutions Private Limited, 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)',
   imageSignature: '',
   slogan: 'Walkover Web Solutions Private Limited',
+  setInvoiceFlag: false,
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -318,6 +320,21 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         dueDate: action.payload.data
       });
 
+    case INVOICE.TEMPLATE.UPDATE_SHIPPING_DATE:
+      return Object.assign({}, state, {
+        shippingDate: action.payload.data
+      });
+
+    case INVOICE.TEMPLATE.UPDATE_SHIPPING_VIA:
+      return Object.assign({}, state, {
+        shippingVia: action.payload.data
+      });
+
+    case INVOICE.TEMPLATE.UPDATE_TRACKING_NO:
+      return Object.assign({}, state, {
+        trackingNumber: action.payload.data
+      });
+
     case INVOICE.TEMPLATE.UPDATE_TOP_MARGIN:
       return Object.assign({}, state, {
         topMargin: action.payload.data
@@ -345,6 +362,48 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
     case INVOICE.TEMPLATE.UPDATE_CUSTOM_FIELD_3:
       return Object.assign({}, state, {
         customField3: action.payload.data
+      });
+
+    case INVOICE.TEMPLATE.UPDATE_SNOLABEL:
+      return Object.assign({}, state, {
+        sNoLabel: action.payload.data
+      });
+
+    case INVOICE.TEMPLATE.UPDATE_ITEM_LABEL:
+      return Object.assign({}, state, {
+        itemLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_DATE_LABEL:
+      return Object.assign({}, state, {
+        dateLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_HSNSAC_LABEL:
+      return Object.assign({}, state, {
+        hsnSacLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_HSNSAC_LABEL:
+      return Object.assign({}, state, {
+        hsnSacLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_QUANTITY_LABEL:
+      return Object.assign({}, state, {
+        quantityLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_DISCOUNT_LABEL:
+      return Object.assign({}, state, {
+        discountLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_TAXABLE_VALUE_LABEL:
+      return Object.assign({}, state, {
+        taxableValueLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_TAX_LABEL:
+      return Object.assign({}, state, {
+        taxLabel: action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_TOTAL_LABEL:
+      return Object.assign({}, state, {
+        totalLabel: action.payload.data
       });
     case INVOICE.TEMPLATE.UPDATE_SHIPPING_ADDRESS:
       return Object.assign({}, state, {
@@ -377,6 +436,18 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
     case INVOICE.TEMPLATE.UPDATE_MESSAGE2:
       return Object.assign({}, state, {
         message2 : action.payload.data
+      });
+    case INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE:
+      console.log("INVOICETITLE" action.payload.ti);
+      return Object.assign({}, state, {
+        formNameInvoice : action.payload.ti.data,
+        setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
+      });
+    case INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE:
+      console.log("INVOICETAXTITLE" action.payload.ti);
+      return Object.assign({}, state, {
+        formNameTaxInvoice : action.payload.ti.data,
+        setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
     default: {
       return state;

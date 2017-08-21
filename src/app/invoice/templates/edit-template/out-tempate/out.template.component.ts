@@ -30,6 +30,7 @@ export class OutTemplateComponent implements OnInit {
   public invoiceNo$: Observable<string>;
   public shippingDate$: Observable<string>;
   public shippingNo$: Observable<string>;
+  public shippingVia$: Observable<string>;
   public trackingDate$: Observable<string>;
   public trackingNo$: Observable<string>;
   public customerName$: Observable<string>;
@@ -45,8 +46,8 @@ export class OutTemplateComponent implements OnInit {
   public customField1$: Observable<string>;
   public customField2$: Observable<string>;
   public customField3$: Observable<string>;
-  public formNameInvoice$: Observable<string>;
-  public formNameTaxInvoice$: Observable<string>;
+  public formNameInvoice: string;
+  public formNameTaxInvoice: string;
   public sNoLabel$: Observable<string>;
   public sNoWidth$: Observable<number>;
   public dateLabel$: Observable<string>;
@@ -88,6 +89,7 @@ export class OutTemplateComponent implements OnInit {
   public color: string;
   public logoSrc: string;
   public imageSignatureSrc: string;
+  public taxInvoiceLabelFlag$: Observable<boolean>;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor( private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
@@ -98,6 +100,7 @@ export class OutTemplateComponent implements OnInit {
     this.invoiceDate$ = this.invoiceTemplatesService.getInvoiceDate();
     this.invoiceNo$ = this.invoiceTemplatesService.getInvoiceNo();
     this.shippingDate$ = this.invoiceTemplatesService.getShippingDate();
+    this.shippingVia$ = this.invoiceTemplatesService.getShippingVia();
     this.shippingNo$ = this.invoiceTemplatesService.getShippingNo();
     this.trackingDate$ = this.invoiceTemplatesService.getTrackingDate();
     this.trackingNo$ = this.invoiceTemplatesService.getTrackingNumber();
@@ -113,8 +116,20 @@ export class OutTemplateComponent implements OnInit {
     this.customField1$ = this.invoiceTemplatesService.getCustomField1();
     this.customField2$ = this.invoiceTemplatesService.getCustomField2();
     this.customField3$ = this.invoiceTemplatesService.getCustomField3();
-    this.formNameInvoice$ = this.invoiceTemplatesService.getFormNameInvoice();
+   //  this.invoiceTemplatesService.getFormNameInvoice().subscribe( val => {
+   //   if (val) {
+   //
+   //     this.formNameInvoice = val;
+   //   }
+   // });
+    this.invoiceTemplatesService.getFormNameTaxInvoice().subscribe( val => {
+      if (val) {
+
+        this.formNameTaxInvoice = val;
+      }
+    });
     this.formNameTaxInvoice$ = this.invoiceTemplatesService.getFormNameTaxInvoice();
+    this.taxInvoiceLabelFlag$ = this.invoiceTemplatesService.getFormNameTaxInvoiceFlag();
     this.sNoLabel$ = this.invoiceTemplatesService.getSnoLabel();
     this.dateLabel$ = this.invoiceTemplatesService.getDateLabel();
     this.itemLabel$ = this.invoiceTemplatesService.getItemLabel();

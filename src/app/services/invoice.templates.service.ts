@@ -86,6 +86,9 @@ export class InvoiceTemplatesService {
   public getShippingDate(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.shippingDate);
   }
+  public getShippingVia(): Observable<string> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.shippingVia);
+  }
 
   public getShippingNo(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.shippingNo);
@@ -157,6 +160,10 @@ export class InvoiceTemplatesService {
 
   public getFormNameTaxInvoice(): Observable<string> {
     return this.store.select((state: AppState) => state.invtemp.templateMeta.formNameTaxInvoice);
+  }
+
+  public getFormNameTaxInvoiceFlag(): Observable<boolean> {
+    return this.store.select((state: AppState) => state.invtemp.templateMeta.setInvoiceFlag);
   }
 
   public getSnoLabel(): Observable<string> {
