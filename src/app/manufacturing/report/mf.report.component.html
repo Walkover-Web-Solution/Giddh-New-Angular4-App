@@ -3,7 +3,7 @@
     <!-- page Title -->
     <div class="col-xs-12 bdrB">
       <div class="row mrL3 mrR3 pd1 pdL0">
-        <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
+        <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register {{isLoading}}</strong></h1>
         <button class="btn btn-success pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
       </div>
     </div>
@@ -15,7 +15,7 @@
             <div class="row">
               <label class="small">Final Product</label>
               <select class="form-control" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product">
-               <option [ngValue]="'select'">Please Select</option>
+               <option value="">Select Product</option>
                <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option>
                </select>
               <span class="select_drop"><i class="fa fa-caret-down"></i></span>
@@ -30,24 +30,24 @@
             <input type="text" class="form-control" name="to" [(ngModel)]="mfStockSearchRequest.to" />
           </div>
           <div class="form-group col-xs-1 pdR0 custom-select pos-rel">
-            <label class="small">Others</label>
+            <label class="small">Search By</label>
             <select class="form-control" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
-               <option [ngValue]="'select'">Please Select</option>
+               <option value="">--Select--</option>
                <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option>
                </select>
             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
           </div>
           <div class="form-group col-xs-2 pdR0 custom-select pos-rel">
-            <label class="small">&nbsp;</label>
+            <label class="small">Operation</label>
             <select class="form-control" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation">
-               <option [ngValue]="'select'">Please Select</option>
+               <option value="">--Select--</option>
                <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option>
                </select>
             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
           </div>
           <div class="form-group col-xs-1 pdR0">
-            <label class="small">Number</label>
-            <input type="text" #numberField="ngModel" pattern="^-?\d+(?:\.\d+)?$" class="form-control" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
+            <label class="small">Value</label>
+            <input type="text" #numberField="ngModel" pattern="^-?\d+(?:\.\d+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
             <p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>
           </div>
           <div class="form-group col-xs-1">
@@ -58,10 +58,13 @@
       </form>
     </div>
     <!-- search form end -->
-    <section *ngIf="reportData && reportData.results.length === 0">
+    <section *ngIf="isReportLoading">
+      <p class="lead alC mrT4">Loading...</p>
+    </section>
+    <section *ngIf="!isReportLoading && reportData && reportData.results.length === 0">
       <p class="lead alC mrT4">No result found!</p>
     </section>
-    <section *ngIf="reportData && reportData.results.length > 0">
+    <section *ngIf="!isReportLoading && reportData && reportData.results.length > 0">
       <div class="" id="mfReportTbl">
         <div class="col-xs-12">
           <div class="table-responsive mrL3 mrR4">
