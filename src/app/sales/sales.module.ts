@@ -1,22 +1,24 @@
 import { NgModule } from '@angular/core';
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule, TypeaheadModule, CollapseModule } from 'ngx-bootstrap';
 import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesComponent } from './sales.component';
-import { InvoiceCreateComponent } from './create/invoice.create.component';
+import { SalesInvoiceComponent } from './create/sales.invoice.component';
 
 @NgModule({
   declarations: [
     SalesComponent,
-    InvoiceCreateComponent
+    SalesInvoiceComponent
   ],
   imports: [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
     SharedModule,
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    TypeaheadModule.forRoot(),
+    CollapseModule.forRoot()
   ],
   exports: [
     TooltipModule
