@@ -50,7 +50,7 @@
             <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
-            <li *ngIf="ifLogoSelected">
+            <li [hidden]="!ifLogoSelected">
                 <!-- edit logo  start -->
                 <div class="clearfix">
                     <div class="logoTool">

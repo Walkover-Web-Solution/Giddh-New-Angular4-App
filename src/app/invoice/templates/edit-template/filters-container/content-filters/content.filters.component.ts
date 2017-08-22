@@ -59,6 +59,43 @@ export class ContentFilterComponent {
   public header: boolean = true;
   public grid: boolean = false;
   public footer: boolean = false;
+  public field: IsFieldVisible = {
+    enableCompanyName: true,
+  enableCompanyAddress: true,
+  enableInvoiceDate: true,
+  enableInvoiceNo: true,
+    enableDueDate: true,
+    enableBillingAddress: true,
+    enableShipDate: true,
+  enableShipVia: true,
+  enableTrackingNo: true,
+  enableDocTitle: true,
+  enableBillingState: true,
+  enableBillingGstin: true,
+  enableShippingAddress: true,
+  enableShippingState: true,
+  enableShippingGstin: true,
+  enableCustom1:  true,
+  enableCustom2:  true,
+  enableCustom3: true,
+  enableSno: true,
+  enableDate: true,
+  enableItem: true,
+  enableHsn: true,
+  enableQty: true,
+  enableRate: true,
+  enableDis: true,
+  enableTaxableValue: true,
+  enableTax: true,
+  enableTotal: true,
+  enableTaxableAmount: true,
+  enableTotalTax: true,
+  enableOtherDeductions: true,
+  enableInvoiceTotal: true,
+  enableMessage1: true,
+  enableMessage2: true,
+  enableThanks: true,
+  };
   // public data: Content = null;
 
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService, private invoiceTemplatesService: InvoiceTemplatesService) {
@@ -162,12 +199,6 @@ export class ContentFilterComponent {
     console.log(data);
   }
 
-//   public onCheckTrackingNo(check) {
-//     if (check === 'false') {
-//       this.enableTrackingNo = false;
-//     }
-//   }
-//
 //   // ------------------InvoiceTitleName-------------
   public onInvoiceChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
@@ -188,34 +219,8 @@ export class ContentFilterComponent {
     this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(this.ti));
     console.log(data);
   }
-
-//   // --------------------CustomerDetails-----------------
-//
-//   public onCheckCustomerName(check) {
-//     if (check === 'false') {
-//       this.enableCustomerName = false;
-//     }
-//   }
-//
-//   public onCheckCustomerCompanyName(check) {
-//     if (check === 'false') {
-//       this.enableCompanyName = false;
-//     }
-//   }
-//
-//   public onCheckCustomerEmailId(check) {
-//     if (check === 'false') {
-//       this.enableCustomerEmailId = true;
-//     }
-//   }
-//
-//   public onCheckCustomerMobileNo(check) {
-//     if (check === 'false') {
-//       this.enableCustomerMobileNo = true;
-//     }
-//   }
 // // ------------------------BillingDetails-------------------
-//
+
   public onShippingAddressChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateShippingAddress(data));
@@ -306,9 +311,6 @@ export class ContentFilterComponent {
   public onChangeWidth(value, colName) {
     this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
   }
-
-
-
   public onUploadOutput(output: UploadOutput): void {
 
     if (output.type === 'allAddedToQueue') {
@@ -362,7 +364,74 @@ export class ContentFilterComponent {
     }
   }
 
-
+  public onCheckField(field, value) {
+      if (field === 'companyName') {
+        this.field.enableCompanyName = value;
+      } else if (field === 'invoiceDate') {
+        this.field.enableInvoiceDate = value;
+      }  else if (field === 'invoiceNo') {
+        this.field.enableInvoiceNo = value;
+      } else if (field === 'companyAddress') {
+        this.field.enableCompanyAddress = value;
+      } else if (field === 'dueDa') {
+        this.field.enableDueDate = value;
+      } else if (field === 'billingAddr') {
+        this.field.enableBillingAddress = value;
+      } else if (field === 'billingGstin') {
+        this.field.enableBillingGstin = value;
+      } else if (field === 'billingState') {
+        this.field.enableBillingState = value;
+      } else if (field === 'shippingAddr') {
+        this.field.enableShippingAddress = value;
+      } else if (field === 'shippingGstin') {
+        this.field.enableShippingGstin = value;
+      } else if (field === 'shippingState') {
+        this.field.enableShippingAddress = value;
+      } else if (field === 'custom1') {
+        this.field.enableCustom1 = value;
+      } else if (field === 'custom2') {
+        this.field.enableCustom2 = value;
+      } else if (field === 'custom3') {
+        this.field.enableCustom3 = value;
+      } else if (field === 'sNo') {
+        this.field.enableSno = value;
+      } else if (field === 'date') {
+        this.field.enableDate = value;
+      } else if (field === 'item') {
+        this.field.enableItem = value;
+      } else if (field === 'hsn') {
+        this.field.enableHsn = value;
+      } else if (field === 'qty') {
+        this.field.enableQty = value;
+      } else if (field === 'rate') {
+        this.field.enableRate = value;
+      } else if (field === 'dis') {
+        this.field.enableDis = value;
+      } else if (field === 'taxableValue') {
+        this.field.enableTaxableValue = value;
+      } else if (field === 'tax') {
+        this.field.enableTax = value;
+      } else if (field === 'total') {
+        this.field.enableTotal = value;
+      } else if (field === 'taxableAmount') {
+        this.field.enableTaxableAmount = value;
+      } else if (field === 'totalTax') {
+        this.field.enableTotalTax = value;
+      } else if (field === 'otherDeductions') {
+        this.field.enableOtherDeductions = value;
+      } else if (field === 'invoiceTotal') {
+        this.field.enableInvoiceTotal = value;
+      } else if (field === 'message1') {
+        this.field.enableMessage1 = value;
+      } else if (field === 'message2') {
+        this.field.enableMessage2 = value;
+      } else if (field === 'thanks') {
+        this.field.enableThanks = value;
+      } else if (field === 'companyAddr') {
+        this.field.enableCompanyAddress = value;
+      }
+      this._invoiceUiDataService.setFieldDisplayState(this.field);
+  }
 
 //
 //
@@ -377,4 +446,42 @@ export interface IsDivVisible {
   header: boolean;
   grid: boolean;
   footer: boolean;
+}
+
+export interface IsFieldVisible {
+  enableCompanyName: boolean;
+  enableCompanyAddress: boolean;
+  enableInvoiceDate: boolean;
+  enableInvoiceNo: boolean;
+  enableDueDate: boolean;
+  enableBillingAddress: boolean;
+  enableShipDate: boolean;
+  enableShipVia: boolean;
+  enableTrackingNo: boolean;
+  enableDocTitle: boolean;
+  enableBillingState: boolean;
+  enableBillingGstin: boolean;
+  enableShippingAddress: boolean;
+  enableShippingState: boolean;
+  enableShippingGstin: boolean;
+  enableCustom1: boolean;
+  enableCustom2: boolean;
+  enableCustom3: boolean;
+  enableSno: boolean;
+  enableDate: boolean;
+  enableItem: boolean;
+  enableHsn: boolean;
+  enableQty: boolean;
+  enableRate: boolean;
+  enableDis: boolean;
+  enableTaxableValue: boolean;
+  enableTax: boolean;
+  enableTotal: boolean;
+  enableTaxableAmount: boolean;
+  enableTotalTax: boolean;
+  enableOtherDeductions: boolean;
+  enableInvoiceTotal: boolean;
+  enableMessage1: boolean;
+  enableMessage2: boolean;
+  enableThanks: boolean;
 }
