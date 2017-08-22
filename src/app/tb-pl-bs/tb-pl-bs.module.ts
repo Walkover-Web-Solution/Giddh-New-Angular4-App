@@ -17,6 +17,10 @@ import { PlComponent } from './components/pl/pl.component';
 import { PlGridComponent } from './components/pl/pl-grid/pl-grid.component';
 import { PlGridRowComponent } from './components/pl/pl-grid/pl-grid-row.component';
 
+import { BsComponent } from './components/bs/bs.component';
+import { BsGridComponent } from './components/bs/bs-grid/bs-grid.component';
+import { BsGridRowComponent } from './components/bs/bs-grid/bs-grid-row.component';
+
 @NgModule({
   declarations: [
     TbPlBsComponent,
@@ -31,6 +35,9 @@ import { PlGridRowComponent } from './components/pl/pl-grid/pl-grid-row.componen
     PlComponent,
     PlGridComponent,
     PlGridRowComponent,
+    BsComponent,
+    BsGridComponent,
+    BsGridRowComponent,
     TrialAccordionDirective
   ],
   exports: [

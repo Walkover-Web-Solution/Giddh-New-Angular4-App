@@ -22,6 +22,15 @@ export interface ProfitLossRequest extends TrialBalanceRequest {
   fy?: number;
 }
 
+export interface BalanceSheetData {
+  assets?: ChildGroup[];
+  liabilities?: ChildGroup[];
+  othArr?: ChildGroup[];
+  assetTotal?: number;
+  liabTotal?: number;
+  dates?: BalanceSheetRequest;
+}
+
 export interface ProfitLossData {
   inProfit?: boolean;
   incArr?: ChildGroup[];
@@ -40,4 +49,19 @@ export interface AccountDetails {
   closingBalance: ClosingBalance;
   openingBalance: OpeningBalance;
   groupDetails: ChildGroup[];
+}
+
+export interface BalanceSheetRequest extends TrialBalanceRequest {
+  fy?: number;
+}
+
+export interface BalanceSheetData {
+  inProfit?: boolean;
+  incArr?: ChildGroup[];
+  expArr?: ChildGroup[];
+  othArr?: ChildGroup[];
+  expenseTotal?: number;
+  incomeTotal?: number;
+  closingBalance?: number;
+  dates?: BalanceSheetRequest;
 }
