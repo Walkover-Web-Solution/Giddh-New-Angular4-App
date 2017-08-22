@@ -115,19 +115,17 @@ input {
 /*input*/
 
 .form-control {
-  background: #f9f7f2 !important;
-  border: 1px solid #ded3c0;
-  border-radius: 0px;
+  border-radius: 0;
   padding: 6px !important;
-  outline: 0;
+  outline: none;
   color: #616161;
   box-shadow: none;
 }
 
 .form-control:focus {
   border-radius: 0 !important;
-  outline: 0;
-  border: 1px solid #f7b995 !important;
+  outline: none;
+  border: 1px solid #cecece;
   box-shadow: none;
 }
 
@@ -690,18 +688,6 @@ input[type="checkbox"]:before {
 }
 
 input[type="checkbox"]:after {
-<<<<<<< HEAD
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  border: 2px solid #969696;
-  width: 18px;
-  height: 18px;
-  background: #fff;
-  cursor: pointer;
-  border-radius: 2px;
-=======
     content: "";
     position: absolute;
     top: 2px;
@@ -712,7 +698,6 @@ input[type="checkbox"]:after {
     background: #fff;
     cursor: pointer;
     border-radius: 2px;
->>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .tab-pane .list-inline > li {
@@ -3227,13 +3212,8 @@ label {
   right: 6px;
 }
 
-<<<<<<< HEAD
-#mfReportTbl table > tbody > tr > td > table.table {
-  background: transparent;
-=======
 #mfReportTbl table>tbody>tr>td>table.table {
     background: transparent;
->>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .pagination > li > a,
@@ -3316,11 +3296,7 @@ label {
 }
 
 #manufacture .form-theme tbody tr td select {
-<<<<<<< HEAD
-  width: 43%;
-=======
     width: 43%;
->>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .btn-group.open .dropdown-toggle {
@@ -3452,18 +3428,6 @@ label {
 }
 
 .radio_theme:checked:after {
-<<<<<<< HEAD
-  content: ' ';
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #ff5f00;
-  left: 4px;
-  top: 6px;
-  border-radius: 50%;
-  right: 0;
-  text-align: center;
-=======
     content: ' ';
     position: absolute;
     width: 6px;
@@ -3474,7 +3438,6 @@ label {
     border-radius: 50%;
     right: 0;
     text-align: center;
->>>>>>> +mustafa | midway: fixing ledger design issues
 }
 
 .open>.dropdown-menu {
