@@ -75,9 +75,9 @@
             <tbody *ngIf="manufacturingDetails">
               <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
                 <td colspan="9"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
-                <td>{{ stock.quantity }}</td>
-                <td>{{ stock.rate }}</td>
-                <td>{{ stock.amount }}</td>
+                <td>{{ stock.quantity | number:'1.0-4'}}</td>
+                <td>{{ stock.rate | number:'1.0-4'}}</td>
+                <td>{{ stock.amount | number:'1.0-4'}}</td>
                 <td class="action"><i class="fa fa-times" (click)="removeConsumptionItem(i)" aria-hidden="true"></i>
                 </td>
               </tr>
@@ -114,9 +114,9 @@
             <tfoot class="bdrT pdT2 pdB2 bdrB">
               <tr>
                 <td colspan="9">Total:</td>
-                <td class="text-right"> {{ getTotal('linkedStocks', 'quantity') }} </td>
+                <td class="text-right"> {{ getTotal('linkedStocks', 'quantity') | number:'1.0-4' }} </td>
                 <td></td>
-                <td class="text-right"> {{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.2' }} </td>
+                <td class="text-right"> {{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.0-4' }} </td>
                 <td></td>
               </tr>
             </tfoot>
@@ -133,7 +133,7 @@
         <form class="form-theme clearfix" name="expenseForm">
           <div class="mrB2 clearfix">
             <p class="col-xs-9 pd0">Total Consumption Cost:</p>
-            <p class="col-xs-3 text-right">{{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.2' }}</p>
+            <p class="col-xs-3 text-right">{{ getTotal('linkedStocks', 'amount') | currency:'INR':true:'1.0-4' }}</p>
           </div>
           <table class="width100">
             <thead class="tcaption">
@@ -203,15 +203,15 @@
           </table>
           <div class="pdB2 bdrT clearfix pdT2 mrT1">
             <p class="col-xs-9 pd0"><strong>Total Manufacturing Cost:</strong></p>
-            <p class="col-xs-3 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | currency:'INR':true:'1.2' }}</strong></p>
+            <p class="col-xs-3 text-right"><strong>{{ getTotal('otherExpenses', 'amount') | currency:'INR':true:'1.0-4' }}</strong></p>
           </div>
           <div class="mrB1 pdB2 clearfix">
             <p class="col-xs-9 pd0"><strong>Grand Total:</strong></p>
-            <p class="col-xs-3 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.2' }}</strong></p>
+            <p class="col-xs-3 text-right"><strong>{{ (getTotal('otherExpenses', 'amount') + getTotal('linkedStocks', 'amount')) | currency:'INR':true:'1.0-4' }}</strong></p>
           </div>
           <div class="mrB1 pdB2 clearfix">
             <p class="col-xs-9 pd0"><strong>Cost per {{manufacturingDetails.stockUniqueName}}:</strong></p>
-            <p class="col-xs-3 text-right"><strong>{{ getCosePerProduct() | currency:'INR':true:'1.2'}}</strong></p>
+            <p class="col-xs-3 text-right"><strong>{{ getCosePerProduct() | currency:'INR':true:'1.0-4'}}</strong></p>
           </div>
           <div class="pull-right" *ngIf="!isUpdateCase">
             <button type="submit" class="btn btn-md btn-success mrR1" (click)="createEntry();">Save</button>
