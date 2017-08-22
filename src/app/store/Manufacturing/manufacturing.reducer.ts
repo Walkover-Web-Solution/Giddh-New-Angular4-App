@@ -5,6 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 import { StocksResponse, StockDetailResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
+import { IStocksItem } from '../../models/interfaces/stocksItem.interface';
 
 export interface ManufacturingState {
     reportData: StocksResponse;
@@ -56,6 +57,14 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             return state;
         }
         case MANUFACTURING_ACTIONS.CREATE_MF_ITEM_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<IStocksItem, ManufacturingItemRequest> = action.payload;
+            if (res.status === 'success') {
+                if (newState.reportData && newState.reportData.results) {
+                    newState.reportData.results.push(res.body);
+                    return Object.assign({}, state, newState);
+                }
+            }
             return state;
         }
         case MANUFACTURING_ACTIONS.UPDATE_MF_ITEM: {
@@ -63,9 +72,12 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
         }
         case MANUFACTURING_ACTIONS.UPDATE_MF_ITEM_RESPONSE: {
             let newState = _.cloneDeep(state);
-            let res: BaseResponse<StockDetailResponse, ManufacturingItemRequest> = action.payload;
+            let res: BaseResponse<IStocksItem, ManufacturingItemRequest> = action.payload;
             if (res.status === 'success') {
-                // newState.stockToUpdate = null;
+                let indx = newState.reportData.results.findIndex((obj) => obj.uniqueName === res.body.uniqueName);
+                if (indx > -1) {
+                    newState.reportData.results[indx] = res.body;
+                }
                 return Object.assign({}, state, newState);
             }
             return state;
