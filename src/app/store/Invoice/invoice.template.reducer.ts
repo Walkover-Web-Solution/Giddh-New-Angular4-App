@@ -2,7 +2,10 @@ import { Action, combineReducers } from '@ngrx/store';
 import { GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
 import {Font} from "ngx-font-picker";
-import { IsDivVisible } from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
+import {
+  IsDivVisible,
+  IsFieldVisible
+} from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 export interface InvoiceTemplateState {
   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
@@ -80,6 +83,7 @@ export interface InvoiceTemplateMetaState {
   slogan: string;
   setInvoiceFlag: boolean;
   div: IsDivVisible;
+  setFieldDisplay: IsFieldVisible;
 }
 
 export interface InvoiceTableState {
@@ -221,7 +225,8 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   imageSignature: '',
   slogan: 'Walkover Web Solutions Private Limited',
   setInvoiceFlag: false,
-  div: null
+  div: null,
+  setFieldDisplay: null
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -291,6 +296,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         companyAddress: footerSection[8].label,
         imageSignature: footerSection[9].label,
         slogan: footerSection[10].label
+
         // companyName: action.payload.
       });
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
