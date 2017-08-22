@@ -132,9 +132,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       });
 
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().takeUntil(this.destroyed$).subscribe(a => {
-      this.zone.run(() => {
-        this.filterAccounts('');
-      });
+      if (a) {
+        this.zone.run(() => {
+          this.filterAccounts('');
+        });
+      }
     });
   }
 
