@@ -24,7 +24,7 @@ export class TbGridComponent implements OnInit, AfterViewInit {
     // debugger;
     if (this.data$) {
       let data = this.toggleVisibility(this.data$.groupDetails, value);
-      this.cd.markForCheck();
+      this.cd.detectChanges();
     }
   }
 
