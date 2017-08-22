@@ -1,0 +1,209 @@
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate class="clearfix mrB2">
+  
+  <div class="pdB1 bdrB">
+    <h3>Sales</h3>
+  </div>
+  
+  <div class="clearfix">
+    <div class="clearfix pdT2 pdB2">
+      <div class="col-xs-6">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group noMarg size_380">
+              <label>Customer Name or <a href (click)="showAddNewCustomerPanel($event)">+ Add Customer</a></label>
+              <input 
+              name="customerName"
+              [(ngModel)]="invFormData.customerName"
+              [typeahead]="accounts$ | async"
+              typeaheadOptionField="name"
+              placeholder="Search from accounts"
+              typeaheadOptionsLimit="10"
+              (typeaheadNoResults)="noResultsForCustomer($event)"
+              (typeaheadOnSelect)="onSelectCustomer($event)"
+              class="form-control">          
+            </div>
+          </div>
+          <div class="form-group noMarg col-xs-6" *ngIf="typeaheadNoResultsOfCustomer">
+            <label>Add Entry Against</label>
+            <select class="form-control">
+              <option [value]="select">Select Bank</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-xs-6 text-right">
+        <p class="lead b">Balance Due: Rs.00.00</p>
+      </div>
+    </div>
+    <div class="col-xs-12"><div class="bdrB"></div></div>
+  </div>
+
+  <section class="form-inline col-xs-12">
+
+    <div class="collapse-pane">
+      <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
+        <div class="ico-box-wrap">
+          <div class="ico-box">
+            <span [ngClass]="isGenDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="ico-head">General Details</div>
+      </div>
+      <div [collapse]="isGenDtlCollapsed" class="clearfix pdL3 pdR3">
+        <div class="form-group size_340">
+          <label>Attention to</label>
+          <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
+        </div>
+        <div class="form-group">
+          <label>Invoice Date</label>
+          <input type="text" name="invoiceDate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
+        </div>
+        <div class="form-group">
+          <label>Invoice Number</label>
+          <input type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="text" name="dueDate" class="form-control" [(ngModel)]="invFormData.invoiceDetails.dueDate" />
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <input type="text" name="country" class="form-control" />
+        </div>
+      </div>
+    </div>
+    <!-- end general details collapse pane -->
+
+    <div class="collapse-pane">
+      <div class="collapse-pane-heading" (click)="isMlngAddrCollapsed = !isMlngAddrCollapsed">
+        <div class="ico-box-wrap">
+          <div class="ico-box">
+            <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="ico-head">Mailing Address</div>
+      </div>
+      <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3">
+        <div class="flex-row wid90p">
+          <div class="flex-row-child">
+            <div class="form-group size_340">
+              <label>Billing Address</label>
+              <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address"></textarea>
+            </div>
+            <div class="form-group">
+              <div>
+                <label>State</label>
+                <input type="text" name="billingDetails.stateCode" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateCode" />
+              </div>
+              <div class="mrT27">
+                <label>GSTIN</label>
+                <select class="form-control" name="billingDetails.gstNumber" [(ngModel)]="invFormData.account.billingDetails.gstNumber">
+                  <option [ngValue]="select">Select GSTIN</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="flex-row-child">
+            <div class="form-group size_340">
+              <label>Shipping Address</label>
+              <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address"></textarea>
+            </div>
+            <div class="form-group">
+              <div>
+                <label>State</label>
+                <input type="text" name="shippingDetails.stateCode" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateCode" />
+              </div>
+              <div class="mrT27">
+                <label>GSTIN</label>
+                <select class="form-control" name="shippingDetails.gstNumber" [(ngModel)]="invFormData.account.shippingDetails.gstNumber">
+                  <option [ngValue]="select">Select GSTIN</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- end row -->
+      </div>
+    </div>
+    <!-- end mailing address collapse pane -->
+
+    <div class="collapse-pane">
+      <div class="collapse-pane-heading" (click)="isOthrDtlCollapsed = !isOthrDtlCollapsed">
+        <div class="ico-box-wrap">
+          <div class="ico-box">
+            <span [ngClass]="isOthrDtlCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
+          </div>
+        </div>
+        <div class="ico-head">Other Details</div>
+      </div>
+      <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3">
+        <div class="form-group size_175">
+          <label>Ship Date</label>
+          <input type="text" name="shipDate" class="form-control" />
+        </div>
+        <div class="form-group size_175">
+          <label>Ship Via</label>
+          <input type="text" name="duedate" class="form-control" />
+        </div>
+        <div class="form-group size_175">
+          <label>Tracking No.</label>
+          <input type="text" name="country" class="form-control" />
+        </div>
+        <div class="form-group size_175">
+          <label>Field 1</label>
+          <input type="text" name="field_1" class="form-control" />
+        </div>
+        <div class="form-group size_175">
+          <label>Field 2</label>
+          <input type="text" name="field_2" class="form-control" />
+        </div>
+        <div class="form-group size_175">
+          <label>Field 3</label>
+          <input type="text" name="field_3" class="form-control" />
+        </div>
+      </div>
+    </div>
+    <!-- end other details collapse pane -->
+
+  </section>
+
+  <section class="clearfix pdT2 mrB2">
+   <!--  <table class="table">
+      <thead class="t-h-bg1">
+        <tr>
+          <th *ngFor="let item of tableCond.content;" [hidden]="!item.display">{{item.field}}</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let entry of invFormData.entries; let i = index">
+        <tr *ngFor="let transaction of entry.transactions; let i = index">
+          <td>{{ i+1 }}</td>
+          <td>{{ transaction.accountName }}<br>{{ transaction.description }}</td>
+        </tr>
+      </tbody>
+    </table> -->
+  </section>
+
+  <section class="row">
+    <section id="actionPane" class="text-center">
+      <div class="col-xs-12">
+        <button type="button" class="btn btn-default pull-left mrR1">Close</button>
+        <button type="button" class="btn btn-default pull-left">Clear</button>
+        <button type="button" class="btn btn-default">Print or Preview</button>
+
+        <div class="pull-right pr">
+          Subtotal 
+          <div class="btn-group" dropdown [dropup]="true">
+            <button type="submit" class="btn btn-default">Generate Invoice</button>
+            <button type="button" dropdownToggle class="btn btn-default dropdown-toggle dropdown-toggle-split">
+              <span class="caret"></span>
+              <span class="sr-only">Split button!</span>
+            </button>
+            <ul *dropdownMenu class="dropdown-menu" role="menu">
+              <li role="menuitem"><a class="dropdown-item" href="#">Generate &amp; Share</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</form>
