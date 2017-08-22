@@ -12,7 +12,7 @@ import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { ISection } from '../../../../models/api-models/Invoice';
 import {InvoiceUiDataService} from "../../../../services/invoice.ui.data.service";
-import {IsDivVisible} from "../filters-container/content-filters/content.filters.component";
+import {IsDivVisible, IsFieldVisible} from "../filters-container/content-filters/content.filters.component";
 
 @Component({
   selector: 'invoice-template',
@@ -98,6 +98,44 @@ export class OutTemplateComponent implements OnInit {
     header: true,
     grid: false,
     footer: false,
+  }
+  public fieldDisplayState: IsFieldVisible = {
+    enableCompanyName: true,
+    enableCompanyAddress: true,
+    enableInvoiceDate: true,
+    enableInvoiceNo: true,
+    enableDueDate: true,
+    enableBillingAddress: true,
+    enableShipDate: true,
+    enableShipVia: true,
+    enableTrackingNo: true,
+    enableDocTitle: true,
+    enableBillingState: true,
+    enableBillingGstin: true,
+    enableShippingAddress: true,
+    enableShippingSatte: true,
+    enableShippingGstin: true,
+    enableCustom1:  true,
+    enableCustom2:  true,
+    enableCustom3: true,
+    enableSno: true,
+    enableDate: true,
+    enableItem: true,
+    enableHsn: true,
+    enableQty: true,
+    enableRate: true,
+    enableDis: true,
+    enableTaxableValue: true,
+    enableTax: true,
+    enableTotal: true,
+    enableTaxableAmount: true,
+    enableTotalTax: true,
+    enableOtherDeductions: true,
+    enableInvoiceTotal: true,
+    enableMessage1: true,
+    enableMessage2: true,
+    enableThanks: true,
+
   }
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -205,6 +243,10 @@ export class OutTemplateComponent implements OnInit {
   //       this.itemCodeWidth = 30 + val['itemCode'];
   //     }
   //   });
+
+    this._invoiceUiDataService.setFieldDisplay.subscribe((val) => {
+      this.fieldDisplayState = val;
+    });
 
     this._invoiceUiDataService.logoPath.subscribe((val) => {
       this.logoSrc = val;
