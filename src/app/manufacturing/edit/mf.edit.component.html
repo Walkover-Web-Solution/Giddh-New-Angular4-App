@@ -15,8 +15,8 @@
           <div class="form-group col-xs-2">
             <div class="row">
               <label class="small">Product Name</label>
-              <select2 [disabled]="isUpdateCase" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" [data]="stockListDropDown$ | async" [options]="options"
-                (valueChanged)="getStocksWithRate($event)">
+              <select2 [disabled]="isUpdateCase" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" [data]="stockListDropDown$ | async"
+                [options]="options" (valueChanged)="getStocksWithRate($event)">
               </select2>
             </div>
           </div>
@@ -26,7 +26,7 @@
       </div>-->
           <div class="form-group col-xs-2">
             <label class="small">Quantity</label>
-            <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
+            <input type="text" class="form-control" (ngModelChange)="onQuantityChange($event)" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
             <small class="pull-right">Multiple of {{manufacturingDetails.multipleOf | json}}</small>
           </div>
           <!--<div class="form-group col-xs-2">
@@ -36,18 +36,19 @@
           <div class="form-group col-xs-2" (clickOutside)="showFromDatePicker=false;">
             <label>Apply Tax From</label>
             <div class="input-group">
-            <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
+              <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
                 class="form-control" required/>
-            <span class="input-group-btn">
+              <span class="input-group-btn">
                 <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                 <i class="glyphicon glyphicon-calendar"></i>
                 </button>
             </span>
             </div>
             <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-            <datepicker name="fromDate" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
+              <datepicker name="fromDate" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker"
+                [showWeeks]="true"></datepicker>
             </div>
-        </div>
+          </div>
         </form>
       </div>
     </div>
@@ -100,8 +101,8 @@
                 <!--<td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>-->
 
                 <td class="action">
-                  <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid"
-                    (click)="addConsumption(linkedStocks)" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
+                  <button [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid" (click)="addConsumption(linkedStocks)"
+                    class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button>
                 </td>
               </tr>
 
