@@ -21,6 +21,7 @@ export interface LedgerState {
   downloadInvoiceInProcess?: boolean;
   discountAccountsList?: IFlattenGroupsAccountsDetail;
   ledgerCreateSuccess?: boolean;
+  ledgerCreateInProcess?: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -81,17 +82,20 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
       return state;
     case LEDGER.CREATE_BLANK_LEDGER_REQUEST:
       return Object.assign({}, state, {
-        ledgerCreateSuccess: false
+        ledgerCreateSuccess: false,
+        ledgerCreateInProcess: true
       });
     case LEDGER.CREATE_BLANK_LEDGER_RESPONSE:
       let ledgerResponse: BaseResponse<LedgerResponse[], BlankLedgerVM> = action.payload;
       if (ledgerResponse.status === 'success') {
         return Object.assign({}, state, {
-          ledgerCreateSuccess: true
+          ledgerCreateSuccess: true,
+          ledgerCreateInProcess: false
         });
       }
       return Object.assign({}, state, {
-        ledgerCreateSuccess: false
+        ledgerCreateSuccess: false,
+        ledgerCreateInProcess: false
       });
     case LEDGER.RESET_LEDGER:
       return Object.assign({}, state, {

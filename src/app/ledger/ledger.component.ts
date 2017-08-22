@@ -17,6 +17,7 @@ import { saveAs } from 'file-saver';
 import { AccountService } from '../services/account.service';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { GroupService } from '../services/group.service';
+import { ToasterService } from '../services/toaster.service';
 
 @Component({
   selector: 'ledger',
@@ -95,7 +96,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router) {
+              private _router: Router, private _toaster: ToasterService) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -212,6 +213,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
     this.isLedgerCreateSuccess$.distinct().subscribe(s => {
       if (s) {
+        this._toaster.successToast('Entry created successfully', 'Success');
         this._router.navigate(['/pages/dummy'], {skipLocationChange: true}).then(() => {
           this._router.navigate(['/pages', 'ledger', this.lc.accountUnq]);
         });
