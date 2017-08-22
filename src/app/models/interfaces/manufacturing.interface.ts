@@ -73,7 +73,7 @@ export interface IManufacturingItemRequest {
 }
 
  export interface ILinkedStockForCreate extends IStockItem {
-  quantity: string;
+  quantity: number;
   rate?: number;
   amount?: number;
 }
