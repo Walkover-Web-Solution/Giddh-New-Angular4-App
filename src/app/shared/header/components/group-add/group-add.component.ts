@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { CompanyActions } from '../../../../services/actions/company.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { GroupCreateRequest, GroupResponse } from '../../../../models/api-models/Group';
@@ -24,8 +22,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
@@ -65,6 +62,8 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     let activeGrp = await this.activeGroup$.first().toPromise();
     let grpObject: GroupCreateRequest;
     grpObject = this.groupDetailForm.value as GroupCreateRequest;
+    this.groupDetailForm.get('uniqueName').setValue(grpObject.uniqueName.toLowerCase());
+    grpObject.uniqueName = grpObject.uniqueName.toLowerCase();
     grpObject.parentGroupUniqueName = activeGrp.uniqueName;
 
     this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
