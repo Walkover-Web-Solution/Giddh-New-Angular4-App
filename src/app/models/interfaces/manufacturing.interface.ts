@@ -76,6 +76,8 @@ export interface IManufacturingItemRequest {
   quantity: number;
   rate?: number;
   amount?: number;
+  stockUnitCode?: string;
+  manufacturingUnit?: string;
 }
 
 export interface Transaction extends IOnlyAmount {
