@@ -5,16 +5,11 @@ import {
 import * as _ from 'lodash';
 import { Font } from 'ngx-font-picker/dist';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-import {Store} from "@ngrx/store";
-import {AppState} from "../../../../../store/roots";
-import {InvoiceActions} from "../../../../../services/actions/invoice/invoice.actions";
-import {InvoiceTemplatesService} from "../../../../../services/invoice.templates.service";
-import {InvoiceUiDataService} from "../../../../../services/invoice.ui.data.service";
-import {Observable} from "rxjs/Observable";
-
-
-// import { Font } from 'ngx-font-picker';
-
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../../store/roots';
+import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
+import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
+import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 @Component({
   selector: 'design-filters',
   templateUrl: 'design.filters.component.html',
@@ -22,13 +17,6 @@ import {Observable} from "rxjs/Observable";
 })
 
 export class DesignFiltersContainerComponent implements OnInit {
-
-  // public font: Font = new Font({
-  //   family: 'Roboto',
-  //   size: '14px',
-  //   style: 'regular',
-  //   styles: ['regular']
-  // });
   public formData: FormData;
   public files: UploadFile[];
   public uploadInput: EventEmitter<UploadInput>;
@@ -59,14 +47,12 @@ export class DesignFiltersContainerComponent implements OnInit {
   public styleSelect: boolean = true;
   public presetFonts = this._presetFonts;
   constructor(private _invoiceUiDataService: InvoiceUiDataService, private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
-    console.log('design-filters-container constructor called');
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
   }
 
   public ngOnInit() {
-    console.log('design-filters-container initialised');
   }
 
   public selectTemplate() {
@@ -116,46 +102,16 @@ export class DesignFiltersContainerComponent implements OnInit {
     this.sizeSelect = !this.sizeSelect;
     this.styleSelect = !this.styleSelect;
   }
-  // constructor() {
-  //   this.files = []; // local uploading files array
-  //   this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
-  //   this.humanizeBytes = humanizeBytes;
-  // }
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
-
-      // this.previewImagem(output.nativeFile).then(response => {
-      //   this.imagePreview = response;
-      //   console.log(this.imagePreview);
-        // The image preview
-
-        this.files.push(output.file);
-        console.log(this.files);
-         this.previewFile(this.files);
-       // });
-      // when all files added in queue
-      // uncomment this if you want to auto upload files when added
-      // const event: UploadInput = {
-      //   type: 'uploadAll',
-      //   url: '/upload',
-      //   method: 'POST',
-      //   data: { foo: 'bar' },
-      //   concurrency: 0
-      // };
-      // this.uploadInput.emit(event);
+      this.files.push(output.file);
+      this.previewFile(this.files);
     } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
-      // this.previewImagem(output.nativeFile).then(response => {
-      //   this.imagePreview = response;
-      //   console.log(this.imagePreview);
-      //   // The image preview
         this.files.push(output.file);
       } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
-      // update current data in files array for uploading file
       const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
       this.files[index] = output.file;
-      console.log(this.files);
     } else if (output.type === 'removed') {
-      // remove file from array when removed
       this.files = this.files.filter((file: UploadFile) => file !== output.file);
     } else if (output.type === 'dragOver') {
       this.dragOver = true;
@@ -164,16 +120,6 @@ export class DesignFiltersContainerComponent implements OnInit {
     } else if (output.type === 'drop') {
       this.dragOver = false;
     }
-    // public previewImagem(file: any) {
-  //   const fileReader = new FileReader();
-  //   return new Promise(resolve => {
-  //     if (file) {
-  //     fileReader.readAsDataURL(file);
-  //     fileReader.onload = function(e: any) {
-  //       resolve(e.target.result);
-  //     };
-  //     }
-  //   });
   }
 
   public startUpload(): void {
@@ -182,7 +128,6 @@ export class DesignFiltersContainerComponent implements OnInit {
       url: 'http://ngx-uploader.com/upload',
       method: 'POST',
       data: { foo: 'bar' },
-      // concurrency: this.formData.concurrency
     };
 
     this.uploadInput.emit(event);
@@ -192,19 +137,11 @@ export class DesignFiltersContainerComponent implements OnInit {
     let preview = document.getElementById('logoImage');
     let file    = document.querySelector('input[type=file]').files[0];
     let reader  = new FileReader();
-    // let imgSrc$: Observable<any>;
 
     reader.onloadend = () => {
       preview.src = reader.result;
       this._invoiceUiDataService.setLogoPath(preview.src);
     };
-
-    // imgSrc$.subscribe((val) => {
-    //   if (val) {
-    //     this._invoiceUiDataService.setLogoPath(imgSrc);
-    //   }
-    // });
-
     if (file) {
       reader.readAsDataURL(file);
     } else {
@@ -242,6 +179,7 @@ export class DesignFiltersContainerComponent implements OnInit {
     this.store.dispatch(this.invoiceAction.setTemplateId(id));
   }
   public onFontSelect(fo: Font) {
+
     this.store.dispatch(this.invoiceAction.setFont(fo.family));
   }
   public changeColor(color) {

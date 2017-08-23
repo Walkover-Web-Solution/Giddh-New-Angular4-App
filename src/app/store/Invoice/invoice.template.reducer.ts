@@ -1,5 +1,5 @@
 import { Action, combineReducers } from '@ngrx/store';
-import { GetInvoiceTemplateDetailsResponse } from '../../models/api-models/Invoice';
+import {GetInvoiceTemplateDetailsResponse, ISection} from '../../models/api-models/Invoice';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
 import {Font} from "ngx-font-picker";
 import {
@@ -87,7 +87,7 @@ export interface InvoiceTemplateMetaState {
 }
 
 export interface InvoiceTableState {
-  [colName: string]: number;
+  theTestState : GetInvoiceTemplateDetailsResponse;
 }
 
 export interface InvoiceTempState {
@@ -97,17 +97,16 @@ export interface InvoiceTempState {
 }
 
 export const initialTableState: InvoiceTableState = {
-
+  theTestState : null
 };
 
 export function invoiceTableReducer(state = initialTableState, action: Action): InvoiceTableState {
   switch (action.type) {
 
     case INVOICE.CONTENT.SET_COLUMN_WIDTH:
-      return Object.assign({}, state, {
-        [action.payload.colName]: action.payload.width
-      });
-
+      let newState = _.cloneDeep(state);
+      newState.theTestState = action.payload
+      return Object.assign({}, state, newState);
     //   case INVOICE.CONTENT.SET_HEADING:
     //   return Object.assign({}, state, {
     //   heading: action.payload.data.heading
@@ -235,7 +234,11 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       let headerSection = action.payload[0].content;
       let tableSection = action.payload[1].content;
       let footerSection = action.payload[2].content;
+
       return Object.assign({}, state, {
+
+
+
         companyName: headerSection[0].label,
         GSTIN: headerSection[1].label,
         PAN: headerSection[2].label,
