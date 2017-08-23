@@ -344,7 +344,7 @@ export class GenBulkInvoiceFinalObj {
 export class GetInvoiceTemplateDetailsResponse {
   public sections: ISection[];
   public isDefault: boolean;
-  public sample: boolean;
+  public isSample: boolean;
   public uniqueName: string;
   public name: string;
 }

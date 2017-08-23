@@ -7,9 +7,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
 import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
 import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-import {Observable} from "rxjs/Observable";
-import {InvoiceUiDataService} from "../../../../../services/invoice.ui.data.service";
-import {InvoiceTemplatesService} from "../../../../../services/invoice.templates.service";
+import { Observable } from 'rxjs/Observable';
+import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
+import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 @Component({
   selector: 'content-selector',
   templateUrl: 'content.filters.component.html',
@@ -18,7 +18,6 @@ import {InvoiceTemplatesService} from "../../../../../services/invoice.templates
 
 export class ContentFilterComponent {
   @Input() public content: boolean;
-  // @Input() public contentData: Content;
   public GSTIN: string;
   public PAN: string;
   public companyName: string;
@@ -96,7 +95,7 @@ export class ContentFilterComponent {
   enableMessage2: true,
   enableThanks: true,
   };
-  // public data: Content = null;
+
 
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService, private invoiceTemplatesService: InvoiceTemplatesService) {
     this.files = []; // local uploading files array
@@ -104,110 +103,60 @@ export class ContentFilterComponent {
     this.humanizeBytes = humanizeBytes;
     this.div$ = this.invoiceTemplatesService.getDivStatus();
     this.div$.subscribe(val => {
-      console.log(val);
     });
     this._invoiceUiDataService.setDivVisible.subscribe((val) => {
-      console.log(val);
       if (val) {
         this.header = val.header;
         this.grid = val.grid;
         this.footer = val.footer;
       }
     });
-    // console.log('design-filters-container constructor called');
   }
 
   public showTemplate(id) {
     this.store.dispatch(this.invoiceAction.setTemplateId(id));
   }
 
-// -------------------GSTIN--------------------
   public onGSTINChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateGSTIN(data));
-    console.log(data);
   }
 
-  // public onCheckGSTIN(check) {
-  //   if (check === 'false') {
-  //     this.enableGSTIN = false;
-  //   }
-  // }
-
-  // ----------PAN-----------------
   public onPANChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updatePAN(data));
-    console.log(data);
   }
 
-
-  // -----------InvoiceDate------------
 
   public onInvoiceDateChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateInvoiceDate(data));
 
   }
 
   public onDueDateChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateDueDate(data));
 
   }
 
-  //
-  // public onCheckInvoiceDate(check) {
-  //   if (check === 'false') {
-  //     this.enableInvoiceDate = false;
-  //   }
-  // }
-
-  // ---------------InvoiceNumber----------
   public onInvoiceNoChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateInvoiceNo(data));
-    console.log(data);
   }
 
-//   public onCheckInvoiceNumber(check) {
-//     if (check === 'false') {
-//       this.enableInvoiceNumber = false;
-//     }
-//   }
-//
-//   // -------------------ShipDate---------------
   public onShipDateChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateShippingDate(data));
   }
-//
-//   public onCheckShipDAte(check) {
-//     if (check === 'false') {
-//       this.enableShipDate = false;
-//     }
-//   }
-//   // -------------------ShipVia-------------------
+
   public onShipViaChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateShippingVia(data));
-    console.log(data);
   }
   public onTrackingNoChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateTrackingNo(data));
-    console.log(data);
   }
 
-//   // ------------------InvoiceTitleName-------------
   public onInvoiceChange(data) {
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.ti = {
       data: data,
       setTaxInvoiceActive: false
     };
     this.store.dispatch(this.invoiceAction.updateFormNameInvoice(this.ti));
-    console.log(data);
   }
 
   public onTaxInvoiceChange(data) {
@@ -215,34 +164,27 @@ export class ContentFilterComponent {
       data: data,
       setTaxInvoiceActive: true
     };
-    // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(this.ti));
-    console.log(data);
   }
-// // ------------------------BillingDetails-------------------
 
   public onShippingAddressChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateShippingAddress(data));
-    console.log(data);
   }
 
   public onShippingGstinChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateShippingGSTIN(data));
-    console.log(data);
   }
 
   public onBillingAddressChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateBillingAddress(data));
-    console.log(data);
   }
 
   public onBillingGstinChange(data) {
     // this.store.dispatch(this.invoiceAction.setTemplateId(id));
     this.store.dispatch(this.invoiceAction.updateBillingGSTIN(data));
-    console.log(data);
   }
   public onMessage1Change(data) {
     this.store.dispatch(this.invoiceAction.updateMessage1(data));
@@ -294,23 +236,7 @@ export class ContentFilterComponent {
     this.store.dispatch(this.invoiceAction.updateTotalLabel(data));
   }
 
-//
-//   public onCheckShippingAddress(check) {
-//     if (check === 'false') {
-//       this.enableShippingAddress = false;
-//     }
-//   }
-//
-//   public onCheckShippingAddressState(check) {
-//     if (check === 'false') {
-//       this.enableShippingAddressState = true;
-//     }
-//   }
-//
-//   // ----------------------InvoiceGrid-----------------------
-  public onChangeWidth(value, colName) {
-    this.store.dispatch(this.invoiceAction.setColumnWidth(value, colName));
-  }
+  // logic for image uploader
   public onUploadOutput(output: UploadOutput): void {
 
     if (output.type === 'allAddedToQueue') {
@@ -341,7 +267,6 @@ export class ContentFilterComponent {
       url: 'http://ngx-uploader.com/upload',
       method: 'POST',
       data: { foo: 'bar' },
-      // concurrency: this.formData.concurrency
     };
 
     this.uploadInput.emit(event);
@@ -351,7 +276,6 @@ export class ContentFilterComponent {
     let preview = document.querySelector('img');
     let file    = document.querySelector('input[type=file]').files[0];
     let reader  = new FileReader();
-    let imgSrc$: Observable<any>;
 
     reader.onloadend = () => {
       preview.src = reader.result;
@@ -363,7 +287,7 @@ export class ContentFilterComponent {
       preview.src = ' ';
     }
   }
-
+  // checking visibility of a field
   public onCheckField(field, value) {
       if (field === 'companyName') {
         this.field.enableCompanyName = value;
@@ -432,9 +356,6 @@ export class ContentFilterComponent {
       }
       this._invoiceUiDataService.setFieldDisplayState(this.field);
   }
-
-//
-//
 }
 
 export interface TaxInvoiceLabel {
