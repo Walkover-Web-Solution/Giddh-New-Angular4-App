@@ -1,28 +1,25 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
-import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
+import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
-  selector: 'pl-grid',  // <home></home>
-  templateUrl: './pl-grid.component.html'
+  selector: 'bs-grid',  // <home></home>
+  templateUrl: './bs-grid.component.html'
 })
-export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
+export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
   public showClearSearch: boolean;
   @Input() public search: string = '';
-  @Input() public plData: ProfitLossData;
+  @Input() public bsData: BalanceSheetData;
 
   @Input()
   public set expandAll(value: boolean) {
-    if (this.plData) {
-      debugger;
-      this.toggleVisibility(this.plData.expArr, value);
-      this.toggleVisibility(this.plData.incArr, value);
-      this.plData = _.cloneDeep(this.plData);
-      // this.plData.expArr = _.cloneDeep(this.plData.expArr);
-      // this.plData.incArr = _.cloneDeep(this.plData.incArr);
+    if (this.bsData) {
+      if (this.bsData.assets) { this.toggleVisibility(this.bsData.assets, value); }
+      if (this.bsData.liabilities) { this.toggleVisibility(this.bsData.liabilities, value); }
+      this.bsData = _.cloneDeep(this.bsData);
     }
   }
 
@@ -31,7 +28,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['expandAll']) {
-      // debugger;--
+      // debugger;
     }
   }
   public ngOnInit() {
@@ -46,9 +43,9 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
-        acc.isVisible = isVisible;
+        return acc.isVisible = isVisible;
       });
-      this.toggleVisibility(grp.childGroups, isVisible);
+      return this.toggleVisibility(grp.childGroups, isVisible);
     });
   }
 }

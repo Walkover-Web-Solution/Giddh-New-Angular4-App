@@ -32,7 +32,7 @@
                 <h3 class="fs20">I Income</h3>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let incGrp  of  plData?.incArr | tbsearch: search" style="padding-left:30px" pl-grid-row [groupDetail]="incGrp" [search]="search">
+            <section class="row row-1" *ngFor="let incGrp  of  plData.incArr | tbsearch: search" style="padding-left:30px" pl-grid-row [groupDetail]="incGrp" [search]="search">
               <section class="row row-2 childgroups" *ngFor="let subGrp  of  incGrp.childGroups" style="padding-left:30px" pl-grid-row  [search]="search"
                 [groupDetail]="subGrp" [ngClass]="{'isHidden': !subGrp.isVisible }">
 
@@ -58,7 +58,7 @@
                 <h3 class="fs20">II Expenses</h3>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let expGrp of plData?.expArr | tbsearch: search" style="padding-left:30px" pl-grid-row [groupDetail]="expGrp"  [search]="search">
+            <section class="row row-1" *ngFor="let expGrp of plData.expArr | tbsearch: search" style="padding-left:30px" pl-grid-row [groupDetail]="expGrp"  [search]="search">
               <section class="row row-2 childgroups" *ngFor="let subGrp of  expGrp.childGroups" style="padding-left:30px" pl-grid-row [groupDetail]="subGrp"  [search]="search"
                 [ngClass]="{'isHidden': !subGrp.isVisible }">
                 <section class="row row-2 accounts" *ngFor="let acc of subGrp.accounts" style="padding-left:30px" pl-grid-row [groupDetail]="acc" [search]="search"
