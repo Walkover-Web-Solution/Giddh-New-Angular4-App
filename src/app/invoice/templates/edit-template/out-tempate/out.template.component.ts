@@ -10,7 +10,10 @@ import { NgStyle } from '@angular/common';
 import { InvoiceActions } from '../../../../services/actions/invoice/invoice.actions';
 import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
-import { ISection } from '../../../../models/api-models/Invoice';
+import {
+  GetInvoiceTemplateDetailsResponse, GetTemplateResponse, ISection,
+  Template
+} from '../../../../models/api-models/Invoice';
 import {InvoiceUiDataService} from "../../../../services/invoice.ui.data.service";
 import {IsDivVisible, IsFieldVisible} from "../filters-container/content-filters/content.filters.component";
 
@@ -94,7 +97,7 @@ export class OutTemplateComponent implements OnInit {
   public activeHeader: boolean = true;
   public activeGrid: boolean = false;
   public activeFooter: boolean = false;
-  public divVis: IsDivVisible={
+  public divVis: IsDivVisible= {
     header: true,
     grid: false,
     footer: false,
@@ -113,7 +116,7 @@ export class OutTemplateComponent implements OnInit {
     enableBillingState: true,
     enableBillingGstin: true,
     enableShippingAddress: true,
-    enableShippingSatte: true,
+    enableShippingState: true,
     enableShippingGstin: true,
     enableCustom1:  true,
     enableCustom2:  true,
@@ -294,5 +297,12 @@ export class OutTemplateComponent implements OnInit {
       footer: true
     }
     this._invoiceUiDataService.setDivStatus(this.divVis);
+  }
+  public createTemplate() {
+    let temp = new GetInvoiceTemplateDetailsResponse();
+    this.store.subscribe(val => {
+      console.log("STORE", val);
+
+    });
   }
 }

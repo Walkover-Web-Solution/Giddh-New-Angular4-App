@@ -14,13 +14,11 @@ export class InvoiceUiDataService {
   public setFieldDisplay: Subject<IsFieldVisible> = new Subject();
 
   public setLogoPath(val) {
-    alert('Worked');
     console.log('The value is :', val);
     this.logoPath.next(val);
   }
 
   public setImageSignatgurePath(val) {
-    alert('Worked');
     console.log('The value is :', val);
     this.imageSignaturePath.next(val);
   }
@@ -28,6 +26,8 @@ export class InvoiceUiDataService {
   public setDivStatus(div: IsDivVisible) {
     this.setDivVisible.next(div);
   }
+
   public setFieldDisplayState(field: IsFieldVisible) {
-  this.setFieldDisplay.next(field);
+    this.setFieldDisplay.next(field);
   }
+}
