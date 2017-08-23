@@ -13,6 +13,8 @@ import * as moment from 'moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { ModalDirective } from 'ngx-bootstrap';
+import { CustomStockUnitAction } from '../../services/actions/inventory/customStockUnit.actions';
+import { InventoryService } from '../../services/inventory.service';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -45,7 +47,8 @@ export class MfEditComponent implements OnInit {
     private manufacturingActions: ManufacturingActions,
     private inventoryAction: InventoryAction,
     private _groupService: GroupService,
-    private _location: Location) {
+    private _location: Location,
+    private _inventoryService: InventoryService) {
     this.manufacturingDetails = new ManufacturingItemRequest();
 
     // Update/Delete condition
@@ -112,10 +115,15 @@ export class MfEditComponent implements OnInit {
     }).takeUntil(this.destroyed$);
     // get stock with rate details
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.stockWithRate && o.stockWithRate.manufacturingDetails && !this.isUpdateCase) {
-        // In create only
-        this.manufacturingDetails.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
-        // this.manufacturingDetails.stockUniqueName = '';
+      if (!this.isUpdateCase) {
+        let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+        if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
+          // In create only
+          manufacturingDetailsObj.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
+        } else {
+          manufacturingDetailsObj.linkedStocks = [];
+        }
+        this.manufacturingDetails = manufacturingDetailsObj;
       }
     });
   }
@@ -136,7 +144,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public addConsumption(data) {
-    let val = {
+    let val: any = {
       amount: data.amount,
       rate: data.rate,
       stockName: data.stockUniqueName,
@@ -144,6 +152,12 @@ export class MfEditComponent implements OnInit {
       quantity: data.quantity
       // stockUnitCode: 'm' // TODO: Remove hardcoded value
     };
+
+    if (this.isUpdateCase) {
+      val.stockUnitCode = data.manufacturingUnit;
+    } else {
+      val.stockUnitCode = data.stockUnitCode;
+    }
 
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
@@ -283,4 +297,20 @@ export class MfEditComponent implements OnInit {
     }
   }
 
+  public getStockUnit(selectedItem) {
+    // console.log(selectedItem);
+    let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+    this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
+      console.log('The response from the API is :', res);
+      if (res.status === 'success') {
+        let unitCode = res.body.stockUnit.code;
+        if (this.isUpdateCase) {
+          this.linkedStocks.manufacturingUnit = unitCode;
+        } else {
+          this.linkedStocks.stockUnitCode = unitCode;
+        }
+        console.log('unitCode is :', unitCode);
+      }
+    });
+  }
 }
