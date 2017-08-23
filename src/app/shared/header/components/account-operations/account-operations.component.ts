@@ -75,6 +75,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public taxGroupForm: FormGroup;
   public showGroupForm: boolean = false;
   public activeGroup$: Observable<GroupResponse>;
+  public activeGroupUniqueName$: Observable<string>;
   public activeGroupInProgress$: Observable<boolean>;
   public isTaxableGroup$: Observable<boolean>;
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
@@ -144,6 +145,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.moveAccountSuccess$ = this.store.select(state => state.groupwithaccounts.moveAccountSuccess).takeUntil(this.destroyed$);
 
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.activeGroupSelected$ = this.store.select(state => {
       if (state.groupwithaccounts.activeAccount) {
@@ -236,7 +238,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.isRootLevelGroupFunc(a.uniqueName);
         let showAddForm: boolean = null;
         this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
         if (!showAddForm) {
@@ -246,6 +247,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
           this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         }
+      }
+    });
+
+    this.activeGroupUniqueName$.subscribe((a) => {
+      if (a) {
+        this.isRootLevelGroupFunc(a);
       }
     });
 
