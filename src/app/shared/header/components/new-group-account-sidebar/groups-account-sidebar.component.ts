@@ -24,6 +24,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   @Input() public groups: GroupsWithAccountsResponse[];
   public _groups: GroupsWithAccountsResponse[];
   @Input() public activeGroup: Observable<GroupResponse>;
+  public activeGroupUniqueName: Observable<string>;
   @Input() public padLeft: number = 30;
   public activeAccount: Observable<AccountResponse>;
 
@@ -33,7 +34,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private accountsAction: AccountsAction) {
     this.mc = new GroupAccountSidebarVM();
-    this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup);
+    this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeGroupUniqueName = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
   }
 
@@ -128,7 +130,10 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
   }
 
-  public ShowAddNewForm() {
+  public ShowAddNewForm(col: ColumnGroupsAccountVM) {
+    if (col.uniqueName) {
+      this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
+    }
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
   }

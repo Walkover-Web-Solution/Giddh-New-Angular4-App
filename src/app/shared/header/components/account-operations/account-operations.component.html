@@ -55,9 +55,9 @@
   <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
 
     <!--account add component-->
-    <account-add *ngIf="!(activeAccount$ | async)" [column]="columnsRef.columns"></account-add>
+    <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="''" [column]="columnsRef.columns"></account-add>
     <!--account update component-->
-    <account-update *ngIf="(activeAccount$ | async)" [column]="columnsRef.columns"></account-update>
+    <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="''" [column]="columnsRef.columns"></account-update>
 
     <!--move account-->
     <div class="pdR2 pdL2 detailed clearfix pdT1 pdB1" *ngIf="(activeAccount$ | async)">
