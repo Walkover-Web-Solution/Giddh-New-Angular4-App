@@ -108,8 +108,12 @@ export class AccountAddComponent implements OnInit, OnDestroy {
         this.addAccountForm.reset({ openingBalanceType: 'CREDIT', openingBalance: 0 });
       }
     });
-    this.isGstEnabledAcc = this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors';
-    this.isHsnSacEnabledAcc = this.activeGroupUniqueName === 'revenuefromoperations' || this.activeGroupUniqueName === 'operatingcost' || this.activeGroupUniqueName === 'indirectexpenses';
+    // assign gst and hsn,sac flags
+    if (this.column[2]) {
+      let col = this.column[2].uniqueName;
+      this.isGstEnabledAcc = col === 'sundrycreditors' || col === 'sundrydebtors';
+      this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'operatingcost' || col === 'indirectexpenses';
+    }
   }
 
   public stateSelected(v) {
