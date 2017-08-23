@@ -32,7 +32,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private accountsAction: AccountsAction) {
+    private accountsAction: AccountsAction) {
     this.mc = new GroupAccountSidebarVM();
     this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
@@ -131,9 +131,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   }
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
-    if (col.uniqueName) {
-      this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
-    }
+    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
   }
