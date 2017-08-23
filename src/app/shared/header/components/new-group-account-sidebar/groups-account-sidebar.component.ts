@@ -26,6 +26,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   @Input() public activeGroup: Observable<GroupResponse>;
   public activeGroupUniqueName: Observable<string>;
   @Input() public padLeft: number = 30;
+  @Input() public isSearchingGroups: boolean = false;
   public activeAccount: Observable<AccountResponse>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);

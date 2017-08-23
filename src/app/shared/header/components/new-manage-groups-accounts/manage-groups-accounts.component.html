@@ -16,8 +16,8 @@
                 <i class="glyphicon glyphicon-search"></i>
               </div>
 
-              <input type="text" name="grpSrch" id="grpSrch" class="form-control" placeholder="Search accounts" trial-accordion="search"
-              > <i class="fa fa-times reset"></i>
+              <input type="text" name="grpSrch" #grpSrch id="grpSrch" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search"
+              > <i class="fa fa-times reset" (click)="resetGroupSearchString()"></i>
 
 
             </div>
@@ -36,10 +36,14 @@
           <span class="spinner small"></span> Loading…
           </div>
         </div>
+        <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+          <div class="vcenter"><h1>No Result Found</h1></div>
+        </div>
         <div>
           <!-- ngIf: showListGroupsNow -->
           <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
-            <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [groups]="(groupList$ | async)"></groups-account-sidebar>
+            <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
+              [groups]="(groupList$ | async)" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
           </div>
           <!-- end ngIf: showListGroupsNow -->
         </div>

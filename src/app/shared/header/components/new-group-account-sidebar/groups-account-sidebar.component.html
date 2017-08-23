@@ -2,7 +2,7 @@
   <div class="grp_wrapper" fxFlex [ngStyle]="{'width':mc.columns.length * 255 + 'px'}">
 
     <!-- level 1 -->
-    <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index" ng-click="mc.getColsCount()">
+    <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index">
       <ul class="grp_list" checkscrollY>
         <li class="new_btn"><a href="javascript:void(0)" class="btn-add" ng-if="(col.showCreateNew || mc.searchLoad && mc.addToIndex != 0) || mc.keyWord.length < 3"
             (click)="ShowAddNewForm(col)">Create new</a></li>
