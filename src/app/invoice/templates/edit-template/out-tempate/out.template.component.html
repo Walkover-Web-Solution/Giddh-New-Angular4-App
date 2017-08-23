@@ -766,10 +766,12 @@
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': color}" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyAddress]">
                 <!-- not confirmed  -->
                 {{this.address$ | async }}
+              <button  (click)="createTemplate()" id="defaultOpen">Design</button>
             </footer>
         </div>
 
     </div>
+
 </body>
 
 </html>
