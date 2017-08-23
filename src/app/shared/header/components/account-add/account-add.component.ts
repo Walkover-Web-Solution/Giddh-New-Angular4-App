@@ -22,6 +22,7 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 export class AccountAddComponent implements OnInit, OnDestroy {
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   @Input() public column: ColumnGroupsAccountVM[];
+  @Input() public activeGroupUniqueName: string;
   public addAccountForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
   public activeAccount$: Observable<AccountResponse>;
@@ -32,10 +33,12 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public showDefaultGstListLength: number = 2;
   public createAccountInProcess$: Observable<boolean>;
   public createAccountIsSuccess$: Observable<boolean>;
+  public isGstEnabledAcc: boolean = false;
+  public isHsnSacEnabledAcc: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private groupWithAccountsAction: GroupWithAccountsAction, private _companyService: CompanyService) {
+    private groupWithAccountsAction: GroupWithAccountsAction, private _companyService: CompanyService) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
@@ -46,7 +49,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     this._companyService.getAllStates().subscribe((data) => {
       let states: Select2OptionData[] = [];
       data.body.map(d => {
-        states.push({text: d.name, id: d.code});
+        states.push({ text: d.name, id: d.code });
       });
       this.statesSource$ = Observable.of(states);
     }, (err) => {
@@ -69,8 +72,8 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       state: [''],
       stateCode: [''],
       hsnOrSac: [''],
-      hsnNumber: [{value: '', disabled: false}, []],
-      sacNumber: [{value: '', disabled: false}, []],
+      hsnNumber: [{ value: '', disabled: false }, []],
+      sacNumber: [{ value: '', disabled: false }, []],
       gstDetails: this._fb.array([
         this.initialGstDetailsForm()
       ])
@@ -102,13 +105,15 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
       if (p) {
         // reset with default values
-        this.addAccountForm.reset({openingBalanceType: 'CREDIT', openingBalance: 0});
+        this.addAccountForm.reset({ openingBalanceType: 'CREDIT', openingBalance: 0 });
       }
     });
+    this.isGstEnabledAcc = this.activeGroupUniqueName === 'sundrycreditors' || this.activeGroupUniqueName === 'sundrydebtors';
+    this.isHsnSacEnabledAcc = this.activeGroupUniqueName === 'revenuefromoperations' || this.activeGroupUniqueName === 'operatingcost' || this.activeGroupUniqueName === 'indirectexpenses';
   }
 
   public stateSelected(v) {
-    this.addAccountForm.patchValue({stateCode: v.value});
+    this.addAccountForm.patchValue({ stateCode: v.value });
   }
 
   public generateUniqueName() {
@@ -120,15 +125,15 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       this.isAccountNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
-            this.addAccountForm.patchValue({uniqueName: val});
+            this.addAccountForm.patchValue({ uniqueName: val });
           } else {
             let num = 1;
-            this.addAccountForm.patchValue({uniqueName: val + num});
+            this.addAccountForm.patchValue({ uniqueName: val + num });
           }
         }
       });
     } else {
-      this.addAccountForm.patchValue({uniqueName: ''});
+      this.addAccountForm.patchValue({ uniqueName: '' });
     }
   }
 
