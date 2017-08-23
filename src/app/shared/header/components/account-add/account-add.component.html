@@ -190,11 +190,8 @@
       <div class="pd2 clearfix pdB1">
 
         <!--delete account  -->
-        <a class="btn isActive" *ngIf="(activeAccount$ | async) && !(activeAccount$ | async)?.isFixed"
-           (click)="showDeleteAccountModal()">Delete {{ (activeAccount$ | async)?.name }} Account
-        </a>
 
-        <button class="btn btn-success pull-right" *ngIf="!(activeAccount$ | async)" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Add
+        <button class="btn btn-success pull-right" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Add
         </button>
       </div>
 
@@ -204,14 +201,3 @@
   </div>
 </div>
 
-<!--delete Account modal  -->
-<div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
-                     (cancelCallBack)="hideDeleteAccountModal()"
-                     (successCallBack)="deleteAccount()">
-      </confirm-modal>
-    </div>
-  </div>
-</div>
