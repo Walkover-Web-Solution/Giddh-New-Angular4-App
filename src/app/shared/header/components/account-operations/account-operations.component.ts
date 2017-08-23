@@ -101,6 +101,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
+  public fetchingAccUniqueName$: Observable<boolean>;
+  public isAccountNameAvailable$: Observable<boolean>;
+  public createAccountInProcess$: Observable<boolean>;
+  public createAccountIsSuccess$: Observable<boolean>;
 
   public taxPopOverTemplate: string = `
   <div class="popover-content">
@@ -203,6 +207,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
       return arr;
     }).takeUntil(this.destroyed$);
+
+    // account-add component's property
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
