@@ -80,8 +80,8 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
-    request.fromDate = null;
-    request.toDate = null;
+    request.fromDate = this.selectedCompany.financialYears[request.fy].financialYearStarts;
+    request.toDate = this.selectedCompany.financialYears[request.fy].financialYearEnds;
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }
 
