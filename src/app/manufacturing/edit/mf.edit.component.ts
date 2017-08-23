@@ -84,15 +84,18 @@ export class MfEditComponent implements OnInit {
   public ngOnInit() {
     console.log('hello from MfEditComponent');
     if (this.isUpdateCase) {
-      this.store.dispatch(this.inventoryAction.GetStockUniqueName(this.manufacturingDetails.uniqueName, this.manufacturingDetails.stockUniqueName));
+      let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+      this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
     }
     // dispatch stocklist request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (!o.stocksList) {
         this.store.dispatch(this.inventoryAction.GetStock());
       }
-      if (this.isUpdateCase && o.activeStock) {
-        this.manufacturingDetails.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
+      if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
+        let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+        manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
+        this.manufacturingDetails = manufacturingDetailsObj;
       }
     });
     // get all stocks
@@ -109,7 +112,7 @@ export class MfEditComponent implements OnInit {
     }).takeUntil(this.destroyed$);
     // get stock with rate details
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
+      if (o.stockWithRate && o.stockWithRate.manufacturingDetails && !this.isUpdateCase) {
         // In create only
         this.manufacturingDetails.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
         // this.manufacturingDetails.stockUniqueName = '';
@@ -257,4 +260,27 @@ export class MfEditComponent implements OnInit {
     }
     return 0;
   }
+
+  public onQuantityChange(event) {
+    if (!isNaN(event)) {
+      let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+      if (manufacturingObj && manufacturingObj.linkedStocks) {
+        manufacturingObj.linkedStocks.forEach((stock) => {
+          if (stock.quantity === 0) {
+            stock.quantity = 1;
+          }
+          if (event) {
+            stock.quantity = stock.quantity * event;
+          } else {
+            stock.quantity = 1;
+          }
+          stock.amount = stock.quantity * stock.rate;
+        });
+        this.manufacturingDetails = manufacturingObj;
+      }
+    } else {
+      this.onQuantityChange(1);
+    }
+  }
+
 }
