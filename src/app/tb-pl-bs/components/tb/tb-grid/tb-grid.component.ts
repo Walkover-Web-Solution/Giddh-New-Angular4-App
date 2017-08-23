@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, NgZone } from '@angular/core';
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ChildGroup } from '../../../../models/api-models/Search';
@@ -6,8 +6,7 @@ import * as _ from 'lodash';
 
 @Component({
   selector: 'tb-grid',  // <home></home>
-  templateUrl: './tb-grid.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './tb-grid.component.html'
 })
 export class TbGridComponent implements OnInit, AfterViewInit {
 
@@ -23,12 +22,12 @@ export class TbGridComponent implements OnInit, AfterViewInit {
   public set expandAll(value: boolean) {
     // debugger;
     if (this.data$) {
-      let data = this.toggleVisibility(this.data$.groupDetails, value);
-      this.cd.detectChanges();
+      this.toggleVisibility(this.data$.groupDetails, value);
+      this.data$ = _.cloneDeep(this.data$);
     }
   }
 
-  constructor(private cd: ChangeDetectorRef) {
+  constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
   }
 
@@ -44,19 +43,9 @@ export class TbGridComponent implements OnInit, AfterViewInit {
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
-        return acc.isVisible = isVisible;
+        acc.isVisible = isVisible;
       });
-      return _.each(grp.childGroups, (chld) => {
-        if (chld.accounts.length > 0) {
-          _.each(chld.accounts, (acc) => {
-            return acc.isVisible = isVisible;
-          });
-        }
-        chld.isVisible = isVisible;
-        if (chld.childGroups.length > 0) {
-          return this.toggleVisibility(chld.childGroups, isVisible);
-        }
-      });
+      this.toggleVisibility(grp.childGroups, isVisible);
     });
   }
 }

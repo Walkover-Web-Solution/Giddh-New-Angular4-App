@@ -6,8 +6,7 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'bs-grid',  // <home></home>
-  templateUrl: './bs-grid.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './bs-grid.component.html'
 })
 export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
@@ -18,10 +17,9 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   public set expandAll(value: boolean) {
     if (this.bsData) {
-      debugger;
       if (this.bsData.assets) { this.toggleVisibility(this.bsData.assets, value); }
       if (this.bsData.liabilities) { this.toggleVisibility(this.bsData.liabilities, value); }
-      this.cd.detectChanges();
+      this.bsData = _.cloneDeep(this.bsData);
     }
   }
 

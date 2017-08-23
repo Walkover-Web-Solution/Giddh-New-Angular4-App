@@ -31,8 +31,8 @@ import { ChildGroup } from '../../models/api-models/Search';
     </section>
     <ng-content></ng-content>
 
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `
+  // changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TlPlGridRowComponent implements OnInit {
   @Input() public groupDetail: ChildGroup;
