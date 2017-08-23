@@ -38,6 +38,7 @@ export interface CurrentGroupAndAccountState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   isGroupWithAccountsLoading: boolean;
   activeGroup: GroupResponse;
+  activeGroupUniqueName: string;
   accountSearchString: string;
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
@@ -93,6 +94,7 @@ const initialState: CurrentGroupAndAccountState = {
   groupswithaccounts: null,
   isGroupWithAccountsLoading: false,
   activeGroup: null,
+  activeGroupUniqueName: null,
   accountSearchString: '',
   isRefreshingFlattenGroupsAccounts: false,
   activeGroupInProgress: false,
@@ -126,21 +128,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showEditAccount: false
       });
     case GroupWithAccountsAction.SET_ACTIVE_GROUP:
-      let activeGroupData: IGroupsWithAccounts;
       return Object.assign({}, state, {
-        activeGroup: activeGroupData,
-        activeGroupInProgress: false,
-        activeGroupTaxHierarchy: null,
-        activeGroupSharedWith: null,
-        showAddNew: false,
-        showAddNewAccount: false,
-        showAddNewGroup: false,
-        showEditGroup: true,
-        showEditAccount: false
+        activeGroupUniqueName: action.payload
       });
     case GroupWithAccountsAction.RESET_ACTIVE_GROUP:
       return Object.assign({}, state, {
         activeGroup: null,
+        activeGroupUniqueName: null,
         activeGroupTaxHierarchy: null,
         activeGroupSharedWith: null,
         showAddNew: false,
@@ -179,6 +173,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       if (grpData.status === 'success') {
         return Object.assign({}, state, {
           activeGroup: grpData.body,
+          activeGroupUniqueName: grpData.body.uniqueName,
           activeGroupInProgress: false,
           activeGroupTaxHierarchy: null,
           activeGroupSharedWith: null,
@@ -274,6 +269,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         groupswithaccounts: [],
         isGroupWithAccountsLoading: false,
         activeGroup: null,
+        activeGroupUniqueName: null,
         accountSearchString: '',
         isRefreshingFlattenGroupsAccounts: false,
         activeGroupInProgress: false,
@@ -410,6 +406,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return Object.assign({}, state, {
           activeGroup: newObj,
+          activeGroupUniqueName: newObj.uniqueName,
           activeGroupInProgress: false,
           groupswithaccounts: groupArray
         });
