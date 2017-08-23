@@ -5,17 +5,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesComponent } from './sales.component';
 import { SalesInvoiceComponent } from './create/sales.invoice.component';
+import { AsideMenuAccountComponent } from './aside-menu/aside.menu.account.component';
 
 @NgModule({
   declarations: [
     SalesComponent,
-    SalesInvoiceComponent
+    SalesInvoiceComponent,
+    AsideMenuAccountComponent
   ],
   imports: [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    SharedModule,
+    SharedModule.forRoot(),
     TooltipModule.forRoot(),
     TypeaheadModule.forRoot(),
     CollapseModule.forRoot()
