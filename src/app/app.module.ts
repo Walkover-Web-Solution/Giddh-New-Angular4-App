@@ -77,7 +77,6 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    SalesModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
     StoreModule.provideStore(rootReducer),
@@ -87,6 +86,7 @@ if (ENV === 'development') {
     ...CONDITIONAL_IMPORTS,
     Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
+    SalesModule,
   ],
   /**
    * Expose our Services and Providers into Angular's dependency injection.

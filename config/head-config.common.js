@@ -43,6 +43,7 @@ module.exports = {
     { rel: 'stylesheet', href: 'assets/js/plugins/select2/css/select2.min.css' },
     { rel: 'stylesheet', href: 'assets/js/plugins/tagmanager/tagmanager.css' },
     { rel: 'stylesheet', href: 'assets/css/mystyle.css' },
+    { rel: 'stylesheet', href: 'assets/css/aside.css' },
 
 
 
