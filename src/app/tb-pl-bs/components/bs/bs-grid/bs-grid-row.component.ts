@@ -29,8 +29,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
       </div>
     </section>
     <ng-content></ng-content>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `
 })
 export class BsGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
