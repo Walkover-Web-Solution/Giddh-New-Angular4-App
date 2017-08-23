@@ -16,7 +16,10 @@
         </li>
 
         <li *ngFor="let acc of col.accounts; let j=index">
-          <a href="javascript:void(0);" class="isAcc" id="acc_{{acc.name}}" (click)="onAccountClick(acc,i)" ng-class="{isActive:mc.breadCrumbList[mc.breadCrumbList.length-1].uniqueName == acc.uniqueName && mc.breadCrumbList[mc.breadCrumbList.length-1].type == 'account'}">
+          <a href="javascript:void(0);" class="isAcc"
+          [ngClass]="{
+            'isActive': ((activeAccount | async)?.uniqueName === acc?.uniqueName)}"
+           id="acc_{{acc.name}}" (click)="onAccountClick(acc,i)">
           {{ acc.name }}
       </a>
         </li>
