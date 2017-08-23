@@ -13,6 +13,8 @@ import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
+import { SalesActions } from '../../services/actions/sales/sales.action';
+import { AccountResponse } from '../../models/api-models/Account';
 
 @Component({
   styleUrls: ['./sales.invoice.component.scss'],
@@ -46,10 +48,12 @@ export class SalesInvoiceComponent implements OnInit {
   public accountAsideMenuState: string = 'out';
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private selectedAccountDetails$: Observable<AccountResponse>;
 
   constructor(
     private store: Store<AppState>,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private salesAction: SalesActions
   ) {}
 
   public ngOnInit() {
@@ -74,9 +78,30 @@ export class SalesInvoiceComponent implements OnInit {
         // accounts.unshift({ name: '+ Add Customer', uniqueName: 'addnewcustomer'});
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
-        console.log ('bank acount', this.bankAccounts$);
       }
     });
+
+    // get account details and set it to local var
+    this.selectedAccountDetails$ = this.store.select(state => state.sales.acDtl).takeUntil(this.destroyed$);
+    this.selectedAccountDetails$.subscribe(o => {
+      if (o) {
+        this.assignValuesInForm(o);
+      }
+    });
+  }
+
+  public assignValuesInForm(data: AccountResponse) {
+    console.log ('assignValuesInForm', data);
+    // toggle all collapse
+    this.isGenDtlCollapsed = false;
+    this.isMlngAddrCollapsed = false;
+    this.isOthrDtlCollapsed = false;
+
+    // auto fill all the details
+    this.invFormData.account.attentionTo = data.attentionTo;
+    this.invFormData.account.billingDetails.address = [data.address];
+    this.invFormData.account.shippingDetails.address = [data.address];
+    this.invFormData.country.countryName = data.country.countryName;
   }
 
   public onSubmitInvoiceForm(f: NgForm) {
@@ -90,6 +115,11 @@ export class SalesInvoiceComponent implements OnInit {
 
   public onSelectCustomer(e: TypeaheadMatch): void {
     console.log('Selected value: ', e.value, e.item);
+    this.getAccountDetails(e.item.uniqueName);
+  }
+
+  public getAccountDetails(accountUniqueName: string) {
+    this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
   }
 
   public toggleAccountAsidePane(event): void {

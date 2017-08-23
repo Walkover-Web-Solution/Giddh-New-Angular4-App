@@ -52,6 +52,8 @@ import { SettingsProfileActions } from './actions/settings/profile/settings.prof
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
+import { SalesActions } from './actions/sales/sales.action';
+import { SalesService } from './sales.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -81,6 +83,7 @@ import { ManufacturingActions } from './actions/manufacturing/manufacturing.acti
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
+    EffectsModule.run(SalesActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -96,6 +99,7 @@ export class ServiceModule {
         ToasterService,
         DashboardService,
         CompanyService,
+        SalesService,
         NeedsAuthentication,
         LocationService,
         UserAuthenticated,
