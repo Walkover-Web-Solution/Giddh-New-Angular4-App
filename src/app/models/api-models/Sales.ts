@@ -73,6 +73,11 @@ class ITotaltaxBreakdown {
   public errorMessage: string;
 }
 
+class CountryClass {
+  public countryName: string;
+  public countryCode: string;
+}
+
 export class InvoiceFormClass {
   public logo: string;
   public company: CompanyClass;
@@ -94,6 +99,7 @@ export class InvoiceFormClass {
   public totalTax?: any;
   public invoiceDetails: InvoiceDetailsClass;
   public other?: any;
+  public country: CountryClass;
   constructor() {
     this.invoiceDetails = new InvoiceDetailsClass();
     this.totaltaxBreakdown = [new ITotaltaxBreakdown()];
@@ -103,6 +109,7 @@ export class InvoiceFormClass {
     this.company = new CompanyClass();
     this.account = new AccountClass();
     this.signature = new SignatureClass();
+    this.country = new CountryClass();
   }
 }
 /**
