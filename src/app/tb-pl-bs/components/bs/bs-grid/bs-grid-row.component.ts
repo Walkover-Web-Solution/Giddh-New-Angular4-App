@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, S
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
-  selector: '[pl-grid-row]',  // <home></home>
+  selector: '[bs-grid-row]',  // <home></home>
   template: `
     <div class="row pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName">
       <div class="col-xs-3  group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search" ></div>
@@ -31,14 +31,14 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     <ng-content></ng-content>
   `
 })
-export class PlGridRowComponent implements OnInit, OnChanges {
+export class BsGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
   constructor() {
     //
   }
   public ngOnChanges(changes: SimpleChanges) {
-    // debugger;
+    debugger;
   }
   public ngOnInit() {
     //
