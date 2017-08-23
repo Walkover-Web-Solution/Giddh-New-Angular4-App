@@ -2,7 +2,6 @@
   // start header
   <div class="scrollAuto" id="headerDiv" PageHeight *ngIf="header" >
     <h2>Header</h2>
-    //(ngModelChange)="onCheckField('companyName')"
 
     <div class="clearfix">
       <div class="form-group"><input type="checkbox" [(ngModel)]="field.enableCompanyName" (ngModelChange)="onCheckField('companyName', field.enableCompanyName)" checked/> Company Name</div>
@@ -134,7 +133,7 @@
         <tr>
           <td><label><input type="checkbox" name="qt" [(ngModel)]="field.enableQty" (ngModelChange)="onCheckField('qty', field.enableQty)" checked/> Quantity</label></td>
           <td><input type="text" class="form-control" name="qt1" [(ngModel)]='qty' (ngModelChange)='onQtyLabelChange(qty)' /></td>
-          <td><input type="range" value="0" max="10" step="0.1" /></td>
+          <!--<td><input type="range" value="0" max="10" step="0.1" /></td>-->
         </tr>
         <tr>
           <td><label><input type="checkbox" name="rt" [(ngModel)]="field.enableRate" (ngModelChange)="onCheckField('rate', field.enableRate)" checked/> Rate/Item</label></td>
@@ -233,53 +232,9 @@
     </div>
 
   </div>
-  // end footer
 
 
 
-  <!--&lt;!&ndash;<nouislider [(ngModel)]="someRange" [min]="0" [max]="60"(ngModelChange)="onChangeWidth(someRange, 'col1')"> Hi Thr</nouislider>&ndash;&gt;-->
-    <!--&lt;!&ndash; <label><input type="checkbox"> Company Name</label><br/>-->
-  <!--<label><input type="checkbox"> Company Address</label><br/>-->
-
-
-  <!--<input type="checkbox" [(ngModel)]="enableGSTIN" (ngModelChange)="onCheckGSTIN(enableGSTIN)" /><br/><br/>-->
- <!--<input type="text" [(ngModel)]='GSTIN' (ngModelChange)='onGSTINChange(GSTIN)'/>-->
-
-  <!--<input type="checkbox" [(ngModel)]="enablePAN" (ngModelChange)="onCheckPAN(enablePAN)" /><br/><br/>-->
-  <!--<input type="text" [(ngModel)]='PAN' (ngModelChange)='onPANChange(PAN)'/> &ndash;&gt;-->
-
-    <!--&lt;!&ndash;<input type="checkbox" [(ngModel)]="enableInvoiceDate" (ngModelChange)="onCheckPAN(enablePAN)" /> <br/> <br/>&ndash;&gt;-->
-    <!--&lt;!&ndash;<input type="text" [(ngModel)]='contentData.' (ngModelChange)='onInvoiceDateChange(contentData.)' [disabled]="!enableInvoiceDate"/>&ndash;&gt;-->
-
-    <!--&lt;!&ndash;<input type="text" [(ngModel)]='contentData' (ngModelChange)='onEditChange(contentData.para)' />&ndash;&gt;-->
-    <!--&lt;!&ndash;<input type="text"  [ngModel]='text2'  ng-change='cbSelected2(text2)'/>&ndash;&gt;-->
-    <!--&lt;!&ndash;<h2> rewqwrw {{data}} fwrwewrwrw</h2>&ndash;&gt;-->
-
-
-    <!--<br/>-->
-    <!--<br/>-->
-
-
-    <!--<div>-->
-        <!--&lt;!&ndash; <input type="range" min="0" max="40" step="1.0" [(ngModel)]="itemSlider" (ngModelChange)="onChangeWidth(itemSlider, 'item')" />-->
-        <!--<input type="range" min="0" max="40" step="1.0" [(ngModel)]="itemCodeSlider" (ngModelChange)="onChangeWidth(itemCodeSlider, 'itemCode')" />-->
-        <!--<input type="range" min="0" max="40" step="0.1" [(ngModel)]="qtySlider" (ngModelChange)="onChangeWidth(qtySlider, 'Qty.')" />-->
-        <!--<input type="range" min="0" max="40" step="0.1" [(ngModel)]="rateSlider" (ngModelChange)="onChangeWidth(rateSlider, 'rate')" />-->
-        <!--<input type="range" min="0" max="20" step="0.1" [(ngModel)]="discountSlider" (ngModelChange)="onChangeWidth(discountSlider, 'discount')" />-->
-        <!--<input type="range" min="0" max="20" step="0.1" [(ngModel)]="taxSlider" (ngModelChange)="onChangeWidth(taxSlider, 'tax')" />-->
-        <!--<input type="range" min="0" max="20" step="0.1" [(ngModel)]="totalSlider" (ngModelChange)="onChangeWidth(totalSlider, 'total')" /> &ndash;&gt;-->
-
-
-
-        <!--<nouislider [(ngModel)]="someRange" [min]="0" [max]="60"(ngModelChange)="onChangeWidth(someRange, 'col1')"></nouislider>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<md-slider [(ngModel)]="myValue" min="0" max="50" (ngModelChange)="onChangeWidth(myValue, 'col2')"></md-slider>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<md-slider [(ngModel)]="myValue" min="0" max="50" (ngModelChange)="onChangeWidth(myValue, 'col3')"></md-slider>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<md-slider [(ngModel)]="myValue" min="0" max="50" (ngModelChange)="onChangeWidth(myValue, 'col4')"></md-slider>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<md-slider [(ngModel)]="myValue" min="0" max="50" (ngModelChange)="onChangeWidth(myValue, 'col5')"></md-slider>&ndash;&gt;&ndash;&gt;-->
-        <!--&lt;!&ndash;&lt;!&ndash;<md-slider [(ngModel)]="myValue" min="0" max="50" (ngModelChange)="onChangeWidth(myValue, 'col6')"></md-slider>&ndash;&gt;&ndash;&gt;-->
-       <!--<md-slider [(ngModel)]="myValue" min="0" max="50" (ngModelChange)="onChangeWidth(myValue, 'col7')"></md-slider>-->
-
-    <!--</div>-->
 
     </div>
 

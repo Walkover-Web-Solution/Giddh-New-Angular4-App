@@ -7,10 +7,8 @@ import * as _ from 'lodash';
 export class InvoiceTemplatesComponent implements OnInit {
 
   constructor() {
-    console.log('Hello');
   }
 
   public ngOnInit() {
-    console.log('from InvoiceTemplatesComponent');
   }
 }
