@@ -12,34 +12,52 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { SalesService } from '../../sales.service';
 import { SALES_ACTIONS } from './sales.const';
 import { Router } from '@angular/router';
+import { AccountResponse } from '../../../models/api-models/Account';
+import { AccountService } from '../../account.service';
 
 @Injectable()
 export class SalesActions {
 
-  // @Effect()
-  // private GetAllPages$: Observable<Action> = this.action$
-  //   .ofType(SALES_ACTIONS.GET)
-  //   .switchMap(action => this._permissionService.GetAllPageNames())
-  //   .map(response => {
-  //     return this.GetAllPagesResponse(response);
-  //   });
+  @Effect()
+  public GetAccountDetails$: Observable<Action> = this.action$
+    .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS)
+    .switchMap(action => this._accountService.GetAccountDetails(action.payload))
+    .map(response => {
+      return this.getAccountDetailsForSalesResponse(response);
+    });
+
+  @Effect()
+  public GetAccountDetailsResponse$: Observable<Action> = this.action$
+    .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE)
+    .map(action => {
+      let data: BaseResponse<AccountResponse, string> = action.payload;
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return {
+        type: ''
+      };
+    });
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private _router: Router,
     private store: Store<AppState>,
-    private _salesService: SalesService) {
+    private _salesService: SalesService,
+    private _accountService: AccountService
+  ) {
   }
 
-  public Get(): Action {
+  public getAccountDetailsForSales(value: string): Action {
     return {
-      type: SALES_ACTIONS.GET,
+      type: SALES_ACTIONS.GET_ACCOUNT_DETAILS,
+      payload: value
     };
   }
 
-  public GetResponse(value: any): Action {
+  public getAccountDetailsForSalesResponse(value: BaseResponse<AccountResponse, string>): Action {
     return {
-      type: SALES_ACTIONS.GET_RESPONSE,
+      type: SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value
     };
   }
