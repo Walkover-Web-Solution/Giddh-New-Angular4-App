@@ -29,7 +29,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'new-ledger-entry-panel',
-  templateUrl: 'newLedgerEntryPanel.component.html'
+  templateUrl: 'newLedgerEntryPanel.component.html',
+  styleUrls: ['./newLedgerEntryPanel.component.css']
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked {
