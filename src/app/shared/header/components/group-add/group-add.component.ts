@@ -14,7 +14,7 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
-  public activeGroup$: Observable<GroupResponse>;
+  public activeGroupUniqueName$: Observable<string>;
   public groupDetailForm: FormGroup;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
@@ -23,7 +23,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).takeUntil(this.destroyed$);
@@ -59,12 +59,14 @@ export class GroupAddComponent implements OnInit, OnDestroy {
   }
 
   public async addNewGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
+    let activeGrpUniqueName: string;
+    this.activeGroupUniqueName$.take(1).subscribe(a => activeGrpUniqueName = a);
+
     let grpObject: GroupCreateRequest;
     grpObject = this.groupDetailForm.value as GroupCreateRequest;
     this.groupDetailForm.get('uniqueName').setValue(grpObject.uniqueName.toLowerCase());
     grpObject.uniqueName = grpObject.uniqueName.toLowerCase();
-    grpObject.parentGroupUniqueName = activeGrp.uniqueName;
+    grpObject.parentGroupUniqueName = activeGrpUniqueName;
 
     this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
     this.groupDetailForm.reset();

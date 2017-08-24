@@ -72,6 +72,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
 
   public resetGroupSearchString() {
     this.groupSearchTerms.next('');
+    this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
     this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
   }
