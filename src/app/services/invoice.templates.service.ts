@@ -1,5 +1,5 @@
 
-import { Template } from '../models/api-models/invoice';
+import { Template } from '../models/api-models/Invoice';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { INVOICE_API } from './apiurls/invoice';

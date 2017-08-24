@@ -341,12 +341,12 @@ export class GenBulkInvoiceFinalObj {
 /*
 * Get invoice template details response model
 */
-export interface GetInvoiceTemplateDetailsResponse {
-  sections: ISection[];
-  isDefault: boolean;
-  sample: boolean;
-  uniqueName: string;
-  name: string;
+export class GetInvoiceTemplateDetailsResponse {
+  public sections: ISection[];
+  public isDefault: boolean;
+  public isSample: boolean;
+  public uniqueName: string;
+  public name: string;
 }
 
 export interface ISection {
