@@ -3485,7 +3485,7 @@ label {
     text-align: right;
     left: 0;
     right: 0;
-    z-index: 1;
+    z-index: 2;
 }
 
 #customInvoice .templateEditor .btn-group-lg>.btn {
@@ -3698,4 +3698,28 @@ label {
     bottom: 10px;
     top: inherit;
     right: -50px;
+}
+
+.scrollAuto {
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.scrollAuto::-webkit-scrollbar {
+    width: 8px;
+    position: relative;
+    border-radius: 8px;
+}
+
+.scrollAuto::-webkit-scrollbar-track {
+    background: #ddd;
+    /* margin-left: 255px; */
+    border-radius: 8px;
+}
+
+.scrollAuto::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    /* margin-left: 255px; */
+    border-radius: 8px;
 }
