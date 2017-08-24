@@ -3,7 +3,7 @@
     <!-- page Title -->
     <div class="col-xs-12 bdrB">
       <div class="row mrL3 mrR3 pd1 pdL0">
-        <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register {{isLoading}}</strong></h1>
+        <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
         <button class="btn btn-success pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
       </div>
     </div>
@@ -21,13 +21,37 @@
               <span class="select_drop"><i class="fa fa-caret-down"></i></span>
             </div>
           </div>
-          <div class="form-group col-xs-1 pdR0">
-            <label class="small">From Date</label>
-            <input type="text" class="form-control" name="from" [(ngModel)]="mfStockSearchRequest.from" />
+          <div class="form-group col-xs-1" (clickOutside)="showFromDatePicker=false;">
+            <label>From Date</label>
+            <div class="input-group">
+              <input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
+                class="form-control" required/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
+                <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+            </div>
+            <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+              <datepicker name="fromDate" [(ngModel)]="mfStockSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker"
+                [showWeeks]="true"></datepicker>
+            </div>
           </div>
-          <div class="form-group col-xs-1 pdR0">
-            <label class="small">To Date</label>
-            <input type="text" class="form-control" name="to" [(ngModel)]="mfStockSearchRequest.to" />
+          <div class="form-group col-xs-1" (clickOutside)="showToDatePicker=false;">
+            <label>To Date</label>
+            <div class="input-group">
+              <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;"
+                class="form-control" required/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
+                <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+            </div>
+            <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+              <datepicker name="fromDate" [(ngModel)]="mfStockSearchRequest.to" (selectionDone)="showToDatePicker=!showToDatePicker"
+                [showWeeks]="true"></datepicker>
+            </div>
           </div>
           <div class="form-group col-xs-1 pdR0 custom-select pos-rel">
             <label class="small">Search By</label>
