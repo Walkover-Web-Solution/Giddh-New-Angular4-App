@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
@@ -7,13 +7,15 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewAndGenerateInvoiceResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewAndGenerateInvoiceResponse, GetAllLedgersForInvoiceResponse } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
+import { ModalDirective } from 'ngx-bootstrap';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
@@ -29,8 +31,21 @@ const COMPARISION_FILTER = [
   templateUrl: './invoice.generate.component.html'
 })
 export class InvoiceGenerateComponent implements OnInit {
-
+  @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
+  @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
   public accounts$: Observable<Select2OptionData[]>;
+  public select2Options: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true
+  };
+  public counts: number[] = COUNTS;
+  public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
+  public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
+  public ledgersData: GetAllLedgersOfInvoicesResponse;
+  public selectedLedgerItems: string[] = [];
+  public allItemsSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private modalRef: BsModalRef;
   private config = {
@@ -39,18 +54,6 @@ export class InvoiceGenerateComponent implements OnInit {
     backdrop: true,
     ignoreBackdropClick: true
   };
-  private select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
-  private counts: number[] = COUNTS;
-  private ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-  private filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
-  private ledgersData: GetAllLedgersOfInvoicesResponse;
-  private selectedLedgerItems: string[] = [];
-  private allItemsSelected: boolean = false;
 
   constructor(
     private modalService: BsModalService,
@@ -80,57 +83,110 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o.generate && o.generate.ledgers) {
-        this.ledgersData = _.cloneDeep(o.generate.ledgers);
-        _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-          item.isSelected = false;
-          return o;
-        });
+    this.store.select(p => p.invoice.generate.ledgers)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((o: GetAllLedgersForInvoiceResponse) => {
+        if (o && o.results) {
+          this.ledgersData = _.cloneDeep(o);
+        }
       }
-      if (o.generate && o.generate.invoiceData) {
-        // open modal
-        // document.getElementById('createNew').click();
-        console.log('in loop');
-      }
-    });
-    this.store.select(p => p.invoice.generate.invoiceData).takeUntil(this.destroyed$).distinctUntilChanged((p, q) => {
-      if (p && q) {
-        return (p.templateUniqueName === q.templateUniqueName);
-      }
-      if ((p && !q) || (!p && q)) {
-        return false;
-      }
-      return true;
-    }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
-      if (o) {
-        this.getInvoiceTemplateDetails('gst_template_a');
-      }
-    });
+      );
+
+    this.store.select(p => p.invoice.generate.invoiceData)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged((p: PreviewAndGenerateInvoiceResponse, q: PreviewAndGenerateInvoiceResponse) => {
+        if (p && q) {
+          return (p.templateUniqueName === q.templateUniqueName);
+        }
+        if ((p && !q) || (!p && q)) {
+          return false;
+        }
+        return true;
+      }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
+        if (o) {
+          this.getInvoiceTemplateDetails(o.templateUniqueName);
+        }
+      });
     this.getLedgersOfInvoice();
 
+  }
+
+  public closeInvoiceModel() {
+    this.invoiceGenerateModel.hide();
+  }
+
+  public getLedgersByFilters(f: NgForm) {
+    if (f.valid) {
+      this.getLedgersOfInvoice();
+    }
+  }
+
+  public toggleAllItems(type: boolean) {
+    if (type) {
+      this.allItemsSelected = true;
+    } else {
+      this.allItemsSelected = false;
+    }
+    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      item.isSelected = this.allItemsSelected ? true : false;
+      return item;
+    });
+    this.insertItemsIntoArr();
+  }
+
+  public toggleItem(item: any, action: boolean) {
+    item.isSelected = action;
+    if (action) {
+      this.countAndToggleVar();
+    } else {
+      this.allItemsSelected = false;
+    }
+    this.insertItemsIntoArr();
+  }
+
+  public prevAndGenInv() {
+    let model = {
+      uniqueNames: _.uniq(this.selectedLedgerItems)
+    };
+    let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      return item.uniqueName === this.selectedLedgerItems[0];
+    });
+    this.store.dispatch(this.invoiceActions.ModifiedInvoiceStateData(model.uniqueNames));
+    this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
+    this.showInvoiceModal();
+  }
+
+  public generateBulkInvoice(action: boolean) {
+    if (this.selectedLedgerItems.length <= 0) {
+      return false;
+    }
+    let arr: GenBulkInvoiceGroupByObj[] = [];
+    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+      if (item.isSelected) {
+        arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
+      }
+    });
+    let res = _.groupBy(arr, 'accUniqueName');
+    let final = [];
+    _.forEach(res, (items: GenBulkInvoiceGroupByObj) => {
+      let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
+      obj.entries = [];
+      _.forEach(items, (o: GenBulkInvoiceGroupByObj) => {
+        obj.accountUniqueName = o.accUniqueName;
+        obj.entries.push(o.uniqueName);
+      });
+      final.push(obj);
+    });
+    console.log('before api', action, final);
   }
 
   private getInvoiceTemplateDetails(templateUniqueName: string) {
     this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
   }
 
-  private showInvoiceModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template, Object.assign({}, this.config, { class: 'gray modal-liquid' }));
-  }
-
-  private closeInvoiceModel(e) {
-    this.modalRef.hide();
-  }
-
-  private getLedgersByFilters(f: NgForm) {
-    if (f.valid) {
-      this.getLedgersOfInvoice();
-    }
-  }
-
-  private showNewInvoiceCreate() {
-    console.log('showNewInvoiceCreate open modal');
+  private showInvoiceModal() {
+    this.invoiceGenerateModel.show();
   }
 
   private getLedgersOfInvoice() {
@@ -175,16 +231,6 @@ export class InvoiceGenerateComponent implements OnInit {
     };
   }
 
-  private toggleItem(item: any, action: boolean) {
-    item.isSelected = action;
-    if (action) {
-      this.countAndToggleVar();
-    } else {
-      this.allItemsSelected = false;
-    }
-    this.insertItemsIntoArr();
-  }
-
   private countAndToggleVar() {
     let total: number = this.ledgersData.results.length;
     let count: number = 0;
@@ -196,19 +242,6 @@ export class InvoiceGenerateComponent implements OnInit {
     if (count === total) {
       this.allItemsSelected = true;
     }
-  }
-
-  private toggleAllItems(type: boolean) {
-    if (type) {
-      this.allItemsSelected = true;
-    } else {
-      this.allItemsSelected = false;
-    }
-    this.ledgersData.results = _.map(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      item.isSelected = this.allItemsSelected ? true : false;
-      return item;
-    });
-    this.insertItemsIntoArr();
   }
 
   private insertItemsIntoArr() {
@@ -225,40 +258,4 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
   }
-
-  private prevAndGenInv() {
-    let model = {
-      uniqueNames: _.uniq(this.selectedLedgerItems)
-    };
-    let res = _.find(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      return item.uniqueName === this.selectedLedgerItems[0];
-    });
-    console.log('before api', model, res.account.uniqueName);
-    this.store.dispatch(this.invoiceActions.PreviewInvoice(res.account.uniqueName, model));
-  }
-
-  private generateBulkInvoice(action: boolean) {
-    if (this.selectedLedgerItems.length <= 0) {
-      return false;
-    }
-    let arr: GenBulkInvoiceGroupByObj[] = [];
-    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
-      if (item.isSelected) {
-        arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
-      }
-    });
-    let res = _.groupBy(arr, 'accUniqueName');
-    let final = [];
-    _.forEach(res, (items: GenBulkInvoiceGroupByObj) => {
-      let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
-      obj.entries = [];
-      _.forEach(items, (o: GenBulkInvoiceGroupByObj) => {
-        obj.accountUniqueName = o.accUniqueName;
-        obj.entries.push(o.uniqueName);
-      });
-      final.push(obj);
-    });
-    console.log('before api', action, final);
-  }
-
 }

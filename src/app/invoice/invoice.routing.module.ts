@@ -13,20 +13,22 @@ import { InvoicePreviewComponent } from './preview/invoice.preview.component';
 import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
-import { InvoiceSettingComponent } from "./settings/invoice.settings.component";
+import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 
 import { FontPickerModule } from 'ngx-font-picker';
 import { FontPickerConfigInterface } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
-import {InvoiceUiDataService} from "../services/invoice.ui.data.service";
-
+import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 
 const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
   // Change this to your Google API key
   apiKey: 'AIzaSyAPcvNvidnjQL-a_2xW2QYox3hT7DQBWyo'
 };
+import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
+import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
+import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -40,7 +42,7 @@ const INVOICE_ROUTES: Routes = [
         path: 'templates',  children: [
           { path: '', component: InvoiceTemplatesComponent  },
           { path: 'list', component: EditInvoiceComponent },
-          { path: 'list/:templateUniqueName',   },
+          { path: 'list/:templateUniqueName' },
           // { path: ':templateUniqueName',  component: InvoiceTemplatesComponent }
         ]
        },
@@ -59,7 +61,10 @@ const INVOICE_ROUTES: Routes = [
     InvoiceCreateComponent,
     DesignFiltersContainerComponent,
     EditFiltersContainersComponent,
-    InvoiceSettingComponent
+    InvoiceSettingComponent,
+    DeleteInvoiceConfirmationModelComponent,
+    PerformActionOnInvoiceModelComponent,
+    InvoiceGenerateModelComponent
   ],
   imports: [
     FormsModule,

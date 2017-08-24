@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PreviewAndGenerateInvoiceResponse } from '../../models/api-models/Invoice';
+import { PreviewAndGenerateInvoiceResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 
@@ -15,12 +15,12 @@ import { InvoiceService } from '../../services/invoice.service';
   templateUrl: './invoice.create.component.html'
 })
 
-export class InvoiceCreateComponent implements OnInit, AfterViewInit {
+export class InvoiceCreateComponent implements OnInit {
 
-  @Input() public actionType: string;
-  @Output() public closeInvoiceModel: EventEmitter<boolean> = new EventEmitter(true);
+  public invFormData: PreviewAndGenerateInvoiceResponse;
+  public tableCond: ISection;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private invoiceFormData: PreviewAndGenerateInvoiceResponse;
+  private invTempCond: GetInvoiceTemplateDetailsResponse;
 
   constructor(
     private store: Store<AppState>,
@@ -29,25 +29,34 @@ export class InvoiceCreateComponent implements OnInit, AfterViewInit {
   ) {}
 
   public ngOnInit() {
-    this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o.generate && o.generate.invoiceData) {
-        this.invoiceFormData = _.cloneDeep(o.generate.invoiceData);
-      }else {
-        this.invoiceFormData = new PreviewAndGenerateInvoiceResponse();
+    this.store.select(p => p.invoice.generate.invoiceData)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((o: PreviewAndGenerateInvoiceResponse) => {
+        if (o) {
+          this.invFormData = _.cloneDeep(o);
+        }else {
+          this.invFormData = new PreviewAndGenerateInvoiceResponse();
+        }
       }
-    });
+    );
+
+    this.store.select(p => p.invoice.generate.invoiceTemplateConditions)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((o) => {
+        if (o) {
+          this.invTempCond =  _.cloneDeep(o);
+          // find table condition in object and assign it to local var
+          let obj =  _.cloneDeep(o);
+          this.tableCond = _.find(obj.sections, ['sectionName', 'table']);
+        }
+      }
+    );
   }
 
-  public ngAfterViewInit() {
-    // this.getInvoiceTemplateDetails('gst_template_a');
-  }
-
-  private onSubmitInvoiceForm(f: NgForm) {
+  public onSubmitInvoiceForm(f: NgForm) {
     console.log (f, 'onSubmitInvoiceForm');
-    console.log (this.invoiceFormData, 'actual class object');
-  }
-
-  private onCancelModal(e) {
-    this.closeInvoiceModel.emit(Object.assign({}, e, {message: 'hey from InvoiceCreateComponent'}));
+    console.log (this.invFormData, 'actual class object');
   }
 }

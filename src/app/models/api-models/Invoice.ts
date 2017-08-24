@@ -19,6 +19,7 @@ export interface IInvoiceResult {
   grandTotal: number;
   account: INameUniqueName;
   balanceDue: number;
+  isSelected?: boolean;
 }
 
 export interface IGetAllInvoicesResponse extends IPagination {
@@ -29,7 +30,8 @@ export interface IGetAllInvoicesResponse extends IPagination {
 export class GetAllInvoicesPaginatedResponse {
   public count: number;
   public page: number;
-  public results: ILedgersInvoiceResult[];
+  // public results: ILedgersInvoiceResult[];
+  public results: IInvoiceResult[];
   public size: number;
   public totalItems: number;
   public totalPages: number;
@@ -60,6 +62,7 @@ export interface ILedgersInvoiceResult {
   entryDate: string;
   uniqueName: string;
   isSelected?: boolean;
+  invoiceNumber?: string;
 }
 
 export interface GetAllLedgersForInvoiceResponse extends IPagination {
@@ -347,6 +350,24 @@ export class GetInvoiceTemplateDetailsResponse {
   public isSample: boolean;
   public uniqueName: string;
   public name: string;
+}
+
+// check if use other wise remove
+export interface GetInvoiceTemplateDetailsResponse {
+  sample?: any;
+  color: string;
+  sections: ISection[];
+  isDefault: boolean;
+  fontSize: string;
+  font: string;
+  topMargin: number;
+  leftMargin: number;
+  rightMargin: number;
+  bottomMargin: number;
+  logoPosition: string;
+  logoSize: string;
+  uniqueName: string;
+  name: string;
 }
 
 export interface ISection {
