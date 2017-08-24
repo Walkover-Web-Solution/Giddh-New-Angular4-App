@@ -46,21 +46,26 @@ class ICommonItemOfTransaction {
   public accountName: string;
 }
 
-class ITransaction extends ICommonItemOfTransaction {
+export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public discount: any[];
+  public hsnNumber: number;
+  public sacNumber: number;
   public description: string;
+  public quantity: number;
+  public stockUnit: string;
+  public rate: number;
 }
 
 class IRoundOff {
-  public transaction: ITransaction;
+  public transaction: SalesTransactionItemClass;
   public uniqueName: string;
   public isTransaction: boolean;
   public balanceType: string;
 }
 
-class IEntry {
+export class SalesEntryClass {
   public uniqueName: string;
-  public transactions: ITransaction[];
+  public transactions: SalesTransactionItemClass[];
 }
 
 class ITotaltaxBreakdown {
@@ -89,7 +94,7 @@ export class InvoiceFormClass {
   public balanceStatus: string;
   public balanceStatusSealPath: string;
   public commonDiscounts: any[];
-  public entries: IEntry[];
+  public entries: SalesEntryClass[];
   public totalTaxableValue: number;
   public grandTotal: number;
   public totalInWords?: any;
@@ -103,7 +108,7 @@ export class InvoiceFormClass {
   constructor() {
     this.invoiceDetails = new InvoiceDetailsClass();
     this.totaltaxBreakdown = [new ITotaltaxBreakdown()];
-    this.entries = [new IEntry ()];
+    this.entries = [];
     this.commonDiscounts = [];
     this.roundOff = new IRoundOff();
     this.company = new CompanyClass();

@@ -170,20 +170,45 @@
 
   </section>
 
-  <section class="clearfix pdT2 mrB2">
-   <!--  <table class="table">
-      <thead class="t-h-bg1">
+  <section class="clearfix pdT2 pdB2 mrB2 whiteBg">
+   <table class="table">
+      <thead>
         <tr>
-          <th *ngFor="let item of tableCond.content;" [hidden]="!item.display">{{item.field}}</th>
+          <th *ngFor="let item of theadArr;">{{item}}</th>
         </tr>
       </thead>
-      <tbody *ngFor="let entry of invFormData.entries; let i = index">
+      <tbody *ngFor="let entry of invFormData.entries;">
         <tr *ngFor="let transaction of entry.transactions; let i = index">
           <td>{{ i+1 }}</td>
-          <td>{{ transaction.accountName }}<br>{{ transaction.description }}</td>
+          <td><input type="text" name="tr.date" class="form-control" [(ngModel)]="transaction.date" /></td>
+          <td>
+            <input type="text" name="tr.accountName" class="form-control" [(ngModel)]="transaction.accountName" /><br>
+            <input type="text" name="tr.description" class="form-control" [(ngModel)]="transaction.description" />
+          </td>
+          <td>
+            <input type="text" name="tr.hsnNumber" class="form-control" [(ngModel)]="transaction.hsnNumber" />
+            <input type="text" name="tr.sacNumber" class="form-control" [(ngModel)]="transaction.sacNumber" />
+          </td>
+          <td>
+            <input type="text" name="tr.quantity" class="form-control" [(ngModel)]="transaction.quantity" />
+          </td>
+          <td>
+            <select class="form-control" name="tr.stockUnit" [(ngModel)]="transaction.stockUnit">
+              <option [ngValue]="select">Select</option>
+            </select>
+          </td>
+          <td>
+            <input type="text" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
+          </td>
+          <td>
+            <input type="text" name="tr.discount" class="form-control" [(ngModel)]="transaction.discount" />
+          </td>
+          <td></td>
+          <td></td>
+          <td></td>
         </tr>
       </tbody>
-    </table> -->
+    </table>
   </section>
 
   <section class="row">

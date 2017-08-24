@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass } from '../../models/api-models/Sales';
+import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +15,8 @@ import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interfac
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
+
+const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
 
 @Component({
   styleUrls: ['./sales.invoice.component.scss'],
@@ -46,6 +48,7 @@ export class SalesInvoiceComponent implements OnInit {
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
   public accountAsideMenuState: string = 'out';
+  public theadArr: string[] = THEAD_ARR;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponse>;
@@ -54,11 +57,14 @@ export class SalesInvoiceComponent implements OnInit {
     private store: Store<AppState>,
     private accountService: AccountService,
     private salesAction: SalesActions
-  ) {}
+  ) {
+    this.invFormData = new InvoiceFormClass();
+    setTimeout(() => {
+      this.addBlankRowInTransaction();
+    }, 500);
+  }
 
   public ngOnInit() {
-
-    this.invFormData = new InvoiceFormClass();
 
     // get accounts and select only accounts which belong in sundrydebtors category
     this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -125,6 +131,28 @@ export class SalesInvoiceComponent implements OnInit {
   public toggleAccountAsidePane(event): void {
     event.preventDefault();
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+  }
+
+  public addBlankRowInTransaction() {
+    let transItem: SalesTransactionItemClass = {
+      discount: null,
+      description: 'Fresh entry desc',
+      amount: 0,
+      accountUniqueName: null,
+      accountName: 'Fresh',
+      hsnNumber: null,
+      sacNumber: null,
+      quantity: null,
+      stockUnit: null,
+      rate: null,
+    };
+    let entryItem: SalesEntryClass = {
+      uniqueName: null,
+      transactions: [transItem]
+    };
+    console.log('before' , this.invFormData.entries);
+    this.invFormData.entries.push(entryItem);
+    console.log('after' , this.invFormData.entries);
   }
 
 }
