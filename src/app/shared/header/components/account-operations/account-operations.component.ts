@@ -13,7 +13,7 @@ import {
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from 'lodash';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
@@ -59,7 +59,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('accountSelect2') public accountSelect2: Select2Component;
   @ViewChild('accountForMoveSelect2') public accountForMoveSelect2: Select2Component;
-
+  @Input() public breadcrumbPath: string[] = [];
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
   public selectedaccountForMerge: any = [];
