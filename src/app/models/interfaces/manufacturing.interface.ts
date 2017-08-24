@@ -112,8 +112,8 @@ export interface IMfStockSearchRequest {
   searchOperation?: string;
   searchBy?: string;
   searchValue?: string;
-  from?: string;
-  to?: string;
+  from?: Date;
+  to?: Date;
   count?: number;
   page?: number;
 }
