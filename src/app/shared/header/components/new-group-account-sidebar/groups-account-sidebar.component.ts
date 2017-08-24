@@ -27,6 +27,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   public activeGroupUniqueName: Observable<string>;
   @Input() public padLeft: number = 30;
   @Input() public isSearchingGroups: boolean = false;
+  public breadcrumbPath: string[] = [];
+  @Output() public breadcrumbPathChanged: EventEmitter<string[]> = new EventEmitter();
   public activeAccount: Observable<AccountResponse>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -147,6 +149,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   }
 
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
+    this.breadcrumbPath = [];
+    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true);
+    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
     this.store.dispatch(this.accountsAction.resetActiveAccount());
@@ -156,6 +161,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   }
 
   public onAccountClick(item: any, currentIndex: number) {
+    this.breadcrumbPath = [];
+    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false);
+    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+    if (parentGrp) {
+      if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
+        this.mc.columns.splice(currentIndex + 1, 1);
+      }
+    }
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.accountsAction.getAccountDetails(item.uniqueName));
     this.mc.selectedType = 'acc';
@@ -196,6 +209,35 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     return orderedGroups;
   }
 
+  public getBreadCrumbPathFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts, parentPath: string[], isGroup: boolean) {
+    for (let el of groupList) {
+      parentPath.push(el.name);
+      if (!isGroup) {
+        if (el.accounts) {
+          for (let key of el.accounts) {
+            if (key.uniqueName === uniqueName) {
+              parentPath.push(key.name);
+              result = el;
+              return result;
+            }
+          }
+        }
+      } else {
+        if (el.uniqueName === uniqueName) {
+          result = el;
+          return result;
+        }
+      }
+      if (el.groups) {
+        result = this.getBreadCrumbPathFromGroup(el.groups, uniqueName, result, parentPath, isGroup);
+        if (result) {
+          return result;
+        }
+      }
+      parentPath.pop();
+    }
+    return result;
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
