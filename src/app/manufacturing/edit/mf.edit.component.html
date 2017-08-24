@@ -1,7 +1,7 @@
 <section id="manufacture" class="container-fluid">
-  <div>
+  <!--<div>
     {{ manufacturingDetails | json }}
-  </div>
+  </div>-->
   <div class="row">
     <!-- page Title -->
     <div class="col-xs-12 bdrB">
@@ -99,8 +99,9 @@
                 <td>
                   <input type="number" required class="form-control" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
                 </td>
-                <td *ngIf="!isUpdateCase">{{linkedStocks.stockUnitCode}}</td>
-                <td *ngIf="isUpdateCase">{{linkedStocks.manufacturingUnit}}</td>
+                <td>{{linkedStocks.manufacturingUnit}}</td>
+                <!--<td *ngIf="!isUpdateCase">{{linkedStocks.stockUnitCode }}</td>
+                <td *ngIf="isUpdateCase">{{linkedStocks.manufacturingUnit || linkedStocks.stockUnitCode}}</td>-->
           
                 <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
                 <td> {{ getCalculatredAmount(linkedStockQuantity, linkedStockRate) }} </td>
@@ -145,7 +146,7 @@
           <table class="width100">
             <thead class="tcaption">
               <tr>
-                <td colspan="5">Add Expense <i class="fa fa-plus cursor-pointer" (click)="toggleAddExpenses = !toggleAddExpenses" aria-hidden="true"></i>
+                <td tooltip="Add A/C where expense entries will be done." placement="top" colspan="5">Add Expense <i class="fa fa-plus cursor-pointer" (click)="toggleAddExpenses = !toggleAddExpenses" aria-hidden="true"></i>
                 </td>
               </tr>
             </thead>
@@ -153,7 +154,7 @@
               <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
                 <td colspan="1">
                   <select class="form-control">
-                    <option value="directexpense" (value)="expense.baseAccount.uniqueName">{{ expense.baseAccount.uniqueName }}</option>
+                    <option (value)="expense.baseAccount.uniqueName">{{ expense.baseAccount.uniqueName }}</option>
                 </select>
                   <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                   <label>to</label>
@@ -170,14 +171,14 @@
                 <td colspan="1">
                   <select class="form-control" required #baseAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.baseAccountUniqueName"
                     name="baseAccountUniqueName">
-                      <option value="select">select</option>
+                      <option value="">Expense A/C</option>
                       <option [ngValue]="account.id" *ngFor="let account of expenseGroupAccounts">{{ account.text }}</option>
                   </select>
                   <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                   <label>to</label>
                   <select class="form-control" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName"
                     name="transactionAccountUniqueName">
-                      <option value="select">select</option>
+                      <option value="">Liabilities/Assets A/C</option>
                       <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{ account.text }}</option>                    
                   </select>
                   <span class="select_drop"><i class="fa fa-caret-down"></i></span>
