@@ -85,9 +85,9 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
-    // this.mfStockSearchRequest.from = null;
-    // this.mfStockSearchRequest.from = moment();
-    // this.mfStockSearchRequest.to = null;
+    let d = new Date();
+    d.setDate(d.getDate() - 30 );
+    this.mfStockSearchRequest.from =  String(d);
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
@@ -97,8 +97,8 @@ export class MfReportComponent implements OnInit {
   }
 
   public getReports() {
-    // this.mfStockSearchRequest.from = moment(this.mfStockSearchRequest.from).format('DD-MM-YYYY');
-    // this.mfStockSearchRequest.to = moment(this.mfStockSearchRequest.to).format('DD-MM-YYYY');
+    this.mfStockSearchRequest.from = moment(this.mfStockSearchRequest.from).format('DD-MM-YYYY');
+    this.mfStockSearchRequest.to = moment(this.mfStockSearchRequest.to).format('DD-MM-YYYY');
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
     this.mfStockSearchRequest = new MfStockSearchRequestClass();
     this.initlizeSerachReqObj();
