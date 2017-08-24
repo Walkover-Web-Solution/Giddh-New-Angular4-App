@@ -15,6 +15,7 @@ import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.
 import { ModalDirective } from 'ngx-bootstrap';
 import { CustomStockUnitAction } from '../../services/actions/inventory/customStockUnit.actions';
 import { InventoryService } from '../../services/inventory.service';
+import { AccountService } from '../../services/account.service';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -36,6 +37,7 @@ export class MfEditComponent implements OnInit {
   public selectedProduct: string;
   public showFromDatePicker: boolean = false;
   public moment = moment;
+  public initialQuantityObj: any = [];
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -48,9 +50,10 @@ export class MfEditComponent implements OnInit {
     private inventoryAction: InventoryAction,
     private _groupService: GroupService,
     private _location: Location,
-    private _inventoryService: InventoryService) {
+    private _inventoryService: InventoryService,
+    private _accountService: AccountService) {
     this.manufacturingDetails = new ManufacturingItemRequest();
-
+    this.initalizeOtherExpenseObj();
     // Update/Delete condition
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (o.stockToUpdate) {
@@ -70,19 +73,29 @@ export class MfEditComponent implements OnInit {
     });
 
     // Get group with accounts
-    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
+    // this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
+    //   if (data.status === 'success') {
+    //     let groups: Select2OptionData[] = [];
+    //     data.body.map((d: any) => {
+    //       if (d.category === 'expenses') {
+    //         this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
+    //       }
+    //       if (d.category === 'liabilities') {
+    //         this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
+    //       }
+    //     });
+    //   }
+    // });
+
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let groups: Select2OptionData[] = [];
-        data.body.map((d: any) => {
-          if (d.category === 'expenses') {
-            this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
-          }
-          if (d.category === 'liabilities') {
-            this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
-          }
+        data.body.results.map(d => {
+          this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
+          this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
         });
       }
     });
+
   }
   public ngOnInit() {
     console.log('hello from MfEditComponent');
@@ -120,8 +133,10 @@ export class MfEditComponent implements OnInit {
         if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
           // In create only
           manufacturingDetailsObj.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
+          manufacturingDetailsObj.multipleOf = _.cloneDeep(o.stockWithRate.manufacturingDetails.manufacturingMultipleOf);
         } else {
           manufacturingDetailsObj.linkedStocks = [];
+          manufacturingDetailsObj.multipleOf = null;
         }
         this.manufacturingDetails = manufacturingDetailsObj;
       }
@@ -137,6 +152,11 @@ export class MfEditComponent implements OnInit {
       this.manufacturingDetails = manufacturingObj;
       this.store.dispatch(this.manufacturingActions.GetStockWithRate(selectedValue));
     }
+  }
+
+  public initalizeOtherExpenseObj() {
+    this.otherExpenses.baseAccountUniqueName = '';
+    this.otherExpenses.transactionAccountUniqueName = '';
   }
 
   public goBackToListPage() {
@@ -203,6 +223,7 @@ export class MfEditComponent implements OnInit {
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};
+    this.initalizeOtherExpenseObj();
   }
 
   public removeExpenseItem(indx) {
@@ -215,6 +236,12 @@ export class MfEditComponent implements OnInit {
     let dataToSave = _.cloneDeep(this.manufacturingDetails);
     dataToSave.stockUniqueName = this.selectedProduct;
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
+    dataToSave.linkedStocks.forEach((obj) => {
+      obj.manufacturingUnit = obj.stockUnitCode;
+      obj.manufacturingQuantity = obj.quantity;
+      // delete obj.stockUnitCode;
+      // delete obj.quantity;
+    });
     // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     // dataToSave.multipleOf = dataToSave.quantity;
     this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
@@ -276,25 +303,32 @@ export class MfEditComponent implements OnInit {
   }
 
   public onQuantityChange(event) {
-    if (!isNaN(event)) {
-      let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-      if (manufacturingObj && manufacturingObj.linkedStocks) {
+    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+    // || this.initialQuantityObj.length !== manufacturingObj.linkedStocks.length
+    if (!this.initialQuantityObj.length) {
+      this.initialQuantityObj.length = [];
+      manufacturingObj.linkedStocks.forEach((o) => {
+        this.initialQuantityObj.push(o);
+      });
+    }
+
+    if (event && !isNaN(event) && event > 0) {
+      event = event;
+    } else {
+      event = 1;
+    }
+
+    if (manufacturingObj && manufacturingObj.linkedStocks) {
         manufacturingObj.linkedStocks.forEach((stock) => {
-          if (stock.quantity === 0) {
-            stock.quantity = 1;
+
+          let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
+          if (selectedStock) {
+            stock.quantity = selectedStock.quantity * event;
+            stock.amount = stock.quantity * stock.rate;
           }
-          if (event) {
-            stock.quantity = stock.quantity * event;
-          } else {
-            stock.quantity = 1;
-          }
-          stock.amount = stock.quantity * stock.rate;
         });
         this.manufacturingDetails = manufacturingObj;
       }
-    } else {
-      this.onQuantityChange(1);
-    }
   }
 
   public getStockUnit(selectedItem) {
