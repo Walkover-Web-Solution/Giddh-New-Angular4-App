@@ -55,9 +55,13 @@ export class MfReportComponent implements OnInit {
 
   public ngOnInit() {
     this.initlizeSerachReqObj();
+    // Refresh the stock list
+    this.store.dispatch(this.inventoryAction.GetStock());
+
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (o.stocksList) {
         if (o.stocksList.results) {
+          this.stockListDropDown = [];
           _.forEach(o.stocksList.results, (unit) => {
             this.stockListDropDown.push({ text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName });
           });
@@ -106,6 +110,8 @@ export class MfReportComponent implements OnInit {
 
   public pageChanged(event: any): void {
     let data = _.cloneDeep(this.mfStockSearchRequest);
+    data.from = moment(data.from).format('DD-MM-YYYY');
+    data.to = moment(data.to).format('DD-MM-YYYY');
     data.page = event.page;
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
