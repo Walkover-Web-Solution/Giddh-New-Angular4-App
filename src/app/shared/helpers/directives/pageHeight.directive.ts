@@ -8,7 +8,8 @@ import { WindowRef } from "../window.object";
 export class FullPageHeight implements OnInit {
 
   constructor(el: ElementRef, winRef: WindowRef) {
-    el.nativeElement.style.height = winRef.nativeWindow.innerHeight+"px";
+    el.nativeElement.style.maxHeight = winRef.nativeWindow.innerHeight+"px";
+    el.nativeElement.style.minHeight = winRef.nativeWindow.innerHeight+"px";
     console.log(el.nativeElement.style);
   }
 

@@ -3,6 +3,7 @@ import {
   SimpleChanges
 } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { CollapseModule } from 'ngx-bootstrap';
 
 import { AppState } from '../../../../../store/roots';
 import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
@@ -17,6 +18,8 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 })
 
 export class ContentFilterComponent {
+  public showCustomField:boolean = false;
+  public showTransportField:boolean = false;
   @Input() public content: boolean;
   public GSTIN: string;
   public PAN: string;
