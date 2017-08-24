@@ -18,7 +18,7 @@ import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.se
 
 export class DesignFiltersContainerComponent implements OnInit {
   public formData: FormData;
-  public files: UploadFile[];
+  public files: UploadFile[] = [];
   public uploadInput: EventEmitter<UploadInput>;
   public humanizeBytes: any;
   public dragOver: boolean;
@@ -134,8 +134,8 @@ export class DesignFiltersContainerComponent implements OnInit {
   }
 
    public previewFile(files: any) {
-    let preview = document.getElementById('logoImage');
-    let file    = document.querySelector('input[type=file]').files[0];
+    let preview: any = document.getElementById('logoImage');
+    let file: any   = document.querySelector('input[type=file]').files[0];
     let reader  = new FileReader();
 
     reader.onloadend = () => {
