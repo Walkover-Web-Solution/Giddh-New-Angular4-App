@@ -78,36 +78,67 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     let activeGroup = null;
     this.store.select(state => state.groupwithaccounts.activeGroup).take(1).subscribe(a => activeGroup = a);
 
-    for (let grp of grps) {
-      // if(activeGroup){
-      if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
-        let newCOL = new ColumnGroupsAccountVM(grp);
-        newCOL.groups = [];
-        if (grp.groups) {
-          for (let key of grp.groups) {
-            // key.isOpen = true;
-            newCOL.groups.push(key);
+    if (this.isSearchingGroups) {
+      if (grps.length > 0) {
+        let allGrps = [];
+        let allAccount = [];
+        for (let grp of grps) {
+          if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
+            grp.isOpen = true;
+            grp.isActive = true;
           }
+          if (grp.groups && grp.groups.length > 0) { allGrps.push(...grp.groups); }
         }
+        for (let grp of grps) {
+          if (grp.accounts && grp.accounts.length > 0) { allAccount.push(...grp.accounts); }
+        }
+        let newCOL = new ColumnGroupsAccountVM(null);
+        newCOL.groups = [];
+        newCOL.accounts = [];
+        for (let key of allGrps) {
+          newCOL.groups.push(key);
+        }
+        for (let key of allAccount) {
+          newCOL.accounts.push(key);
+        }
+        let col = this.polulateColms(allGrps);
         this.mc.columns.splice(1, 0, newCOL);
-        return newCOL;
-      } else {
-        if (grp.groups) {
-          let col = this.polulateColms(grp.groups);
-          if (col) {
-            let newCOL = new ColumnGroupsAccountVM(grp);
-            newCOL.groups = [];
-            newCOL.isOpen = false;
+        if (col) {
+          return newCOL;
+        }
+      }
+    } else {
+      for (let grp of grps) {
+        // if(activeGroup){
+        if (activeGroup && grp.uniqueName === activeGroup.uniqueName) {
+          let newCOL = new ColumnGroupsAccountVM(grp);
+          newCOL.groups = [];
+          if (grp.groups) {
             for (let key of grp.groups) {
-              if (key.uniqueName === col.uniqueName) {
-                key.isOpen = true;
-              } else {
-                key.isOpen = false;
-              }
+              // key.isOpen = true;
               newCOL.groups.push(key);
             }
-            this.mc.columns.splice(1, 0, newCOL);
-            return newCOL;
+          }
+          this.mc.columns.splice(1, 0, newCOL);
+          return newCOL;
+        } else {
+          if (grp.groups) {
+            let col = this.polulateColms(grp.groups);
+            if (col) {
+              let newCOL = new ColumnGroupsAccountVM(grp);
+              newCOL.groups = [];
+              newCOL.isOpen = false;
+              for (let key of grp.groups) {
+                if (key.uniqueName === col.uniqueName) {
+                  key.isOpen = true;
+                } else {
+                  key.isOpen = false;
+                }
+                newCOL.groups.push(key);
+              }
+              this.mc.columns.splice(1, 0, newCOL);
+              return newCOL;
+            }
           }
         }
       }
