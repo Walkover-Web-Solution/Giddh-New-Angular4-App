@@ -63,11 +63,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public trxRequest: TransactionsRequest;
   public needToReCalculate: boolean = false;
   public accountsOptions: Select2Options = {
-    multiple: true,
-    width: '200px',
+    multiple: false,
+    width: '100%',
     placeholder: 'Select Accounts',
     allowClear: true,
-    maximumSelectionLength: 1,
+    // maximumSelectionLength: 1,
     templateSelection: (data) => data.text,
     templateResult: (data: any) => {
       if (data.text === 'Searching…') {
@@ -75,13 +75,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
       if (!data.additional.stock) {
         return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:10px">${data.additional.uniqueName}</span>
+                        <span class="account-list-item" style="display: block;font-size:13px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:11px">${data.additional.uniqueName}</span>
                       </a>`);
       } else {
         return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:12px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:10px">${data.additional.uniqueName}</span>
+                        <span class="account-list-item" style="display: block;font-size:13px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:11px">${data.additional.uniqueName}</span>
                         <span class="account-list-item" style="display: block;font-size:10px">
                             Stock: ${data.additional.stock.name}
                         </span>
@@ -169,7 +169,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
-          if (fa.id === e.value[0]) {
+          // change (e.value[0]) to e.value to use in single select for ledger transaction entry
+          if (fa.id === e.value) {
             txn.selectedAccount = fa.additional;
             // reset taxes and discount on selected account change
             txn.tax = 0;
