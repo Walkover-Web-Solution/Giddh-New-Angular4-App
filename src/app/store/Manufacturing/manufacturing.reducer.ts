@@ -28,7 +28,9 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             let newState = _.cloneDeep(state);
             let res: BaseResponse<StocksResponse, IMfStockSearchRequest> = action.payload;
             if (res.status === 'success') {
-                newState.reportData = res.body;
+                let response = _.cloneDeep(res.body);
+                response.results = _.orderBy(res.body.results, [ (o) => o.voucherNumber ], 'desc');
+                newState.reportData = response;
                 return Object.assign({}, state, newState);
             }
             return state;
