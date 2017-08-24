@@ -7,10 +7,8 @@ import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
-import { InvoiceTemplatesComponent } from './templates/invoice.templates.component';
-
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
-import { InvoiceCreateComponent } from './create/invoice.create.component';
+// import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
@@ -23,7 +21,6 @@ import { EditFiltersContainersComponent } from './templates/edit-template/filter
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
 
 const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
-  // Change this to your Google API key
   apiKey: 'AIzaSyAPcvNvidnjQL-a_2xW2QYox3hT7DQBWyo'
 };
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
@@ -38,14 +35,7 @@ const INVOICE_ROUTES: Routes = [
     children: [
       { path: 'preview',  component: InvoicePreviewComponent  },
       { path: 'generate',  component: InvoiceGenerateComponent },
-      {
-        path: 'templates',  children: [
-          { path: '', component: InvoiceTemplatesComponent  },
-          { path: 'list', component: EditInvoiceComponent },
-          { path: 'list/:templateUniqueName' },
-          // { path: ':templateUniqueName',  component: InvoiceTemplatesComponent }
-        ]
-       },
+      { path: 'templates',  component: EditInvoiceComponent },
       { path: 'settings', component: InvoiceSettingComponent },
     ]
   }
@@ -56,9 +46,8 @@ const INVOICE_ROUTES: Routes = [
     InvoiceComponent,
     InvoicePreviewComponent,
     InvoiceGenerateComponent,
-    InvoiceTemplatesComponent,
     EditInvoiceComponent,
-    InvoiceCreateComponent,
+    // InvoiceCreateComponent,
     DesignFiltersContainerComponent,
     EditFiltersContainersComponent,
     InvoiceSettingComponent,

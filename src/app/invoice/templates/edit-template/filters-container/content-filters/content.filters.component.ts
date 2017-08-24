@@ -96,14 +96,12 @@ export class ContentFilterComponent {
   enableThanks: true,
   };
 
-
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService, private invoiceTemplatesService: InvoiceTemplatesService) {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
     this.div$ = this.invoiceTemplatesService.getDivStatus();
-    this.div$.subscribe(val => {
-    });
+    // this.div$.subscribe(val => {});
     this._invoiceUiDataService.setDivVisible.subscribe((val) => {
       if (val) {
         this.header = val.header;
@@ -124,7 +122,6 @@ export class ContentFilterComponent {
   public onPANChange(data) {
     this.store.dispatch(this.invoiceAction.updatePAN(data));
   }
-
 
   public onInvoiceDateChange(data) {
     this.store.dispatch(this.invoiceAction.updateInvoiceDate(data));
@@ -268,15 +265,14 @@ export class ContentFilterComponent {
       method: 'POST',
       data: { foo: 'bar' },
     };
-
     this.uploadInput.emit(event);
   }
 
   public previewFile(files: any) {
     let preview = document.querySelector('img');
-    let file    = document.querySelector('input[type=file]').files[0];
+    let a: any  = document.querySelector('input[type=file]');
+    let file    = a.files[0];
     let reader  = new FileReader();
-
     reader.onloadend = () => {
       preview.src = reader.result;
       this._invoiceUiDataService.setImageSignatgurePath(preview.src);
