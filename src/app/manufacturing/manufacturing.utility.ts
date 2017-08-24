@@ -4,8 +4,8 @@ export class MfStockSearchRequestClass {
   public searchOperation: string;
   public searchBy: string;
   public searchValue: string;
-  public from: string;
-  public to: string;
+  public from: Date = new Date();
+  public to: Date = new Date();
   public count: number;
   public page: number;
 }
