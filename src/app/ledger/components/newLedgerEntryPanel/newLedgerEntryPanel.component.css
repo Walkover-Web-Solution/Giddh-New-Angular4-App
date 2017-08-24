@@ -1,0 +1,11 @@
+.primary_color {
+    color: #d35f29 !important;
+}
+
+.ledger-panel {
+    overflow: visible;
+}
+
+.ledger-panel table tbody tr td a {
+    color: #333;
+}
