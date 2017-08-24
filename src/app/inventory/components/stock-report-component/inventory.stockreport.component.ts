@@ -22,6 +22,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   templateUrl: './inventory.stockreport.component.html'
 })
 export class InventoryStockReportComponent implements OnInit, OnDestroy {
+  public today: Date = new Date();
   public activeStock$: string;
   public stockReport$: Observable<StockReportResponse>;
   public sub: Subscription;
@@ -30,8 +31,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public stockReportRequest: StockReportRequest;
   public showFromDatePicker: boolean;
   public showToDatePicker: boolean;
-  public toDate: Date;
-  public fromDate: Date;
+  public toDate: string;
+  public fromDate: string;
   public moment = moment;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -97,8 +98,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
             }
           });
           this.stockReportRequest.count = 10;
-          this.fromDate = moment().add(-1, 'month').toDate();
-          this.toDate = moment().toDate();
+          this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
+          this.toDate = moment().format('DD-MM-YYYY');
           this.stockReportRequest.from = moment().add(-1, 'month').format('DD-MM-YYYY');
           this.stockReportRequest.to = moment().format('DD-MM-YYYY');
           this.stockReportRequest.page = 1;
@@ -111,8 +112,8 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   }
 
   public getStockReport(resetPage: boolean) {
-    this.stockReportRequest.from = moment(this.fromDate).format('DD-MM-YYYY');
-    this.stockReportRequest.to = moment(this.toDate).format('DD-MM-YYYY');
+    this.stockReportRequest.from = this.fromDate || null;
+    this.stockReportRequest.to = this.toDate || null;
     if (resetPage) {
       this.stockReportRequest.page = 1;
     }
