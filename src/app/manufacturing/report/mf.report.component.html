@@ -22,7 +22,7 @@
             </div>
           </div>
           <div class="form-group col-xs-1" (clickOutside)="showFromDatePicker=false;">
-            <label>From Date</label>
+            <small>From Date</small>
             <div class="input-group">
               <input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
                 class="form-control" required/>
@@ -38,7 +38,7 @@
             </div>
           </div>
           <div class="form-group col-xs-1" (clickOutside)="showToDatePicker=false;">
-            <label>To Date</label>
+            <small>To Date</small>
             <div class="input-group">
               <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;"
                 class="form-control" required/>
