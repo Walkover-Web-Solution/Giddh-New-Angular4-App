@@ -32,10 +32,6 @@
             <input type="text" class="form-control" (ngModelChange)="onQuantityChange($event)" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
             <small class="pull-right">Multiple of {{manufacturingDetails.multipleOf | json}}</small>
           </div>
-          <!--<div class="form-group col-xs-2">
-            <label class="small">Date</label>
-            <input type="Date" class="form-control" name="manufaturingDate" [(ngModel)]="manufacturingDetails.date" /> 
-          </div>-->
           <div class="form-group col-xs-2" (clickOutside)="showFromDatePicker=false;">
             <label>Date</label>
             <div class="input-group">
