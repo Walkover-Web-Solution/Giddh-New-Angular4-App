@@ -16,7 +16,7 @@ import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.se
   styleUrls: ['design.filters.component.css']
 })
 
-export class DesignFiltersContainerComponent implements OnInit {
+export class DesignFiltersContainerComponent {
   public formData: FormData;
   public files: UploadFile[] = [];
   public uploadInput: EventEmitter<UploadInput>;
@@ -50,9 +50,6 @@ export class DesignFiltersContainerComponent implements OnInit {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
-  }
-
-  public ngOnInit() {
   }
 
   public selectTemplate() {
@@ -135,7 +132,8 @@ export class DesignFiltersContainerComponent implements OnInit {
 
    public previewFile(files: any) {
     let preview: any = document.getElementById('logoImage');
-    let file: any   = document.querySelector('input[type=file]').files[0];
+    let a: any  = document.querySelector('input[type=file]');
+    let file = a.files[0];
     let reader  = new FileReader();
 
     reader.onloadend = () => {

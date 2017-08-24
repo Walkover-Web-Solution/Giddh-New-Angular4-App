@@ -1,11 +1,12 @@
 import { Action, combineReducers } from '@ngrx/store';
-import {GetInvoiceTemplateDetailsResponse, ISection} from '../../models/api-models/Invoice';
+import { GetInvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
-import {Font} from "ngx-font-picker";
+import { Font } from 'ngx-font-picker';
 import {
   IsDivVisible,
   IsFieldVisible
 } from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
+import * as _ from 'lodash';
 
 export interface InvoiceTemplateState {
   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
@@ -105,7 +106,7 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
 
     case INVOICE.CONTENT.SET_COLUMN_WIDTH:
       let newState = _.cloneDeep(state);
-      newState.theTestState = action.payload
+      newState.theTestState = action.payload;
       return Object.assign({}, state, newState);
     //   case INVOICE.CONTENT.SET_HEADING:
     //   return Object.assign({}, state, {
