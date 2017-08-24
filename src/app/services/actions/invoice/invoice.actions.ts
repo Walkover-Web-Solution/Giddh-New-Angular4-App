@@ -20,11 +20,11 @@ import {
   GetInvoiceTemplateDetailsResponse,
   Template
 } from '../../../models/api-models/Invoice';
-import {Font} from "ngx-font-picker";
+import { Font } from 'ngx-font-picker';
 import {
   IsDivVisible,
   TaxInvoiceLabel
-} from "../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component";
+} from '../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 // import {Section, Template} from "../../../models/api-models/invoice";
 
 @Injectable()
@@ -72,7 +72,50 @@ export class InvoiceActions {
       payload: res
     }));
 
-  // get template details of invoice
+  // Delete Invoice
+  @Effect()
+  public DeleteInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DELETE_INVOICE)
+    .switchMap(action => this._invoiceService.DeleteInvoice(action.payload))
+    .map(response => {
+      return this.DeleteInvoiceResponse(response);
+    });
+
+  @Effect()
+  public DeleteInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<string, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Invoice Deleted Successfully');
+      }
+      return { type: '' };
+    });
+
+  // Action On Invoice
+  @Effect()
+  public ActionOnInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE)
+    .switchMap(action => this._invoiceService.PerformActionOnInvoice(action.payload.invoiceUniqueName, action.payload.action))
+    .map(response => {
+      return this.ActionOnInvoiceResponse(response);
+    });
+
+  @Effect()
+  public ActionOnInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<string, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Invoice Successfully Updated.');
+      }
+      return { type: '' }; // Refresh the list
+    });
+
   @Effect()
   public GetTemplateDetailsOfInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS)
@@ -159,18 +202,39 @@ export class InvoiceActions {
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
-    if (response.status === 'error') {
-      if (showToast) {
-        this._toasty.errorToast(response.message);
-      }
-      return errorAction;
-    } else {
-      if (showToast && typeof response.body === 'string') {
-        this._toasty.successToast(response.body);
-      }
-    }
-    return successAction;
+  public DeleteInvoice(model: string): Action {
+    return {
+      type: INVOICE_ACTIONS.DELETE_INVOICE,
+      payload: model
+    };
+  }
+
+  public DeleteInvoiceResponse(model): Action {
+    return {
+      type: INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public ActionOnInvoice(invoiceUniqueName: string, action: object, ): Action {
+    return {
+      type: INVOICE_ACTIONS.ACTION_ON_INVOICE,
+      payload: {invoiceUniqueName, action}
+    };
+  }
+
+  public ActionOnInvoiceResponse(model: any): Action {
+    return {
+      type: INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public ModifiedInvoiceStateData(model: string[]): Action {
+    return {
+      type: INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA,
+      payload: model
+    };
   }
 
   public setTemplateData(section: any) {
@@ -207,11 +271,11 @@ export class InvoiceActions {
     };
   }
   public setFont(font: string): Action {
-  return {
-  type: INVOICE.TEMPLATE.SET_FONT,
-  payload: {font}
- };
-}
+    return {
+      type: INVOICE.TEMPLATE.SET_FONT,
+      payload: {font}
+    };
+  }
   public setColor(color: string): Action {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
@@ -532,5 +596,19 @@ export class InvoiceActions {
       type: INVOICE.TEMPLATE.SET_VISIBLE,
       payload: {div}
     };
+  }
+
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+    if (response.status === 'error') {
+      if (showToast) {
+        this._toasty.errorToast(response.message);
+      }
+      return errorAction;
+    } else {
+      if (showToast && typeof response.body === 'string') {
+        this._toasty.successToast(response.body);
+      }
+    }
+    return successAction;
   }
 }
