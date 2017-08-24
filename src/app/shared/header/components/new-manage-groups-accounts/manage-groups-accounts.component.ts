@@ -28,7 +28,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
   public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: true };
   @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
-
+  public breadcrumbPath: string[] = [];
   public myModelRect: any;
   public searchLoad: Observable<boolean>;
 
@@ -49,11 +49,11 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public ngOnInit() {
     // search groups
     this.groupSearchTerms
-    .debounceTime(700)
-    .distinctUntilChanged()
-    .subscribe(term => {
-      this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
-    });
+      .debounceTime(700)
+      .distinctUntilChanged()
+      .subscribe(term => {
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(term));
+      });
   }
 
   public ngAfterViewInit() {
@@ -68,6 +68,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   }
   public searchGroups(term: string): void {
     this.groupSearchTerms.next(term);
+    this.breadcrumbPath = [];
   }
 
   public resetGroupSearchString() {
@@ -90,5 +91,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   }
   public ShowRightForm(e) {
     //
+  }
+
+  public breadcrumbPathChanged(breadcrumbPath: string[]) {
+    this.breadcrumbPath = breadcrumbPath;
   }
 }

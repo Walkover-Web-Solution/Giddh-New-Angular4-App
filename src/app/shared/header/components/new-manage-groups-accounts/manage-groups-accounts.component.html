@@ -43,7 +43,7 @@
           <!-- ngIf: showListGroupsNow -->
           <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
             <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar
-              [groups]="(groupList$ | async)" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
+              [groups]="(groupList$ | async)" (breadcrumbPathChanged)="breadcrumbPathChanged($event)" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
           </div>
           <!-- end ngIf: showListGroupsNow -->
         </div>
@@ -51,7 +51,7 @@
       </div>
       <!-- middle body -->
       <div class="form_box height100">
-        <account-operations [columnsRef]="currentColumns" (ShowForm)="ShowRightForm($event)" #form></account-operations>
+        <account-operations [columnsRef]="currentColumns" [breadcrumbPath]="breadcrumbPath" (ShowForm)="ShowRightForm($event)" #form></account-operations>
       </div>
 
 
