@@ -8,7 +8,7 @@ const filter1 = [
 
 const filter2 = [
   { name: 'Quantity Inward', uniqueName: 'quantityInward' },
-  { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
+  // { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
   { name: 'Voucher Number', uniqueName: 'voucherNumber' }
 ];
 
@@ -39,6 +39,9 @@ export class MfReportComponent implements OnInit {
   public stockListDropDown: Select2OptionData[] = [];
   public reportData: StocksResponse = null;
   public isReportLoading: boolean = true;
+  public showFromDatePicker: boolean = false;
+  public showToDatePicker: boolean = false;
+  public moment = moment;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -51,10 +54,7 @@ export class MfReportComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.mfStockSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    this.mfStockSearchRequest.to = moment().format('DD-MM-YYYY');
-    this.mfStockSearchRequest.page = 1;
-    this.mfStockSearchRequest.count = 10;
+    this.initlizeSerachReqObj();
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (o.stocksList) {
         if (o.stocksList.results) {
@@ -81,13 +81,27 @@ export class MfReportComponent implements OnInit {
     });
   }
 
+  public initlizeSerachReqObj() {
+    this.mfStockSearchRequest.product = '';
+    this.mfStockSearchRequest.searchBy = '';
+    this.mfStockSearchRequest.searchOperation = '';
+    let d = new Date();
+    d.setDate(d.getDate() - 30 );
+    this.mfStockSearchRequest.from =  String(d);
+    this.mfStockSearchRequest.page = 1;
+    this.mfStockSearchRequest.count = 10;
+  }
   public goToCreateNewPage() {
     this.store.dispatch(this.manufacturingActions.RemoveMFItemUniqueNameFomStore());
     this.router.navigate(['/pages/manufacturing/edit']);
   }
 
   public getReports() {
+    this.mfStockSearchRequest.from = moment(this.mfStockSearchRequest.from).format('DD-MM-YYYY');
+    this.mfStockSearchRequest.to = moment(this.mfStockSearchRequest.to).format('DD-MM-YYYY');
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
+    this.mfStockSearchRequest = new MfStockSearchRequestClass();
+    this.initlizeSerachReqObj();
   }
 
   public pageChanged(event: any): void {
