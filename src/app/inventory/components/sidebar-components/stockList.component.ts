@@ -7,6 +7,7 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'stock-list',
@@ -39,7 +40,7 @@ export class StockListComponent implements OnInit, OnDestroy {
     this.activeStock$ = this.store.select(p => p.inventory.activeStock);
   }
   public ngOnInit() {
-    //
+    this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name'], ['asc']);
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
