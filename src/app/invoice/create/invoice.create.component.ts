@@ -5,9 +5,65 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PreviewAndGenerateInvoiceResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../models/api-models/Invoice';
+import { PreviewAndGenerateInvoiceResponse, InvoiceTemplateDetailsResponse, ISection, IContent } from '../../models/api-models/Invoice';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
+
+// {
+//   field: 'description'
+// },
+const THEAD = [
+  {
+    display: false,
+    label: '',
+    field: 'sNo'
+  },
+  {
+    display: true,
+    label: 'Date',
+    field: 'date'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'item'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'itemCode'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'quantity'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'rate'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'discount'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'taxableAmount'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'tax'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'total'
+  }
+];
 
 @Component({
   styleUrls: ['./invoice.create.component.css'],
@@ -19,8 +75,10 @@ export class InvoiceCreateComponent implements OnInit {
 
   public invFormData: PreviewAndGenerateInvoiceResponse;
   public tableCond: ISection;
+  public invTempCond: InvoiceTemplateDetailsResponse;
+  public customThead: IContent[] = THEAD;
+  // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private invTempCond: GetInvoiceTemplateDetailsResponse;
 
   constructor(
     private store: Store<AppState>,
@@ -44,15 +102,28 @@ export class InvoiceCreateComponent implements OnInit {
     this.store.select(p => p.invoice.generate.invoiceTemplateConditions)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
-      .subscribe((o) => {
+      .subscribe((o: InvoiceTemplateDetailsResponse) => {
         if (o) {
           this.invTempCond =  _.cloneDeep(o);
-          // find table condition in object and assign it to local var
           let obj =  _.cloneDeep(o);
           this.tableCond = _.find(obj.sections, ['sectionName', 'table']);
+          console.log('bigo', this.tableCond);
+          this.prepareThead();
         }
       }
     );
+  }
+
+  public prepareThead() {
+    let obj =  _.cloneDeep(this.tableCond.content);
+    _.map(this.customThead, (item: IContent) => {
+      let res = _.find(this.tableCond.content, ['field', item.field ]);
+      if (res) {
+        item.display = res.display;
+        item.label = res.label;
+      }
+    });
+    console.log(this.customThead);
   }
 
   public onSubmitInvoiceForm(f: NgForm) {

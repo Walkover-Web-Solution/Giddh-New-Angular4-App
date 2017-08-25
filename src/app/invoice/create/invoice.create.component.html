@@ -86,15 +86,23 @@
   <section class="clearfix pdT2 mrB2">
     <table class="table">
       <thead class="t-h-bg1">
-        <tr>
-          <th *ngFor="let item of tableCond.content;" [hidden]="!item.display">{{item.field}}</th>
+        <tr *ngIf="customThead">
+          <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.field}}</th>
         </tr>
       </thead>
       <tbody *ngFor="let entry of invFormData.entries; let i = index">
-        <!-- <tr *ngFor="let transaction of entry.transactions; let i = index">
+        <tr *ngFor="let transaction of entry.transactions; let i = index">
           <td>{{ i+1 }}</td>
+          <td></td>
           <td>{{ transaction.accountName }}<br>{{ transaction.description }}</td>
-        </tr> -->
+          <td>{{ transaction.hsnNumber || transaction.sacNumber }}</td>
+          <td>{{ transaction.quantity }}</td>
+          <td>{{ transaction.rate }}</td>
+          <td>discount</td>
+          <td>taxable</td>
+          <td>tax</td>
+          <td>{{ transaction.amount }}</td>
+        </tr>
       </tbody>
     </table>
   </section>
