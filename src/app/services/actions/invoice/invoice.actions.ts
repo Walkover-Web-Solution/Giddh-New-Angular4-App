@@ -18,7 +18,8 @@ import {
   PreviewAndGenerateInvoiceRequest,
   PreviewAndGenerateInvoiceResponse,
   GetInvoiceTemplateDetailsResponse,
-  Template
+  Template,
+  InvoiceTemplateDetailsResponse
 } from '../../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
 import {
@@ -120,7 +121,7 @@ export class InvoiceActions {
   public GetTemplateDetailsOfInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS)
     .switchMap(action => this._invoiceService.GetInvoiceTemplateDetails(action.payload))
-    .map(res => this.validateResponse<GetInvoiceTemplateDetailsResponse, string>(res, {
+    .map(res => this.validateResponse<InvoiceTemplateDetailsResponse, string>(res, {
       type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
       payload: res
     }, true, {

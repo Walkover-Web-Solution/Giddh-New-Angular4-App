@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewAndGenerateInvoiceRequest, PreviewAndGenerateInvoiceResponse, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewAndGenerateInvoiceRequest, PreviewAndGenerateInvoiceResponse, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse } from '../models/api-models/Invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -138,7 +138,7 @@ export class InvoiceService {
    * get template by uniquename
    * URL:: company/:companyUniqueName/templates-v2/templateUniqueName
    */
-  public GetInvoiceTemplateDetails(templateUniqueName: string): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse, string>> {
+  public GetInvoiceTemplateDetails(templateUniqueName: string): Observable<BaseResponse<InvoiceTemplateDetailsResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -147,12 +147,12 @@ export class InvoiceService {
     });
     return this._http.get(INVOICE_API.GET_INVOICE_TEMPLATE_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
       .map((res) => {
-        let data: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = res.json();
+        let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res.json();
         data.request = templateUniqueName;
         data.queryString = { templateUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<GetInvoiceTemplateDetailsResponse, string>(e, templateUniqueName));
+      .catch((e) => HandleCatch<InvoiceTemplateDetailsResponse, string>(e, templateUniqueName));
   }
 
   /**

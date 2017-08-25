@@ -2,12 +2,12 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 import { INVOICE_ACTIONS } from '../../services/actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest, GetInvoiceTemplateDetailsResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
 
 export class GeneratePage {
   public ledgers: GetAllLedgersOfInvoicesResponse;
   public invoiceData: PreviewAndGenerateInvoiceResponse;
-  public invoiceTemplateConditions: GetInvoiceTemplateDetailsResponse;
+  public invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
 }
 
 export class PreviewPage {
@@ -74,7 +74,7 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
             let newState = _.cloneDeep(state);
-            let res: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = action.payload;
+            let res: BaseResponse<InvoiceTemplateDetailsResponse, string> = action.payload;
             if (res.status === 'success') {
                 newState.generate.invoiceTemplateConditions = res.body;
                 return Object.assign({}, state, newState);
