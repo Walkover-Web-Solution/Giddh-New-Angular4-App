@@ -39,7 +39,7 @@ export interface CurrentGroupAndAccountState {
   isGroupWithAccountsLoading: boolean;
   activeGroup: GroupResponse;
   activeGroupUniqueName: string;
-  accountSearchString: string;
+  groupAndAccountSearchString: string;
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
   activeGroupInProgress: boolean;
@@ -95,7 +95,7 @@ const initialState: CurrentGroupAndAccountState = {
   isGroupWithAccountsLoading: false,
   activeGroup: null,
   activeGroupUniqueName: null,
-  accountSearchString: '',
+  groupAndAccountSearchString: '',
   isRefreshingFlattenGroupsAccounts: false,
   activeGroupInProgress: false,
   activeGroupSharedWith: null,
@@ -149,10 +149,14 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       });
 
     case GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING:
+    debugger
       return Object.assign({}, state, {
-        accountSearchString: action.payload
+        groupAndAccountSearchString: action.payload
       });
-
+    case GroupWithAccountsAction.RESET_GROUP_ACCOUNTS_SEARCH_STRING:
+      return Object.assign({}, state, {
+        groupAndAccountSearchString: ''
+      });
     case GroupWithAccountsAction.GET_GROUP_WITH_ACCOUNTS_RESPONSE:
       let data: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
       if (data.status === 'success') {
@@ -270,7 +274,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         isGroupWithAccountsLoading: false,
         activeGroup: null,
         activeGroupUniqueName: null,
-        accountSearchString: '',
+        groupAndAccountSearchString: '',
         isRefreshingFlattenGroupsAccounts: false,
         activeGroupInProgress: false,
         activeGroupSharedWith: [],
