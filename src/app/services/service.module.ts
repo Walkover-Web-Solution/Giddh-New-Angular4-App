@@ -31,7 +31,6 @@ import { InventoryService } from './inventory.service';
 import { PermissionService } from './permission.service';
 import { ManufacturingService } from './manufacturing.service';
 import { PermissionActions } from './actions/permission/permission.action';
-
 /**
  * Home Module
  */
@@ -41,7 +40,7 @@ import { SearchService } from './search.service';
 import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
 import { FlyAccountsActions } from './actions/fly-accounts.actions';
 import { TlPlService } from './tl-pl.service';
-import { TlPlActions } from './actions/tl-pl.actions';
+import { TBPlBsActions } from './actions/tl-pl.actions';
 import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
 import { HomeActions } from './actions/home/home.actions';
@@ -77,7 +76,7 @@ import { ManufacturingActions } from './actions/manufacturing/manufacturing.acti
     EffectsModule.run(PermissionActions),
     EffectsModule.run(ManufacturingActions),
     EffectsModule.run(FlyAccountsActions),
-    EffectsModule.run(TlPlActions),
+    EffectsModule.run(TBPlBsActions),
     EffectsModule.run(LedgerActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),

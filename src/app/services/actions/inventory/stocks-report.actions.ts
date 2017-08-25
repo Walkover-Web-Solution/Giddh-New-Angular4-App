@@ -31,7 +31,7 @@ export class StockReportActions {
           return this.validateResponse<StockReportResponse, StockReportRequest>(r, {
             type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT_RESPONSE,
             payload: r.body
-          });
+          }, true);
         });
 
     });

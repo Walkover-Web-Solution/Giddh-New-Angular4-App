@@ -1,6 +1,6 @@
 <span (blur)="hideDiscountMenu()">
+    <label>Discount</label>
     <a (click)="$event.stopPropagation();discountMenu = !discountMenu" id="discount">
-        <label>Discount</label>
         <input type="number" name="" class="form-control cursor-pointer"
                [(ngModel)]="discountTotal" disabled="disabled"/>
     </a>

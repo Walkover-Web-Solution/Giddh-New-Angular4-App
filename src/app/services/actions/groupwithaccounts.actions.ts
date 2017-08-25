@@ -104,6 +104,9 @@ export class GroupWithAccountsAction {
       this._groupService.GetGroupsWithAccounts(action.payload)
     )
     .map(response => {
+      if (response.request.length > 0) {
+        this.store.dispatch(this.resetAddAndMangePopup());
+      }
       return this.getGroupWithAccountsResponse(response);
     });
 

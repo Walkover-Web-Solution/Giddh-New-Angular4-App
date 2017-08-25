@@ -1764,7 +1764,7 @@ v-pane-content {
 }
 
 v-pane-content > div {
-  visibility: none;
+  visibility: hidden;
 }
 
 /* Theme: default
@@ -2844,9 +2844,9 @@ table.nopad td .form-control, .taxTable.table .form-control {
   margin-right: 5px;
 }
 
-.tdfsbig a:last-child() {
-  margin-right: 0;
-}
+/*.tdfsbig a:last-child() {*/
+  /*margin-right: 0;*/
+/*}*/
 
 .tdfsbig i {
   font-size: 18px;
@@ -3029,7 +3029,7 @@ ul.pills li {
 
 .col-container {
   height: -moz-calc(100% - 160px);
-  height: -webkit-calc(100% -160px);
+  height: -webkit-calc(100% - 160px);
   height: calc(100% - 160px);
   overflow-y: auto;
 }
@@ -4014,7 +4014,7 @@ tr.db-bnk-account > td.reconnectDiv {
 
 .invoice-input textarea:focus, .invoice-input textarea:active {
   outline: 0;
-  box-shadow: 0;
+  box-shadow: none;
   padding: 0 10px;
 }
 
@@ -4857,4 +4857,20 @@ table.proforma-particulars {
 }
 .select2-parent .select2-container--default .select2-results>.select2-results__options{
   font-size: 14px;
+}
+/*.account-list-item {*/
+  /*color:black;*/
+  /*background-color: white;*/
+/*}*/
+/*.active, .active .account-list-item {*/
+  /*color:white;*/
+  /*background-color: #d36029;*/
+/*}*/
+.dropdown-menu>.active>a, .dropdown-menu>.active>a:focus, .dropdown-menu>.active>a:hover,.dropdown-menu>.active>a>a, .dropdown-menu>.active>a>a:focus, .dropdown-menu>.active>a>a:hover {
+  color:white;
+  background-color: #d36029;
+}
+.dropdown-menu>li>a, .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover,.dropdown-menu>li>a>a, .dropdown-menu>li>a>a:focus, .dropdown-menu>li>a>a:hover {
+  color:black;
+  background-color: white;
 }

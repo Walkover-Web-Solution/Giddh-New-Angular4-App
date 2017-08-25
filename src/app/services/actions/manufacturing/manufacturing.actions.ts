@@ -27,6 +27,10 @@ export class ManufacturingActions {
   private GetMfReportResponse$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.MF_REPORT_RESPONSE)
     .map(response => {
+      let data: BaseResponse<ICommonResponseOfManufactureItem, ICommonResponseOfManufactureItem> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
       return { type : ''};
     });
 

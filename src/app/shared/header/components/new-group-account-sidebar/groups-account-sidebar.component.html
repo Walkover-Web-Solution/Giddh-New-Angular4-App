@@ -2,13 +2,13 @@
   <div class="grp_wrapper" fxFlex [ngStyle]="{'width':mc.columns.length * 255 + 'px'}">
 
     <!-- level 1 -->
-    <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index" ng-click="mc.getColsCount()">
+    <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index">
       <ul class="grp_list" checkscrollY>
         <li class="new_btn"><a href="javascript:void(0)" class="btn-add" ng-if="(col.showCreateNew || mc.searchLoad && mc.addToIndex != 0) || mc.keyWord.length < 3"
-            (click)="ShowAddNewForm()">Create new</a></li>
+            (click)="ShowAddNewForm(col)">Create new</a></li>
         <li *ngFor="let grp of col.groups; let j=index">
           <a href="javascript:void(0);" class="" id="subGrp_{{grp.name}}" (click)="onGroupClick(grp,i)" [ngClass]="{
-            'isActive': ((activeGroup | async)?.uniqueName === grp?.uniqueName),
+            'isActive': ((activeGroupUniqueName | async) === grp?.uniqueName) && !(activeAccount | async),
             'isParent':grp?.isOpen
           }" tooltip="{{grp.synonyms}}" placement="bottom" ng-class="{isParent:col.active.type == 'grp' && col.active.index == $index, isActive:mc.breadCrumbList[mc.breadCrumbList.length-1].uniqueName == grp.uniqueName && mc.breadCrumbList[mc.breadCrumbList.length-1].type == 'grp'}">
         {{ grp.name }}
@@ -16,7 +16,10 @@
         </li>
 
         <li *ngFor="let acc of col.accounts; let j=index">
-          <a href="javascript:void(0);" class="isAcc" id="acc_{{acc.name}}" (click)="onAccountClick(acc,i)" ng-class="{isActive:mc.breadCrumbList[mc.breadCrumbList.length-1].uniqueName == acc.uniqueName && mc.breadCrumbList[mc.breadCrumbList.length-1].type == 'account'}">
+          <a href="javascript:void(0);" class="isAcc"
+          [ngClass]="{
+            'isActive': ((activeAccount | async)?.uniqueName === acc?.uniqueName)}"
+           id="acc_{{acc.name}}" (click)="onAccountClick(acc,i)">
           {{ acc.name }}
       </a>
         </li>
