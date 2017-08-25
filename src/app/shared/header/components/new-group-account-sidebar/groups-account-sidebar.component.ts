@@ -44,14 +44,14 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['groups']) {
-      // this.resetData();
+      this.resetData();
     }
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.resetData();
-    this.activeGroup.subscribe(a => this.resetData());
+    // this.activeGroup.subscribe(a => this.resetData());
   }
 
   public resetData() {
