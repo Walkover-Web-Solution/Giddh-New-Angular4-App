@@ -3,13 +3,12 @@ import { Observable } from 'rxjs';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { digitsOnly } from '../../../helpers/customValidationHelper';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { CompanyService } from '../../../../services/companyService.service';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
-import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 
 @Component({
@@ -17,7 +16,7 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
   templateUrl: './account-add.component.html'
 })
 export class AccountAddComponent implements OnInit, OnDestroy {
-  @Input() public column: ColumnGroupsAccountVM[];
+
   @Input() public activeGroupUniqueName: string;
   @Input() public fetchingAccUniqueName$: Observable<boolean>;
   @Input() public isAccountNameAvailable$: Observable<boolean>;
@@ -27,8 +26,9 @@ export class AccountAddComponent implements OnInit, OnDestroy {
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
   public showGstList: boolean = false;
   public showDefaultGstListLength: number = 2;
-  public isGstEnabledAcc: boolean = false;
-  public isHsnSacEnabledAcc: boolean = false;
+  @Input() public isGstEnabledAcc: boolean = false;
+  @Input() public isHsnSacEnabledAcc: boolean = false;
+  @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequest }> = new EventEmitter();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -95,12 +95,6 @@ export class AccountAddComponent implements OnInit, OnDestroy {
         this.addAccountForm.reset({ openingBalanceType: 'CREDIT', openingBalance: 0 });
       }
     });
-    // assign gst and hsn,sac flags
-    if (this.column[2]) {
-      let col = this.column[2].uniqueName;
-      this.isGstEnabledAcc = col === 'sundrycreditors' || col === 'sundrydebtors';
-      this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'operatingcost' || col === 'indirectexpenses';
-    }
   }
 
   public stateSelected(v) {
@@ -196,7 +190,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     //   accountObj.gstDetails = gstDetailsArr;
     // }
     delete accountObj['gstDetails'];
-    this.store.dispatch(this.accountsAction.createAccount(this.activeGroupUniqueName, accountObj));
+    this.submitClicked.emit({ activeGroupUniqueName: this.activeGroupUniqueName, accountRequest: accountObj });
   }
 
   public ngOnDestroy() {

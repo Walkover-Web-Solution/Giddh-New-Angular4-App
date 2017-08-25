@@ -64,7 +64,7 @@ export class AccountsAction {
       let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: '' };
       }
       this._toasty.successToast(action.payload.body, action.payload.status);
       let accName = null;
@@ -97,8 +97,14 @@ export class AccountsAction {
         this._toasty.successToast('Account Created Successfully');
       }
       this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
-      this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-      return {type: ''};
+      let groupSearchString: string;
+      this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
+      if (groupSearchString) {
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+      } else {
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+      }
+      return { type: '' };
     });
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
@@ -153,9 +159,17 @@ export class AccountsAction {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         this._toasty.successToast('Account Updated Successfully');
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        let groupSearchString: string;
+        this.store.take(1).subscribe(a => {
+          groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
+        });
+        if (groupSearchString) {
+          this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+        } else {
+          this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        }
       }
-      return {type: ''};
+      return { type: '' };
     });
 
   @Effect()
@@ -368,10 +382,10 @@ export class AccountsAction {
     });
 
   constructor(private action$: Actions,
-              private _accountService: AccountService,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private groupWithAccountsAction: GroupWithAccountsAction) {
+    private _accountService: AccountService,
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private groupWithAccountsAction: GroupWithAccountsAction) {
   }
 
   public createAccount(value: string, account: AccountRequest): Action {
@@ -380,8 +394,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-        account
-      })
+          account
+        })
     };
   }
 
@@ -398,8 +412,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-        account
-      })
+          account
+        })
     };
   }
 
@@ -444,8 +458,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-        accountUniqueName
-      })
+          accountUniqueName
+        })
     };
   }
 
@@ -462,8 +476,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-        accountUniqueName
-      })
+          accountUniqueName
+        })
     };
   }
 
@@ -480,8 +494,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-        accountUniqueName
-      })
+          accountUniqueName
+        })
     };
   }
 
@@ -557,7 +571,7 @@ export class AccountsAction {
   public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): Action {
     return {
       type: AccountsAction.MERGE_ACCOUNT,
-      payload: {accountUniqueName, data}
+      payload: { accountUniqueName, data }
     };
   }
 
@@ -571,7 +585,7 @@ export class AccountsAction {
   public unmergeAccount(accountUniqueName: string, data: AccountUnMergeRequest): Action {
     return {
       type: AccountsAction.UNMERGE_ACCOUNT,
-      payload: {accountUniqueName, data}
+      payload: { accountUniqueName, data }
     };
   }
 
