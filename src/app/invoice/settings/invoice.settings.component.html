@@ -1,3 +1,4 @@
+{{invoiceSetting | json}} {{ invoiceWebhook | json}}
 <section id="invoice-setting">
     <div class="box clearfix">
         <form action="" class="col-xs-12">
@@ -56,22 +57,24 @@
                             <input type="checkbox" />
                         </div>
                     </div>
-                    <div class="col-xs-2">
-                        <div class="row">
-                            <label>Key ID<span class="req">*</span></label>
+                    <div class="">
+                        <div class="col-xs-2">
+                            <div class="row">
+                                <label>Key ID<span class="req">*</span></label>
+                                <input type="text" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Secret ID<span class="req">*</span></label>
                             <input type="text" class="form-control" />
                         </div>
-                    </div>
-                    <div class="col-xs-2">
-                        <label>Secret ID<span class="req">*</span></label>
-                        <input type="text" class="form-control" />
-                    </div>
-                    <div class="col-xs-2">
-                        <div class="row">
-                            <label>Link Account</label>
-                            <select name="" id="" class="form-control">
+                        <div class="col-xs-2">
+                            <div class="row">
+                                <label>Link Account</label>
+                                <select name="" id="" class="form-control">
                               <option value="">Bank</option>
                             </select>
+                            </div>
                         </div>
                     </div>
 

@@ -1,8 +1,9 @@
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
-import { INVOICE_ACTIONS } from '../../services/actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
+import { INVOICE_ACTIONS, INVOICE } from '../../services/actions/invoice/invoice.const';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
+import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 
 export class GeneratePage {
   public ledgers: GetAllLedgersOfInvoicesResponse;
@@ -18,7 +19,7 @@ export class PreviewPage {
 export interface InvoiceState {
   preview: PreviewPage;
   generate: GeneratePage;
-  settings: string;
+  settings: InvoiceSetting;
 }
 
 export const initialState: InvoiceState = {
@@ -128,6 +129,15 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                 if (indx > -1) {
                     newState.preview.invoices.results.splice(indx, 1);
                 }
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<InvoiceSetting, string> = action.payload;
+            if (res.status === 'success') {
+                newState.settings = res.body;
                 return Object.assign({}, state, newState);
             }
             return state;
