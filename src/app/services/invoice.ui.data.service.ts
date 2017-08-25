@@ -12,6 +12,9 @@ export class InvoiceUiDataService {
   public imageSignaturePath: Subject<string> = new Subject();
   public setDivVisible: Subject<IsDivVisible> = new Subject();
   public setFieldDisplay: Subject<IsFieldVisible> = new Subject();
+  public logoSize: Subject<string> = new Subject();
+  public defaultPrintSetting: Subject<number> = new Subject();
+  public showLogo: Subject<boolean> = new Subject();
 
   public setLogoPath(val) {
     console.log('The value is :', val);
@@ -29,5 +32,15 @@ export class InvoiceUiDataService {
 
   public setFieldDisplayState(field: IsFieldVisible) {
     this.setFieldDisplay.next(field);
+  }
+
+  public setLogoSize(size: string) {
+    this.logoSize.next(size);
+  }
+  public resetPrintSetting(margin: number) {
+      this.defaultPrintSetting.next(margin);
+  }
+  public logoState(state) {
+    this.showLogo.next(state);
   }
 }

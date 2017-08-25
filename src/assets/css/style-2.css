@@ -3723,3 +3723,7 @@ label {
     /* margin-left: 255px; */
     border-radius: 8px;
 }
+
+[hidden] {
+    display: none !important;
+}

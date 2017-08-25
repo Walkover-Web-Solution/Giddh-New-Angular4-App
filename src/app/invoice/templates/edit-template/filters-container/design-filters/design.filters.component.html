@@ -55,21 +55,24 @@
                 <div class="clearfix">
                     <div class="logoTool">
                         <span class="logo-preview">
-                            <label class="upload-button" for="logo-edit">
+                            <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
                                 <input type="file" id="logo-edit" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
                             </label>
-                            <img src="" alt="" id="logoImage" />
+                            <label for="logo-edit">
+                                <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
+                            </label>
+                            
                         </span>
-                        <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()">Start Upload</button>
+                        <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" [hidden]="!logoAttached">Start Upload</button>
                         <div class="pull-left mrL1 mrT1">
                             <p>Size</p>
                             <ul>
-                                <li>S</li>
-                                <li>M</li>
-                                <li>L</li>
+                                <li (click)="setLogoSize('small')">S</li>
+                                <li (click)="setLogoSize('medium')">M</li>
+                                <li (click)="setLogoSize('large')">L</li>
                             </ul>
-                            <a href="javascript:void(0);" class="primary_clr">Hide logo</a>
+                            <a href="javascript:void(0);" class="primary_clr" [hidden]="!logoAttached" (click)="hideLogo()"><span [hidden]="showLogo">Show</span><span [hidden]="!showLogo">Hide</span> logo</a>
                         </div>
                     </div>
                 </div>
@@ -148,10 +151,11 @@
                                     <td><input type="text" class="form-control" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMargin")' /></td>
                                     <td><input type="text" class="form-control" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")' /></td>
                                     <td><input type="text" class="form-control" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMargin")' /></td>
+                                    <td><a href="javascript:void(0);" class="pdR1" (click)="resetPrintSetting()">Reset</a></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <a href="javascript:void(0);" class="pos-abs pull-right pdR1">Reset</a>
+                        <!-- <a href="javascript:void(0);" class="pos-abs pull-right pdR1">Reset</a> -->
                     </div>
                 </div>
                 <!-- edit print setting  end -->
