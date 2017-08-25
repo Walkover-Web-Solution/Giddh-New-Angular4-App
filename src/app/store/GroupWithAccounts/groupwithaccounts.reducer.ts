@@ -50,6 +50,10 @@ export interface CurrentGroupAndAccountState {
   addAccountOpen: boolean;
   activeAccount: AccountResponse;
   fetchingGrpUniqueName: boolean;
+  isCreateGroupInProcess?: boolean;
+  isCreateGroupSuccess?: boolean;
+  isUpdateGroupInProcess?: boolean;
+  isUpdateGroupSuccess?: boolean;
   isGroupNameAvailable?: boolean;
   fetchingAccUniqueName: boolean;
   isAccountNameAvailable?: boolean;
@@ -202,6 +206,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case GroupWithAccountsAction.CREATE_GROUP:
+      return Object.assign({}, state, {
+        isCreateGroupInProcess: true
+      });
     case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
       let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
       if (gData.status === 'success') {
@@ -228,10 +236,15 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           }
         }
         return Object.assign({}, state, {
-          groupswithaccounts: groupArray
+          groupswithaccounts: groupArray,
+          isCreateGroupInProcess: false,
+          isCreateGroupSuccess: true
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        isCreateGroupInProcess: false,
+        isCreateGroupSuccess: false
+      });
 
     case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
       let sharedData: BaseResponse<GroupSharedWithResponse[], string> = action.payload;
@@ -282,7 +295,11 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showAddNewAccount: false,
         showAddNewGroup: false,
         showEditGroup: false,
-        showEditAccount: false
+        showEditAccount: false,
+        isCreateGroupInProcess: false,
+        isCreateGroupSuccess: false,
+        isUpdateGroupInProcess: false,
+        isUpdateGroupSuccess: false
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
@@ -390,6 +407,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showEditGroup: false,
         showEditAccount: false
       });
+    case GroupWithAccountsAction.UPDATE_GROUP:
+      return Object.assign({}, state, {
+        isUpdateGroupInProcess: true
+      });
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE:
       let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
       if (activeGrpData.status === 'success') {
@@ -410,10 +431,15 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           activeGroup: newObj,
           activeGroupUniqueName: newObj.uniqueName,
           activeGroupInProgress: false,
-          groupswithaccounts: groupArray
+          groupswithaccounts: groupArray,
+          isUpdateGroupInProcess: false,
+          isUpdateGroupSuccess: true
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        isUpdateGroupInProcess: false,
+        isUpdateGroupSuccess: false
+      });
     case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE:
       let activeAccount: BaseResponse<AccountResponse, string> = action.payload;
       if (activeAccount.status === 'success') {
