@@ -58,7 +58,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     }
   }
 
-  public async addNewGroup() {
+  public addNewGroup() {
     let activeGrpUniqueName: string;
     this.activeGroupUniqueName$.take(1).subscribe(a => activeGrpUniqueName = a);
 
