@@ -44,7 +44,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['groups']) {
-      this.resetData();
+      // this.resetData();
     }
   }
 
@@ -165,9 +165,6 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false);
     this.breadcrumbPathChanged.emit(this.breadcrumbPath);
     if (parentGrp) {
-      // if (this.isSearchingGroups) {
-      //   this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(parentGrp.uniqueName));
-      // }
       if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
         this.mc.columns.splice(currentIndex + 1, 1);
       }
@@ -179,6 +176,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   }
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
+    this.breadcrumbPath = [];
+    this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true);
+    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
