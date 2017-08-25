@@ -7,7 +7,8 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, PreviewInvoiceResponseClass, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
+import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 
 @Injectable()
 export class InvoiceService {
@@ -93,7 +94,7 @@ export class InvoiceService {
   * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
   */
 
-  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<string, GenerateBulkInvoiceRequest>> {
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<string, GenerateBulkInvoiceRequest[]>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -109,7 +110,7 @@ export class InvoiceService {
         data.queryString = { reqObj };
         return data;
       })
-      .catch((e) => HandleCatch<string, GenerateBulkInvoiceRequest>(e, reqObj, model));
+      .catch((e) => HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
   }
 
   /*
@@ -214,5 +215,24 @@ export class InvoiceService {
         return data;
       })
       .catch((e) => HandleCatch<string, string>(e, invoiceUniqueName));
+  }
+
+  /**
+   * get invoice setting
+   * URL:: company/:companyUniqueName/settings
+   */
+  public GetInvoiceSetting(): Observable<BaseResponse<InvoiceSetting, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName))
+      .map((res) => {
+        let data: BaseResponse<InvoiceSetting, string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<InvoiceSetting, string>(e));
   }
 }

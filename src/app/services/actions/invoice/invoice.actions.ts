@@ -28,6 +28,7 @@ import {
   IsDivVisible,
   TaxInvoiceLabel
 } from '../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
+import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 // import {Section, Template} from "../../../models/api-models/invoice";
 
 @Injectable()
@@ -154,6 +155,20 @@ export class InvoiceActions {
       payload: res
     }, true, {
       type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
+      payload: res
+    }));
+
+  
+  // mustafa
+  @Effect()
+  public getInvoiceSetting$: Observable<Action> = this.action$
+    .ofType(INVOICE.SETTING.GET_INVOICE_SETTING)
+    .switchMap(action => this._invoiceService.GetInvoiceSetting())
+    .map(res => this.validateResponse<InvoiceSetting, string>(res, {
+      type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
       payload: res
     }));
 
@@ -659,6 +674,12 @@ export class InvoiceActions {
     return{
       type: INVOICE.TEMPLATE.SET_VISIBLE,
       payload: {div}
+    };
+  }
+
+  public getInvoiceSetting(): Action {
+    return{
+      type: INVOICE.SETTING.GET_INVOICE_SETTING
     };
   }
 

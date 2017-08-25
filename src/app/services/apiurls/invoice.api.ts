@@ -11,5 +11,6 @@ export const INVOICE_API = {
   DELETE_INVOICE: COMMON_URL + 'invoices/:invoiceNumber',
   GENERATE_INVOICE: COMMON_URL + 'accounts/:accountUniqueName/invoices/generate',
   PREVIEW_INVOICE: COMMON_URL + 'v2/accounts/:accountUniqueName/invoices/preview',
-  GET_INVOICE_TEMPLATE_DETAILS: COMMON_URL + 'templates-v2/:templateUniqueName' // get call for single template details
+  GET_INVOICE_TEMPLATE_DETAILS: COMMON_URL + 'templates-v2/:templateUniqueName', // get call for single template details
+  SETTING_INVOICE: COMMON_URL + 'settings' // GET/POST Invoice setting
 };
