@@ -1,4 +1,4 @@
-<div class="bdrR bdrL row view_forms" id="middleBody" style="height: 100%;min-height: 100%;margin:0">
+<div class="bdrR bdrL row view_forms" id="middleBody" style="margin:0" [perfect-scrollbar]="config" [ngStyle]="{'height':height+'px'}">
 
   <!--breadcrumbs-->
   <div class="breadcrumbs pdL2 pdT1 pdR2 pdB1">
@@ -52,8 +52,9 @@
   <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
 
     <!--account add component-->
-    <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [column]="columnsRef.columns" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
-      [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$" [createAccountIsSuccess$]="createAccountIsSuccess$"></account-add>
+    <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [column]="columnsRef.columns"
+      [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$"
+      [createAccountIsSuccess$]="createAccountIsSuccess$"></account-add>
     <!--account update component-->
     <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [column]="columnsRef.columns"></account-update>
 
