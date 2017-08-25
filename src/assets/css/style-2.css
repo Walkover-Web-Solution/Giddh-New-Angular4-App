@@ -153,7 +153,7 @@ input {
 }
 
 .company-name span {
-    color: #adadad!important;
+    color: #adadad !important;
 }
 
 .company-name span.cName {
@@ -247,9 +247,10 @@ header .navbar {
     width: 100%;
 }
 
-.ledgHead input[type=search] {
+
+/* .ledgHead input[type=search] {
     min-width: 220px;
-}
+} */
 
 
 /*btn*/
@@ -324,6 +325,7 @@ header .navbar {
     color: #616161;
     padding: 10px 15px;
     border-radius: 6px;
+    font-size: 78%;
 }
 
 .ledger-panel .form-control {
@@ -443,7 +445,7 @@ header .navbar {
     border-top: 1px solid #eee;
 }
 
-.export-ledger-options ..dropdown_theme {
+.export-ledger-options .dropdown_theme {
     left: -30px;
 }
 
@@ -473,7 +475,7 @@ header .navbar {
     /*    background: #f3f0e6;*/
     padding: 0 4px;
     /*    border: 1px solid #ccc;
-    border-radius: 3px;
+  border-radius: 3px;
 */
     font-size: 24px;
 }
@@ -659,7 +661,7 @@ header {
 
 input[type="checkbox"] {
     position: relative;
-    top: -2px;
+    top: 0;
     text-align: center;
     margin: 0 1rem 0 0;
     cursor: pointer;
@@ -717,7 +719,7 @@ input[type="checkbox"]:after {
 }
 
 .tab-pane input[type=search]:after {
-    font-family: icomoon!important;
+    font-family: icomoon !important;
     content: "\e906";
     speak: none;
     font-style: normal;
@@ -890,7 +892,7 @@ input[type="checkbox"]:after {
 }
 
 .filterForm .form-control {
-    background-color: #fff!important;
+    background-color: #fff !important;
 }
 
 .filterForm .form-group.col-xs-2 {
@@ -1064,7 +1066,7 @@ input[type="checkbox"]:after {
 }
 
 .selectTag:after {
-    font-family: icomoon!important;
+    font-family: icomoon !important;
     content: "\e904";
     position: absolute;
     speak: none;
@@ -1094,13 +1096,13 @@ input[type="checkbox"]:after {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #d35f29;
+    background-color: #d35f29 !important;
     border-color: transparent;
     color: #fff;
 }
 
 .daterangepicker td.in-range {
-    background-color: #eae7da;
+    background-color: #eae7da !important;
     border-color: transparent;
     color: #000;
     border-radius: 0;
@@ -1138,14 +1140,14 @@ input[type="checkbox"]:after {
 }
 
 .ranges li {
-    color: #525252;
+    color: #525252 !important;
 }
 
 .ranges li.active,
 .ranges li:hover {
-    background-color: #525252;
-    border: 1px solid #525252;
-    color: #fff;
+    background: #d35f29 !important;
+    border: 1px solid #d35f29 !important;
+    color: #fff !important;
 }
 
 .download-invoice-ledger {
@@ -1155,7 +1157,7 @@ input[type="checkbox"]:after {
 
 .popover.bottom>.arrow:after {
     margin-left: 0;
-    border-top-width: none;
+    border-top-width: 0;
     top: 1px;
     border-right: 15px solid transparent;
     border-bottom: 15px solid #fff;
@@ -1284,10 +1286,11 @@ input[type=number] {
     background: #f7edcd !important;
 }
 
-.active.end-date.in-range.available {
-    background: #d35f29;
+.active.end-date.in-range.available,
+.daterangepicker td.start-date {
+    background: #d35f29 !important;
     color: #fff;
-    border-radius: 0 4px 4px 0;
+    border-radius: 2px;
 }
 
 .fixedDate {
@@ -1481,7 +1484,8 @@ a.btn.btn-xs.btn-link.pull-right {
     background: 0 0;
     position: absolute;
     top: 6px;
-    left: 6px cursor: pointer;
+    left: 6px;
+    cursor: pointer;
 }
 
 .mutliple_unit button+button {
@@ -1885,7 +1889,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .input-group-btn.sticky:last-child>.btn {
-    margin-left: -1 !important;
+    margin-left: -1px !important;
 }
 
 .l8grey {
@@ -2170,11 +2174,11 @@ select.form-control {
 }
 
 .noMarg {
-    margin: 0!important;
+    margin: 0 !important;
 }
 
 .fw400 {
-    font-weight: 400!important;
+    font-weight: 400 !important;
 }
 
 .gico-wrap .icon-trash,
@@ -2405,11 +2409,6 @@ label {
     column-count: 3;
 }
 
-.` {
-    overflow-y: auto;
-    height: 100%;
-}
-
 .inline-table {
     display: table;
     min-height: 400px;
@@ -2439,7 +2438,7 @@ label {
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5!important;
+    background: #f4f5f5 !important;
     border: 1px solid #cccccc;
 }
 
@@ -2676,7 +2675,7 @@ label {
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5!important;
+    background: #f4f5f5 !important;
     border: 1px solid #cccccc;
 }
 
@@ -3141,14 +3140,14 @@ label {
     height: 1px;
     top: -8px;
     z-index: 0;
-    width: calc(100%/3);
+    width: calc(100% / 3);
     right: 0;
     left: 0;
     margin: 0 auto;
 }
 
 .steps-indicator.step-2:before {
-    width: calc(100%/2);
+    width: calc(100% / 2);
 }
 
 .steps-indicator li a:before,
@@ -3201,8 +3200,9 @@ label {
 }
 
 .d-inline-block {
-    display: inline-block!important;
+    display: inline-block !important;
 }
+
 .onHover {
     opacity: 0;
     z-index: -1;
@@ -3230,7 +3230,6 @@ label {
     right: 6px;
 }
 
-<<<<<<< HEAD
 #mfReportTbl table>tbody>tr>td>table.table {
     background: transparent;
 }
@@ -3316,7 +3315,8 @@ label {
 
 #manufacture .form-theme tbody tr td select {
     width: 43%;
-=======
+}
+
 .btn-group.open .dropdown-toggle {
     box-shadow: none;
 }
@@ -3458,5 +3458,63 @@ label {
     border-radius: 50%;
     right: 0;
     text-align: center;
->>>>>>> master
+}
+
+.open>.dropdown-menu {
+    display: block;
+}
+
+.dropdown-container .dropdown-menu {
+    display: block;
+    height: 200px;
+    overflow: auto;
+}
+
+.dropdown-container .dropdown-menu li label {
+    overflow: hidden;
+    margin: 0;
+    width: 100%;
+    float: left;
+}
+
+
+/* #w-398px{
+  width: 398px;
+} */
+
+.square {
+    border-radius: 0px;
+}
+
+.ledger-row td .select2-container--default .select2-results__option--highlighted[aria-selected] a {
+    color: #fff !important;
+}
+
+.ledger-row td .select2-results ul li a {
+    color: #333;
+}
+
+.ledger-row td .select2-container .select2-selection {
+    background: transparent !important;
+    border: 0 !important;
+    cursor: text;
+}
+
+.ledger-row td .select2-container .select2-search__field {
+    background: #f3f0e6 !important
+}
+
+.ledger-panel .dropdown-container .dropdown-menu li {
+    clear: both;
+    float: left;
+    padding: 3px 2px;
+}
+
+.ledger-panel .dropdown-container .dropdown-menu li label span {
+    max-width: calc(100% - 22px);
+}
+
+.ledger-panel .dropdown-menu {
+    border-radius: 0;
+    margin: 0;
 }

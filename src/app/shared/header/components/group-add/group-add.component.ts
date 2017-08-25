@@ -3,8 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { CompanyActions } from '../../../../services/actions/company.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { GroupCreateRequest, GroupResponse } from '../../../../models/api-models/Group';
@@ -16,7 +14,7 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
-  public activeGroup$: Observable<GroupResponse>;
+  public activeGroupUniqueName$: Observable<string>;
   public groupDetailForm: FormGroup;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
@@ -24,9 +22,8 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
+    this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).takeUntil(this.destroyed$);
@@ -44,7 +41,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     let val: string = this.groupDetailForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
     if (val) {
-      this.store.dispatch(this.accountsAction.getAccountUniqueName(val));
+      this.store.dispatch(this.groupWithAccountsAction.getGroupUniqueName(val));
 
       this.isGroupNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
@@ -62,10 +59,14 @@ export class GroupAddComponent implements OnInit, OnDestroy {
   }
 
   public async addNewGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
+    let activeGrpUniqueName: string;
+    this.activeGroupUniqueName$.take(1).subscribe(a => activeGrpUniqueName = a);
+
     let grpObject: GroupCreateRequest;
     grpObject = this.groupDetailForm.value as GroupCreateRequest;
-    grpObject.parentGroupUniqueName = activeGrp.uniqueName;
+    this.groupDetailForm.get('uniqueName').setValue(grpObject.uniqueName.toLowerCase());
+    grpObject.uniqueName = grpObject.uniqueName.toLowerCase();
+    grpObject.parentGroupUniqueName = activeGrpUniqueName;
 
     this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
     this.groupDetailForm.reset();

@@ -84,7 +84,7 @@
                     <tr>
                         <th>Sr. No.</th>
                         <th>Tax#</th>
-                        <th>Unique Name</th>
+                        <th>Name</th>
                         <th>Linked Account</th>
                         <th>Applied From</th>
                         <th>Tax Percentage</th>
@@ -103,7 +103,7 @@
                         <td *ngIf="!taxToEdit[i]">{{tax.taxNumber}}</td>
                         <td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>
 
-                        <td *ngIf="!taxToEdit[i]">{{tax.uniqueName}}</td>
+                        <td *ngIf="!taxToEdit[i]">{{tax.name}}</td>
                         <td *ngIf="taxToEdit[i]">
                           <input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">
                         </td>

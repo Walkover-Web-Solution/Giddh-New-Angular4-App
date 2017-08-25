@@ -21,6 +21,11 @@ import { IGstDetailListItem } from '../../../../models/interfaces/gstDetailListI
   templateUrl: './account-update.component.html'
 })
 export class AccountUpdateComponent implements OnInit, OnDestroy {
+  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
+  @Input() public column: ColumnGroupsAccountVM[];
+  @Input() public activeGroupUniqueName: string;
+  public isHsnSacEnabledAcc: boolean = false;
+  public isGstEnabledAcc: boolean = false;
   public showGstList: boolean = false;
   public showDefaultGstListLength: number = 2;
   public updateAccountForm: FormGroup;
@@ -30,8 +35,6 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
   public isAccountNameAvailable$: Observable<boolean>;
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
-  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-  @Input() public column: ColumnGroupsAccountVM[];
   public statesSource$: Subject<Select2OptionData[]> = new Subject<Select2OptionData[]>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -120,6 +123,12 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
         hsn.disable();
       }
     });
+    // assign gst and hsn,sac flags
+    if (this.column[2]) {
+      let col = this.column[2].uniqueName;
+      this.isGstEnabledAcc = col === 'sundrycreditors' || col === 'sundrydebtors';
+      this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'operatingcost' || col === 'indirectexpenses';
+    }
   }
 
   public stateSelected(v) {

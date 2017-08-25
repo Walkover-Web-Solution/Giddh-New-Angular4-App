@@ -97,6 +97,9 @@
     text-align: center;
     width: 100%;
     font-size: 1.5rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .role ul li {
@@ -160,4 +163,9 @@
     font-family: FontAwesome;
     background: #f1f1f2;
     border-color: #f1f1f2;
+}
+
+.rolehead .vcenter {
+    max-width: 100px;
+    padding: 0 18px;
 }
