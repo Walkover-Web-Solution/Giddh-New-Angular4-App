@@ -83,7 +83,6 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
-      debugger;
       let fromDate = moment(action.payload.fromDate, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
       let toDate = moment(action.payload.toDate, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
       return {
