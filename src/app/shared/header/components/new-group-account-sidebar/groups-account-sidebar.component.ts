@@ -165,6 +165,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false);
     this.breadcrumbPathChanged.emit(this.breadcrumbPath);
     if (parentGrp) {
+      // if (this.isSearchingGroups) {
+      //   this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(parentGrp.uniqueName));
+      // }
       if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
         this.mc.columns.splice(currentIndex + 1, 1);
       }
