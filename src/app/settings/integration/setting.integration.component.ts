@@ -10,6 +10,7 @@ import { SmsKeyClass, EmailKeyClass, RazorPayClass } from '../../models/api-mode
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../services/account.service';
+import { ToasterService } from '../../services/toaster.service';
 
 @Component({
   selector: 'setting-integration',
@@ -45,7 +46,8 @@ export class SettingIntegrationComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private SettingsIntegrationActions: SettingsIntegrationActions,
-    private accountService: AccountService
+    private accountService: AccountService,
+    private toasty: ToasterService,
   ) {}
 
   public ngOnInit() {
@@ -127,6 +129,17 @@ export class SettingIntegrationComponent implements OnInit {
   public updateRazorPayDetails() {
     let data = _.cloneDeep(this.razorPayObj);
     this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
+  }
+
+  public unlinkAccountFromRazorPay() {
+    if (this.razorPayObj.account && this.razorPayObj.account.name && this.razorPayObj.account.uniqueName) {
+      let data = _.cloneDeep(this.razorPayObj);
+      data.account.uniqueName = null;
+      data.account.name = null;
+      this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
+    }else {
+      this.toasty.warningToast('You don\'t have any account linked with Razorpay.');
+    }
   }
 
   public deleteRazorPayDetails() {

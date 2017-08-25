@@ -10,6 +10,7 @@ export interface IStocksItem extends INameUniqueName {
   stockName?: any;
   manufacturingQuantity?: any;
   linkedStocks?: any;
+  manufacturingUnit?: any;
 }
 
 /**
@@ -62,6 +63,7 @@ export class IStockItemDetail {
   public stockUnitCode: string;
   public rate?: number;
   public amount?: number;
+  public manufacturingUnit?: string;
 }
 
 export interface IManufacturingDetails {

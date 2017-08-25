@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -113,6 +113,7 @@ export class ComparisionChartComponent implements OnInit {
     this.expenseData = [];
     this.requestInFlight = true;
     if (this.activeFinancialYear) {
+
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
         this.activeFinancialYear.financialYearStarts,
         this.activeFinancialYear.financialYearEnds, this.refresh));

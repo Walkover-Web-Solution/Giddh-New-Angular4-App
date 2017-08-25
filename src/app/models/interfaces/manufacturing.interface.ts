@@ -73,9 +73,12 @@ export interface IManufacturingItemRequest {
 }
 
  export interface ILinkedStockForCreate extends IStockItem {
-  quantity: string;
+  quantity: number;
   rate?: number;
   amount?: number;
+  stockUnitCode?: string;
+  manufacturingUnit?: string;
+  manufacturingQuantity: number;
 }
 
 export interface Transaction extends IOnlyAmount {
@@ -95,6 +98,7 @@ export class ManufacturingItemRequest {
   public multipleOf?: number;
   public linkedStocks: ILinkedStockForCreate[];
   public otherExpenses: IOtherExpensesForCreate[];
+  public voucherNumber?: string;
 }
 
 /*

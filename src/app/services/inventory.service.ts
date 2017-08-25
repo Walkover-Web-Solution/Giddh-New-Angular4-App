@@ -88,7 +88,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVENTORY_API.GROUPS_STOCKS.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName)).map((res) => {
+    return this._http.get(INVENTORY_API.GROUPS_STOCKS.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))).map((res) => {
       let data: BaseResponse<StockGroupResponse, string> = res.json();
       data.request = stockGroupUniqueName;
       data.queryString = { stockGroupUniqueName };

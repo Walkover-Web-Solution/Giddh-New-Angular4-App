@@ -29,7 +29,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'new-ledger-entry-panel',
-  templateUrl: 'newLedgerEntryPanel.component.html'
+  templateUrl: 'newLedgerEntryPanel.component.html',
+  styleUrls: ['./newLedgerEntryPanel.component.css']
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked {
@@ -39,6 +40,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   public uploadInput: EventEmitter<UploadInput>;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
@@ -56,7 +58,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public isFileUploading: boolean = false;
-  @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+  public isLedgerCreateInProcess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -69,6 +71,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.authKey$ = this.store.select(p => p.session.user.authKey).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
       text: 'Sales',
       id: 'sal'

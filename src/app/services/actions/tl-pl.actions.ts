@@ -9,42 +9,79 @@ import { Action } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TlPlService } from '../tl-pl.service';
-import { TrialBalanceRequest } from '../../models/api-models/tl-pl';
+import { ProfitLossRequest, TrialBalanceRequest, AccountDetails, BalanceSheetRequest } from '../../models/api-models/tb-pl-bs';
 
 @Injectable()
-export class TlPlActions {
+export class TBPlBsActions {
   public static readonly GET_TRIAL_BALANCE_REQUEST = 'GET_TRIAL_BALANCE_REQUEST';
   public static readonly GET_TRIAL_BALANCE_RESPONSE = 'GET_TRIAL_BALANCE_RESPONSE';
+  public static readonly GET_PROFIT_LOSS_REQUEST = 'GET_PROFIT_LOSS_REQUEST';
+  public static readonly GET_PROFIT_LOSS_RESPONSE = 'GET_PROFIT_LOSS_RESPONSE';
+  public static readonly GET_BALANCE_SHEET_REQUEST = 'GET_BALANCE_SHEET_REQUEST';
+  public static readonly GET_BALANCE_SHEET_RESPONSE = 'GET_BALANCE_SHEET_RESPONSE';
+
   public static readonly SET_DATE = 'SET_DATE';
   @Effect() private GetTrialBalance$: Observable<Action> = this.action$
-    .ofType(TlPlActions.GET_TRIAL_BALANCE_REQUEST)
+    .ofType(TBPlBsActions.GET_TRIAL_BALANCE_REQUEST)
     .switchMap(action => {
       return this._tlPlService.GetTrailBalance(action.payload)
-        .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
-          type: TlPlActions.GET_TRIAL_BALANCE_RESPONSE,
+        .map((r) => this.validateResponse<AccountDetails, TrialBalanceRequest>(r, {
+          type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
           payload: r.body
         }, true, {
-          type: TlPlActions.GET_TRIAL_BALANCE_RESPONSE,
-          payload: []
-        }));
+            type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
+            payload: []
+          }));
+    });
+
+  @Effect() private GetProfitLoss$: Observable<Action> = this.action$
+    .ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST)
+    .switchMap(action => {
+      return this._tlPlService.GetProfitLoss(action.payload)
+        .map((r) => this.validateResponse<AccountDetails, ProfitLossRequest>(r, {
+          type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
+          payload: r.body
+        }, true, {
+            type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
+            payload: []
+          }));
+    });
+
+  @Effect() private GetBalanceSheet$: Observable<Action> = this.action$
+    .ofType(TBPlBsActions.GET_BALANCE_SHEET_REQUEST)
+    .switchMap(action => {
+      return this._tlPlService.GetBalanceSheet(action.payload)
+        .map((r) => this.validateResponse<AccountDetails, BalanceSheetRequest>(r, {
+          type: TBPlBsActions.GET_BALANCE_SHEET_RESPONSE,
+          payload: r.body
+        }, true, {
+            type: TBPlBsActions.GET_BALANCE_SHEET_RESPONSE,
+            payload: []
+          }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private _tlPlService: TlPlService) {
+    private _toasty: ToasterService,
+    private _tlPlService: TlPlService) {
   }
 
   public GetTrialBalance(request: TrialBalanceRequest): Action {
     return {
-      type: TlPlActions.GET_TRIAL_BALANCE_REQUEST,
+      type: TBPlBsActions.GET_TRIAL_BALANCE_REQUEST,
       payload: request
     };
   }
 
-  public SetDate(fromDate: Date, toDate: Date): Action {
+  public GetProfitLoss(request: ProfitLossRequest): Action {
     return {
-      type: TlPlActions.SET_DATE,
-      payload: { fromDate, toDate }
+      type: TBPlBsActions.GET_PROFIT_LOSS_REQUEST,
+      payload: request
+    };
+  }
+  public GetBalanceSheet(request: BalanceSheetRequest): Action {
+    return {
+      type: TBPlBsActions.GET_BALANCE_SHEET_REQUEST,
+      payload: request
     };
   }
 

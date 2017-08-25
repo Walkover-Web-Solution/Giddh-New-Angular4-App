@@ -27,7 +27,7 @@ export interface AppState {
   auditlog: fromAuditLogs.AuditLogsState;
   permission: fromPermission.PermissionState;
   flyAccounts: fromFlyAccounts.FlyAccountsState;
-  tlPl: fromTlPl.TlPlState;
+  tlPl: fromTlPl.TBPlBsState;
   ledger: fromLedger.LedgerState;
   settings: fromSettings.SettingsState;
   manufacturing: fromManufacturing.ManufacturingState;
@@ -48,6 +48,6 @@ export const reducers = {
   search: fromSearch.searchReducer,
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,
-  tlPl: fromTlPl.tlPlReducer,
+  tlPl: fromTlPl.tbPlBsReducer,
   ledger: fromLedger.ledgerReducer
 };
