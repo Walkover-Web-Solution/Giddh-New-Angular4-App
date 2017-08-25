@@ -1,5 +1,5 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-      novalidate [formGroup]="groupDetailForm" (submit)="addNewGroup()">
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm" novalidate
+  [formGroup]="groupDetailForm" (submit)="addNewGroup()">
   <div class="form_bg pd2">
     <div class="form-group clearfix">
       <div class="col-xs-7">
@@ -19,13 +19,12 @@
     </div>
     <div class="form-group clearfix">
       <label>Description</label>
-      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
-                formControlName="description"></textarea>
+      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
     </div>
   </div>
 
   <div class="pd2 pdB clearfix">
-    <button class="btn btn-success pull-right" [disabled]="!groupDetailForm.valid">Add
+    <button class="btn btn-success pull-right" [ladda]="isCreateGroupInProcess$ | async" [disabled]="!groupDetailForm.valid">Add
     </button>
   </div>
 </form>

@@ -1,5 +1,5 @@
-<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm"
-      novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
+<form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm" novalidate
+  [formGroup]="groupDetailForm" (submit)="updateGroup()">
   <div class="form_bg pd2">
     <div class="form-group clearfix">
       <div class="col-xs-7">
@@ -19,17 +19,13 @@
     </div>
     <div class="form-group clearfix">
       <label>Description</label>
-      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
-                formControlName="description"></textarea>
+      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
     </div>
   </div>
 
   <div class="pd2 pdB clearfix">
-    <a href="javascript:void(0);" class="btn isActive"
-       *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
-       (click)="showDeleteGroupModal()">DELETE {{ (activeGroup$ | async)?.name }}</a>
-    <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async)"
-            [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
+    <a href="javascript:void(0);" class="btn isActive" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE {{ (activeGroup$ | async)?.name }}</a>
+    <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
     </button>
   </div>
 </form>
@@ -54,11 +50,8 @@
         </a>
       </ng-template>
 
-      <input formControlName="moveto" placeholder="Group name" (typeaheadOnSelect)="moveToGroupSelected($event)"
-             [typeahead]="accountList"
-             typeaheadOptionField="name"
-             class="form-control"
-             [typeaheadItemTemplate]="moveGroupTemplate">
+      <input formControlName="moveto" placeholder="Group name" (typeaheadOnSelect)="moveToGroupSelected($event)" [typeahead]="accountList"
+        typeaheadOptionField="name" class="form-control" [typeaheadItemTemplate]="moveGroupTemplate">
     </div>
     <div class="form-group mr0">
       <button class="btn isActive" [disabled]="!moveGroupForm.valid">Move</button>
@@ -68,7 +61,7 @@
 
 <!--taxes  -->
 <div class="clearfix bdrB" *ngIf="isTaxableGroup$ | async">
-  <div class="clearfix" >
+  <div class="clearfix">
     <div class="bdrB">
       <div class="dGryHead">
         Taxes
@@ -92,8 +85,7 @@
               <ng-template #popTemplate>
                 <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
               </ng-template>
-              <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate"
-                    placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+              <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
                   </span>
             </div>
             <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
@@ -104,8 +96,7 @@
                   <!-- <ng-select #select [ngModel]="activeGroupSelected$ | async" [options]="companyTaxDropDown | async" [multiple]="true">
                 </ng-select> -->
 
-                  <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async"
-                           [options]="options" [value]="activeGroupSelected$ | async"></select2>
+                  <select2 #applyTaxSelect2 formControlName="taxes" [data]="companyTaxDropDown | async" [options]="options" [value]="activeGroupSelected$ | async"></select2>
 
                 </div>
                 <button type="submit" class="btn btn-success mrT1"> Save</button>
@@ -124,9 +115,8 @@
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog">
     <div class="modal-content">
-      <confirm-modal [title]="'Delete Group'"
-                     [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
-                     (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
+      <confirm-modal [title]="'Delete Group'" [body]="'Are you sure you want to delete this group? All child groups will also be deleted.'"
+        (cancelCallBack)="hideDeleteGroupModal()" (successCallBack)="deleteGroup()">
       </confirm-modal>
     </div>
   </div>

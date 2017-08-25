@@ -50,6 +50,10 @@ export interface CurrentGroupAndAccountState {
   addAccountOpen: boolean;
   activeAccount: AccountResponse;
   fetchingGrpUniqueName: boolean;
+  isCreateGroupInProcess?: boolean;
+  isCreateGroupSuccess?: boolean;
+  isUpdateGroupInProcess?: boolean;
+  isUpdateGroupSuccess?: boolean;
   isGroupNameAvailable?: boolean;
   fetchingAccUniqueName: boolean;
   isAccountNameAvailable?: boolean;
@@ -149,7 +153,6 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       });
 
     case GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING:
-    debugger
       return Object.assign({}, state, {
         groupAndAccountSearchString: action.payload
       });
@@ -203,6 +206,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
+    case GroupWithAccountsAction.CREATE_GROUP:
+      return Object.assign({}, state, {
+        isCreateGroupInProcess: true
+      });
     case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
       let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
       if (gData.status === 'success') {
@@ -229,10 +236,15 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           }
         }
         return Object.assign({}, state, {
-          groupswithaccounts: groupArray
+          groupswithaccounts: groupArray,
+          isCreateGroupInProcess: false,
+          isCreateGroupSuccess: true
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        isCreateGroupInProcess: false,
+        isCreateGroupSuccess: false
+      });
 
     case GroupWithAccountsAction.SHARED_GROUP_WITH_RESPONSE:
       let sharedData: BaseResponse<GroupSharedWithResponse[], string> = action.payload;
@@ -274,7 +286,6 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         isGroupWithAccountsLoading: false,
         activeGroup: null,
         activeGroupUniqueName: null,
-        groupAndAccountSearchString: '',
         isRefreshingFlattenGroupsAccounts: false,
         activeGroupInProgress: false,
         activeGroupSharedWith: [],
@@ -284,7 +295,11 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showAddNewAccount: false,
         showAddNewGroup: false,
         showEditGroup: false,
-        showEditAccount: false
+        showEditAccount: false,
+        isCreateGroupInProcess: false,
+        isCreateGroupSuccess: false,
+        isUpdateGroupInProcess: false,
+        isUpdateGroupSuccess: false
       });
     case GroupWithAccountsAction.GET_GROUP_TAX_HIERARCHY:
 
@@ -392,10 +407,14 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         showEditGroup: false,
         showEditAccount: false
       });
+    case GroupWithAccountsAction.UPDATE_GROUP:
+      return Object.assign({}, state, {
+        isUpdateGroupInProcess: true
+      });
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE:
       let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
       if (activeGrpData.status === 'success') {
-        let newObj = Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
+        let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
 
         for (let grp of groupArray) {
@@ -412,10 +431,15 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           activeGroup: newObj,
           activeGroupUniqueName: newObj.uniqueName,
           activeGroupInProgress: false,
-          groupswithaccounts: groupArray
+          groupswithaccounts: groupArray,
+          isUpdateGroupInProcess: false,
+          isUpdateGroupSuccess: true
         });
       }
-      return state;
+      return Object.assign({}, state, {
+        isUpdateGroupInProcess: false,
+        isUpdateGroupSuccess: false
+      });
     case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE:
       let activeAccount: BaseResponse<AccountResponse, string> = action.payload;
       if (activeAccount.status === 'success') {
@@ -426,7 +450,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case AccountsAction.UPDATE_ACCOUNT:
-      return Object.assign({}, state, {updateAccountInProcess: true});
+      return Object.assign({}, state, { updateAccountInProcess: true });
     case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
       let updatedAccount: BaseResponse<AccountResponse, AccountRequest> = action.payload;
       if (updatedAccount.status === 'success') {
@@ -436,30 +460,30 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
           updateAccountIsSuccess: true
         });
       }
-      return Object.assign({}, state, {updateAccountInProcess: false, updateAccountIsSuccess: false});
+      return Object.assign({}, state, { updateAccountInProcess: false, updateAccountIsSuccess: false });
     case AccountsAction.RESET_ACTIVE_ACCOUNT:
-      return Object.assign({}, state, {activeAccount: null, addAccountOpen: false});
+      return Object.assign({}, state, { activeAccount: null, addAccountOpen: false });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME:
-      return Object.assign({}, state, {fetchingAccUniqueName: true, isAccountNameAvailable: null});
+      return Object.assign({}, state, { fetchingAccUniqueName: true, isAccountNameAvailable: null });
     case AccountsAction.GET_ACCOUNT_UNIQUENAME_RESPONSE:
       let responseData: BaseResponse<AccountResponse, string> = action.payload;
       if (responseData.status === 'success') {
-        return Object.assign({}, state, {fetchingAccUniqueName: false, isAccountNameAvailable: false});
+        return Object.assign({}, state, { fetchingAccUniqueName: false, isAccountNameAvailable: false });
       } else {
         if (responseData.code === 'ACCOUNT_NOT_FOUND') {
-          return Object.assign({}, state, {fetchingAccUniqueName: false, isAccountNameAvailable: true});
+          return Object.assign({}, state, { fetchingAccUniqueName: false, isAccountNameAvailable: true });
         }
         return state;
       }
     case GroupWithAccountsAction.GET_GROUP_UNIQUENAME:
-      return Object.assign({}, state, {fetchingGrpUniqueName: true, isGroupNameAvailable: null});
+      return Object.assign({}, state, { fetchingGrpUniqueName: true, isGroupNameAvailable: null });
     case GroupWithAccountsAction.GET_GROUP_UNIQUENAME_RESPONSE:
       let resData: BaseResponse<AccountResponse, string> = action.payload;
       if (resData.status === 'success') {
-        return Object.assign({}, state, {fetchingGrpUniqueName: false, isGroupNameAvailable: false});
+        return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: false });
       } else {
         if (resData.code === 'GROUP_NOT_FOUND') {
-          return Object.assign({}, state, {fetchingGrpUniqueName: false, isGroupNameAvailable: true});
+          return Object.assign({}, state, { fetchingGrpUniqueName: false, isGroupNameAvailable: true });
         }
         return state;
       }
@@ -495,7 +519,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
-          activeGroup: {uniqueName: g.queryString.parentUniqueName}
+          activeGroup: { uniqueName: g.queryString.parentUniqueName }
         });
       }
       return state;
@@ -518,7 +542,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
-          activeGroup: {uniqueName: m.request.parentGroupUniqueName}
+          activeGroup: { uniqueName: m.request.parentGroupUniqueName }
         });
       }
       return state;
@@ -550,13 +574,13 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         moveAccountSuccess: false
       });
     case AccountsAction.CREATE_ACCOUNT:
-      return Object.assign({}, state, {createAccountInProcess: true});
+      return Object.assign({}, state, { createAccountInProcess: true });
     case AccountsAction.CREATE_ACCOUNT_RESPONSE:
       let accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
       if (accountData.status === 'success') {
-        return Object.assign({}, state, {createAccountInProcess: false, createAccountIsSuccess: true});
+        return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: true });
       }
-      return Object.assign({}, state, {createAccountInProcess: false, createAccountIsSuccess: false});
+      return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: false });
     default:
       return state;
   }
