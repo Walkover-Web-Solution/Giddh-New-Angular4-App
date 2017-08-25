@@ -30,7 +30,8 @@
   <div class="modal-body pd0">
     <div class="clearfix height100">
 
-      <div class="grp_col pd0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
+      <div class="grp_col pd0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
+      #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
         <div class="search-loading" *ngIf="(searchLoad | async)">
           <div class="vcenter">
           <span class="spinner small"></span> Loading…
@@ -51,7 +52,8 @@
       </div>
       <!-- middle body -->
       <div class="form_box height100">
-        <account-operations [columnsRef]="currentColumns" [breadcrumbPath]="breadcrumbPath" (ShowForm)="ShowRightForm($event)" #form></account-operations>
+        <account-operations [columnsRef]="currentColumns" [height]= "((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"  [breadcrumbPath]="breadcrumbPath" (ShowForm)="ShowRightForm($event)" #form
+         ></account-operations>
       </div>
 
 

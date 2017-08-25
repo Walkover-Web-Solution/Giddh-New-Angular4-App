@@ -45,6 +45,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showEditGroup$: Observable<boolean>;
   @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
   @Input() public columnsRef: GroupAccountSidebarVM;
+  @Input() public height: number;
   public activeAccount$: Observable<AccountResponse>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
