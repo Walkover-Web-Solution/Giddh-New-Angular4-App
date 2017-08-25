@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
 import { InvoicePreviewComponent } from './preview/invoice.preview.component';
-// import { InvoiceCreateComponent } from './create/invoice.create.component';
+import { InvoiceCreateComponent } from './create/invoice.create.component';
 import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
@@ -47,7 +47,7 @@ const INVOICE_ROUTES: Routes = [
     InvoicePreviewComponent,
     InvoiceGenerateComponent,
     EditInvoiceComponent,
-    // InvoiceCreateComponent,
+    InvoiceCreateComponent,
     DesignFiltersContainerComponent,
     EditFiltersContainersComponent,
     InvoiceSettingComponent,

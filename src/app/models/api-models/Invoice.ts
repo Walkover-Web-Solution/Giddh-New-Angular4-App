@@ -353,7 +353,7 @@ export class GetInvoiceTemplateDetailsResponse {
 }
 
 // check if use other wise remove
-export interface GetInvoiceTemplateDetailsResponse {
+export interface InvoiceTemplateDetailsResponse {
   sample?: any;
   color: string;
   sections: ISection[];
@@ -379,5 +379,5 @@ export interface IContent {
   display: boolean;
   label: string;
   field: string;
-  width: string;
+  width?: string;
 }
