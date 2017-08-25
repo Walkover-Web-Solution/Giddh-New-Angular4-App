@@ -44,7 +44,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['groups']) {
-      this.resetData();
+      // this.resetData();
     }
   }
 
@@ -176,6 +176,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   }
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
+    this.breadcrumbPath = [];
+    this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true);
+    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
