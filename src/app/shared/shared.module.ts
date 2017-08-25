@@ -24,10 +24,7 @@ import {
   AccountOperationsComponent,
   AccountsSideBarComponent,
   CompanyAddComponent,
-  GroupAccountsListComponent,
   GroupsAccountSidebarComponent,
-  GroupsRecursiveListComponent,
-  GroupsRecursiveListItemComponent,
   ManageGroupsAccountsComponent
 } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
@@ -64,8 +61,7 @@ export function highchartsFactory() {
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
+    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
     TaxControlComponent, NumberToWordsPipe, RecTypePipe],
@@ -95,8 +91,7 @@ export function highchartsFactory() {
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, DatePickerModule, RecTypePipe
   ],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent,
-    GroupsRecursiveListComponent, GroupsRecursiveListItemComponent, GroupAccountsListComponent, AccountAddComponent, GroupsAccountSidebarComponent,
+  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent],
   providers: [{
     provide: HighchartsStatic,
