@@ -26,7 +26,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public showForm: boolean = false;
   @ViewChild('myModel') public myModel: ElementRef;
   @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: true };
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
   @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
   public breadcrumbPath: string[] = [];
   public myModelRect: any;
@@ -87,7 +87,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     this.destroyed$.complete();
   }
   public ScrollToRight() {
-    this.directiveScroll.scrollToRight();
+    if (this.directiveScroll) {
+      this.directiveScroll.scrollToRight();
+    }
   }
   public ShowRightForm(e) {
     //
