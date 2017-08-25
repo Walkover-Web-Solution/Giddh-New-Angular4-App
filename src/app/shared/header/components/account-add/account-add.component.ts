@@ -191,7 +191,6 @@ export class AccountAddComponent implements OnInit, OnDestroy {
     // }
     delete accountObj['gstDetails'];
     this.submitClicked.emit({ activeGroupUniqueName: this.activeGroupUniqueName, accountRequest: accountObj });
-    this.store.dispatch(this.accountsAction.createAccount(this.activeGroupUniqueName, accountObj));
   }
 
   public ngOnDestroy() {

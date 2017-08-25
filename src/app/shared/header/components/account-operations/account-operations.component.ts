@@ -25,7 +25,8 @@ import {
   AccountSharedWithResponse,
   AccountsTaxHierarchyResponse,
   AccountUnMergeRequest,
-  ShareAccountRequest
+  ShareAccountRequest,
+  AccountRequest
 } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -661,6 +662,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.hideMoveMergedAccountModal();
   }
 
+  public addNewGroup(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
+    this.store.dispatch(this.accountsAction.createAccount(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
