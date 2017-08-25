@@ -130,6 +130,8 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     enableThanks: true,
 
   }
+  public logoSize: string;
+  public showLogo: boolean = true;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -227,6 +229,18 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
 
     this._invoiceUiDataService.imageSignaturePath.subscribe((val) => {
       this.imageSignatureSrc = val;
+    });
+    this._invoiceUiDataService.logoSize.subscribe((val) => {
+      this.logoSize = val;
+    });
+    this._invoiceUiDataService.defaultPrintSetting.subscribe((val) => {
+      this.leftMargin = val
+      this.rightMargin = val
+      this.topMargin = val
+      this.bottomMargin = val
+    });
+    this._invoiceUiDataService.showLogo.subscribe((val) => {
+      this.showLogo = val;
     });
   }
 

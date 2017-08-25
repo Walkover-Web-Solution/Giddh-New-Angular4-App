@@ -46,10 +46,16 @@ export class DesignFiltersContainerComponent {
   public sizeSelect: boolean = true;
   public styleSelect: boolean = true;
   public presetFonts = this._presetFonts;
+  public logoAttached: boolean = false;
+  public logoSize: string;
+  public showLogo: boolean = true;
   constructor(private _invoiceUiDataService: InvoiceUiDataService, private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
+    this.currentColor = "#000000";
+    this.logoSize = '140';
+    this._invoiceUiDataService.setLogoSize(this.logoSize);
   }
 
   public selectTemplate() {
@@ -142,8 +148,11 @@ export class DesignFiltersContainerComponent {
     };
     if (file) {
       reader.readAsDataURL(file);
+      this.logoAttached = true;
     } else {
-      preview.src = ' ';
+      preview.src = '';
+      this.logoAttached = false;
+      this._invoiceUiDataService.setLogoPath('');
     }
   }
   public cancelUpload(id: string): void {
@@ -183,6 +192,30 @@ export class DesignFiltersContainerComponent {
   public changeColor(color) {
     this.currentColor = color;
     this.store.dispatch(this.invoiceAction.setColor(color));
+  }
+  public setLogoSize(size) {
+    if (size == 'small') {
+      this.logoSize = '40';
+    }
+    else if (size == 'large') {
+        this.logoSize = '180';
+    }
+    else {
+     this.logoSize = '140'; 
+    }
+    this._invoiceUiDataService.setLogoSize(this.logoSize);
+  }
+
+  public resetPrintSetting() {
+    this._invoiceUiDataService.resetPrintSetting(10);
+    this.left = '';
+    this.top = '';
+    this.right = '';
+    this.bottom = ''; 
+  }
+  public hideLogo() {
+    this.showLogo = !this.showLogo;
+    this._invoiceUiDataService.logoState(this.showLogo);
   }
 
 }

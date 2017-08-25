@@ -481,7 +481,7 @@
         <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[activeHeader]" (click)="onClickHeader()">
             <a href="javascript:void(0);" class="edit-template" *ngIf="!activeHeader"><i class="fa fa-pencil"></i></a>
             <header>
-                <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="{{this.companyName$ | async}}"></figure>
+                <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" [hidden]='!showLogo' /></figure>
                 <figure class="col-xs-6" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyName ]">
                     <strong><h2 [ngStyle]="{ 'color': color}" >{{this.companyName$ | async}}</h2></strong>
                 </figure>
