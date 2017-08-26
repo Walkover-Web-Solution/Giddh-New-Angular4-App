@@ -18,7 +18,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public stockUnitsDropDown$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
-    width: '200px',
+    width: '100%',
     placeholder: 'Choose a parent unit'
   };
   public stockUnit$: Observable<StockUnitRequest[]>;

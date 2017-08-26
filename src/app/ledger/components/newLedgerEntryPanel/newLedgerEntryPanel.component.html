@@ -2,7 +2,7 @@
     <div class="wrapper">
         <div class="basic_detail" ng-if="ledgerCtrl.showTaxationDiscountBox">
             <table>
-                <tbody>
+                <tbody class="mrB1 pull-left">
                     <tr *ngIf="currentTxn.selectedAccount">
                         <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
                             <table>
@@ -71,7 +71,7 @@
             </table>
         </div>
 
-        <div class="row pd1 inWords">
+        <div class="row pd1 inWords" *ngIf="currentTxn.total">
             <div class="col-xs-12">
                 {{ currentTxn.total | myNumberToWordsPipe }}
             </div>
@@ -101,13 +101,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                    </div>
-                </div>
-
-                <div class="file_attached col-xs-5 pull-right text-right" *ngIf="blankLedger.attachedFile.length > 0">
-                    <div class="row">
-                        <span>{{ blankLedger.attachedFileName }}</span>
-                        <label class="remove cp mrL1" (click)="showDeleteAttachedFileModal()">(remove)</label>
                     </div>
                 </div>
             </div>
@@ -154,7 +147,7 @@
 
         <div class="row">
             <div class="col-xs-6">
-                <button class="no-btn" (click)="showAdvanced = !showAdvanced">Advance <i
+                <button class="no-btn pdL0" (click)="showAdvanced = !showAdvanced">Advance <i
           class="glyphicon glyphicon-triangle-bottom" [ngClass]="{rotate180:showAdvanced}"></i></button>
             </div>
             <div class="col-xs-6 text-right">
@@ -163,20 +156,30 @@
         </div>
 
         <div class="row">
+            <div class="col-xs-12">
+                <div class="mrR1" [ngClass]="{hide:blankLedger.attachedFile}">
+                    <label class="checkbox pull-left">
+              <input class="pull-left" type="checkbox" name="generateInvoice"
+                     [(ngModel)]="blankLedger.generateInvoice">
+              <span class="">Generate Invoice</span>
+            </label>
+                </div>
+
+                <div class="file_attached pull-right text-right" *ngIf="blankLedger.attachedFile.length > 0">
+                    <div class="">
+                        <span>{{ blankLedger.attachedFileName }}</span>
+                        <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
+                    </div>
+                </div>
+            </div>
+
             <div class="col-xs-3 pdT1">
-                <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger" (click)="resetPanel()">Reset
+                <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger" (click)="resetPanel()">
+          Reset
         </button>
             </div>
             <div class="col-xs-9 pdT1">
                 <div class="pull-right">
-                    <div class="mrR1 pull-left" [ngClass]="{hide:blankLedger.attachedFile}">
-                        <label class="checkbox oh">
-              <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice"
-                     [(ngModel)]="blankLedger.generateInvoice">
-              <span class="pull-left">Generate Invoice</span>
-            </label>
-                    </div>
-
                     <div class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
                         <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                         <label for="invoiceFile"><i class="glyphicon glyphicon-paperclip"></i></label>
@@ -186,7 +189,7 @@
           </button>
                     <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-success" (click)="addToDrOrCr('CREDIT',$event)">Add to CR
           </button>
-                    <button id="saveLedger" class="btn btn-success" [disabled]="isFileUploading" (click)="saveLedger()">Save
+                    <button id="saveLedger" class="btn btn-success" [disabled]="isFileUploading" [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
           </button>
 
                 </div>
