@@ -423,6 +423,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             // grp = Object.assign({}, grp, activeGrpData.body);
             grp.uniqueName = activeGrpData.body.uniqueName;
             grp.name = activeGrpData.body.name;
+            grp.isActive = true;
+            grp.isOpen = true;
             break;
           } else {
             updateActiveGroupFunc(grp.groups, activeGrpData.queryString.groupUniqueName, activeGrpData.body);
@@ -613,6 +615,8 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
     if (grp.uniqueName === uniqueName) {
       grp.name = updatedGroup.name;
       grp.uniqueName = updatedGroup.uniqueName;
+      grp.isActive = true;
+      grp.isOpen = true;
       break;
     }
     if (grp.groups) {
