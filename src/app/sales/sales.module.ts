@@ -7,6 +7,8 @@ import { SalesComponent } from './sales.component';
 import { SalesInvoiceComponent } from './create/sales.invoice.component';
 import { AsideMenuAccountComponent } from './aside-menu/aside.menu.account.component';
 
+export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
+
 @NgModule({
   declarations: [
     SalesComponent,

@@ -14,6 +14,8 @@ import { SALES_ACTIONS } from './sales.const';
 import { Router } from '@angular/router';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
+import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
+import { GroupService } from '../../group.service';
 
 @Injectable()
 export class SalesActions {
@@ -39,12 +41,31 @@ export class SalesActions {
       };
     });
 
+  // @Effect()
+  // public GetGroupsListForSales$: Observable<Action> = this.action$
+  //   .ofType(SALES_ACTIONS.GET_GROUPS_FOR_SALES)
+  //   .switchMap(action => this._groupService.GetGroupsWithAccounts(action.payload))
+  //   .map(response => this.getGroupsListForSalesResponse(response));
+
+  // @Effect()
+  // public GetGroupsListForSalesResponse$: Observable<Action> = this.action$
+  //   .ofType(SALES_ACTIONS.GET_GROUPS_FOR_SALES_RESPONSE)
+  //   .map(action => {
+  //     if (action.payload.status === 'error') {
+  //       this._toasty.errorToast(action.payload.message, action.payload.code);
+  //     }
+  //     return {
+  //       type: ''
+  //     };
+  //   });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private _router: Router,
     private store: Store<AppState>,
     private _salesService: SalesService,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _groupService: GroupService
   ) {
   }
 
@@ -61,6 +82,20 @@ export class SalesActions {
       payload: value
     };
   }
+
+  // public getGroupsListForSales(value?: string): Action {
+  //   return {
+  //     type: SALES_ACTIONS.GET_GROUPS_FOR_SALES,
+  //     payload: value
+  //   };
+  // }
+
+  // public getGroupsListForSalesResponse(value: BaseResponse<GroupsWithAccountsResponse[], string>): Action {
+  //   return {
+  //     type: SALES_ACTIONS.GET_GROUPS_FOR_SALES_RESPONSE,
+  //     payload: value
+  //   };
+  // }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {

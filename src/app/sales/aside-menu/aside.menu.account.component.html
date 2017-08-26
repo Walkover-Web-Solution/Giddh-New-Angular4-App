@@ -3,8 +3,18 @@
     <h3 class="aside-title">Create Account</h3>
   </div>
   <div class="aside-body">
-    <!-- *ngIf="!(activeAccount$ | async)" -->
-    <!-- <account-add [column]="null"></account-add> -->
+    <div class="form-group pdT2">
+      <label class="mrB1">Select Group</label>
+      <select2 name="flatAccountWGroupsList" [data]="flatAccountWGroupsList$ | async" class="select2-parent" [(ngModel)]="activeGroupUniqueName$" [options]="select2Options"></select2>
+    </div>
+    <!--account add component-->
+    <!-- 
+    <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+    [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
+    [createAccountInProcess$]="createAccountInProcess$"
+    [createAccountIsSuccess$]="createAccountIsSuccess$" (submitClicked)="addNewGroup($event)"
+    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-add>
+    -->
     <div>
       <button class="btn btn-default" (click)="closeAsidePane($event)">Close</button>
     </div>
