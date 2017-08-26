@@ -90,7 +90,7 @@
           <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.field}}</th>
         </tr>
       </thead>
-      <tbody *ngFor="let entry of invFormData.entries; let i = index">
+      <tbody *ngFor="let entry of invFormData.entries;">
         <tr *ngFor="let transaction of entry.transactions; let i = index">
           <td>{{ i+1 }}</td>
           <td></td>
@@ -98,10 +98,10 @@
           <td>{{ transaction.hsnNumber || transaction.sacNumber }}</td>
           <td>{{ transaction.quantity }}</td>
           <td>{{ transaction.rate }}</td>
-          <td>discount</td>
-          <td>taxable</td>
-          <td>tax</td>
+          <td>{{ entry.discounts[i].amount }}</td>
           <td>{{ transaction.amount }}</td>
+          <td>tax</td>
+          <td>total</td>
         </tr>
       </tbody>
     </table>
