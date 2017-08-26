@@ -208,7 +208,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       return state;
     case GroupWithAccountsAction.CREATE_GROUP:
       return Object.assign({}, state, {
-        isCreateGroupInProcess: true
+        isCreateGroupInProcess: true,
+        isCreateGroupSuccess: false
       });
     case GroupWithAccountsAction.CREATE_GROUP_RESPONSE:
       let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;

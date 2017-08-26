@@ -42,7 +42,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
       description: ['']
     });
 
-    this.isCreateGroupSuccess$.subscribe(a => {
+    this.isCreateGroupSuccess$.distinctUntilChanged().subscribe(a => {
       if (a) {
         this._toaster.successToast('Sub group added successfully', 'Success');
         this.groupDetailForm.reset();
