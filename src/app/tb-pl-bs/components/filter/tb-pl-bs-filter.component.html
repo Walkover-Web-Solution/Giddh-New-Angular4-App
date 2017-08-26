@@ -31,9 +31,10 @@
   </div>
   <!-- end of coloumn -->
   <div class="col-xs-3">
-    <tb-export-csv class="pull-right"></tb-export-csv>
-    <tb-export-xls class="pull-right"></tb-export-xls>
-    <tb-export-pdf class="pull-right"></tb-export-pdf>
+    <tb-export-csv *ngIf="tbExportCsv" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
+    <tb-export-xls *ngIf="tbExportXLS" (tbExportXLSEvent)="tbExportXLSEvent.emit($event)" class="pull-right"></tb-export-xls>
+    <tb-export-pdf *ngIf="tbExportPdf" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
+    <pl-bs-export-xls *ngIf="plBsExportXLS" (plBsExportPdfEvent)="plBsExportXLSEvent.emit($event)" class="pull-right"></pl-bs-export-xls>
   </div>
   <!-- end of second coloumn -->
 </div>
@@ -43,7 +44,7 @@
     <div class="form-group mrR2">
       <div class="input-group input-group-md">
         <span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-search"></i></span>
-        <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3" id="w-398px"  [(ngModel)]="search" >
+        <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3" id="w-398px" [(ngModel)]="search">
         <i class="glyphicon glyphicon-remove close-icon" *ngIf="showClearSearch"></i>
       </div>
     </div>
