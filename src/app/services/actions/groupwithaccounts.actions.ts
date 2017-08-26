@@ -157,6 +157,8 @@ export class GroupWithAccountsAction {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast('Sub group added successfully', 'Success');
       }
       return {
         type: ''
