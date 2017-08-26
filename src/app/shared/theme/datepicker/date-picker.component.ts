@@ -27,7 +27,7 @@ export const DATEPICKER_VALUE_ACCESSOR: any = {
 @Component({
   selector: 'date-picker',
   template: `
-    <div class="form-group" (clickOutside)="showToDatePicker=false;">
+    <div class="form-group {{ containerClass }}" (clickOutside)="showToDatePicker=false;">
       <label>{{label}}</label>
       <div class="input-group" style="display:table">
         <input type="text" name="to" required
@@ -35,14 +35,31 @@ export const DATEPICKER_VALUE_ACCESSOR: any = {
                [value]="value"
                (keyup)="false"
                class="form-control"/>
-        <span class="input-group-btn">
+        <span class="input-group-btn" *ngIf="showCalenderButton">
                     <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker"><i
                       class="glyphicon glyphicon-calendar"></i></button>
                   </span>
       </div>
       <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-        <datepicker [showWeeks]="false" [minDate]="minDate" [maxDate]="maxDate"
-                    (selectionDone)="selectionDone($event)"></datepicker>
+        <ul class="my-dropdown-menu">
+          <li>
+            <datepicker [showWeeks]="false" (click)="$event.stopPropagation()" [minDate]="minDate"
+                        [maxDate]="maxDate" (selectionDone)="selectionDone($event)"></datepicker>
+          </li>
+          <li style="padding:10px 9px 2px" *ngIf="showAdditionalButton">
+                <span class="btn-group pull-left">
+            <button type="button" class="btn btn-sm btn-info"
+                    (click)="setToday();showToDatePicker = false"
+            >Today</button>
+            <button type="button" class="btn btn-sm btn-danger"
+                    (click)="clearDate();showToDatePicker = false"
+            >Clear</button>
+          </span>
+            <button type="button" class="btn btn-sm btn-success pull-right" (click)="showToDatePicker = false">
+              Done
+            </button>
+          </li>
+        </ul>
       </div>
     </div>
   `,
@@ -55,6 +72,9 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
   @Input() public label: string;
   @Input() public maxDate: string;
   @Input() public minDate: string;
+  @Input() public showCalenderButton: boolean = true;
+  @Input() public showAdditionalButton: boolean = true;
+  @Input() public containerClass: string;
 
   @Input() public disabled: boolean = false;
   // emitter when value is changed
@@ -114,6 +134,16 @@ export class DatePickerComponent implements AfterViewInit, OnChanges, OnDestroy,
 
   public ngOnDestroy() {
     //
+  }
+
+  public setToday() {
+    this.value = this.convertToString(new Date());
+    this.onChangeCb(this.value);
+  }
+
+  public clearDate() {
+    this.value = '';
+    this.onChangeCb(this.value);
   }
 
   public selectionDone(event) {

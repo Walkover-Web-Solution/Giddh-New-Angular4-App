@@ -1,7 +1,8 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
-  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild,
+  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit,
+  ViewChild,
   ViewChildren
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -69,7 +70,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private router: Router,
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef) {
+    private cdRef: ChangeDetectorRef,
+              private zone: NgZone) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -88,14 +90,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!state.company.companies) {
         return;
       }
-      let selectedCmp =  state.company.companies.find(cmp => {
+
+      let selectedCmp = state.company.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
-
+      if (!selectedCmp) {
+        return;
+      }
       if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
-          this.userIsSuperUser = true;
+        this.userIsSuperUser = true;
       } else {
-         this.userIsSuperUser = false;
+        this.userIsSuperUser = false;
       }
       return selectedCmp;
 
@@ -125,6 +130,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.accountSearchValue = newValue;
         this.filterAccounts(newValue);
       });
+
+    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().takeUntil(this.destroyed$).subscribe(a => {
+      if (a) {
+        this.zone.run(() => {
+          this.filterAccounts('');
+        });
+      }
+    });
   }
 
   public ngAfterViewInit() {

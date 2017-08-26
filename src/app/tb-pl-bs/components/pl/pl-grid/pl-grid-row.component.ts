@@ -5,7 +5,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
   selector: '[pl-grid-row]',  // <home></home>
   template: `
     <div class="row pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName">
-      <div class="col-xs-3  group">{{ groupDetail.groupName | uppercase}}</div>
+      <div class="col-xs-3  group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search" ></div>
       <div class="col-xs-3  group">2.0</div>
       <!-- ng-bind-html="groupDetail.closingBalance.amount | uppercase" -->
       <div class="col-xs-3  group text-right">
@@ -29,12 +29,11 @@ import { ChildGroup } from '../../../../models/api-models/Search';
       </div>
     </section>
     <ng-content></ng-content>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  `
 })
 export class PlGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
-
+  @Input() public search: string;
   constructor() {
     //
   }

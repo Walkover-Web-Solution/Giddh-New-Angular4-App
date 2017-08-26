@@ -6,10 +6,6 @@ import { TbPlBsComponent } from './tb-pl-bs.component';
 import { TbGridComponent } from './components/tb/tb-grid/tb-grid.component';
 import { TbPlBsFilterComponent } from './components/filter/tb-pl-bs-filter.component';
 import { TbPlBsRoutingModule } from './tb-pl-bs.routing.module';
-import { TlPlExportComponent } from './components/export/tl-pl-export.component';
-import { TlPlExportCsvComponent } from './components/export/tl-pl-export-csv.component';
-import { TlPlExportPdfComponent } from './components/export/tl-pl-export-pdf.component';
-import { TlPlExportXlsComponent } from './components/export/tl-pl-export-xls.component';
 import { TlPlGridRowComponent } from './components/tb-pl-bs-grid-row.component';
 import { TrialAccordionDirective } from './components/trial-accordion.directive';
 import { TbComponent } from './components/tb/tb.component';
@@ -17,20 +13,32 @@ import { PlComponent } from './components/pl/pl.component';
 import { PlGridComponent } from './components/pl/pl-grid/pl-grid.component';
 import { PlGridRowComponent } from './components/pl/pl-grid/pl-grid-row.component';
 
+import { BsComponent } from './components/bs/bs.component';
+import { BsGridComponent } from './components/bs/bs-grid/bs-grid.component';
+import { BsGridRowComponent } from './components/bs/bs-grid/bs-grid-row.component';
+
+import { PlBsExportXlsComponent } from './components/export/pl-bs-export-xls.component';
+import { TbExportCsvComponent } from './components/export/tb-export-csv.component';
+import { TbExportPdfComponent } from './components/export/tb-export-pdf.component';
+import { TbExportXlsComponent } from './components/export/tb-export-xls.component';
+
 @NgModule({
   declarations: [
     TbPlBsComponent,
     TbGridComponent,
     TbPlBsFilterComponent,
-    TlPlExportComponent,
-    TlPlExportCsvComponent,
-    TlPlExportPdfComponent,
-    TlPlExportXlsComponent,
     TlPlGridRowComponent,
     TbComponent,
     PlComponent,
     PlGridComponent,
     PlGridRowComponent,
+    PlBsExportXlsComponent,
+    TbExportCsvComponent,
+    TbExportPdfComponent,
+    TbExportXlsComponent,
+    BsComponent,
+    BsGridComponent,
+    BsGridRowComponent,
     TrialAccordionDirective
   ],
   exports: [

@@ -8,22 +8,10 @@
   <form #filter="ngForm">
     <div class="filterForm clearfix pr">
       <div class="form-group mrB pull-left">
-        <label>From Date</label>
-        <div class="input-group" (clickOutside)="showFromDatePicker=false;">
-          <input type="text" name="from" [ngModel]="moment(fromDate).format('DD/MM/YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;">
-          <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-            <datepicker name="fromDate" [(ngModel)]="fromDate" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
-          </div>
-        </div>
+        <date-picker [label]="'From Date'" [minDate]="" [maxDate]="today" [(ngModel)]="fromDate" name="fromDate" [showAdditionalButton]="true" [showCalenderButton]="false"></date-picker>
       </div>
       <div class="form-group mrB pull-left">
-        <label>To Date</label>
-        <div class="input-group" (clickOutside)="showToDatePicker=false;">
-          <input type="text" name="to" [ngModel]="moment(toDate).format('DD/MM/YYYY')" (focus)="showToDatePicker = true;showFromDatePicker=false;">
-          <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-            <datepicker name="toDate" [(ngModel)]="toDate" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="true"></datepicker>
-          </div>
-        </div>
+          <date-picker [label]="'To Date'" [minDate]="" [maxDate]="today" [(ngModel)]="toDate" name="toDate" [showAdditionalButton]="true" [showCalenderButton]="false"></date-picker>
       </div>
       <div class="form-group">
         <label>&nbsp;</label>

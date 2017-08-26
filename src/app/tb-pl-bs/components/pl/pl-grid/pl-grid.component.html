@@ -21,8 +21,12 @@
                 <tr>
                   <th class="col-xs-3 ">Particular</th>
                   <th class="col-xs-3 ">Note</th>
-                  <th class="col-xs-3 ">As Of {{plData?.dates?.toDate}}</th>
-                  <th class="col-xs-3 ">As Of {{plData?.dates?.fromDate}}</th>
+                  <th class="col-xs-3 ">
+                    As Of {{plData?.dates?.toDate | date}}
+                  </th>
+                  <th class="col-xs-3 ">
+                    As Of {{plData?.dates?.fromDate |date}}
+                  </th>
                 </tr>
               </thead>
             </table>
@@ -32,12 +36,13 @@
                 <h3 class="fs20">I Income</h3>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let incGrp  of  plData?.incArr" style="padding-left:30px" pl-grid-row [groupDetail]="incGrp">
+            <section class="row row-1" *ngFor="let incGrp  of  plData.incArr | tbsearch: search" style="padding-left:30px" pl-grid-row
+              [groupDetail]="incGrp" [search]="search">
               <section class="row row-2 childgroups" *ngFor="let subGrp  of  incGrp.childGroups" style="padding-left:30px" pl-grid-row
-                [groupDetail]="subGrp" [ngClass]="{'isHidden': !subGrp.isVisible }">
+                [search]="search" [groupDetail]="subGrp" [ngClass]="{'isHidden': !subGrp.isVisible }">
 
                 <section class="row row-2 accounts" *ngFor="let acc  of subGrp.accounts" style="padding-left:30px" pl-grid-row [groupDetail]="acc"
-                  [ngClass]="{'isHidden': !acc.isVisible }">
+                  [search]="search" [ngClass]="{'isHidden': !acc.isVisible }">
                 </section>
               </section>
             </section>
@@ -58,11 +63,12 @@
                 <h3 class="fs20">II Expenses</h3>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let expGrp of plData?.expArr" style="padding-left:30px" pl-grid-row [groupDetail]="expGrp">
+            <section class="row row-1" *ngFor="let expGrp of plData.expArr | tbsearch: search" style="padding-left:30px" pl-grid-row
+              [groupDetail]="expGrp" [search]="search">
               <section class="row row-2 childgroups" *ngFor="let subGrp of  expGrp.childGroups" style="padding-left:30px" pl-grid-row [groupDetail]="subGrp"
-                [ngClass]="{'isHidden': !subGrp.isVisible }">
+                [search]="search" [ngClass]="{'isHidden': !subGrp.isVisible }">
                 <section class="row row-2 accounts" *ngFor="let acc of subGrp.accounts" style="padding-left:30px" pl-grid-row [groupDetail]="acc"
-                  [ngClass]="{'isHidden': !acc.isVisible }">
+                  [search]="search" [ngClass]="{'isHidden': !acc.isVisible }">
                 </section>
               </section>
             </section>

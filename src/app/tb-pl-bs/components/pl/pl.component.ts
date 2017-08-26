@@ -32,6 +32,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
     </div>
     <div *ngIf="(data$ | async)">
       <pl-grid #plGrid
+      [search]="filter.search"
         [plData]="data$ | async"
       ></pl-grid>
     </div>
@@ -79,8 +80,9 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
-    request.fromDate = null;
-    request.toDate = null;
+    request.fromDate = this.selectedCompany.financialYears[request.fy].financialYearStarts;
+    request.toDate = this.selectedCompany.financialYears[request.fy].financialYearEnds;
+    //
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }
 

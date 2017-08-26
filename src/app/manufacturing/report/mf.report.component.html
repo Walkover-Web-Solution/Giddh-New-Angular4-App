@@ -15,39 +15,63 @@
             <div class="row">
               <label class="small">Final Product</label>
               <select class="form-control" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product">
-               <option [ngValue]="'select'">Please Select</option>
+               <option value="">Select Product</option>
                <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option>
                </select>
               <span class="select_drop"><i class="fa fa-caret-down"></i></span>
             </div>
           </div>
-          <div class="form-group col-xs-1 pdR0">
-            <label class="small">From Date</label>
-            <input type="text" class="form-control" name="from" [(ngModel)]="mfStockSearchRequest.from" />
+          <div class="form-group col-xs-1" (clickOutside)="showFromDatePicker=false;">
+            <small>From Date</small>
+            <div class="input-group">
+              <input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
+                class="form-control" required/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
+                <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+            </div>
+            <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+              <datepicker name="fromDate" [(ngModel)]="mfStockSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker"
+                [showWeeks]="true"></datepicker>
+            </div>
           </div>
-          <div class="form-group col-xs-1 pdR0">
-            <label class="small">To Date</label>
-            <input type="text" class="form-control" name="to" [(ngModel)]="mfStockSearchRequest.to" />
+          <div class="form-group col-xs-1" (clickOutside)="showToDatePicker=false;">
+            <small>To Date</small>
+            <div class="input-group">
+              <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;"
+                class="form-control" required/>
+              <span class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
+                <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+            </div>
+            <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+              <datepicker name="fromDate" [(ngModel)]="mfStockSearchRequest.to" (selectionDone)="showToDatePicker=!showToDatePicker"
+                [showWeeks]="true"></datepicker>
+            </div>
           </div>
           <div class="form-group col-xs-1 pdR0 custom-select pos-rel">
-            <label class="small">Others</label>
+            <label class="small">Search By</label>
             <select class="form-control" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
-               <option [ngValue]="'select'">Please Select</option>
+               <option value="">--Select--</option>
                <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option>
                </select>
             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
           </div>
           <div class="form-group col-xs-2 pdR0 custom-select pos-rel">
-            <label class="small">&nbsp;</label>
+            <label class="small">Operation</label>
             <select class="form-control" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation">
-               <option [ngValue]="'select'">Please Select</option>
+               <option value="">--Select--</option>
                <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option>
                </select>
             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
           </div>
           <div class="form-group col-xs-1 pdR0">
-            <label class="small">Number</label>
-            <input type="text" #numberField="ngModel" pattern="^-?\d+(?:\.\d+)?$" class="form-control" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
+            <label class="small">Value</label>
+            <input type="text" #numberField="ngModel" pattern="^-?\d+(?:\.\d+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
             <p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>
           </div>
           <div class="form-group col-xs-1">
@@ -58,10 +82,13 @@
       </form>
     </div>
     <!-- search form end -->
-    <section *ngIf="reportData && reportData.results.length === 0">
+    <section *ngIf="isReportLoading">
+      <p class="lead alC mrT4">Loading...</p>
+    </section>
+    <section *ngIf="!isReportLoading && reportData && reportData.results.length === 0">
       <p class="lead alC mrT4">No result found!</p>
     </section>
-    <section *ngIf="reportData && reportData.results.length > 0">
+    <section *ngIf="!isReportLoading && reportData && reportData.results.length > 0">
       <div class="" id="mfReportTbl">
         <div class="col-xs-12">
           <div class="table-responsive mrL3 mrR4">
@@ -72,7 +99,7 @@
                   <th width="10%">Vch. No.</th>
                   <th width="15%">Final Product</th>
                   <th width="24%" class="alC">Raw Products</th>
-                  <th width="12%" class="alC">Quantity Inwards</th>
+                  <th width="12%" class="alC">Product Inwards</th>
                   <th width="24%" class="alC">Quantity Outwards</th>
                 </tr>
               </thead>

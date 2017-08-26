@@ -7,7 +7,7 @@ import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
 import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { TbGridComponent } from "./tb-grid/tb-grid.component";
+import { TbGridComponent } from './tb-grid/tb-grid.component';
 
 @Component({
   selector: 'tb',
@@ -33,6 +33,7 @@ import { TbGridComponent } from "./tb-grid/tb-grid.component";
     </div>
     <div *ngIf="(data$ | async)">
       <tb-grid #tbGrid
+      [search]="filter.search"
         [expandAll]="false"
         [data$]="data$  | async"
       ></tb-grid>

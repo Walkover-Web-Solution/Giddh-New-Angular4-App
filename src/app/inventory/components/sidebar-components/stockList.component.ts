@@ -7,10 +7,14 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'stock-list',
   styles: [`
+    .active {
+      color: #d35f29 !important;
+    }
   `],
   template: `
   <ul class="list-unstyled stock-items" [hidden]="!Groups.isOpen" >
@@ -29,14 +33,14 @@ export class StockListComponent implements OnInit, OnDestroy {
   public Stocks: any[];
   @Input()
   public Groups: IGroupsWithStocksHierarchyMinItem;
-  public stockUniqueName: any;
+  public stockUniqueName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
     this.activeStock$ = this.store.select(p => p.inventory.activeStock);
   }
   public ngOnInit() {
-    //
+    this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name'], ['asc']);
   }
   public ngOnDestroy() {
     this.destroyed$.next(true);
@@ -44,6 +48,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   }
   public OpenStock(item, e: Event) {
     e.stopPropagation();
+    this.stockUniqueName = item.uniqueName;
     this._router.navigate(['/pages', 'inventory', 'add-group', this.Groups.uniqueName, 'stock-report', item.uniqueName]);
   }
 }

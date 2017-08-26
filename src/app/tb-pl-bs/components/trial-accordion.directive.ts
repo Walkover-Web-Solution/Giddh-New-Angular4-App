@@ -7,7 +7,7 @@ export class TrialAccordionDirective {
   // @HostBinding('trial-accordion') public type = '';
   // tslint:disable-next-line:no-input-rename
   @Input('trial-accordion') public data;
-
+  // tslint:disable-next-line:no-input-rename
   constructor(private el: ElementRef) {
     //
 
@@ -19,7 +19,6 @@ export class TrialAccordionDirective {
       // this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
       this.data.childGroups = this.data.childGroups.map(p => ({ ...p, isVisible: !p.isVisible }));
       this.data.isVisible = true;
-      console.log(this.data);
     }
     if (this.el.nativeElement.nextElementSibling) {
       // this.toggleClass(this.el.nativeElement);
