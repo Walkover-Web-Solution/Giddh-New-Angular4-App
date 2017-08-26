@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -12,10 +12,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       <div class="export-options" *ngIf="showTbXls">
         <span class="arrow"></span>
         <ul class="list-unstyled">
-          <li><a href="" (click)="downloadTbXls('main-group')">Main Group Report</a></li>
-          <li><a href="" (click)="downloadTbXls('group')">All Group Report</a></li>
-          <li><a href="" (click)="downloadTbXls('account')">All Account Report</a></li>
-          <li><a href="" (click)="downloadTbXls('all')">Complete Report</a></li>
+          <li><a href="" (click)="downloadTbXls('main-group',$event)">Main Group Report</a></li>
+          <li><a href="" (click)="downloadTbXls('group',$event)">All Group Report</a></li>
+          <li><a href="" (click)="downloadTbXls('account',$event)">All Account Report</a></li>
+          <li><a href="" (click)="downloadTbXls('all',$event)">Complete Report</a></li>
         </ul>
       </div>
     </div>
@@ -25,6 +25,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class TbExportXlsComponent implements OnInit, OnDestroy {
 
   public enableDownload: boolean = true;
+  @Output() public tbExportXLSEvent = new EventEmitter<string>();
 
   public showTbXls: boolean;
   /**
@@ -34,8 +35,9 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
 
   }
 
-  public downloadTbXls(e: Event) {
+  public downloadTbXls(value: string, e: Event) {
     this.showTbXls = false;
+    this.tbExportXLSEvent.emit(value);
     e.preventDefault();
     return false;
   }

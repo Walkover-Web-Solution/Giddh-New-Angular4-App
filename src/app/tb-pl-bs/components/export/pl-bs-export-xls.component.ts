@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -15,6 +15,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class PlBsExportXlsComponent implements OnInit, OnDestroy {
 
   public enableDownload: boolean = true;
+  @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
   /**
    * TypeScript public modifiers
    */
@@ -24,6 +25,7 @@ export class PlBsExportXlsComponent implements OnInit, OnDestroy {
 
   public downloadTbXls(e: Event) {
     // this.showpdf = false;
+    this.plBsExportPdfEvent.emit(true);
     e.preventDefault();
     return false;
   }
