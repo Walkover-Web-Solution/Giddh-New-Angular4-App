@@ -3268,8 +3268,8 @@ label {
 }
 
 .select2-container--default .select2-selection--single {
-    background: #f9f7f2 !important;
-    border: 1px solid #ded3c0 !important;
+    background: #fff !important;
+    border: 1px solid #cecece !important;
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;
