@@ -28,15 +28,17 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
 
   // tslint:disable-next-line:no-empty
   constructor(grp: IGroupsWithAccounts) {
-    this.accounts = grp.accounts;
-    this.synonyms = grp.synonyms;
-    this.name = grp.name;
-    this.uniqueName = grp.uniqueName;
-    this.category = grp.category;
-    this.isActive = grp.isActive;
-    this.isOpen = grp.isOpen;
-    this.isVisible = grp.isVisible;
-    this.groups = grp.groups;
+    if (grp) {
+      this.accounts = grp.accounts;
+      this.synonyms = grp.synonyms;
+      this.name = grp.name;
+      this.uniqueName = grp.uniqueName;
+      this.category = grp.category;
+      this.isActive = grp.isActive;
+      this.isOpen = grp.isOpen;
+      this.isVisible = grp.isVisible;
+      this.groups = grp.groups;
+    }
   }
 
 }

@@ -6,23 +6,23 @@ import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'pl-grid',  // <home></home>
-  templateUrl: './pl-grid.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  templateUrl: './pl-grid.component.html'
 })
 export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
   public showClearSearch: boolean;
-
+  @Input() public search: string = '';
   @Input() public plData: ProfitLossData;
 
   @Input()
   public set expandAll(value: boolean) {
     if (this.plData) {
-      if (this.plData.expArr) { this.toggleVisibility(this.plData.expArr, value); }
-      if (this.plData.incArr) { this.toggleVisibility(this.plData.incArr, value); }
-      // console.log(value);
-      this.cd.markForCheck();
-      console.log(this.plData);
+      debugger;
+      this.toggleVisibility(this.plData.expArr, value);
+      this.toggleVisibility(this.plData.incArr, value);
+      this.plData = _.cloneDeep(this.plData);
+      // this.plData.expArr = _.cloneDeep(this.plData.expArr);
+      // this.plData.incArr = _.cloneDeep(this.plData.incArr);
     }
   }
 
@@ -31,7 +31,7 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
   public ngOnChanges(changes: SimpleChanges) {
     if (changes['expandAll']) {
-      debugger;
+      // debugger;--
     }
   }
   public ngOnInit() {
@@ -46,19 +46,9 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
-        return acc.isVisible = isVisible;
+        acc.isVisible = isVisible;
       });
-      return _.each(grp.childGroups, (chld) => {
-        if (chld.accounts.length > 0) {
-          _.each(chld.accounts, (acc) => {
-            return acc.isVisible = isVisible;
-          });
-        }
-        chld.isVisible = isVisible;
-        if (chld.childGroups.length > 0) {
-          return this.toggleVisibility(chld.childGroups, isVisible);
-        }
-      });
+      this.toggleVisibility(grp.childGroups, isVisible);
     });
   }
 }

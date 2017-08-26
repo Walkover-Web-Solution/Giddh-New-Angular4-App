@@ -32,6 +32,6 @@ export function rootReducer(state: any, action: any) {
   if (ENV !== 'development') {
     return productionReducer(state, action);
   } else {
-    return developmentReducer(state, action);
+    return productionReducer(state, action);
   }
 }

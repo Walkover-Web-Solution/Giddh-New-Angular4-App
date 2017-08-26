@@ -13,6 +13,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   public selectedDateOption: string = '1';
   public selectedFinancialYearOption: string = '';
   public filterForm: FormGroup;
+  public search: string;
   public financialOptions = [];
   // public expandAll?: boolean = null;
   @Output()
