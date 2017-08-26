@@ -116,19 +116,17 @@ input {
 /*input*/
 
 .form-control {
-    background: #f9f7f2 !important;
-    border: 1px solid #ded3c0;
-    border-radius: 0px;
+    border-radius: 0;
     padding: 6px !important;
-    outline: 0;
+    outline: none;
     color: #616161;
     box-shadow: none;
 }
 
 .form-control:focus {
     border-radius: 0 !important;
-    outline: 0;
-    border: 1px solid #f7b995 !important;
+    outline: none;
+    border: 1px solid #cecece;
     box-shadow: none;
 }
 
