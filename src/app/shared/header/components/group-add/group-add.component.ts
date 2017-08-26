@@ -25,8 +25,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private _toaster: ToasterService) {
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction) {
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
@@ -44,7 +43,6 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
     this.isCreateGroupSuccess$.distinctUntilChanged().subscribe(a => {
       if (a) {
-        this._toaster.successToast('Sub group added successfully', 'Success');
         this.groupDetailForm.reset();
       }
     });
