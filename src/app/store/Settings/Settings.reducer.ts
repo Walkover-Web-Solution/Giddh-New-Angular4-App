@@ -3,10 +3,11 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../services/actions/settings/profile/settings.profile.const';
-import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked-accounts.const';
 import { ComapnyResponse } from '../../models/api-models/Company';
 import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass, RazorPayDetailsResponse, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
+import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.const';
+import { IGetAllEbankAccountResponse } from '../../models/api-models/SettingsLinkedAccounts';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -125,6 +126,14 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
         newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
       }
       return Object.assign({}, state, newState);
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE: {
+        let response: BaseResponse<IGetAllEbankAccountResponse[], string> = action.payload;
+        if (response.status === 'success') {
+          newState.linkedAccounts = response.body;
+          return Object.assign({}, state, newState);
+        }
+        return state;
     }
     default: {
       return state;
