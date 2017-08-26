@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output, OnInit } from '@angular/core';
-import { AccountAddComponent } from '../shared/header/components/index';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -27,7 +26,6 @@ import * as _ from 'lodash';
 export class AsideMenuAccountComponent implements OnInit {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-  // public flatAccountWGroupsList: IFlattenGroupsAccountsDetail[];
   public flatAccountWGroupsList$: Observable<Select2OptionData[]>;
   public select2Options: Select2Options = {
     multiple: false,
@@ -35,6 +33,14 @@ export class AsideMenuAccountComponent implements OnInit {
     placeholder: 'Select Group',
     allowClear: true
   };
+  public activeGroupUniqueName: string;
+  public isGroupItemSelected: boolean = false;
+  public isGstEnabledAcc: boolean = false;
+  public isHsnSacEnabledAcc: boolean = false;
+  public fetchingAccUniqueName$: Observable<boolean>;
+  public isAccountNameAvailable$: Observable<boolean>;
+  public createAccountInProcess$: Observable<boolean>;
+  public createAccountIsSuccess$: Observable<boolean>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -59,6 +65,26 @@ export class AsideMenuAccountComponent implements OnInit {
         console.log(this.flatAccountWGroupsList$);
       }
     });
+  }
+
+  // subscribe on group
+  // this.isGstEnabledAcc = col === 'sundrycreditors' || col === 'sundrydebtors';
+  // this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'operatingcost' || col === 'indirectexpenses';
+  // account-add component's property
+  // this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
+  // this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
+  // this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+  // this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+
+  public addNewGroup(accRequestObject: { str: string, accountRequest: any }) {
+    console.log ('account creation');
+  }
+
+  public groupSelected(data) {
+    if (data.value) {
+      this.isGroupItemSelected = true;
+      this.activeGroupUniqueName = data.value;
+    }
   }
 
   public closeAsidePane(event) {
