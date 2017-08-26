@@ -1,0 +1,67 @@
+<div class="box">
+  <h1 style="padding:20px 0px;font-weight:bold;">Add Bank Account</h1>
+  <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
+  <div class="mrT1">NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again
+    after some time.</div>
+  <hr class="mrT2 col-xs-11">
+  <div class="mrT2 col-xs-12 pd0">
+    <h1 class="pull-left">Added Accounts</h1>
+    <button class="btn btn-primary btn-sm pull-right" *ngIf="ebankAccounts.length">Refresh</button>
+    <div class="col-xs-12 mrT1 pd0" *ngIf="ebankAccounts.length">
+        <section *ngFor="let acc of ebankAccounts">
+            <aside class="title">{{acc.siteName}}</aside>
+            <aside class="body">
+                <aside class="account-card" *ngFor="let card of acc.accounts">
+                <div class="reconnectDiv" *ngIf="card.reconnect">
+                    <button class="btn btn-sm btn-info reconnectButton" ng-click="reconnectAccount(card)">Reconnect</button>
+                    <button class="btn btn-sm btn-danger reconnectButton" style="top:60%;left:28%; width:109px;" ng-click="deleteAddedBank(card)">Delete</button>
+                </div>
+                <a><i class="pull-left glyphicon glyphicon-refresh refresh-icon" ng-disabled="card.reconnect" ng-click="refreshToken(card)"></i></a>
+                <h1 ng-bind="card.name"></h1>
+                <div class="account-number">
+                    <b>Account</b>: {{card.accountNumber}}
+                </div>
+                <div class="account-date">
+                    <b>Entries From</b>:
+                    <a href="javascript:void(0)">
+                    {{card.transactionDate | date}}
+                    <input [(ngModel)]="card.transactionDate" name="transactionDate"/>
+                    </a>
+                </div>
+                <div class="balance">
+                    {{card.currencyCode}} {{card.amount}}
+                </div>
+                <div class="with" *ngIf="card.linkedAccount">
+                    Linked with: {{card.linkedAccount.name}} ({{card.linkedAccount.uniqueName}})
+                </div>
+                <div class="select-account" *ngIf="card.showAccList">
+                    <!--<ui-select ng-model="banks.toLink" theme="bootstrap" on-select="LinkGiddhAccountConfirm($select.selected)">
+                    <ui-select-match placeholder="Select Accounts">
+                        <span>{{$select.selected.name}}</span>
+                    </ui-select-match >
+                    <ui-select-choices
+                        ui-disable-choice="acc.uniqueName === selAcntUname"
+                        repeat="acc in AccountsListToLink | filter: $select.search | limitTo: 5">
+                        <span>{{acc.name}} ({{acc.uniqueName}})</span>
+                    </ui-select-choices>
+                    </ui-select>-->
+                </div>
+                <button class="btn btn-sm btn-warning pull-right" ng-if="card.showAccList" ng-disabled="card.reconnect" ng-click="card.showAccList = !card.showAccList" style="margin-top:5px">Not Now</button>
+                <button class="btn btn-sm btn-info" ng-if="card.linkedAccount == null && !card.showAccList" ng-disabled="card.reconnect" ng-click="linkGiddhAccount(card)">Link Account</button>
+                <button class="btn btn-sm btn-danger mrT1" ng-if="card.linkedAccount.name.length > 0" ng-disabled="card.reconnect" ng-click="removeGiddhAccount(card)">Unlink Account</button>
+                <a class="delete-bank" ng-disabled="card.reconnect" ng-click="deleteAddedBank(card)" uib-tooltip="Delete Bank" tooltip-placement="left"><i class="glyphicon glyphicon-trash"></i></a>
+            </aside>
+            </aside>
+        </section>
+    </div>
+  </div> 
+
+<!--delete Tax confirmation model -->
+<div bsModal #taxConfirmationModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content">
+      <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal($event)"></connect-bank-modal>
+    </div>
+  </div>
+</div> 
