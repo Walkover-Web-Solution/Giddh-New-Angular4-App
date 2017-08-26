@@ -4842,8 +4842,8 @@ table.proforma-particulars {
 }
 .select2-parent .select2-container--default .select2-selection--single{
   border-radius: 0;
-  background-color: #f9f7f2;
-  border: 1px solid #ded3c0;
+  background-color: #fff;
+  border: 1px solid #cecece;
 }
 .select2-parent .select2-container .select2-selection--single{
   height: 34px

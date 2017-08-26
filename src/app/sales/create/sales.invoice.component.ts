@@ -15,7 +15,6 @@ import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interfac
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
-
 const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
 
 @Component({
@@ -49,6 +48,7 @@ export class SalesInvoiceComponent implements OnInit {
   public bankAccounts$: Observable<INameUniqueName[]>;
   public accountAsideMenuState: string = 'out';
   public theadArr: string[] = THEAD_ARR;
+  public activeGroupUniqueName$: Observable<string>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponse>;
