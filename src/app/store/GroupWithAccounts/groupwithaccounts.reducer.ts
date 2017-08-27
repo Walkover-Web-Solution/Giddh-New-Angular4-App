@@ -424,7 +424,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
             grp.uniqueName = activeGrpData.body.uniqueName;
             grp.name = activeGrpData.body.name;
             grp.isActive = true;
-            grp.isOpen = true;
+            grp.isOpen = false;
             break;
           } else {
             updateActiveGroupFunc(grp.groups, activeGrpData.queryString.groupUniqueName, activeGrpData.body);
@@ -616,7 +616,7 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
       grp.name = updatedGroup.name;
       grp.uniqueName = updatedGroup.uniqueName;
       grp.isActive = true;
-      grp.isOpen = true;
+      grp.isOpen = false;
       break;
     }
     if (grp.groups) {
