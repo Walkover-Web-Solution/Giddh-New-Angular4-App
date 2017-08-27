@@ -7,6 +7,7 @@ import { SettingIntegrationComponent } from './integration/setting.integration.c
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SharedModule } from '../shared/shared.module';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
+import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingRountingModule } from './settings.routing.module';
 @NgModule({
@@ -16,6 +17,7 @@ import { SettingRountingModule } from './settings.routing.module';
     SettingIntegrationComponent,
     SettingProfileComponent,
     SettingTaxesComponent,
+    SettingsLinkedAccountsComponent,
     DeleteTaxConfirmationModelComponent
   ],
   imports: [
@@ -27,4 +29,4 @@ import { SettingRountingModule } from './settings.routing.module';
     SharedModule
   ]
 })
-export class SettingsModule {}
+export class SettingsModule { }
