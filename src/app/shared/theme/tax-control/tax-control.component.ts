@@ -71,7 +71,7 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   }
 
   public clicked(e) {
-    debugger;
+    // debugger;
   }
 
   /**
@@ -94,7 +94,7 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   private isTaxApplicable(tax): boolean {
     const today = moment(moment().format('DD-MM-YYYY'), 'DD-MM-YYYY', true).valueOf();
     let isApplicable = false;
-    _.each(tax.taxDetail, (det) => {
+    _.each(tax.taxDetail, (det: any) => {
       if (today >= moment(det.date, 'DD-MM-YYYY', true).valueOf()) {
         return isApplicable = true;
       }
