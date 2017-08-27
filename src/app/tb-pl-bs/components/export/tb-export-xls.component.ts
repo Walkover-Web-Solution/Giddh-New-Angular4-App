@@ -1,13 +1,11 @@
-import { Component, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
-import * as moment from 'moment';
-import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
   selector: 'tb-export-xls',  // <home></home>
   template: `
     <div class="form-group xls-export" (clickOutside)="showTbXls=false;">
-      <a href="" (click)="showTbXlsOptions($event)" *ngIf="enableDownload"><img
+      <a href="" (click)="showTbXls = !showTbXls" *ngIf="enableDownload"><img
         src="/assets/images/xls-icon.png"/></a>
       <div class="export-options" *ngIf="showTbXls">
         <span class="arrow"></span>
@@ -38,12 +36,6 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
   public downloadTbXls(value: string, e: Event) {
     this.showTbXls = false;
     this.tbExportXLSEvent.emit(value);
-    e.preventDefault();
-    return false;
-  }
-
-  public showTbXlsOptions(e: Event) {
-    this.showTbXls = !this.showTbXls;
     e.preventDefault();
     return false;
   }
