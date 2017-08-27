@@ -95,8 +95,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService) {
+    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+    private _router: Router, private _toaster: ToasterService) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -114,12 +114,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
               accountsArray.push({
                 id: uuid.v4(),
                 text: acc.name,
-                additional: Object.assign({}, acc, {stock: as})
+                additional: Object.assign({}, acc, { stock: as })
               });
             });
-            accountsArray.push({id: uuid.v4(), text: acc.name, additional: acc});
+            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
           } else {
-            accountsArray.push({id: uuid.v4(), text: acc.name, additional: acc});
+            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
           }
         });
         this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'text'));
@@ -169,17 +169,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
-          // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-          if (fa.id === e.value) {
-            txn.selectedAccount = fa.additional;
-            // reset taxes and discount on selected account change
-            txn.tax = 0;
-            txn.taxes = [];
-            txn.discount = 0;
-            txn.discounts = [];
-            return;
-          }
+        // change (e.value[0]) to e.value to use in single select for ledger transaction entry
+        if (fa.id === e.value) {
+          txn.selectedAccount = fa.additional;
+          // reset taxes and discount on selected account change
+          txn.tax = 0;
+          txn.taxes = [];
+          txn.discount = 0;
+          txn.discounts = [];
+          return;
         }
+      }
       );
     });
   }
@@ -215,7 +215,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.distinct().subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        this._router.navigate(['/pages/dummy'], {skipLocationChange: true}).then(() => {
+        this._router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
           this._router.navigate(['/pages', 'ledger', this.lc.accountUnq]);
         });
       }
@@ -341,10 +341,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
       byteArrays.push(byteArray);
       offset += sliceSize;
     }
-    return new Blob(byteArrays, {type: contentType});
+    return new Blob(byteArrays, { type: contentType });
   }
 
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerActions.ResetLedger());
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }
