@@ -15,6 +15,15 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   public filterForm: FormGroup;
   public search: string;
   public financialOptions = [];
+  @Input() public tbExportPdf: boolean;
+  @Input() public tbExportXLS: boolean;
+  @Input() public tbExportCsv: boolean;
+  @Input() public plBsExportXLS: boolean;
+
+  @Output() public tbExportPdfEvent = new EventEmitter<string>();
+  @Output() public tbExportXLSEvent = new EventEmitter<string>();
+  @Output() public tbExportCsvEvent = new EventEmitter<string>();
+  @Output() public plBsExportXLSEvent = new EventEmitter<string>();
   // public expandAll?: boolean = null;
   @Output()
   public expandAll: EventEmitter<boolean> = new EventEmitter<boolean>();

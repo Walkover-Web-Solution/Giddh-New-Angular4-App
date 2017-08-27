@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -12,11 +12,11 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       <div class="export-options" *ngIf="showCsvDownloadOptions">
         <span class="arrow"></span>
         <ul class="list-unstyled">
-          <li><a href="" (click)="hideOptions($event)" export-report data-report="group-wise">Group Wise
+          <li><a href="" (click)="hideOptions('group-wise', $event)" export-report data-report="group-wise">Group Wise
             Report</a></li>
-          <li><a href="" (click)="hideOptions($event)" export-report data-report="condensed">Condensed
+          <li><a href="" (click)="hideOptions('condensed', $event)" export-report data-report="condensed">Condensed
             Report</a></li>
-          <li><a href="" (click)="hideOptions($event)" export-report data-report="account-wise">Account Wise
+          <li><a href="" (click)="hideOptions('account-wise', $event)" export-report data-report="account-wise">Account Wise
             Report</a></li>
         </ul>
       </div>
@@ -25,9 +25,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   `
 })
 export class TbExportCsvComponent implements OnInit, OnDestroy {
+  @Output() public tbExportCsvEvent = new EventEmitter<string>();
   public showCsvDownloadOptions: boolean;
   public enableDownload: boolean = true;
-
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private fnGroupWise: string;
@@ -48,8 +48,9 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     return false;
   }
 
-  public hideOptions(e: Event) {
+  public hideOptions(value: string, e: Event) {
     this.showCsvDownloadOptions = false;
+    this.tbExportCsvEvent.emit(value);
     e.preventDefault();
     return false;
   }

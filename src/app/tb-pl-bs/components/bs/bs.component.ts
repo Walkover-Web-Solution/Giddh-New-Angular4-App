@@ -18,6 +18,11 @@ import { BsGridComponent } from './bs-grid/bs-grid.component';
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
       (expandAll)="expandAllEmit($event)"
+      [tbExportCsv]="false"
+      [tbExportPdf]="false"
+      [tbExportXLS]="false"
+      [plBsExportXLS]="true"
+      (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
     <div *ngIf="!(data$ | async)">
          <!-- loader -->
@@ -88,5 +93,8 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public exportXLS(event) {
+    //
   }
 }

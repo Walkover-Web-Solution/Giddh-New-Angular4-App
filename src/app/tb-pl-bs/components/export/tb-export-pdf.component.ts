@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -12,11 +12,11 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       <div class="export-options" *ngIf="showpdf">
         <span class="arrow"></span>
         <ul class="list-unstyled">
-          <li><a href="" (click)="hideOptions($event)" export-pdfgroupwise>Group Wise
+          <li><a href="" (click)="hideOptions('group-wise',$event)" export-pdfgroupwise>Group Wise
             Report</a></li>
-          <li><a href="" (click)="hideOptions($event)" export-pdfcondensed>Condensed
+          <li><a href="" (click)="hideOptions('condensed',$event)" export-pdfcondensed>Condensed
             Report</a></li>
-          <li><a href="" (click)="hideOptions($event)" export-pdfaccountwise>Account Wise
+          <li><a href="" (click)="hideOptions('account-wise',$event)" export-pdfaccountwise>Account Wise
             Report</a></li>
         </ul>
       </div>
@@ -25,7 +25,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   `
 })
 export class TbExportPdfComponent implements OnInit, OnDestroy {
-
+  @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
 
   public showpdf: boolean;
@@ -39,8 +39,9 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
 
   }
 
-  public hideOptions(e: Event) {
+  public hideOptions(value: string, e: Event) {
     this.showpdf = false;
+    this.tbExportPdfEvent.emit(value)
     e.preventDefault();
     return false;
   }

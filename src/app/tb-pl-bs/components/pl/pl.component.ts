@@ -18,6 +18,11 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
       (expandAll)="expandAllEmit($event)"
+      [tbExportCsv]="false"
+      [tbExportPdf]="false"
+      [tbExportXLS]="false"
+      [plBsExportXLS]="true"
+      (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
     <div *ngIf="!(data$ | async)">
          <!-- loader -->
@@ -79,6 +84,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     //
   }
+  public exportXLS(event) { }
   public filterData(request: ProfitLossRequest) {
     request.fromDate = this.selectedCompany.financialYears[request.fy].financialYearStarts;
     request.toDate = this.selectedCompany.financialYears[request.fy].financialYearEnds;
