@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';
+
 @Component({
   selector: 'search-grid',  // <home></home>
   templateUrl: './search-grid.component.html'
@@ -134,10 +135,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 return account[query.queryType] > amount;
               } else {
                 if (query.queryType === 'openingBalance') {
-                  return account.openingBalance > amount && account.openBalType === query.balType;
+                  return account.openingBalance > amount && account.openBalanceType === query.balType;
                 }
                 if (query.queryType === 'closingBalance') {
-                  return account.closingBalance > amount && account.closeBalType === query.balType;
+                  return account.closingBalance > amount && account.closeBalanceType === query.balType;
                 } else {
                   return account[query.queryType] > amount;
                 }
@@ -147,10 +148,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 return account[query.queryType] < amount;
               } else {
                 if (query.queryType === 'openingBalance') {
-                  return account.openingBalance < amount && account.openBalType === query.balType;
+                  return account.openingBalance < amount && account.openBalanceType === query.balType;
                 }
                 if (query.queryType === 'closingBalance') {
-                  return account.closingBalance < amount && account.closeBalType === query.balType;
+                  return account.closingBalance < amount && account.closeBalanceType === query.balType;
                 } else {
                   return account[query.queryType] < amount;
                 }
@@ -160,10 +161,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
                 return account[query.queryType] === amount;
               } else {
                 if (query.queryType === 'openingBalance') {
-                  return account.openingBalance === amount && account.openBalType === query.balType;
+                  return account.openingBalance === amount && account.openBalanceType === query.balType;
                 }
                 if (query.queryType === 'closingBalance') {
-                  return account.closingBalance === amount && account.closeBalType === query.balType;
+                  return account.closingBalance === amount && account.closeBalanceType === query.balType;
                 } else {
                   return account[query.queryType] === amount;
                 }
@@ -220,7 +221,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
       if (data.name.indexOf(',')) {
         data.name.replace(',', '');
       }
-      row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalType + ',' + data.parent;
+      row += data.name + ',' + data.uniqueName + ',' + this.roundNum(data.openingBalance, 2) + ',' + data.openBalanceType + ',' + this.roundNum(data.debitTotal, 2) + ',' + this.roundNum(data.creditTotal, 2) + ',' + this.roundNum(data.closingBalance, 2) + ',' + data.closeBalanceType + ',' + data.parent;
       return row += '\r\n';
     }));
     csv = title + row;
