@@ -34,7 +34,7 @@
             </div>
             <button class="btn btn-sm btn-info " ng-if="card.linkedAccount == null &amp;&amp; !card.showAccList" ng-disabled="card.reconnect"
               ng-click="linkGiddhAccount(card)">Link Account</button>
-            <a class="delete-bank" ng-disabled="card.reconnect" (click)="showDeleteAccountModal(card.name)" uib-tooltip="Delete Bank"
+            <a class="delete-bank" ng-disabled="card.reconnect" (click)="showDeleteAccountModal(card)" uib-tooltip="Delete Bank"
               tooltip-placement="left">
               <i class="glyphicon glyphicon-trash"></i></a>
           </aside>
@@ -50,7 +50,7 @@
       <div class="modal-content">
         <confirm-modal [title]="'Delete Merged Account'" [body]='deleteAccountModalBody'
                        (cancelCallBack)="hideDeleteAccountModal()"
-                       (successCallBack)="hideDeleteAccountModal()">
+                       (successCallBack)="deleteAccount()">
         </confirm-modal>
       </div>
     </div>

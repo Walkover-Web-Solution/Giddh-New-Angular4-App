@@ -125,13 +125,12 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANKS_ACCOUNTS_RESPONSE: {
       let response: BaseResponse<string, string> = action.payload;
       if (response.status === 'success') {
-        newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
-          isDeleteBankAccountIsInProcess: false
+        newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
+        _.map(newState.linkedAccounts.bankAccounts, (ac) => {
+          _.filter(ac.accounts, (account) => account.loginId !== response.request);
         });
       } else {
-        newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
-          isDeleteBankAccountIsInProcess: false
-        });
+        newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
       }
       return Object.assign({}, state, newState);
     }
