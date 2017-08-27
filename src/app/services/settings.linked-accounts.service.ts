@@ -45,6 +45,7 @@ export class SettingsLinkedAccountsService {
       .replace(':loginId', token)
     ).map((res) => {
       let data: BaseResponse<string, string> = res.json();
+      data.request = token;
       return data;
     }).catch((e) => HandleCatch<string, string>(e));
   }
