@@ -7,6 +7,8 @@ import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGro
 import { FIXED_CATEGORY_OF_GROUPS } from '../sales.module';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
+import { AccountRequest } from '../../models/api-models/Account';
+import { AccountsAction } from '../../services/actions/accounts.actions';
 
 @Component({
   selector: 'aside-menu-account',
@@ -35,8 +37,8 @@ export class AsideMenuAccountComponent implements OnInit {
   };
   public activeGroupUniqueName: string;
   public isGroupItemSelected: boolean = false;
-  public isGstEnabledAcc: boolean = false;
-  public isHsnSacEnabledAcc: boolean = false;
+  public isGstEnabledAcc: boolean = true;
+  public isHsnSacEnabledAcc: boolean = true;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
@@ -46,7 +48,13 @@ export class AsideMenuAccountComponent implements OnInit {
 
   constructor(
     private store: Store<AppState>,
+    private accountsAction: AccountsAction
   ) {
+    // account-add component's property
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
+    this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
+    this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
+    this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -67,17 +75,10 @@ export class AsideMenuAccountComponent implements OnInit {
     });
   }
 
-  // subscribe on group
-  // this.isGstEnabledAcc = col === 'sundrycreditors' || col === 'sundrydebtors';
-  // this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'operatingcost' || col === 'indirectexpenses';
-  // account-add component's property
-  // this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-  // this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
-  // this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
-  // this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
-
-  public addNewGroup(accRequestObject: { str: string, accountRequest: any }) {
-    console.log ('account creation');
+  public addNewGroup(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
+    console.log ('account creation', accRequestObject);
+    this.store.dispatch(this.accountsAction.createAccount(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
+    this.closeAsidePane(event);
   }
 
   public groupSelected(data) {
