@@ -97,29 +97,21 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
 
     // linked accounts
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_BANKS_ACCOUNTS: {
-      newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
-        isBankAccountsInProcess: true
-      });
+      newState.linkedAccounts.isBankAccountsInProcess = true;
       return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_BANKS_ACCOUNTS_RESPONSE: {
       let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (response.status === 'success') {
-        newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
-          isBankAccountsInProcess: false,
-          bankAccounts: _.orderBy(response.body, ['siteName'], ['asc'])
-        });
+        newState.linkedAccounts.isBankAccountsInProcess = false;
+        newState.linkedAccounts.bankAccounts = _.orderBy(response.body, ['siteName'], ['asc']);
       } else {
-        newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
-          isBankAccountsInProcess: false
-        });
+        newState.linkedAccounts.isBankAccountsInProcess = false;
       }
       return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANKS_ACCOUNTS: {
-      newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
-        isDeleteBankAccountIsInProcess: true
-      });
+      newState.linkedAccounts.isDeleteBankAccountIsInProcess = true;
       return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANKS_ACCOUNTS_RESPONSE: {
@@ -132,6 +124,7 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       } else {
         newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
       }
+      debugger
       return Object.assign({}, state, newState);
     }
     default: {
