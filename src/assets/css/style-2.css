@@ -116,18 +116,18 @@ input {
 /*input*/
 
 .form-control {
-  border-radius: 0;
-  padding: 6px !important;
-  outline: none;
-  color: #616161;
-  box-shadow: none;
+    border-radius: 0;
+    padding: 6px !important;
+    outline: none;
+    color: #616161;
+    box-shadow: none;
 }
 
 .form-control:focus {
-  border-radius: 0 !important;
-  outline: none;
-  border: 1px solid #cecece;
-  box-shadow: none;
+    border-radius: 0 !important;
+    outline: none;
+    border: 1px solid #cecece;
+    box-shadow: none;
 }
 
 .sidebar {

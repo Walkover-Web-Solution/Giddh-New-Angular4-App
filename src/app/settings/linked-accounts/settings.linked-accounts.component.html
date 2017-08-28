@@ -1,0 +1,57 @@
+<div class="pd2 clearfix ">
+  <h1 class="mrB1">Add Bank Account </h1>
+  <button ng-click="connectBank()" class="btn btn-primary">Connect Bank</button>
+  <div class="mrT1">NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again
+    after some time.</div>
+  <hr class="mrT2 col-xs-11">
+  <div class="mrT2 col-xs-12 pd0">
+    <h1 class="pull-left">Added Accounts</h1>
+    <button class="btn btn-primary btn-sm pull-right " ng-click="refreshAccounts()" ng-if="linkedAccountsExist">Refresh</button>
+    <div class="col-xs-12 mrT1 pd0 " ng-if="banks.linked.length > 0">
+      <section class="linked-accounts clearfix" *ngFor="let account of (bankAccounts$ | async)">
+        <aside class="title ng-binding">{{ account.siteName }}</aside>
+        <aside class="body">
+          <aside class="account-card" *ngFor="let card of account.accounts">
+
+            <a><i class="pull-left glyphicon glyphicon-refresh refresh-icon" ng-disabled="card.reconnect" ng-click="refreshToken(card)"></i></a>
+            <h1 [tooltip]="card.name" >{{ card.name }}</h1>
+            <div class="account-number ng-binding">
+              <b>Account</b>: {{ card.accountNumber }}
+            </div>
+            <div class="account-date">
+              <b>Entries From</b>:
+              <a href="javascript:void(0)" class="ng-binding">
+                  {{ card.transactionDate | date }}
+                  <input ng-change="changedate(card.transactionDate)" type="text"
+                  class="transaction-date"
+                  uib-datepicker-popup="dd-MM-yyyy" required="" datepicker-options="dateOptionsBanks"
+                  is-open="fromDatePickerIsOpen" ng-click="fromDatePickerOpen(); setItemAccountId(card)"
+                  ng-model="card.transactionDate" max-date="today" min-date="beforeThreeMonths" placeholder="from date">
+                </a>
+            </div>
+            <div class="balance ng-binding">
+              {{ card.currencyCode }} {{ card.amount }}
+            </div>
+            <button class="btn btn-sm btn-info " ng-if="card.linkedAccount == null &amp;&amp; !card.showAccList" ng-disabled="card.reconnect"
+              ng-click="linkGiddhAccount(card)">Link Account</button>
+            <a class="delete-bank" ng-disabled="card.reconnect" (click)="showDeleteAccountModal(card)" uib-tooltip="Delete Bank"
+              tooltip-placement="left">
+              <i class="glyphicon glyphicon-trash"></i></a>
+          </aside>
+        </aside>
+      </section>
+    </div>
+  </div>
+</div>
+
+ <!--delete account modal  -->
+ <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <confirm-modal [title]="'Delete Merged Account'" [body]='deleteAccountModalBody'
+                       (cancelCallBack)="hideDeleteAccountModal()"
+                       (successCallBack)="deleteAccount()">
+        </confirm-modal>
+      </div>
+    </div>
+  </div>

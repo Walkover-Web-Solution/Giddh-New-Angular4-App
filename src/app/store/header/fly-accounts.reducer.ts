@@ -47,9 +47,9 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
-          closeBalType: account.closingBalance.type,
+          closeBalanceType: account.closingBalance.type,
           closingBalance: Number(account.closingBalance.amount),
-          openBalType: account.openingBalance.type,
+          openBalanceType: account.openingBalance.type,
           creditTotal: Number(account.creditTotal),
           debitTotal: Number(account.debitTotal),
           openingBalance: Number(account.openingBalance),
@@ -64,9 +64,9 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
-          closeBalType: account.closingBalance.type,
+          closeBalanceType: account.closingBalance.type,
           closingBalance: Number(account.closingBalance.amount),
-          openBalType: account.openingBalance.type,
+          openBalanceType: account.openingBalance.type,
           creditTotal: Number(account.creditTotal),
           debitTotal: Number(account.debitTotal),
           openingBalance: Number(account.openingBalance),
