@@ -30,8 +30,8 @@ export interface Account {
 export interface AccountFlat {
   creditTotal: number;
   debitTotal: number;
-  closeBalType: string;
-  openBalType: string;
+  closeBalanceType: string;
+  openBalanceType: string;
   closingBalance: number;
   openingBalance: number;
   uniqueName: string;

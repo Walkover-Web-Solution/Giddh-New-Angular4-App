@@ -3,17 +3,26 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../services/actions/settings/profile/settings.profile.const';
+import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked-accounts.const';
 import { ComapnyResponse } from '../../models/api-models/Company';
 import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass, RazorPayDetailsResponse, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
+import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 
+export interface LinkedAccountsState {
+  bankAccounts?: BankAccountsResponse[];
+  isBankAccountsInProcess?: boolean;
+  isDeleteBankAccountIsInProcess?: boolean;
+}
 export interface SettingsState {
-    integration: IntegrationPage;
-    profile: object;
+  integration: IntegrationPage;
+  profile: object;
+  linkedAccounts: LinkedAccountsState;
 }
 
 export const initialState: SettingsState = {
-    integration: new IntegrationPageClass(),
-    profile: {}
+  integration: new IntegrationPageClass(),
+  profile: {},
+  linkedAccounts: {}
 };
 
 export function SettingsReducer(state = initialState, action: Action): SettingsState {
@@ -70,20 +79,60 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       }
       return state;
     case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
-        let response: BaseResponse<ComapnyResponse, string> = action.payload;
-        if (response.status === 'success') {
-          newState.profile = response.body;
-          return Object.assign({}, state, newState);
-        }
-        return state;
+      let response: BaseResponse<ComapnyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.profile = response.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
     case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
-        let response: BaseResponse<ComapnyResponse, string> = action.payload;
-        if (response.status === 'success') {
-          newState.profile = response.body;
-          return Object.assign({}, state, newState);
-        }
-        return state;
+      let response: BaseResponse<ComapnyResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.profile = response.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+
+    // linked accounts
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_BANKS_ACCOUNTS: {
+      newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
+        isBankAccountsInProcess: true
+      });
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_BANKS_ACCOUNTS_RESPONSE: {
+      let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
+          isBankAccountsInProcess: false,
+          bankAccounts: _.orderBy(response.body, ['siteName'], ['asc'])
+        });
+      } else {
+        newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
+          isBankAccountsInProcess: false
+        });
+      }
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANKS_ACCOUNTS: {
+      newState.linkedAccounts = Object.assign({}, newState.linkedAccounts, {
+        isDeleteBankAccountIsInProcess: true
+      });
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANKS_ACCOUNTS_RESPONSE: {
+      let response: BaseResponse<string, string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
+        _.map(newState.linkedAccounts.bankAccounts, (ac) => {
+          _.filter(ac.accounts, (account) => account.loginId !== response.request);
+        });
+      } else {
+        newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
+      }
+      return Object.assign({}, state, newState);
     }
     default: {
       return state;
