@@ -84,6 +84,9 @@ export class AsideMenuAccountComponent implements OnInit {
     if (data.value) {
       this.isGroupItemSelected = true;
       this.activeGroupUniqueName = data.value;
+    }else {
+      this.isGroupItemSelected = false;
+      this.activeGroupUniqueName = null;
     }
   }
 

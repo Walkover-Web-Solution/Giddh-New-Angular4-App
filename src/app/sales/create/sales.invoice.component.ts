@@ -150,9 +150,7 @@ export class SalesInvoiceComponent implements OnInit {
       uniqueName: null,
       transactions: [transItem]
     };
-    console.log('before' , this.invFormData.entries);
     this.invFormData.entries.push(entryItem);
-    console.log('after' , this.invFormData.entries);
   }
 
 }
