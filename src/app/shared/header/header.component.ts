@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
+    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -147,9 +147,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.router.navigate(['/login']);
         });
       } else {
-        this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/home']);
-        });
+        // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+           // this.router.navigate(['/home']);
+        // });
       }
     });
   }
