@@ -144,7 +144,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
       stockRate: [{ value: '', disabled: true }],
-      openingAmount: ['', decimalDigits],
+      openingAmount: [''],
       purchaseAccountUniqueName: [''],
       salesAccountUniqueName: [''],
       purchaseUnitRates: this._fb.array([
@@ -248,6 +248,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       } else {
         this.isUpdatingStockForm = false;
         // this.resetStockForm();
+      }
+    });
+
+    // fetching uniquename boolean
+    this.fetchingStockUniqueName$.takeUntil(this.destroyed$).subscribe(f => {
+      if (f) {
+        this.addStockForm.controls['uniqueName'].disable();
+      } else {
+        this.addStockForm.controls['uniqueName'].enable();
       }
     });
 
@@ -375,7 +384,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let amount = this.addStockForm.value.openingAmount;
 
     if (quantity && amount) {
-      this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(3) });
+      this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(4) });
     } else if (quantity === 0 || amount === 0) {
       this.addStockForm.controls['stockRate'].reset();
     }
