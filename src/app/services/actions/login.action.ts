@@ -13,6 +13,7 @@ import {
 } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class LoginActions {
@@ -96,6 +97,7 @@ export class LoginActions {
       });
       this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
       this.store.dispatch(this.comapnyActions.RefreshCompanies());
+      this._router.navigate(['/home']);
       return { type: '' };
     });
 
@@ -118,6 +120,7 @@ export class LoginActions {
       return this.LoginSuccess();
     });
   constructor(
+    public _router: Router,
     private actions$: Actions,
     private auth: AuthenticationService,
     public _toaster: ToasterService,
