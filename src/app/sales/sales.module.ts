@@ -13,7 +13,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
   declarations: [
     SalesComponent,
     SalesInvoiceComponent,
-    AsideMenuAccountComponent
+    AsideMenuAccountComponent,
+
   ],
   imports: [
     FormsModule,

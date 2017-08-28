@@ -10,13 +10,13 @@
 
     {{isGroupItemSelected}}
     {{activeGroupUniqueName}}
-    
-    <!-- <account-add *ngIf="isGroupItemSelected" [activeGroupUniqueName]="activeGroupUniqueName"
+
+    <account-add *ngIf="isGroupItemSelected" [activeGroupUniqueName]="activeGroupUniqueName"
     [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
     [createAccountInProcess$]="createAccountInProcess$"
     [createAccountIsSuccess$]="createAccountIsSuccess$" (submitClicked)="addNewGroup($event)"
-    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-add> -->
-   
+    [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-add>
+
     <div>
       <button class="btn btn-default" (click)="closeAsidePane($event)">Close</button>
     </div>
