@@ -73,8 +73,8 @@
           <td>{{item.uniqueName}}</td>
           <td class="alR">
             <span *ngIf="item.openingBalance > 0">
-          <span class="text-success pull-left" *ngIf="item.openBalType === 'DEBIT'">DR</span>
-            <span class="text-danger pull-left" *ngIf="item.openBalType === 'CREDIT'">CR</span> &nbsp;
+          <span class="text-success pull-left" *ngIf="item.openBalanceType === 'DEBIT'">DR</span>
+            <span class="text-danger pull-left" *ngIf="item.openBalanceType === 'CREDIT'">CR</span> &nbsp;
             </span>
             {{item.openingBalance.toFixed(2) }}
           </td>
@@ -82,8 +82,8 @@
           <td class="alR">{{item.creditTotal.toFixed(2)}}</td>
           <td class="alR">
             <span *ngIf="item.closingBalance > 0">
-            <span class="text-success pull-left" *ngIf="item.closeBalType === 'DEBIT'">DR</span>
-            <span class="text-danger pull-left" *ngIf="item.closeBalType === 'CREDIT'">CR</span> &nbsp;
+            <span class="text-success pull-left" *ngIf="item.closeBalanceType === 'DEBIT'">DR</span>
+            <span class="text-danger pull-left" *ngIf="item.closeBalanceType === 'CREDIT'">CR</span> &nbsp;
             </span>
             {{item.closingBalance.toFixed(2) }}
           </td>
