@@ -22,7 +22,7 @@ export const ROUTES: Routes = [
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthentication] },
-      { path: 'sales', component: SalesComponent },
+      { path: 'sales', component: SalesComponent, canActivate: [NeedsAuthentication] },
       { path: 'about', loadChildren: './about/about.module#AboutModule', canActivate: [NeedsAuthentication] },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthentication] },
       { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthentication] },
@@ -37,7 +37,7 @@ export const ROUTES: Routes = [
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication] },
       { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthentication] },
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthentication] },
-      { path: '**', redirectTo: 'home', pathMatch: 'full' }
+      { path: '**', redirectTo: 'sales', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
