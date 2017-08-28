@@ -71,7 +71,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     row = '';
     header = '';
     title = '' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\n';
-    this.fnGroupWise = "Trial_Balance.csv";
+    this.fnGroupWise = 'Trial_Balance.csv';
     companyDetails = this.selectedCompany;
     header = `${companyDetails.name}\r\n"${companyDetails.address}"\r\n${companyDetails.city}-${companyDetails.pincode}\r\nTrial Balance: fromDate  to toDate\r\n`;
     csv += `${header}\r\n${title}`;
@@ -91,12 +91,12 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     _.each(this.exportData, obj => {
       if (obj.isVisible) {
         row += `${obj.groupName},${obj.forwardedBalance} ${this.recType.transform(obj.forwardedBalance)},${obj.debitTotal},${obj.creditTotal},${obj.closingBalance}${this.recType.transform(obj.closingBalance)}\r\n`;
-        if (obj.forwardedBalance.type === "DEBIT") {
+        if (obj.forwardedBalance.type === 'DEBIT') {
           total.ob = total.ob + obj.forwardedBalance.amount;
         } else {
           total.ob = total.ob - obj.forwardedBalance.amount;
         }
-        if (obj.closingBalance.type === "DEBIT") {
+        if (obj.closingBalance.type === 'DEBIT') {
           total.cb = total.cb + obj.closingBalance.amount;
         } else {
           total.cb = total.cb - obj.closingBalance.amount;
@@ -123,7 +123,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     this.uriGroupWise = `data:text/csv;charset=utf-8,${csv}`;
     this.showOptions = true;
     return e.stopPropagation();
-  };
+  }
 
   public formatDataAccountWise = e => {
     let accounts: AccountFlat[];
@@ -150,7 +150,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
       cr: 0,
       dr: 0
     };
-    this.fnAccountWise = "Trial_Balance_account-wise.csv";
+    this.fnAccountWise = 'Trial_Balance_account-wise.csv';
     row = '';
     title = '';
     body = '';
@@ -158,9 +158,10 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     companyDetails = this.selectedCompany;
     header = `${companyDetails.name}\r\n"${companyDetails.address}"\r\n${companyDetails.city}-${companyDetails.pincode}\r\nTrial Balance: fromDate to toDate\r\n`;
     // Flatten All Accounts > accounts , Flatten All ChildGroups > ChildGroups, Flatten All
+    // tslint:disable-next-line:no-shadowed-variable
     const toAccountFlat = (accounts: Account[], parentGroup: string) => {
       return accounts.map(p => {
-        return <AccountFlat>{
+        return {
           name: p.name,
           openingBalance: p.openingBalance.amount,
           openBalanceType: p.openingBalance.type,
@@ -170,7 +171,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
           closeBalanceType: p.closingBalance.type,
           parent: parentGroup,
           uniqueName: ''
-        };
+        } as AccountFlat;
       });
     };
     sortChildren = (parent: ChildGroup[]) => {
@@ -194,8 +195,8 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     };
     sortChildren(rawData);
     title += 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
-    createCsv = data => {
-      _.each(data, obj => {
+    createCsv = (data: any) => {
+      _.each(data, (obj: any) => {
         row = row || '';
         if (obj.isVisible === true) {
           row += `${obj.name} (${obj.parent}),${obj.openingBalance} ${this.recType.transform({
@@ -205,12 +206,12 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
             type: obj.closingBalanceType,
             amount: obj.closingBalance
           })}\r\n`;
-          if (obj.openingBalanceType === "DEBIT") {
+          if (obj.openingBalanceType === 'DEBIT') {
             total.ob = total.ob + obj.openingBalance;
           } else {
             total.ob = total.ob - obj.openingBalance;
           }
-          if (obj.closingBalanceType === "DEBIT") {
+          if (obj.closingBalanceType === 'DEBIT') {
             total.cb = total.cb + obj.closingBalance;
           } else {
             total.cb = total.cb - obj.closingBalance;
@@ -240,7 +241,7 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     this.uriAccountWise = `data:text/csv;charset=utf-8,${(csv)}`;
     this.showOptions = true;
     return e.stopPropagation();
-  };
+  }
 
   /*  public formatDataCondensed = e => {
       let body;
@@ -415,9 +416,9 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
 
   public formatData = e => {
     this.formatDataGroupWise(e);
-    //this.formatDataCondensed(e);
+    // this.formatDataCondensed(e);
     this.formatDataAccountWise(e);
-  };
+  }
 
   public hideOptions(value: string, e: Event) {
     this.showCsvDownloadOptions = false;
