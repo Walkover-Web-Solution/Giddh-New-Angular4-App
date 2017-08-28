@@ -26,15 +26,25 @@ export class NeedsAuthentication implements CanActivate {
         }
       });
       if (cmpUniqueName === '') {
+        console.log('Opps! I don\'t have company name from needsAuthentication, Let me get it');
         let resp = this._companyService.getStateDetails('').toPromise();
         return resp.then(p => {
+          console.log('Got It!Let\'t Redirect-> from needsAuthentication');
           this.store.dispatch(this.companyActions.GetStateDetailsResponse(p));
+          return true;
+        }).catch((e) => {
+          console.log(e);
           return true;
         });
       }
+      console.log('YAY! I have company name from needsAuthentication');
       return true;
     } else {
-      this._router.navigate(['/login']);
+      console.log('Home youa are not authenticated Login again from needsAuthentication');
+      this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+        this._router.navigate(['/login']);
+      });
+      return false;
     }
   }
 }

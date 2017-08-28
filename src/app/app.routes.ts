@@ -17,6 +17,7 @@ export const ROUTES: Routes = [
   { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+  { path: 'dummy', component: DummyComponent },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -31,7 +32,6 @@ export const ROUTES: Routes = [
       },
       { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthentication] },
-      { path: 'dummy', component: DummyComponent },
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication] },
       { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthentication] },
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthentication] },
