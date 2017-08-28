@@ -313,20 +313,6 @@ module.exports = function (options) {
       //  include: 'asyncChunks'
       //}),
 
-      /**
-       * Plugin: ScriptExtHtmlWebpackPlugin
-       * Description: Enhances html-webpack-plugin functionality
-       * with different deployment options for your scripts including:
-       *
-       * See: https://github.com/numical/script-ext-html-webpack-plugin
-       */
-      new ScriptExtHtmlWebpackPlugin({
-        sync: /polyfill|vendor/,
-        defaultAttribute: 'async',
-        preload: [/polyfill|vendor|main/],
-        prefetch: [/chunk/]
-      }),
-
       /*
        * Plugin: HtmlWebpackPlugin
        * Description: Simplifies creation of HTML files to serve your webpack bundles.
@@ -341,6 +327,20 @@ module.exports = function (options) {
         chunksSortMode: 'dependency',
         metadata: METADATA,
         inject: 'body'
+      }),
+
+       /**
+       * Plugin: ScriptExtHtmlWebpackPlugin
+       * Description: Enhances html-webpack-plugin functionality
+       * with different deployment options for your scripts including:
+       *
+       * See: https://github.com/numical/script-ext-html-webpack-plugin
+       */
+      new ScriptExtHtmlWebpackPlugin({
+        sync: /polyfill|vendor/,
+        defaultAttribute: 'async',
+        preload: [/polyfill|vendor|main/],
+        prefetch: [/chunk/]
       }),
 
       /**
@@ -377,37 +377,8 @@ module.exports = function (options) {
       new LoaderOptionsPlugin({}),
 
       new ngcWebpack.NgcWebpackPlugin({
-        /**
-         * If false the plugin is a ghost, it will not perform any action.
-         * This property can be used to trigger AOT on/off depending on your build target (prod, staging etc...)
-         *
-         * The state can not change after initializing the plugin.
-         * @default true
-         */
         disabled: !AOT,
         tsConfig: helpers.root('tsconfig.webpack.json'),
-        /**
-         * A path to a file (resource) that will replace all resource referenced in @Components.
-         * For each `@Component` the AOT compiler compiles it creates new representation for the templates (html, styles)
-         * of that `@Components`. It means that there is no need for the source templates, they take a lot of
-         * space and they will be replaced by the content of this resource.
-         *
-         * To leave the template as is set to a falsy value (the default).
-         *
-         * TIP: Use an empty file as an overriding resource. It is recommended to use a ".js" file which
-         * usually has small amount of loaders hence less performance impact.
-         *
-         * > This feature is doing NormalModuleReplacementPlugin for AOT compiled resources.
-         *
-         * ### resourceOverride and assets
-         * If you reference assets in your styles/html that are not inlined and you expect a loader (e.g. url-loader)
-         * to copy them, don't use the `resourceOverride` feature as it does not support this feature at the moment.
-         * With `resourceOverride` the end result is that webpack will replace the asset with an href to the public
-         * assets folder but it will not copy the files. This happens because the replacement is done in the AOT compilation
-         * phase but in the bundling it won't happen (it's being replaced with and empty file...)
-         *
-         * @default undefined
-         */
         resourceOverride: helpers.root('config/resource-override.js')
       }),
 
