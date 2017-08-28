@@ -97,7 +97,10 @@ export class LoginActions {
       });
       this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
       this.store.dispatch(this.comapnyActions.RefreshCompanies());
-      this._router.navigate(['/home']);
+
+      this._router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        this._router.navigate(['/home']);
+      });
       return { type: '' };
     });
 
