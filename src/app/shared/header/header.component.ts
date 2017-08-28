@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
-              private zone: NgZone) {
+    private zone: NgZone) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -143,7 +143,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
       if (!s) {
-        this.router.navigate(['/login']);
+        this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/login']);
+        });
+      } else {
+        this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+          this.router.navigate(['/home']);
+        });
       }
     });
   }
