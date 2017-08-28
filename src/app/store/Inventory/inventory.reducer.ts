@@ -339,7 +339,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       if (resStockData.status === 'success') {
         return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: false});
       } else {
-        if (resStockData.code === 'STOCK_GROUP_NOT_FOUND') {
+        if (resStockData.code === 'STOCK_NOT_FOUND') {
           return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: true});
         }
         return state;
@@ -376,8 +376,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         }
         return Object.assign({}, state, {
           groupsWithStocks: groupArray,
-          activeStockUniqueName: createStockResp.request.uniqueName,
-          activeStock: createStockResp.body,
+          activeStockUniqueName: null,
+          activeStock: null,
           createStockSuccess: true,
           isStockAddInProcess: false
         });
