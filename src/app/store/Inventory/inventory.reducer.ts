@@ -337,7 +337,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
     case InventoryActionsConst.GetStockUniqueNameResponse:
       let resStockData: BaseResponse<StockDetailResponse, string> = action.payload;
       if (resStockData.status === 'success') {
-        return Object.assign({}, state, {activeStock: resStockData.body, fetchingStockUniqueName: false, isStockNameAvailable: false});
+        return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: false});
       } else {
         if (resStockData.code === 'STOCK_NOT_FOUND') {
           return Object.assign({}, state, {fetchingStockUniqueName: false, isStockNameAvailable: true});
@@ -376,8 +376,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
         }
         return Object.assign({}, state, {
           groupsWithStocks: groupArray,
-          activeStockUniqueName: createStockResp.request.uniqueName,
-          activeStock: createStockResp.body,
+          activeStockUniqueName: null,
+          activeStock: null,
           createStockSuccess: true,
           isStockAddInProcess: false
         });
