@@ -71,12 +71,14 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
   public addNewGroup() {
     let activeGrpUniqueName: string;
+    let uniqueName = this.groupDetailForm.get('uniqueName');
+    uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+
     this.activeGroupUniqueName$.take(1).subscribe(a => activeGrpUniqueName = a);
 
     let grpObject: GroupCreateRequest;
     grpObject = this.groupDetailForm.value as GroupCreateRequest;
-    this.groupDetailForm.get('uniqueName').setValue(grpObject.uniqueName.toLowerCase());
-    grpObject.uniqueName = grpObject.uniqueName.toLowerCase();
+    grpObject.uniqueName = grpObject.uniqueName;
     grpObject.parentGroupUniqueName = activeGrpUniqueName;
 
     this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
