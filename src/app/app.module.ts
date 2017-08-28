@@ -25,6 +25,7 @@ import { PageComponent } from './page.component';
 import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
+import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
 // Application wide providers
@@ -78,6 +79,7 @@ if (ENV === 'development') {
     HttpModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
+    ToastrModule.forRoot(),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
