@@ -10,6 +10,7 @@ import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
 import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingRountingModule } from './settings.routing.module';
+import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect-bank-modal.component';
 @NgModule({
   declarations: [
     // components here
@@ -18,7 +19,8 @@ import { SettingRountingModule } from './settings.routing.module';
     SettingProfileComponent,
     SettingTaxesComponent,
     SettingsLinkedAccountsComponent,
-    DeleteTaxConfirmationModelComponent
+    DeleteTaxConfirmationModelComponent,
+    ConnectBankModalComponent
   ],
   imports: [
     SharedModule,
