@@ -125,7 +125,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
       let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (bankresponse.status === 'success') {
-        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: null });
+        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: bankresponse.body.length === 0 ? 'No data Availble' : null });
       }
       return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
     }
