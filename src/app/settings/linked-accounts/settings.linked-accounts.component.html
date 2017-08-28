@@ -14,7 +14,7 @@
           <aside class="account-card" *ngFor="let card of account.accounts">
 
             <a><i class="pull-left glyphicon glyphicon-refresh refresh-icon" ng-disabled="card.reconnect" ng-click="refreshToken(card)"></i></a>
-            <h1 [tooltip]="card.name" >{{ card.name }}</h1>
+            <h1 [tooltip]="card.name">{{ card.name }}</h1>
             <div class="account-number ng-binding">
               <b>Account</b>: {{ card.accountNumber }}
             </div>
@@ -34,8 +34,7 @@
             </div>
             <button class="btn btn-sm btn-info " ng-if="card.linkedAccount == null &amp;&amp; !card.showAccList" ng-disabled="card.reconnect"
               ng-click="linkGiddhAccount(card)">Link Account</button>
-            <a class="delete-bank" ng-disabled="card.reconnect" (click)="showDeleteAccountModal(card)" uib-tooltip="Delete Bank"
-              tooltip-placement="left">
+            <a class="delete-bank" ng-disabled="card.reconnect" (click)="showDeleteAccountModal(card)" uib-tooltip="Delete Bank" tooltip-placement="left">
               <i class="glyphicon glyphicon-trash"></i></a>
           </aside>
         </aside>
@@ -44,14 +43,22 @@
   </div>
 </div>
 
- <!--delete account modal  -->
- <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <confirm-modal [title]="'Delete Merged Account'" [body]='deleteAccountModalBody'
-                       (cancelCallBack)="hideDeleteAccountModal()"
-                       (successCallBack)="deleteAccount()">
-        </confirm-modal>
-      </div>
+<!--delete account modal  -->
+<div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete Merged Account'" [body]='deleteAccountModalBody' (cancelCallBack)="hideDeleteAccountModal()"
+        (successCallBack)="deleteAccount()">
+      </confirm-modal>
     </div>
   </div>
+</div>
+
+<!--connnect bank modal  -->
+<div bsModal #connectBankModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <connect-bank-modal [connectUrl]="'www.google.com'"></connect-bank-modal>
+    </div>
+  </div>
+</div>
