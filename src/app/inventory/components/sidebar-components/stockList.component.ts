@@ -19,13 +19,13 @@ import * as _ from 'lodash';
   template: `
   <ul class="list-unstyled stock-items" [hidden]="!Groups.isOpen" >
     <li  (click)="OpenStock(item, $event)" *ngFor="let item of Groups.stocks" >
-      <div [ngClass]="{'active': stockUniqueName === item.uniqueName }">{{item.name}}</div>
+      <div [ngClass]="{'active':  (activeStockUniqueName$ | async) === item.uniqueName}">{{item.name}}</div>
     </li>
   </ul>
   `
 })
 export class StockListComponent implements OnInit, OnDestroy {
-  public activeStock$: Observable<StockDetailResponse>;
+  public activeStockUniqueName$: Observable<string>;
   public activeGroup$: Observable<StockGroupResponse>;
   public sub: Subscription;
 
@@ -37,7 +37,7 @@ export class StockListComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private _router: Router) {
     this.activeGroup$ = this.store.select(p => p.inventory.activeGroup);
-    this.activeStock$ = this.store.select(p => p.inventory.activeStock);
+    this.activeStockUniqueName$ = this.store.select(p => p.inventory.activeStockUniqueName);
   }
   public ngOnInit() {
     this.Groups.stocks = _.orderBy(this.Groups.stocks, ['name'], ['asc']);

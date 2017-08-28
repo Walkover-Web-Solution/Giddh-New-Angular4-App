@@ -166,6 +166,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this.inventoryActions.resetActiveGroup());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
