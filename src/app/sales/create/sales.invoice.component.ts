@@ -129,7 +129,9 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public toggleAccountAsidePane(event): void {
-    event.preventDefault();
+    if (event) {
+      event.preventDefault();
+    }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
 
