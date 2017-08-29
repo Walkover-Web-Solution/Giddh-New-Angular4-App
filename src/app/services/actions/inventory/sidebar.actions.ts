@@ -18,24 +18,30 @@ export class SidebarAction {
     .ofType(InventoryActionsConst.GetInventoryGroup)
     .do(a => console.log('called'))
     .switchMap(action => {
-      return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName);
-    })
-    .map(response => {
-      return this.GetInventoryGroupResponse(response);
+      return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName).map(response => {
+        if (response.status === 'error') {
+          this._toasty.errorToast(response.message, response.code);
+        } else {
+          this.store.dispatch(this.GetInventoryGroupResponse(response));
+          this.store.dispatch(this.OpenGroup(response.body.uniqueName));
+        }
+        return { type: '' };
+      });
     });
 
-  @Effect()
-  public GetInventoryGroupResponse$: Observable<Action> = this.action$
-    .ofType(InventoryActionsConst.GetInventoryGroupResponse)
-    .map(action => {
-      let data: BaseResponse<StockGroupResponse, string> = action.payload;
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
-      } else {
-        this.store.dispatch(this.OpenGroup(data.body.uniqueName));
-      }
-      return { type: '' };
-    });
+  // @Effect()
+  // public GetInventoryGroupResponse$: Observable<Action> = this.action$
+  //   .ofType(InventoryActionsConst.GetInventoryGroupResponse)
+  //   .shareReplay()
+  //   .map(action => {
+  //     let data: BaseResponse<StockGroupResponse, string> = action.payload;
+  //     if (action.payload.status === 'error') {
+  //       this._toasty.errorToast(action.payload.message, action.payload.code);
+  //     } else {
+  //       // this.store.dispatch(this.OpenGroup(data.body.uniqueName));
+  //     }
+  //     return { type: '' };
+  //   });
 
   @Effect()
   public GetInventoryStock$: Observable<Action> = this.action$
