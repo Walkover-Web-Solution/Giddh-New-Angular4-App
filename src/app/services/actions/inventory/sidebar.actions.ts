@@ -16,8 +16,13 @@ export class SidebarAction {
   @Effect()
   public GetInventoryGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetInventoryGroup)
-    .switchMap(action => this._inventoryService.GetGroupsStock(action.payload.groupUniqueName))
+    .do(a => console.log('called'))
+    .switchMap(action => {
+      debugger;
+      return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName);
+    })
     .map(response => {
+      debugger;
       return this.GetInventoryGroupResponse(response);
     });
 
@@ -136,7 +141,7 @@ export class SidebarAction {
   public GetInventoryStock(stockUniqueName: string, activeGroupUniqueName: string): Action {
     return {
       type: InventoryActionsConst.GetInventoryStock,
-      payload: {stockUniqueName, activeGroupUniqueName}
+      payload: { stockUniqueName, activeGroupUniqueName }
     };
   }
 
