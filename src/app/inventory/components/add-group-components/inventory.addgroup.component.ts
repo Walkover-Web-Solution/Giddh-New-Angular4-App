@@ -242,7 +242,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
     this.store.select(p => p.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$).distinctUntilChanged().filter(p => !p).subscribe((a) => {
       this.activeGroup$.take(1).subscribe(b => activeGroup = b);
-      this.router.navigateByUrl('/pages/dummy', { skipLocationChange: true }).then(() => {
+      this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
         this.router.navigate(['/pages', 'inventory', 'add-group', activeGroup.uniqueName]);
       });
     });
