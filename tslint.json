@@ -7,6 +7,7 @@
   ],
   "rules": {
     // Custom
+
     "trailing-comma": [
       false,
       {

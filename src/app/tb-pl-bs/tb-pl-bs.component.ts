@@ -22,5 +22,6 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   }
 
   public ngAfterViewInit() {
+    //
   }
 }

@@ -31,7 +31,7 @@ export class EledgerService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    let URL = ELEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName);
+    let URL = ELEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
     if (refresh) {
       URL = URL + '?refresh=true';
     }
@@ -53,7 +53,7 @@ export class EledgerService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(ELEDGER_API.TRASH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName).replace(':transactionId', transactionId)).map((res) => {
+    return this._http.delete(ELEDGER_API.TRASH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId)).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.queryString = { accountUniqueName, transactionId };
       return data;
@@ -71,7 +71,7 @@ export class EledgerService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(ELEDGER_API.MAP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName).replace(':transactionId', transactionId), model)
+    return this._http.put(ELEDGER_API.MAP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId), model)
       .map((res) => {
         let data: BaseResponse<string, EledgerMapRequest> = res.json();
         data.request = model;
