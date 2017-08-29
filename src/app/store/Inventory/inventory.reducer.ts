@@ -123,6 +123,7 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
             }
           }
         }
+        groupArray = _.orderBy(groupArray, ['name']);
         return Object.assign({}, state, {groupsWithStocks: groupArray});
       }
       return state;
