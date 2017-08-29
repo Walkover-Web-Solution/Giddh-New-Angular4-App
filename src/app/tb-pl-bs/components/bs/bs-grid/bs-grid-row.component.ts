@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit, ChangeDetectorRef, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ChildGroup } from '../../../../models/api-models/Search';
 
 @Component({
@@ -38,7 +38,6 @@ export class BsGridRowComponent implements OnInit, OnChanges {
     //
   }
   public ngOnChanges(changes: SimpleChanges) {
-    debugger;
   }
   public ngOnInit() {
     //
