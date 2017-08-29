@@ -4,6 +4,7 @@ import * as _ from 'lodash';
 import { INVOICE_ACTIONS, INVOICE } from '../../services/actions/invoice/invoice.const';
 import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
+import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 
 export class GeneratePage {
   public ledgers: GetAllLedgersOfInvoicesResponse;
@@ -138,6 +139,85 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let res: BaseResponse<InvoiceSetting, string> = action.payload;
             if (res.status === 'success') {
                 newState.settings = res.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+                let uniqueName = res.queryString.uniquename;
+                let indx = newState.settings.webhooks.findIndex((obj)=> obj.uniqueName === uniqueName );
+                if (indx > -1) {
+                    newState.settings.webhooks.splice(indx, 1);
+                }
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+                console.log(res.body);
+                let emailId = res.queryString.emailId;
+                newState.settings.invoiceSettings.email = emailId;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            let blankWebhook = {
+                url: '',
+                triggerAt: 0,
+                entity: '',
+                uniqueName: '' 
+            }
+            if (res.status === 'success') {
+                let newWebhook = res.queryString.webhook;
+                newState.settings.webhooks.push(newWebhook);
+                newState.settings.webhooks.push(blankWebhook);
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+                let form = res.queryString.form;
+                newState.settings.invoiceSettings = form.invoiceSettings;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            if (res.status === 'success') {
+                newState.settings.razorPayform = res.body;
+                console.log(res.body);
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            if (res.status === 'success') {
+                newState.settings.razorPayform = res.body;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+                console.log(res);
                 return Object.assign({}, state, newState);
             }
             return state;
