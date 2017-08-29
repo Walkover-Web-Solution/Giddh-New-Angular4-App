@@ -4,8 +4,7 @@
     </div>
     <div class="modal-body">
         <section *ngIf="goAhead">
-            <invoice-create></invoice-create>
+            <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent()"></invoice-create>
         </section>
-        <button type="button" class="btn btn-default mrR1 pull-left" (click)="closePopupEvent()">Close</button>
     </div>
 </section>

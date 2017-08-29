@@ -2,12 +2,13 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 import { INVOICE_ACTIONS } from '../../services/actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult, GenerateInvoiceRequestClass } from '../../models/api-models/Invoice';
 
 export class GeneratePage {
   public ledgers: GetAllLedgersOfInvoicesResponse;
-  public invoiceData: PreviewAndGenerateInvoiceResponse;
+  public invoiceData: PreviewInvoiceResponseClass;
   public invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
+  public isInvoiceGenerated: boolean;
 }
 
 export class PreviewPage {
@@ -22,7 +23,7 @@ export interface InvoiceState {
 
 export const initialState: InvoiceState = {
   preview: {invoices: null},
-  generate: {ledgers: null, invoiceData: null, invoiceTemplateConditions: null},
+  generate: {ledgers: null, invoiceData: null, invoiceTemplateConditions: null, isInvoiceGenerated: false},
   settings: null
 };
 
@@ -65,12 +66,30 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
         }
         case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
-            let res: BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest> = action.payload;
+            let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
             if (res.status === 'success') {
                 newState.generate.invoiceData = res.body;
                 return Object.assign({}, state, newState);
             }
             return state;
+        }
+        case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<GenerateInvoiceRequestClass, string> = action.payload;
+            if (res.status === 'success') {
+                newState.generate.isInvoiceGenerated = true;
+                // remove selected entry
+                newState.generate.ledgers.results = _.remove(newState.generate.ledgers.results, (item: ILedgersInvoiceResult) => {
+                    return !item.isSelected;
+                });
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
+            let newState = _.cloneDeep(state);
+            newState.generate.isInvoiceGenerated = false;
+            return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -81,7 +100,6 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             }
             return state;
         }
-
         case INVOICE_ACTIONS.DELETE_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;

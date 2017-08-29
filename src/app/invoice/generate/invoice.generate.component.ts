@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewAndGenerateInvoiceResponse, GetAllLedgersForInvoiceResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewInvoiceResponseClass, GetAllLedgersForInvoiceResponse } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -85,17 +85,15 @@ export class InvoiceGenerateComponent implements OnInit {
 
     this.store.select(p => p.invoice.generate.ledgers)
       .takeUntil(this.destroyed$)
-      .distinctUntilChanged()
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
           this.ledgersData = _.cloneDeep(o);
         }
-      }
-      );
+      });
 
     this.store.select(p => p.invoice.generate.invoiceData)
       .takeUntil(this.destroyed$)
-      .distinctUntilChanged((p: PreviewAndGenerateInvoiceResponse, q: PreviewAndGenerateInvoiceResponse) => {
+      .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
         if (p && q) {
           return (p.templateUniqueName === q.templateUniqueName);
         }
@@ -103,7 +101,7 @@ export class InvoiceGenerateComponent implements OnInit {
           return false;
         }
         return true;
-      }).subscribe((o: PreviewAndGenerateInvoiceResponse) => {
+      }).subscribe((o: PreviewInvoiceResponseClass) => {
         if (o) {
           this.getInvoiceTemplateDetails(o.templateUniqueName);
         }
@@ -145,7 +143,7 @@ export class InvoiceGenerateComponent implements OnInit {
     this.insertItemsIntoArr();
   }
 
-  public prevAndGenInv() {
+  public previewInvoice() {
     let model = {
       uniqueNames: _.uniq(this.selectedLedgerItems)
     };
