@@ -1,0 +1,14 @@
+.webookList li {
+    list-style: none;
+    margin-bottom: 7px;
+    position: relative;
+}
+
+.webookList li>div>label {
+    position: absolute;
+    bottom: 7px;
+}
+
+.delete-ico {
+    font-size: 18px;
+}
