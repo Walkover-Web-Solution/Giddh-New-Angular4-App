@@ -97,10 +97,23 @@ export class LoginActions {
       });
       this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
       this.store.dispatch(this.comapnyActions.RefreshCompanies());
-
-      this._router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
-        this._router.navigate(['/home']);
+      console.log('login success to dummy Login Action');
+      this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+        console.log('login success to home Login Action');
+        this._router.navigate(['/pages/home']);
       });
+      return { type: '' };
+    });
+
+  @Effect()
+  public logoutSuccess$: Observable<Action> = this.actions$
+    .ofType(LoginActions.LogOut)
+    .map(action => {
+      // console.log('logout success to dummy Login Action');
+      // this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+      //   console.log('logout success to home Login Action');
+      //   this._router.navigate(['/login']);
+      // });
       return { type: '' };
     });
 
