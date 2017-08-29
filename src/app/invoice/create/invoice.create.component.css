@@ -1,3 +1,6 @@
+.whiteBg{
+  background-color: #fff;
+}
 .form-group input, .form-group select, .form-group textarea{
   max-width: 140px;
 }

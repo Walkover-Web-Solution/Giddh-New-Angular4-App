@@ -51,7 +51,7 @@
   <ul class="list-inline pull-left">
     <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
     <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
-    <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1" class="btn btn-primary" (click)="prevAndGenInv()">Preview &amp; Generate</button></li>
+    <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button></li>
     <!-- <li><button class="btn btn-info" id="createNew" (click)="showInvoiceModal()">Create New</button></li> -->
     <!-- <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li> -->
 
@@ -131,7 +131,7 @@
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog gray modal-liquid">
     <div class="modal-content">
-      <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+      <invoice-generate-model (closeEvent)="closeInvoiceModel()"></invoice-generate-model>
     </div>
   </div>
 </div>

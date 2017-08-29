@@ -15,11 +15,12 @@ import {
   CommonPaginatedRequest,
   GetAllLedgersForInvoiceResponse,
   InvoiceFilterClass,
-  PreviewAndGenerateInvoiceRequest,
-  PreviewAndGenerateInvoiceResponse,
+  PreviewInvoiceRequest,
+  PreviewInvoiceResponseClass,
   GetInvoiceTemplateDetailsResponse,
   Template,
-  InvoiceTemplateDetailsResponse
+  InvoiceTemplateDetailsResponse,
+  GenerateInvoiceRequestClass
 } from '../../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
 import {
@@ -60,16 +61,29 @@ export class InvoiceActions {
       payload: res
     }));
 
-  // Preview and Generate Invoice
+  // Preview Invoice
   @Effect()
   public PreviewInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.PREVIEW_INVOICE)
     .switchMap(action => this._invoiceService.PreviewInvoice(action.payload.accountUniqueName, action.payload.body))
-    .map(res => this.validateResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>(res, {
+    .map(res => this.validateResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(res, {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: res
     }, true, {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
+      payload: res
+    }));
+
+  // Generate Invoice
+  @Effect()
+  public GenerateInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.GENERATE_INVOICE)
+    .switchMap(action => this._invoiceService.GenerateInvoice(action.payload.accountUniqueName, action.payload.body))
+    .map(res => this.validateResponse<GenerateInvoiceRequestClass, string>(res, {
+      type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: res
     }));
 
@@ -175,16 +189,30 @@ export class InvoiceActions {
     };
   }
 
-  public PreviewInvoice(accountUniqueName: string, model: PreviewAndGenerateInvoiceRequest): Action {
+  public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Action {
     return {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE,
       payload: {accountUniqueName, body: model}
     };
   }
 
-  public PreviewInvoiceResponse(model: PreviewAndGenerateInvoiceResponse): Action {
+  public PreviewInvoiceResponse(model: PreviewInvoiceResponseClass): Action {
     return {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public GenerateInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Action {
+    return {
+      type: INVOICE_ACTIONS.GENERATE_INVOICE,
+      payload: {accountUniqueName, body: model}
+    };
+  }
+
+  public GenerateInvoiceResponse(model: GenerateInvoiceRequestClass): Action {
+    return {
+      type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: model
     };
   }
@@ -235,6 +263,13 @@ export class InvoiceActions {
     return {
       type: INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA,
       payload: model
+    };
+  }
+
+  public InvoiceGenerationCompleted(): Action {
+    return {
+      type: INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED,
+      payload: ''
     };
   }
 

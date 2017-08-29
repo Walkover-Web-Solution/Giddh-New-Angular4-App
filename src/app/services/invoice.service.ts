@@ -7,7 +7,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewAndGenerateInvoiceRequest, PreviewAndGenerateInvoiceResponse, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, PreviewInvoiceResponseClass, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass } from '../models/api-models/Invoice';
 
 @Injectable()
 export class InvoiceService {
@@ -113,12 +113,12 @@ export class InvoiceService {
   }
 
   /*
-  * Preview and Generate Invoice
+  * Preview Invoice
   * method: 'POST'
   * url: '/company/:companyUniqueName/accounts/:accountUniqueName/invoices/preview'
   */
 
-  public PreviewInvoice(accountUniqueName: string, model: PreviewAndGenerateInvoiceRequest): Observable<BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>> {
+  public PreviewInvoice(accountUniqueName: string, model: PreviewInvoiceRequest): Observable<BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -127,11 +127,30 @@ export class InvoiceService {
     });
     return this._http.post(INVOICE_API.PREVIEW_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest> = res.json();
+        let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res.json();
         data.request = model;
         return data;
       })
-      .catch((e) => HandleCatch<PreviewAndGenerateInvoiceResponse, PreviewAndGenerateInvoiceRequest>(e, model));
+      .catch((e) => HandleCatch<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(e, model));
+  }
+
+  /**
+   * Generate Invoice
+   */
+  public GenerateInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Observable<BaseResponse<GenerateInvoiceRequestClass, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(INVOICE_API.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<GenerateInvoiceRequestClass, string> = res.json();
+        data.request = '';
+        return data;
+      })
+      .catch((e) => HandleCatch<GenerateInvoiceRequestClass, string>(e, model));
   }
 
   /**
