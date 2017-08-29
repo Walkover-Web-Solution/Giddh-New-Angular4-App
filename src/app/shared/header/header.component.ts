@@ -14,7 +14,7 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
@@ -71,7 +71,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
-    private zone: NgZone) {
+    private zone: NgZone,
+    private route: ActivatedRoute) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -121,6 +122,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
@@ -154,6 +156,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // });
       }
     });
+    if (this.route.snapshot.url.toString() === 'new-user') {
+      this.showAddCompanyModal();
+    }
   }
 
   public ngAfterViewChecked() {
