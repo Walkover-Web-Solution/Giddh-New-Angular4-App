@@ -215,7 +215,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.distinct().subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        this._router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
           this._router.navigate(['/pages', 'ledger', this.lc.accountUnq]);
         });
       }
