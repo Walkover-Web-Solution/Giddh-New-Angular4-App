@@ -30,7 +30,7 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(MANUFACTURING_API.GET.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', model.stockUniqueName).replace(':manufacturingUniqueName', model.manufacturingUniqueName))
+    return this._http.get(MANUFACTURING_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', model.stockUniqueName).replace(':manufacturingUniqueName', model.manufacturingUniqueName))
       .map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res.json();
         data.queryString = model;
@@ -51,7 +51,7 @@ export class ManufacturingService {
         }
         this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', stockUniqueName), model).map((res) => {
+    return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', stockUniqueName), model).map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
         data.request = model;
         data.queryString = {stockUniqueName};
@@ -70,7 +70,7 @@ export class ManufacturingService {
         }
         this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(MANUFACTURING_API.UPDATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).map((res) => {
+    return this._http.put(MANUFACTURING_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
         data.request = model;
         data.queryString = reqModal;
@@ -89,7 +89,7 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(MANUFACTURING_API.DELETE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', model.stockUniqueName).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).map((res) => {
+    return this._http.delete(MANUFACTURING_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', model.stockUniqueName).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = '';
       data.queryString = { model };
@@ -135,7 +135,7 @@ export class ManufacturingService {
       url = url + 'count=' + model.count;
     }
 
-    return this._http.get(url.replace(':companyUniqueName', this.companyUniqueName))
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
       .map((res) => {
         let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
         data.request = '';
@@ -156,7 +156,7 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', model.stockUniqueName))
+    return this._http.get(MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', model.stockUniqueName))
       .map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res.json();
         data.queryString = model;

@@ -30,7 +30,7 @@ export class SearchService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(SEARCH_API.SEARCH
-        .replace(':companyUniqueName', this.companyUniqueName)
+        .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         .replace(':groupName', request.groupName),
       { from: request.fromDate, to: request.toDate, refresh: request.refresh })
       .map((res) => {
