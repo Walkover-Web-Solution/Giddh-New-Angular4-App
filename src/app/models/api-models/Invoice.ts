@@ -194,16 +194,16 @@ export class SendMailRequest {
 }
 
 /**
- * Preview and Generate Invoice
+ * Preview Invoice
  * method: 'POST'
  * url: '/company/:companyUniqueName'accounts/:accountUniqueName/invoices/preview''
  */
 
-export class PreviewAndGenerateInvoiceRequest {
+export class PreviewInvoiceRequest {
   public uniqueNames: string[];
 }
 
-export class PreviewAndGenerateInvoiceResponse {
+export class PreviewInvoiceResponseClass {
   public logo: string;
   public company: Company;
   public customerName: string;
@@ -214,7 +214,7 @@ export class PreviewAndGenerateInvoiceResponse {
   public balanceStatus: string;
   public balanceStatusSealPath: string;
   public commonDiscounts: any[];
-  public entries: Entry[];
+  public entries: GstEntry[];
   public totalTaxableValue: number;
   public grandTotal: number;
   public totalInWords?: any;
@@ -272,11 +272,6 @@ export interface IInvoiceTransaction extends ICommonItemOfTransaction {
   rate?: any;
 }
 
-export interface Entry {
-  uniqueName: string;
-  transactions: Transaction[];
-}
-
 export interface Tax extends ICommonItemOfTransaction {
   hasError: boolean;
   visibleTaxRate: number;
@@ -290,7 +285,7 @@ export interface IInvoiceTax extends ICommonItemOfTransaction {
 
 export interface GstEntry {
   uniqueName: string;
-  discounts: any[];
+  discounts: ICommonItemOfTransaction[];
   taxes: IInvoiceTax[];
   transactions: IInvoiceTransaction[];
   description: string;
@@ -325,6 +320,16 @@ export interface GstDetails {
   showSac: boolean;
   showQty: boolean;
   showRate: boolean;
+}
+
+/**
+ * Generate Invoice model
+ */
+export class GenerateInvoiceRequestClass {
+  public uniqueNames: string[];
+  public validateTax: boolean;
+  public invoice: any;
+  public updateAccountDetails: boolean;
 }
 
 /*
