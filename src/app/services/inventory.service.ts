@@ -73,7 +73,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(INVENTORY_API.DELETE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniqueName))).map((res) => {
+    return this._http.delete(INVENTORY_API.DELETE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = stockGroupUniqueName;
       data.queryString = { stockGroupUniqueName };
@@ -82,7 +82,6 @@ export class InventoryService {
   }
 
   public GetGroupsStock(stockGroupUniqueName: string): Observable<BaseResponse<StockGroupResponse, string>> {
-    debugger;
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
