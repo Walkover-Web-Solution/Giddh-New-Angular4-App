@@ -20,4 +20,6 @@ export interface IEbankAccount {
   linkedAccount?: any;
   accountNumber: string;
   name: string;
+  isDatePickerOpen?: boolean;
+  showAccList?: boolean;
 }
