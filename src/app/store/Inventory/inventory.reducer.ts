@@ -156,8 +156,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
           }
           return Object.assign({}, state, {
             activeGroup: group,
-            activeGroupUniqueName: group.uniqueName,
-            groupsWithStocks: groupArray
+            activeGroupUniqueName: group.uniqueName
+            // groupsWithStocks: groupArray
           });
         }
       }
