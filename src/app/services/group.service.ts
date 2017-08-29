@@ -191,9 +191,9 @@ export class GroupService {
     });
     return this._http.get(GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':q', encodeURIComponent(q || ''))
-      .replace(':page', page.toString())
-      .replace(':count', count.toString())
-      .replace(':showEmptyGroups', showEmptyGroups)).map((res) => {
+      .replace(':page', encodeURIComponent(page.toString()))
+      .replace(':count', encodeURIComponent(count.toString()))
+      .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups))).map((res) => {
       let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count, showEmptyGroups };

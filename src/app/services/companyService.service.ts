@@ -75,7 +75,7 @@ export class CompanyService {
   public getStateDetails(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
     let url = '';
     if (cmpUniqueName) {
-      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', cmpUniqueName ? cmpUniqueName : '');
+      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
     } else {
       url = COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
     }

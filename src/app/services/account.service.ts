@@ -226,7 +226,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent( q || '')).replace(':count', count || '').replace(':page', page || '')).map((res) => {
+    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':count', count || '').replace(':page', encodeURIComponent(page || ''))).map((res) => {
       let data: BaseResponse<FlattenAccountsResponse, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count };
@@ -241,7 +241,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':count', count || 0).replace(':q', encodeURIComponent( q || '')).replace(':page', page || 1), groupUniqueNames).map((res) => {
+    return this._http.post(ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':count', count || 0).replace(':q', encodeURIComponent(q || '')).replace(':page', encodeURIComponent(page || 1)), groupUniqueNames).map((res) => {
       let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = res.json();
       data.request = groupUniqueNames;
       data.queryString = { count, q, page };
