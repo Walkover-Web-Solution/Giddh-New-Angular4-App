@@ -130,7 +130,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', q)).map((res) => {
+    return this._http.get(GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
       let data: BaseResponse<GroupsWithAccountsResponse[], string> = res.json();
       data.request = q;
       return data;
@@ -190,7 +190,7 @@ export class GroupService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-      .replace(':q', q)
+      .replace(':q', encodeURIComponent(q || ''))
       .replace(':page', page.toString())
       .replace(':count', count.toString())
       .replace(':showEmptyGroups', showEmptyGroups)).map((res) => {
