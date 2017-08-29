@@ -1,13 +1,13 @@
 import { Action } from '@ngrx/store';
 import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
-import { AccountDetails, ProfitLossData, BalanceSheetData } from '../../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { ChildGroup } from '../../models/api-models/Search';
 import * as moment from 'moment';
 
 interface TbState {
   data?: AccountDetails;
-  exportData: any;
+  exportData: ChildGroup[];
   count: 0;
   detailedGroups: any;
   showLoader: boolean;
@@ -27,6 +27,7 @@ interface BsState {
   showLoader: boolean;
   noData: boolean;
 }
+
 export interface TBPlBsState {
   tb?: TbState;
   pl?: PlState;
@@ -66,9 +67,10 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
       if (data.closingBalance.amount === 0 && data.creditTotal === 0 && data.debitTotal === 0 && data.forwardedBalance.amount === 0) {
         noData = true;
       }
-      return Object.assign({}, state, {
-        tb: { data, noData, showLoader }
-      });
+      return {
+        ...state,
+        tb: { ...state.tb, data, noData, showLoader, exportData: data.groupDetails }
+      };
     }
     case TBPlBsActions.GET_TRIAL_BALANCE_REQUEST: {
       return { ...state, tb: { ...state.tb, showLoader: true } };

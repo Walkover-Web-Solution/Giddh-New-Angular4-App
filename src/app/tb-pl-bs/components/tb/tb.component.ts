@@ -25,7 +25,6 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
       [tbExportCsv]="true"
       [tbExportPdf]="true"
       [tbExportXLS]="true"
-      [plBsExportXLS]="false"
     ></tb-pl-bs-filter>
     <div *ngIf="!(data$ | async)">
       <!-- loader -->
