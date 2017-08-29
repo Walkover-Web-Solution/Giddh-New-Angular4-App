@@ -40,4 +40,5 @@ export class RazorPayDetailsResponse {
   public userName: string;
   public account: INameUniqueName;
   public autoCapturePayment: boolean;
+  public password?: string;
 }
