@@ -13,6 +13,7 @@ import {
 } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class LoginActions {
@@ -96,6 +97,23 @@ export class LoginActions {
       });
       this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
       this.store.dispatch(this.comapnyActions.RefreshCompanies());
+      console.log('login success to dummy Login Action');
+      this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+        console.log('login success to home Login Action');
+        this._router.navigate(['/pages/home']);
+      });
+      return { type: '' };
+    });
+
+  @Effect()
+  public logoutSuccess$: Observable<Action> = this.actions$
+    .ofType(LoginActions.LogOut)
+    .map(action => {
+      // console.log('logout success to dummy Login Action');
+      // this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+      //   console.log('logout success to home Login Action');
+      //   this._router.navigate(['/login']);
+      // });
       return { type: '' };
     });
 
@@ -118,6 +136,7 @@ export class LoginActions {
       return this.LoginSuccess();
     });
   constructor(
+    public _router: Router,
     private actions$: Actions,
     private auth: AuthenticationService,
     public _toaster: ToasterService,

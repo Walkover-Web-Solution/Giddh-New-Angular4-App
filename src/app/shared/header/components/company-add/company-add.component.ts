@@ -26,11 +26,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
   public dataSource: Observable<any>;
-  public sub: Subscription;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService) {
+    private _location: LocationService) {
   }
 
   // tslint:disable-next-line:no-empty
@@ -66,6 +65,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this.closeModal();
       }
     });
     this.store

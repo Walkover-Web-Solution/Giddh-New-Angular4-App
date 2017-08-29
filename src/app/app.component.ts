@@ -57,7 +57,7 @@ export class AppComponent implements OnInit, AfterViewInit {
             }
           });
 
-          this.router.navigateByUrl('/pages/dummy', { skipLocationChange: true }).then(() => {
+          this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
             this.router.navigate(path, parament);
           });
         }

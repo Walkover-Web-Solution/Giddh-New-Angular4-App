@@ -29,13 +29,15 @@ export function FlyAccountsReducer(state = initialState, action: Action): FlyAcc
 }
 
 const prepare = (data: IFlattenGroupsAccountsDetail[]) => {
-  return data.map(p => <IFlattenGroupsAccountsDetail>{
-    accountDetails: p.accountDetails,
-    groupName: p.groupName,
-    applicableTaxes: p.applicableTaxes,
-    groupSynonyms: p.groupSynonyms,
-    isOpen: false,
-    groupUniqueName: p.groupUniqueName
+  return data.map(p => {
+    return {
+      accountDetails: p.accountDetails,
+      groupName: p.groupName,
+      applicableTaxes: p.applicableTaxes,
+      groupSynonyms: p.groupSynonyms,
+      isOpen: false,
+      groupUniqueName: p.groupUniqueName
+    } as IFlattenGroupsAccountsDetail;
   });
 };
 const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
