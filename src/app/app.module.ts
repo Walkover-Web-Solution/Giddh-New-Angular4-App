@@ -28,6 +28,7 @@ import { ServiceModule } from './services/service.module';
 import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
+import { NewUserComponent } from './newUser.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -66,7 +67,8 @@ if (ENV === 'development') {
     AppComponent,
     PageComponent,
     NoContentComponent,
-    DummyComponent
+    DummyComponent,
+    NewUserComponent
   ],
   /**
    * Import Angular's modules.

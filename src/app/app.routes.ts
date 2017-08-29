@@ -3,6 +3,8 @@ import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
 import { DummyComponent } from './dummy.component';
+import { NewUserComponent } from './newUser.component';
+import { NewUserAuthGuard } from './services/decorators/newUserGuard';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -18,6 +20,7 @@ export const ROUTES: Routes = [
   { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'dummy', component: DummyComponent },
+  { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [

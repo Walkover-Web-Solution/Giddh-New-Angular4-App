@@ -60,7 +60,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     });
     this.isCompanyCreated$.subscribe(s => {
       if (s) {
-        // this.wizard.next();
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
@@ -68,14 +67,14 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         this.closeModal();
       }
     });
-    this.store
-      .select(c => c.company.companies).takeUntil(this.destroyed$)
-      .subscribe(p => {
-        if (p && p.find(c => c.name === this.company.name) !== undefined) {
-          this.company = new CompanyRequest();
-          this.wizard.next();
-        }
-      });
+    // this.store
+    //   .select(c => c.company.companies).takeUntil(this.destroyed$)
+    //   .subscribe(p => {
+    //     if (p && p.find(c => c.name === this.company.name) !== undefined) {
+    //       this.company = new CompanyRequest();
+    //       this.wizard.next();
+    //     }
+    //   });
   }
 
   public textOnly(e) {

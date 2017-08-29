@@ -85,6 +85,19 @@ export class CompanyService {
     }).catch((e) => HandleCatch<StateDetailsResponse, string>(e));
   }
 
+  public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
+    let url = '';
+    if (cmpUniqueName) {
+      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
+    } else {
+      url = COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
+    }
+    return this._http.get(url).map((res) => {
+      let data: BaseResponse<StateDetailsResponse, string> = res.json();
+      return data;
+    });
+  }
+
   // Effects need to be review
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
     return this._http.post(COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
