@@ -56,6 +56,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this._flyAccountActions.ResetflatAccountWGroups());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
