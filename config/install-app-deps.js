@@ -13,7 +13,7 @@ const electronVersion = getElectronVersion(root);
 
 writeAppPackage(rootPackage, appDir);
 
-installOrRebuild(rootPackage.build, appDir, electronVersion, platform, arch, true)
+installOrRebuild(rootPackage.build, appDir, { frameworkInfo: { version: electronVersion, useCustomDist: false } }, platform, arch, true)
   .catch(printErrorAndExit);
 
 
@@ -26,13 +26,13 @@ function getElectronVersion(root) {
 
 function writeAppPackage(metadata, appDir) {
   const fields = ['name', 'productName', 'version', 'description', 'keywords',
-        'author', 'homepage', 'license', 'dependencies'];
+    'author', 'homepage', 'license', 'dependencies'];
   var output = {};
-  fields.forEach(function(field) {
+  fields.forEach(function (field) {
     output[field] = metadata[field];
   });
   const outputPath = path.join(appDir, 'package.json');
-  if (!fs.existsSync(appDir)){
+  if (!fs.existsSync(appDir)) {
     fs.mkdirSync(appDir);
   }
   fs.writeFileSync(outputPath, JSON.stringify(output, null, 2));
