@@ -128,119 +128,105 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     enableMessage1: true,
     enableMessage2: true,
     enableThanks: true,
-
   }
-  public logoSize: string;
-  public showLogo: boolean = true;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
-    this.companyName$ = this.invoiceTemplatesService.getCompanyName().takeUntil(this.destroyed$);
-    this.GSTIN$ = this.invoiceTemplatesService.getGSTIN().takeUntil(this.destroyed$);
-    this.PAN$ = this.invoiceTemplatesService.getPAN().takeUntil(this.destroyed$);
-    this.address$ = this.invoiceTemplatesService.getAddress().takeUntil(this.destroyed$);
-    this.invoiceDate$ = this.invoiceTemplatesService.getInvoiceDate().takeUntil(this.destroyed$);
-    this.invoiceNo$ = this.invoiceTemplatesService.getInvoiceNo().takeUntil(this.destroyed$);
-    this.shippingDate$ = this.invoiceTemplatesService.getShippingDate().takeUntil(this.destroyed$);
-    this.shippingVia$ = this.invoiceTemplatesService.getShippingVia().takeUntil(this.destroyed$);
-    this.shippingNo$ = this.invoiceTemplatesService.getShippingNo().takeUntil(this.destroyed$);
-    this.trackingDate$ = this.invoiceTemplatesService.getTrackingDate().takeUntil(this.destroyed$);
-    this.trackingNo$ = this.invoiceTemplatesService.getTrackingNumber().takeUntil(this.destroyed$);
-    this.customerName$ = this.invoiceTemplatesService.getCustomerName().takeUntil(this.destroyed$);
-    this.customerEmail$ = this.invoiceTemplatesService.getCustomerEmail().takeUntil(this.destroyed$);
-    this.customerMobileNo$ = this.invoiceTemplatesService.getCustomerMobileNo().takeUntil(this.destroyed$);
-    this.dueDate$ = this.invoiceTemplatesService.getDueDate().takeUntil(this.destroyed$);
-    this.billingAddress$ = this.invoiceTemplatesService.getBillingAddress().takeUntil(this.destroyed$);
-    this.billingGSTIN$ = this.invoiceTemplatesService.getBillingGSTIN().takeUntil(this.destroyed$);
-    this.billingState$ = this.invoiceTemplatesService.getBillingState().takeUntil(this.destroyed$);
-    this.shippingAddress$ = this.invoiceTemplatesService.getShippingAddress().takeUntil(this.destroyed$);
-    this.shippingGSTIN$ = this.invoiceTemplatesService.getShippingGSTIN().takeUntil(this.destroyed$);
-    this.customField1$ = this.invoiceTemplatesService.getCustomField1().takeUntil(this.destroyed$);
-    this.customField2$ = this.invoiceTemplatesService.getCustomField2().takeUntil(this.destroyed$);
-    this.customField3$ = this.invoiceTemplatesService.getCustomField3().takeUntil(this.destroyed$);
+    this.companyName$ = this.invoiceTemplatesService.getCompanyName().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.GSTIN$ = this.invoiceTemplatesService.getGSTIN().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.PAN$ = this.invoiceTemplatesService.getPAN().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.address$ = this.invoiceTemplatesService.getAddress().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.invoiceDate$ = this.invoiceTemplatesService.getInvoiceDate().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.invoiceNo$ = this.invoiceTemplatesService.getInvoiceNo().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.shippingDate$ = this.invoiceTemplatesService.getShippingDate().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.shippingVia$ = this.invoiceTemplatesService.getShippingVia().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.shippingNo$ = this.invoiceTemplatesService.getShippingNo().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.trackingDate$ = this.invoiceTemplatesService.getTrackingDate().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.trackingNo$ = this.invoiceTemplatesService.getTrackingNumber().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.customerName$ = this.invoiceTemplatesService.getCustomerName().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.customerEmail$ = this.invoiceTemplatesService.getCustomerEmail().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.customerMobileNo$ = this.invoiceTemplatesService.getCustomerMobileNo().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.dueDate$ = this.invoiceTemplatesService.getDueDate().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.billingAddress$ = this.invoiceTemplatesService.getBillingAddress().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.billingGSTIN$ = this.invoiceTemplatesService.getBillingGSTIN().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.billingState$ = this.invoiceTemplatesService.getBillingState().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.shippingAddress$ = this.invoiceTemplatesService.getShippingAddress().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.shippingGSTIN$ = this.invoiceTemplatesService.getShippingGSTIN().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.customField1$ = this.invoiceTemplatesService.getCustomField1().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.customField2$ = this.invoiceTemplatesService.getCustomField2().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.customField3$ = this.invoiceTemplatesService.getCustomField3().takeUntil(this.destroyed$).distinctUntilChanged();
 
-    this.invoiceTemplatesService.getFormNameTaxInvoice().subscribe(val => {
+    this.invoiceTemplatesService.getFormNameTaxInvoice().distinctUntilChanged().subscribe(val => {
       if (val) {
 
         this.formNameTaxInvoice = val;
       }
     });
-    this.taxInvoiceLabelFlag$ = this.invoiceTemplatesService.getFormNameTaxInvoiceFlag().takeUntil(this.destroyed$);
-    this.sNoLabel$ = this.invoiceTemplatesService.getSnoLabel().takeUntil(this.destroyed$);
-    this.dateLabel$ = this.invoiceTemplatesService.getDateLabel().takeUntil(this.destroyed$);
-    this.itemLabel$ = this.invoiceTemplatesService.getItemLabel().takeUntil(this.destroyed$);
-    this.hsnSacLabel$ = this.invoiceTemplatesService.getHsnSacLabel().takeUntil(this.destroyed$);
-    this.itemCodeLabel$ = this.invoiceTemplatesService.getItemCodeLabel().takeUntil(this.destroyed$);
-    this.descLabel$ = this.invoiceTemplatesService.getDescLabel().takeUntil(this.destroyed$);
-    this.rateLabel$ = this.invoiceTemplatesService.getRateLabel().takeUntil(this.destroyed$);
-    this.discountLabel$ = this.invoiceTemplatesService.getDiscountLabel().takeUntil(this.destroyed$);
-    this.taxableValueLabel$ = this.invoiceTemplatesService.getTaxableValueLabel().takeUntil(this.destroyed$);
-    this.taxLabel$ = this.invoiceTemplatesService.getTaxLabel().takeUntil(this.destroyed$);
-    this.totalLabel$ = this.invoiceTemplatesService.getTotalLabel().takeUntil(this.destroyed$);
-    this.quantityLabel$ = this.invoiceTemplatesService.getQuantityLabel().takeUntil(this.destroyed$);
-    this.invoiceTemplatesService.getTopMargin().subscribe(val => {
+    this.taxInvoiceLabelFlag$ = this.invoiceTemplatesService.getFormNameTaxInvoiceFlag().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.sNoLabel$ = this.invoiceTemplatesService.getSnoLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.dateLabel$ = this.invoiceTemplatesService.getDateLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.dateLabel$ = this.invoiceTemplatesService.getDateLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.itemLabel$ = this.invoiceTemplatesService.getItemLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.hsnSacLabel$ = this.invoiceTemplatesService.getHsnSacLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.itemCodeLabel$ = this.invoiceTemplatesService.getItemCodeLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.descLabel$ = this.invoiceTemplatesService.getDescLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.rateLabel$ = this.invoiceTemplatesService.getRateLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.discountLabel$ = this.invoiceTemplatesService.getDiscountLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.taxableValueLabel$ = this.invoiceTemplatesService.getTaxableValueLabel().debounceTime(700).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.taxLabel$ = this.invoiceTemplatesService.getTaxLabel().takeUntil(this.destroyed$).debounceTime(700).distinctUntilChanged();
+    this.totalLabel$ = this.invoiceTemplatesService.getTotalLabel().takeUntil(this.destroyed$).debounceTime(700).distinctUntilChanged();
+    this.quantityLabel$ = this.invoiceTemplatesService.getQuantityLabel().takeUntil(this.destroyed$).debounceTime(700).distinctUntilChanged();
+    this.invoiceTemplatesService.getTopMargin().debounceTime(700).distinctUntilChanged().subscribe(val => {
       if (val) {
         this.topMargin = val;
       }
     });
-    this.invoiceTemplatesService.getLeftMargin().subscribe(val => {
+    this.invoiceTemplatesService.getLeftMargin().debounceTime(700).distinctUntilChanged().subscribe(val => {
       if (val) {
 
         this.leftMargin = val;
       }
     });
-    this.invoiceTemplatesService.getRightMargin().subscribe(val => {
+    this.invoiceTemplatesService.getRightMargin().distinctUntilChanged().subscribe(val => {
       if (val) {
         this.rightMargin = val;
       }
     });
-    this.invoiceTemplatesService.getBottomMargin().subscribe(val => {
+    this.invoiceTemplatesService.getBottomMargin().distinctUntilChanged().subscribe(val => {
       if (val) {
         this.bottomMargin = val;
       }
     });
-    this.invoiceTemplatesService.getFontFamily().subscribe(val => {
+    this.invoiceTemplatesService.getFontFamily().distinctUntilChanged().subscribe(val => {
       if (val) {
         this.fontFamily = val;
       }
     });
-    this.invoiceTemplatesService.getColor().subscribe(val => {
+    this.invoiceTemplatesService.getColor().distinctUntilChanged().subscribe(val => {
       if (val) {
         this.color = val;
       }
     });
-    this.message1$ = this.invoiceTemplatesService.getMessage1();
-    this.message2$ = this.invoiceTemplatesService.getMessage2();
-    this.taxableAmount$ = this.invoiceTemplatesService.getTaxableAmount();
-    this.totalTax$ = this.invoiceTemplatesService.getTotalTax();
-    this.total$ = this.invoiceTemplatesService.getTotal();
-    this.totalInWords$ = this.invoiceTemplatesService.getTotalInWords();
-    this.otherDeduction$ = this.invoiceTemplatesService.getOtherDeduction();
-    this.thanks$ = this.invoiceTemplatesService.getThanks();
-    this.slogan$ = this.invoiceTemplatesService.getSlogan();
-    this._invoiceUiDataService.setFieldDisplay.subscribe((val) => {
+    this.message1$ = this.invoiceTemplatesService.getMessage1().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.message2$ = this.invoiceTemplatesService.getMessage2().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.taxableAmount$ = this.invoiceTemplatesService.getTaxableAmount().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.totalTax$ = this.invoiceTemplatesService.getTotalTax().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.total$ = this.invoiceTemplatesService.getTotal().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.totalInWords$ = this.invoiceTemplatesService.getTotalInWords().takeUntil(this.destroyed$).distinctUntilChanged();;
+    this.otherDeduction$ = this.invoiceTemplatesService.getOtherDeduction().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.thanks$ = this.invoiceTemplatesService.getThanks().takeUntil(this.destroyed$).distinctUntilChanged();
+    this.slogan$ = this.invoiceTemplatesService.getSlogan().takeUntil(this.destroyed$).distinctUntilChanged();
+    this._invoiceUiDataService.setFieldDisplay.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
       this.fieldDisplayState = val;
     });
 
-    this._invoiceUiDataService.logoPath.subscribe((val) => {
+    this._invoiceUiDataService.logoPath.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
       this.logoSrc = val;
     });
 
-    this._invoiceUiDataService.imageSignaturePath.subscribe((val) => {
+    this._invoiceUiDataService.imageSignaturePath.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
       this.imageSignatureSrc = val;
-    });
-    this._invoiceUiDataService.logoSize.subscribe((val) => {
-      this.logoSize = val;
-    });
-    this._invoiceUiDataService.defaultPrintSetting.subscribe((val) => {
-      this.leftMargin = val
-      this.rightMargin = val
-      this.topMargin = val
-      this.bottomMargin = val
-    });
-    this._invoiceUiDataService.showLogo.subscribe((val) => {
-      this.showLogo = val;
     });
   }
 
@@ -259,7 +245,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     }
 
     this._invoiceUiDataService.setDivStatus(this.divVis);
-  }
+  };
 
   public onClickGrid() {
     this.activeHeader = false;
@@ -271,7 +257,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       footer: false
     }
     this._invoiceUiDataService.setDivStatus(this.divVis);
-  }
+  };
 
   public onClickFooter() {
     this.activeHeader = false;
@@ -283,7 +269,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       footer: true
     }
     this._invoiceUiDataService.setDivStatus(this.divVis);
-  }
+  };
 
   public createTemplate() {
     // let temp = new GetInvoiceTemplateDetailsResponse();
