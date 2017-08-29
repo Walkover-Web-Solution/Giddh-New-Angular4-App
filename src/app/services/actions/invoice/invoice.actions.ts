@@ -20,7 +20,8 @@ import {
   GetInvoiceTemplateDetailsResponse,
   Template,
   InvoiceTemplateDetailsResponse,
-  GenerateInvoiceRequestClass
+  GenerateInvoiceRequestClass,
+  GenerateBulkInvoiceRequest
 } from '../../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
 import {
@@ -84,6 +85,19 @@ export class InvoiceActions {
       payload: res
     }, true, {
       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
+      payload: res
+    }));
+
+  // Generate Bulk Invoice
+  @Effect()
+  public GenerateBulkInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
+    .switchMap(action => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
+    .map(res => this.validateResponse<string, GenerateBulkInvoiceRequest>(res, {
+      type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
       payload: res
     }));
 
@@ -214,6 +228,20 @@ export class InvoiceActions {
     return {
       type: INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE,
       payload: model
+    };
+  }
+
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Action {
+    return {
+      type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE,
+      payload: { reqObj, body: model}
+    };
+  }
+
+  public GenerateBulkInvoiceResponse(): Action {
+    return {
+      type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
+      payload: ''
     };
   }
 
