@@ -7,7 +7,10 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, PreviewInvoiceResponseClass, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
+import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
+import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
+import * as _ from 'lodash';
 
 @Injectable()
 export class InvoiceService {
@@ -93,7 +96,7 @@ export class InvoiceService {
   * url: '/company/:companyUniqueName/invoices/bulk-generate?combined=:combined'
   */
 
-  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<string, GenerateBulkInvoiceRequest>> {
+  public GenerateBulkInvoice(reqObj: { combined: boolean }, model: GenerateBulkInvoiceRequest[]): Observable<BaseResponse<string, GenerateBulkInvoiceRequest[]>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -109,7 +112,7 @@ export class InvoiceService {
         data.queryString = { reqObj };
         return data;
       })
-      .catch((e) => HandleCatch<string, GenerateBulkInvoiceRequest>(e, reqObj, model));
+      .catch((e) => HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
   }
 
   /*
@@ -215,4 +218,166 @@ export class InvoiceService {
       })
       .catch((e) => HandleCatch<string, string>(e, invoiceUniqueName));
   }
+
+  /**
+   * get invoice setting
+   * URL:: company/:companyUniqueName/settings
+   */
+  public GetInvoiceSetting(): Observable<BaseResponse<InvoiceSetting, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName))
+      .map((res) => {
+        let data: BaseResponse<InvoiceSetting, string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<InvoiceSetting, string>(e));
+  }
+
+  /**
+   * delete invoice webhook
+   * URL:: company/:companyUniqueName/settings/webhooks/:webhookUniqueName
+   */
+  public DeleteInvoiceWebhook(uniquename): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(INVOICE_API.DELETE_WEBHOOK.replace(':companyUniqueName', this.companyUniqueName).replace(':webhookUniquename', uniquename))
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.queryString = {uniquename: uniquename}
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e));
+  }
+
+  /**
+   * update invoice emailId
+   * URL:: company/:companyUniqueName/invoice-setting
+   */
+  public UpdateInvoiceEmail(emailId): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.put(INVOICE_API.UPDATE_INVOICE_EMAIL.replace(':companyUniqueName', this.companyUniqueName),{emailAddress: emailId})
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.queryString = {emailId: emailId}
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e));
+  }
+
+    /**
+   * Save Invoice Webhook
+   * URL:: company/:companyUniqueName/settings/webhooks
+   */
+  public SaveInvoiceWebhook(webhook): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(INVOICE_API.SAVE_INVOICE_WEBHOOK.replace(':companyUniqueName', this.companyUniqueName),webhook)
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.queryString = {webhook}
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e));
+  }
+
+  /**
+   * Update Invoice Setting
+   * URL:: company/:companyUniqueName/settings/     
+   */
+  public UpdateInvoiceSetting(form): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.put(INVOICE_API.SETTING_INVOICE.replace(':companyUniqueName', this.companyUniqueName),form)
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.queryString = {form}
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e));
+  }
+
+  /**
+   * Get razorPay details 
+   * URL:: company/:companyUniqueName/razorpay
+   */
+  public GetRazorPayDetail(): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName))
+      .map((res) => {
+        let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
+  }
+
+  /**
+   * Update razorPay details 
+   * URL:: company/:companyUniqueName/razorpay
+   */
+  public UpdateRazorPayDetail(form): Observable<BaseResponse<RazorPayDetailsResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+      let newForm = _.cloneDeep(form);
+      newForm.companyName = s.session.companyUniqueName;;
+      form = _.cloneDeep(newForm);
+    });
+    return this._http.put(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
+      .map((res) => {
+        let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
+        data.queryString = {form}
+        return data;
+      })
+      .catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
+  }
+
+  /**
+   * Delete razorPay details 
+   * URL:: company/:companyUniqueName/razorpay
+   */
+  public DeleteRazorPayDetail(): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName))
+      .map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        return data;
+      })
+      .catch((e) => HandleCatch<string, string>(e));
+  }
+
+
 }
