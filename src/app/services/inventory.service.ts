@@ -106,7 +106,7 @@ export class InventoryService {
   //     }
   //     this.companyUniqueName = s.session.companyUniqueName;
   //   });
-  //   return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
+  //   return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_FLATTEN.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '').replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
   //     let data: BaseResponse<GroupsWithStocksFlatten, string> = res.json();
   //     data.request = '';
   //     data.queryString = { q, page, count };
@@ -155,7 +155,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
+    return this._http.get(INVENTORY_API.GROUPS_WITH_STOCKS_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', count.toString())).map((res) => {
       let data: BaseResponse<GroupsWithStocksHierarchyMin, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count };

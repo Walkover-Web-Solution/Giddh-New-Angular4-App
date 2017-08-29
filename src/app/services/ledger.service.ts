@@ -42,7 +42,7 @@ export class LedgerService {
     request.reversePage = reversePage;
     request.sort = sort;
     request.to = to;
-    return this._http.get(LEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', sort).replace(':to', to).replace(':reversePage', reversePage.toString())).map((res) => {
+    return this._http.get(LEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', sort).replace(':to', to).replace(':reversePage', reversePage.toString())).map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res.json();
       data.request = request;
       data.queryString = { q, page, count, accountUniqueName, from, to, reversePage, sort };
