@@ -14,7 +14,6 @@ import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent } from './theme';
-import { ToastrModule } from 'ngx-toastr';
 import { SelectModule } from './theme/select/select.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { ChartModule } from 'angular2-highcharts';
@@ -45,6 +44,7 @@ import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploa
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 import { DatePickerModule } from './theme/datepicker/date-picker.module';
 import { RecTypePipe } from './helpers/pipes/recType.pipe';
+import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -64,7 +64,7 @@ export function highchartsFactory() {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
-    TaxControlComponent, NumberToWordsPipe, RecTypePipe],
+    TaxControlComponent, NumberToWordsPipe, RecTypePipe, DecimalDigitsDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -76,7 +76,6 @@ export function highchartsFactory() {
       style: 'slide-left',
       spinnerSize: 30
     }),
-    ToastrModule.forRoot(),
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
@@ -86,10 +85,11 @@ export function highchartsFactory() {
     TextMaskModule,
     NgUploaderModule,
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ToastrModule, ManageGroupsAccountsComponent,
+  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
-    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, DatePickerModule, RecTypePipe
+    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, DatePickerModule, RecTypePipe,
+    DecimalDigitsDirective
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent],

@@ -71,7 +71,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
-              private zone: NgZone) {
+    private zone: NgZone) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -105,7 +105,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
+    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -143,7 +143,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
       if (!s) {
-        this.router.navigate(['/login']);
+        console.log('logout success to dummy Headder');
+        this.router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+          console.log('logout success to home Headder');
+          this.router.navigate(['/login']);
+        });
+      } else {
+        // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        // this.router.navigate(['/home']);
+        // });
       }
     });
   }

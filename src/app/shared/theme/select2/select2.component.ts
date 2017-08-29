@@ -109,7 +109,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
     if (changes['data'] && JSON.stringify(changes['data'].previousValue) !== JSON.stringify(changes['data'].currentValue)) {
       this.initPlugin();
 
-      const newValue: string = this.element.val();
+      const newValue: string | string[] = this.element.val() as string | string[];
       this.valueChanged.emit({
         value: newValue
       });
@@ -137,7 +137,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
       this.setElementValue(this.value);
     }
 
-    this.element.on('select2:select select2:unselect ', (event) => {
+    this.element.on('select2:select select2:unselect ', (event: any) => {
       if (event.type === 'select2:unselect') {
         if (this.options.multiple !== true) {
           this.onChangeCb(null);
@@ -156,7 +156,7 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
         });
       } else {
         this.onChangeCb(that.element.val());
-        this.value = that.element.val();
+        this.value = that.element.val() as string | string[];
         that.valueChanged.emit({
           value: that.element.val()
         });
