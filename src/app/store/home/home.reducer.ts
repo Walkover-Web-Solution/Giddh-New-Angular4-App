@@ -125,7 +125,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
       let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
       if (bankresponse.status === 'success') {
-        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: null });
+        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: bankresponse.body.length === 0 ? 'No data Availble' : null });
       }
       return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
     }
@@ -259,7 +259,7 @@ const processDataForGroupHistory = (result: IGroupHistoryGroups[]) => {
       year = moment().get('y');
       month = '';
       monthNum = 0;
-      _.each(group, grp => {
+      _.each(group, (grp: any) => {
         let sum;
         duration = monthArray[moment(grp.to, 'YYYY-MM-DD').get('months')] + moment(grp.to, 'YYYY-MM-DD').get('years');
         month = monthArray[moment(grp.to, 'YYYY-MM-DD').get('months')];
@@ -316,7 +316,7 @@ const processDataForProfitLoss = plData => {
   monthlyBalances = [];
   yearlyBalances = [];
   if (plData.profitLoss) {
-    _.each(plData.profitLoss.periodBalances, nw => {
+    _.each(plData.profitLoss.periodBalances, (nw: any) => {
       let str;
       str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
       nwLabels.push(str);
@@ -337,7 +337,7 @@ const processDataForNetworth = plData => {
   monthlyBalances = [];
   yearlyBalances = [];
   if (plData.networth) {
-    _.each(plData.networth.periodBalances, nw => {
+    _.each(plData.networth.periodBalances, (nw: any) => {
       let str;
       str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
       nwLabels.push(str);

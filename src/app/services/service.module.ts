@@ -51,6 +51,8 @@ import { SettingsProfileService } from './settings.profile.service';
 import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
+import { SettingsLinkedAccountsService } from './settings.linked-accounts.service';
+import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked-accounts.action';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
 
 /**
@@ -81,6 +83,7 @@ import { ManufacturingActions } from './actions/manufacturing/manufacturing.acti
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
+    EffectsModule.run(SettingsLinkedAccountsActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -111,7 +114,8 @@ export class ServiceModule {
         LedgerService,
         SettingsIntegrationService,
         SettingsProfileService,
-        SettingsTaxesService
+        SettingsTaxesService,
+        SettingsLinkedAccountsService
       ]
     };
   }

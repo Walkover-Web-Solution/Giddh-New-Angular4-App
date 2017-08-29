@@ -30,7 +30,7 @@ export class TlPlService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(TB_PL_BS_API.GET_TRIAL_BALANCE
-      .replace(':companyUniqueName', this.companyUniqueName), request)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
       .map((res) => {
         let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res.json();
         data.request = request;
@@ -54,7 +54,7 @@ export class TlPlService {
       .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
-      .replace(':companyUniqueName', this.companyUniqueName), filteredRequest)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
         let data: BaseResponse<AccountDetails, ProfitLossRequest> = res.json();
         data.request = request;
@@ -78,7 +78,7 @@ export class TlPlService {
       .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
 
     return this._http.get(TB_PL_BS_API.GET_BALANCE_SHEET
-      .replace(':companyUniqueName', this.companyUniqueName), filteredRequest)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
         let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res.json();
         data.request = request;
@@ -95,7 +95,7 @@ export class TlPlService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
-      .replace(':companyUniqueName', this.companyUniqueName), request)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
       .map((res) => {
         return res.json();
       })
@@ -110,7 +110,7 @@ export class TlPlService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
-      .replace(':companyUniqueName', this.companyUniqueName), request)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
       .map((res) => {
         return res.json();
       })
@@ -125,7 +125,7 @@ export class TlPlService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
-      .replace(':companyUniqueName', this.companyUniqueName), request)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
       .map((res) => {
         return res.json();
       })

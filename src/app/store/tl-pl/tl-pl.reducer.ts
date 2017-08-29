@@ -162,7 +162,7 @@ const addVisibleFlag = (grpList: ChildGroup[]) => {
 };
 
 const removeZeroAmountGroup = (grpList) => {
-  return _.each(grpList, (grp) => {
+  return _.each(grpList, (grp: any) => {
     if (grp.childGroups.length > 0) {
       removeZeroAmountGroup(grp.childGroups);
     }
@@ -185,7 +185,7 @@ const orderGroups = (data) => {
   liabilities = [];
   income = [];
   expenses = [];
-  _.each(data, (grp) => {
+  _.each(data, (grp: any) => {
     switch (grp.category) {
       case 'assets':
         return assets.push(grp);
@@ -221,7 +221,7 @@ const filterProfitLossData = data => {
   filterPlData.incArr = [];
   filterPlData.expArr = [];
   filterPlData.othArr = [];
-  _.each(data, grp => {
+  _.each(data, (grp: any) => {
     grp.isVisible = false;
     switch (grp.category) {
       case 'income':
@@ -254,7 +254,7 @@ const prepareProfitLossData = (data) => {
 const calculateTotalIncome = data => {
   let eTtl;
   eTtl = 0;
-  _.each(data, item => {
+  _.each(data, (item: any) => {
     if (item.closingBalance.type === 'DEBIT') {
       return eTtl -= Number(item.closingBalance.amount);
     } else {
@@ -267,7 +267,7 @@ const calculateTotalIncome = data => {
 const calculateTotalExpense = data => {
   let eTtl;
   eTtl = 0;
-  _.each(data, item => {
+  _.each(data, (item: any) => {
     if (item.closingBalance.type === 'CREDIT') {
       return eTtl -= Number(item.closingBalance.amount);
     } else {
@@ -283,7 +283,7 @@ const filterBalanceSheetData = data => {
   filterPlData.assets = [];
   filterPlData.liabilities = [];
   filterPlData.othArr = [];
-  _.each(data, grp => {
+  _.each(data, (grp: any) => {
     grp.isVisible = false;
     switch (grp.category) {
       case 'assets':
@@ -307,7 +307,7 @@ const prepareBalanceSheetData = (data) => {
 const calCulateTotalAssets = data => {
   let total;
   total = 0;
-  _.each(data, (obj) => {
+  _.each(data, (obj: any) => {
     if (obj.closingBalance.type === 'CREDIT') {
       return total -= obj.closingBalance.amount;
     } else {
@@ -319,7 +319,7 @@ const calCulateTotalAssets = data => {
 const calCulateTotalLiab = data => {
   let total;
   total = 0;
-  _.each(data, (obj) => {
+  _.each(data, (obj: any) => {
     if (obj.closingBalance.type === 'DEBIT') {
       return total -= obj.closingBalance.amount;
     } else {
