@@ -51,7 +51,7 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName',encodeURIComponent( stockUniqueName)), model).map((res) => {
+    return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
       let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
       data.request = model;
       data.queryString = { stockUniqueName };
