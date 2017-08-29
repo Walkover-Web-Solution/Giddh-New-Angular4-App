@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 @Injectable()
-export class UserAuthenticated implements CanActivate {
+export class NewUserAuthGuard implements CanActivate {
   private user: VerifyEmailResponseModel;
   constructor(public _router: Router, private store: Store<AppState>) {
   }
@@ -16,11 +16,9 @@ export class UserAuthenticated implements CanActivate {
       }
     });
     if (this.user && this.user.authKey) {
-      console.log('Request is authorized, redirect to Home Component!');
-      // this._auth.Authorize();
-      this._router.navigate(['/home']);
-    } else {
       return true;
+    } else {
+      return false;
     }
   }
 }
