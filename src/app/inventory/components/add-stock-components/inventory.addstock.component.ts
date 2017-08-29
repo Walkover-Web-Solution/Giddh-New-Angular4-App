@@ -104,10 +104,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
 
-      if (this.groupUniqueName) {
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-      }
-
       if (params['stockUniqueName'] && params['groupUniqueName']) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       }
@@ -344,6 +340,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngAfterViewInit() {
+    if (this.groupUniqueName) {
+      // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+    }
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     manufacturingDetailsContorl.disable();
   }

@@ -1,7 +1,7 @@
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -19,7 +19,7 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
   selector: 'inventory-add-group',  // <home></home>
   templateUrl: './inventory.addgroup.component.html'
 })
-export class InventoryAddGroupComponent implements OnInit, OnDestroy {
+export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   public sub: Subscription;
   public groupsData$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
@@ -67,16 +67,6 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     // subscribe to url
     this.sub = this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
-      let activeGroup = null;
-      this.activeGroup$.take(1).subscribe(a => {
-        if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
-          //
-        } else {
-          if (this.groupUniqueName) {
-            this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-          }
-        }
-      });
     });
 
     // add group form
@@ -140,6 +130,17 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy {
     });
   }
 
+  public ngAfterViewInit() {
+    // this.activeGroup$.take(1).subscribe(a => {
+    //   if (this.groupUniqueName && a && a.uniqueName === this.groupUniqueName) {
+    //     //
+    //   } else {
+    //     if (this.groupUniqueName) {
+    //       this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+    //     }
+    //   }
+    // });
+  }
   public getParentGroupData() {
     // parentgroup data
     this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {

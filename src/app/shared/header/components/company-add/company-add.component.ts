@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 import { StateDetailsRequest } from '../../../../models/api-models/Company';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'company-add',
@@ -29,7 +30,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService) {
+    private _location: LocationService, private _route: Router) {
   }
 
   // tslint:disable-next-line:no-empty
@@ -64,6 +65,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this._route.navigate(['/ledger', 'cash']);
         this.closeModal();
       }
     });
