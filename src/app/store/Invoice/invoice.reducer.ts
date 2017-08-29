@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
 import { INVOICE_ACTIONS } from '../../services/actions/invoice/invoice.const';
-import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult, GenerateInvoiceRequestClass } from '../../models/api-models/Invoice';
+import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass, PreviewInvoiceRequest, InvoiceTemplateDetailsResponse, ILedgersInvoiceResult, GenerateInvoiceRequestClass, GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
 
 export class GeneratePage {
   public ledgers: GetAllLedgersOfInvoicesResponse;
@@ -43,24 +43,29 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let res: BaseResponse<GetAllLedgersOfInvoicesResponse, CommonPaginatedRequest> = action.payload;
             if (res.status === 'success') {
                 let body = _.cloneDeep(res.body);
-                body.results.map((item: ILedgersInvoiceResult) => {
-                    item.isSelected = (item.isSelected) ? true : false;
-                });
+                if (body.results.length > 0) {
+                    body.results.map((item: ILedgersInvoiceResult) => {
+                        item.isSelected = (item.isSelected) ? true : false;
+                    });
+                }
                 newState.generate.ledgers = body;
                 return Object.assign({}, state, newState);
             }
+            return state;
         }
         case INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA: {
             let newState = _.cloneDeep(state);
             let uniq: string[] = action.payload;
             _.forEach(uniq, (value) => {
-                newState.generate.ledgers.results.map((item: ILedgersInvoiceResult) => {
-                    if (item.uniqueName === value) {
-                        item.isSelected = true;
-                    }else {
-                        item.isSelected = false;
-                    }
-                });
+                if (newState.generate.ledgers.results.length > 0) {
+                    newState.generate.ledgers.results.map((item: ILedgersInvoiceResult) => {
+                        if (item.uniqueName === value) {
+                            item.isSelected = true;
+                        }else {
+                            item.isSelected = false;
+                        }
+                    });
+                }
             });
             return Object.assign({}, state, newState);
         }
@@ -78,9 +83,24 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let res: BaseResponse<GenerateInvoiceRequestClass, string> = action.payload;
             if (res.status === 'success') {
                 newState.generate.isInvoiceGenerated = true;
-                // remove selected entry
                 newState.generate.ledgers.results = _.remove(newState.generate.ledgers.results, (item: ILedgersInvoiceResult) => {
                     return !item.isSelected;
+                });
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, GenerateBulkInvoiceRequest> = action.payload;
+            let reqObj: GenerateBulkInvoiceRequest[] = action.payload.request;
+            if (res.status === 'success' && reqObj.length > 0) {
+                _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
+                    _.forEach(item.entries, (uniqueName: string) => {
+                        newState.generate.ledgers.results = _.remove(newState.generate.ledgers.results, (o: ILedgersInvoiceResult) => {
+                            return o.uniqueName !== uniqueName;
+                        });
+                    });
                 });
                 return Object.assign({}, state, newState);
             }
