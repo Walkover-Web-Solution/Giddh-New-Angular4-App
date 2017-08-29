@@ -84,7 +84,11 @@ const initialState: InventoryState = {
   isDeleteGroupInProcess: false,
   createCustomStockInProcess: false,
   updateCustomStockInProcess: false,
-  deleteCustomStockInProcessCode: []
+  deleteCustomStockInProcessCode: [],
+  activeGroupUniqueName: '',
+  activeStock: null,
+  activeStockUniqueName: '',
+  stockReport: null
 };
 
 export const InventoryReducer: ActionReducer<InventoryState> = (state: InventoryState = initialState, action: Action) => {
@@ -436,6 +440,8 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       return Object.assign({}, state, {showLoadingForStockEditInProcess: false});
     case InventoryActionsConst.ResetActiveStock:
       return Object.assign({}, state, {activeStock: null, activeStockUniqueName: null});
+    case InventoryActionsConst.ResetInventoryState:
+      return Object.assign({}, state, initialState);
     /*
      *Custom Stock Units...
      * */

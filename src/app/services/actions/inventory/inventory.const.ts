@@ -44,6 +44,8 @@ export class InventoryActionsConst {
   public static GetStockResponse = 'GetStockResponse';
 
   public static ResetActiveStock = 'ResetActiveStock';
+
+  public static ResetInventoryState = 'ResetInventoryState';
 }
 
 export const CUSTOM_STOCK_UNIT_ACTIONS = {

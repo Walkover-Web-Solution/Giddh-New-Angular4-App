@@ -22,6 +22,8 @@ export function FlyAccountsReducer(state = initialState, action: Action): FlyAcc
   switch (action.type) {
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE:
       return Object.assign({}, state, { flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
+    case FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP:
+      return Object.assign({}, state, { flattenGroupsAccounts: prepare([]) });
     default: {
       return state;
     }
@@ -29,13 +31,15 @@ export function FlyAccountsReducer(state = initialState, action: Action): FlyAcc
 }
 
 const prepare = (data: IFlattenGroupsAccountsDetail[]) => {
-  return data.map(p => <IFlattenGroupsAccountsDetail>{
-    accountDetails: p.accountDetails,
-    groupName: p.groupName,
-    applicableTaxes: p.applicableTaxes,
-    groupSynonyms: p.groupSynonyms,
-    isOpen: false,
-    groupUniqueName: p.groupUniqueName
+  return data.map(p => {
+    return {
+      accountDetails: p.accountDetails,
+      groupName: p.groupName,
+      applicableTaxes: p.applicableTaxes,
+      groupSynonyms: p.groupSynonyms,
+      isOpen: false,
+      groupUniqueName: p.groupUniqueName
+    };
   });
 };
 const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {

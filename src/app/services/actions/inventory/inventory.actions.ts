@@ -84,7 +84,7 @@ export class InventoryAction {
       return { type: '' };
     });
 
-    @Effect()
+  @Effect()
   public GetStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetStock)
     .switchMap(action => this._inventoryService.GetStocks())
@@ -161,7 +161,7 @@ export class InventoryAction {
     });
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
-     private _toasty: ToasterService, private router: Router) {
+    private _toasty: ToasterService, private router: Router) {
 
   }
 
@@ -238,7 +238,7 @@ export class InventoryAction {
   public removeStock(stockGroupUniqueName: string, stockUniqueName: string): Action {
     return {
       type: InventoryActionsConst.RemoveStock,
-      payload: {stockGroupUniqueName, stockUniqueName}
+      payload: { stockGroupUniqueName, stockUniqueName }
     };
   }
 
@@ -258,7 +258,7 @@ export class InventoryAction {
   public GetStockUniqueName(stockGroupUniqueName: string, stockUniqueName: string): Action {
     return {
       type: InventoryActionsConst.GetStockUniqueName,
-      payload: {stockGroupUniqueName, stockUniqueName}
+      payload: { stockGroupUniqueName, stockUniqueName }
     };
   }
 
@@ -282,7 +282,7 @@ export class InventoryAction {
     };
   }
 
-   public resetActiveStock(): Action {
+  public resetActiveStock(): Action {
     return {
       type: InventoryActionsConst.ResetActiveStock
     };
@@ -296,6 +296,12 @@ export class InventoryAction {
   public hideLoaderForStock(): Action {
     return {
       type: InventoryActionsConst.HideLoadingForStockEditInProcess
+    };
+  }
+
+  public ResetInventoryState(): Action {
+    return {
+      type: InventoryActionsConst.ResetInventoryState
     };
   }
 }
