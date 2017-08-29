@@ -135,6 +135,25 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
         }
         return state;
     }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE: {
+        let response: BaseResponse<IGetAllEbankAccountResponse[], string> = action.payload;
+        if (response.status === 'success') {
+          newState.linkedAccounts = response.body;
+          return Object.assign({}, state, newState);
+        }
+        return state;
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE: {
+        let response: BaseResponse<string, string> = action.payload;
+        if (response.status === 'success') {
+          let indx = newState.linkedAccounts.findIndex((acc) => acc.siteId === response.queryString.loginId);
+          if (indx > -1) {
+            newState.linkedAccounts.splice(indx, 1);
+            return Object.assign({}, state, newState);
+          }
+        }
+        return state;
+    }
     default: {
       return state;
     }
