@@ -18,11 +18,9 @@ export class SidebarAction {
     .ofType(InventoryActionsConst.GetInventoryGroup)
     .do(a => console.log('called'))
     .switchMap(action => {
-      debugger;
       return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName);
     })
     .map(response => {
-      debugger;
       return this.GetInventoryGroupResponse(response);
     });
 
