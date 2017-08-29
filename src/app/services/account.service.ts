@@ -34,7 +34,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName), model)
+    return this._http.post(ACCOUNTS_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<AccountResponse, AccountRequest> = res.json();
         data.request = model;
