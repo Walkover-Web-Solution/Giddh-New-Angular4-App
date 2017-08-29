@@ -25,7 +25,6 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
       [tbExportCsv]="true"
       [tbExportPdf]="true"
       [tbExportXLS]="true"
-      [plBsExportXLS]="false"
     ></tb-pl-bs-filter>
     <div *ngIf="!(data$ | async)">
       <!-- loader -->
@@ -99,7 +98,13 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  public exportCsv($event) { }
-  public exportPdf($event) { }
-  public exportXLS($event) { }
+  public exportCsv($event) {
+    //
+   }
+  public exportPdf($event) {
+    //
+   }
+  public exportXLS($event) {
+    //
+   }
 }

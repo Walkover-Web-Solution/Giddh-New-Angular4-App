@@ -31,7 +31,8 @@
   </div>
   <!-- end of coloumn -->
   <div class="col-xs-3">
-    <tb-export-csv *ngIf="tbExportCsv" (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
+    <tb-export-csv *ngIf="tbExportCsv" [selectedCompany]="selectedCompany"
+                   (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
     <tb-export-xls *ngIf="tbExportXLS" (tbExportXLSEvent)="tbExportXLSEvent.emit($event)" class="pull-right"></tb-export-xls>
     <tb-export-pdf *ngIf="tbExportPdf" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
     <pl-bs-export-xls *ngIf="plBsExportXLS" (plBsExportPdfEvent)="plBsExportXLSEvent.emit($event)" class="pull-right"></pl-bs-export-xls>

@@ -115,7 +115,6 @@ export interface IStockUnit extends IStockItem {
   quantityPerUnit: number;
 }
 
-
 export interface IStockUnitResponse extends IStockItem, IStockUnit {
   hierarchicalQuantity: number;
 }
