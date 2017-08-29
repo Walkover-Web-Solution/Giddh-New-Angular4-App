@@ -31,7 +31,7 @@ export class SearchService {
     });
     return this._http.get(SEARCH_API.SEARCH
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-        .replace(':groupName', request.groupName),
+        .replace(':groupName', encodeURIComponent(request.groupName)),
       { from: request.fromDate, to: request.toDate, refresh: request.refresh })
       .map((res) => {
         return res.json();
