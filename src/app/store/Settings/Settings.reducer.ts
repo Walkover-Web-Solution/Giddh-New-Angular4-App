@@ -124,7 +124,6 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       } else {
         newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
       }
-      debugger
       return Object.assign({}, state, newState);
     }
     default: {

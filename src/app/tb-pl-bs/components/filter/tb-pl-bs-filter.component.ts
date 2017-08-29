@@ -15,10 +15,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   public filterForm: FormGroup;
   public search: string;
   public financialOptions = [];
-  @Input() public tbExportPdf: boolean;
-  @Input() public tbExportXLS: boolean;
-  @Input() public tbExportCsv: boolean;
-  @Input() public plBsExportXLS: boolean;
+  @Input() public tbExportPdf: boolean = false;
+  @Input() public tbExportXLS: boolean = false;
+  @Input() public tbExportCsv: boolean = false;
+  @Input() public plBsExportXLS: boolean = false;
 
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   @Output() public tbExportXLSEvent = new EventEmitter<string>();
@@ -58,6 +58,10 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
       return { text: q.uniqueName, id: q.uniqueName };
     });
     this.selectedFinancialYearOption = value.activeFinancialYear.uniqueName;
+  }
+
+  public get selectedCompany() {
+    return this._selectedCompany;
   }
 
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
