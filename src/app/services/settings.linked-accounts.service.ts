@@ -23,7 +23,7 @@ export class SettingsLinkedAccountsService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(SETTINGS_LINKED_ACCOUNTS_API.BANK_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(SETTINGS_LINKED_ACCOUNTS_API.BANK_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<BankAccountsResponse[], string> = res.json();
       data.request = '';
       return data;
@@ -41,7 +41,7 @@ export class SettingsLinkedAccountsService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.delete(SETTINGS_LINKED_ACCOUNTS_API.REMOVE_ACCOUNT
-      .replace(':companyUniqueName', this.companyUniqueName)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':loginId', token)
     ).map((res) => {
       let data: BaseResponse<string, string> = res.json();
