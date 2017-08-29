@@ -88,7 +88,6 @@ export class GetAllLedgersOfInvoicesResponse {
 export class GenerateBulkInvoiceRequest {
   public accountUniqueName: string;
   public entries: string[];
-  public combined: boolean;
 }
 
 /**

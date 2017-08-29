@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewInvoiceResponseClass, GetAllLedgersForInvoiceResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewInvoiceResponseClass, GetAllLedgersForInvoiceResponse, GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -116,6 +116,7 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public getLedgersByFilters(f: NgForm) {
     if (f.valid) {
+      this.selectedLedgerItems = [];
       this.getLedgersOfInvoice();
     }
   }
@@ -166,7 +167,7 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
     let res = _.groupBy(arr, 'accUniqueName');
-    let final = [];
+    let model: GenerateBulkInvoiceRequest[] = [];
     _.forEach(res, (items: GenBulkInvoiceGroupByObj) => {
       let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
       obj.entries = [];
@@ -174,9 +175,10 @@ export class InvoiceGenerateComponent implements OnInit {
         obj.accountUniqueName = o.accUniqueName;
         obj.entries.push(o.uniqueName);
       });
-      final.push(obj);
+      model.push(obj);
     });
-    console.log('before api', action, final);
+    let reqObj = { combined: action };
+    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice(reqObj, model));
   }
 
   private getInvoiceTemplateDetails(templateUniqueName: string) {
