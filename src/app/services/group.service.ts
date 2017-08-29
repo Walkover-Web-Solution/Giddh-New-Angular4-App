@@ -54,7 +54,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(GROUP_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
+    return this._http.put(GROUP_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
       let data: BaseResponse<GroupResponse, GroupUpateRequest> = res.json();
       data.queryString = { groupUniqueName };
       data.request = modele;
@@ -69,7 +69,7 @@ export class GroupService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(GROUP_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
+    return this._http.put(GROUP_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
       let data: BaseResponse<string, ShareGroupRequest> = res.json();
       data.queryString = { groupUniqueName };
       data.request = modele;
@@ -84,7 +84,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupResponse, string> = res.json();
       data.queryString = { groupUniqueName };
       return data;
@@ -100,7 +100,7 @@ export class GroupService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName), { user: userEmail }).map((res) => {
+    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), { user: userEmail }).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = userEmail;
       data.queryString = { groupUniqueName };
@@ -115,7 +115,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+    return this._http.get(GROUP_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupSharedWithResponse[], string> = res.json();
       data.queryString = { groupUniqueName };
       data.request = groupUniqueName;
@@ -144,7 +144,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(GROUP_API.MOVE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName), modele).map((res) => {
+    return this._http.put(GROUP_API.MOVE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
       let data: BaseResponse<MoveGroupResponse, MoveGroupRequest> = res.json();
       data.request = modele;
       data.queryString = { groupUniqueName };
@@ -174,7 +174,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+    return this._http.delete(GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = { groupUniqueName };
@@ -209,7 +209,7 @@ export class GroupService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(GROUP_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', groupUniqueName)).map((res) => {
+    return this._http.get(GROUP_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupsTaxHierarchyResponse, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = { groupUniqueName };

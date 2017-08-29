@@ -69,7 +69,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', groupUniqueName).replace(':refresh', refresh.toString())).map((res) => {
+    return this._http.get(DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).map((res) => {
       let data: BaseResponse<ClosingBalanceResponse, string> = res.json();
       data.queryString = { fromDate, toDate, groupUniqueName, refresh };
       data.request = '';
