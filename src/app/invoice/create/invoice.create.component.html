@@ -96,14 +96,17 @@
         <tr *ngFor="let transaction of entry.transactions; let i = index">
           <td>{{ i+1 }}</td>
           <td>{{ entry.entryDate }}</td>
-          <td>{{ transaction.accountName }}<br>{{ transaction.description }}</td>
+          <td>
+            {{ transaction.accountName }}<br>
+            <input type="text" name="transaction.description" class="form-control" [(ngModel)]="transaction.description" />
+          </td>
           <td>{{ transaction.hsnNumber || transaction.sacNumber }}</td>
           <td>{{ transaction.quantity }}</td>
-          <td>{{ transaction.rate }}</td>
-          <td>{{ getEntryTotalDiscount(entry.discounts) }}</td>
-          <td>{{ getEntryTaxableAmount(transaction, entry.discounts) }}</td>
-          <td>{{ getTransactionTotalTax(entry.taxes) }}</td>
-          <td>{{ getEntryTotal(entry, i) }}</td>
+          <td>{{ transaction.rate | currency:'INR':true }}</td>
+          <td>{{ getEntryTotalDiscount(entry.discounts) | currency:'INR':true }}</td>
+          <td>{{ getEntryTaxableAmount(transaction, entry.discounts) | currency:'INR':true }}</td>
+          <td>{{ getTransactionTotalTax(entry.taxes) | currency:'INR':true }}</td>
+          <td>{{ getEntryTotal(entry, i) | currency:'INR':true }}</td>
         </tr>
       </tbody>
     </table>

@@ -28,6 +28,8 @@ import {
   IsDivVisible,
   TaxInvoiceLabel
 } from '../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
+import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
+import { RazorPayDetailsResponse } from '../../../models/api-models/SettingsIntegraion';
 // import {Section, Template} from "../../../models/api-models/invoice";
 
 @Injectable()
@@ -93,7 +95,7 @@ export class InvoiceActions {
   public GenerateBulkInvoice$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GENERATE_BULK_INVOICE)
     .switchMap(action => this._invoiceService.GenerateBulkInvoice(action.payload.reqObj, action.payload.body))
-    .map(res => this.validateResponse<string, GenerateBulkInvoiceRequest>(res, {
+    .map(res => this.validateResponse<string, GenerateBulkInvoiceRequest[]>(res, {
       type: INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE,
       payload: res
     }, true, {
@@ -156,6 +158,134 @@ export class InvoiceActions {
       type: INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE,
       payload: res
     }));
+
+  
+  //*********************************** MUSTAFA //***********************************\\
+
+  /**
+   * GET INVOICE SETTING
+   */
+  @Effect()
+  public getInvoiceSetting$: Observable<Action> = this.action$
+    .ofType(INVOICE.SETTING.GET_INVOICE_SETTING)
+    .switchMap(action => this._invoiceService.GetInvoiceSetting())
+    .map(res => this.validateResponse<InvoiceSetting, string>(res, {
+      type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE.SETTING.GET_INVOICE_SETTING_RESPONSE,
+      payload: res
+    }));
+
+  /**
+   * DELETE INVOICE WEBHOOK
+   */
+  @Effect()
+  public DeleteWebhook$: Observable<Action> = this.action$
+    .ofType(INVOICE.SETTING.DELETE_WEBHOOK)
+    .switchMap(action => this._invoiceService.DeleteInvoiceWebhook(action.payload))
+    .map(res => this.validateResponse<string, string>(res, {
+      type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE.SETTING.DELETE_WEBHOOK_RESPONSE,
+      payload: res
+    }));
+
+  /**
+   * UPDATE INVOICE EMAILID
+   */
+  @Effect()
+  public UpdateInvoiceEmail$: Observable<Action> = this.action$
+    .ofType(INVOICE.SETTING.UPDATE_INVOICE_EMAIL)
+    .switchMap(action => this._invoiceService.UpdateInvoiceEmail(action.payload))
+    .map(res => this.validateResponse<string, string>(res, {
+      type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
+      payload: res
+    }, true, {
+      type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL_RESPONSE,
+      payload: res
+    }));
+
+    /**
+     * SAVE INVOICE WEBHOOK
+     */
+    @Effect()
+    public SaveInvoiceWebhook$: Observable<Action> = this.action$
+      .ofType(INVOICE.SETTING.SAVE_INVOICE_WEBHOOK)
+      .switchMap(action => this._invoiceService.SaveInvoiceWebhook(action.payload))
+      .map(res => this.validateResponse<string, string>(res, {
+        type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
+        payload: res
+      }, true, {
+        type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE,
+        payload: res
+      }));
+
+    /**
+     * UPDATE INVOICE SETTING
+     */
+    @Effect()
+    public updateInvoiceSetting$: Observable<Action> = this.action$
+      .ofType(INVOICE.SETTING.UPDATE_INVOICE_SETTING)
+      .switchMap(action => this._invoiceService.UpdateInvoiceSetting(action.payload))
+      .map(res => this.validateResponse<string, string>(res, {
+        type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
+        payload: res
+      }, true, {
+        type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
+        payload: res
+      }));
+      
+
+    /**
+     * GET RAZORPAY DETAIL
+     */
+    @Effect()
+    public GetRazorPayDetail$: Observable<Action> = this.action$
+      .ofType(INVOICE.SETTING.GET_RAZORPAY_DETAIL)
+      .switchMap(action => this._invoiceService.GetRazorPayDetail())
+      .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
+        type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
+        payload: res
+      }, true, {
+        type: INVOICE.SETTING.GET_RAZORPAY_DETAIL_RESPONSE,
+        payload: res
+      }));
+
+
+    /**
+     * UPDATE RAZORPAY DETAIL
+     */
+    @Effect()
+    public UpdateRazorPayDetail$: Observable<Action> = this.action$
+      .ofType(INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL)
+      .switchMap(action => this._invoiceService.UpdateRazorPayDetail(action.payload))
+      .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
+        type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
+        payload: res
+      }, true, {
+        type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
+        payload: res
+      }));
+      
+
+    /**
+     * DELETE RAZORPAY DETAIL
+     */
+    @Effect()
+    public DeleteRazorPayDetail$: Observable<Action> = this.action$
+      .ofType(INVOICE.SETTING.DELETE_RAZORPAY_DETAIL)
+      .switchMap(action => this._invoiceService.DeleteRazorPayDetail())
+      .map(res => this.validateResponse<string, string>(res, {
+        type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL_RESPONSE,
+        payload: res
+      }, true, {
+        type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
+        payload: res
+      }));
+  //*********************************** MUSTAFA //***********************************\\
+
 
   // write above except kunal
   // get all templates
@@ -662,6 +792,59 @@ export class InvoiceActions {
     };
   }
 
+  public getInvoiceSetting(): Action {
+    return{
+      type: INVOICE.SETTING.GET_INVOICE_SETTING
+    };
+  }
+
+  public deleteWebhook(uniqueName: string): Action {
+    return{
+      type: INVOICE.SETTING.DELETE_WEBHOOK,
+      payload: uniqueName
+    };
+  }
+
+  public updateInvoiceEmail(emailId: string): Action {
+    return{
+      type: INVOICE.SETTING.UPDATE_INVOICE_EMAIL,
+      payload: emailId
+    };
+  }
+
+  public saveInvoiceWebhook(webhook: object): Action {
+    return{
+      type: INVOICE.SETTING.SAVE_INVOICE_WEBHOOK,
+      payload: webhook
+    };
+  }
+  
+  public updateInvoiceSetting(form: object): Action {
+    return{
+      type: INVOICE.SETTING.UPDATE_INVOICE_SETTING,
+      payload: form
+    };
+  }
+
+  public getRazorPayDetail(): Action {
+    return{
+      type: INVOICE.SETTING.GET_RAZORPAY_DETAIL
+    };
+  }
+
+  public updateRazorPayDetail(form: object): Action {
+    return{
+      type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL,
+      payload: form
+    };
+  }
+
+  public deleteRazorPayDetail(): Action {
+    return{
+      type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL
+    };
+  }
+  
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {

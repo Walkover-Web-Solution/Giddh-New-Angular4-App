@@ -8,7 +8,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PreviewInvoiceResponseClass, InvoiceTemplateDetailsResponse, ISection, IContent, IInvoiceTax, GstEntry, ICommonItemOfTransaction, IInvoiceTransaction, GenerateInvoiceRequestClass } from '../../models/api-models/Invoice';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
-import { Observable } from "rxjs/Observable";
+import { Observable } from 'rxjs/Observable';
 
 // {
 //   field: 'description'
