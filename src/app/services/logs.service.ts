@@ -29,7 +29,7 @@ export class LogsService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', this.companyUniqueName).replace(':page', page.toString()), model)
+    return this._http.post(LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model)
       .map((res) => {
         let data: BaseResponse<LogsResponse, LogsRequest> = res.json();
         data.request = model;

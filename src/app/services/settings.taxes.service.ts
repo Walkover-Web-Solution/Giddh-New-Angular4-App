@@ -30,7 +30,7 @@ export class SettingsTaxesService {
             }
             this.companyUniqueName = s.session.companyUniqueName;
         });
-        return this._http.post(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+        return this._http.post(COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
             let data: BaseResponse<any, any> = res.json();
             data.request = model;
             return data;
@@ -47,7 +47,7 @@ export class SettingsTaxesService {
             }
             this.companyUniqueName = s.session.companyUniqueName;
         });
-        return this._http.put(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName) + '/' + taxUniqueName, model).map((res) => {
+        return this._http.put(COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName, model).map((res) => {
             let data: BaseResponse<any, any> = res.json();
             data.request = model;
             return data;
@@ -64,7 +64,7 @@ export class SettingsTaxesService {
             }
             this.companyUniqueName = s.session.companyUniqueName;
         });
-        return this._http.delete(COMPANY_API.TAX.replace(':companyUniqueName', this.companyUniqueName) + '/' + taxUniqueName).map((res) => {
+        return this._http.delete(COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)) + '/' + taxUniqueName).map((res) => {
             let data: BaseResponse<any, any> = res.json();
             data.request = taxUniqueName;
             return data;
