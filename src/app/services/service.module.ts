@@ -51,13 +51,13 @@ import { SettingsProfileService } from './settings.profile.service';
 import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
-import { SettingsLinkedAccountsService } from './settings.linked-accounts.service';
-import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked-accounts.action';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { InvoiceService } from './invoice.service';
 import { InvoiceTemplatesService } from './invoice.templates.service';
+import { SettingsLinkedAccountsService } from './settings.linked.accounts.service';
+import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
