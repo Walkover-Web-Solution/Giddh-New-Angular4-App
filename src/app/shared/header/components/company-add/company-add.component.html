@@ -62,7 +62,7 @@
                 <div class="form-group">
                   <input #city="ngModel" [typeahead]="dataSource" type="text" [ngClass]="{'hasError': city.invalid, 'has-success':city.valid}"
                     [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off" required maxlength="50"
-                    placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$" (keyup)="textOnly($event)">
+                    placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$">
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async"
