@@ -1,4 +1,4 @@
- import { INameUniqueName } from './nameUniqueName.interface';
+import { INameUniqueName } from './nameUniqueName.interface';
 
 export interface IUserInfo extends INameUniqueName {
   email: string;

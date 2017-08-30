@@ -2,7 +2,6 @@ import { VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
 import { Store } from '@ngrx/store';
 
 @Injectable()
@@ -21,7 +20,6 @@ export class UserAuthenticated implements CanActivate {
       // this._auth.Authorize();
       this._router.navigate(['/home']);
     } else {
-      console.log('Request is not authorized, redirect to Home Component!');
       return true;
     }
   }

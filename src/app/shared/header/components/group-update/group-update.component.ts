@@ -29,6 +29,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public moveGroupForm: FormGroup;
   public taxGroupForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
+  public activeGroupUniqueName$: Observable<string>;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public isTaxableGroup$: Observable<boolean>;
@@ -37,6 +38,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public activeGroupSelected$: Observable<string[]>;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public companyTaxDropDown: Observable<Select2OptionData[]>;
+  public isUpdateGroupInProcess$: Observable<boolean>;
+  public isUpdateGroupSuccess$: Observable<boolean>;
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -74,9 +77,10 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction) {
+    private companyActions: CompanyActions, private accountsAction: AccountsAction) {
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).takeUntil(this.destroyed$);
     this.showEditGroup$ = this.store.select(state => state.groupwithaccounts.showEditGroup).takeUntil(this.destroyed$);
@@ -94,32 +98,34 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       return [];
     }).takeUntil(this.destroyed$);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).takeUntil(this.destroyed$);
+    this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).takeUntil(this.destroyed$);
+    this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
     this.companyTaxDropDown = this.store.select(state => {
       let arr: Select2OptionData[] = [];
       if (state.company.taxes) {
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return {text: p.name, id: p.uniqueName};
+              return { text: p.name, id: p.uniqueName };
             });
           }
         }
@@ -131,7 +137,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public ngOnInit() {
     this.groupDetailForm = this._fb.group({
       name: ['', Validators.required],
-      uniqueName: ['', Validators.required, uniqueNameValidator],
+      uniqueName: ['', Validators.required],
       description: ['']
     });
     this.moveGroupForm = this._fb.group({
@@ -143,7 +149,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
-        this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+        this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
         if (a.fixed) {
           this.groupDetailForm.get('name').disable();
           this.groupDetailForm.get('uniqueName').disable();
@@ -216,7 +222,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -243,37 +249,42 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public moveToGroupSelected(event: any) {
-    this.moveGroupForm.patchValue({moveto: event.item.uniqueName});
+    this.moveGroupForm.patchValue({ moveto: event.item.uniqueName });
   }
 
-  public async moveGroup() {
-    let activeGrp = await this.activeGroup$.first().toPromise();
+  public moveGroup() {
+    let activeGroupUniqueName: string;
+    this.activeGroupUniqueName$.take(1).subscribe(a => activeGroupUniqueName = a);
 
     let grpObject = new MoveGroupRequest();
     grpObject.parentGroupUniqueName = this.moveGroupForm.value.moveto;
-    this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGrp.uniqueName));
+    this.store.dispatch(this.groupWithAccountsAction.moveGroup(grpObject, activeGroupUniqueName));
     this.moveGroupForm.reset();
   }
 
   public deleteGroup() {
-    let activeGrpUniqueName = null;
-    this.activeGroup$.take(1).subscribe(s => activeGrpUniqueName = s.uniqueName);
-    this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGrpUniqueName));
+    let activeGroupUniqueName: string;
+    this.activeGroupUniqueName$.take(1).subscribe(a => activeGroupUniqueName = a);
+    this.store.dispatch(this.groupWithAccountsAction.deleteGroup(activeGroupUniqueName));
     this.hideDeleteGroupModal();
   }
 
-  public async updateGroup() {
-    let activeGroup = await this.activeGroup$.first().toPromise();
-    this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroup.uniqueName));
+  public updateGroup() {
+    let activeGroupUniqueName: string;
+    let uniqueName = this.groupDetailForm.get('uniqueName');
+    uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+
+    this.activeGroupUniqueName$.take(1).subscribe(a => activeGroupUniqueName = a);
+    // this.store.dispatch(this.groupWithAccountsAction.updateGroup(this.groupDetailForm.value, activeGroupUniqueName));
   }
 
   public async taxHierarchy() {
     let activeAccount: AccountResponse = null;
-    let activeGroup: GroupResponse = null;
+    let activeGroupUniqueName: string = null;
     this.store.take(1).subscribe(s => {
       if (s.groupwithaccounts) {
         activeAccount = s.groupwithaccounts.activeAccount;
-        activeGroup = s.groupwithaccounts.activeGroup;
+        activeGroupUniqueName = s.groupwithaccounts.activeGroupUniqueName;
       }
     });
     if (activeAccount) {
@@ -282,7 +293,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       this.store.dispatch(this.accountsAction.getTaxHierarchy(activeAccount.uniqueName));
     } else {
       this.store.dispatch(this.companyActions.getTax());
-      this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroup.uniqueName));
+      this.store.dispatch(this.groupWithAccountsAction.getTaxHierarchy(activeGroupUniqueName));
       this.showEditTaxSection = true;
     }
 

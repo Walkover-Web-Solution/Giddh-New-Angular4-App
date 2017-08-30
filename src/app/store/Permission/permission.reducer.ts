@@ -29,6 +29,14 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                     string > ;
                 if (res.status === 'success') {
                     newState.roles = res.body;
+                    newState.roles = _.sortBy(newState.roles, [ (o) => o.name ]);
+                    newState.roles = _.sortBy(newState.roles, [ (o) => !o.isFixed ]);
+                    let sortedRoles = _.cloneDeep(newState);
+                    sortedRoles.roles.forEach((role) => {
+                        role.scopes = _.sortBy(role.scopes, [ (o) => o.name ]);
+                    });
+
+                    newState = sortedRoles;
                     return Object.assign({}, state, newState);
                 }
                 return state;
@@ -41,9 +49,12 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
             {
                 let newState = _.cloneDeep(state);
                 let res = action.payload;
-                newState.newRole = {};
-                newState.roles.push(res);
-                return Object.assign({}, state, newState);
+                // newState.newRole = {};
+                if (res.status === 'success') {
+                    newState.roles.push(res.body);
+                    return Object.assign({}, state, newState);
+                }
+                return state;
             }
         case PERMISSION_ACTIONS.UPDATE_ROLE:
             {

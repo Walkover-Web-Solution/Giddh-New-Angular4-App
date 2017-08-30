@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
@@ -76,7 +76,7 @@ export class ComparisionChartComponent implements OnInit {
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
-          this.activeFinancialYear = activeCompany.activeFinancialYear;
+          if (activeCompany) { this.activeFinancialYear = activeCompany.activeFinancialYear; }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {
@@ -113,6 +113,7 @@ export class ComparisionChartComponent implements OnInit {
     this.expenseData = [];
     this.requestInFlight = true;
     if (this.activeFinancialYear) {
+
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
         this.activeFinancialYear.financialYearStarts,
         this.activeFinancialYear.financialYearEnds, this.refresh));

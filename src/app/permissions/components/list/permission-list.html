@@ -5,8 +5,9 @@
             <span class="vcenter">  
                 <h1>{{role.name}}</h1>
                 <div class="text-center mrT2 onHover">
-                    <button class="btn btn-md btn-primary" (click)="updateRole(role);">Edit</button>
-                    <button class="btn btn-md btn-danger" (click)="deleteRole(role);">Delete</button>
+                    <button *ngIf="!role.isFixed" class="btn btn-md btn-primary" (click)="updateRole(role);">Edit</button>
+                    <button *ngIf="!role.isFixed" class="btn btn-md btn-danger" (click)="deleteRole(role);">Delete</button>
+                    <button *ngIf="role.isFixed" class="btn btn-md btn-primary" (click)="updateRole(role);">View</button>
                 </div>
             </span>
         </div>

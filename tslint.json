@@ -7,6 +7,7 @@
   ],
   "rules": {
     // Custom
+    "no-forward-ref": false,
     "trailing-comma": [
       false,
       {
@@ -21,20 +22,19 @@
     // Angular 2
     "component-class-suffix": true,
     // "component-selector": [true, "element", "my", "kebab-case"],
-    "directive-class-suffix": true,
+    "directive-class-suffix": false,
     // "directive-selector": [true, "attribute", "my", "camelCase"],
     "import-destructuring-spacing": true,
     "invoke-injectable": true,
     "no-access-missing-member": true,
     "no-attribute-parameter-decorator": true,
-    "no-forward-ref": true,
-    "no-input-rename": true,
-    "no-output-rename": true,
+    "no-input-rename": false,
+    "no-output-rename": false,
     "no-reference": false,
     "only-arrow-functions": false,
     "jsdoc-format": false,
     "pipe-naming": [
-      true,
+      false,
       "camelCase",
       "my"
     ],
@@ -79,6 +79,7 @@
     ],
     "max-classes-per-file": [
       false
-    ]
+    ],
+    "radix": false
   }
 }

@@ -4,7 +4,7 @@
     <div class="row">
       <div class="form-group col-xs-3">
         <label>Select Tax</label><br>
-        <select [(ngModel)]="newTaxObj.taxType" name="taxType" id="" class="form-control" >
+        <select [(ngModel)]="newTaxObj.taxType" name="taxType" class="form-control" >
          <option value="">Select tax</option>
          <option value="GST">GST</option>
          <option value="InputGST">Input GST</option>
@@ -39,7 +39,7 @@
       <div class="form-group col-xs-3" (clickOutside)="showFromDatePicker=false;">
         <label>Apply Tax From</label>
         <div class="input-group">
-          <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true; showToDatePicker=false;"
+          <input type="text" name="from" [ngModel]="moment(newTaxObj.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
             class="form-control" required/>
           <span class="input-group-btn">
             <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
@@ -53,7 +53,7 @@
       </div>
       <div class="form-group col-xs-3">
         <label>Tax Duration</label><br>
-        <select [(ngModel)]="newTaxObj.duration" name="duration" id="" class="form-control">
+        <select [(ngModel)]="newTaxObj.duration" name="duration"  class="form-control">
          <option value="">Select Duration</option>
          <option value="MONTHLY">Monthly</option>
          <option value="QUARTERLY">Quarterly</option>
@@ -75,7 +75,7 @@
          <button type="button" (click)="onCancel()" class="btn btn-primary">Cancel</button>
      </div>
     </div>
-    <div class="row"> 
+    <div class="row">
       <div class="col-xs-12">
        <h1 style="padding:20px 0px;font-weight:bold;">Added Taxes</h1>
         <div class="table-responsive">
@@ -84,7 +84,7 @@
                     <tr>
                         <th>Sr. No.</th>
                         <th>Tax#</th>
-                        <th>Unique Name</th>
+                        <th>Name</th>
                         <th>Linked Account</th>
                         <th>Applied From</th>
                         <th>Tax Percentage</th>
@@ -103,11 +103,11 @@
                         <td *ngIf="!taxToEdit[i]">{{tax.taxNumber}}</td>
                         <td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>
 
-                        <td *ngIf="!taxToEdit[i]">{{tax.uniqueName}}</td>
+                        <td *ngIf="!taxToEdit[i]">{{tax.name}}</td>
                         <td *ngIf="taxToEdit[i]">
                           <input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">
                         </td>
-                      
+
                         <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
                         <td *ngIf="tax.accounts[0] && !taxToEdit[i]">{{tax.accounts[0].name}}</td>
                         <td *ngIf="tax.accounts[0] && taxToEdit[i]"> <input class="form-control" type="text" [(ngModel)]="availableTaxes[i].accounts[0].name" name="acc_0_name{{i}}"></td>
@@ -120,7 +120,7 @@
                         </td>
                         <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
                             <div *ngFor="let t of tax.taxDetail; let j = index; let last = last">
-                              <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}"> 
+                              <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}">
                             </div>
                         </td>
 
@@ -138,7 +138,7 @@
                         </td>
                         <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
                             <div class="input-group" *ngFor="let t of tax.taxDetail; let j = index; let last = last">
-                              <input type="text" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}"> 
+                              <input type="text" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}">
                               <span class="input-group-addon cursor-pointer">
                                 <i *ngIf="!last" (click)="removeDateAndPercentage(i, j)" class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
                                 <i *ngIf="last" (click)="addMoreDateAndPercentage(i)" class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
@@ -192,7 +192,7 @@
         </div>
       </div>
     </div>
-  </form> 
+  </form>
 </div>
 
 <!--delete Tax confirmation model -->

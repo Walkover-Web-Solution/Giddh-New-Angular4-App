@@ -86,13 +86,13 @@ function createTag(tagName, attrMap, publicPath) {
  *        { rel: "apple-touch-icon", sizes: "57x57", href: "/assets/icon/apple-icon-57x57.png" }
  *      ],
  *      meta: [
- *        { name: "msapplication-TileColor", design-filters: "#00bcd4" }
+ *        { name: "msapplication-TileColor", content: "#00bcd4" }
  *      ]
  *    }
  *
  * getHeadTags(ds);
  * // "<link rel="apple-touch-icon" sizes="57x57" href="/assets/icon/apple-icon-57x57.png">"
- *    "<meta name="msapplication-TileColor" design-filters="#00bcd4">"
+ *    "<meta name="msapplication-TileColor" content="#00bcd4">"
  *
  * @returns {string}
  */

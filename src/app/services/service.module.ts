@@ -29,12 +29,8 @@ import { SidebarAction } from './actions/inventory/sidebar.actions';
 import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
 import { PermissionService } from './permission.service';
-import { PermissionActions } from './actions/permission/permission.action';
-import { InvoiceActions } from './actions/invoice/invoice.actions';
-import { InvoiceService } from './invoice.service';
-import { InvoiceTemplatesService } from './invoice.templates.service';
 import { ManufacturingService } from './manufacturing.service';
-
+import { PermissionActions } from './actions/permission/permission.action';
 /**
  * Home Module
  */
@@ -44,7 +40,7 @@ import { SearchService } from './search.service';
 import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
 import { FlyAccountsActions } from './actions/fly-accounts.actions';
 import { TlPlService } from './tl-pl.service';
-import { TlPlActions } from './actions/tl-pl.actions';
+import { TBPlBsActions } from './actions/tl-pl.actions';
 import { LedgerActions } from './actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
 import { HomeActions } from './actions/home/home.actions';
@@ -55,8 +51,10 @@ import { SettingsProfileService } from './settings.profile.service';
 import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
+import { SettingsLinkedAccountsService } from './settings.linked-accounts.service';
+import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked-accounts.action';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
-
+import { NewUserAuthGuard } from './decorators/newUserGuard';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -81,12 +79,12 @@ import { ManufacturingActions } from './actions/manufacturing/manufacturing.acti
     EffectsModule.run(PermissionActions),
     EffectsModule.run(ManufacturingActions),
     EffectsModule.run(FlyAccountsActions),
-    EffectsModule.run(TlPlActions),
+    EffectsModule.run(TBPlBsActions),
     EffectsModule.run(LedgerActions),
-    EffectsModule.run(InvoiceActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
-    EffectsModule.run(SettingsTaxesActions)
+    EffectsModule.run(SettingsTaxesActions),
+    EffectsModule.run(SettingsLinkedAccountsActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -105,6 +103,7 @@ export class ServiceModule {
         NeedsAuthentication,
         LocationService,
         UserAuthenticated,
+        NewUserAuthGuard,
         GroupService,
         AccountService,
         InventoryService,
@@ -115,11 +114,10 @@ export class ServiceModule {
         LogsService,
         TlPlService,
         LedgerService,
-        InvoiceService,
-        InvoiceTemplatesService,
         SettingsIntegrationService,
         SettingsProfileService,
-        SettingsTaxesService
+        SettingsTaxesService,
+        SettingsLinkedAccountsService
       ]
     };
   }
