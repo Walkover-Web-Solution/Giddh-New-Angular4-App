@@ -25,9 +25,11 @@ import { PageComponent } from './page.component';
 import { NoContentComponent } from './no-content/no-content.component';
 import { SharedModule } from './shared/shared.module';
 import { ServiceModule } from './services/service.module';
+import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
-import { WindowRef } from "./shared/helpers/window.object";
+import { WindowRef } from './shared/helpers/window.object';
+import { NewUserComponent } from './newUser.component';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -66,7 +68,8 @@ if (ENV === 'development') {
     AppComponent,
     PageComponent,
     NoContentComponent,
-    DummyComponent
+    DummyComponent,
+    NewUserComponent
   ],
   /**
    * Import Angular's modules.
@@ -79,6 +82,7 @@ if (ENV === 'development') {
     HttpModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
+    ToastrModule.forRoot(),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
@@ -97,7 +101,6 @@ if (ENV === 'development') {
     WindowRef
   ]
 })
-
 export class AppModule {
 
   constructor(

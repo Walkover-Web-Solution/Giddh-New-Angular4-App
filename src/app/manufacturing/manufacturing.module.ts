@@ -8,11 +8,13 @@ import { MfReportComponent } from './report/mf.report.component';
 import { MfEditComponent } from './edit/mf.edit.component';
 import { PaginationModule } from 'ngx-bootstrap';
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
+import { DeleteManufacturingConfirmationModelComponent } from './edit/modal/confirmation.model.component';
 @NgModule({
   declarations: [
     ManufacturingComponent,
     MfReportComponent,
-    MfEditComponent
+    MfEditComponent,
+    DeleteManufacturingConfirmationModelComponent
   ],
   exports: [RouterModule],
   providers: [],

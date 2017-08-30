@@ -116,12 +116,10 @@ input {
 /*input*/
 
 .form-control {
-    background: #fff !important;
-    border: 1px solid #d6d6d6;
-    border-radius: 0px;
+    border-radius: 0;
     padding: 6px !important;
-    outline: 0;
-    color: #666666;
+    outline: none;
+    color: #616161;
     box-shadow: none;
 }
 
@@ -135,8 +133,8 @@ input {
 
 .form-control:focus {
     border-radius: 0 !important;
-    outline: 0;
-    border: 1px solid #f7b995 !important;
+    outline: none;
+    border: 1px solid #cecece;
     box-shadow: none;
 }
 
@@ -161,7 +159,7 @@ input {
 }
 
 .company-name span {
-    color: #adadad!important;
+    color: #adadad !important;
 }
 
 .company-name span.cName {
@@ -190,10 +188,10 @@ header .navbar {
 }
 
 .t-h-bg1 th {
-    background: #fff;
+    background: #f3f0e6;
     color: #4d4d4d;
-    border: none;
-    padding: 11px 8px !important;
+    border: 1px solid #c4c6c7;
+    padding: 11px !important;
     font-weight: 400;
 }
 
@@ -255,9 +253,10 @@ header .navbar {
     width: 100%;
 }
 
-.ledgHead input[type=search] {
+
+/* .ledgHead input[type=search] {
     min-width: 220px;
-}
+} */
 
 
 /*btn*/
@@ -332,6 +331,7 @@ header .navbar {
     color: #616161;
     padding: 10px 15px;
     border-radius: 6px;
+    font-size: 78%;
 }
 
 .ledger-panel .form-control {
@@ -451,7 +451,7 @@ header .navbar {
     border-top: 1px solid #eee;
 }
 
-.export-ledger-options ..dropdown_theme {
+.export-ledger-options .dropdown_theme {
     left: -30px;
 }
 
@@ -481,7 +481,7 @@ header .navbar {
     /*    background: #f3f0e6;*/
     padding: 0 4px;
     /*    border: 1px solid #ccc;
-    border-radius: 3px;
+  border-radius: 3px;
 */
     font-size: 24px;
 }
@@ -667,7 +667,7 @@ header {
 
 input[type="checkbox"] {
     position: relative;
-    top: -2px;
+    top: 0;
     text-align: center;
     margin: 0 1rem 0 0;
     cursor: pointer;
@@ -725,7 +725,7 @@ input[type="checkbox"]:after {
 }
 
 .tab-pane input[type=search]:after {
-    font-family: icomoon!important;
+    font-family: icomoon !important;
     content: "\e906";
     speak: none;
     font-style: normal;
@@ -897,12 +897,16 @@ input[type="checkbox"]:after {
     border-radius: 0 !important;
 }
 
+.filterForm .form-control {
+    background-color: #fff !important;
+}
+
 .filterForm .form-group.col-xs-2 {
     padding: 0 7px;
 }
 
 .filterForm label {
-    display: block;
+    width: 100%;
     font-size: 13px;
     font-weight: 400;
 }
@@ -1068,7 +1072,7 @@ input[type="checkbox"]:after {
 }
 
 .selectTag:after {
-    font-family: icomoon!important;
+    font-family: icomoon !important;
     content: "\e904";
     position: absolute;
     speak: none;
@@ -1098,13 +1102,13 @@ input[type="checkbox"]:after {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #d35f29;
+    background-color: #d35f29 !important;
     border-color: transparent;
     color: #fff;
 }
 
 .daterangepicker td.in-range {
-    background-color: #eae7da;
+    background-color: #eae7da !important;
     border-color: transparent;
     color: #000;
     border-radius: 0;
@@ -1142,14 +1146,14 @@ input[type="checkbox"]:after {
 }
 
 .ranges li {
-    color: #525252;
+    color: #525252 !important;
 }
 
 .ranges li.active,
 .ranges li:hover {
-    background-color: #525252;
-    border: 1px solid #525252;
-    color: #fff;
+    background: #d35f29 !important;
+    border: 1px solid #d35f29 !important;
+    color: #fff !important;
 }
 
 .download-invoice-ledger {
@@ -1159,7 +1163,7 @@ input[type="checkbox"]:after {
 
 .popover.bottom>.arrow:after {
     margin-left: 0;
-    border-top-width: none;
+    border-top-width: 0;
     top: 1px;
     border-right: 15px solid transparent;
     border-bottom: 15px solid #fff;
@@ -1288,10 +1292,11 @@ input[type=number] {
     background: #f7edcd !important;
 }
 
-.active.end-date.in-range.available {
-    background: #d35f29;
+.active.end-date.in-range.available,
+.daterangepicker td.start-date {
+    background: #d35f29 !important;
     color: #fff;
-    border-radius: 0 4px 4px 0;
+    border-radius: 2px;
 }
 
 .fixedDate {
@@ -1485,7 +1490,8 @@ a.btn.btn-xs.btn-link.pull-right {
     background: 0 0;
     position: absolute;
     top: 6px;
-    left: 6px cursor: pointer;
+    left: 6px;
+    cursor: pointer;
 }
 
 .mutliple_unit button+button {
@@ -1889,7 +1895,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .input-group-btn.sticky:last-child>.btn {
-    margin-left: -1 !important;
+    margin-left: -1px !important;
 }
 
 .l8grey {
@@ -2174,11 +2180,11 @@ select.form-control {
 }
 
 .noMarg {
-    margin: 0!important;
+    margin: 0 !important;
 }
 
 .fw400 {
-    font-weight: 400!important;
+    font-weight: 400 !important;
 }
 
 .gico-wrap .icon-trash,
@@ -2266,8 +2272,8 @@ select.form-control {
     /*max-width: 400px;*/
     /*max-width: 690px;*/
     float: left;
-    min-height: 100%;
-    height: 100%;
+    /* min-height: 100%; */
+    /* height: 100%; */
     overflow-x: auto;
 }
 
@@ -2409,11 +2415,6 @@ label {
     column-count: 3;
 }
 
-.` {
-    overflow-y: auto;
-    height: 100%;
-}
-
 .inline-table {
     display: table;
     min-height: 400px;
@@ -2443,7 +2444,7 @@ label {
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5!important;
+    background: #f4f5f5 !important;
     border: 1px solid #cccccc;
 }
 
@@ -2680,7 +2681,7 @@ label {
 }
 
 #App_taxes .form-control {
-    background: #f4f5f5!important;
+    background: #f4f5f5 !important;
     border: 1px solid #cccccc;
 }
 
@@ -3145,14 +3146,14 @@ label {
     height: 1px;
     top: -8px;
     z-index: 0;
-    width: calc(100%/3);
+    width: calc(100% / 3);
     right: 0;
     left: 0;
     margin: 0 auto;
 }
 
 .steps-indicator.step-2:before {
-    width: calc(100%/2);
+    width: calc(100% / 2);
 }
 
 .steps-indicator li a:before,
@@ -3191,6 +3192,10 @@ label {
     height: 100%;
     min-height: 100%;
 }
+.height98 {
+  height: 97%;
+  min-height: 97%;
+}
 
 .grp_col div {
     height: 100%;
@@ -3205,7 +3210,7 @@ label {
 }
 
 .d-inline-block {
-    display: inline-block!important;
+    display: inline-block !important;
 }
 
 .onHover {
@@ -3271,8 +3276,8 @@ label {
 }
 
 .select2-container--default .select2-selection--single {
-    background: #fff !important;
-    border: 1px solid #d6d6d6 !important;
+    background: #f9f7f2 !important;
+    border: 1px solid #ded3c0 !important;
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;
@@ -3473,7 +3478,7 @@ label {
     left: 0
 }
 
-.d-block {
+.open>.dropdown-menu {
     display: block;
 }
 
@@ -3539,39 +3544,18 @@ label {
 }
 
 #customInvoice .templateEditor label span {
+    float: left;
+}
+
+.dropdown-container .dropdown-menu {
     display: block;
+    height: 200px;
+    overflow: auto;
 }
 
-#customInvoice .templateEditor .table>thead>tr>th,
-#customInvoice .templateEditor .table>tbody>tr>td {
-    border: 0;
-    /* font-weight: normal; */
-    /* padding: 0; */
-    vertical-align: middle
-}
-
-#customInvoice .templateEditor .table>tbody>tr>td:first-child,
-#customInvoice .templateEditor .table>thead>tr>th:first-child {
-    padding-left: 0;
-}
-
-#customInvoice .templateEditor .table>tbody {
-    margin: 10px 0;
-}
-
-#customInvoice .templateEditor .table>tbody>tr>td label {
-    margin-bottom: 0;
-}
-
-#customInvoice .templateEditor .customField span {
-    display: inline-block;
-    float: right;
-    width: calc(100% - 30px);
-}
-
-.swatch ul {
-    display: inline-block;
-    max-width: 110px;
+.dropdown-container .dropdown-menu li label {
+    overflow: hidden;
+    margin: 0;
     width: 100%;
     padding: 20px 0;
 }
@@ -3584,110 +3568,43 @@ label {
 
 .designTool>li {
     float: left;
-    width: 100%;
-    margin: 10px 0;
-    list-style: none;
 }
 
-.designTool li>label {
-    display: inline-block;
-    width: auto !important;
-    line-height: 50px;
-    margin-bottom: 0 !important;
-    padding: 0 10px;
+
+/* #w-398px{
+  width: 398px;
+} */
+
+.square {
+    border-radius: 0px;
 }
 
-.designTool li [class^="ico-"],
-.designTool li [class*=" ico-"] {
-    width: 50px;
-    height: 50px;
+.ledger-row td .select2-container--default .select2-results__option--highlighted[aria-selected] a {
+    color: #fff !important;
+}
+
+.ledger-row td .select2-results ul li a {
+    color: #333;
+}
+
+.ledger-row td .select2-container .select2-selection {
+    background: transparent !important;
+    border: 0 !important;
+    cursor: text;
+}
+
+.ledger-row td .select2-container .select2-search__field {
+    background: #f3f0e6 !important
+}
+
+.ledger-panel .dropdown-container .dropdown-menu li {
+    clear: both;
     float: left;
-    background: #fff url("../images/designTool.svg") no-repeat;
-    background-size: 65px;
+    padding: 3px 2px;
 }
 
-.ico-template {
-    background-position: center -6px !important;
-}
-
-.ico-edit {
-    background-position: center -73px !important;
-}
-
-.ico-swatch {
-    background-position: center -138px !important;
-}
-
-.ico-txt {
-    background-position: center -202px !important;
-}
-
-.ico-print {
-    background-position: center -267px !important;
-}
-
-.templateView li {
-    float: left;
-    width: 177px;
-    margin: 0px;
-    list-style: none;
-    height: 240px;
-    padding: 10px 10px 0 0;
-}
-
-.templateView li img {
-    background: #fff;
-    height: 100%;
-    width: 100%;
-    object-fit: contain;
-    border-radius: 4px;
-    border: 1px solid #e5e5e5;
-}
-
-.logo-preview {
-    float: left
-}
-
-.logo-preview img,
-.swatch-preview {
-    width: 100px;
-    height: 100px;
-    float: left;
-    background: #fff;
-    object-fit: contain
-}
-
-.logoTool ul {
-    margin: 5px 0;
-}
-
-.logoTool ul li {
-    font-weight: bold;
-    list-style: none;
-    display: inline-block;
-    border: 1px solid #b2b2b2;
-    border-radius: 50%;
-    width: 30px;
-    text-align: center;
-    height: 30px;
-    line-height: 30px;
-    color: #b2b2b2;
-}
-
-.logoTool ul li:hover {
-    border-color: #666666;
-    color: #666666;
-}
-
-.swatch-preview span {
-    border-radius: 50%;
-    float: left;
-    width: 100%;
-    height: 100%;
-}
-
-.printTool .table>tbody>tr>td {
-    padding-top: 0;
+.ledger-panel .dropdown-container .dropdown-menu li label span {
+    max-width: calc(100% - 22px);
 }
 
 .printTool .table>tbody>tr>td>input {
@@ -3726,4 +3643,8 @@ label {
 
 [hidden] {
     display: none !important;
+}
+.ledger-panel .dropdown-menu {
+    border-radius: 0;
+    margin: 0;
 }

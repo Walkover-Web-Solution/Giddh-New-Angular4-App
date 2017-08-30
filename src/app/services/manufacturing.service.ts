@@ -30,7 +30,7 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(MANUFACTURING_API.GET.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', model.stockUniqueName).replace(':manufacturingUniqueName', model.manufacturingUniqueName))
+    return this._http.get(MANUFACTURING_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName))
       .map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res.json();
         data.queryString = model;
@@ -46,16 +46,16 @@ export class ManufacturingService {
    */
   public CreateManufacturingItem(model: IManufacturingItemRequest, stockUniqueName: string): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
     this.store.take(1).subscribe(s => {
-        if (s.session.user) {
-            this.user = s.session.user.user;
-        }
-        this.companyUniqueName = s.session.companyUniqueName;
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', stockUniqueName), model).map((res) => {
-        let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
-        data.request = model;
-        data.queryString = {stockUniqueName};
-        return data;
+    return this._http.post(MANUFACTURING_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
+      let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
+      data.request = model;
+      data.queryString = { stockUniqueName };
+      return data;
     }).catch((e) => HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
   }
 
@@ -65,16 +65,16 @@ export class ManufacturingService {
   */
   public UpdateManufacturingItem(model: IManufacturingItemRequest, reqModal: IManufacturingUnqItemObj): Observable<BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest>> {
     this.store.take(1).subscribe(s => {
-        if (s.session.user) {
-            this.user = s.session.user.user;
-        }
-        this.companyUniqueName = s.session.companyUniqueName;
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(MANUFACTURING_API.UPDATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).map((res) => {
-        let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
-        data.request = model;
-        data.queryString = reqModal;
-        return data;
+    return this._http.put(MANUFACTURING_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', reqModal.stockUniqueName).replace(':manufacturingUniqueName', reqModal.manufacturingUniqueName), model).map((res) => {
+      let data: BaseResponse<ICommonResponseOfManufactureItem, IManufacturingItemRequest> = res.json();
+      data.request = model;
+      data.queryString = reqModal;
+      return data;
     }).catch((e) => HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
   }
 
@@ -85,11 +85,11 @@ export class ManufacturingService {
   public DeleteManufacturingItem(model: IManufacturingUnqItemObj): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
-          this.user = s.session.user.user;
+        this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(MANUFACTURING_API.DELETE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', model.stockUniqueName).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).map((res) => {
+    return this._http.delete(MANUFACTURING_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)).replace(':manufacturingUniqueName', model.manufacturingUniqueName)).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = '';
       data.queryString = { model };
@@ -135,14 +135,14 @@ export class ManufacturingService {
       url = url + 'count=' + model.count;
     }
 
-    return this._http.get(url.replace(':companyUniqueName', this.companyUniqueName))
+    return this._http.get(url.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)))
       .map((res) => {
         let data: BaseResponse<StocksResponse, IMfStockSearchRequest> = res.json();
-        data.request = '';
+        data.request = model;
         data.queryString = model;
         return data;
       })
-      .catch((e) => HandleCatch<StocksResponse, IMfStockSearchRequest>(e, ''));
+      .catch((e) => HandleCatch<StocksResponse, IMfStockSearchRequest>(e, model));
   }
 
   /**
@@ -156,7 +156,7 @@ export class ManufacturingService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', this.companyUniqueName).replace(':stockUniqueName', model.stockUniqueName))
+    return this._http.get(MANUFACTURING_API.GET_STOCK_WITH_RATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(model.stockUniqueName)))
       .map((res) => {
         let data: BaseResponse<ICommonResponseOfManufactureItem, string> = res.json();
         data.queryString = model;

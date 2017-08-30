@@ -22,10 +22,11 @@ import { WizardStepComponent } from './wizard-step.component';
     '.card-header { background-color: #fff; padding: 0; font-size: 1.25rem; }',
     '.card-block { overflow-y: auto; }',
     '.card-footer { background-color: #fff; border-top: 0 none; }',
-    '.nav-item { padding: 1rem 0rem; border-bottom: 0.5rem solid #ccc; }',
+    '.nav-item { padding: 1rem 0rem; }',
     '.disabled { color: #ccc; }',
     '.nav-item[_ngcontent-c8] {border-bottom: 0;}',
-    '.completed { cursor: default; }'
+    '.completed { cursor: default; }',
+    '.steps-indicator { pointer-events: none }'
   ]
 })
 export class WizardComponent implements AfterContentInit {

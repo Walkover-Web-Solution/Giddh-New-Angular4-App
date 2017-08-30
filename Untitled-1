@@ -1,7 +1,0 @@
-{"taxNumber":"1234",
-"name":"newtax",
-"taxType":"GST",
-"duration":"YEARLY",
-"taxFileDate":2,
-"accounts":[],
-"taxDetail":[{"date":"10-08-2017","taxValue":"100"}]}

@@ -1,43 +1,46 @@
-<div id="live" ng-init="getLiveData()">
+<div id="live">
     <div class="panel panel-default">
         <div class="panel-heading">
             <strong>Bank accounts</strong><i class="glyphicon glyphicon-refresh pull-right" (click)="reload()"></i>
         </div>
-        <div class="panel-body pos-rel">
+
+        <div class="panel-body pos-rel pdT0">
+            <div class="col-xs-12 mrT1 pdB2">
+                <div class="row">
+                    <div class="table primary_clr">
+                        <span class="col-xs-6  pd0">A/c</span>
+                        <span class="col-xs-3 pdL1">A/c no.</span>
+                        <span class="col-xs-3 pd0 text-right">Closing Bal.</span>
+                    </div>
+                </div>
+            </div>
             <div class="dashboard-reconnectdiv" *ngIf="(isGetBankAccountsInProcess$ | async)">
                 <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
             </div>
             <div [ngClass]="{'dashboard-reconnectdiv': (bankAccountsError$ | async)}" *ngIf="!(isGetBankAccountsInProcess$ | async)">
                 <label class="font-black" *ngIf="(bankAccountsError$ | async)">{{bankAccountsError$ | async}}</label>
             </div>
-
             <div *ngFor="let bankAccounts of (bankAccounts$ | async)">
-                <section class="linked-accounts clearfix">
-                    <aside class="title">{{ bankAccounts.siteName}}</aside>
+                <section class="clearfix">
+                    <strong class="title">{{ bankAccounts.siteName}}</strong>
                     <aside class="body">
                         <table class="width100">
                             <tr *ngFor="let item of bankAccounts.accounts">
-                                <!--<div ng-if="account.reconnect" class="reconnectDiv">-->
-                                <!--<button class="btn btn-default" ng-click="reconnectBank(account)">Reconnect</button>-->
-                                <!--</div>-->
                                 <td class="pos-rel width100">
-                                    <table class="table table-bordered">
+                                    <table class="table mrB1">
                                         <tbody>
                                             <tr>
                                                 <td class="col-xs-6">{{item.name}}</td>
-                                                <td class="col-xs-4">{{item.currencyCode}} {{item.amount}}</td>
-                                                <td class="col-xs-2"><i class="glyphicon glyphicon-refresh" (click)="refreshBank(item.loginId)"></i></td>
-                                            </tr>
-                                            <tr *ngIf="item.reconnect" class="db-bnk-account">
-                                                <td class="reconnectDiv text-center col-xs-12">
-                                                    <button class="btn btn-default" (click)="reconnect(item.loginId)">Reconnect</button>
+                                                <td class="col-xs-3">{{item.accountNumber}}</td>
+                                                <td class="col-xs-3 text-right">{{item.amount}}
+                                                    <br />
+                                                    <small>{{item.currencyCode}}</small>
+                                                    <button *ngIf="item.reconnect" class="btn isActive" (click)="reconnect(item.loginId)">Reconnect</button>
                                                 </td>
+
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <!--                   <span class="error-overlay">
-
-                                    </span> -->
                                 </td>
                             </tr>
                         </table>

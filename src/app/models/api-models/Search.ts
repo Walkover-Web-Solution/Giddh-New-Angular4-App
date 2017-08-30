@@ -30,8 +30,8 @@ export interface Account {
 export interface AccountFlat {
   creditTotal: number;
   debitTotal: number;
-  closeBalType: string;
-  openBalType: string;
+  closeBalanceType: string;
+  openBalanceType: string;
   closingBalance: number;
   openingBalance: number;
   uniqueName: string;
@@ -39,17 +39,17 @@ export interface AccountFlat {
   parent: string;
 }
 
-export interface ChildGroup {
-  forwardedBalance: ForwardedBalance;
-  creditTotal: number;
-  debitTotal: number;
-  closingBalance: ClosingBalance;
-  childGroups: ChildGroup[];
-  accounts: Account[];
-  uniqueName: string;
-  category?: any;
-  groupName: string;
-  isVisible: boolean;
+export class ChildGroup {
+  public forwardedBalance: ForwardedBalance;
+  public creditTotal: number;
+  public debitTotal: number;
+  public closingBalance: ClosingBalance;
+  public childGroups: ChildGroup[];
+  public accounts: Account[];
+  public uniqueName: string;
+  public category?: any;
+  public groupName: string;
+  public isVisible: boolean = false;
 }
 
 export interface SearchResponse {

@@ -19,6 +19,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
 import { NewRoleClass } from '../../permission.utility';
 import { CapitalizePipe } from './capitalize.pipe';
+import { Observable } from 'rxjs/Observable';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   templateUrl: './permission-list.html',
@@ -34,25 +36,57 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   public allRoles: IRoleCommonResponseAndRequest[] = [];
   public selectedRoleForDelete: IRoleCommonResponseAndRequest;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
+  private session$: Observable<any>;
   constructor(
     private store: Store<AppState>,
     public route: ActivatedRoute,
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
     private router: Router,
-    private PermissionActions: PermissionActions
+    private PermissionActions: PermissionActions,
+    private _toasty: ToasterService
   ) { }
 
   public ngOnInit() {
+
+    // This module should be accessible to superuser only
+    this.session$ = this.store.select(s => {
+      return s.session;
+    }).takeUntil(this.destroyed$);
+
+    this.session$.subscribe((session) => {
+      this.store.select(state => state.company).takeUntil(this.destroyed$).subscribe((company) => {
+        if (company && company.companies.length) {
+          let selectedCompany = company.companies.find(cmp => {
+            return cmp.uniqueName === session.companyUniqueName;
+          });
+          if (selectedCompany && selectedCompany.uniqueName === session.companyUniqueName) {
+            if (selectedCompany.role.uniqueName !== 'super_admin') {
+                this.redirectToDashboard();
+            }
+          } else {
+            this.redirectToDashboard();
+          }
+        } else {
+          this.redirectToDashboard();
+        }
+      });
+    });
+
     this.route.data.subscribe((data: any) => this.localState = data.yourData);
     // Getting roles every time user refresh page
     this.store.dispatch(this.PermissionActions.GetRoles());
+    this.store.dispatch(this.PermissionActions.RemoveNewlyCreatedRoleFromStore());
     this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
   }
 
   public ngOnDestroy() {
     //    this.store.dispatch(this.PermissionActions.RemoveNewlyCreatedRoleFromStore());
+  }
+
+  public redirectToDashboard() {
+    this._toasty.errorToast('You do not have permission to access this module');
+    this.router.navigateByUrl('/home');
   }
 
   public closePopupEvent(userAction) {
@@ -81,11 +115,11 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     this.permissionConfirmationModel.hide();
   }
 
-  private openPermissionModal() {
+  public openPermissionModal() {
     this.permissionModel.show();
   }
 
-  private hidePermissionModel() {
+  public hidePermissionModel() {
     this.permissionModel.hide();
   }
 }

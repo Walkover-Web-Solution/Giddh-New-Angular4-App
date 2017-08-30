@@ -1,19 +1,10 @@
 import { PageComponent } from './page.component';
-import { Routes, LoadChildren } from '@angular/router';
-import { HomeComponent } from './home/home.component';
-import { AboutComponent } from './about/about.component';
-import { LoginComponent } from './login/login.component';
+import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
-import { SearchComponent } from './search/search.component';
-import { AuditLogsComponent } from './audit-logs/audit-logs.component';
-import { TlPlComponent } from './tl-pl/tl-pl.component';
-import { LedgerComponent } from './ledger/ledger.component';
-import { SettingsComponent } from './settings/settings.component';
 import { DummyComponent } from './dummy.component';
-import { ManufacturingComponent } from './manufacturing/manufacturing.component';
-import { MfReportComponent } from './manufacturing/report/mf.report.component';
-import { MfEditComponent } from './manufacturing/edit/mf.edit.component';
+import { NewUserComponent } from './newUser.component';
+import { NewUserAuthGuard } from './services/decorators/newUserGuard';
 
 export const ROUTES: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -28,6 +19,8 @@ export const ROUTES: Routes = [
   { path: 'trial-balance-and-profit-loss', redirectTo: 'pages/trial-balance-and-profit-loss', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'audit-logs', redirectTo: 'pages/audit-logs', pathMatch: 'full', canActivate: [NeedsAuthentication] },
   { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+  { path: 'dummy', component: DummyComponent },
+  { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -36,10 +29,13 @@ export const ROUTES: Routes = [
       { path: 'about', loadChildren: './about/about.module#AboutModule', canActivate: [NeedsAuthentication] },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule', canActivate: [NeedsAuthentication] },
       { path: 'search', loadChildren: './search/search.module#SearchModule', canActivate: [NeedsAuthentication] },
-      { path: 'trial-balance-and-profit-loss', loadChildren: './tl-pl/tl-pl.module#TlPlModule', canActivate: [NeedsAuthentication] },
+      {
+        path: 'trial-balance-and-profit-loss',
+        loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule',
+        canActivate: [NeedsAuthentication]
+      },
       { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule', canActivate: [NeedsAuthentication] },
       { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule', canActivate: [NeedsAuthentication] },
-      { path: 'dummy', component: DummyComponent },
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule', canActivate: [NeedsAuthentication] },
       { path: 'settings', loadChildren: './settings/settings.module#SettingsModule', canActivate: [NeedsAuthentication] },
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule', canActivate: [NeedsAuthentication] },
