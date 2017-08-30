@@ -21,7 +21,7 @@
               <span class="select_drop"><i class="fa fa-caret-down"></i></span>
             </div>
           </div>
-          <div class="form-group col-xs-1" (clickOutside)="showFromDatePicker=false;">
+          <div class="form-group col-xs-2" (clickOutside)="showFromDatePicker=false;">
             <small>From Date</small>
             <div class="input-group">
               <input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;"
@@ -37,7 +37,7 @@
                 [showWeeks]="true"></datepicker>
             </div>
           </div>
-          <div class="form-group col-xs-1" (clickOutside)="showToDatePicker=false;">
+          <div class="form-group col-xs-2" (clickOutside)="showToDatePicker=false;">
             <small>To Date</small>
             <div class="input-group">
               <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;"
