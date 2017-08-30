@@ -11,11 +11,11 @@ import { Observable } from 'rxjs/Observable';
           }`]
 })
 
-export class ConnectBankModalComponent implements OnChanges{
+export class ConnectBankModalComponent implements OnChanges {
 
   @Input() public sourceOfIframe: string;
   @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
-  public iframeSrc: SafeResourceUrl = undefined;
+  public iframeSrc: string = '';
   public isIframeLoading: boolean = false;
   constructor(public sanitizer: DomSanitizer) {
   }
@@ -23,11 +23,13 @@ export class ConnectBankModalComponent implements OnChanges{
   public ngOnChanges(changes) {
     this.isIframeLoading = true;
     if (changes.sourceOfIframe.currentValue) {
-      this.iframeSrc = this.sanitizer.bypassSecurityTrustResourceUrl(this.sourceOfIframe);
+      this.iframeSrc = this.sourceOfIframe;
       this.isIframeLoading = false;
     }
   }
-
+  public getIframeUrl(url) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  }
   public onCancel() {
     this.modalCloseEvent.emit(true);
     this.iframeSrc = undefined;
