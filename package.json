@@ -183,6 +183,7 @@
     "ngrx-store-localstorage": "^0.1.8",
     "ngrx-store-logger": "^0.1.8",
     "ngx-bootstrap": "^1.9.1",
+    "ngx-font-picker": "^4.1.0",
     "ngx-perfect-scrollbar": "^4.5.2",
     "ngx-toastr": "^6.1.2",
     "ngx-uploader": "^3.3.6",
