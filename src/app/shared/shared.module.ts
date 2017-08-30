@@ -44,6 +44,7 @@ import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploa
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 import { DatePickerModule } from './theme/datepicker/date-picker.module';
 import { RecTypePipe } from './helpers/pipes/recType.pipe';
+import { SafePipe } from './helpers/pipes/safe.pipe';
 import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -64,7 +65,7 @@ export function highchartsFactory() {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
-    TaxControlComponent, NumberToWordsPipe, RecTypePipe, DecimalDigitsDirective],
+    TaxControlComponent, NumberToWordsPipe, RecTypePipe, SafePipe, DecimalDigitsDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -89,7 +90,7 @@ export function highchartsFactory() {
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, DatePickerModule, RecTypePipe,
-    DecimalDigitsDirective
+    DecimalDigitsDirective, SafePipe
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent],

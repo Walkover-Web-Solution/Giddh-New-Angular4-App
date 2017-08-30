@@ -1,5 +1,7 @@
 <button class="pull-right" (click)="onCancel()">X</button>
 <div id="myFrame" class="modal-body pdT5 pdB5 pdL2 pdR2 clearfix">
-    <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
-    <iframe *ngIf="iframeSrc" #frame class="embed-responsive-item" [src]="iframeSrc" frameborder="0"></iframe>
+  <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
+  <ng-template #frame>
+    <iframe  id="player" class="embed-responsive-item" [src]="getIframeUrl(iframeSrc)" frameborder="0"></iframe>
+  </ng-template>
 </div>
