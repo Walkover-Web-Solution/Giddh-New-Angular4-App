@@ -188,9 +188,8 @@ header .navbar {
 }
 
 .t-h-bg1 th {
-    background: #f3f0e6;
+    background: #fff;
     color: #4d4d4d;
-    border: 1px solid #c4c6c7;
     padding: 11px !important;
     font-weight: 400;
 }
@@ -906,7 +905,7 @@ input[type="checkbox"]:after {
 }
 
 .filterForm label {
-    width: 100%;
+    display: block;
     font-size: 13px;
     font-weight: 400;
 }
@@ -3276,8 +3275,6 @@ label {
 }
 
 .select2-container--default .select2-selection--single {
-    background: #f9f7f2 !important;
-    border: 1px solid #ded3c0 !important;
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;
@@ -3470,81 +3467,8 @@ label {
     text-align: center;
 }
 
-
-/*************************************************** Custom Invoice CSS  ****************************************************/
-
-#customInvoice .templateEditor input[type="checkbox"] {
-    margin-right: 12px !important;
-    left: 0
-}
-
 .open>.dropdown-menu {
     display: block;
-}
-
-.sticky-footer {
-    background: #5d5d5d;
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    text-align: right;
-    left: 0;
-    right: 0;
-    z-index: 2;
-}
-
-#customInvoice .templateEditor .btn-group-lg>.btn {
-    border-radius: 0;
-    border: 0;
-    background: #e5e5e5;
-}
-
-#customInvoice .templateEditor .btn-group-lg>.btn:focus {
-    outline: 0;
-}
-
-#customInvoice .templateEditor .btn-group-lg>.btn:hover {
-    background: #fff;
-    color: #ff5f00;
-}
-
-#customInvoice {
-    letter-spacing: 0;
-    background: #f4f5f8;
-}
-
-#customInvoice h2 {
-    font-size: 20px;
-    margin-bottom: 20px;
-}
-
-#customInvoice .templateEditor label {
-    margin-bottom: 15px;
-    width: 100%;
-}
-
-#customInvoice .templateEditor .form-control,
-#customInvoice .templateEditor .table>tbody>tr>td .form-control {
-    margin: 7px 0;
-    background: #fff;
-    border-color: #969696;
-    border-radius: 2px;
-}
-
-#customInvoice .templateEditor h3 {
-    color: #ff5f00;
-    margin: 15px 0;
-    font-size: 18px;
-}
-
-.customField .form-control {
-    float: right;
-    width: 100%;
-    margin: 0 !important;
-}
-
-#customInvoice .templateEditor label span {
-    float: left;
 }
 
 .dropdown-container .dropdown-menu {
@@ -3557,16 +3481,6 @@ label {
     overflow: hidden;
     margin: 0;
     width: 100%;
-    padding: 20px 0;
-}
-
-.swatch ul li {
-    width: 24px;
-    height: 24px;
-    display: inline-block
-}
-
-.designTool>li {
     float: left;
 }
 
@@ -3607,43 +3521,6 @@ label {
     max-width: calc(100% - 22px);
 }
 
-.printTool .table>tbody>tr>td>input {
-    margin: 0 !important;
-}
-
-.printTool a {
-    bottom: 10px;
-    top: inherit;
-    right: -50px;
-}
-
-.scrollAuto {
-    overflow-y: auto;
-    padding-right: 15px;
-}
-
-.scrollAuto::-webkit-scrollbar {
-    width: 8px;
-    position: relative;
-    border-radius: 8px;
-}
-
-.scrollAuto::-webkit-scrollbar-track {
-    background: #ddd;
-    /* margin-left: 255px; */
-    border-radius: 8px;
-}
-
-.scrollAuto::-webkit-scrollbar-thumb {
-    background-color: darkgrey;
-    outline: 1px solid slategrey;
-    /* margin-left: 255px; */
-    border-radius: 8px;
-}
-
-[hidden] {
-    display: none !important;
-}
 .ledger-panel .dropdown-menu {
     border-radius: 0;
     margin: 0;
