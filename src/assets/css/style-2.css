@@ -653,7 +653,7 @@ header {
 
 .basic>tbody>tr>td {
     font-weight: 400;
-    padding: 4px 8px;
+    padding: 4px 11px;
 }
 
 .basic>tbody>tr>td a {
@@ -3191,9 +3191,10 @@ label {
     height: 100%;
     min-height: 100%;
 }
+
 .height98 {
-  height: 97%;
-  min-height: 97%;
+    height: 97%;
+    min-height: 97%;
 }
 
 .grp_col div {
