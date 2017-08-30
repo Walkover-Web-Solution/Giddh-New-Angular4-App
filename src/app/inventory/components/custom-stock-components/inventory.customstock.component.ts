@@ -8,6 +8,8 @@ import { Select2OptionData } from '../../../shared/theme/select2/select2.interfa
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 import * as  _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
+import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
@@ -16,6 +18,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public stockUnitsDropDown$: Observable<Select2OptionData[]>;
+  public activeGroupUniqueName$: Observable<string>;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -30,7 +33,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public deleteCustomStockInProcessCode$: Observable<any[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction) {
+  constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
+  private sidebarAction: SidebarAction) {
     this.customUnitObj = new StockUnitRequest();
     this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).takeUntil(this.destroyed$);
     this.stockUnitsDropDown$ = this.store.select(p => {
@@ -42,6 +46,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         });
       }
     });
+    this.activeGroupUniqueName$ = this.store.select(s => s.inventory.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.createCustomStockInProcess$ = this.store.select(s => s.inventory.createCustomStockInProcess).takeUntil(this.destroyed$);
     this.updateCustomStockInProcess$ = this.store.select(s => s.inventory.updateCustomStockInProcess).takeUntil(this.destroyed$);
     this.deleteCustomStockInProcessCode$ = this.store.select(s => s.inventory.deleteCustomStockInProcessCode).takeUntil(this.destroyed$);
@@ -49,7 +54,14 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello `inventory-custom-stock` component');
+    let activeGroup = null;
+    this.activeGroupUniqueName$.take(1).subscribe(a => activeGroup = a);
+    if (activeGroup) {
+      this.store.dispatch(this.sidebarAction.OpenGroup(activeGroup));
+    }
+
+    this.store.dispatch(this.inventoryAction.resetActiveGroup());
+    this.store.dispatch(this.inventoryAction.resetActiveStock());
     this.store.dispatch(this.customStockActions.GetStockUnit());
     this.stockUnit$.subscribe(p => this.clearFields());
   }
@@ -79,7 +91,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   }
 
-  public  change(v) {
+  public change(v) {
     this.stockUnit$.find(p => {
       let unit = p.find(q => q.code === v.value);
       if (unit !== undefined) {

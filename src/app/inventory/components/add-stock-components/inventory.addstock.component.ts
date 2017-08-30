@@ -103,7 +103,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.route.params.distinct().takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
-
       if (params['stockUniqueName'] && params['groupUniqueName']) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       }

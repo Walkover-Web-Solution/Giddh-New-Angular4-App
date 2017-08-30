@@ -18,12 +18,12 @@ export class SidebarAction {
     .ofType(InventoryActionsConst.GetInventoryGroup)
     .do(a => console.log('called'))
     .switchMap(action => {
-      return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName).map(response => {
+      return this._inventoryService.GetGroupsStock(action.payload.groupUniqueName).shareReplay().map(response => {
         if (response.status === 'error') {
           this._toasty.errorToast(response.message, response.code);
         } else {
           this.store.dispatch(this.GetInventoryGroupResponse(response));
-          this.store.dispatch(this.OpenGroup(response.body.uniqueName));
+          // this.store.dispatch(this.OpenGroup(response.body.uniqueName));
         }
         return { type: '' };
       });

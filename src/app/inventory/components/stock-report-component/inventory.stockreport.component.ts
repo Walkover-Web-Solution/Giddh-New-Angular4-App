@@ -119,12 +119,11 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
   }
 
   public ngAfterViewInit() {
-    // this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
-    //   if (!a) {
-    //     this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
-    //     this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-    //   }
-    // });
+    this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
+      if (!a) {
+        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+      }
+    });
   }
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {
