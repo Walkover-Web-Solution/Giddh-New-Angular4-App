@@ -1,0 +1,96 @@
+<section id="invoice-setting">
+    <div class="box clearfix">
+        <form class="col-xs-12">
+            <div class="row">
+                <div class="form-group clearfix bdrB pdB2">
+                    <div class="col-xs-5"><label class="row">From Email</label></div>
+                    <div class="col-xs-3">
+                        <div class="row">
+                            <label>From email</label>
+                            <div class="input-group col-xs-10">
+                                <input type="email" class="form-control" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' />
+                                <span class="input-group-addon" [hidden]="invoiceSetting.emailVerified"><i class="glyphicon glyphicon-exclamation-sign"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clearfix bdrB pdB2">
+                    <div class="col-xs-5"><label class="row">Send alert</label></div>
+                    <ul class="col-xs-7 webookList">
+                        <div class="row">
+                            <li *ngFor="let webhook of invoiceWebhook; let i = index" class="col-xs-12">
+                                <div class="row">
+                                    <div class="w100 pull-left">
+                                        <label [hidden]="i != '0'">Due Days</label>
+                                        <input type="text" class="form-control" maxlength="2" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' [disabled]='webhook.uniqueName' />
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <label [hidden]="i != '0'">Webhook URL</label>
+                                        <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
+                                    </div>
+                                    <label class="mrL1 cp" [hidden]="i == invoiceWebhook.length-1"> <i class="fa fa-trash-o delete-ico" (click)="deleteWebhook(webhook, i)"></i></label>
+                                    <label class="mrL1 cp" *ngIf="i == invoiceWebhook.length-1" (click)="addNewWebhook(webhook)"> <i class="fa fa-plus"></i> Add webhook URL</label>
+                                </div>
+                            </li>
+                        </div>
+                    </ul>
+                </div>
+                <div class="form-group clearfix bdrB pdB2">
+                    <div class="col-xs-5"><label class="row">Default due date</label></div>
+                    <div class="w100 pull-left">
+                        <label>Days</label>
+                        <input type="text" class="form-control" [(ngModel)]="invoiceSetting.duePeriod" name="invoiceDefaultDue" />
+                    </div>
+                </div>
+                <div class="form-group clearfix bdrB pdB2">
+                    <div class="col-xs-5"><label class="row">Auto mail when generated</label></div>
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <input type="checkbox" [(ngModel)]="invoiceSetting.autoMail" name="invoiceAutomail" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clearfix bdrB pdB2">
+                    <div class="col-xs-5"><label class="row">Show seal according to status of payment</label></div>
+                    <div class="col-xs-4">
+                        <div class="row">
+                            <input type="checkbox" [(ngModel)]="invoiceSetting.showSeal" name="invoiceShowseal" />
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-xs-5"><label class="row">Create entry after payment using any payment gateway (Razorpay)</label></div>
+                    <div class="col-xs-1">
+                        <div class="row">
+                            <input type="checkbox" [(ngModel)]="invoiceSetting.createPaymentEntry" name="invoiceCreatePaymentEntry" />
+                        </div>
+                    </div>
+                    <div class="" [hidden]="!invoiceSetting.createPaymentEntry">
+                        <div class="col-xs-2">
+                            <div class="row">
+                                <label>Key ID<span class="req">*</span></label>
+                                <input type="text" class="form-control" [(ngModel)]="paymentDetail.userName" name="keyID" />
+                            </div>
+                        </div>
+                        <div class="col-xs-2">
+                            <label>Secret ID<span class="req">*</span></label>
+                            <input type="password" class="form-control" [(ngModel)]="paymentDetail.password" name="secretKey" />
+                        </div>
+                        <div class="col-xs-2">
+                            <div class="row">
+                                <label>Link Account</label>
+                                <select2 [(ngModel)]="paymentDetail.account" name="stockUniqueName" [data]="linkAccountDropDown$ | async" [options]="options" [ngModelOptions]="{standalone: true}" (valueChanged)="selectLinkAccount($event)">
+                                </select2>
+                            </div>
+                        </div>
+                        <button class=" btn btn-danger mrT1 pull-right " *ngIf="updateRazor " (click)="deleteRazorPay() ">Delete</button>
+                    </div>
+                </div>
+                <div class="form-group mrT3 ">
+                    <button class="btn btn-default " (click)="UpdateForm(invoiceSetting) ">Save</button>
+                    <button class="btn btn-default " (click)="resetForm() ">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

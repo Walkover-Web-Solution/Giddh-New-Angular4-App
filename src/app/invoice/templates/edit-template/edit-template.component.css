@@ -1,0 +1,11 @@
+.templateEditor {
+    width: 30%;
+    float: left;
+    overflow: auto;
+}
+
+.invoice-preview {
+    width: 9in;
+    float: right;
+    overflow: auto;
+}
