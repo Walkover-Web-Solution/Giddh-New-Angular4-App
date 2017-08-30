@@ -51,16 +51,16 @@
             </aside>
         </section>
     </div>
-  </div> 
+  </div>
 
 <!-- Connect-Bank-Modal -->
 <div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal($event)"></connect-bank-modal>
+      <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal>
     </div>
   </div>
-</div> 
+</div>
 
 <!-- Confirmation Modal -->
 <div bsModal #confirmationModal="bs-modal" class="modal fade" role="dialog">

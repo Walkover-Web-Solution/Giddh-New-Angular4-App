@@ -18,6 +18,7 @@ import { SettingsLinkedAccountsService } from '../../services/settings.linked.ac
 import { SettingsLinkedAccountsActions } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IGetAllEbankAccountResponse, IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
+import { DomSanitizer, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'setting-linked-accounts',
@@ -48,7 +49,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private _settingsLinkedAccountsService: SettingsLinkedAccountsService,
     private settingsLinkedAccountsActions: SettingsLinkedAccountsActions,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _sanitizer: DomSanitizer
   ) {
     this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
   }
@@ -60,7 +62,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
         console.log('Found');
         this.ebankAccounts = _.cloneDeep(o.linkedAccounts.bankAccounts);
       } else {
-       console.log('Not found');
+        console.log('Not found');
       }
     });
 
@@ -69,7 +71,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
         data.body.results.map(d => {
-          accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
+          accounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
         });
         this.accounts$ = accounts;
       }
@@ -80,7 +82,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     // get token info
     this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        this.iframeSource = data.body.connectUrl;
+        if (data.body.connectUrl) {
+          this.iframeSource = data.body.connectUrl;// this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
+        }
       }
     });
     this.connectBankModel.show();
@@ -97,17 +101,17 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       switch (this.actionToPerform) {
         case 'DeleteAddedBank':
           this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(this.selectedAccount.loginId));
-        break;
+          break;
         case 'UpdateDate':
           let dateToUpdate = moment(this.selectedAccount.transactionDate).format('DD-MM-YYYY');
           this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(dateToUpdate, accountId));
-        break;
+          break;
         case 'LinkAccount':
           this.store.dispatch(this.settingsLinkedAccountsActions.LinkBankAccount(this.dataToUpdate, accountId));
-        break;
+          break;
         case 'UnlinkAccount':
           this.store.dispatch(this.settingsLinkedAccountsActions.UnlinkBankAccount(accountId));
-        break;
+          break;
       }
     }
 
@@ -127,7 +131,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public onDeleteAddedBank(bankName, account) {
     this.selectedAccount = _.cloneDeep(account);
     this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
-    this.actionToPerform  = 'DeleteAddedBank';
+    this.actionToPerform = 'DeleteAddedBank';
     this.confirmationModal.show();
   }
 
@@ -144,14 +148,14 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     this.selectedAccount = _.cloneDeep(account);
     this.confirmationMessage = `Are you sure you want to link ${data.value} ?`;
-    this.actionToPerform  = 'LinkAccount';
+    this.actionToPerform = 'LinkAccount';
     this.confirmationModal.show();
   }
 
   public onUnlinkBankAccount(account) {
     this.selectedAccount = _.cloneDeep(account);
     this.confirmationMessage = `Are you sure you want to unlink ${account.linkedAccount.name} ?`;
-    this.actionToPerform  = 'UnlinkAccount';
+    this.actionToPerform = 'UnlinkAccount';
     this.confirmationModal.show();
   }
 
@@ -160,7 +164,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     this.selectedAccount = _.cloneDeep(account);
     this.confirmationMessage = `Do you want to get ledger entries for this account from ${dateToUpdate} ?`;
-    this.actionToPerform  = 'UpdateDate';
+    this.actionToPerform = 'UpdateDate';
     this.confirmationModal.show();
   }
 
