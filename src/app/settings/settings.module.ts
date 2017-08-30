@@ -7,10 +7,12 @@ import { SettingIntegrationComponent } from './integration/setting.integration.c
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SharedModule } from '../shared/shared.module';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
-import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
+// import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingRountingModule } from './settings.routing.module';
-import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect-bank-modal.component';
+import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
+import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
+import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 @NgModule({
   declarations: [
     // components here
@@ -18,9 +20,11 @@ import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/
     SettingIntegrationComponent,
     SettingProfileComponent,
     SettingTaxesComponent,
-    SettingsLinkedAccountsComponent,
+    // SettingsLinkedAccountsComponent,
     DeleteTaxConfirmationModelComponent,
-    ConnectBankModalComponent
+    SettingLinkedAccountsComponent,
+    ConnectBankModalComponent,
+    SettingLinkedAccountsConfirmationModalComponent
   ],
   imports: [
     SharedModule,
