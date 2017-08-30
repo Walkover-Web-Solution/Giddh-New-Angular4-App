@@ -136,11 +136,7 @@ export class InvoiceCreateComponent implements OnInit {
     });
   }
 
-  public onSubmitInvoiceForm(f: NgForm, share: boolean) {
-    if (share) {
-      console.log ('bingo share case');
-    }
-    console.log (this.invFormData, 'actual class object');
+  public onSubmitInvoiceForm(f: NgForm) {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
     model.invoice = _.cloneDeep(this.invFormData);
