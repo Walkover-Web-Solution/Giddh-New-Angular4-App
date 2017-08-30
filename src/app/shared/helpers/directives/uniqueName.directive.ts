@@ -6,10 +6,12 @@ import { ToasterService } from '../../../services/toaster.service';
 })
 export class UniqueNameDirective  {
   public el: HTMLInputElement;
-  @HostListener('keyup', ['$event'])
-  public onChange(value: any) {
-    this.el.value = value.target.value.replace(RegExp(' ', 'g'), '');
-    if (value.which === 32) {
+  @HostListener('keypress', ['$event'])
+  public onChange(event: any) {
+    // this.el.value = value.target.value.replace(RegExp(' ', 'g'), '');
+    if (event.which === 32) {
+      event.preventDefault();
+      this._toaster.clearAllToaster();
       this._toaster.warningToast('Space not allowed', 'Warning');
     }
   }
