@@ -24,6 +24,7 @@ export class InventoryAction {
     .map(response => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
       if (data.status === 'error') {
+        this._toasty.clearAllToaster();
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Group Created Successfully');
@@ -43,6 +44,7 @@ export class InventoryAction {
     .map(response => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
       if (data.status === 'error') {
+        this._toasty.clearAllToaster();
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast('Group Updated Successfully');
@@ -111,6 +113,7 @@ export class InventoryAction {
     .map(response => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
       if (data.status === 'error') {
+        this._toasty.clearAllToaster();
         this._toasty.errorToast(data.message, data.code);
       } else {
         this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock']);
@@ -132,6 +135,7 @@ export class InventoryAction {
     .map(response => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
       if (data.status === 'error') {
+        this._toasty.clearAllToaster();
         this._toasty.errorToast(data.message, data.code);
       } else {
         this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock', data.body.uniqueName]);
