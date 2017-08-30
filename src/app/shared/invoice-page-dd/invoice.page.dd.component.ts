@@ -17,8 +17,8 @@ const INV_PAGE = [
 
 export class InvoicePageDDComponent {
 
-  private navItems: INameUniqueName[] = INV_PAGE;
-  private selectedPage: string = null;
+  public navItems: INameUniqueName[] = INV_PAGE;
+  public selectedPage: string = null;
 
   constructor(private router: Router, private location: Location) {
     this.router.events.subscribe((event: NavigationStart) => {

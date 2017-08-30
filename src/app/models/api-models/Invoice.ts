@@ -249,6 +249,8 @@ export interface Account {
   attentionTo: string;
   email: string;
   mobileNumber?: any;
+  shippingDetails: IGstDetails;
+  billingDetails: IGstDetails;
 }
 
 export interface ICommonItemOfTransaction {
