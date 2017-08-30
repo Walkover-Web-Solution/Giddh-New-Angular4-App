@@ -33,6 +33,7 @@ const INVOICE_ROUTES: Routes = [
     canActivate: [NeedsAuthentication],
     component: InvoiceComponent,
     children: [
+      { path: '', redirectTo: 'preview', pathMatch: 'full' },
       { path: 'preview',  component: InvoicePreviewComponent  },
       { path: 'generate',  component: InvoiceGenerateComponent },
       { path: 'templates',  component: EditInvoiceComponent },
