@@ -7,7 +7,7 @@ import { SettingIntegrationComponent } from './integration/setting.integration.c
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SharedModule } from '../shared/shared.module';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
-import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
+// import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingRountingModule } from './settings.routing.module';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
@@ -20,7 +20,7 @@ import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accoun
     SettingIntegrationComponent,
     SettingProfileComponent,
     SettingTaxesComponent,
-    SettingsLinkedAccountsComponent,
+    // SettingsLinkedAccountsComponent,
     DeleteTaxConfirmationModelComponent,
     SettingLinkedAccountsComponent,
     ConnectBankModalComponent,
