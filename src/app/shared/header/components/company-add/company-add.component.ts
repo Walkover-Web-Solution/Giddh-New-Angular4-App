@@ -47,7 +47,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.dataSource = Observable
       .create((observer: any) => {
         this._location.GetCity({
-          QueryString: this.company.city.trim(),
+          QueryString: this.company.city,
           AdministratorLevel: undefined,
           Country: undefined,
           OnlyCity: true
