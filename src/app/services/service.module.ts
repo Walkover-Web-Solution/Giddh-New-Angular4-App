@@ -53,6 +53,9 @@ import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.ac
 import { SettingsTaxesService } from './settings.taxes.service';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
+import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { InvoiceService } from './invoice.service';
+import { InvoiceTemplatesService } from './invoice.templates.service';
 import { SettingsLinkedAccountsService } from './settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
 
@@ -81,6 +84,7 @@ import { SettingsLinkedAccountsActions } from './actions/settings/linked-account
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TBPlBsActions),
     EffectsModule.run(LedgerActions),
+    EffectsModule.run(InvoiceActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
@@ -111,6 +115,8 @@ export class ServiceModule {
         ManufacturingService,
         ErrorHandler,
         SearchService,
+        InvoiceService,
+        InvoiceTemplatesService,
         LogsService,
         TlPlService,
         LedgerService,

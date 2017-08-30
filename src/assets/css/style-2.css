@@ -123,6 +123,14 @@ input {
     box-shadow: none;
 }
 
+.form-control::-webkit-input-placeholder,
+.form-control::-webkit-input-placeholder,
+.form-control::-moz-placeholder,
+.form-control:-ms-input-placeholder,
+.form-control:-moz-placeholder {
+    color: #b3b3b3;
+}
+
 .form-control:focus {
     border-radius: 0 !important;
     outline: none;
@@ -180,9 +188,8 @@ header .navbar {
 }
 
 .t-h-bg1 th {
-    background: #f3f0e6;
+    background: #fff;
     color: #4d4d4d;
-    border: 1px solid #c4c6c7;
     padding: 11px !important;
     font-weight: 400;
 }
@@ -663,7 +670,7 @@ input[type="checkbox"] {
     text-align: center;
     margin: 0 1rem 0 0;
     cursor: pointer;
-    left: 8px;
+    left: 0px;
 }
 
 input[type="checkbox"]:checked:before {
@@ -898,7 +905,7 @@ input[type="checkbox"]:after {
 }
 
 .filterForm label {
-    width: 100%;
+    display: block;
     font-size: 13px;
     font-weight: 400;
 }
@@ -3268,8 +3275,6 @@ label {
 }
 
 .select2-container--default .select2-selection--single {
-    background: #f9f7f2 !important;
-    border: 1px solid #ded3c0 !important;
     border-radius: 0px !important;
     padding: 6px !important;
     outline: 0;

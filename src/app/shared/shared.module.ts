@@ -42,6 +42,8 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
+import { InvoicePageDDComponent } from './invoice-page-dd/invoice.page.dd.component';
+import { FullPageHeight } from './helpers/directives/pageHeight.directive';
 import { DatePickerModule } from './theme/datepicker/date-picker.module';
 import { RecTypePipe } from './helpers/pipes/recType.pipe';
 import { SafePipe } from './helpers/pipes/safe.pipe';
@@ -65,7 +67,7 @@ export function highchartsFactory() {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
     AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
-    TaxControlComponent, NumberToWordsPipe, RecTypePipe, SafePipe, DecimalDigitsDirective],
+    TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -89,8 +91,8 @@ export function highchartsFactory() {
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
-    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, DatePickerModule, RecTypePipe,
-    DecimalDigitsDirective, SafePipe
+    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
+    DatePickerModule, RecTypePipe, DecimalDigitsDirective
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent],
