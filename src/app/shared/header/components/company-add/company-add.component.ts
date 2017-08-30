@@ -9,6 +9,7 @@ import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 import { StateDetailsRequest } from '../../../../models/api-models/Company';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'company-add',
@@ -26,11 +27,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
   public dataSource: Observable<any>;
-  public sub: Subscription;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService) {
+    private _location: LocationService, private _route: Router) {
   }
 
   // tslint:disable-next-line:no-empty
@@ -61,21 +61,22 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     });
     this.isCompanyCreated$.subscribe(s => {
       if (s) {
-        // this.wizard.next();
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+        this._route.navigate(['/ledger', 'cash']);
+        this.closeModal();
       }
     });
-    this.store
-      .select(c => c.company.companies).takeUntil(this.destroyed$)
-      .subscribe(p => {
-        if (p && p.find(c => c.name === this.company.name) !== undefined) {
-          this.company = new CompanyRequest();
-          this.wizard.next();
-        }
-      });
+    // this.store
+    //   .select(c => c.company.companies).takeUntil(this.destroyed$)
+    //   .subscribe(p => {
+    //     if (p && p.find(c => c.name === this.company.name) !== undefined) {
+    //       this.company = new CompanyRequest();
+    //       this.wizard.next();
+    //     }
+    //   });
   }
 
   public textOnly(e) {

@@ -35,6 +35,16 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 500);
       }
     };
+    this.router.events.subscribe(s => {
+      if (s instanceof NavigationEnd) {
+        const tree = this.router.parseUrl(this.router.url);
+        if (tree.fragment) {
+          // you can use DomAdapter
+          const element = document.querySelector('#' + tree.fragment);
+          if (element) { element.scrollIntoView(element); }
+        }
+      }
+    });
     this.router.events.takeUntil(this.destroyed$).delay(300).subscribe((event) => {
       window.scrollTo(0, 0);
     });

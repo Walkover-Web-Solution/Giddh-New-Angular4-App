@@ -1,5 +1,7 @@
 # @AngularClass
 
+package-lock_*
+
 # Logs
 logs
 *.log
@@ -76,3 +78,4 @@ packages/
 POSTMAN/
 
 yarn.lock
+tsconfig.main.temp.json

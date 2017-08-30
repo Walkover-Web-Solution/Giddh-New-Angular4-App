@@ -1,10 +1,10 @@
-<span (blur)="hideDiscountMenu()">
-    <a (click)="$event.stopPropagation();discountMenu = !discountMenu" id="discount">
-        <label>Discount</label>
+<span (blur)="hideDiscountMenu()" >
+    <label>Discount</label>
+    <a (click)="discountMenu = !discountMenu" id="discount">
         <input type="number" name="" class="form-control cursor-pointer"
                [(ngModel)]="discountTotal" disabled="disabled"/>
     </a>
-    <ul class="my-dropdown-menu pd" *ngIf="discountMenu">
+    <ul class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()">
       <li>
           <table>
               <tr

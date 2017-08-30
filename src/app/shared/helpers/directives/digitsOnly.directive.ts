@@ -1,17 +1,21 @@
-import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
+import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: '[digitsOnlyDirective]'
 })
-export class DigitsOnlyDirective  {
+export class DigitsOnlyDirective {
   public el: HTMLInputElement;
+
   @HostListener('keyup', ['$event'])
-  public onChange(value: any) {
-    this.el.value = this.el.value.replace(/[^0-9]/g, '');
+  public onChange(el: any) {
+    if (el.shiftKey || el.ctrlKey || (el.which >= 37 && el.which <= 40)) {
+      return;
+    }
+    this.renderer.setProperty(this.el, 'value', this.el.value.replace(/[^0-9]/g, ''));
   }
 
   // tslint:disable-next-line:member-ordering
-  constructor(private elementRef: ElementRef) {
+  constructor(private renderer: Renderer2, private elementRef: ElementRef) {
     this.el = this.elementRef.nativeElement;
   }
 

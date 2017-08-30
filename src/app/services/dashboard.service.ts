@@ -34,7 +34,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.DASHBOARD.replace(':companyUniqueName', this.companyUniqueName).replace(':from', fromDate).replace(':to', toDate).replace(':interval', interval).replace(':refresh', refresh.toString())).map((res) => {
+    return this._http.get(DASHBOARD_API.DASHBOARD.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(fromDate)).replace(':to', encodeURIComponent(toDate)).replace(':interval', interval).replace(':refresh', refresh.toString())).map((res) => {
       let data: BaseResponse<DashboardResponse, string> = res.json();
       data.queryString = { fromDate, toDate, interval, refresh };
       data.request = '';
@@ -49,7 +49,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(DASHBOARD_API.GROUP_HISTORY.replace(':companyUniqueName', this.companyUniqueName).replace(':from', fromDate).replace(':to', toDate).replace(':interval', interval).replace(':refresh', refresh.toString()), model).map((res) => {
+    return this._http.post(DASHBOARD_API.GROUP_HISTORY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':from', encodeURIComponent(fromDate)).replace(':to', encodeURIComponent(toDate)).replace(':interval', interval).replace(':refresh', refresh.toString()), model).map((res) => {
       let data: BaseResponse<GroupHistoryResponse, GroupHistoryRequest> = res.json();
       data.request = model;
       data.queryString = { fromDate, toDate, interval, refresh };
@@ -69,7 +69,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', this.companyUniqueName).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', groupUniqueName).replace(':refresh', refresh.toString())).map((res) => {
+    return this._http.get(DASHBOARD_API.CLOSING_BALANCE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':fromDate', fromDate).replace(':toDate', toDate).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)).replace(':refresh', refresh.toString())).map((res) => {
       let data: BaseResponse<ClosingBalanceResponse, string> = res.json();
       data.queryString = { fromDate, toDate, groupUniqueName, refresh };
       data.request = '';
@@ -84,7 +84,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.BANK_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(DASHBOARD_API.BANK_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<BankAccountsResponse[], string> = res.json();
       data.request = '';
       return data;
@@ -98,7 +98,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.REFRESH_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
+    return this._http.get(DASHBOARD_API.REFRESH_BANK_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':loginId', loginId)).map((res) => {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
       data.request = '';
       return data;
@@ -111,7 +111,7 @@ export class DashboardService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(DASHBOARD_API.RECONNECT_BANK_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':loginId', loginId)).map((res) => {
+    return this._http.get(DASHBOARD_API.RECONNECT_BANK_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':loginId', loginId)).map((res) => {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
       data.request = '';
       return data;

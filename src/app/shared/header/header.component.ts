@@ -1,7 +1,8 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
-  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, OnDestroy, OnInit, ViewChild,
+  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit,
+  ViewChild,
   ViewChildren
 } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -13,7 +14,7 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
@@ -27,6 +28,7 @@ import { FormControl } from '@angular/forms';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
+  public userIsSuperUser: boolean = false; // Protect permission module
   public session$: Observable<boolean>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
@@ -68,7 +70,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private router: Router,
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef) {
+    private cdRef: ChangeDetectorRef,
+    private zone: NgZone,
+    private route: ActivatedRoute) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -87,12 +91,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!state.company.companies) {
         return;
       }
-      return state.company.companies.find(cmp => {
+
+      let selectedCmp = state.company.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
-    }).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
+      if (!selectedCmp) {
+        return;
+      }
+      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
+        this.userIsSuperUser = true;
+      } else {
+        this.userIsSuperUser = false;
+      }
+      return selectedCmp;
 
+    }).takeUntil(this.destroyed$);
+    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -108,6 +122,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
@@ -117,14 +132,33 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.accountSearchValue = newValue;
         this.filterAccounts(newValue);
       });
+
+    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().takeUntil(this.destroyed$).subscribe(a => {
+      if (a) {
+        this.zone.run(() => {
+          this.filterAccounts('');
+        });
+      }
+    });
   }
 
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
       if (!s) {
-        this.router.navigate(['/login']);
+        console.log('logout success to dummy Headder');
+        this.router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+          console.log('logout success to home Headder');
+          this.router.navigate(['/login']);
+        });
+      } else {
+        // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        // this.router.navigate(['/home']);
+        // });
       }
     });
+    if (this.route.snapshot.url.toString() === 'new-user') {
+      this.showAddCompanyModal();
+    }
   }
 
   public ngAfterViewChecked() {

@@ -1,9 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import * as _ from 'lodash';
-import { IGroupsWithAccounts } from '../../../models/interfaces/groupsWithAccounts.interface';
 @Pipe({
-  name: 'myAccountFilter',
+  // tslint:disable-next-line:pipe-naming
+  name: 'grpsrch',
   pure: true
 })
 
@@ -32,7 +31,7 @@ export class AccountFilterPipe implements PipeTransform {
   }
 
   public performSearch(input) {
-    return _.each(input, (grp) => {
+    return _.each(input, (grp: any) => {
       // console.log(input);
       // grp = Object.assign( grp, { isVisible: false });
       let grpName;
@@ -42,7 +41,7 @@ export class AccountFilterPipe implements PipeTransform {
       if (!this.checkIndex(grpName, this.srch) && !this.checkIndex(grpUnq, this.srch)) {
         grp.isVisible = false;
         if (grp.groups.length > 0) {
-          return _.each(grp.groups, (sub) => {
+          return _.each(grp.groups, (sub: any) => {
             // sub = Object.assign( sub, { isVisible: false });
             let subName;
             let subUnq;
@@ -51,7 +50,7 @@ export class AccountFilterPipe implements PipeTransform {
             if (!this.checkIndex(subName, this.srch) && !this.checkIndex(subUnq, this.srch)) {
               sub.isVisible = false;
               if (sub.groups.length) {
-                return _.each(sub.groups, (child) => {
+                return _.each(sub.groups, (child: any) => {
                   // child = Object.assign( child, { isVisible: false });
                   let childName;
                   let childUnq;
@@ -60,7 +59,7 @@ export class AccountFilterPipe implements PipeTransform {
                   if (!this.checkIndex(childName, this.srch) && !this.checkIndex(childUnq, this.srch)) {
                     child.isVisible = false;
                     if (child.groups.length > 0) {
-                      return _.each(child.groups, (subChild) => {
+                      return _.each(child.groups, (subChild: any) => {
                         // subChild = Object.assign( subChild, { isVisible: false });
                         let subChildName;
                         let subChildUnq;
@@ -69,7 +68,7 @@ export class AccountFilterPipe implements PipeTransform {
                         if (!this.checkIndex(subChildName, this.srch) && !this.checkIndex(subChildUnq, this.srch)) {
                           subChild.isVisible = false;
                           if (subChild.groups.length > 0) {
-                            return _.each(child.groups, (subChild2) => {
+                            return _.each(child.groups, (subChild2: any) => {
                               let subChild2Name;
                               let subChild2Unq;
                               subChild2Name = subChild2.name.toLowerCase();
@@ -115,11 +114,11 @@ export class AccountFilterPipe implements PipeTransform {
     });
   }
   public resetSearch(input) {
-    return _.each(input, (grp) => {
+    return _.each(input, (grp: any) => {
       // grp = Object.assign(grp, { isVisible: false });
       grp.isVisible = true;
       if (grp.groups.length > 0) {
-        return _.each(grp.groups, (sub) => {
+        return _.each(grp.groups, (sub: any) => {
           // sub = Object.assign(sub, { isVisible: false });
           sub.isVisible = true;
           if (sub.groups.length > 0) {

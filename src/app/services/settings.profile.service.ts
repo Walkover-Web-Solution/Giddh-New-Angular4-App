@@ -29,7 +29,7 @@ export class SettingsProfileService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<SmsKeyClass, string> = res.json();
       data.queryString = {};
       return data;
@@ -46,7 +46,7 @@ export class SettingsProfileService {
             }
             this.companyUniqueName = s.session.companyUniqueName;
         });
-        return this._http.put(SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+        return this._http.put(SETTINGS_PROFILE_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
             let data: BaseResponse<any, any> = res.json();
             data.request = model;
             return data;

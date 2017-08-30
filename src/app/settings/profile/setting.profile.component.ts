@@ -8,6 +8,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
+import { ToasterService } from '../../services/toaster.service';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -28,13 +29,15 @@ export class SettingProfileComponent implements OnInit {
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
   public states: Select2OptionData[] = [];
+  public isGstValid: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private router: Router,
     private store: Store<AppState>,
     private settingsProfileActions: SettingsProfileActions,
-    private _companyService: CompanyService
+    private _companyService: CompanyService,
+    private _toasty: ToasterService
   ) {
     this._companyService.getAllStates().subscribe((data) => {
       data.body.map(d => {
@@ -57,25 +60,27 @@ export class SettingProfileComponent implements OnInit {
     console.log('hello from SettingProfileComponent');
   }
 
-  private addGst() {
-    let companyDetails = _.cloneDeep(this.companyProfileObj);
-
-    let newGstObj = {
+  public addGst() {
+    if (this.isGstValid) {
+      let companyDetails = _.cloneDeep(this.companyProfileObj);
+      let newGstObj = {
       gstNumber: '',
-      addressList: [{
-        stateCode: '',
-        stateName: '',
-        address: '',
-        isDefault: false
-      }]
-    };
+        addressList: [{
+          stateCode: '',
+          stateName: '',
+          address: '',
+          isDefault: false
+        }]
+      };
 
-    companyDetails.gstDetails.push(newGstObj);
-
-    this.companyProfileObj = companyDetails;
+      companyDetails.gstDetails.push(newGstObj);
+      this.companyProfileObj = companyDetails;
+    } else {
+      this._toasty.errorToast('Please enter valid GST number to add more GST details.');
+    }
   }
 
-  private stateSelected(v, indx) {
+  public stateSelected(v, indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     let selectedStateCode = v.value;
     let selectedState = this.states.find((state) => state.id === selectedStateCode);
@@ -86,7 +91,7 @@ export class SettingProfileComponent implements OnInit {
     console.log('The selected state is :', selectedState);
   }
 
-  private updateProfile(data) {
+  public updateProfile(data) {
     let dataToSave = _.cloneDeep(data);
     if (dataToSave.gstDetails.length > 0) {
       for (let entry of dataToSave.gstDetails) {
@@ -103,7 +108,7 @@ export class SettingProfileComponent implements OnInit {
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
   }
 
-  private removeGstEntry(indx) {
+  public removeGstEntry(indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     if (indx > -1 ) {
       profileObj.gstDetails.splice(indx, 1);
@@ -111,7 +116,7 @@ export class SettingProfileComponent implements OnInit {
     this.companyProfileObj = profileObj;
   }
 
-  private setGstAsDefault(indx, ev) {
+  public setGstAsDefault(indx, ev) {
     if (indx > -1 && ev.target.checked) {
       for (let entry of this.companyProfileObj.gstDetails) {
           entry.addressList[0].isDefault = false;
@@ -120,7 +125,7 @@ export class SettingProfileComponent implements OnInit {
     }
   }
 
-  private getDefaultGstNumber() {
+  public getDefaultGstNumber() {
     if (this.companyProfileObj && this.companyProfileObj.gstDetails) {
       let profileObj = this.companyProfileObj;
       let defaultGstObjIndx;
@@ -134,4 +139,25 @@ export class SettingProfileComponent implements OnInit {
     }
     return '';
   }
+
+  public checkGstNumValidation(ele: HTMLInputElement) {
+    let isInvalid: boolean = false;
+    if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37) ) {
+      this._toasty.errorToast('Invalid GST number');
+      ele.classList.add('error-box');
+      this.isGstValid = false;
+    } else {
+      ele.classList.remove('error-box');
+      this.isGstValid = true;
+    }
+  }
+
+  public setMainState(ele: HTMLInputElement) {
+      this.companyProfileObj.state = Number(ele.value.substring(0, 2));
+  }
+
+  public setChildState(ele: HTMLInputElement, index: number) {
+      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = Number(ele.value.substring(0, 2));
+  }
+
 }

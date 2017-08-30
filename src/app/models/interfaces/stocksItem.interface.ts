@@ -5,6 +5,12 @@ export interface IStocksItem extends INameUniqueName {
   mappedPurchaseAccount: INameUniqueName;
   mappedSalesAccount: INameUniqueName;
   stockGroup: INameUniqueName;
+  date?: any;
+  voucherNumber?: any;
+  stockName?: any;
+  manufacturingQuantity?: any;
+  linkedStocks?: any;
+  manufacturingUnit?: any;
 }
 
 /**
@@ -57,6 +63,7 @@ export class IStockItemDetail {
   public stockUnitCode: string;
   public rate?: number;
   public amount?: number;
+  public manufacturingUnit?: string;
 }
 
 export interface IManufacturingDetails {
@@ -107,7 +114,6 @@ export interface IStockUnit extends IStockItem {
   parentStockUnit?: IStockItem;
   quantityPerUnit: number;
 }
-
 
 export interface IStockUnitResponse extends IStockItem, IStockUnit {
   hierarchicalQuantity: number;

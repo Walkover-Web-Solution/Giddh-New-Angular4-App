@@ -26,10 +26,13 @@ import { UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { TaxControlComponent } from '../../../shared/theme/index';
+import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 
 @Component({
   selector: 'new-ledger-entry-panel',
-  templateUrl: 'newLedgerEntryPanel.component.html'
+  templateUrl: 'newLedgerEntryPanel.component.html',
+  styleUrls: ['./newLedgerEntryPanel.component.css']
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked {
@@ -39,6 +42,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+  @ViewChild('discount') public discountControl: LedgerDiscountComponent;
+  @ViewChild('tax') public taxControll: TaxControlComponent;
   public uploadInput: EventEmitter<UploadInput>;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
@@ -56,19 +62,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public isFileUploading: boolean = false;
-  @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+  public isLedgerCreateInProcess$: Observable<boolean>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private _ledgerActions: LedgerActions,
-              private _companyActions: CompanyActions,
-              private cdRef: ChangeDetectorRef,
-              private _toasty: ToasterService) {
+    private _ledgerActions: LedgerActions,
+    private _companyActions: CompanyActions,
+    private cdRef: ChangeDetectorRef,
+    private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.authKey$ = this.store.select(p => p.session.user.authKey).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
       text: 'Sales',
       id: 'sal'
@@ -126,7 +133,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public calculateTotal() {
     let total = this.currentTxn.amount - this.currentTxn.discount;
-    this.currentTxn.total = Number((total + (( total * this.currentTxn.tax) / 100)).toFixed(2));
+    this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
   }
 
   public calculateAmount() {
@@ -159,8 +166,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Auth-Key': authKey},
+        data: { company: companyUniqueName },
+        headers: { 'Auth-Key': authKey },
         concurrency: 1
       };
 
@@ -199,5 +206,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public hideDiscountTax(): void {
+    if (this.discountControl) {
+      this.discountControl.discountMenu = false;
+    }
+    if (this.taxControll) {
+      this.taxControll.showTaxPopup = false;
+    }
+  }
+  public hideDiscount(): void {
+    if (this.discountControl) {
+      this.discountControl.discountMenu = false;
+    }
+  }
+  public hideTax(): void {
+    if (this.taxControll) {
+      this.taxControll.showTaxPopup = false;
+    }
   }
 }

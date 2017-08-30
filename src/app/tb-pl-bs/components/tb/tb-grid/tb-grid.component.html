@@ -1,0 +1,93 @@
+<!-- loader -->
+
+
+<!-- no data start -->
+<div class="no-data" *ngIf="noData">
+  <h1>Sorry, No Data Found!</h1>
+  <img src="/assets/images/no-data.png" alt="">
+</div>
+<!-- nodata end -->
+<div *ngIf="!noData">
+  <div class="pd15">
+    <!-- start main content -->
+    <div class="table-container clearfix trial-balance">
+      <table class="col-xs-12 tb-head">
+        <thead>
+          <tr>
+            <th class="col-xs-4">Particular</th>
+            <th class="col-xs-2">Opening Bal</th>
+            <th class="col-xs-4 text-center">
+              Transactions
+              <table class="col-xs-12">
+                <thead>
+                  <tr>
+                    <th class="col-xs-6 text-left">Debit(Dr.)</th>
+                    <th class="col-xs-6 text-left">Credit(Cr.)</th>
+                  </tr>
+                </thead>
+              </table>
+            </th>
+            <th class="col-xs-2">Closing Bal</th>
+          </tr>
+        </thead>
+      </table>
+
+      <!--Start Grid-->
+      <div>
+        <section class="row row-1" *ngFor="let grp of data$.groupDetails | tbsearch: search" [ngClass]="grp.category" tb-pl-bs-grid-row
+          [groupDetail]="grp" [search]="search">
+          <section class="row row-2 " style="padding-left:30px" tb-pl-bs-grid-row *ngFor="let account of grp.accounts" [groupDetail]="account"  [search]="search"
+            [ngClass]="{'isHidden': !account.isVisible }">
+          </section>
+          <section class="row row-2 " [ngClass]="{'isHidden': !childGroup.isVisible }" style="padding-left:30px" tb-pl-bs-grid-row
+            *ngFor="let childGroup of grp.childGroups" [groupDetail]="childGroup"  [search]="search">
+          </section>
+        </section>
+      </div>
+      <!--<section class="row row-1"-->
+      <!--*ngFor="let grp of (data$ | async).groupDetails"-->
+      <!--[ngClass]="grp.category">-->
+      <!--&lt;!&ndash; filter:filterTBSearch:index:data  &ndash;&gt;-->
+      <!--&lt;!&ndash; |  tbsearch:keyWord | filter:filterTBSearch:tbsearch &ndash;&gt;-->
+
+
+      <!--</section>-->
+      <!--End Grid-->
+      <div>
+        <div class="table-responsive">
+          <table class="table bdrL bdrR">
+            <thead>
+              <tr>
+                <th class="col-xs-4">
+                  <span class="pdL1">Grand Total</span>
+                </th>
+                <th class="col-xs-2  text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
+                <th class="col-xs-4">
+                  <table class="col-xs-12">
+                    <thead>
+                      <tr>
+                        <th class="col-xs-6 text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
+                        <th class="col-xs-6 text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </th>
+                <th class="col-xs-2  text-right">
+                  <span class="pdR1">{{  data$.closingBalance?.amount | number:'1.2-2' }}</span>
+                </th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- end main content -->
+
+    <!-- start template trial bal -->
+    <!--<script type="text/ng-template" id="trialBalSubGroup">-->
+
+    <!--</script>-->
+    <!-- end template -->
+  </div>
+</div>
