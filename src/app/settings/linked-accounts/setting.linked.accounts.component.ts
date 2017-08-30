@@ -83,7 +83,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     this._settingsLinkedAccountsService.GetEbankToken().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         if (data.body.connectUrl) {
-          this.iframeSource = data.body.connectUrl;// this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
+          this.iframeSource = data.body.connectUrl; // this._sanitizer.bypassSecurityTrustResourceUrl(data.body.connectUrl);
         }
       }
     });
