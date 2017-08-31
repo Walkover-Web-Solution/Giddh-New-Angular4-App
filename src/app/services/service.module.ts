@@ -60,6 +60,8 @@ import { SettingsLinkedAccountsService } from './settings.linked.accounts.servic
 import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
 import { PurchaseInvoiceService } from './purchase-invoice.service';
 import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
+import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
+import { SettingsFinancialYearService } from './settings.financial-year.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -91,7 +93,8 @@ import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invo
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
     EffectsModule.run(SettingsLinkedAccountsActions),
-    EffectsModule.run(InvoicePurchaseActions)
+    EffectsModule.run(InvoicePurchaseActions),
+    EffectsModule.run(SettingsFinancialYearActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -127,7 +130,8 @@ export class ServiceModule {
         SettingsProfileService,
         SettingsTaxesService,
         SettingsLinkedAccountsService,
-        PurchaseInvoiceService
+        PurchaseInvoiceService,
+        SettingsFinancialYearService
       ]
     };
   }
