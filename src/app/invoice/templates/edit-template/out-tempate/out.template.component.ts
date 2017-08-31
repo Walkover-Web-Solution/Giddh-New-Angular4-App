@@ -134,6 +134,8 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     enableMessage2: true,
     enableThanks: true,
   };
+  public showLogo: boolean = true;
+  public logoSize: string;
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -155,6 +157,18 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this._invoiceUiDataService.imageSignaturePath.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
       this.imageSignatureSrc = val;
     });
+    this._invoiceUiDataService.logoSize.subscribe((val) => {
+      this.logoSize = val;
+    });
+    this._invoiceUiDataService.defaultPrintSetting.subscribe((val) => {
+      this.templateMeta.leftMargin = val;
+      this.templateMeta.rightMargin = val;
+      this.templateMeta.topMargin = val;
+      this.templateMeta.bottomMargin = val;
+    });
+    this._invoiceUiDataService.showLogo.subscribe((val) => {
+      this.showLogo = val;
+    });
   }
 
   public ngOnInit() {
@@ -170,7 +184,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       grid: false,
       footer: false
     };
-
     this._invoiceUiDataService.setDivStatus(this.divVis);
   }
 
