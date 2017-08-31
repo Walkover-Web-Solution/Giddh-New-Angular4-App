@@ -88,7 +88,7 @@ export interface InvoiceTemplateMetaState {
 }
 
 export interface InvoiceTableState {
-  theTestState : GetInvoiceTemplateDetailsResponse;
+  theTestState: GetInvoiceTemplateDetailsResponse;
 }
 
 export interface InvoiceTempState {
@@ -129,9 +129,11 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
   switch (action.type) {
 
     case INVOICE.TEMPLATE.SET_TEMPLATE_STATE:
+      console.log('SET TEMPLATE STATE');
       let result = action.payload.temp.body;
       let newState = []; // Array
-      if (result && result.templateId) {
+      console.log(result);
+      if (result) {
         result.forEach((obj) => {
           let key = obj.uniqueName;
           let obj1 = {};
@@ -231,79 +233,8 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
   switch (action.type) {
-    case INVOICE.TEMPLATE.SET_TEMPLATE_DATA:
-      let headerSection = action.payload[0].content;
-      let tableSection = action.payload[1].content;
-      let footerSection = action.payload[2].content;
-
-      return Object.assign({}, state, {
-
-
-
-        companyName: headerSection[0].label,
-        GSTIN: headerSection[1].label,
-        PAN: headerSection[2].label,
-        address: headerSection[3].label,
-        invoiceDate: headerSection[4].label,
-        invoiceNumber: headerSection[5].label,
-        shippingDate: headerSection[6].label,
-        shippingVia: headerSection[7].label,
-        trackingNumber: headerSection[8].label,
-        trackingRecord: headerSection[9].label,
-        customerName: headerSection[10].label,
-        customerEmail: headerSection[11].label,
-        customerMobileNumber: headerSection[12].label,
-        dueDate: headerSection[13].label,
-        billingState: headerSection[14].label,
-        billingAddress: headerSection[15].label,
-        billingGstin: headerSection[16].label,
-        shippingAddress: headerSection[17].label,
-        shippingState: headerSection[18].label,
-        shippinGstin: headerSection[19].label,
-        customField1: headerSection[20].label,
-        customField2: headerSection[21].label,
-        customField3: headerSection[22].label,
-        formNameInvoice: headerSection[23].label,
-        formNameTaxInvoice: headerSection[24].label,
-        sNoLabel: tableSection[0].label,
-        sNoWidth: tableSection[0].width,
-        dateLabel: tableSection[1].label,
-        dateWidth: tableSection[1].width,
-        itemLabel: tableSection[2].label,
-        itemWidth: tableSection[2].width,
-        hsnSacLabel: tableSection[3].label,
-        hsnSacWidth: tableSection[3].width,
-        itemCodeLabel: tableSection[4].label,
-        itemCodeWidth: tableSection[4].width,
-        descLabel: tableSection[5].label,
-        descWidth: tableSection[5].width,
-        rateLabel: tableSection[6].label,
-        rateWidth: tableSection[6].width,
-        discountLabel: tableSection[7].label,
-        discountWidth: tableSection[7].width,
-        taxableValueLabel: tableSection[8].label,
-        taxableValueWidth: tableSection[8].width,
-        taxLabel: tableSection[9].label,
-        taxWidth: tableSection[9].width,
-        totalLabel: tableSection[10].label,
-        totalWidth: tableSection[10].width,
-        quantityLabel: tableSection[11].label,
-        quantityWidth: tableSection[11].width,
-        taxableAmount: footerSection[0].label,
-        totalTax: footerSection[1].label,
-        otherDeduction: footerSection[2].label,
-        total: footerSection[3].label,
-        totalInWords: footerSection[4].label,
-        message1: footerSection[5].label,
-        message2: footerSection[6].label,
-        thanks: footerSection[7].label,
-        companyAddress: footerSection[8].label,
-        imageSignature: footerSection[9].label,
-        slogan: footerSection[10].label
-
-        // companyName: action.payload.
-      });
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
+      console.log(action.payload.id);
       return Object.assign({}, state, {
         templateId: action.payload.id
       });
