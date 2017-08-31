@@ -225,7 +225,7 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   thanks: 'Thank You for your business.',
   companyAddress: 'Walkover Web Solutions Private Limited, 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)',
   imageSignature: '',
-  slogan: 'Walkover Web Solutions Private Limited',
+  slogan: 'Signature',
   setInvoiceFlag: false,
   div: null,
   setFieldDisplay: null

@@ -116,10 +116,12 @@ input {
 /*input*/
 
 .form-control {
+    background: #fff !important;
+    border: 1px solid #d6d6d6;
     border-radius: 0;
     padding: 6px !important;
-    outline: none;
-    color: #616161;
+    outline: 0;
+    color: #666666;
     box-shadow: none;
 }
 
@@ -134,7 +136,7 @@ input {
 .form-control:focus {
     border-radius: 0 !important;
     outline: none;
-    border: 1px solid #cecece;
+    border: 1px solid #f7b995 !important;
     box-shadow: none;
 }
 
@@ -894,10 +896,6 @@ input[type="checkbox"]:after {
     max-width: 140px;
     width: 100%;
     border-radius: 0 !important;
-}
-
-.filterForm .form-control {
-    background-color: #fff !important;
 }
 
 .filterForm .form-group.col-xs-2 {
@@ -3525,4 +3523,267 @@ label {
 .ledger-panel .dropdown-menu {
     border-radius: 0;
     margin: 0;
+}
+
+
+/*************************************************** Custom Invoice CSS  ****************************************************/
+
+#customInvoice .templateEditor input[type="checkbox"] {
+    margin-right: 12px !important;
+    left: 0
+}
+
+.d-block {
+    display: block;
+}
+
+.sticky-footer {
+    background: #5d5d5d;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    text-align: right;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+#customInvoice .templateEditor .btn-group-lg>.btn {
+    border-radius: 0;
+    border: 0;
+    background: #e5e5e5;
+}
+
+#customInvoice .templateEditor .btn-group-lg>.btn:focus {
+    outline: 0;
+}
+
+#customInvoice .templateEditor .btn-group-lg>.btn:hover {
+    background: #fff;
+    color: #ff5f00;
+}
+
+#customInvoice {
+    letter-spacing: 0;
+    background: #f4f5f8;
+}
+
+#customInvoice h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+#customInvoice .templateEditor label {
+    margin-bottom: 15px;
+    width: 100%;
+}
+
+#customInvoice .templateEditor .form-control,
+#customInvoice .templateEditor .table>tbody>tr>td .form-control {
+    margin: 7px 0;
+    background: #fff;
+    border-color: #969696;
+    border-radius: 2px;
+}
+
+#customInvoice .templateEditor h3 {
+    color: #ff5f00;
+    margin: 15px 0;
+    font-size: 18px;
+}
+
+.customField .form-control {
+    float: right;
+    width: 100%;
+    margin: 0 !important;
+}
+
+#customInvoice .templateEditor label span {
+    display: block;
+}
+
+#customInvoice .templateEditor .table>thead>tr>th,
+#customInvoice .templateEditor .table>tbody>tr>td {
+    border: 0;
+    /* font-weight: normal; */
+    /* padding: 0; */
+    vertical-align: middle
+}
+
+#customInvoice .templateEditor .table>tbody>tr>td:first-child,
+#customInvoice .templateEditor .table>thead>tr>th:first-child {
+    padding-left: 0;
+}
+
+#customInvoice .templateEditor .table>tbody {
+    margin: 10px 0;
+}
+
+#customInvoice .templateEditor .table>tbody>tr>td label {
+    margin-bottom: 0;
+}
+
+#customInvoice .templateEditor .customField span {
+    display: inline-block;
+    float: right;
+    width: calc(100% - 30px);
+}
+
+.swatch ul {
+    display: inline-block;
+    max-width: 110px;
+    width: 100%;
+    padding: 20px 0;
+}
+
+.swatch ul li {
+    width: 24px;
+    height: 24px;
+    display: inline-block
+}
+
+.designTool>li {
+    float: left;
+    width: 100%;
+    margin: 10px 0;
+    list-style: none;
+}
+
+.designTool li>label {
+    display: inline-block;
+    width: auto !important;
+    line-height: 50px;
+    margin-bottom: 0 !important;
+    padding: 0 10px;
+}
+
+.designTool li [class^="ico-"],
+.designTool li [class*=" ico-"] {
+    width: 50px;
+    height: 50px;
+    float: left;
+    background: #fff url("../images/designTool.svg") no-repeat;
+    background-size: 65px;
+}
+
+.ico-template {
+    background-position: center -6px !important;
+}
+
+.ico-edit {
+    background-position: center -73px !important;
+}
+
+.ico-swatch {
+    background-position: center -138px !important;
+}
+
+.ico-txt {
+    background-position: center -202px !important;
+}
+
+.ico-print {
+    background-position: center -267px !important;
+}
+
+.templateView li {
+    float: left;
+    width: 177px;
+    margin: 0px;
+    list-style: none;
+    height: 240px;
+    padding: 10px 10px 0 0;
+}
+
+.templateView li img {
+    background: #fff;
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+    border: 1px solid #e5e5e5;
+}
+
+.logo-preview {
+    float: left
+}
+
+.logo-preview img,
+.swatch-preview {
+    width: 100px;
+    height: 100px;
+    float: left;
+    background: #fff;
+    object-fit: contain
+}
+
+.logoTool ul {
+    margin: 5px 0;
+}
+
+.logoTool ul li {
+    font-weight: bold;
+    list-style: none;
+    display: inline-block;
+    border: 1px solid #b2b2b2;
+    border-radius: 50%;
+    width: 30px;
+    text-align: center;
+    height: 30px;
+    line-height: 30px;
+    color: #b2b2b2;
+}
+
+.logoTool ul li:hover {
+    border-color: #666666;
+    color: #666666;
+}
+
+.swatch-preview span {
+    border-radius: 50%;
+    float: left;
+    width: 100%;
+    height: 100%;
+}
+
+.printTool .table>tbody>tr>td {
+    padding-top: 0;
+}
+
+.printTool .table>tbody>tr>td>input {
+    margin: 0 !important;
+}
+
+.printTool a {
+    bottom: 10px;
+    top: inherit;
+    right: -50px;
+}
+
+.scrollAuto {
+    overflow-y: auto;
+    padding-right: 15px;
+}
+
+.scrollAuto::-webkit-scrollbar {
+    width: 8px;
+    position: relative;
+    border-radius: 8px;
+}
+
+.scrollAuto::-webkit-scrollbar-track {
+    background: #ddd;
+    /* margin-left: 255px; */
+    border-radius: 8px;
+}
+
+.scrollAuto::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    /* margin-left: 255px; */
+    border-radius: 8px;
+}
+
+[hidden] {
+    display: none !important;
 }
