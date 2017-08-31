@@ -53,7 +53,7 @@ export class DesignFiltersContainerComponent {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
-    this.currentColor = "#000000";
+    this.currentColor = '#000000';
     this.logoSize = '140';
     this._invoiceUiDataService.setLogoSize(this.logoSize);
   }
@@ -194,14 +194,12 @@ export class DesignFiltersContainerComponent {
     this.store.dispatch(this.invoiceAction.setColor(color));
   }
   public setLogoSize(size) {
-    if (size == 'small') {
+    if (size === 'small') {
       this.logoSize = '40';
-    }
-    else if (size == 'large') {
+    } else if (size === 'large') {
         this.logoSize = '180';
-    }
-    else {
-     this.logoSize = '140'; 
+    } else {
+     this.logoSize = '140';
     }
     this._invoiceUiDataService.setLogoSize(this.logoSize);
   }
@@ -211,7 +209,7 @@ export class DesignFiltersContainerComponent {
     this.left = '';
     this.top = '';
     this.right = '';
-    this.bottom = ''; 
+    this.bottom = '';
   }
   public hideLogo() {
     this.showLogo = !this.showLogo;

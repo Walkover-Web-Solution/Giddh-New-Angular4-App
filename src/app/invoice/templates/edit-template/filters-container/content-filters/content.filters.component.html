@@ -80,7 +80,7 @@
                 <input type="checkbox" [(ngModel)]="field.enableShippingState" name="shpst" (ngModelChange)="onCheckField('shippingState', field.enableShippingState)"  checked/> State
             </div>
             <div class="form-group">
-                <input type="checkbox" [(ngModel)]="field.enableShippingGstin" name="shpGs" (ngModelChange)="onCheckField('shippingGstin', field.enableShippingGstin)" [disabled]="!field.enableBillingGstin" checked/> GSTIN
+                <input type="checkbox" [(ngModel)]="field.enableShippingGstin" name="shpGs" (ngModelChange)="onCheckField('shippingGstin', field.enableShippingGstin)" [disabled]="!field.enableShippingGstin" checked/> GSTIN
                 <div class="mrL3"><input type="text" class="form-control" /></div>
             </div>
         </div>
@@ -89,13 +89,13 @@
             <h3> <i class="fa cp" aria-hidden="true" (click)="showCustomField = !showCustomField" [ngClass]="{'fa-minus-square-o': showCustomField, 'fa-plus-square-o': !showCustomField}"></i> Custom Field</h3>
             <div class="clearfix" [collapse]="!showCustomField">
                 <div class="form-group clearfix">
-                    <input type="checkbox" [(ngModel)]="field.enableCustom1" name="c1" (ngModelChange)="onCheckField('custom1', field.enableCustom1)" checked/><span><input type="text" class="form-control" name="c11" [(ngModel)]='custom1' (ngModelChange)='onCustom1Change(custom1)' /></span>
+                    <input type="checkbox" [(ngModel)]="field.enableCustom1" name="c1" (ngModelChange)="onCheckField('custom1', field.enableCustom1)" checked/><span><input type="text" class="form-control" name="c11" [(ngModel)]='custom1' (ngModelChange)='onCustom1Change(custom1)' [disabled]="!field.enableCustom1"/></span>
                 </div>
                 <div class="form-group clearfix">
-                    <input type="checkbox" [(ngModel)]="field.enableCustom2" name="c2" (ngModelChange)="onCheckField('custom2', field.enableCustom2)" checked/><span><input type="text" name="c22" class="form-control" [(ngModel)]='custom2' (ngModelChange)='onCustom2Change(custom2)'/></span>
+                    <input type="checkbox" [(ngModel)]="field.enableCustom2" name="c2" (ngModelChange)="onCheckField('custom2', field.enableCustom2)" checked/><span><input type="text" name="c22" class="form-control" [(ngModel)]='custom2' (ngModelChange)='onCustom2Change(custom2)' [disabled]="!field.enableCustom2"/></span>
                 </div>
                 <div class="form-group clearfix">
-                    <input type="checkbox" [(ngModel)]="field.enableCustom3" name="c3" (ngModelChange)="onCheckField('custom2', field.enableCustom3)" checked/><span><input type="text" class="form-control" name="c33" [(ngModel)]='custom3' (ngModelChange)='onCustom3Change(custom3)' /></span>
+                    <input type="checkbox" [(ngModel)]="field.enableCustom3" name="c3" (ngModelChange)="onCheckField('custom3', field.enableCustom3)" checked/><span><input type="text" class="form-control" name="c33" [(ngModel)]='custom3' (ngModelChange)='onCustom3Change(custom3)' [disabled]="!field.enableCustom3"/></span>
                 </div>
             </div>
         </div>
@@ -115,52 +115,52 @@
                 <tbody>
                     <tr>
                         <td><label><input type="checkbox" name="sN" [(ngModel)]="field.enableSno" (ngModelChange)="onCheckField('sNo', field.enableSno)" checked/> Number</label></td>
-                        <td><input type="text" class="form-control" name="ss" [(ngModel)]='sNo' (ngModelChange)='onSnoLabelChange(sNo)' /></td>
+                        <td><input type="text" class="form-control" name="ss" [(ngModel)]='sNo' (ngModelChange)='onSnoLabelChange(sNo)' [disabled]="!field.enableSno"/></td>
                         <!--<td><input type="range" value="0" class="range-input" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox" name="dt"[(ngModel)]="field.enableDate" (ngModelChange)="onCheckField('date', field.enableDate)" checked/>Date</label></td>
-                        <td><input type="text" class="form-control" name="dt1" [(ngModel)]='date' (ngModelChange)='onDateLabelChange(date)' /></td>
+                        <td><input type="text" class="form-control" name="dt1" [(ngModel)]='date' (ngModelChange)='onDateLabelChange(date)' [disabled]="!field.enableDate" /></td>
                         <!--<td><input type="range" value="0" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox" name="it" [(ngModel)]="field.enableItem" (ngModelChange)="onCheckField('item', field.enableItem)" checked/> Item</label></td>
-                        <td><input type="text" class="form-control" name="it1" [(ngModel)]='item' (ngModelChange)='onItemLabelChange(item)' /></td>
+                        <td><input type="text" class="form-control" name="it1" [(ngModel)]='item' (ngModelChange)='onItemLabelChange(item)' [disabled]="!field.enableItem"/></td>
                         <!--<td><input type="range" value="0" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox"  name="hsn" [(ngModel)]="field.enableHsn" (ngModelChange)="onCheckField('hsn', field.enableHsn)" checked/> HSN/SAC</label></td>
-                        <td><input type="text" class="form-control" name="hsn1" [(ngModel)]='hsnSac' (ngModelChange)='onHsnLabelChange(hsnSac)' /></td>
+                        <td><input type="text" class="form-control" name="hsn1" [(ngModel)]='hsnSac' (ngModelChange)='onHsnLabelChange(hsnSac)' [disabled]="!field.enableHsn"/></td>
                         <!--<td><input type="range" value="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox" name="qt" [(ngModel)]="field.enableQty" (ngModelChange)="onCheckField('qty', field.enableQty)" checked/> Quantity</label></td>
-                        <td><input type="text" class="form-control" name="qt1" [(ngModel)]='qty' (ngModelChange)='onQtyLabelChange(qty)' /></td>
+                        <td><input type="text" class="form-control" name="qt1" [(ngModel)]='qty' (ngModelChange)='onQtyLabelChange(qty)' [disabled]="!field.enableQty"/></td>
                         <!--<td><input type="range" value="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox" name="rt" [(ngModel)]="field.enableRate" (ngModelChange)="onCheckField('rate', field.enableRate)" checked/> Rate/Item</label></td>
-                        <td><input type="text" class="form-control" name="rt1" [(ngModel)]='rate' (ngModelChange)='onRateLabelChange(qty)' /></td>
+                        <td><input type="text" class="form-control" name="rt1" [(ngModel)]='rate' (ngModelChange)='onRateLabelChange(qty)' [disabled]="!field.enableRate"/></td>
                         <!--<td><input type="range" value="0" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox"  name="ds" [(ngModel)]="field.enableDis" (ngModelChange)="onCheckField('dis', field.enableDis)" checked/> Discount/Item</label></td>
-                        <td><input type="text" class="form-control" name="ds1" [(ngModel)]='discount' (ngModelChange)='onDiscountLabelChange(discount)' /></td>
+                        <td><input type="text" class="form-control" name="ds1" [(ngModel)]='discount' (ngModelChange)='onDiscountLabelChange(discount)' [disabled]="!field.enableDis"/></td>
                         <!--<td><input type="range" value="0" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox"  name="tv" [(ngModel)]="field.enableTaxableValue" (ngModelChange)="onCheckField('taxableValue', field.enableTaxableValue)" checked/> Taxable Value</label></td>
-                        <td><input type="text" class="form-control" name="tv1" [(ngModel)]='taxableValue' (ngModelChange)='onTaxableValueLabelChange(taxableValue)' /></td>
+                        <td><input type="text" class="form-control" name="tv1" [(ngModel)]='taxableValue' (ngModelChange)='onTaxableValueLabelChange(taxableValue)' [disabled]="!field.enableTaxableValue"/></td>
                         <!--<td><input type="range" value="0" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox" name="ta"  [(ngModel)]="field.enableTax" (ngModelChange)="onCheckField('tax', field.enableTax)" checked/> Tax</label></td>
-                        <td><input type="text" class="form-control" name="t1" [(ngModel)]='tax' (ngModelChange)='onTaxLabelChange(tax)' /></td>
+                        <td><input type="text" class="form-control" name="t1" [(ngModel)]='tax' (ngModelChange)='onTaxLabelChange(tax)' [disabled]="!field.enableTax" /></td>
                         <!--<td><input type="range" value="0" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                     <tr>
                         <td><label><input type="checkbox"  name="tot" [(ngModel)]="field.enableTotal" (ngModelChange)="onCheckField('total', field.enableTotal)" checked/> Total</label></td>
-                        <td><input type="text" class="form-control" name="tot1" [(ngModel)]='total' (ngModelChange)='onTotalLabelChange(total)' /></td>
+                        <td><input type="text" class="form-control" name="tot1" [(ngModel)]='total' (ngModelChange)='onTotalLabelChange(total)' [disabled]="!field.enableTotal" /></td>
                         <!--<td><input type="range" value="0" min="0" max="10" step="0.1" /></td>-->
                     </tr>
                 </tbody>
@@ -199,7 +199,7 @@
             <div class="form-group mrL3 clearfix">
                 <div class="col-xs-8">
                     <div class="row">
-                        <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='message1' name="msg11" (ngModelChange)='onMessage1Change(message1)'></textarea>
+                        <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='message1' name="msg11" (ngModelChange)='onMessage1Change(message1) [disabled]="!field.enableMessage1"'></textarea>
                     </div>
                 </div>
                 <div class="col-xs-4">
@@ -217,7 +217,7 @@
             <div class="form-group mrL3 clearfix">
                 <div class="col-xs-8">
                     <div class="row">
-                        <textarea class="form-control" name="mdg22" [(ngModel)]='message2' (ngModelChange)='onMessage2Change(message2)'>Note:Contact us for queries on these questions</textarea>
+                        <textarea class="form-control" name="mdg22" [(ngModel)]='message2' (ngModelChange)='onMessage2Change(message2) [disabled]="!field.enableMessage2"'>Note:Contact us for queries on these questions</textarea>
                     </div>
                 </div>
                 <div class="col-xs-4">
