@@ -7,26 +7,26 @@ import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interfac
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 
 export class GeneratePage {
-  public ledgers: GetAllLedgersOfInvoicesResponse;
-  public invoiceData: PreviewInvoiceResponseClass;
-  public invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
-  public isInvoiceGenerated: boolean;
+    public ledgers: GetAllLedgersOfInvoicesResponse;
+    public invoiceData: PreviewInvoiceResponseClass;
+    public invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
+    public isInvoiceGenerated: boolean;
 }
 
 export class PreviewPage {
-  public invoices: GetAllInvoicesPaginatedResponse;
+    public invoices: GetAllInvoicesPaginatedResponse;
 }
 
 export interface InvoiceState {
-  preview: PreviewPage;
-  generate: GeneratePage;
-  settings: InvoiceSetting;
+    preview: PreviewPage;
+    generate: GeneratePage;
+    settings: InvoiceSetting;
 }
 
 export const initialState: InvoiceState = {
-  preview: {invoices: null},
-  generate: {ledgers: null, invoiceData: null, invoiceTemplateConditions: null, isInvoiceGenerated: false},
-  settings: null
+    preview: { invoices: null },
+    generate: { ledgers: null, invoiceData: null, invoiceTemplateConditions: null, isInvoiceGenerated: false },
+    settings: null
 };
 
 export function InvoiceReducer(state = initialState, action: Action): InvoiceState {
@@ -63,7 +63,7 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                     newState.generate.ledgers.results.map((item: ILedgersInvoiceResult) => {
                         if (item.uniqueName === value) {
                             item.isSelected = true;
-                        }else {
+                        } else {
                             item.isSelected = false;
                         }
                     });
@@ -148,7 +148,7 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
                 let uniqueName = res.queryString.uniquename;
-                let indx = newState.settings.webhooks.findIndex((obj)=> obj.uniqueName === uniqueName );
+                let indx = newState.settings.webhooks.findIndex((obj) => obj.uniqueName === uniqueName);
                 if (indx > -1) {
                     newState.settings.webhooks.splice(indx, 1);
                 }
@@ -174,8 +174,8 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                 url: '',
                 triggerAt: 0,
                 entity: '',
-                uniqueName: '' 
-            }
+                uniqueName: ''
+            };
             if (res.status === 'success') {
                 let newWebhook = res.queryString.webhook;
                 newState.settings.webhooks.push(newWebhook);
@@ -217,7 +217,26 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-                console.log(res);
+                newState.settings.razorPayform = new RazorPayDetailsResponse();
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.DELETE_INVOICE_EMAIL_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+                newState.settings.invoiceSettings.email = null;
+                newState.settings.invoiceSettings.emailVerified = false;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
+            if (res.status === 'success') {
+                newState.settings.razorPayform = res.body;
                 return Object.assign({}, state, newState);
             }
             return state;

@@ -88,7 +88,7 @@ export interface InvoiceTemplateMetaState {
 }
 
 export interface InvoiceTableState {
-  theTestState : GetInvoiceTemplateDetailsResponse;
+  theTestState: GetInvoiceTemplateDetailsResponse;
 }
 
 export interface InvoiceTempState {
@@ -98,7 +98,7 @@ export interface InvoiceTempState {
 }
 
 export const initialTableState: InvoiceTableState = {
-  theTestState : null
+  theTestState: null
 };
 
 export function invoiceTableReducer(state = initialTableState, action: Action): InvoiceTableState {
@@ -237,8 +237,6 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       let footerSection = action.payload[2].content;
 
       return Object.assign({}, state, {
-
-
 
         companyName: headerSection[0].label,
         GSTIN: headerSection[1].label,
@@ -449,24 +447,24 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.SET_COLOR:
       return Object.assign({}, state, {
-        color : action.payload.color
+        color: action.payload.color
       });
     case INVOICE.TEMPLATE.UPDATE_MESSAGE1:
       return Object.assign({}, state, {
-        message1 : action.payload.data
+        message1: action.payload.data
       });
     case INVOICE.TEMPLATE.UPDATE_MESSAGE2:
       return Object.assign({}, state, {
-        message2 : action.payload.data
+        message2: action.payload.data
       });
     case INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE:
       return Object.assign({}, state, {
-        formNameInvoice : action.payload.ti.data,
+        formNameInvoice: action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
     case INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE:
       return Object.assign({}, state, {
-        formNameTaxInvoice : action.payload.ti.data,
+        formNameTaxInvoice: action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
 

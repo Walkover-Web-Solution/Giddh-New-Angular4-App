@@ -48,7 +48,7 @@ export class SettingIntegrationComponent implements OnInit {
     private SettingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
     private toasty: ToasterService,
-  ) {}
+  ) { }
 
   public ngOnInit() {
     this.store.dispatch(this.SettingsIntegrationActions.GetSMSKey());
@@ -137,7 +137,7 @@ export class SettingIntegrationComponent implements OnInit {
       data.account.uniqueName = null;
       data.account.name = null;
       this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
-    }else {
+    } else {
       this.toasty.warningToast('You don\'t have any account linked with Razorpay.');
     }
   }
