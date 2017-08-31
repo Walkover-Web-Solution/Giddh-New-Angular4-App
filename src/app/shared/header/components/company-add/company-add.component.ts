@@ -8,8 +8,10 @@ import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
-import { StateDetailsRequest } from '../../../../models/api-models/Company';
+import { StateDetailsRequest, ComapnyResponse } from '../../../../models/api-models/Company';
 import { Router } from '@angular/router';
+import { ModalDirective } from 'ngx-bootstrap';
+import { LoginActions } from '../../../../services/actions/login.action';
 
 @Component({
   selector: 'company-add',
@@ -17,6 +19,7 @@ import { Router } from '@angular/router';
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
   @ViewChild('wizard') public wizard: WizardComponent;
+  @ViewChild('logoutModal') public logoutModal: ModalDirective;
   @Output() public closeCompanyModal: EventEmitter<any> = new EventEmitter();
   @Output() public closeCompanyModalAndShowAddManege: EventEmitter<string> = new EventEmitter();
   public company: CompanyRequest = new CompanyRequest();
@@ -26,15 +29,18 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isMobileVerified: Observable<boolean>;
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
+  public companies$: Observable<ComapnyResponse[]>;
+  public showMobileVarifyMsg: boolean = false;
   public dataSource: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService, private _route: Router) {
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions) {
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    this.companies$ = this.store.select(s => s.company.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
     this.isCompanyCreationInProcess$ = this.store.select(s => s.company.isCompanyCreationInProcess).takeUntil(this.destroyed$);
 
@@ -57,6 +63,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.isMobileVerified.subscribe(p => {
       if (p) {
         this.wizard.next();
+        this.showMobileVarifyMsg = true;
       }
     });
     this.isCompanyCreated$.subscribe(s => {
@@ -122,13 +129,36 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   }
 
   public closeModal() {
-    this.closeCompanyModal.emit();
+    let companies = null;
+    this.companies$.take(1).subscribe(c => companies = c);
+    if (companies) {
+      if (companies.length > 0) {
+        this.closeCompanyModal.emit();
+      } else {
+        this.showLogoutModal();
+      }
+    } else {
+      this.showLogoutModal();
+    }
   }
 
   public closeModalAndShowAddMangeModal() {
     this.closeCompanyModalAndShowAddManege.emit();
   }
 
+  public showLogoutModal() {
+    this.logoutModal.show();
+  }
+
+  public hideLogoutModal() {
+    this.logoutModal.hide();
+  }
+
+  public logoutUser() {
+    this.hideLogoutModal();
+    this.closeCompanyModal.emit();
+    this.store.dispatch(this._loginAction.LogOut());
+  }
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration
     let d, dateString, randomGenerate, strings;
