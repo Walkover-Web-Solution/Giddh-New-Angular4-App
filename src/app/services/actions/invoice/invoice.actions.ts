@@ -159,7 +159,7 @@ export class InvoiceActions {
       payload: res
     }));
 
-  
+
   //*********************************** MUSTAFA //***********************************\\
 
   /**
@@ -236,7 +236,7 @@ export class InvoiceActions {
         type: INVOICE.SETTING.UPDATE_INVOICE_SETTING_RESPONSE,
         payload: res
       }));
-      
+
 
     /**
      * GET RAZORPAY DETAIL
@@ -268,7 +268,7 @@ export class InvoiceActions {
         type: INVOICE.SETTING.UPDATE_RAZORPAY_DETAIL_RESPONSE,
         payload: res
       }));
-      
+
 
     /**
      * DELETE RAZORPAY DETAIL
@@ -294,6 +294,7 @@ export class InvoiceActions {
     .ofType(INVOICE.TEMPLATE.GET_USER_TEMPLATES)
     .switchMap(action => this._invoiceTemplatesService.getTemplates())
     .map((response: Template) => {
+      console.log('SET STATE ACTION CALLED');
       return this.setTemplateState(response);
     });
 
@@ -818,7 +819,7 @@ export class InvoiceActions {
       payload: webhook
     };
   }
-  
+
   public updateInvoiceSetting(form: object): Action {
     return{
       type: INVOICE.SETTING.UPDATE_INVOICE_SETTING,
@@ -844,7 +845,7 @@ export class InvoiceActions {
       type: INVOICE.SETTING.DELETE_RAZORPAY_DETAIL
     };
   }
-  
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {

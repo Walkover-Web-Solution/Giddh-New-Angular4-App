@@ -18,8 +18,8 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 })
 
 export class ContentFilterComponent {
-  public showCustomField:boolean = false;
-  public showTransportField:boolean = false;
+  public showCustomField: boolean = false;
+  public showTransportField: boolean = false;
   @Input() public content: boolean;
   public GSTIN: string;
   public PAN: string;
@@ -46,6 +46,7 @@ export class ContentFilterComponent {
   public invoice: string;
   public taxInvoice: string;
   public hsnSac: string;
+  public billingAddress: string;
   public billingGstin: string;
   public shippingAddress: string;
   public shippingGstin: string;
@@ -67,6 +68,10 @@ export class ContentFilterComponent {
   enableInvoiceDate: true,
   enableInvoiceNo: true,
     enableDueDate: true,
+    enableCustomerName: true,
+    enableMobileNo: true,
+    enableCustomerAddress: true,
+    enableEmailId: true,
     enableBillingAddress: true,
     enableShipDate: true,
   enableShipVia: true,
@@ -374,6 +379,10 @@ export interface IsFieldVisible {
   enableInvoiceDate: boolean;
   enableInvoiceNo: boolean;
   enableDueDate: boolean;
+  enableCustomerName: boolean;
+  enableCustomerAddress: boolean;
+  enableEmailId: boolean;
+  enableMobileNo: boolean;
   enableBillingAddress: boolean;
   enableShipDate: boolean;
   enableShipVia: boolean;
