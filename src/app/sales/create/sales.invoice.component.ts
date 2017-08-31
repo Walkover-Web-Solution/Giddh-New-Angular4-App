@@ -136,23 +136,23 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public addBlankRowInTransaction() {
-    let transItem: SalesTransactionItemClass = {
-      discount: null,
-      description: 'Fresh entry desc',
-      amount: 0,
-      accountUniqueName: null,
-      accountName: 'Fresh',
-      hsnNumber: null,
-      sacNumber: null,
-      quantity: null,
-      stockUnit: null,
-      rate: null,
-    };
-    let entryItem: SalesEntryClass = {
-      uniqueName: null,
-      transactions: [transItem]
-    };
-    this.invFormData.entries.push(entryItem);
+    // let transItem: SalesTransactionItemClass = {
+    //   discount: null,
+    //   description: 'Fresh entry desc',
+    //   amount: 0,
+    //   accountUniqueName: null,
+    //   accountName: 'Fresh',
+    //   hsnNumber: null,
+    //   sacNumber: null,
+    //   quantity: null,
+    //   stockUnit: null,
+    //   rate: null,
+    // };
+    // let entryItem: SalesEntryClass = {
+    //   uniqueName: null,
+    //   transactions: [transItem]
+    // };
+    // this.invFormData.entries.push(entryItem);
   }
 
 }
