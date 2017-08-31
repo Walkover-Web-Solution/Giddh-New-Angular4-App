@@ -1,3 +1,6 @@
+
+import * as moment from 'moment';
+
 /**
  * draw invoice on ui and api model related class and interface
 */
@@ -54,6 +57,11 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public quantity: number;
   public stockUnit: string;
   public rate: number;
+  public date: string;
+  constructor() {
+    super();
+    this.date = moment().format('DD-MM-YYYY');
+  }
 }
 
 class IRoundOff {
@@ -66,6 +74,9 @@ class IRoundOff {
 export class SalesEntryClass {
   public uniqueName: string;
   public transactions: SalesTransactionItemClass[];
+  constructor() {
+    this.transactions = [new SalesTransactionItemClass()];
+  }
 }
 
 class ITotaltaxBreakdown {
@@ -108,7 +119,7 @@ export class InvoiceFormClass {
   constructor() {
     this.invoiceDetails = new InvoiceDetailsClass();
     this.totaltaxBreakdown = [new ITotaltaxBreakdown()];
-    this.entries = [];
+    this.entries = [new SalesEntryClass()];
     this.commonDiscounts = [];
     this.roundOff = new IRoundOff();
     this.company = new CompanyClass();
