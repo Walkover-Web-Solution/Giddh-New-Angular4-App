@@ -23,32 +23,40 @@ export class InvoiceSettingComponent implements OnInit {
   public invoiceLastState: InvoiceISetting;
   public webhookLastState: InvoiceWebhooks[];
   public webhookIsValidate: boolean = false;
-  public webhookMock: any = {
-    url: '',
-    triggerAt: '',
-    entity: 'invoice'
-  };
   public settingResponse: any;
   public formToSave: any;
   public proformaWebhook: InvoiceWebhooks[];
   public webhooksToSend: InvoiceWebhooks[];
   public getRazorPayDetailResponse: boolean = false;
-  public paymentDetail: RazorPayDetailsResponse = new RazorPayDetailsResponse();
+  public razorpayObj: RazorPayDetailsResponse = new RazorPayDetailsResponse();
   public updateRazor: boolean = false;
   public accountList: any;
   public accountToSend: any = {};
   public linkAccountDropDown$: Observable<Select2OptionData[]>;
-
   public options: Select2Options = {
     multiple: false,
     width: '100%',
     allowClear: true,
     placeholder: 'Select to link account'
   };
+  public webhookMock: any = {
+    url: '',
+    triggerAt: '',
+    entity: 'invoice'
+  };
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _toasty: ToasterService, private _accountService: AccountService) {
+
+  constructor(
+    private store: Store<AppState>,
+    private invoiceActions: InvoiceActions,
+    private _toasty: ToasterService,
+    private _accountService: AccountService
+  ) { }
+
+  public ngOnInit() {
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-    console.log('Hello');
+
     this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
         this.settingResponse = setting;
@@ -69,9 +77,13 @@ export class InvoiceSettingComponent implements OnInit {
         this.invoiceWebhook.push(webhookRow);
 
         if (setting.razorPayform) {
-          this.paymentDetail = _.cloneDeep(setting.razorPayform);
-          this.paymentDetail.password = 'YOU_ARE_NOT_ALLOWED';
+          this.razorpayObj = _.cloneDeep(setting.razorPayform);
+          this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
           this.updateRazor = true;
+          // this.razorpayObj.account.name = _.cloneDeep(setting.razorPayform.account.uniqueName) || '';
+          if (setting.razorPayform === new RazorPayDetailsResponse()) {
+            this.updateRazor = false;
+          }
         }
 
         if (this.invoiceSetting.createPaymentEntry && !this.getRazorPayDetailResponse) {
@@ -79,8 +91,7 @@ export class InvoiceSettingComponent implements OnInit {
           this.getRazorPayDetailResponse = true;
         }
       }
-    }
-    );
+    });
 
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -90,14 +101,9 @@ export class InvoiceSettingComponent implements OnInit {
         data.body.results.map(d => {
           linkAccount.push({ text: d.name, id: d.uniqueName });
         });
-        console.log(data.body.results);
         this.linkAccountDropDown$ = Observable.of(linkAccount);
       }
     });
-  }
-
-  public ngOnInit() {
-    //
   }
 
   /**
@@ -108,12 +114,13 @@ export class InvoiceSettingComponent implements OnInit {
     if (!objToSave.url || !objToSave.triggerAt) {
       this._toasty.warningToast("Last row can't be blank.");
       return false;
-    } else if (objToSave.url && objToSave.triggerAt) {
-      this.validateWebhook(objToSave);
-      if (this.webhookIsValidate) {
-        this.saveWebhook(objToSave);
+    } else
+      if (objToSave.url && objToSave.triggerAt) {
+        this.validateWebhook(objToSave);
+        if (this.webhookIsValidate) {
+          this.saveWebhook(objToSave);
+        }
       }
-    }
   }
 
   /**
@@ -138,9 +145,9 @@ export class InvoiceSettingComponent implements OnInit {
    * Update Form
    */
   public UpdateForm(form) {
-    let paymentDetail: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
+    let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
-    if (!_.isEqual(form, this.invoiceLastState) || !_.isEqual(this.paymentDetail, paymentDetail)) {
+    if (!_.isEqual(form, this.invoiceLastState) || !_.isEqual(this.razorpayObj, razorpayObj)) {
       if (!_.isEqual(form, this.invoiceLastState)) {
 
         if (!this.invoiceWebhook[this.invoiceWebhook.length - 1].url && !this.invoiceWebhook[this.invoiceWebhook.length - 1].triggerAt) {
@@ -152,17 +159,12 @@ export class InvoiceSettingComponent implements OnInit {
         this.formToSave = _.cloneDeep(this.settingResponse);
         this.formToSave.invoiceSettings = _.cloneDeep(this.invoiceSetting);
         this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
-        let paymentDetail = _.cloneDeep(this.paymentDetail);
         delete this.formToSave.razorPayform; // delete razorPay before sending form
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
       }
 
-      if (!_.isEqual(this.paymentDetail, paymentDetail) && form.createPaymentEntry) {
-        this.saveRazorPay(this.paymentDetail, form);
-      }
-      // check whether email is Updated or not
-      if (!_.isEqual(form.email, this.invoiceLastState.email)) {
-        this.store.dispatch(this.invoiceActions.updateInvoiceEmail(form.email));
+      if (!_.isEqual(this.razorpayObj, razorpayObj) && form.createPaymentEntry) {
+        this.saveRazorPay(this.razorpayObj, form);
       }
     } else {
       this._toasty.warningToast('No changes made.');
@@ -176,16 +178,20 @@ export class InvoiceSettingComponent implements OnInit {
 
   public saveRazorPay(razorForm, form) {
     let assignAccountToRazorPay = _.cloneDeep(this.accountToSend);
-    this.paymentDetail.account = assignAccountToRazorPay;
-    this.paymentDetail.autoCapturePayment = true;
-    this.paymentDetail.companyName = '';
-    if (form.createPaymentEntry && (!this.paymentDetail.userName || !this.paymentDetail.account)) {
-      this._toasty.warningToast('Payment Detail is Invalid. Please check');
+    this.razorpayObj.account = assignAccountToRazorPay;
+    this.razorpayObj.autoCapturePayment = true;
+    this.razorpayObj.companyName = '';
+    if (form.createPaymentEntry && (!this.razorpayObj.userName || !this.razorpayObj.account)) {
+      this._toasty.warningToast('Please Enter Valid Key Or Uncheck Razorpay Option.');
       return false;
     }
-    // this.saveRazorPay(this.paymentDetail);
-    let paymentDetail = _.cloneDeep(this.paymentDetail);
-    this.store.dispatch(this.invoiceActions.updateRazorPayDetail(paymentDetail));
+    let razorpayObj = _.cloneDeep(this.razorpayObj);
+    if (this.updateRazor) {
+      delete razorpayObj.password;
+      this.store.dispatch(this.invoiceActions.SaveRazorPayDetail(razorpayObj));
+    } else {
+      this.store.dispatch(this.invoiceActions.updateRazorPayDetail(razorpayObj));
+    }
   }
 
   /**
@@ -225,16 +231,34 @@ export class InvoiceSettingComponent implements OnInit {
   }
 
   /**
-   * saveRazorPay
+   * select account to link with razorpay
    */
   public selectLinkAccount(data) {
-    console.log(data);
     let arrOfAcc = _.cloneDeep(this.accountList);
     if (data.value) {
       let result = arrOfAcc.filter((obj) => obj.uniqueName === data.value);
-      console.log(result);
       this.accountToSend.name = result[0].name;
       this.accountToSend.uniqueName = result[0].uniqueName;
+    }
+  }
+
+  /**
+   * verfiy Email
+   */
+  public verfiyEmail(emailId) {
+    this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
+  }
+
+  /**
+   * delete Email
+   */
+  public deleteEmail(emailId) {
+    if (!emailId) {
+      return false;
+    } else {
+      let emailTodelete = _.cloneDeep(emailId);
+      emailTodelete = null;
+      this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
     }
   }
 }
