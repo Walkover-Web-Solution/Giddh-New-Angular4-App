@@ -1,11 +1,14 @@
-<div class="accounts-side-bar greyBg" *ngIf="flyAccounts">
-  <div class="" ng-click="$event.stopPropagation()">
+<div class="accounts-side-bar greyBg">
+  <div class="" ng-click="$event.stopPropagation()" *ngIf="flyAccounts">
+    <div *ngIf="(isFlyAccountInProcess$ | async)">
+      Loading Accounts Please Wait
+    </div>
     <!-- searchbar end -->
-    <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !noGroups ">
+    <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !noGroups && !(isFlyAccountInProcess$ | async)">
       <h4 class="list-group-item-heading">Oops, there are no accounts in <strong>selected company</strong> <a href="" ng-click="goToManageGroups()">+
         add new</a></h4>
     </div>
-    <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups">
+    <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">
       <h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>
     </div>
     <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height
