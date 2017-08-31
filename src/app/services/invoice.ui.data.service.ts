@@ -1,9 +1,9 @@
-import { Injectable } from "@angular/core";
-import {Subject} from "rxjs/Subject";
+import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs/Subject';
 import {
   IsDivVisible,
   IsFieldVisible
-} from "../invoice/templates/edit-template/filters-container/content-filters/content.filters.component";
+} from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 @Injectable()
 
@@ -38,7 +38,7 @@ export class InvoiceUiDataService {
     this.logoSize.next(size);
   }
   public resetPrintSetting(margin: number) {
-      this.defaultPrintSetting.next(margin);
+    this.defaultPrintSetting.next(margin);
   }
   public logoState(state) {
     this.showLogo.next(state);
