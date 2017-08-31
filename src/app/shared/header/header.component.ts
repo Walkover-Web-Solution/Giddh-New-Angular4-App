@@ -224,7 +224,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
-
   }
 
   public onHide() {
