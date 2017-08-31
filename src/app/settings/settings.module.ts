@@ -13,6 +13,7 @@ import { SettingRountingModule } from './settings.routing.module';
 import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
+import { FinancialYearComponent } from './financial-year/financial-year.component';
 @NgModule({
   declarations: [
     // components here
@@ -24,7 +25,8 @@ import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accoun
     DeleteTaxConfirmationModelComponent,
     SettingLinkedAccountsComponent,
     ConnectBankModalComponent,
-    SettingLinkedAccountsConfirmationModalComponent
+    SettingLinkedAccountsConfirmationModalComponent,
+    FinancialYearComponent
   ],
   imports: [
     SharedModule,
