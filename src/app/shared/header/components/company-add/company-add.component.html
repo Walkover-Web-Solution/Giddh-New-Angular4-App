@@ -9,7 +9,7 @@
 
     <div class="modal-body noPad">
       <div class="welcome-msg">
-        <div class="l8grey">
+        <div class="l8grey" *ngIf="!(isMobileVerified | async)">
           <span>Welcome!</span><br>
           <span>Let us help you set up your company with Giddh.</span>
           <span>Before creating a company we need to verify your mobile no. first.</span>
