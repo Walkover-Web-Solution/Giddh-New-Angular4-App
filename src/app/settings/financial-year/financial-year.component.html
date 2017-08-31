@@ -1,0 +1,41 @@
+<div class="box">
+  <!--<div>
+    {{ companyProfileObj | json }}
+  </div>-->
+   <form>
+    <div class="row">
+      <div class="col-xs-12">
+        <h1 style="padding:20px 0px;font-weight:bold;">Financial Year(s) - {{ 'Company name here' }}</h1>
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Lock Status</th>
+                    </tr>
+                </thead>
+                <tbody >
+                    <tr>
+                      <td>1</td>
+                      <td>01-04-2017</td>
+                      <td>31-03-2018</td>
+                      <td>Current Financial Year (can not be locked)</td>
+                    </tr>
+                    <tr>
+                      <td>2</td>
+                      <td>01-04-2016</td>
+                      <td>31-03-2017</td>
+                      <td>
+                        <input type="radio">
+                      </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
