@@ -92,7 +92,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     header: true,
     grid: false,
     footer: false,
-  }
+  };
   public fieldDisplayState: IsFieldVisible = {
     enableCompanyName: true,
     enableCompanyAddress: true,
@@ -257,9 +257,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this.divVis = {
       header: true,
       grid: false,
-      footer: false
-    }
-
+      footer: false }
     this._invoiceUiDataService.setDivStatus(this.divVis);
   }
 
@@ -270,8 +268,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this.divVis = {
       header: false,
       grid: true,
-      footer: false
-    }
+      footer: false }
     this._invoiceUiDataService.setDivStatus(this.divVis);
   }
 

@@ -325,10 +325,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       return Object.assign({}, state, {
         hsnSacLabel: action.payload.data
       });
-    case INVOICE.TEMPLATE.UPDATE_HSNSAC_LABEL:
-      return Object.assign({}, state, {
-        hsnSacLabel: action.payload.data
-      });
+
     case INVOICE.TEMPLATE.UPDATE_QUANTITY_LABEL:
       return Object.assign({}, state, {
         quantityLabel: action.payload.data
