@@ -1,4 +1,4 @@
-import { RazorPayDetailsResponse } from "../api-models/SettingsIntegraion";
+import { RazorPayDetailsResponse } from '../api-models/SettingsIntegraion';
 
 export interface InvoiceSetting {
     invoiceSettings: InvoiceISetting;
@@ -22,5 +22,5 @@ export interface InvoiceWebhooks {
     operation?: string;
     triggerAt: number;
     uniqueName?: string;
-    url: string; 
+    url: string;
 }
