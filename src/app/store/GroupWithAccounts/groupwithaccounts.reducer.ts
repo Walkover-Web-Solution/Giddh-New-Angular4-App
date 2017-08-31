@@ -410,7 +410,8 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       });
     case GroupWithAccountsAction.UPDATE_GROUP:
       return Object.assign({}, state, {
-        isUpdateGroupInProcess: true
+        isUpdateGroupInProcess: true,
+        isUpdateGroupSuccess: false
       });
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE:
       let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
@@ -453,7 +454,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       }
       return state;
     case AccountsAction.UPDATE_ACCOUNT:
-      return Object.assign({}, state, { updateAccountInProcess: true });
+      return Object.assign({}, state, { updateAccountInProcess: true, updateAccountIsSuccess: false });
     case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
       let updatedAccount: BaseResponse<AccountResponse, AccountRequest> = action.payload;
       if (updatedAccount.status === 'success') {
