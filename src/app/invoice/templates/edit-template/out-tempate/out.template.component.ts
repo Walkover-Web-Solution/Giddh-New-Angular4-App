@@ -91,7 +91,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     header: true,
     grid: false,
     footer: false,
-  }
+  };
   public fieldDisplayState: IsFieldVisible = {
     enableCompanyName: true,
     enableCompanyAddress: true,
@@ -128,7 +128,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     enableMessage1: true,
     enableMessage2: true,
     enableThanks: true,
-  }
+  };
   // public tableMeta$: Observable<TableMetaMap>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -213,7 +213,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this.taxableAmount$ = this.invoiceTemplatesService.getTaxableAmount().takeUntil(this.destroyed$).distinctUntilChanged();
     this.totalTax$ = this.invoiceTemplatesService.getTotalTax().takeUntil(this.destroyed$).distinctUntilChanged();
     this.total$ = this.invoiceTemplatesService.getTotal().takeUntil(this.destroyed$).distinctUntilChanged();
-    this.totalInWords$ = this.invoiceTemplatesService.getTotalInWords().takeUntil(this.destroyed$).distinctUntilChanged();;
+    this.totalInWords$ = this.invoiceTemplatesService.getTotalInWords().takeUntil(this.destroyed$).distinctUntilChanged();
     this.otherDeduction$ = this.invoiceTemplatesService.getOtherDeduction().takeUntil(this.destroyed$).distinctUntilChanged();
     this.thanks$ = this.invoiceTemplatesService.getThanks().takeUntil(this.destroyed$).distinctUntilChanged();
     this.slogan$ = this.invoiceTemplatesService.getSlogan().takeUntil(this.destroyed$).distinctUntilChanged();
@@ -242,10 +242,10 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       header: true,
       grid: false,
       footer: false
-    }
+    };
 
     this._invoiceUiDataService.setDivStatus(this.divVis);
-  };
+  }
 
   public onClickGrid() {
     this.activeHeader = false;
@@ -255,9 +255,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       header: false,
       grid: true,
       footer: false
-    }
+    };
     this._invoiceUiDataService.setDivStatus(this.divVis);
-  };
+  }
 
   public onClickFooter() {
     this.activeHeader = false;
@@ -267,9 +267,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       header: false,
       grid: false,
       footer: true
-    }
+    };
     this._invoiceUiDataService.setDivStatus(this.divVis);
-  };
+  }
 
   public createTemplate() {
     // let temp = new GetInvoiceTemplateDetailsResponse();
