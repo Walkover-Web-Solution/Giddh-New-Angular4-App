@@ -347,4 +347,12 @@ export class MfEditComponent implements OnInit {
       }
     });
   }
+
+  public setToday() {
+    this.manufacturingDetails.date = String(new Date());
+  }
+
+  public clearDate() {
+    this.manufacturingDetails.date = '';
+  }
 }
