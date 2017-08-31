@@ -7,12 +7,14 @@ import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions'
 export interface FlyAccountsState {
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   showAccountList: boolean;
+  isFlyAccountInProcess: boolean;
   noGroups: boolean;
   flyAccounts: boolean;
 }
 
 export const initialState: FlyAccountsState = {
   flattenGroupsAccounts: [],
+  isFlyAccountInProcess: false,
   showAccountList: false,
   noGroups: false,
   flyAccounts: false
@@ -20,8 +22,10 @@ export const initialState: FlyAccountsState = {
 
 export function FlyAccountsReducer(state = initialState, action: Action): FlyAccountsState {
   switch (action.type) {
+    case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST:
+      return Object.assign({}, state, { isFlyAccountInProcess: true });
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE:
-      return Object.assign({}, state, { flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
+      return Object.assign({}, state, { isFlyAccountInProcess: false, flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
     case FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP:
       return Object.assign({}, state, { flattenGroupsAccounts: prepare([]) });
     default: {
