@@ -129,4 +129,12 @@ export class MfReportComponent implements OnInit {
     data.to = null;
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
+
+  public clearDate(model: string) {
+    this.mfStockSearchRequest[model] = '';
+  }
+
+  public setToday(model: string) {
+    this.mfStockSearchRequest[model] = new Date();
+  }
 }
