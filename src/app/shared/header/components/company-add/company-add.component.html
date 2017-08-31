@@ -65,8 +65,7 @@
                     placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$">
                 </div>
                 <div class="modal-footer">
-                  <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async"
-                    [disabled]="createCompanyForm.invalid">Create</button>
+                  <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid">Create</button>
                 </div>
               </form>
               <!-- <input class=" btn btn-primary center-block" style="width:80px;margin-top:45px" type="submit" wz-next value="Next" /> -->
@@ -89,5 +88,16 @@
     <!-- end modal body -->
 
 
+  </div>
+</div>
+
+<!--logout modal-->
+<div bsModal #logoutModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Log Out'" [body]="'In order to be able to use Giddh, you must create a company. Are you sure you want to cancel and logout?'"
+      (successCallBack)="logoutUser()" (cancelCallBack)="hideLogoutModal()">
+      </confirm-modal>
+    </div>
   </div>
 </div>
