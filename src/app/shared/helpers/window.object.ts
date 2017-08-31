@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import { Injectable } from '@angular/core';
 
 function _window(): any {
   // return the native window obj
@@ -7,9 +7,9 @@ function _window(): any {
 
 @Injectable()
 export class WindowRef {
-  
+
   get nativeWindow(): any {
     return _window();
   }
-  
+
 }

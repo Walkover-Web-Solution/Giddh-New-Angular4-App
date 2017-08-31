@@ -109,9 +109,9 @@ export class DesignFiltersContainerComponent {
     if (output.type === 'allAddedToQueue') {
       this.files.push(output.file);
       this.previewFile(this.files);
-    } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
-        this.files.push(output.file);
-      } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
+    } else if (output.type === 'addedToQueue' && typeof output.file !== 'undefined') {
+      this.files.push(output.file);
+    } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
       const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
       this.files[index] = output.file;
     } else if (output.type === 'removed') {
@@ -136,11 +136,11 @@ export class DesignFiltersContainerComponent {
     this.uploadInput.emit(event);
   }
 
-   public previewFile(files: any) {
+  public previewFile(files: any) {
     let preview: any = document.getElementById('logoImage');
-    let a: any  = document.querySelector('input[type=file]');
+    let a: any = document.querySelector('input[type=file]');
     let file = a.files[0];
-    let reader  = new FileReader();
+    let reader = new FileReader();
 
     reader.onloadend = () => {
       preview.src = reader.result;
@@ -197,9 +197,9 @@ export class DesignFiltersContainerComponent {
     if (size === 'small') {
       this.logoSize = '40';
     } else if (size === 'large') {
-        this.logoSize = '180';
+      this.logoSize = '180';
     } else {
-     this.logoSize = '140';
+      this.logoSize = '140';
     }
     this._invoiceUiDataService.setLogoSize(this.logoSize);
   }

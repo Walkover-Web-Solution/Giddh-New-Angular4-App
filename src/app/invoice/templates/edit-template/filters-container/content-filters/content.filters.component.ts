@@ -82,8 +82,8 @@ export class ContentFilterComponent {
     enableShippingAddress: true,
     enableShippingState: true,
     enableShippingGstin: true,
-    enableCustom1:  true,
-    enableCustom2:  true,
+    enableCustom1: true,
+    enableCustom2: true,
     enableCustom3: true,
     enableSno: true,
     enableDate: true,
@@ -158,7 +158,7 @@ export class ContentFilterComponent {
 
   public onInvoiceChange(data) {
     this.ti = {
-    data: data,
+      data,
       setTaxInvoiceActive: false
     };
     this.store.dispatch(this.invoiceAction.updateFormNameInvoice(this.ti));
@@ -166,7 +166,7 @@ export class ContentFilterComponent {
 
   public onTaxInvoiceChange(data) {
     this.ti = {
-      data: data,
+      data,
       setTaxInvoiceActive: true
     };
     this.store.dispatch(this.invoiceAction.updateFormNameTaxInvoice(this.ti));
@@ -248,7 +248,7 @@ export class ContentFilterComponent {
       this.files.push(output.file);
       console.log(this.files);
       this.previewFile(this.files);
-    } else if (output.type === 'addedToQueue'  && typeof output.file !== 'undefined') {
+    } else if (output.type === 'addedToQueue' && typeof output.file !== 'undefined') {
       this.files.push(output.file);
     } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
       const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
@@ -278,9 +278,9 @@ export class ContentFilterComponent {
 
   public previewFile(files: any) {
     let preview = document.querySelector('img');
-    let a: any  = document.querySelector('input[type=file]');
-    let file    = a.files[0];
-    let reader  = new FileReader();
+    let a: any = document.querySelector('input[type=file]');
+    let file = a.files[0];
+    let reader = new FileReader();
     reader.onloadend = () => {
       preview.src = reader.result;
       this._invoiceUiDataService.setImageSignatgurePath(preview.src);
@@ -293,72 +293,72 @@ export class ContentFilterComponent {
   }
   // checking visibility of a field
   public onCheckField(field, value) {
-      if (field === 'companyName') {
-        this.field.enableCompanyName = value;
-      } else if (field === 'invoiceDate') {
-        this.field.enableInvoiceDate = value;
-      }  else if (field === 'invoiceNo') {
-        this.field.enableInvoiceNo = value;
-      } else if (field === 'companyAddress') {
-        this.field.enableCompanyAddress = value;
-      } else if (field === 'dueDa') {
-        this.field.enableDueDate = value;
-      } else if (field === 'billingAddr') {
-        this.field.enableBillingAddress = value;
-      } else if (field === 'billingGstin') {
-        this.field.enableBillingGstin = value;
-      } else if (field === 'billingState') {
-        this.field.enableBillingState = value;
-      } else if (field === 'shippingAddr') {
-        this.field.enableShippingAddress = value;
-      } else if (field === 'shippingGstin') {
-        this.field.enableShippingGstin = value;
-      } else if (field === 'shippingState') {
-        this.field.enableShippingAddress = value;
-      } else if (field === 'custom1') {
-        this.field.enableCustom1 = value;
-      } else if (field === 'custom2') {
-        this.field.enableCustom2 = value;
-      } else if (field === 'custom3') {
-        this.field.enableCustom3 = value;
-      } else if (field === 'sNo') {
-        this.field.enableSno = value;
-      } else if (field === 'date') {
-        this.field.enableDate = value;
-      } else if (field === 'item') {
-        this.field.enableItem = value;
-      } else if (field === 'hsn') {
-        this.field.enableHsn = value;
-      } else if (field === 'qty') {
-        this.field.enableQty = value;
-      } else if (field === 'rate') {
-        this.field.enableRate = value;
-      } else if (field === 'dis') {
-        this.field.enableDis = value;
-      } else if (field === 'taxableValue') {
-        this.field.enableTaxableValue = value;
-      } else if (field === 'tax') {
-        this.field.enableTax = value;
-      } else if (field === 'total') {
-        this.field.enableTotal = value;
-      } else if (field === 'taxableAmount') {
-        this.field.enableTaxableAmount = value;
-      } else if (field === 'totalTax') {
-        this.field.enableTotalTax = value;
-      } else if (field === 'otherDeductions') {
-        this.field.enableOtherDeductions = value;
-      } else if (field === 'invoiceTotal') {
-        this.field.enableInvoiceTotal = value;
-      } else if (field === 'message1') {
-        this.field.enableMessage1 = value;
-      } else if (field === 'message2') {
-        this.field.enableMessage2 = value;
-      } else if (field === 'thanks') {
-        this.field.enableThanks = value;
-      } else if (field === 'companyAddr') {
-        this.field.enableCompanyAddress = value;
-      }
-      this._invoiceUiDataService.setFieldDisplayState(this.field);
+    if (field === 'companyName') {
+      this.field.enableCompanyName = value;
+    } else if (field === 'invoiceDate') {
+      this.field.enableInvoiceDate = value;
+    } else if (field === 'invoiceNo') {
+      this.field.enableInvoiceNo = value;
+    } else if (field === 'companyAddress') {
+      this.field.enableCompanyAddress = value;
+    } else if (field === 'dueDa') {
+      this.field.enableDueDate = value;
+    } else if (field === 'billingAddr') {
+      this.field.enableBillingAddress = value;
+    } else if (field === 'billingGstin') {
+      this.field.enableBillingGstin = value;
+    } else if (field === 'billingState') {
+      this.field.enableBillingState = value;
+    } else if (field === 'shippingAddr') {
+      this.field.enableShippingAddress = value;
+    } else if (field === 'shippingGstin') {
+      this.field.enableShippingGstin = value;
+    } else if (field === 'shippingState') {
+      this.field.enableShippingAddress = value;
+    } else if (field === 'custom1') {
+      this.field.enableCustom1 = value;
+    } else if (field === 'custom2') {
+      this.field.enableCustom2 = value;
+    } else if (field === 'custom3') {
+      this.field.enableCustom3 = value;
+    } else if (field === 'sNo') {
+      this.field.enableSno = value;
+    } else if (field === 'date') {
+      this.field.enableDate = value;
+    } else if (field === 'item') {
+      this.field.enableItem = value;
+    } else if (field === 'hsn') {
+      this.field.enableHsn = value;
+    } else if (field === 'qty') {
+      this.field.enableQty = value;
+    } else if (field === 'rate') {
+      this.field.enableRate = value;
+    } else if (field === 'dis') {
+      this.field.enableDis = value;
+    } else if (field === 'taxableValue') {
+      this.field.enableTaxableValue = value;
+    } else if (field === 'tax') {
+      this.field.enableTax = value;
+    } else if (field === 'total') {
+      this.field.enableTotal = value;
+    } else if (field === 'taxableAmount') {
+      this.field.enableTaxableAmount = value;
+    } else if (field === 'totalTax') {
+      this.field.enableTotalTax = value;
+    } else if (field === 'otherDeductions') {
+      this.field.enableOtherDeductions = value;
+    } else if (field === 'invoiceTotal') {
+      this.field.enableInvoiceTotal = value;
+    } else if (field === 'message1') {
+      this.field.enableMessage1 = value;
+    } else if (field === 'message2') {
+      this.field.enableMessage2 = value;
+    } else if (field === 'thanks') {
+      this.field.enableThanks = value;
+    } else if (field === 'companyAddr') {
+      this.field.enableCompanyAddress = value;
+    }
+    this._invoiceUiDataService.setFieldDisplayState(this.field);
   }
 }
 
