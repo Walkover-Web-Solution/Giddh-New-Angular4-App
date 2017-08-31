@@ -19,14 +19,14 @@
     <div class="form-group">
         <label>Count</label>
         <select class="form-control col-xs-2" name="count" [(ngModel)]="ledgerSearchRequest.count">
-      <option [ngValue]="select">Select</option>
+      <option [ngValue]="'select'">Select</option>
       <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
     </select>
     </div>
     <div class="form-group">
         <label>Amount</label>
         <select class="form-control" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy">
-      <option [ngValue]="select">Please Select</option>
+      <option [ngValue]="'select'">Please Select</option>
       <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
     </select>
     </div>
