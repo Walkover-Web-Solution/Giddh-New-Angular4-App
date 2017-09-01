@@ -1,11 +1,148 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-  <H1> Hi this is purchase invoice component</H1>
-</head>
-<body>
+<section id="purchaseInvoice" class="container-fluid">
 
-</body>
-</html>
+    <!-- page Title  -->
+    <div class="col-xs-12 bdrB">
+        <div class="row">
+            <h1 class="section_title"><strong>Purchase</strong></h1>
+        </div>
+    </div>
+
+    <!-- filter -->
+    <div class="col-xs-12">
+        <div class="row pdT1">
+            <form class="col-xs-10">
+                <div class="row">
+                    <div class="form-group col-xs-2">
+                        <div class="row">
+                            <label>Date Range</label>
+                            <input type="text" class="form-control" placeholder="" />
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-2">
+                        <label>Other Filters</label>
+
+                        <div class="btn-group btn-block" dropdown>
+                            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle"> Filter <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                            </button>
+                            <ul *dropdownMenu class="dropdown-menu" role="menu">
+                                <li>
+                                    <label><input type="checkbox" >GSTIN empty </label>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="form-group inline">
+                        <br />
+                        <button class="btn btn-success">GO</button>
+                        <a class="btn anchr-btn">Reset</a>
+                    </div>
+                    <button class="btn btn-generate pull-right">Generate <br />Purchase Invoice</button>
+                </div>
+            </form>
+
+
+            <!-- search form  -->
+            <form class="col-xs-2 pull-right search-form">
+                <br />
+                <div class="row">
+                    <div class="input-group col-xs-11 pull-right">
+                        <span class="input-group-btn">
+                      <i class="glyphicon glyphicon-search"></i>
+                    </span>
+                        <input type="text" class="form-control" placeholder="Search">
+                    </div>
+                    <!-- /input-group -->
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- filter end  -->
+
+    <!-- table  -->
+    <table class="table basic table-bordered pdT2">
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Date</th>
+                <th>Particulars</th>
+                <th>Account</th>
+                <th>GSTIN</th>
+                <th>Invoice No.</th>
+                <th>Entry</th>
+                <th>Voucher No.</th>
+                <th class="text-right">Taxable Value</th>
+                <th class="text-right">IGST</th>
+                <th class="text-right">CGST</th>
+                <th class="text-right">SGST</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="text-center"><input type="checkbox" disabled="disabled" /></td>
+                <td>11/07/2017</td>
+                <td>Purchase account</td>
+                <td>Debtor 1</td>
+                <td><input type="text" class="form-control" value="23BBBBBB000A1Z0" /></td>
+                <td><input type="text" class="form-control" value="AB12316" /></td>
+                <td>Purchase-8</td>
+                <td class="select">
+                    <div class="custom-select pos-rel">
+                        <select name="" class="form-control cp" id="">
+                            <option value="composite">Composite</option>
+                            <option value="reverse-charge">Reverse Charge</option>
+                        </select>
+                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    </div>
+                </td>
+                <td class="text-right">15000.00</td>
+                <td class="text-right">-</td>
+                <td class="text-right">100.00</td>
+                <td class="text-right">100.00</td>
+            </tr>
+            <tr>
+                <td class="text-center"><input type="checkbox" /></td>
+                <td>11/07/2017</td>
+                <td>Purchase account</td>
+                <td>Debtor 1</td>
+                <td><input type="text" class="form-control" value="23BBBBBB000A1Z0" /></td>
+                <td><input type="text" class="form-control input-err" value="" /></td>
+                <td>Purchase-8</td>
+                <td class="select">
+                    <div class="custom-select pos-rel">
+                        <select name="" class="form-control cp" id="">
+                            <option value="composite">Composite</option>
+                            <option value="reverse-charge">Reverse Charge</option>
+                        </select>
+                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    </div>
+                </td>
+                <td class="text-right">15000.00</td>
+                <td class="text-right">100.00</td>
+                <td class="text-right">-</td>
+                <td class="text-right">-</td>
+            </tr>
+            <tr>
+                <td class="text-center"><input type="checkbox" /></td>
+                <td>11/07/2017</td>
+                <td>Purchase account</td>
+                <td>Debtor 1</td>
+                <td><input type="text" class="form-control input-warn" value="" /></td>
+                <td><input type="text" class="form-control input-warn" value="" /></td>
+                <td>Purchase-8</td>
+                <td class="select">
+                    <div class="custom-select pos-rel">
+                        <select name="" class="form-control cp" id="">
+                            <option value="composite">Composite</option>
+                            <option value="reverse-charge">Reverse Charge</option>
+                        </select>
+                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    </div>
+                </td>
+                <td class="text-right">15000.00</td>
+                <td class="text-right">100.00</td>
+                <td class="text-right">100.00</td>
+                <td class="text-right">-</td>
+            </tr>
+        </tbody>
+    </table>
+</section>
