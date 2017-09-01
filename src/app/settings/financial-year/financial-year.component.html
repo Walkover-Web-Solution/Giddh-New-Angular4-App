@@ -1,11 +1,11 @@
 <div class="box">
   <!--<div>
-    {{ companyProfileObj | json }}
+    {{ financialYearObj | json }}
   </div>-->
    <form>
     <div class="row">
       <div class="col-xs-12">
-        <h1 style="padding:20px 0px;font-weight:bold;">Financial Year(s) - {{ 'Company name here' }}</h1>
+        <h1 style="padding:20px 0px;font-weight:bold;">Financial Year(s) - {{ currentCompanyName }}</h1>
         <div class="table-responsive">
             <table class="table table-bordered table-hover table-striped">
                 <thead>
@@ -16,23 +16,38 @@
                         <th>Lock Status</th>
                     </tr>
                 </thead>
-                <tbody >
-                    <tr>
-                      <td>1</td>
-                      <td>01-04-2017</td>
-                      <td>31-03-2018</td>
-                      <td>Current Financial Year (can not be locked)</td>
-                    </tr>
-                    <tr>
-                      <td>2</td>
-                      <td>01-04-2016</td>
-                      <td>31-03-2017</td>
-                      <td>
-                        <input type="radio">
+                <tbody *ngIf="financialYearObj && financialYearObj.financialYears">
+                    <tr *ngFor="let financialYear of financialYearObj.financialYears; let i = index">
+                      <td>{{i+1}}</td>
+                      <td>{{financialYear.financialYearStarts}}</td>
+                      <td>{{financialYear.financialYearEnds}}</td>
+                      <td *ngIf="currentCompanyFinancialYearUN != financialYear.uniqueName">
+                        <i *ngIf="financialYear.isLocked" class="fa fa-lock fa-2x" aria-hidden="true" (click)="lockUnlockFinancialYear(financialYear);"></i>
+                        <i *ngIf="!financialYear.isLocked" class="fa fa-unlock fa-2x" aria-hidden="true" (click)="lockUnlockFinancialYear(financialYear);"></i>
+                        <!--<input [(ngModel)]="financialYear.isLocked" name="fy_{{i}}" type="checkbox" (change)="lockUnlockFinancialYear(financialYear);">-->
+                      </td>
+                      <td *ngIf="currentCompanyFinancialYearUN == financialYear.uniqueName">
+                        Current Financial Year (can not be locked)
                       </td>
                     </tr>
                 </tbody>
             </table>
+        </div>
+        <hr>
+        <div class="form-group mrT2">
+          <label>Switch Financial Year</label>
+          <div class="input-group">
+            <select2 [data]="financialOptions" [options]="options" [value]="currentCompanyFinancialYearUN" (valueChanged)="selectFinancialYearOption($event)"></select2>
+          </div>
+          <button class="btn btn-success mrT1 mrB1" (click)="switchFY()">Save</button>
+        </div>
+        <hr>
+        <div class="form-group mrT2">
+          <label>Add Financial Year</label>
+          <div class="input-group">
+            <select2 [data]="yearOptions" [options]="options" (valueChanged)="selectYear($event)"></select2>
+          </div>
+          <button class="btn btn-success mrT1 mrB1" (click)="addFY()">Save</button>
         </div>
       </div>
     </div>

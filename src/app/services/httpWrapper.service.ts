@@ -33,7 +33,7 @@ export class HttpWrapperService {
     return this._http.delete(url, options);
   }
 
-  public patch = (url: string, body: string, options?: RequestOptionsArgs): Observable<Response> => {
+  public patch = (url: string, body: any, options?: RequestOptionsArgs): Observable<Response> => {
     options = this.prepareOptions(options);
     return this._http.patch(url, body, options);
   }
