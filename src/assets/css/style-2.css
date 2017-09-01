@@ -673,6 +673,7 @@ input[type="checkbox"] {
     margin: 0 1rem 0 0;
     cursor: pointer;
     left: 0px;
+    height: 19px;
 }
 
 input[type="checkbox"]:checked:before {
@@ -3789,8 +3790,15 @@ label {
     display: none !important;
 }
 
+
+/* disabled css */
+
 .form-control[disabled],
 .form-control[readonly],
 fieldset[disabled] .form-control {
     background-color: #eee !important;
+}
+
+input[type='checkbox'][disabled] {
+    opacity: 0.2;
 }
