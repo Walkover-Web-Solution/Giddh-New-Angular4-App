@@ -3228,6 +3228,7 @@ label {
     -moz-appearance: none;
     -webkit-appearance: none;
     -webkit-border-radius: 0;
+    border-radius: 0;
 }
 
 .custom-select .select_drop {
@@ -3786,4 +3787,10 @@ label {
 
 [hidden] {
     display: none !important;
+}
+
+.form-control[disabled],
+.form-control[readonly],
+fieldset[disabled] .form-control {
+    background-color: #eee !important;
 }
