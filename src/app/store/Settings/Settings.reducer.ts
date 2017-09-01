@@ -3,11 +3,13 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../services/actions/settings/profile/settings.profile.const';
-import { ComapnyResponse } from '../../models/api-models/Company';
+import { ComapnyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
 import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass, RazorPayDetailsResponse, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.const';
 import { IGetAllEbankAccountResponse } from '../../models/api-models/SettingsLinkedAccounts';
+import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../services/actions/settings/financial-year/financial-year.const';
+import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -18,12 +20,14 @@ export interface SettingsState {
   integration: IntegrationPage;
   profile: object;
   linkedAccounts: LinkedAccountsState;
+  financialYears: IFinancialYearResponse;
 }
 
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
-  linkedAccounts: {}
+  linkedAccounts: {},
+  financialYears: null
 };
 
 export function SettingsReducer(state = initialState, action: Action): SettingsState {
@@ -182,6 +186,46 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
           }
           return Object.assign({}, state, newState);
         }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE: {
+      let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = response.body;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE: {
+      let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE: {
+      let response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE: {
+      let response: BaseResponse<ActiveFinancialYear, string> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE: {
+      let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
     default: {
       return state;
     }
