@@ -163,3 +163,25 @@ table td[class*=col-]:last-child {
 .pdR25imp {
     padding-right: 25px !important;
 }
+
+.t-h-bg1 th {
+    background: #f3f0e6;
+    color: #4d4d4d;
+    border: 1px solid #c4c6c7;
+    padding: 11px!important;
+    font-weight: 400;
+}
+
+// .ledger-row .select2-transaction .select2-container--default .select2-search--dropdown {
+//     top: -35px;
+//     position: absolute;
+//     background: transparent;
+//     width: 100%;
+// }
+// .ledger-row .select2-transaction .select2-container--default .select2-search__field {
+//     background: #f7de8a !important;
+//     border: 0;
+// }
+// .ledger-row .select2-transaction .select2-container--default .select2-selection__arrow {
+//     display: none;
+// }

@@ -1,0 +1,66 @@
+.section_title {
+    padding: 15px 0;
+}
+
+#purchaseInvoice {
+    background-color: #f4f5f8;
+    padding: 20px;
+}
+
+.table.basic {
+    background: #fff;
+}
+
+.input-err {
+    border-color: #ce1b1b;
+}
+
+.input-warn {
+    border-color: #f2e200;
+}
+
+table>tbody>tr td.select {
+    padding: 0;
+}
+
+table>tbody>tr td.select .custom-select select {
+    border: 0;
+    padding-right: 26px !important;
+}
+
+.btn-generate {
+    margin-top: 4px;
+    color: #ff5f00;
+    background: #e5e5e5;
+}
+
+.btn-generate:hover {
+    color: #fff;
+    background: #ff5f00;
+}
+
+.search-form .input-group-btn {
+    width: 35px;
+    font-size: inherit;
+    border: 1px solid #d6d6d6;
+    text-align: center;
+    color: #999999;
+    background: #fff;
+    border-right: 0;
+    vertical-align: middle;
+    line-height: 32px;
+}
+
+.search-form .form-control {
+    border-left: 0;
+}
+
+.anchr-btn {
+    border: 0;
+    background: transparent;
+    color: #10aae0;
+}
+
+.anchr-btn:hover {
+    color: #10aae0;
+}
