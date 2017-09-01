@@ -76,14 +76,13 @@ export class InvoiceSettingComponent implements OnInit {
         let webhookRow = _.cloneDeep(this.webhookMock);
         this.invoiceWebhook.push(webhookRow);
 
-        if (setting.razorPayform) {
+        if (setting.razorPayform && !_.isEmpty(setting.razorPayform)) {
           this.razorpayObj = _.cloneDeep(setting.razorPayform);
           this.razorpayObj.password = 'YOU_ARE_NOT_ALLOWED';
           this.updateRazor = true;
           // this.razorpayObj.account.name = _.cloneDeep(setting.razorPayform.account.uniqueName) || '';
-          if (setting.razorPayform === new RazorPayDetailsResponse()) {
-            this.updateRazor = false;
-          }
+        } else {
+          this.updateRazor = false;
         }
 
         if (this.invoiceSetting.createPaymentEntry && !this.getRazorPayDetailResponse) {
@@ -188,9 +187,9 @@ export class InvoiceSettingComponent implements OnInit {
     let razorpayObj = _.cloneDeep(this.razorpayObj);
     if (this.updateRazor) {
       delete razorpayObj.password;
-      this.store.dispatch(this.invoiceActions.SaveRazorPayDetail(razorpayObj));
-    } else {
       this.store.dispatch(this.invoiceActions.updateRazorPayDetail(razorpayObj));
+    } else {
+      this.store.dispatch(this.invoiceActions.SaveRazorPayDetail(razorpayObj));
     }
   }
 
@@ -246,7 +245,13 @@ export class InvoiceSettingComponent implements OnInit {
    * verfiy Email
    */
   public verfiyEmail(emailId) {
-    this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
+    let email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (email.test(emailId)) {
+      this.store.dispatch(this.invoiceActions.updateInvoiceEmail(emailId));
+    } else {
+      this._toasty.warningToast('Invalid Email Address.');
+      return false;
+    }
   }
 
   /**
