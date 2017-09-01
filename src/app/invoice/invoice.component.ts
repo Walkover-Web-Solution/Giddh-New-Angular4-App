@@ -29,10 +29,6 @@ import * as _ from 'lodash';
   templateUrl: './invoice.component.html'
 })
 export class InvoiceComponent {
-
-  // private navItems: INameUniqueName[] = INV_PAGE;
-  // private selectedPage: string = null;
-
   constructor(
     private router: Router,
     private location: Location

@@ -246,14 +246,12 @@ export class ContentFilterComponent {
 
     if (output.type === 'allAddedToQueue') {
       this.files.push(output.file);
-      console.log(this.files);
       this.previewFile(this.files);
     } else if (output.type === 'addedToQueue' && typeof output.file !== 'undefined') {
       this.files.push(output.file);
     } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
       const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
       this.files[index] = output.file;
-      console.log(this.files);
     } else if (output.type === 'removed') {
       // remove file from array when removed
       this.files = this.files.filter((file: UploadFile) => file !== output.file);
