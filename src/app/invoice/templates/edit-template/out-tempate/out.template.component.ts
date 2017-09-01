@@ -446,7 +446,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   //     logoSize: ''
   // }
   // }
-  // console.log(JSON.stringify(temp));
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
