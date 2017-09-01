@@ -201,14 +201,9 @@
         
         #default table.item th,
         #default table.item tfoot tr th {
-            text-align: right;
             position: relative;
             padding: 14px 7px;
             line-height: 1.2rem;
-        }
-        
-        #default table.item tr th:nth-child(2) {
-            text-align: left;
         }
         
         #default table.item tfoot tr th {
@@ -228,38 +223,12 @@
             border-radius: 0;
             padding: 7px;
             border-top: 1px solid rgba(89, 89, 89, 0.6);
-            text-align: right;
             line-height: 1.2rem;
         }
         
         #default table.item td p {
             color: #595959;
         }
-        
-        #default table.item td:nth-child(1) {
-            width: 26%;
-        }
-        
-        #default table.item td:nth-child(2) {
-            width: 38%;
-            text-align: left;
-        }
-        
-        #default table.item td:nth-child(3) {
-            text-align: right;
-            width: 12%;
-        }
-        
-        #default table.item td:nth-child(4) {
-            text-align: right;
-            width: 12%;
-        }
-        
-        #default table.item td:nth-child(5) {
-            text-align: right;
-            width: 12%;
-        }
-        /* table balance */
         
         #default table.balance {
             width: 75%;
@@ -347,7 +316,7 @@
                 left: 0;
             }
             #default table.item {
-                page-break-inside: always;
+                /*page-break-inside: always;*/
                 page-break-after: auto;
             }
             #default table.balance {
@@ -475,7 +444,8 @@
     </style>
 </head>
 
-<body [ngStyle]="{ 'padding': topMargin+'px'+' '+rightMargin+'px'+' '+bottomMargin+'px'+' '+leftMargin+'px', 'font-family': fontFamily}">
+
+<body [ngStyle]="{ 'padding': templateMeta.topMargin+'px'+' '+templateMeta.rightMargin+'px'+' '+templateMeta.bottomMargin+'px'+' '+templateMeta.leftMargin+'px', 'font-family': templateMeta.font}">
     <!--class="disabled-area"-->
     <div>
         <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[activeHeader]" (click)="onClickHeader()">
@@ -483,7 +453,7 @@
             <header>
                 <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" [hidden]='!showLogo' /></figure>
                 <figure class="col-xs-6" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyName ]">
-                    <strong><h2 [ngStyle]="{ 'color': color}" >{{this.companyName$ | async}}</h2></strong>
+                    <strong><h2 [ngStyle]="{ 'color': templateMeta.color}" >{{this.templateMeta.companyName}}</h2></strong>
                 </figure>
                 <table cellspacing="0" cellpadding="0">
                     <tbody>
@@ -492,11 +462,11 @@
                                 <table class="numDetail">
                                     <tbody>
                                         <tr>
-                                            <td><strong>GSTIN</strong> 01234567890123</td>
+                                            <td><strong>{{this.templateMeta.GSTIN}}</strong> 01234567890123</td>
 
                                         </tr>
                                         <tr>
-                                            <td><strong>PAN</strong> 1234567890</td>
+                                            <td><strong>{{this.templateMeta.PAN}}</strong> 1234567890</td>
 
                                         </tr>
                                     </tbody>
@@ -509,13 +479,13 @@
                                 <table>
                                     <tbody>
                                         <tr>
-                                            <td><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceDate ]">{{this.invoiceDate$ | async }}</strong></td>
+                                            <td><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceDate ]">{{this.templateMeta.invoiceDate}}</strong></td>
                                             <td>
                                                 <p [hidden]="!fieldDisplayState.enableInvoiceDate"> 23/06/2017 </p>
                                             </td>
                                         </tr>
                                         <tr>
-                                            <td><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceNo]">{{this.invoiceNo$ | async}}</strong></td>
+                                            <td><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceNo]">{{this.templateMeta.invoiceNumber}}</strong></td>
                                             <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceNo]">201770323-64</td>
                                         </tr>
                                     </tbody>
@@ -531,8 +501,8 @@
                 <!--</h2>-->
                 <!--</div>-->
                 <div class="docTitle" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDocTitle]">
-                    <h2 [ngStyle]="{ 'color': color}" title="{{this.formNameTaxInvoice}}">
-                        <hr [ngStyle]="{ 'background-color': color}" />
+                    <h2 [ngStyle]="{ 'color': templateMeta.color}" title="{{this.templateMeta.formNameTaxInvoice}}">
+                        <hr [ngStyle]="{ 'background-color': templateMeta.color}" />
                     </h2>
                 </div>
             </header>
@@ -541,18 +511,18 @@
                 <tbody>
                     <tr>
                         <td>
-                            <p><strong>{{this.customerName$ | async}}</strong></p>
-                            <p>{{this.customerEmail$ | async}}</p>
-                            <p>{{this.customerMobileNo$ | async}}</p>
+                            <p [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCustomerName]"><strong>{{this.templateMeta.customerName}}</strong></p>
+                            <p [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableEmailId]">{{this.templateMeta.customerEmail}}</p>
+                            <p [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableMobileNo]">{{this.templateMeta.customerMobileNumber}}</p>
                         </td>
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableBillingAddress]">
-                            <p><strong>{{this.billingAddress$ | async}}</strong></p>
+                            <p><strong>{{this.templateMeta.billingAddress}}</strong></p>
                             <p>Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                         </td>
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableShippingAddress]">
-                            <p><strong>{{this.shippingAddress$ | async}}</strong></p>
+                            <p><strong>{{this.templateMeta.shippingAddress}}</strong></p>
                             <p>Green Soft Solutions
                                 <p>5 A.B. Road</p>
                                 <p>Indore (M.P.) 452000</p>
@@ -560,15 +530,15 @@
                     </tr>
                     <tr>
                         <td>
-                            <p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{this.dueDate$ | async}}</strong></p>
+                            <p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{this.templateMeta.dueDate}}</strong></p>
                             <p>30/06/2017</p>
                         </td>
-                        <td>
-                            <p><strong>{{this.GSTIN$ | async}}</strong></p>
+                        <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableBillingGstin]">
+                            <p><strong>{{this.templateMeta.billingGstin}}</strong></p>
                             <p>22BBBBBB000A1Z0</p>
                         </td>
-                        <td>
-                            <p><strong>{{this.GSTIN$ | async}}</strong></p>
+                        <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableShippingGstin]">
+                            <p><strong>{{this.templateMeta.shippinGstin}}</strong></p>
                             <p>22BBBBBB000A1Z0</p>
                         </td>
                     </tr>
@@ -578,32 +548,32 @@
                 <tbody>
                     <tr>
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableShipDate]">
-                            <strong>{{this.shippingDate$ | async}}</strong>
+                            <strong>{{this.templateMeta.shippingDate}}</strong>
                             <p>30/06/2017</p>
                         </td>
 
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableShipVia]">
-                            <strong>{{this.shippingVia$ | async}}</strong>
+                            <strong>{{this.templateMeta.shippingVia}}</strong>
                             <p>30/06/2017</p>
                         </td>
 
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTrackingNo]">
-                            <strong>{{this.trackingNo$ | async}}</strong>
+                            <strong>{{this.templateMeta.trackingNumber}}</strong>
                             <p>323443242342</p>
                         </td>
 
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCustom1]">
-                            <strong>{{this.customField1$ | async}}</strong>
+                            <strong>{{this.templateMeta.customField1}}</strong>
                             <p>Hello this is custom field</p>
                         </td>
 
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCustom2]">
-                            <strong>{{this.customField2$ | async}}</strong>
+                            <strong>{{this.templateMeta.customField2}}</strong>
                             <p>2324342424432</p>
                         </td>
 
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCustom3]">
-                            <strong>{{this.customField3$ | async}}</strong>
+                            <strong>{{this.templateMeta.customField3}}</strong>
                             <p>Field 3</p>
                         </td>
                     </tr>
@@ -616,53 +586,56 @@
                 <table class="item" cellpadding="0" cellspacing="0">
                     <thead>
                         <tr>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableSno]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span> {{this.sNoLabel$ | async}}</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableItem]" colspan="2"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span> {{this.itemLabel$ | async}}</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableHsn]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.hsnSacLabel$ | async}}</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableQty]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.quantityLabel$ | async}}</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableRate]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.rateLabel$ | async}} (₹)</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDis]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.discountLabel$ | async}} (₹)</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTaxableValue]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.taxableValueLabel$ | async}}(₹)</th>
-                            <th [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTax]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.taxLabel$ | async}} (₹)</th>
-                            <th colspan="2" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTotal]"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>{{this.totalLabel$ | async}} (₹)</th>
+                            <th *ngIf="fieldDisplayState.enableSno" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span> {{this.templateMeta.sNoLabel}}</th>
+                            <th *ngIf="fieldDisplayState.enableItem" colspan="2" class="text-left"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span> {{this.templateMeta.itemLabel}}</th>
+                            <th *ngIf="fieldDisplayState.enableHsn" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.hsnSacLabel}}</th>
+                            <th *ngIf="fieldDisplayState.enableQty" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.quantityLabel}}</th>
+                            <th *ngIf="fieldDisplayState.enableRate" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.rateLabel}} (₹)</th>
+                            <th *ngIf="fieldDisplayState.enableDis" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.discountLabel}} (₹)</th>
+                            <th *ngIf="fieldDisplayState.enableTaxableValue" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.taxableValueLabel}}</th>
+                            <th *ngIf="fieldDisplayState.enableTax" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.taxLabel}} (₹)</th>
+                            <th colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{this.templateMeta.totalLabel}} (₹)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>1</td>
-                            <td colspan="2">Dummy Product Edition 2</td>
-                            <td>123456</td>
-                            <td>10 No.</td>
-                            <td>1000.00</td>
-                            <td>30.00</td>
-                            <td>9700.00</td>
-                            <td>9700.00
+                            <td *ngIf="fieldDisplayState.enableSno" class="text-right">1</td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableItem" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="fieldDisplayState.enableHsn" class="text-right">123456</td>
+                            <td *ngIf="fieldDisplayState.enableQty" class="text-right">10 No.</td>
+                            <td *ngIf="fieldDisplayState.enableRate" class="text-right">1000.00</td>
+                            <td *ngIf="fieldDisplayState.enableDis" class="text-right">30.00</td>
+                            <td *ngIf="fieldDisplayState.enableTaxableValue" class="text-right">9700.00</td>
+                            <td *ngIf="fieldDisplayState.enableTax" class="text-right">9700.00
                                 <p>@10%</p>
                             </td>
-                            <td colspan="2">11000344640.00</td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right">11000344640.00</td>
                         </tr>
                         <tr>
-                            <td>1</td>
-                            <td colspan="2">Dummy Product Edition 2</td>
-                            <td>123456</td>
-                            <td>10 No.</td>
-                            <td>1000.00</td>
-                            <td>30.00</td>
-                            <td>9700.00</td>
-                            <td>9700.00
+                            <td *ngIf="fieldDisplayState.enableSno" class="text-right">1</td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableItem" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="fieldDisplayState.enableHsn" class="text-right">123456</td>
+                            <td *ngIf="fieldDisplayState.enableQty" class="text-right">10 No.</td>
+                            <td *ngIf="fieldDisplayState.enableRate" class="text-right">1000.00</td>
+                            <td *ngIf="fieldDisplayState.enableDis" class="text-right">30.00</td>
+                            <td *ngIf="fieldDisplayState.enableTaxableValue" class="text-right">9700.00</td>
+                            <td *ngIf="fieldDisplayState.enableTax" class="text-right">9700.00
                                 <p>@10%</p>
                             </td>
-                            <td colspan="2">11000344640.00</td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right">11000344640.00</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="6"> <span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>&nbsp;</th>
-                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
-                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
-                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
-                            <th><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
-                            <th colspan="2"><span class="bgClr" [ngStyle]="{ 'background-color': color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableSno" class="text-right"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableItem" colspan="2" class="text-left"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableHsn" class="text-right"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableQty" class="text-right"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableRate" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableDis" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableTaxableValue" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableTax" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableTotal" colspan="2" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
                         </tr>
                     </tfoot>
                 </table>
@@ -673,48 +646,48 @@
             <aside>
                 <table class="balance">
                     <tr [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTaxableAmount]">
-                        <th><strong>{{this.taxableAmount$ | async}}</strong></th>
+                        <th><strong>{{this.templateMeta.taxableAmount}}</strong></th>
                         <td><span>₹30100.00</span></td>
                     </tr>
                     <tr [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTotalTax]">
-                        <th><strong>{{this.totalTax$ | async}}</strong></th>
+                        <th><strong>{{this.templateMeta.totalTax}}</strong></th>
                         <td><span>₹5920.00</span></td>
                     </tr>
                     <tr [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableTotal]">
-                        <th><strong>{{this.total$ | async}}</strong></th>
+                        <th><strong>{{this.templateMeta.total}}</strong></th>
                         <td><span>₹36020.00</span></td>
                     </tr>
                     <tr>
-                        <th><strong>{{this.totalInWords$ | async}}</strong></th>
+                        <th><strong>{{this.templateMeta.totalInWords}}</strong></th>
                         <td>Thirty Six Thousand Twenty Only</td>
                     </tr>
                 </table>
                 <table cellpadding="0" cellspacing="0" class="subfooter">
                     <tbody>
                         <tr>
-                            <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableMessage1]">
-                                <p style="margin-bottom: 15px;"><strong>  <p>{{this.message1$| async}}</p></strong></p>
-                                <section>
-                                    <p>{{this.message2$| async}}</p>
-                                </section>
-                            </td>
-                            <td></td>
-                            <td style="text-align: center;vertical-align: bottom;" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableMessage2]">
-                                <hr />
-                                <strong><h3>{{this.slogan$ | async}}</h3></strong>
-                                <strong><small>(Signature)</small></strong>
-                            </td>
+                            <td>
+                                <p style="margin-bottom: 15px;" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableMessage1]">
+                                    <strong>{{this.templateMeta.message1}}</strong>
+                                </p>
+                                <p [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableMessage2]"> {{this.templateMeta.message2}}</p>
+                                <td>&nbsp;</td>
+                                <td style="text-align: center;vertical-align: bottom;">
+                                    <img [src]="templateMeta.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />
+                                    <hr />
+                                    <strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyName]"><h3>{{this.templateMeta.companyName}}</h3></strong>
+                                    <strong><small>{{this.templateMeta.slogan}}</small></strong>
+                                </td>
                         </tr>
                         <tr [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableThanks]">
-                            <td><strong><h4 [ngStyle]="{ 'color': color}">{{this.thanks$ | async}}</h4></strong></td>
+                            <td><strong><h4 [ngStyle]="{ 'color': templateMeta.color}">{{this.templateMeta.thanks}}</h4></strong></td>
                         </tr>
                     </tbody>
                 </table>
 
             </aside>
             <footer style="text-align: center;" [ngStyle]="{ 'border-color': color}" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyAddress]">
-                {{this.address$ | async }}
-                <button (click)="createTemplate()" id="defaultOpen">Design</button>
+                {{this.templateMeta.address}}
+
             </footer>
         </div>
 

@@ -42,7 +42,7 @@ export class EditInvoiceComponent implements OnInit {
 
     this.store.select(state => {
       return Object.keys(state.invtemp.template).map(key => state.invtemp.template[key]);
-    }).takeUntil(this.destroyed$).take(10).subscribe((value) => {
+    }).takeUntil(this.destroyed$).take(5).subscribe((value) => {
         if (!_.isEmpty(value)) {
          let copyValue = _ .cloneDeep(value);
          this.template = copyValue;
@@ -53,7 +53,7 @@ export class EditInvoiceComponent implements OnInit {
         });
          this.currentTemplate = _. cloneDeep(currentTemplate);
          this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
-         this.store.dispatch(this.invoiceActions.setTemplateData(this.currentTemplateSections));
+         // this.store.dispatch(this.invoiceActions.setTemplateData(this.currentTemplateSections));
         }
     });
 
