@@ -15,11 +15,9 @@ export class EditFiltersContainersComponent implements OnInit {
   public ifEmailSelected: boolean = false;
 
   constructor() {
-    console.log('filters-container constructor called');
   }
 
   public ngOnInit() {
-    console.log('filters-container initialised');
   }
 
   public openTab(tab) {
