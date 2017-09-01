@@ -6,6 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { NgModule } from '@angular/core';
 import { PurchaseComponent } from './purchase.component';
 import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
+import { Location } from '@angular/common';
 /**
  * Created by kunalsaxena on 9/1/17.
  */
@@ -17,7 +18,7 @@ const INVOICE_ROUTES: Routes = [
     component: PurchaseComponent,
     children: [
       { path: '', redirectTo: 'purchase', pathMatch: 'full' },
-      { path: 'invoice',  component: PurchaseInvoiceComponent  },
+      { path: 'invoice', component: PurchaseInvoiceComponent },
     ]
   }
 ];
@@ -35,6 +36,6 @@ const INVOICE_ROUTES: Routes = [
   exports: [
     RouterModule,
   ],
-  providers: []
+  providers: [Location]
 })
 export class PurchaseRoutingModule { }

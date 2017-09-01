@@ -7,9 +7,9 @@ import { PurchaseComponent } from './purchase.component';
  */
 
 @NgModule({
-  declarations: [ PurchaseInvoiceComponent, PurchaseComponent ],
+  declarations: [PurchaseInvoiceComponent, PurchaseComponent],
   imports: [
     PurchaseRoutingModule
   ]
 })
-export class PurchaseModule {}
+export class PurchaseModule { }
