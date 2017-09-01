@@ -202,13 +202,14 @@
           </td>
           <td>
             <select class="form-control" name="tr.discount" [(ngModel)]="transaction.discount">
-              <option [ngValue]="select">Select</option>
+              <option [ngValue]="'select'">Select</option>
             </select>
           </td>
           <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.taxable" /></td>
           <td>
-            <select class="form-control" name="tr.tax" [(ngModel)]="transaction.tax">
-              <option [ngValue]="select">Select</option>
+            <select multiple class="form-control" name="tr.tax" [(ngModel)]="transaction.tax">
+              <option [ngValue]="'select'">Select</option>
+              <option [ngValue]="tax.uniqueName" *ngFor="let tax of taxList$ | async">{{tax.name}}</option>
             </select>
           </td>
           <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.total" /></td>

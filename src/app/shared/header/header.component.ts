@@ -147,9 +147,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.router.navigate(['/login']);
         });
       } else {
-        this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
-          this.router.navigate(['/home']);
-        });
+        // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        //   this.router.navigate(['/home']);
+        // });
       }
     });
   }
