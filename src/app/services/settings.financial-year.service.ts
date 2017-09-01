@@ -16,7 +16,7 @@ export interface ILockFinancialYearRequest {
   uniqueName: string;
 }
 
-export interface ILockFinancialYearResponse {
+export interface IFinancialYearResponse {
   companyName: string;
   companyUniqueName: string;
   financialYears: ActiveFinancialYear[];
@@ -36,7 +36,7 @@ export class SettingsFinancialYearService {
   * API: 'company/:companyUniqueName/financial-year'
   * Method: GET
   */
-  public GetAllFinancialYears(): Observable<BaseResponse<ActiveFinancialYear, string>> {
+  public GetAllFinancialYears(): Observable<BaseResponse<IFinancialYearResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -44,10 +44,10 @@ export class SettingsFinancialYearService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<ActiveFinancialYear, string> = res.json();
+      let data: BaseResponse<IFinancialYearResponse, string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => HandleCatch<ActiveFinancialYear, string>(e));
+    }).catch((e) => HandleCatch<IFinancialYearResponse, string>(e));
   }
 
   /*
@@ -55,7 +55,7 @@ export class SettingsFinancialYearService {
   * API: 'company/:companyUniqueName/financial-year-lock'
   * Method: PATCH
   */
-  public LockFinancialYear(reqObj: ILockFinancialYearRequest): Observable<BaseResponse<ILockFinancialYearResponse, ILockFinancialYearRequest>> {
+  public LockFinancialYear(reqObj: ILockFinancialYearRequest): Observable<BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -63,9 +63,66 @@ export class SettingsFinancialYearService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.patch(SETTINGS_FINANCIAL_YEAR_API.LOCK_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), reqObj).map((res) => {
-      let data: BaseResponse<ILockFinancialYearResponse, ILockFinancialYearRequest> = res.json();
+      let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => HandleCatch<ILockFinancialYearResponse, ILockFinancialYearRequest>(e));
+    }).catch((e) => HandleCatch<IFinancialYearResponse, ILockFinancialYearRequest>(e));
+  }
+
+  /*
+  * Unlock Financial Year
+  * API: 'company/:companyUniqueName/financial-year-unlock'
+  * Method: PATCH
+  */
+  public UnlockFinancialYear(reqObj: ILockFinancialYearRequest): Observable<BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.patch(SETTINGS_FINANCIAL_YEAR_API.UNLOCK_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), reqObj).map((res) => {
+      let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = res.json();
+      data.queryString = {};
+      return data;
+    }).catch((e) => HandleCatch<IFinancialYearResponse, ILockFinancialYearRequest>(e));
+  }
+
+  /*
+  * Switch Financial Year
+  * API: 'company/:companyUniqueName/financial-year-unlock'
+  * Method: PATCH
+  */
+  public SwitchFinancialYear(uniqueName: string): Observable<BaseResponse<ActiveFinancialYear, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.patch(SETTINGS_FINANCIAL_YEAR_API.SWITCH_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {uniqueName}).map((res) => {
+      let data: BaseResponse<ActiveFinancialYear, string> = res.json();
+      data.queryString = {};
+      return data;
+    }).catch((e) => HandleCatch<ActiveFinancialYear, string>(e));
+  }
+
+  /*
+  * Add Financial Year
+  * API: 'company/:companyUniqueName/financial-year'
+  * Method: PATCH
+  */
+  public AddFinancialYear(fromYear: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(SETTINGS_FINANCIAL_YEAR_API.ADD_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {fromYear}).map((res) => {
+      let data: BaseResponse<IFinancialYearResponse, string> = res.json();
+      data.queryString = {};
+      return data;
+    }).catch((e) => HandleCatch<IFinancialYearResponse, string>(e));
   }
 }
