@@ -85,7 +85,7 @@
                         <div class="col-xs-2">
                             <div class="row">
                                 <label>Link Account</label>
-                                <select2 [(ngModel)]="razorpayObj.account.name" name="linkedaccount" [data]="linkAccountDropDown$ | async" [options]="options" [ngModelOptions]="{standalone: true}" (valueChanged)="selectLinkAccount($event)">
+                                <select2 [(ngModel)]="razorpayObj.account" name="linkedaccount" [data]="linkAccountDropDown$ | async" [options]="options" [ngModelOptions]="{standalone: true}" (valueChanged)="selectLinkAccount($event)">
                                 </select2>
                             </div>
                         </div>
