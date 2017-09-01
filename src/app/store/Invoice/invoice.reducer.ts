@@ -160,9 +160,9 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-                console.log(res.body);
                 let emailId = res.queryString.emailId;
                 newState.settings.invoiceSettings.email = emailId;
+                newState.settings.invoiceSettings.emailVerified = false;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -199,7 +199,6 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (res.status === 'success') {
                 newState.settings.razorPayform = res.body;
-                console.log(res.body);
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -208,7 +207,8 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let newState = _.cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (res.status === 'success') {
-                newState.settings.razorPayform = res.body;
+                let form = res.queryString.form;
+                newState.settings.razorPayform = form;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -236,7 +236,8 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let newState = _.cloneDeep(state);
             let res: BaseResponse<RazorPayDetailsResponse, string> = action.payload;
             if (res.status === 'success') {
-                newState.settings.razorPayform = res.body;
+                let form = res.queryString.form;
+                newState.settings.razorPayform = form;
                 return Object.assign({}, state, newState);
             }
             return state;
