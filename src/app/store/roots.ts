@@ -50,7 +50,7 @@ export const reducers = {
   verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
   inventory: fromInventory.InventoryReducer,
   invoice: fromInvoice.InvoiceReducer,
-  invtemp: fromInvoiceTemp.invoiceTemplateReducer,
+  invtemp: fromInvoiceTemp.InvoiceTemplateReducer,
   search: fromSearch.searchReducer,
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,

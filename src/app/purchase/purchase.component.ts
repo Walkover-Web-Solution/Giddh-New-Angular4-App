@@ -1,9 +1,9 @@
+/**
+ * Created by kunalsaxena on 9/1/17.
+ */
 import { Component } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
+import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import * as _ from 'lodash';
 
 @Component({
   styles: [`
@@ -26,12 +26,14 @@ import * as _ from 'lodash';
       color: #ff5f00;
     }
   `],
-  templateUrl: './invoice.component.html'
+  templateUrl: './purchase.component.html'
 })
-export class InvoiceComponent {
+export class PurchaseComponent {
   constructor(
     private router: Router,
     private location: Location
-  ) {}
+  ) {
+    console.log('Hi this is purchase component');
+  }
 
 }
