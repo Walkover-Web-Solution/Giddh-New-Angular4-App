@@ -351,7 +351,7 @@ export class InvoiceService {
       newForm.companyName = s.session.companyUniqueName;
       form = _.cloneDeep(newForm);
     });
-    return this._http.post(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
+    return this._http.put(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
         let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
         data.queryString = { form };
@@ -412,7 +412,7 @@ export class InvoiceService {
       newForm.companyName = s.session.companyUniqueName;
       form = _.cloneDeep(newForm);
     });
-    return this._http.put(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
+    return this._http.post(INVOICE_API.GET_RAZORPAY_DETAIL.replace(':companyUniqueName', this.companyUniqueName), form)
       .map((res) => {
         let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
         data.queryString = { form };
