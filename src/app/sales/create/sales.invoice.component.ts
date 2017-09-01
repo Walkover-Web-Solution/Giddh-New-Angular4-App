@@ -15,6 +15,8 @@ import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interfac
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
+import { CompanyActions } from '../../services/actions/company.actions';
+import { TaxResponse } from '../../models/api-models/Company';
 const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
 
 @Component({
@@ -49,19 +51,23 @@ export class SalesInvoiceComponent implements OnInit {
   public accountAsideMenuState: string = 'out';
   public theadArr: string[] = THEAD_ARR;
   public activeGroupUniqueName$: Observable<string>;
+  private taxList$: Observable<INameUniqueName[]>;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponse>;
+  private taxes$: Observable<TaxResponse[]>;
 
   constructor(
     private store: Store<AppState>,
     private accountService: AccountService,
-    private salesAction: SalesActions
+    private salesAction: SalesActions,
+    private companyActions: CompanyActions
   ) {
     this.invFormData = new InvoiceFormClass();
     setTimeout(() => {
       this.addBlankRowInTransaction();
     }, 500);
+    this.store.dispatch(this.companyActions.getTax());
   }
 
   public ngOnInit() {
@@ -94,6 +100,19 @@ export class SalesInvoiceComponent implements OnInit {
         this.assignValuesInForm(o);
       }
     });
+
+    // get tax list
+    this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
+      if (o) {
+        let arr: INameUniqueName[] = [];
+        _.forEach(o, (item: TaxResponse) => {
+          arr.push({name: item.name, uniqueName: item.uniqueName});
+        });
+        this.taxes$ = Observable.of(o);
+        this.taxList$ = Observable.of(arr);
+      }
+    });
+
   }
 
   public assignValuesInForm(data: AccountResponse) {
