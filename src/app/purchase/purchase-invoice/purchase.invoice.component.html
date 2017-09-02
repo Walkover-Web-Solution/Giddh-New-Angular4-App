@@ -15,21 +15,31 @@
                     <div class="form-group col-xs-2">
                         <div class="row">
                             <label>Date Range</label>
-                            <input type="text" class="form-control" placeholder="" />
+                            <br>
+                            <div class="input-group" daterangepicker (selected)="selectedDate($event, mainInput)" (cancelDaterangepicker)="calendarEventsHandler($event)" (applyDaterangepicker)="calendarEventsHandler($event)" (hideDaterangepicker)="calendarEventsHandler($event)" (showDaterangepicker)="calendarEventsHandler($event)">
+                                <span class="form-control uneditable-input">
+                                    {{ mainInput.start | date:'M/dd/y' }} - {{ mainInput.end| date:'M/dd/y' }}
+                                </span>
+                                <span class="input-group-btn">
+                                    <a type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></a>
+                                </span>
+                            </div>
                         </div>
                     </div>
+
                     <div class="form-group col-xs-2">
                         <label>Other Filters</label>
 
                         <div class="btn-group btn-block" dropdown>
-                            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle"> Filter <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> Filter <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
                             </button>
-                            <ul *dropdownMenu class="dropdown-menu" role="menu">
-                                <li>
-                                    <label><input type="checkbox" >GSTIN empty </label>
+                            <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                                <li *ngFor="let item of otherFilters">
+                                    <label><input type="checkbox"> {{item.name}}</label>
                                 </li>
                             </ul>
                         </div>
+
                     </div>
                     <div class="form-group inline">
                         <br />
@@ -39,7 +49,6 @@
                     <button class="btn btn-generate pull-right">Generate <br />Purchase Invoice</button>
                 </div>
             </form>
-
 
             <!-- search form  -->
             <form class="col-xs-2 pull-right search-form">
@@ -74,6 +83,7 @@
                 <th class="text-right">IGST</th>
                 <th class="text-right">CGST</th>
                 <th class="text-right">SGST</th>
+                <th class="text-right">UTGST</th>
             </tr>
         </thead>
         <tbody>
@@ -98,6 +108,7 @@
                 <td class="text-right">-</td>
                 <td class="text-right">100.00</td>
                 <td class="text-right">100.00</td>
+                <td class="text-right">100.00</td>
             </tr>
             <tr>
                 <td class="text-center"><input type="checkbox" /></td>
@@ -120,6 +131,7 @@
                 <td class="text-right">100.00</td>
                 <td class="text-right">-</td>
                 <td class="text-right">-</td>
+                <td class="text-right">-</td>
             </tr>
             <tr>
                 <td class="text-center"><input type="checkbox" /></td>
@@ -141,6 +153,7 @@
                 <td class="text-right">15000.00</td>
                 <td class="text-right">100.00</td>
                 <td class="text-right">100.00</td>
+                <td class="text-right">-</td>
                 <td class="text-right">-</td>
             </tr>
         </tbody>
