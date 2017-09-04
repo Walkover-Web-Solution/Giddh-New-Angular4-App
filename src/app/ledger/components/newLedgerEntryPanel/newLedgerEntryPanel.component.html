@@ -1,6 +1,6 @@
 <div class="ledger-panel" (click)="hideDiscountTax()">
   <div class="wrapper">
-    <div class="basic_detail" ng-if="ledgerCtrl.showTaxationDiscountBox">
+    <div class="basic_detail" *ngIf="showTaxationDiscountBox">
       <table>
         <tbody class="mrB1 pull-left">
           <tr *ngIf="currentTxn.selectedAccount">
@@ -39,8 +39,7 @@
             </td>
             <td class="pItem">
               <label class="primary_color">Amount</label>
-              <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount" ng-model="ledgerCtrl.selectedTxn.panel.amount"
-                (keyup)="calculateTotal()" />
+              <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()" />
             </td>
             <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
               <label>&nbsp;</label>
