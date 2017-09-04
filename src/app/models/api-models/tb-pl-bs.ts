@@ -13,8 +13,8 @@ export interface TrialBalanceExportResponse {
 }
 
 export interface TrialBalanceRequest {
-  fromDate?: string;
-  toDate?: string;
+  from?: string;
+  to?: string;
   refresh?: boolean;
 }
 
