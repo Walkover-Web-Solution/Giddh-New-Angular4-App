@@ -74,6 +74,9 @@ table>tbody>tr td.select .custom-select select {
     padding-left: 7px;
 }
 
+.dd-options:hover {
+    color: rgb(211, 95, 41);
+}
 /*.ranges:nth-of-type(2) {
     display: none !important;
 }*/
