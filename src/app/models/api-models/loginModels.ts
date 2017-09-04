@@ -7,6 +7,7 @@ export class VerifyEmailModel {
 
 export class VerifyEmailResponseModel {
   public user: UserDetails;
+  public session: Session;
   public authKey: string;
   public isNewUser: boolean;
   public contactNumber: string;
@@ -15,10 +16,16 @@ export class VerifyEmailResponseModel {
   public text: string;
 }
 
+export interface Session {
+  id: string;
+  expiresAt: string;
+  createdAt: string;
+}
+
 export class UserDetails {
   public name: string;
   public email: string;
-  public contactNo: string;
+  public mobileNo: string;
   public uniqueName: string;
   public anAdmin: boolean;
 }

@@ -15,7 +15,7 @@ export class UserAuthenticated implements CanActivate {
         this.user = s.session.user;
       }
     });
-    if (this.user && this.user.authKey) {
+    if (this.user && this.user.session && this.user.session.id) {
       console.log('Request is authorized, redirect to Home Component!');
       // this._auth.Authorize();
       this._router.navigate(['/home']);
