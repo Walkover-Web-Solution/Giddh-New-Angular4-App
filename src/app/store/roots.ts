@@ -36,6 +36,7 @@ export interface AppState {
   ledger: fromLedger.LedgerState;
   settings: fromSettings.SettingsState;
   manufacturing: fromManufacturing.ManufacturingState;
+  invoicePurchase: fromInvoicePurchase.InvoicePurchaseState;
 }
 
 export const reducers = {
