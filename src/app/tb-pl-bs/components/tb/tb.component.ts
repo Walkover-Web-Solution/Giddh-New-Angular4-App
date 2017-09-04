@@ -26,7 +26,7 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
       [tbExportPdf]="true"
       [tbExportXLS]="true"
     ></tb-pl-bs-filter>
-    <div *ngIf="!(data$ | async)">
+    <div *ngIf="(showLoader | async)">
       <!-- loader -->
       <div class="loader" >
         <span></span>
@@ -62,8 +62,8 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     if (value) {
       this.request = {
         refresh: false,
-        fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
-        toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
+        from: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        to: this.selectedCompany.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
     }

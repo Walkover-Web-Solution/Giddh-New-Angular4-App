@@ -15,8 +15,8 @@
           </div>
         </div>
 
-        <date-picker formControlName="fromDate" label="From Date" [minDate]="" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
-        <date-picker formControlName="toDate" label="To Date" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
+        <date-picker formControlName="from" label="From Date" [minDate]="" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
+        <date-picker formControlName="to" label="To Date" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
 
         <div class="form-group" style="vertical-align: bottom">
           <button type="submit" class="btn btn-success mrL1">
