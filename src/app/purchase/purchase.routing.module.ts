@@ -29,7 +29,7 @@ const INVOICE_ROUTES: Routes = [
   declarations: [
   ],
   imports: [
-    Daterangepicker,
+    // Daterangepicker,
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
@@ -39,7 +39,7 @@ const INVOICE_ROUTES: Routes = [
   ],
   exports: [
     RouterModule,
-    Ng2BootstrapModule,
+    // Ng2BootstrapModule,
     // FormsModule,
     CommonModule,
     SharedModule,
