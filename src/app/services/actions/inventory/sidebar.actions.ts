@@ -156,9 +156,10 @@ export class SidebarAction {
     };
   }
 
-  public GetGroupsWithStocksHierarchyMin(): Action {
+  public GetGroupsWithStocksHierarchyMin(q?: string): Action {
     return {
-      type: InventoryActionsConst.GetGroupsWithStocksHierarchyMin
+      type: InventoryActionsConst.GetGroupsWithStocksHierarchyMin,
+      payload: q
     };
   }
 
