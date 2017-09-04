@@ -6,7 +6,11 @@ import * as  moment from 'moment';
 import * as  _ from 'lodash';
 import { IInvoicePurchaseResponse } from '../../services/purchase-invoice.service';
 
-import { PipeTransform , Pipe } from '@angular/core';
+import { PipeTransform, Pipe, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/roots';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { InvoicePurchaseActions } from '../../services/actions/purchase-invoice/purchase-invoice.action';
 @Pipe({ name: 'highlight' })
 export class HighlightPipe implements PipeTransform {
   public transform(text: string, search): string {
@@ -48,7 +52,7 @@ const fileGstrOptions = [
   styleUrls: ['purchase.invoice.component.css'],
   providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }, HighlightPipe]
 })
-export class PurchaseInvoiceComponent {
+export class PurchaseInvoiceComponent implements OnInit {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
   public allPurchaseInvoices: IInvoicePurchaseResponse[] = [
         {
@@ -215,15 +219,25 @@ export class PurchaseInvoiceComponent {
   public singleDate: any;
 
   public eventLog = '';
-
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(
     private router: Router,
-    private location: Location
+    private location: Location,
+    private store: Store<AppState>,
+    private invoicePurchaseActions: InvoicePurchaseActions
   ) {
     console.log('Hi this is purchase invoice component');
     this.allPurchaseInvoicesBackup = this.allPurchaseInvoices;
   }
 
+  public ngOnInit() {
+    this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices());
+    this.store.select(p => p.invoicePurchase.purchaseInvoices).takeUntil(this.destroyed$).subscribe((o) => {
+      if (o && o.length) {
+        this.allPurchaseInvoices = o;
+      }
+    });
+  }
   public selectedDate(value: any, dateInput: any) {
     console.log('value is :', value);
     console.log('dateInput is :', dateInput);
