@@ -9,8 +9,10 @@ import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroups
 import * as uuid from 'uuid';
 import { cloneDeep } from 'lodash';
 import { createAutoCorrectedDatePipe } from '../shared/helpers/autoCorrectedDatePipe';
+import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 
 export class LedgerVM {
+  public groupsArray: Observable<GroupsWithAccountsResponse[]>;
   public activeAccount$: Observable<AccountResponse>;
   public transactionData$: Observable<TransactionsResponse>;
   public selectedTxnUniqueName: string;
@@ -26,10 +28,13 @@ export class LedgerVM {
   public fromDate: Date;
   public toDate: Date;
   public format: string = 'dd-MM-yyyy';
-  public accountUnq: string = ''; // $stateParams.unqName
+  public accountUnq: string = '';
   public blankLedger: BlankLedgerVM;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
+  public isAmountFirst: boolean = false;
+  public isTotalFirts: boolean = false;
+  public showTaxationDiscountBox: boolean = false;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
