@@ -50,8 +50,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     }
     this._selectedCompany = value;
     this.filterForm.patchValue({
-      toDate: value.activeFinancialYear.financialYearEnds,
-      fromDate: value.activeFinancialYear.financialYearEnds
+      to: value.activeFinancialYear.financialYearEnds,
+      from: value.activeFinancialYear.financialYearStarts
     });
 
     this.financialOptions = value.financialYears.map(q => {
@@ -69,8 +69,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
 
   constructor(private fb: FormBuilder) {
     this.filterForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
+      from: [''],
+      to: [''],
       fy: [''],
       refresh: [false]
     });
