@@ -28,6 +28,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { TaxControlComponent } from '../../../shared/theme/index';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
+import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
+import { find } from 'lodash';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -39,6 +41,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: boolean = false;
+  @Input() public showTaxationDiscountBox: boolean = true;
+  public isAmountFirst: boolean = false;
+  public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
@@ -63,7 +68,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public isFileUploading: boolean = false;
   public isLedgerCreateInProcess$: Observable<boolean>;
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -134,12 +138,24 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public calculateTotal() {
     let total = this.currentTxn.amount - this.currentTxn.discount;
     this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
+    if (this.isAmountFirst || this.isTotalFirts) {
+      return;
+    } else {
+      this.isAmountFirst = true;
+      this.currentTxn.isInclusiveTax = false;
+    }
   }
 
   public calculateAmount() {
     let total = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax)
       * this.currentTxn.discount);
     this.currentTxn.amount = Number((total / (100 + this.currentTxn.tax)).toFixed(2));
+    if (this.isTotalFirts || this.isAmountFirst) {
+      return;
+    } else {
+      this.isTotalFirts = true;
+      this.currentTxn.isInclusiveTax = true;
+    }
   }
 
   public saveLedger() {
@@ -220,6 +236,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.discountControl.discountMenu = false;
     }
   }
+
   public hideTax(): void {
     if (this.taxControll) {
       this.taxControll.showTaxPopup = false;
