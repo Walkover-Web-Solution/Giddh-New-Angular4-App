@@ -1,7 +1,7 @@
 import { VerifyEmailResponseModel } from '../models/api-models/loginModels';
 import { AppState } from '../store/roots';
 import { Injectable } from '@angular/core';
-import { Http, RequestOptionsArgs, Response, Headers } from '@angular/http';
+import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 
@@ -51,7 +51,7 @@ export class HttpWrapperService {
     }
 
     if (this.user) {
-      options.headers.append('auth-key', this.user.authKey);
+      options.headers.append('Session-Id', this.user.session.id);
     }
     // options.withCredentials = true;
     options.headers.append('cache-control', 'no-cache');
