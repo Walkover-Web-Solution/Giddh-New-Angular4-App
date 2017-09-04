@@ -2,13 +2,13 @@ import { CompanyActions } from './../../../../services/actions/company.actions';
 import { LocationService } from './../../../../services/location.service';
 import { CompanyRequest } from './../../../../models/api-models/Company';
 import { SignupWithMobile, VerifyMobileModel } from './../../../../models/api-models/loginModels';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { VerifyMobileActions } from './../../../../services/actions/verifyMobile.actions';
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
-import { StateDetailsRequest, ComapnyResponse } from '../../../../models/api-models/Company';
+import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
@@ -46,7 +46,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
-        return s.session.user.user.contactNo !== null;
+        return s.session.user.user.mobileNo !== null;
       }
     }).takeUntil(this.destroyed$);
     this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated).takeUntil(this.destroyed$);
