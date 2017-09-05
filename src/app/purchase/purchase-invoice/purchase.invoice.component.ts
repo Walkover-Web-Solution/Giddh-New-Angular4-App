@@ -55,121 +55,121 @@ const fileGstrOptions = [
 export class PurchaseInvoiceComponent implements OnInit {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
   public allPurchaseInvoices: IInvoicePurchaseResponse[] = [
-        {
-            account: {
-                accountName: 'devansh nogst',
-                gstIn: null,
-                uniqueName: 'devanshnogst'
-            },
-            entryUniqueName: 'zz01504521377679',
-            gstin: null,
-            entryType: false,
-            igstAmount: 30002.04,
-            cgstAmount: 0,
-            sgstAmount: 0,
-            taxableValue: 0,
-            particulars: 'devansh hsn',
-            invoiceNo: '321',
-            utgstAmount: 0,
-            entryDate: '2017-08-20',
-            voucherNo: 5
-        },
-        {
-            account: {
-                accountName: 'devansh',
-                gstIn: '03EFIAJ111111Z1',
-                uniqueName: 'devansh'
-            },
-            entryUniqueName: 'cfp1504251058218',
-            gstin: '03EFIAJ111111Z1',
-            entryType: false,
-            igstAmount: 3000,
-            cgstAmount: 0,
-            sgstAmount: 0,
-            taxableValue: 0,
-            particulars: 'devansh hsn',
-            invoiceNo: '3333',
-            utgstAmount: 0,
-            entryDate: '2017-08-20',
-            voucherNo: 2
-        },
-        {
-            account: {
-                accountName: 'devansh nogst',
-                gstIn: null,
-                uniqueName: 'devanshnogst'
-            },
-            entryUniqueName: '3k01504523098974',
-            gstin: null,
-            entryType: false,
-            igstAmount: 30002.04,
-            cgstAmount: 0,
-            sgstAmount: 0,
-            taxableValue: 0,
-            particulars: 'devansh hsn',
-            invoiceNo: '1231',
-            utgstAmount: 0,
-            entryDate: '2017-08-20',
-            voucherNo: 6
-        },
-        {
-            account: {
-                accountName: 'devansh nogst',
-                gstIn: null,
-                uniqueName: 'devanshnogst'
-            },
-            entryUniqueName: 'gr31504520672172',
-            gstin: null,
-            entryType: false,
-            igstAmount: 30002.04,
-            cgstAmount: 0,
-            sgstAmount: 0,
-            taxableValue: 0,
-            particulars: 'devansh hsn',
-            invoiceNo: '321',
-            utgstAmount: 0,
-            entryDate: '2017-08-20',
-            voucherNo: 3
-        },
-        {
-            account: {
-                accountName: 'devansh',
-                gstIn: '03EFIAJ111111Z1',
-                uniqueName: 'devansh'
-            },
-            entryUniqueName: '0zq1504250944348',
-            gstin: '03EFIAJ111111Z1',
-            entryType: false,
-            igstAmount: 3000,
-            cgstAmount: 0,
-            sgstAmount: 0,
-            taxableValue: 0,
-            particulars: 'devansh hsn',
-            invoiceNo: '3333',
-            utgstAmount: 0,
-            entryDate: '2017-08-20',
-            voucherNo: 1
-        },
-        {
-            account: {
-                accountName: 'devansh nogst',
-                gstIn: null,
-                uniqueName: 'devanshnogst'
-            },
-            entryUniqueName: '4rf1504520750544',
-            gstin: null,
-            entryType: false,
-            igstAmount: 30002.04,
-            cgstAmount: 0,
-            sgstAmount: 0,
-            taxableValue: 0,
-            particulars: 'devansh hsn',
-            invoiceNo: '321',
-            utgstAmount: 0,
-            entryDate: '2017-08-20',
-            voucherNo: 4
-        }
-    ];
+    {
+      account: {
+        accountName: 'devansh nogst',
+        gstIn: null,
+        uniqueName: 'devanshnogst'
+      },
+      entryUniqueName: 'zz01504521377679',
+      gstin: null,
+      entryType: false,
+      igstAmount: 30002.04,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      taxableValue: 0,
+      particulars: 'devansh hsn',
+      invoiceNo: '321',
+      utgstAmount: 0,
+      entryDate: '2017-08-20',
+      voucherNo: 5
+    },
+    {
+      account: {
+        accountName: 'devansh',
+        gstIn: '03EFIAJ111111Z1',
+        uniqueName: 'devansh'
+      },
+      entryUniqueName: 'cfp1504251058218',
+      gstin: '03EFIAJ111111Z1',
+      entryType: false,
+      igstAmount: 3000,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      taxableValue: 0,
+      particulars: 'devansh hsn',
+      invoiceNo: '3333',
+      utgstAmount: 0,
+      entryDate: '2017-08-20',
+      voucherNo: 2
+    },
+    {
+      account: {
+        accountName: 'devansh nogst',
+        gstIn: null,
+        uniqueName: 'devanshnogst'
+      },
+      entryUniqueName: '3k01504523098974',
+      gstin: null,
+      entryType: false,
+      igstAmount: 30002.04,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      taxableValue: 0,
+      particulars: 'devansh hsn',
+      invoiceNo: '1231',
+      utgstAmount: 0,
+      entryDate: '2017-08-20',
+      voucherNo: 6
+    },
+    {
+      account: {
+        accountName: 'devansh nogst',
+        gstIn: null,
+        uniqueName: 'devanshnogst'
+      },
+      entryUniqueName: 'gr31504520672172',
+      gstin: null,
+      entryType: false,
+      igstAmount: 30002.04,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      taxableValue: 0,
+      particulars: 'devansh hsn',
+      invoiceNo: '321',
+      utgstAmount: 0,
+      entryDate: '2017-08-20',
+      voucherNo: 3
+    },
+    {
+      account: {
+        accountName: 'devansh',
+        gstIn: '03EFIAJ111111Z1',
+        uniqueName: 'devansh'
+      },
+      entryUniqueName: '0zq1504250944348',
+      gstin: '03EFIAJ111111Z1',
+      entryType: false,
+      igstAmount: 3000,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      taxableValue: 0,
+      particulars: 'devansh hsn',
+      invoiceNo: '3333',
+      utgstAmount: 0,
+      entryDate: '2017-08-20',
+      voucherNo: 1
+    },
+    {
+      account: {
+        accountName: 'devansh nogst',
+        gstIn: null,
+        uniqueName: 'devanshnogst'
+      },
+      entryUniqueName: '4rf1504520750544',
+      gstin: null,
+      entryType: false,
+      igstAmount: 30002.04,
+      cgstAmount: 0,
+      sgstAmount: 0,
+      taxableValue: 0,
+      particulars: 'devansh hsn',
+      invoiceNo: '321',
+      utgstAmount: 0,
+      entryDate: '2017-08-20',
+      voucherNo: 4
+    }
+  ];
 
   public selectedGstrType: string;
 
@@ -248,19 +248,32 @@ export class PurchaseInvoiceComponent implements OnInit {
   /**
    * filterPurchaseInvoice
    */
-  public filterPurchaseInvoice(searchString) {
+  public filterPurchaseInvoice(searchString: string) {
     this.allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoicesBackup);
-    if (searchString) {
-      let allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoices);
-      let patt = new RegExp(searchString);
-      allPurchaseInvoices = allPurchaseInvoices.filter((invoice: IInvoicePurchaseResponse) => {
-        return (patt.test(invoice.entryUniqueName) || patt.test(invoice.account.accountName) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNo) || patt.test(invoice.particulars));
-      });
 
-      this.allPurchaseInvoices = allPurchaseInvoices;
-    } else {
-      this.allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoicesBackup);
+    if (searchString) {
+
+      let isValidInput: boolean = true;
+      let patt: RegExp;
+      searchString = searchString.replace(/\\/g, '\\\\');
+
+      try {
+        patt = new RegExp(searchString);
+      } catch (e) {
+        isValidInput = false;
+      }
+
+      if (isValidInput) {
+        let allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoices);
+
+        allPurchaseInvoices = allPurchaseInvoices.filter((invoice: IInvoicePurchaseResponse) => {
+          return (patt.test(invoice.account.gstIn) || patt.test(invoice.entryUniqueName) || patt.test(invoice.account.accountName) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNo) || patt.test(invoice.particulars));
+        });
+
+        this.allPurchaseInvoices = allPurchaseInvoices;
+      }
     }
+
   }
 
   /**

@@ -139,8 +139,8 @@
         </thead>
         <tbody>
             <tr *ngFor="let invoice of allPurchaseInvoices">
-                <td class="text-center"><input type="checkbox" disabled="disabled" /></td>
-                <td>{{invoice.entryDate}}</td>
+                <td class="text-center"><input type="checkbox" /></td>
+                <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
                 <td [innerHTML]="invoice.account.accountName | highlight: searchBox.value"></td>
                 <td [innerHTML]="invoice.account.gstIn | highlight: searchBox.value"></td>
                 <td><input type="text" class="form-control" [value]="invoice.account.gstIn" /></td>
