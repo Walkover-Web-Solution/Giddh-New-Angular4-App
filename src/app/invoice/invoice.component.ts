@@ -8,8 +8,7 @@ import * as _ from 'lodash';
 @Component({
   styles: [`
     .invoice-bg{
-      background-color: #f4f5f8;
-      padding: 20px;
+      padding-top: 15px;
     }
     .invoice-nav.navbar-nav>li>a{
       padding: 6px 30px;
@@ -32,6 +31,6 @@ export class InvoiceComponent {
   constructor(
     private router: Router,
     private location: Location
-  ) {}
+  ) { }
 
 }
