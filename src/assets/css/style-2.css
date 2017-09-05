@@ -118,10 +118,10 @@ input {
 .form-control {
     background: #fff !important;
     border: 1px solid #d6d6d6;
-    border-radius: 0;
+    border-radius: 2px !important;
     padding: 6px !important;
     outline: 0;
-    color: #666666;
+    color: rgba(0, 0, 0, 0.6);
     box-shadow: none;
 }
 
@@ -130,13 +130,12 @@ input {
 .form-control::-moz-placeholder,
 .form-control:-ms-input-placeholder,
 .form-control:-moz-placeholder {
-    color: #b3b3b3;
+    color: rgba(0, 0, 0, 0.3);
 }
 
 .form-control:focus {
-    border-radius: 0 !important;
     outline: none;
-    border: 1px solid #f7b995 !important;
+    border-color: #f7b995 !important;
     box-shadow: none;
 }
 
@@ -161,24 +160,22 @@ input {
 }
 
 .company-name span {
-    color: #adadad !important;
+    color: #333 !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
-.company-name span.cName {
-    color: #616161 !important;
+.company-name .cText span {
+    color: #fff !important;
 }
 
 .acntAccordion .title.active {
     background-image: none;
 }
 
-header,
 header .navbar {
-    background-color: #fff;
-}
-
-.hamburger_menu {
-    background: #525252;
+    background-color: #1a1a1a;
 }
 
 .company-name.open span {
@@ -274,13 +271,8 @@ header .navbar {
 .btn {
     padding: 6px 16px;
     border: 0;
-    border-radius: 0;
+    border-radius: 2px;
     font-size: 14px;
-}
-
-#AddManage {
-    margin: 6px 0 0 20px;
-    padding: 10px 5px;
 }
 
 .btn-default {
@@ -371,7 +363,7 @@ header .navbar {
 #accountSearch {
     min-height: 54px;
     border: 0;
-    background: #d35f29 !important;
+    background: #333 !important;
     color: #fff;
     padding: 7px 10px !important;
     width: 232px;
@@ -387,9 +379,9 @@ header .navbar {
 }
 
 .ledger_search .input-group-addon {
-    background: #d35f29;
+    background: #333;
     color: #fff;
-    border: 1px solid #f5834e;
+    border: 0;
     border-top: 0;
     border-bottom: 0;
 }
@@ -415,15 +407,11 @@ header .navbar {
 
 .parent-Group {
     padding-left: 15px;
-}
-
-.smlSquare.ASS {
-    background: none;
+    line-height: normal;
 }
 
 .subAccBox li a.active,
 .subAccBox li a:hover {
-    color: #d35f29;
     background: none;
 }
 
@@ -438,10 +426,6 @@ header .navbar {
     background: #f5f5f5;
     color: #d35f29 !important;
     margin: 20px 0px;
-}
-
-.acntAccordion {
-    margin-top: 11px;
 }
 
 #cmpWrp i {
@@ -599,17 +583,17 @@ header {
 #cmpWrp {
     cursor: pointer;
     position: relative;
-    padding-left: 20px;
+    padding-right: 25px;
+    max-width: 380px;
 }
 
 #cmpWrp .cText {
-    margin: 5px 0 5px 10px;
+    margin: 5px 0 5px 0px;
+    width: 100%;
 }
 
 #companyList {
     background: #fff;
-    border: 1px solid #fff;
-    border-top: 0;
 }
 
 #companyList li ul li:hover {
@@ -618,11 +602,12 @@ header {
 
 #companyList li {
     background: #fff;
+    text-transform: capitalize;
 }
 
 #companyList li.selected-company,
 #companyList li.selected-company:hover {
-    background: #f5834e;
+    background: #d35f29;
     color: #fff;
 }
 
@@ -636,7 +621,7 @@ header {
     top: 60%;
     bottom: 0;
     transform: translateY(-50%);
-    left: 5px;
+    right: 10px;
 }
 
 .basic>tbody>tr>td,
@@ -649,13 +634,10 @@ header {
     font-size: 14px;
 }
 
-.basic>thead>tr>th {
-    border-bottom: 0;
-}
-
 .basic>tbody>tr>td {
     font-weight: 400;
-    padding: 4px 11px;
+    padding: 8px 11px;
+    text-transform: capitalize;
 }
 
 .basic>tbody>tr>td a {
@@ -668,9 +650,9 @@ header {
 
 input[type="checkbox"] {
     position: relative;
-    top: 0;
+    top: 3px;
     text-align: center;
-    margin: 0 1rem 0 0;
+    margin: 0 8px 0 0;
     cursor: pointer;
     left: 0px;
     height: 19px;
@@ -1005,7 +987,7 @@ input[type="checkbox"]:after {
 }
 
 #companyList .glyphicon-trash {
-    color: red;
+    color: #d35f29;
 }
 
 .proforma-list>.filters>div {
@@ -1125,8 +1107,8 @@ input[type="checkbox"]:after {
 
 #user-dropdown {
     color: #fff;
-    background: #d35f29;
-    width: 60px;
+    background: #333;
+    width: 50px;
     text-align: center;
     padding: 15px 0;
 }
@@ -1229,18 +1211,6 @@ input[type=number]::-webkit-inner-spin-button {
     margin: 0;
 }
 
-input[type=number] {
-    -moz-appearance: textfield;
-}
-
-.accounts-side-bar {
-    box-shadow: 0 3px 28px 0 rgba(0, 0, 0, .14);
-    border: 1px solid #ccc;
-    border-top: 0;
-    border-left: 0;
-    background: #fdfdfd;
-}
-
 .export-ledger-options>.arrow:after {
     width: 0;
     height: 0;
@@ -1255,7 +1225,8 @@ input[type=number] {
 
 .navbar-right .dropdown-menu,
 .pull-right>.dropdown-menu {
-    top: 46px;
+    top: 54px;
+    border-color: #dcdde0;
 }
 
 .datePickr .dropdown-menu {
@@ -1356,7 +1327,6 @@ footer>div {
 
 footer>div>a {
     margin: 0 22px;
-    letter-spacing: 1px;
     color: #C5C5B8;
     padding: 10px 0;
 }
@@ -2315,32 +2285,8 @@ select.form-control {
 }
 
 form label {
-    color: #1a1a1a;
+    color: rgba(0, 0, 0, 0.8);
     font-weight: normal;
-}
-
-.form-control::-webkit-input-placeholder {
-    color: #cccccc;
-}
-
-.form-control::-webkit-input-placeholder {
-    /* Chrome/Opera/Safari */
-    color: #cccccc;
-}
-
-.form-control::-moz-placeholder {
-    /* Firefox 19+ */
-    color: #cccccc;
-}
-
-.form-control:-ms-input-placeholder {
-    /* IE 10+ */
-    color: #cccccc;
-}
-
-.form-control:-moz-placeholder {
-    /* Firefox 18- */
-    color: #cccccc;
 }
 
 label {
@@ -2556,11 +2502,6 @@ label {
 
 #Addaccount .form-inline select.form-control {
     width: calc(100% - 15px);
-}
-
-form label {
-    color: #1a1a1a;
-    font-weight: normal;
 }
 
 .form-control::-webkit-input-placeholder {
@@ -3271,7 +3212,6 @@ label {
 
 #manufacture .section_title {
     color: #616161;
-    letter-spacing: 0;
     font-size: 20px;
 }
 
@@ -3415,13 +3355,11 @@ label {
 #dashboard .panel-default {
     color: #4d4d4d;
     border-color: #949494;
-    padding: 0 10px;
     -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 #dashboard .panel-default>.panel-heading {
-    color: inherit;
     background-color: transparent;
     border-color: #949494;
 }
@@ -3566,7 +3504,6 @@ label {
 }
 
 #customInvoice {
-    letter-spacing: 0;
     background: #f4f5f8;
 }
 
@@ -3801,4 +3738,67 @@ fieldset[disabled] .form-control {
 
 input[type='checkbox'][disabled] {
     opacity: 0.2;
+}
+
+.basic {
+    background: #fff;
+}
+
+.basic>thead>tr>th {
+    background: #525252;
+    color: #fff;
+    border: 0;
+    text-transform: capitalize;
+}
+
+.basic>tbody>tr:hover td {
+    background: #f4f5f8;
+}
+
+.nested_table>tbody tr td {
+    border: 0 !important;
+    padding: 8px 0;
+}
+
+.top_bar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
+
+.section_head {
+    padding: 15px 0;
+    font-family: 'LatoWebbold';
+    font-size: 110%;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.icon-btn .btn-xs {
+    padding: 1px 5px;
+    font-size: 12px;
+    line-height: 1.5;
+    border-radius: 3px;
+    background: #eee;
+    border: 1px solid #d6d6d6;
+}
+
+.dashboard-filter label {
+    padding-right: 8px;
+}
+
+.empty_table h1 {
+    font-size: 130%;
+    color: rgba(0, 0, 0, 0.4);
+    padding: 8px;
+}
+
+.input-group-btn .btn-default {
+    background: #eeeeee;
+    border: 1px solid #d6d6d6;
+}
+
+.input-group-btn .btn-default:hover {
+    background: #eeeeee;
+    border: 1px solid #d6d6d6;
+    box-shadow: none;
+    outline: 0;
 }
