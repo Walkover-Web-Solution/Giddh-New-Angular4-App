@@ -50,7 +50,7 @@ export class HttpWrapperService {
       options.headers = new Headers();
     }
 
-    if (this.user) {
+    if (this.user && this.user.session && this.user.session.id) {
       options.headers.append('Session-Id', this.user.session.id);
     }
     // options.withCredentials = true;
