@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Configuration } from '../app.constant';
 
 import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
@@ -31,6 +32,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private email: string;
   private name: string;
   private token: string;
+  private socialLoginKeys: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
@@ -39,7 +41,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
     private eh: ErrorHandlerService,
-    private loginAction: LoginActions
+    private loginAction: LoginActions,
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -148,7 +150,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
   public loginWithProvider(provider: string) {
-    //
+    if (Configuration.isElectron && !this.socialLoginKeys) {
+      // electron
+      // let ipcRenderer = import('electron');
+      // ipcRenderer.sendSync('get-client-key');
+      // ipcRenderer.on('set-client-key', (args) => {
+      //   this.socialLoginKeys = args;
+      // });
+    } else {
+      // website
+      // this.auth.authenticate(provider)
+      //   .subscribe({
+      //     error: (err: any) => console.log(err),
+      //     complete: () => this.router.navigate(['social-login-callback'])
+      //   });
+    }
   }
-
 }
