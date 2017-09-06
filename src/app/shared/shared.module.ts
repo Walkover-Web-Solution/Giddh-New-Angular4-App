@@ -48,6 +48,8 @@ import { DatePickerModule } from './theme/datepicker/date-picker.module';
 import { RecTypePipe } from './helpers/pipes/recType.pipe';
 import { SafePipe } from './helpers/pipes/safe.pipe';
 import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
+import { Ng2UiAuthModule } from 'ng2-ui-auth';
+import { MyAuthConfig } from './social.config';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -87,6 +89,7 @@ export function highchartsFactory() {
     ChartModule,
     TextMaskModule,
     NgUploaderModule,
+    // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
