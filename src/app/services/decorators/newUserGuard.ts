@@ -15,7 +15,7 @@ export class NewUserAuthGuard implements CanActivate {
         this.user = s.session.user;
       }
     });
-    if (this.user && this.user.authKey) {
+    if (this.user && this.user.session && this.user.session.id) {
       return true;
     } else {
       return false;

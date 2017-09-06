@@ -1,16 +1,20 @@
-import { Injectable, EventEmitter } from '@angular/core';
-import { Http, Response, Headers } from '@angular/http';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
 import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
-import { ErrorHandlerService } from './errorhandler.service';
 import { LoaderService } from './loader.service';
 import { LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { VerifyMobileResponseModel, SignupWithMobileResponse, VerifyEmailModel, VerifyEmailResponseModel, SignupWithMobile, VerifyMobileModel, VerifyLoginOTPResponse } from '../models/api-models/loginModels';
-import { HandleCatch, ErrorHandler } from './catchManager/catchmanger';
+import {
+  SignupWithMobile,
+  VerifyEmailModel,
+  VerifyEmailResponseModel,
+  VerifyMobileModel,
+  VerifyMobileResponseModel
+} from '../models/api-models/loginModels';
+import { ErrorHandler, HandleCatch } from './catchManager/catchmanger';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
@@ -29,12 +33,13 @@ export class AuthenticationService {
     }).catch((e) => HandleCatch<string, string>(e, email));
   }
 
-  public VerifyEmail(modele: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
-    return this._http.post(LOGIN_API.VerifyEmail, modele).map((res) => {
+  public VerifyEmail(model: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
+    return this._http.post(LOGIN_API.VerifyEmail, model).map((res) => {
       let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = res.json();
-      data.request = modele;
+      data.request = model;
+      console.log(data);
       return data;
-    }).catch((e) => HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, modele));
+    }).catch((e) => HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model));
   }
 
   public SignupWithMobile(model: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
@@ -49,6 +54,7 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.VerifyOTP, modele).map((res) => {
       let data: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = res.json();
       data.request = modele;
+      console.log(data);
       return data;
     }).catch((e) => HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele));
   }
