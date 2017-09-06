@@ -18,6 +18,8 @@ import { AccountResponse } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { TaxControlData } from '../../shared/theme/index';
+import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
+import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
 
 @Component({
@@ -63,13 +65,12 @@ export class SalesInvoiceComponent implements OnInit {
     private store: Store<AppState>,
     private accountService: AccountService,
     private salesAction: SalesActions,
-    private companyActions: CompanyActions
+    private companyActions: CompanyActions,
+    private ledgerActions: LedgerActions
   ) {
     this.invFormData = new InvoiceFormClass();
-    setTimeout(() => {
-      // do something
-    }, 500);
     this.store.dispatch(this.companyActions.getTax());
+    this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
   }
 
   public ngOnInit() {
@@ -110,6 +111,14 @@ export class SalesInvoiceComponent implements OnInit {
         this.showTaxBox = true;
       }
     });
+
+    // get discount list
+
+    // this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).subscribe((o: IFlattenGroupsAccountsDetail) => {
+    //   if (o) {
+    //     this.discountItem$ = Observable.of(o);
+    //   }
+    // });
 
   }
 
@@ -179,6 +188,10 @@ export class SalesInvoiceComponent implements OnInit {
   public selectedTaxEvent(arr: string[]) {
     console.log ('selectedTaxEvent', arr);
     this.selectedTaxes = arr;
+  }
+
+  public selectedDiscountEvent(arr: any[]) {
+    console.log ('selectedDiscountEvent', arr);
   }
 
 }
