@@ -13,7 +13,7 @@ const electronVersion = getElectronVersion(root);
 
 writeAppPackage(rootPackage, appDir);
 
-installOrRebuild(rootPackage.build, appDir, electronVersion, platform, arch, true)
+installOrRebuild(rootPackage.build, appDir, { frameworkInfo: { version: electronVersion, useCustomDist: false } }, platform, arch, true)
   .catch(printErrorAndExit);
 
 

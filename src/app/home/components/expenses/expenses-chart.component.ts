@@ -46,7 +46,10 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
         let financialYears = [];
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
-          this.activeFinancialYear = c.find(p => p.uniqueName === a).activeFinancialYear;
+          let res = c.find(p => p.uniqueName === a);
+          if (res) {
+            this.activeFinancialYear = res.activeFinancialYear;
+          }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {

@@ -103,11 +103,6 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.route.params.distinct().takeUntil(this.destroyed$).subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
       this.stockUniqueName = params['stockUniqueName'];
-
-      if (this.groupUniqueName) {
-        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-      }
-
       if (params['stockUniqueName'] && params['groupUniqueName']) {
         this.store.dispatch(this.sideBarAction.GetInventoryStock(this.stockUniqueName, this.groupUniqueName));
       }
@@ -144,7 +139,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockUnitCode: ['', [Validators.required]],
       openingQuantity: ['', decimalDigits],
       stockRate: [{ value: '', disabled: true }],
-      openingAmount: ['', decimalDigits],
+      openingAmount: [''],
       purchaseAccountUniqueName: [''],
       salesAccountUniqueName: [''],
       purchaseUnitRates: this._fb.array([
@@ -251,6 +246,15 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       }
     });
 
+    // fetching uniquename boolean
+    this.fetchingStockUniqueName$.takeUntil(this.destroyed$).subscribe(f => {
+      if (f) {
+        this.addStockForm.controls['uniqueName'].disable();
+      } else {
+        this.addStockForm.controls['uniqueName'].enable();
+      }
+    });
+
     // subscribe createStockSuccess for resting form
     this.createStockSuccess$.subscribe(s => {
       if (s) {
@@ -335,6 +339,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngAfterViewInit() {
+    if (this.groupUniqueName) {
+      // this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+    }
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     manufacturingDetailsContorl.disable();
   }
@@ -375,7 +382,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     let amount = this.addStockForm.value.openingAmount;
 
     if (quantity && amount) {
-      this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(3) });
+      this.addStockForm.patchValue({ stockRate: (amount / quantity).toFixed(4) });
     } else if (quantity === 0 || amount === 0) {
       this.addStockForm.controls['stockRate'].reset();
     }
@@ -554,10 +561,12 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   // submit form
   public submit() {
     let stockObj = new CreateStockRequest();
-    let formObj = this.addStockForm.value;
+    let uniqueName = this.addStockForm.get('uniqueName');
+    uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
 
+    let formObj = this.addStockForm.value;
     stockObj.name = formObj.name;
-    stockObj.uniqueName = formObj.uniqueName.toLowerCase();
+    stockObj.uniqueName = formObj.uniqueName;
     stockObj.stockUnitCode = formObj.stockUnitCode;
     stockObj.openingAmount = formObj.openingAmount;
     stockObj.openingQuantity = formObj.openingQuantity;
@@ -595,6 +604,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   public update() {
     let stockObj = new CreateStockRequest();
+    let uniqueName = this.addStockForm.get('uniqueName');
+    uniqueName.patchValue(uniqueName.value.replace(/ /g, '').toLowerCase());
+
     let formObj = this.addStockForm.value;
 
     stockObj.name = formObj.name;
@@ -639,6 +651,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this.inventoryAction.resetActiveStock());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

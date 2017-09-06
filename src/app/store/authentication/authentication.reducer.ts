@@ -1,9 +1,14 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { VerifyMobileResponseModel, VerifyMobileModel, VerifyEmailModel, UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
+import {
+  VerifyEmailModel,
+  VerifyEmailResponseModel,
+  VerifyMobileModel,
+  VerifyMobileResponseModel
+} from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
 import * as _ from 'lodash';
 
 /**
@@ -199,7 +204,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return state;
     case CompanyActions.SET_CONTACT_NO:
       let newState = _.cloneDeep(state);
-      newState.user.user.contactNo = action.payload;
+      newState.user.user.mobileNo = action.payload;
       return newState;
     default:
       return state;

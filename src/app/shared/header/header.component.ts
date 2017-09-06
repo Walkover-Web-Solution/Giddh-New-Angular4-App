@@ -14,7 +14,7 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
@@ -71,7 +71,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
-    private zone: NgZone) {
+    private zone: NgZone,
+    private route: ActivatedRoute) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -105,7 +106,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
+    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -121,6 +122,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
@@ -143,15 +145,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
       if (!s) {
-        this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        console.log('logout success to dummy Headder');
+        this.router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+          console.log('logout success to home Headder');
           this.router.navigate(['/login']);
         });
       } else {
         // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
-        //   this.router.navigate(['/home']);
+        // this.router.navigate(['/home']);
         // });
       }
     });
+    if (this.route.snapshot.url.toString() === 'new-user') {
+      this.showAddCompanyModal();
+    }
   }
 
   public ngAfterViewChecked() {
@@ -217,7 +224,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public logout() {
     this.store.dispatch(this.loginAction.LogOut());
-
   }
 
   public onHide() {

@@ -25,9 +25,8 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
       [tbExportCsv]="true"
       [tbExportPdf]="true"
       [tbExportXLS]="true"
-      [plBsExportXLS]="false"
     ></tb-pl-bs-filter>
-    <div *ngIf="!(data$ | async)">
+    <div *ngIf="(showLoader | async)">
       <!-- loader -->
       <div class="loader" >
         <span></span>
@@ -63,8 +62,8 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     if (value) {
       this.request = {
         refresh: false,
-        fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
-        toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
+        from: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        to: this.selectedCompany.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
     }
@@ -99,7 +98,13 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  public exportCsv($event) { }
-  public exportPdf($event) { }
-  public exportXLS($event) { }
+  public exportCsv($event) {
+    //
+   }
+  public exportPdf($event) {
+    //
+   }
+  public exportXLS($event) {
+    //
+   }
 }

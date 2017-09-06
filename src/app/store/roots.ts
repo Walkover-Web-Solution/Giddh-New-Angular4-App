@@ -10,6 +10,8 @@ import * as fromInventory from './Inventory/inventory.reducer';
 import * as fromSearch from './Search/search.reducer';
 import * as fromAuditLogs from './AuditLogs/audit-logs.reducer';
 import * as fromFlyAccounts from './header/fly-accounts.reducer';
+import * as fromInvoice from './Invoice/invoice.reducer';
+import * as fromInvoiceTemp from './Invoice/invoice.template.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
 import * as fromLedger from './Ledger/ledger.reducer';
 import * as fromSettings from './Settings/Settings.reducer';
@@ -29,6 +31,8 @@ export interface AppState {
   auditlog: fromAuditLogs.AuditLogsState;
   permission: fromPermission.PermissionState;
   flyAccounts: fromFlyAccounts.FlyAccountsState;
+  invoice: fromInvoice.InvoiceState;
+  invtemp: fromInvoiceTemp.InvoiceTempState;
   tlPl: fromTlPl.TBPlBsState;
   ledger: fromLedger.LedgerState;
   settings: fromSettings.SettingsState;
@@ -48,6 +52,8 @@ export const reducers = {
   groupwithaccounts: fromGroupAndAccounts.GroupsWithAccountsReducer,
   verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
   inventory: fromInventory.InventoryReducer,
+  invoice: fromInvoice.InvoiceReducer,
+  invtemp: fromInvoiceTemp.InvoiceTemplateReducer,
   search: fromSearch.searchReducer,
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,

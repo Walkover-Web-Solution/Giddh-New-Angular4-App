@@ -51,11 +51,17 @@ import { SettingsProfileService } from './settings.profile.service';
 import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
-import { SettingsLinkedAccountsService } from './settings.linked-accounts.service';
-import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked-accounts.action';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
 import { SalesActions } from './actions/sales/sales.action';
 import { SalesService } from './sales.service';
+import { NewUserAuthGuard } from './decorators/newUserGuard';
+import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { InvoiceService } from './invoice.service';
+import { InvoiceTemplatesService } from './invoice.templates.service';
+import { SettingsLinkedAccountsService } from './settings.linked.accounts.service';
+import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
+import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
+import { SettingsFinancialYearService } from './settings.financial-year.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -82,11 +88,13 @@ import { SalesService } from './sales.service';
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TBPlBsActions),
     EffectsModule.run(LedgerActions),
+    EffectsModule.run(InvoiceActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
     EffectsModule.run(SalesActions),
-    EffectsModule.run(SettingsLinkedAccountsActions)
+    EffectsModule.run(SettingsLinkedAccountsActions),
+    EffectsModule.run(SettingsFinancialYearActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -106,6 +114,7 @@ export class ServiceModule {
         NeedsAuthentication,
         LocationService,
         UserAuthenticated,
+        NewUserAuthGuard,
         GroupService,
         AccountService,
         InventoryService,
@@ -113,13 +122,16 @@ export class ServiceModule {
         ManufacturingService,
         ErrorHandler,
         SearchService,
+        InvoiceService,
+        InvoiceTemplatesService,
         LogsService,
         TlPlService,
         LedgerService,
         SettingsIntegrationService,
         SettingsProfileService,
         SettingsTaxesService,
-        SettingsLinkedAccountsService
+        SettingsLinkedAccountsService,
+        SettingsFinancialYearService
       ]
     };
   }
