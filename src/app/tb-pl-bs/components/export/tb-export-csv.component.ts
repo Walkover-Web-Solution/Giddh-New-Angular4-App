@@ -58,9 +58,6 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
   private csvCond: any;
   private accounts: AccountFlat[];
 
-  /**
-   * TypeScript public modifiers
-   */
   constructor(private store: Store<AppState>, private recType: RecTypePipe) {
     this.store.select(p => p.tlPl.tb.exportData).subscribe(p => {
       console.log(p);
