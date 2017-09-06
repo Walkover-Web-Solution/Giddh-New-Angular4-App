@@ -8,4 +8,5 @@ export const LOGIN_API = {
   VerifyOTP: Configuration.ApiUrl + 'v2/verify-number',
   VerifyNumber: Configuration.ApiUrl + 'users/system_admin/verify-number',
   LoginWithNumber: Configuration.ApiUrl + 'login-with-number?countryCode=:countryCode&mobileNumber=:mobileNumber', // get call
+  // LoginWithGoogle:
 };
