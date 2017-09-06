@@ -4,7 +4,6 @@ import { VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
-import { AuthenticationService } from '../authentication.service';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../../models/api-models/Company';
 
@@ -19,7 +18,7 @@ export class NeedsAuthentication implements CanActivate {
         this.user = s.session.user;
       }
     });
-    if (this.user && this.user.authKey) {
+    if (this.user && this.user.session && this.user.session.id) {
       let cmpUniqueName = '';
       this.store.select(s => s.session.companyUniqueName).take(1).subscribe(s => {
         if (s) {
