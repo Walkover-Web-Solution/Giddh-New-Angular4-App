@@ -28,9 +28,11 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   @Input() public taxes: TaxResponse[];
   @Input() public applicableTaxes: any[];
   @Input() public taxRenderData: TaxControlData[];
+  @Input() public showHeading: boolean = true;
   @Input() public showTaxPopup: boolean = false;
   @Output() public isApplicableTaxesEvent: EventEmitter<boolean> = new EventEmitter();
   @Output() public taxAmountSumEvent: EventEmitter<number> = new EventEmitter();
+  @Output() public selectedTaxEvent: EventEmitter<string[]> = new EventEmitter();
 
   public sum: number = 0;
   private selectedTaxes: string[] = [];
@@ -68,6 +70,7 @@ export class TaxControlComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
+    this.selectedTaxEvent.unsubscribe();
   }
 
   public clicked(e) {
@@ -82,6 +85,7 @@ export class TaxControlComponent implements OnInit, OnDestroy {
     this.sum = this.calculateSum();
     this.selectedTaxes = this.generateSelectedTaxes();
     this.taxAmountSumEvent.emit(this.sum);
+    this.selectedTaxEvent.emit(this.selectedTaxes);
 
     let diff = _.difference(this.selectedTaxes, this.applicableTaxes).length > 0;
     if (diff) {

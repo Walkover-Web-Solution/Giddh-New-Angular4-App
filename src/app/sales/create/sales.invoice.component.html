@@ -206,11 +206,20 @@
             </select>
           </td>
           <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.taxable" /></td>
-          <td>
-            <select multiple class="form-control" name="tr.tax" [(ngModel)]="transaction.tax">
+          <td class="tax-list-dd-wrap">
+            <tax-control *ngIf="showTaxBox"
+              [taxes]="companyTaxesList$ | async"
+              [applicableTaxes]="[]"
+              [taxRenderData]="[]"
+              [showTaxPopup]="false"
+              [showHeading]="false"
+              (selectedTaxEvent)="selectedTaxEvent($event)"
+              (taxAmountSumEvent)="taxAmountEvent($event)">
+            </tax-control>
+            <!-- <select multiple class="form-control" name="tr.tax" [(ngModel)]="transaction.tax">
               <option [ngValue]="'select'">Select</option>
               <option [ngValue]="tax.uniqueName" *ngFor="let tax of taxList$ | async">{{tax.name}}</option>
-            </select>
+            </select> -->
           </td>
           <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
         </tr>
