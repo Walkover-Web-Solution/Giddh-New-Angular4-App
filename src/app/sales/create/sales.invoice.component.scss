@@ -2,7 +2,7 @@
 $themeClr : #fe5f00;
 
 // mixins
-/** 
+/**
 # margin mixin pass direction and number
 */
 @mixin marg($d, $num) {
@@ -22,7 +22,7 @@ $themeClr : #fe5f00;
     margin: $num;
   }
 }
-/** 
+/**
 # padding mixin pass direction and number
 */
 @mixin pad($d, $num) {
