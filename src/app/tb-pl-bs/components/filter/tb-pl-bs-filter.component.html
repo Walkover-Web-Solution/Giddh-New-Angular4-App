@@ -33,9 +33,10 @@
   <div class="col-xs-3">
     <tb-export-csv *ngIf="tbExportCsv" [selectedCompany]="selectedCompany"
                    (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
-    <tb-export-xls *ngIf="tbExportXLS" (tbExportXLSEvent)="tbExportXLSEvent.emit($event)" class="pull-right"></tb-export-xls>
+    <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right"></tb-export-xls>
     <tb-export-pdf *ngIf="tbExportPdf" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
-    <pl-bs-export-xls *ngIf="plBsExportXLS" (plBsExportPdfEvent)="plBsExportXLSEvent.emit($event)" class="pull-right"></pl-bs-export-xls>
+    <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
+    <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
   </div>
   <!-- end of second coloumn -->
 </div>
