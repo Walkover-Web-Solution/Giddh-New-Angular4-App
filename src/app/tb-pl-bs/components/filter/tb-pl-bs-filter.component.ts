@@ -19,6 +19,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   @Input() public tbExportXLS: boolean = false;
   @Input() public tbExportCsv: boolean = false;
   @Input() public plBsExportXLS: boolean = false;
+  @Input() public BsExportXLS: boolean = false;
 
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   @Output() public tbExportXLSEvent = new EventEmitter<string>();
