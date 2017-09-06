@@ -68,4 +68,8 @@ export class AuthenticationService {
       return data;
     }).catch((e) => HandleCatch<string, VerifyMobileModel>(e));
   }
+
+  public LoginWithGoogle() {
+    //
+  }
 }

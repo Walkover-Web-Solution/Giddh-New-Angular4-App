@@ -3,10 +3,13 @@ import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { ToasterService } from './../toaster.service';
 import { AuthenticationService } from './../authentication.service';
 import { Observable } from 'rxjs/Observable';
+// import { LoginActions } from '../actions/login.action';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/roots';
 
 @Injectable()
 export class ErrorHandler {
-  constructor(private _toaster: ToasterService) { }
+  constructor(private _toaster: ToasterService, private store: Store<AppState>) { }
 
   public handle<TResponce, TRequest>(e: any) {
     let response: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
@@ -27,6 +30,11 @@ export class ErrorHandler {
 }
 export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
   let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
+  // logout if invalid session detacted
+  if (r.code === 'SESSION_EXPIRED_OR_INVALID') {
+    this.store.dispatch('LoginOut');
+  }
+
   if (r.status === 0) {
     data = {
       body: null,

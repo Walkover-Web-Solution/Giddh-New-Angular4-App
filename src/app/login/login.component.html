@@ -11,19 +11,19 @@
               <p class="lead ">Sign In or register</p>
             </div>
 
-            <button type="login" class="btn sharp btn-block btn-lg btn-login google">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="loginWithProvider('google')">
               <img src="./assets/images/google-plus-icon.png">
               connect with Google
             </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" ng-click="authenticate('twitter')" ng-if="!phoneLoginPopup">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" ng-click="authenticate('twitter')" (click)="loginWithProvider('twitter')">
               <img src="./assets/images/twitter-icon.png">
               Login with Twitter
             </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" ng-click="authenticate('linkedin')" ng-if="!phoneLoginPopup">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" ng-click="authenticate('linkedin')" (click)="loginWithProvider('linkedin')">
               <img src="./assets/images/linkedin-icon.png">
               Login with LinkedIn
             </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()" ng-if="!phoneLoginPopup">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
               <i class="glyphicon glyphicon-phone"></i>
               Login with Mobile
             </button>

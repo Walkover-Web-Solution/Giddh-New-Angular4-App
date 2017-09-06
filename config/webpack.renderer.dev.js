@@ -140,7 +140,7 @@ module.exports = function (options) {
       new DefinePlugin({
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
-        'isElectron': false,
+        'isElectron': true,
         'AppUrl': JSON.stringify(METADATA.AppUrl),
         'ApiUrl': JSON.stringify(METADATA.ApiUrl),
         'process.env': {
