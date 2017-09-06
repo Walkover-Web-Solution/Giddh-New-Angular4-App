@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -18,6 +18,7 @@ import { AccountService } from '../services/account.service';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
+import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 
 @Component({
   selector: 'ledger',
@@ -91,7 +92,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   };
   public isLedgerCreateSuccess$: Observable<boolean>;
 
-  private ledgerSearchTerms = new Subject<string>();
+  @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -104,6 +105,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
 
+    // get groups with accounts
+    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this.lc.groupsArray = Observable.of(data.body);
+      } else {
+        this.lc.groupsArray = Observable.of([]);
+      }
+    });
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
@@ -179,14 +188,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
           txn.discounts = [];
           return;
         }
-      }
-      );
+      });
     });
-  }
-
-  // Push a search term into the observable stream.
-  public search(term: string): void {
-    this.ledgerSearchTerms.next(term);
+    // check if selected account category allows to show taxationDiscountBox in newEntry popup
+    this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
   }
 
   public pageChanged(event: any): void {
@@ -215,16 +220,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.distinct().subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        this._router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
           this._router.navigate(['/pages', 'ledger', this.lc.accountUnq]);
         });
       }
     });
 
     // search
-    this.ledgerSearchTerms
+    Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
       .debounceTime(700)
       .distinctUntilChanged()
+      .map((e: any) => e.target.value)
       .subscribe(term => {
         this.trxRequest.q = term;
         this.trxRequest.page = 0;
@@ -322,7 +328,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
   }
-
+  public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
+    let groupWithAccountsList: GroupsWithAccountsResponse[];
+    let flatternAccountList;
+    this.lc.groupsArray.take(1).subscribe(a => groupWithAccountsList = a);
+    if (txn.selectedAccount) {
+      const parent = txn.selectedAccount.parentGroups[0].uniqueName;
+      const parentGroup: GroupsWithAccountsResponse = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+      return parentGroup.category === 'income' || parentGroup.category === 'expenses';
+    }
+    return false;
+  }
   public base64ToBlob(b64Data, contentType, sliceSize) {
     contentType = contentType || '';
     sliceSize = sliceSize || 512;
@@ -343,7 +359,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     return new Blob(byteArrays, { type: contentType });
   }
-
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerActions.ResetLedger());
     this.destroyed$.next(true);

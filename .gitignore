@@ -1,5 +1,7 @@
 # @AngularClass
 
+package-lock_*
+
 # Logs
 logs
 *.log

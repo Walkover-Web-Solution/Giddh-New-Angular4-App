@@ -15,6 +15,7 @@ import { GroupService } from '../group.service';
 export class FlyAccountsActions {
   public static readonly GET_FLAT_ACCOUNT_W_GROUP_REQUEST = 'GET_FLAT_ACCOUNT_W_GROUP_REQUEST';
   public static readonly GET_FLAT_ACCOUNT_W_GROUP_RESPONSE = 'GET_FLAT_ACCOUNT_W_GROUP_RESPONSE';
+  public static readonly RESET_FLAT_ACCOUNT_W_GROUP = 'RESET_FLAT_ACCOUNT_W_GROUP';
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST)
     .switchMap(action => {
@@ -23,15 +24,15 @@ export class FlyAccountsActions {
           type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
           payload: r.body
         }, true, {
-          type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
-          payload: []
-        }));
+            type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
+            payload: []
+          }));
     });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _groupService: GroupService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _groupService: GroupService) {
   }
 
   public GetflatAccountWGroups(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Action {
@@ -43,6 +44,11 @@ export class FlyAccountsActions {
     };
   }
 
+  public ResetflatAccountWGroups(): Action {
+    return {
+      type: FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {

@@ -30,7 +30,7 @@ export class TBPlBsActions {
           payload: r.body
         }, true, {
             type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
-            payload: []
+            payload: null
           }));
     });
 

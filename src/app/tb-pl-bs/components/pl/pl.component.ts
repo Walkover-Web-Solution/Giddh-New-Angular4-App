@@ -84,10 +84,12 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     //
   }
-  public exportXLS(event) { }
+  public exportXLS(event) {
+    //
+   }
   public filterData(request: ProfitLossRequest) {
-    request.fromDate = this.selectedCompany.financialYears[request.fy].financialYearStarts;
-    request.toDate = this.selectedCompany.financialYears[request.fy].financialYearEnds;
+    request.from = this.selectedCompany.financialYears[request.fy].financialYearStarts;
+    request.to = this.selectedCompany.financialYears[request.fy].financialYearEnds;
     //
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }

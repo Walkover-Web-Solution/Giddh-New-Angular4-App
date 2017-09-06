@@ -89,6 +89,7 @@ export class AccountsAction {
     .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSE)
     .map(action => {
       if (action.payload.status === 'error') {
+        this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
           type: ''
@@ -156,6 +157,7 @@ export class AccountsAction {
     .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE)
     .map(action => {
       if (action.payload.status === 'error') {
+        this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
       } else {
         this._toasty.successToast('Account Updated Successfully');

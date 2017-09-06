@@ -76,7 +76,7 @@ export class ComparisionChartComponent implements OnInit {
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
-          this.activeFinancialYear = activeCompany.activeFinancialYear;
+          if (activeCompany) { this.activeFinancialYear = activeCompany.activeFinancialYear; }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {

@@ -1,0 +1,125 @@
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm(invoiceForm)" novalidate class="clearfix mrB2">
+  
+    <div class="pdT2 bdrB clearfix">
+      <div class="col-xs-6">
+        <div class="form-group size_360">
+          <label>Customer Name</label>
+          <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.customerName" />
+        </div>
+      </div>
+      <div class="col-xs-6 text-right">
+        <!-- <p class="lead b">Balance Due: Rs9750</p> -->
+      </div>
+    </div>
+  
+  <section class="clearfix mrB2">
+    <section class="form-inline col-xs-12">
+      <div class="pdT2 clearfix">
+        <div class="form-group size_240">
+          <label>Attention to</label>
+          <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
+        </div>
+        <div class="form-group">
+          <label>Invoice Date</label>
+          <input type="text" name="invoiceDate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
+        </div>
+        <div class="form-group">
+          <label>Invoice Number</label>
+          <input [disabled]="true" type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
+        </div>
+        <div class="form-group">
+          <label>Due Date</label>
+          <input type="text" name="dueDate" class="form-control" [(ngModel)]="invFormData.invoiceDetails.dueDate" />
+        </div>
+        <div class="form-group">
+          <label>Country</label>
+          <input type="text" name="country" class="form-control" />
+        </div>
+      </div>
+
+      <div class="pdT2 clearfix">
+        <div class="form-group size_240">
+          <label>Billing Address</label>
+          <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address"></textarea>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" name="billingDetails.stateCode" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateCode" />
+        </div>
+        <div class="form-group">
+          <label>GSTIN</label>
+          <select class="form-control" name="billingDetails.gstNumber" [(ngModel)]="invFormData.account.billingDetails.gstNumber">
+            <option value="select">Select GSTIN</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="pdT2 clearfix">
+        <div class="form-group size_240">
+          <label>Shipping Address</label>
+          <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address"></textarea>
+        </div>
+        <div class="form-group">
+          <label>State</label>
+          <input type="text" name="shippingDetails.stateCode" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateCode" />
+        </div>
+        <div class="form-group">
+          <label>GSTIN</label>
+          <select class="form-control" name="shippingDetails.gstNumber" [(ngModel)]="invFormData.account.shippingDetails.gstNumber">
+            <option value="select">Select GSTIN</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Ship Date</label>
+          <input type="text" name="shipDate" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Ship Via</label>
+          <input type="text" name="duedate" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>Tracking No.</label>
+          <input type="text" name="country" class="form-control" />
+        </div>
+      </div>
+    </section>
+  </section>
+
+  <section class="clearfix mrB2 whiteBg">
+    <table class="table">
+      <thead class="t-h-bg1">
+        <tr *ngIf="customThead">
+          <th *ngFor="let item of customThead;" [hidden]="!item.display">{{item.label}}</th>
+        </tr>
+      </thead>
+      <tbody *ngFor="let entry of invFormData.entries;">
+        <tr *ngFor="let transaction of entry.transactions; let i = index">
+          <td>{{ i+1 }}</td>
+          <td>{{ entry.entryDate }}</td>
+          <td>
+            {{ transaction.accountName }}<br>
+            <input type="text" name="transaction.description" class="form-control" [(ngModel)]="transaction.description" />
+          </td>
+          <td>{{ transaction.hsnNumber || transaction.sacNumber }}</td>
+          <td>{{ transaction.quantity }}</td>
+          <td>{{ transaction.rate | currency:'INR':true }}</td>
+          <td>{{ getEntryTotalDiscount(entry.discounts) | currency:'INR':true }}</td>
+          <td>{{ getEntryTaxableAmount(transaction, entry.discounts) | currency:'INR':true }}</td>
+          <td>{{ getTransactionTotalTax(entry.taxes) | currency:'INR':true }}</td>
+          <td>{{ getEntryTotal(entry, i) | currency:'INR':true }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="row">
+    <section id="actionPane" class="text-center">
+      <div class="col-xs-12">
+        <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1 pull-left" (click)="closePopupEvent()">Close</button>
+        <div class="pull-right">
+          <button type="submit" class="btn btn-default">Generate Invoice</button>
+        </div>
+      </div>
+    </section>
+  </section>
+</form>

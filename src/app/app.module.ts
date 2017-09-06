@@ -29,6 +29,9 @@ import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
 import { SalesModule } from './sales/sales.module';
+import { WindowRef } from './shared/helpers/window.object';
+import { NewUserComponent } from './newUser.component';
+import 'rxjs/add/operator/take';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -67,7 +70,8 @@ if (ENV === 'development') {
     AppComponent,
     PageComponent,
     NoContentComponent,
-    DummyComponent
+    DummyComponent,
+    NewUserComponent
   ],
   /**
    * Import Angular's modules.
@@ -96,7 +100,8 @@ if (ENV === 'development') {
    */
   providers: [
     ENV_PROVIDERS,
-    APP_PROVIDERS
+    APP_PROVIDERS,
+    WindowRef
   ]
 })
 export class AppModule {

@@ -23,7 +23,7 @@ export interface CurrentCompanyState {
  * Setting the InitialState for this Reducer's Store
  */
 const initialState: CurrentCompanyState = {
-  companies: null,
+  companies: [],
   isRefreshing: false,
   taxes: null,
   isTaxesLoading: false,
@@ -43,7 +43,7 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
       if (companyResp.status === 'success') {
         let newState = _.cloneDeep(state);
         newState.isCompanyCreationInProcess = false;
-        newState.isCompanyCreated = false;
+        newState.isCompanyCreated = true;
         newState.companies.push(companyResp.body);
         return newState;
       }
