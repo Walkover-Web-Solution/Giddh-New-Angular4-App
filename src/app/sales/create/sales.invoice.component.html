@@ -201,9 +201,10 @@
             <input type="text" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
           </td>
           <td>
-            <select class="form-control" name="tr.discount" [(ngModel)]="transaction.discount">
+            <discount-list (selectedDiscountItems)="selectedDiscountEvent($event)"></discount-list>
+            <!-- <select class="form-control" name="tr.discount" [(ngModel)]="transaction.discount">
               <option [ngValue]="'select'">Select</option>
-            </select>
+            </select> -->
           </td>
           <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.taxable" /></td>
           <td class="tax-list-dd-wrap">
