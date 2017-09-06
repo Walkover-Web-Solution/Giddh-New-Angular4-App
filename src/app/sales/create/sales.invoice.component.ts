@@ -17,6 +17,7 @@ import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponse } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
+import { TaxControlData } from '../../shared/theme/index';
 const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
 
 @Component({
@@ -51,11 +52,12 @@ export class SalesInvoiceComponent implements OnInit {
   public accountAsideMenuState: string = 'out';
   public theadArr: string[] = THEAD_ARR;
   public activeGroupUniqueName$: Observable<string>;
-  private taxList$: Observable<INameUniqueName[]>;
+  public companyTaxesList$: Observable<TaxResponse[]>;
+  public selectedTaxes: string[] = [];
+  public showTaxBox: boolean = false;
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponse>;
-  private taxes$: Observable<TaxResponse[]>;
 
   constructor(
     private store: Store<AppState>,
@@ -65,7 +67,7 @@ export class SalesInvoiceComponent implements OnInit {
   ) {
     this.invFormData = new InvoiceFormClass();
     setTimeout(() => {
-      this.addBlankRowInTransaction();
+      // do something
     }, 500);
     this.store.dispatch(this.companyActions.getTax());
   }
@@ -101,15 +103,11 @@ export class SalesInvoiceComponent implements OnInit {
       }
     });
 
-    // get tax list
+    // get tax list and assign values to local vars
     this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
       if (o) {
-        let arr: INameUniqueName[] = [];
-        _.forEach(o, (item: TaxResponse) => {
-          arr.push({name: item.name, uniqueName: item.uniqueName});
-        });
-        this.taxes$ = Observable.of(o);
-        this.taxList$ = Observable.of(arr);
+        this.companyTaxesList$ = Observable.of(o);
+        this.showTaxBox = true;
       }
     });
 
@@ -172,6 +170,15 @@ export class SalesInvoiceComponent implements OnInit {
     //   transactions: [transItem]
     // };
     // this.invFormData.entries.push(entryItem);
+  }
+
+  public taxAmountEvent($event) {
+    console.log ('taxAmountEvent', $event);
+  }
+
+  public selectedTaxEvent(arr: string[]) {
+    console.log ('selectedTaxEvent', arr);
+    this.selectedTaxes = arr;
   }
 
 }
