@@ -2,7 +2,6 @@ import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
@@ -13,11 +12,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 /*
  * Platform and Environment providers/directives/pipes
  */
-import { AuthProviders } from './app.constant';
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 import { rootReducer } from './store';
 // App is our top level component
+import { Configuration } from './app.constant';
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
@@ -30,6 +29,7 @@ import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-per
 import { DummyComponent } from './dummy.component';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
+import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import 'rxjs/add/operator/take';
 // Application wide providers
 const APP_PROVIDERS = [
@@ -70,7 +70,8 @@ if (ENV === 'development') {
     PageComponent,
     NoContentComponent,
     DummyComponent,
-    NewUserComponent
+    NewUserComponent,
+    SocialLoginCallbackComponent
   ],
   /**
    * Import Angular's modules.
@@ -89,7 +90,6 @@ if (ENV === 'development') {
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ...CONDITIONAL_IMPORTS,
-    Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
   ],
   /**
@@ -107,7 +107,9 @@ export class AppModule {
   constructor(
     public appRef: ApplicationRef,
     public _store: Store<AppState>
-  ) { }
+  ) {
+    console.log(Configuration.isElectron);
+  }
 
   public hmrOnInit(store: StoreType) {
     if (!store || !store.rootState) {

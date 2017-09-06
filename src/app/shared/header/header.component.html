@@ -1,240 +1,238 @@
 <!-- super loader -->
 <div class="load-bar-wrap" style="display: none">
-  <div class="load-bar">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
+    <div class="load-bar">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
 </div>
 <!-- end of super loader -->
 
 <header class="clearfix header-container">
-  <div class="container-fluid">
+
     <nav class="navbar navbar-inverse">
-      <ul class="nav navbar-nav">
-        <li class="hamburger_menu" dropdown [isOpen]="sideMenu.isopen" style="margin-left:-15px;cursor: pointer">
-          <a dropdownToggle id="page-dropdown" (click)="false">
-            <i class="glyphicon glyphicon-menu-hamburger"></i>
-          </a>
-          <ul id="topMenusBar" role="menu" class="dropdown-menu">
-            <li>
-              <div>
-                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
-                  <ul class="dshUl clearfix list-inline ddMaxHeight">
-                    <li class="dmLi trialB">
-                      <a [routerLink]="['home']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Dashboard</div>
-                            <div class="subTitle">Your <b>Company Summary</b> at one place.</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi trialB">
-                      <a [routerLink]="['/pages/settings']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Settings</div>
-                            <div class="subTitle">Manage your company settings.</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi">
-                      <a [routerLink]="['trial-balance-and-profit-loss']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">TB/P&amp;L</div>
-                            <div class="subTitle">Trial Balance/ Profit and Loss</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi">
-                      <a [routerLink]="['/pages/invoice']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Invoice</div>
-                            <div class="subTitle">Generate and Download Invoice/Proforma</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi">
-                      <a [routerLink]="['/inventory']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Inventory</div>
-                            <div class="subTitle">Manage Inventory</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi">
-                      <a [routerLink]="['manufacturing']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Manufacturing</div>
-                            <div class="subTitle">Some info about manufacturing module</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi">
-                      <a href="">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Recurring Entry</div>
-                            <div class="subTitle">Add and Edit Recurring Entries</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi" ui-sref="Reports">
-                      <a href="">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Reports</div>
-                            <div class="subTitle">Generate and view Business Reports</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi" ui-sref="audit-logs">
-                      <a [routerLink]="['audit-logs']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Audit Logs</div>
-                            <div class="subTitle">View all Logs</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi" ui-sref="search">
-                      <a [routerLink]="['search']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Search</div>
-                            <div class="subTitle">View all your creditors</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi" *ngIf="userIsSuperUser">
-                      <a [routerLink]="['permissions']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Permissions</div>
-                            <div class="subTitle">Some info about permission module</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </perfect-scrollbar>
-              </div>
-            </li>
-          </ul>
-        </li>
+        <div class="container-fluid pdL0">
+            <ul class="nav navbar-nav">
+                <li class="hamburger_menu cp" dropdown [isOpen]="sideMenu.isopen">
+                    <a dropdownToggle id="page-dropdown" (click)="false">
+                        <i class="glyphicon glyphicon-menu-hamburger"></i>
+                    </a>
+                    <ul id="topMenusBar" role="menu" class="dropdown-menu">
+                        <li>
+                            <div>
+                                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
+                                    <ul class="dshUl clearfix list-inline ddMaxHeight">
+                                        <li class="dmLi trialB">
+                                            <a [routerLink]="['home']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Dashboard</div>
+                                                        <div class="subTitle">Your <b>Company Summary</b> at one place.</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi trialB">
+                                            <a [routerLink]="['/pages/settings']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Settings</div>
+                                                        <div class="subTitle">Manage your company settings.</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a [routerLink]="['trial-balance-and-profit-loss']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">TB/P&amp;L</div>
+                                                        <div class="subTitle">Trial Balance/ Profit and Loss</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a [routerLink]="['/pages/invoice']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Invoice</div>
+                                                        <div class="subTitle">Generate and Download Invoice/Proforma</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a [routerLink]="['/inventory']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Inventory</div>
+                                                        <div class="subTitle">Manage Inventory</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a [routerLink]="['manufacturing']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Manufacturing</div>
+                                                        <div class="subTitle">Some info about manufacturing module</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Recurring Entry</div>
+                                                        <div class="subTitle">Add and Edit Recurring Entries</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="Reports">
+                                            <a href="">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Reports</div>
+                                                        <div class="subTitle">Generate and view Business Reports</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="audit-logs">
+                                            <a [routerLink]="['audit-logs']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Audit Logs</div>
+                                                        <div class="subTitle">View all Logs</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" ui-sref="search">
+                                            <a [routerLink]="['search']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Search</div>
+                                                        <div class="subTitle">View all your creditors</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                        <li class="dmLi" *ngIf="userIsSuperUser">
+                                            <a [routerLink]="['permissions']">
+                                                <div class="media">
+                                                    <div class="media-body">
+                                                        <div class="title">Permissions</div>
+                                                        <div class="subTitle">Some info about permission module</div>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </perfect-scrollbar>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
 
-        <!-- books search -->
-        <li>
-          <div class="row">
-            <div class="ledger_search form-inline col-xs-12">
-              <div class="form-group">
-                <div class="input-group">
-                  <input #accountSearch id="accountSearch" type="text" name="searchGroup" class="form-control" placeholder="Search accounts"
-                    (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
-                  <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-                    <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
-        <li>
-          <div>
-            <button id="AddManage" type="button" class="btn btn-primary btn-sm btn-block mrB1" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
-          </div>
-        </li>
-      </ul>
+                <!-- books search -->
+                <li>
+                    <div class="ledger_search form-inline">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl" [value]="accountSearchValue">
+                                <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
+                                    <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    <div class="pd1">
+                        <button id="AddManage" type="button" class="btn isActive btn-sm" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
+                    </div>
+                </li>
+            </ul>
 
-      <ul class="nav navbar-nav navbar-right" *ngIf="(selectedCompany | async)">
-        <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
-          <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
+            <ul class="nav navbar-nav navbar-right" *ngIf="(selectedCompany | async)">
+                <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
+                    <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
                         <span class="icon-dropdown"></span>
                         <div class="cText">
                             <span class="cName">{{ (selectedCompany | async)?.name }}</span>
                             <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
                         </div>
                     </a>
-          <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
-            <li class="create-company">
-              <button id="refreshCompanyBtn" class="btn btn-success btn-sm" (click)="refreshCompanies($event)"><i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i></button>
-              <button id="createCompanyBtn" class="btn btn-primary btn-sm" (click)="showAddCompanyModal()">Create Company</button>
-            </li>
-            <li style="padding:0px;">
-              <ul style="max-height: 260px;overflow-y: scroll;overflow:auto;">
-                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
-                  (click)="changeCompany(cmp.uniqueName)">
-                  <span tooltip-placement="right">{{ cmp.name }}</span>
-                  <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
-                    class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                    <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
+                        <li class="create-company" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
+                            <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
+                            <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)"><i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh</button>
+
+                        </li>
+                        <li style="padding:0px;">
+                            <ul style="max-height: 260px; overflow:auto;">
+                                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}" (click)="changeCompany(cmp.uniqueName)">
+                                    <span tooltip-placement="right">{{ cmp.name }}</span>
+                                    <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName" class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-        <li dropdown [isOpen]="userMenu.isopen" tooltip-placement="left">
-          <a href (click)="false" id="user-dropdown" dropdownToggle>
+                <li dropdown [isOpen]="userMenu.isopen" tooltip-placement="left">
+                    <a href (click)="false" id="user-dropdown" dropdownToggle>
             {{userName | uppercase}}
           </a>
-          <ul class="dropdown-menu" aria-labelledby="user-dropdown">
-            <li><a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a></li>
-            <li><a ui-sref="company.content.user">User Detail</a></li>
-            <li><a href="javascript:void(0)">Run Tour</a></li>
-            <li><a target="_Blank" href="https://docs.giddh.com/">Documentation</a></li>
-            <li><a class="pull-left" href="javascript:void(0)"><span class="pull-left">Switch User</span><span class="on-btn pull-left"></span></a></li>
-            <li role="separator" class="divider" style="width:100%"></li>
-            <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
-          </ul>
-        </li>
-      </ul>
+                    <ul class="dropdown-menu" aria-labelledby="user-dropdown">
+                        <li><a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a></li>
+                        <li><a ui-sref="company.content.user">User Detail</a></li>
+                        <li><a href="javascript:void(0)">Run Tour</a></li>
+                        <li><a target="_Blank" href="https://docs.giddh.com/">Documentation</a></li>
+                        <li><a class="pull-left" href="javascript:void(0)"><span class="pull-left">Switch User</span><span class="on-btn pull-left"></span></a></li>
+                        <li role="separator" class="divider" style="width:100%"></li>
+                        <li><a href="javascript:void(0)" (click)="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </nav>
-  </div>
-  <accounts-side-bar *ngIf="(selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+
+    <accounts-side-bar *ngIf="(selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
 <div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
-  <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
-    <div class="modal-content fullScreenMy">
-      <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
-      </ng-template>
-      <!-- <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts> -->
+    <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
+        <div class="modal-content fullScreenMy">
+            <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
+            </ng-template>
+            <!-- <app-manage-groups-accounts (closeEvent)="hideManageGroupsModal()"></app-manage-groups-accounts> -->
+        </div>
     </div>
-  </div>
 </div>
 
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog" (onHidden)="onHide()">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
-      </ng-template>
-      <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
+            </ng-template>
+            <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
       </company-add> -->
+        </div>
     </div>
-  </div>
 </div>
 
 <!--delete company modal  -->
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
+        </div>
     </div>
-  </div>
 </div>
