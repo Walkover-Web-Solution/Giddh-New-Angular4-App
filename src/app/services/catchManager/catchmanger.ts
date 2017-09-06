@@ -37,7 +37,15 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
     data.request = request;
     data.queryString = queryString;
   } else {
-    data = r.json();
+    if (r.text() === '') {
+      //
+      data.status = 'error';
+      data.message = 'Something went wrong';
+      data.body = null;
+      data.code = 'Internal Error';
+    } else {
+      data = r.json();
+    }
     data.request = request;
     data.queryString = queryString;
   }

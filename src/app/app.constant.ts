@@ -26,7 +26,7 @@ export const APP_DEFAULT_TITLE = 'Giddh -';
 
 export const DEFAULT_TOASTER_OPTIONS = {
   closeButton: true, // show close button
-  timeOut: 5000, // time to live
+  timeOut: 3000, // time to live
   enableHtml: false, // allow html in message. (UNSAFE)
   extendedTimeOut: 1000, // time to close after a user hovers over toast
   progressBar: true, // show progress bar

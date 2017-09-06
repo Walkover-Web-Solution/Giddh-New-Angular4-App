@@ -41,7 +41,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
 
   public hideOptions(value: string, e: Event) {
     this.showpdf = false;
-    this.tbExportPdfEvent.emit(value)
+    this.tbExportPdfEvent.emit(value);
     e.preventDefault();
     return false;
   }

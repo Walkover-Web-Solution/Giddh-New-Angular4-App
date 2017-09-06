@@ -14,6 +14,7 @@ import * as _ from 'lodash';
 export class AccountsSideBarComponent implements OnInit, OnDestroy {
   @Input() public flyAccounts: boolean;
   public flatAccountWGroupsList: IFlattenGroupsAccountsDetail[];
+  public isFlyAccountInProcess$: Observable<boolean>;
   public companyList$: Observable<any>;
   public showAccountList: boolean = true;
 
@@ -38,6 +39,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
       this.toggleAccounts(this._noGroups);
       this._noGroups = true;
     });
+    this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
 
     this.companyList$ = this.store.select(state => {
       return state.company.companies;
@@ -56,6 +58,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this._flyAccountActions.ResetflatAccountWGroups());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

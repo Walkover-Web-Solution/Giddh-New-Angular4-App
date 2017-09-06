@@ -1,0 +1,219 @@
+<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design">
+
+
+    <div class="clearfix">
+        <div class="col-xs-9">
+            <div class="row">
+                <label><input type="text" class="form-control" placeholder="My Invoice Template" /></label>
+            </div>
+        </div>
+    </div>
+
+    <!-- <img src="" height="200" alt="Image preview...">
+
+
+    <button type="button" class="start-upload-btn" (click)="startUpload()">
+    Start Upload
+  </button> {{imagePreview}} -->
+    <div class="clearfix">
+        <ul class="designTool">
+            <li *ngIf="!ifTemplateSelected" (click)="selectTemplate()">
+                <i class="ico-template"></i> <label>Change up to template</label>
+            </li>
+            <li *ngIf="ifTemplateSelected">
+                <!-- edit template  start -->
+                <div class="clearfix">
+                    <ul class="templateView">
+
+                        <li (click)="showTemplate('gst_template_a')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="showTemplate('common_template_a')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="showTemplate('gst_template_b')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="showTemplate('gst_template_c')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="showTemplate('gst_template_d')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                        <li (click)="showTemplate('gst_template_e')">
+                            <img src="./assets/images/template1.jpg" alt="" />
+                        </li>
+                    </ul>
+                </div>
+                <!--<template-selector></template-selector>-->
+            </li>
+            <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
+                <i class="ico-edit"></i> <label>Make logo edit</label>
+            </li>
+            <li [hidden]="!ifLogoSelected">
+                <!-- edit logo  start -->
+                <div class="clearfix">
+                    <div class="logoTool">
+                        <span class="logo-preview">
+                            <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
+                                <input type="file" id="logo-edit" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+                                <small>Upload Your Logo</small>
+                            </label>
+                            <label for="logo-edit">
+                                <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
+                            </label>
+                            
+                        </span>
+                        <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" [hidden]="!logoAttached">Start Upload</button>
+                        <div class="pull-left mrL1 mrT1">
+                            <p>Size</p>
+                            <ul>
+                                <li (click)="setLogoSize('small')">S</li>
+                                <li (click)="setLogoSize('medium')">M</li>
+                                <li (click)="setLogoSize('large')">L</li>
+                            </ul>
+                            <a href="javascript:void(0);" class="primary_clr" [hidden]="!logoAttached" (click)="hideLogo()"><span [hidden]="showLogo">Show</span><span [hidden]="!showLogo">Hide</span> logo</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- edit logo end -->
+            </li>
+
+            <li *ngIf="!ifColorSelected" (click)="selectColor()">
+                <i class="ico-swatch"></i> <label>Try other colour</label>
+            </li>
+            <li *ngIf="ifColorSelected">
+                <!-- edit color  start -->
+                <div class="clearfix">
+                    <div class="swatch text-center">
+                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': currentColor}"></span> {{this.currentColor}}
+                        </span>
+                        <div class="mrL1 pull-left">
+                            <ul>
+                                <li class="" (click)="changeColor('#bdbdbd')"></li>
+                                <li class="" (click)="changeColor('#636363')"></li>
+                                <li class="" (click)="changeColor('#000000')"></li>
+                                <li class="" (click)="changeColor('#a6bddb')"></li>
+                                <li class="" (click)="changeColor('#7889a1')"></li>
+                                <li class="" (click)="changeColor('#48565f')"></li>
+                                <li class="" (click)="changeColor('#79bd58')"></li>
+                                <li class="" (click)="changeColor('#0e909a')"></li>
+                                <li class="" (click)="changeColor('#202e5a')"></li>
+                                <li class="" (click)="changeColor('#96bc2d')"></li>
+                                <li class="" (click)="changeColor('#2a651d')"></li>
+                                <li class="" (click)="changeColor('#004254')"></li>
+                                <li class="" (click)="changeColor('#ff8c00')"></li>
+                                <li class="" (click)="changeColor('#82001d')"></li>
+                                <li class="" (click)="changeColor('#6b1438')"></li>
+                                <li class="" (click)="changeColor('#f4749b')"></li>
+                                <li class="" (click)="changeColor('#950069')"></li>
+                                <li class="" (click)="changeColor('#542852')"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <!-- edit color end -->
+            </li>
+            <li *ngIf="!ifFontSelected" (click)="selectFonts()">
+                <i class="ico-txt"></i> <label>Select different fonts</label>
+            </li>
+            <li *ngIf="ifFontSelected">
+                <div class="col-xs-9 font-selector">
+                    <div class="row">
+                        <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
+                            [fpPresetFonts]="presetFonts">
+                            {{font.family}}
+                            <i class="glyphicon glyphicon-triangle-bottom pull-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li *ngIf="!ifPrintSelected" (click)="printSettings()">
+                <i class="ico-print"></i> <label>Edit print setting</label>
+            </li>
+            <li *ngIf="ifPrintSelected">
+                <!-- edit print setting  start  -->
+                <div class="clearfix">
+                    <div class="printTool pos-rel">
+                        <p>Page margins</p>
+                        <table class="table mr0">
+                            <thead>
+                                <tr>
+                                    <th>Top</th>
+                                    <th>Left</th>
+                                    <th>Bottom</th>
+                                    <th>Right</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" class="form-control" [(ngModel)]=top (ngModelChange)='onPageMarginChange(top,"topMargin")' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMargin")' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMargin")' /></td>
+                                    <td><a href="javascript:void(0);" class="pdR1" (click)="resetPrintSetting()">Reset</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- <a href="javascript:void(0);" class="pos-abs pull-right pdR1">Reset</a> -->
+                    </div>
+                </div>
+                <!-- edit print setting  end -->
+            </li>
+        </ul>
+    </div>
+
+
+
+
+
+    <!-- <div class="tab">
+        <button class="tablinks" (click)="showTemplate('common_template_a')" id="defaultOpen">template1</button>
+        <button class="tablinks" (click)="showTemplate('gst_template_a')">template2</button>
+        <button class="tablinks" (click)="showTemplate('gst_template_b')">template3</button>
+    </div>
+
+    <div class="tab">
+        <button class="tablinks" (click)="showTemplate('gst_template_c')">template4</button>
+        <button class="tablinks" (click)="showTemplate('gst_template_d')">template5</button>
+        <button class="tablinks" (click)="showTemplate('gst_template_e')">template6</button>
+    </div> -->
+    <!-- edit template  end -->
+
+
+
+
+
+
+
+
+
+
+    <!-- <p style="margin-bottom: 20px" *ngIf="!ifTemplateSelected"> <button (click)="selectTemplate()" type="submit" class="btn btn-primary">1</button> Change up to template </p>
+    <template-selector *ngIf="ifTemplateSelected"></template-selector>
+    <p style="margin-bottom: 20px" *ngIf="!ifLogoSelected"> <button (click)="selectLogo()" type="submit" class="btn btn-primary">2</button> Make logo edit </p>
+    <p style="margin-bottom: 20px" *ngIf="!ifColorSelected"> <button (click)="selectColor()" type="submit" class="btn btn-primary">3</button> Try other color </p>
+    <p style="margin-bottom: 20px" *ngIf="!ifFontSelected"> <button (click)="selectFonts()" type="submit" class="btn btn-primary">4</button> Select different fonts </p>
+    <p style="margin-bottom: 20px" *ngIf="!ifPrintSelected"> <button (click)="printSettings()" type="submit" class="btn btn-primary">5</button> Edit print settings </p> -->
+
+    <!-- <div class="swatch">
+        <ul>
+            <li class="black"></li>
+            <li class="grey"></li>
+            <li class="yellow"></li>
+            <li class="cyan"></li>
+            <li class="red"></li>
+            <li class="orange"></li>
+            <li class="blue"></li>
+            <li class="purple"></li>
+        </ul>
+    </div>  -->
+
+    <!-- <p><input name="top" id="top-margin" type="text" [(ngModel)]=top (ngModelChange)='onPageMarginChange(top,"topMargin")' />
+        <input name="left" id="left-margin" type="text" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMargin")' />
+        <input name="bottom" id="bottom-margin" type="text" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")' />
+        <input name="right" id="right-margin" type="text" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMargin")' /></p> -->
+
+
+
+</div>

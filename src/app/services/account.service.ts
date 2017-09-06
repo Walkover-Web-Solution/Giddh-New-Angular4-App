@@ -34,7 +34,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':groupUniqueName', groupUniqueName), model)
+    return this._http.post(ACCOUNTS_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<AccountResponse, AccountRequest> = res.json();
         data.request = model;
@@ -51,7 +51,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountName', accountName), model)
+    return this._http.put(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountName', accountName), model)
       .map((res) => {
         let data: BaseResponse<AccountResponse, AccountRequest> = res.json();
         data.request = model;
@@ -68,7 +68,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+    return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountResponse, string> = res.json();
       data.queryString = { accountUniqueName };
       return data;
@@ -82,7 +82,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+    return this._http.get(ACCOUNTS_API.DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountResponse, string> = res.json();
       data.queryString = { accountUniqueName };
       data.request = accountUniqueName;
@@ -97,7 +97,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(ACCOUNTS_API.MERGE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.put(ACCOUNTS_API.MERGE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, AccountMergeRequest[]> = res.json();
         data.request = model;
@@ -114,7 +114,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.UNMERGE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.post(ACCOUNTS_API.UNMERGE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, AccountUnMergeRequest> = res.json();
         data.request = model;
@@ -133,7 +133,7 @@ export class AccountService implements OnInit {
     });
     let mod = [];
     mod.push(model);
-    return this._http.post(APPLY_TAX_API.APPLY_TAX.replace(':companyUniqueName', this.companyUniqueName), mod)
+    return this._http.post(APPLY_TAX_API.APPLY_TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), mod)
       .map((res) => {
         let data: BaseResponse<string, ApplyTaxRequest> = res.json();
         data.request = model;
@@ -148,7 +148,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(ACCOUNTS_API.MOVE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.put(ACCOUNTS_API.MOVE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, AccountMoveRequest> = res.json();
         data.request = model;
@@ -164,7 +164,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(ACCOUNTS_API.SHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.put(ACCOUNTS_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, ShareAccountRequest> = res.json();
         data.request = model;
@@ -181,7 +181,7 @@ export class AccountService implements OnInit {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(ACCOUNTS_API.UNSHARE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), { user: userEmail }).map((res) => {
+    return this._http.put(ACCOUNTS_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = userEmail;
       data.queryString = { accountUniqueName };
@@ -195,7 +195,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.get(ACCOUNTS_API.SHARED_WITH.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName))
+    return this._http.get(ACCOUNTS_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)))
       .map((res) => {
         let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
         data.request = '';
@@ -211,7 +211,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(ACCOUNTS_API.DELETE_ACCOUNT.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+    return this._http.delete(ACCOUNTS_API.DELETE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = accountUniqueName;
       data.queryString = { accountUniqueName };
@@ -226,7 +226,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q || '').replace(':count', count || '').replace(':page', page || '')).map((res) => {
+    return this._http.get(ACCOUNTS_API.FLATTEN_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':count', count || '').replace(':page', encodeURIComponent(page || ''))).map((res) => {
       let data: BaseResponse<FlattenAccountsResponse, string> = res.json();
       data.request = '';
       data.queryString = { q, page, count };
@@ -241,7 +241,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', this.companyUniqueName).replace(':count', count || 0).replace(':q', q || '').replace(':page', page || 1), groupUniqueNames).map((res) => {
+    return this._http.post(ACCOUNTS_API.FLATTEN_ACCOUNTS_OF_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':count', count || 0).replace(':q', encodeURIComponent(q || '')).replace(':page', encodeURIComponent(page || 1)), groupUniqueNames).map((res) => {
       let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = res.json();
       data.request = groupUniqueNames;
       data.queryString = { count, q, page };
@@ -256,7 +256,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(ACCOUNTS_API.TAX_HIERARCHY.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName)).map((res) => {
+    return this._http.get(ACCOUNTS_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<AccountsTaxHierarchyResponse, string> = res.json();
       data.request = '';
       data.queryString = { accountUniqueName };
