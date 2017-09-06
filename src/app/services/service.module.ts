@@ -104,6 +104,7 @@ export class ServiceModule {
       ngModule: ServiceModule,
       providers: [
         StorageService,
+        ErrorHandler,
         HttpWrapperService,
         AuthenticationService,
         ErrorHandlerService,
@@ -119,7 +120,6 @@ export class ServiceModule {
         InventoryService,
         PermissionService,
         ManufacturingService,
-        ErrorHandler,
         SearchService,
         InvoiceService,
         InvoiceTemplatesService,
