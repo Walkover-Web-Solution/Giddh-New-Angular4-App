@@ -57,6 +57,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
   public userName: string;
+  public isProd = ENV;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
