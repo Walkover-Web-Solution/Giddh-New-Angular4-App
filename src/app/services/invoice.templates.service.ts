@@ -32,7 +32,10 @@ export class InvoiceTemplatesService {
       let data: Template = res.json();
       console.log('API RESPONSE', data);
       return data;
-    }).catch((e) => HandleCatch<Template, string>(e));
+    }).catch((e) => {
+      let object = HandleCatch<Template, string>(e);
+      return object.map(p => p.body);
+    });
   }
 
   // public getTopMargin(): Observable<number> {
