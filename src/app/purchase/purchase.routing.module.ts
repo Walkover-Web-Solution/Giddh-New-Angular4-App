@@ -40,7 +40,7 @@ const INVOICE_ROUTES: Routes = [
   exports: [
     RouterModule,
     // Ng2BootstrapModule,
-    // FormsModule,
+    FormsModule,
     CommonModule,
     SharedModule,
     // Daterangepicker
