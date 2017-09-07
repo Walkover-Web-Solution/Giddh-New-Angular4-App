@@ -41,7 +41,7 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
         if (tree.fragment) {
           // you can use DomAdapter
           const element = document.querySelector('#' + tree.fragment);
-          if (element) { element.scrollIntoView(element); }
+          // if (element) { element.scrollIntoView(element); }
         }
       }
     });
