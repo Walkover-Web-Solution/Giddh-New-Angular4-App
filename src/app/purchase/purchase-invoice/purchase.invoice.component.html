@@ -78,7 +78,8 @@
                             <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> File {{ selectedGstrType }} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
                             </button>
                             <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                                <li class="cursor-pointer dd-options" (click)="onDownloadSheetGSTR1();">Download Sheet</li>
+                                <li class="cursor-pointer dd-options" (click)="onDownloadSheetGSTR1('gstr1');">Download Sheet</li>
+                                <li class="cursor-pointer dd-options text-danger" (click)="onDownloadSheetGSTR1('gstr1_error');">Download Error Sheet</li>
                                 <li class="cursor-pointer dd-options">Use JIOGST API</li>
                                 <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR1();">
                                     {{item.name}}
@@ -182,7 +183,7 @@
                 <td>{{invoice.voucherNo}}</td>
                 <td class="select">
                     <div class="custom-select pos-rel">
-                        <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp">
+                        <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onUpdateEntryType(i, invoice.entryType);">
                             <option value="composite">Composite</option>
                             <option value="reverse charge">Reverse Charge</option>
                         </select>
