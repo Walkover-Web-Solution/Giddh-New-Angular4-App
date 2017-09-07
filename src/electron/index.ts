@@ -70,3 +70,13 @@ ipcMain.on('show-dialog', (event, arg) => {
     detail: 'It\'s my pleasure to make your life better.'
   });
 });
+
+ipcMain.on('get-client-key', (event, arg) => {
+  event.sender.send('set-client-key', {
+    GOOGLE_KEY: 'eWzLFEb_T9VrzFjgE40Bz6_l',
+    TWITTER_KEY: 'w64afk3ZflEsdFxd6jyB9wt5j',
+    TWITTER_SECRET: '62GfvL1A6FcSEJBPnw59pjVklVI4QqkvmA1uDEttNLbUl2ZRpy',
+    LINKEDIN_KEY: '75urm0g3386r26',
+    LINKEDIN_SECRET: '3AJTvaKNOEG4ISJ0'
+  });
+});
