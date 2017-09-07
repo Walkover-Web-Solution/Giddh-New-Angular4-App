@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
 import * as  moment from 'moment';
 import * as  _ from 'lodash';
-import { IInvoicePurchaseResponse } from '../../services/purchase-invoice.service';
+import { IInvoicePurchaseResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 
 import { PipeTransform, Pipe, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -14,6 +14,9 @@ import { InvoicePurchaseActions } from '../../services/actions/purchase-invoice/
 import { ToasterService } from '../../services/toaster.service';
 import { ComapnyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../services/actions/company.actions';
+import { saveAs } from 'file-saver';
+import { AccountService } from '../../services/account.service';
+import { AccountRequest } from '../../models/api-models/Account';
 @Pipe({ name: 'highlight' })
 export class HighlightPipe implements PipeTransform {
   public transform(text: string, search): string {
@@ -119,7 +122,9 @@ export class PurchaseInvoiceComponent implements OnInit {
     private store: Store<AppState>,
     private invoicePurchaseActions: InvoicePurchaseActions,
     private toasty: ToasterService,
-    private companyActions: CompanyActions
+    private companyActions: CompanyActions,
+    private purchaseInvoiceService: PurchaseInvoiceService,
+    private accountService: AccountService
   ) {
     console.log('Hi this is purchase invoice component');
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
@@ -127,19 +132,21 @@ export class PurchaseInvoiceComponent implements OnInit {
          this.activeCompanyUniqueName = _.cloneDeep(c);
       }
     });
-    // this.store.select(p => p.company.companies).takeUntil(this.destroyed$).subscribe((c) => {
-    //   if (c.length) {
-    //     let companies = this.companies = _.cloneDeep(c);
-    //     if (this.activeCompanyUniqueName) {
-    //       let activeCompany = companies.find((o: ComapnyResponse) => o.uniqueName === this.activeCompanyUniqueName);
-    //       if (activeCompany) {
-    //         this.activeCompanyGstNumber = activeCompany.gstDetails;
-    //       }
-    //     }
-    //   } else {
-    //     this.store.dispatch(this.companyActions.RefreshCompanies());
-    //   }
-    // });
+    this.store.select(p => p.company.companies).takeUntil(this.destroyed$).subscribe((c) => {
+      if (c.length) {
+        let companies = this.companies = _.cloneDeep(c);
+        if (this.activeCompanyUniqueName) {
+          let activeCompany = companies.find((o: ComapnyResponse) => o.uniqueName === this.activeCompanyUniqueName);
+          if (activeCompany && activeCompany.gstDetails[0]) {
+            this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
+          } else {
+            this.toasty.errorToast('GST number not found.');
+          }
+        }
+      } else {
+        this.store.dispatch(this.companyActions.RefreshCompanies());
+      }
+    });
   }
 
   public ngOnInit() {
@@ -223,14 +230,32 @@ export class PurchaseInvoiceComponent implements OnInit {
     this.selectedRowIndex = indx;
   }
 
+  public arrayBufferToBase64( buffer ) {
+    let binary = '';
+    let bytes = new Uint8Array( buffer );
+    let len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+        binary += String.fromCharCode( bytes[ i ] );
+    }
+    return window.btoa( binary );
+  }
+
   /**
    * onDownloadSheetGSTR1
    */
-  public onDownloadSheetGSTR1() {
+  public onDownloadSheetGSTR1(typeOfSheet: string) {
     if (this.selectedDateForGSTR1) {
       let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
       let monthToSend = check.format('MM') + '-' + check.format('YYYY');
-
+      if (this.activeCompanyGstNumber) {
+        if (typeOfSheet === 'gstr1') {
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(monthToSend, this.activeCompanyGstNumber));
+        } else if (typeOfSheet === 'gstr1_error') {
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1ErrorSheet(monthToSend, this.activeCompanyGstNumber));
+        }
+      } else {
+        this.toasty.errorToast('GST number not found.');
+      }
     } else {
       this.toasty.errorToast('Please select month');
     }
@@ -242,5 +267,40 @@ export class PurchaseInvoiceComponent implements OnInit {
 
   public clearDate() {
     this.selectedDateForGSTR1 = '';
+  }
+
+  /**
+   * onUpdateEntryType
+   */
+  public onUpdateEntryType(indx, value) {
+    let account: AccountRequest = new AccountRequest();
+    let isComposite: boolean;
+    if (value === 'composite') {
+      isComposite = true;
+    } else if (value === 'reverse charge') {
+      isComposite = false;
+    }
+    let data = _.cloneDeep(this.allPurchaseInvoices);
+    let selectedRow = data[indx];
+    let selectedAccName = selectedRow.account.uniqueName;
+    this.accountService.GetAccountDetails(selectedAccName).subscribe((accDetails) => {
+      let accountData = _.cloneDeep(accDetails.body);
+      account.name = accountData.name;
+      account.uniqueName = accountData.uniqueName;
+      account.hsnNumber = accountData.hsnNumber;
+      account.city = accountData.city;
+      account.pincode = accountData.pincode;
+      account.country = accountData.country;
+      account.sacNumber = accountData.sacNumber;
+      account.stateCode = accountData.stateCode;
+      account.isComposite = isComposite;
+      this.accountService.UpdateAccount(account, selectedAccName).subscribe((res) => {
+        if (res.status === 'success') {
+          this.toasty.successToast('Entry type changed successfully.');
+        } else {
+          this.toasty.errorToast(res.message, res.code);
+        }
+      });
+    });
   }
 }
