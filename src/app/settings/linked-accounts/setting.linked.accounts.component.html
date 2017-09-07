@@ -1,72 +1,74 @@
-<div class="box">
-  <h1 style="padding:20px 0px;font-weight:bold;">Add Bank Account</h1>
-  <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
-  <div class="mrT1">NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again
-    after some time.</div>
-  <hr class="mrT2 col-xs-11">
-  <div class="mrT2 col-xs-12 pd0">
-    <h1 class="pull-left">Added Accounts</h1>
-    <button class="btn btn-primary btn-sm pull-right" (click)="onRefreshAccounts()" *ngIf='ebankAccounts && ebankAccounts.length'>Refresh</button>
-    <div class="col-xs-12 mrT1 pd0" *ngIf='ebankAccounts && ebankAccounts.length'>
-        <section *ngFor="let acc of ebankAccounts">
-            <h3>{{acc.siteName}}</h3>
-            <aside class="body">
-                <aside (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
-                <aside class="title">{{card.name}}</aside>
-                <div class="reconnectDiv" *ngIf="card.reconnect">
-                    <button class="btn btn-sm btn-info reconnectButton" (click)="onReconnectAccount(card)">Reconnect</button>
-                    <button class="btn btn-sm btn-danger reconnectButton" style="top:60%;left:28%; width:109px;" (click)="onDeleteAddedBank(acc.siteName, card)">Delete</button>
-                </div>
-                <a href="javascript:void(0)" tooltip="Refresh" placement="top"><i class="pull-left glyphicon glyphicon-refresh refresh-icon" ng-disabled="card.reconnect" (click)="onRefreshToken(card)"></i></a>
-                <a href="javascript:void(0)" class="delete-bank" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, card)" uib-tooltip="Delete Bank" tooltip-placement="left"><i class="glyphicon glyphicon-trash"></i></a>
-                <!--<h1> {{ card.name }} </h1>-->
-                <div class="account-number">
-                    <b>Account</b>: {{card.accountNumber}}
-                </div>
-                <div class="account-date">
-                    <b>Entries From</b>:
-                    <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
-                    {{card.transactionDate | date}}
-                    <input [(ngModel)]="card.transactionDate" name="transactionDate"/>
-                    </a>
-                    <div style="position: absolute; z-index:10; min-height:290px;">
-                    <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (activeDateChange)="onUpdateDate(card.transactionDate, card)" [showWeeks]="true">
-                    </datepicker>
-                    </div>
-                </div>
-                <div class="balance">
-                    {{card.currencyCode}} {{card.amount}}
-                </div>
-                <div class="with" *ngIf="card.linkedAccount">
-                    Linked with: {{card.linkedAccount.name}} ({{card.linkedAccount.uniqueName}})
-                </div>
-                <div class="select-account" *ngIf="card.showAccList">
-                    <select2 [data]="accounts$" [options]="select2Options" (valueChanged)="onAccountSelect(card, $event)"></select2>
-                </div>
-                <button class="btn btn-sm btn-warning pull-right" *ngIf="card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = false" style="margin-top:5px">Not Now</button>
-                <button class="btn btn-sm btn-info" *ngIf="card.linkedAccount == null && !card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = true;">Link Account</button>
-                <button class="btn btn-sm btn-danger mrT1" *ngIf="card.linkedAccount && card.linkedAccount.name.length > 0" [disabled]="card.reconnect" (click)="onUnlinkBankAccount(card)">Unlink Account</button>
-                <!--<button class="delete-bank" [disabled]="card.reconnect" (click)="onDeleteAddedBank(card)" uib-tooltip="Delete Bank" tooltip-placement="left"><i class="glyphicon glyphicon-trash"></i></button>                -->
-            </aside>
-            </aside>
-        </section>
-    </div>
-  </div>
+<div class="box clearfix mrT2">
+    <h1 class="section_head pdT0">Add Bank Account</h1>
+    <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
+    <div class="mrT1"><small class="alert alert-warning pd1 inline"> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again after some time.</small> </div>
+</div>
 
+<div class="box clearfix mrT2" *ngIf='ebankAccounts && ebankAccounts.length'>
+    <div class="">
+        <button class="btn btn-primary btn-sm pull-right" (click)="onRefreshAccounts()">Refresh</button>
+        <h1 class="section_head pdT0">Added Accounts</h1>
+        <div class="col-xs-12 mrT1">
+            <section *ngFor="let acc of ebankAccounts; let i = index" class="clearfix bank-account" [ngClass]="{'mrB4': i != ebankAccounts.length-1 }">
+                <h3 class="subHead bdrB">
+                    <button class="no-btn fs20" tooltip="Delete Bank" placement="top" (click)="onDeleteAddedBank(acc.siteName, card)"><i class="fa fa-trash-o"></i></button> {{acc.siteName}}
+                    <button class="btn btn-link mrL1" tooltip="Refresh" placement="top"><i class="fa fa-refresh" ng-disabled="card.reconnect" (click)="onRefreshToken(card)"></i> Refresh</button>
+
+                </h3>
+                <aside class="body">
+                    <aside (clickOutside)="card.isDatePickerOpen = false" class="account-card" *ngFor="let card of acc.accounts; let i = index">
+                        <aside class="title">{{card.name}}</aside>
+                        <div class="reconnectDiv" *ngIf="card.reconnect">
+                            <button class="btn btn-sm btn-info reconnectButton" (click)="onReconnectAccount(card)">Reconnect</button>
+                            <button class="btn btn-sm btn-danger reconnectButton" style="top:60%;left:28%; width:109px;" (click)="onDeleteAddedBank(acc.siteName, card)">Delete</button>
+                        </div>
+                        <!--<h1> {{ card.name }} </h1>-->
+                        <div class="account-number">
+                            <b>Account</b>: {{card.accountNumber}}
+                        </div>
+                        <div class="account-date clearfix">
+                            <b>Entries From</b>: <label for="date_{{i}}" class="cp">{{card.transactionDate | date}}</label>
+                            <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
+                                <input [(ngModel)]="card.transactionDate" name="transactionDate" id="date_{{i}}" />
+                            </a>
+                            <div style="position: absolute; z-index:10; min-height:290px;">
+                                <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (activeDateChange)="onUpdateDate(card.transactionDate, card)" [showWeeks]="true">
+                                </datepicker>
+                            </div>
+                        </div>
+                        <div class="balance text-left">
+                            {{card.currencyCode}} {{card.amount}}
+                        </div>
+                        <div class="with" *ngIf="card.linkedAccount">
+                            Linked with: {{card.linkedAccount.name}} ({{card.linkedAccount.uniqueName}})
+                        </div>
+                        <div class="select-account" *ngIf="card.showAccList">
+                            <select2 [data]="accounts$" [options]="select2Options" (valueChanged)="onAccountSelect(card, $event)"></select2>
+                        </div>
+                        <button class="btn btn-sm btn-warning pull-right" *ngIf="card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = false" style="margin-top:5px">Not Now</button>
+                        <button class="btn btn-sm btn-primary" *ngIf="card.linkedAccount == null && !card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = true;">Link Account</button>
+                        <button class="btn btn-sm btn-danger mrT1" *ngIf="card.linkedAccount && card.linkedAccount.name.length > 0" [disabled]="card.reconnect" (click)="onUnlinkBankAccount(card)">Unlink Account</button>
+                        <!--<button class="delete-bank" [disabled]="card.reconnect" (click)="onDeleteAddedBank(card)" uib-tooltip="Delete Bank" tooltip-placement="left"><i class="glyphicon glyphicon-trash"></i></button>                -->
+                    </aside>
+                </aside>
+            </section>
+        </div>
+    </div>
+</div>
 <!-- Connect-Bank-Modal -->
 <div bsModal #connectBankModel="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <connect-bank-modal [sourceOfIframe]="iframeSource" (modalCloseEvent)="closeModal()"></connect-bank-modal>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Confirmation Modal -->
 <div bsModal #confirmationModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <setting-l-acc-confirmation-modal [message]="confirmationMessage" (closeModelEvent)="closeConfirmationModal($event)"></setting-l-acc-confirmation-modal>
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <setting-l-acc-confirmation-modal [message]="confirmationMessage" (closeModelEvent)="closeConfirmationModal($event)"></setting-l-acc-confirmation-modal>
+        </div>
     </div>
-  </div>
 </div>

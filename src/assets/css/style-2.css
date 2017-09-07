@@ -928,7 +928,7 @@ input[type="checkbox"]:after {
 }
 
 .pdT0 {
-    padding-top: 0;
+    padding-top: 0 !important;
 }
 
 .templateInfo {
@@ -3766,7 +3766,7 @@ input[type='checkbox'][disabled] {
 }
 
 .section_head {
-    padding: 15px 0;
+    padding: 10px 0;
     font-family: 'LatoWebbold';
     font-size: 110%;
     color: rgba(0, 0, 0, 0.8);
@@ -3801,4 +3801,23 @@ input[type='checkbox'][disabled] {
     border: 1px solid #d6d6d6;
     box-shadow: none;
     outline: 0;
+}
+
+.align-top>tbody>tr>td {
+    vertical-align: top;
+}
+
+.subHead {
+    font-size: 105%;
+    color: #333333;
+    padding-bottom: 10px;
+}
+
+.bank-account .subHead button {
+    color: #333;
+    padding: 0 0;
+}
+
+.bank-account .subHead {
+    margin-bottom: 7px;
 }
