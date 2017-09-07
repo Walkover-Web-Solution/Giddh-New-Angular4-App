@@ -15,13 +15,25 @@ export class CompanyRequest {
 }
 
 export class StateDetailsRequest {
-   public lastState: string;
+  public lastState: string;
   public companyUniqueName: string;
 }
 
 export class StateDetailsResponse {
   public lastState: string;
   public companyUniqueName: string;
+}
+
+export class AddressList {
+  public stateCode: string;
+  public address: string;
+  public isDefault: boolean;
+  public stateName: string;
+}
+
+export class GstDetail {
+  public addressList: AddressList[];
+  public gstNumber: string;
 }
 
 export class ComapnyResponse {
@@ -48,6 +60,7 @@ export class ComapnyResponse {
   public alias?: any;
   public role: Role;
   public name: string;
+  public gstDetails: GstDetail[];
 }
 
 export interface Role {

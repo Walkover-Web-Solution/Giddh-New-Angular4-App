@@ -94,4 +94,42 @@ export class PurchaseInvoiceService {
       return data;
     }).catch((e) => HandleCatch<IInvoicePurchaseResponse, string>(e));
   }
+
+  /*
+  * Download GSTR1 Sheet
+  * API: 'gstreturn/GSTR_excel_export?monthYear=:month&gstin=:company_gstin'
+  * Method: GET
+  */
+  public DownloadGSTR1Sheet(month: string, gstNumber: string): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', month).replace(':company_gstin', gstNumber)).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString =  { month, gstNumber };
+      return data;
+    }).catch((e) => HandleCatch<any, string>(e));
+  }
+
+  /*
+  * Download GSTR1 Error Sheet
+  * API: 'gstreturn/GSTR1_error_sheet?monthYear=:month&gstin=:company_gstin'
+  * Method: GET
+  */
+  public DownloadGSTR1ErrorSheet(month: string, gstNumber: string): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', month).replace(':company_gstin', gstNumber)).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString =  { month, gstNumber };
+      return data;
+    }).catch((e) => HandleCatch<any, string>(e));
+  }
 }
