@@ -11,6 +11,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoicePurchaseActions } from '../../services/actions/purchase-invoice/purchase-invoice.action';
+import { ToasterService } from '../../services/toaster.service';
+import { ComapnyResponse } from '../../models/api-models/Company';
+import { CompanyActions } from '../../services/actions/company.actions';
 @Pipe({ name: 'highlight' })
 export class HighlightPipe implements PipeTransform {
   public transform(text: string, search): string {
@@ -54,124 +57,11 @@ const fileGstrOptions = [
 })
 export class PurchaseInvoiceComponent implements OnInit {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
-  public allPurchaseInvoices: IInvoicePurchaseResponse[] = [
-    {
-      account: {
-        accountName: 'devansh nogst',
-        gstIn: null,
-        uniqueName: 'devanshnogst'
-      },
-      entryUniqueName: 'zz01504521377679',
-      gstin: null,
-      entryType: false,
-      igstAmount: 30002.04,
-      cgstAmount: 0,
-      sgstAmount: 0,
-      taxableValue: 0,
-      particulars: 'devansh hsn',
-      invoiceNo: '321',
-      utgstAmount: 0,
-      entryDate: '2017-08-20',
-      voucherNo: 5
-    },
-    {
-      account: {
-        accountName: 'devansh',
-        gstIn: '03EFIAJ111111Z1',
-        uniqueName: 'devansh'
-      },
-      entryUniqueName: 'cfp1504251058218',
-      gstin: '03EFIAJ111111Z1',
-      entryType: false,
-      igstAmount: 3000,
-      cgstAmount: 0,
-      sgstAmount: 0,
-      taxableValue: 0,
-      particulars: 'devansh hsn',
-      invoiceNo: '3333',
-      utgstAmount: 0,
-      entryDate: '2017-08-20',
-      voucherNo: 2
-    },
-    {
-      account: {
-        accountName: 'devansh nogst',
-        gstIn: null,
-        uniqueName: 'devanshnogst'
-      },
-      entryUniqueName: '3k01504523098974',
-      gstin: null,
-      entryType: false,
-      igstAmount: 30002.04,
-      cgstAmount: 0,
-      sgstAmount: 0,
-      taxableValue: 0,
-      particulars: 'devansh hsn',
-      invoiceNo: '1231',
-      utgstAmount: 0,
-      entryDate: '2017-08-20',
-      voucherNo: 6
-    },
-    {
-      account: {
-        accountName: 'devansh nogst',
-        gstIn: null,
-        uniqueName: 'devanshnogst'
-      },
-      entryUniqueName: 'gr31504520672172',
-      gstin: null,
-      entryType: false,
-      igstAmount: 30002.04,
-      cgstAmount: 0,
-      sgstAmount: 0,
-      taxableValue: 0,
-      particulars: 'devansh hsn',
-      invoiceNo: '321',
-      utgstAmount: 0,
-      entryDate: '2017-08-20',
-      voucherNo: 3
-    },
-    {
-      account: {
-        accountName: 'devansh',
-        gstIn: '03EFIAJ111111Z1',
-        uniqueName: 'devansh'
-      },
-      entryUniqueName: '0zq1504250944348',
-      gstin: '03EFIAJ111111Z1',
-      entryType: false,
-      igstAmount: 3000,
-      cgstAmount: 0,
-      sgstAmount: 0,
-      taxableValue: 0,
-      particulars: 'devansh hsn',
-      invoiceNo: '3333',
-      utgstAmount: 0,
-      entryDate: '2017-08-20',
-      voucherNo: 1
-    },
-    {
-      account: {
-        accountName: 'devansh nogst',
-        gstIn: null,
-        uniqueName: 'devanshnogst'
-      },
-      entryUniqueName: '4rf1504520750544',
-      gstin: null,
-      entryType: false,
-      igstAmount: 30002.04,
-      cgstAmount: 0,
-      sgstAmount: 0,
-      taxableValue: 0,
-      particulars: 'devansh hsn',
-      invoiceNo: '321',
-      utgstAmount: 0,
-      entryDate: '2017-08-20',
-      voucherNo: 4
-    }
-  ];
-
+  public allPurchaseInvoices: IInvoicePurchaseResponse[] = [];
+  public selectedDateForGSTR1: string = '';
+  public moment = moment;
   public selectedGstrType: string;
+  public showGSTR1DatePicker: boolean = false;
 
   public datePickerOptions: any = {
     locale: {
@@ -210,7 +100,9 @@ export class PurchaseInvoiceComponent implements OnInit {
   public gstrOptions: any[] = gstrOptions;
   public purchaseReportOptions: any[] = purchaseReportOptions;
   public fileGstrOptions: any[] = fileGstrOptions;
-
+  public activeCompanyUniqueName: string;
+  public activeCompanyGstNumber: string;
+  public companies: ComapnyResponse[];
   public mainInput = {
     start: moment().subtract(12, 'month'),
     end: moment().subtract(6, 'month')
@@ -219,22 +111,43 @@ export class PurchaseInvoiceComponent implements OnInit {
   public singleDate: any;
 
   public eventLog = '';
+  private selectedRowIndex: number;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(
     private router: Router,
     private location: Location,
     private store: Store<AppState>,
-    private invoicePurchaseActions: InvoicePurchaseActions
+    private invoicePurchaseActions: InvoicePurchaseActions,
+    private toasty: ToasterService,
+    private companyActions: CompanyActions
   ) {
     console.log('Hi this is purchase invoice component');
-    this.allPurchaseInvoicesBackup = this.allPurchaseInvoices;
+    this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
+      if (c) {
+         this.activeCompanyUniqueName = _.cloneDeep(c);
+      }
+    });
+    // this.store.select(p => p.company.companies).takeUntil(this.destroyed$).subscribe((c) => {
+    //   if (c.length) {
+    //     let companies = this.companies = _.cloneDeep(c);
+    //     if (this.activeCompanyUniqueName) {
+    //       let activeCompany = companies.find((o: ComapnyResponse) => o.uniqueName === this.activeCompanyUniqueName);
+    //       if (activeCompany) {
+    //         this.activeCompanyGstNumber = activeCompany.gstDetails;
+    //       }
+    //     }
+    //   } else {
+    //     this.store.dispatch(this.companyActions.RefreshCompanies());
+    //   }
+    // });
   }
 
   public ngOnInit() {
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices());
     this.store.select(p => p.invoicePurchase.purchaseInvoices).takeUntil(this.destroyed$).subscribe((o) => {
       if (o && o.length) {
-        this.allPurchaseInvoices = o;
+        this.allPurchaseInvoices = _.cloneDeep(o);
+        this.allPurchaseInvoicesBackup = _.cloneDeep(o);
       }
     });
   }
@@ -292,4 +205,42 @@ export class PurchaseInvoiceComponent implements OnInit {
     this.selectedGstrType = gstrType;
   }
 
+  /**
+   * onUpdate
+   */
+  public onUpdate() {
+    if (this.selectedRowIndex > -1) {
+      let data = _.cloneDeep(this.allPurchaseInvoices);
+      let dataToSave = data[this.selectedRowIndex];
+      this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(dataToSave));
+    }
+  }
+
+  /**
+   * onSelectRow
+   */
+  public onSelectRow(indx) {
+    this.selectedRowIndex = indx;
+  }
+
+  /**
+   * onDownloadSheetGSTR1
+   */
+  public onDownloadSheetGSTR1() {
+    if (this.selectedDateForGSTR1) {
+      let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
+      let monthToSend = check.format('MM') + '-' + check.format('YYYY');
+
+    } else {
+      this.toasty.errorToast('Please select month');
+    }
+  }
+
+  public setCurrentMonth() {
+    this.selectedDateForGSTR1 = String(new Date());
+  }
+
+  public clearDate() {
+    this.selectedDateForGSTR1 = '';
+  }
 }
