@@ -202,7 +202,7 @@
         </div>
     </nav>
 
-    <accounts-side-bar *ngIf="(selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+    <accounts-side-bar *ngIf="isProd === 'development' && (selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
