@@ -7,8 +7,8 @@ export class VerifyEmailModel {
 
 export class VerifyEmailResponseModel {
   public user: UserDetails;
-  public session: Session;
-  public authKey: string;
+  public session?: Session;
+  public authKey?: string;
   public isNewUser: boolean;
   public contactNumber: string;
   public countryCode: string;
