@@ -11,6 +11,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -42,6 +44,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private router: Router,
     private eh: ErrorHandlerService,
     private loginAction: LoginActions,
+    private authService: AuthService
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -89,6 +92,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
+
+    // get user object when google auth is complete
+    this.authService.authState.subscribe((user) => {
+      if (user) {
+        this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+      }
+    });
   }
 
   public showEmailModal() {
@@ -120,7 +130,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public showMobileModal() {
     this.mobileVerifyModal.show();
-
   }
 
   public hideMobileModal() {
@@ -166,4 +175,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       //   });
     }
   }
+
+  public signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
 }
