@@ -45,15 +45,15 @@ export class SettingIntegrationComponent implements OnInit {
   constructor(
     private router: Router,
     private store: Store<AppState>,
-    private SettingsIntegrationActions: SettingsIntegrationActions,
+    private settingsIntegrationActions: SettingsIntegrationActions,
     private accountService: AccountService,
     private toasty: ToasterService,
   ) { }
 
   public ngOnInit() {
-    this.store.dispatch(this.SettingsIntegrationActions.GetSMSKey());
-    this.store.dispatch(this.SettingsIntegrationActions.GetEmailKey());
-    this.store.dispatch(this.SettingsIntegrationActions.GetRazorPayDetails());
+    this.store.dispatch(this.settingsIntegrationActions.GetSMSKey());
+    this.store.dispatch(this.settingsIntegrationActions.GetEmailKey());
+    this.store.dispatch(this.settingsIntegrationActions.GetRazorPayDetails());
     // getting all page data of integration page
     this.store.select(p => p.settings.integration).takeUntil(this.destroyed$).subscribe((o) => {
       // set sms form data
@@ -96,13 +96,13 @@ export class SettingIntegrationComponent implements OnInit {
 
   public onSubmitMsgform(f: NgForm) {
     if (f.valid) {
-      this.store.dispatch(this.SettingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
+      this.store.dispatch(this.settingsIntegrationActions.SaveSMSKey(f.value.smsFormObj));
     }
   }
 
   public onSubmitEmailform(f: NgForm) {
     if (f.valid) {
-      this.store.dispatch(this.SettingsIntegrationActions.SaveEmailKey(f.value));
+      this.store.dispatch(this.settingsIntegrationActions.SaveEmailKey(f.value));
     }
   }
 
@@ -113,7 +113,7 @@ export class SettingIntegrationComponent implements OnInit {
   public selectAccount(event) {
     if (event.value) {
       this.accounts$.subscribe((arr: Select2OptionData[]) => {
-        let res = _.find(arr, function(o) { return o.id === event.value; });
+        let res = _.find(arr, (o) => o.id === event.value);
         if (res) {
           this.razorPayObj.account.name = res.text;
         }
@@ -123,12 +123,12 @@ export class SettingIntegrationComponent implements OnInit {
 
   public saveRazorPayDetails() {
     let data = _.cloneDeep(this.razorPayObj);
-    this.store.dispatch(this.SettingsIntegrationActions.SaveRazorPayDetails(data));
+    this.store.dispatch(this.settingsIntegrationActions.SaveRazorPayDetails(data));
   }
 
   public updateRazorPayDetails() {
     let data = _.cloneDeep(this.razorPayObj);
-    this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
+    this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
   }
 
   public unlinkAccountFromRazorPay() {
@@ -136,14 +136,14 @@ export class SettingIntegrationComponent implements OnInit {
       let data = _.cloneDeep(this.razorPayObj);
       data.account.uniqueName = null;
       data.account.name = null;
-      this.store.dispatch(this.SettingsIntegrationActions.UpdateRazorPayDetails(data));
+      this.store.dispatch(this.settingsIntegrationActions.UpdateRazorPayDetails(data));
     } else {
       this.toasty.warningToast('You don\'t have any account linked with Razorpay.');
     }
   }
 
   public deleteRazorPayDetails() {
-    this.store.dispatch(this.SettingsIntegrationActions.DeleteRazorPayDetails());
+    this.store.dispatch(this.settingsIntegrationActions.DeleteRazorPayDetails());
   }
 
 }
