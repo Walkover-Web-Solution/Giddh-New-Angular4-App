@@ -48,9 +48,9 @@ export class MfReportComponent implements OnInit {
     private manufacturingActions: ManufacturingActions,
     private inventoryAction: InventoryAction,
     private router: Router) {
-      this.mfStockSearchRequest.product = '';
-      this.mfStockSearchRequest.searchBy = '';
-      this.mfStockSearchRequest.searchOperation = '';
+    this.mfStockSearchRequest.product = '';
+    this.mfStockSearchRequest.searchBy = '';
+    this.mfStockSearchRequest.searchOperation = '';
   }
 
   public ngOnInit() {
@@ -62,7 +62,7 @@ export class MfReportComponent implements OnInit {
       if (o.stocksList) {
         if (o.stocksList.results) {
           this.stockListDropDown = [];
-          _.forEach(o.stocksList.results, (unit) => {
+          _.forEach(o.stocksList.results, (unit: any) => {
             this.stockListDropDown.push({ text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName });
           });
         }
@@ -90,8 +90,8 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
     let d = new Date();
-    d.setDate(d.getDate() - 30 );
-    this.mfStockSearchRequest.from =  String(d);
+    d.setDate(d.getDate() - 30);
+    this.mfStockSearchRequest.from = String(d);
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
