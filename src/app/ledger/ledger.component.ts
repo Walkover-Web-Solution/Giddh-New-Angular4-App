@@ -75,15 +75,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         return;
       }
       if (!data.additional.stock) {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:13px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:11px">${data.additional.uniqueName}</span>
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
                       </a>`);
       } else {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:13px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:11px">${data.additional.uniqueName}</span>
-                        <span class="account-list-item" style="display: block;font-size:10px">
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
+                        <span class="account-list-item" style="display: block;font-size:11px">
                             Stock: ${data.additional.stock.name}
                         </span>
                       </a>`);
