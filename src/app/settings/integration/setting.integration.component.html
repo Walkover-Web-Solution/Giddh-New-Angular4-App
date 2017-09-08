@@ -1,4 +1,4 @@
-<h3 class="section_head mrT1">SMS Integration</h3>
+<h3 class="section_head mrT2">SMS Integration</h3>
 <div class="box clearfix">
     <h3 class="fs18 mrB1">MSG91</h3>
     <form #msgform="ngForm" (ngSubmit)="onSubmitMsgform(msgform)" class="">
@@ -24,7 +24,7 @@
 </div>
 
 
-<h3 class="section_head mrT1">Email Integration</h3>
+<h3 class="section_head mrT2">Email Integration</h3>
 <div class="box clearfix">
     <h3 class="fs18 mrB1">SendGrid</h3>
     <form #emailform="ngForm" (ngSubmit)="onSubmitEmailform(emailform)" class="">
@@ -47,7 +47,7 @@
     </form>
 </div>
 
-<h3 class="section_head mrT1">Invoice Payment</h3>
+<h3 class="section_head mrT2">Invoice Payment</h3>
 <div class="box clearfix">
     <h3 class="fs18 mrB1">Razorpay Details</h3>
     <form #razorPayform="ngForm" novalidate class="">
@@ -81,7 +81,7 @@
         <div class="row">
             <div class="col-xs-12 form-group ">
                 <button *ngIf="!updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="saveRazorPayDetails()">Save</button>
-                <button *ngIf="updateRazor" class="btn btn-info mrR1" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update</button>
+                <button *ngIf="updateRazor" class="btn btn-success" [disabled]="razorPayform.invalid" (click)="updateRazorPayDetails()">Update</button>
                 <button *ngIf="updateRazor" class="btn btn-danger" (click)="deleteRazorPayDetails()">Delete</button>
             </div>
         </div>

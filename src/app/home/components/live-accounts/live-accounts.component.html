@@ -32,8 +32,8 @@
                                             <tr>
                                                 <td class="col-xs-6">{{item.name}}</td>
                                                 <td class="col-xs-3">{{item.accountNumber}}</td>
-                                                <td class="col-xs-3 text-right">{{item.amount}}<br />
-                                                    <small>{{item.currencyCode}}</small>
+                                                <td class="col-xs-3 text-right">{{item.amount}}<br *ngIf="item.amount" />
+                                                    <small *ngIf="item.currencyCode">{{item.currencyCode}}</small>
                                                     <button *ngIf="item.reconnect" class="btn isActive" (click)="reconnect(item.loginId)">Reconnect</button>
                                                 </td>
 
