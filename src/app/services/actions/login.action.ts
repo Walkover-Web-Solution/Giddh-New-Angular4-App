@@ -17,6 +17,10 @@ import { Router } from '@angular/router';
 
 @Injectable()
 export class LoginActions {
+
+  public static SIGNUP_WITH_GOOGLE_REQUEST = 'SIGNUP_WITH_GOOGLE_REQUEST';
+  public static SIGNUP_WITH_GOOGLE_RESPONSE = 'SIGNUP_WITH_GOOGLE_RESPONSE';
+
   public static SignupWithEmailRequest = 'SignupWithEmailRequest';
   public static SignupWithEmailResponce = 'SignupWithEmailResponce';
   public static SignupWithMobileRequest = 'SignupWithMobileRequest';
@@ -29,6 +33,25 @@ export class LoginActions {
   public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
+
+  @Effect()
+  public signupWithGoogle$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST)
+    .switchMap(action =>
+      this.auth.LoginWithGoogle(action.payload)
+    )
+    .map(response => this.signupWithGoogleResponse(response));
+
+  @Effect()
+  public signupWithGoogleResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      }
+      return this.LoginSuccess();
+    });
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
@@ -178,6 +201,19 @@ export class LoginActions {
   public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): Action {
     return {
       type: LoginActions.VerifyEmailResponce,
+      payload: value
+    };
+  }
+
+  public signupWithGoogle(value: string): Action {
+    return {
+      type: LoginActions.SIGNUP_WITH_GOOGLE_REQUEST,
+      payload: value
+    };
+  }
+  public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): Action {
+    return {
+      type: LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE,
       payload: value
     };
   }
