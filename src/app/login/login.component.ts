@@ -162,8 +162,13 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem('email');
   }
 
-  public signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  public async signInWithGoogle() {
+    if (Configuration.isElectron) {
+      let electronOauth2 = await import('electron-oauth2');
+      console.log(electronOauth2);
+    } else {
+      this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+    }
   }
 
   public ngOnDestroy() {
