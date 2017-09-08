@@ -22,7 +22,7 @@ export interface IInvoicePurchaseResponse {
   entryUniqueName: string;
   entryDate: string;
   voucherNo: number;
-  entryType: boolean;
+  entryType: string;
   gstin: string;
   particulars: string;
   invoiceNo: string;
