@@ -15,12 +15,15 @@ import {
   VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
 import { ErrorHandler, HandleCatch } from './catchManager/catchmanger';
+import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class AuthenticationService {
 
-  constructor(public _http: HttpWrapperService,
+  constructor(
+    public Http: Http,
+    public _http: HttpWrapperService,
     public _router: Router,
     private _error: ErrorHandler
   ) {
@@ -75,7 +78,17 @@ export class AuthenticationService {
     }).catch((e) => HandleCatch<string, VerifyMobileModel>(e));
   }
 
-  public LoginWithGoogle() {
-    //
+  public LoginWithGoogle(token: string) {
+    let args: any = {};
+    args.headers = new Headers();
+    args.headers.append('cache-control', 'no-cache');
+    args.headers.append('Content-Type', 'application/json');
+    args.headers.append('Accept', 'application/json');
+    args.headers.append('Access-Token', token);
+    return this.Http.get(LOGIN_API.LOGIN_WITH_GOOGLE, args).map((res) => {
+      let data: BaseResponse<VerifyEmailResponseModel, string> = res.json();
+      return data;
+    }).catch((e) => HandleCatch<VerifyEmailResponseModel, string>(e, args));
   }
+
 }

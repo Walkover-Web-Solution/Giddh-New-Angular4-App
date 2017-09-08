@@ -62,6 +62,19 @@ export function highchartsFactory() {
 
   return hc;
 }
+// social login injection
+import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'ng4-social-login';
+
+const SOCIAL_CONFIG = new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+  }
+]);
+
+export function provideConfig() {
+  return SOCIAL_CONFIG;
+}
 
 @NgModule({
   declarations: [
@@ -81,6 +94,7 @@ export function highchartsFactory() {
       style: 'slide-left',
       spinnerSize: 30
     }),
+    SocialLoginModule,
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
@@ -99,10 +113,16 @@ export function highchartsFactory() {
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent],
-  providers: [{
-    provide: HighchartsStatic,
-    useFactory: highchartsFactory
-  }]
+  providers: [
+    {
+      provide: HighchartsStatic,
+      useFactory: highchartsFactory
+    },
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
+  ]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {
