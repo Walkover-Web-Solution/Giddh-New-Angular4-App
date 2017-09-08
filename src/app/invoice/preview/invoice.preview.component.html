@@ -1,56 +1,57 @@
-<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline filterForm">
+<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline">
     <div class="form-group">
-        <label>From</label>
+        <label class="d-block">From</label>
         <input type="text" class="form-control" name="from" placeholder="from date" [(ngModel)]="invoiceSearchRequest.from" />
     </div>
     <div class="form-group">
-        <label>To</label>
+        <label class="d-block">To</label>
         <input type="text" class="form-control" name="to" placeholder="to date" [(ngModel)]="invoiceSearchRequest.to" />
     </div>
     <div class="form-group">
-        <label>Account</label>
+        <label class="d-block">Account</label>
         <select2 name="a" [(ngModel)]="invoiceSearchRequest.accountUniqueName" class="select2-parent" [data]="accounts$ | async" [options]="select2Options">
         </select2>
     </div>
     <div class="form-group">
-        <label>Description</label>
+        <label class="d-block">Description</label>
         <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
     </div>
     <div class="form-group">
-        <label>Count</label>
-        <select class="form-control col-xs-2" name="count" [(ngModel)]="invoiceSearchRequest.count">
+        <label class="d-block">Count</label>
+        <div class="custom-select pos-rel">
+            <select class="form-control cp" name="count" [(ngModel)]="invoiceSearchRequest.count">
       <option value="select">Select</option>
       <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
-    </select>
+      </select>
+            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+        </div>
     </div>
     <div class="form-group">
-        <label>Amount</label>
-        <select class="form-control" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
-      <option value="select">Please Select</option>
+        <label class="d-block">Amount</label>
+        <div class="custom-select pos-rel">
+            <select class="form-control cp" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
+      <option value="">Please Select</option>
       <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-    </select>
+      </select>
+            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+        </div>
     </div>
     <div class="form-group">
-        <label>&nbsp;</label>
+        <label class="d-block">&nbsp;</label>
         <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.entryTotal" placeholder="By amount">
     </div>
     <div class="form-group">
-        <label>&nbsp;</label>
-        <button class="btn btn-primary">GO</button>
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-success btn-sm">GO</button>
     </div>
-
 </form>
 <!--list of data  -->
-<br>
-<br>
-<br>
-<div class="no-data" *ngIf="!invoiceData">
+<div class="no-data mrT2" *ngIf="!invoiceData">
     <h1>No Entry found in sales!</h1>
     <h1>Have to do some sales before creating invoice</h1>
     <a class="btn btn-primary">Go to Sales</a>
 </div>
-
-<table class="table basic table-bordered pdT2" *ngIf="invoiceData && invoiceData.results.length > 0">
+<table class="table basic table-bordered mrT2" *ngIf="invoiceData && invoiceData.results.length > 0">
     <thead class="t-h-bg1">
         <tr>
             <th>#</th>
@@ -73,20 +74,22 @@
             <td>{{item.grandTotal}}</td>
             <td>{{item.balanceDue}}</td>
             <td>
-                <select #invoiceAction class="form-control" (change)="onPerformAction(item, invoiceAction)">
-         <option value="">--Select--</option>
-         <option value="paid">Paid</option>
-         <option value="unpaid">Unpaid</option>
-         <option value="hold">Hold</option>
-         <option value="cancel">Cancel</option>
-       </select>
+                <div class="custom-select pos-rel">
+                    <select #invoiceAction class="form-control cp" (change)="onPerformAction(item, invoiceAction)">
+                        <option value="">--Select--</option>
+                        <option value="paid">Paid</option>
+                        <option value="unpaid">Unpaid</option>
+                        <option value="hold">Hold</option>
+                        <option value="cancel">Cancel</option>
+                    </select>
+                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                </div>
             </td>
             <td>{{item.balanceStatus}}</td>
             <td class="text-center"> <i (click)="onDeleteBtnClick(item.uniqueName)" class="fa fa-trash cp"></i> </td>
         </tr>
     </tbody>
 </table>
-
 <!-- Delete invoice confirmation model -->
 <div bsModal #invoiceConfirmationModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
@@ -96,7 +99,6 @@
         </div>
     </div>
 </div>
-
 <!-- Perform action on invoice model -->
 <div bsModal #performActionOnInvoiceModel="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-md">
