@@ -139,7 +139,8 @@
                 </li>
 
                 <!-- books search -->
-                <li>
+                <li *ngIf="!isProd">
+                    {{ isProd }}
                     <div class="row">
                         <div class="ledger_search form-inline col-xs-12">
                             <div class="form-group">
