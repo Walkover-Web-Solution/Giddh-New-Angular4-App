@@ -183,7 +183,7 @@
                 <td><input type="text" class="form-control" [value]="invoice.account.gstIn" /></td>
                 <td><input type="text" class="form-control" [value]="invoice.invoiceNo" /></td>
                 <td>{{invoice.voucherNo}}</td>
-                <td class="select">
+                <td class="select text-center">
                     <div class="custom-select pos-rel">
                         <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onUpdateEntryType(i, invoice.entryType);">
                             <option value="">None selected</option>
@@ -192,17 +192,7 @@
                         </select>
                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                     </div>
-                    <!--<div class="btn-group btn-block" dropdown>
-                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> Filter <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-                        </button>
-                        <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                            <li><label><input type="radio" name="entryType" [checked]="invoice.entryType == 'composite'"> Composite </label></li>
-                            <li><label><input type="radio" name="entryType" [checked]="invoice.entryType == 'reverse charge'"> Reverse Charge </label></li>-->
-                            <!--<li *ngFor="let item of otherFilters">
-                                <label><input type="checkbox"> {{item.name}}</label>
-                            </li>-->
-                        <!--</ul>
-                    </div>-->
+                    <!--<button class="btn btn-link">Undo 7s</button>-->
                 </td>
                 <td class="text-right">{{invoice.taxableValue}}</td>
                 <td class="text-right" >{{invoice.igstAmount}}</td>
