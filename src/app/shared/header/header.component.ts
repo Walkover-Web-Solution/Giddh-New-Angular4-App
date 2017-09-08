@@ -57,6 +57,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
   public userName: string;
+  public isProd = ENV === 'production'; // to hide search accounts on production
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -71,7 +72,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
-              private zone: NgZone) {
+    private zone: NgZone) {
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
