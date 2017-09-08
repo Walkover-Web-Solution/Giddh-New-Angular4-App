@@ -5129,7 +5129,7 @@ strong {
 
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
     border-color: #4d4d4d transparent transparent transparent !important;
-    border-width: 6px 5px 0 6px;
+    border-width: 6px 5px 0 5px;
     margin-left: -8px;
     margin-top: -3px;
     border-radius: 2px;
