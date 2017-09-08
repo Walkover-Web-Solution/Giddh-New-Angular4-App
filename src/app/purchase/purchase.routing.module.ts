@@ -33,7 +33,7 @@ const INVOICE_ROUTES: Routes = [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    SharedModule,
+    SharedModule.forRoot(),
     RouterModule.forChild(INVOICE_ROUTES),
     // Ng2BootstrapModule.forRoot(),
   ],
