@@ -21,6 +21,7 @@ import { ElementViewContainerRef } from '../helpers/directives/element.viewchild
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
+import { AuthService } from 'ng4-social-login';
 
 @Component({
   selector: 'app-header',
@@ -65,6 +66,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
+    private socialAuthService: AuthService,
     private store: Store<AppState>,
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
@@ -224,6 +226,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public logout() {
+    this.socialAuthService.signOut();
     this.store.dispatch(this.loginAction.LogOut());
   }
 
