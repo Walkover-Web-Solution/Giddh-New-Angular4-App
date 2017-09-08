@@ -81,8 +81,8 @@ table td[class*=col-]:last-child {
 }
 
 .account_Name {
-    font-size: 21px;
-    color: #858585;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: 'LatoWebBold';
 }
 
 .ledger-footer-1 {
@@ -91,7 +91,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-head th {
-    color: #cccccc;
+    color: rgba(0, 0, 0, 0.4);
 }
 
 .total_col td {
@@ -167,21 +167,15 @@ table td[class*=col-]:last-child {
 .t-h-bg1 th {
     background: #f3f0e6;
     color: #4d4d4d;
-    border: 1px solid #c4c6c7;
+    border-right: 1px solid #c4c6c7;
     padding: 11px!important;
     font-weight: 400;
+    border-bottom: 1px solid #c4c6c7;
 }
 
-// .ledger-row .select2-transaction .select2-container--default .select2-search--dropdown {
-//     top: -35px;
-//     position: absolute;
-//     background: transparent;
-//     width: 100%;
-// }
-// .ledger-row .select2-transaction .select2-container--default .select2-search__field {
-//     background: #f7de8a !important;
-//     border: 0;
-// }
-// .ledger-row .select2-transaction .select2-container--default .select2-selection__arrow {
-//     display: none;
-// }
+.ledger_book {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+}

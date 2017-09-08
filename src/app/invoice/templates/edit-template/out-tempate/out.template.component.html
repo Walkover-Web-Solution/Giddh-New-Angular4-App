@@ -51,20 +51,11 @@
         /* page */
         
         #default {
-            /* font: 14px/1 'Open Sans', sans-serif; */
             overflow: auto;
-            font-size: 12px;
-            padding: 0;
             font-size: 93%;
-        }
-        
-        #default {
             background: #f2f2f2;
-            cursor: default;
             border: 1px solid #bfbfbf;
             padding: 0;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
         
         #default body {
@@ -74,19 +65,15 @@
             padding: 0.1in;
             letter-spacing: 0;
             width: 100%;
-        }
-        
-        #default body {
             background: #FFF;
             border-radius: 1px;
-            /* box-shadow: 0 0 1in -0.25in rgba(0, 0, 0, 0.5); */
         }
         /* header */
         
         #default header {
             margin: 0;
             background: #fff;
-            padding: 0.23in 0.23in 0.03in
+            padding: 0.23in 0.23in 0.03in;
         }
         
         #default header:after {
@@ -283,59 +270,6 @@
             margin: 10px 0 0
         }
         
-        @page {
-            margin: 0;
-            size: A4 portrait;
-        }
-        
-        @media print {
-            * {
-                -webkit-print-color-adjust: exact;
-            }
-            #default {
-                background: none;
-                padding: 0;
-            }
-            #default body {
-                box-shadow: none;
-                margin: 0;
-            }
-            #default span:empty {
-                display: none;
-            }
-            #default footer {
-                position: fixed;
-                bottom: 0px;
-                right: 0;
-                left: 0;
-            }
-            #default header {
-                position: fixed;
-                top: 0px;
-                right: 0;
-                left: 0;
-            }
-            #default table.item {
-                /*page-break-inside: always;*/
-                page-break-after: auto;
-            }
-            #default table.balance {
-                page-break-inside: auto;
-                page-break-before: always;
-            }
-            #default tr {
-                page-break-inside: avoid;
-                page-break-after: auto
-            }
-            /*#default article {margin: 10in 0;}*/
-            #default .cargoDetail {
-                margin-top: 1.2in
-            }
-            #default .subfooter {
-                padding-bottom: 4in
-            }
-        }
-        
         #default .docTitle {
             width: 100%;
             line-height: 20px;
@@ -351,18 +285,6 @@
             left: -21px;
             width: 105.5%;
         }
-        /* #default .docTitle h2:before {
-            content: " ";
-            position: absolute;
-            top: 50%;
-            height: 20px;
-            width: 100%;
-            right: 0;
-            left: 0;
-            background: #df4927;
-            height: 2px;
-            margin: 0 auto;
-        } */
         
         #default .docTitle h2:after {
             content: attr(title);
