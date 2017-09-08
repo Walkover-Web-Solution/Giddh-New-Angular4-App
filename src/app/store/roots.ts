@@ -15,6 +15,7 @@ import * as fromInvoiceTemp from './Invoice/invoice.template.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
 import * as fromLedger from './Ledger/ledger.reducer';
 import * as fromSettings from './Settings/Settings.reducer';
+import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
 
 export interface AppState {
   router: RouterState;
@@ -35,6 +36,7 @@ export interface AppState {
   ledger: fromLedger.LedgerState;
   settings: fromSettings.SettingsState;
   manufacturing: fromManufacturing.ManufacturingState;
+  invoicePurchase: fromInvoicePurchase.InvoicePurchaseState;
 }
 
 export const reducers = {
@@ -55,5 +57,6 @@ export const reducers = {
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,
   tlPl: fromTlPl.tbPlBsReducer,
-  ledger: fromLedger.ledgerReducer
+  ledger: fromLedger.ledgerReducer,
+  invoicePurchase: fromInvoicePurchase.InvoicePurchaseReducer
 };
