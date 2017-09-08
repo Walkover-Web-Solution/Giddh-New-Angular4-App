@@ -11,11 +11,14 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
+
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../shared/social.config';
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { Headers } from '@angular/http';
 import { RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -48,6 +51,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private eh: ErrorHandlerService,
     public _http: HttpWrapperService,
     private loginAction: LoginActions,
+    private authService: AuthService,
     private _toaster: ToasterService
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
@@ -96,6 +100,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
+
+    // get user object when google auth is complete
+    this.authService.authState.subscribe((user) => {
+      if (user) {
+        this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+      }
+    });
   }
 
   public showEmailModal() {
@@ -127,7 +138,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public showMobileModal() {
     this.mobileVerifyModal.show();
-
   }
 
   public hideMobileModal() {
@@ -150,6 +160,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.imageURL = localStorage.getItem('image');
     this.name = localStorage.getItem('name');
     this.email = localStorage.getItem('email');
+  }
+
+  public signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
   public ngOnDestroy() {
@@ -214,4 +228,5 @@ export class LoginComponent implements OnInit, OnDestroy {
       //   });
     }
   }
+
 }
