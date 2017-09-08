@@ -83,6 +83,7 @@ table td[class*=col-]:last-child {
 .account_Name {
     color: rgba(0, 0, 0, 0.8);
     font-family: 'LatoWebBold';
+    text-transform: capitalize;
 }
 
 .ledger-footer-1 {
