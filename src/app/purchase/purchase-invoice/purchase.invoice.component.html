@@ -73,7 +73,7 @@
                     <div class="pull-right col-xs-2">
                         <div class="form-group col-xs-8">
                             <label></label>
-                            <div class="btn-group btn-block" dropdown [isDisabled]="!selectedGstrType">
+                            <div class="btn-group btn-block" dropdown [isDisabled]="!selectedGstrType || selectedGstrType=='GSTR2'">
                                 <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> File {{ selectedGstrType }} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
                                 </button>
                                 <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
@@ -86,7 +86,7 @@
                                 </ul>
                             </div>
                         </div>
-                        <button class="btn btn-success pull-right" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
+                        <!--<button class="btn btn-success pull-right" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>-->
                     </div>
                     
                 </div>
