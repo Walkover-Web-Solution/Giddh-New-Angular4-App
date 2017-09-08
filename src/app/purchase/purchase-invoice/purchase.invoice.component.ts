@@ -6,7 +6,7 @@ import * as  moment from 'moment';
 import * as  _ from 'lodash';
 import { IInvoicePurchaseResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 
-import { PipeTransform, Pipe, OnInit } from '@angular/core';
+import { PipeTransform, Pipe, OnInit, trigger, state, style, transition, animate } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -56,7 +56,19 @@ const fileGstrOptions = [
   selector: 'invoice-purchase',
   templateUrl: './purchase.invoice.component.html',
   styleUrls: ['purchase.invoice.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }, HighlightPipe]
+  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }, HighlightPipe],
+  animations: [
+    trigger('slideInOut', [
+      state('in', style({
+        transform: 'translate3d(0, 0, 0)'
+      })),
+      state('out', style({
+        transform: 'translate3d(100%, 0, 0)'
+      })),
+      transition('in <=> out', animate('400ms ease-in-out')),
+      // transition('out => in', animate('400ms ease-in-out'))
+    ]),
+  ]
 })
 export class PurchaseInvoiceComponent implements OnInit {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
@@ -65,6 +77,7 @@ export class PurchaseInvoiceComponent implements OnInit {
   public moment = moment;
   public selectedGstrType: string;
   public showGSTR1DatePicker: boolean = false;
+  public accountAsideMenuState: string = 'out';
 
   public datePickerOptions: any = {
     locale: {
@@ -273,34 +286,46 @@ export class PurchaseInvoiceComponent implements OnInit {
    * onUpdateEntryType
    */
   public onUpdateEntryType(indx, value) {
-    let account: AccountRequest = new AccountRequest();
-    let isComposite: boolean;
-    if (value === 'composite') {
-      isComposite = true;
-    } else if (value === 'reverse charge') {
-      isComposite = false;
-    }
-    let data = _.cloneDeep(this.allPurchaseInvoices);
-    let selectedRow = data[indx];
-    let selectedAccName = selectedRow.account.uniqueName;
-    this.accountService.GetAccountDetails(selectedAccName).subscribe((accDetails) => {
-      let accountData = _.cloneDeep(accDetails.body);
-      account.name = accountData.name;
-      account.uniqueName = accountData.uniqueName;
-      account.hsnNumber = accountData.hsnNumber;
-      account.city = accountData.city;
-      account.pincode = accountData.pincode;
-      account.country = accountData.country;
-      account.sacNumber = accountData.sacNumber;
-      account.stateCode = accountData.stateCode;
-      account.isComposite = isComposite;
-      this.accountService.UpdateAccount(account, selectedAccName).subscribe((res) => {
-        if (res.status === 'success') {
-          this.toasty.successToast('Entry type changed successfully.');
-        } else {
-          this.toasty.errorToast(res.message, res.code);
-        }
+    if (value === 'composite' || value === '') {
+      let account: AccountRequest = new AccountRequest();
+      let isComposite: boolean;
+      if (value === 'composite') {
+        isComposite = true;
+      } else if (value === '') {
+        isComposite = false;
+      }
+      let data = _.cloneDeep(this.allPurchaseInvoices);
+      let selectedRow = data[indx];
+      let selectedAccName = selectedRow.account.uniqueName;
+      this.accountService.GetAccountDetails(selectedAccName).subscribe((accDetails) => {
+        let accountData = _.cloneDeep(accDetails.body);
+        account.name = accountData.name;
+        account.uniqueName = accountData.uniqueName;
+        account.hsnNumber = accountData.hsnNumber;
+        account.city = accountData.city;
+        account.pincode = accountData.pincode;
+        account.country = accountData.country;
+        account.sacNumber = accountData.sacNumber;
+        account.stateCode = accountData.stateCode;
+        account.isComposite = isComposite;
+        this.accountService.UpdateAccount(account, selectedAccName).subscribe((res) => {
+          if (res.status === 'success') {
+            this.toasty.successToast('Entry type changed successfully.');
+          } else {
+            this.toasty.errorToast(res.message, res.code);
+          }
+        });
       });
-    });
+    }
+  }
+
+  /**
+   * toggleSettingAsidePane
+   */
+  public toggleSettingAsidePane(event): void {
+    if (event) {
+      event.preventDefault();
+    }
+    this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
 }

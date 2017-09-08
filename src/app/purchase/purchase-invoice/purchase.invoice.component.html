@@ -70,23 +70,25 @@
                         <br />
                         <button [disabled]="!selectedGstrType || selectedGstrType=='GSTR1'" class="btn btn-success">GO</button>
                     </div>
-
-                    <div class="form-group col-xs-2 pull-right">
-                        <label><b>File GSTR</b></label>
-
-                        <div class="btn-group btn-block" dropdown [isDisabled]="!selectedGstrType">
-                            <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> File {{ selectedGstrType }} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-                            </button>
-                            <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
-                                <li class="cursor-pointer dd-options" (click)="onDownloadSheetGSTR1('gstr1');">Download Sheet</li>
-                                <li class="cursor-pointer dd-options text-danger" (click)="onDownloadSheetGSTR1('gstr1_error');">Download Error Sheet</li>
-                                <li class="cursor-pointer dd-options">Use JIOGST API</li>
-                                <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR1();">
-                                    {{item.name}}
-                                </li>-->
-                            </ul>
+                    <div class="pull-right col-xs-2">
+                        <div class="form-group col-xs-8">
+                            <label></label>
+                            <div class="btn-group btn-block" dropdown [isDisabled]="!selectedGstrType">
+                                <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> File {{ selectedGstrType }} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                                </button>
+                                <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                                    <li class="cursor-pointer dd-options" (click)="onDownloadSheetGSTR1('gstr1');">Download Sheet</li>
+                                    <li class="cursor-pointer dd-options text-danger" (click)="onDownloadSheetGSTR1('gstr1_error');">Download Error Sheet</li>
+                                    <li class="cursor-pointer dd-options">Use JIOGST API</li>
+                                    <!--<li class="cursor-pointer dd-options" *ngFor="let item of fileGstrOptions" (click)="onDownloadSheetGSTR1();">
+                                        {{item.name}}
+                                    </li>-->
+                                </ul>
+                            </div>
                         </div>
+                        <button class="btn btn-success pull-right" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
                     </div>
+                    
                 </div>
             </form>
         </div>
@@ -174,7 +176,7 @@
         </thead>
         <tbody>
             <tr *ngFor="let invoice of allPurchaseInvoices; let i = index">
-                <td class="text-center"><input type="checkbox" (click)="onSelectRow(i)" /></td>
+                <td class="text-center"><input type="checkbox" (click)="onSelectRow(i)" [disabled]="invoice.entryType === ''" /></td>
                 <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
                 <td [innerHTML]="invoice.particulars | highlight: searchBox.value"></td>
                 <td [innerHTML]="invoice.account.accountName | highlight: searchBox.value"></td>
@@ -184,11 +186,23 @@
                 <td class="select">
                     <div class="custom-select pos-rel">
                         <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onUpdateEntryType(i, invoice.entryType);">
-                            <option value="composite">Composite</option>
-                            <option value="reverse charge">Reverse Charge</option>
+                            <option value="">None selected</option>
+                            <option value="composite"> Composite </option>
+                            <option value="reverse charge"> Reverse Charge</option>
                         </select>
                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                     </div>
+                    <!--<div class="btn-group btn-block" dropdown>
+                        <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> Filter <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                        </button>
+                        <ul *dropdownMenu class="dropdown-menu pageListDD" role="menu">
+                            <li><label><input type="radio" name="entryType" [checked]="invoice.entryType == 'composite'"> Composite </label></li>
+                            <li><label><input type="radio" name="entryType" [checked]="invoice.entryType == 'reverse charge'"> Reverse Charge </label></li>-->
+                            <!--<li *ngFor="let item of otherFilters">
+                                <label><input type="checkbox"> {{item.name}}</label>
+                            </li>-->
+                        <!--</ul>
+                    </div>-->
                 </td>
                 <td class="text-right">{{invoice.taxableValue}}</td>
                 <td class="text-right" >{{invoice.igstAmount}}</td>
@@ -198,4 +212,10 @@
             </tr>
         </tbody>
     </table>
+    <!-- open account aside -->
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
+<!--<div class="form-group col-xs-2">
+    <button class="btn btn-success" (click)="toggleSettingAsidePane($event);"><i class="fa fa-cog" aria-hidden="true"></i> Settings</button>
+</div>-->
