@@ -19,16 +19,13 @@ import { AppState } from '../../../store/roots';
     top: 0;
     right: 0;
     bottom: 0;
-    width: 100%;
+    width: 400px;
     z-index: 1045;
   }
   .aside-height{
       background-color: #d4d4d5;
       padding: 20px;
       height: 100%;
-      width: 400px
-      right: 0;
-      float:right;
     }
   `],
   templateUrl: './aside-menu-purchase-invoice-setting.component.html'

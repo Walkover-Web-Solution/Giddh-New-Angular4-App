@@ -6,7 +6,7 @@ import * as  moment from 'moment';
 import * as  _ from 'lodash';
 import { IInvoicePurchaseResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 
-import { PipeTransform, Pipe, OnInit, trigger, state, style, transition, animate } from '@angular/core';
+import { PipeTransform, Pipe, OnInit, trigger, state, style, transition, animate, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -17,6 +17,7 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { saveAs } from 'file-saver';
 import { AccountService } from '../../services/account.service';
 import { AccountRequest } from '../../models/api-models/Account';
+
 @Pipe({ name: 'highlight' })
 export class HighlightPipe implements PipeTransform {
   public transform(text: string, search): string {
@@ -70,7 +71,7 @@ const fileGstrOptions = [
     ]),
   ]
 })
-export class PurchaseInvoiceComponent implements OnInit {
+export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
   public allPurchaseInvoices: IInvoicePurchaseResponse[] = [];
   public selectedDateForGSTR1: string = '';
@@ -327,5 +328,12 @@ export class PurchaseInvoiceComponent implements OnInit {
       event.preventDefault();
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+  }
+
+  /**
+   * ngOnDestroy
+   */
+  public ngOnDestroy() {
+    // Some code here
   }
 }
