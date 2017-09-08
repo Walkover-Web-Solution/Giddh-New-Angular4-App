@@ -169,7 +169,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public async loginWithProvider(provider: string) {
     if (Configuration.isElectron) {
       // electron
-      // let electronOauth2 = await import('electron-oauth2'; )
+      // let electronOauth2 = await import('electron-oauth2');
       // let config = {};
       // let bodyParams = {};
 
