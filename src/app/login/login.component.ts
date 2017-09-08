@@ -13,6 +13,12 @@ import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
 
+import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../shared/social.config';
+import { HttpWrapperService } from '../services/httpWrapper.service';
+import { Headers } from '@angular/http';
+import { RequestOptionsArgs } from '@angular/http';
+import { ToasterService } from '../services/toaster.service';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -43,8 +49,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private router: Router,
     private eh: ErrorHandlerService,
+    public _http: HttpWrapperService,
     private loginAction: LoginActions,
-    private authService: AuthService
+    private authService: AuthService,
+    private _toaster: ToasterService
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -154,18 +162,63 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem('email');
   }
 
+  public signInWithGoogle(): void {
+    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  public loginWithProvider(provider: string) {
-    if (Configuration.isElectron && !this.socialLoginKeys) {
+  public async loginWithProvider(provider: string) {
+    if (Configuration.isElectron) {
       // electron
-      // let ipcRenderer = import('electron');
-      // ipcRenderer.sendSync('get-client-key');
-      // ipcRenderer.on('set-client-key', (args) => {
-      //   this.socialLoginKeys = args;
-      // });
+      let electronOauth2 = await import('electron-oauth2')
+      let config = {};
+      let bodyParams = {};
+
+      if (provider === 'google') {
+        config = GoogleLoginElectronConfig;
+        bodyParams = AdditionalGoogleLoginParams;
+      } else {
+        config = LinkedinLoginElectronConfig;
+        bodyParams = AdditionalLinkedinLoginParams;
+      }
+      const myApiOauth = electronOauth2(config, {
+        alwaysOnTop: true,
+        autoHideMenuBar: true,
+        webPreferences: {
+          nodeIntegration: false,
+          devTools: true
+        }
+      });
+      myApiOauth.getAccessToken(bodyParams)
+        .then(token => {
+          // use your token.access_token
+          let url = '';
+          if (provider === 'google') {
+            url = Configuration.ApiUrl + 'v2/login-with-google';
+          } else {
+            url = Configuration.ApiUrl + 'v2/login-with-linkedIn';
+          }
+          let options: RequestOptionsArgs = {};
+
+          options.headers = new Headers();
+          options.headers.append('Access-Token', token.access_token);
+          this._http.get(url, {}, options).map(res => res.json()).subscribe(d => {
+            this.store.dispatch(this.loginAction.VerifyEmailResponce(d));
+          }, (e) => {
+            this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
+          });
+          // myApiOauth.refreshToken(token.refresh_token)
+          //   .then(newToken => {
+          //     //
+          //   });
+        }).catch(e => {
+          if (e.message !== 'window was closed by user') {
+            this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
+          }
+        });
     } else {
       // website
       // this.auth.authenticate(provider)
@@ -174,10 +227,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       //     complete: () => this.router.navigate(['social-login-callback'])
       //   });
     }
-  }
-
-  public signInWithGoogle(): void {
-    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
   }
 
 }
