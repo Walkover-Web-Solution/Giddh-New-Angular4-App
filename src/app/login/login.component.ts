@@ -165,64 +165,62 @@ export class LoginComponent implements OnInit, OnDestroy {
     console.log('Is Electron: -' + Configuration.isElectron);
     if (Configuration.isElectron) {
       // electron
-      require.ensure(['electron', 'electron-oauth2'], (require) => {
-        let electron = require('electron');
-        let ipcRenderer = electron.ipcRenderer;
-        let electronOauth2 = require('electron-oauth2');
+      let electron = (window as any).require('electron');
+      let electronOauth2 = (window as any).require('electron-oauth');
 
-        // get config from main-process
-        ipcRenderer.send('get-auth-configs');
-        // set config
-        ipcRenderer.on('set-auth-configs', (events, args) => {
-          this.socialLoginKeys = args;
+      let ipcRenderer = electron.ipcRenderer;
+      // get config from main-process
+      ipcRenderer.send('get-auth-configs');
+      // set config
+      ipcRenderer.on('set-auth-configs', (events, args) => {
+        this.socialLoginKeys = args;
 
-          let config = {};
-          let bodyParams = {};
-          if (provider === 'google') {
-            // google
-            config = this.socialLoginKeys.GoogleLoginElectronConfig;
-            bodyParams = this.socialLoginKeys.AdditionalGoogleLoginParams;
-          } else {
-            // linked in
-            config = this.socialLoginKeys.LinkedinLoginElectronConfig;
-            bodyParams = this.socialLoginKeys.AdditionalLinkedinLoginParams;
+        let config = {};
+        let bodyParams = {};
+        if (provider === 'google') {
+          // google
+          config = this.socialLoginKeys.GoogleLoginElectronConfig;
+          bodyParams = this.socialLoginKeys.AdditionalGoogleLoginParams;
+        } else {
+          // linked in
+          config = this.socialLoginKeys.LinkedinLoginElectronConfig;
+          bodyParams = this.socialLoginKeys.AdditionalLinkedinLoginParams;
+        }
+        const myApiOauth = electronOauth2(config, {
+          alwaysOnTop: true,
+          autoHideMenuBar: true,
+          webPreferences: {
+            nodeIntegration: false,
+            devTools: true
           }
-          const myApiOauth = electronOauth2(config, {
-            alwaysOnTop: true,
-            autoHideMenuBar: true,
-            webPreferences: {
-              nodeIntegration: false,
-              devTools: true
+        });
+        myApiOauth.getAccessToken(bodyParams)
+          .then(token => {
+            // use your token.access_token
+            let url = '';
+            if (provider === 'google') {
+              url = Configuration.ApiUrl + 'v2/login-with-google';
+            } else {
+              url = Configuration.ApiUrl + 'v2/login-with-linkedIn';
+            }
+            let options: RequestOptionsArgs = {};
+
+            options.headers = new Headers();
+            options.headers.append('Access-Token', token.access_token);
+            this._http.get(url, {}, options).map(res => res.json()).subscribe(d => {
+              this.store.dispatch(this.loginAction.VerifyEmailResponce(d));
+            }, (e) => {
+              this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
+            });
+            // myApiOauth.refreshToken(token.refresh_token)
+            //   .then(newToken => {
+            //     //
+            //   });
+          }).catch(e => {
+            if (e.message !== 'window was closed by user') {
+              this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
             }
           });
-          myApiOauth.getAccessToken(bodyParams)
-            .then(token => {
-              // use your token.access_token
-              let url = '';
-              if (provider === 'google') {
-                url = Configuration.ApiUrl + 'v2/login-with-google';
-              } else {
-                url = Configuration.ApiUrl + 'v2/login-with-linkedIn';
-              }
-              let options: RequestOptionsArgs = {};
-
-              options.headers = new Headers();
-              options.headers.append('Access-Token', token.access_token);
-              this._http.get(url, {}, options).map(res => res.json()).subscribe(d => {
-                this.store.dispatch(this.loginAction.VerifyEmailResponce(d));
-              }, (e) => {
-                this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
-              });
-              // myApiOauth.refreshToken(token.refresh_token)
-              //   .then(newToken => {
-              //     //
-              //   });
-            }).catch(e => {
-              if (e.message !== 'window was closed by user') {
-                this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
-              }
-            });
-        });
       });
 
     } else {
