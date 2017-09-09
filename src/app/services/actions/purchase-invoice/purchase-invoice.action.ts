@@ -124,9 +124,9 @@ export class InvoicePurchaseActions {
   public downloadFile(data: Response, month: string, gstNumber: string, type: string) {
     let blob = this.base64ToBlob(data, 'application/xls', 512);
     if (type === 'gstr1_sheet') {
-      return saveAs(blob, `GSTR1-Sheet-${month}-${gstNumber}.xls`);
+      return saveAs(blob, `GSTR1-Sheet-${month}-${gstNumber}.xlsx`);
     } else if (type === 'error_sheet') {
-      return saveAs(blob, `GSTR1-Error-Sheet-${month}-${gstNumber}.xls`);
+      return saveAs(blob, `GSTR1-Error-Sheet-${month}-${gstNumber}.xlsx`);
     }
   }
 
