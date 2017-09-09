@@ -165,7 +165,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     if (!isElectron) {
       this.socialAuthService.signOut();
     } else {
-      this._aunthenticationServer.GoogleProvider.signOut();
+      // this._aunthenticationServer.GoogleProvider.signOut();
     }
 
     this.store.dispatch(this._loginAction.LogOut());
