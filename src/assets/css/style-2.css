@@ -298,7 +298,7 @@ header .navbar {
 
 .compoundEntry td,
 .compoundEntry td .form-control {
-    background: #f7de8a !important;
+    background: #fff0bc !important;
 }
 
 .ledger-table-body table tbody.ledger-main tr td {
@@ -3131,7 +3131,7 @@ label {
 
 .pagination>li>a,
 .pagination>li>span {
-    color: #525252;
+    color: rgba(0, 0, 0, 0.8);
 }
 
 .pagination>.active>a,
@@ -3784,16 +3784,17 @@ input[type='checkbox'][disabled] {
     left: 5px;
 }
 
-.ledger-row .select2-ledger .select2-container--open .select2-search--dropdown {
+
+/* .ledger-row .select2-ledger .select2-container--open .select2-search--dropdown {
     top: -34px;
-    position: absolute;
+    position: fixed;
     background: transparent;
     width: 100%;
     padding: 0;
 }
 
 .ledger-row .select2-ledger .select2-container--open .select2-search__field {
-    background: #f7de8a !important;
+    background: #fff0bc !important;
     border: 0;
     height: 34px;
 }
@@ -3804,7 +3805,7 @@ input[type='checkbox'][disabled] {
 
 .ledger-row .select2-ledger .select2-container--default .select2-selection__rendered {
     padding-right: 0;
-}
+} */
 
 .ledger-panel .btn-danger {
     border: 1px solid red;
