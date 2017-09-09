@@ -2691,10 +2691,6 @@ i.cls-alert {
 
 /*make un-responsive*/
 
-body.unresponsive {
-    padding-top: 54px;
-}
-
 .navbar-right.navbar-nav>li>a {
     border-right: 0;
 }
@@ -5133,4 +5129,8 @@ strong {
     margin-left: -8px;
     margin-top: -3px;
     border-radius: 2px;
+}
+
+#main {
+    padding-top: 54px;
 }
