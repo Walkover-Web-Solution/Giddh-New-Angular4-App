@@ -226,7 +226,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public logout() {
-    this.socialAuthService.signOut();
+    if (!isElectron) {
+      this.socialAuthService.signOut();
+    } else {
+      // this._aunthenticationServer.GoogleProvider.signOut();
+    }
     this.store.dispatch(this.loginAction.LogOut());
   }
 
