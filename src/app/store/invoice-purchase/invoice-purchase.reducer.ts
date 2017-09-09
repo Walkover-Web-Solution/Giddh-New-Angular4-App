@@ -48,6 +48,18 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
             newState.isDownloadingFile = false;
             return Object.assign({}, state, newState);
         }
+        case PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET:
+        {
+            let newState = _.cloneDeep(state);
+            newState.isDownloadingFile = true;
+            return Object.assign({}, state, newState);
+        }
+        case PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE:
+        {
+            let newState = _.cloneDeep(state);
+            newState.isDownloadingFile = false;
+            return Object.assign({}, state, newState);
+        }
         default:
         {
             return state;
