@@ -12,7 +12,6 @@ import { AuthenticationService } from './authentication.service';
 import { GroupService } from './group.service';
 import { StorageService } from './storage.service';
 import { HttpWrapperService } from './httpWrapper.service';
-import { ErrorHandlerService } from './errorhandler.service';
 import { ToasterService } from './toaster.service';
 import { SharedModule } from '../shared/shared.module';
 import { CompanyActions } from './actions/company.actions';
@@ -107,7 +106,6 @@ export class ServiceModule {
         ErrorHandler,
         HttpWrapperService,
         AuthenticationService,
-        ErrorHandlerService,
         ToasterService,
         DashboardService,
         CompanyService,

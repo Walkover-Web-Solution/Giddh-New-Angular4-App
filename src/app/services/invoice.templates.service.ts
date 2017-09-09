@@ -10,7 +10,7 @@ import { AppState } from '../store/roots';
 import { map } from 'rxjs/operator/map';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { IsDivVisible } from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class InvoiceTemplatesService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   public getTemplates(): Observable<Template> {
@@ -33,7 +33,7 @@ export class InvoiceTemplatesService {
       console.log('API RESPONSE', data);
       return data;
     }).catch((e) => {
-      let object = HandleCatch<Template, string>(e);
+      let object = this.errorHandler.HandleCatch<Template, string>(e);
       return object.map(p => p.body);
     });
   }

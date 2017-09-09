@@ -5,8 +5,6 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
-
-import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
@@ -47,7 +45,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,
-    private eh: ErrorHandlerService,
     public _http: HttpWrapperService,
     private loginAction: LoginActions,
     private authService: AuthService,
