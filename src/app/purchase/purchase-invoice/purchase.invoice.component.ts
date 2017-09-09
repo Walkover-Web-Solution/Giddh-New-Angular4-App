@@ -366,7 +366,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     // Call the Update Entry Type API
     // If user change the page and counter is running...
-    if (this.intervalId._state === 'running') {
+    if (this.intervalId && this.intervalId._state === 'running') {
       this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
     }
   }
