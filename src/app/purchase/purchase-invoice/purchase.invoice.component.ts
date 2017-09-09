@@ -108,6 +108,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public activeCompanyUniqueName: string;
   public activeCompanyGstNumber: string;
   public companies: ComapnyResponse[];
+  public isDownloadingFileInProgress: boolean = false;
   public mainInput = {
     start: moment().subtract(12, 'month'),
     end: moment().subtract(6, 'month')
@@ -154,11 +155,12 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices());
-    this.store.select(p => p.invoicePurchase.purchaseInvoices).takeUntil(this.destroyed$).subscribe((o) => {
-      if (o && o.length) {
-        this.allPurchaseInvoices = _.cloneDeep(o);
-        this.allPurchaseInvoicesBackup = _.cloneDeep(o);
+    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+      if (o.purchaseInvoices && o.purchaseInvoices.length) {
+        this.allPurchaseInvoices = _.cloneDeep(o.purchaseInvoices);
+        this.allPurchaseInvoicesBackup = _.cloneDeep(o.purchaseInvoices);
       }
+      this.isDownloadingFileInProgress = o.isDownloadingFile;
     });
   }
   public selectedDate(value: any, dateInput: any) {
