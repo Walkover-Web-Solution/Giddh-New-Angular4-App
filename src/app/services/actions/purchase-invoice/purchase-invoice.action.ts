@@ -65,7 +65,7 @@ export class InvoicePurchaseActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.downloadFile(data.body, data.queryString.month, data.queryString.gstNumber);
+        this.downloadFile(data.body, data.queryString.month, data.queryString.gstNumber, 'gstr1_sheet');
         this.toasty.successToast('GSTR1 Sheet Downloaded Successfully.');
       }
       return { type: '' };
@@ -76,7 +76,7 @@ export class InvoicePurchaseActions {
     .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET)
     .switchMap(action => {
       return this.purchaseInvoiceService.DownloadGSTR1ErrorSheet(action.payload.month, action.payload.gstNumber)
-        .map(response => this.DownloadGSTR1SheetResponse(response));
+        .map(response => this.DownloadGSTR1ErrorSheetResponse(response));
     });
 
   @Effect()
@@ -87,7 +87,7 @@ export class InvoicePurchaseActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        // this.downloadFile(data.body, data.queryString.month, data.queryString.gstNumber);
+        this.downloadFile(data.body, data.queryString.month, data.queryString.gstNumber, 'error_sheet');
         this.toasty.successToast('GSTR1 Error Sheet Downloaded Successfully.');
       }
       return { type: '' };
@@ -121,9 +121,13 @@ export class InvoicePurchaseActions {
     return new Blob(byteArrays, { type: contentType });
   }
 
-  public downloadFile(data: Response, month: string, gstNumber: string) {
+  public downloadFile(data: Response, month: string, gstNumber: string, type: string) {
     let blob = this.base64ToBlob(data, 'application/xls', 512);
-    return saveAs(blob, `GSTR1-Sheet-${month}-${gstNumber}.xls`);
+    if (type === 'gstr1_sheet') {
+      return saveAs(blob, `GSTR1-Sheet-${month}-${gstNumber}.xlsx`);
+    } else if (type === 'error_sheet') {
+      return saveAs(blob, `GSTR1-Error-Sheet-${month}-${gstNumber}.xlsx`);
+    }
   }
 
   public GetPurchaseInvoices(): Action {

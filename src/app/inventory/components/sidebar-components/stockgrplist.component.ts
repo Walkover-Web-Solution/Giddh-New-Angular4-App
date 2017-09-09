@@ -15,14 +15,11 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
       color: #d35f29 !important;
     }
     .stock-grp-list>li>div, .sub-grp>li>div {
-    text-transform: uppercase;
-    color: #616161;
-    font-family: Roboto-Bold;
-}
-  .stock-items>li>div {
-    text-transform: capitalize;
-    color: #909090;
-}
+      text-transform: uppercase;
+    }
+    .stock-items>li>div {
+      text-transform: capitalize;
+    }
   `],
   template: `
     <ul class="list-unstyled stock-grp-list mrT1">
