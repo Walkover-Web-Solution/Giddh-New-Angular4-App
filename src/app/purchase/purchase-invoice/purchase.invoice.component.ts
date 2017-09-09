@@ -18,19 +18,6 @@ import { saveAs } from 'file-saver';
 import { AccountService } from '../../services/account.service';
 import { AccountRequest } from '../../models/api-models/Account';
 
-@Pipe({ name: 'highlight' })
-export class HighlightPipe implements PipeTransform {
-  public transform(text: string, search): string {
-    let pattern = search.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
-    pattern = pattern.split(' ').filter((t) => {
-      return t.length > 0;
-    }).join('|');
-    let regex = new RegExp(pattern, 'gi');
-
-    return search ? text.replace(regex, (match) => `<span class="highlight">${match}</span>`) : text;
-  }
-}
-
 const otherFiltersOptions = [
   { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
   { name: 'GSTIN Filled', uniqueName: 'GSTIN Filled' },
@@ -57,7 +44,7 @@ const fileGstrOptions = [
   selector: 'invoice-purchase',
   templateUrl: './purchase.invoice.component.html',
   styleUrls: ['purchase.invoice.component.css'],
-  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }, HighlightPipe],
+  providers: [{ provide: BsDropdownConfig, useValue: { autoClose: true } }],
   animations: [
     trigger('slideInOut', [
       state('in', style({
@@ -71,7 +58,7 @@ const fileGstrOptions = [
     ]),
   ]
 })
-export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
+export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
   public allPurchaseInvoices: IInvoicePurchaseResponse[] = [];
   public selectedDateForGSTR1: string = '';
@@ -143,14 +130,14 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
     console.log('Hi this is purchase invoice component');
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
       if (c) {
-         this.activeCompanyUniqueName = _.cloneDeep(c);
+        this.activeCompanyUniqueName = _.cloneDeep(c);
       }
     });
     this.store.select(p => p.company.companies).takeUntil(this.destroyed$).subscribe((c) => {
       if (c.length) {
         let companies = this.companies = _.cloneDeep(c);
         if (this.activeCompanyUniqueName) {
-          let activeCompany = companies.find((o: ComapnyResponse) => o.uniqueName === this.activeCompanyUniqueName);
+          let activeCompany: any = companies.find((o: ComapnyResponse) => o.uniqueName === this.activeCompanyUniqueName);
           if (activeCompany && activeCompany.gstDetails[0]) {
             this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
           } else {
@@ -244,14 +231,14 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
     this.selectedRowIndex = indx;
   }
 
-  public arrayBufferToBase64( buffer ) {
+  public arrayBufferToBase64(buffer) {
     let binary = '';
-    let bytes = new Uint8Array( buffer );
+    let bytes = new Uint8Array(buffer);
     let len = bytes.byteLength;
     for (let i = 0; i < len; i++) {
-        binary += String.fromCharCode( bytes[ i ] );
+      binary += String.fromCharCode(bytes[i]);
     }
-    return window.btoa( binary );
+    return window.btoa(binary);
   }
 
   /**
@@ -299,7 +286,7 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
       let selectedRow = data[indx];
       let selectedAccName = selectedRow.account.uniqueName;
       this.accountService.GetAccountDetails(selectedAccName).subscribe((accDetails) => {
-        let accountData = _.cloneDeep(accDetails.body);
+        let accountData: any = _.cloneDeep(accDetails.body);
         account.name = accountData.name;
         account.uniqueName = accountData.uniqueName;
         account.hsnNumber = accountData.hsnNumber;
