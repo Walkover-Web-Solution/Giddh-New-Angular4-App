@@ -12,6 +12,7 @@ import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-mod
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
+import { AuthService } from 'ng4-social-login';
 
 @Component({
   selector: 'company-add',
@@ -34,7 +35,9 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public dataSource: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+  constructor(
+    private socialAuthService: AuthService,
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions) {
   }
 
@@ -157,6 +160,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public logoutUser() {
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
+    this.socialAuthService.signOut();
     this.store.dispatch(this._loginAction.LogOut());
   }
   private getRandomString(comnanyName, city) {
