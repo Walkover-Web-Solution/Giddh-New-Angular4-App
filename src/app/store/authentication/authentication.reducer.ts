@@ -157,7 +157,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
 export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
   switch (action.type) {
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
-      let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+      let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
       if (data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body
@@ -169,15 +169,17 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
     }
     case LoginActions.VerifyEmailResponce:
-      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
-      if (data.status === 'success') {
-        return Object.assign({}, state, {
-          user: data.body
-        });
-      } else {
-        return Object.assign({}, state, {
-          user: null
-        });
+      {
+        let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+        if (data.status === 'success') {
+          return Object.assign({}, state, {
+            user: data.body
+          });
+        } else {
+          return Object.assign({}, state, {
+            user: null
+          });
+        }
       }
     case LoginActions.VerifyMobileResponce:
       let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;

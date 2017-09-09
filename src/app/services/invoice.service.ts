@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { INVOICE_API } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
@@ -18,7 +18,7 @@ export class InvoiceService {
   private user: UserDetails;
   private companyUniqueName: string;
 
-  constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) {
   }
 
   /**
@@ -42,7 +42,7 @@ export class InvoiceService {
         data.queryString = { model };
         return data;
       })
-      .catch((e) => HandleCatch<IGetAllInvoicesResponse, CommonPaginatedRequest>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<IGetAllInvoicesResponse, CommonPaginatedRequest>(e, ''));
   }
 
   /*
@@ -65,7 +65,7 @@ export class InvoiceService {
         data.queryString = { reqObj };
         return data;
       })
-      .catch((e) => HandleCatch<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(e, reqObj, model));
+      .catch((e) => this.errorHandler.HandleCatch<GetAllLedgersForInvoiceResponse, CommonPaginatedRequest>(e, reqObj, model));
   }
 
   /*
@@ -112,7 +112,7 @@ export class InvoiceService {
         data.queryString = { reqObj };
         return data;
       })
-      .catch((e) => HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
+      .catch((e) => this.errorHandler.HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
   }
 
   /*
@@ -134,7 +134,7 @@ export class InvoiceService {
         data.request = model;
         return data;
       })
-      .catch((e) => HandleCatch<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(e, model));
+      .catch((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, PreviewInvoiceRequest>(e, model));
   }
 
   /**
@@ -153,7 +153,7 @@ export class InvoiceService {
         data.request = '';
         return data;
       })
-      .catch((e) => HandleCatch<GenerateInvoiceRequestClass, string>(e, model));
+      .catch((e) => this.errorHandler.HandleCatch<GenerateInvoiceRequestClass, string>(e, model));
   }
 
   /**
@@ -174,7 +174,7 @@ export class InvoiceService {
         data.queryString = { templateUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<InvoiceTemplateDetailsResponse, string>(e, templateUniqueName));
+      .catch((e) => this.errorHandler.HandleCatch<InvoiceTemplateDetailsResponse, string>(e, templateUniqueName));
   }
 
   /**
@@ -195,7 +195,7 @@ export class InvoiceService {
         data.queryString = { invoiceNumber };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e, invoiceNumber));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceNumber));
   }
 
   /**
@@ -216,7 +216,7 @@ export class InvoiceService {
         data.queryString = { invoiceUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e, invoiceUniqueName));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e, invoiceUniqueName));
   }
 
   /**
@@ -235,7 +235,7 @@ export class InvoiceService {
         let data: BaseResponse<InvoiceSetting, string> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<InvoiceSetting, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<InvoiceSetting, string>(e));
   }
 
   /**
@@ -255,7 +255,7 @@ export class InvoiceService {
         data.queryString = { uniquename };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
   /**
@@ -275,7 +275,7 @@ export class InvoiceService {
         data.queryString = { emailId };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
   /**
@@ -295,7 +295,7 @@ export class InvoiceService {
         data.queryString = { webhook };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
   /**
@@ -315,7 +315,7 @@ export class InvoiceService {
         data.queryString = { form };
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
   /**
@@ -334,7 +334,7 @@ export class InvoiceService {
         let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
   }
 
   /**
@@ -357,7 +357,7 @@ export class InvoiceService {
         data.queryString = { form };
         return data;
       })
-      .catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
   }
 
   /**
@@ -376,7 +376,7 @@ export class InvoiceService {
         let data: BaseResponse<string, string> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
   /**
@@ -395,7 +395,7 @@ export class InvoiceService {
         let data: BaseResponse<string, string> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<string, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
   /**
@@ -418,7 +418,7 @@ export class InvoiceService {
         data.queryString = { form };
         return data;
       })
-      .catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
+      .catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
   }
 
 }

@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
 import { ProfitLossRequest, TrialBalanceExportRequest, TrialBalanceRequest, BalanceSheetRequest, AccountDetails } from '../models/api-models/tb-pl-bs';
 
@@ -16,7 +16,7 @@ export class TlPlService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   /**
@@ -36,7 +36,7 @@ export class TlPlService {
         data.request = request;
         return data;
       })
-      .catch((e) => HandleCatch<AccountDetails, TrialBalanceRequest>(e, request));
+      .catch((e) => this.errorHandler.HandleCatch<AccountDetails, TrialBalanceRequest>(e, request));
   }
 
   /**
@@ -60,7 +60,7 @@ export class TlPlService {
         data.request = request;
         return data;
       })
-      .catch((e) => HandleCatch<AccountDetails, ProfitLossRequest>(e, request));
+      .catch((e) => this.errorHandler.HandleCatch<AccountDetails, ProfitLossRequest>(e, request));
   }
 
   /**
@@ -84,7 +84,7 @@ export class TlPlService {
         data.request = request;
         return data;
       })
-      .catch((e) => HandleCatch<any, any>(e));
+      .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
 
   public ExportTrialBalance(request: TrialBalanceExportRequest): Observable<BaseResponse<any, any>> {
@@ -99,7 +99,7 @@ export class TlPlService {
       .map((res) => {
         return res.json();
       })
-      .catch((e) => HandleCatch<any, any>(e));
+      .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
 
   public ExportBalanceSheet(request: TrialBalanceExportRequest): Observable<BaseResponse<any, any>> {
@@ -114,7 +114,7 @@ export class TlPlService {
       .map((res) => {
         return res.json();
       })
-      .catch((e) => HandleCatch<any, any>(e));
+      .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
 
   public ExportProfitLoss(request: TrialBalanceExportRequest): Observable<BaseResponse<any, any>> {
@@ -129,6 +129,6 @@ export class TlPlService {
       .map((res) => {
         return res.json();
       })
-      .catch((e) => HandleCatch<any, any>(e));
+      .catch((e) => this.errorHandler.HandleCatch<any, any>(e));
   }
 }
