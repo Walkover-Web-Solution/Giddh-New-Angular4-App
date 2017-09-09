@@ -75,6 +75,7 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
   public allPurchaseInvoices: IInvoicePurchaseResponse[] = [];
   public selectedDateForGSTR1: string = '';
+  public selectedEntryTypeValue: string = '';
   public moment = moment;
   public selectedGstrType: string;
   public showGSTR1DatePicker: boolean = false;
@@ -124,11 +125,12 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
     start: moment().subtract(12, 'month'),
     end: moment().subtract(6, 'month')
   };
-
   public singleDate: any;
-
+  public timeCounter: number = 10; // Max number of seconds to wait
   public eventLog = '';
-  private selectedRowIndex: number;
+  public selectedRowIndex: number;
+  private intervalId: any;
+  private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(
     private router: Router,
@@ -284,10 +286,49 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
   }
 
   /**
-   * onUpdateEntryType
+   * onChangeEntryType
    */
-  public onUpdateEntryType(indx, value) {
-    if (value === 'composite' || value === '') {
+  public onChangeEntryType(indx, value) {
+    clearInterval(this.intervalId);
+    this.timeCounter = 10;
+    if (indx > -1 && (value === 'composite' || value === '')) {
+      this.selectedRowIndex = indx;
+      this.selectedEntryTypeValue = value;
+
+      this.intervalId = setInterval(() => {
+        console.log('running...');
+        this.timeCounter--;
+        this.checkForCounterValue(this.timeCounter);
+      }, 1000);
+    }
+  }
+
+  /**
+   * checkForCounterValue
+   */
+  public checkForCounterValue(counterValue) {
+    if (this.intervalId && (counterValue === 0 || this.undoEntryTypeChange) && this.intervalId._state === 'running') {
+      clearInterval(this.intervalId);
+      this.timeCounter = 10;
+      if (!this.undoEntryTypeChange) {
+        this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
+      }
+      this.undoEntryTypeChange = false;
+    }
+  }
+
+  /**
+   * onUndoEntryTypeChange
+   */
+  public onUndoEntryTypeChange() {
+    this.undoEntryTypeChange = true;
+  }
+
+  /**
+   * updateEntryType
+   */
+  public updateEntryType(indx, value) {
+    if (indx > -1 && (value === 'composite' || value === '')) {
       let account: AccountRequest = new AccountRequest();
       let isComposite: boolean;
       if (value === 'composite') {
@@ -334,6 +375,10 @@ export class PurchaseInvoiceComponent implements OnInit , OnDestroy{
    * ngOnDestroy
    */
   public ngOnDestroy() {
-    // Some code here
+    // Call the Update Entry Type API
+    // If user change the page and counter is running...
+    if (this.intervalId._state === 'running') {
+      this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
+    }
   }
 }

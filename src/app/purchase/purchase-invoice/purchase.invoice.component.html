@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="form-group col-xs-2">
                         <div class="row">
-                            <label><b>GSTR From</b></label>
+                            <label><b>GSTR From </b></label>
                             <div class="btn-group btn-block" dropdown>
                                 <button dropdownToggle type="button" data-toggle="dropdown" class="form-control text-left btn-block dropdown-toggle"> <span *ngIf="!selectedGstrType">GSTR</span> <span *ngIf="selectedGstrType">{{selectedGstrType}}</span> <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
                                 </button>
@@ -184,15 +184,15 @@
                 <td><input type="text" class="form-control" [value]="invoice.invoiceNo" /></td>
                 <td>{{invoice.voucherNo}}</td>
                 <td class="select text-center">
-                    <div class="custom-select pos-rel">
-                        <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onUpdateEntryType(i, invoice.entryType);">
+                    <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
+                        <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType);">
                             <option value="">None selected</option>
                             <option value="composite"> Composite </option>
                             <option value="reverse charge"> Reverse Charge</option>
                         </select>
                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                     </div>
-                    <!--<button class="btn btn-link">Undo 7s</button>-->
+                    <button *ngIf="timeCounter != 10 && selectedRowIndex == i" (click)="onUndoEntryTypeChange()" class="btn btn-link">Undo in {{timeCounter}}s</button>
                 </td>
                 <td class="text-right">{{invoice.taxableValue}}</td>
                 <td class="text-right" >{{invoice.igstAmount}}</td>
