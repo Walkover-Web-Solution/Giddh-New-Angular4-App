@@ -49,7 +49,6 @@ import { RecTypePipe } from './helpers/pipes/recType.pipe';
 import { SafePipe } from './helpers/pipes/safe.pipe';
 import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
 import { Ng2UiAuthModule } from 'ng2-ui-auth';
-import { MyAuthConfig } from './social.config';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
