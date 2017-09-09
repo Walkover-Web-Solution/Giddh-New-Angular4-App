@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { SmsKeyClass, EmailKeyClass } from '../models/api-models/SettingsIntegraion';
 import { ActiveFinancialYear } from '../models/api-models/Company';
 import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
@@ -55,7 +55,7 @@ export class PurchaseInvoiceService {
   private companyUniqueName: string;
   private roleUniqueName: string;
 
-  constructor(private _http: HttpWrapperService, private store: Store<AppState>) { }
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) { }
 
   /*
   * Get Purchase Invoice
@@ -73,7 +73,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<IInvoicePurchaseResponse[], string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => HandleCatch<IInvoicePurchaseResponse[], string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse[], string>(e));
   }
 
   /*
@@ -92,7 +92,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<IInvoicePurchaseResponse, string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => HandleCatch<IInvoicePurchaseResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e));
   }
 
   /*
@@ -111,7 +111,7 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res.json();
       data.queryString =  { month, gstNumber };
       return data;
-    }).catch((e) => HandleCatch<any, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 
   /*
@@ -130,6 +130,6 @@ export class PurchaseInvoiceService {
       let data: BaseResponse<any, string> = res.json();
       data.queryString =  { month, gstNumber };
       return data;
-    }).catch((e) => HandleCatch<any, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 }
