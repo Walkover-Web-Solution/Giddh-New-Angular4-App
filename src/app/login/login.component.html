@@ -10,15 +10,15 @@
                         <div class="clearfix mrB1">
                             <p class="lead ">Sign In or register</p>
                         </div>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithGoogle()">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
               <img src="./assets/images/google-plus-icon.png">
               connect with Google
             </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" [disabled]="true" ng-click="authenticate('twitter')" (click)="loginWithProvider('twitter')">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" [disabled]="true">
               <img src="./assets/images/twitter-icon.png">
               Login with Twitter
             </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="loginWithProvider('linkedin')">
+            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
               <img src="./assets/images/linkedin-icon.png">
               Login with LinkedIn
             </button>
