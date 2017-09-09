@@ -42,6 +42,7 @@ export class AccountResponse implements IAccountCreate {
     public mergedAccounts: string;
     public uniqueName: string;
     public name: string;
+    public isComposite?: boolean;
 }
 
 /**
@@ -69,6 +70,8 @@ export class AccountRequest implements IAccount {
   public state?: string;
   public sacNumber: string;
   public stateCode: string;
+  public isComposite?: boolean;
+
 }
 
 /**

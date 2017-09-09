@@ -58,6 +58,8 @@ import { InvoiceService } from './invoice.service';
 import { InvoiceTemplatesService } from './invoice.templates.service';
 import { SettingsLinkedAccountsService } from './settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
+import { PurchaseInvoiceService } from './purchase-invoice.service';
+import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
 import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
 import { SettingsFinancialYearService } from './settings.financial-year.service';
 
@@ -91,6 +93,7 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
     EffectsModule.run(SettingsLinkedAccountsActions),
+    EffectsModule.run(InvoicePurchaseActions),
     EffectsModule.run(SettingsFinancialYearActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
@@ -127,6 +130,7 @@ export class ServiceModule {
         SettingsProfileService,
         SettingsTaxesService,
         SettingsLinkedAccountsService,
+        PurchaseInvoiceService,
         SettingsFinancialYearService
       ]
     };
