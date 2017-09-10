@@ -8,3 +8,4 @@ export const TB_PL_BS_API = {
   DOWNLOAD_BALANCE_SHEET_EXCEL: Configuration.ApiUrl + '/company/:companyUniqueName/v2/balance-sheet-collapsed-download',
   DOWNLOAD_PROFIT_LOSS_EXCEL: Configuration.ApiUrl + '/company/:companyUniqueName/v2/profit-loss-collapsed-download',
 };
+
