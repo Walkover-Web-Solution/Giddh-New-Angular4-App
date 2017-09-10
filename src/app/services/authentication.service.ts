@@ -14,23 +14,29 @@ import {
   VerifyMobileModel,
   VerifyMobileResponseModel
 } from '../models/api-models/loginModels';
-import { ErrorHandler, HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
+import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
+import { GoogleLoginProvider } from 'ng4-social-login';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class AuthenticationService {
-
-  constructor(public _http: HttpWrapperService,
-    public _router: Router,
-    private _error: ErrorHandler
+  public GoogleProvider: GoogleLoginProvider;
+  private GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
+  constructor(private errorHandler: ErrorHandler,
+    public _Http: Http,
+    public _http: HttpWrapperService,
+    public _router: Router
   ) {
+    this.GoogleProvider = new GoogleLoginProvider(this.GOOGLE_CLIENT_ID);
+    this.GoogleProvider.initialize();
   }
 
   public SignupWithEmail(email: string): Observable<BaseResponse<string, string>> {
     return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string, string>(e, email));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, email));
   }
 
   public VerifyEmail(model: VerifyEmailModel): Observable<BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>> {
@@ -39,7 +45,7 @@ export class AuthenticationService {
       data.request = model;
       console.log(data);
       return data;
-    }).catch((e) => HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model));
   }
 
   public SignupWithMobile(model: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
@@ -47,7 +53,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, SignupWithMobile> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<string, SignupWithMobile>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, model));
   }
 
   public VerifyOTP(modele: VerifyMobileModel): Observable<BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>> {
@@ -56,7 +62,7 @@ export class AuthenticationService {
       data.request = modele;
       console.log(data);
       return data;
-    }).catch((e) => HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele));
+    }).catch((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele));
   }
 
   public VerifyNumber(modele: SignupWithMobile): Observable<BaseResponse<string, SignupWithMobile>> {
@@ -64,7 +70,7 @@ export class AuthenticationService {
       let data: BaseResponse<string, SignupWithMobile> = res.json();
       data.request = modele;
       return data;
-    }).catch((e) => HandleCatch<string, SignupWithMobile>(e, modele));
+    }).catch((e) => this.errorHandler.HandleCatch<string, SignupWithMobile>(e, modele));
   }
 
   public VerifyNumberOTP(modele: VerifyMobileModel): Observable<BaseResponse<string, VerifyMobileModel>> {
@@ -72,10 +78,20 @@ export class AuthenticationService {
       let data: BaseResponse<string, VerifyMobileModel> = res.json();
       data.request = modele;
       return data;
-    }).catch((e) => HandleCatch<string, VerifyMobileModel>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<string, VerifyMobileModel>(e));
   }
 
-  public LoginWithGoogle() {
-    //
+  public LoginWithGoogle(token: string) {
+    let args: any = {};
+    args.headers = new Headers();
+    args.headers.append('cache-control', 'no-cache');
+    args.headers.append('Content-Type', 'application/json');
+    args.headers.append('Accept', 'application/json');
+    args.headers.append('Access-Token', token);
+    return this._Http.get(LOGIN_API.LOGIN_WITH_GOOGLE, args).map((res) => {
+      let data: BaseResponse<VerifyEmailResponseModel, string> = res.json();
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args));
   }
+
 }

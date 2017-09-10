@@ -139,7 +139,7 @@ module.exports = function (options) {
       }) : null,
     ].filter(plugin => plugin !== null),
 
-    target: "electron"
+    target: "electron-main"
   };
 
 }

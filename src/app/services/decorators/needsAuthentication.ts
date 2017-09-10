@@ -40,7 +40,9 @@ export class NeedsAuthentication implements CanActivate {
                 return true;
               } else {
                 // Navigate to new-user for adding new comapny
-                this._router.navigate(['/new-user']);
+                this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+                  this._router.navigate(['/new-user']);
+                });
                 return false;
               }
             });
@@ -60,7 +62,10 @@ export class NeedsAuthentication implements CanActivate {
               return true;
             } else {
               // Navigate to new-user for adding new comapny
-              this._router.navigate(['/new-user']);
+              this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+                this._router.navigate(['/new-user']);
+              });
+              // this._router.navigate(['/new-user']);
               return false;
             }
           });

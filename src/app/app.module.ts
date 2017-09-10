@@ -108,7 +108,6 @@ export class AppModule {
     public appRef: ApplicationRef,
     public _store: Store<AppState>
   ) {
-    console.log(Configuration.isElectron);
   }
 
   public hmrOnInit(store: StoreType) {
