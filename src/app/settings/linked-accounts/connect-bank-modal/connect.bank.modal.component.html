@@ -1,7 +1,10 @@
-<button class="pull-right" (click)="onCancel()">X</button>
-<div id="myFrame" class="modal-body pdT5 pdB5 pdL2 pdR2 clearfix">
-  <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
-  <ng-template #frame>
-    <iframe  id="player" class="embed-responsive-item" [src]="getIframeUrl(iframeSrc)" frameborder="0"></iframe>
-  </ng-template>
+<div class="modal-header themeBg pd2 pdL2 pdR2">
+    <i class="fa fa-times text-right close_modal" data-dismiss="modal" aria-hidden="true" (click)="onCancel()" aria-label="Close"></i>
+    <h3 class="modal-title bg">Connect Banks</h3>
+</div>
+<div id="myFrame" class="modal-body clearfix">
+    <p class="text-center" *ngIf="isIframeLoading; else frame">Loading...</p>
+    <ng-template #frame>
+        <iframe id="player" class="embed-responsive-item" [src]="getIframeUrl(iframeSrc)" frameborder="0"></iframe>
+    </ng-template>
 </div>

@@ -10,7 +10,7 @@ const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
 */
-const commonConfig = require('./webpack.common.js');
+const commonConfig = require('./webpack.renderer.js');
 
 /**
  * Webpack Plugins
@@ -333,7 +333,7 @@ module.exports = function (env) {
          */
 
       ],
-
+      // target: 'electron-renderer'
       /**
        * Include polyfills or mocks for various node stuff
        * Description: Node configuration

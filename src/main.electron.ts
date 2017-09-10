@@ -1,4 +1,4 @@
 /*
  * Electron bootstraping
  */
-import './electron';
+import './mainprocess/index';

@@ -12,7 +12,9 @@ import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-mod
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
-
+import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
+import { AuthenticationService } from "../../../../services/authentication.service";
+// const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
   templateUrl: './company-add.component.html'
@@ -34,8 +36,11 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public dataSource: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService, private _route: Router, private _loginAction: LoginActions) {
+  constructor(
+    private socialAuthService: AuthService,
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
+    private _aunthenticationServer: AuthenticationService) {
   }
 
   // tslint:disable-next-line:no-empty
@@ -157,6 +162,12 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public logoutUser() {
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
+    if (!isElectron) {
+      this.socialAuthService.signOut();
+    } else {
+      // this._aunthenticationServer.GoogleProvider.signOut();
+    }
+
     this.store.dispatch(this._loginAction.LogOut());
   }
   private getRandomString(comnanyName, city) {

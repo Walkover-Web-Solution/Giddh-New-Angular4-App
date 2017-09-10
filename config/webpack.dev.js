@@ -124,7 +124,6 @@ module.exports = function(options) {
             ]
 
         },
-
         plugins: [
 
             /**
