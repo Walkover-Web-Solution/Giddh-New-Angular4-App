@@ -13,7 +13,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { IPageStr } from '../permissions/permission.utility';
 
 @Injectable()
@@ -23,7 +23,7 @@ export class PermissionService {
     private companyUniqueName: string;
     private roleUniqueName: string;
 
-    constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
+    constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) {
     }
 
     /*
@@ -44,7 +44,7 @@ export class PermissionService {
             let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res.json();
             data.queryString = {};
             return data;
-        }).catch((e) => HandleCatch<IRoleCommonResponseAndRequest[], string>(e));
+        }).catch((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest[], string>(e));
     }
 
     /**
@@ -61,7 +61,7 @@ export class PermissionService {
             let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res.json();
             data.request = model;
             return data;
-        }).catch((e) => HandleCatch<CreateNewRoleResponse, CreateNewRoleRequest>(e, model));
+        }).catch((e) => this.errorHandler.HandleCatch<CreateNewRoleResponse, CreateNewRoleRequest>(e, model));
     }
 
     /**
@@ -78,7 +78,7 @@ export class PermissionService {
             let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res.json();
             data.request = model;
             return data;
-        }).catch((e) => HandleCatch<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>(e, model));
+        }).catch((e) => this.errorHandler.HandleCatch<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>(e, model));
     }
 
     /**
@@ -96,7 +96,7 @@ export class PermissionService {
             data.request = '';
             data.queryString = { roleUniqueName };
             return data;
-        }).catch((e) => HandleCatch<string, string>(e, '', { roleUniqueName }));
+        }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', { roleUniqueName }));
     }
 
     /*
@@ -107,6 +107,6 @@ export class PermissionService {
             let data: BaseResponse<IPageStr[], string> = res.json();
             data.queryString = {};
             return data;
-        }).catch((e) => HandleCatch<IPageStr[], string>(e));
+        }).catch((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e));
     }
 }

@@ -52,7 +52,6 @@ module.exports = function (options) {
      * See: https://github.com/webpack/docs/wiki/build-performance#sourcemaps
      */
     devtool: 'cheap-module-source-map',
-
     /**
      * Options affecting the output of the compilation.
      *

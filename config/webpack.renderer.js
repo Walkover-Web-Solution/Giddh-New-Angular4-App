@@ -69,6 +69,19 @@ module.exports = function (options) {
 
     },
 
+    externals: [
+      (function () {
+        var IGNORES = [
+          'electron'
+        ];
+        return function (context, request, callback) {
+          if (IGNORES.indexOf(request) >= 0) {
+            return callback(null, "require('" + request + "')");
+          }
+          return callback();
+        };
+      })()
+    ],
     /**
      * Options affecting the resolving of modules.
      *
@@ -410,7 +423,7 @@ module.exports = function (options) {
     //   module: false,
     //   clearImmediate: false,
     //   setImmediate: false
-    // }
+    // },
     target: 'electron-renderer'
 
   };

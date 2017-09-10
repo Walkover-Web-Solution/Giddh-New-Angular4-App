@@ -9,7 +9,7 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import {
   FlattenGroupsAccountsResponse,
   GroupCreateRequest,
@@ -28,7 +28,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 export class GroupService {
   private companyUniqueName: string;
   private user: UserDetails;
-  constructor(public _http: HttpWrapperService,
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService,
     public _router: Router,
     private store: Store<AppState>
   ) {
@@ -44,7 +44,7 @@ export class GroupService {
       let data: BaseResponse<GroupResponse, GroupCreateRequest> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<GroupResponse, GroupCreateRequest>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupResponse, GroupCreateRequest>(e, model));
   }
 
   public UpdateGroup(modele: GroupUpateRequest, groupUniqueName: string): Observable<BaseResponse<GroupResponse, GroupUpateRequest>> {
@@ -59,7 +59,7 @@ export class GroupService {
       data.queryString = { groupUniqueName };
       data.request = modele;
       return data;
-    }).catch((e) => HandleCatch<GroupResponse, GroupUpateRequest>(e, modele, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupResponse, GroupUpateRequest>(e, modele, { groupUniqueName }));
   }
   public ShareGroup(modele: ShareGroupRequest, groupUniqueName: string): Observable<BaseResponse<string, ShareGroupRequest>> {
     this.store.take(1).subscribe(s => {
@@ -74,7 +74,7 @@ export class GroupService {
       data.queryString = { groupUniqueName };
       data.request = modele;
       return data;
-    }).catch((e) => HandleCatch<string, ShareGroupRequest>(e, modele, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, ShareGroupRequest>(e, modele, { groupUniqueName }));
   }
 
   public GetGrouptDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
@@ -88,7 +88,7 @@ export class GroupService {
       let data: BaseResponse<GroupResponse, string> = res.json();
       data.queryString = { groupUniqueName };
       return data;
-    }).catch((e) => HandleCatch<GroupResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e));
   }
 
   // need to check on Effect
@@ -105,7 +105,7 @@ export class GroupService {
       data.request = userEmail;
       data.queryString = { groupUniqueName };
       return data;
-    }).catch((e) => HandleCatch<string, string>(e, userEmail, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, userEmail, { groupUniqueName }));
   }
 
   public ShareWithGroup(groupUniqueName: string): Observable<BaseResponse<GroupSharedWithResponse[], string>> {
@@ -120,7 +120,7 @@ export class GroupService {
       data.queryString = { groupUniqueName };
       data.request = groupUniqueName;
       return data;
-    }).catch((e) => HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupSharedWithResponse[], string>(e, groupUniqueName, { groupUniqueName }));
   }
 
   public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
@@ -134,7 +134,7 @@ export class GroupService {
       let data: BaseResponse<GroupsWithAccountsResponse[], string> = res.json();
       data.request = q;
       return data;
-    }).catch((e) => HandleCatch<GroupsWithAccountsResponse[], string>(e, q));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupsWithAccountsResponse[], string>(e, q));
   }
 
   public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<MoveGroupResponse, MoveGroupRequest>> {
@@ -149,7 +149,7 @@ export class GroupService {
       data.request = modele;
       data.queryString = { groupUniqueName };
       return data;
-    }).catch((e) => HandleCatch<MoveGroupResponse, MoveGroupRequest>(e, modele, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<MoveGroupResponse, MoveGroupRequest>(e, modele, { groupUniqueName }));
   }
 
   public GetGroupDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
@@ -164,7 +164,7 @@ export class GroupService {
       data.request = groupUniqueName;
       data.queryString = { groupUniqueName };
       return data;
-    }).catch((e) => HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupResponse, string>(e, groupUniqueName, { groupUniqueName }));
   }
 
   public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string, string>> {
@@ -179,10 +179,10 @@ export class GroupService {
       data.request = groupUniqueName;
       data.queryString = { groupUniqueName };
       return data;
-    }).catch((e) => HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, groupUniqueName, { groupUniqueName }));
   }
 
-  public  GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
+  public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -194,12 +194,12 @@ export class GroupService {
       .replace(':page', encodeURIComponent(page.toString()))
       .replace(':count', encodeURIComponent(count.toString()))
       .replace(':showEmptyGroups', encodeURIComponent(showEmptyGroups))).map((res) => {
-      let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res.json();
-      data.request = '';
-      data.queryString = { q, page, count, showEmptyGroups };
-      // data.response.results.forEach(p => p.isOpen = false);
-      return data;
-    }).catch((e) => HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups }));
+        let data: BaseResponse<FlattenGroupsAccountsResponse, string> = res.json();
+        data.request = '';
+        data.queryString = { q, page, count, showEmptyGroups };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<FlattenGroupsAccountsResponse, string>(e, '', { q, page, count, showEmptyGroups }));
   }
 
   public GetTaxHierarchy(groupUniqueName: string): Observable<BaseResponse<GroupsTaxHierarchyResponse, string>> {
@@ -214,7 +214,7 @@ export class GroupService {
       data.request = groupUniqueName;
       data.queryString = { groupUniqueName };
       return data;
-    }).catch((e) => HandleCatch<GroupsTaxHierarchyResponse, string>(e, groupUniqueName, { groupUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<GroupsTaxHierarchyResponse, string>(e, groupUniqueName, { groupUniqueName }));
   }
 
 }

@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import {
   TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest,
@@ -20,7 +20,7 @@ export class LedgerService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   /**
@@ -47,7 +47,7 @@ export class LedgerService {
       data.request = request;
       data.queryString = { q, page, count, accountUniqueName, from, to, reversePage, sort };
       return data;
-    }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
+    }).catch((e) => this.errorHandler.HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
   }
 
   /*
@@ -68,7 +68,7 @@ export class LedgerService {
         data.queryString = { accountUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName }));
   }
 
   /*
@@ -88,7 +88,7 @@ export class LedgerService {
         data.queryString = { accountUniqueName, entryUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName, entryUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName, entryUniqueName }));
   }
 
   /*
@@ -105,7 +105,7 @@ export class LedgerService {
       let data: BaseResponse<string, string> = res.json();
       data.queryString = { accountUniqueName, entryUniqueName };
       return data;
-    }).catch((e) => HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /*
@@ -122,7 +122,7 @@ export class LedgerService {
       let data: BaseResponse<LedgerResponse[], string> = res.json();
       data.queryString = { accountUniqueName, entryUniqueName };
       return data;
-    }).catch((e) => HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /**
@@ -142,7 +142,7 @@ export class LedgerService {
       let data: BaseResponse<ReconcileResponse, string> = res.json();
       data.queryString = { accountUniqueName, from, to, chequeNumber };
       return data;
-    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName, from, to, chequeNumber }));
+    }).catch((e) => this.errorHandler.HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName, from, to, chequeNumber }));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
@@ -159,6 +159,6 @@ export class LedgerService {
         data.queryString = { accountUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<string, DownloadLedgerRequest>(e, model, { accountUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<string, DownloadLedgerRequest>(e, model, { accountUniqueName }));
   }
 }

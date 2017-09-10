@@ -60,7 +60,9 @@ export class InvoicePreviewComponent implements OnInit {
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService
-  ) { }
+  ) {
+    this.invoiceSearchRequest.entryTotalBy = '';
+  }
 
   public ngOnInit() {
     // set initial values

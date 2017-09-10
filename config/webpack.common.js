@@ -34,7 +34,7 @@ const METADATA = {
   baseUrl: '/',
   isDevServer: helpers.isWebpackDevServer(),
   HMR: HMR,
-  isElectron: true
+  isElectron: false
 };
 
 /**

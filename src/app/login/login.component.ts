@@ -5,12 +5,17 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
-
-import { ErrorHandlerService } from './../services/errorhandler.service';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
+
+import { HttpWrapperService } from '../services/httpWrapper.service';
+import { Headers } from '@angular/http';
+import { RequestOptionsArgs } from '@angular/http';
+import { ToasterService } from '../services/toaster.service';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -40,8 +45,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,
-    private eh: ErrorHandlerService,
+    public _http: HttpWrapperService,
     private loginAction: LoginActions,
+    private authService: AuthService,
+    private _toaster: ToasterService
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -89,6 +96,13 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
+
+    // get user object when google auth is complete
+    this.authService.authState.subscribe((user) => {
+      if (user) {
+        this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+      }
+    });
   }
 
   public showEmailModal() {
@@ -120,7 +134,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public showMobileModal() {
     this.mobileVerifyModal.show();
-
   }
 
   public hideMobileModal() {
@@ -145,25 +158,81 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem('email');
   }
 
+  public signInWithProviders(provider: string) {
+    console.log('Is Electron: -' + Configuration.isElectron);
+    if (Configuration.isElectron) {
+      // electron
+      let electron = (window as any).require('electron');
+      let electronOauth2 = (window as any).require('electron-oauth');
+
+      let ipcRenderer = electron.ipcRenderer;
+      // get config from main-process
+      ipcRenderer.send('get-auth-configs');
+      // set config
+      ipcRenderer.on('set-auth-configs', (events, args) => {
+        this.socialLoginKeys = args;
+
+        let config = {};
+        let bodyParams = {};
+        if (provider === 'google') {
+          // google
+          config = this.socialLoginKeys.GoogleLoginElectronConfig;
+          bodyParams = this.socialLoginKeys.AdditionalGoogleLoginParams;
+        } else {
+          // linked in
+          config = this.socialLoginKeys.LinkedinLoginElectronConfig;
+          bodyParams = this.socialLoginKeys.AdditionalLinkedinLoginParams;
+        }
+        const myApiOauth = electronOauth2(config, {
+          alwaysOnTop: true,
+          autoHideMenuBar: true,
+          webPreferences: {
+            nodeIntegration: false,
+            devTools: true
+          }
+        });
+        myApiOauth.getAccessToken(bodyParams)
+          .then(token => {
+            // use your token.access_token
+            let url = '';
+            if (provider === 'google') {
+              url = Configuration.ApiUrl + 'v2/login-with-google';
+            } else {
+              url = Configuration.ApiUrl + 'v2/login-with-linkedIn';
+            }
+            let options: RequestOptionsArgs = {};
+
+            options.headers = new Headers();
+            options.headers.append('Access-Token', token.access_token);
+            this._http.get(url, {}, options).map(res => res.json()).subscribe(d => {
+              this.store.dispatch(this.loginAction.VerifyEmailResponce(d));
+            }, (e) => {
+              this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
+            });
+            // myApiOauth.refreshToken(token.refresh_token)
+            //   .then(newToken => {
+            //     //
+            //   });
+          }).catch(e => {
+            if (e.message !== 'window was closed by user') {
+              this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
+            }
+          });
+      });
+
+    } else {
+      //  web
+      if (provider === 'google') {
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+      } else {
+        // linkedin
+      }
+    }
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
-  public loginWithProvider(provider: string) {
-    if (Configuration.isElectron && !this.socialLoginKeys) {
-      // electron
-      // let ipcRenderer = import('electron');
-      // ipcRenderer.sendSync('get-client-key');
-      // ipcRenderer.on('set-client-key', (args) => {
-      //   this.socialLoginKeys = args;
-      // });
-    } else {
-      // website
-      // this.auth.authenticate(provider)
-      //   .subscribe({
-      //     error: (err: any) => console.log(err),
-      //     complete: () => this.router.navigate(['social-login-callback'])
-      //   });
-    }
-  }
+
 }

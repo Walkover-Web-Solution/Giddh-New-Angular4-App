@@ -42,6 +42,16 @@
                                                 </div>
                                             </a>
                                         </li>
+                                        <li class="dmLi trialB">
+                                            <a [routerLink]="['/pages/purchase/invoice']">
+                                                <div class="media">
+                                                <div class="media-body">
+                                                    <div class="title">Taxes</div>
+                                                    <div class="subTitle">Goods and Services Tax</div>
+                                                </div>
+                                                </div>
+                                            </a>
+                                        </li>
                                         <li class="dmLi">
                                             <a [routerLink]="['trial-balance-and-profit-loss']">
                                                 <div class="media">
@@ -202,7 +212,7 @@
         </div>
     </nav>
 
-    <accounts-side-bar *ngIf="(selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+    <accounts-side-bar *ngIf="isProd === 'development' && (selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->

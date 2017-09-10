@@ -25,6 +25,6 @@ export class ToasterService {
   }
 
   public clearAllToaster(): void {
-      this._toaster.clear();
+    this._toaster.clear();
   }
 }
