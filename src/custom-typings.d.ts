@@ -42,8 +42,9 @@ import * as _ from 'lodash'
  * You can include your type definitions in this file until you create one for the @types
  *
  */
-
 // support NodeJS modules without type definitions
+import * as jsPDF from 'jspdf';
+
 declare module '*';
 
 /*
@@ -89,9 +90,9 @@ type FactoryPromise = () => Promise<any>;
 
 type AsyncRoutes = {
   [component: string]: Es6PromiseLoader |
-  Function |
-  FactoryEs6PromiseLoader |
-  FactoryPromise;
+    Function |
+    FactoryEs6PromiseLoader |
+    FactoryPromise;
 };
 
 type IdleCallbacks = Es6PromiseLoader |
@@ -117,8 +118,11 @@ interface WebpackModule {
 
 interface WebpackRequire {
   (id: string): any;
+
   (paths: string[], callback: (...modules: any[]) => void): void;
+
   ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
+
   context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
 }
 
@@ -131,13 +135,28 @@ interface ErrorStackTraceLimit {
 }
 
 // Extend typings
-interface NodeRequire extends WebpackRequire { }
-interface ErrorConstructor extends ErrorStackTraceLimit { }
-interface NodeRequireFunction extends Es6PromiseLoader { }
-interface NodeModule extends WebpackModule { }
-interface Global extends GlobalEnvironment { }
+interface NodeRequire extends WebpackRequire {
+}
 
+interface ErrorConstructor extends ErrorStackTraceLimit {
+}
 
+interface NodeRequireFunction extends Es6PromiseLoader {
+}
+
+interface NodeModule extends WebpackModule {
+}
+
+interface Global extends GlobalEnvironment {
+}
+
+export module L {
+  export interface JsPDFAutoTable extends jsPDF {
+    autoTable(column: any, rows: any, options?: any);
+
+    autoTableEndPosY();
+  }
+}
 
 
 
