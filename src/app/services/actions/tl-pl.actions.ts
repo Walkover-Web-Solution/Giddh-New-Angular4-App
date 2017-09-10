@@ -106,7 +106,7 @@ export class TBPlBsActions {
     };
   }
 
-  public DownloadTrialBalanceExcel(request: TrialBalanceRequest): Action {
+  public DownloadTrialBalanceExcel(request: TrialBalanceExportExcelRequest): Action {
     return {
       type: TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST,
       payload: request

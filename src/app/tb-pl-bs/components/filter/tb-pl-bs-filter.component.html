@@ -34,7 +34,8 @@
     <tb-export-csv *ngIf="tbExportCsv" [selectedCompany]="selectedCompany"
                    (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
     <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right"></tb-export-xls>
-    <tb-export-pdf *ngIf="tbExportPdf" (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
+    <tb-export-pdf *ngIf="tbExportPdf" [selectedCompany]="selectedCompany"
+                   (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
     <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
     <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
   </div>
