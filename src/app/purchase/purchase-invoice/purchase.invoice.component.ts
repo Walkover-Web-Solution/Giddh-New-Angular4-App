@@ -267,7 +267,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public setCurrentMonth() {
-    this.selectedDateForGSTR1 = String(new Date());
+    this.selectedDateForGSTR1 = String(moment());
   }
 
   public clearDate() {

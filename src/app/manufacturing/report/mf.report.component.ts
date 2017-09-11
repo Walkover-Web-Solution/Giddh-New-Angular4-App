@@ -89,8 +89,9 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
-    let d = new Date();
-    d.setDate(d.getDate() - 30);
+
+    let d = moment().subtract(30, 'days');
+
     this.mfStockSearchRequest.from = String(d);
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
@@ -135,6 +136,6 @@ export class MfReportComponent implements OnInit {
   }
 
   public setToday(model: string) {
-    this.mfStockSearchRequest[model] = new Date();
+    this.mfStockSearchRequest[model] = moment();
   }
 }
