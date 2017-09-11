@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
+import { ToasterService } from '../../../../services/toaster.service';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
@@ -14,6 +15,9 @@ export class DownloadOrSendInvoiceOnMailComponent {
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
 
   public showEmailTextarea: boolean = false;
+
+  constructor(private _toasty: ToasterService) {}
+
   public onConfirmation(amount) {
     this.closeModelEvent.emit(amount);
   }
@@ -33,7 +37,12 @@ export class DownloadOrSendInvoiceOnMailComponent {
    * onSendInvoiceOnMail
    */
   public onSendInvoiceOnMail(email) {
-    this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: [email] });
-    this.showEmailTextarea = false;
+    let emailList = email.split(',');
+    if (Array.isArray(emailList)) {
+      this.downloadOrSendMailEvent.emit({ action: 'send_mail', emails: emailList });
+      this.showEmailTextarea = false;
+    } else {
+      this._toasty.errorToast('Invalid email(s).');
+    }
   }
 }
