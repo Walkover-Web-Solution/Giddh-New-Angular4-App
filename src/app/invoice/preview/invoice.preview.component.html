@@ -68,7 +68,7 @@
     <tbody>
         <tr *ngFor="let item of invoiceData.results; let i = index">
             <td>{{ i + 1}}</td>
-            <td>{{item.invoiceNumber}}</td>
+            <td><a href="javascript:void(0);" (click)="onSelectInvoice(item)">{{item.invoiceNumber}}</a></td>
             <td>{{item.account.name}}</td>
             <td>{{item.invoiceDate}}</td>
             <td>{{item.grandTotal}}</td>
@@ -105,6 +105,15 @@
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
             <perform-action-on-invoice-model (closeModelEvent)="closePerformActionPopup($event)"></perform-action-on-invoice-model>
+        </div>
+    </div>
+</div>
+<!-- Download or Send Invoice on mail -->
+<div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <download-or-send-mail-invoice (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)" (closeModelEvent)="closeDownloadOrSendMailPopup($event)"></download-or-send-mail-invoice>
         </div>
     </div>
 </div>

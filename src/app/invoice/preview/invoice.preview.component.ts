@@ -33,6 +33,7 @@ export class InvoicePreviewComponent implements OnInit {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
+  @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
 
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
@@ -92,6 +93,8 @@ export class InvoicePreviewComponent implements OnInit {
           item.isSelected = false;
           return o;
         });
+      } else {
+        this.getInvoices();
       }
     });
     this.getInvoices();
@@ -131,6 +134,29 @@ export class InvoicePreviewComponent implements OnInit {
   public closePerformActionPopup(data) {
     this.performActionOnInvoiceModel.hide();
     this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, { action: 'paid', amount: data }));
+  }
+
+  /**
+   * onSelectInvoice
+   */
+  public onSelectInvoice(invoice) {
+    this.selectedInvoice = _.cloneDeep(invoice);
+    this.downloadOrSendMailModel.show();
+  }
+
+  /**
+  * onDownloadOrSendMailEvent
+  */
+  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[] }) {
+    if (userResponse.action === 'download') {
+      this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, { invoiceNumber: [this.selectedInvoice.invoiceNumber], template: 'gst_template_a' }));
+    } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
+    }
+  }
+
+  public closeDownloadOrSendMailPopup(data) {
+    this.downloadOrSendMailModel.hide();
   }
 
   private getInvoices() {
