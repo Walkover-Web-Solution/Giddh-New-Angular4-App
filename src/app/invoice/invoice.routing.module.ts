@@ -26,6 +26,7 @@ const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
 import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
+import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -54,7 +55,8 @@ const INVOICE_ROUTES: Routes = [
     InvoiceSettingComponent,
     DeleteInvoiceConfirmationModelComponent,
     PerformActionOnInvoiceModelComponent,
-    InvoiceGenerateModelComponent
+    InvoiceGenerateModelComponent,
+    DownloadOrSendInvoiceOnMailComponent
   ],
   imports: [
     FormsModule,

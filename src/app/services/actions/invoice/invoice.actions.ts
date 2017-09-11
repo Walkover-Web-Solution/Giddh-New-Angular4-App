@@ -31,6 +31,7 @@ import {
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../../models/api-models/SettingsIntegraion';
 // import {Section, Template} from "../../../models/api-models/invoice";
+import { saveAs } from 'file-saver';
 
 @Injectable()
 export class InvoiceActions {
@@ -310,6 +311,49 @@ export class InvoiceActions {
         type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
         payload: res
       }));
+
+  @Effect()
+  public DownloadInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE)
+    .switchMap(action => {
+      return this._invoiceService.DownloadInvoice(action.payload.accountUniqueName, action.payload.dataToSend)
+        .map(response => this.DownloadInvoiceResponse(response));
+    });
+
+  @Effect()
+  public DownloadInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this.downloadFile(data.body, data.queryString.dataToSend.invoiceNumber[0]);
+        this._toasty.successToast('Invoice Downloaded Successfully.');
+      }
+      return { type: '' };
+    });
+
+  @Effect()
+  public SendInvoiceOnMail$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.SEND_MAIL)
+    .switchMap(action => {
+      return this._invoiceService.SendInvoiceOnMail(action.payload.accountUniqueName, action.payload.dataToSend)
+        .map(response => this.SendInvoiceOnMailResponse(response));
+    });
+
+  @Effect()
+  public SendInvoiceOnMailResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.SEND_MAIL_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body);
+      }
+      return { type: '' };
+    });
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -330,6 +374,32 @@ export class InvoiceActions {
     private _toasty: ToasterService,
     private _router: Router
   ) { }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, { type: contentType });
+  }
+
+  public downloadFile(data: Response, invoiceUniqueName: string) {
+    let blob = this.base64ToBlob(data, 'application/pdf', 512);
+    return saveAs(blob, `Invoice-${invoiceUniqueName}.pdf`);
+  }
 
   public GetAllInvoices(model: CommonPaginatedRequest): Action {
     return {
@@ -882,6 +952,34 @@ export class InvoiceActions {
     return {
       type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL,
       payload: form
+    };
+  }
+
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], template: string }): Action {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
+      payload: { accountUniqueName, dataToSend}
+    };
+  }
+
+  public DownloadInvoiceResponse(model: BaseResponse<string, string>): Action {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[]}): Action {
+    return {
+      type: INVOICE_ACTIONS.SEND_MAIL,
+      payload: { accountUniqueName, dataToSend }
+    };
+  }
+
+  public SendInvoiceOnMailResponse(model: BaseResponse<string, string>): Action {
+    return {
+      type: INVOICE_ACTIONS.SEND_MAIL_RESPONSE,
+      payload: model
     };
   }
 
