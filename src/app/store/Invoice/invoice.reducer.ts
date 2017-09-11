@@ -242,6 +242,31 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             }
             return state;
         }
+        case INVOICE_ACTIONS.ACTION_ON_INVOICE_RESPONSE: {
+            let newState = _.cloneDeep(state);
+            let res: BaseResponse<string, string> = action.payload;
+            if (res.status === 'success') {
+
+                // Client side modification can useful when using pagination
+                /* let status = res.queryString.action.action;
+                let uniqueName = res.queryString.invoiceUniqueName;
+                let indx = newState.preview.invoices.results.findIndex((o) => o.uniqueName === uniqueName);
+                if (indx > -1) {
+                    newState.preview.invoices.results[indx].balanceStatus = status;
+                    if (status === 'paid') {
+                        newState.preview.invoices.results[indx].balanceDue = newState.preview.invoices.results[indx].grandTotal - res.queryString.action.amount;
+                        if (newState.preview.invoices.results[indx].grandTotal > newState.preview.invoices.results[indx].balanceDue) {
+                            newState.preview.invoices.results[indx].balanceStatus = 'Partial-Paid';
+                        }
+                    }
+                } */
+
+                // Just refreshing the list for now
+                newState.preview.invoices = null;
+                return Object.assign({}, state, newState);
+            }
+            return state;
+        }
         default: {
             return state;
         }
