@@ -1,8 +1,6 @@
-import { PageComponent } from '../page.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { InventoryComponent } from './inventory.component';
-import { ChildHomeComponent } from './components';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
 import { InventoryAddStockComponent } from './components/add-stock-components/inventory.addstock.component';

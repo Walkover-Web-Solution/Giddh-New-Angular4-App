@@ -1,9 +1,7 @@
 import { SharedModule } from './../shared/shared.module';
-import { InventoryActions } from './actions/inventory.actions';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { InventoryRoutingModule } from './inventory.routing.module';
 import { InventoryComponent } from './inventory.component';
 import { InventoryHearderComponent } from './components/header-components/inventory-header-component';

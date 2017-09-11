@@ -43,7 +43,6 @@ import * as _ from 'lodash'
  *
  */
 // support NodeJS modules without type definitions
-import * as jsPDF from 'jspdf';
 
 declare module '*';
 
@@ -150,13 +149,7 @@ interface NodeModule extends WebpackModule {
 interface Global extends GlobalEnvironment {
 }
 
-export module L {
-  export interface JsPDFAutoTable extends jsPDF {
-    autoTable(column: any, rows: any, options?: any);
 
-    autoTableEndPosY();
-  }
-}
 
 
 
