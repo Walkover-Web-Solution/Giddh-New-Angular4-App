@@ -12,6 +12,7 @@ import {
   AccountDetails,
   BalanceSheetRequest,
   ProfitLossRequest,
+  TrialBalanceExportExcelRequest,
   TrialBalanceRequest
 } from '../../models/api-models/tb-pl-bs';
 

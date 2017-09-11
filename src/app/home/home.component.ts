@@ -5,7 +5,6 @@ import { RevenueChartComponent } from './components/revenue/revenue-chart.compon
 import { ExpensesChartComponent } from './components/expenses/expenses-chart.component';
 import { LiveAccountsComponent } from './components/live-accounts/live-accounts.component';
 import { Store } from '@ngrx/store';
-import { HomeActions } from './actions/home.actions';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
