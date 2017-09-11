@@ -1,9 +1,7 @@
 import { SharedModule } from '../shared/shared.module';
-import { HomeActions } from './actions/home.actions';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
-import { RouterModule } from '@angular/router';
 import { HomeRoutingModule } from './home.routing.module';
 import { HomeComponent } from './home.component';
 import { LiveAccountsComponent } from './components/live-accounts/live-accounts.component';

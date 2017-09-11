@@ -1,18 +1,10 @@
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 /**
  * Angular 2 decorators and services
  */
-import {
-  Component,
-  OnInit,
-  ViewEncapsulation,
-  AfterViewInit
-} from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Location } from '@angular/common';
 
-import { Observable } from 'rxjs/Observable';
-
-import { HomeState, HomeActions } from './services';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
 

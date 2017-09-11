@@ -7,10 +7,9 @@ import { Store } from '@ngrx/store';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
-import { L } from '../../../../custom-typings';
 import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
-import JsPDFAutoTable = L.JsPDFAutoTable;
+import { JsPDFAutoTable } from '../../../../customTypes/jsPDF/index';
 
 interface GroupViewModel {
   credit: number;
@@ -45,6 +44,8 @@ interface GroupViewModel {
   providers: [RecTypePipe]
 })
 export class TbExportPdfComponent implements OnInit, OnDestroy {
+
+
   @Input() selectedCompany: ComapnyResponse;
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
@@ -61,8 +62,30 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
   }
 
   public downloadPdf(value: string) {
-    this.showpdf = false;
+    switch (value) {
+      case 'group-wise':
+        this.downloadPdfGroupWise();
+        break;
+      case 'condensed':
+        this.downloadPdfCondensed();
+        break;
+      case 'account-wise':
+        this.downloadPdfAccountWise();
+        break;
+    }
+    return false;
+  }
 
+  public ngOnInit() {
+    //
+  }
+
+  public ngOnDestroy() {
+    //
+  }
+
+  private downloadPdfGroupWise() {
+    this.showpdf = false;
     let pdf = <JsPDFAutoTable> new jsPDF('p', 'pt');
     let columns = [
       {
@@ -109,6 +132,11 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
       margin: {
         top: 110
       },
+      drawCell: (cell, data) => {
+        if (data.column.name === 'name') {
+          console.log(cell, data);
+        }
+      },
       addPageContent: () => {
         pdf.setFontSize(16);
         pdf.text(40, 50, this.selectedCompany.name);
@@ -130,16 +158,17 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     pdf.text(footerX + 430, lastY + 20, total.cb.toFixed(2));
     // Save the PDF
     pdf.save('Test.pdf');
-    return false;
   }
 
+  private downloadPdfCondensed() {
 
-  public ngOnInit() {
-    //
   }
 
-  public ngOnDestroy() {
-    //
+  private createPdf(rows: any, cols: any): void {
+
   }
 
+  private downloadPdfAccountWise(): void {
+    throw new Error("Method not implemented.");
+  }
 }

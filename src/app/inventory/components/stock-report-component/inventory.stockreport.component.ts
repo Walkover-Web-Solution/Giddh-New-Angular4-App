@@ -1,15 +1,14 @@
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { StockDetailResponse, StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
+import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../services/actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { InventoryStockReportVM } from './inventory-stock-report.view-model';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';

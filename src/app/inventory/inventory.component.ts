@@ -1,15 +1,6 @@
-import { CompanyRequest } from './../models/api-models/Company';
-import { CompanyActions } from './../services/actions/company.actions';
-import { Actions } from '@ngrx/effects';
-
 import { Store } from '@ngrx/store';
-import { HomeActions } from './actions/home.actions';
 import { AppState } from '../store/roots';
-import {
-  Component,
-  OnInit,
-  OnDestroy
-} from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InventoryAction } from '../services/actions/inventory/inventory.actions';
 
 @Component({

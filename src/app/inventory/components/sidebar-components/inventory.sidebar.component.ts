@@ -3,8 +3,7 @@ import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { Component, OnDestroy, OnInit, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

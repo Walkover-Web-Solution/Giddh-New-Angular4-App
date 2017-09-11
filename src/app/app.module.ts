@@ -16,7 +16,6 @@ import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 import { rootReducer } from './store';
 // App is our top level component
-import { Configuration } from './app.constant';
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
