@@ -349,7 +349,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public setToday() {
-    this.manufacturingDetails.date = String(new Date());
+    this.manufacturingDetails.date = String(moment());
   }
 
   public clearDate() {
