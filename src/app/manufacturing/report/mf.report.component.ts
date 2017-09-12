@@ -54,7 +54,7 @@ export class MfReportComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.initlizeSerachReqObj();
+    this.initializeSearchReqObj();
     // Refresh the stock list
     this.store.dispatch(this.inventoryAction.GetStock());
 
@@ -85,7 +85,7 @@ export class MfReportComponent implements OnInit {
     });
   }
 
-  public initlizeSerachReqObj() {
+  public initializeSearchReqObj() {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
@@ -106,7 +106,7 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.to = moment(this.mfStockSearchRequest.to).format('DD-MM-YYYY');
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
     this.mfStockSearchRequest = new MfStockSearchRequestClass();
-    this.initlizeSerachReqObj();
+    this.initializeSearchReqObj();
   }
 
   public pageChanged(event: any): void {

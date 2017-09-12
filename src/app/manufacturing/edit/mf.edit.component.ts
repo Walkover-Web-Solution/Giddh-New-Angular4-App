@@ -53,7 +53,7 @@ export class MfEditComponent implements OnInit {
     private _inventoryService: InventoryService,
     private _accountService: AccountService) {
     this.manufacturingDetails = new ManufacturingItemRequest();
-    this.initalizeOtherExpenseObj();
+    this.initializeOtherExpenseObj();
     // Update/Delete condition
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (o.stockToUpdate) {
@@ -154,7 +154,7 @@ export class MfEditComponent implements OnInit {
     }
   }
 
-  public initalizeOtherExpenseObj() {
+  public initializeOtherExpenseObj() {
     this.otherExpenses.baseAccountUniqueName = '';
     this.otherExpenses.transactionAccountUniqueName = '';
   }
@@ -223,7 +223,7 @@ export class MfEditComponent implements OnInit {
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};
-    this.initalizeOtherExpenseObj();
+    this.initializeOtherExpenseObj();
   }
 
   public removeExpenseItem(indx) {
@@ -293,7 +293,7 @@ export class MfEditComponent implements OnInit {
     this.manufacturingConfirmationModal.hide();
   }
 
-  public getCalculatredAmount(quantity, rate) {
+  public getCalculatedAmount(quantity, rate) {
     if (quantity.model && rate.model) {
       let amount = quantity.model * rate.model;
       this.linkedStocks.amount = amount;
