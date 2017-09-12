@@ -12,7 +12,6 @@ export class UserAuthenticated implements CanActivate {
   public canActivate() {
     this.store.takeLast(1).subscribe(s => {
       if (s.session.user) {
-        debugger;
         this.user = s.session.user;
       }
     });
