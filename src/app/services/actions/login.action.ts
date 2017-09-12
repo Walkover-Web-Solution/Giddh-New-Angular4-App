@@ -14,7 +14,7 @@ import {
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
-
+import { go, replace, search, show, back, forward } from '@ngrx/router-store';
 @Injectable()
 export class LoginActions {
 
@@ -118,13 +118,14 @@ export class LoginActions {
           cmpUniqueName = s;
         }
       });
+      debugger;
       this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
       this.store.dispatch(this.comapnyActions.RefreshCompanies());
       console.log('login success to dummy Login Action');
-      this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
-        console.log('login success to home Login Action');
-        this._router.navigate(['/pages/home']);
-      });
+      // this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
+      // console.log('login success to home Login Action');
+      go(['/pages/home']);
+      // });
       return { type: '' };
     });
 
@@ -137,6 +138,8 @@ export class LoginActions {
       //   console.log('logout success to home Login Action');
       //   this._router.navigate(['/login']);
       // });
+      debugger;
+      go(['/login']);
       return { type: '' };
     });
 

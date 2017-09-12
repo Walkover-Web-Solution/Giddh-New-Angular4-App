@@ -10,8 +10,9 @@ export class UserAuthenticated implements CanActivate {
   constructor(public _router: Router, private store: Store<AppState>) {
   }
   public canActivate() {
-    this.store.take(1).subscribe(s => {
+    this.store.takeLast(1).subscribe(s => {
       if (s.session.user) {
+        debugger;
         this.user = s.session.user;
       }
     });
