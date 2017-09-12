@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { Router, NavigationStart } from '@angular/router';
-import { Location } from '@angular/common';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import * as _ from 'lodash';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../store/roots';
+import { CompanyActions } from '../services/actions/company.actions';
+import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({
   styles: [`
@@ -27,10 +26,20 @@ import * as _ from 'lodash';
   `],
   templateUrl: './invoice.component.html'
 })
-export class InvoiceComponent {
-  constructor(
-    private router: Router,
-    private location: Location
-  ) { }
+export class InvoiceComponent implements OnInit {
+  constructor(private store: Store<AppState>,
+    private companyActions: CompanyActions
+  ) {
+    //
+   }
 
+  public ngOnInit() {
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'invoice';
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+  }
 }
