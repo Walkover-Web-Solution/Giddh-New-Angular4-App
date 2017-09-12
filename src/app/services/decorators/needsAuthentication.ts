@@ -6,7 +6,7 @@ import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
-import { BaseResponse } from "../../models/api-models/BaseResponse";
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 @Injectable()
 export class NeedsAuthentication implements CanActivate {
@@ -24,7 +24,7 @@ export class NeedsAuthentication implements CanActivate {
     if (this.user && this.user.session && this.user.session.id) {
 
       let cmpUniqueName = '';
-      this.store.select(s => s.session.companyUniqueName).take(1).subscribe(s => {
+      this.store.select(s => s.session.companyUniqueName).subscribe(s => {
         if (s) {
           cmpUniqueName = s;
         }
@@ -81,7 +81,6 @@ export class NeedsAuthentication implements CanActivate {
               this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
                 this._router.navigate(['/new-user']);
               });
-              // this._router.navigate(['/new-user']);
               return false;
             }
           });
