@@ -4,7 +4,7 @@
 
 import {
   Input, EventEmitter, Output, OnInit, OnChanges,
-  SimpleChanges, Component
+  SimpleChanges, Component, ViewChild
 } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -13,6 +13,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
 import { ISection, GetInvoiceTemplateDetailsResponse } from '../../../models/api-models/Invoice';
 import * as _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'edit-invoice',
@@ -21,8 +22,11 @@ import * as _ from 'lodash';
 })
 
 export class EditInvoiceComponent implements OnInit {
+
+  @ViewChild('templateModal') public templateModal: ModalDirective;
+
   public templateId: string = 'common_template_a';
-  public heading: string = 'Walkover Web Soluitons';
+  public heading: string = 'Walkover Web Solutions';
   public template: GetInvoiceTemplateDetailsResponse[];
   public currentTemplate: any;
   public currentTemplateSections: ISection[];
@@ -60,6 +64,20 @@ export class EditInvoiceComponent implements OnInit {
   }
   public ngOnInit() {
     // TODO: Fetch current template object and bind to template component
+  }
+
+  /**
+   * onOpenTemplateModal
+   */
+  public onOpenTemplateModal() {
+    this.templateModal.show();
+  }
+
+  /**
+   * onCloseTemplateModal
+   */
+  public onCloseTemplateModal() {
+    this.templateModal.hide();
   }
 
 }
