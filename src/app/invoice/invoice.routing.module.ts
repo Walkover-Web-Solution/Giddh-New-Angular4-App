@@ -27,6 +27,7 @@ import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confir
 import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
+import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -56,7 +57,8 @@ const INVOICE_ROUTES: Routes = [
     DeleteInvoiceConfirmationModelComponent,
     PerformActionOnInvoiceModelComponent,
     InvoiceGenerateModelComponent,
-    DownloadOrSendInvoiceOnMailComponent
+    DownloadOrSendInvoiceOnMailComponent,
+    InvoiceTemplateModalComponent
   ],
   imports: [
     FormsModule,
