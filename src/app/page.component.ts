@@ -51,9 +51,9 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public ngAfterViewInit() {
-    if (this.location.path() === '/pages') {
-      this.router.navigate(['/pages', 'home']);
-    }
+    // if (this.location.path() === '/pages') {
+    //   this.router.navigate(['/pages', 'home']);
+    // }
   }
 
   public ngOnDestroy(): void {

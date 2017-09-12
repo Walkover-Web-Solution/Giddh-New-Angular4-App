@@ -29,10 +29,17 @@ export interface AuthenticationState {
   user?: VerifyEmailResponseModel;                   // current user | null
 }
 
+export enum userLoginStateEnum {
+  notLoggedIn,
+  userLoggedIn,
+  newUserLoggedIn
+}
+
 export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
   companyUniqueName: string;                   // current user | null
+  userLoginState: userLoginStateEnum;
 }
 
 /**
@@ -56,7 +63,8 @@ const initialState = {
 const sessionInitialState = {
   user: null,
   lastState: '',
-  companyUniqueName: ''
+  companyUniqueName: '',
+  userLoginState: userLoginStateEnum.notLoggedIn
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -196,7 +204,8 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return Object.assign({}, state, {
         user: null,
         companyUniqueName: '',
-        lastState: ''
+        lastState: '',
+        userLoginState: 0
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
@@ -220,6 +229,11 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       let newState = _.cloneDeep(state);
       newState.user.user.mobileNo = action.payload;
       return newState;
+    case LoginActions.SetLoginStatus: {
+      return Object.assign({}, state, {
+        userLoginState: action.payload
+      });
+    }
     default:
       return state;
   }

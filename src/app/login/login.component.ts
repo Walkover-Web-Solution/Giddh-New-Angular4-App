@@ -73,14 +73,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       return state.login.isVerifyEmailSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
       }
     });
     store.select(state => {
       return state.login.isVerifyMobileSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
       }
     });
   }
