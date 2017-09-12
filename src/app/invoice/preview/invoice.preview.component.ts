@@ -17,7 +17,7 @@ import { Select2OptionData } from '../../shared/theme/select2/select2.interface'
 import { ModalDirective } from 'ngx-bootstrap';
 
 const COUNTS = [12, 25, 50, 100];
-const COMPARISION_FILTER = [
+const COMPARISON_FILTER = [
   { name: 'Greater Than', uniqueName: 'greaterThan' },
   { name: 'Less Than', uniqueName: 'lessThan' },
   { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
@@ -38,7 +38,7 @@ export class InvoicePreviewComponent implements OnInit {
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public invoiceData: GetAllInvoicesPaginatedResponse;
-  public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
+  public filtersForEntryTotal: INameUniqueName[] = COMPARISON_FILTER;
   public counts: number[] = COUNTS;
   public accounts$: Observable<Select2OptionData[]>;
   public select2Options: Select2Options = {
@@ -175,17 +175,17 @@ export class InvoicePreviewComponent implements OnInit {
     if (o.description) {
       model.description = o.description;
     }
-    if (o.entryTotalBy === COMPARISION_FILTER[0].uniqueName) {
+    if (o.entryTotalBy === COMPARISON_FILTER[0].uniqueName) {
       model.totalIsMore = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[1].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[1].uniqueName) {
       model.totalIsLess = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[2].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[2].uniqueName) {
       model.totalIsMore = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[3].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[3].uniqueName) {
       model.totalIsLess = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[4].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[4].uniqueName) {
       model.totalIsEqual = true;
     }
     return model;

@@ -117,7 +117,7 @@
                 <td *ngIf="isUpdateCase">{{linkedStocks.manufacturingUnit || linkedStocks.stockUnitCode}}</td>-->
           
                 <td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
-                <td> {{ getCalculatredAmount(linkedStockQuantity, linkedStockRate) }} </td>
+                <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) }} </td>
                 <!--<td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>-->
 
                 <td class="action">
