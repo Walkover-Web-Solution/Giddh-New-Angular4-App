@@ -87,7 +87,7 @@ if (ENV === 'development') {
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules, enableTracing: true }),
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS,
   ],
