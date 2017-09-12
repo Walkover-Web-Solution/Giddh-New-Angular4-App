@@ -19,6 +19,8 @@ import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../services/actions/company.actions';
 
 @Component({
   selector: 'ledger',
@@ -97,7 +99,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
     private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService) {
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -208,6 +210,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.count = 15;
 
         this.lc.accountUnq = params['accountUniqueName'];
+        // set state details
+        let companyUniqueName = null;
+        this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
+        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         this.getTransactionData();
       }

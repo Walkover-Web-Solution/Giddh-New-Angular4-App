@@ -23,6 +23,8 @@ export const ROUTES: Routes = [
   { path: 'dummy', component: DummyComponent },
   { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
   { path: 'social-login-callback', component: SocialLoginCallbackComponent },
+  { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full', canActivate: [NeedsAuthentication]  },
+  { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full', canActivate: [NeedsAuthentication]  },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
