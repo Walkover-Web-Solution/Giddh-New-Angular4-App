@@ -193,6 +193,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
     case LoginActions.LogOut:
+      debugger;
       return Object.assign({}, state, {
         user: null,
         companyUniqueName: '',
