@@ -3,6 +3,10 @@ import {
   OnInit
 } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { AppState } from '../store/roots';
+import { Store } from '@ngrx/store';
+import { CompanyActions } from '../services/actions/company.actions';
 
 @Component({
   selector: 'about',
@@ -26,7 +30,7 @@ export class AboutComponent implements OnInit {
 
   public localState: any;
   constructor(
-    public route: ActivatedRoute
+    public route: ActivatedRoute, private store: Store<AppState>, private companyActions: CompanyActions
   ) { }
 
   public ngOnInit() {
@@ -39,7 +43,12 @@ export class AboutComponent implements OnInit {
         this.localState = data.yourData;
       });
 
-    console.log('hello `About` component');
+      let companyUniqueName = null;
+      this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+      let stateDetailsRequest = new StateDetailsRequest();
+      stateDetailsRequest.companyUniqueName = companyUniqueName;
+      stateDetailsRequest.lastState = 'about';
+      this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
     /**
      * static data that is bundled
      * var mockData = require('assets/mock-data/mock-data.json');

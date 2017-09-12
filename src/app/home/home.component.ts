@@ -8,6 +8,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../services/actions/company.actions';
 
 @Component({
   selector: 'home',  // <home></home>
@@ -22,12 +24,18 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('history') public history: HistoryChartComponent;
   @ViewChild('networth') public networth: NetworthChartComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
     //
   }
 
   public ngOnInit() {
-    console.log('hello `Home` component');
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'home';
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
   public hardRefresh() {
