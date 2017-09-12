@@ -41,6 +41,9 @@ export class InvoicePreviewComponent implements OnInit {
   public filtersForEntryTotal: INameUniqueName[] = COMPARISON_FILTER;
   public counts: number[] = COUNTS;
   public accounts$: Observable<Select2OptionData[]>;
+  public moment = moment;
+  public showFromDatePicker: boolean  = false;
+  public showToDatePicker: boolean = false;
   public select2Options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -67,8 +70,8 @@ export class InvoicePreviewComponent implements OnInit {
 
   public ngOnInit() {
     // set initial values
-    this.invoiceSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    this.invoiceSearchRequest.to = moment().format('DD-MM-YYYY');
+    this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
+    this.invoiceSearchRequest.to = String(moment());
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 12;
 
@@ -159,6 +162,14 @@ export class InvoicePreviewComponent implements OnInit {
     this.downloadOrSendMailModel.hide();
   }
 
+  public setToday(model: string) {
+    this.invoiceSearchRequest[model] = String(moment());
+  }
+
+  public clearDate(model: string) {
+    this.invoiceSearchRequest[model] = '';
+  }
+
   private getInvoices() {
     this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi()));
   }
@@ -194,8 +205,8 @@ export class InvoicePreviewComponent implements OnInit {
   private prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
     return {
-      from: o.from,
-      to: o.to,
+      from: moment(o.from).format('DD-MM-YYYY'),
+      to: moment(o.to).format('DD-MM-YYYY'),
       count: o.count,
       page: o.page
     };
