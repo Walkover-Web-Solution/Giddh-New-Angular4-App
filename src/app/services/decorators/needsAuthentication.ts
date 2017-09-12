@@ -68,10 +68,13 @@ export class NeedsAuthentication implements CanActivate {
           return this._companyService.CompanyList().toPromise().then(cmp => {
             if (cmp.body.length > 0) {
               // Set first company as acctive call Set StateDetail API
-              let stateDetails = new StateDetailsRequest();
-              stateDetails.companyUniqueName = cmp.body[0].uniqueName;
-              stateDetails.lastState = 'company.content.ledgerContent@giddh';
-              this.store.dispatch(this.companyActions.SetStateDetails(stateDetails));
+              let respState = new BaseResponse<StateDetailsResponse, string>();
+              respState.body = new StateDetailsResponse();
+              respState.body.companyUniqueName = cmp.body[0].uniqueName;
+              respState.body.lastState = 'company.content.ledgerContent@giddh';
+              respState.status = 'success';
+              respState.request = '';
+              this.store.dispatch(this.companyActions.GetStateDetailsResponse(respState));
               return true;
             } else {
               // Navigate to new-user for adding new comapny
