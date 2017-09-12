@@ -15,6 +15,9 @@ import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
 import { go, replace, search, show, back, forward } from '@ngrx/router-store';
+import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
+import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
+import { CompanyService } from '../companyService.service';
 @Injectable()
 export class LoginActions {
 
@@ -33,6 +36,7 @@ export class LoginActions {
   public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
+  public static SetLoginStatus = 'SetLoginStatus';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -111,21 +115,48 @@ export class LoginActions {
   @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
-    .map(action => {
+    .switchMap((action) => {
+      let stateDetail$ = this._companyService.getStateDetailsAuthGuard('');
+      let companies$ = this._companyService.CompanyList();
+      return Observable.forkJoin(stateDetail$, companies$);
+    }).map((results: any[]) => {
       let cmpUniqueName = '';
-      this.store.select(s => s.session.companyUniqueName).take(1).subscribe(s => {
-        if (s) {
-          cmpUniqueName = s;
+      let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
+      let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
+      this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+      if (companies.body.length === 0) {
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+        this.store.dispatch(go(['pages/new-user']));
+      } else {
+        if (stateDetail.body) {
+          cmpUniqueName = stateDetail.body.companyUniqueName;
+          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
+            this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
+            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+            this.store.dispatch(go(['pages/home']));
+          } else {
+            let respState = new BaseResponse<StateDetailsResponse, string>();
+            respState.body = new StateDetailsResponse();
+            respState.body.companyUniqueName = companies.body[0].uniqueName;
+            respState.body.lastState = 'company.content.ledgerContent@giddh';
+            respState.status = 'success';
+            respState.request = '';
+            this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
+            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+            this.store.dispatch(go(['pages/home']));
+          }
+        } else {
+          let respState = new BaseResponse<StateDetailsResponse, string>();
+          respState.body = new StateDetailsResponse();
+          respState.body.companyUniqueName = companies.body[0].uniqueName;
+          respState.body.lastState = 'company.content.ledgerContent@giddh';
+          respState.status = 'success';
+          respState.request = '';
+          this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
+          this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+          this.store.dispatch(go(['pages/home']));
         }
-      });
-      debugger;
-      this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
-      this.store.dispatch(this.comapnyActions.RefreshCompanies());
-      console.log('login success to dummy Login Action');
-      // this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
-      // console.log('login success to home Login Action');
-      go(['/pages/home']);
-      // });
+      }
       return { type: '' };
     });
 
@@ -138,8 +169,8 @@ export class LoginActions {
       //   console.log('logout success to home Login Action');
       //   this._router.navigate(['/login']);
       // });
-      debugger;
-      go(['/login']);
+      // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.notLoggedIn));
+      this.store.dispatch(go(['/login']));
       return { type: '' };
     });
 
@@ -167,7 +198,8 @@ export class LoginActions {
     private auth: AuthenticationService,
     public _toaster: ToasterService,
     private store: Store<AppState>,
-    private comapnyActions: CompanyActions
+    private comapnyActions: CompanyActions,
+    private _companyService: CompanyService
   ) { }
   public SignupWithEmailRequest(value: string): Action {
     return {
@@ -242,6 +274,13 @@ export class LoginActions {
   public LogOut(): Action {
     return {
       type: LoginActions.LogOut
+    };
+  }
+
+  public SetLoginStatus(value: userLoginStateEnum): Action {
+    return {
+      type: LoginActions.SetLoginStatus,
+      payload: value
     };
   }
 }
