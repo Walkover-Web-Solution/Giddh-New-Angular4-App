@@ -24,3 +24,15 @@ export interface InvoiceWebhooks {
     uniqueName?: string;
     url: string;
 }
+
+export class EmailSettingObjDefinition {
+  public isEmailTabSelected: boolean;
+  public subject?: string = '';
+  public form: string = 'abcd@walkover.in';
+  public body?: string = `Here’s your invoice! We appreciate your prompt payment.
+Thanks for your business!
+Walkover Test11343`;
+  public useGreeting?: boolean;
+  public greeting?: string;
+  public username?: string;
+}

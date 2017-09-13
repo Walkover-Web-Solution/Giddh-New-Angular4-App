@@ -10,6 +10,7 @@ import { AppState } from '../../../../../store/roots';
 import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
+
 @Component({
   selector: 'design-filters',
   templateUrl: 'design.filters.component.html',
@@ -56,6 +57,7 @@ export class DesignFiltersContainerComponent {
     this.currentColor = '#000000';
     this.logoSize = '140';
     this._invoiceUiDataService.setLogoSize(this.logoSize);
+    this._invoiceUiDataService.updateEmailSettingObj({ isEmailTabSelected: false });
   }
 
   public selectTemplate() {

@@ -244,7 +244,7 @@
         /*footer*/
         
         #default footer {
-            border-top: 2px solid #df4927;
+            border-top: 2px solid;
             padding: 15px 0;
             margin: 8px 0 0;
             background: #fff;
@@ -334,7 +334,10 @@
         /* common template css  */
         
         .disabled-area {
-            position: relative
+            position: relative;
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
         }
         
         .disabled-area:after {
@@ -410,6 +413,11 @@
                                             <td><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceNo]">{{this.templateMeta.invoiceNumber}}</strong></td>
                                             <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableInvoiceNo]">201770323-64</td>
                                         </tr>
+                                        <tr>
+                                            <td><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{this.templateMeta.dueDate}}</strong></td>
+                                            <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">30/06/2017</td>
+                                        </tr>
+
                                     </tbody>
                                 </table>
                             </td>
@@ -451,10 +459,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
-                            <p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{this.templateMeta.dueDate}}</strong></p>
-                            <p>30/06/2017</p>
-                        </td>
+                        <td>&nbsp;</td>
                         <td [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableBillingGstin]">
                             <p><strong>{{this.templateMeta.billingGstin}}</strong></p>
                             <p>22BBBBBB000A1Z0</p>
@@ -607,7 +612,7 @@
                 </table>
 
             </aside>
-            <footer style="text-align: center;" [ngStyle]="{ 'border-color': color}" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyAddress]">
+            <footer style="text-align: center;" [ngStyle]="{ 'border-color': color,'border-color': templateMeta.color}" [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableCompanyAddress]">
                 {{this.templateMeta.address}}
             </footer>
         </div>
