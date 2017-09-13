@@ -53,7 +53,7 @@
                </span>
                 </div>
                 <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                    <datepicker name="fromDate" [(ngModel)]="newTaxObj.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
+                    <datepicker name="fromDate" [(ngModel)]="newTaxObj.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
                 </div>
             </div>
             <div class="form-group col-xs-3">

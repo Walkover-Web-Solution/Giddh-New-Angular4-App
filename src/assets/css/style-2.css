@@ -1393,9 +1393,9 @@ footer small a {
 }
 
 .form-theme {
-    background: #f5f5f5;
+    background: #f4f5f8;
     padding: 20px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid #f4f5f8;
 }
 
 .form-theme .form-control {
@@ -1599,6 +1599,7 @@ a.btn.btn-xs.btn-link.pull-right {
     height: 200px;
     overflow-y: scroll;
     width: 100%;
+    padding-left: 2px;
 }
 
 .fb__1-container {
@@ -2094,12 +2095,6 @@ select.form-control {
 
 .addStockTbl .form-control {
     background-color: #fff !important;
-}
-
-.linkstock {
-    height: 200px;
-    overflow-y: scroll;
-    padding-left: 30px;
 }
 
 .linkStockTbl {
@@ -2802,18 +2797,12 @@ label {
 }
 
 #manufacture .form-theme tbody tr td {
-    padding: 12px 0;
+    padding: 7px 0;
     color: #525252;
 }
 
 #manufacture .form-theme tbody tr td:nth-child(1) {
-    padding-left: 20px;
-}
-
-#manufacture .form-theme tbody tr td:last-child {
-    position: relative;
-    top: -8px;
-    right: -8px;
+    padding-left: 10px;
 }
 
 #manufacture select {
@@ -2822,13 +2811,11 @@ label {
 
 #manufacture .form-theme tbody tr td select,
 #manufacture .source tbody tr td select {
-    width: 170px;
+    min-width: 170px;
     display: inline-block;
     -webkit-appearance: none;
     -moz-appearance: none;
-    appearance: none;
     padding: 0 20px 0 7px !important;
-    background: transparent !important;
 }
 
 #manufacture .form-theme tbody tr td .select_drop,
@@ -2854,8 +2841,9 @@ label {
 }
 
 #manufacture .source .linkstock thead th,
-#manufacture .source .linkstock tfoot tr td {
+#manufacture .source .linkstock tfoot tr th {
     color: #333;
+    font-weight: 100;
 }
 
 #manufacture .source table thead th,
@@ -2870,7 +2858,7 @@ label {
 
 #manufacture .source table thead th,
 #manufacture .source .linkStockTbl>tbody>tr>td:first-child,
-#manufacture .source table tfoot td {
+#manufacture .source table tfoot th {
     padding: 10px 15px;
     font-size: 14px;
 }
@@ -3115,6 +3103,7 @@ label {
     -webkit-appearance: none;
     -webkit-border-radius: 0;
     border-radius: 0;
+    padding-right: 22px !important;
 }
 
 .custom-select .select_drop {
@@ -3157,6 +3146,8 @@ label {
 #manufacture .section_title {
     color: #616161;
     font-size: 20px;
+    line-height: 34px;
+    vertical-align: middle;
 }
 
 .select2-container--default .select2-selection--single {
@@ -3193,20 +3184,12 @@ label {
     background: none;
 }
 
-#manufacture .source tbody tr td .form-control {
-    background: transparent !important
-}
-
 .new-row td {
     padding: 3px 15px !important;
 }
 
 .table-hover tr:hover {
     cursor: pointer
-}
-
-#manufacture .form-theme tbody tr td select {
-    width: 43%;
 }
 
 .btn-group.open .dropdown-toggle {
@@ -3809,4 +3792,69 @@ input[type='checkbox'][disabled] {
 
 .ledger-panel .btn-danger {
     border: 1px solid red;
+}
+
+datepicker-inner .well table tbody tr td .btn-default {
+    padding: 0 4px;
+    border: 0;
+    background: none;
+}
+
+datepicker-inner .well {
+    background-color: #ffffff;
+    border-top: 0;
+    box-shadow: none;
+    margin: 0;
+}
+
+datepicker-inner .well table tbody:focus,
+daypicker:focus,
+datepicker:focus,
+datepicker-inner .well table thead tr th button {
+    outline: 0;
+}
+
+datepicker-inner .well table tbody .btn.active,
+datepicker-inner .well table tbody .btn:active {
+    background: #d25f29 !important;
+    box-shadow: none;
+}
+
+datepicker-inner .well table tbody .btn-default .text-info {
+    color: #d25f29;
+}
+
+datepicker-inner .well table tbody .btn.active .text-info,
+datepicker-inner .well table tbody .btn:active .text-info {
+    color: #fff !important;
+}
+
+datepicker-inner .well table thead tr th .btn-secondary {
+    background: transparent !important;
+    border: 0;
+}
+
+datepicker-inner .well table thead tr:nth-child(2) {
+    height: 35px;
+    vertical-align: middle;
+}
+
+datepicker-inner .well table tbody .btn-info .text-muted,
+datepicker-inner .well table tbody .btn-default.active {
+    color: #fff;
+}
+
+.my-dropdown-menu datepicker-inner .well {
+    border: 0;
+}
+
+.btn-xs {
+    padding: 1px 5px !important;
+}
+
+.calendar-dropdown {
+    /* box-shadow: none; */
+    border-color: #ddd;
+    margin-top: 1px;
+    border-radius: 2px;
 }
