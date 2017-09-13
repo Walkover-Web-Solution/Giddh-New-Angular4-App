@@ -38,7 +38,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.revenueChartData$ = this.store.select(p => p.home.revenueChart).takeUntil(this.destroyed$);
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
+    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -65,7 +65,8 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          this.refreshData();
+          debugger;
+          if (activeCmpUniqueName) { this.refreshData(); }
         }
       }
     });

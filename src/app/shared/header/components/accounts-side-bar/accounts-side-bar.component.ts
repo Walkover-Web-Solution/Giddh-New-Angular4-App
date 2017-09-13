@@ -42,7 +42,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
     this.isFlyAccountInProcess$ = this.store.select(s => s.flyAccounts.isFlyAccountInProcess).takeUntil(this.destroyed$);
 
     this.companyList$ = this.store.select(state => {
-      return state.company.companies;
+      return state.session.companies;
     }).takeUntil(this.destroyed$);
   }
 
