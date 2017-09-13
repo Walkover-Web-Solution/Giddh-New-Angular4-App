@@ -130,6 +130,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private purchaseInvoiceService: PurchaseInvoiceService,
     private accountService: AccountService
   ) {
+    this.selectedDateForGSTR1 = String(moment());
     console.log('Hi this is purchase invoice component');
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
       if (c) {
