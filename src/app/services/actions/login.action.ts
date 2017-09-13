@@ -2,7 +2,7 @@ import { VerifyMobileResponseModel, VerifyMobileModel, SignupWithMobileResponse,
 import { ToasterService } from '../toaster.service';
 import { AuthenticationService } from '../authentication.service';
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { Response, RequestOptionsArgs, Http } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
@@ -18,6 +18,7 @@ import { go, replace, search, show, back, forward } from '@ngrx/router-store';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
+import { Configuration } from "../../app.constant";
 @Injectable()
 export class LoginActions {
 
@@ -37,6 +38,8 @@ export class LoginActions {
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
   public static SetLoginStatus = 'SetLoginStatus';
+  public static GoogleLoginElectron = 'GoogleLoginElectron';
+  public static GoogleLoginElectronResponse = 'GoogleLoginElectronResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -50,6 +53,7 @@ export class LoginActions {
   public signupWithGoogleResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
     .map(action => {
+      debugger
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
@@ -87,6 +91,7 @@ export class LoginActions {
   public verifyEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailResponce)
     .map(action => {
+      debugger;
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
@@ -126,14 +131,16 @@ export class LoginActions {
       this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
       if (companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-        this.store.dispatch(go(['pages/new-user']));
+        return go(['/pages/new-user']);
       } else {
         if (stateDetail.body) {
           cmpUniqueName = stateDetail.body.companyUniqueName;
           if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            this.store.dispatch(go(['pages/inventory']));
+            // this.store.dispatch(replace(['/pages/home']));
+            debugger
+            return go(['/pages/home']);
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -143,7 +150,7 @@ export class LoginActions {
             respState.request = '';
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            this.store.dispatch(go(['pages/inventory']));
+            return go(['/pages/home']);
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -154,10 +161,10 @@ export class LoginActions {
           respState.request = '';
           this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-          this.store.dispatch(go(['pages/inventory']));
+          return go(['/pages/home']);
         }
       }
-      return { type: '' };
+      // return { type: '' };
     });
 
   @Effect()
@@ -192,6 +199,22 @@ export class LoginActions {
       }
       return this.LoginSuccess();
     });
+
+    @Effect()
+    public GoogleElectronLogin$: Observable<Action> = this.actions$
+      .ofType(LoginActions.GoogleLoginElectron)
+      .switchMap(action => {
+        return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
+      })
+      .map(data => {
+        debugger
+        if (data.status === 'error') {
+          this._toaster.errorToast(data.message, data.code);
+          return { type: '' };
+        }
+        // return this.LoginSuccess();
+        return this.signupWithGoogleResponse(data);
+      });
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -199,7 +222,8 @@ export class LoginActions {
     public _toaster: ToasterService,
     private store: Store<AppState>,
     private comapnyActions: CompanyActions,
-    private _companyService: CompanyService
+    private _companyService: CompanyService,
+    private http: Http
   ) { }
   public SignupWithEmailRequest(value: string): Action {
     return {
@@ -280,6 +304,13 @@ export class LoginActions {
   public SetLoginStatus(value: userLoginStateEnum): Action {
     return {
       type: LoginActions.SetLoginStatus,
+      payload: value
+    };
+  }
+
+  public GoogleElectronLogin(value: RequestOptionsArgs): Action {
+    return {
+      type: LoginActions.GoogleLoginElectron,
       payload: value
     };
   }
