@@ -28,6 +28,7 @@ import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_a
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
 import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
 import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
+import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -58,7 +59,8 @@ const INVOICE_ROUTES: Routes = [
     PerformActionOnInvoiceModelComponent,
     InvoiceGenerateModelComponent,
     DownloadOrSendInvoiceOnMailComponent,
-    InvoiceTemplateModalComponent
+    InvoiceTemplateModalComponent,
+    InvoiceEmailFilterComponent
   ],
   imports: [
     FormsModule,

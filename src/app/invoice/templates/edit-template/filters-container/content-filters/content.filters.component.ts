@@ -11,6 +11,7 @@ import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-upload
 import { Observable } from 'rxjs/Observable';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
+
 @Component({
   selector: 'content-selector',
   templateUrl: 'content.filters.component.html',
@@ -117,6 +118,7 @@ export class ContentFilterComponent {
         this.footer = val.footer;
       }
     });
+    this._invoiceUiDataService.updateEmailSettingObj({ isEmailTabSelected: false });
   }
 
   public showTemplate(id) {
