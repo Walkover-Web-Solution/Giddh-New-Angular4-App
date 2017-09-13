@@ -9,7 +9,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
+import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
 
 import { HttpWrapperService } from '../services/httpWrapper.service';
 import { Headers } from '@angular/http';
@@ -98,9 +98,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
 
     // get user object when google auth is complete
-    this.authService.authState.subscribe((user) => {
+    this.authService.authState.subscribe((user: SocialUser) => {
       if (user) {
-        this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+        console.log ('from inside', user);
+        switch (user.provider) {
+          case 'GOOGLE': {
+            this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+          }
+          case 'LINKEDIN': {
+            //
+          }
+          default:
+            // do something
+        }
       }
     });
   }
@@ -224,8 +234,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       //  web
       if (provider === 'google') {
         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-      } else {
-        // linkedin
+      } else if (provider === 'linkedin') {
+        this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
       }
     }
   }
