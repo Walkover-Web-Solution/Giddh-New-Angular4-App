@@ -16,20 +16,17 @@ import {
 } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
-import { GoogleLoginProvider } from 'ng4-social-login';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class AuthenticationService {
-  public GoogleProvider: GoogleLoginProvider;
-  private GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
+
   constructor(private errorHandler: ErrorHandler,
     public _Http: Http,
     public _http: HttpWrapperService,
     public _router: Router
   ) {
-    this.GoogleProvider = new GoogleLoginProvider(this.GOOGLE_CLIENT_ID);
-    this.GoogleProvider.initialize();
+
   }
 
   public SignupWithEmail(email: string): Observable<BaseResponse<string, string>> {
