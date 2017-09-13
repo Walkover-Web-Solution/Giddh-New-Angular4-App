@@ -136,7 +136,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.activeCompanyUniqueName = _.cloneDeep(c);
       }
     });
-    this.store.select(p => p.company.companies).takeUntil(this.destroyed$).subscribe((c) => {
+    this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((c) => {
       if (c.length) {
         let companies = this.companies = _.cloneDeep(c);
         if (this.activeCompanyUniqueName) {

@@ -85,19 +85,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }).takeUntil(this.destroyed$);
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
-      return state.company.isRefreshing;
+      return state.session.isRefreshing;
     }).takeUntil(this.destroyed$);
 
     this.companies$ = this.store.select(state => {
-      return _.orderBy(state.company.companies, 'name');
+      return _.orderBy(state.session.companies, 'name');
     }).takeUntil(this.destroyed$);
 
     this.selectedCompany = this.store.select(state => {
-      if (!state.company.companies) {
+      if (!state.session.companies) {
         return;
       }
 
-      let selectedCmp = state.company.companies.find(cmp => {
+      let selectedCmp = state.session.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
       if (!selectedCmp) {

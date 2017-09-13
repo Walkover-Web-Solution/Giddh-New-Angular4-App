@@ -133,28 +133,28 @@ export class LoginActions {
           if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            this.store.dispatch(go(['pages/home']));
+            this.store.dispatch(go(['pages/inventory']));
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
             respState.body.companyUniqueName = companies.body[0].uniqueName;
-            respState.body.lastState = 'company.content.ledgerContent@giddh';
+            respState.body.lastState = 'home';
             respState.status = 'success';
             respState.request = '';
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            this.store.dispatch(go(['pages/home']));
+            this.store.dispatch(go(['pages/inventory']));
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
           respState.body = new StateDetailsResponse();
           respState.body.companyUniqueName = companies.body[0].uniqueName;
-          respState.body.lastState = 'company.content.ledgerContent@giddh';
+          respState.body.lastState = 'home';
           respState.status = 'success';
           respState.request = '';
           this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-          this.store.dispatch(go(['pages/home']));
+          this.store.dispatch(go(['pages/inventory']));
         }
       }
       return { type: '' };

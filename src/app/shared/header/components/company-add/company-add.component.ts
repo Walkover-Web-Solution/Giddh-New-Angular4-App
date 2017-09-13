@@ -45,16 +45,16 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.companies$ = this.store.select(s => s.company.companies).takeUntil(this.destroyed$);
+    this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
-    this.isCompanyCreationInProcess$ = this.store.select(s => s.company.isCompanyCreationInProcess).takeUntil(this.destroyed$);
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
 
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.mobileNo !== null;
       }
     }).takeUntil(this.destroyed$);
-    this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated).takeUntil(this.destroyed$);
+    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
     this.dataSource = Observable
       .create((observer: any) => {
         this._location.GetCity({
@@ -82,7 +82,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       }
     });
     // this.store
-    //   .select(c => c.company.companies).takeUntil(this.destroyed$)
+    //   .select(c => c.session.companies).takeUntil(this.destroyed$)
     //   .subscribe(p => {
     //     if (p && p.find(c => c.name === this.company.name) !== undefined) {
     //       this.company = new CompanyRequest();
