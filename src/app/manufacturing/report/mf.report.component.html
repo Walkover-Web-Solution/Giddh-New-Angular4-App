@@ -1,156 +1,157 @@
-<section id="manufacture" class="container-fluid">
-    <div class="row">
-        <!-- page Title -->
-        <div class="col-xs-12 bdrB">
-            <div class="row mrL3 mrR3 pd1 pdL0">
-                <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
-                <button class="btn btn-success pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
-            </div>
-        </div>
-        <!-- form -->
+<section id="manufacture" class="clearfix">
+    <!-- page Title -->
+    <div class="top_bar col-xs-12 clearfix bdrB">
+        <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
+        <button class="btn btn-default pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
+    </div>
+    <!-- form -->
+    <div class="col-xs-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="col-xs-12" (submit)="getReports()" autocomplete="off">
-                <div class="row mrL3 mrR3 pd1 pdL0 pdB0">
-                    <div class="form-group col-xs-1 custom-select pos-rel">
-                        <div class="row">
-                            <label class="small">Final Product</label>
-                            <select class="form-control" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product">
-               <option value="">Select Product</option>
-               <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option>
-               </select>
+            <form #mfStockSearchRequestForm="ngForm" class="form-inline mrT2 mrB2" (submit)="getReports()" autocomplete="off">
+                <div class="">
+                    <div class="form-group">
+                        <label class="d-block">Final Product</label>
+                        <div class="custom-select pos-rel">
+                            <select class="form-control cp" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product">
+                                <option value="">--Select Product--</option>
+                                <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option>
+                            </select>
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                         </div>
                     </div>
-                    <div class="form-group col-xs-2" (clickOutside)="showFromDatePicker=false;">
-                        <small>From Date</small>
+                    <div class="form-group" (clickOutside)="showFromDatePicker=false;">
+                        <label class="d-block">From Date</label>
                         <div class="input-group">
                             <input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
                             <span class="input-group-btn">
-                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-                </button>
-            </span>
+                                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
+                                    <i class="glyphicon glyphicon-calendar"></i>
+                                </button>
+                            </span>
                         </div>
-
-                        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                            <ul class="my-dropdown-menu">
+                        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;" placement="right">
+                            <ul class="my-dropdown-menu calendar-dropdown">
                                 <li>
                                     <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="mfStockSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
                                 </li>
-                                <li style="padding:10px 9px 2px" class="ng-scope">
+                                <li class="pd1 clearfix pdT pdB">
                                     <span class="btn-group pull-left">
-			              <button type="button" class="btn btn-sm btn-info" (click)="setToday('from');showFromDatePicker = false;">Today</button>
-			              <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('from');showFromDatePicker = false;">Clear</button></span>
-                                    <button type="button" class="btn btn-sm btn-success pull-right" (click)="showFromDatePicker = false">Done</button>
+                                        <button type="button" class="btn btn-xs btn-primary mrR" (click)="setToday('from');showFromDatePicker = false;">Today</button>
+                                        <button type="button" class="btn btn-xs btn-success" (click)="showFromDatePicker = false">Done</button>
+                                    </span>
+                                    <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate('from');showFromDatePicker = false;">Clear</button>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="form-group col-xs-2" (clickOutside)="showToDatePicker=false;">
-                        <small>To Date</small>
+                    <div class="form-group" (clickOutside)="showToDatePicker=false;">
+                        <label class="d-block">To Date</label>
                         <div class="input-group">
                             <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;" class="form-control" required/>
                             <span class="input-group-btn">
-                <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-                </button>
-            </span>
+                  <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
+                  <i class="glyphicon glyphicon-calendar"></i>
+                  </button>
+                  </span>
                         </div>
                         <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                            <ul class="my-dropdown-menu">
+                            <ul class="my-dropdown-menu calendar-dropdown">
                                 <li>
                                     <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="mfStockSearchRequest.to" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
                                 </li>
-                                <li style="padding:10px 9px 2px" class="ng-scope">
+                                <li class="pd1 clearfix pdT pdB">
                                     <span class="btn-group pull-left">
-			              <button type="button" class="btn btn-sm btn-info" (click)="setToday('to');showToDatePicker = false;">Today</button>
-			              <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('to');showToDatePicker = false;">Clear</button></span>
-                                    <button type="button" class="btn btn-sm btn-success pull-right" (click)="showToDatePicker = false">Done</button>
+                                        <button type="button" class="btn btn-xs btn-primary mrR" (click)="setToday('to');showToDatePicker = false;">Today</button>
+                                        <button type="button" class="btn btn-xs btn-success" (click)="showToDatePicker = false">Done</button>
+                                    </span>
+                                    <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate('to');showToDatePicker = false;">Clear</button>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div class="form-group col-xs-1 pdR0 custom-select pos-rel">
-                        <label class="small">Search By</label>
-                        <select class="form-control" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
-               <option value="">--Select--</option>
-               <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-               </select>
-                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    <div class="form-group">
+                        <label class="d-block">Search By</label>
+                        <div class="custom-select pos-rel">
+                            <select class="form-control cp" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
+                                <option value="">--Select--</option>
+                                <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option>
+                            </select>
+                            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                        </div>
                     </div>
-                    <div class="form-group col-xs-2 pdR0 custom-select pos-rel">
-                        <label class="small">Operation</label>
-                        <select class="form-control" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation">
-               <option value="">--Select--</option>
-               <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-               </select>
-                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    <div class="form-group">
+                        <label class="d-block">Operation</label>
+                        <div class="custom-select pos-rel">
+                            <select class="form-control cp" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation">
+                                <option value="">--Select--</option>
+                                <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option>
+                            </select>
+                            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                        </div>
                     </div>
-                    <div class="form-group col-xs-1 pdR0">
-                        <label class="small">Value</label>
+                    <div class="form-group">
+                        <label class="d-block">Value</label>
                         <input type="text" #numberField="ngModel" pattern="^-?\d+(?:\.\d+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue" />
                         <p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>
                     </div>
-                    <div class="form-group col-xs-1">
-                        <label class="small">&nbsp;</label><br>
-                        <button class="btn btn-primary" type="submit" [disabled]="mfStockSearchRequestForm.invalid">Go</button>
+                    <div class="form-group">
+                        <label class="d-block">&nbsp;</label>
+                        <button class="btn btn-success" type="submit" [disabled]="mfStockSearchRequestForm.invalid">Go</button>
                     </div>
                 </div>
             </form>
         </div>
-        <!-- search form end -->
-        <section *ngIf="isReportLoading">
-            <p class="lead alC mrT4">Loading...</p>
-        </section>
-        <section *ngIf="!isReportLoading && reportData && reportData.results.length === 0">
-            <p class="lead alC mrT4">No result found!</p>
-        </section>
-        <section *ngIf="!isReportLoading && reportData && reportData.results.length > 0">
-            <div class="" id="mfReportTbl">
-                <div class="col-xs-12">
-                    <div class="table-responsive mrL3 mrR4">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr class="form_title">
-                                    <th width="15%">Date</th>
-                                    <th width="10%">Vch. No.</th>
-                                    <th width="15%">Final Product</th>
-                                    <th width="24%" class="alC">Raw Products</th>
-                                    <th width="12%" class="alC">Product Inwards</th>
-                                    <th width="24%" class="alC">Quantity Outwards</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)">
-                                    <td>{{item.date}}</td>
-                                    <td>{{item.voucherNumber}}</td>
-                                    <td>{{item.stockName}}</td>
-                                    <td colspan="3" class="">
-                                        <table class="table">
-                                            <tbody>
-                                                <tr>
-                                                    <td width="40%">&nbsp;</td>
-                                                    <td width="20%">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
-                                                    <td width="40%">&nbsp;</td>
-                                                </tr>
-                                                <tr *ngFor="let row of item.linkedStocks">
-                                                    <td>{{row.stockName}}</td>
-                                                    <td>&nbsp;</td>
-                                                    <td>{{row.manufacturingQuantity}} {{row.manufacturingUnit}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="alC">
-                <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
-                </pagination>
-            </div>
-        </section>
     </div>
+    <!-- search form end -->
+    <section *ngIf="isReportLoading" class="clearfix">
+        <p class="lead alC mrT4">Loading...</p>
+    </section>
+    <section *ngIf="!isReportLoading && reportData && reportData.results.length === 0" class="clearfix">
+        <p class="lead alC mrT4">No result found!</p>
+    </section>
+    <section *ngIf="!isReportLoading && reportData && reportData.results.length > 0">
+        <div class="" id="mfReportTbl">
+            <div class="col-xs-12">
+                <table class="table basic table-bordered">
+                    <thead>
+                        <tr>
+                            <th width="15%">Date</th>
+                            <th width="10%">Vch. No.</th>
+                            <th width="15%">Final Product</th>
+                            <th width="24%" class="alC">Raw Products</th>
+                            <th width="12%" class="alC">Product Inwards</th>
+                            <th width="24%" class="alC">Quantity Outwards</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of reportData.results" (dblclick)="editMFItem(item)" class="cp">
+                            <td>{{item.date}}</td>
+                            <td>{{item.voucherNumber}}</td>
+                            <td>{{item.stockName}}</td>
+                            <td colspan="3" class="">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td width="40%">&nbsp;</td>
+                                            <td width="20%">{{item.manufacturingQuantity}} {{item.manufacturingUnit}}</td>
+                                            <td width="40%">&nbsp;</td>
+                                        </tr>
+                                        <tr *ngFor="let row of item.linkedStocks">
+                                            <td>{{row.stockName}}</td>
+                                            <td>&nbsp;</td>
+                                            <td>{{row.manufacturingQuantity}} {{row.manufacturingUnit}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="alC">
+            <pagination [totalItems]="reportData.totalItems" [(ngModel)]="reportData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
+            </pagination>
+        </div>
+    </section>
 </section>
