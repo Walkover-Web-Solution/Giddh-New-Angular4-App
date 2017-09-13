@@ -64,7 +64,7 @@ export function highchartsFactory() {
 // social login injection
 import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider } from 'ng4-social-login';
 
-const SOCIAL_CONFIG = new AuthServiceConfig([
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
     provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
@@ -72,7 +72,7 @@ const SOCIAL_CONFIG = new AuthServiceConfig([
 ]);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG;
+  return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({

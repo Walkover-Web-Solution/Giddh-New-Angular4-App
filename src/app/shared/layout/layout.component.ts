@@ -8,12 +8,6 @@ import { Observable } from 'rxjs/Observable';
     `]
 })
 export class LayoutComponent implements OnInit, AfterViewInit {
-  public title: Observable<string>;
-  public languages: any[] = [{ name: 'ENGLISH', value: 'en' }, { name: 'DUTCH', value: 'nl' }];
-
-  /**
-   *
-   */
   // tslint:disable-next-line:no-empty
   constructor() { }
   // tslint:disable-next-line:no-empty
