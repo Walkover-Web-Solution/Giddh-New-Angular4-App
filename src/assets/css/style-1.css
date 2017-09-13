@@ -1466,11 +1466,6 @@ li:last-child .angular-ui-tree-handle {
     padding: 0 !important;
 }
 
-.dgreyBg td,
-.dgreyBg th {
-    background-color: #e6e6e6;
-}
-
 .greyBg td,
 .greyBg th {
     background-color: #f5f5f5;
