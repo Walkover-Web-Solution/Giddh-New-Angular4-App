@@ -77,5 +77,4 @@ export class EditFiltersContainersComponent implements OnInit {
   //   this.ifLogoSelected = false;
   //   this.ifTemplateSelected = false;
   // }
-
 }

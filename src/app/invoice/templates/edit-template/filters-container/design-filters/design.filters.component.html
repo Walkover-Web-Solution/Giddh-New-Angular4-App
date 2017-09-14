@@ -1,4 +1,4 @@
-<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design">
+<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design"  (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
 
 
     <div class="clearfix">
@@ -15,12 +15,13 @@
     <button type="button" class="start-upload-btn" (click)="startUpload()">
     Start Upload
   </button> {{imagePreview}} -->
-    <div class="clearfix">
-        <ul class="designTool">
+    <div class="clearfix" >
+      <ul class="designTool" >
             <li *ngIf="!ifTemplateSelected" (click)="selectTemplate()">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li *ngIf="ifTemplateSelected">
+              <i class="ico-template"></i> <label>Change up to template</label>
                 <!-- edit template  start -->
                 <div class="clearfix">
                     <ul class="templateView">
@@ -47,10 +48,11 @@
                 </div>
                 <!--<template-selector></template-selector>-->
             </li>
-            <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
+            <li *ngIf="!ifLogoSelected" (click)="selectLogo()" >
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
             <li [hidden]="!ifLogoSelected">
+              <i class="ico-edit"></i> <label>Make logo edit</label>
                 <!-- edit logo  start -->
                 <div class="clearfix">
                     <div class="logoTool">
@@ -62,7 +64,7 @@
                             <label for="logo-edit">
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
                             </label>
-                            
+
                         </span>
                         <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" [hidden]="!logoAttached">Start Upload</button>
                         <div class="pull-left mrL1 mrT1">
@@ -82,7 +84,9 @@
             <li *ngIf="!ifColorSelected" (click)="selectColor()">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
-            <li *ngIf="ifColorSelected">
+            <!--<li *ngIf="ifColorSelected">-->
+          <li [hidden]="!ifColorSelected">
+            <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
                 <div class="clearfix">
                     <div class="swatch text-center">
@@ -118,6 +122,7 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
             <li *ngIf="ifFontSelected">
+              <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="col-xs-9 font-selector">
                     <div class="row">
                         <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
@@ -132,6 +137,7 @@
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
             <li *ngIf="ifPrintSelected">
+              <i class="ico-print"></i> <label>Edit print setting</label>
                 <!-- edit print setting  start  -->
                 <div class="clearfix">
                     <div class="printTool pos-rel">
