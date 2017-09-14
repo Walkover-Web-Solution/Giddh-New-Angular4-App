@@ -184,7 +184,7 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   customField2: 'Field 2',
   customField3: 'Field 3',
   formNameInvoice: 'INVOICE',
-  formNameTaxInvoice: 'HI THIS IS THE TEXT INVOICE',
+  formNameTaxInvoice: 'INVOICE',
   sNoLabel: 'S no.',
   sNoWidth: 10,
   dateLabel: 'Date',
@@ -220,8 +220,8 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   otherDeduction: 'Other Deduction',
   total: 'Invoice Total',
   totalInWords: 'Invoice Total (In words)',
-  message1: 'sample message 1',
-  message2: 'sample message 2',
+  message1: 'NOTE 1',
+  message2: 'NOTE 2',
   thanks: 'Thank You for your business.',
   companyAddress: 'Walkover Web Solutions Private Limited, 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)',
   imageSignature: '',
@@ -361,7 +361,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.UPDATE_SHIPPING_GSTIN:
       return Object.assign({}, state, {
-        shippingGstin: action.payload.data
+        shippinGstin: action.payload.data
       });
     case INVOICE.TEMPLATE.UPDATE_BILLING_ADDRESS:
       return Object.assign({}, state, {
