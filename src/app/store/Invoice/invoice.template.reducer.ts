@@ -7,6 +7,7 @@ import {
   IsFieldVisible
 } from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 import * as _ from 'lodash';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 export interface InvoiceTemplateState {
   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
@@ -89,6 +90,8 @@ export interface InvoiceTemplateMetaState {
 
 export interface InvoiceTableState {
   theTestState: GetInvoiceTemplateDetailsResponse;
+  customCreatedTemplates: GetInvoiceTemplateDetailsResponse[];
+  isLoadingCustomCreatedTemplates: boolean;
 }
 
 export interface InvoiceTempState {
@@ -98,7 +101,9 @@ export interface InvoiceTempState {
 }
 
 export const initialTableState: InvoiceTableState = {
-  theTestState: null
+  theTestState: null,
+  customCreatedTemplates: null,
+  isLoadingCustomCreatedTemplates: false,
 };
 
 export function invoiceTableReducer(state = initialTableState, action: Action): InvoiceTableState {
@@ -116,6 +121,34 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
     //   return Object.assign({}, state, {
     //     heading: action.payload.data
     //   });
+    case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES: {
+      let nextState = _.cloneDeep(state);
+      nextState.isLoadingCustomCreatedTemplates = true;
+      return Object.assign({}, state, nextState);
+    }
+    case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE: {
+      let nextState = _.cloneDeep(state);
+      let res: BaseResponse<GetInvoiceTemplateDetailsResponse[], string> = action.payload;
+      nextState.isLoadingCustomCreatedTemplates = false;
+      if (res && res.status === 'success') {
+        nextState.customCreatedTemplates = res.body;
+      }
+      return Object.assign({}, state, nextState);
+    }
+    case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
+      let nextState = _.cloneDeep(state);
+      let res: BaseResponse<any, string> = action.payload;
+      if (res.status === 'success') {
+        let uniqName = res.queryString.templateUniqueName;
+        let indx = state.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+        if (indx > -1) {
+          state.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
+          state.customCreatedTemplates[indx].isDefault = true;
+        }
+        return Object.assign({}, state, nextState);
+      }
+      return state;
+    }
     default: {
       return state;
     }
@@ -228,7 +261,7 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   slogan: 'Signature',
   setInvoiceFlag: false,
   div: null,
-  setFieldDisplay: null
+  setFieldDisplay: null,
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
@@ -397,7 +430,6 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         formNameTaxInvoice: action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
-
     default: {
       return state;
     }
