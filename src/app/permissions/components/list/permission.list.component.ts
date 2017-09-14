@@ -56,8 +56,8 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
     this.session$.subscribe((session) => {
       this.store.select(state => state.company).takeUntil(this.destroyed$).subscribe((company) => {
-        if (company && company.companies.length) {
-          let selectedCompany = company.companies.find(cmp => {
+        if (company && session.companies.length) {
+          let selectedCompany = session.companies.find(cmp => {
             return cmp.uniqueName === session.companyUniqueName;
           });
           if (selectedCompany && selectedCompany.uniqueName === session.companyUniqueName) {

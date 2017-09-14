@@ -33,10 +33,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.vm = new AuditLogsSidebarVM();
     this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
     this.vm.selectedCompany = this.store.select(state => {
-      if (!state.company.companies) {
+      if (!state.session.companies) {
         return;
       }
-      return state.company.companies.find(cmp => {
+      return state.session.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
     }).takeUntil(this.destroyed$);

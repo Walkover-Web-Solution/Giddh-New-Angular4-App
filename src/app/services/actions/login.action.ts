@@ -2,7 +2,7 @@ import { VerifyMobileResponseModel, VerifyMobileModel, SignupWithMobileResponse,
 import { ToasterService } from '../toaster.service';
 import { AuthenticationService } from '../authentication.service';
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
+import { Response, RequestOptionsArgs, Http } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,11 @@ import {
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
-
+import { go, replace, search, show, back, forward } from '@ngrx/router-store';
+import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
+import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
+import { CompanyService } from '../companyService.service';
+import { Configuration } from '../../app.constant';
 @Injectable()
 export class LoginActions {
 
@@ -37,6 +41,9 @@ export class LoginActions {
   public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
+  public static SetLoginStatus = 'SetLoginStatus';
+  public static GoogleLoginElectron = 'GoogleLoginElectron';
+  public static LinkedInLoginElectron = 'LinkedInLoginElectron';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -134,21 +141,53 @@ export class LoginActions {
   @Effect()
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
-    .map(action => {
+    .switchMap((action) => {
+      let stateDetail$ = this._companyService.getStateDetailsAuthGuard('');
+      let companies$ = this._companyService.CompanyList();
+      return Observable.forkJoin(stateDetail$, companies$);
+    }).map((results: any[]) => {
       let cmpUniqueName = '';
-      this.store.select(s => s.session.companyUniqueName).take(1).subscribe(s => {
-        if (s) {
-          cmpUniqueName = s;
+      let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
+      let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
+      if (companies.body.length === 0) {
+        // this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
+        return go(['/pages/new-user']);
+      } else {
+        if (stateDetail.body) {
+          cmpUniqueName = stateDetail.body.companyUniqueName;
+          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
+            this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
+            this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+            // this.store.dispatch(replace(['/pages/home']));
+            return go(['/pages/home']);
+          } else {
+            let respState = new BaseResponse<StateDetailsResponse, string>();
+            respState.body = new StateDetailsResponse();
+            respState.body.companyUniqueName = companies.body[0].uniqueName;
+            respState.body.lastState = 'home';
+            respState.status = 'success';
+            respState.request = '';
+            this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
+            this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+            this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+            return go(['/pages/home']);
+          }
+        } else {
+          let respState = new BaseResponse<StateDetailsResponse, string>();
+          respState.body = new StateDetailsResponse();
+          respState.body.companyUniqueName = companies.body[0].uniqueName;
+          respState.body.lastState = 'home';
+          respState.status = 'success';
+          respState.request = '';
+          this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
+          this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
+          this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+          return go(['/pages/home']);
         }
-      });
-      this.store.dispatch(this.comapnyActions.GetStateDetails(cmpUniqueName));
-      this.store.dispatch(this.comapnyActions.RefreshCompanies());
-      console.log('login success to dummy Login Action');
-      this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
-        console.log('login success to home Login Action');
-        this._router.navigate(['/pages/home']);
-      });
-      return { type: '' };
+      }
+      // return { type: '' };
     });
 
   @Effect()
@@ -160,6 +199,8 @@ export class LoginActions {
       //   console.log('logout success to home Login Action');
       //   this._router.navigate(['/login']);
       // });
+      // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.notLoggedIn));
+      this.store.dispatch(go(['/login']));
       return { type: '' };
     });
 
@@ -181,13 +222,45 @@ export class LoginActions {
       }
       return this.LoginSuccess();
     });
+
+  @Effect()
+  public GoogleElectronLogin$: Observable<Action> = this.actions$
+    .ofType(LoginActions.GoogleLoginElectron)
+    .switchMap(action => {
+      return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
+    })
+    .map(data => {
+      if (data.status === 'error') {
+        this._toaster.errorToast(data.message, data.code);
+        return { type: '' };
+      }
+      // return this.LoginSuccess();
+      return this.signupWithGoogleResponse(data);
+    });
+
+    @Effect()
+    public LinkedInElectronLogin$: Observable<Action> = this.actions$
+      .ofType(LoginActions.LinkedInLoginElectron)
+      .switchMap(action => {
+        return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', action.payload).map(p => p.json());
+      })
+      .map(data => {
+        if (data.status === 'error') {
+          this._toaster.errorToast(data.message, data.code);
+          return { type: '' };
+        }
+        // return this.LoginSuccess();
+        return this.signupWithGoogleResponse(data);
+      });
   constructor(
     public _router: Router,
     private actions$: Actions,
     private auth: AuthenticationService,
     public _toaster: ToasterService,
     private store: Store<AppState>,
-    private comapnyActions: CompanyActions
+    private comapnyActions: CompanyActions,
+    private _companyService: CompanyService,
+    private http: Http
   ) { }
   public SignupWithEmailRequest(value: string): Action {
     return {
@@ -275,6 +348,27 @@ export class LoginActions {
   public LogOut(): Action {
     return {
       type: LoginActions.LogOut
+    };
+  }
+
+  public SetLoginStatus(value: userLoginStateEnum): Action {
+    return {
+      type: LoginActions.SetLoginStatus,
+      payload: value
+    };
+  }
+
+  public GoogleElectronLogin(value: RequestOptionsArgs): Action {
+    return {
+      type: LoginActions.GoogleLoginElectron,
+      payload: value
+    };
+  }
+
+  public LinkedInElectronLogin(value: RequestOptionsArgs): Action {
+    return {
+      type: LoginActions.LinkedInLoginElectron,
+      payload: value
     };
   }
 }

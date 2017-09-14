@@ -42,26 +42,28 @@ export class AppComponent implements OnInit, AfterViewInit {
   // tslint:disable-next-line:no-empty
   public ngOnInit() { }
   public ngAfterViewInit() {
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe((companyName) => {
-      if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
-        if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
+    //   this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe((companyName) => {
+    //     if (companyName) {
+    //       if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
+    //         if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
 
-          let path = [];
-          let parament = {};
-          this.activatedRoute.firstChild.firstChild.url.take(1).subscribe(p => {
+    //           let path = [];
+    //           let parament = {};
+    //           this.activatedRoute.firstChild.firstChild.url.subscribe(p => {
+    //             // debugger;
+    //             if (p.length > 0) {
+    //               path = [p[0].path];
+    //               parament = { queryParams: p[0].parameters };
+    //             }
+    //           });
 
-            if (p.length > 0) {
-              path = [p[0].path];
-              parament = { queryParams: p[0].parameters };
-            }
-          });
-
-          this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-            this.router.navigate(path, parament);
-          });
-        }
-      }
-    });
+    //           // this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
+    //           //   debugger;this.router.navigate(path, parament);
+    //           // });
+    //         }
+    //       }
+    //     }
+    //   });
   }
 
 }

@@ -13,7 +13,7 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   public selectedCompany: ComapnyResponse;
 
   constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
-    this.store.select(p => p.company.companies && p.company.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
+    this.store.select(p => p.session.companies && p.session.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
       this.selectedCompany = p;
     });
   }
