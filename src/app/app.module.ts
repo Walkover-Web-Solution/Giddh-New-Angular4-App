@@ -6,7 +6,7 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { PreloadAllModules, RouterModule } from '@angular/router';
-import { RouterStoreModule } from '@ngrx/router-store';
+import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 /*
@@ -87,7 +87,7 @@ if (ENV === 'development') {
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules, enableTracing: true }),
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS,
   ],

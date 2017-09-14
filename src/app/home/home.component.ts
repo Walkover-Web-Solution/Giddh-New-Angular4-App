@@ -6,7 +6,7 @@ import { ExpensesChartComponent } from './components/expenses/expenses-chart.com
 import { LiveAccountsComponent } from './components/live-accounts/live-accounts.component';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
@@ -16,7 +16,7 @@ import { CompanyActions } from '../services/actions/company.actions';
   styleUrls: ['./home.component.scss'],
   templateUrl: './home.component.html'
 })
-export class HomeComponent implements OnInit, OnDestroy {
+export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('liveaccount') public liveaccount: LiveAccountsComponent;
   @ViewChild('expence') public expence: ExpensesChartComponent;
   @ViewChild('revenue') public revenue: RevenueChartComponent;
@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   @ViewChild('history') public history: HistoryChartComponent;
   @ViewChild('networth') public networth: NetworthChartComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef) {
     //
   }
 
@@ -38,6 +38,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
+  public ngAfterViewInit(): void {
+    this.cdRef.detectChanges();
+  }
   public hardRefresh() {
     //
     this.compare.refresh = true;

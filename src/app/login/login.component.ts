@@ -1,13 +1,13 @@
 import { LoginActions } from '../services/actions/login.action';
 import { AppState } from '../store/roots';
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel, LinkedInRequestModel } from '../models/api-models/loginModels';
+import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, LinkedInRequestModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
 
@@ -15,6 +15,8 @@ import { HttpWrapperService } from '../services/httpWrapper.service';
 import { Headers } from '@angular/http';
 import { RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
 
 @Component({
   selector: 'login',
@@ -48,7 +50,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public _http: HttpWrapperService,
     private loginAction: LoginActions,
     private authService: AuthService,
-    private _toaster: ToasterService
+    private _toaster: ToasterService,
+    private zone: NgZone
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -73,16 +76,23 @@ export class LoginComponent implements OnInit, OnDestroy {
       return state.login.isVerifyEmailSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
       }
     });
     store.select(state => {
       return state.login.isVerifyMobileSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
       }
     });
+    if (!isElectron) {
+      this.authService.authState.takeUntil(this.destroyed$).subscribe((user) => {
+        if (user) {
+          this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+        }
+      });
+    }
   }
 
   // tslint:disable-next-line:no-empty
@@ -96,31 +106,32 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
-
-    // get user object when google auth is complete
-    this.authService.authState.subscribe((user: SocialUser) => {
-      console.log ('from authState', user);
-      if (user) {
-        switch (user.provider) {
-          case 'GOOGLE': {
-            this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
-          }
-          case 'LINKEDIN': {
-            let obj: LinkedInRequestModel = new LinkedInRequestModel();
-            obj.email = user.email;
-            obj.token = user.token;
-            this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
-          }
-          default:
+    if (!isElectron) {
+      // get user object when google auth is complete
+      this.authService.authState.subscribe((user: SocialUser) => {
+        console.log('from authState', user);
+        if (user) {
+          switch (user.provider) {
+            case 'GOOGLE': {
+              this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+            }
+            case 'LINKEDIN': {
+              let obj: LinkedInRequestModel = new LinkedInRequestModel();
+              obj.email = user.email;
+              obj.token = user.token;
+              this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
+            }
+            default:
             // do something
+          }
         }
-      }
-    });
+      });
+    }
   }
 
   public showEmailModal() {
     this.emailVerifyModal.show();
-    this.emailVerifyModal.onShow.subscribe(() => {
+    this.emailVerifyModal.onShow.takeUntil(this.destroyed$).subscribe(() => {
       this.isSubmited = false;
     });
   }
@@ -171,31 +182,24 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem('email');
   }
 
-  public signInWithProviders(provider: string) {
-    console.log('Is Electron: -' + Configuration.isElectron);
+  public async signInWithProviders(provider: string) {
     if (Configuration.isElectron) {
-      // electron
-      let electron = (window as any).require('electron');
+
+      // electronOauth2
       let electronOauth2 = (window as any).require('electron-oauth');
 
-      let ipcRenderer = electron.ipcRenderer;
-      // get config from main-process
-      ipcRenderer.send('get-auth-configs');
-      // set config
-      ipcRenderer.on('set-auth-configs', (events, args) => {
-        this.socialLoginKeys = args;
-
-        let config = {};
-        let bodyParams = {};
-        if (provider === 'google') {
-          // google
-          config = this.socialLoginKeys.GoogleLoginElectronConfig;
-          bodyParams = this.socialLoginKeys.AdditionalGoogleLoginParams;
-        } else {
-          // linked in
-          config = this.socialLoginKeys.LinkedinLoginElectronConfig;
-          bodyParams = this.socialLoginKeys.AdditionalLinkedinLoginParams;
-        }
+      let config = {};
+      let bodyParams = {};
+      if (provider === 'google') {
+        // google
+        config = GoogleLoginElectronConfig;
+        bodyParams = AdditionalGoogleLoginParams;
+      } else {
+        // linked in
+        config = LinkedinLoginElectronConfig;
+        bodyParams = AdditionalLinkedinLoginParams;
+      }
+      try {
         const myApiOauth = electronOauth2(config, {
           alwaysOnTop: true,
           autoHideMenuBar: true,
@@ -204,35 +208,22 @@ export class LoginComponent implements OnInit, OnDestroy {
             devTools: true
           }
         });
-        myApiOauth.getAccessToken(bodyParams)
-          .then(token => {
-            // use your token.access_token
-            let url = '';
-            if (provider === 'google') {
-              url = Configuration.ApiUrl + 'v2/login-with-google';
-            } else {
-              url = Configuration.ApiUrl + 'v2/login-with-linkedIn';
-            }
-            let options: RequestOptionsArgs = {};
+        let token = await myApiOauth.getAccessToken(bodyParams);
+        let options: RequestOptionsArgs = {};
 
-            options.headers = new Headers();
-            options.headers.append('Access-Token', token.access_token);
-            this._http.get(url, {}, options).map(res => res.json()).subscribe(d => {
-              this.store.dispatch(this.loginAction.VerifyEmailResponce(d));
-            }, (e) => {
-              this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
-            });
-            // myApiOauth.refreshToken(token.refresh_token)
-            //   .then(newToken => {
-            //     //
-            //   });
-          }).catch(e => {
-            if (e.message !== 'window was closed by user') {
-              this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
-            }
-          });
-      });
+        options.headers = new Headers();
+        options.headers.append('Access-Token', token.access_token);
 
+        if (provider === 'google') {
+          // google
+          this.store.dispatch(this.loginAction.GoogleElectronLogin(options));
+        } else {
+          // linked in
+          this.store.dispatch(this.loginAction.LinkedInElectronLogin(options));
+        }
+      } catch (e) {
+        //
+      }
     } else {
       //  web
       if (provider === 'google') {
