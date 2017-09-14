@@ -35,6 +35,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithMobileInProcess$: Observable<boolean>;
   public isVerifyEmailInProcess$: Observable<boolean>;
   public isLoginWithEmailInProcess$: Observable<boolean>;
+  public isSocialLogoutAttempted$: Observable<boolean>;
   private imageURL: string;
   private email: string;
   private name: string;
@@ -86,13 +87,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         // this.router.navigate(['home']);
       }
     });
-    if (!isElectron) {
-      this.authService.authState.takeUntil(this.destroyed$).subscribe((user) => {
-        if (user) {
-          this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
-        }
-      });
-    }
+    this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
   }
 
   // tslint:disable-next-line:no-empty
@@ -106,25 +101,31 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
-    if (!isElectron) {
-      // get user object when google auth is complete
-      this.authService.authState.subscribe((user: SocialUser) => {
-        console.log('from authState', user);
-        if (user) {
-          switch (user.provider) {
-            case 'GOOGLE': {
-              this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+    // get user object when google auth is complete
+    if (!Configuration.isElectron) {
+      this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
+        console.log('auth', user);
+        this.isSocialLogoutAttempted$.subscribe((res) => {
+          if (!res && user) {
+            switch (user.provider) {
+              case 'GOOGLE': {
+                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+                break;
+              }
+              case 'LINKEDIN': {
+                let obj: LinkedInRequestModel = new LinkedInRequestModel();
+                obj.email = user.email;
+                obj.token = user.token;
+                this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
+                break;
+              }
+              default: {
+                // do something
+                break;
+              }
             }
-            case 'LINKEDIN': {
-              let obj: LinkedInRequestModel = new LinkedInRequestModel();
-              obj.email = user.email;
-              obj.token = user.token;
-              this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
-            }
-            default:
-            // do something
           }
-        }
+        });
       });
     }
   }
@@ -226,7 +227,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         //
       }
     } else {
-      //  web
+      //  web social authentication
+      this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
       if (provider === 'google') {
         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
       } else if (provider === 'linkedin') {
