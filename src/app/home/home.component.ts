@@ -29,6 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnInit() {
+    debugger;
     let companyUniqueName = null;
     this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
     let stateDetailsRequest = new StateDetailsRequest();
