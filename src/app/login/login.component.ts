@@ -7,7 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
+import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel, LinkedInRequestModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
 
@@ -99,14 +99,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // get user object when google auth is complete
     this.authService.authState.subscribe((user: SocialUser) => {
+      console.log ('from authState', user);
       if (user) {
-        console.log ('from inside', user);
         switch (user.provider) {
           case 'GOOGLE': {
             this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
           }
           case 'LINKEDIN': {
-            //
+            let obj: LinkedInRequestModel = new LinkedInRequestModel();
+            obj.email = user.email;
+            obj.token = user.token;
+            this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
           }
           default:
             // do something
