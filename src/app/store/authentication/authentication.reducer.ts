@@ -5,7 +5,8 @@ import {
   VerifyEmailModel,
   VerifyEmailResponseModel,
   VerifyMobileModel,
-  VerifyMobileResponseModel
+  VerifyMobileResponseModel,
+  LinkedInRequestModel
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
@@ -158,6 +159,18 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
   switch (action.type) {
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body
+        });
+      } else {
+        return Object.assign({}, state, {
+          user: null
+        });
+      }
+    }
+    case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
+      let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
       if (data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body

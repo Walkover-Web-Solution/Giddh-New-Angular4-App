@@ -12,7 +12,8 @@ import {
   VerifyEmailModel,
   VerifyEmailResponseModel,
   VerifyMobileModel,
-  VerifyMobileResponseModel
+  VerifyMobileResponseModel,
+  LinkedInRequestModel
 } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
@@ -92,6 +93,21 @@ export class AuthenticationService {
       let data: BaseResponse<VerifyEmailResponseModel, string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, string>(e, args));
+  }
+
+  public LoginWithLinkedin(model: LinkedInRequestModel) {
+    let args: any = {};
+    args.headers = new Headers();
+    args.headers.append('cache-control', 'no-cache');
+    args.headers.append('Content-Type', 'application/json');
+    args.headers.append('Accept', 'application/json');
+    args.headers.append('Access-Token', model.token);
+    args.headers.append('User-Email', model.email);
+    return this._Http.get(LOGIN_API.LOGIN_WITH_LINKEDIN, args).map((res) => {
+      let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = res.json();
+      data.request = model;
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args));
   }
 
 }
