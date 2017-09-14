@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
 import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
-import { AuthenticationService } from "../../../../services/authentication.service";
+import { AuthenticationService } from '../../../../services/authentication.service';
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',

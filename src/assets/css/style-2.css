@@ -3829,7 +3829,9 @@ datepicker-inner .well table tbody .btn:active .text-info {
     color: #fff !important;
 }
 
-datepicker-inner .well table thead tr th .btn-secondary {
+datepicker-inner .well table thead tr th .btn-secondary,
+datepicker-inner .well monthpicker table thead tr th .btn-default,
+datepicker-inner .well yearpicker table thead tr th .btn-default {
     background: transparent !important;
     border: 0;
 }
@@ -3857,4 +3859,18 @@ datepicker-inner .well table tbody .btn-default.active {
     border-color: #ddd;
     margin-top: 1px;
     border-radius: 2px;
+}
+
+datepicker-inner .well yearpicker table tbody tr td .btn-default,
+datepicker-inner .well monthpicker table tbody tr td .btn-default {
+    padding: 5px 4px;
+}
+
+datepicker-inner .well yearpicker table tbody tr:nth-child(1) td,
+datepicker-inner .well monthpicker table tbody tr:nth-child(1) td {
+    padding-top: 10px;
+}
+
+input[type='checkbox'][disabled]:after {
+    cursor: not-allowed;
 }
