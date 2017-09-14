@@ -205,7 +205,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           autoHideMenuBar: true,
           webPreferences: {
             nodeIntegration: false,
-            devTools: true
+            devTools: true,
+            partition: 'oauth2'
           }
         });
         let token = await myApiOauth.getAccessToken(bodyParams);
