@@ -19,8 +19,8 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 })
 
 export class ContentFilterComponent {
-  public showCustomField: boolean = false;
-  public showTransportField: boolean = false;
+  public showCustomField: boolean = true;
+  public showTransportField: boolean = true;
   @Input() public content: boolean;
   public GSTIN: string;
   public PAN: string;
@@ -103,6 +103,7 @@ export class ContentFilterComponent {
     enableMessage1: true,
     enableMessage2: true,
     enableThanks: true,
+    enableTotalInWords: true
   };
 
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService, private invoiceTemplatesService: InvoiceTemplatesService) {
@@ -357,6 +358,8 @@ export class ContentFilterComponent {
       this.field.enableThanks = value;
     } else if (field === 'companyAddr') {
       this.field.enableCompanyAddress = value;
+    } else if (field === 'invoiceTotalInWords') {
+      this.field.enableTotalInWords = value;
     }
     this._invoiceUiDataService.setFieldDisplayState(this.field);
   }
@@ -413,4 +416,5 @@ export interface IsFieldVisible {
   enableMessage1: boolean;
   enableMessage2: boolean;
   enableThanks: boolean;
+  enableTotalInWords: boolean;
 }
