@@ -16,6 +16,7 @@ import { Headers } from '@angular/http';
 import { RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
+import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from "../../mainprocess/main-auth.config";
 
 @Component({
   selector: 'login',
@@ -160,7 +161,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem('email');
   }
 
-  public signInWithProviders(provider: string) {
+  public async signInWithProviders(provider: string) {
     console.log('Is Electron: -' + Configuration.isElectron);
     if (Configuration.isElectron) {
 
@@ -170,21 +171,21 @@ export class LoginComponent implements OnInit, OnDestroy {
 
       let ipcRenderer = electron.ipcRenderer;
       // get config from main-process
-      ipcRenderer.send('get-auth-configs');
-      // set config
-      ipcRenderer.on('set-auth-configs', async (events, args) => {
-        this.socialLoginKeys = args;
+      // ipcRenderer.send('get-auth-configs');
+      // // set config
+      // ipcRenderer.on('set-auth-configs', async (events, args) => {
+        // this.socialLoginKeys = args;
 
         let config = {};
         let bodyParams = {};
         if (provider === 'google') {
           // google
-          config = this.socialLoginKeys.GoogleLoginElectronConfig;
-          bodyParams = this.socialLoginKeys.AdditionalGoogleLoginParams;
+          config = GoogleLoginElectronConfig;
+          bodyParams = AdditionalGoogleLoginParams;
         } else {
           // linked in
-          config = this.socialLoginKeys.LinkedinLoginElectronConfig;
-          bodyParams = this.socialLoginKeys.AdditionalLinkedinLoginParams;
+          config = LinkedinLoginElectronConfig;
+          bodyParams = AdditionalLinkedinLoginParams;
         }
         const myApiOauth = electronOauth2(config, {
           alwaysOnTop: true,
@@ -195,31 +196,12 @@ export class LoginComponent implements OnInit, OnDestroy {
           }
         });
         let token = await myApiOauth.getAccessToken(bodyParams);
-        // console.log(my) .then(token => {
-        // use your token.access_token
-        let url = '';
-        if (provider === 'google') {
-          url = Configuration.ApiUrl + 'v2/login-with-google';
-        } else {
-          url = Configuration.ApiUrl + 'v2/login-with-linkedIn';
-        }
         let options: RequestOptionsArgs = {};
 
         options.headers = new Headers();
         options.headers.append('Access-Token', token.access_token);
         this.store.dispatch(this.loginAction.GoogleElectronLogin(options));
-        // debugger;
-
-        // myApiOauth.refreshToken(token.refresh_token)
-        //   .then(newToken => {
-        //     //
-        //   });
-        // }).catch(e => {
-        //   if (e.message !== 'window was closed by user') {
-        //     this._toaster.errorToast('Something Went Wrong Please Try Again', 'Giddh App');
-        //   }
-        // });
-      });
+      // });
 
     } else {
       //  web
