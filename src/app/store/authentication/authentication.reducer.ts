@@ -9,7 +9,7 @@ import {
   LinkedInRequestModel
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
+import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
 import * as _ from 'lodash';
 
 /**
@@ -30,10 +30,22 @@ export interface AuthenticationState {
   user?: VerifyEmailResponseModel;                   // current user | null
 }
 
+export enum userLoginStateEnum {
+  notLoggedIn,
+  userLoggedIn,
+  newUserLoggedIn
+}
+
 export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
   companyUniqueName: string;                   // current user | null
+  userLoginState: userLoginStateEnum;
+  companies: ComapnyResponse[];
+  isRefreshing: boolean;
+  isCompanyCreationInProcess: boolean;
+
+  isCompanyCreated: boolean;
 }
 
 /**
@@ -54,10 +66,15 @@ const initialState = {
   user: null
 };
 
-const sessionInitialState = {
+const sessionInitialState: SessionState = {
   user: null,
   lastState: '',
-  companyUniqueName: ''
+  companyUniqueName: '',
+  userLoginState: userLoginStateEnum.notLoggedIn,
+  companies: [],
+  isCompanyCreated: false,
+  isCompanyCreationInProcess: false,
+  isRefreshing: false
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -209,7 +226,12 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return Object.assign({}, state, {
         user: null,
         companyUniqueName: '',
-        lastState: ''
+        lastState: '',
+        userLoginState: 0,
+        companies: [],
+        isCompanyCreated: false,
+        isCompanyCreationInProcess: false,
+        isRefreshing: false
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
@@ -229,10 +251,54 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
       return state;
-    case CompanyActions.SET_CONTACT_NO:
+    case CompanyActions.SET_CONTACT_NO: {
       let newState = _.cloneDeep(state);
       newState.user.user.mobileNo = action.payload;
       return newState;
+    }
+    case CompanyActions.CREATE_COMPANY:
+      return Object.assign({}, state, { isCompanyCreationInProcess: true });
+    case CompanyActions.RESET_CREATE_COMPANY_FLAG:
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false });
+    case CompanyActions.CREATE_COMPANY_RESPONSE: {
+      let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
+      if (companyResp.status === 'success') {
+        let newState = _.cloneDeep(state);
+        newState.isCompanyCreationInProcess = false;
+        newState.isCompanyCreated = true;
+        newState.companies.push(companyResp.body);
+        return newState;
+      }
+      return state;
+    }
+    case CompanyActions.REFRESH_COMPANIES:
+      return Object.assign({}, state, {
+        isRefreshing: true,
+        isCompanyCreated: false
+      });
+    case CompanyActions.REFRESH_COMPANIES_RESPONSE:
+      let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
+      if (companies.status === 'success') {
+        return Object.assign({}, state, {
+          isRefreshing: false,
+          companies: action.payload.body
+        });
+      }
+      return state;
+    case CompanyActions.DELETE_COMPANY_RESPONSE:
+      let uniqueName: BaseResponse<string, string> = action.payload;
+      if (uniqueName.status === 'success') {
+        let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
+        return Object.assign({}, state, {
+          companies: array
+        });
+      }
+      return state;
+    case LoginActions.SetLoginStatus: {
+      return Object.assign({}, state, {
+        userLoginState: action.payload
+      });
+    }
     default:
       return state;
   }

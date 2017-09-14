@@ -7,7 +7,7 @@ import { NeedsAuthentication } from '../services/decorators/needsAuthentication'
   imports: [
     RouterModule.forChild([
       {
-        path: '', component: HomeComponent, canActivate: [NeedsAuthentication]
+        path: '', component: HomeComponent
       }
     ])
   ],

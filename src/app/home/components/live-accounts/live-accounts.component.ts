@@ -33,7 +33,9 @@ export class LiveAccountsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.reload();
+    // if (activeCmpUniqueName) {
+      this.reload();
+    // }
     this.refreshBankAccount$.distinctUntilChanged().subscribe(p => {
       if (p) {
         if (p.connectUrl) {

@@ -20,7 +20,7 @@
                     <ul id="topMenusBar" role="menu" class="dropdown-menu">
                         <li>
                             <div>
-                                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
+                                <!-- <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height> -->
                                     <ul class="dshUl clearfix list-inline ddMaxHeight">
                                         <li class="dmLi trialB">
                                             <a [routerLink]="['home']">
@@ -143,7 +143,7 @@
                                             </a>
                                         </li>
                                     </ul>
-                                </perfect-scrollbar>
+                                <!-- </perfect-scrollbar> -->
                             </div>
                         </li>
                     </ul>
@@ -212,7 +212,9 @@
         </div>
     </nav>
 
-    <accounts-side-bar *ngIf="(isProd === 'development' || isElectron) && (selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+    <accounts-side-bar *ngIf="(isProd === 'development' || isElectron) && (selectedCompany | async)"
+     (clickOutside)="closeSidebar($event.target.id)"
+      [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
