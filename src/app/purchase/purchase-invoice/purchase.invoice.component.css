@@ -2,30 +2,12 @@
     padding: 15px 0;
 }
 
-#purchaseInvoice {
-    background-color: #f4f5f8;
-    padding: 20px;
-}
-
-.table.basic {
-    background: #fff;
-}
-
 .input-err {
     border-color: #ce1b1b;
 }
 
 .input-warn {
     border-color: #f2e200;
-}
-
-table>tbody>tr td.select {
-    padding: 0;
-}
-
-table>tbody>tr td.select .custom-select select {
-    border: 0;
-    padding-right: 26px !important;
 }
 
 .btn-generate {
@@ -55,16 +37,6 @@ table>tbody>tr td.select .custom-select select {
     border-left: 0;
 }
 
-.anchr-btn {
-    border: 0;
-    background: transparent;
-    color: #10aae0;
-}
-
-.anchr-btn:hover {
-    color: #10aae0;
-}
-
 .open>.pageListDD {
     display: inline-block;
     min-width: 200px;
@@ -77,6 +49,8 @@ table>tbody>tr td.select .custom-select select {
 .dd-options:hover {
     color: rgb(211, 95, 41);
 }
+
+
 /*.ranges:nth-of-type(2) {
     display: none !important;
 }*/
