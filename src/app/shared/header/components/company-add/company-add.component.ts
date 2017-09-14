@@ -12,7 +12,7 @@ import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-mod
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
-import { AuthService, GoogleLoginProvider } from 'ng4-social-login';
+import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
@@ -33,6 +33,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isCompanyCreated$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public showMobileVarifyMsg: boolean = false;
+  public isLoggedInWithSocialAccount$: Observable<boolean>;
   public dataSource: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -41,6 +42,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
     private _aunthenticationServer: AuthenticationService) {
+      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
   }
 
   // tslint:disable-next-line:no-empty
@@ -162,13 +164,20 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public logoutUser() {
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
-    if (!isElectron) {
-      this.socialAuthService.signOut();
-    } else {
+    if (isElectron) {
       // this._aunthenticationServer.GoogleProvider.signOut();
+    } else {
+      this.isLoggedInWithSocialAccount$.subscribe((val) => {
+        if (val) {
+          this.socialAuthService.signOut().then().catch((err) => {
+            // console.log ('err', err);
+          });
+          this.store.dispatch(this._loginAction.socialLogoutAttempt());
+        }else {
+          this.store.dispatch(this._loginAction.LogOut());
+        }
+      });
     }
-
-    this.store.dispatch(this._loginAction.LogOut());
   }
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration

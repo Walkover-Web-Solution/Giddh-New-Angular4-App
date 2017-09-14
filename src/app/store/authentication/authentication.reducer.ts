@@ -27,7 +27,9 @@ export interface AuthenticationState {
   isLoginWithGoogleInProcess: boolean;
   isLoginWithLinkedInInProcess: boolean;
   isLoginWithTwitterInProcess: boolean;
-  user?: VerifyEmailResponseModel;                   // current user | null
+  user?: VerifyEmailResponseModel;   // current user | null
+  isSocialLogoutAttempted: boolean;
+  isLoggedInWithSocialAccount: boolean;
 }
 
 export enum userLoginStateEnum {
@@ -63,7 +65,9 @@ const initialState = {
   isLoginWithEmailSubmited: false,
   isLoginWithMobileSubmited: false,
   isVerifyEmailSuccess: false,
-  user: null
+  user: null,
+  isSocialLogoutAttempted: false,
+  isLoggedInWithSocialAccount: false
 };
 
 const sessionInitialState: SessionState = {
@@ -167,6 +171,32 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isVerifyEmailSuccess: false,
         user: null
       });
+    case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
+      let newState = _.cloneDeep(state);
+      newState.isSocialLogoutAttempted = true;
+      return newState;
+    }
+    // important if logged in via social accounts for web only
+    case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let LINKEDIN_RESPONSE: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
+      if (LINKEDIN_RESPONSE.status === 'success') {
+        newState.isLoggedInWithSocialAccount = true;
+      } else {
+        newState.isLoggedInWithSocialAccount = false;
+      }
+      return newState;
+    }
+    case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+      if (GOOGLE_RESPONSE.status === 'success') {
+        newState.isLoggedInWithSocialAccount = true;
+      } else {
+        newState.isLoggedInWithSocialAccount = false;
+      }
+      return newState;
+    }
     default:
       return state;
   }
@@ -223,6 +253,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
     case LoginActions.LogOut:
+    case LoginActions.SOCIAL_LOGOUT_ATTEMPT:
       return Object.assign({}, state, {
         user: null,
         companyUniqueName: '',
