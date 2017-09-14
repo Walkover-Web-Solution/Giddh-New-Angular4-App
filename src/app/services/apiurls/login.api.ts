@@ -8,6 +8,5 @@ export const LOGIN_API = {
   VerifyNumber: Configuration.ApiUrl + 'users/system_admin/verify-number',
   LoginWithNumber: Configuration.ApiUrl + 'login-with-number?countryCode=:countryCode&mobileNumber=:mobileNumber', // get call
   LOGIN_WITH_GOOGLE: Configuration.ApiUrl + 'v2/login-with-google',
-  // LOGIN_WITH_LINKEDIN: Configuration.ApiUrl + 'v3/login-with-linkedin'
-  LOGIN_WITH_LINKEDIN: 'http://apidev.giddh.com/v3/login-with-linkedIn'
+  LOGIN_WITH_LINKEDIN: Configuration.ApiUrl + 'v3/login-with-linkedin'
 };
