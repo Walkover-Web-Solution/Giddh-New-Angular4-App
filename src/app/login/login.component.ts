@@ -92,11 +92,20 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
+    this.mobileVerifyForm = this._fb.group({
+      mobileNumber: ['', [Validators.required]],
+      otp: ['', [Validators.required]],
+    });
 
+    this.emailVerifyForm = this._fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      token: ['', Validators.required]
+    });
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
-      this.authService.authState.subscribe((user: SocialUser) => {
-        console.log ('auth', user);
+      debugger;
+      this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
+        console.log('auth', user);
         this.isSocialLogoutAttempted$.subscribe((res) => {
           if (!res && user) {
             switch (user.provider) {
