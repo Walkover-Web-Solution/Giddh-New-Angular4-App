@@ -23,6 +23,8 @@ import { Configuration } from '../../app.constant';
 @Injectable()
 export class LoginActions {
 
+  public static RESET_SOCIAL_LOGOUT_ATTEMPT = 'RESET_SOCIAL_LOGOUT_ATTEMPT';
+  public static SOCIAL_LOGOUT_ATTEMPT = 'SOCIAL_LOGOUT_ATTEMPT';
   public static SIGNUP_WITH_GOOGLE_REQUEST = 'SIGNUP_WITH_GOOGLE_REQUEST';
   public static SIGNUP_WITH_GOOGLE_RESPONSE = 'SIGNUP_WITH_GOOGLE_RESPONSE';
 
@@ -194,14 +196,7 @@ export class LoginActions {
   public logoutSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LogOut)
     .map(action => {
-      // console.log('logout success to dummy Login Action');
-      // this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
-      //   console.log('logout success to home Login Action');
-      //   this._router.navigate(['/login']);
-      // });
-      // this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.notLoggedIn));
-      this.store.dispatch(go(['/login']));
-      return { type: '' };
+      return go(['/login']);
     });
 
   @Effect()
@@ -326,7 +321,16 @@ export class LoginActions {
       payload: value
     };
   }
-
+  public resetSocialLogoutAttempt(): Action {
+    return {
+      type: LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT
+    };
+  }
+  public socialLogoutAttempt(): Action {
+    return {
+      type: LoginActions.SOCIAL_LOGOUT_ATTEMPT
+    };
+  }
   public VerifyMobileRequest(value: VerifyMobileModel): Action {
     return {
       type: LoginActions.VerifyMobileRequest,
@@ -344,7 +348,6 @@ export class LoginActions {
       type: LoginActions.LoginSuccess
     };
   }
-
   public LogOut(): Action {
     return {
       type: LoginActions.LogOut

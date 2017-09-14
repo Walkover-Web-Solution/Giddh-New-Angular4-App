@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
+  public isLoggedInWithSocialAccount$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public selectedCompany: Observable<ComapnyResponse>;
   public markForDeleteCompany: ComapnyResponse;
@@ -78,6 +79,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private cdRef: ChangeDetectorRef,
     private zone: NgZone,
     private route: ActivatedRoute) {
+
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -150,7 +154,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
       if (s === userLoginStateEnum.notLoggedIn) {
-        // this.router.navigate(['/login']);
+        this.router.navigate(['/login']);
       } else if (s === userLoginStateEnum.newUserLoggedIn) {
         // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
         this.router.navigate(['/new-user']);
@@ -224,12 +228,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public logout() {
-    if (!isElectron) {
-      this.socialAuthService.signOut();
-    } else {
+    if (isElectron) {
       // this._aunthenticationServer.GoogleProvider.signOut();
+      this.store.dispatch(this.loginAction.LogOut());
+    } else {
+      // check if logged in via social accounts
+      this.isLoggedInWithSocialAccount$.subscribe((val) => {
+        if (val) {
+          this.socialAuthService.signOut().then().catch((err) => {
+            console.log('err', err);
+          });
+          this.store.dispatch(this.loginAction.socialLogoutAttempt());
+          this.store.dispatch(this.loginAction.LogOut());
+        } else {
+          this.store.dispatch(this.loginAction.LogOut());
+        }
+      });
+
     }
-    this.store.dispatch(this.loginAction.LogOut());
   }
 
   public onHide() {
