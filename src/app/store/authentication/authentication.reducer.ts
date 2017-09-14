@@ -169,7 +169,8 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithEmailSubmited: false,
         isLoginWithMobileSubmited: false,
         isVerifyEmailSuccess: false,
-        user: null
+        user: null,
+        isSocialLogoutAttempted: true
       });
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
       let newState = _.cloneDeep(state);

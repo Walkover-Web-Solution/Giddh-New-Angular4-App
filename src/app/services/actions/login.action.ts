@@ -196,8 +196,8 @@ export class LoginActions {
   public logoutSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LogOut)
     .map(action => {
-      this.store.dispatch(go(['/login']));
-      return { type: '' };
+      debugger;
+      return go(['/login']);
     });
 
   @Effect()
