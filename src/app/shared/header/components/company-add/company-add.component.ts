@@ -171,7 +171,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
         if (val) {
           this.socialAuthService.signOut().then().catch((err) => {
-            debugger
             console.log ('err', err);
           });
           this.store.dispatch(this._loginAction.socialLogoutAttempt());
