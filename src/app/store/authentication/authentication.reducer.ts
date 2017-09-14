@@ -176,6 +176,11 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       newState.isSocialLogoutAttempted = true;
       return newState;
     }
+    case LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT: {
+      let newState = _.cloneDeep(state);
+      newState.isSocialLogoutAttempted = false;
+      return newState;
+    }
     // important if logged in via social accounts for web only
     case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
       let newState = _.cloneDeep(state);
