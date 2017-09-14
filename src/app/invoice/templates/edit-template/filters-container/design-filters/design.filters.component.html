@@ -1,4 +1,4 @@
-<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design"  (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
+<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design" (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
 
 
     <div class="clearfix">
@@ -15,13 +15,13 @@
     <button type="button" class="start-upload-btn" (click)="startUpload()">
     Start Upload
   </button> {{imagePreview}} -->
-    <div class="clearfix" >
-      <ul class="designTool" >
+    <div class="clearfix">
+        <ul class="designTool">
             <li *ngIf="!ifTemplateSelected" (click)="selectTemplate()">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li *ngIf="ifTemplateSelected">
-              <i class="ico-template"></i> <label>Change up to template</label>
+                <i class="ico-template"></i> <label>Change up to template</label>
                 <!-- edit template  start -->
                 <div class="clearfix">
                     <ul class="templateView">
@@ -48,13 +48,13 @@
                 </div>
                 <!--<template-selector></template-selector>-->
             </li>
-            <li *ngIf="!ifLogoSelected" (click)="selectLogo()" >
+            <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
             <li [hidden]="!ifLogoSelected">
-              <i class="ico-edit"></i> <label>Make logo edit</label>
+                <i class="ico-edit"></i> <label>Make logo edit</label>
                 <!-- edit logo  start -->
-                <div class="clearfix">
+                <div class="clearfix mrT1">
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
@@ -85,10 +85,10 @@
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
             <!--<li *ngIf="ifColorSelected">-->
-          <li [hidden]="!ifColorSelected">
-            <i class="ico-swatch"></i> <label>Try other colour</label>
+            <li [hidden]="!ifColorSelected">
+                <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
-                <div class="clearfix">
+                <div class="clearfix mrT1">
                     <div class="swatch text-center">
                         <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': currentColor}"></span> {{this.currentColor}}
                         </span>
@@ -122,8 +122,8 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
             <li *ngIf="ifFontSelected">
-              <i class="ico-txt"></i> <label>Select different fonts</label>
-                <div class="col-xs-9 font-selector">
+                <i class="ico-txt"></i> <label>Select different fonts</label>
+                <div class="col-xs-9 font-selector mrT1">
                     <div class="row">
                         <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
                             [fpPresetFonts]="presetFonts">
@@ -137,9 +137,9 @@
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
             <li *ngIf="ifPrintSelected">
-              <i class="ico-print"></i> <label>Edit print setting</label>
+                <i class="ico-print"></i> <label>Edit print setting</label>
                 <!-- edit print setting  start  -->
-                <div class="clearfix">
+                <div class="clearfix mrT1">
                     <div class="printTool pos-rel">
                         <p>Page margins</p>
                         <table class="table mr0">

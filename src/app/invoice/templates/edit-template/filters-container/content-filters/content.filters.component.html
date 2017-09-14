@@ -5,8 +5,6 @@
 
         <div class="clearfix">
             <div class="form-group"><input type="checkbox" [(ngModel)]="field.enableCompanyName" (ngModelChange)="onCheckField('companyName', field.enableCompanyName)" checked/> Company Name</div>
-            <div class="form-group"><input type="checkbox" [(ngModel)]="field.enableCompanyAddress" (ngModelChange)="onCheckField('companyAddress', field.enableCompanyAddress)" checked/> Company Address</div>
-
             <div class="form-group">
                 <input type="checkbox" [(ngModel)]="field.enableInvoiceDate" (ngModelChange)="onCheckField('invoiceDate', field.enableInvoiceDate)" checked/> Invoice Date
                 <div class="mrL3"><input type="text" class="form-control" name="invoiceDate" [(ngModel)]='invoiceDate' (ngModelChange)='onInvoiceDateChange(invoiceDate)' [disabled]="!field.enableInvoiceDate" /></div>
@@ -66,7 +64,7 @@
             </div>
             <div class="form-group">
                 <input type="checkbox" [(ngModel)]="field.enableBillingGstin" name="blstn" (ngModelChange)="onCheckField('billingGstin', field.enableBillingGstin)" checked/> GSTIN
-                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)' [disabled]="!field.enableBillingGstin"/></div>
+                <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='billingGstin' (ngModelChange)='onBillingGstinChange(billingGstin)' [disabled]="!field.enableBillingGstin" /></div>
             </div>
         </div>
 
@@ -80,7 +78,7 @@
                 <input type="checkbox" [(ngModel)]="field.enableShippingState" name="shpst" (ngModelChange)="onCheckField('shippingState', field.enableShippingState)" checked/> State
             </div>
             <div class="form-group">
-                <input type="checkbox" [(ngModel)]="field.enableShippingGstin" name="shpGs" (ngModelChange)="onCheckField('shippingGstin', field.enableShippingGstin)"  checked/> GSTIN
+                <input type="checkbox" [(ngModel)]="field.enableShippingGstin" name="shpGs" (ngModelChange)="onCheckField('shippingGstin', field.enableShippingGstin)" checked/> GSTIN
                 <div class="mrL3"><input type="text" class="form-control" [(ngModel)]='shippingGstin' (ngModelChange)='onShippingGstinChange(shippingGstin)' [disabled]="!field.enableShippingGstin" /></div>
             </div>
         </div>
@@ -172,8 +170,7 @@
         <div class="clearfix">
             <h2>Footer</h2>
             <div class="clearfix bdrB">
-                <div class="form-group"><input type="checkbox" checked/> Your Company Name</div>
-                <div class="form-group"><input type="checkbox" /> Company Address</div>
+                <div class="form-group"> <input type="checkbox" name="cad" [(ngModel)]="field.enableCompanyAddress" (ngModelChange)="onCheckField('companyAddr', field.enableCompanyAddress)" checked/> Company Address</div>
                 <div class="form-group">
                     <input type="checkbox" name="tam" [(ngModel)]="field.enableTaxableAmount" (ngModelChange)="onCheckField('taxableAmount', field.enableTaxableAmount)" /> Taxable Amount
                 </div>
@@ -187,7 +184,7 @@
                     <input type="checkbox" name="itot" [(ngModel)]="field.enableInvoiceTotal" (ngModelChange)="onCheckField('invoiceTotal', field.enableInvoiceTotal)" /> Invoice Total
                 </div>
                 <div class="form-group">
-                    <input type="checkbox" /> Invoice Total(in words)
+                    <input type="checkbox" name="itiw" [(ngModel)]="field.enableTotalInWords" (ngModelChange)="onCheckField('invoiceTotalInWords', field.enableTotalInWords)" /> Invoice Total(in words)
                 </div>
             </div>
         </div>
@@ -197,16 +194,16 @@
                 <input type="checkbox" name="msg1" [(ngModel)]="field.enableMessage1" (ngModelChange)="onCheckField('message1', field.enableMessage1)" checked/> Message 1
             </div>
             <div class="form-group mrL3 clearfix">
-                <div class="col-xs-8">
+                <div class="col-xs-12">
                     <div class="row">
                         <textarea class="form-control" placeholder="Enter any other text you would like in the footer. " [(ngModel)]='message1' name="msg11" (ngModelChange)='onMessage1Change(message1) [disabled]="!field.enableMessage1"'></textarea>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <!--<select class="form-control">-->
-            <!--<option value="10">10px</option>-->
-          <!--</select>-->
-                </div>
+                <!-- <div class="col-xs-4">
+                    <select class="form-control">
+                    <option value="10">10px</option>
+                    </select>
+                </div> -->
             </div>
         </div>
 
@@ -215,16 +212,16 @@
                 <input type="checkbox" name="msg2" [(ngModel)]="field.enableMessage2" (ngModelChange)="onCheckField('message2', field.enableMessage2)" checked/> Message 2
             </div>
             <div class="form-group mrL3 clearfix">
-                <div class="col-xs-8">
+                <div class="col-xs-12">
                     <div class="row">
                         <textarea class="form-control" name="mdg22" [(ngModel)]='message2' (ngModelChange)='onMessage2Change(message2) [disabled]="!field.enableMessage2"'>Note:Contact us for queries on these questions</textarea>
                     </div>
                 </div>
-                <div class="col-xs-4">
-                    <!--<select class="form-control">-->
-            <!--<option value="10">10px</option>-->
-          <!--</select>-->
-                </div>
+                <!-- <div class="col-xs-4">
+                    <select class="form-control">
+                    <option value="10">10px</option>
+                    </select>
+                </div> -->
             </div>
         </div>
 
@@ -232,7 +229,7 @@
 
         <div class="clearfix mrT1">
             <div class="form-group"> <input type="checkbox" name="ty" [(ngModel)]="field.enableThanks" (ngModelChange)="onCheckField('thanks', field.enableThanks)" checked/> Thank you for your business</div>
-            <div class="form-group"> <input type="checkbox" name="cad" [(ngModel)]="field.enableCompanyAddress" (ngModelChange)="onCheckField('companyAddr', field.enableCompanyAddress)" checked/> Company Address</div>
+
         </div>
 
     </div>
