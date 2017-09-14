@@ -103,7 +103,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     });
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
-      debugger;
       this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
         console.log('auth', user);
         this.isSocialLogoutAttempted$.subscribe((res) => {

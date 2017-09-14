@@ -196,7 +196,6 @@ export class LoginActions {
   public logoutSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LogOut)
     .map(action => {
-      debugger;
       return go(['/login']);
     });
 
