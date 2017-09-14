@@ -367,6 +367,46 @@ export class InvoiceActions {
       return this.setTemplateState(response);
     });
 
+  // GET CUSTOM CREATED TEMPLATES
+  @Effect()
+  private getAllCreatedTemplates$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES)
+    .switchMap(action => this._invoiceTemplatesService.getAllCreatedTemplates())
+    .map(response => {
+      return this.getAllCreatedTemplatesResponse(response);
+    });
+
+  @Effect()
+  private getAllCreatedTemplatesResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
+      return { type : ''};
+    });
+
+  // SET TEMPLATE AS DEFAULT
+  @Effect()
+  private setTemplateAsDefault$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT)
+    .switchMap(action => this._invoiceTemplatesService.setTemplateAsDefault(action.payload))
+    .map(response => {
+      return this.setTemplateAsDefaultResponse(response);
+    });
+
+  @Effect()
+  private setTemplateAsDefaultResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
+      return { type : ''};
+    });
+
   constructor(
     private action$: Actions,
     private _invoiceService: InvoiceService,
@@ -537,6 +577,33 @@ export class InvoiceActions {
   public getTemplateState(): Action {
     return {
       type: INVOICE.TEMPLATE.GET_USER_TEMPLATES
+    };
+  }
+
+  public getAllCreatedTemplates(): Action {
+    return {
+      type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES
+    };
+  }
+
+  public getAllCreatedTemplatesResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE,
+      payload: response
+    };
+  }
+
+  public setTemplateAsDefault(templateUniqueName: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT,
+      payload: templateUniqueName
+    };
+  }
+
+  public setTemplateAsDefaultResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE,
+      payload: response
     };
   }
 
