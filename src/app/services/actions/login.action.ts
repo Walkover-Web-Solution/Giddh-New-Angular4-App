@@ -9,7 +9,8 @@ import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import {
   VerifyEmailResponseModel,
-  VerifyEmailModel
+  VerifyEmailModel,
+  LinkedInRequestModel
 } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
@@ -20,6 +21,9 @@ export class LoginActions {
 
   public static SIGNUP_WITH_GOOGLE_REQUEST = 'SIGNUP_WITH_GOOGLE_REQUEST';
   public static SIGNUP_WITH_GOOGLE_RESPONSE = 'SIGNUP_WITH_GOOGLE_RESPONSE';
+
+  public static SIGNUP_WITH_LINKEDIN_REQUEST = 'SIGNUP_WITH_LINKEDIN_REQUEST';
+  public static SIGNUP_WITH_LINKEDIN_RESPONSE = 'SIGNUP_WITH_LINKEDIN_RESPONSE';
 
   public static SignupWithEmailRequest = 'SignupWithEmailRequest';
   public static SignupWithEmailResponce = 'SignupWithEmailResponce';
@@ -52,6 +56,25 @@ export class LoginActions {
       }
       return this.LoginSuccess();
     });
+
+    @Effect()
+    public signupWithLinkedin$: Observable<Action> = this.actions$
+      .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST)
+      .switchMap(action =>
+        this.auth.LoginWithLinkedin(action.payload)
+      )
+      .map(response => this.signupWithLinkedinResponse(response));
+
+    @Effect()
+    public signupWithLinkedinResponse$: Observable<Action> = this.actions$
+      .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+          return { type: '' };
+        }
+        return this.LoginSuccess();
+      });
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
@@ -214,6 +237,19 @@ export class LoginActions {
   public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): Action {
     return {
       type: LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE,
+      payload: value
+    };
+  }
+
+  public signupWithLinkedin(value: LinkedInRequestModel): Action {
+    return {
+      type: LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST,
+      payload: value
+    };
+  }
+  public signupWithLinkedinResponse(value: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>): Action {
+    return {
+      type: LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE,
       payload: value
     };
   }
