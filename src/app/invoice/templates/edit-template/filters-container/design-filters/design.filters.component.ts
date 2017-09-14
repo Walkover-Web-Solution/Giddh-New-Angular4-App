@@ -218,4 +218,12 @@ export class DesignFiltersContainerComponent {
     this._invoiceUiDataService.logoState(this.showLogo);
   }
 
+  public clickedOutside() {
+    console.log('Clicked outside');
+    this.ifColorSelected = false;
+    this.ifLogoSelected = false;
+    this.ifPrintSelected = false;
+    this.ifFontSelected = false;
+    this.ifTemplateSelected = false;
+  }
 }
