@@ -10,7 +10,6 @@ export class UserAuthenticated implements CanActivate {
   }
   public canActivate() {
     return this.store.select(p => p.session.userLoginState).map(p => {
-      debugger
       if (p === userLoginStateEnum.userLoggedIn) {
         this._router.navigate(['/home']);
       }
