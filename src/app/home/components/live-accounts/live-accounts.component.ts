@@ -33,7 +33,6 @@ export class LiveAccountsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    debugger;
     // if (activeCmpUniqueName) {
       this.reload();
     // }

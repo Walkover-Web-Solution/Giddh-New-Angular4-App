@@ -16,7 +16,7 @@ import { Headers } from '@angular/http';
 import { RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from "../../mainprocess/main-auth.config";
+import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
 
 @Component({
   selector: 'login',
@@ -162,31 +162,23 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   public async signInWithProviders(provider: string) {
-    console.log('Is Electron: -' + Configuration.isElectron);
     if (Configuration.isElectron) {
 
-      // electron
-      let electron = (window as any).require('electron');
+      // electronOauth2
       let electronOauth2 = (window as any).require('electron-oauth');
 
-      let ipcRenderer = electron.ipcRenderer;
-      // get config from main-process
-      // ipcRenderer.send('get-auth-configs');
-      // // set config
-      // ipcRenderer.on('set-auth-configs', async (events, args) => {
-        // this.socialLoginKeys = args;
-
-        let config = {};
-        let bodyParams = {};
-        if (provider === 'google') {
-          // google
-          config = GoogleLoginElectronConfig;
-          bodyParams = AdditionalGoogleLoginParams;
-        } else {
-          // linked in
-          config = LinkedinLoginElectronConfig;
-          bodyParams = AdditionalLinkedinLoginParams;
-        }
+      let config = {};
+      let bodyParams = {};
+      if (provider === 'google') {
+        // google
+        config = GoogleLoginElectronConfig;
+        bodyParams = AdditionalGoogleLoginParams;
+      } else {
+        // linked in
+        config = LinkedinLoginElectronConfig;
+        bodyParams = AdditionalLinkedinLoginParams;
+      }
+      try {
         const myApiOauth = electronOauth2(config, {
           alwaysOnTop: true,
           autoHideMenuBar: true,
@@ -200,9 +192,17 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         options.headers = new Headers();
         options.headers.append('Access-Token', token.access_token);
-        this.store.dispatch(this.loginAction.GoogleElectronLogin(options));
-      // });
 
+        if (provider === 'google') {
+          // google
+          this.store.dispatch(this.loginAction.GoogleElectronLogin(options));
+        } else {
+          // linked in
+          this.store.dispatch(this.loginAction.LinkedInElectronLogin(options));
+        }
+      } catch (e) {
+        //
+      }
     } else {
       //  web
       if (provider === 'google') {
@@ -216,7 +216,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-    debugger;
   }
 
 }

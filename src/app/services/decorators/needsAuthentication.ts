@@ -16,7 +16,6 @@ export class NeedsAuthentication implements CanActivate {
   }
   public canActivate() {
     return this.store.select(p => p.session.userLoginState).map(p => {
-      debugger
       if (p === userLoginStateEnum.newUserLoggedIn) {
         this._router.navigate(['/new-user']);
       }
