@@ -77,7 +77,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this._route.navigate(['/ledger', 'cash']);
+        // this._route.navigate(['/ledger', 'cash']);
         this.closeModal();
       }
     });
