@@ -63,7 +63,6 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          debugger;
           if (activeCmpUniqueName) { this.refreshData(); }
         }
       }

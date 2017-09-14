@@ -39,7 +39,7 @@ export class LoginActions {
   public static LogOut = 'LoginOut';
   public static SetLoginStatus = 'SetLoginStatus';
   public static GoogleLoginElectron = 'GoogleLoginElectron';
-  public static GoogleLoginElectronResponse = 'GoogleLoginElectronResponse';
+  public static LinkedInLoginElectron = 'LinkedInLoginElectron';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -207,7 +207,6 @@ export class LoginActions {
       return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
     })
     .map(data => {
-      debugger
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
         return { type: '' };
@@ -215,6 +214,21 @@ export class LoginActions {
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
     });
+
+    @Effect()
+    public LinkedInElectronLogin$: Observable<Action> = this.actions$
+      .ofType(LoginActions.LinkedInLoginElectron)
+      .switchMap(action => {
+        return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', action.payload).map(p => p.json());
+      })
+      .map(data => {
+        if (data.status === 'error') {
+          this._toaster.errorToast(data.message, data.code);
+          return { type: '' };
+        }
+        // return this.LoginSuccess();
+        return this.signupWithGoogleResponse(data);
+      });
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -311,6 +325,13 @@ export class LoginActions {
   public GoogleElectronLogin(value: RequestOptionsArgs): Action {
     return {
       type: LoginActions.GoogleLoginElectron,
+      payload: value
+    };
+  }
+
+  public LinkedInElectronLogin(value: RequestOptionsArgs): Action {
+    return {
+      type: LoginActions.LinkedInLoginElectron,
       payload: value
     };
   }

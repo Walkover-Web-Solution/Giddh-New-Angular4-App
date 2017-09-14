@@ -91,7 +91,6 @@ export class ComparisionChartComponent implements OnInit {
             }
           }
         }
-        debugger;
         if (activeCmpUniqueName) { this.fetchChartData(); }
       }
     });
