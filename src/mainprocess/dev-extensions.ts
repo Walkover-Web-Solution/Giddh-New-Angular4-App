@@ -5,7 +5,7 @@ import { app } from 'electron';
 
 declare const ENV: string;
 
-if (ENV === 'development' || true) {
+if (ENV === 'development') {
   // tslint:disable-next-line:no-var-requires
   const installExtension = require('electron-devtools-installer').default;
 
