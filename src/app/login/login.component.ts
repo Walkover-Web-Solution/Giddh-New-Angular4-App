@@ -92,15 +92,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.mobileVerifyForm = this._fb.group({
-      mobileNumber: ['', [Validators.required]],
-      otp: ['', [Validators.required]],
-    });
-
-    this.emailVerifyForm = this._fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      token: ['', Validators.required]
-    });
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -228,17 +219,14 @@ export class LoginComponent implements OnInit, OnDestroy {
         //
       }
     } else {
-      //  web
+      //  web social authentication
+      this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
       if (provider === 'google') {
         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
       } else if (provider === 'linkedin') {
         this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
       }
     }
-  }
-
-  public signout() {
-    this.authService.signOut();
   }
 
   public ngOnDestroy() {
