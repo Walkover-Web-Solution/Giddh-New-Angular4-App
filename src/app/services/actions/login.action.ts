@@ -18,7 +18,7 @@ import { go, replace, search, show, back, forward } from '@ngrx/router-store';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
-import { Configuration } from "../../app.constant";
+import { Configuration } from '../../app.constant';
 @Injectable()
 export class LoginActions {
 
@@ -53,7 +53,6 @@ export class LoginActions {
   public signupWithGoogleResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
     .map(action => {
-      debugger
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
@@ -91,7 +90,6 @@ export class LoginActions {
   public verifyEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailResponce)
     .map(action => {
-      debugger;
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
@@ -128,8 +126,8 @@ export class LoginActions {
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
       let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
-      this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
       if (companies.body.length === 0) {
+        // this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         return go(['/pages/new-user']);
       } else {
@@ -137,9 +135,9 @@ export class LoginActions {
           cmpUniqueName = stateDetail.body.companyUniqueName;
           if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
+            this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             // this.store.dispatch(replace(['/pages/home']));
-            debugger
             return go(['/pages/home']);
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -149,6 +147,7 @@ export class LoginActions {
             respState.status = 'success';
             respState.request = '';
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
+            this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             return go(['/pages/home']);
           }
@@ -160,6 +159,7 @@ export class LoginActions {
           respState.status = 'success';
           respState.request = '';
           this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
+          this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
           return go(['/pages/home']);
         }
@@ -200,21 +200,21 @@ export class LoginActions {
       return this.LoginSuccess();
     });
 
-    @Effect()
-    public GoogleElectronLogin$: Observable<Action> = this.actions$
-      .ofType(LoginActions.GoogleLoginElectron)
-      .switchMap(action => {
-        return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
-      })
-      .map(data => {
-        debugger
-        if (data.status === 'error') {
-          this._toaster.errorToast(data.message, data.code);
-          return { type: '' };
-        }
-        // return this.LoginSuccess();
-        return this.signupWithGoogleResponse(data);
-      });
+  @Effect()
+  public GoogleElectronLogin$: Observable<Action> = this.actions$
+    .ofType(LoginActions.GoogleLoginElectron)
+    .switchMap(action => {
+      return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
+    })
+    .map(data => {
+      debugger
+      if (data.status === 'error') {
+        this._toaster.errorToast(data.message, data.code);
+        return { type: '' };
+      }
+      // return this.LoginSuccess();
+      return this.signupWithGoogleResponse(data);
+    });
   constructor(
     public _router: Router,
     private actions$: Actions,
