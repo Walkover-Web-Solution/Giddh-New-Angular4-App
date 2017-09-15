@@ -63,7 +63,6 @@ export class LoginActions {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
       }
-      debugger;
       return this.LoginSuccess();
     });
 
