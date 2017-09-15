@@ -29,6 +29,9 @@ export class TbGridComponent implements OnInit, AfterViewInit {
           _.each(grp.accounts, (acc: any) => {
             acc.isVisible = true;
           });
+          _.each(grp.childGroups, (cgrp: any) => {
+            cgrp.isVisible = value;
+          });
         });
       }
       this.data$ = _.cloneDeep(this.data$);
@@ -48,7 +51,7 @@ export class TbGridComponent implements OnInit, AfterViewInit {
   }
 
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    return _.each(data, (grp) => {
+    _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
         acc.isVisible = isVisible;
