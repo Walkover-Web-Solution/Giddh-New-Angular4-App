@@ -23,6 +23,14 @@ export class TbGridComponent implements OnInit, AfterViewInit {
     // debugger;
     if (this.data$) {
       this.toggleVisibility(this.data$.groupDetails, value);
+      if (this.data$) {
+        _.each(this.data$.groupDetails, (grp: any) => {
+          grp.isVisible = true;
+          _.each(grp.accounts, (acc: any) => {
+            acc.isVisible = true;
+          });
+        });
+      }
       this.data$ = _.cloneDeep(this.data$);
     }
   }
