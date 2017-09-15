@@ -33,16 +33,20 @@
       </table>
 
       <!--Start Grid-->
-      <div>
-        <section class="row row-1" *ngFor="let grp of data$.groupDetails | tbsearch: search" [ngClass]="grp.category" tb-pl-bs-grid-row
-          [groupDetail]="grp" [search]="search">
-          <section class="row row-2 " style="padding-left:30px" tb-pl-bs-grid-row *ngFor="let account of grp.accounts" [groupDetail]="account"  [search]="search"
-            [ngClass]="{'isHidden': !account.isVisible }">
+      <div *ngIf="data$.groupDetails">
+
+        <ng-template #groupDetails let-list let-padding="padding" >
+                    <section class="row row-1"
+                    *ngFor="let grp of list"
+                    [ngClass]="grp.category" [hidden]="!grp.isVisible"   tb-pl-bs-grid-row
+            [groupDetail]="grp" [padding]="padding" [search]="search" >
+            <ng-container  *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
           </section>
-          <section class="row row-2 " [ngClass]="{'isHidden': !childGroup.isVisible }" style="padding-left:30px" tb-pl-bs-grid-row
-            *ngFor="let childGroup of grp.childGroups" [groupDetail]="childGroup"  [search]="search">
-          </section>
-        </section>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 0 }"></ng-container>
+
+
+
       </div>
       <!--<section class="row row-1"-->
       <!--*ngFor="let grp of (data$ | async).groupDetails"-->
@@ -73,7 +77,7 @@
                   </table>
                 </th>
                 <th class="col-xs-2  text-right">
-                  <span class="pdR1">{{  data$.closingBalance?.amount | number:'1.2-2' }}</span>
+                  <span class="pdR1">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
                 </th>
               </tr>
             </thead>

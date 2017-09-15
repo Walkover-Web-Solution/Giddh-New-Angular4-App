@@ -23,10 +23,14 @@ export class TbsearchPipe implements PipeTransform {
     }
     let initial = input;
 
-    if (!_.isUndefined(this.srch)) {
+    if (!_.isUndefined(this.srch) && this.srch.length > 2) {
+      debugger;
       this.performSearch(input);
-      if (this.srch.length < 2) {
-        this.resetSearch(input);
+    } else {
+      if (!_.isUndefined(this.srch)) {
+        if (this.srch.length !== 0) {
+          this.resetSearch(input);
+        }
       }
     }
     return input;
@@ -117,7 +121,7 @@ export class TbsearchPipe implements PipeTransform {
       if (grp.childGroups.length > 0) {
         return _.each(grp.childGroups, (sub: any) => {
           // sub = Object.assign(sub, { isVisible: false });
-          sub.isVisible = true;
+          sub.isVisible = false;
           if (sub.childGroups.length > 0) {
             return this.resetSearch(sub.childGroups);
           }

@@ -34,7 +34,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 })
 export class PurchaseComponent implements OnInit {
   constructor(private store: Store<AppState>, private _companyActions: CompanyActions) {
-    console.log('Hi this is purchase component');
+    // console.log('Hi this is purchase component');
   }
   public ngOnInit(): void {
     let companyUniqueName = null;

@@ -394,10 +394,10 @@ export class EditInvoiceComponent implements OnInit {
       };
 
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
-        console.log('The res is :', res);
+        // console.log('The res is :', res);
       });
     } else {
-      console.log('this.fieldDisplayState is not ready');
+      // console.log('this.fieldDisplayState is not ready');
     }
   }
 
@@ -407,7 +407,7 @@ export class EditInvoiceComponent implements OnInit {
   public onSetTemplateAsDefault(template) {
     if (template) {
       let selectedTemplate = _.cloneDeep(template);
-      console.log('the selectedTemplate is :', selectedTemplate);
+      // console.log('the selectedTemplate is :', selectedTemplate);
       this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName));
     }
   }
