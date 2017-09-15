@@ -219,7 +219,7 @@ export class DesignFiltersContainerComponent {
   }
 
   public clickedOutside() {
-    console.log('Clicked outside');
+    // console.log('Clicked outside');
     this.ifColorSelected = false;
     this.ifLogoSelected = false;
     this.ifPrintSelected = false;
