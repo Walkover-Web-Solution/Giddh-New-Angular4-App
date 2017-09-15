@@ -147,7 +147,7 @@ export class LoginActions {
     .switchMap((action) => {
       return Observable.zip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
     }).map((results: any[]) => {
-      console.log(results);
+      // console.log(results);
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
       let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
