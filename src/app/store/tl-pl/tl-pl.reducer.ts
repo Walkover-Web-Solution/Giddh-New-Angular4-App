@@ -247,11 +247,11 @@ const prepareProfitLossData = (data) => {
   plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
   if (plData.incomeTotal >= plData.expenseTotal) {
     plData.inProfit = true;
-    plData.expenseTotal += plData.closingBalance;
+    // plData.expenseTotal += plData.closingBalance;
   }
   if (plData.incomeTotal < plData.expenseTotal) {
     plData.inProfit = false;
-    plData.incomeTotal += plData.closingBalance;
+    // plData.incomeTotal += plData.closingBalance;
   }
   return plData;
 };

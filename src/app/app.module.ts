@@ -55,7 +55,7 @@ interface StoreType {
 let CONDITIONAL_IMPORTS = [];
 
 if (ENV === 'development') {
-  console.log('loading react devtools');
+  // console.log('loading react devtools');
   CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrumentOnlyWithExtension());
 }
 
@@ -87,7 +87,7 @@ if (ENV === 'development') {
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
-    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules, enableTracing: true }),
+    RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS,
   ],
@@ -113,7 +113,7 @@ export class AppModule {
     if (!store || !store.rootState) {
       return;
     }
-    console.log('HMR store', JSON.stringify(store, null, 2));
+    // console.log('HMR store', JSON.stringify(store, null, 2));
     /**
      * Set state
      */
