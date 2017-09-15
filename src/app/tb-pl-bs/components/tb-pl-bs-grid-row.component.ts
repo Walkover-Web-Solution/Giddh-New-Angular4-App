@@ -4,8 +4,8 @@ import { ChildGroup } from '../../models/api-models/Search';
 @Component({
   selector: '[tb-pl-bs-grid-row]',  // <home></home>
   template: `
-    <div class="row tb-pl-bs-grid-row"  [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName">
-      <div class="col-xs-4 group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
+    <div class="row row-2 tb-pl-bs-grid-row" [ngClass]="{'isHidden': !groupDetail.isVisible}"  [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName" [ngStyle]="{'padding-left': padding+'px'}">
+      <div class="col-xs-4 group" [ngStyle]="{'padding-left':'10px'}" [innerHTML]="groupDetail.groupName | uppercase | highlight:search"></div>
       <div class="col-xs-2 group text-right">{{ groupDetail.forwardedBalance?.amount | number:'1.2-2' }}
         {{groupDetail.forwardedBalance | recType }}
       </div>
@@ -15,7 +15,7 @@ import { ChildGroup } from '../../models/api-models/Search';
         {{groupDetail.closingBalance | recType }}
       </div>
     </div>
-    <section class="row row-2 account " *ngFor="let account of groupDetail.accounts"
+    <section class="row row-2 account " *ngFor="let account of groupDetail.accounts" [ngStyle]="{'padding-left': (padding+20)+'px'}"
              [ngClass]="{'isHidden': !account.isVisible }">
       <div class="row">
         <div class="col-xs-4 account" [ngStyle]="{'padding-left':'10px'}" [innerHTML]="account.name | lowercase | highlight:search" ></div>
@@ -37,6 +37,7 @@ import { ChildGroup } from '../../models/api-models/Search';
 export class TlPlGridRowComponent implements OnInit {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
+  @Input() public padding: string;
   public visible: boolean = true;
 
   constructor() {
