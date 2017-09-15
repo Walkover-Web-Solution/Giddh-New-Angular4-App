@@ -20,12 +20,12 @@ export class InvoiceUiDataService {
   public invoiceEmailSettingObject: EmailSettingObjDefinition = new EmailSettingObjDefinition();
 
   public setLogoPath(val) {
-    console.log('The value is :', val);
+    // console.log('The value is :', val);
     this.logoPath.next(val);
   }
 
   public setImageSignatgurePath(val) {
-    console.log('The value is :', val);
+    // console.log('The value is :', val);
     this.imageSignaturePath.next(val);
   }
 

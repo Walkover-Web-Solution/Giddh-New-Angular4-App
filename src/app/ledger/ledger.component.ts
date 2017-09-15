@@ -61,7 +61,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         moment().subtract(12, 'months'),
         moment()
       ]
-    }
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
   };
   public trxRequest: TransactionsRequest;
   public needToReCalculate: boolean = false;
@@ -219,6 +221,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        // set trxRequest.from and trxRequest.to from start and end date for initial request
+        this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
+        this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
         this.getTransactionData();
       }
     });
@@ -276,7 +281,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       let blob = this.base64ToBlob(d.body, 'application/pdf', 512);
       return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
     }, error => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -336,7 +341,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
-    this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    if (blankTransactionObj.transactions.length > 0) {
+      this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    } else {
+      this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+    }
   }
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];

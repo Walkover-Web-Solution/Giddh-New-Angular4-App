@@ -42,10 +42,10 @@ export class InvoicePageDDComponent {
   }
 
   private onShown(): void {
-    console.log('Dropdown is shown');
+    // console.log('Dropdown is shown');
   }
   private changePage(page: string): void {
-    console.log('Page should be changed to:', page);
+    // console.log('Page should be changed to:', page);
     // this.router.navigate(['/pages', page]);
   }
 }

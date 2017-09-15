@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,
-    public _http: HttpWrapperService,
     private loginAction: LoginActions,
     private authService: AuthService,
     private _toaster: ToasterService,
@@ -104,7 +103,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
       this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
-        console.log('auth', user);
         this.isSocialLogoutAttempted$.subscribe((res) => {
           if (!res && user) {
             switch (user.provider) {

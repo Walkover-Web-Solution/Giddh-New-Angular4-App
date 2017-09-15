@@ -131,7 +131,7 @@ export class DataFormatter {
         if (group.closingBalance.amount !== 0) {
           row += `${strIndex + group.groupName.toUpperCase()},${group.forwardedBalance.amount}${this.recType.transform(group.forwardedBalance)},${group.debitTotal},${group.creditTotal},${group.closingBalance.amount}${this.recType.transform(group.closingBalance)}\r\n`;
           if (group.accounts === void 0) {
-            console.log(group);
+            // console.log(group);
           }
           if (group.accounts.length > 0) {
             group.accounts.forEach(acc => {

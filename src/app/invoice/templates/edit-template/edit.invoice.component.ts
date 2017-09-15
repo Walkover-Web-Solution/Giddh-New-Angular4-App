@@ -419,6 +419,7 @@ export class EditInvoiceComponent implements OnInit {
   public onSetTemplateAsDefault(template) {
     if (template) {
       let selectedTemplate = _.cloneDeep(template);
+      // console.log('the selectedTemplate is :', selectedTemplate);
       this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName));
     }
   }
