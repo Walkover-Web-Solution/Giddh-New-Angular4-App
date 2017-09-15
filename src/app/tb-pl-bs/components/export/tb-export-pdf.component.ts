@@ -134,7 +134,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
       },
       drawCell: (cell, data) => {
         if (data.column.name === 'name') {
-          console.log(cell, data);
+          // console.log(cell, data);
         }
       },
       addPageContent: () => {

@@ -59,10 +59,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
     this.store.select(p => p.settings).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
-        console.log('Found');
+        // console.log('Found');
         this.ebankAccounts = _.cloneDeep(o.linkedAccounts.bankAccounts);
       } else {
-        console.log('Not found');
+        // console.log('Not found');
       }
     });
 

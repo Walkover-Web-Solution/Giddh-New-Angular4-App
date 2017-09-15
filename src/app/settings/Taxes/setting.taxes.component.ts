@@ -56,7 +56,7 @@ export class SettingTaxesComponent implements OnInit {
         this.availableTaxes = _.cloneDeep(o.taxes);
       }
     });
-    console.log('hello from SettingTaxesComponent');
+    // console.log('hello from SettingTaxesComponent');
 
     // get flatternaccounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {

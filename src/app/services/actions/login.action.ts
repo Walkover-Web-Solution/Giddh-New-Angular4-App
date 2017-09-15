@@ -63,27 +63,28 @@ export class LoginActions {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
       }
+      debugger;
       return this.LoginSuccess();
     });
 
-    @Effect()
-    public signupWithLinkedin$: Observable<Action> = this.actions$
-      .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST)
-      .switchMap(action =>
-        this.auth.LoginWithLinkedin(action.payload)
-      )
-      .map(response => this.signupWithLinkedinResponse(response));
+  @Effect()
+  public signupWithLinkedin$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST)
+    .switchMap(action =>
+      this.auth.LoginWithLinkedin(action.payload)
+    )
+    .map(response => this.signupWithLinkedinResponse(response));
 
-    @Effect()
-    public signupWithLinkedinResponse$: Observable<Action> = this.actions$
-      .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
-      .map(action => {
-        if (action.payload.status === 'error') {
-          this._toaster.errorToast(action.payload.message, action.payload.code);
-          return { type: '' };
-        }
-        return this.LoginSuccess();
-      });
+  @Effect()
+  public signupWithLinkedinResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      }
+      return this.LoginSuccess();
+    });
 
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
@@ -144,19 +145,17 @@ export class LoginActions {
   public loginSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LoginSuccess)
     .switchMap((action) => {
-      let stateDetail$ = this._companyService.getStateDetailsAuthGuard('');
-      let companies$ = this._companyService.CompanyList();
-      return Observable.forkJoin(stateDetail$, companies$);
+      return Observable.zip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
     }).map((results: any[]) => {
+      // console.log(results);
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
       let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
       if (companies.body.length === 0) {
-        // this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         return go(['/pages/new-user']);
       } else {
-        if (stateDetail.body) {
+        if (stateDetail.body && stateDetail.status === 'success') {
           cmpUniqueName = stateDetail.body.companyUniqueName;
           if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
@@ -233,20 +232,20 @@ export class LoginActions {
       return this.signupWithGoogleResponse(data);
     });
 
-    @Effect()
-    public LinkedInElectronLogin$: Observable<Action> = this.actions$
-      .ofType(LoginActions.LinkedInLoginElectron)
-      .switchMap(action => {
-        return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', action.payload).map(p => p.json());
-      })
-      .map(data => {
-        if (data.status === 'error') {
-          this._toaster.errorToast(data.message, data.code);
-          return { type: '' };
-        }
-        // return this.LoginSuccess();
-        return this.signupWithGoogleResponse(data);
-      });
+  @Effect()
+  public LinkedInElectronLogin$: Observable<Action> = this.actions$
+    .ofType(LoginActions.LinkedInLoginElectron)
+    .switchMap(action => {
+      return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', action.payload).map(p => p.json());
+    })
+    .map(data => {
+      if (data.status === 'error') {
+        this._toaster.errorToast(data.message, data.code);
+        return { type: '' };
+      }
+      // return this.LoginSuccess();
+      return this.signupWithGoogleResponse(data);
+    });
   constructor(
     public _router: Router,
     private actions$: Actions,
