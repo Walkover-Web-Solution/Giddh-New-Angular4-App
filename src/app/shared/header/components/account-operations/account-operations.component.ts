@@ -290,7 +290,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.showNewForm$.subscribe(s => {
       if (s) {
-        console.log(this.columnsRef);
+        // console.log(this.columnsRef);
       }
     });
 
@@ -541,7 +541,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         }
       });
       let a = [];
-      console.log(data);
+      // console.log(data);
       if (this.applyTaxSelect2.value && Array.isArray(this.applyTaxSelect2.value)) {
         data.taxes.push(...(this.applyTaxSelect2.value as string[]));
       }

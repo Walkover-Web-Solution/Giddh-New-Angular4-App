@@ -74,11 +74,22 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
     this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.tb.data)).takeUntil(this.destroyed$);
+    this.data$ = this.store.select(p => {
+      let d = _.cloneDeep(p.tlPl.tb.data);
+      if (d) {
+        _.each(d.groupDetails, (grp: any) => {
+          grp.isVisible = true;
+          _.each(grp.accounts, (acc: any) => {
+            acc.isVisible = true;
+          });
+        });
+      }
+      return d;
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
 
   public ngAfterViewInit() {
@@ -100,11 +111,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public exportCsv($event) {
     //
-   }
+  }
   public exportPdf($event) {
     //
-   }
+  }
   public exportXLS($event) {
     //
-   }
+  }
 }
