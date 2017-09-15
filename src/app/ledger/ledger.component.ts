@@ -341,7 +341,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
-    this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    if (blankTransactionObj.transactions.length > 0) {
+      this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    } else {
+      this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+    }
   }
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];
