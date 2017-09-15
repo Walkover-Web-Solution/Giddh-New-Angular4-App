@@ -140,10 +140,10 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
       let res: BaseResponse<any, string> = action.payload;
       if (res.status === 'success') {
         let uniqName = res.queryString.templateUniqueName;
-        let indx = state.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+        let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
         if (indx > -1) {
-          state.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
-          state.customCreatedTemplates[indx].isDefault = true;
+          nextState.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
+          nextState.customCreatedTemplates[indx].isDefault = true;
         }
         return Object.assign({}, state, nextState);
       }
