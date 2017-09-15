@@ -48,7 +48,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,
-    public _http: HttpWrapperService,
     private loginAction: LoginActions,
     private authService: AuthService,
     private _toaster: ToasterService,
@@ -109,6 +108,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           if (!res && user) {
             switch (user.provider) {
               case 'GOOGLE': {
+                debugger;
                 this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
                 break;
               }
