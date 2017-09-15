@@ -97,7 +97,7 @@ export class MfEditComponent implements OnInit {
 
   }
   public ngOnInit() {
-    console.log('hello from MfEditComponent');
+    // console.log('hello from MfEditComponent');
     if (this.isUpdateCase) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
@@ -334,7 +334,7 @@ export class MfEditComponent implements OnInit {
     // console.log(selectedItem);
     let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
     this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
-      console.log('The response from the API is :', res);
+      // console.log('The response from the API is :', res);
       if (res.status === 'success') {
         let unitCode = res.body.stockUnit.code;
         if (this.isUpdateCase) {
@@ -342,7 +342,7 @@ export class MfEditComponent implements OnInit {
         } else {
           this.linkedStocks.stockUnitCode = unitCode;
         }
-        console.log('unitCode is :', unitCode);
+        // console.log('unitCode is :', unitCode);
       }
     });
   }
