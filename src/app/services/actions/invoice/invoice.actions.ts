@@ -363,7 +363,7 @@ export class InvoiceActions {
     .ofType(INVOICE.TEMPLATE.GET_USER_TEMPLATES)
     .switchMap(action => this._invoiceTemplatesService.getTemplates())
     .map((response: Template) => {
-      console.log('SET STATE ACTION CALLED');
+      // console.log('SET STATE ACTION CALLED');
       return this.setTemplateState(response);
     });
 
@@ -986,7 +986,7 @@ export class InvoiceActions {
     };
   }
   public setDivVisible(div: IsDivVisible): Action {
-    console.log(div);
+    // console.log(div);
     return {
       type: INVOICE.TEMPLATE.SET_VISIBLE,
       payload: { div }

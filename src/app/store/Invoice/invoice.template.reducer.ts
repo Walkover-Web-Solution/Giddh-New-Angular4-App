@@ -176,10 +176,10 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
   switch (action.type) {
 
     case INVOICE.TEMPLATE.SET_TEMPLATE_STATE:
-      console.log('SET TEMPLATE STATE');
+      // console.log('SET TEMPLATE STATE');
       let result = action.payload.temp.body;
       let newState = []; // Array
-      console.log(result);
+      // console.log(result);
       if (result) {
         result.forEach((obj) => {
           let key = obj.uniqueName;
@@ -281,7 +281,7 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
   switch (action.type) {
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
-      console.log(action.payload.id);
+      // console.log(action.payload.id);
       return Object.assign({}, state, {
         templateId: action.payload.id
       });
@@ -378,7 +378,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         quantityLabel: action.payload.data
       });
     case INVOICE.TEMPLATE.SET_VISIBLE:
-      console.log('DIV VISIBLE REDUCER CALLED');
+      // console.log('DIV VISIBLE REDUCER CALLED');
       return Object.assign({}, state, {
         div: {
           header: action.payload.divVis.header,

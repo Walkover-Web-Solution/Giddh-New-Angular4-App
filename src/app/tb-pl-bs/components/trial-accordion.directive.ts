@@ -16,10 +16,13 @@ export class TrialAccordionDirective {
   @HostListener('click')
   public onClick() {
     if (this.data.accounts) {
-      // this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
-      this.data.childGroups = this.data.childGroups.map(p => ({ ...p, isVisible: !p.isVisible }));
-      this.data.isVisible = true;
+      this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
     }
+    if (this.data.childGroups) {
+      this.data.childGroups = this.data.childGroups.map(p => ({ ...p, isVisible: !p.isVisible }));
+    }
+    this.data.isVisible = true;
+    // }
     if (this.el.nativeElement.nextElementSibling) {
       // this.toggleClass(this.el.nativeElement);
     }
