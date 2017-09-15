@@ -73,7 +73,7 @@ export class TagsComponent implements AfterViewInit, OnInit, ControlValueAccesso
     if (!(this.element as any).tagsManager) {
       if (!this.check) {
         this.check = true;
-        console.log('Please add TagsManager library (js file) to the project.');
+        // console.log('Please add TagsManager library (js file) to the project.');
       }
 
       return;

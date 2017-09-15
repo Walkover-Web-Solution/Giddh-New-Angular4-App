@@ -40,7 +40,7 @@ export class AccountAddComponent implements OnInit, OnDestroy {
       });
       this.statesSource$ = Observable.of(states);
     }, (err) => {
-      console.log(err);
+      // console.log(err);
     });
   }
 

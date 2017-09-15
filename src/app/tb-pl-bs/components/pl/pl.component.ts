@@ -74,7 +74,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
   public expandAllEmit(v) {
     if (this.plGrid) {

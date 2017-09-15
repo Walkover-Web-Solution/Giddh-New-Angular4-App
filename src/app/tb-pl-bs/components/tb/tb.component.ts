@@ -89,7 +89,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
 
   public ngAfterViewInit() {

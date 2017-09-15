@@ -14,7 +14,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello inventory module');
+    // console.log('hello inventory module');
     // this.exampleData = [
     // ];
   }
