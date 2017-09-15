@@ -71,7 +71,8 @@ export interface InvoiceTemplateMetaState {
   bottomMargin: number;
   rightMargin: number;
   font: string;
-  color: string;
+  primaryColor: string;
+  secondaryColor: string;
   taxableAmount: string;
   totalTax: string;
   otherDeduction: string;
@@ -247,7 +248,8 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   bottomMargin: 10,
   rightMargin: 10,
   font: 'Roboto',
-  color: '#df4927',
+  primaryColor: '#df4927',
+  secondaryColor: '#fdf6f4',
   taxableAmount: 'Taxable Amount',
   totalTax: 'Total Tax*',
   otherDeduction: 'Other Deduction',
@@ -410,7 +412,8 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.SET_COLOR:
       return Object.assign({}, state, {
-        color: action.payload.color
+        primaryColor: action.payload.primaryColor,
+        secondaryColor: action.payload.secondaryColor
       });
     case INVOICE.TEMPLATE.UPDATE_MESSAGE1:
       return Object.assign({}, state, {
