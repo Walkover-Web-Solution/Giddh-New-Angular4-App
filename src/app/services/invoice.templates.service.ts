@@ -30,7 +30,7 @@ export class InvoiceTemplatesService {
     });
     return this._http.get(INVOICE_API.GET_USER_TEMPLATES).map((res) => {
       let data: Template = res.json();
-      console.log('API RESPONSE', data);
+      // console.log('API RESPONSE', data);
       return data;
     }).catch((e) => {
       let object = this.errorHandler.HandleCatch<Template, string>(e);
@@ -54,6 +54,22 @@ export class InvoiceTemplatesService {
     });
   }
 
+  public getCustomTemplate(templateUniqueName: string): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.GET_CUSTOM_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName)).map((res) => {
+      let data: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = res.json();
+      return data;
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<any, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
   public setTemplateAsDefault(templateUniqueName: string): Observable<BaseResponse<any, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -62,6 +78,23 @@ export class InvoiceTemplatesService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.patch(INVOICE_API.SET_AS_DEFAULT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName), {}).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString = { templateUniqueName };
+      return data;
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<any, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
+  public deleteTemplate(templateUniqueName: string): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(INVOICE_API.DELETE_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.queryString = { templateUniqueName };
       return data;

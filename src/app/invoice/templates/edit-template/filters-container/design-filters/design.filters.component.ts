@@ -229,4 +229,10 @@ export class DesignFiltersContainerComponent {
     this.ifTemplateSelected = false;
   }
 
+  /**
+   * setTemplateName
+   */
+  public setTemplateName(name: string) {
+    this._invoiceUiDataService.setTemplateName(name);
+  }
 }
