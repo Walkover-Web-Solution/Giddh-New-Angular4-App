@@ -4,7 +4,7 @@
     <div class="clearfix">
         <div class="col-xs-9">
             <div class="row">
-                <label><input type="text" class="form-control" placeholder="My Invoice Template" /></label>
+                <label><input type="text" class="form-control" #templateName placeholder="My Invoice Template" (keyup)="setTemplateName(templateName.value)" /></label>
             </div>
         </div>
     </div>
