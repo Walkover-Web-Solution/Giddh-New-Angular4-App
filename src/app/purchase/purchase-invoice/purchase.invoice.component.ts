@@ -131,7 +131,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private accountService: AccountService
   ) {
     this.selectedDateForGSTR1 = String(moment());
-    console.log('Hi this is purchase invoice component');
+    // console.log('Hi this is purchase invoice component');
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
       if (c) {
         this.activeCompanyUniqueName = _.cloneDeep(c);
@@ -165,8 +165,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     });
   }
   public selectedDate(value: any, dateInput: any) {
-    console.log('value is :', value);
-    console.log('dateInput is :', dateInput);
+    // console.log('value is :', value);
+    // console.log('dateInput is :', dateInput);
     // dateInput.start = value.start;
     // dateInput.end = value.end;
   }
@@ -286,7 +286,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.selectedEntryTypeValue = value;
 
       this.intervalId = setInterval(() => {
-        console.log('running...');
+        // console.log('running...');
         this.timeCounter--;
         this.checkForCounterValue(this.timeCounter);
       }, 1000);
