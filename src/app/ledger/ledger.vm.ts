@@ -31,7 +31,7 @@ export class LedgerVM {
   public accountUnq: string = '';
   public blankLedger: BlankLedgerVM;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
-  public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
+  // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   public showTaxationDiscountBox: boolean = false;
