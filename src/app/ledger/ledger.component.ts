@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -21,6 +21,7 @@ import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'ledger',
@@ -66,7 +67,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public trxRequest: TransactionsRequest;
-  public needToReCalculate: boolean = false;
   public accountsOptions: Select2Options = {
     multiple: false,
     width: '100%',
@@ -95,6 +95,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   };
   public isLedgerCreateSuccess$: Observable<boolean>;
+  public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
