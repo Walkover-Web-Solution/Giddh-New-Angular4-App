@@ -13,7 +13,7 @@ export class SocialLoginCallbackComponent implements OnInit {
   }
 
   public ngOnInit() {
-    console.log(this.auth.getPayload());
+    // console.log(this.auth.getPayload());
 }
 
 }

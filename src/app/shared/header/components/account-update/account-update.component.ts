@@ -54,7 +54,7 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
       });
       this.statesSource$.next(states);
     }, (err) => {
-      console.log(err);
+      // console.log(err);
     });
   }
 

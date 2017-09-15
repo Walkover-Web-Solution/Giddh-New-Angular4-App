@@ -30,7 +30,7 @@ export class InvoiceTemplatesService {
     });
     return this._http.get(INVOICE_API.GET_USER_TEMPLATES).map((res) => {
       let data: Template = res.json();
-      console.log('API RESPONSE', data);
+      // console.log('API RESPONSE', data);
       return data;
     }).catch((e) => {
       let object = this.errorHandler.HandleCatch<Template, string>(e);

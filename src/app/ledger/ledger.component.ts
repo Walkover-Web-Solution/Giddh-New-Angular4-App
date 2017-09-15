@@ -276,7 +276,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       let blob = this.base64ToBlob(d.body, 'application/pdf', 512);
       return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
     }, error => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
