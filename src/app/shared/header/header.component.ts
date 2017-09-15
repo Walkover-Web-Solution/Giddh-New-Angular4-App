@@ -230,7 +230,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public logout() {
     if (isElectron) {
       // this._aunthenticationServer.GoogleProvider.signOut();
-      this.store.dispatch(this.loginAction.LogOut());
+      this.store.dispatch(this.loginAction.ClearSession());
     } else {
       // check if logged in via social accounts
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -238,10 +238,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.socialAuthService.signOut().then().catch((err) => {
             // console.log('err', err);
           });
+          this.store.dispatch(this.loginAction.ClearSession());
           this.store.dispatch(this.loginAction.socialLogoutAttempt());
-          this.store.dispatch(this.loginAction.LogOut());
         } else {
-          this.store.dispatch(this.loginAction.LogOut());
+          this.store.dispatch(this.loginAction.ClearSession());
         }
       });
 

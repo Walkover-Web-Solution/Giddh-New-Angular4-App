@@ -9,7 +9,9 @@ import {
   OnInit,
   Output,
   SimpleChanges,
-  ViewChild
+  ViewChild,
+  ElementRef,
+  AfterViewInit
 } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store/roots';
@@ -30,6 +32,7 @@ import { TaxControlComponent } from '../../../shared/theme/index';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { find } from 'lodash';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -37,10 +40,10 @@ import { find } from 'lodash';
   styleUrls: ['./newLedgerEntryPanel.component.css']
 })
 
-export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked {
+export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
-  @Input() public needToReCalculate: boolean = false;
+  @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
@@ -116,9 +119,17 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    if (changes['needToReCalculate']) {
-      this.calculateTotal();
-    }
+    // if (changes['needToReCalculate'] && changes['needToReCalculate'].currentValue) {
+    //   this.amountChanged();
+    // }
+  }
+
+  public ngAfterViewInit(): void {
+    this.needToReCalculate.subscribe(a => {
+      if (a) {
+        this.amountChanged();
+      }
+    });
   }
 
   public ngAfterViewChecked() {
@@ -138,6 +149,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public calculateTotal() {
     let total = this.currentTxn.amount - this.currentTxn.discount;
     this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
+  }
+
+  public amountChanged() {
     if (this.isAmountFirst || this.isTotalFirts) {
       return;
     } else {
