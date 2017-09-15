@@ -1,330 +1,349 @@
 <section class="container nopad">
 
-    <!--ledger table-->
-    <div class="ledgHead transactions-page mrT3 pos-rel">
+  <!--ledger table-->
+  <div class="ledgHead transactions-page mrT3 pos-rel">
 
-        <!-- ledger header -->
-        <div class="col-md-12">
-            <div class="row">
-                <div class="col-xs-4">
-                    <div class="row">
-                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (selected)="selectedDate($event)"
-                         class="form-control date-range-picker"/>
-                        <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
-                        <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
-                        <!--type="text" ng-model="cDate" options="opts" required="">-->
-                    </div>
-                </div>
-                <div class="col-xs-4">
-                    <div class="row">
-                        <h1 class="text-center account_Name fs20 ng-binding">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>
-                    </div>
-                </div>
-                <div class="col-xs-4 pull-right text-right">
-                    <div class="row">
-
-                        <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" ng-click="ledgerCtrl.shareLedger(); ledgerCtrl.toggleExportFucntion()">
-                            <i class="icon-download"></i>
-                        </a>
-
-                        <a href="" id="share" class="icomoon_ico" ng-click="ledgerCtrl.shareLedger();ledgerCtrl.getSharedWithList(); ledgerCtrl.toggleShareFucntion()">
-                            <i [tooltip]="'Share Ledger'" [placement]="'right'" class="icon-share"></i>
-                        </a>
-
-                        <div class="mrL2 col-xs-6 pos-rel pull-right">
-                            <div class="row">
-                                <input type="search" class="form-control" placeholder="Search ledger" #ledgerSearchTerms>
-                                <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ledger header -->
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-xs-4">
+          <div class="row">
+            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (selected)="selectedDate($event)"
+              class="form-control date-range-picker" />
+            <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
+            <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
+            <!--type="text" ng-model="cDate" options="opts" required="">-->
+          </div>
         </div>
-        <!-- ledger header end -->
-
-        <!--bank ledgers-->
-        <!-- ngIf: ledgerCtrl.eLedgerData.length > 0 && ledgerCtrl.showEledger -->
-        <!--/bank ledger-->
-
-        <!--account table-->
-        <table class="col-xs-12 ledger-head mrT3">
-            <thead>
-                <tr>
-                    <th class="col-xs-6"><b>{{ (lc.activeAccount$ | async)?.name }} is Coming in (+)</b>
-                    </th>
-                    <th class="col-xs-6"><b>{{ (lc.activeAccount$ | async)?.name }} is Going out (-)</b>
-                    </th>
-                </tr>
-            </thead>
-        </table>
-        <!--account table end-->
-
-        <!--transaction-->
-        <div class="ledger_book">
-            <!--debit transaction-->
-            <div class="left-col-new" [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
-                <table class="width100">
-                    <thead>
-                        <tr class="t-h-bg1">
-                            <th class="col-xs-2">
-                                <span ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')" class="cp">Date</span>
-                            </th>
-                            <th class="col-xs-7">Particular</th>
-                            <th class="col-xs-3">Amount</th>
-                        </tr>
-                    </thead>
-                </table>
-
-                <table class="width100">
-                    <tbody>
-                        <tr class="ledger-row">
-                            <td class="col-xs-2"></td>
-                            <td class="col-xs-7">B/F Balance</td>
-                            <td class="col-xs-3">
-                                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount }}</span>
-                                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
-                            </td>
-                        </tr>
-                        <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
-                            <td class="col-xs-2">{{ txn.entryDate }}</td>
-                            <td class="col-xs-7">
-                                {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
-                            </td>
-                            <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                                {{ txn.amount }}
-                                <span class="download-invoice-ledger ng-scope" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber, $event)" container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
-	              	<i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
-	              </span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-
-                <!--blank ledger-->
-                <table class="width100" (click)="$event.stopPropagation();" (clickOutside)="hideNewLedgerEntryPopup()">
-                    <tbody>
-                        <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
-                            <td class="width100" *ngIf="txn.type === 'DEBIT'">
-                                <table class="width100">
-                                    <tbody class="ledger-main">
-                                        <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
-
-                                            <td class="col-xs-2">
-                                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, pipe: lc.datePipe, guide: true}">
-                                            </td>
-                                            <td class="col-xs-7 select2-parent select2-ledger">
-
-                                                <select2 [data]="lc.flatternAccountList | async" [(ngModel)]="txn.particular" [options]="accountsOptions" (valueChanged)="selectAccount($event,txn)"></select2>
-
-                                                <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
-                                                    <li>Create New Account</li>
-                                                </ul>
-
-
-                                            </td>
-
-                                            <td class="col-xs-3 pos-rel">
-                                                <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keydown)="needToReCalculate = true" (keyup)="needToReCalculate = false">
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-                                <!--new ledge popup-->
-                                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
-                                        (saveBlankLedger)="saveBlankTransaction()">
-                                    </new-ledger-entry-panel>
-                                </div>
-
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-            </div>
-            <!--debit transaction-->
-
-            <!--credit transaction-->
-            <div class="right-col-new" [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
-                <table class="width100">
-                    <thead>
-                        <tr class="t-h-bg1">
-                            <th class="col-xs-2">
-                                <span ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')" class="cp">Date</span>
-                            </th>
-                            <th class="col-xs-7">Particular</th>
-                            <th class="col-xs-3">Amount</th>
-                        </tr>
-                    </thead>
-                </table>
-
-                <table class="width100">
-                    <tbody>
-                        <tr class="ledger-row">
-                            <td class="col-xs-2"></td>
-                            <td class="col-xs-7">B/F Balance</td>
-                            <td class="col-xs-3">
-                                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">{{ (lc.transactionData$ | async)?.forwardedBalance.amount  }}</span>
-                                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
-                            </td>
-                        </tr>
-
-                        <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
-                            <td class="col-xs-2">{{ txn.entryDate }}</td>
-                            <td class="col-xs-7">
-                                {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
-                            </td>
-                            <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                                {{txn.amount}}
-                                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadInvoice(txn.attachedFileUniqueName, $event)" container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
-	              	<i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
-	              </span>
-                                <span class="download-invoice-ledger" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber , $event)" container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
-	              	<i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
-	              </span>
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-                <!--blank ladger-->
-                <table class="width100" (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
-                    <tbody>
-                        <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
-                            <td class="width100" *ngIf="txn.type === 'CREDIT'">
-                                <table class="width100">
-                                    <tbody class="ledger-main">
-                                        <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
-
-                                            <td class="col-xs-2">
-                                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" ng-click="ledgerCtrl.selectBlankTxn(txn, $event)" is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
-                                            </td>
-                                            <td class="col-xs-7 select2-parent select2-ledger">
-
-                                                <select2 [data]="lc.flatternAccountList | async" (valueChanged)="selectAccount($event,txn)" [(ngModel)]="txn.particular" [options]="accountsOptions"></select2>
-
-                                                <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
-                                                    <li>Create New Account</li>
-                                                </ul>
-
-
-                                            </td>
-
-                                            <td class="col-xs-3 pos-rel">
-                                                <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keydown)="needToReCalculate = true" (keyup)="needToReCalculate = false" ng-click="ledgerCtrl.selectBlankTxn(txn, $event)" is-open="txn.isOpen">
-                                            </td>
-
-                                        </tr>
-
-                                    </tbody>
-                                </table>
-
-                                <!--new ledge popup-->
-                                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
-                                        (saveBlankLedger)="saveBlankTransaction()">
-                                    </new-ledger-entry-panel>
-                                </div>
-
-                            </td>
-                        </tr>
-
-                    </tbody>
-                </table>
-
-            </div>
-            <!--credit transaction-->
-
-            <!--footer-->
-            <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;">
-                <tbody>
-
-                    <tr class="total_col">
-                        <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                            <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'" class="">
-								C/F: {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '3.1-5' }}
-							</span>
-                        </td>
-                    </tr>
-                    <tr class="total_col">
-                        <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                            <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.creditTotal | number: '3.1-5' }}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <table class=" ledger-footer-1 " style="width:50%;right:0;bottom:0;">
-                <tbody>
-
-                    <tr class="total_col">
-                        <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
-                            <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" tooltip="" [placement]="'top'">
-								C/F: Dr <span class="primary_color">{{(lc.transactionData$ | async)?.closingBalance.amount}}
-							</span></span>
-                        </td>
-                    </tr>
-                    <tr class="total_col">
-                        <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                            <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{(lc.transactionData$ | async)?.creditTotal}}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <!--footer-->
-
-            <!-- pagination -->
-            <div class="text-center mrT2 pageCount pa">
-                <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
-                <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
-
-                <div id="pagination" *ngIf="(lc.transactionData$ | async)?.totalPages > 1">
-                    <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count" [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)"
-                        [boundaryLinks]="true">
-                    </pagination>
-                </div>
-
-            </div>
-            <!-- pagination -->
+        <div class="col-xs-4">
+          <div class="row">
+            <h1 class="text-center account_Name fs20 ng-binding">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>
+          </div>
         </div>
-        <!--transaction-->
+        <div class="col-xs-4 pull-right text-right">
+          <div class="row">
+
+            <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" ng-click="ledgerCtrl.shareLedger(); ledgerCtrl.toggleExportFucntion()">
+              <i class="icon-download"></i>
+            </a>
+
+            <a href="" id="share" class="icomoon_ico" ng-click="ledgerCtrl.shareLedger();ledgerCtrl.getSharedWithList(); ledgerCtrl.toggleShareFucntion()">
+              <i [tooltip]="'Share Ledger'" [placement]="'right'" class="icon-share"></i>
+            </a>
+
+            <div class="mrL2 col-xs-6 pos-rel pull-right">
+              <div class="row">
+                <input type="search" class="form-control" placeholder="Search ledger" #ledgerSearchTerms>
+                <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- ledger table end -->
+    <!-- ledger header end -->
+
+    <!--bank ledgers-->
+    <!-- ngIf: ledgerCtrl.eLedgerData.length > 0 && ledgerCtrl.showEledger -->
+    <!--/bank ledger-->
+
+    <!--account table-->
+    <table class="col-xs-12 ledger-head mrT3">
+      <thead>
+        <tr>
+          <th class="col-xs-6">
+            <b>{{ (lc.activeAccount$ | async)?.name }} is Coming in (+)</b>
+          </th>
+          <th class="col-xs-6">
+            <b>{{ (lc.activeAccount$ | async)?.name }} is Going out (-)</b>
+          </th>
+        </tr>
+      </thead>
+    </table>
+    <!--account table end-->
+
+    <!--transaction-->
+    <div class="ledger_book">
+      <!--debit transaction-->
+      <div class="left-col-new" [ngClass]="{bdrR: (lc.transactionData$ | async)?.debitTransactions.length >= (lc.transactionData$ | async)?.creditTransactions.length}">
+        <table class="width100">
+          <thead>
+            <tr class="t-h-bg1">
+              <th class="col-xs-2">
+                <span ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')"
+                  class="cp">Date</span>
+              </th>
+              <th class="col-xs-7">Particular</th>
+              <th class="col-xs-3">Amount</th>
+            </tr>
+          </thead>
+        </table>
+
+        <table class="width100">
+          <tbody>
+            <tr class="ledger-row">
+              <td class="col-xs-2"></td>
+              <td class="col-xs-7">B/F Balance</td>
+              <td class="col-xs-3">
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount }}</span>
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
+              </td>
+            </tr>
+            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
+              (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
+              <td class="col-xs-2">{{ txn.entryDate }}</td>
+              <td class="col-xs-7">
+                {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
+              </td>
+              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
+                {{ txn.amount }}
+                <span class="download-invoice-ledger ng-scope" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber, $event)"
+                  container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
+                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!--blank ledger-->
+        <table class="width100" (click)="$event.stopPropagation();" (clickOutside)="hideNewLedgerEntryPopup()">
+          <tbody>
+            <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
+              <td class="width100" *ngIf="txn.type === 'DEBIT'">
+                <table class="width100">
+                  <tbody class="ledger-main">
+                    <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
+
+                      <td class="col-xs-2">
+                        <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                      </td>
+                      <td class="col-xs-7 select2-parent select2-ledger">
+
+                        <select2 [data]="lc.flatternAccountList | async" [(ngModel)]="txn.particular" [options]="accountsOptions" (valueChanged)="selectAccount($event,txn)"></select2>
+
+                        <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
+                          <li>Create New Account</li>
+                        </ul>
+
+
+                      </td>
+
+                      <td class="col-xs-3 pos-rel">
+                        <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keydown)="needToReCalculate = true" (keyup)="needToReCalculate = false">
+                      </td>
+
+                    </tr>
+
+                  </tbody>
+                </table>
+                <!--new ledge popup-->
+                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                  <new-ledger-entry-panel [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                    (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
+                  </new-ledger-entry-panel>
+                </div>
+
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+      <!--debit transaction-->
+
+      <!--credit transaction-->
+      <div class="right-col-new" [ngClass]="{bdrL: (lc.transactionData$ | async)?.debitTransactions.length < (lc.transactionData$ | async)?.creditTransactions.length}">
+        <table class="width100">
+          <thead>
+            <tr class="t-h-bg1">
+              <th class="col-xs-2">
+                <span ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')"
+                  class="cp">Date</span>
+              </th>
+              <th class="col-xs-7">Particular</th>
+              <th class="col-xs-3">Amount</th>
+            </tr>
+          </thead>
+        </table>
+
+        <table class="width100">
+          <tbody>
+            <tr class="ledger-row">
+              <td class="col-xs-2"></td>
+              <td class="col-xs-7">B/F Balance</td>
+              <td class="col-xs-3">
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">{{ (lc.transactionData$ | async)?.forwardedBalance.amount }}</span>
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
+              </td>
+            </tr>
+
+            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
+              (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
+              <td class="col-xs-2">{{ txn.entryDate }}</td>
+              <td class="col-xs-7">
+                {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
+              </td>
+              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
+                {{txn.amount}}
+                <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadInvoice(txn.attachedFileUniqueName, $event)"
+                  container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
+                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                </span>
+                <span class="download-invoice-ledger" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber , $event)"
+                  container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
+                  <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
+                </span>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <!--blank ladger-->
+        <table class="width100" (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
+          <tbody>
+            <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
+              <td class="width100" *ngIf="txn.type === 'CREDIT'">
+                <table class="width100">
+                  <tbody class="ledger-main">
+                    <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
+
+                      <td class="col-xs-2">
+                        <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" ng-click="ledgerCtrl.selectBlankTxn(txn, $event)"
+                          is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
+                      </td>
+                      <td class="col-xs-7 select2-parent select2-ledger">
+
+                        <select2 [data]="lc.flatternAccountList | async" (valueChanged)="selectAccount($event,txn)" [(ngModel)]="txn.particular"
+                          [options]="accountsOptions"></select2>
+
+                        <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
+                          <li>Create New Account</li>
+                        </ul>
+
+
+                      </td>
+
+                      <td class="col-xs-3 pos-rel">
+                        <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keydown)="needToReCalculate = true" (keyup)="needToReCalculate = false"
+                          ng-click="ledgerCtrl.selectBlankTxn(txn, $event)" is-open="txn.isOpen">
+                      </td>
+
+                    </tr>
+
+                  </tbody>
+                </table>
+
+                <!--new ledge popup-->
+                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                  <new-ledger-entry-panel [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                    (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
+                  </new-ledger-entry-panel>
+                </div>
+
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
+      <!--credit transaction-->
+
+      <!--footer-->
+      <table class="ledger-footer-1" style="width:50%;left:0;bottom:0;">
+        <tbody>
+
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+              <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'"
+                class="">
+                C/F: {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '3.1-5' }}
+              </span>
+            </td>
+          </tr>
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
+              <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.creditTotal | number: '3.1-5' }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class=" ledger-footer-1 " style="width:50%;right:0;bottom:0;">
+        <tbody>
+
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
+              <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" tooltip="" [placement]="'top'">
+                C/F: Dr
+                <span class="primary_color">{{(lc.transactionData$ | async)?.closingBalance.amount}}
+                </span>
+              </span>
+            </td>
+          </tr>
+          <tr class="total_col">
+            <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
+              <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{(lc.transactionData$ | async)?.creditTotal}}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!--footer-->
+
+      <!-- pagination -->
+      <div class="text-center mrT2 pageCount pa">
+        <span class="grey ng-binding">{{ (lc.transactionData$ | async)?.totalItems }} transactions,</span>
+        <span class="black ng-binding">{{ (lc.transactionData$ | async)?.totalPages }} pages</span>
+
+        <div id="pagination" *ngIf="(lc.transactionData$ | async)?.totalPages > 1">
+          <pagination [totalItems]="(lc.transactionData$ | async)?.totalPages * (lc.transactionData$ | async)?.count" [itemsPerPage]="(lc.transactionData$ | async)?.count"
+            [maxSize]="5" class="pagination-sm" [(ngModel)]="lc.currentPage" (pageChanged)="pageChanged($event)" [boundaryLinks]="true">
+          </pagination>
+        </div>
+
+      </div>
+      <!-- pagination -->
+    </div>
+    <!--transaction-->
+  </div>
+  <!-- ledger table end -->
 
 </section>
 
 <!--total section-->
 <section class="ledger-stat mrT3" *ngIf="(lc.transactionData$ | async)?.debitTransactions.length > 0 || (lc.transactionData$ | async)?.creditTransactions.length > 0">
-    <div class="container">
-        <div class="col-xs-3">
-            <!--<span class="primary_color mrB1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
-            <h1>Total Transactions <span class="primary_color">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-            </h1>
-            <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span> <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
-        </div>
-        <div class="col-xs-3">
-            <h1>Debit Total</h1>
-            <h3>{{(lc.transactionData$ | async)?.debitTotal | number:'3.1-5'}}</h3>
-        </div>
-        <div class="col-xs-3">
-            <h1>Credit Total</h1>
-            <h3>{{(lc.transactionData$ | async)?.creditTotal | number:'3.1-5'}}</h3>
-        </div>
-        <div class="col-xs-3">
-            <h1 class=" primary_color">Net Total
-                <span *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">Credit</span>
-                <span *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">Debit</span>
-            </h1>
-            <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">
-                {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'3.1-5'}}</h3>
-            <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">
-                {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'3.1-5'}}</h3>
-        </div>
+  <div class="container">
+    <div class="col-xs-3">
+      <!--<span class="primary_color mrB1" style="font-size: 12px">{{cDate.startDate | date:'dd-MMM-yyyy'}} - {{cDate.endDate | date:'dd-MMM-yyyy'}}</span>-->
+      <h1>Total Transactions
+        <span class="primary_color">{{(lc.transactionData$ | async)?.debitTransactionsCount + (lc.transactionData$ | async)?.creditTransactionsCount}}</span>
+      </h1>
+      <span class="mrT1 mrR2">Dr {{(lc.transactionData$ | async)?.debitTransactionsCount}}</span>
+      <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
     </div>
+    <div class="col-xs-3">
+      <h1>Debit Total</h1>
+      <h3>{{(lc.transactionData$ | async)?.debitTotal | number:'3.1-5'}}</h3>
+    </div>
+    <div class="col-xs-3">
+      <h1>Credit Total</h1>
+      <h3>{{(lc.transactionData$ | async)?.creditTotal | number:'3.1-5'}}</h3>
+    </div>
+    <div class="col-xs-3">
+      <h1 class=" primary_color">Net Total
+        <span *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">Credit</span>
+        <span *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">Debit</span>
+      </h1>
+      <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">
+        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'3.1-5'}}</h3>
+      <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">
+        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'3.1-5'}}</h3>
+    </div>
+  </div>
 
 </section>
