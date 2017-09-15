@@ -35,7 +35,7 @@ export class TbExportXlsComponent implements OnInit, OnDestroy {
   }
 
   public downloadTbXls(value: string) {
-    console.log(this.trialBalanceRequest);
+    // console.log(this.trialBalanceRequest);
     let request = <TrialBalanceExportExcelRequest>{ ...this.trialBalanceRequest, export: value };
     this.store.dispatch(this._tbPlActions.DownloadTrialBalanceExcel(request));
     return false;

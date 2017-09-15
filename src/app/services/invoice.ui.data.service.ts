@@ -9,6 +9,7 @@ import { EmailSettingObjDefinition } from '../models/interfaces/invoice.setting.
 @Injectable()
 
 export class InvoiceUiDataService {
+  public templateName: string;
   public logoPath: Subject<string> = new Subject();
   public imageSignaturePath: Subject<string> = new Subject();
   public setDivVisible: Subject<IsDivVisible> = new Subject();
@@ -19,12 +20,12 @@ export class InvoiceUiDataService {
   public invoiceEmailSettingObject: EmailSettingObjDefinition = new EmailSettingObjDefinition();
 
   public setLogoPath(val) {
-    console.log('The value is :', val);
+    // console.log('The value is :', val);
     this.logoPath.next(val);
   }
 
   public setImageSignatgurePath(val) {
-    console.log('The value is :', val);
+    // console.log('The value is :', val);
     this.imageSignaturePath.next(val);
   }
 
@@ -51,5 +52,11 @@ export class InvoiceUiDataService {
   }
   public getEmailSettingObj() {
     return this.invoiceEmailSettingObject;
+  }
+  public setTemplateName(name: string) {
+    this.templateName = name;
+  }
+  public getTemplateName() {
+    return this.templateName;
   }
 }

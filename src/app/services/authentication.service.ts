@@ -41,7 +41,7 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.VerifyEmail, model).map((res) => {
       let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = res.json();
       data.request = model;
-      console.log(data);
+      // console.log(data);
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, VerifyEmailModel>(e, model));
   }
@@ -58,7 +58,7 @@ export class AuthenticationService {
     return this._http.post(LOGIN_API.VerifyOTP, modele).map((res) => {
       let data: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = res.json();
       data.request = modele;
-      console.log(data);
+      // console.log(data);
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<VerifyMobileResponseModel, VerifyMobileModel>(e, modele));
   }

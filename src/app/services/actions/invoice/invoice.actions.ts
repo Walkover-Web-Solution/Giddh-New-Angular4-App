@@ -363,7 +363,7 @@ export class InvoiceActions {
     .ofType(INVOICE.TEMPLATE.GET_USER_TEMPLATES)
     .switchMap(action => this._invoiceTemplatesService.getTemplates())
     .map((response: Template) => {
-      console.log('SET STATE ACTION CALLED');
+      // console.log('SET STATE ACTION CALLED');
       return this.setTemplateState(response);
     });
 
@@ -403,6 +403,30 @@ export class InvoiceActions {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Template was set as default.');
+      }
+      return { type : ''};
+    });
+
+  // DELETE TEMPLATE
+  @Effect()
+  private deleteTemplate$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE)
+    .switchMap(action => this._invoiceTemplatesService.deleteTemplate(action.payload))
+    .map(response => {
+      return this.deleteTemplateResponse(response);
+    });
+
+  @Effect()
+  private deleteTemplateResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body);
       }
       return { type: '' };
     });
@@ -603,6 +627,20 @@ export class InvoiceActions {
   public setTemplateAsDefaultResponse(response: any): Action {
     return {
       type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE,
+      payload: response
+    };
+  }
+
+  public deleteTemplate(templateUniqueName: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.DELETE_TEMPLATE,
+      payload: templateUniqueName
+    };
+  }
+
+  public deleteTemplateResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE,
       payload: response
     };
   }
@@ -948,7 +986,7 @@ export class InvoiceActions {
     };
   }
   public setDivVisible(div: IsDivVisible): Action {
-    console.log(div);
+    // console.log(div);
     return {
       type: INVOICE.TEMPLATE.SET_VISIBLE,
       payload: { div }

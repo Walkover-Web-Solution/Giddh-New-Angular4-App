@@ -11,7 +11,7 @@ import { ComparisionChartComponent } from './components/comparision/comparision-
 import { HistoryChartComponent } from './components/history/history-chart.component';
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
 
-console.log('`Home` bundle loaded asynchronously');
+// console.log('`Home` bundle loaded asynchronously');
 
 @NgModule({
   declarations: [
