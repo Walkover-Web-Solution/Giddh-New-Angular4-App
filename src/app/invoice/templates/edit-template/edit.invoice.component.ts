@@ -17,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { IsFieldVisible } from './filters-container/content-filters/content.filters.component';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'edit-invoice',
@@ -27,6 +28,8 @@ import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service'
 export class EditInvoiceComponent implements OnInit {
 
   @ViewChild('templateModal') public templateModal: ModalDirective;
+  @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
+  @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
 
   public templateId: string = 'common_template_a';
   public heading: string = 'Walkover Web Solutions';
@@ -35,10 +38,13 @@ export class EditInvoiceComponent implements OnInit {
   public isLoadingCustomCreatedTemplates: boolean = false;
   public currentTemplate: any;
   public currentTemplateSections: ISection[];
+  public deleteTemplateConfirmationMessage: string;
   public fieldDisplayState: IsFieldVisible;
+  public invoiceTemplateBase64Data: string;
+  private selectedTemplateUniqueName: string;
   private templateMeta: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
@@ -107,7 +113,8 @@ export class EditInvoiceComponent implements OnInit {
         this.templateMeta = val.invtemp.templateMeta;
       });
       let data: any = {
-        name: 'my new template',
+        // name: 'my new template',
+        name: this._invoiceUiDataService.getTemplateName(),
         uniqueName: '',
         isSample: false,
         sections: [
@@ -394,9 +401,14 @@ export class EditInvoiceComponent implements OnInit {
       };
 
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
-        console.log('The res is :', res);
+        if (res.status === 'success') {
+          this._toasty.successToast('Template Saved Successfully.');
+          this.templateModal.hide();
+          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+        }
       });
     } else {
+      this._toasty.errorToast('None field were changed.');
       console.log('this.fieldDisplayState is not ready');
     }
   }
@@ -407,8 +419,49 @@ export class EditInvoiceComponent implements OnInit {
   public onSetTemplateAsDefault(template) {
     if (template) {
       let selectedTemplate = _.cloneDeep(template);
-      console.log('the selectedTemplate is :', selectedTemplate);
       this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName));
     }
+  }
+
+  /**
+   * onDeleteTemplate
+   */
+  public onDeleteTemplate(template) {
+    if (template) {
+      let selectedTemplate = _.cloneDeep(template);
+      this.deleteTemplateConfirmationMessage = `Are you sure want to delete "<b>${selectedTemplate.name}</b>" template?`;
+      this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
+      this.customTemplateConfirmationModal.show();
+    }
+  }
+
+  /**
+   * onCloseConfirmationModal
+   */
+  public onCloseConfirmationModal(userResponse: boolean) {
+    if (userResponse && this.selectedTemplateUniqueName) {
+      this.store.dispatch(this.invoiceActions.deleteTemplate(this.selectedTemplateUniqueName));
+    }
+    this.customTemplateConfirmationModal.hide();
+  }
+
+  /**
+   * onPreview
+   */
+  public onPreview(template) {
+    let selectedTemplate = _.cloneDeep(template);
+    this._invoiceTemplatesService.getCustomTemplate(selectedTemplate.uniqueName).subscribe((res) => {
+      if (res.status === 'success') {
+        this.currentTemplateSections = res.body.sections;
+        // this.templateId = res.body.uniqueName;
+        this.invoiceTemplatePreviewModal.show();
+      }
+    });
+  }
+  /**
+   * onClosePreviewModal
+   */
+  public onClosePreviewModal() {
+    this.invoiceTemplatePreviewModal.hide();
   }
 }
