@@ -130,7 +130,7 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keydown)="needToReCalculate = true" (keyup)="needToReCalculate = false">
+                        <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keyup)="needToReCalculate.next(true)">
                       </td>
 
                     </tr>
@@ -228,8 +228,7 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (keydown)="needToReCalculate = true" (keyup)="needToReCalculate = false"
-                          ng-click="ledgerCtrl.selectBlankTxn(txn, $event)" is-open="txn.isOpen">
+                        <input class="form-control alR" type="number" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)">
                       </td>
 
                     </tr>

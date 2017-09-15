@@ -17,6 +17,8 @@ import {
 } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
+import { AppState } from '../store/roots';
+import { Store } from '@ngrx/store';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
@@ -25,7 +27,8 @@ export class AuthenticationService {
   constructor(private errorHandler: ErrorHandler,
     public _Http: Http,
     public _http: HttpWrapperService,
-    public _router: Router
+    public _router: Router,
+    private store: Store<AppState>
   ) {
 
   }
@@ -79,6 +82,18 @@ export class AuthenticationService {
     }).catch((e) => this.errorHandler.HandleCatch<string, VerifyMobileModel>(e));
   }
 
+  public ClearSession(): Observable<BaseResponse<string, string>> {
+    let userName = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        userName = s.session.user.user.uniqueName;
+      }
+    });
+    return this._http.delete(LOGIN_API.CLEAR_SESSION.replace(':userUniqueName', encodeURIComponent(userName))).map((res) => {
+      let data: BaseResponse<string, string> = res.json();
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
+  }
   public LoginWithGoogle(token: string) {
     let args: any = {};
     args.headers = new Headers();

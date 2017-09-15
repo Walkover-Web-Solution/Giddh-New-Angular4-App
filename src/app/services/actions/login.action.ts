@@ -43,6 +43,7 @@ export class LoginActions {
   public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
+  public static ClearSession = 'ClearSession';
   public static SetLoginStatus = 'SetLoginStatus';
   public static GoogleLoginElectron = 'GoogleLoginElectron';
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
@@ -245,6 +246,15 @@ export class LoginActions {
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
     });
+
+  @Effect()
+  public ClearSession$: Observable<Action> = this.actions$
+    .ofType(LoginActions.ClearSession)
+    .switchMap(action => {
+      return this.auth.ClearSession();
+    }).map(data => {
+      return this.LogOut();
+    });
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -370,6 +380,12 @@ export class LoginActions {
     return {
       type: LoginActions.LinkedInLoginElectron,
       payload: value
+    };
+  }
+
+  public ClearSession(): Action {
+    return {
+      type: LoginActions.ClearSession
     };
   }
 }
