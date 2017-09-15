@@ -26,7 +26,7 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
 
   switch (action.type) {
     case 'CATCH_ERROR':
-      console.log(action.payload);
+      // console.log(action.payload);
       return;
     case CompanyActions.GET_TAX:
       return Object.assign({}, state, {
@@ -44,7 +44,7 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
         isTaxesLoading: false
       });
     case CompanyActions.SET_ACTIVE_COMPANY:
-      console.log(action.payload);
+      // console.log(action.payload);
       return state;
     case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
       let res: BaseResponse<TaxResponse, string> = action.payload;
