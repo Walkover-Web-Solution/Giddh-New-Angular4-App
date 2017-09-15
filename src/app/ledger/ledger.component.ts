@@ -61,7 +61,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         moment().subtract(12, 'months'),
         moment()
       ]
-    }
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
   };
   public trxRequest: TransactionsRequest;
   public needToReCalculate: boolean = false;
@@ -219,6 +221,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        // set trxRequest.from and trxRequest.to from start and end date for initial request
+        this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
+        this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
         this.getTransactionData();
       }
     });
