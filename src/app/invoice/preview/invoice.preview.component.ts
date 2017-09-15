@@ -73,7 +73,7 @@ export class InvoicePreviewComponent implements OnInit {
     this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
     this.invoiceSearchRequest.to = String(moment());
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 12;
+    this.invoiceSearchRequest.count = 25;
 
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {

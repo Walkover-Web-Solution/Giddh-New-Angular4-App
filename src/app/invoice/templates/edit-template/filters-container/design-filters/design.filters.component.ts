@@ -226,4 +226,11 @@ export class DesignFiltersContainerComponent {
     this.ifFontSelected = false;
     this.ifTemplateSelected = false;
   }
+
+  /**
+   * setTemplateName
+   */
+  public setTemplateName(name: string) {
+    this._invoiceUiDataService.setTemplateName(name);
+  }
 }
