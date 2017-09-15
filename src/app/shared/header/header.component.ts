@@ -236,7 +236,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
         if (val) {
           this.socialAuthService.signOut().then().catch((err) => {
-            console.log('err', err);
+            // console.log('err', err);
           });
           this.store.dispatch(this.loginAction.ClearSession());
           this.store.dispatch(this.loginAction.socialLogoutAttempt());
