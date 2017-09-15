@@ -384,7 +384,7 @@ export class InvoiceActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type : ''};
+      return { type: '' };
     });
 
   // SET TEMPLATE AS DEFAULT
@@ -404,7 +404,7 @@ export class InvoiceActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type : ''};
+      return { type: '' };
     });
 
   constructor(
@@ -633,10 +633,10 @@ export class InvoiceActions {
       payload: { font }
     };
   }
-  public setColor(color: string): Action {
+  public setColor(primaryColor: string, secondaryColor: string): Action {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
-      payload: { color }
+      payload: { primaryColor, secondaryColor }
     };
   }
   public updateGSTIN(data: string): Action {
@@ -1025,7 +1025,7 @@ export class InvoiceActions {
   public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], template: string }): Action {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
-      payload: { accountUniqueName, dataToSend}
+      payload: { accountUniqueName, dataToSend }
     };
   }
 
@@ -1036,7 +1036,7 @@ export class InvoiceActions {
     };
   }
 
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[]}): Action {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[] }): Action {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: { accountUniqueName, dataToSend }
