@@ -404,7 +404,7 @@ export class InvoiceActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
-        this._toasty.successToast('Template was set as default.');
+        this._toasty.successToast('Template successfully marked as default.');
       }
       return { type : ''};
     });
@@ -1060,7 +1060,7 @@ export class InvoiceActions {
     };
   }
 
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], template: string }): Action {
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[] }): Action {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
       payload: { accountUniqueName, dataToSend }
