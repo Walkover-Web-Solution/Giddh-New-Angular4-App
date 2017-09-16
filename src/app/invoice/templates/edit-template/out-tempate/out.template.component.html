@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html id="default" *ngIf="templateId == 'common_template_a'">
+
+<head>
+    <title></title>
+    <style type="text/css">
+        /* reset */
+        
+        * {
+            border: 0;
+            box-sizing: content-box;
+            color: #262626;
+            font-family: inherit;
+            font-size: inherit;
+            font-style: inherit;
+            font-weight: inherit;
+            line-height: inherit;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-decoration: none;
+            vertical-align: top;
+        }
+        /* heading */
+        
+        #default header h1 {
+            /* color: #df4927; */
+            font-size: 16px;
+        }
+        
+        #default header h2 {
+            /* color: #df4927; */
+            font-size: 18px;
+        }
+        /* table */
+        
+        #default table {
+            font-size: 93%;
+            table-layout: fixed;
+            width: 100%;
+            border-collapse: inherit
+        }
+        
+        #default table {}
+        
+        #default .item th,
+        #default tfoot tr th {
+            /* background: #f2f2f2; */
+            border: 0;
+        }
+        /* page */
+        
+        #default {
+            overflow: auto;
+            font-size: 93%;
+            background: #f2f2f2;
+            border: 1px solid #bfbfbf;
+            padding: 0;
+        }
+        
+        #default body {
+            box-sizing: border-box;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0.1in;
+            letter-spacing: 0;
+            width: 100%;
+            background: #FFF;
+            border-radius: 1px;
+        }
+        /* header */
+        
+        #default header {
+            margin: 0;
+            background: #fff;
+            padding: 0.23in 0.23in 0.03in;
+        }
+        
+        #default header:after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+        
+        .pull-right tr td {
+            text-align: right !important;
+        }
+        
+        #default header .numDetail strong {
+            width: 50px;
+            float: left;
+        }
+        
+        #default .meta {
+            padding: 0 0.23in 0.03in;
+            margin-bottom: 10px;
+        }
+        
+        #default .meta tbody tr td,
+        #default .meta tbody tr th {
+            border: 0;
+            padding: 5px 0;
+        }
+        
+        #default .meta tbody tr th {
+            background: none;
+            border: 0;
+            padding: 0;
+            text-align: left;
+            color: #262626;
+        }
+        
+        .hidden-label {
+            opacity: 0;
+        }
+        
+        #default .meta tbody tr td {
+            padding: 7px 0;
+            line-height: 1.3rem;
+        }
+        /*#default .meta tbody tr td:nth-child(2)>table tbody tr td{background: #f2f2f2;padding: 0 10px;line-height: 2rem;margin: 4px 0; display: -webkit-box;}*/
+        
+        #default header figure {
+            float: left;
+            font-style: normal;
+            line-height: 1.25;
+            margin: 0 0 0.3em 0;
+        }
+        
+        #default header figure p {
+            margin: 0 0 0.25em;
+        }
+        
+        #default header span,
+        header img {
+            display: block;
+            float: right;
+        }
+        
+        #default header span {
+            margin: 0 0 1em 1em;
+            max-height: 25%;
+            max-width: 60%;
+            position: relative;
+        }
+        
+        #default header img {
+            max-height: 100%;
+            max-width: 100%;
+        }
+        
+        #default header table tr td {
+            border: 0;
+            padding: 4px 0;
+        }
+        /* article */
+        
+        #default article {
+            margin-bottom: 10px;
+        }
+        
+        #default article:after {
+            clear: both;
+            content: "";
+            display: table;
+        }
+        
+        #default article h1 {
+            clip: rect(0 0 0 0);
+            position: absolute;
+        }
+        
+        #default article address {
+            float: left;
+            font-weight: bold;
+        }
+        
+        .text-right {
+            text-align: right;
+        }
+        /* table items */
+        
+        #default table.item {
+            clear: both;
+            width: 100%;
+            table-layout: auto;
+        }
+        
+        #default table.item th,
+        #default table.item tfoot tr th {
+            position: relative;
+            padding: 14px 7px;
+            line-height: 1.2rem;
+        }
+        
+        #default table.item tfoot tr th {
+            padding-right: 7px;
+        }
+        
+        #default table.item tr th,
+        #default table.item tfoot tr th {
+            font-weight: bold;
+        }
+        
+        #default table.item tfoot tr th {
+            border-top: 1px solid rgba(89, 89, 89, 0.6);
+        }
+        
+        #default table.item td {
+            border-radius: 0;
+            padding: 7px;
+            border-top: 1px solid rgba(89, 89, 89, 0.6);
+            line-height: 1.2rem;
+        }
+        
+        #default table.item td p {
+            color: #595959;
+        }
+        
+        #default table.balance {
+            width: 75%;
+            float: right;
+            margin: 0px 7px 40px;
+        }
+        
+        #default table.balance th,
+        #default table.balance td {
+            width: 50%;
+            text-align: right;
+            padding: 4px;
+        }
+        /* aside */
+        
+        #default aside h1 {
+            border: none;
+            border-width: 0 0 1px;
+            margin: 0 0 1em;
+        }
+        
+        #default aside h1 {
+            border-color: #999;
+            border-bottom-style: solid;
+        }
+        /*footer*/
+        
+        #default footer {
+            border-top: 2px solid;
+            padding: 15px 0;
+            margin: 8px 0 0;
+            background: #fff;
+        }
+        
+        #default aside {
+            line-height: 1.5rem;
+        }
+        
+        #default .subfooter {
+            padding: 0 20px;
+        }
+        
+        #default .subfooter hr {
+            width: 100%;
+            border-bottom: 1px solid #000;
+            margin: 3px 0;
+        }
+        
+        #default .subfooter h4 {
+            font-size: 17px;
+            color: #df4927;
+            margin: 10px 0 0
+        }
+        
+        #default .docTitle {
+            width: 100%;
+            line-height: 20px;
+            text-align: center;
+            height: 30px;
+            position: relative;
+        }
+        
+        #default .docTitle h2 {
+            text-align: center;
+            position: absolute;
+            right: 0;
+            left: -21px;
+            width: 105.5%;
+        }
+        
+        #default .docTitle h2:after {
+            content: attr(title);
+            width: auto;
+            position: relative;
+            background: #fff;
+            margin: 0 auto;
+            padding: 6px 16px;
+            right: 0;
+            line-height: 40px;
+            vertical-align: middle;
+            z-index: 0;
+            left: 0;
+        }
+        
+        #default p {
+            margin: 0;
+        }
+        
+        #default h2 {
+            margin: 0;
+            font-size: inherit
+        }
+        
+        #default table.item th .bgClr {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            background: aqua;
+            left: 0;
+            right: 0;
+            width: 100%;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .docTitle hr {
+            position: absolute;
+            height: 2px;
+            top: 50%;
+            width: 100%;
+        }
+        
+        strong {
+            font-weight: bold;
+        }
+        /* common template css  */
+        
+        .disabled-area {
+            position: relative;
+            float: left;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .disabled-area:after {
+            content: ' ';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            pointer-events: none;
+            background: rgba(204, 204, 204, 0.5);
+            border: 1px dashed #808080;
+        }
+        
+        .edit-template {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 4px;
+            height: 15px;
+            z-index: 1;
+            background: #fff;
+        }
+        
+        .edit-template i {
+            color: #000;
+            font: normal normal normal 14px/1 FontAwesome;
+        }
+    </style>
+</head>
+
+
+<body [ngStyle]="{ 'padding': templateMeta.topMargin+'px'+' '+templateMeta.rightMargin+'px'+' '+templateMeta.bottomMargin+'px'+' '+templateMeta.leftMargin+'px', 'font-family': templateMeta.font}">
+    <!--class="disabled-area"-->
+    <div>
+        <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[activeHeader]" (click)="onClickHeader()">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!activeHeader"><i class="fa fa-pencil"></i></a>
+            <header>
+                <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" [hidden]='!showLogo' /></figure>
+                <figure class="col-xs-6" *ngIf="fieldDisplayState.enableCompanyName">
+                    <strong><h2 [ngStyle]="{ 'color': templateMeta.color}" >{{this.templateMeta.companyName}}</h2></strong>
+                </figure>
+                <table cellspacing="0" cellpadding="0">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table class="numDetail">
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>{{this.templateMeta.GSTIN}}</strong> 01234567890123</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>{{this.templateMeta.PAN}}</strong> 1234567890</td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td colspan="2">
+
+                            </td>
+                            <td class="pull-right">
+                                <table>
+                                    <tbody>
+                                        <tr *ngIf="fieldDisplayState.enableInvoiceDate">
+                                            <td><strong>{{(this.templateMeta.invoiceDate.length > 0) ? this.templateMeta.invoiceDate : 'Invoice Date'}}</strong></td>
+                                            <td>
+                                                <p> 23/06/2017 </p>
+                                            </td>
+                                        </tr>
+                                        <tr *ngIf="fieldDisplayState.enableInvoiceNo">
+                                            <td><strong>{{(this.templateMeta.invoiceNumber.length > 0) ? this.templateMeta.invoiceNumber : 'Invoice No.'}}</strong></td>
+                                            <td>201770323-64</td>
+                                        </tr>
+                                        <tr *ngIf="fieldDisplayState.enableDueDate">
+                                            <td><strong>{{(this.templateMeta.dueDate.length > 0) ? this.templateMeta.dueDate : 'Due Date'}}</strong></td>
+                                            <td>30/06/2017</td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+                <!--<div class="docTitle">-->
+                <!--<h2 [ngStyle]="{ 'color': color}" *ngIf="this.taxInvoiceLabelFlag$ | async" title="{{this.formNameInvoice$ | async}}">-->
+                <!--<hr [ngStyle]="{ 'background-color': color}" />-->
+                <!--</h2>-->
+                <!--</div>-->
+                <div class="docTitle" *ngIf="fieldDisplayState.enableDocTitle">
+                    <h2 [ngStyle]="{ 'color': templateMeta.color}" title="{{(this.templateMeta.formNameTaxInvoice.length > 0) ? this.templateMeta.formNameTaxInvoice : 'INVOICE' }}">
+                        <hr [ngStyle]="{ 'background-color': templateMeta.color}" />
+                    </h2>
+                </div>
+            </header>
+
+            <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
+                <tbody>
+                    <tr>
+                        <td *ngIf="fieldDisplayState.enableCustomerName || fieldDisplayState.enableEmailId || fieldDisplayState.enableMobileNo">
+                            <p *ngIf="fieldDisplayState.enableCustomerName"><strong>{{this.templateMeta.customerName}}</strong></p>
+                            <p *ngIf="fieldDisplayState.enableEmailId">{{this.templateMeta.customerEmail}}</p>
+                            <p *ngIf="fieldDisplayState.enableMobileNo">{{this.templateMeta.customerMobileNumber}}</p>
+                        </td>
+                        <td *ngIf="fieldDisplayState.enableBillingAddress">
+                            <p><strong>{{(this.templateMeta.billingAddress.length > 0) ? this.templateMeta.billingAddress : 'Billing Address'}}</strong></p>
+                            <p>Green Soft Solutions</p>
+                            <p>5 A.B. Road</p>
+                            <p>Indore (M.P.) 452000</p>
+                        </td>
+                        <td *ngIf="fieldDisplayState.enableShippingAddress">
+                            <p><strong>{{(this.templateMeta.shippingAddress.length > 0) ? this.templateMeta.shippingAddress : 'Shipping Address'}}</strong></p>
+                            <p>Green Soft Solutions
+                                <p>5 A.B. Road</p>
+                                <p>Indore (M.P.) 452000</p>
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td *ngIf="fieldDisplayState.enableCustomerName || fieldDisplayState.enableEmailId || fieldDisplayState.enableMobileNo">&nbsp;</td>
+                        <!--<td>-->
+                        <!--&lt;!&ndash;<p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{(this.templateMeta.dueDate.length > 0) ? this.templateMeta.dueDate : 'Due Date'}}</strong></p>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<p>30/06/2017</p>&ndash;&gt;-->
+                        <!--</td>-->
+                        <td *ngIf="fieldDisplayState.enableBillingAddress">
+                            <p><strong>{{(this.templateMeta.billingGstin.length > 0) ? this.templateMeta.billingGstin : 'GSTIN'}}</strong></p>
+                            <p>22BBBBBB000A1Z0</p>
+                        </td>
+                        <td *ngIf="fieldDisplayState.enableShippingAddress">
+                            <p><strong>{{(this.templateMeta.shippinGstin.length > 0) ? this.templateMeta.shippinGstin : 'GSTIN'}}</strong></p>
+                            <p>22BBBBBB000A1Z0</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class="meta">
+                <tbody>
+                    <tr>
+                        <td *ngIf="fieldDisplayState.enableShipDate">
+                            <strong>{{(this.templateMeta.shippingDate.length > 0) ? this.templateMeta.shippingDate : 'Ship Date'}}</strong>
+                            <p>30/06/2017</p>
+                        </td>
+
+                        <td *ngIf="fieldDisplayState.enableShipVia">
+                            <strong>{{(this.templateMeta.shippingVia.length > 0) ? this.templateMeta.shippingVia : 'Ship Via'}}</strong>
+                            <p>30/06/2017</p>
+                        </td>
+
+                        <td *ngIf="fieldDisplayState.enableTrackingNo">
+                            <strong>{{(this.templateMeta.trackingNumber.length > 0) ? this.templateMeta.trackingNumber : 'Tracking No'}}</strong>
+                            <p>00115467</p>
+                        </td>
+                        <td *ngIf="fieldDisplayState.enableCustom1">
+                            <strong>{{(this.templateMeta.customField1.length > 0) ? this.templateMeta.customField1 : 'Custom Field1'}}</strong>
+                            <p>Hello this is custom field</p>
+                        </td>
+
+                        <td *ngIf="fieldDisplayState.enableCustom2">
+                            <strong>{{(this.templateMeta.customField2.length > 0) ? this.templateMeta.customField2 : 'Custom Field2'}}</strong>
+                            <p>2324342424432</p>
+                        </td>
+
+                        <td *ngIf="fieldDisplayState.enableCustom3">
+                            <strong>{{(this.templateMeta.customField3.length > 0) ? this.templateMeta.customField3 : 'Custom Field3'}}</strong>
+                            <p>Field 3</p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id="Template-table" [ngClass]="{false: 'disabled-area', true: ' ' }[activeGrid]" (click)="onClickGrid()">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!activeGrid"><i class="fa fa-pencil"></i></a>
+            <article>
+                <table class="item" cellpadding="0" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th *ngIf="fieldDisplayState.enableSno" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span> {{(this.templateMeta.sNoLabel.length > 0) ? this.templateMeta.sNoLabel : 'S No'}}</th>
+                            <th *ngIf="fieldDisplayState.enableDate" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span> {{(this.templateMeta.dateLabel.length > 0) ? this.templateMeta.dateLabel : 'Date'}}</th>
+                            <th *ngIf="fieldDisplayState.enableItem" colspan="2" class="text-left"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span> {{(this.templateMeta.itemLabel.length > 0) ? this.templateMeta.itemLabel : 'Item'}}</th>
+                            <th *ngIf="fieldDisplayState.enableHsn" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.hsnSacLabel.length > 0) ? this.templateMeta.hsnSacLabel : 'HSN/SAC'}}</th>
+                            <th *ngIf="fieldDisplayState.enableQty" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.quantityLabel.length > 0) ? this.templateMeta.quantityLabel : 'Qty.'}}</th>
+                            <th *ngIf="fieldDisplayState.enableRate" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.rateLabel.length > 0) ? this.templateMeta.rateLabel : 'Rate'}} (₹)</th>
+                            <th *ngIf="fieldDisplayState.enableDis" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.discountLabel.length > 0) ? this.templateMeta.discountLabel : 'Disc.'}} (₹)</th>
+                            <th *ngIf="fieldDisplayState.enableTaxableValue" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.taxableValueLabel.length > 0) ? this.templateMeta.taxableValueLabel : 'Taxable Value'}}</th>
+                            <th *ngIf="fieldDisplayState.enableTax" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.taxLabel.length > 0) ? this.templateMeta.taxLabel : 'Tax'}}(₹)</th>
+                            <th colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>{{(this.templateMeta.totalLabel.length > 0) ? this.templateMeta.totalLabel : 'Total'}} (₹)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td *ngIf="fieldDisplayState.enableSno" class="text-right">1</td>
+                            <td *ngIf="fieldDisplayState.enableDate" class="text-right">23/07/17</td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableItem" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="fieldDisplayState.enableHsn" class="text-right">123456</td>
+                            <td *ngIf="fieldDisplayState.enableQty" class="text-right">10 No.</td>
+                            <td *ngIf="fieldDisplayState.enableRate" class="text-right">1000.00</td>
+                            <td *ngIf="fieldDisplayState.enableDis" class="text-right">30.00</td>
+                            <td *ngIf="fieldDisplayState.enableTaxableValue" class="text-right">9700.00</td>
+                            <td *ngIf="fieldDisplayState.enableTax" class="text-right">9700.00
+                                <p>@10%</p>
+                            </td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right">11000344640.00</td>
+                        </tr>
+                        <tr>
+                            <td *ngIf="fieldDisplayState.enableSno" class="text-right">1</td>
+                            <td *ngIf="fieldDisplayState.enableDate" class="text-right">23/07/17</td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableItem" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="fieldDisplayState.enableHsn" class="text-right">123456</td>
+                            <td *ngIf="fieldDisplayState.enableQty" class="text-right">10 No.</td>
+                            <td *ngIf="fieldDisplayState.enableRate" class="text-right">1000.00</td>
+                            <td *ngIf="fieldDisplayState.enableDis" class="text-right">30.00</td>
+                            <td *ngIf="fieldDisplayState.enableTaxableValue" class="text-right">9700.00</td>
+                            <td *ngIf="fieldDisplayState.enableTax" class="text-right">9700.00
+                                <p>@10%</p>
+                            </td>
+                            <td colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right">11000344640.00</td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th *ngIf="fieldDisplayState.enableSno" class="text-right"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableDate" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableItem" colspan="2" class="text-left"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableHsn" class="text-right"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableQty" class="text-right"> <span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>&nbsp;</th>
+                            <th *ngIf="fieldDisplayState.enableRate" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableDis" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableTaxableValue" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableTax" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                            <th *ngIf="fieldDisplayState.enableTotal" colspan="2" class="text-right"><span class="bgClr" [ngStyle]="{ 'background-color': templateMeta.color}"></span>30100.00</th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </article>
+        </div>
+        <div id="Template-footer" [ngClass]="{false: 'disabled-area', true: ' ' }[activeFooter]" (click)="onClickFooter()">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!activeFooter"><i class="fa fa-pencil"></i></a>
+            <aside>
+                <table class="balance">
+                    <tr *ngIf="fieldDisplayState.enableTaxableAmount">
+                        <th><strong>{{this.templateMeta.taxableAmount}}</strong></th>
+                        <td><span>₹30100.00</span></td>
+                    </tr>
+                    <tr *ngIf="fieldDisplayState.enableTotalTax">
+                        <th><strong>{{this.templateMeta.totalTax}}</strong></th>
+                        <td><span>₹5920.00</span></td>
+                    </tr>
+                    <tr *ngIf="fieldDisplayState.enableInvoiceTotal">
+                        <th><strong>{{this.templateMeta.total}}</strong></th>
+                        <td><span>₹36020.00</span></td>
+                    </tr>
+                    <tr *ngIf="fieldDisplayState.enableTotalInWords">
+                        <th><strong>{{this.templateMeta.totalInWords}}</strong></th>
+                        <td>Thirty Six Thousand Twenty Only</td>
+                    </tr>
+                </table>
+                <table cellpadding="0" cellspacing="0" class="subfooter">
+                    <tbody>
+                        <tr>
+                            <td *ngIf="fieldDisplayState.enableMessage1 || fieldDisplayState.enableMessage2">
+                                <p *ngIf="fieldDisplayState.enableMessage1" style="margin-bottom: 15px;">
+                                    <strong>{{this.templateMeta.message1}}</strong>
+                                </p>
+                                <p *ngIf="fieldDisplayState.enableMessage2"> {{this.templateMeta.message2}}</p>
+                            </td>
+                            <td>&nbsp;</td>
+                            <td style="text-align: center;vertical-align: bottom;">
+                                <img [src]="templateMeta.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />
+                                <hr />
+                                <strong><h3>{{this.templateMeta.companyName}}</h3></strong>
+                                <strong><small>{{this.templateMeta.slogan}}</small></strong>
+                            </td>
+                        </tr>
+                        <tr *ngIf="fieldDisplayState.enableThanks">
+                            <td><strong><h4 [ngStyle]="{ 'color': templateMeta.color}">{{this.templateMeta.thanks}}</h4></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </aside>
+            <footer *ngIf="fieldDisplayState.enableCompanyAddress" style="text-align: center;" [ngStyle]="{ 'border-color': templateMeta.color}">
+                {{this.templateMeta.address}}
+            </footer>
+        </div>
+
+    </div>
+
+</body>
+
+</html>

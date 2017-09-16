@@ -36,7 +36,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.expensesChartData$ = this.store.select(p => p.home.expensesChart).takeUntil(this.destroyed$);
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
+    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -46,7 +46,10 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
         let financialYears = [];
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
-          this.activeFinancialYear = c.find(p => p.uniqueName === a).activeFinancialYear;
+          let res = c.find(p => p.uniqueName === a);
+          if (res) {
+            this.activeFinancialYear = res.activeFinancialYear;
+          }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {
@@ -60,7 +63,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          this.refreshData();
+          if (activeCmpUniqueName) { this.refreshData(); }
         }
       }
     });

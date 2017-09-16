@@ -18,6 +18,11 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
       (expandAll)="expandAllEmit($event)"
+      [tbExportCsv]="false"
+      [tbExportPdf]="false"
+      [tbExportXLS]="false"
+      [plBsExportXLS]="true"
+      (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
     <div *ngIf="!(data$ | async)">
          <!-- loader -->
@@ -69,7 +74,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
   public expandAllEmit(v) {
     if (this.plGrid) {
@@ -79,9 +84,12 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     //
   }
+  public exportXLS(event) {
+    //
+   }
   public filterData(request: ProfitLossRequest) {
-    request.fromDate = this.selectedCompany.financialYears[request.fy].financialYearStarts;
-    request.toDate = this.selectedCompany.financialYears[request.fy].financialYearEnds;
+    request.from = this.selectedCompany.financialYears[request.fy].financialYearStarts;
+    request.to = this.selectedCompany.financialYears[request.fy].financialYearEnds;
     //
     this.store.dispatch(this.tlPlActions.GetProfitLoss(_.cloneDeep(request)));
   }

@@ -19,8 +19,14 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
       [showLabels]="true"
       (onPropertyChanged)="filterData($event)"
       (expandAll)="expandAllEmit($event)"
+      (tbExportCsvEvent)="exportCsv($event)"
+      (tbExportPdfEvent)="exportPdf($event)"
+      (tbExportXLSEvent)="exportXLS($event)"
+      [tbExportCsv]="true"
+      [tbExportPdf]="true"
+      [tbExportXLS]="true"
     ></tb-pl-bs-filter>
-    <div *ngIf="!(data$ | async)">
+    <div *ngIf="(showLoader | async)">
       <!-- loader -->
       <div class="loader" >
         <span></span>
@@ -56,8 +62,8 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     if (value) {
       this.request = {
         refresh: false,
-        fromDate: this.selectedCompany.activeFinancialYear.financialYearStarts,
-        toDate: this.selectedCompany.activeFinancialYear.financialYearEnds
+        from: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        to: this.selectedCompany.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
     }
@@ -68,11 +74,22 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
     this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.tb.data)).takeUntil(this.destroyed$);
+    this.data$ = this.store.select(p => {
+      let d = _.cloneDeep(p.tlPl.tb.data);
+      if (d) {
+        _.each(d.groupDetails, (grp: any) => {
+          grp.isVisible = true;
+          _.each(grp.accounts, (acc: any) => {
+            acc.isVisible = true;
+          });
+        });
+      }
+      return d;
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
 
   public ngAfterViewInit() {
@@ -91,5 +108,14 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public exportCsv($event) {
+    //
+  }
+  public exportPdf($event) {
+    //
+  }
+  public exportXLS($event) {
+    //
   }
 }

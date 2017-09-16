@@ -22,6 +22,7 @@ export class GroupWithAccountsAction {
   public static GET_GROUP_WITH_ACCOUNTS = 'GroupWithAccounts';
   public static GET_GROUP_WITH_ACCOUNTS_RESPONSE = 'GroupWithAccountsResponse';
   public static SET_GROUP_ACCOUNTS_SEARCH_STRING = 'GroupAccountsSearchString';
+  public static RESET_GROUP_ACCOUNTS_SEARCH_STRING = 'ResetGroupAccountsSearchString';
   public static GET_GROUP_DETAILS = 'GroupDetails';
   public static GET_GROUP_DETAILS_RESPONSE = 'GroupDetailsResponse';
   public static GET_FLATTEN_GROUPS_ACCOUNTS = 'GetFlattenGroupsAccounts';
@@ -123,15 +124,6 @@ export class GroupWithAccountsAction {
     });
 
   @Effect()
-  public SetAccountsSearchString$: Observable<Action> = this.action$
-    .ofType(GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING)
-    .map(action => {
-      return {
-        type: ''
-      };
-    });
-
-  @Effect()
   public GetGroupsDetails$: Observable<Action> = this.action$
     .ofType(GroupWithAccountsAction.GET_GROUP_DETAILS)
     .switchMap(action => this._groupService.GetGroupDetails(action.payload))
@@ -165,6 +157,8 @@ export class GroupWithAccountsAction {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast('Sub group added successfully', 'Success');
       }
       return {
         type: ''
@@ -428,10 +422,16 @@ export class GroupWithAccountsAction {
     };
   }
 
-  public setAccountsSearchString(value: string): Action {
+  public setGroupAndAccountsSearchString(value: string): Action {
     return {
       type: GroupWithAccountsAction.SET_GROUP_ACCOUNTS_SEARCH_STRING,
       payload: value
+    };
+  }
+
+  public resetGroupAndAccountsSearchString(): Action {
+    return {
+      type: GroupWithAccountsAction.RESET_GROUP_ACCOUNTS_SEARCH_STRING
     };
   }
 

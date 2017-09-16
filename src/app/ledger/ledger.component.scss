@@ -81,8 +81,9 @@ table td[class*=col-]:last-child {
 }
 
 .account_Name {
-    font-size: 21px;
-    color: #858585;
+    color: rgba(0, 0, 0, 0.8);
+    font-family: 'LatoWebBold';
+    text-transform: capitalize;
 }
 
 .ledger-footer-1 {
@@ -91,7 +92,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-head th {
-    color: #cccccc;
+    color: rgba(0, 0, 0, 0.4);
 }
 
 .total_col td {
@@ -162,4 +163,20 @@ table td[class*=col-]:last-child {
 
 .pdR25imp {
     padding-right: 25px !important;
+}
+
+.t-h-bg1 th {
+    background: #f3f0e6;
+    color: #4d4d4d;
+    border-right: 1px solid #c4c6c7;
+    padding: 11px!important;
+    font-weight: 400;
+    border-bottom: 1px solid #c4c6c7;
+}
+
+.ledger_book {
+    border: 1px solid #ccc;
+    overflow: hidden;
+    position: relative;
+    background: #fff;
 }

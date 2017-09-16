@@ -24,6 +24,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   @Input() public groups: GroupsWithAccountsResponse[];
   public _groups: GroupsWithAccountsResponse[];
   @Input() public activeGroup: Observable<GroupResponse>;
+  public isUpdateGroupSuccess$: Observable<boolean>;
+  public isUpdateAccountSuccess$: Observable<boolean>;
   public activeGroupUniqueName: Observable<string>;
   @Input() public padLeft: number = 30;
   @Input() public isSearchingGroups: boolean = false;
@@ -40,6 +42,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     this.activeGroup = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.activeAccount = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
+    this.isUpdateAccountSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -52,6 +56,37 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   public ngOnInit() {
     this.resetData();
     this.activeGroup.subscribe(a => this.resetData());
+    this.isUpdateGroupSuccess$.subscribe(a => {
+      if (a) {
+        let activeGroup = null;
+        let groups = null;
+        this.activeGroup.take(1).subscribe(ac => activeGroup = ac);
+        this.store.select(p => p.groupwithaccounts.groupswithaccounts).take(1).subscribe(grp => groups = grp);
+        if (activeGroup && groups) {
+          this.breadcrumbPath = [];
+          this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true);
+          this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+        }
+      }
+    });
+    this.isUpdateAccountSuccess$.subscribe(a => {
+      if (a) {
+        if (this.isSearchingGroups) {
+          this.breadcrumbPath = [];
+          this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+        } else {
+          let activeAccount = null;
+          let groups = null;
+          this.activeAccount.take(1).subscribe(ac => activeAccount = ac);
+          this.store.select(p => p.groupwithaccounts.groupswithaccounts).take(1).subscribe(grp => groups = grp);
+          if (activeAccount && groups) {
+            this.breadcrumbPath = [];
+            this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false);
+            this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+          }
+        }
+      }
+    });
   }
 
   public resetData() {
@@ -176,6 +211,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   }
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
+    this.breadcrumbPath = [];
+    this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true);
+    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());

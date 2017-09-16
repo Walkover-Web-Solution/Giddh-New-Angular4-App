@@ -7,8 +7,13 @@ import { SettingIntegrationComponent } from './integration/setting.integration.c
 import { SettingProfileComponent } from './profile/setting.profile.component';
 import { SharedModule } from '../shared/shared.module';
 import { SettingTaxesComponent } from './Taxes/setting.taxes.component';
+// import { SettingsLinkedAccountsComponent } from './linked-accounts/settings.linked-accounts.component';
 import { DeleteTaxConfirmationModelComponent } from './Taxes/confirmation/confirmation.model.component';
 import { SettingRountingModule } from './settings.routing.module';
+import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
+import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
+import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
+import { FinancialYearComponent } from './financial-year/financial-year.component';
 @NgModule({
   declarations: [
     // components here
@@ -16,7 +21,12 @@ import { SettingRountingModule } from './settings.routing.module';
     SettingIntegrationComponent,
     SettingProfileComponent,
     SettingTaxesComponent,
-    DeleteTaxConfirmationModelComponent
+    // SettingsLinkedAccountsComponent,
+    DeleteTaxConfirmationModelComponent,
+    SettingLinkedAccountsComponent,
+    ConnectBankModalComponent,
+    SettingLinkedAccountsConfirmationModalComponent,
+    FinancialYearComponent
   ],
   imports: [
     SharedModule,
@@ -27,4 +37,4 @@ import { SettingRountingModule } from './settings.routing.module';
     SharedModule
   ]
 })
-export class SettingsModule {}
+export class SettingsModule { }

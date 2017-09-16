@@ -3,6 +3,8 @@ import { AppState } from '../store/roots';
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { SearchRequest } from '../models/api-models/Search';
 import { SearchActions } from '../services/actions/search.actions';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../services/actions/company.actions';
 
 @Component({
   selector: 'search',
@@ -23,13 +25,17 @@ export class SearchComponent implements OnInit, OnDestroy {
     return this._searchRequest;
   }
 
-  constructor(private store: Store<AppState>, private _searchActions: SearchActions) {
+  constructor(private store: Store<AppState>, private _searchActions: SearchActions, private companyActions: CompanyActions) {
   }
 
   public ngOnInit() {
-    console.log('hello Search module');
-    // this.exampleData = [
-    // ];
+    let companyUniqueName = null;
+    this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+    let stateDetailsRequest = new StateDetailsRequest();
+    stateDetailsRequest.companyUniqueName = companyUniqueName;
+    stateDetailsRequest.lastState = 'search';
+
+    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 
   public ngOnDestroy(): void {

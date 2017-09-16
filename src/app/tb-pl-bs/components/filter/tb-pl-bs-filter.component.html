@@ -15,8 +15,8 @@
           </div>
         </div>
 
-        <date-picker formControlName="fromDate" label="From Date" [minDate]="" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
-        <date-picker formControlName="toDate" label="To Date" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
+        <date-picker formControlName="from" label="From Date" [minDate]="" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
+        <date-picker formControlName="to" label="To Date" [maxDate]="today" *ngIf="selectedDateOption=='1'"></date-picker>
 
         <div class="form-group" style="vertical-align: bottom">
           <button type="submit" class="btn btn-success mrL1">
@@ -31,9 +31,13 @@
   </div>
   <!-- end of coloumn -->
   <div class="col-xs-3">
-    <!--<export-csv class="pull-right"></export-csv>-->
-    <tl-pl-export-xls class="pull-right"></tl-pl-export-xls>
-    <tl-pl-export-pdf class="pull-right"></tl-pl-export-pdf>
+    <tb-export-csv *ngIf="tbExportCsv" [selectedCompany]="selectedCompany"
+                   (tbExportCsvEvent)="tbExportCsvEvent.emit($event)" class="pull-right"></tb-export-csv>
+    <tb-export-xls *ngIf="tbExportXLS" [trialBalanceRequest]="filterForm.value" class="pull-right"></tb-export-xls>
+    <tb-export-pdf *ngIf="tbExportPdf" [selectedCompany]="selectedCompany"
+                   (tbExportPdfEvent)="tbExportPdfEvent.emit($event)" class="pull-right"></tb-export-pdf>
+    <pl-export-xls *ngIf="plBsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></pl-export-xls>
+    <bs-export-xls *ngIf="BsExportXLS" [fy]="filterForm.controls['fy'].value" class="pull-right"></bs-export-xls>
   </div>
   <!-- end of second coloumn -->
 </div>
@@ -43,7 +47,7 @@
     <div class="form-group mrR2">
       <div class="input-group input-group-md">
         <span class="input-group-addon" id="sizing-addon3"><i class="glyphicon glyphicon-search"></i></span>
-        <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3" id="w-398px"  [(ngModel)]="search" >
+        <input type="search" class="form-control" placeholder="Search" aria-describedby="sizing-addon3" id="w-398px" [(ngModel)]="search">
         <i class="glyphicon glyphicon-remove close-icon" *ngIf="showClearSearch"></i>
       </div>
     </div>
