@@ -37,7 +37,7 @@ export class HistoryChartComponent implements OnInit {
   private AllSeries: IndividualSeriesOptionsExtension[];
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(p => p.company.companies).takeUntil(this.destroyed$);
+    this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
     this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
     this.AllSeries = [{
       name: 'Expense',
@@ -173,7 +173,9 @@ export class HistoryChartComponent implements OnInit {
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
           activeCompany = c.find(p => p.uniqueName === a);
-          this.activeFinancialYear = activeCompany.activeFinancialYear;
+          if (activeCompany) {
+            this.activeFinancialYear = activeCompany.activeFinancialYear;
+          }
         });
         if (this.activeFinancialYear) {
           for (let cmp of c) {

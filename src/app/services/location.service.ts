@@ -35,16 +35,20 @@ export class LocationService {
     return this._http.get(this.GoogleApiURL + query)
       .map((res) => {
         let r = res.json();
-        let data = r.results.map((a) => {
-          return a.address_components.map((p) => {
-            if (_.some(p.types, (q) => q === 'locality')) {
-              return p.long_name;
-            }
-            return '';
-          });
-        });
-        data = _.flatten(data).filter(p => p !== '');
-        return data;
+        // let data = r.results.map((a) => {
+        //   debugger
+        //   return a.address_components.map((p) => {
+        //     if (_.includes(p.types, 'locality')) {
+        //       return p.long_name;
+        //     }
+        //     return '';
+        //   });
+        // });
+        let data = r.results.filter((i) => _.includes(i.types, 'locality'));
+        return data.map(item =>
+          item.address_components[0].long_name
+        );
+        // data = _.uniq(_.flatten(data).filter(p => p !== ''));
       })
       .catch((e) => e);
   }

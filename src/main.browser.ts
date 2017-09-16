@@ -26,7 +26,7 @@ Observable.prototype.debug = function(message: string) {
     return this.do(
         nextValue => {
             if (debuggerOn) {
-                console.log(message, nextValue);
+                // console.log(message, nextValue);
             }
         },
         error => {

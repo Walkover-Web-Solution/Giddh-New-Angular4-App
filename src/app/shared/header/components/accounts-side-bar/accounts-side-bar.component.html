@@ -1,66 +1,67 @@
-<div class="accounts-side-bar greyBg" *ngIf="flyAccounts">
-  <div class="" ng-click="$event.stopPropagation()">
-    <!-- searchbar end -->
-    <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !noGroups ">
-      <h4 class="list-group-item-heading">Oops, there are no accounts in <strong>selected company</strong> <a href="" ng-click="goToManageGroups()">+
-        add new</a></h4>
-    </div>
-    <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups">
-      <h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>
-    </div>
-    <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height
-      additional-height="80">
-      <div class="menu acList">
-        <div class="loader" *ngIf="!showAccountList && ( companyList$ | async ).length > 0">
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
-          <span></span>
+<div class="accounts-side-bar greyBg">
+    <div class="" ng-click="$event.stopPropagation()" *ngIf="flyAccounts">
+        <div *ngIf="(isFlyAccountInProcess$ | async)">
+            Loading Accounts Please Wait
         </div>
-        <ul class="acntAccordion" *ngIf="showAccountList">
-          <li>
-            <ul id="ul_0" class="mainUl accBox" style="border-left:none">
-              <li class="mainLiAclist parent-Group" *ngFor="let account of (flatAccountWGroupsList)" id="li_{{account.groupUniqueName}}">
-                <div class="title  LIB{{account.groupUniqueName}}" (click)="account.isOpen = !account.isOpen" [ngClass]="{'active' : account.isOpen || account.groupUniqueName === selectedGroupUname}">
-                  <a class="ellp max250">{{account.groupName}}</a>
+        <!-- searchbar end -->
+        <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !noGroups && !(isFlyAccountInProcess$ | async)">
+            <h4 class="list-group-item-heading">Oops, there are no accounts in <strong>selected company</strong> <a href="" ng-click="goToManageGroups()">+
+        add new</a></h4>
+        </div>
+        <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">
+            <h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>
+        </div>
+        <!-- <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height additional-height="80"> -->
+            <div class="menu acList">
+                <div class="loader" *ngIf="!showAccountList && ( companyList$ | async ).length > 0">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
                 </div>
-                <ul class="accBox subAccBox" *ngIf="account.isOpen" id="ul_{{account.groupUniqueName}}">
-                  <li class="inrPrnt" *ngFor="let accDtl of account.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top">
-                    <a ng-click="setLedgerData(value, accDtl);" ng-class="{'active': accDtl.uniqueName === selectedAccountUniqueName}" ui-sref="company.content.ledgerContent({unqName:accDtl.uniqueName})">
-                      <div class="clearfix">
-                        <i [ngClass]="accDtl.charId == 1 ? 'smlSquare LIB' : 'smlSquare ASS'"></i>
-                        <span class="ellp max250" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span>
-                        <!-- <span class="ng-hide">{{accDtl.uniqueName}}</span> -->
-                      </div>
-                    </a>
-                  </li>
+                <ul class="acntAccordion" *ngIf="showAccountList">
+                    <li>
+                        <ul id="ul_0" class="mainUl accBox" style="border-left:none">
+                            <li class="mainLiAclist parent-Group" *ngFor="let account of (flatAccountWGroupsList)" id="li_{{account.groupUniqueName}}">
+                                <div class="title  LIB{{account.groupUniqueName}}" (click)="account.isOpen = !account.isOpen" [ngClass]="{'active' : account.isOpen || account.groupUniqueName === selectedGroupUname}">
+                                    <a class="ellp max250">{{account.groupName}}</a>
+                                </div>
+                                <ul class="accBox subAccBox" *ngIf="account.isOpen" id="ul_{{account.groupUniqueName}}">
+                                    <li class="inrPrnt cp" *ngFor="let accDtl of account.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top">
+                                        <a ng-click="setLedgerData(value, accDtl);" ng-class="{'active': accDtl.uniqueName === selectedAccountUniqueName}" ui-sref="company.content.ledgerContent({unqName:accDtl.uniqueName})">
+                                            <div class="clearfix">
+                                                <strong><span class="ellp max250" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span></strong>
+                                                <!-- <span class="ng-hide">{{accDtl.uniqueName}}</span> -->
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--<a href="javascript:void(0)" class="load-more"-->
+                    <!--ng-click="loadMoreGrpWithAcc(selectedCompany.uniqueName, search.acnt);$event.stopPropagation()"-->
+                    <!--ng-if="gwaList.currentPage < gwaList.totalPages">Load More</a>-->
                 </ul>
-              </li>
-            </ul>
-          </li>
-          <!--<a href="javascript:void(0)" class="load-more"-->
-          <!--ng-click="loadMoreGrpWithAcc(selectedCompany.uniqueName, search.acnt);$event.stopPropagation()"-->
-          <!--ng-if="gwaList.currentPage < gwaList.totalPages">Load More</a>-->
-        </ul>
 
-      </div>
-      <div style="height: 50px;"></div>
-    </perfect-scrollbar>
-    <!--<div class="text-center bc-wrap" ng-if="currentState == 'company.content.ledgerContent'">-->
-    <!--&lt;!&ndash;breadcrumbs&ndash;&gt;-->
-    <!--<div>-->
-    <!--<ol class="breadcrumb">-->
-    <!--<li ng-repeat="(key,value) in accountToShow.parentGroups" ng-class="{active:$last}">-->
-    <!--<a href="javascript:void(0)">{{value.name}}</a>-->
-    <!--</li>-->
-    <!--&lt;!&ndash;<li>Bank Accounts</li>&ndash;&gt;-->
-    <!--&lt;!&ndash;<li>ICICI Bank Ltd</li>&ndash;&gt;-->
-    <!--</ol>-->
-    <!--</div>-->
-    <!--&lt;!&ndash;/breadcrumbs&ndash;&gt;-->
-    <!--</div>-->
-  </div>
+            </div>
+            <div style="height: 50px;"></div>
+        <!-- </perfect-scrollbar> -->
+        <!--<div class="text-center bc-wrap" ng-if="currentState == 'company.content.ledgerContent'">-->
+        <!--&lt;!&ndash;breadcrumbs&ndash;&gt;-->
+        <!--<div>-->
+        <!--<ol class="breadcrumb">-->
+        <!--<li ng-repeat="(key,value) in accountToShow.parentGroups" ng-class="{active:$last}">-->
+        <!--<a href="javascript:void(0)">{{value.name}}</a>-->
+        <!--</li>-->
+        <!--&lt;!&ndash;<li>Bank Accounts</li>&ndash;&gt;-->
+        <!--&lt;!&ndash;<li>ICICI Bank Ltd</li>&ndash;&gt;-->
+        <!--</ol>-->
+        <!--</div>-->
+        <!--&lt;!&ndash;/breadcrumbs&ndash;&gt;-->
+        <!--</div>-->
+    </div>
 
 
 </div>

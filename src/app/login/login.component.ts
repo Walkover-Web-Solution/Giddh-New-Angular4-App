@@ -1,15 +1,23 @@
 import { LoginActions } from '../services/actions/login.action';
 import { AppState } from '../store/roots';
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, NgZone } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
-
-import { ErrorHandlerService } from './../services/errorhandler.service';
+import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel } from '../models/api-models/loginModels';
+import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, LinkedInRequestModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
+
+import { HttpWrapperService } from '../services/httpWrapper.service';
+import { Headers } from '@angular/http';
+import { RequestOptionsArgs } from '@angular/http';
+import { ToasterService } from '../services/toaster.service';
+import { BaseResponse } from '../models/api-models/BaseResponse';
+import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
+
 @Component({
   selector: 'login',
   templateUrl: './login.component.html',
@@ -27,10 +35,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithMobileInProcess$: Observable<boolean>;
   public isVerifyEmailInProcess$: Observable<boolean>;
   public isLoginWithEmailInProcess$: Observable<boolean>;
+  public isSocialLogoutAttempted$: Observable<boolean>;
   private imageURL: string;
   private email: string;
   private name: string;
   private token: string;
+  private socialLoginKeys: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
@@ -38,8 +48,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     private _fb: FormBuilder,
     private store: Store<AppState>,
     private router: Router,
-    private eh: ErrorHandlerService,
-    private loginAction: LoginActions
+    private loginAction: LoginActions,
+    private authService: AuthService,
+    private _toaster: ToasterService,
+    private zone: NgZone
   ) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
@@ -64,16 +76,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       return state.login.isVerifyEmailSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
       }
     });
     store.select(state => {
       return state.login.isVerifyMobileSuccess;
     }).takeUntil(this.destroyed$).subscribe((value) => {
       if (value) {
-        this.router.navigate(['home']);
+        // this.router.navigate(['home']);
       }
     });
+    this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
   }
 
   // tslint:disable-next-line:no-empty
@@ -87,11 +100,37 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
+    // get user object when google auth is complete
+    if (!Configuration.isElectron) {
+      this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
+        this.isSocialLogoutAttempted$.subscribe((res) => {
+          if (!res && user) {
+            switch (user.provider) {
+              case 'GOOGLE': {
+                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+                break;
+              }
+              case 'LINKEDIN': {
+                let obj: LinkedInRequestModel = new LinkedInRequestModel();
+                obj.email = user.email;
+                obj.token = user.token;
+                this.store.dispatch(this.loginAction.signupWithLinkedin(obj));
+                break;
+              }
+              default: {
+                // do something
+                break;
+              }
+            }
+          }
+        });
+      });
+    }
   }
 
   public showEmailModal() {
     this.emailVerifyModal.show();
-    this.emailVerifyModal.onShow.subscribe(() => {
+    this.emailVerifyModal.onShow.takeUntil(this.destroyed$).subscribe(() => {
       this.isSubmited = false;
     });
   }
@@ -118,7 +157,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public showMobileModal() {
     this.mobileVerifyModal.show();
-
   }
 
   public hideMobileModal() {
@@ -143,12 +181,63 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.email = localStorage.getItem('email');
   }
 
+  public async signInWithProviders(provider: string) {
+    if (Configuration.isElectron) {
+
+      // electronOauth2
+      let electronOauth2 = (window as any).require('electron-oauth');
+
+      let config = {};
+      let bodyParams = {};
+      if (provider === 'google') {
+        // google
+        config = GoogleLoginElectronConfig;
+        bodyParams = AdditionalGoogleLoginParams;
+      } else {
+        // linked in
+        config = LinkedinLoginElectronConfig;
+        bodyParams = AdditionalLinkedinLoginParams;
+      }
+      try {
+        const myApiOauth = electronOauth2(config, {
+          alwaysOnTop: true,
+          autoHideMenuBar: true,
+          webPreferences: {
+            nodeIntegration: false,
+            devTools: true,
+            partition: 'oauth2'
+          }
+        });
+        let token = await myApiOauth.getAccessToken(bodyParams);
+        let options: RequestOptionsArgs = {};
+
+        options.headers = new Headers();
+        options.headers.append('Access-Token', token.access_token);
+
+        if (provider === 'google') {
+          // google
+          this.store.dispatch(this.loginAction.GoogleElectronLogin(options));
+        } else {
+          // linked in
+          this.store.dispatch(this.loginAction.LinkedInElectronLogin(options));
+        }
+      } catch (e) {
+        //
+      }
+    } else {
+      //  web social authentication
+      this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
+      if (provider === 'google') {
+        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+      } else if (provider === 'linkedin') {
+        this.authService.signIn(LinkedinLoginProvider.PROVIDER_ID);
+      }
+    }
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
-  public loginWithProvider(provider: string) {
-    //
   }
 
 }

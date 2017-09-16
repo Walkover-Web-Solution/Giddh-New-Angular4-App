@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { LOGS_API } from './apiurls/logs.api';
 import { LogsRequest, LogsResponse } from '../models/api-models/Logs';
 
@@ -16,7 +16,7 @@ export class LogsService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   /**
@@ -29,13 +29,13 @@ export class LogsService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', this.companyUniqueName).replace(':page', page.toString()), model)
+    return this._http.post(LOGS_API.AUDIT_LOGS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':page', page.toString()), model)
       .map((res) => {
         let data: BaseResponse<LogsResponse, LogsRequest> = res.json();
         data.request = model;
         data.queryString = { page };
         return data;
       })
-      .catch((e) => HandleCatch<LogsResponse, LogsRequest>(e, model, { page }));
+      .catch((e) => this.errorHandler.HandleCatch<LogsResponse, LogsRequest>(e, model, { page }));
   }
 }

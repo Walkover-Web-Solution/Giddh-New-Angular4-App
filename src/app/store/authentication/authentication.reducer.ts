@@ -1,9 +1,15 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { VerifyMobileResponseModel, VerifyMobileModel, VerifyEmailModel, UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
+import {
+  VerifyEmailModel,
+  VerifyEmailResponseModel,
+  VerifyMobileModel,
+  VerifyMobileResponseModel,
+  LinkedInRequestModel
+} from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
 import * as _ from 'lodash';
 
 /**
@@ -21,13 +27,27 @@ export interface AuthenticationState {
   isLoginWithGoogleInProcess: boolean;
   isLoginWithLinkedInInProcess: boolean;
   isLoginWithTwitterInProcess: boolean;
-  user?: VerifyEmailResponseModel;                   // current user | null
+  user?: VerifyEmailResponseModel;   // current user | null
+  isSocialLogoutAttempted: boolean;
+  isLoggedInWithSocialAccount: boolean;
+}
+
+export enum userLoginStateEnum {
+  notLoggedIn,
+  userLoggedIn,
+  newUserLoggedIn
 }
 
 export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
   companyUniqueName: string;                   // current user | null
+  userLoginState: userLoginStateEnum;
+  companies: ComapnyResponse[];
+  isRefreshing: boolean;
+  isCompanyCreationInProcess: boolean;
+
+  isCompanyCreated: boolean;
 }
 
 /**
@@ -45,13 +65,20 @@ const initialState = {
   isLoginWithEmailSubmited: false,
   isLoginWithMobileSubmited: false,
   isVerifyEmailSuccess: false,
-  user: null
+  user: null,
+  isSocialLogoutAttempted: false,
+  isLoggedInWithSocialAccount: false
 };
 
-const sessionInitialState = {
+const sessionInitialState: SessionState = {
   user: null,
   lastState: '',
-  companyUniqueName: ''
+  companyUniqueName: '',
+  userLoginState: userLoginStateEnum.notLoggedIn,
+  companies: [],
+  isCompanyCreated: false,
+  isCompanyCreationInProcess: false,
+  isRefreshing: false
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -142,8 +169,40 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithEmailSubmited: false,
         isLoginWithMobileSubmited: false,
         isVerifyEmailSuccess: false,
-        user: null
+        user: null,
+        isSocialLogoutAttempted: true
       });
+    case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
+      let newState = _.cloneDeep(state);
+      newState.isSocialLogoutAttempted = true;
+      return newState;
+    }
+    case LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT: {
+      let newState = _.cloneDeep(state);
+      newState.isSocialLogoutAttempted = false;
+      return newState;
+    }
+    // important if logged in via social accounts for web only
+    case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let LINKEDIN_RESPONSE: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
+      if (LINKEDIN_RESPONSE.status === 'success') {
+        newState.isLoggedInWithSocialAccount = true;
+      } else {
+        newState.isLoggedInWithSocialAccount = false;
+      }
+      return newState;
+    }
+    case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
+      let newState = _.cloneDeep(state);
+      let GOOGLE_RESPONSE: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
+      if (GOOGLE_RESPONSE.status === 'success') {
+        newState.isLoggedInWithSocialAccount = true;
+      } else {
+        newState.isLoggedInWithSocialAccount = false;
+      }
+      return newState;
+    }
     default:
       return state;
   }
@@ -151,8 +210,8 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
 
 export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
   switch (action.type) {
-    case LoginActions.VerifyEmailResponce:
-      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+    case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
+      let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
       if (data.status === 'success') {
         return Object.assign({}, state, {
           user: data.body
@@ -161,6 +220,32 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         return Object.assign({}, state, {
           user: null
         });
+      }
+    }
+    case LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE: {
+      let data: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel> = action.payload as BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body
+        });
+      } else {
+        return Object.assign({}, state, {
+          user: null
+        });
+      }
+    }
+    case LoginActions.VerifyEmailResponce:
+      {
+        let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+        if (data.status === 'success') {
+          return Object.assign({}, state, {
+            user: data.body
+          });
+        } else {
+          return Object.assign({}, state, {
+            user: null
+          });
+        }
       }
     case LoginActions.VerifyMobileResponce:
       let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
@@ -174,10 +259,16 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
     case LoginActions.LogOut:
+    case LoginActions.SOCIAL_LOGOUT_ATTEMPT:
       return Object.assign({}, state, {
         user: null,
         companyUniqueName: '',
-        lastState: ''
+        lastState: '',
+        userLoginState: 0,
+        companies: [],
+        isCompanyCreated: false,
+        isCompanyCreationInProcess: false,
+        isRefreshing: false
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
@@ -197,10 +288,54 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
       return state;
-    case CompanyActions.SET_CONTACT_NO:
+    case CompanyActions.SET_CONTACT_NO: {
       let newState = _.cloneDeep(state);
-      newState.user.user.contactNo = action.payload;
+      newState.user.user.mobileNo = action.payload;
       return newState;
+    }
+    case CompanyActions.CREATE_COMPANY:
+      return Object.assign({}, state, { isCompanyCreationInProcess: true });
+    case CompanyActions.RESET_CREATE_COMPANY_FLAG:
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false });
+    case CompanyActions.CREATE_COMPANY_RESPONSE: {
+      let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
+      if (companyResp.status === 'success') {
+        let newState = _.cloneDeep(state);
+        newState.isCompanyCreationInProcess = false;
+        newState.isCompanyCreated = true;
+        newState.companies.push(companyResp.body);
+        return newState;
+      }
+      return state;
+    }
+    case CompanyActions.REFRESH_COMPANIES:
+      return Object.assign({}, state, {
+        isRefreshing: true,
+        isCompanyCreated: false
+      });
+    case CompanyActions.REFRESH_COMPANIES_RESPONSE:
+      let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
+      if (companies.status === 'success') {
+        return Object.assign({}, state, {
+          isRefreshing: false,
+          companies: action.payload.body
+        });
+      }
+      return state;
+    case CompanyActions.DELETE_COMPANY_RESPONSE:
+      let uniqueName: BaseResponse<string, string> = action.payload;
+      if (uniqueName.status === 'success') {
+        let array = state.companies.filter(cmp => cmp.uniqueName !== uniqueName.body);
+        return Object.assign({}, state, {
+          companies: array
+        });
+      }
+      return state;
+    case LoginActions.SetLoginStatus: {
+      return Object.assign({}, state, {
+        userLoginState: action.payload
+      });
+    }
     default:
       return state;
   }

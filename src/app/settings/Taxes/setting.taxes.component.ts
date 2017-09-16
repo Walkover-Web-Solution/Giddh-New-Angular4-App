@@ -56,14 +56,14 @@ export class SettingTaxesComponent implements OnInit {
         this.availableTaxes = _.cloneDeep(o.taxes);
       }
     });
-    console.log('hello from SettingTaxesComponent');
+    // console.log('hello from SettingTaxesComponent');
 
     // get flatternaccounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: Select2OptionData[] = [];
         data.body.results.map(d => {
-          accounts.push({text: `${d.name} (${d.uniqueName})`, id: d.uniqueName});
+          accounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
         });
         this.accounts$ = accounts;
       }
@@ -88,7 +88,7 @@ export class SettingTaxesComponent implements OnInit {
 
     dataToSave.date = moment(dataToSave.date).format('DD-MM-YYYY');
     dataToSave.accounts = dataToSave.accounts ? dataToSave.accounts : [];
-    dataToSave.taxDetail = [{ date: dataToSave.date , taxValue: dataToSave.taxValue}];
+    dataToSave.taxDetail = [{ date: dataToSave.date, taxValue: dataToSave.taxValue }];
 
     this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
   }
@@ -117,7 +117,7 @@ export class SettingTaxesComponent implements OnInit {
 
   public addMoreDateAndPercentage(taxIndex: number) {
     let taxes = _.cloneDeep(this.availableTaxes);
-    taxes[taxIndex].taxDetail.push({ date: null, taxValue: null});
+    taxes[taxIndex].taxDetail.push({ date: null, taxValue: null });
     this.availableTaxes = taxes;
   }
 

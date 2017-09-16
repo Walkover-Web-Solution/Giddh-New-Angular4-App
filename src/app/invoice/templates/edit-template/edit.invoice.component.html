@@ -1,0 +1,46 @@
+
+<div class="col-xs-12">
+    <div class="col-xs-3">
+        <div class="row">
+            <div class="template-grid bdr pd2">
+                <h3 class="primary_clr">New Template</h3>
+                <p class="mrT2">
+                    Click to add a template fromour gallery. You can customizethe template title, columns,and headers in line item table
+                </p>
+                <button class="btn btn-small isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
+            </div>
+        </div>
+    </div>
+    <!--<div *ngIf="isLoadingCustomCreatedTemplates" class="well text-center">
+        Loading....
+    </div>-->
+    <div class="col-xs-3" *ngFor="let template of customCreatedTemplates; let i = index">
+        <div class="row">
+            <div class="template-grid bdr pd2">
+                <h3 class="primary_clr">{{template.name}}</h3>
+                <p class="mrT2">
+                    Make it as default - {{template.isDefault}}
+                </p>
+                <button class="btn btn-link mrT2" (click)="onSetTemplateAsDefault(template)">
+                    <i *ngIf="template.isDefault" class="fa fa-toggle-on fa-2x" aria-hidden="true"></i>
+                    <i *ngIf="!template.isDefault" class="fa fa-toggle-off fa-2x" aria-hidden="true"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Template modal -->
+<div bsModal #templateModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width: 100%;margin:0;">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content" style="border-radius:0px;">
+      <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId" (closeModelEvent)="onCloseTemplateModal()"></invoice-template-modal>
+    </div>
+  </div>
+  <div class="sticky-footer pd2">
+    <button class="btn btn-default">Preview</button>
+    <button class="btn btn-success" (click)="createTemplate()">Save</button>
+    <button class="btn btn-danger" (click)="onCloseTemplateModal()">Close</button>
+  </div>
+</div>

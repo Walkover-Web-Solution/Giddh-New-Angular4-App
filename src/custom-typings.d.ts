@@ -42,8 +42,8 @@ import * as _ from 'lodash'
  * You can include your type definitions in this file until you create one for the @types
  *
  */
-
 // support NodeJS modules without type definitions
+
 declare module '*';
 
 /*
@@ -63,8 +63,8 @@ declare var System: SystemJS;
 declare var AppUrl: string;
 declare var ApiUrl: string;
 declare var isElectron: boolean;
-declare var $: JQueryStatic;
-declare var jQuery: JQueryStatic;
+// declare var $: JQueryStatic;
+// declare var jQuery: JQueryStatic;
 
 interface SystemJS {
   import: (path?: string) => Promise<any>;
@@ -89,9 +89,9 @@ type FactoryPromise = () => Promise<any>;
 
 type AsyncRoutes = {
   [component: string]: Es6PromiseLoader |
-  Function |
-  FactoryEs6PromiseLoader |
-  FactoryPromise;
+    Function |
+    FactoryEs6PromiseLoader |
+    FactoryPromise;
 };
 
 type IdleCallbacks = Es6PromiseLoader |
@@ -117,8 +117,11 @@ interface WebpackModule {
 
 interface WebpackRequire {
   (id: string): any;
+
   (paths: string[], callback: (...modules: any[]) => void): void;
+
   ensure(ids: string[], callback: (req: WebpackRequire) => void, chunkName?: string): void;
+
   context(directory: string, useSubDirectories?: boolean, regExp?: RegExp): WebpackContext;
 }
 
@@ -131,11 +134,20 @@ interface ErrorStackTraceLimit {
 }
 
 // Extend typings
-interface NodeRequire extends WebpackRequire { }
-interface ErrorConstructor extends ErrorStackTraceLimit { }
-interface NodeRequireFunction extends Es6PromiseLoader { }
-interface NodeModule extends WebpackModule { }
-interface Global extends GlobalEnvironment { }
+interface NodeRequire extends WebpackRequire {
+}
+
+interface ErrorConstructor extends ErrorStackTraceLimit {
+}
+
+interface NodeRequireFunction extends Es6PromiseLoader {
+}
+
+interface NodeModule extends WebpackModule {
+}
+
+interface Global extends GlobalEnvironment {
+}
 
 
 

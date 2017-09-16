@@ -18,6 +18,8 @@ import { BsGridComponent } from './bs-grid/bs-grid.component';
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
       (expandAll)="expandAllEmit($event)"
+      [BsExportXLS]="true"
+      (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
     <div *ngIf="!(data$ | async)">
          <!-- loader -->
@@ -69,7 +71,7 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
   public expandAllEmit(v) {
     if (this.bsGrid) {
@@ -80,13 +82,16 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
-    request.fromDate = this.selectedCompany.financialYears[request.fy].financialYearStarts;
-    request.toDate = this.selectedCompany.financialYears[request.fy].financialYearEnds;
+    request.from = this.selectedCompany.financialYears[request.fy].financialYearStarts;
+    request.to = this.selectedCompany.financialYears[request.fy].financialYearEnds;
     this.store.dispatch(this.tlPlActions.GetBalanceSheet(_.cloneDeep(request)));
   }
 
   public ngOnDestroy(): void {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public exportXLS(event) {
+    //
   }
 }
