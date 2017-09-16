@@ -152,7 +152,7 @@ export class InvoicePreviewComponent implements OnInit {
   */
   public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[] }) {
     if (userResponse.action === 'download') {
-      this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, { invoiceNumber: [this.selectedInvoice.invoiceNumber], template: 'gst_template_a' }));
+      this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, { invoiceNumber: [this.selectedInvoice.invoiceNumber]}));
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
     }
