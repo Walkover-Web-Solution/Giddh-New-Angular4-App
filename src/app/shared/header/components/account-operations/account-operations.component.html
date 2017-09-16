@@ -51,11 +51,12 @@
   <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
 
     <!--account add component-->
-    <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async"
+    <!-- <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async"
                  [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
                  [createAccountInProcess$]="createAccountInProcess$"
                  [createAccountIsSuccess$]="createAccountIsSuccess$" (submitClicked)="addNewGroup($event)"
-                 [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-add>
+                 [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-add> -->
+    <account-add-new></account-add-new>
 
     <!--account update component-->
     <account-update *ngIf="(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async"
