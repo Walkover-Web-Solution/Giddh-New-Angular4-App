@@ -17,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { IsFieldVisible } from './filters-container/content-filters/content.filters.component';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
   selector: 'edit-invoice',
@@ -27,6 +28,8 @@ import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service'
 export class EditInvoiceComponent implements OnInit {
 
   @ViewChild('templateModal') public templateModal: ModalDirective;
+  @ViewChild('customTemplateConfirmationModal') public customTemplateConfirmationModal: ModalDirective;
+  @ViewChild('invoiceTemplatePreviewModal') public invoiceTemplatePreviewModal: ModalDirective;
 
   public templateId: string = 'common_template_a';
   public heading: string = 'Walkover Web Solutions';
@@ -35,10 +38,55 @@ export class EditInvoiceComponent implements OnInit {
   public isLoadingCustomCreatedTemplates: boolean = false;
   public currentTemplate: any;
   public currentTemplateSections: ISection[];
+  public deleteTemplateConfirmationMessage: string;
   public fieldDisplayState: IsFieldVisible;
+  public invoiceTemplateBase64Data: string;
+  public field: IsFieldVisible = {
+    enableCompanyName: true,
+    enableCompanyAddress: true,
+    enableInvoiceDate: true,
+    enableInvoiceNo: true,
+    enableDueDate: true,
+    enableCustomerName: true,
+    enableMobileNo: true,
+    enableCustomerAddress: true,
+    enableEmailId: true,
+    enableBillingAddress: true,
+    enableShipDate: true,
+    enableShipVia: true,
+    enableTrackingNo: true,
+    enableDocTitle: true,
+    enableBillingState: true,
+    enableBillingGstin: true,
+    enableShippingAddress: true,
+    enableShippingState: true,
+    enableShippingGstin: true,
+    enableCustom1: true,
+    enableCustom2: true,
+    enableCustom3: true,
+    enableSno: true,
+    enableDate: true,
+    enableItem: true,
+    enableHsn: true,
+    enableQty: true,
+    enableRate: true,
+    enableDis: true,
+    enableTaxableValue: true,
+    enableTax: true,
+    enableTotal: true,
+    enableTaxableAmount: true,
+    enableTotalTax: true,
+    enableOtherDeductions: true,
+    enableInvoiceTotal: true,
+    enableMessage1: true,
+    enableMessage2: true,
+    enableThanks: true,
+    enableTotalInWords: true
+  };
+  private selectedTemplateUniqueName: string;
   private templateMeta: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
@@ -107,7 +155,8 @@ export class EditInvoiceComponent implements OnInit {
         this.templateMeta = val.invtemp.templateMeta;
       });
       let data: any = {
-        name: 'my new template',
+        // name: 'my new template',
+        name: this._invoiceUiDataService.getTemplateName(),
         uniqueName: '',
         isSample: false,
         sections: [
@@ -382,7 +431,9 @@ export class EditInvoiceComponent implements OnInit {
         ],
         //  copyFrom: this.templateMeta.companyName,
         copyFrom: 'gst_template_a',
-        color: this.templateMeta.color,
+        // color: this.templateMeta.color,
+        primaryColor: this.templateMeta.primaryColor,
+        secondaryColor: this.templateMeta.secondaryColor,
         font: this.templateMeta.font,
         fontSize: '10pt',
         topMargin: this.templateMeta.topMargin,
@@ -394,10 +445,15 @@ export class EditInvoiceComponent implements OnInit {
       };
 
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
-        // console.log('The res is :', res);
+        if (res.status === 'success') {
+          this._toasty.successToast('Template Saved Successfully.');
+          this.templateModal.hide();
+          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+        }
       });
     } else {
-      // console.log('this.fieldDisplayState is not ready');
+      this._toasty.errorToast('None field were changed.');
+      console.log('this.fieldDisplayState is not ready');
     }
   }
 
@@ -410,5 +466,125 @@ export class EditInvoiceComponent implements OnInit {
       // console.log('the selectedTemplate is :', selectedTemplate);
       this.store.dispatch(this.invoiceActions.setTemplateAsDefault(selectedTemplate.uniqueName));
     }
+  }
+
+  /**
+   * onDeleteTemplate
+   */
+  public onDeleteTemplate(template) {
+    if (template) {
+      let selectedTemplate = _.cloneDeep(template);
+      this.deleteTemplateConfirmationMessage = `Are you sure want to delete "<b>${selectedTemplate.name}</b>" template?`;
+      this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
+      this.customTemplateConfirmationModal.show();
+    }
+  }
+
+  /**
+   * onCloseConfirmationModal
+   */
+  public onCloseConfirmationModal(userResponse: boolean) {
+    if (userResponse && this.selectedTemplateUniqueName) {
+      this.store.dispatch(this.invoiceActions.deleteTemplate(this.selectedTemplateUniqueName));
+    }
+    this.customTemplateConfirmationModal.hide();
+  }
+
+  /**
+   * onPreview
+   */
+  public onPreview(template) {
+    let selectedTemplate = _.cloneDeep(template);
+    this._invoiceTemplatesService.getCustomTemplate(selectedTemplate.uniqueName).subscribe((res) => {
+      if (res.status === 'success') {
+        this.currentTemplateSections = res.body.sections;
+        let sections = _.cloneDeep(res.body.sections);
+        sections.forEach((section) => {
+          section.content.forEach((field) => {
+              this.onCheckField(field.field, field.display);
+          });
+        });
+        // this.templateId = res.body.uniqueName;
+        this.invoiceTemplatePreviewModal.show();
+      }
+    });
+  }
+
+   // checking visibility of a field
+  public onCheckField(field, value) {
+    if (field === 'companyName') {
+      this.field.enableCompanyName = value;
+    } else if (field === 'invoiceDate') {
+      this.field.enableInvoiceDate = value;
+    } else if (field === 'invoiceNo') {
+      this.field.enableInvoiceNo = value;
+    } else if (field === 'companyAddress') {
+      this.field.enableCompanyAddress = value;
+    } else if (field === 'dueDa') {
+      this.field.enableDueDate = value;
+    } else if (field === 'billingAddr') {
+      this.field.enableBillingAddress = value;
+    } else if (field === 'billingGstin') {
+      this.field.enableBillingGstin = value;
+    } else if (field === 'billingState') {
+      this.field.enableBillingState = value;
+    } else if (field === 'shippingAddr') {
+      this.field.enableShippingAddress = value;
+    } else if (field === 'shippingGstin') {
+      this.field.enableShippingGstin = value;
+    } else if (field === 'shippingState') {
+      this.field.enableShippingState = value;
+    } else if (field === 'custom1') {
+      this.field.enableCustom1 = value;
+    } else if (field === 'custom2') {
+      this.field.enableCustom2 = value;
+    } else if (field === 'custom3') {
+      this.field.enableCustom3 = value;
+    } else if (field === 'sNo') {
+      this.field.enableSno = value;
+    } else if (field === 'date') {
+      this.field.enableDate = value;
+    } else if (field === 'item') {
+      this.field.enableItem = value;
+    } else if (field === 'hsn') {
+      this.field.enableHsn = value;
+    } else if (field === 'qty') {
+      this.field.enableQty = value;
+    } else if (field === 'rate') {
+      this.field.enableRate = value;
+    } else if (field === 'dis') {
+      this.field.enableDis = value;
+    } else if (field === 'taxableValue') {
+      this.field.enableTaxableValue = value;
+    } else if (field === 'tax') {
+      this.field.enableTax = value;
+    } else if (field === 'total') {
+      this.field.enableTotal = value;
+    } else if (field === 'taxableAmount') {
+      this.field.enableTaxableAmount = value;
+    } else if (field === 'totalTax') {
+      this.field.enableTotalTax = value;
+    } else if (field === 'otherDeductions') {
+      this.field.enableOtherDeductions = value;
+    } else if (field === 'invoiceTotal') {
+      this.field.enableInvoiceTotal = value;
+    } else if (field === 'message1') {
+      this.field.enableMessage1 = value;
+    } else if (field === 'message2') {
+      this.field.enableMessage2 = value;
+    } else if (field === 'thanks') {
+      this.field.enableThanks = value;
+    } else if (field === 'companyAddr') {
+      this.field.enableCompanyAddress = value;
+    } else if (field === 'invoiceTotalInWords') {
+      this.field.enableTotalInWords = value;
+    }
+    this._invoiceUiDataService.setFieldDisplayState(this.field);
+  }
+  /**
+   * onClosePreviewModal
+   */
+  public onClosePreviewModal() {
+    this.invoiceTemplatePreviewModal.hide();
   }
 }
