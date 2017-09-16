@@ -162,7 +162,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             // this.store.dispatch(replace(['/pages/home']));
-            return go(['/pages/home']);
+            return go([stateDetail.body.lastState]);
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -173,7 +173,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            return go(['/pages/home']);
+            return go([stateDetail.body.lastState]);
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
