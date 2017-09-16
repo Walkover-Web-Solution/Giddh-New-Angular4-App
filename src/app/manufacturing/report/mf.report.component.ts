@@ -138,4 +138,13 @@ export class MfReportComponent implements OnInit {
   public setToday(model: string) {
     this.mfStockSearchRequest[model] = moment();
   }
+
+  public checkValueField(val: string) {
+    let patt = new RegExp(/^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$/);
+    if (val && !patt.test(val)) {
+        let char = val.charAt(val.length - 1);
+        val = val.replace(new RegExp(char, 'g'), '');
+        this.mfStockSearchRequest['searchValue'] = val;
+    }
+  }
 }

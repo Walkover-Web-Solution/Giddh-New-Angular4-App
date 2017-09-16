@@ -384,7 +384,7 @@ export class InvoiceActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type : ''};
+      return { type: '' };
     });
 
   // SET TEMPLATE AS DEFAULT
@@ -403,8 +403,32 @@ export class InvoiceActions {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Template successfully marked as default.');
       }
       return { type : ''};
+    });
+
+  // DELETE TEMPLATE
+  @Effect()
+  private deleteTemplate$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE)
+    .switchMap(action => this._invoiceTemplatesService.deleteTemplate(action.payload))
+    .map(response => {
+      return this.deleteTemplateResponse(response);
+    });
+
+  @Effect()
+  private deleteTemplateResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body);
+      }
+      return { type: '' };
     });
 
   constructor(
@@ -607,6 +631,20 @@ export class InvoiceActions {
     };
   }
 
+  public deleteTemplate(templateUniqueName: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.DELETE_TEMPLATE,
+      payload: templateUniqueName
+    };
+  }
+
+  public deleteTemplateResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE,
+      payload: response
+    };
+  }
+
   public getCurrentTemplateSate(uniqueName: string): Action {
     return {
       payload: uniqueName,
@@ -633,10 +671,10 @@ export class InvoiceActions {
       payload: { font }
     };
   }
-  public setColor(color: string): Action {
+  public setColor(primaryColor: string, secondaryColor: string): Action {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
-      payload: { color }
+      payload: { primaryColor, secondaryColor }
     };
   }
   public updateGSTIN(data: string): Action {
@@ -1022,10 +1060,10 @@ export class InvoiceActions {
     };
   }
 
-  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[], template: string }): Action {
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[] }): Action {
     return {
       type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
-      payload: { accountUniqueName, dataToSend}
+      payload: { accountUniqueName, dataToSend }
     };
   }
 
@@ -1036,7 +1074,7 @@ export class InvoiceActions {
     };
   }
 
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[]}): Action {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[] }): Action {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL,
       payload: { accountUniqueName, dataToSend }
