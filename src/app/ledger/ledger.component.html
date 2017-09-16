@@ -130,7 +130,7 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="text" digitsOnlyDirective [(ngModel)]="txn.amount" (keyup)="needToReCalculate.next(true)">
+                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (keyup)="needToReCalculate.next(true)">
                       </td>
 
                     </tr>
@@ -228,7 +228,7 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="text" digitsOnlyDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)">
+                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)">
                       </td>
 
                     </tr>
