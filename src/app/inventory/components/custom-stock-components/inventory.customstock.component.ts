@@ -23,7 +23,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public options: Select2Options = {
     multiple: false,
     width: '100%',
-    placeholder: 'Choose a parent unit'
+    placeholder: 'Choose a parent unit',
+    allowClear: true
   };
   public stockUnit$: Observable<StockUnitRequest[]>;
   public editMode: boolean;
@@ -73,7 +74,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
     } else {
       this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(this.customUnitObj), this.editCode));
-      this.customUnitObj.name = '';
+      this.customUnitObj.name = null;
     }
   }
 
@@ -89,6 +90,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public clearFields() {
     this.customUnitObj = new StockUnitRequest();
+    this.customUnitObj.name = null;
     this.editMode = false;
     this.editCode = '';
 
