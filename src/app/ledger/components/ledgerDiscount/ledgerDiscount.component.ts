@@ -16,7 +16,9 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
   public discountTotal: number;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
-  public discountMenu: boolean = false;
+
+  @Input() public discountMenu: boolean;
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {

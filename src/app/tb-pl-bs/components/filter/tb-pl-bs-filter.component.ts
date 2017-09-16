@@ -15,6 +15,16 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   public filterForm: FormGroup;
   public search: string;
   public financialOptions = [];
+  @Input() public tbExportPdf: boolean = false;
+  @Input() public tbExportXLS: boolean = false;
+  @Input() public tbExportCsv: boolean = false;
+  @Input() public plBsExportXLS: boolean = false;
+  @Input() public BsExportXLS: boolean = false;
+
+  @Output() public tbExportPdfEvent = new EventEmitter<string>();
+  @Output() public tbExportXLSEvent = new EventEmitter<string>();
+  @Output() public tbExportCsvEvent = new EventEmitter<string>();
+  @Output() public plBsExportXLSEvent = new EventEmitter<string>();
   // public expandAll?: boolean = null;
   @Output()
   public expandAll: EventEmitter<boolean> = new EventEmitter<boolean>();
@@ -41,8 +51,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     }
     this._selectedCompany = value;
     this.filterForm.patchValue({
-      toDate: value.activeFinancialYear.financialYearEnds,
-      fromDate: value.activeFinancialYear.financialYearEnds
+      to: value.activeFinancialYear.financialYearEnds,
+      from: value.activeFinancialYear.financialYearStarts
     });
 
     this.financialOptions = value.financialYears.map(q => {
@@ -51,13 +61,17 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     this.selectedFinancialYearOption = value.activeFinancialYear.uniqueName;
   }
 
+  public get selectedCompany() {
+    return this._selectedCompany;
+  }
+
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
   private _selectedCompany: ComapnyResponse;
 
   constructor(private fb: FormBuilder) {
     this.filterForm = this.fb.group({
-      fromDate: [''],
-      toDate: [''],
+      from: [''],
+      to: [''],
       fy: [''],
       refresh: [false]
     });

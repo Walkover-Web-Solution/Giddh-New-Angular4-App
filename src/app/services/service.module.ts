@@ -12,7 +12,6 @@ import { AuthenticationService } from './authentication.service';
 import { GroupService } from './group.service';
 import { StorageService } from './storage.service';
 import { HttpWrapperService } from './httpWrapper.service';
-import { ErrorHandlerService } from './errorhandler.service';
 import { ToasterService } from './toaster.service';
 import { SharedModule } from '../shared/shared.module';
 import { CompanyActions } from './actions/company.actions';
@@ -52,6 +51,16 @@ import { SettingsProfileActions } from './actions/settings/profile/settings.prof
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
+import { NewUserAuthGuard } from './decorators/newUserGuard';
+import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { InvoiceService } from './invoice.service';
+import { InvoiceTemplatesService } from './invoice.templates.service';
+import { SettingsLinkedAccountsService } from './settings.linked.accounts.service';
+import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
+import { PurchaseInvoiceService } from './purchase-invoice.service';
+import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
+import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
+import { SettingsFinancialYearService } from './settings.financial-year.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -78,9 +87,13 @@ import { ManufacturingActions } from './actions/manufacturing/manufacturing.acti
     EffectsModule.run(FlyAccountsActions),
     EffectsModule.run(TBPlBsActions),
     EffectsModule.run(LedgerActions),
+    EffectsModule.run(InvoiceActions),
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
+    EffectsModule.run(SettingsLinkedAccountsActions),
+    EffectsModule.run(InvoicePurchaseActions),
+    EffectsModule.run(SettingsFinancialYearActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -90,28 +103,33 @@ export class ServiceModule {
       ngModule: ServiceModule,
       providers: [
         StorageService,
+        ErrorHandler,
         HttpWrapperService,
         AuthenticationService,
-        ErrorHandlerService,
         ToasterService,
         DashboardService,
         CompanyService,
         NeedsAuthentication,
         LocationService,
         UserAuthenticated,
+        NewUserAuthGuard,
         GroupService,
         AccountService,
         InventoryService,
         PermissionService,
         ManufacturingService,
-        ErrorHandler,
         SearchService,
+        InvoiceService,
+        InvoiceTemplatesService,
         LogsService,
         TlPlService,
         LedgerService,
         SettingsIntegrationService,
         SettingsProfileService,
-        SettingsTaxesService
+        SettingsTaxesService,
+        SettingsLinkedAccountsService,
+        PurchaseInvoiceService,
+        SettingsFinancialYearService
       ]
     };
   }

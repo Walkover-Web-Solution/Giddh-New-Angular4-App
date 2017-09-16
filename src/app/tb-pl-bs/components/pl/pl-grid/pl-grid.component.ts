@@ -8,7 +8,7 @@ import { Observable } from 'rxjs/Observable';
   selector: 'pl-grid',  // <home></home>
   templateUrl: './pl-grid.component.html'
 })
-export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
+export class PlGridComponent {
   public noData: boolean;
   public showClearSearch: boolean;
   @Input() public search: string = '';
@@ -17,31 +17,15 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input()
   public set expandAll(value: boolean) {
     if (this.plData) {
-      debugger;
       this.toggleVisibility(this.plData.expArr, value);
       this.toggleVisibility(this.plData.incArr, value);
       this.plData = _.cloneDeep(this.plData);
-      // this.plData.expArr = _.cloneDeep(this.plData.expArr);
-      // this.plData.incArr = _.cloneDeep(this.plData.incArr);
     }
   }
 
   constructor(private cd: ChangeDetectorRef) {
     //
   }
-  public ngOnChanges(changes: SimpleChanges) {
-    if (changes['expandAll']) {
-      // debugger;--
-    }
-  }
-  public ngOnInit() {
-    //
-  }
-
-  public ngAfterViewInit() {
-    //
-  }
-
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;

@@ -7,12 +7,14 @@ import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions'
 export interface FlyAccountsState {
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   showAccountList: boolean;
+  isFlyAccountInProcess: boolean;
   noGroups: boolean;
   flyAccounts: boolean;
 }
 
 export const initialState: FlyAccountsState = {
   flattenGroupsAccounts: [],
+  isFlyAccountInProcess: false,
   showAccountList: false,
   noGroups: false,
   flyAccounts: false
@@ -20,8 +22,12 @@ export const initialState: FlyAccountsState = {
 
 export function FlyAccountsReducer(state = initialState, action: Action): FlyAccountsState {
   switch (action.type) {
+    case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST:
+      return Object.assign({}, state, { isFlyAccountInProcess: true });
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE:
-      return Object.assign({}, state, { flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
+      return Object.assign({}, state, { isFlyAccountInProcess: false, flattenGroupsAccounts: prepare(action.payload.results ? action.payload.results : []) });
+    case FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP:
+      return Object.assign({}, state, { flattenGroupsAccounts: prepare([]) });
     default: {
       return state;
     }
@@ -29,13 +35,15 @@ export function FlyAccountsReducer(state = initialState, action: Action): FlyAcc
 }
 
 const prepare = (data: IFlattenGroupsAccountsDetail[]) => {
-  return data.map(p => <IFlattenGroupsAccountsDetail>{
-    accountDetails: p.accountDetails,
-    groupName: p.groupName,
-    applicableTaxes: p.applicableTaxes,
-    groupSynonyms: p.groupSynonyms,
-    isOpen: false,
-    groupUniqueName: p.groupUniqueName
+  return data.map(p => {
+    return {
+      accountDetails: p.accountDetails,
+      groupName: p.groupName,
+      applicableTaxes: p.applicableTaxes,
+      groupSynonyms: p.groupSynonyms,
+      isOpen: false,
+      groupUniqueName: p.groupUniqueName
+    };
   });
 };
 const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
@@ -47,9 +55,9 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
-          closeBalType: account.closingBalance.type,
+          closeBalanceType: account.closingBalance.type,
           closingBalance: Number(account.closingBalance.amount),
-          openBalType: account.openingBalance.type,
+          openBalanceType: account.openingBalance.type,
           creditTotal: Number(account.creditTotal),
           debitTotal: Number(account.debitTotal),
           openingBalance: Number(account.openingBalance),
@@ -64,9 +72,9 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
-          closeBalType: account.closingBalance.type,
+          closeBalanceType: account.closingBalance.type,
           closingBalance: Number(account.closingBalance.amount),
-          openBalType: account.openingBalance.type,
+          openBalanceType: account.openingBalance.type,
           creditTotal: Number(account.creditTotal),
           debitTotal: Number(account.debitTotal),
           openingBalance: Number(account.openingBalance),

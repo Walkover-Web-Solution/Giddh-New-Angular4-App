@@ -25,21 +25,21 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public dropdownHeading: string = 'Select pages';
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    constructor(private router: Router, private store: Store<AppState>, private PermissionActions: PermissionActions) {
+    constructor(private router: Router, private store: Store<AppState>, private permissionActions: PermissionActions) {
         this.store.select(p => p.permission).takeUntil(this.destroyed$).subscribe((permission) => {
             this.allRoles = [];
             permission.roles.forEach((role) => {
-                this.allRoles.push({name: role.name, uniqueName: role.uniqueName});
+                this.allRoles.push({ name: role.name, uniqueName: role.uniqueName });
             });
             this.newRoleObj.pageList = [];
             permission.pages.forEach((page: IPageStr) => {
-                this.newRoleObj.pageList.push({name: page, isSelected: false});
+                this.newRoleObj.pageList.push({ name: page, isSelected: false });
             });
         });
     }
 
     public ngOnInit() {
-        this.store.dispatch(this.PermissionActions.GetAllPages());
+        this.store.dispatch(this.permissionActions.GetAllPages());
         this.newRoleObj.isFresh = true;
     }
 
@@ -68,10 +68,10 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             let data;
             if (this.newRoleObj.isFresh) {
                 data = _.omit(this.newRoleObj, 'uniqueName');
-            }else {
+            } else {
                 data = _.omit(this.newRoleObj, 'pageList');
             }
-            this.store.dispatch(this.PermissionActions.PushTempRoleInStore(data));
+            this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
             this.closeEvent.emit('save');
         }
     }
@@ -109,7 +109,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     }
 
     get isFormValid() {
-        if (this.newRoleObj.name && this.newRoleObj.isFresh && this.makeCount() > 0 ) {
+        if (this.newRoleObj.name && this.newRoleObj.isFresh && this.makeCount() > 0) {
             return true;
         } else if (this.newRoleObj.name && !this.newRoleObj.isFresh && this.newRoleObj.uniqueName) {
             return true;

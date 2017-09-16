@@ -1,15 +1,14 @@
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
-import { StockDetailResponse, StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
+import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../services/actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store/roots';
 
 import { Store } from '@ngrx/store';
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
-import { InventoryStockReportVM } from './inventory-stock-report.view-model';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment';
@@ -21,7 +20,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   selector: 'invetory-stock-report',  // <home></home>
   templateUrl: './inventory.stockreport.component.html'
 })
-export class InventoryStockReportComponent implements OnInit, OnDestroy {
+export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   public today: Date = new Date();
   public activeStock$: string;
   public stockReport$: Observable<StockReportResponse>;
@@ -91,12 +90,6 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
           this.store.select(p => {
             return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
           }).take(1).subscribe(p => this.activeStock$ = p);
-          this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
-            if (!a) {
-              this.store.dispatch(this.sideBarAction.OpenGroup(this.groupUniqueName));
-              this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
-            }
-          });
           this.stockReportRequest.count = 10;
           this.fromDate = moment().add(-1, 'month').format('DD-MM-YYYY');
           this.toDate = moment().format('DD-MM-YYYY');
@@ -122,6 +115,14 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public ngAfterViewInit() {
+    this.store.select(p => p.inventory.activeGroup).take(1).subscribe((a) => {
+      if (!a) {
+        this.store.dispatch(this.sideBarAction.GetInventoryGroup(this.groupUniqueName));
+      }
+    });
   }
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {

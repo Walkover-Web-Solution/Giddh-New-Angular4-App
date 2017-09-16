@@ -38,7 +38,7 @@ export class BsGridRowComponent implements OnInit, OnChanges {
     //
   }
   public ngOnChanges(changes: SimpleChanges) {
-    debugger;
+    //
   }
   public ngOnInit() {
     //

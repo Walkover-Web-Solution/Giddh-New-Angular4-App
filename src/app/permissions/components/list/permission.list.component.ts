@@ -43,7 +43,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
     private router: Router,
-    private PermissionActions: PermissionActions,
+    private permissionActions: PermissionActions,
     private _toasty: ToasterService
   ) { }
 
@@ -56,13 +56,13 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
     this.session$.subscribe((session) => {
       this.store.select(state => state.company).takeUntil(this.destroyed$).subscribe((company) => {
-        if (company && company.companies.length) {
-          let selectedCompany = company.companies.find(cmp => {
+        if (company && session.companies.length) {
+          let selectedCompany = session.companies.find(cmp => {
             return cmp.uniqueName === session.companyUniqueName;
           });
           if (selectedCompany && selectedCompany.uniqueName === session.companyUniqueName) {
             if (selectedCompany.role.uniqueName !== 'super_admin') {
-                this.redirectToDashboard();
+              this.redirectToDashboard();
             }
           } else {
             this.redirectToDashboard();
@@ -75,13 +75,13 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
     this.route.data.subscribe((data: any) => this.localState = data.yourData);
     // Getting roles every time user refresh page
-    this.store.dispatch(this.PermissionActions.GetRoles());
-    this.store.dispatch(this.PermissionActions.RemoveNewlyCreatedRoleFromStore());
+    this.store.dispatch(this.permissionActions.GetRoles());
+    this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
     this.store.select(p => p.permission.roles).takeUntil(this.destroyed$).subscribe((roles: IRoleCommonResponseAndRequest[]) => this.allRoles = roles);
   }
 
   public ngOnDestroy() {
-    //    this.store.dispatch(this.PermissionActions.RemoveNewlyCreatedRoleFromStore());
+    //    this.store.dispatch(this.permissionActions.RemoveNewlyCreatedRoleFromStore());
   }
 
   public redirectToDashboard() {
@@ -98,7 +98,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
 
   public updateRole(role: NewRoleClass) {
     let data = new NewRoleClass(role.name, role.scopes, role.isFixed, role.uniqueName, true);
-    this.store.dispatch(this.PermissionActions.PushTempRoleInStore(data));
+    this.store.dispatch(this.permissionActions.PushTempRoleInStore(data));
     this.router.navigate(['/pages', 'permissions', 'details']);
   }
 
@@ -108,7 +108,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
   }
   public deleteConfirmedRole() {
     this.permissionConfirmationModel.hide();
-    this.store.dispatch(this.PermissionActions.DeleteRole(this.selectedRoleForDelete.uniqueName));
+    this.store.dispatch(this.permissionActions.DeleteRole(this.selectedRoleForDelete.uniqueName));
   }
 
   public closeConfirmationPopup() {

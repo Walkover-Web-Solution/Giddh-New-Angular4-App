@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { SearchRequest } from '../../../models/api-models/Search';

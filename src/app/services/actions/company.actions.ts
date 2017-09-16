@@ -50,6 +50,7 @@ export class CompanyActions {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };
       }
+      this._toasty.successToast('Company created successfully', 'Success');
       // set newly created company as active company
       let stateDetailsObj = new StateDetailsRequest();
       stateDetailsObj.companyUniqueName = response.request.uniqueName;

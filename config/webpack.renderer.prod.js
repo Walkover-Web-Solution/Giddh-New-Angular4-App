@@ -10,7 +10,7 @@ const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
 */
-const commonConfig = require('./webpack.common.js');
+const commonConfig = require('./webpack.renderer.js');
 
 /**
  * Webpack Plugins
@@ -21,7 +21,6 @@ const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
 const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
-const ProvidePlugin = require('webpack/lib/ProvidePlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 
@@ -333,7 +332,7 @@ module.exports = function (env) {
          */
 
       ],
-
+      // target: 'electron-renderer'
       /**
        * Include polyfills or mocks for various node stuff
        * Description: Node configuration

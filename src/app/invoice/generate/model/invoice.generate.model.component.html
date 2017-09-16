@@ -1,0 +1,10 @@
+<section>
+    <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Invoice</h3>
+    </div>
+    <div class="modal-body">
+        <section *ngIf="goAhead">
+            <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent()"></invoice-create>
+        </section>
+    </div>
+</section>

@@ -2,7 +2,6 @@ import { Action } from '@ngrx/store';
 import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../../models/api-models/Search';
 import { SearchActions } from '../../services/actions/search.actions';
 import * as _ from 'lodash';
-import { BaseResponseOptions } from '@angular/http';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 export interface SearchState {
@@ -78,9 +77,9 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
-          closeBalType: account.closingBalance.type,
+          closeBalanceType: account.closingBalance.type,
           closingBalance: Number(account.closingBalance.amount),
-          openBalType: account.openingBalance.type,
+          openBalanceType: account.openingBalance.type,
           creditTotal: Number(account.creditTotal),
           debitTotal: Number(account.debitTotal),
           openingBalance: Number(account.openingBalance),
@@ -95,9 +94,9 @@ const flattenSearchGroupsAndAccounts = (rawList: SearchResponse[]) => {
       _.each(obj.accounts, (account) => {
         let accountFlat: AccountFlat = {
           parent: obj.groupName,
-          closeBalType: account.closingBalance.type,
+          closeBalanceType: account.closingBalance.type,
           closingBalance: Number(account.closingBalance.amount),
-          openBalType: account.openingBalance.type,
+          openBalanceType: account.openingBalance.type,
           creditTotal: Number(account.creditTotal),
           debitTotal: Number(account.debitTotal),
           openingBalance: Number(account.openingBalance),

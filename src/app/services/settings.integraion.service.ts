@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { SmsKeyClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
 import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 
@@ -17,7 +17,7 @@ export class SettingsIntegrationService {
   private companyUniqueName: string;
   private roleUniqueName: string;
 
-  constructor(private _http: HttpWrapperService, private store: Store<AppState>) {}
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) { }
 
   /*
   * Get SMS key
@@ -29,11 +29,11 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<SmsKeyClass, string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => HandleCatch<SmsKeyClass, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<SmsKeyClass, string>(e));
   }
 
   /**
@@ -46,11 +46,11 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+    return this._http.post(SETTINGS_INTEGRATION_API.SMS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<string, SmsKeyClass> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<string, SmsKeyClass>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<string, SmsKeyClass>(e, model));
   }
 
   /*
@@ -63,11 +63,11 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<EmailKeyClass, string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => HandleCatch<EmailKeyClass, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<EmailKeyClass, string>(e));
   }
 
   /**
@@ -80,11 +80,11 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+    return this._http.post(SETTINGS_INTEGRATION_API.EMAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<string, EmailKeyClass> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<string, EmailKeyClass>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<string, EmailKeyClass>(e, model));
   }
 
   /*
@@ -97,10 +97,10 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.get(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<RazorPayDetailsResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, string>(e));
   }
 
   /*
@@ -113,11 +113,11 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+    return this._http.post(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
   }
 
   /*
@@ -130,11 +130,11 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName), model).map((res) => {
+    return this._http.put(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<RazorPayDetailsResponse, RazorPayClass> = res.json();
       data.request = model;
       return data;
-    }).catch((e) => HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<RazorPayDetailsResponse, RazorPayClass>(e, model));
   }
 
   /*
@@ -147,10 +147,10 @@ export class SettingsIntegrationService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
+    return this._http.delete(SETTINGS_INTEGRATION_API.RAZORPAY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<string, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
 
 }

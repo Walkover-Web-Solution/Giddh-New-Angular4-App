@@ -7,7 +7,7 @@ import { AppState } from '../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import {
   TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest,
@@ -20,7 +20,7 @@ export class LedgerService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   /**
@@ -42,12 +42,12 @@ export class LedgerService {
     request.reversePage = reversePage;
     request.sort = sort;
     request.to = to;
-    return this._http.get(LEDGER_API.GET.replace(':companyUniqueName', this.companyUniqueName).replace(':q', q).replace(':page', page.toString()).replace(':count', count.toString()).replace(':accountUniqueName', accountUniqueName).replace(':from', from).replace(':sort', sort).replace(':to', to).replace(':reversePage', reversePage.toString())).map((res) => {
+    return this._http.get(LEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || '')).replace(':page', page.toString()).replace(':count', encodeURIComponent(count.toString())).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':sort', encodeURIComponent(sort)).replace(':to', encodeURIComponent(to)).replace(':reversePage', reversePage.toString())).map((res) => {
       let data: BaseResponse<TransactionsResponse, TransactionsRequest> = res.json();
       data.request = request;
       data.queryString = { q, page, count, accountUniqueName, from, to, reversePage, sort };
       return data;
-    }).catch((e) => HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
+    }).catch((e) => this.errorHandler.HandleCatch<TransactionsResponse, TransactionsRequest>(e, request, { q, page, count, accountUniqueName, from, to, reversePage, sort }));
   }
 
   /*
@@ -61,14 +61,14 @@ export class LedgerService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(LEDGER_API.CREATE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.post(LEDGER_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<LedgerResponse[], BlankLedgerVM> = res.json();
         data.request = model;
         data.queryString = { accountUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<LedgerResponse[], BlankLedgerVM>(e, model, { accountUniqueName }));
   }
 
   /*
@@ -81,14 +81,14 @@ export class LedgerService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName), model)
+    return this._http.put(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName), model)
       .map((res) => {
         let data: BaseResponse<LedgerResponse, LedgerRequest> = res.json();
         data.request = model;
         data.queryString = { accountUniqueName, entryUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName, entryUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName, entryUniqueName }));
   }
 
   /*
@@ -101,11 +101,11 @@ export class LedgerService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName)).map((res) => {
+    return this._http.delete(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.queryString = { accountUniqueName, entryUniqueName };
       return data;
-    }).catch((e) => HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /*
@@ -118,11 +118,11 @@ export class LedgerService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':entryUniqueName', entryUniqueName)).map((res) => {
+    return this._http.get(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).map((res) => {
       let data: BaseResponse<LedgerResponse[], string> = res.json();
       data.queryString = { accountUniqueName, entryUniqueName };
       return data;
-    }).catch((e) => HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /**
@@ -138,11 +138,11 @@ export class LedgerService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).map((res) => {
+    return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).map((res) => {
       let data: BaseResponse<ReconcileResponse, string> = res.json();
       data.queryString = { accountUniqueName, from, to, chequeNumber };
       return data;
-    }).catch((e) => HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName, from, to, chequeNumber }));
+    }).catch((e) => this.errorHandler.HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName, from, to, chequeNumber }));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {
@@ -152,13 +152,13 @@ export class LedgerService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.post(LEDGER_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, DownloadLedgerRequest> = res.json();
         data.request = model;
         data.queryString = { accountUniqueName };
         return data;
       })
-      .catch((e) => HandleCatch<string, LedgerRequest>(e, model, { accountUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<string, DownloadLedgerRequest>(e, model, { accountUniqueName }));
   }
 }

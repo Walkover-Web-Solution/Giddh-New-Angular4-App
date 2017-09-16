@@ -14,13 +14,15 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { ComapnyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
+import { AuthService } from 'ng4-social-login';
+import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 
 @Component({
   selector: 'app-header',
@@ -29,7 +31,7 @@ import { FormControl } from '@angular/forms';
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
   public userIsSuperUser: boolean = false; // Protect permission module
-  public session$: Observable<boolean>;
+  public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
@@ -51,13 +53,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
+  public isLoggedInWithSocialAccount$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public selectedCompany: Observable<ComapnyResponse>;
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
   public userName: string;
-  public isProd = ENV === 'production'; // to hide search accounts on production
+  public isProd = ENV;
+  public isElectron: boolean = isElectron;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -65,6 +69,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
+    private socialAuthService: AuthService,
     private store: Store<AppState>,
     private companyActions: CompanyActions,
     private groupWithAccountsAction: GroupWithAccountsAction,
@@ -72,7 +77,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private flyAccountActions: FlyAccountsActions,
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
-    private zone: NgZone) {
+    private zone: NgZone,
+    private route: ActivatedRoute) {
+
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+
     this.user$ = this.store.select(state => {
       if (state.session.user) {
         return state.session.user.user;
@@ -80,19 +89,19 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }).takeUntil(this.destroyed$);
 
     this.isCompanyRefreshInProcess$ = this.store.select(state => {
-      return state.company.isRefreshing;
+      return state.session.isRefreshing;
     }).takeUntil(this.destroyed$);
 
     this.companies$ = this.store.select(state => {
-      return _.orderBy(state.company.companies, 'name');
+      return _.orderBy(state.session.companies, 'name');
     }).takeUntil(this.destroyed$);
 
     this.selectedCompany = this.store.select(state => {
-      if (!state.company.companies) {
+      if (!state.session.companies) {
         return;
       }
 
-      let selectedCmp = state.company.companies.find(cmp => {
+      let selectedCmp = state.session.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
       if (!selectedCmp) {
@@ -106,7 +115,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => (p.session.user !== null && p.session.user.user !== null && p.session.user.authKey !== null)).takeUntil(this.destroyed$);
+    this.session$ = this.store.select(p => p.session.userLoginState).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -122,6 +131,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         }
       }
     });
+
     this.manageGroupsAccountsModal.onHidden.subscribe(e => {
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
@@ -143,10 +153,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public ngAfterViewInit() {
     this.session$.subscribe((s) => {
-      if (!s) {
+      if (s === userLoginStateEnum.notLoggedIn) {
         this.router.navigate(['/login']);
+      } else if (s === userLoginStateEnum.newUserLoggedIn) {
+        // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
+        this.router.navigate(['/new-user']);
+        // });
       }
     });
+    if (this.route.snapshot.url.toString() === 'new-user') {
+      this.showAddCompanyModal();
+    }
   }
 
   public ngAfterViewChecked() {
@@ -211,8 +228,24 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public logout() {
-    this.store.dispatch(this.loginAction.LogOut());
+    if (isElectron) {
+      // this._aunthenticationServer.GoogleProvider.signOut();
+      this.store.dispatch(this.loginAction.LogOut());
+    } else {
+      // check if logged in via social accounts
+      this.isLoggedInWithSocialAccount$.subscribe((val) => {
+        if (val) {
+          this.socialAuthService.signOut().then().catch((err) => {
+            // console.log('err', err);
+          });
+          this.store.dispatch(this.loginAction.socialLogoutAttempt());
+          this.store.dispatch(this.loginAction.LogOut());
+        } else {
+          this.store.dispatch(this.loginAction.LogOut());
+        }
+      });
 
+    }
   }
 
   public onHide() {
