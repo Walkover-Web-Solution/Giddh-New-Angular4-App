@@ -17,7 +17,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     <section class="row row-2 account pl-grid-row" *ngFor="let account of groupDetail.accounts"
              [ngClass]="{'isHidden': !account.isVisible }">
       <div class="row"*ngIf="account.name">
-        <div class="col-xs-3  group" [ngStyle]="{'padding-left':'10px'}">{{ account.name | uppercase}}</div>
+        <div class="col-xs-3  group" [ngStyle]="{'padding-left':'10px'}">{{ account.name | lowercase }}</div>
         <div class="col-xs-3  group text-right">
           <span>{{account.closingBalance.amount | number:'1.2-2'}}{{account.closingBalance | recType}}</span>
         </div>

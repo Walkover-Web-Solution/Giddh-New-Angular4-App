@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { ComapnyResponse } from '../../../models/api-models/Company';
@@ -8,7 +8,7 @@ import { ComapnyResponse } from '../../../models/api-models/Company';
   templateUrl: './tb-pl-bs-filter.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TbPlBsFilterComponent implements OnInit, OnDestroy {
+export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public today: Date = new Date();
   public selectedDateOption: string = '1';
   public selectedFinancialYearOption: string = '';
@@ -36,7 +36,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     multiple: false,
     width: '200px',
     placeholder: 'Select Option',
-    allowClear: true
+    allowClear: false
   };
 
   @Input() public showLoader: boolean = true;
@@ -59,6 +59,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
       return { text: q.uniqueName, id: q.uniqueName };
     });
     this.selectedFinancialYearOption = value.activeFinancialYear.uniqueName;
+    this.cd.detectChanges();
   }
 
   public get selectedCompany() {
@@ -68,7 +69,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
   private _selectedCompany: ComapnyResponse;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
     this.filterForm = this.fb.group({
       from: [''],
       to: [''],
@@ -77,7 +78,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
     });
 
   }
-
+  public ngOnChanges(changes: SimpleChanges): void {
+    // if (changes['needToReCalculate']) {
+    //   this.calculateTotal();
+    // }
+  }
   public ngOnInit() {
     //
     if (!this.showLabels) {
@@ -102,9 +107,11 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy {
       fromDate: financialYear.financialYearEnds,
       fy: index === 0 ? 0 : index * -1
     });
+    this.cd.markForCheck();
   }
 
   public filterData() {
+    debugger;
     this.onPropertyChanged.emit(this.filterForm.value);
   }
 
