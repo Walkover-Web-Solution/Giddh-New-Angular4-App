@@ -58,11 +58,12 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   // set company and fetch data...
   @Input()
   public set selectedCompany(value: ComapnyResponse) {
+    debugger;
     this._selectedCompany = value;
     if (value) {
       this.request = {
         refresh: false,
-        from: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        from: value.activeFinancialYear.financialYearStarts,
         to: this.selectedCompany.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
@@ -117,5 +118,18 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public exportXLS($event) {
     //
+  }
+  public findIndex(activeFY, financialYears) {
+    let tempFYIndex = 0;
+    _.each(financialYears, (fy, index: number) => {
+      if (fy.uniqueName === activeFY.uniqueName) {
+        if (index === 0) {
+          tempFYIndex = index;
+        } else {
+          tempFYIndex = index * -1;
+        }
+      }
+    });
+    return tempFYIndex;
   }
 }

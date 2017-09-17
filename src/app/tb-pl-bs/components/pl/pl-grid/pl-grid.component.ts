@@ -19,15 +19,16 @@ export class PlGridComponent {
     if (this.plData) {
       this.toggleVisibility(this.plData.expArr, value);
       this.toggleVisibility(this.plData.incArr, value);
-      this.plData = _.cloneDeep(this.plData);
     }
+    this.plData = _.cloneDeep(this.plData);
+    this.cd.detectChanges();
   }
 
   constructor(private cd: ChangeDetectorRef) {
     //
   }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    return _.each(data, (grp) => {
+    _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
         acc.isVisible = isVisible;
