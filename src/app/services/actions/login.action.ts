@@ -43,6 +43,7 @@ export class LoginActions {
   public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
+  public static ClearSession = 'ClearSession';
   public static SetLoginStatus = 'SetLoginStatus';
   public static GoogleLoginElectron = 'GoogleLoginElectron';
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
@@ -63,7 +64,6 @@ export class LoginActions {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return { type: '' };
       }
-      debugger;
       return this.LoginSuccess();
     });
 
@@ -162,7 +162,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             // this.store.dispatch(replace(['/pages/home']));
-            return go(['/pages/home']);
+            return go([stateDetail.body.lastState]);
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -173,7 +173,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            return go(['/pages/home']);
+            return go([stateDetail.body.lastState]);
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -245,6 +245,15 @@ export class LoginActions {
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
+    });
+
+  @Effect()
+  public ClearSession$: Observable<Action> = this.actions$
+    .ofType(LoginActions.ClearSession)
+    .switchMap(action => {
+      return this.auth.ClearSession();
+    }).map(data => {
+      return this.LogOut();
     });
   constructor(
     public _router: Router,
@@ -371,6 +380,12 @@ export class LoginActions {
     return {
       type: LoginActions.LinkedInLoginElectron,
       payload: value
+    };
+  }
+
+  public ClearSession(): Action {
+    return {
+      type: LoginActions.ClearSession
     };
   }
 }
