@@ -9,6 +9,7 @@ import { EmailSettingObjDefinition } from '../models/interfaces/invoice.setting.
 @Injectable()
 
 export class InvoiceUiDataService {
+  public templateName: string;
   public logoPath: Subject<string> = new Subject();
   public imageSignaturePath: Subject<string> = new Subject();
   public setDivVisible: Subject<IsDivVisible> = new Subject();
@@ -51,5 +52,11 @@ export class InvoiceUiDataService {
   }
   public getEmailSettingObj() {
     return this.invoiceEmailSettingObject;
+  }
+  public setTemplateName(name: string) {
+    this.templateName = name;
+  }
+  public getTemplateName() {
+    return this.templateName;
   }
 }

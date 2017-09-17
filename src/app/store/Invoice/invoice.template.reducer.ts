@@ -71,7 +71,8 @@ export interface InvoiceTemplateMetaState {
   bottomMargin: number;
   rightMargin: number;
   font: string;
-  color: string;
+  primaryColor: string;
+  secondaryColor: string;
   taxableAmount: string;
   totalTax: string;
   otherDeduction: string;
@@ -131,7 +132,7 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
       let res: BaseResponse<GetInvoiceTemplateDetailsResponse[], string> = action.payload;
       nextState.isLoadingCustomCreatedTemplates = false;
       if (res && res.status === 'success') {
-        nextState.customCreatedTemplates = res.body;
+        nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
       }
       return Object.assign({}, state, nextState);
     }
@@ -140,10 +141,24 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
       let res: BaseResponse<any, string> = action.payload;
       if (res.status === 'success') {
         let uniqName = res.queryString.templateUniqueName;
-        let indx = state.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+        let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
         if (indx > -1) {
-          state.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
-          state.customCreatedTemplates[indx].isDefault = true;
+          nextState.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
+          nextState.customCreatedTemplates[indx].isDefault = true;
+          nextState.customCreatedTemplates = _.sortBy(nextState.customCreatedTemplates, [(o) => !o.isDefault]);
+        }
+        return Object.assign({}, state, nextState);
+      }
+      return state;
+    }
+    case INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE: {
+      let nextState = _.cloneDeep(state);
+      let res: BaseResponse<any, string> = action.payload;
+      if (res.status === 'success') {
+        let uniqName = res.queryString.templateUniqueName;
+        let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+        if (indx > -1) {
+          nextState.customCreatedTemplates.splice(indx, 1);
         }
         return Object.assign({}, state, nextState);
       }
@@ -247,7 +262,8 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   bottomMargin: 10,
   rightMargin: 10,
   font: 'Roboto',
-  color: '#df4927',
+  primaryColor: '#df4927',
+  secondaryColor: '#fdf6f4',
   taxableAmount: 'Taxable Amount',
   totalTax: 'Total Tax*',
   otherDeduction: 'Other Deduction',
@@ -410,7 +426,8 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.SET_COLOR:
       return Object.assign({}, state, {
-        color: action.payload.color
+        primaryColor: action.payload.primaryColor,
+        secondaryColor: action.payload.secondaryColor
       });
     case INVOICE.TEMPLATE.UPDATE_MESSAGE1:
       return Object.assign({}, state, {
