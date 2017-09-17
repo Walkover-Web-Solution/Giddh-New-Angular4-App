@@ -315,7 +315,7 @@ export class ContentFilterComponent {
     } else if (field === 'shippingGstin') {
       this.field.enableShippingGstin = value;
     } else if (field === 'shippingState') {
-      this.field.enableShippingAddress = value;
+      this.field.enableShippingState = value;
     } else if (field === 'custom1') {
       this.field.enableCustom1 = value;
     } else if (field === 'custom2') {
