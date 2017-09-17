@@ -1,0 +1,70 @@
+#template-grid-wrapper{
+  padding: 0 30px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: baseline;
+}
+
+.template-grid{
+  background-color: #fff;
+  padding: 50px 25px;
+  border: 1px solid #ccc;
+  margin-right: 60px;
+  margin-bottom: 60px;
+  display: inline-block;
+  align-self: flex-start;
+  max-width: 260px;
+  text-align: center;
+  height: 300px;
+  overflow: hidden;
+  min-width: 250px;
+}
+.template-grid h3{
+  text-transform: uppercase;
+  font-size: 18px;
+  height: 20px;
+}
+
+.template-grid .btn{
+  padding: 10px;
+}
+
+/* The ribbons */
+
+.corner-ribbon{
+  width: 100%;
+  position: absolute;
+  bottom: 41px;
+  right: 62px;
+  text-align: center;
+  line-height: 25px;
+  letter-spacing: 1px;
+  color: #f0f0f0;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+/* Custom styles */
+
+.corner-ribbon.sticky{
+  position: relative;
+  float: left;
+}
+
+.corner-ribbon.shadow{
+  box-shadow: 0 0 3px rgba(0,0,0,.3);
+}
+
+/* Different positions */
+
+.corner-ribbon.top-left{
+  bottom: 41px;
+  right: 84px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+
+/* Colors */
+.corner-ribbon.green{background: #2c7;}
