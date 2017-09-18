@@ -3879,3 +3879,15 @@ input[type='checkbox'][disabled]:after {
 .form-bg {
     background: #f4f5f8;
 }
+
+.toggle-btn i {
+    margin-right: 9px;
+    font-size: 20px;
+    position: relative;
+    top: 2px;
+}
+
+.toggle-btn label {
+    color: #ff5f00;
+    font-size: 16px;
+}
