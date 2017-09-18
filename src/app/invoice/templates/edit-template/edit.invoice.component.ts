@@ -112,13 +112,11 @@ export class EditInvoiceComponent implements OnInit {
           }
         });
         this.currentTemplate = _.cloneDeep(currentTemplate);
-        this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
+        if (this.currentTemplate) {
+          this.currentTemplateSections = this.currentTemplate.common_template_a.sections;
+        }
         // this.store.dispatch(this.invoiceActions.setTemplateData(this.currentTemplateSections));
       }
-    });
-
-    this._invoiceUiDataService.setFieldDisplay.subscribe((obj) => {
-      this.fieldDisplayState = _.cloneDeep(obj);
     });
 
     // Get custom created templates
@@ -133,6 +131,9 @@ export class EditInvoiceComponent implements OnInit {
   }
   public ngOnInit() {
     // TODO: Fetch current template object and bind to template component
+    this._invoiceUiDataService.setFieldDisplay.subscribe((obj) => {
+      this.fieldDisplayState = _.cloneDeep(obj);
+    });
   }
 
   /**
@@ -150,310 +151,314 @@ export class EditInvoiceComponent implements OnInit {
   }
 
   public createTemplate() {
-    if (this.fieldDisplayState) {
-      this.store.take(1).subscribe(val => {
-        this.templateMeta = val.invtemp.templateMeta;
-      });
-      let data: any = {
-        // name: 'my new template',
-        name: this._invoiceUiDataService.getTemplateName(),
-        uniqueName: '',
-        isSample: false,
-        sections: [
-          {
-            sectionName: 'header',
-            content: [
-              {
-                field: 'companyName',
-                label: 'Walkover',
-                display: this.fieldDisplayState.enableCompanyName
-              },
-              {
-                field: 'GSTIN',
-                label: this.templateMeta.GSTIN,
-                display: true
-              },
-              {
-                field: 'PAN',
-                label: this.templateMeta.PAN,
-                display: true
-              },
-              {
-                field: 'address',
-                label: this.templateMeta.address,
-                display: this.fieldDisplayState.enableCompanyAddress
-              },
-              {
-                field: 'invoiceDate',
-                label: this.templateMeta.invoiceDate,
-                display: this.fieldDisplayState.enableInvoiceDate
-              },
-              {
-                field: 'invoiceNumber',
-                label: this.templateMeta.invoiceNumber,
-                display: this.fieldDisplayState.enableInvoiceNo
-              },
-              {
-                field: 'shippingDate',
-                label: this.templateMeta.shippingDate,
-                display: this.fieldDisplayState.enableShipDate
-              },
-              {
-                field: 'shippedVia',
-                label: this.templateMeta.shippingVia,
-                display: this.fieldDisplayState.enableShipVia
-              },
-              {
-                field: 'TrackingNumber',
-                label: this.templateMeta.trackingNumber,
-                display: this.fieldDisplayState.enableTrackingNo
-              },
-              {
-                field: 'TrackingNumber',
-                label: this.templateMeta.trackingNumber,
-                display: this.fieldDisplayState.enableTrackingNo
-              },
-              {
-                field: 'customerName',
-                label: this.templateMeta.customerName,
-                display: true
-              },
-              {
-                field: 'customerEmail',
-                label: this.templateMeta.customerEmail,
-                display: true
-              },
-              {
-                field: 'customerMobileNumber',
-                label: this.templateMeta.customerMobileNumber,
-                display: true
-              },
-              {
-                field: 'dueDate',
-                label: this.templateMeta.dueDate,
-                display: this.fieldDisplayState.enableDueDate
-              },
-              {
-                field: 'billingState',
-                label: this.templateMeta.billingState,
-                display: this.fieldDisplayState.enableBillingState
-              },
-              {
-                field: 'billingAddress',
-                label: this.templateMeta.billingAddress,
-                display: this.fieldDisplayState.enableBillingAddress
-              },
-              {
-                field: 'billingGstin',
-                label: this.templateMeta.billingGstin,
-                display: this.fieldDisplayState.enableBillingGstin
-              },
-              {
-                field: 'shippingAddress',
-                label: this.templateMeta.shippingAddress,
-                display: this.fieldDisplayState.enableShippingAddress
-              },
-              {
-                field: 'shippingState',
-                // label: this.templateMeta.shippingState,
-                label: 'Shipping State',
-                display: this.fieldDisplayState.enableShippingState
-              },
-              {
-                field: 'shippingGstin',
-                label: this.templateMeta.shippingGstin,
-                display: this.fieldDisplayState.enableShippingGstin
-              },
-              {
-                field: 'customField1',
-                label: this.templateMeta.customField1,
-                display: this.fieldDisplayState.enableCustom1
-              },
-              {
-                field: 'customField2',
-                label: this.templateMeta.customField2,
-                display: this.fieldDisplayState.enableCustom2
-              },
-              {
-                field: 'customField3',
-                label: this.templateMeta.customField3,
-                display: this.fieldDisplayState.enableCustom3
-              },
-              {
-                field: 'formNameInvoice',
-                label: this.templateMeta.formNameInvoice,
-                display: this.fieldDisplayState.enableDocTitle
-              },
-              {
-                field: 'formNameTaxInvoice',
-                label: this.templateMeta.formNameTaxInvoice,
-                display: this.fieldDisplayState.enableDocTitle
-              }
-            ]
-          },
-          {
-            sectionName: 'table',
-            content: [
-              {
-                field: 'sNo',
-                display: this.fieldDisplayState.enableSno,
-                label: this.templateMeta.sNoLabel,
-                width: 10
-              },
-              {
-                field: 'date',
-                display: this.fieldDisplayState.enableDis,
-                label: this.templateMeta.dateLabel,
-                width: 10
-              },
-              {
-                field: 'item',
-                display: this.fieldDisplayState.enableItem,
-                label: this.templateMeta.itemLabel,
-                width: 10
-              },
-              {
-                field: 'hsnSac',
-                display: this.fieldDisplayState.enableHsn,
-                label: this.templateMeta.hsnSacLabel,
-                width: 10
-              },
-              {
-                field: 'itemCode',
-                display: true,
-                label: this.templateMeta.itemCodeLabel,
-                width: 10
-              },
-              {
-                field: 'description',
-                display: true,
-                label: this.templateMeta.description,
-                width: 10
-              },
-              {
-                field: 'rate',
-                display: this.fieldDisplayState.enableRate,
-                label: this.templateMeta.rateLabel,
-                width: 10
-              },
-              {
-                field: 'discount',
-                display: this.fieldDisplayState.enableDis,
-                label: this.templateMeta.discountLabel,
-                width: 10
-              },
-              {
-                field: 'taxableValue',
-                display: this.fieldDisplayState.enableTaxableValue,
-                label: this.templateMeta.taxableValueLabel,
-                width: 10
-              },
-              {
-                field: 'tax',
-                display: this.fieldDisplayState.enableTax,
-                label: this.templateMeta.taxLabel,
-                width: 10
-              },
-              {
-                field: 'total',
-                display: this.fieldDisplayState.enableTotal,
-                label: this.templateMeta.totalLabel,
-                width: 10
-              },
-              {
-                field: 'quantity',
-                display: this.fieldDisplayState.enableQty,
-                label: this.templateMeta.quantityLabel,
-                width: 10
-              }
-            ]
-          },
-          {
-            sectionName: 'footer',
-            content: [
-              {
-                field: 'taxableAmount',
-                display: this.fieldDisplayState.enableTaxableAmount,
-                label: this.templateMeta.taxableAmount
-              },
-              {
-                field: 'totalTax',
-                display: this.fieldDisplayState.enableTotalTax,
-                label: this.templateMeta.totalTax
-              },
-              {
-                field: 'otherDeduction',
-                display: this.fieldDisplayState.enableOtherDeductions,
-                label: this.templateMeta.otherDeduction
-              },
-              {
-                field: 'total',
-                display: this.fieldDisplayState.enableInvoiceTotal,
-                label: this.templateMeta.total
-              },
-              {
-                field: 'totalInWords',
-                display: this.fieldDisplayState.enableInvoiceTotal,
-                label: this.templateMeta.totalInWords
-              },
-              {
-                field: 'message1',
-                display: this.fieldDisplayState.enableMessage1,
-                label: this.templateMeta.message1
-              },
-              {
-                field: 'message2',
-                display: this.fieldDisplayState.enableMessage2,
-                label: this.templateMeta.message1
-              },
-              {
-                field: 'thanks',
-                display: this.fieldDisplayState.enableThanks,
-                label: this.templateMeta.thanks
-              },
-              {
-                field: 'companyAddress',
-                display: this.fieldDisplayState.enableCompanyAddress,
-                label: this.templateMeta.address
-              },
-              {
-                field: 'imageSignature',
-                display: true,
-                label: this.templateMeta.imageSignature
-              },
-              {
-                field: 'slogan',
-                display: true,
-                label: this.templateMeta.slogan
-              }
-            ]
-          }
-        ],
-        //  copyFrom: this.templateMeta.companyName,
-        copyFrom: 'gst_template_a',
-        // color: this.templateMeta.color,
-        primaryColor: this.templateMeta.primaryColor,
-        secondaryColor: this.templateMeta.secondaryColor,
-        font: this.templateMeta.font,
-        fontSize: '10pt',
-        topMargin: this.templateMeta.topMargin,
-        leftMargin: this.templateMeta.leftMargin,
-        rightMargin: this.templateMeta.rightMargin,
-        bottomMargin: this.templateMeta.bottomMargin,
-        logoPosition: '',
-        logoSize: ''
-      };
-
-      this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
-        if (res.status === 'success') {
-          this._toasty.successToast('Template Saved Successfully.');
-          this.templateModal.hide();
-          this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
-        }
-      });
+    if (!this._invoiceUiDataService.getTemplateName()) {
+      this._toasty.errorToast('Please enter template name');
     } else {
-      this._toasty.errorToast('None field were changed.');
-      console.log('this.fieldDisplayState is not ready');
+      if (this.fieldDisplayState) {
+        this.store.takeUntil(this.destroyed$).subscribe(val => {
+          this.templateMeta = val.invtemp.templateMeta;
+        });
+        let data: any = {
+          // name: 'my new template',
+          name: this._invoiceUiDataService.getTemplateName(),
+          uniqueName: '',
+          isSample: false,
+          sections: [
+            {
+              sectionName: 'header',
+              content: [
+                {
+                  field: 'companyName',
+                  label: 'Walkover',
+                  display: this.fieldDisplayState.enableCompanyName
+                },
+                {
+                  field: 'GSTIN',
+                  label: this.templateMeta.GSTIN,
+                  display: true
+                },
+                {
+                  field: 'PAN',
+                  label: this.templateMeta.PAN,
+                  display: true
+                },
+                {
+                  field: 'address',
+                  label: this.templateMeta.address,
+                  display: this.fieldDisplayState.enableCompanyAddress
+                },
+                {
+                  field: 'invoiceDate',
+                  label: this.templateMeta.invoiceDate,
+                  display: this.fieldDisplayState.enableInvoiceDate
+                },
+                {
+                  field: 'invoiceNumber',
+                  label: this.templateMeta.invoiceNumber,
+                  display: this.fieldDisplayState.enableInvoiceNo
+                },
+                {
+                  field: 'shippingDate',
+                  label: this.templateMeta.shippingDate,
+                  display: this.fieldDisplayState.enableShipDate
+                },
+                {
+                  field: 'shippedVia',
+                  label: this.templateMeta.shippingVia,
+                  display: this.fieldDisplayState.enableShipVia
+                },
+                {
+                  field: 'TrackingNumber',
+                  label: this.templateMeta.trackingNumber,
+                  display: this.fieldDisplayState.enableTrackingNo
+                },
+                {
+                  field: 'TrackingNumber',
+                  label: this.templateMeta.trackingNumber,
+                  display: this.fieldDisplayState.enableTrackingNo
+                },
+                {
+                  field: 'customerName',
+                  label: this.templateMeta.customerName,
+                  display: true
+                },
+                {
+                  field: 'customerEmail',
+                  label: this.templateMeta.customerEmail,
+                  display: true
+                },
+                {
+                  field: 'customerMobileNumber',
+                  label: this.templateMeta.customerMobileNumber,
+                  display: true
+                },
+                {
+                  field: 'dueDate',
+                  label: this.templateMeta.dueDate,
+                  display: this.fieldDisplayState.enableDueDate
+                },
+                {
+                  field: 'billingState',
+                  label: this.templateMeta.billingState,
+                  display: this.fieldDisplayState.enableBillingState
+                },
+                {
+                  field: 'billingAddress',
+                  label: this.templateMeta.billingAddress,
+                  display: this.fieldDisplayState.enableBillingAddress
+                },
+                {
+                  field: 'billingGstin',
+                  label: this.templateMeta.billingGstin,
+                  display: this.fieldDisplayState.enableBillingGstin
+                },
+                {
+                  field: 'shippingAddress',
+                  label: this.templateMeta.shippingAddress,
+                  display: this.fieldDisplayState.enableShippingAddress
+                },
+                {
+                  field: 'shippingState',
+                  // label: this.templateMeta.shippingState,
+                  label: 'Shipping State',
+                  display: this.fieldDisplayState.enableShippingState
+                },
+                {
+                  field: 'shippingGstin',
+                  label: this.templateMeta.shippingGstin,
+                  display: this.fieldDisplayState.enableShippingGstin
+                },
+                {
+                  field: 'customField1',
+                  label: this.templateMeta.customField1,
+                  display: this.fieldDisplayState.enableCustom1
+                },
+                {
+                  field: 'customField2',
+                  label: this.templateMeta.customField2,
+                  display: this.fieldDisplayState.enableCustom2
+                },
+                {
+                  field: 'customField3',
+                  label: this.templateMeta.customField3,
+                  display: this.fieldDisplayState.enableCustom3
+                },
+                {
+                  field: 'formNameInvoice',
+                  label: this.templateMeta.formNameInvoice,
+                  display: this.fieldDisplayState.enableDocTitle
+                },
+                {
+                  field: 'formNameTaxInvoice',
+                  label: this.templateMeta.formNameTaxInvoice,
+                  display: this.fieldDisplayState.enableDocTitle
+                }
+              ]
+            },
+            {
+              sectionName: 'table',
+              content: [
+                {
+                  field: 'sNo',
+                  display: this.fieldDisplayState.enableSno,
+                  label: this.templateMeta.sNoLabel,
+                  width: 10
+                },
+                {
+                  field: 'date',
+                  display: this.fieldDisplayState.enableDis,
+                  label: this.templateMeta.dateLabel,
+                  width: 10
+                },
+                {
+                  field: 'item',
+                  display: this.fieldDisplayState.enableItem,
+                  label: this.templateMeta.itemLabel,
+                  width: 10
+                },
+                {
+                  field: 'hsnSac',
+                  display: this.fieldDisplayState.enableHsn,
+                  label: this.templateMeta.hsnSacLabel,
+                  width: 10
+                },
+                {
+                  field: 'itemCode',
+                  display: true,
+                  label: this.templateMeta.itemCodeLabel,
+                  width: 10
+                },
+                {
+                  field: 'description',
+                  display: true,
+                  label: this.templateMeta.description,
+                  width: 10
+                },
+                {
+                  field: 'rate',
+                  display: this.fieldDisplayState.enableRate,
+                  label: this.templateMeta.rateLabel,
+                  width: 10
+                },
+                {
+                  field: 'discount',
+                  display: this.fieldDisplayState.enableDis,
+                  label: this.templateMeta.discountLabel,
+                  width: 10
+                },
+                {
+                  field: 'taxableValue',
+                  display: this.fieldDisplayState.enableTaxableValue,
+                  label: this.templateMeta.taxableValueLabel,
+                  width: 10
+                },
+                {
+                  field: 'tax',
+                  display: this.fieldDisplayState.enableTax,
+                  label: this.templateMeta.taxLabel,
+                  width: 10
+                },
+                {
+                  field: 'total',
+                  display: this.fieldDisplayState.enableTotal,
+                  label: this.templateMeta.totalLabel,
+                  width: 10
+                },
+                {
+                  field: 'quantity',
+                  display: this.fieldDisplayState.enableQty,
+                  label: this.templateMeta.quantityLabel,
+                  width: 10
+                }
+              ]
+            },
+            {
+              sectionName: 'footer',
+              content: [
+                {
+                  field: 'taxableAmount',
+                  display: this.fieldDisplayState.enableTaxableAmount,
+                  label: this.templateMeta.taxableAmount
+                },
+                {
+                  field: 'totalTax',
+                  display: this.fieldDisplayState.enableTotalTax,
+                  label: this.templateMeta.totalTax
+                },
+                {
+                  field: 'otherDeduction',
+                  display: this.fieldDisplayState.enableOtherDeductions,
+                  label: this.templateMeta.otherDeduction
+                },
+                {
+                  field: 'total',
+                  display: this.fieldDisplayState.enableInvoiceTotal,
+                  label: this.templateMeta.total
+                },
+                {
+                  field: 'totalInWords',
+                  display: this.fieldDisplayState.enableInvoiceTotal,
+                  label: this.templateMeta.totalInWords
+                },
+                {
+                  field: 'message1',
+                  display: this.fieldDisplayState.enableMessage1,
+                  label: this.templateMeta.message1
+                },
+                {
+                  field: 'message2',
+                  display: this.fieldDisplayState.enableMessage2,
+                  label: this.templateMeta.message1
+                },
+                {
+                  field: 'thanks',
+                  display: this.fieldDisplayState.enableThanks,
+                  label: this.templateMeta.thanks
+                },
+                {
+                  field: 'companyAddress',
+                  display: this.fieldDisplayState.enableCompanyAddress,
+                  label: this.templateMeta.address
+                },
+                {
+                  field: 'imageSignature',
+                  display: true,
+                  label: this.templateMeta.imageSignature
+                },
+                {
+                  field: 'slogan',
+                  display: true,
+                  label: this.templateMeta.slogan
+                }
+              ]
+            }
+          ],
+          //  copyFrom: this.templateMeta.companyName,
+          copyFrom: 'gst_template_a',
+          // color: this.templateMeta.color,
+          primaryColor: this.templateMeta.primaryColor,
+          secondaryColor: this.templateMeta.secondaryColor,
+          font: this.templateMeta.font,
+          fontSize: '10pt',
+          topMargin: this.templateMeta.topMargin,
+          leftMargin: this.templateMeta.leftMargin,
+          rightMargin: this.templateMeta.rightMargin,
+          bottomMargin: this.templateMeta.bottomMargin,
+          logoPosition: '',
+          logoSize: ''
+        };
+
+        this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
+          if (res.status === 'success') {
+            this._toasty.successToast('Template Saved Successfully.');
+            this.templateModal.hide();
+            this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
+          }
+        });
+      } else {
+        this._toasty.errorToast('None field were changed.');
+        console.log('this.fieldDisplayState is not ready');
+      }
     }
   }
 
@@ -501,7 +506,7 @@ export class EditInvoiceComponent implements OnInit {
         let sections = _.cloneDeep(res.body.sections);
         sections.forEach((section) => {
           section.content.forEach((field) => {
-              this.onCheckField(field.field, field.display);
+            this.onCheckField(field.field, field.display);
           });
         });
         // this.templateId = res.body.uniqueName;
@@ -510,7 +515,7 @@ export class EditInvoiceComponent implements OnInit {
     });
   }
 
-   // checking visibility of a field
+  // checking visibility of a field
   public onCheckField(field, value) {
     if (field === 'companyName') {
       this.field.enableCompanyName = value;

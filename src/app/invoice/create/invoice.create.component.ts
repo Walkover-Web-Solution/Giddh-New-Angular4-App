@@ -41,6 +41,11 @@ const THEAD = [
   {
     display: false,
     label: '',
+    field: 'hsnSac'
+  },
+  {
+    display: false,
+    label: '',
     field: 'itemCode'
   },
   {
@@ -86,8 +91,11 @@ export class InvoiceCreateComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
   public invFormData: PreviewInvoiceResponseClass;
   public tableCond: ISection;
+  public headerCond: ISection;
+  public templateHeader: any = {};
   public invTempCond: InvoiceTemplateDetailsResponse;
   public customThead: IContent[] = THEAD;
+  public updtFlag: boolean = false;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isInvoiceGenerated$: Observable<boolean>;
@@ -119,7 +127,9 @@ export class InvoiceCreateComponent implements OnInit {
             this.invTempCond = _.cloneDeep(o);
             let obj = _.cloneDeep(o);
             this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
             this.prepareThead();
+            this.prepareTemplateHeader();
           }
         }
       );
@@ -130,6 +140,19 @@ export class InvoiceCreateComponent implements OnInit {
         this.store.dispatch(this.invoiceActions.InvoiceGenerationCompleted());
       }
     });
+  }
+
+  public prepareTemplateHeader() {
+    let obj = _.cloneDeep(this.headerCond.content);
+    let dummyObj = {};
+    _.forEach(obj, (item: IContent) => {
+      dummyObj[item.field] = item;
+    });
+    // sorting object
+    Object.keys(dummyObj).sort().forEach( (key) => {
+      this.templateHeader[key] = dummyObj[key];
+    });
+    console.log (this.templateHeader);
   }
 
   public prepareThead() {
@@ -143,14 +166,20 @@ export class InvoiceCreateComponent implements OnInit {
     });
   }
 
-  public onSubmitInvoiceForm(f: NgForm) {
+  public setUpdateAccFlag() {
+    this.updtFlag = true;
+    this.onSubmitInvoiceForm();
+  }
+
+  public onSubmitInvoiceForm() {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
     model.invoice = _.cloneDeep(this.invFormData);
     model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
     model.validateTax = true;
-    model.updateAccountDetails = false;
+    model.updateAccountDetails = this.updtFlag;
     this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+    this.updtFlag = false;
   }
 
   public getEntryUniqueNames(entryArr: GstEntry[]): string[] {
