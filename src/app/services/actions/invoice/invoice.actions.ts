@@ -327,9 +327,6 @@ export class InvoiceActions {
       let data: BaseResponse<any, string> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
-      } else {
-        this.downloadFile(data.body, data.queryString.dataToSend.invoiceNumber[0]);
-        this._toasty.successToast('Invoice Downloaded Successfully.');
       }
       return { type: '' };
     });
@@ -438,32 +435,6 @@ export class InvoiceActions {
     private _toasty: ToasterService,
     private _router: Router
   ) { }
-
-  public base64ToBlob(b64Data, contentType, sliceSize) {
-    contentType = contentType || '';
-    sliceSize = sliceSize || 512;
-    let byteCharacters = atob(b64Data);
-    let byteArrays = [];
-    let offset = 0;
-    while (offset < byteCharacters.length) {
-      let slice = byteCharacters.slice(offset, offset + sliceSize);
-      let byteNumbers = new Array(slice.length);
-      let i = 0;
-      while (i < slice.length) {
-        byteNumbers[i] = slice.charCodeAt(i);
-        i++;
-      }
-      let byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-      offset += sliceSize;
-    }
-    return new Blob(byteArrays, { type: contentType });
-  }
-
-  public downloadFile(data: Response, invoiceUniqueName: string) {
-    let blob = this.base64ToBlob(data, 'application/pdf', 512);
-    return saveAs(blob, `Invoice-${invoiceUniqueName}.pdf`);
-  }
 
   public GetAllInvoices(model: CommonPaginatedRequest): Action {
     return {

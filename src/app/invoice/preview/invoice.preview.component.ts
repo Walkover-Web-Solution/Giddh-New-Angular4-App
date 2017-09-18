@@ -16,6 +16,7 @@ import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 
+
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
   { name: 'Greater Than', uniqueName: 'greaterThan' },
@@ -35,6 +36,7 @@ export class InvoicePreviewComponent implements OnInit {
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
 
+  public base64Data: string;
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public invoiceData: GetAllInvoicesPaginatedResponse;
@@ -142,9 +144,41 @@ export class InvoicePreviewComponent implements OnInit {
   /**
    * onSelectInvoice
    */
-  public onSelectInvoice(invoice) {
+  public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
+    this.store.dispatch(this.invoiceActions.DownloadInvoice(invoice.account.uniqueName, { invoiceNumber: [invoice.invoiceNumber]}));
     this.downloadOrSendMailModel.show();
+  }
+
+  /**
+   * download file as pdf
+   * @param data
+   * @param invoiceUniqueName
+   */
+  public downloadFile() {
+    let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+    return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+  }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, { type: contentType });
   }
 
   /**
@@ -152,7 +186,7 @@ export class InvoicePreviewComponent implements OnInit {
   */
   public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[] }) {
     if (userResponse.action === 'download') {
-      this.store.dispatch(this.invoiceActions.DownloadInvoice(this.selectedInvoice.account.uniqueName, { invoiceNumber: [this.selectedInvoice.invoiceNumber]}));
+      this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
     }
