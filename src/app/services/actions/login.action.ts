@@ -261,7 +261,7 @@ export class LoginActions {
     .ofType(CompanyActions.CHANGE_COMPANY)
     .switchMap(action => this._companyService.getStateDetails(action.payload))
     .map(response => {
-      debugger;
+      // debugger;
       if (response.status === 'error') {
         //
         let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
