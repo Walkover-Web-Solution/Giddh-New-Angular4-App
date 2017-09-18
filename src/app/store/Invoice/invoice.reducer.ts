@@ -15,6 +15,7 @@ export class GeneratePage {
 
 export class PreviewPage {
     public invoices: GetAllInvoicesPaginatedResponse;
+    public base64Data: string;
 }
 
 export interface InvoiceState {
@@ -24,7 +25,7 @@ export interface InvoiceState {
 }
 
 export const initialState: InvoiceState = {
-    preview: { invoices: null },
+    preview: { invoices: null, base64Data: null },
     generate: { ledgers: null, invoiceData: null, invoiceTemplateConditions: null, isInvoiceGenerated: false },
     settings: null
 };
@@ -39,6 +40,15 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                 return Object.assign({}, state, newState);
             }
             return state;
+        }
+        case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
+          let newState = _.cloneDeep(state);
+          let res: BaseResponse<string, string> = action.payload;
+          if (res.status === 'success') {
+              newState.preview.base64Data = res.body;
+              return Object.assign({}, state, newState);
+          }
+          return state;
         }
         case INVOICE_ACTIONS.GET_ALL_LEDGERS_FOR_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
