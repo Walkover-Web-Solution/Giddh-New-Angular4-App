@@ -20,42 +20,26 @@
     <div formArrayName="addresses">
       <div *ngFor="let gst of addAccountForm.get('addresses')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
         <div class="row">
-          <div class="form-group col-xs-6">
-            <label for="" class="d-block">GSTIN
-              <span class="pull-right" *ngIf="!f" (click)="removeGstDetailsForm(i)">
-                <i class="fa fa-times"></i> Remove</span>
-            </label>
-            <input type="text" formControlName="gstNumber" class="form-control" name="gst" />
-          </div>
-          <div class="form-group col-xs-6">
-
-            <label class="form-check-label">
-              <input class="form-check-input" type="checkbox" formControlName="isComposite" name="isComposite"> Is Composite?
-            </label>
-            <label class="form-check-label pull-right">
-              <input class="form-check-input" type="checkbox" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
-              formControlName="isDefault" name="isDefault"> Is Default?
-            </label>
-          </div>
+            <div class="form-group col-xs-6">
+                <label for="" class="d-block">GSTIN</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" id="" name="gst" placeholder="">
+                    <div class="input-group-addon"><input type="checkbox" name="defaultGst" tooltip="DEFAULT GST" placement="bottom"></div>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label class="d-block">&nbsp;</label>
+                <div class="mrT1">
+                    <label><input class="" type="checkbox" name="isComposite" id="" value="Composite"> Is Composite?</label>
+                    <a href="javascript:void(0);" class="grey_clr mrL3"><i class="fa fa-times"></i> Remove</a>
+                </div>
+            </div>
         </div>
 
         <div class="row">
-          <div class="form-group col-xs-6">
-            <label for="">Address</label>
-            <textarea name="companyAddress" formControlName="address" id="" rows="5" class="form-control"></textarea>
-          </div>
-          <div class="form-group col-xs-6">
-            <div class="form-group">
-              <label for="">Party Type</label>
-              <div class="custom-select pos-rel">
-                <select name="" id="" class="form-control cp" formControlName="partyType">
-                  <!--use class="select2-parent", while using select2 tag  -->
-                  <option value="" selected>Not Applicable</option>
-                </select>
-                <span class="select_drop">
-                  <i class="fa fa-caret-down"></i>
-                </span>
-              </div>
+            <div class="form-group col-xs-6">
+                <label for="">Address</label>
+                <textarea name="gstAddr" id="" rows="5" class="form-control"></textarea>
             </div>
 
             <div class="form-group">
@@ -70,27 +54,76 @@
                 </span>
               </div>
             </div>
-
-          </div>
-          <a class="text-right col-xs-12" (click)="addGstDetailsForm()" href="javascript:void(0);">
-            <i class="fa fa-plus"></i> Add More GSTIN</a>
+            <a class="text-right col-xs-12" href="javascript:void(0);"><i class="fa fa-plus"></i> Add More GSTIN</a>
+        </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group toggle-btn mrB">
+                    <label><i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showDetails, 'fa-plus-square-o': !showDetails}"></i>Other Details</label>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <label for="">Attention to (will be used in Invoice)</label>
+                <input type="text" class="form-control" name="attention" />
+            </div>
         </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="form-group col-xs-12">
-        <label for="">Attention to (will be used in Invoice)</label>
-        <input type="text" formControlName="attentionTo" class="form-control" name="attention" />
-      </div>
-    </div>
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="">Opening Balance</label>
+                <div class="input-group">
+                    <input type="text" class="form-control text-right" id="" placeholder="00.00">
+                    <input type="hidden" name="balanceType" value="" />
+                    <div class="input-group-addon cp">DR.</div>
+                    <div class="input-group-addon cp">CR.</div>
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="">Unique Name</label>
+                <input type="text" class="form-control" name="accUnqname" />
+            </div>
+        </div>
 
-    <div class="row">
-      <div class="form-group col-xs-12 text-right">
-        <button class="btn btn-default">Cancel</button>
-        <button class="btn btn-default" type="submit">Save</button>
-      </div>
-    </div>
+
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="">Mobile Number</label>
+                <div class="input-group">
+                    <div class="input-group-addon">+91</div>
+                    <input type="text" class="form-control" id="" name="mobileno." placeholder="9198XXXXXXXX">
+                    <input type="hidden" name="phoneCode" value="" />
+                </div>
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="">Email Id</label>
+                <input type="email" class="form-control" name="emailId" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <label for="">Address</label>
+                <textarea rows="2" cols="" name="companyAddress" class="form-control">514 S. Magnolia St. Orlando, FL 32806</textarea>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <label for="">Description</label>
+                <textarea rows="3" cols="" name="description" class="form-control"></textarea>
+            </div>
+        </div>
+
+        <div class="row mrT3">
+            <div class="form-group col-xs-12 text-right">
+                <button class="btn btn-default">Cancel</button>
+                <button class="btn btn-default">Save</button>
+            </div>
+        </div>
 
   </form>
 </div>
