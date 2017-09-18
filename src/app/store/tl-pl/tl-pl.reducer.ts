@@ -66,14 +66,17 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
         data.groupDetails = removeZeroAmountAccount((data.groupDetails));
         let noData = false;
         let showLoader = false;
+        debugger;
         if (data.closingBalance.amount === 0 && data.creditTotal === 0 && data.debitTotal === 0 && data.forwardedBalance.amount === 0) {
           noData = true;
         }
+        debugger;
         return {
           ...state,
           tb: { ...state.tb, data, noData, showLoader, exportData: data.groupDetails }
         };
       } else {
+        debugger;
         return { ...state, tb: { ...state.tb, showLoader: false, exportData: [], data: null, noData: true } };
       }
     }
