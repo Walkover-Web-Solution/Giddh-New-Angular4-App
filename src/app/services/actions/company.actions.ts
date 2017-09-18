@@ -54,7 +54,7 @@ export class CompanyActions {
       // set newly created company as active company
       let stateDetailsObj = new StateDetailsRequest();
       stateDetailsObj.companyUniqueName = response.request.uniqueName;
-      stateDetailsObj.lastState = 'company.content.ledgerContent@giddh';
+      stateDetailsObj.lastState = 'home';
       this.store.dispatch(this.SetStateDetails(stateDetailsObj));
 
       return this.RefreshCompanies();
