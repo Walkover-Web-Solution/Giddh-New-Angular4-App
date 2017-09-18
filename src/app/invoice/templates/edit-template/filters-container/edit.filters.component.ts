@@ -5,7 +5,13 @@ import {
 
 @Component({
   selector: 'edit-template-filters',
-  templateUrl: 'edit.filters.component.html'
+  templateUrl: 'edit.filters.component.html',
+  styles: [`
+    .active {
+      background: #fff !important;
+      color: #ff5f00 !important;
+    }
+  `]
 })
 
 export class EditFiltersContainersComponent implements OnInit {

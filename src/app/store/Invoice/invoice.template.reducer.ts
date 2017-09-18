@@ -133,6 +133,7 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
       nextState.isLoadingCustomCreatedTemplates = false;
       if (res && res.status === 'success') {
         nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
+        // nextState.customCreatedTemplates = _.cloneDeep(res.body);
       }
       return Object.assign({}, state, nextState);
     }
@@ -145,7 +146,6 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
         if (indx > -1) {
           nextState.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
           nextState.customCreatedTemplates[indx].isDefault = true;
-          nextState.customCreatedTemplates = _.sortBy(nextState.customCreatedTemplates, [(o) => !o.isDefault]);
         }
         return Object.assign({}, state, nextState);
       }
