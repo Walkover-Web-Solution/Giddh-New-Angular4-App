@@ -99,12 +99,13 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public selectFinancialYearOption(v) {
+    debugger;
     this.selectedFinancialYearOption = v.value || '';
     let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === this.selectedFinancialYearOption);
     let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === this.selectedFinancialYearOption);
     this.filterForm.patchValue({
-      toDate: financialYear.financialYearEnds,
-      fromDate: financialYear.financialYearEnds,
+      to: financialYear.financialYearEnds,
+      from: financialYear.financialYearStarts,
       fy: index === 0 ? 0 : index * -1
     });
     this.cd.markForCheck();
@@ -112,6 +113,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   public filterData() {
     debugger;
+    let request = this.filterForm.value as TrialBalanceRequest;
+    request.selectedDateOption = this.selectedDateOption;
     this.onPropertyChanged.emit(this.filterForm.value);
   }
 
