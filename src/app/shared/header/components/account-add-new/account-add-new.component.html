@@ -1,3 +1,79 @@
 <p>
-  Account Add New Works
+    Account Add New Works
 </p>
+<div class="container-fluid">
+
+    <form class="horizontal-form" name="addAccountForm">
+
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="">Account Name</label>
+                <input type="text" class="form-control" name="accountName" />
+            </div>
+            <div class="form-group col-xs-6">
+                <label for="">Country</label>
+                <select class="form-control"> <!--use class="select2-parent", while using select2 tag  -->
+              <option value="in">India</option>
+            </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="" class="d-block">GSTIN <span class="pull-right"><i class="fa fa-times"></i> Remove</span></label>
+                <input type="text" class="form-control" name="gst" />
+            </div>
+            <div class="form-group col-xs-6">
+
+                <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" name="isComposite" id="inlineRadio1" value="Composite"> Is Composite?
+              </label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label for="">Address</label>
+                <textarea name="companyAddress" id="" rows="5" class="form-control"></textarea>
+            </div>
+            <div class="form-group col-xs-6">
+                <div class="form-group">
+                    <label for="">Party Type</label>
+                    <div class="custom-select pos-rel">
+                        <select name="" id="" class="form-control cp"> <!--use class="select2-parent", while using select2 tag  -->
+                          <option value="" selected>Not Applicable</option>
+                        </select>
+                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="">State *</label>
+                    <div class="custom-select pos-rel">
+                        <select name="state" id="" class="form-control cp"> <!--use class="select2-parent", while using select2 tag  -->
+                          <option value="mp" selected>Madhya Pradesh</option>
+                        </select>
+                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    </div>
+                </div>
+
+            </div>
+            <a class="text-right col-xs-12" href="javascript:void(0);"><i class="fa fa-plus"></i> Add More GSTIN</a>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-12">
+                <label for="">Attention to (will be used in Invoice)</label>
+                <input type="text" class="form-control" name="attention" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-xs-12 text-right">
+                <button class="btn btn-default">Cancel</button>
+                <button class="btn btn-default">Save</button>
+            </div>
+        </div>
+
+    </form>
+</div>
