@@ -8,6 +8,9 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 import { Observable } from 'rxjs/Observable';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
+import { Select2OptionData } from '../../../theme/select2/index';
+import { CompanyService } from '../../../../services/companyService.service';
+import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 
 @Component({
   selector: 'account-add-new',
@@ -26,9 +29,30 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
+  public partyTypeSource: Select2OptionData[] = [
+    { id: 'not applicable', text: 'Not Applicable' },
+    { id: 'deemed export', text: 'Deemed Export' },
+    { id: 'government entity', text: 'Government Entity' },
+    { id: 'sez', text: 'Sez' },
+  ];
+  public countrySource: Select2OptionData[] = [];
+  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction) {
-    //
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
+    private _companyService: CompanyService) {
+    this._companyService.getAllStates().subscribe((data) => {
+      let states: Select2OptionData[] = [];
+      data.body.map(d => {
+        states.push({ text: d.name, id: d.code });
+      });
+      this.statesSource$ = Observable.of(states);
+    }, (err) => {
+      // console.log(err);
+    });
+
+    contriesWithCodes.map(c => {
+      this.countrySource.push({ id: c.countryflag, text: `${c.countryflag} - ${c.countryName}` });
+    });
   }
 
   public ngOnInit() {
