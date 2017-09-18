@@ -155,3 +155,28 @@ export class AccountsTaxHierarchyResponse {
   public applicableTaxes: INameUniqueName[];
   public inheritedTaxes: IInheritedTaxes[];
 }
+export class IAccountAddress {
+  public gstNumber: string;
+  public address: string;
+  public stateCode: string;
+  public isDefault: boolean;
+  public isComposite: boolean;
+  public partyType: string;
+}
+
+export class AccountRequestV2 {
+  public addresses: IAccountAddress;
+  public attentionTo?: string;
+  public companyName?: string;
+  public description?: string;
+  public email?: string;
+  public mobileNo?: string;
+  public openingBalance?: any;
+  public openingBalanceDate?: string;
+  public openingBalanceType?: string;
+  public name: string;
+  public uniqueName: string;
+  public hsnNumber: string;
+  public country: { countryCode: string };
+  public sacNumber: string;
+}
