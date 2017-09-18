@@ -41,6 +41,11 @@ const THEAD = [
   {
     display: false,
     label: '',
+    field: 'hsnSac'
+  },
+  {
+    display: false,
+    label: '',
     field: 'itemCode'
   },
   {
@@ -86,6 +91,8 @@ export class InvoiceCreateComponent implements OnInit {
   @Output() public closeEvent: EventEmitter<string> = new EventEmitter<string>();
   public invFormData: PreviewInvoiceResponseClass;
   public tableCond: ISection;
+  public headerCond: ISection;
+  public templateHeader: any = {};
   public invTempCond: InvoiceTemplateDetailsResponse;
   public customThead: IContent[] = THEAD;
   // public methods above
@@ -119,7 +126,9 @@ export class InvoiceCreateComponent implements OnInit {
             this.invTempCond = _.cloneDeep(o);
             let obj = _.cloneDeep(o);
             this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
             this.prepareThead();
+            this.prepareTemplateHeader();
           }
         }
       );
@@ -130,6 +139,19 @@ export class InvoiceCreateComponent implements OnInit {
         this.store.dispatch(this.invoiceActions.InvoiceGenerationCompleted());
       }
     });
+  }
+
+  public prepareTemplateHeader() {
+    let obj = _.cloneDeep(this.headerCond.content);
+    let dummyObj = {};
+    _.forEach(obj, (item: IContent) => {
+      dummyObj[item.field] = item;
+    });
+    // sorting object
+    Object.keys(dummyObj).sort().forEach( (key) => {
+      this.templateHeader[key] = dummyObj[key];
+    });
+    console.log (this.templateHeader);
   }
 
   public prepareThead() {
