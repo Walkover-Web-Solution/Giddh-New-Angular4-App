@@ -81,8 +81,10 @@ export class CompanyService {
     }
     return this._http.get(url).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
+      data.queryString = cmpUniqueName;
+      data.request = cmpUniqueName;
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName));
   }
 
   public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
