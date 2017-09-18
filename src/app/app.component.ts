@@ -45,12 +45,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').subscribe((company) => {
       if (company && company.companyUniqueName && company.companyUniqueName !== '') {
         if (company.lastState && company.lastState !== '') {
-          debugger;
+          // debugger;
           this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
             this.router.navigate([company.lastState]);
           });
         } else {
-          debugger;
+          // debugger;
           if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
             if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
               let path = [];
