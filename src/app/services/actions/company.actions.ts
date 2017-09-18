@@ -253,5 +253,4 @@ export class CompanyActions {
     return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
   }
 
-
 }
