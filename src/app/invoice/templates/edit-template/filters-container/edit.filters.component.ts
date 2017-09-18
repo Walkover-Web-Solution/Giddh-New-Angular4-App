@@ -5,7 +5,13 @@ import {
 
 @Component({
   selector: 'edit-template-filters',
-  templateUrl: 'edit.filters.component.html'
+  templateUrl: 'edit.filters.component.html',
+  styles: [`
+    .active {
+      background: #fff !important;
+      color: #ff5f00 !important;
+    }
+  `]
 })
 
 export class EditFiltersContainersComponent implements OnInit {
@@ -15,6 +21,7 @@ export class EditFiltersContainersComponent implements OnInit {
   public ifEmailSelected: boolean = false;
 
   constructor() {
+    this.openTab('content');
   }
 
   public ngOnInit() {

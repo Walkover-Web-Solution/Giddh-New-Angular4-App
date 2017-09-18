@@ -43,11 +43,13 @@ export class InvoiceGenerateComponent implements OnInit {
   public moment = moment;
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
+  public togglePrevGenBtn: boolean = false;
   public counts: number[] = COUNTS;
   public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
   public ledgersData: GetAllLedgersOfInvoicesResponse;
   public selectedLedgerItems: string[] = [];
+  public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private modalRef: BsModalRef;
@@ -261,12 +263,20 @@ export class InvoiceGenerateComponent implements OnInit {
       if (item.isSelected) {
         if (idx === -1) {
           this.selectedLedgerItems.push(item.uniqueName);
+          this.selectedCountOfAccounts.push(item.account.uniqueName);
         }
       } else {
         if (idx !== -1) {
           this.selectedLedgerItems.splice(idx);
+          this.selectedCountOfAccounts.splice(idx);
         }
       }
     });
+    // check if all selected entries are from same account
+    if (this.selectedCountOfAccounts.length) {
+      this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
+    }else {
+      this.togglePrevGenBtn = false;
+    }
   }
 }
