@@ -202,11 +202,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public changeCompany(selectedCompanyUniqueName: string) {
-    let stateDetailsRequest = new StateDetailsRequest();
-    stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
-    stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
-
-    this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
+    // let stateDetailsRequest = new StateDetailsRequest();
+    // stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
+    // // debugger;
+    // if (this.route.firstChild.snapshot.url.length > 0) {
+    //   let path = this.route.firstChild.snapshot.url;
+    //   let parament = {};
+    //   // debugger;
+    //   stateDetailsRequest.lastState = path[0].path;
+    this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    // }
   }
 
   public deleteCompany(e: Event) {
@@ -230,7 +235,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public logout() {
     if (isElectron) {
       // this._aunthenticationServer.GoogleProvider.signOut();
-      this.store.dispatch(this.loginAction.LogOut());
+      this.store.dispatch(this.loginAction.ClearSession());
     } else {
       // check if logged in via social accounts
       this.isLoggedInWithSocialAccount$.subscribe((val) => {
@@ -238,10 +243,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.socialAuthService.signOut().then().catch((err) => {
             // console.log('err', err);
           });
+          this.store.dispatch(this.loginAction.ClearSession());
           this.store.dispatch(this.loginAction.socialLogoutAttempt());
-          this.store.dispatch(this.loginAction.LogOut());
         } else {
-          this.store.dispatch(this.loginAction.LogOut());
+          this.store.dispatch(this.loginAction.ClearSession());
         }
       });
 
