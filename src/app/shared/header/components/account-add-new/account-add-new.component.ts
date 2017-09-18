@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs/Rx';
 import { Select2OptionData } from '../../../theme/select2/index';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
+import { ToasterService } from '../../../../services/toaster.service';
 
 @Component({
   selector: 'account-add-new',
@@ -37,9 +38,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   ];
   public countrySource: Select2OptionData[] = [];
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
+  public showMoreGstDetails: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService) {
+    private _companyService: CompanyService, private _toaster: ToasterService) {
     this._companyService.getAllStates().subscribe((data) => {
       let states: Select2OptionData[] = [];
       data.body.map(d => {
@@ -79,14 +81,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
 
   public initialGstDetailsForm(): FormGroup {
-    return this._fb.group({
-      gstNumber: [''],
+    let gstFields = this._fb.group({
+      gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
       address: [''],
       stateCode: [''],
       isDefault: [false],
       isComposite: [false],
       partyType: ['']
     });
+    return gstFields;
   }
 
   public generateUniqueName() {
@@ -109,16 +112,20 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       this.addAccountForm.patchValue({ uniqueName: '' });
     }
   }
-  public addGstDetailsForm() {
-    const addresses = this.addAccountForm.get('addresses') as FormArray;
-    addresses.push(this.initialGstDetailsForm());
+  public addGstDetailsForm(gstForm: FormGroup) {
+    if (gstForm.valid) {
+      const addresses = this.addAccountForm.get('addresses') as FormArray;
+      addresses.push(this.initialGstDetailsForm());
+    } else {
+      this._toaster.clearAllToaster();
+      this._toaster.errorToast('Please fill GSTIN field first');
+    }
+    return;
   }
-
   public removeGstDetailsForm(i: number) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
     addresses.removeAt(i);
   }
-
   public isDefaultAddressSelected(val: boolean, i: number) {
     if (val) {
       let addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -128,7 +135,25 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       addresses.controls[i].get('isDefault').patchValue(true);
     }
   }
-
+  public getStateCode(gstForm: FormGroup) {
+    let gstVal: string = gstForm.get('gstNumber').value;
+    if (gstVal.length >= 2) {
+      this.statesSource$.take(1).subscribe(state => {
+        let s = state.find(st => st.id === gstVal.substr(0, 2));
+        if (s) {
+          gstForm.get('stateCode').patchValue(s.id);
+          gstForm.get('stateCode').disable();
+        } else {
+          gstForm.get('stateCode').patchValue(null);
+          this._toaster.clearAllToaster();
+          this._toaster.warningToast('Invalid GSTIN.');
+        }
+      });
+    } else {
+      gstForm.get('stateCode').patchValue(null);
+      gstForm.get('stateCode').enable();
+    }
+  }
   public submit() {
     console.log(this.addAccountForm.value);
   }
