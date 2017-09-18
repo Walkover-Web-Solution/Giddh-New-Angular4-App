@@ -27,6 +27,10 @@ export class CompanyActions {
   public static GET_STATE_DETAILS_RESPONSE = 'CompanyGetStateDetailsResponse';
   public static SET_STATE_DETAILS = 'CompanySetStateDetails';
   public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
+
+  public static CHANGE_COMPANY = 'CHANGE_COMPANY';
+  public static CHANGE_COMPANY_RESPONSE = 'CHANGE_COMPANY_RESPONSE';
+
   public static SET_ACTIVE_COMPANY = 'CompanyActiveCompany';
   public static SET_CONTACT_NO = 'SET_CONTACT_NO';
 
@@ -248,4 +252,6 @@ export class CompanyActions {
   public ResetCompanyPopup(): Action {
     return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
   }
+
+
 }
