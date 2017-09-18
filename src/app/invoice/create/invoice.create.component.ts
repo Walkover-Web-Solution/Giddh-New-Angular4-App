@@ -95,6 +95,7 @@ export class InvoiceCreateComponent implements OnInit {
   public templateHeader: any = {};
   public invTempCond: InvoiceTemplateDetailsResponse;
   public customThead: IContent[] = THEAD;
+  public updtFlag: boolean = false;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isInvoiceGenerated$: Observable<boolean>;
@@ -165,14 +166,20 @@ export class InvoiceCreateComponent implements OnInit {
     });
   }
 
-  public onSubmitInvoiceForm(f: NgForm) {
+  public setUpdateAccFlag() {
+    this.updtFlag = true;
+    this.onSubmitInvoiceForm();
+  }
+
+  public onSubmitInvoiceForm() {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
     model.invoice = _.cloneDeep(this.invFormData);
     model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
     model.validateTax = true;
-    model.updateAccountDetails = false;
+    model.updateAccountDetails = this.updtFlag;
     this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+    this.updtFlag = false;
   }
 
   public getEntryUniqueNames(entryArr: GstEntry[]): string[] {
