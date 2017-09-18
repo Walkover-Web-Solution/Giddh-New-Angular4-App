@@ -120,7 +120,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public findIndex(activeFY, financialYears) {
     let tempFYIndex = 0;
-    _.each(financialYears, (fy, index: number) => {
+    _.each(financialYears, (fy: any, index: number) => {
       if (fy.uniqueName === activeFY.uniqueName) {
         if (index === 0) {
           tempFYIndex = index;
