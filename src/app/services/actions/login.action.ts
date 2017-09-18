@@ -255,6 +255,25 @@ export class LoginActions {
     }).map(data => {
       return this.LogOut();
     });
+
+  @Effect()
+  public CHANGE_COMPANY$: Observable<Action> = this.actions$
+    .ofType(CompanyActions.CHANGE_COMPANY)
+    .switchMap(action => this._companyService.getStateDetails(action.payload))
+    .map(response => {
+      debugger;
+      if (response.status === 'error') {
+        //
+        let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
+        dummyResponse.body = new StateDetailsResponse();
+        dummyResponse.body.companyUniqueName = response.request;
+        dummyResponse.body.lastState = 'home';
+        dummyResponse.status = 'success';
+        return this.ChangeCompanyResponse(dummyResponse);
+      }
+      return this.ChangeCompanyResponse(response);
+    });
+
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -386,6 +405,19 @@ export class LoginActions {
   public ClearSession(): Action {
     return {
       type: LoginActions.ClearSession
+    };
+  }
+  public ChangeCompany(cmpUniqueName: string): Action {
+    return {
+      type: CompanyActions.CHANGE_COMPANY,
+      payload: cmpUniqueName
+    };
+  }
+
+  public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): Action {
+    return {
+      type: CompanyActions.CHANGE_COMPANY_RESPONSE,
+      payload: value
     };
   }
 }
