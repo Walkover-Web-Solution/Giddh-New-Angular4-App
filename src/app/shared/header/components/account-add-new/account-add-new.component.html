@@ -21,7 +21,8 @@
           <div class="form-group col-xs-6">
             <label for="" class="d-block">GSTIN</label>
             <div class="input-group">
-              <input type="text" class="form-control" id="" name="gst" placeholder="">
+              <input type="text" class="form-control" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst)"
+              name="gst" placeholder="">
               <div class="input-group-addon">
                 <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
                   tooltip="DEFAULT GST" placement="bottom">
@@ -55,7 +56,9 @@
             <div class="custom-select pos-rel">
               <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }" formControlName="stateCode"></select2>
             </div>
-            <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm()">
+            <a href="javascript:void(0);" class="pull-left gstbtn pdR1 cursor-pointer">
+              Show all </a>
+            <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst)">
               <i class="fa fa-plus"></i> Add More GSTIN
             </a>
           </div>
