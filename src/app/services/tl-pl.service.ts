@@ -37,7 +37,7 @@ export class TlPlService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(TB_PL_BS_API.GET_TRIAL_BALANCE
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), { from: request.from, to: request.to, refresh: request.refresh })
       .map((res) => {
         let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res.json();
         data.request = request;
