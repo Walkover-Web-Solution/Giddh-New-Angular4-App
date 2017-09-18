@@ -37,7 +37,7 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
        <h1>loading ledger</h1>
       </div>
     </div>
-    <div *ngIf="(data$ | async)">
+    <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
       [search]="filter.search"
         [expandAll]="false"
@@ -58,7 +58,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   // set company and fetch data...
   @Input()
   public set selectedCompany(value: ComapnyResponse) {
-    debugger;
     this._selectedCompany = value;
     if (value) {
       this.request = {

@@ -24,8 +24,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
       [plBsExportXLS]="true"
       (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
-    <div *ngIf="!(data$ | async)">
-         <!-- loader -->
+    <div *ngIf="(showLoader | async)">
          <div class="loader" >
            <span></span>
            <span></span>
@@ -35,7 +34,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
           <h1>loading ledger</h1>
         </div>
     </div>
-    <div *ngIf="(data$ | async)">
+    <div *ngIf="(data$ | async).expArr && !(showLoader | async)">
       <pl-grid #plGrid
       [search]="filter.search"
         [plData]="data$ | async"
@@ -95,7 +94,6 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     //
   }
   public filterData(request: ProfitLossRequest) {
-    debugger;
     request.from = request.from;
     request.to = request.to;
     request.fy = request.fy;
