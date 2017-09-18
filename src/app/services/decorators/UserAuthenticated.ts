@@ -9,14 +9,14 @@ export class UserAuthenticated implements CanActivate {
   constructor(public _router: Router, private store: Store<AppState>) {
   }
   public canActivate() {
-    return this.store.select(p => p.session.userLoginState).map(p => {
-      if (p === userLoginStateEnum.userLoggedIn) {
-        this._router.navigate(['/home']);
+    return this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').map(p => {
+      if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
+        this._router.navigate([p.lastState]);
       }
-      if (p === userLoginStateEnum.newUserLoggedIn) {
+      if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
         this._router.navigate(['/new-user']);
       }
-      return !(p === userLoginStateEnum.userLoggedIn || p === userLoginStateEnum.newUserLoggedIn);
+      return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);
     });
   }
 }
