@@ -9,10 +9,8 @@
       </div>
       <div class="form-group col-xs-6" formGroupName="country">
         <label for="">Country</label>
-        <select class="form-control" formControlName="countryCode">
-          <!--use class="select2-parent", while using select2 tag  -->
-          <option value="in">India</option>
-        </select>
+        <select2 [data]="countrySource" formControlName="countryCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select Country' }">
+        </select2>
       </div>
     </div>
 
@@ -50,24 +48,13 @@
           <div class="form-group col-xs-6">
             <label for="">Party Type *</label>
             <div class="custom-select pos-rel">
-              <select name="partType" id="" class="form-control cp" formControlName="partyType">
-                <!--use class="select2-parent", while using select2 tag  -->
-                <option value="na" selected>Not Applicabale</option>
-              </select>
-              <span class="select_drop">
-                <i class="fa fa-caret-down"></i>
-              </span>
+              <select2 [data]="partyTypeSource" formControlName="partyType" [options]="{ width:'100%', multiple: false, placeholder: 'Select Party Type' }"></select2>
             </div>
 
             <label for="">State *</label>
             <div class="custom-select pos-rel">
-              <select name="state" id="" class="form-control cp" formControlName="stateCode">
-                <!--use class="select2-parent", while using select2 tag  -->
-                <option value="mp" selected>Madhya Pradesh</option>
-              </select>
-              <span class="select_drop">
-                <i class="fa fa-caret-down"></i>
-              </span>
+              <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
+              formControlName="stateCode"></select2>
             </div>
           </div>
           <a class="text-right col-xs-12" href="javascript:void(0);" (click)="addGstDetailsForm()">
