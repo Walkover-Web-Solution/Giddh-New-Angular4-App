@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid mrT1">
 
   <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
@@ -19,23 +19,15 @@
       <div *ngFor="let gst of addAccountForm.get('addresses')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
         <div class="row">
           <div class="form-group col-xs-6">
-            <label for="" class="d-block">GSTIN</label>
-            <div class="input-group">
-              <input type="text" class="form-control" id="" name="gst" placeholder="">
-              <div class="input-group-addon">
-                <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
-                  tooltip="DEFAULT GST" placement="bottom">
-              </div>
-            </div>
+            <label for="">Account Name</label>
+            <input type="text" class="form-control" (change)="generateUniqueName()" formControlName="name" name="accountName" />
           </div>
-          <div class="form-group col-xs-6">
-            <label class="d-block">&nbsp;</label>
-            <div class="mrT1">
-              <label>
-                <input class="" type="checkbox" name="isComposite" formControlName="isComposite"> Is Composite?</label>
-              <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
-                <i class="fa fa-times"></i> Remove</a>
-            </div>
+          <div class="form-group col-xs-6" formGroupName="country">
+            <label for="">Country</label>
+            <select class="form-control" formControlName="countryCode">
+              <!--use class="select2-parent", while using select2 tag  -->
+              <option value="in">India</option>
+            </select>
           </div>
         </div>
 
@@ -53,13 +45,12 @@
 
             <label for="">State *</label>
             <div class="custom-select pos-rel">
-              <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
-              formControlName="stateCode"></select2>
+              <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }" formControlName="stateCode"></select2>
             </div>
+            <a class="text-right col-xs-12" href="javascript:void(0);" (click)="addGstDetailsForm()">
+              <i class="fa fa-plus"></i> Add More GSTIN
+            </a>
           </div>
-          <a class="text-right col-xs-12" href="javascript:void(0);" (click)="addGstDetailsForm()">
-            <i class="fa fa-plus"></i> Add More GSTIN
-          </a>
         </div>
       </div>
     </div>
@@ -69,56 +60,50 @@
       <div class="col-xs-12">
         <div class="form-group toggle-btn mrB">
           <label>
-            <i class="fa cp" aria-hidden="true" (click)="showOtherDetails = !showOtherDetails" [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other Details</label>
+            <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showDetails, 'fa-plus-square-o': !showDetails}"></i>Other Details</label>
         </div>
       </div>
     </div>
 
-    <div *ngIf="showOtherDetails">
-      <div class="row">
-        <div class="form-group col-xs-12">
-          <label for="">Attention to (will be used in Invoice)</label>
-          <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
+    <div class="row">
+      <div class="form-group col-xs-12">
+        <label for="">Attention to (will be used in Invoice)</label>
+        <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label for="">Opening Balance</label>
+        <div class="input-group">
+          <input type="text" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
+          <input type="hidden" name="balanceType" formControlName="openingBalanceType" value="" />
+          <div class="input-group-addon cp">DR.</div>
+          <div class="input-group-addon cp">CR.</div>
         </div>
       </div>
-
-      <div class="row">
-        <div class="form-group col-xs-6">
-          <label for="">Opening Balance</label>
-          <div class="input-group">
-            <input type="text" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
-            <input type="hidden" name="balanceType" formControlName="openingBalanceType" value="" />
-            <div class="input-group-addon cp">DR.</div>
-            <div class="input-group-addon cp">CR.</div>
-          </div>
-        </div>
-        <div class="form-group col-xs-6">
-          <label for="">Unique Name</label>
-          <input type="text" class="form-control" formControlName="uniqueName" name="accUnqname" />
+      <div class="form-group col-xs-6">
+        <label for="">Unique Name</label>
+        <input type="text" class="form-control" formControlName="uniqueName" name="accUnqname" />
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-6">
+        <label for="">Mobile Number</label>
+        <div class="input-group">
+          <div class="input-group-addon">+91</div>
+          <input type="text" class="form-control" formControlName="mobileNo" name="mobileno." placeholder="9198XXXXXXXX">
+          <input type="hidden" name="phoneCode" value="" />
         </div>
       </div>
-
-
-      <div class="row">
-        <div class="form-group col-xs-6">
-          <label for="">Mobile Number</label>
-          <div class="input-group">
-            <div class="input-group-addon">+91</div>
-            <input type="text" class="form-control" formControlName="mobileNo" name="mobileno." placeholder="9198XXXXXXXX">
-            <input type="hidden" name="phoneCode" value="" />
-          </div>
-        </div>
-        <div class="form-group col-xs-6">
-          <label for="">Email Id</label>
-          <input type="email" class="form-control" formControlName="email" name="emailId" />
-        </div>
+      <div class="form-group col-xs-6">
+        <label for="">Email Id</label>
+        <input type="email" class="form-control" formControlName="email" name="emailId" />
       </div>
-
-      <div class="row">
-        <div class="form-group col-xs-12">
-          <label for="">Description</label>
-          <textarea rows="3" cols="" name="description" formControlName="description" class="form-control"></textarea>
-        </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-12">
+        <label for="">Description</label>
+        <textarea rows="3" cols="" name="description" formControlName="description" class="form-control"></textarea>
       </div>
     </div>
     <div class="row mrT3">
@@ -127,6 +112,5 @@
         <button class="btn btn-default">Save</button>
       </div>
     </div>
-
   </form>
 </div>
