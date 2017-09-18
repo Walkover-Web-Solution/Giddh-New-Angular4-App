@@ -10,6 +10,7 @@ export interface TrialBalanceRequest {
   from?: string;
   to?: string;
   refresh?: boolean;
+  selectedDateOption?: string;
 }
 
 
