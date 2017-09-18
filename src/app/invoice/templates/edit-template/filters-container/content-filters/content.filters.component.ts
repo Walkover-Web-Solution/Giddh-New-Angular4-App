@@ -120,6 +120,7 @@ export class ContentFilterComponent {
       }
     });
     this._invoiceUiDataService.updateEmailSettingObj({ isEmailTabSelected: false });
+    this.onCheckField('companyName', true);
   }
 
   public showTemplate(id) {
