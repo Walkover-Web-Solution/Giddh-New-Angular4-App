@@ -18,7 +18,6 @@ const commonConfig = require('./webpack.common.js');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
@@ -28,10 +27,10 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
  * Webpack Constants
  */
 const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
-const HOST = process.env.HOST || 'localapp.giddh.com';
-const PORT = process.env.PORT || 8080;
-const AppUrl = 'http://localapp.giddh.com/';
-const ApiUrl = 'http://api.giddh.com/';
+const HOST = process.env.HOST || 'giddh.com';
+const PORT = process.env.PORT || 80;
+const AppUrl = 'https://giddh.com/new/';
+const ApiUrl = 'https://api.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
 }).metadata, {
