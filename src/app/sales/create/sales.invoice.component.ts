@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, trigger, state, style, transition, animate, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -131,9 +132,21 @@ export class SalesInvoiceComponent implements OnInit {
 
     // auto fill all the details
     this.invFormData.account.attentionTo = data.attentionTo;
-    this.invFormData.account.billingDetails.address = [data.address];
-    this.invFormData.account.shippingDetails.address = [data.address];
+    this.invFormData.invoiceDetails.invoiceDate = moment().format('DD-MM-YYYY');
     this.invFormData.country.countryName = data.country.countryName;
+    // fill address conditionally
+    if (data.addresses.length > 0) {
+      // set billing
+      this.invFormData.account.billingDetails.address = [];
+      this.invFormData.account.billingDetails.address.push(data.addresses[0].address);
+      this.invFormData.account.billingDetails.stateCode = data.addresses[0].stateCode;
+      this.invFormData.account.billingDetails.gstNumber = data.addresses[0].gstNumber;
+      // set shipping
+      this.invFormData.account.shippingDetails.address = [];
+      this.invFormData.account.shippingDetails.address.push(data.addresses[0].address);
+      this.invFormData.account.shippingDetails.stateCode = data.addresses[0].stateCode;
+      this.invFormData.account.shippingDetails.gstNumber = data.addresses[0].gstNumber;
+    }
   }
 
   public onSubmitInvoiceForm(f: NgForm) {

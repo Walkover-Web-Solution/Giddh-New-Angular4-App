@@ -19,9 +19,6 @@ import {
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
 
-// {
-//   field: 'description'
-// },
 const THEAD = [
   {
     display: false,
