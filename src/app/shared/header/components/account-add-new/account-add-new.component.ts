@@ -32,22 +32,23 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public showOtherDetails: boolean = false;
   public partyTypeSource: Select2OptionData[] = [
-    {id: 'not applicable', text: 'Not Applicable'},
-    {id: 'deemed export', text: 'Deemed Export'},
-    {id: 'government entity', text: 'Government Entity'},
-    {id: 'sez', text: 'Sez'}
+    { id: 'not applicable', text: 'Not Applicable' },
+    { id: 'deemed export', text: 'Deemed Export' },
+    { id: 'government entity', text: 'Government Entity' },
+    { id: 'sez', text: 'Sez' }
   ];
   public countrySource: Select2OptionData[] = [];
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
-  public showMoreGstDetails: boolean = false;
+  public moreGstDetailsVisible: boolean = false;
+  public gstDetailsLength: number = 3;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService) {
     this._companyService.getAllStates().subscribe((data) => {
       let states: Select2OptionData[] = [];
       data.body.map(d => {
-        states.push({text: d.name, id: d.code});
+        states.push({ text: d.name, id: d.code });
       });
       this.statesSource$ = Observable.of(states);
     }, (err) => {
@@ -55,7 +56,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
 
     contriesWithCodes.map(c => {
-      this.countrySource.push({id: c.countryflag, text: `${c.countryflag} - ${c.countryName}`});
+      this.countrySource.push({ id: c.countryflag, text: `${c.countryflag} - ${c.countryName}` });
     });
   }
 
@@ -77,8 +78,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         countryCode: ['']
       }),
       hsnOrSac: [''],
-      hsnNumber: [{value: '', disabled: false}, []],
-      sacNumber: [{value: '', disabled: false}, []]
+      hsnNumber: [{ value: '', disabled: false }, []],
+      sacNumber: [{ value: '', disabled: false }, []]
     });
   }
 
@@ -86,7 +87,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
       address: [''],
-      stateCode: [{value: '', disabled: false}],
+      stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
       partyType: ['']
@@ -103,15 +104,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       this.isAccountNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
-            this.addAccountForm.patchValue({uniqueName: val});
+            this.addAccountForm.patchValue({ uniqueName: val });
           } else {
             let num = 1;
-            this.addAccountForm.patchValue({uniqueName: val + num});
+            this.addAccountForm.patchValue({ uniqueName: val + num });
           }
         }
       });
     } else {
-      this.addAccountForm.patchValue({uniqueName: ''});
+      this.addAccountForm.patchValue({ uniqueName: '' });
     }
   }
 
@@ -125,7 +126,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
     return;
   }
-
   public removeGstDetailsForm(i: number) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
     addresses.removeAt(i);
@@ -156,11 +156,24 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      statesEle.element.attr('disabled', 'false');
+      statesEle.element.removeAttr('disabled');
       gstForm.get('stateCode').patchValue(null);
     }
   }
 
+  public showMoreGst() {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    this.gstDetailsLength = addresses.controls.length;
+    this.moreGstDetailsVisible = true;
+  }
+
+  public openingBalanceTypeChnaged(type: string) {
+    this.addAccountForm.get('openingBalanceType').patchValue(type);
+  }
+  public showLessGst() {
+    this.gstDetailsLength = 3;
+    this.moreGstDetailsVisible = false;
+  }
   public submit() {
     console.log(this.addAccountForm.value);
   }
