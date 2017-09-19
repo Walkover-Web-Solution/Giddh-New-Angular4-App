@@ -14,6 +14,7 @@ import { Observable } from 'rxjs/Observable';
 
 import { Store } from '@ngrx/store';
 import { AppState } from './store/roots';
+import { ROUTES } from './app.routes';
 
 /**
  * App Component
@@ -45,9 +46,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').subscribe((company) => {
       if (company && company.companyUniqueName && company.companyUniqueName !== '') {
         if (company.lastState && company.lastState !== '') {
-          // debugger;
           this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-            this.router.navigate([company.lastState]);
+            if (ROUTES.findIndex(p => p.path.split('/')[0] === company.lastState.split('/')[0]) > -1) {
+              this.router.navigate([company.lastState]);
+            } else {
+              this.router.navigate(['home']);
+            }
           });
         } else {
           // debugger;
@@ -63,7 +67,11 @@ export class AppComponent implements OnInit, AfterViewInit {
               });
               if (path.length > 0 && parament) {
                 this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                  this.router.navigate(path, parament);
+                  if (ROUTES.findIndex(p => p.path.split('/')[0] === path[0].split('/')[0]) > -1) {
+                    this.router.navigate([path[0]], parament);
+                  } else {
+                    this.router.navigate(['home']);
+                  }
                 });
               }
             }
