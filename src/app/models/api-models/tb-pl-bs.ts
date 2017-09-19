@@ -12,7 +12,6 @@ export interface TrialBalanceRequest {
   refresh?: boolean;
 }
 
-
 export interface ProfitLossRequest extends TrialBalanceRequest {
   fy?: number;
 }
