@@ -8,11 +8,10 @@ export class DataFormatter {
   public groups: ChildGroup[] = [];
 
   constructor(private exportData: ChildGroup[],
-              private selectedCompany: ComapnyResponse,
-              private recType: RecTypePipe) {
+    private selectedCompany: ComapnyResponse,
+    private recType: RecTypePipe) {
 
   }
-
 
   public formatDataGroupWise = (): string => {
     let csv;
@@ -41,7 +40,7 @@ export class DataFormatter {
     csv += `${row}\r\n`;
     csv += `\r\nTotal,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
     return csv;
-  };
+  }
 
   public formatDataAccountWise = (): string => {
     let body;
@@ -94,7 +93,7 @@ export class DataFormatter {
     footer += `Total,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
     csv = `${header}\r\n\r\n${title}\r\n${body}${footer}`;
     return csv;
-  };
+  }
 
   public formatDataCondensed = (): string => {
     let body;
@@ -153,15 +152,15 @@ export class DataFormatter {
     footer += `Total,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
     csv = `${header}\r\n\r\n${title}\r\n${body}\r\n${footer}\r\n`;
     return csv;
-  };
+  }
 
   public calculateTotal = (group: ChildGroup, total: Total): Total => {
-    if (group.forwardedBalance.type === "DEBIT") {
+    if (group.forwardedBalance.type === 'DEBIT') {
       total.ob = total.ob + group.forwardedBalance.amount;
     } else {
       total.ob = total.ob - group.forwardedBalance.amount;
     }
-    if (group.closingBalance.type === "DEBIT") {
+    if (group.closingBalance.type === 'DEBIT') {
       total.cb = total.cb + group.closingBalance.amount;
     } else {
       total.cb = total.cb - group.closingBalance.amount;
@@ -169,7 +168,7 @@ export class DataFormatter {
     total.cr += group.creditTotal;
     total.dr += group.debitTotal;
     return total;
-  };
+  }
 
   private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
 
@@ -180,5 +179,5 @@ export class DataFormatter {
     } else {
       return `${balance} Dr`;
     }
-  };
+  }
 }

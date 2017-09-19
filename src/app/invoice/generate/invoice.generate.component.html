@@ -1,5 +1,5 @@
 <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline filterForm">
-    
+
     <div class="form-group" (clickOutside)="showFromDatePicker=false;">
         <label class="d-block">From</label>
         <div class="input-group">
@@ -24,7 +24,7 @@
             </ul>
         </div>
     </div>
-    
+
     <div class="form-group" (clickOutside)="showToDatePicker=false;">
         <label class="d-block">To</label>
         <div class="input-group">
@@ -86,12 +86,11 @@
 
 <div class="clearfix pdT2 mrB2">
     <ul class="list-inline pull-left">
-        <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
-        <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
-        <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button></li>
-        <!-- <li><button class="btn btn-info" id="createNew" (click)="showInvoiceModal()">Create New</button></li> -->
-        <!-- <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li> -->
-
+      <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
+      <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
+      <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button></li>
+      <!-- <li><button class="btn btn-info" id="createNew" (click)="showInvoiceModal()">Create New</button></li> -->
+      <!-- <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li> -->
     </ul>
     <!-- <div class="form-group pull-right">
     <input type="search" class="form-control maxW150" placeholder="Search">

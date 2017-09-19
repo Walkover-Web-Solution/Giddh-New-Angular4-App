@@ -11,7 +11,7 @@
         <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">
             <h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>
         </div>
-        <!-- <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height additional-height="80"> -->
+        <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height additional-height="80">
             <div class="menu acList">
                 <div class="loader" *ngIf="!showAccountList && ( companyList$ | async ).length > 0">
                     <span></span>
@@ -47,7 +47,7 @@
 
             </div>
             <div style="height: 50px;"></div>
-        <!-- </perfect-scrollbar> -->
+        </perfect-scrollbar>
         <!--<div class="text-center bc-wrap" ng-if="currentState == 'company.content.ledgerContent'">-->
         <!--&lt;!&ndash;breadcrumbs&ndash;&gt;-->
         <!--<div>-->

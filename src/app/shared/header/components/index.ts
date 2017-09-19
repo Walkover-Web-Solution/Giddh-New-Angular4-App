@@ -5,3 +5,4 @@ export * from './company-add/company-add.component';
 export * from './account-operations/account-operations.component';
 export * from './account-add/account-add.component';
 export * from './account-update/account-update.component';
+export * from './account-add-new/account-add-new.component';
