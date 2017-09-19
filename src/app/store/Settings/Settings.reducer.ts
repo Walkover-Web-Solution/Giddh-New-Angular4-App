@@ -153,9 +153,9 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
         return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE: {
-        let response: BaseResponse<IGetAllEbankAccountResponse[], string> = action.payload;
+        let response: BaseResponse<LinkedAccountsState[], string> = action.payload;
         if (response.status === 'success') {
-          newState.linkedAccounts = response.body;
+          newState.linkedAccounts = response.body as LinkedAccountsState;
           return Object.assign({}, state, newState);
         }
         return state;

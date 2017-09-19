@@ -2,6 +2,7 @@ import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import path from 'path';
 import url from 'url';
 import './dev-extensions';
+import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from './main-auth.config';
 
 declare const DEV_SERVER: boolean;
 
@@ -68,5 +69,10 @@ ipcMain.on('show-dialog', (event, arg) => {
     title: 'Native Dialog',
     message: 'I\'m a native dialog!',
     detail: 'It\'s my pleasure to make your life better.'
+  });
+});
+ipcMain.on('get-auth-configs', (event) => {
+  event.sender.send('set-auth-configs', {
+    GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams
   });
 });

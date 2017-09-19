@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { MANUFACTURING_API } from './apiurls/manufacturing.api';
 import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest, IMfStockSearchRequest } from '../models/interfaces/manufacturing.interface';
 import { StocksResponse } from '../models/api-models/Inventory';
@@ -16,7 +16,7 @@ export class ManufacturingService {
   private user: UserDetails;
   private companyUniqueName: string;
 
-  constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) {
   }
 
   /**
@@ -36,7 +36,7 @@ export class ManufacturingService {
         data.queryString = model;
         return data;
       })
-      .catch((e) => HandleCatch<ICommonResponseOfManufactureItem, string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, ''));
   }
 
   /**
@@ -56,7 +56,7 @@ export class ManufacturingService {
       data.request = model;
       data.queryString = { stockUniqueName };
       return data;
-    }).catch((e) => HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
   }
 
   /**
@@ -75,7 +75,7 @@ export class ManufacturingService {
       data.request = model;
       data.queryString = reqModal;
       return data;
-    }).catch((e) => HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
+    }).catch((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, IManufacturingItemRequest>(e, model));
   }
 
   /**
@@ -94,7 +94,7 @@ export class ManufacturingService {
       data.request = '';
       data.queryString = { model };
       return data;
-    }).catch((e) => HandleCatch<string, string>(e, '', { model }));
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, '', { model }));
   }
 
   /**
@@ -142,7 +142,7 @@ export class ManufacturingService {
         data.queryString = model;
         return data;
       })
-      .catch((e) => HandleCatch<StocksResponse, IMfStockSearchRequest>(e, model));
+      .catch((e) => this.errorHandler.HandleCatch<StocksResponse, IMfStockSearchRequest>(e, model));
   }
 
   /**
@@ -162,6 +162,6 @@ export class ManufacturingService {
         data.queryString = model;
         return data;
       })
-      .catch((e) => HandleCatch<ICommonResponseOfManufactureItem, string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<ICommonResponseOfManufactureItem, string>(e, ''));
   }
 }

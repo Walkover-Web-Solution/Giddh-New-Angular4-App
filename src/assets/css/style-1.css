@@ -305,19 +305,13 @@ ul.dropdown-menu {
     z-index: 9999;
 }
 
-header {
-    background-color: #d35f29;
-}
-
 header .navbar {
     min-height: 54px;
     border: 0;
     margin: 0;
     padding: 0;
-    background-color: #d35f29;
+    border-radius: 0;
 }
-
-header .navbar-btn.btn-sm {}
 
 header .navbar-nav>li.active {
     margin-left: -15px;
@@ -680,7 +674,7 @@ header .navbar-nav>li.active {
 }
 
 .mrB {
-    margin-bottom: 5px;
+    margin-bottom: 5px !important;
 }
 
 .mrL {
@@ -764,7 +758,7 @@ header .navbar-nav>li.active {
 }
 
 .bdr {
-    border: 1px solid #ddd;
+    border: 1px solid #ccc;
 }
 
 .bdrN {
@@ -772,19 +766,19 @@ header .navbar-nav>li.active {
 }
 
 .bdrT {
-    border-top: 1px solid #ddd;
+    border-top: 1px solid #ccc;
 }
 
 .bdrB {
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid #ccc;
 }
 
 .bdrL {
-    border-left: 1px solid #ddd;
+    border-left: 1px solid #ccc;
 }
 
 .bdrR {
-    border-right: 1px solid #ddd !important;
+    border-right: 1px solid #ccc !important;
 }
 
 .bdrR0 {
@@ -1481,11 +1475,6 @@ li:last-child .angular-ui-tree-handle {
 
 .ledgerTable.table .nopad {
     padding: 0 !important;
-}
-
-.dgreyBg td,
-.dgreyBg th {
-    background-color: #e6e6e6;
 }
 
 .greyBg td,
@@ -2463,17 +2452,19 @@ i.cls-alert {
     float: left;
     display: inline-block;
     position: relative;
-    margin: 10px 10px 0 0;
-    padding: 10px;
-    color: #333;
-    background: #fff;
+    background: #f4f5f8;
     border-radius: 2px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    transition: all 0.2s ease-in-out;
+    box-sizing: border-box;
+    margin: 7px;
+    transition: all 0.5s ease-in-out;
+    padding: 10px;
+    border: 1px solid rgba(251, 194, 168, 0.68);
 }
 
 .account-card:hover {
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    background: #fff;
+    box-shadow: 0 5px 14px 0 rgba(58, 58, 58, .18);
+    border-color: #d35f29;
 }
 
 .account-card>h1 {
@@ -2490,14 +2481,14 @@ i.cls-alert {
 
 .account-card>.balances>span.title {
     display: block;
-    color: #444;
+    color: #333;
 }
 
 .account-card>.balance {
-    color: #444;
+    color: #333;
     font-size: 24px;
-    padding: 5px 0;
-    line-height: 24px;
+    padding-bottom: 10px;
+    line-height: normal;
 }
 
 .account-card>.with {
@@ -2515,47 +2506,21 @@ i.cls-alert {
 
 .account-card .account-number,
 .account-card .account-date {
-    font-size: 12px;
+    font-size: 14px;
     margin: 5px 0;
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.account-card .account-date>label {
+    color: #d25f29;
 }
 
 .account-card .account-date>a {
-    margin-left: 5px;
-    font-size: 12px;
-    color: green;
-    cursor: pointer;
     position: relative;
-}
-
-.account-card .account-date>a>input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    max-width: 100%;
     opacity: 0;
     cursor: pointer;
+    z-index: -999;
 }
-
-.account-card .refresh-icon {
-    color: green;
-    position: absolute;
-    right: 35px;
-    top: 12px;
-}
-
-
-/*.account-card .btn{
-    position: absolute;
-    bottom: 10px;
-}*/
-
-
-/*.account-card .select-account{
-    margin-top:45px;
-}
-*/
 
 .linked-accounts {
     width: 100%;
@@ -2731,10 +2696,6 @@ i.cls-alert {
 
 
 /*make un-responsive*/
-
-body.unresponsive {
-    padding-top: 54px;
-}
 
 .navbar-right.navbar-nav>li>a {
     border-right: 0;
@@ -3359,30 +3320,18 @@ ul.pills li {
 }
 
 .ledger-panel {
-    /*width: 79%;*/
-    /*color: white !important;*/
-    /*max-width: 640px;*/
-    /*min-height: 200px;*/
-    overflow: hidden;
-    background: white;
-    /* For browsers that do not support gradients */
-    background: -webkit-linear-gradient(bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9) 90%);
-    /*Safari 5.1-6*/
-    background: -o-linear-gradient(bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9) 90%);
-    /*Opera 11.1-12*/
-    background: -moz-linear-gradient(bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9) 90%);
-    /*Fx 3.6-15*/
-    background: linear-gradient(to bottom, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0.9) 90%);
-    border-radius: 4px;
-    color: #333;
+    background: #f4f5f8;
+    border-radius: 2px;
     position: relative;
     padding: 10px;
     z-index: 2;
-    /*    top:54px;
-    right:35px;*/
-    -webkit-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
-    -moz-box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
-    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.75);
+    -webkit-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
+    -moz-box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
+    box-shadow: 0px 3px 28px 0 rgba(0, 0, 0, 0.14);
+    font-family: 'LatoWeb';
+    font-size: 90%;
+    margin: 3px 6px 6px 6px;
+    border: 1px solid #ccc;
 }
 
 @-webkit-keyframes panel-open {
@@ -3501,17 +3450,6 @@ ul.pills li {
     left: 0;
     top: 0;
     z-index: 1;
-}
-
-.reconnectDiv .row {
-    position: relative;
-    top: 30%;
-}
-
-.reconnectButton {
-    position: absolute;
-    top: 40%;
-    left: 28%;
 }
 
 
@@ -5063,7 +5001,7 @@ table.proforma-particulars {
 .box {
     padding: 20px;
     background-color: white;
-    margin: 20px 0;
+    /* margin: 20px 0; */
 }
 
 #settingTab .nav>li>a {
@@ -5092,6 +5030,7 @@ table.proforma-particulars {
     line-height: 32px;
     color: #616161;
     font-size: 14px;
+    padding-left: 0;
 }
 
 .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -5183,4 +5122,21 @@ strong {
 .navbar-inverse .btn-link:focus,
 .navbar-inverse .btn-link:hover {
     color: #333;
+}
+
+b,
+strong {
+    font-family: 'LatoWebBold';
+}
+
+.select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #4d4d4d transparent transparent transparent !important;
+    border-width: 6px 5px 0 5px;
+    margin-left: -8px;
+    margin-top: -3px;
+    border-radius: 2px;
+}
+
+#main {
+    padding-top: 54px;
 }

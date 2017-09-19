@@ -1,5 +1,5 @@
 
-import { Template } from '../models/api-models/Invoice';
+import { Template, GetInvoiceTemplateDetailsResponse } from '../models/api-models/Invoice';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { INVOICE_API } from './apiurls/invoice';
@@ -10,7 +10,7 @@ import { AppState } from '../store/roots';
 import { map } from 'rxjs/operator/map';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { IsDivVisible } from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 @Injectable()
@@ -18,7 +18,7 @@ export class InvoiceTemplatesService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   public getTemplates(): Observable<Template> {
@@ -30,9 +30,110 @@ export class InvoiceTemplatesService {
     });
     return this._http.get(INVOICE_API.GET_USER_TEMPLATES).map((res) => {
       let data: Template = res.json();
-      console.log('API RESPONSE', data);
+      // console.log('API RESPONSE', data);
       return data;
-    }).catch((e) => HandleCatch<Template, string>(e));
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<Template, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
+  public getAllCreatedTemplates(): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse[], string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<GetInvoiceTemplateDetailsResponse[], string> = res.json();
+      return data;
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<any, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
+  public getCustomTemplate(templateUniqueName: string): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API.GET_CUSTOM_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName)).map((res) => {
+      let data: BaseResponse<GetInvoiceTemplateDetailsResponse, string> = res.json();
+      return data;
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<any, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
+  public setTemplateAsDefault(templateUniqueName: string): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.patch(INVOICE_API.SET_AS_DEFAULT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName), {}).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString = { templateUniqueName };
+      return data;
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<any, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
+  public deleteTemplate(templateUniqueName: string): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.delete(INVOICE_API.DELETE_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':templateUniqueName', templateUniqueName)).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.queryString = { templateUniqueName };
+      return data;
+    }).catch((e) => {
+      let object = this.errorHandler.HandleCatch<any, string>(e);
+      return object.map(p => p.body);
+    });
+  }
+
+  // public saveTemplates(model: any): Observable<Template> {
+  //   alert('ok');
+  //   this.store.take(1).subscribe(s => {
+  //     if (s.session.user) {
+  //       this.user = s.session.user.user;
+  //     }
+  //     this.companyUniqueName = s.session.companyUniqueName;
+  //   });
+  //   return this._http.post(INVOICE_API.CREATE_NEW_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+  //     let data: Template = res.json();
+  //     return data;
+  //   }).catch((e) => {
+  //     let object = this.errorHandler.HandleCatch<Template, string>(e);
+  //     return object.map(p => p.body);
+  //   });
+  // }
+
+  public saveTemplates(model: any): Observable<BaseResponse<string, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(INVOICE_API.CREATE_NEW_TEMPLATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+      let data: BaseResponse<string, string> = res.json();
+      data.request = model;
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, model));
   }
 
   // public getTopMargin(): Observable<number> {

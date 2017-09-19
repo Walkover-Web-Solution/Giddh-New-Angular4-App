@@ -7,6 +7,7 @@ import {
   IsFieldVisible
 } from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 import * as _ from 'lodash';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 export interface InvoiceTemplateState {
   [uniqueName: string]: GetInvoiceTemplateDetailsResponse;
@@ -70,7 +71,8 @@ export interface InvoiceTemplateMetaState {
   bottomMargin: number;
   rightMargin: number;
   font: string;
-  color: string;
+  primaryColor: string;
+  secondaryColor: string;
   taxableAmount: string;
   totalTax: string;
   otherDeduction: string;
@@ -89,6 +91,8 @@ export interface InvoiceTemplateMetaState {
 
 export interface InvoiceTableState {
   theTestState: GetInvoiceTemplateDetailsResponse;
+  customCreatedTemplates: GetInvoiceTemplateDetailsResponse[];
+  isLoadingCustomCreatedTemplates: boolean;
 }
 
 export interface InvoiceTempState {
@@ -98,7 +102,9 @@ export interface InvoiceTempState {
 }
 
 export const initialTableState: InvoiceTableState = {
-  theTestState: null
+  theTestState: null,
+  customCreatedTemplates: null,
+  isLoadingCustomCreatedTemplates: false,
 };
 
 export function invoiceTableReducer(state = initialTableState, action: Action): InvoiceTableState {
@@ -116,6 +122,48 @@ export function invoiceTableReducer(state = initialTableState, action: Action): 
     //   return Object.assign({}, state, {
     //     heading: action.payload.data
     //   });
+    case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES: {
+      let nextState = _.cloneDeep(state);
+      nextState.isLoadingCustomCreatedTemplates = true;
+      return Object.assign({}, state, nextState);
+    }
+    case INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE: {
+      let nextState = _.cloneDeep(state);
+      let res: BaseResponse<GetInvoiceTemplateDetailsResponse[], string> = action.payload;
+      nextState.isLoadingCustomCreatedTemplates = false;
+      if (res && res.status === 'success') {
+        nextState.customCreatedTemplates = _.sortBy(res.body, [(o) => !o.isDefault]);
+        // nextState.customCreatedTemplates = _.cloneDeep(res.body);
+      }
+      return Object.assign({}, state, nextState);
+    }
+    case INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE: {
+      let nextState = _.cloneDeep(state);
+      let res: BaseResponse<any, string> = action.payload;
+      if (res.status === 'success') {
+        let uniqName = res.queryString.templateUniqueName;
+        let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+        if (indx > -1) {
+          nextState.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
+          nextState.customCreatedTemplates[indx].isDefault = true;
+        }
+        return Object.assign({}, state, nextState);
+      }
+      return state;
+    }
+    case INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE: {
+      let nextState = _.cloneDeep(state);
+      let res: BaseResponse<any, string> = action.payload;
+      if (res.status === 'success') {
+        let uniqName = res.queryString.templateUniqueName;
+        let indx = nextState.customCreatedTemplates.findIndex((template) => template.uniqueName === uniqName);
+        if (indx > -1) {
+          nextState.customCreatedTemplates.splice(indx, 1);
+        }
+        return Object.assign({}, state, nextState);
+      }
+      return state;
+    }
     default: {
       return state;
     }
@@ -129,10 +177,10 @@ export function invoiceTemplateReducer(state = initialState, action: Action): In
   switch (action.type) {
 
     case INVOICE.TEMPLATE.SET_TEMPLATE_STATE:
-      console.log('SET TEMPLATE STATE');
+      // console.log('SET TEMPLATE STATE');
       let result = action.payload.temp.body;
       let newState = []; // Array
-      console.log(result);
+      // console.log(result);
       if (result) {
         result.forEach((obj) => {
           let key = obj.uniqueName;
@@ -184,7 +232,7 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   customField2: 'Field 2',
   customField3: 'Field 3',
   formNameInvoice: 'INVOICE',
-  formNameTaxInvoice: 'HI THIS IS THE TEXT INVOICE',
+  formNameTaxInvoice: 'INVOICE',
   sNoLabel: 'S no.',
   sNoWidth: 10,
   dateLabel: 'Date',
@@ -209,32 +257,33 @@ export const initialStateTempMeta: InvoiceTemplateMetaState = {
   totalWidth: 10,
   quantityLabel: 'Qty.',
   quantityWidth: 10,
-  topMargin: 20,
-  leftMargin: 0,
-  bottomMargin: 0,
+  topMargin: 10,
+  leftMargin: 10,
+  bottomMargin: 10,
   rightMargin: 10,
   font: 'Roboto',
-  color: '#df4927',
+  primaryColor: '#df4927',
+  secondaryColor: '#fdf6f4',
   taxableAmount: 'Taxable Amount',
   totalTax: 'Total Tax*',
   otherDeduction: 'Other Deduction',
   total: 'Invoice Total',
   totalInWords: 'Invoice Total (In words)',
-  message1: 'sample message 1',
-  message2: 'sample message 2',
+  message1: 'NOTE 1',
+  message2: 'NOTE 2',
   thanks: 'Thank You for your business.',
   companyAddress: 'Walkover Web Solutions Private Limited, 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)',
   imageSignature: '',
   slogan: 'Signature',
   setInvoiceFlag: false,
   div: null,
-  setFieldDisplay: null
+  setFieldDisplay: null,
 };
 
 export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
   switch (action.type) {
     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
-      console.log(action.payload.id);
+      // console.log(action.payload.id);
       return Object.assign({}, state, {
         templateId: action.payload.id
       });
@@ -331,7 +380,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         quantityLabel: action.payload.data
       });
     case INVOICE.TEMPLATE.SET_VISIBLE:
-      console.log('DIV VISIBLE REDUCER CALLED');
+      // console.log('DIV VISIBLE REDUCER CALLED');
       return Object.assign({}, state, {
         div: {
           header: action.payload.divVis.header,
@@ -361,7 +410,7 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.UPDATE_SHIPPING_GSTIN:
       return Object.assign({}, state, {
-        shippingGstin: action.payload.data
+        shippinGstin: action.payload.data
       });
     case INVOICE.TEMPLATE.UPDATE_BILLING_ADDRESS:
       return Object.assign({}, state, {
@@ -377,7 +426,8 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
       });
     case INVOICE.TEMPLATE.SET_COLOR:
       return Object.assign({}, state, {
-        color: action.payload.color
+        primaryColor: action.payload.primaryColor,
+        secondaryColor: action.payload.secondaryColor
       });
     case INVOICE.TEMPLATE.UPDATE_MESSAGE1:
       return Object.assign({}, state, {
@@ -397,7 +447,6 @@ export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action:
         formNameTaxInvoice: action.payload.ti.data,
         setInvoiceFlag: action.payload.ti.setTaxInvoiceActive
       });
-
     default: {
       return state;
     }

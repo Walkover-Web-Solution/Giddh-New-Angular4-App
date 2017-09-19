@@ -69,6 +69,19 @@ module.exports = function (options) {
 
     },
 
+    externals: [
+      (function () {
+        var IGNORES = [
+          'electron'
+        ];
+        return function (context, request, callback) {
+          if (IGNORES.indexOf(request) >= 0) {
+            return callback(null, "require('" + request + "')");
+          }
+          return callback();
+        };
+      })()
+    ],
     /**
      * Options affecting the resolving of modules.
      *
@@ -222,11 +235,11 @@ module.exports = function (options) {
       //   filename: 'webpack-assets.json',
       //   prettyPrint: true
       // }),
-      new webpack.ProvidePlugin({
-        $: "jquery",
-        jQuery: "jquery",
-        "window.jQuery": "jquery"
-      }),
+      // new webpack.ProvidePlugin({
+      //   $: "jquery",
+      //   jQuery: "jquery",
+      //   "window.jQuery": "jquery"
+      // }),
       /**
        * Plugin: ForkCheckerPlugin
        * Description: Do type checking in a separate process, so webpack don't need to wait.
@@ -410,7 +423,7 @@ module.exports = function (options) {
     //   module: false,
     //   clearImmediate: false,
     //   setImmediate: false
-    // }
+    // },
     target: 'electron-renderer'
 
   };

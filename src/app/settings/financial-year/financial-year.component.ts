@@ -69,8 +69,8 @@ export class FinancialYearComponent implements OnInit {
       if (s.session) {
         this.currentCompanyUniqueName = _.cloneDeep(s.session.companyUniqueName);
       }
-      if (this.currentCompanyUniqueName && s.company.companies) {
-        let companies = _.cloneDeep(s.company.companies);
+      if (this.currentCompanyUniqueName && s.session.companies) {
+        let companies = _.cloneDeep(s.session.companies);
         let comp = companies.find((c) => c.uniqueName === this.currentCompanyUniqueName);
         if (comp) {
           this.currentCompanyName = comp.name;

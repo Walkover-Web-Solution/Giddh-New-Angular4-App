@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -19,6 +19,9 @@ import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
+import { StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyActions } from '../services/actions/company.actions';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'ledger',
@@ -59,10 +62,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
         moment().subtract(12, 'months'),
         moment()
       ]
-    }
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
   };
   public trxRequest: TransactionsRequest;
-  public needToReCalculate: boolean = false;
   public accountsOptions: Select2Options = {
     multiple: false,
     width: '100%',
@@ -75,15 +79,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
         return;
       }
       if (!data.additional.stock) {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:13px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:11px">${data.additional.uniqueName}</span>
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
                       </a>`);
       } else {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:13px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:11px">${data.additional.uniqueName}</span>
-                        <span class="account-list-item" style="display: block;font-size:10px">
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
+                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
+                        <span class="account-list-item" style="display: block;font-size:11px">
                             Stock: ${data.additional.stock.name}
                         </span>
                       </a>`);
@@ -91,13 +95,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   };
   public isLedgerCreateSuccess$: Observable<boolean>;
+  public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
     private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService) {
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -208,7 +213,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.count = 15;
 
         this.lc.accountUnq = params['accountUniqueName'];
+        // set state details
+        let companyUniqueName = null;
+        this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
+        let stateDetailsRequest = new StateDetailsRequest();
+        stateDetailsRequest.companyUniqueName = companyUniqueName;
+        stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
+        this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
+
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        // set trxRequest.from and trxRequest.to from start and end date for initial request
+        this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
+        this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
         this.getTransactionData();
       }
     });
@@ -266,7 +282,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       let blob = this.base64ToBlob(d.body, 'application/pdf', 512);
       return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
     }, error => {
-      console.log(error);
+      // console.log(error);
     });
   }
 
@@ -326,7 +342,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
-    this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    if (blankTransactionObj.transactions.length > 0) {
+      this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    } else {
+      this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
+    }
   }
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];
