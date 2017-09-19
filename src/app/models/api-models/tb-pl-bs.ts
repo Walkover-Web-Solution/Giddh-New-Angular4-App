@@ -10,8 +10,8 @@ export interface TrialBalanceRequest {
   from?: string;
   to?: string;
   refresh?: boolean;
+  selectedDateOption?: string;
 }
-
 
 export interface ProfitLossRequest extends TrialBalanceRequest {
   fy?: number;

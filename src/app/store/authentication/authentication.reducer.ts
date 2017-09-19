@@ -46,7 +46,6 @@ export interface SessionState {
   companies: ComapnyResponse[];
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
-
   isCompanyCreated: boolean;
 }
 
@@ -271,14 +270,27 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         isRefreshing: false
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE:
-      let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
-      if (stateData.status === 'success') {
-        return Object.assign({}, state, {
-          lastState: stateData.body.lastState,
-          companyUniqueName: stateData.body.companyUniqueName
-        });
+      {
+        let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
+        if (stateData.status === 'success') {
+          return Object.assign({}, state, {
+            lastState: stateData.body.lastState,
+            companyUniqueName: stateData.body.companyUniqueName
+          });
+        }
+        return state;
       }
-      return state;
+    case CompanyActions.CHANGE_COMPANY_RESPONSE:
+      {
+        let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
+        if (stateData.status === 'success') {
+          return Object.assign({}, state, {
+            lastState: stateData.body.lastState,
+            companyUniqueName: stateData.body.companyUniqueName
+          });
+        }
+        return state;
+      }
     case CompanyActions.SET_STATE_DETAILS_RESPONSE:
       let setStateData: BaseResponse<string, StateDetailsRequest> = action.payload;
       if (setStateData.status === 'success') {

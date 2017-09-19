@@ -77,23 +77,22 @@ export class TBPlBsActions {
     .ofType(TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST)
     .switchMap(action => {
       return this._tlPlService.DownloadTrialBalanceExcel(action.payload)
-        .map((r) => ({ type: '' }))
+        .map((r) => ({ type: '' }));
     });
 
   @Effect() private DownloadTBalanceSheetExcel$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST)
     .switchMap(action => {
       return this._tlPlService.DownloadBalanceSheetExcel(action.payload)
-        .map((r) => ({ type: '' }))
+        .map((r) => ({ type: '' }));
     });
 
   @Effect() private DownloadProfitLossExcel$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.DOWNLOAD_PROFIT_LOSS_EXCEL_REQUEST)
     .switchMap(action => {
       return this._tlPlService.DownloadProfitLossExcel(action.payload)
-        .map((r) => ({ type: '' }))
+        .map((r) => ({ type: '' }));
     });
-
 
   constructor(private action$: Actions,
               private _toasty: ToasterService,
