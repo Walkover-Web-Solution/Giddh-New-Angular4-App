@@ -21,7 +21,7 @@
           <div class="form-group col-xs-6">
             <label for="" class="d-block">GSTIN</label>
             <div class="input-group">
-              <input type="text" class="form-control" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst)"
+              <input type="text" class="form-control" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)"
               name="gst" placeholder="">
               <div class="input-group-addon">
                 <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
@@ -43,7 +43,7 @@
         <div class="row">
           <div class="form-group col-xs-6">
             <label for="">Address</label>
-            <textarea name="gstAddr" id="" rows="5" class="form-control"></textarea>
+            <textarea name="gstAddr" rows="5" class="form-control"></textarea>
           </div>
 
           <div class="form-group col-xs-6">
@@ -54,7 +54,8 @@
 
             <label for="">State *</label>
             <div class="custom-select pos-rel">
-              <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }" formControlName="stateCode"></select2>
+              <select2 [data]="statesSource$ | async" #states [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
+                       formControlName="stateCode"></select2>
             </div>
             <a href="javascript:void(0);" class="pull-left gstbtn pdR1 cursor-pointer">
               Show all </a>
