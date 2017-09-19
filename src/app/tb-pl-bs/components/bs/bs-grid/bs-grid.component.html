@@ -20,7 +20,6 @@
               <thead>
                 <tr>
                   <th class="col-xs-3 ">Particular</th>
-                  <th class="col-xs-3 ">Note</th>
                   <th class="col-xs-3 ">As Of {{bsData?.dates?.to}}</th>
                   <th class="col-xs-3 ">As Of {{bsData?.dates?.from}}</th>
                 </tr>
@@ -44,11 +43,11 @@
             </section>
             <!--/Grid-->
             <div class="col-xs-12">
-              <div class="col-xs-6  group">Total Liabilities</div>
-              <div class="col-xs-3  group">
+              <div class="col-xs-4  group">Total Liabilities</div>
+              <div class="col-xs-4  group">
                 <span class="pull-right">{{ bsData?.liabTotal | number:'1.2-2' }}</span>
               </div>
-              <div class="col-xs-3  group">
+              <div class="col-xs-4  group">
                 <span class="pull-right">{{ bsData?.liabTotal | number:'1.2-2' }}</span>
               </div>
             </div>
@@ -59,7 +58,7 @@
           <div class="table-container clearfix profitLoss table-responsive">
             <!--Grid-->
             <div class="row mrB1">
-              <div class="col-xs-6">
+              <div class="col-xs-4">
                 <h3 class="fs20">II ASSETS</h3>
               </div>
             </div>
@@ -76,11 +75,11 @@
           </div>
         </div>
         <div class="col-xs-12">
-          <div class="col-xs-6  group">Total Assets</div>
-          <div class="col-xs-3  group">
+          <div class="col-xs-4  group">Total Assets</div>
+          <div class="col-xs-4  group">
             <span class="pull-right">{{ bsData?.assetTotal | number:'1.2-2' }}</span>
           </div>
-          <div class="col-xs-3  group">
+          <div class="col-xs-4  group">
             <span class="pull-right">{{ bsData?.assetTotal | number:'1.2-2' }}</span>
           </div>
         </div>

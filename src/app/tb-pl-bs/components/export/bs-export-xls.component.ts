@@ -24,7 +24,7 @@ export class BsExportXlsComponent implements OnInit, OnDestroy {
   }
 
   public downloadBsXls() {
-    let request = <ProfitLossRequest>{ fy: this.fy };
+    let request = { fy: this.fy } as ProfitLossRequest;
     this.store.dispatch(this._tbPlActions.DownloadBalanceSheetExcel(request));
   }
 
