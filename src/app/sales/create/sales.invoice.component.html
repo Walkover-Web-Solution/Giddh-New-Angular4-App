@@ -12,6 +12,7 @@
             <div class="form-group noMarg size_380">
               <label>Customer Name or <a href (click)="toggleAccountAsidePane($event)">+ Add Customer</a></label>
               <input
+              autocomplete="off"
               name="customerName"
               [(ngModel)]="invFormData.customerName"
               [typeahead]="accounts$ | async"
@@ -182,15 +183,15 @@
           <td>{{ i+1 }}</td>
           <td><input type="text" name="tr.date" class="form-control" [(ngModel)]="transaction.date" /></td>
           <td>
-            <input type="text" name="tr.accountName" class="form-control" [(ngModel)]="transaction.accountName" /><br>
-            <input type="text" name="tr.description" class="form-control" [(ngModel)]="transaction.description" />
+            <input type="text" placeholder="Account" name="tr.accountName" class="form-control" [(ngModel)]="transaction.accountName" /><br>
+            <input type="text" placeholder="Description" name="tr.description" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
-            <input type="text" name="tr.hsnNumber" class="form-control" [(ngModel)]="transaction.hsnNumber" />
-            <input type="text" name="tr.sacNumber" class="form-control" [(ngModel)]="transaction.sacNumber" />
+            <input type="text" placeholder="HSN" name="tr.hsnNumber" class="form-control" [(ngModel)]="transaction.hsnNumber" />
+            <input type="text" placeholder="SAC" name="tr.sacNumber" class="form-control" [(ngModel)]="transaction.sacNumber" />
           </td>
           <td>
-            <input type="text" name="tr.quantity" class="form-control" [(ngModel)]="transaction.quantity" />
+            <input type="text" placeholder="Quantity" name="tr.quantity" class="form-control" [(ngModel)]="transaction.quantity" />
           </td>
           <td>
             <select class="form-control" name="tr.stockUnit" [(ngModel)]="transaction.stockUnit">
@@ -198,7 +199,7 @@
             </select>
           </td>
           <td>
-            <input type="text" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
+            <input type="text" placeholder="Rate" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
           </td>
           <td>
             <discount-list (selectedDiscountItems)="selectedDiscountEvent($event)"></discount-list>
