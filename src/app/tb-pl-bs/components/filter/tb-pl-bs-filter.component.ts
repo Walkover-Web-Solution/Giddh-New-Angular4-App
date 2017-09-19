@@ -99,7 +99,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public selectFinancialYearOption(v) {
-    debugger;
     this.selectedFinancialYearOption = v.value || '';
     let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === this.selectedFinancialYearOption);
     let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === this.selectedFinancialYearOption);
@@ -112,7 +111,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public filterData() {
-    debugger;
     let request = this.filterForm.value as TrialBalanceRequest;
     request.selectedDateOption = this.selectedDateOption;
     this.onPropertyChanged.emit(this.filterForm.value);
