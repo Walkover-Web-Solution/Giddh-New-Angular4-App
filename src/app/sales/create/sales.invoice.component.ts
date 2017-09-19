@@ -97,7 +97,7 @@ export class SalesInvoiceComponent implements OnInit {
     });
 
     // get account details and set it to local var
-    this.selectedAccountDetails$ = this.store.select(state => state.sales.acDtl).takeUntil(this.destroyed$);
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
     this.selectedAccountDetails$.subscribe(o => {
       if (o) {
         this.assignValuesInForm(o);
