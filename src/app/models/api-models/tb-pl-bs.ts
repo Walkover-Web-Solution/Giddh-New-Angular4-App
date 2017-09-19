@@ -13,7 +13,6 @@ export interface TrialBalanceRequest {
   selectedDateOption?: string;
 }
 
-
 export interface ProfitLossRequest extends TrialBalanceRequest {
   fy?: number;
 }
