@@ -101,9 +101,7 @@
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <select class="form-control" name="billingDetails.gstNumber" [(ngModel)]="invFormData.account.billingDetails.gstNumber">
-                  <option [ngValue]="select">Select GSTIN</option>
-                </select>
+                <input type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" />
               </div>
             </div>
           </div>
@@ -119,9 +117,7 @@
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <select class="form-control" name="shippingDetails.gstNumber" [(ngModel)]="invFormData.account.shippingDetails.gstNumber">
-                  <option [ngValue]="select">Select GSTIN</option>
-                </select>
+                <input type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" />
               </div>
             </div>
           </div>

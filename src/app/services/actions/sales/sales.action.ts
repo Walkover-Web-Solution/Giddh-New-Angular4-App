@@ -23,7 +23,7 @@ export class SalesActions {
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS)
-    .switchMap(action => this._accountService.GetAccountDetails(action.payload))
+    .switchMap(action => this._accountService.GetAccountDetailsV2(action.payload))
     .map(response => {
       return this.getAccountDetailsForSalesResponse(response);
     });
