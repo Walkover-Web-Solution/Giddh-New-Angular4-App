@@ -16,7 +16,7 @@
 
     <!-- gst details -->
     <div formArrayName="addresses">
-      <div *ngFor="let gst of addAccountForm.get('addresses')['controls'];let i = index;let f = first; let l = last" [formGroupName]="i">
+      <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
         <div class="row">
           <div class="form-group col-xs-6">
             <label for="" class="d-block">GSTIN</label>
@@ -57,11 +57,21 @@
               <select2 [data]="statesSource$ | async" #states [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
                        formControlName="stateCode"></select2>
             </div>
-            <a href="javascript:void(0);" class="pull-left gstbtn pdR1 cursor-pointer">
-              Show all </a>
-            <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst)">
-              <i class="fa fa-plus"></i> Add More GSTIN
-            </a>
+            <div class="row">
+
+              <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)"
+                class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">
+                Show all ({{addAccountForm.get('addresses')['controls'].length}})</a>
+
+                <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && moreGstDetailsVisible"
+                    class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">
+                    Show Less </a>
+
+              <a class="text-right col-xs-6" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst)">
+                <i class="fa fa-plus"></i> Add More GSTIN
+              </a>
+
+            </div>
           </div>
         </div>
       </div>
@@ -88,9 +98,8 @@
         <label for="">Opening Balance</label>
         <div class="input-group">
           <input type="text" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
-          <input type="hidden" name="balanceType" formControlName="openingBalanceType" value="" />
-          <div class="input-group-addon cp">DR.</div>
-          <div class="input-group-addon cp">CR.</div>
+          <div class="input-group-addon cp" (click)="openingBalanceTypeChnaged('DEBIT')">DR.</div>
+          <div class="input-group-addon cp" (click)="openingBalanceTypeChnaged('CREDIT')">CR.</div>
         </div>
       </div>
       <div class="form-group col-xs-6">
