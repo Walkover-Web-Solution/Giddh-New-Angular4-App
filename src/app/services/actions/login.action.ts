@@ -20,6 +20,7 @@ import { userLoginStateEnum } from '../../store/authentication/authentication.re
 import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
 import { Configuration } from '../../app.constant';
+import { ROUTES } from '../../app.routes';
 @Injectable()
 export class LoginActions {
 
@@ -43,6 +44,7 @@ export class LoginActions {
   public static VerifyMobileResponce = 'VerifyMobileResponce';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
+  public static ClearSession = 'ClearSession';
   public static SetLoginStatus = 'SetLoginStatus';
   public static GoogleLoginElectron = 'GoogleLoginElectron';
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
@@ -156,12 +158,13 @@ export class LoginActions {
       } else {
         if (stateDetail.body && stateDetail.status === 'success') {
           cmpUniqueName = stateDetail.body.companyUniqueName;
-          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
+          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             // this.store.dispatch(replace(['/pages/home']));
-            return go(['/pages/home']);
+            // if (ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
+            return go([stateDetail.body.lastState]);
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -172,7 +175,8 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            return go(['/pages/home']);
+            return go([stateDetail.body.lastState]);
+
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -245,6 +249,33 @@ export class LoginActions {
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
     });
+
+  @Effect()
+  public ClearSession$: Observable<Action> = this.actions$
+    .ofType(LoginActions.ClearSession)
+    .switchMap(action => {
+      return this.auth.ClearSession();
+    }).map(data => {
+      return this.LogOut();
+    });
+
+  @Effect()
+  public CHANGE_COMPANY$: Observable<Action> = this.actions$
+    .ofType(CompanyActions.CHANGE_COMPANY)
+    .switchMap(action => this._companyService.getStateDetails(action.payload))
+    .map(response => {
+      if (response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) {
+        //
+        let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
+        dummyResponse.body = new StateDetailsResponse();
+        dummyResponse.body.companyUniqueName = response.request;
+        dummyResponse.body.lastState = 'home';
+        dummyResponse.status = 'success';
+        return this.ChangeCompanyResponse(dummyResponse);
+      }
+      return this.ChangeCompanyResponse(response);
+    });
+
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -369,6 +400,25 @@ export class LoginActions {
   public LinkedInElectronLogin(value: RequestOptionsArgs): Action {
     return {
       type: LoginActions.LinkedInLoginElectron,
+      payload: value
+    };
+  }
+
+  public ClearSession(): Action {
+    return {
+      type: LoginActions.ClearSession
+    };
+  }
+  public ChangeCompany(cmpUniqueName: string): Action {
+    return {
+      type: CompanyActions.CHANGE_COMPANY,
+      payload: cmpUniqueName
+    };
+  }
+
+  public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): Action {
+    return {
+      type: CompanyActions.CHANGE_COMPANY_RESPONSE,
       payload: value
     };
   }
