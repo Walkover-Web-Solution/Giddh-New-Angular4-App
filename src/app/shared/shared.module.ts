@@ -51,6 +51,7 @@ import { SafePipe } from './helpers/pipes/safe.pipe';
 import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
 // social login injection
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
+import { DisableFormFieldDirective } from './helpers/directives/disableFormField.directive';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -85,7 +86,8 @@ export function provideConfig() {
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
     AccountAddComponent, AccountAddNewComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
-    TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective],
+    TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective,
+    DisableFormFieldDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -112,7 +114,7 @@ export function provideConfig() {
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
-    DatePickerModule, RecTypePipe, DecimalDigitsDirective
+    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent, AccountAddNewComponent],
