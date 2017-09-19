@@ -1,7 +1,6 @@
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
 import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Observable } from 'rxjs/Observable';

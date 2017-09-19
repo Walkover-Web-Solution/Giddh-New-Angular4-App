@@ -10,11 +10,10 @@ import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
-import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from 'lodash';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
@@ -34,10 +33,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.vm = new AuditLogsSidebarVM();
     this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
     this.vm.selectedCompany = this.store.select(state => {
-      if (!state.company.companies) {
+      if (!state.session.companies) {
         return;
       }
-      return state.company.companies.find(cmp => {
+      return state.session.companies.find(cmp => {
         return cmp.uniqueName === state.session.companyUniqueName;
       });
     }).takeUntil(this.destroyed$);

@@ -22,10 +22,10 @@
                   <th class="col-xs-3 ">Particular</th>
                   <th class="col-xs-3 ">Note</th>
                   <th class="col-xs-3 ">
-                    As Of {{plData?.dates?.toDate | date}}
+                    As Of {{plData?.dates?.to }}
                   </th>
                   <th class="col-xs-3 ">
-                    As Of {{plData?.dates?.fromDate |date}}
+                    As Of {{plData?.dates?.from }}
                   </th>
                 </tr>
               </thead>
@@ -49,8 +49,8 @@
             <!--/Grid-->
             <div class="col-xs-12">
               <div class="col-xs-6  group">Total Income</div>
-              <div class="col-xs-3  group"><span class="pull-right">{{ plData?.incomeTotal | number:'1.2-2' }}</span></div>
-              <div class="col-xs-3  group"><span class="pull-right">{{ plData?.incomeTotal | number:'1.2-2' }}</span></div>
+              <div class="col-xs-3  group"><span class="pull-right">{{ plData?.incomeTotal | number:'1.2-2' }} CR</span></div>
+              <div class="col-xs-3  group"><span class="pull-right">{{ plData?.incomeTotal | number:'1.2-2' }} CR</span></div>
             </div>
           </div>
         </div>
@@ -77,8 +77,8 @@
         </div>
         <div class="col-xs-12">
           <div class="col-xs-6  group">Total Expenses</div>
-          <div class="col-xs-3  group"><span class="pull-right">{{ plData?.expenseTotal | number:'1.2-2' }}</span></div>
-          <div class="col-xs-3  group"><span class="pull-right">{{ plData?.expenseTotal | number:'1.2-2' }}</span></div>
+          <div class="col-xs-3  group"><span class="pull-right">{{ plData?.expenseTotal | number:'1.2-2' }} DR</span></div>
+          <div class="col-xs-3  group"><span class="pull-right">{{ plData?.expenseTotal | number:'1.2-2' }} DR</span></div>
         </div>
         <!-- end of expenses -->
       </div>

@@ -15,7 +15,7 @@ import {
   States
 } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/comapny.api';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class CompanyService {
   private user: UserDetails;
   private companyUniqueName: string;
 
-  constructor(private _http: HttpWrapperService, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) {
   }
 
   /**
@@ -37,7 +37,7 @@ export class CompanyService {
         data.request = company;
         return data;
       })
-      .catch((e) => HandleCatch<ComapnyResponse, CompanyRequest>(e, company));
+      .catch((e) => this.errorHandler.HandleCatch<ComapnyResponse, CompanyRequest>(e, company));
   }
 
   /**
@@ -54,7 +54,7 @@ export class CompanyService {
         let data: BaseResponse<ComapnyResponse[], string> = res.json();
         return data;
       })
-      .catch((e) => HandleCatch<ComapnyResponse[], string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<ComapnyResponse[], string>(e, ''));
   }
 
   /**
@@ -66,7 +66,7 @@ export class CompanyService {
         let data: BaseResponse<string, string> = res.json();
         data.queryString = { uniqueName };
         return data;
-      }).catch((e) => HandleCatch<string, string>(e, ''));
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
   }
 
   /**
@@ -81,8 +81,10 @@ export class CompanyService {
     }
     return this._http.get(url).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
+      data.queryString = cmpUniqueName;
+      data.request = cmpUniqueName;
       return data;
-    }).catch((e) => HandleCatch<StateDetailsResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<StateDetailsResponse, string>(e, cmpUniqueName, cmpUniqueName));
   }
 
   public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
@@ -104,7 +106,7 @@ export class CompanyService {
       let data: BaseResponse<string, StateDetailsRequest> = res.json();
       data.request = stateDetails;
       return data;
-    }).catch((e) => HandleCatch<string, StateDetailsRequest>(e, stateDetails));
+    }).catch((e) => this.errorHandler.HandleCatch<string, StateDetailsRequest>(e, stateDetails));
   }
 
   public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
@@ -117,7 +119,7 @@ export class CompanyService {
     return this._http.get(COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<TaxResponse[], string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<TaxResponse[], string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e));
   }
 
   public getComapnyUsers(): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
@@ -130,7 +132,7 @@ export class CompanyService {
     return this._http.get(COMPANY_API.GET_COMPANY_USERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<AccountSharedWithResponse[], string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e));
   }
 
   public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
@@ -146,7 +148,7 @@ export class CompanyService {
       .replace(':to', encodeURIComponent(request.params.to))
       , request.data).map((res) => {
         return res.json();
-      }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
+      }).catch((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e));
   }
 
   public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
@@ -162,7 +164,7 @@ export class CompanyService {
       .replace(':to', encodeURIComponent(request.params.to))
       , request.data).map((res) => {
         return res.json();
-      }).catch((e) => HandleCatch<string, BulkEmailRequest>(e));
+      }).catch((e) => this.errorHandler.HandleCatch<string, BulkEmailRequest>(e));
   }
 
   /**
@@ -172,6 +174,6 @@ export class CompanyService {
     return this._http.get(COMPANY_API.GET_ALL_STATES).map((res) => {
       let data: BaseResponse<States[], string> = res.json();
       return data;
-    }).catch((e) => HandleCatch<States[], string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<States[], string>(e));
   }
 }

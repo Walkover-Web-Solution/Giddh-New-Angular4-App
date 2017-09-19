@@ -1,12 +1,66 @@
-<div class="panel">
-    <div class="panel-body" id="customInvoice">
 
-        <ng-container>
-            <div style="width: 100%">
-                <edit-template-filters class="templateEditor"></edit-template-filters>
-                <invoice-template class="invoice-preview scrollAuto" [templateSections]="currentTemplateSections" [templateId]="templateId"></invoice-template>
-            </div>
-        </ng-container>
+<div class="clearfix" id="template-grid-wrapper">
+    <div class="template-grid">
+        <h3 class="primary_clr">New Template</h3>
+        <p class="pdT4">
+            Click to add a template fromour gallery. You can customizethe template title, columns,and headers in line item table
+        </p>
+        <button class="btn btn-small isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
+    </div>
+    <div class="template-grid" *ngFor="let template of customCreatedTemplates; let i = index">
+        <h3 class="primary_clr">{{template.name}} <div *ngIf="template.isDefault" class="corner-ribbon top-left sticky green shadow">Default</div></h3>
+        <div style="min-height:100px;">
+
+        </div>
+        <div class="pdT4">
+            <button [disabled]="template.isDefault" class="btn btn-link" (click)="onSetTemplateAsDefault(template)">
+                <i *ngIf="template.isDefault" tooltip="Default template" class="fa fa-toggle-on fa-2x" aria-hidden="true"></i>
+                <i *ngIf="!template.isDefault" tooltip="Set as default" class="fa fa-toggle-off fa-2x" aria-hidden="true"></i>
+            </button>
+            <button class="btn btn-link" (click)="onPreview(template)">
+                <i class="fa fa-eye fa-2x" tooltip="Preview" aria-hidden="true"></i>
+            </button>
+            <!--<button [disabled]="template.isDefault" class="btn btn-link" (click)="onUpdateTemplate(template)">
+                <i class="fa fa fa-wrench fa-rotate-270 fa-2x" tooltip="Edit template" aria-hidden="true"></i>
+            </button>-->
+            <button [disabled]="template.isDefault" class="btn btn-link" (click)="onDeleteTemplate(template)">
+                <i class="fa fa-trash-o fa-2x" tooltip="Delete" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </div>
-<!-- PageHeight  -->
+
+<!-- Template modal -->
+<div bsModal #templateModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog" style="width: 100%;margin:0;">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content" style="border-radius:0px;">
+      <invoice-template-modal [templateSections]="currentTemplateSections" [templateId]="templateId" (closeModelEvent)="onCloseTemplateModal()"></invoice-template-modal>
+    </div>
+  </div>
+  <div class="sticky-footer pd2">
+    <button class="btn btn-default">Preview</button>
+    <button class="btn btn-success" (click)="createTemplate()">Save</button>
+    <button class="btn btn-danger" (click)="onCloseTemplateModal()">Close</button>
+  </div>
+</div>
+
+<!--delete custom template confirmation modal -->
+<div bsModal #customTemplateConfirmationModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-md">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+        </div>
+    </div>
+</div>
+
+<!--invoice-template-preview-modal -->
+<div bsModal #invoiceTemplatePreviewModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <invoice-template-preview-modal [templateId]="templateId" [templateSections]='currentTemplateSections' (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
+        </div>
+    </div>
+</div>

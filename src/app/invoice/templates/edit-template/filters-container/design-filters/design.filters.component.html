@@ -1,10 +1,10 @@
-<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design">
+<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design" (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
 
 
     <div class="clearfix">
         <div class="col-xs-9">
             <div class="row">
-                <label><input type="text" class="form-control" placeholder="My Invoice Template" /></label>
+                <label><input type="text" class="form-control" #templateName placeholder="My Invoice Template" (keyup)="setTemplateName(templateName.value)" /></label>
             </div>
         </div>
     </div>
@@ -21,6 +21,7 @@
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
             <li *ngIf="ifTemplateSelected">
+                <i class="ico-template"></i> <label>Change up to template</label>
                 <!-- edit template  start -->
                 <div class="clearfix">
                     <ul class="templateView">
@@ -51,8 +52,9 @@
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
             <li [hidden]="!ifLogoSelected">
+                <i class="ico-edit"></i> <label>Make logo edit</label>
                 <!-- edit logo  start -->
-                <div class="clearfix">
+                <div class="clearfix mrT1">
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
@@ -62,7 +64,7 @@
                             <label for="logo-edit">
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
                             </label>
-                            
+
                         </span>
                         <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" [hidden]="!logoAttached">Start Upload</button>
                         <div class="pull-left mrL1 mrT1">
@@ -82,32 +84,34 @@
             <li *ngIf="!ifColorSelected" (click)="selectColor()">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
-            <li *ngIf="ifColorSelected">
+            <!--<li *ngIf="ifColorSelected">-->
+            <li [hidden]="!ifColorSelected">
+                <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
-                <div class="clearfix">
+                <div class="clearfix mrT1">
                     <div class="swatch text-center">
-                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': currentColor}"></span> {{this.currentColor}}
+                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': primaryColor}"></span> {{this.primaryColor}}
                         </span>
                         <div class="mrL1 pull-left">
                             <ul>
-                                <li class="" (click)="changeColor('#bdbdbd')"></li>
-                                <li class="" (click)="changeColor('#636363')"></li>
-                                <li class="" (click)="changeColor('#000000')"></li>
-                                <li class="" (click)="changeColor('#a6bddb')"></li>
-                                <li class="" (click)="changeColor('#7889a1')"></li>
-                                <li class="" (click)="changeColor('#48565f')"></li>
-                                <li class="" (click)="changeColor('#79bd58')"></li>
-                                <li class="" (click)="changeColor('#0e909a')"></li>
-                                <li class="" (click)="changeColor('#202e5a')"></li>
-                                <li class="" (click)="changeColor('#96bc2d')"></li>
-                                <li class="" (click)="changeColor('#2a651d')"></li>
-                                <li class="" (click)="changeColor('#004254')"></li>
-                                <li class="" (click)="changeColor('#ff8c00')"></li>
-                                <li class="" (click)="changeColor('#82001d')"></li>
-                                <li class="" (click)="changeColor('#6b1438')"></li>
-                                <li class="" (click)="changeColor('#f4749b')"></li>
-                                <li class="" (click)="changeColor('#950069')"></li>
-                                <li class="" (click)="changeColor('#542852')"></li>
+                                <li class="" (click)="changeColor('#bdbdbd', '#fcfcfc')"></li>
+                                <li class="" (click)="changeColor('#636363', '#f7f7f7')"></li>
+                                <li class="" (click)="changeColor('#000000', '#f2f2f2')"></li>
+                                <li class="" (click)="changeColor('#a6bddb', '#fafcfd')"></li>
+                                <li class="" (click)="changeColor('#7889a1', '#f8f9fa')"></li>
+                                <li class="" (click)="changeColor('#48565f', '#f6f6f7')"></li>
+                                <li class="" (click)="changeColor('#79bd58', '#f8fcf6')"></li>
+                                <li class="" (click)="changeColor('#0e909a', '#f3f9fa')"></li>
+                                <li class="" (click)="changeColor('#202e5a', '#f4f4f7')"></li>
+                                <li class="" (click)="changeColor('#96bc2d', '#fafcf4')"></li>
+                                <li class="" (click)="changeColor('#2a651d', '#f4f7f3')"></li>
+                                <li class="" (click)="changeColor('#004254', '#f2f5f6')"></li>
+                                <li class="" (click)="changeColor('#ff8c00', '#fffaf3')"></li>
+                                <li class="" (click)="changeColor('#82001d', '#f9f2f3')"></li>
+                                <li class="" (click)="changeColor('#6b1438', '#f7f3f5')"></li>
+                                <li class="" (click)="changeColor('#f4749b', '#fef8fa')"></li>
+                                <li class="" (click)="changeColor('#950069', '#faf2f7')"></li>
+                                <li class="" (click)="changeColor('#542852', '#f6f4f6')"></li>
                             </ul>
                         </div>
                     </div>
@@ -118,7 +122,8 @@
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
             <li *ngIf="ifFontSelected">
-                <div class="col-xs-9 font-selector">
+                <i class="ico-txt"></i> <label>Select different fonts</label>
+                <div class="col-xs-9 font-selector mrT1">
                     <div class="row">
                         <div class="form-control" fxLayout="column" (fontPickerChange)='onFontSelect(font)' fxLayoutAlign="center center" fxFlex [(fontPicker)]="font" [fpWidth]="'auto'" [fpPosition]="'bottom'" [fpPositionOffset]="'0%'" [fpPositionRelativeToArrow]="false" [fpPresetLabel]="'Preset fonts'"
                             [fpPresetFonts]="presetFonts">
@@ -132,8 +137,9 @@
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
             <li *ngIf="ifPrintSelected">
+                <i class="ico-print"></i> <label>Edit print setting</label>
                 <!-- edit print setting  start  -->
-                <div class="clearfix">
+                <div class="clearfix mrT1">
                     <div class="printTool pos-rel">
                         <p>Page margins</p>
                         <table class="table mr0">

@@ -17,10 +17,11 @@ import { BsComponent } from './components/bs/bs.component';
 import { BsGridComponent } from './components/bs/bs-grid/bs-grid.component';
 import { BsGridRowComponent } from './components/bs/bs-grid/bs-grid-row.component';
 
-import { PlBsExportXlsComponent } from './components/export/pl-bs-export-xls.component';
+import { PlExportXlsComponent } from './components/export/pl-export-xls.component';
 import { TbExportCsvComponent } from './components/export/tb-export-csv.component';
 import { TbExportPdfComponent } from './components/export/tb-export-pdf.component';
 import { TbExportXlsComponent } from './components/export/tb-export-xls.component';
+import { BsExportXlsComponent } from './components/export/bs-export-xls.component';
 
 @NgModule({
   declarations: [
@@ -32,10 +33,11 @@ import { TbExportXlsComponent } from './components/export/tb-export-xls.componen
     PlComponent,
     PlGridComponent,
     PlGridRowComponent,
-    PlBsExportXlsComponent,
+    PlExportXlsComponent,
     TbExportCsvComponent,
     TbExportPdfComponent,
     TbExportXlsComponent,
+    BsExportXlsComponent,
     BsComponent,
     BsGridComponent,
     BsGridRowComponent,

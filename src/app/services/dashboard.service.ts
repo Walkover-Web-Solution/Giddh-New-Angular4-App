@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { HttpWrapperService } from './httpWrapper.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
-import { HandleCatch } from './catchManager/catchmanger';
+import { ErrorHandler } from './catchManager/catchmanger';
 import { AppState } from '../store/roots';
 import { DASHBOARD_API } from './apiurls/dashboard.api';
 import {
@@ -24,7 +24,7 @@ export class DashboardService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
   public Dashboard(fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<DashboardResponse, string>> {
@@ -39,7 +39,7 @@ export class DashboardService {
       data.queryString = { fromDate, toDate, interval, refresh };
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<DashboardResponse, string>(e, '', { fromDate, toDate, interval, refresh }));
+    }).catch((e) => this.errorHandler.HandleCatch<DashboardResponse, string>(e, '', { fromDate, toDate, interval, refresh }));
   }
 
   public GetGroupHistory(model: GroupHistoryRequest, fromDate: string = '', toDate: string = '', interval: string = 'monthly', refresh: boolean = false): Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> {
@@ -54,7 +54,7 @@ export class DashboardService {
       data.request = model;
       data.queryString = { fromDate, toDate, interval, refresh };
       return data;
-    }).catch((e) => HandleCatch<GroupHistoryResponse, GroupHistoryRequest>(e, model, {
+    }).catch((e) => this.errorHandler.HandleCatch<GroupHistoryResponse, GroupHistoryRequest>(e, model, {
       fromDate,
       toDate,
       interval,
@@ -74,7 +74,7 @@ export class DashboardService {
       data.queryString = { fromDate, toDate, groupUniqueName, refresh };
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<ClosingBalanceResponse, string>(e, '', { fromDate, toDate, groupUniqueName, refresh }));
+    }).catch((e) => this.errorHandler.HandleCatch<ClosingBalanceResponse, string>(e, '', { fromDate, toDate, groupUniqueName, refresh }));
   }
 
   public GetBankAccounts(): Observable<BaseResponse<BankAccountsResponse[], string>> {
@@ -88,7 +88,7 @@ export class DashboardService {
       let data: BaseResponse<BankAccountsResponse[], string> = res.json();
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<BankAccountsResponse[], string>(e, '', ));
+    }).catch((e) => this.errorHandler.HandleCatch<BankAccountsResponse[], string>(e, '', ));
   }
 
   public RefreshBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {
@@ -102,7 +102,7 @@ export class DashboardService {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<RefreshBankAccountResponse, string>(e, '', ));
+    }).catch((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '', ));
   }
   public ReconnectBankAccount(loginId: string): Observable<BaseResponse<RefreshBankAccountResponse, string>> {
     this.store.take(1).subscribe(s => {
@@ -115,6 +115,6 @@ export class DashboardService {
       let data: BaseResponse<RefreshBankAccountResponse, string> = res.json();
       data.request = '';
       return data;
-    }).catch((e) => HandleCatch<RefreshBankAccountResponse, string>(e, '', ));
+    }).catch((e) => this.errorHandler.HandleCatch<RefreshBankAccountResponse, string>(e, '', ));
   }
 }

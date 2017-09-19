@@ -40,7 +40,6 @@ export class MfEditComponent implements OnInit {
   public initialQuantityObj: any = [];
   public options: Select2Options = {
     multiple: false,
-    width: '100%',
     placeholder: 'Select'
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,7 +52,7 @@ export class MfEditComponent implements OnInit {
     private _inventoryService: InventoryService,
     private _accountService: AccountService) {
     this.manufacturingDetails = new ManufacturingItemRequest();
-    this.initalizeOtherExpenseObj();
+    this.initializeOtherExpenseObj();
     // Update/Delete condition
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (o.stockToUpdate) {
@@ -98,7 +97,7 @@ export class MfEditComponent implements OnInit {
 
   }
   public ngOnInit() {
-    console.log('hello from MfEditComponent');
+    // console.log('hello from MfEditComponent');
     if (this.isUpdateCase) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
@@ -154,7 +153,7 @@ export class MfEditComponent implements OnInit {
     }
   }
 
-  public initalizeOtherExpenseObj() {
+  public initializeOtherExpenseObj() {
     this.otherExpenses.baseAccountUniqueName = '';
     this.otherExpenses.transactionAccountUniqueName = '';
   }
@@ -223,7 +222,7 @@ export class MfEditComponent implements OnInit {
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};
-    this.initalizeOtherExpenseObj();
+    this.initializeOtherExpenseObj();
   }
 
   public removeExpenseItem(indx) {
@@ -293,7 +292,7 @@ export class MfEditComponent implements OnInit {
     this.manufacturingConfirmationModal.hide();
   }
 
-  public getCalculatredAmount(quantity, rate) {
+  public getCalculatedAmount(quantity, rate) {
     if (quantity.model && rate.model) {
       let amount = quantity.model * rate.model;
       this.linkedStocks.amount = amount;
@@ -319,23 +318,23 @@ export class MfEditComponent implements OnInit {
     }
 
     if (manufacturingObj && manufacturingObj.linkedStocks) {
-        manufacturingObj.linkedStocks.forEach((stock) => {
+      manufacturingObj.linkedStocks.forEach((stock) => {
 
-          let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
-          if (selectedStock) {
-            stock.quantity = selectedStock.quantity * event;
-            stock.amount = stock.quantity * stock.rate;
-          }
-        });
-        this.manufacturingDetails = manufacturingObj;
-      }
+        let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
+        if (selectedStock) {
+          stock.quantity = selectedStock.quantity * event;
+          stock.amount = stock.quantity * stock.rate;
+        }
+      });
+      this.manufacturingDetails = manufacturingObj;
+    }
   }
 
   public getStockUnit(selectedItem) {
     // console.log(selectedItem);
     let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
     this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
-      console.log('The response from the API is :', res);
+      // console.log('The response from the API is :', res);
       if (res.status === 'success') {
         let unitCode = res.body.stockUnit.code;
         if (this.isUpdateCase) {
@@ -343,13 +342,13 @@ export class MfEditComponent implements OnInit {
         } else {
           this.linkedStocks.stockUnitCode = unitCode;
         }
-        console.log('unitCode is :', unitCode);
+        // console.log('unitCode is :', unitCode);
       }
     });
   }
 
   public setToday() {
-    this.manufacturingDetails.date = String(new Date());
+    this.manufacturingDetails.date = String(moment());
   }
 
   public clearDate() {

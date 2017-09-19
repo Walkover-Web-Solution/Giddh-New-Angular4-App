@@ -1,9 +1,8 @@
 <div class="btn-group btn-group-lg" role="group" aria-label="">
-    <button type="button" class="btn btn-default" (click)="openTab('design')" id="defaultOpen">Design</button>
-    <button type="button" class="btn btn-default" (click)="openTab('content')">Content</button>
-    <button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>
+    <button type="button" class="btn btn-default" [ngClass]="{'active': ifDesignSelected}" (click)="openTab('design')" id="defaultOpen">Design</button>
+    <button type="button" class="btn btn-default" [ngClass]="{'active': ifContentSelected}" (click)="openTab('content')">Content</button>
+    <!--<button type="button" class="btn btn-default" (click)="openTab('email')">Email</button>-->
 
-    <small class="clearfix grey_clr pdT1 pull-left">Everything saves automatically.</small>
 </div>
 
 
@@ -15,21 +14,14 @@
 </div> -->
 
 <div class="tab">
-    <design-filters *ngIf="ifDesignSelected" [design]="ifDesignSelected"> </design-filters>
+        <design-filters *ngIf="ifDesignSelected" [design]="ifDesignSelected"> </design-filters>
+        <content-selector *ngIf="ifContentSelected" [content]="ifContentSelected"></content-selector>
+        <invoice-email-filter-component *ngIf="ifEmailSelected"></invoice-email-filter-component>
 
 
-        <!-- <h3>Content</h3>
-        <div class="tab">
-            <button class="tablinks" (click)="openTab('header')" id="defaultcontent">Header</button>
-            <button class="tablinks" (click)="openTab('invoiceGrid')"> Invoice Grid</button>
-            <button class="tablinks" (click)="openTab('footer')">Footer</button>
-        </div> -->
-        <content-selector *ngIf="ifContentSelected" [content]="ifContentSelected">
-        </content-selector>
-        <!--<logo-uploader></logo-uploader>-->
 
 
-    <div id="emails" class="tabcontent" *ngIf="ifEmailSelected">
+    <!--<div id="emails" class="tabcontent" *ngIf="ifEmailSelected">
 
         <div class="clearfix mrT2">
             <h2 style="margin-bottom: 0;">Standard email</h2>
@@ -44,18 +36,26 @@
 
         <div class="clearfix mrT2">
             <div class="form-group">
-                <div class="col-xs-5 pdL0">
+                <div class="">
                     <input type="checkbox" /> Use greeting
                 </div>
-                <div class="col-xs-4">
+                <div class="col-xs-4 pdL0">
+                    <div class="custom-select pos-rel">
                     <select class="form-control">
-                        <option value="dear">Dear</option>
+                        <option value="dear">dear</option>
                     </select>
+                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                    </div>
                 </div>
                 <div class="col-xs-8">
-                    <select class="form-control">
-                        <option value="dear">Customer name</option>
-                    </select>
+                    <div class="row">
+                        <div class="custom-select pos-rel">
+                            <select class="form-control">
+                                <option value="dear">Customer name</option>
+                            </select>
+                            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -70,10 +70,6 @@
             </div>
         </div>
 
-    </div>
+    </div>-->
 
-    <div class="sticky-footer pd2">
-        <button class="btn btn-default">Preview</button>
-        <button class="btn btn-success">Save</button>
-    </div>
 </div>

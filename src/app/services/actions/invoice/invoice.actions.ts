@@ -31,6 +31,7 @@ import {
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../../models/api-models/SettingsIntegraion';
 // import {Section, Template} from "../../../models/api-models/invoice";
+import { saveAs } from 'file-saver';
 
 @Injectable()
 export class InvoiceActions {
@@ -310,6 +311,46 @@ export class InvoiceActions {
         type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL_RESPONSE,
         payload: res
       }));
+
+  @Effect()
+  public DownloadInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE)
+    .switchMap(action => {
+      return this._invoiceService.DownloadInvoice(action.payload.accountUniqueName, action.payload.dataToSend)
+        .map(response => this.DownloadInvoiceResponse(response));
+    });
+
+  @Effect()
+  public DownloadInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
+      return { type: '' };
+    });
+
+  @Effect()
+  public SendInvoiceOnMail$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.SEND_MAIL)
+    .switchMap(action => {
+      return this._invoiceService.SendInvoiceOnMail(action.payload.accountUniqueName, action.payload.dataToSend)
+        .map(response => this.SendInvoiceOnMailResponse(response));
+    });
+
+  @Effect()
+  public SendInvoiceOnMailResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.SEND_MAIL_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body);
+      }
+      return { type: '' };
+    });
   // *********************************** MUSTAFA //***********************************\\
 
   // write above except kunal
@@ -319,8 +360,72 @@ export class InvoiceActions {
     .ofType(INVOICE.TEMPLATE.GET_USER_TEMPLATES)
     .switchMap(action => this._invoiceTemplatesService.getTemplates())
     .map((response: Template) => {
-      console.log('SET STATE ACTION CALLED');
+      // console.log('SET STATE ACTION CALLED');
       return this.setTemplateState(response);
+    });
+
+  // GET CUSTOM CREATED TEMPLATES
+  @Effect()
+  private getAllCreatedTemplates$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES)
+    .switchMap(action => this._invoiceTemplatesService.getAllCreatedTemplates())
+    .map(response => {
+      return this.getAllCreatedTemplatesResponse(response);
+    });
+
+  @Effect()
+  private getAllCreatedTemplatesResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
+      return { type: '' };
+    });
+
+  // SET TEMPLATE AS DEFAULT
+  @Effect()
+  private setTemplateAsDefault$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT)
+    .switchMap(action => this._invoiceTemplatesService.setTemplateAsDefault(action.payload))
+    .map(response => {
+      return this.setTemplateAsDefaultResponse(response);
+    });
+
+  @Effect()
+  private setTemplateAsDefaultResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast('Template successfully marked as default.');
+      }
+      return { type : ''};
+    });
+
+  // DELETE TEMPLATE
+  @Effect()
+  private deleteTemplate$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE)
+    .switchMap(action => this._invoiceTemplatesService.deleteTemplate(action.payload))
+    .map(response => {
+      return this.deleteTemplateResponse(response);
+    });
+
+  @Effect()
+  private deleteTemplateResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      } else {
+        this._toasty.successToast(data.body);
+      }
+      return { type: '' };
     });
 
   constructor(
@@ -470,6 +575,47 @@ export class InvoiceActions {
     };
   }
 
+  public getAllCreatedTemplates(): Action {
+    return {
+      type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES
+    };
+  }
+
+  public getAllCreatedTemplatesResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE,
+      payload: response
+    };
+  }
+
+  public setTemplateAsDefault(templateUniqueName: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT,
+      payload: templateUniqueName
+    };
+  }
+
+  public setTemplateAsDefaultResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.SET_TEMPLATE_AS_DEFAULT_RESPONSE,
+      payload: response
+    };
+  }
+
+  public deleteTemplate(templateUniqueName: string): Action {
+    return {
+      type: INVOICE.TEMPLATE.DELETE_TEMPLATE,
+      payload: templateUniqueName
+    };
+  }
+
+  public deleteTemplateResponse(response: any): Action {
+    return {
+      type: INVOICE.TEMPLATE.DELETE_TEMPLATE_RESPONSE,
+      payload: response
+    };
+  }
+
   public getCurrentTemplateSate(uniqueName: string): Action {
     return {
       payload: uniqueName,
@@ -496,10 +642,10 @@ export class InvoiceActions {
       payload: { font }
     };
   }
-  public setColor(color: string): Action {
+  public setColor(primaryColor: string, secondaryColor: string): Action {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
-      payload: { color }
+      payload: { primaryColor, secondaryColor }
     };
   }
   public updateGSTIN(data: string): Action {
@@ -811,7 +957,7 @@ export class InvoiceActions {
     };
   }
   public setDivVisible(div: IsDivVisible): Action {
-    console.log(div);
+    // console.log(div);
     return {
       type: INVOICE.TEMPLATE.SET_VISIBLE,
       payload: { div }
@@ -882,6 +1028,34 @@ export class InvoiceActions {
     return {
       type: INVOICE.SETTING.SAVE_RAZORPAY_DETAIL,
       payload: form
+    };
+  }
+
+  public DownloadInvoice(accountUniqueName: string, dataToSend: { invoiceNumber: string[] }): Action {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE,
+      payload: { accountUniqueName, dataToSend }
+    };
+  }
+
+  public DownloadInvoiceResponse(model: BaseResponse<string, string>): Action {
+    return {
+      type: INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[] }): Action {
+    return {
+      type: INVOICE_ACTIONS.SEND_MAIL,
+      payload: { accountUniqueName, dataToSend }
+    };
+  }
+
+  public SendInvoiceOnMailResponse(model: BaseResponse<string, string>): Action {
+    return {
+      type: INVOICE_ACTIONS.SEND_MAIL_RESPONSE,
+      payload: model
     };
   }
 

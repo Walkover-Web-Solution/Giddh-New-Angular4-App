@@ -20,6 +20,7 @@ import { ChartModule } from 'angular2-highcharts';
 
 import {
   AccountAddComponent,
+  AccountAddNewComponent,
   AccountOperationsComponent,
   AccountsSideBarComponent,
   CompanyAddComponent,
@@ -48,6 +49,8 @@ import { DatePickerModule } from './theme/datepicker/date-picker.module';
 import { RecTypePipe } from './helpers/pipes/recType.pipe';
 import { SafePipe } from './helpers/pipes/safe.pipe';
 import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
+// social login injection
+import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -61,11 +64,26 @@ export function highchartsFactory() {
   return hc;
 }
 
+const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+  {
+    id: GoogleLoginProvider.PROVIDER_ID,
+    provider: new GoogleLoginProvider('641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com')
+  },
+  {
+    id: LinkedinLoginProvider.PROVIDER_ID,
+    provider: new LinkedinLoginProvider('817roify24ig8g')
+  }
+]);
+
+export function provideConfig() {
+  return SOCIAL_CONFIG || {id: null, providers: []};
+}
+
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
-    AccountAddComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
+    AccountAddComponent, AccountAddNewComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
     TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective],
   imports: [
@@ -79,6 +97,7 @@ export function highchartsFactory() {
       style: 'slide-left',
       spinnerSize: 30
     }),
+    SocialLoginModule,
     FormWizardModule,
     SelectModule,
     Select2Module, TagsModule,
@@ -86,7 +105,8 @@ export function highchartsFactory() {
     Daterangepicker,
     ChartModule,
     TextMaskModule,
-    NgUploaderModule,
+    NgUploaderModule
+    // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
@@ -95,11 +115,17 @@ export function highchartsFactory() {
     InvoicePageDDComponent, FullPageHeight, DatePickerModule, RecTypePipe, DecimalDigitsDirective
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
-    NgxTypeAheadComponent],
-  providers: [{
-    provide: HighchartsStatic,
-    useFactory: highchartsFactory
-  }]
+    NgxTypeAheadComponent, AccountAddNewComponent],
+  providers: [
+    {
+      provide: HighchartsStatic,
+      useFactory: highchartsFactory
+    },
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
+  ]
 })
 export class SharedModule {
   public static forRoot(): ModuleWithProviders {

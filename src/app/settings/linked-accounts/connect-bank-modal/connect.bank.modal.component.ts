@@ -8,6 +8,9 @@ import { Observable } from 'rxjs/Observable';
   styles: [`iframe {
               width: 100%;
               height: 400px;
+          }
+          .connect-page .page-title {
+                margin-top: 0;
           }`]
 })
 

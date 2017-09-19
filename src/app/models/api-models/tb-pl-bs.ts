@@ -1,12 +1,6 @@
 import { ChildGroup, ClosingBalance, ForwardedBalance, OpeningBalance } from './Search';
 
-export interface TrialBalanceExportRequest {
-  fromDate?: string;
-  toDate?: string;
-  export?: string;
-}
-
-export interface TrialBalanceExportResponse {
+export interface TrialBalanceExportExcelRequest {
   fromDate?: string;
   toDate?: string;
   export?: string;

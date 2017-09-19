@@ -40,11 +40,16 @@ export class InvoiceGenerateComponent implements OnInit {
     placeholder: 'Select Accounts',
     allowClear: true
   };
+  public moment = moment;
+  public showFromDatePicker: boolean = false;
+  public showToDatePicker: boolean = false;
+  public togglePrevGenBtn: boolean = false;
   public counts: number[] = COUNTS;
   public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
   public ledgersData: GetAllLedgersOfInvoicesResponse;
   public selectedLedgerItems: string[] = [];
+  public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private modalRef: BsModalRef;
@@ -64,8 +69,8 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public ngOnInit() {
     // set initial values
-    this.ledgerSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    this.ledgerSearchRequest.to = moment().format('DD-MM-YYYY');
+    this.ledgerSearchRequest.from = String(moment().subtract(30, 'days'));
+    this.ledgerSearchRequest.to = String(moment());
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
 
@@ -181,6 +186,14 @@ export class InvoiceGenerateComponent implements OnInit {
     this.store.dispatch(this.invoiceActions.GenerateBulkInvoice(reqObj, model));
   }
 
+  public setToday(model: string) {
+    this.ledgerSearchRequest[model] = String(moment());
+  }
+
+  public clearDate(model: string) {
+    this.ledgerSearchRequest[model] = '';
+  }
+
   private getInvoiceTemplateDetails(templateUniqueName: string) {
     this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
   }
@@ -224,8 +237,8 @@ export class InvoiceGenerateComponent implements OnInit {
   private prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
     return {
-      from: o.from,
-      to: o.to,
+      from: moment(o.from).format('DD-MM-YYYY'),
+      to: moment(o.to).format('DD-MM-YYYY'),
       count: o.count,
       page: o.page
     };
@@ -250,12 +263,20 @@ export class InvoiceGenerateComponent implements OnInit {
       if (item.isSelected) {
         if (idx === -1) {
           this.selectedLedgerItems.push(item.uniqueName);
+          this.selectedCountOfAccounts.push(item.account.uniqueName);
         }
       } else {
         if (idx !== -1) {
           this.selectedLedgerItems.splice(idx);
+          this.selectedCountOfAccounts.splice(idx);
         }
       }
     });
+    // check if all selected entries are from same account
+    if (this.selectedCountOfAccounts.length) {
+      this.togglePrevGenBtn = this.selectedCountOfAccounts.every(v => v === this.selectedCountOfAccounts[0]);
+    }else {
+      this.togglePrevGenBtn = false;
+    }
   }
 }
