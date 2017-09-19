@@ -1,8 +1,7 @@
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, AfterViewInit } from '@angular/core';
-import { LoginActions } from '../services/actions/login.action';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';

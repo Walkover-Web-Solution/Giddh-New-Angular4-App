@@ -12,7 +12,9 @@ import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-mod
 import { Router } from '@angular/router';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
-
+import { AuthService } from 'ng4-social-login';
+import { AuthenticationService } from '../../../../services/authentication.service';
+// const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
   templateUrl: './company-add.component.html'
@@ -31,25 +33,30 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isCompanyCreated$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public showMobileVarifyMsg: boolean = false;
+  public isLoggedInWithSocialAccount$: Observable<boolean>;
   public dataSource: Observable<any>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService, private _route: Router, private _loginAction: LoginActions) {
+  constructor(
+    private socialAuthService: AuthService,
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
+    private _aunthenticationServer: AuthenticationService) {
+      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
   }
 
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
-    this.companies$ = this.store.select(s => s.company.companies).takeUntil(this.destroyed$);
+    this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
-    this.isCompanyCreationInProcess$ = this.store.select(s => s.company.isCompanyCreationInProcess).takeUntil(this.destroyed$);
+    this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
 
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.mobileNo !== null;
       }
     }).takeUntil(this.destroyed$);
-    this.isCompanyCreated$ = this.store.select(s => s.company.isCompanyCreated).takeUntil(this.destroyed$);
+    this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
     this.dataSource = Observable
       .create((observer: any) => {
         this._location.GetCity({
@@ -70,14 +77,14 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       if (s) {
         let stateDetailsRequest = new StateDetailsRequest();
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
-        stateDetailsRequest.lastState = 'company.content.ledgerContent@giddh';
+        stateDetailsRequest.lastState = 'home';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        this._route.navigate(['/ledger', 'cash']);
+        // this._route.navigate(['/ledger', 'cash']);
         this.closeModal();
       }
     });
     // this.store
-    //   .select(c => c.company.companies).takeUntil(this.destroyed$)
+    //   .select(c => c.session.companies).takeUntil(this.destroyed$)
     //   .subscribe(p => {
     //     if (p && p.find(c => c.name === this.company.name) !== undefined) {
     //       this.company = new CompanyRequest();
@@ -157,7 +164,22 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public logoutUser() {
     this.hideLogoutModal();
     this.closeCompanyModal.emit();
-    this.store.dispatch(this._loginAction.LogOut());
+    if (isElectron) {
+      // this._aunthenticationServer.GoogleProvider.signOut();
+      this.store.dispatch(this._loginAction.ClearSession());
+    } else {
+      this.isLoggedInWithSocialAccount$.subscribe((val) => {
+        if (val) {
+          this.socialAuthService.signOut().then().catch((err) => {
+            // console.log ('err', err);
+          });
+          this.store.dispatch(this._loginAction.ClearSession());
+          this.store.dispatch(this._loginAction.socialLogoutAttempt());
+        }else {
+          this.store.dispatch(this._loginAction.ClearSession());
+        }
+      });
+    }
   }
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration

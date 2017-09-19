@@ -37,7 +37,7 @@ import { TbGridComponent } from './tb-grid/tb-grid.component';
        <h1>loading ledger</h1>
       </div>
     </div>
-    <div *ngIf="(data$ | async)">
+    <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
       [search]="filter.search"
         [expandAll]="false"
@@ -62,7 +62,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     if (value) {
       this.request = {
         refresh: false,
-        from: this.selectedCompany.activeFinancialYear.financialYearStarts,
+        from: value.activeFinancialYear.financialYearStarts,
         to: this.selectedCompany.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
@@ -74,11 +74,22 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
     this.showLoader = this.store.select(p => p.tlPl.tb.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.tb.data)).takeUntil(this.destroyed$);
+    this.data$ = this.store.select(p => {
+      let d = _.cloneDeep(p.tlPl.tb.data);
+      if (d) {
+        _.each(d.groupDetails, (grp: any) => {
+          grp.isVisible = true;
+          _.each(grp.accounts, (acc: any) => {
+            acc.isVisible = true;
+          });
+        });
+      }
+      return d;
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
-    console.log('hello Tb Component');
+    // console.log('hello Tb Component');
   }
 
   public ngAfterViewInit() {
@@ -100,11 +111,24 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public exportCsv($event) {
     //
-   }
+  }
   public exportPdf($event) {
     //
-   }
+  }
   public exportXLS($event) {
     //
-   }
+  }
+  public findIndex(activeFY, financialYears) {
+    let tempFYIndex = 0;
+    _.each(financialYears, (fy: any, index: number) => {
+      if (fy.uniqueName === activeFY.uniqueName) {
+        if (index === 0) {
+          tempFYIndex = index;
+        } else {
+          tempFYIndex = index * -1;
+        }
+      }
+    });
+    return tempFYIndex;
+  }
 }

@@ -26,6 +26,11 @@ const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
 import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
+import { DownloadOrSendInvoiceOnMailComponent } from './preview/models/download-or-send-mail/download-or-send-mail.component';
+import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/template-modal/template-modal.component';
+import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
+import { DeleteTemplateConfirmationModelComponent } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
+import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -54,7 +59,12 @@ const INVOICE_ROUTES: Routes = [
     InvoiceSettingComponent,
     DeleteInvoiceConfirmationModelComponent,
     PerformActionOnInvoiceModelComponent,
-    InvoiceGenerateModelComponent
+    InvoiceGenerateModelComponent,
+    DownloadOrSendInvoiceOnMailComponent,
+    InvoiceTemplateModalComponent,
+    InvoiceEmailFilterComponent,
+    DeleteTemplateConfirmationModelComponent,
+    InvoiceTemplatePreviewModelComponent
   ],
   imports: [
     FormsModule,

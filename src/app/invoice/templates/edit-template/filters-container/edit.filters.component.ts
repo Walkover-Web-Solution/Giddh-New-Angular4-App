@@ -1,23 +1,24 @@
-import {
-  Component, Input, EventEmitter, Output, OnInit, OnChanges,
-  SimpleChanges
-} from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'edit-template-filters',
-  templateUrl: 'edit.filters.component.html'
+  templateUrl: 'edit.filters.component.html',
+  styles: [`
+    .active {
+      background: #fff !important;
+      color: #ff5f00 !important;
+    }
+  `]
 })
 
-export class EditFiltersContainersComponent implements OnInit {
+export class EditFiltersContainersComponent {
 
   public ifDesignSelected: boolean = true;
   public ifContentSelected: boolean = false;
   public ifEmailSelected: boolean = false;
 
   constructor() {
-  }
-
-  public ngOnInit() {
+    this.openTab('content');
   }
 
   public openTab(tab) {
@@ -77,5 +78,4 @@ export class EditFiltersContainersComponent implements OnInit {
   //   this.ifLogoSelected = false;
   //   this.ifTemplateSelected = false;
   // }
-
 }

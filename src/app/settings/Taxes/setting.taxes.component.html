@@ -1,5 +1,5 @@
-<div class="box">
-    <h1 class="section_head">Create New Tax</h1>
+<div class="box clearfix mrT2">
+    <h1 class="section_head pdT0">Create New Tax</h1>
     <form (ngSubmit)="onSubmit(newTaxObj)">
         <div class="row">
             <div class="form-group col-xs-3">
@@ -53,7 +53,7 @@
                </span>
                 </div>
                 <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                    <datepicker name="fromDate" [(ngModel)]="newTaxObj.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="true"></datepicker>
+                    <datepicker name="fromDate" [(ngModel)]="newTaxObj.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
                 </div>
             </div>
             <div class="form-group col-xs-3">
@@ -88,11 +88,12 @@
         </div>
     </form>
 
-    <div class="row">
-        <div class="col-xs-12 panel-body">
-            <h1 class="section_head">Added Taxes</h1>
+
+    <div class="col-xs-12 pdT2">
+        <div class="row">
+            <h1 class="section_head pdT1">Added Taxes</h1>
             <div class="table-responsive">
-                <table class="table table-bordered basic">
+                <table class="table table-bordered basic mrB">
                     <thead>
                         <tr>
                             <th>Sr. No.</th>
@@ -127,7 +128,7 @@
                                 </div>
                             </td>
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
-                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last">
+                                <div *ngFor="let t of tax.taxDetail; let j = index; let last = last" class="mrB1">
                                     <input type="text" class="form-control" [(ngModel)]="t.date" name="tax_date_{{i}}_{{j}}">
                                 </div>
                             </td>
@@ -143,7 +144,7 @@
                                 </div>
                             </td>
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
-                                <div class="input-group" *ngFor="let t of tax.taxDetail; let j = index; let last = last">
+                                <div class="input-group mrB1" *ngFor="let t of tax.taxDetail; let j = index; let last = last">
                                     <input type="text" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}">
                                     <span class="input-group-addon cursor-pointer">
                               <i *ngIf="!last" (click)="removeDateAndPercentage(i, j)" class="fa fa-minus cursor-pointer" aria-hidden="true"></i>

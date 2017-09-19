@@ -11,6 +11,7 @@ import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-upload
 import { Observable } from 'rxjs/Observable';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
+
 @Component({
   selector: 'content-selector',
   templateUrl: 'content.filters.component.html',
@@ -18,8 +19,8 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 })
 
 export class ContentFilterComponent {
-  public showCustomField: boolean = false;
-  public showTransportField: boolean = false;
+  public showCustomField: boolean = true;
+  public showTransportField: boolean = true;
   @Input() public content: boolean;
   public GSTIN: string;
   public PAN: string;
@@ -102,6 +103,7 @@ export class ContentFilterComponent {
     enableMessage1: true,
     enableMessage2: true,
     enableThanks: true,
+    enableTotalInWords: true
   };
 
   constructor(private store: Store<AppState>, public invoiceAction: InvoiceActions, private _invoiceUiDataService: InvoiceUiDataService, private invoiceTemplatesService: InvoiceTemplatesService) {
@@ -117,6 +119,8 @@ export class ContentFilterComponent {
         this.footer = val.footer;
       }
     });
+    this._invoiceUiDataService.updateEmailSettingObj({ isEmailTabSelected: false });
+    this.onCheckField('companyName', true);
   }
 
   public showTemplate(id) {
@@ -312,7 +316,7 @@ export class ContentFilterComponent {
     } else if (field === 'shippingGstin') {
       this.field.enableShippingGstin = value;
     } else if (field === 'shippingState') {
-      this.field.enableShippingAddress = value;
+      this.field.enableShippingState = value;
     } else if (field === 'custom1') {
       this.field.enableCustom1 = value;
     } else if (field === 'custom2') {
@@ -355,6 +359,8 @@ export class ContentFilterComponent {
       this.field.enableThanks = value;
     } else if (field === 'companyAddr') {
       this.field.enableCompanyAddress = value;
+    } else if (field === 'invoiceTotalInWords') {
+      this.field.enableTotalInWords = value;
     }
     this._invoiceUiDataService.setFieldDisplayState(this.field);
   }
@@ -411,4 +417,5 @@ export interface IsFieldVisible {
   enableMessage1: boolean;
   enableMessage2: boolean;
   enableThanks: boolean;
+  enableTotalInWords: boolean;
 }

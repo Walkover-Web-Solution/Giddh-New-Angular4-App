@@ -2,18 +2,16 @@ import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
-import { Ng2UiAuthModule } from 'ng2-ui-auth';
 import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { PreloadAllModules, RouterModule } from '@angular/router';
-import { RouterStoreModule } from '@ngrx/router-store';
+import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 /*
  * Platform and Environment providers/directives/pipes
  */
-import { AuthProviders } from './app.constant';
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
 import { rootReducer } from './store';
@@ -31,6 +29,7 @@ import { DummyComponent } from './dummy.component';
 import { SalesModule } from './sales/sales.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
+import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import 'rxjs/add/operator/take';
 // Application wide providers
 const APP_PROVIDERS = [
@@ -57,7 +56,7 @@ interface StoreType {
 let CONDITIONAL_IMPORTS = [];
 
 if (ENV === 'development') {
-  console.log('loading react devtools');
+  // console.log('loading react devtools');
   CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrumentOnlyWithExtension());
 }
 
@@ -71,7 +70,8 @@ if (ENV === 'development') {
     PageComponent,
     NoContentComponent,
     DummyComponent,
-    NewUserComponent
+    NewUserComponent,
+    SocialLoginCallbackComponent
   ],
   /**
    * Import Angular's modules.
@@ -90,7 +90,6 @@ if (ENV === 'development') {
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ...CONDITIONAL_IMPORTS,
-    Ng2UiAuthModule.forRoot(AuthProviders),
     ...CONDITIONAL_IMPORTS,
     SalesModule,
   ],
@@ -109,13 +108,14 @@ export class AppModule {
   constructor(
     public appRef: ApplicationRef,
     public _store: Store<AppState>
-  ) { }
+  ) {
+  }
 
   public hmrOnInit(store: StoreType) {
     if (!store || !store.rootState) {
       return;
     }
-    console.log('HMR store', JSON.stringify(store, null, 2));
+    // console.log('HMR store', JSON.stringify(store, null, 2));
     /**
      * Set state
      */

@@ -78,6 +78,7 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     enableMessage1: true,
     enableMessage2: true,
     enableThanks: true,
+    enableTotalInWords: true
   };
   public showLogo: boolean = true;
   public logoSize: string;

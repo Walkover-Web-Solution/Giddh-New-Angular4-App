@@ -17,7 +17,7 @@ import { Select2OptionData } from '../../shared/theme/select2/select2.interface'
 import { ModalDirective } from 'ngx-bootstrap';
 
 const COUNTS = [12, 25, 50, 100];
-const COMPARISION_FILTER = [
+const COMPARISON_FILTER = [
   { name: 'Greater Than', uniqueName: 'greaterThan' },
   { name: 'Less Than', uniqueName: 'lessThan' },
   { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
@@ -33,13 +33,18 @@ export class InvoicePreviewComponent implements OnInit {
 
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
+  @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
 
+  public base64Data: string;
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public invoiceData: GetAllInvoicesPaginatedResponse;
-  public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
+  public filtersForEntryTotal: INameUniqueName[] = COMPARISON_FILTER;
   public counts: number[] = COUNTS;
   public accounts$: Observable<Select2OptionData[]>;
+  public moment = moment;
+  public showFromDatePicker: boolean  = false;
+  public showToDatePicker: boolean = false;
   public select2Options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -60,14 +65,16 @@ export class InvoicePreviewComponent implements OnInit {
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService
-  ) { }
+  ) {
+    this.invoiceSearchRequest.entryTotalBy = '';
+  }
 
   public ngOnInit() {
     // set initial values
-    this.invoiceSearchRequest.from = moment().subtract(30, 'days').format('DD-MM-YYYY');
-    this.invoiceSearchRequest.to = moment().format('DD-MM-YYYY');
+    this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
+    this.invoiceSearchRequest.to = String(moment());
     this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 12;
+    this.invoiceSearchRequest.count = 25;
 
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -90,6 +97,8 @@ export class InvoicePreviewComponent implements OnInit {
           item.isSelected = false;
           return o;
         });
+      } else {
+        this.getInvoices();
       }
     });
     this.getInvoices();
@@ -131,6 +140,69 @@ export class InvoicePreviewComponent implements OnInit {
     this.store.dispatch(this.invoiceActions.ActionOnInvoice(this.selectedInvoice.uniqueName, { action: 'paid', amount: data }));
   }
 
+  /**
+   * onSelectInvoice
+   */
+  public onSelectInvoice(invoice: IInvoiceResult) {
+    this.selectedInvoice = _.cloneDeep(invoice);
+    this.store.dispatch(this.invoiceActions.DownloadInvoice(invoice.account.uniqueName, { invoiceNumber: [invoice.invoiceNumber]}));
+    this.downloadOrSendMailModel.show();
+  }
+
+  /**
+   * download file as pdf
+   * @param data
+   * @param invoiceUniqueName
+   */
+  public downloadFile() {
+    let blob = this.base64ToBlob(this.base64Data, 'application/pdf', 512);
+    return saveAs(blob, `Invoice-${this.selectedInvoice.account.uniqueName}.pdf`);
+  }
+
+  public base64ToBlob(b64Data, contentType, sliceSize) {
+    contentType = contentType || '';
+    sliceSize = sliceSize || 512;
+    let byteCharacters = atob(b64Data);
+    let byteArrays = [];
+    let offset = 0;
+    while (offset < byteCharacters.length) {
+      let slice = byteCharacters.slice(offset, offset + sliceSize);
+      let byteNumbers = new Array(slice.length);
+      let i = 0;
+      while (i < slice.length) {
+        byteNumbers[i] = slice.charCodeAt(i);
+        i++;
+      }
+      let byteArray = new Uint8Array(byteNumbers);
+      byteArrays.push(byteArray);
+      offset += sliceSize;
+    }
+    return new Blob(byteArrays, { type: contentType });
+  }
+
+  /**
+  * onDownloadOrSendMailEvent
+  */
+  public onDownloadOrSendMailEvent(userResponse: { action: string, emails: string[] }) {
+    if (userResponse.action === 'download') {
+      this.downloadFile();
+    } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
+      this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
+    }
+  }
+
+  public closeDownloadOrSendMailPopup(data) {
+    this.downloadOrSendMailModel.hide();
+  }
+
+  public setToday(model: string) {
+    this.invoiceSearchRequest[model] = String(moment());
+  }
+
+  public clearDate(model: string) {
+    this.invoiceSearchRequest[model] = '';
+  }
+
   private getInvoices() {
     this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi()));
   }
@@ -147,17 +219,17 @@ export class InvoicePreviewComponent implements OnInit {
     if (o.description) {
       model.description = o.description;
     }
-    if (o.entryTotalBy === COMPARISION_FILTER[0].uniqueName) {
+    if (o.entryTotalBy === COMPARISON_FILTER[0].uniqueName) {
       model.totalIsMore = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[1].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[1].uniqueName) {
       model.totalIsLess = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[2].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[2].uniqueName) {
       model.totalIsMore = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[3].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[3].uniqueName) {
       model.totalIsLess = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[4].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[4].uniqueName) {
       model.totalIsEqual = true;
     }
     return model;
@@ -166,8 +238,8 @@ export class InvoicePreviewComponent implements OnInit {
   private prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
     return {
-      from: o.from,
-      to: o.to,
+      from: moment(o.from).format('DD-MM-YYYY'),
+      to: moment(o.to).format('DD-MM-YYYY'),
       count: o.count,
       page: o.page
     };

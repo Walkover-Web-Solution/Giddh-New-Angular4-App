@@ -1,11 +1,53 @@
 <form #invoiceForm="ngForm" (ngSubmit)="getLedgersByFilters(invoiceForm)" novalidate class="form-inline filterForm">
-    <div class="form-group">
-        <label>From</label>
-        <input type="text" class="form-control" name="from" placeholder="from date" [(ngModel)]="ledgerSearchRequest.from" />
+
+    <div class="form-group" (clickOutside)="showFromDatePicker=false;">
+        <label class="d-block">From</label>
+        <div class="input-group">
+            <input type="text" name="from" [ngModel]="moment(ledgerSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
+                <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <ul class="my-dropdown-menu">
+                <li>
+                    <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="ledgerSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
+                </li>
+                <li style="padding:10px 9px 2px" class="ng-scope">
+                    <span class="btn-group pull-left">
+                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('from');showFromDatePicker = false;">Today</button>
+                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('from');showFromDatePicker = false;">Clear</button></span>
+                    <button type="button" class="btn btn-sm btn-success pull-right" (click)="showFromDatePicker = false">Done</button>
+                </li>
+            </ul>
+        </div>
     </div>
-    <div class="form-group">
-        <label>To</label>
-        <input type="text" class="form-control" name="to" placeholder="to date" [(ngModel)]="ledgerSearchRequest.to" />
+
+    <div class="form-group" (clickOutside)="showToDatePicker=false;">
+        <label class="d-block">To</label>
+        <div class="input-group">
+            <input type="text" name="to" [ngModel]="moment(ledgerSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;" class="form-control" required/>
+            <span class="input-group-btn">
+                <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
+                <i class="glyphicon glyphicon-calendar"></i>
+                </button>
+            </span>
+        </div>
+        <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+            <ul class="my-dropdown-menu">
+                <li>
+                    <datepicker name="toDate" (click)="$event.stopPropagation()" [(ngModel)]="ledgerSearchRequest.to" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
+                </li>
+                <li style="padding:10px 9px 2px" class="ng-scope">
+                    <span class="btn-group pull-left">
+                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('to');showToDatePicker = false;">Today</button>
+                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('to');showToDatePicker = false;">Clear</button></span>
+                    <button type="button" class="btn btn-sm btn-success pull-right" (click)="showToDatePicker = false">Done</button>
+                </li>
+            </ul>
+        </div>
     </div>
     <div class="form-group">
         <label>Account</label>
@@ -44,12 +86,11 @@
 
 <div class="clearfix pdT2 mrB2">
     <ul class="list-inline pull-left">
-        <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
-        <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
-        <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || selectedLedgerItems.length > 1" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button></li>
-        <!-- <li><button class="btn btn-info" id="createNew" (click)="showInvoiceModal()">Create New</button></li> -->
-        <!-- <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li> -->
-
+      <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(false)">Generate Multiple</button></li>
+      <li><button [disabled]="selectedLedgerItems.length === 0" class="btn btn-primary" (click)="generateBulkInvoice(true)">Generate Compound</button></li>
+      <li><button placement="top" tooltip="Works only for single entry." [disabled]="selectedLedgerItems.length === 0 || !togglePrevGenBtn" class="btn btn-primary" (click)="previewInvoice()">Preview &amp; Generate</button></li>
+      <!-- <li><button class="btn btn-info" id="createNew" (click)="showInvoiceModal()">Create New</button></li> -->
+      <!-- <li><a placement="right" tooltip="How to generate invoice?" class="cp" href="http://faq.giddh.com/invoice/how-to-make-invoice" target="_blank"><i class="glyphicon glyphicon-question-sign"></i></a></li> -->
     </ul>
     <!-- <div class="form-group pull-right">
     <input type="search" class="form-control maxW150" placeholder="Search">

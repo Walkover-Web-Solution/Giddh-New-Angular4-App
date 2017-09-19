@@ -42,6 +42,7 @@ export class AccountResponse implements IAccountCreate {
     public mergedAccounts: string;
     public uniqueName: string;
     public name: string;
+    public isComposite?: boolean;
 }
 
 /**
@@ -69,6 +70,8 @@ export class AccountRequest implements IAccount {
   public state?: string;
   public sacNumber: string;
   public stateCode: string;
+  public isComposite?: boolean;
+
 }
 
 /**
@@ -151,4 +154,29 @@ export class FlattenAccountsResponse implements IPaginatedResponse {
 export class AccountsTaxHierarchyResponse {
   public applicableTaxes: INameUniqueName[];
   public inheritedTaxes: IInheritedTaxes[];
+}
+export class IAccountAddress {
+  public gstNumber: string;
+  public address: string;
+  public stateCode: string;
+  public isDefault: boolean;
+  public isComposite: boolean;
+  public partyType: string;
+}
+
+export class AccountRequestV2 {
+  public addresses: IAccountAddress;
+  public attentionTo?: string;
+  public companyName?: string;
+  public description?: string;
+  public email?: string;
+  public mobileNo?: string;
+  public openingBalance?: any;
+  public openingBalanceDate?: string;
+  public openingBalanceType?: string;
+  public name: string;
+  public uniqueName: string;
+  public hsnNumber: string;
+  public country: { countryCode: string };
+  public sacNumber: string;
 }

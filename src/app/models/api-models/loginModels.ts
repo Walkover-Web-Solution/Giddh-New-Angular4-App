@@ -1,5 +1,10 @@
 import { IUserDetail } from '../interfaces/userInfo.interface';
 
+export class LinkedInRequestModel {
+  public email: string;
+  public token: string;
+}
+
 export class VerifyEmailModel {
   public email: string;
   public verificationCode: string;
@@ -7,8 +12,8 @@ export class VerifyEmailModel {
 
 export class VerifyEmailResponseModel {
   public user: UserDetails;
-  public session: Session;
-  public authKey: string;
+  public session?: Session;
+  public authKey?: string;
   public isNewUser: boolean;
   public contactNumber: string;
   public countryCode: string;

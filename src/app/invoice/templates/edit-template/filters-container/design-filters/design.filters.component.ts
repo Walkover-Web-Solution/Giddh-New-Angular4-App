@@ -10,6 +10,7 @@ import { AppState } from '../../../../../store/roots';
 import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
+
 @Component({
   selector: 'design-filters',
   templateUrl: 'design.filters.component.html',
@@ -30,7 +31,8 @@ export class DesignFiltersContainerComponent {
     style: 'regular',
     styles: ['regular']
   });
-  public currentColor: string;
+  public primaryColor: string;
+  public secondaryColor: string;
   public top: string;
   public left: string;
   public bottom: string;
@@ -53,9 +55,11 @@ export class DesignFiltersContainerComponent {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
-    this.currentColor = '#000000';
+    this.primaryColor = '#df4927';
+    this.secondaryColor = '#fdf6f4';
     this.logoSize = '140';
     this._invoiceUiDataService.setLogoSize(this.logoSize);
+    this._invoiceUiDataService.updateEmailSettingObj({ isEmailTabSelected: false });
   }
 
   public selectTemplate() {
@@ -189,9 +193,10 @@ export class DesignFiltersContainerComponent {
 
     this.store.dispatch(this.invoiceAction.setFont(fo.family));
   }
-  public changeColor(color) {
-    this.currentColor = color;
-    this.store.dispatch(this.invoiceAction.setColor(color));
+  public changeColor(primaryColor, secondaryColor) {
+    this.primaryColor = primaryColor;
+    this.secondaryColor = secondaryColor;
+    this.store.dispatch(this.invoiceAction.setColor(this.primaryColor, this.secondaryColor));
   }
   public setLogoSize(size) {
     if (size === 'small') {
@@ -216,4 +221,18 @@ export class DesignFiltersContainerComponent {
     this._invoiceUiDataService.logoState(this.showLogo);
   }
 
+  public clickedOutside() {
+    this.ifColorSelected = false;
+    this.ifLogoSelected = false;
+    this.ifPrintSelected = false;
+    this.ifFontSelected = false;
+    this.ifTemplateSelected = false;
+  }
+
+  /**
+   * setTemplateName
+   */
+  public setTemplateName(name: string) {
+    this._invoiceUiDataService.setTemplateName(name);
+  }
 }

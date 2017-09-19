@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { AboutRoutingModule } from './about.routing.module';
 import { AboutComponent } from './about.component';
 
-console.log('`About` bundle loaded asynchronously');
+// console.log('`About` bundle loaded asynchronously');
 
 @NgModule({
   declarations: [

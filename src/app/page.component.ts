@@ -25,35 +25,13 @@ export class PageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.comapnyActions.RefreshCompanies());
-    // this.store.dispatch(this.loginAction.LoginSuccess());
-    document.onreadystatechange = (e) => {
-      // debugger;
-      if (e.returnValue) {
-        setTimeout(() => {
-          window.scrollTo(0, 0);
-        }, 500);
-      }
-    };
-    this.router.events.subscribe(s => {
-      if (s instanceof NavigationEnd) {
-        const tree = this.router.parseUrl(this.router.url);
-        if (tree.fragment) {
-          // you can use DomAdapter
-          const element = document.querySelector('#' + tree.fragment);
-          if (element) { element.scrollIntoView(element); }
-        }
-      }
-    });
-    this.router.events.takeUntil(this.destroyed$).delay(300).subscribe((event) => {
-      window.scrollTo(0, 0);
-    });
+    // this.store.dispatch(this.comapnyActions.RefreshCompanies());
   }
 
   public ngAfterViewInit() {
-    if (this.location.path() === '/pages') {
-      this.router.navigate(['/pages', 'home']);
-    }
+    // if (this.location.path() === '/pages') {
+    //   this.router.navigate(['/pages', 'home']);
+    // }
   }
 
   public ngOnDestroy(): void {

@@ -39,6 +39,18 @@ export interface AccountFlat {
   parent: string;
 }
 
+export interface GroupFlat {
+  creditTotal: number;
+  debitTotal: number;
+  closeBalanceType: string;
+  openBalanceType: string;
+  closingBalance: number;
+  openingBalance: number;
+  uniqueName: string;
+  name: string;
+  parent: string;
+}
+
 export class ChildGroup {
   public forwardedBalance: ForwardedBalance;
   public creditTotal: number;
