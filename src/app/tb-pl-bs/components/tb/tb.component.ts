@@ -97,7 +97,6 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public filterData(request: TrialBalanceRequest) {
-    debugger;
     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
   }
   public expandAllEmit(v) {
