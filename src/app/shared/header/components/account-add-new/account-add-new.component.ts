@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers/customValidationHelper';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AppState } from '../../../../store/roots';
@@ -8,6 +8,11 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 import { Observable } from 'rxjs/Observable';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
+import { Select2OptionData } from '../../../theme/select2/index';
+import { CompanyService } from '../../../../services/companyService.service';
+import { contriesWithCodes } from '../../../helpers/countryWithCodes';
+import { ToasterService } from '../../../../services/toaster.service';
+import { Select2Component } from '../../../theme/select2/select2.component';
 
 @Component({
   selector: 'account-add-new',
@@ -26,9 +31,32 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
+  public partyTypeSource: Select2OptionData[] = [
+    {id: 'not applicable', text: 'Not Applicable'},
+    {id: 'deemed export', text: 'Deemed Export'},
+    {id: 'government entity', text: 'Government Entity'},
+    {id: 'sez', text: 'Sez'}
+  ];
+  public countrySource: Select2OptionData[] = [];
+  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
+  public showMoreGstDetails: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction) {
-    //
+
+  constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
+              private _companyService: CompanyService, private _toaster: ToasterService) {
+    this._companyService.getAllStates().subscribe((data) => {
+      let states: Select2OptionData[] = [];
+      data.body.map(d => {
+        states.push({text: d.name, id: d.code});
+      });
+      this.statesSource$ = Observable.of(states);
+    }, (err) => {
+      // console.log(err);
+    });
+
+    contriesWithCodes.map(c => {
+      this.countrySource.push({id: c.countryflag, text: `${c.countryflag} - ${c.countryName}`});
+    });
   }
 
   public ngOnInit() {
@@ -49,20 +77,21 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         countryCode: ['']
       }),
       hsnOrSac: [''],
-      hsnNumber: [{ value: '', disabled: false }, []],
-      sacNumber: [{ value: '', disabled: false }, []],
+      hsnNumber: [{value: '', disabled: false}, []],
+      sacNumber: [{value: '', disabled: false}, []]
     });
   }
 
   public initialGstDetailsForm(): FormGroup {
-    return this._fb.group({
-      gstNumber: [''],
+    let gstFields = this._fb.group({
+      gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
       address: [''],
-      stateCode: [''],
+      stateCode: [{value: '', disabled: false}],
       isDefault: [false],
       isComposite: [false],
       partyType: ['']
     });
+    return gstFields;
   }
 
   public generateUniqueName() {
@@ -74,20 +103,27 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       this.isAccountNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
-            this.addAccountForm.patchValue({ uniqueName: val });
+            this.addAccountForm.patchValue({uniqueName: val});
           } else {
             let num = 1;
-            this.addAccountForm.patchValue({ uniqueName: val + num });
+            this.addAccountForm.patchValue({uniqueName: val + num});
           }
         }
       });
     } else {
-      this.addAccountForm.patchValue({ uniqueName: '' });
+      this.addAccountForm.patchValue({uniqueName: ''});
     }
   }
-  public addGstDetailsForm() {
-    const addresses = this.addAccountForm.get('addresses') as FormArray;
-    addresses.push(this.initialGstDetailsForm());
+
+  public addGstDetailsForm(gstForm: FormGroup) {
+    if (gstForm.valid) {
+      const addresses = this.addAccountForm.get('addresses') as FormArray;
+      addresses.push(this.initialGstDetailsForm());
+    } else {
+      this._toaster.clearAllToaster();
+      this._toaster.errorToast('Please fill GSTIN field first');
+    }
+    return;
   }
 
   public removeGstDetailsForm(i: number) {
@@ -105,9 +141,30 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
   }
 
+  public getStateCode(gstForm: FormGroup, statesEle: Select2Component) {
+    let gstVal: string = gstForm.get('gstNumber').value;
+    if (gstVal.length >= 2) {
+      this.statesSource$.take(1).subscribe(state => {
+        let s = state.find(st => st.id === gstVal.substr(0, 2));
+        statesEle.element.attr('disabled', 'true');
+        if (s) {
+          gstForm.get('stateCode').patchValue(s.id);
+        } else {
+          gstForm.get('stateCode').patchValue(null);
+          this._toaster.clearAllToaster();
+          this._toaster.warningToast('Invalid GSTIN.');
+        }
+      });
+    } else {
+      statesEle.element.attr('disabled', 'false');
+      gstForm.get('stateCode').patchValue(null);
+    }
+  }
+
   public submit() {
     console.log(this.addAccountForm.value);
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

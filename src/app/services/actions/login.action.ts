@@ -20,6 +20,7 @@ import { userLoginStateEnum } from '../../store/authentication/authentication.re
 import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
 import { Configuration } from '../../app.constant';
+import { ROUTES } from '../../app.routes';
 @Injectable()
 export class LoginActions {
 
@@ -157,11 +158,12 @@ export class LoginActions {
       } else {
         if (stateDetail.body && stateDetail.status === 'success') {
           cmpUniqueName = stateDetail.body.companyUniqueName;
-          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1) {
+          if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             // this.store.dispatch(replace(['/pages/home']));
+            // if (ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
             return go([stateDetail.body.lastState]);
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -174,6 +176,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             return go([stateDetail.body.lastState]);
+
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -261,8 +264,7 @@ export class LoginActions {
     .ofType(CompanyActions.CHANGE_COMPANY)
     .switchMap(action => this._companyService.getStateDetails(action.payload))
     .map(response => {
-      // debugger;
-      if (response.status === 'error') {
+      if (response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) {
         //
         let dummyResponse = new BaseResponse<StateDetailsResponse, string>();
         dummyResponse.body = new StateDetailsResponse();

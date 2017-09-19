@@ -118,17 +118,4 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   public exportXLS($event) {
     //
   }
-  public findIndex(activeFY, financialYears) {
-    let tempFYIndex = 0;
-    _.each(financialYears, (fy: any, index: number) => {
-      if (fy.uniqueName === activeFY.uniqueName) {
-        if (index === 0) {
-          tempFYIndex = index;
-        } else {
-          tempFYIndex = index * -1;
-        }
-      }
-    });
-    return tempFYIndex;
-  }
 }
