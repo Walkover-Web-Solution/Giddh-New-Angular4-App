@@ -16,7 +16,6 @@ import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 
-
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
   { name: 'Greater Than', uniqueName: 'greaterThan' },
