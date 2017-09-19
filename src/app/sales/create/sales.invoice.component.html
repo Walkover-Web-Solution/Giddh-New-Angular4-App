@@ -179,7 +179,18 @@
           <td>{{ i+1 }}</td>
           <td><input type="text" name="tr.date" class="form-control" [(ngModel)]="transaction.date" /></td>
           <td>
-            <input type="text" placeholder="Account" name="tr.accountName" class="form-control" [(ngModel)]="transaction.accountName" /><br>
+            <input
+              autocomplete="off"
+              name="tr.accountName"
+              [(ngModel)]="transaction.accountName"
+              [typeahead]="salesAccounts$ | async"
+              typeaheadOptionField="name"
+              placeholder="Search from accounts"
+              typeaheadOptionsLimit="10"
+              (typeaheadNoResults)="noResultsForSalesAccount($event)"
+              (typeaheadOnSelect)="onSelectSalesAccount($event)"
+              class="form-control">
+            <br>
             <input type="text" placeholder="Description" name="tr.description" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
@@ -192,6 +203,7 @@
           <td>
             <select class="form-control" name="tr.stockUnit" [(ngModel)]="transaction.stockUnit">
               <option [ngValue]="select">Select</option>
+              <option *ngFor="let stock of stockList" [ngValue]="stock.id">{{stock.text}}</option>
             </select>
           </td>
           <td>

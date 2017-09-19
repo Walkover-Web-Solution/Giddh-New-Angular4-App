@@ -1,6 +1,11 @@
 
 import * as moment from 'moment';
 
+export interface IStockUnit {
+  text: string;
+  id: string;
+}
+
 /**
  * draw invoice on ui and api model related class and interface
 */

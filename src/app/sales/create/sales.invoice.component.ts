@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
+import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit } from '../../models/api-models/Sales';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -21,6 +21,8 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { TaxControlData } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { StockUnits } from '../../inventory/components/custom-stock-components/stock-unit';
+import { BaseResponse } from "../../models/api-models/BaseResponse";
 const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
 
 @Component({
@@ -49,15 +51,18 @@ export class SalesInvoiceComponent implements OnInit {
   public isMlngAddrCollapsed: boolean = true;
   public isOthrDtlCollapsed: boolean = true;
   public typeaheadNoResultsOfCustomer: boolean = false;
+  public typeaheadNoResultsOfSalesAccount: boolean = false;
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
+  public salesAccounts$: Observable<INameUniqueName[]>;
   public accountAsideMenuState: string = 'out';
   public theadArr: string[] = THEAD_ARR;
   public activeGroupUniqueName$: Observable<string>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public selectedTaxes: string[] = [];
   public showTaxBox: boolean = false;
+  public stockList: IStockUnit[] = [];
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponse>;
@@ -72,6 +77,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+    this.stockList = StockUnits;
   }
 
   public ngOnInit() {
@@ -81,6 +87,7 @@ export class SalesInvoiceComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: INameUniqueName[] = [];
         let bankaccounts: INameUniqueName[] = [];
+        let salesAccounts: INameUniqueName[] = [];
         _.forEach(data.body.results, (item) => {
           // creating account list only of sundrydebtors category
           if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
@@ -90,10 +97,17 @@ export class SalesInvoiceComponent implements OnInit {
           if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts')) {
             bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
+
+          // creating sales account list
+          if (_.find(item.parentGroups, (o) => o.uniqueName === 'sales')) {
+            salesAccounts.push({ name: item.name, uniqueName: item.uniqueName });
+          }
         });
         // accounts.unshift({ name: '+ Add Customer', uniqueName: 'addnewcustomer'});
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
+        this.salesAccounts$ = Observable.of(salesAccounts);
+        console.log('salesAccounts', salesAccounts);
       }
     });
 
@@ -152,6 +166,20 @@ export class SalesInvoiceComponent implements OnInit {
   public onSubmitInvoiceForm(f: NgForm) {
     console.log (f, 'onSubmitInvoiceForm');
     console.log (this.invFormData, 'actual class object');
+  }
+
+  public noResultsForSalesAccount(e: boolean): void {
+    this.typeaheadNoResultsOfSalesAccount = e;
+  }
+
+  public onSelectSalesAccount(e: TypeaheadMatch): void {
+    this.accountService.GetAccountDetailsV2(e.item.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponse, string>) => {
+      if (data.status === 'success') {
+        let o = _.cloneDeep(data.body);
+        console.log ('set data in tr', o);
+      }
+      console.log ('data:', data);
+    });
   }
 
   public noResultsForCustomer(e: boolean): void {
