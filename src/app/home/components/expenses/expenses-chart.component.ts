@@ -27,8 +27,8 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public activeCompanyUniqueName$: Observable<string>;
   public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
   public accountStrings: AccountChartDataLastCurrentYear[] = [];
-  public activeYearAccounts: ICbAccount[] = [];
-  public lastYearAccounts: ICbAccount[] = [];
+  public activeYearAccounts: IChildGroups[] = [];
+  public lastYearAccounts: IChildGroups[] = [];
   public activeYearAccountsRanks: number[] = [];
   public lastYearAccountsRanks: number[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -71,16 +71,17 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     this.expensesChartData$.subscribe(exp => {
       if (exp) {
         if (exp.operatingcostActiveyear && exp.indirectexpensesActiveyear) {
-          let indirectexpensesAccounts = [].concat.apply([], this.flattenGroup([exp.indirectexpensesActiveyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let operatingcostAccounts = [].concat.apply([], this.flattenGroup([exp.operatingcostActiveyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let accounts = _.unionBy(indirectexpensesAccounts as ICbAccount[], operatingcostAccounts as ICbAccount[]) as ICbAccount[];
+          debugger;
+          let indirectexpensesGroups = [].concat.apply([], exp.indirectexpensesActiveyear.childGroups);
+          let operatingcostGroups = [].concat.apply([], exp.operatingcostActiveyear.childGroups);
+          let accounts = _.unionBy(indirectexpensesGroups as IChildGroups[], operatingcostGroups as IChildGroups[]) as IChildGroups[];
           this.activeYearAccounts = accounts;
         }
 
         if (exp.operatingcostLastyear && exp.indirectexpensesLastyear) {
-          let indirectexpensesAccounts = [].concat.apply([], this.flattenGroup([exp.indirectexpensesLastyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let operatingcostAccounts = [].concat.apply([], this.flattenGroup([exp.operatingcostLastyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let lastAccounts = _.unionBy(indirectexpensesAccounts as ICbAccount[], operatingcostAccounts as ICbAccount[]) as ICbAccount[];
+          let indirectexpensesGroups = [].concat.apply([], exp.indirectexpensesLastyear.childGroups);
+          let operatingcostGroups = [].concat.apply([], exp.operatingcostLastyear.childGroups);
+          let lastAccounts = _.unionBy(indirectexpensesGroups as IChildGroups[], operatingcostGroups as IChildGroups[]) as IChildGroups[];
           this.lastYearAccounts = lastAccounts;
         }
       }
@@ -183,7 +184,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public generateActiveYearString(): INameUniqueName[] {
     let activeStrings: INameUniqueName[] = [];
     this.activeYearAccounts.map(acc => {
-      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.name });
+      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
     });
     return activeStrings;
   }
@@ -191,7 +192,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public generateLastYearString(): INameUniqueName[] {
     let lastStrings: INameUniqueName[] = [];
     this.lastYearAccounts.map(acc => {
-      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.name });
+      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
     });
     return lastStrings;
   }
