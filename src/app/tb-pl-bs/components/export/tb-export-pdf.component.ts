@@ -45,8 +45,7 @@ interface GroupViewModel {
 })
 export class TbExportPdfComponent implements OnInit, OnDestroy {
 
-
-  @Input() selectedCompany: ComapnyResponse;
+  @Input() public selectedCompany: ComapnyResponse;
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
   public showpdf: boolean;
@@ -86,7 +85,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
 
   private downloadPdfGroupWise() {
     this.showpdf = false;
-    let pdf = <JsPDFAutoTable> new jsPDF('p', 'pt');
+    let pdf = new jsPDF('p', 'pt') as JsPDFAutoTable;
     let columns = [
       {
         title: 'Particular',
@@ -118,17 +117,17 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     let rows: GroupViewModel[] = this.exportData
       .map(p => {
         total = this.dataFormatter.calculateTotal(p, total);
-        return <GroupViewModel>{
+        return {
           closingBalance: `${p.closingBalance.amount} ${this.recType.transform(p.closingBalance)}`,
           openingBalance: `${p.forwardedBalance.amount} ${this.recType.transform(p.forwardedBalance)}`,
           name: p.groupName,
           credit: p.creditTotal,
           debit: p.debitTotal
-        };
+        } as GroupViewModel;
       });
 
     pdf.autoTable(columns, rows, {
-      theme: "plain",
+      theme: 'plain',
       margin: {
         top: 110
       },
@@ -143,7 +142,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
         pdf.setFontSize(10);
         pdf.text(40, 65, this.selectedCompany.address);
         pdf.text(40, 80, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
-        pdf.text(40, 95, "Trial Balance: ");
+        pdf.text(40, 95, 'Trial Balance: ');
       }
     });
     let footerX = 40;
@@ -151,7 +150,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     let pageWidth = pdf.internal.pageSize.width - 40;
     pdf.setFontSize(8);
     pdf.line(40, lastY, pageWidth, lastY);
-    pdf.text(footerX, lastY + 20, "Total");
+    pdf.text(footerX, lastY + 20, 'Total');
     pdf.text(footerX + 210, lastY + 20, total.ob.toString());
     pdf.text(footerX + 302, lastY + 20, total.dr.toString());
     pdf.text(footerX + 365, lastY + 20, total.cr.toFixed(2));
@@ -161,14 +160,14 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
   }
 
   private downloadPdfCondensed() {
-
+    //
   }
 
   private createPdf(rows: any, cols: any): void {
-
+    //
   }
 
   private downloadPdfAccountWise(): void {
-    throw new Error("Method not implemented.");
+    throw new Error('Method not implemented.');
   }
 }
