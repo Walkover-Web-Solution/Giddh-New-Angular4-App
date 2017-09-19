@@ -149,30 +149,7 @@ export class HomeActions {
     });
 
   @Effect()
-  public GetNetworthChartActiveYear$: Observable<Action> = this.action$
-    .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR)
-    .switchMap(action => {
-      return Observable.zip(
-        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
-      );
-    }).map((res) => {
-      if (res[0].status === 'success') {
-        let obj: IComparisionChartResponse = {
-          NetworthActiveYear: res[0].body
-        };
-        return {
-          type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
-          payload: obj
-        };
-      }
-      return {
-        type: ''
-      };
-    });
-
-  @Effect()
   public GetComparisionChartLastYear$: Observable<Action> = this.action$
-
     .ofType(HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR)
     .switchMap(action => {
       let revenueModel: GroupHistoryRequest = {
@@ -197,6 +174,28 @@ export class HomeActions {
         };
         return {
           type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
+          payload: obj
+        };
+      }
+      return {
+        type: ''
+      };
+    });
+
+  @Effect()
+  public GetNetworthChartActiveYear$: Observable<Action> = this.action$
+    .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR)
+    .switchMap(action => {
+      return Observable.zip(
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+      );
+    }).map((res) => {
+      if (res[0].status === 'success') {
+        let obj: IComparisionChartResponse = {
+          NetworthActiveYear: res[0].body
+        };
+        return {
+          type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
           payload: obj
         };
       }
