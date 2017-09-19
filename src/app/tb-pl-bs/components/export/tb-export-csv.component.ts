@@ -39,7 +39,7 @@ export interface Total {
   providers: [RecTypePipe]
 })
 export class TbExportCsvComponent implements OnInit, OnDestroy {
-  @Input() selectedCompany: ComapnyResponse;
+  @Input() public selectedCompany: ComapnyResponse;
   @Output() public tbExportCsvEvent = new EventEmitter<string>();
 
   public showCsvDownloadOptions: boolean;
@@ -58,6 +58,13 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     });
   }
 
+  public ngOnInit() {
+    //
+  }
+
+  public ngOnDestroy() {
+    //
+  }
 
   public downloadCSV(value: string) {
     this.showCsvDownloadOptions = false;
@@ -83,7 +90,8 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
   }
 
   private getIEVersion(): number {
-    let Idx, sAgent;
+    let Idx;
+    let sAgent;
     sAgent = window.navigator.userAgent;
     Idx = sAgent.indexOf('MSIE');
     if (Idx > 0) {
@@ -108,14 +116,5 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
       saveAs(data, fileName);
     }
   }
-
-  public ngOnInit() {
-    //
-  }
-
-  public ngOnDestroy() {
-    //
-  }
-
 
 }
