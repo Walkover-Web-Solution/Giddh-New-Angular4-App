@@ -19,6 +19,7 @@ import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOpt
 
 export class ComparisionChartComponent implements OnInit {
   @Input() public refresh: boolean = false;
+  @Input() public showLastYear: boolean = false;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -130,23 +131,25 @@ export class ComparisionChartComponent implements OnInit {
       if (p.name === str) {
         p.visible = !p.visible;
       }
-      if (p.name === str) {
-        p.visible = !p.visible;
-      }
-      if (p.name === str) {
-        p.visible = !p.visible;
-      }
-      if (p.name === 'LY Expense' && str === 'LY') {
-        p.visible = !p.visible;
-      }
-      if (p.name === 'LY Revenue' && str === 'LY') {
-        p.visible = !p.visible;
-      }
-      if (p.name === 'LY Profit/Loss' && str === 'LY') {
-        p.visible = !p.visible;
+    });
+    this.ShowLastYear();
+    this.generateCharts();
+  }
+  public LyToggle() {
+    this.showLastYear = !this.showLastYear;
+    this.ShowLastYear();
+    this.generateCharts();
+  }
+  public ShowLastYear() {
+    _.each(this.AllSeries, (p) => {
+      if (p.visible && p.name.indexOf('LY ') === -1) {
+        this.AllSeries.forEach(q => {
+          if (q.name === 'LY ' + p.name) {
+            q.visible = this.showLastYear;
+          }
+        });
       }
     });
-    this.generateCharts();
   }
   public generateCharts() {
     _.each(this.AllSeries, (p) => {

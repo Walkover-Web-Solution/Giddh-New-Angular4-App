@@ -89,6 +89,7 @@ export interface IComparisionChartResponse {
   ExpensesLastYear?: any[];
   ExpensesLastYearMonthly?: any[];
   ExpensesLastYearYearly?: any[];
+  // networth
   NetworthActiveYear?: any;
   NetworthActiveYearMonthly?: any[];
   NetworthActiveYearYearly?: any[];
