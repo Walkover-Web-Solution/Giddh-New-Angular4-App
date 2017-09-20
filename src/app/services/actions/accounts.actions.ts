@@ -150,7 +150,7 @@ export class AccountsAction {
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS)
-    .switchMap(action => this._accountService.GetAccountDetails(action.payload))
+    .switchMap(action => this._accountService.GetAccountDetailsV2(action.payload))
     .map(response => {
       return this.getAccountDetailsResponse(response);
     });
@@ -491,7 +491,7 @@ export class AccountsAction {
     };
   }
 
-  public getAccountDetailsResponse(value: BaseResponse<AccountResponse, string>): Action {
+  public getAccountDetailsResponse(value: BaseResponse<AccountResponseV2, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value

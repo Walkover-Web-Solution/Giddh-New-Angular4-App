@@ -37,7 +37,8 @@ import {
   AccountSharedWithResponse,
   AccountsTaxHierarchyResponse,
   AccountUnMergeRequest,
-  ShareAccountRequest
+  ShareAccountRequest,
+  AccountResponseV2
 } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -59,7 +60,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @Output() public ShowForm: EventEmitter<boolean> = new EventEmitter(false);
   @Input() public columnsRef: GroupAccountSidebarVM;
   @Input() public height: number;
-  public activeAccount$: Observable<AccountResponse>;
+  public activeAccount$: Observable<AccountResponseV2>;
   public isTaxableAccount$: Observable<boolean>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
   public shareAccountForm: FormGroup;
@@ -329,7 +330,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
     });
     this.activeAccountTaxHierarchy$.subscribe((a) => {
-      let activeAccount: AccountResponse = null;
+      let activeAccount: AccountResponseV2 = null;
       this.store.take(1).subscribe(s => {
         if (s.groupwithaccounts) {
           activeAccount = s.groupwithaccounts.activeAccount;
@@ -343,7 +344,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     });
 
     this.activeGroupTaxHierarchy$.subscribe((a) => {
-      let activeAccount: AccountResponse = null;
+      let activeAccount: AccountResponseV2 = null;
       let activeGroup: GroupResponse = null;
       this.store.take(1).subscribe(s => {
         if (s.groupwithaccounts) {
@@ -483,7 +484,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public taxHierarchy() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     let activeGroup: GroupResponse = null;
     this.store.take(1).subscribe(s => {
       if (s.groupwithaccounts) {
@@ -519,7 +520,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public applyTax() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     let activeGroup: GroupResponse = null;
     this.store.take(1).subscribe(s => {
       if (s.groupwithaccounts) {
@@ -604,7 +605,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public deleteMergedAccount() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let obj = new AccountUnMergeRequest();
     obj.uniqueNames = [this.selectedAccountForDelete];
@@ -641,7 +642,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public mergeAccounts() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let finalData: AccountMergeRequest[] = [];
     if (this.selectedaccountForMerge.length) {
@@ -670,7 +671,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveMergeAccountTo() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     let obj = new AccountUnMergeRequest();
     obj.uniqueNames = [this.setAccountForMove];
