@@ -3891,3 +3891,7 @@ input[type='checkbox'][disabled]:after {
     color: #ff5f00;
     font-size: 16px;
 }
+.active-toggle-btn {
+  color: white;
+  background-color: #ff5f00;
+}
