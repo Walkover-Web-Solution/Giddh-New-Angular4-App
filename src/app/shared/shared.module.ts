@@ -25,7 +25,8 @@ import {
   AccountsSideBarComponent,
   CompanyAddComponent,
   GroupsAccountSidebarComponent,
-  ManageGroupsAccountsComponent
+  ManageGroupsAccountsComponent,
+  AccountUpdateNewComponent
 } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
 import { TagsModule } from './theme/tags/tags.module';
@@ -84,7 +85,7 @@ export function provideConfig() {
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
-    AccountAddComponent, AccountAddNewComponent, AccountUpdateComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
+    AccountAddComponent, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
     TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective,
     DisableFormFieldDirective],

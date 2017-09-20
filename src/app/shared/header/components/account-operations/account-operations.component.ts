@@ -32,7 +32,7 @@ import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import {
   AccountMergeRequest,
   AccountMoveRequest,
-  AccountRequest,
+  AccountRequest, AccountRequestV2,
   AccountResponse,
   AccountSharedWithResponse,
   AccountsTaxHierarchyResponse,
@@ -269,8 +269,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (this.columnsRef) {
           if (this.columnsRef.columns[1]) {
             let col = this.columnsRef.columns[1].uniqueName;
-            this.isGstEnabledAcc = col === 'sundrycreditors' || col === 'sundrydebtors';
-            this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'operatingcost' || col === 'indirectexpenses';
+            this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+            this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
           }
         }
       }
@@ -682,8 +682,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.hideMoveMergedAccountModal();
   }
 
-  public addNewGroup(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
-    this.store.dispatch(this.accountsAction.createAccount(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
+  public addNewAccount(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
+    this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
   }
 
   public ngOnDestroy() {
