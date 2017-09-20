@@ -64,7 +64,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['CREDIT', [Validators.required]],
+      openingBalanceType: ['', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -168,14 +168,16 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
 
   public openingBalanceTypeChnaged(type: string) {
-    this.addAccountForm.get('openingBalanceType').patchValue(type);
+    if (this.addAccountForm.get('openingBalance').value > 0) {
+      this.addAccountForm.get('openingBalanceType').patchValue(type);
+    }
   }
   public showLessGst() {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
   public submit() {
-    console.log(this.addAccountForm.value);
+    //
   }
 
   public ngOnDestroy() {
