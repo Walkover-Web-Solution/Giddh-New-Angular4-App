@@ -302,20 +302,12 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let data = action.payload as IComparisionChartResponse;
       let revenueActiveYear = processDataForGroupHistory(data.revenueActiveYear);
       let ExpensesActiveYear = processDataForGroupHistory(data.ExpensesActiveYear);
-      let ProfitLossActiveYear = processDataForProfitLoss(data.ProfitLossActiveYear);
+      // debugger;
+      // let ProfitLossActiveYear = processDataForProfitLoss(data.Net);
       let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
       return Object.assign({}, state, {
         networth_comparisionChart: {
           ...state.networth_comparisionChart,
-          revenueActiveYear,
-          revenueActiveYearMonthly: revenueActiveYear.map(p => p.closingBalance.amount),
-          revenueActiveYearYearly: revenueActiveYear.map(p => p.total.amount),
-          ExpensesActiveYear,
-          ExpensesActiveYearMonthly: ExpensesActiveYear.map(p => p.closingBalance.amount),
-          ExpensesActiveYearYearly: ExpensesActiveYear.map(p => p.total.amount),
-          ProfitLossActiveYear,
-          ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
-          ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
           NetworthActiveYear,
           NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
           NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
@@ -326,20 +318,12 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       let data = action.payload as IComparisionChartResponse;
       let revenueLastYear = processDataForGroupHistory(data.revenueLastYear);
       let ExpensesLastYear = processDataForGroupHistory(data.ExpensesLastYear);
-      let ProfitLossLastYear = processDataForProfitLoss(data.ProfitLossLastYear);
+      // debugger;
+      // let ProfitLossLastYear = processDataForProfitLoss(data.NetworthLastYear);
       let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
       return Object.assign({}, state, {
         networth_comparisionChart: {
           ...state.networth_comparisionChart,
-          revenueLastYear,
-          revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
-          revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
-          ExpensesLastYear,
-          ExpensesLastYearMonthly: ExpensesLastYear.map(p => p.closingBalance.amount),
-          ExpensesLastYearYearly: ExpensesLastYear.map(p => p.total.amount),
-          ProfitLossLastYear,
-          ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
-          ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
           NetworthLastYear,
           NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
           NetworthLastYearYearly: NetworthLastYear.yearlyBalances,

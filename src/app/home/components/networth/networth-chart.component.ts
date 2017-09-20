@@ -89,6 +89,10 @@ export class NetworthChartComponent implements OnInit {
       }];
     }
   }
+  public refreshChart() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
   public fetchChartData() {
     this.requestInFlight = true;
     this.networthData = [];

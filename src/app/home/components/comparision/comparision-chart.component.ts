@@ -20,6 +20,9 @@ import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOpt
 export class ComparisionChartComponent implements OnInit {
   @Input() public refresh: boolean = false;
   @Input() public showLastYear: boolean = false;
+  @Input() public showExpense: boolean = false;
+  @Input() public showRevenue: boolean = false;
+  @Input() public showProfitLoss: boolean = true;
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -43,27 +46,27 @@ export class ComparisionChartComponent implements OnInit {
     this.AllSeries = [{
       name: 'Expense',
       data: this.expenseData,
-      visible: true
+      visible: this.showExpense
     }, {
       name: 'Revenue',
       data: [],
-      visible: true
+      visible: this.showRevenue
     }, {
       name: 'Profit/Loss',
       data: [],
-      visible: true
+      visible: this.showProfitLoss
     }, {
       name: 'LY Expense',
       data: [],
-      visible: true
+      visible: (this.showExpense && this.showLastYear)
     }, {
       name: 'LY Revenue',
       data: [],
-      visible: true
+      visible: (this.showRevenue && this.showLastYear)
     }, {
       name: 'LY Profit/Loss',
       data: [],
-      visible: true
+      visible: (this.showProfitLoss && this.showLastYear)
     }];
   }
 
@@ -114,7 +117,6 @@ export class ComparisionChartComponent implements OnInit {
     this.expenseData = [];
     this.requestInFlight = true;
     if (this.activeFinancialYear) {
-
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
         this.activeFinancialYear.financialYearStarts,
         this.activeFinancialYear.financialYearEnds, this.refresh));
@@ -127,11 +129,31 @@ export class ComparisionChartComponent implements OnInit {
     this.refresh = false;
   }
   public toggle(str: string) {
-    _.each(this.AllSeries, (p) => {
-      if (p.name === str) {
-        p.visible = !p.visible;
-      }
-    });
+    if (str === 'Profit/Loss') {
+      this.showProfitLoss = !this.showProfitLoss;
+    } else if (str === 'Expense') {
+      this.showExpense = !this.showExpense;
+    } else if (str === 'Revenue') {
+      this.showRevenue = !this.showRevenue;
+    }
+    // _.each(this.AllSeries, (p) => {
+    //   if (p.name === 'Profit/Loss' && this.showProfitLoss) {
+    //     p.visible = true;
+    //   } else {
+    //     p.visible = false;
+    //   }
+    //   if (p.name === 'Expense' && this.showExpense) {
+    //     p.visible = true;
+    //   } else {
+    //     p.visible = false;
+    //   }
+    //   if (p.name === 'Revenue' && this.showRevenue) {
+    //     p.visible = true;
+    //   } else {
+    //     p.visible = false;
+    //   }
+
+    // });
     this.ShowLastYear();
     this.generateCharts();
   }
@@ -141,15 +163,31 @@ export class ComparisionChartComponent implements OnInit {
     this.generateCharts();
   }
   public ShowLastYear() {
-    _.each(this.AllSeries, (p) => {
-      if (p.visible && p.name.indexOf('LY ') === -1) {
-        this.AllSeries.forEach(q => {
-          if (q.name === 'LY ' + p.name) {
-            q.visible = this.showLastYear;
-          }
-        });
-      }
-    });
+    this.AllSeries = [{
+      name: 'Expense',
+      data: this.expenseData,
+      visible: this.showExpense
+    }, {
+      name: 'Revenue',
+      data: [],
+      visible: this.showRevenue
+    }, {
+      name: 'Profit/Loss',
+      data: [],
+      visible: this.showProfitLoss
+    }, {
+      name: 'LY Expense',
+      data: [],
+      visible: (this.showExpense && this.showLastYear)
+    }, {
+      name: 'LY Revenue',
+      data: [],
+      visible: (this.showRevenue && this.showLastYear)
+    }, {
+      name: 'LY Profit/Loss',
+      data: [],
+      visible: (this.showProfitLoss && this.showLastYear)
+    }];
   }
   public generateCharts() {
     _.each(this.AllSeries, (p) => {
