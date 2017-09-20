@@ -141,13 +141,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
 
     // get discount accounts list
-    this._groupService.GetFlattenGroupsAccounts('discount').subscribe(data => {
-      if (data.status === 'success') {
-        this.lc.discountAccountsList = data.body.results;
-      } else {
-        this.lc.discountAccountsList = [];
-      }
-    });
+    // this._groupService.GetFlattenGroupsAccounts('discount').subscribe(data => {
+    //   if (data.status === 'success') {
+    //     this.lc.discountAccountsList = data.body.results;
+    //   } else {
+    //     this.lc.discountAccountsList = [];
+    //   }
+    // });
+    this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
+    // get company taxes
+    this.store.dispatch(this._companyActions.getTax());
   }
 
   public selectCompoundEntry(txn: ITransactionItem) {
@@ -236,9 +239,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.distinct().subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        this._router.navigate(['/dummy'], { skipLocationChange: true }).then(() => {
-          this._router.navigate(['/pages', 'ledger', this.lc.accountUnq]);
-        });
+        this.trxRequest = new TransactionsRequest();
+        this.trxRequest.accountUniqueName = this.lc.accountUnq;
+        this.getTransactionData();
+        this.resetBlankTransaction();
       }
     });
 
