@@ -86,7 +86,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public initialGstDetailsForm(): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
-      address: [''],
+      address: ['', Validators.maxLength(120)],
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
