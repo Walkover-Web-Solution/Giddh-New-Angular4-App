@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { digitsOnly } from '../../../helpers/customValidationHelper';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AppState } from '../../../../store/roots';
@@ -16,7 +16,27 @@ import { Select2Component } from '../../../theme/select2/select2.component';
 
 @Component({
   selector: 'account-add-new',
-  templateUrl: 'account-add-new.component.html'
+  templateUrl: 'account-add-new.component.html',
+  styles: [`
+  .hsn-sac{
+    left: 51px;
+      position: relative;
+  }
+  .hsn-sac-radio{
+    top: 34px;
+      position: relative;
+      left: -10px;
+  }
+  .hsn-sac-w-m-input{
+    width: 144px;
+      margin-left: 50px;
+  }
+  .hsn-sac-group{
+    position: relative;
+      top: -75px;
+      left: 197px;
+  }
+  `]
 })
 
 export class AccountAddNewComponent implements OnInit, OnDestroy {
@@ -71,15 +91,37 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       companyName: [''],
       attentionTo: [''],
       description: [''],
-      addresses: this._fb.array([
+      addresses: this.isGstEnabledAcc ? this._fb.array([
         this.initialGstDetailsForm()
-      ]),
+      ]) : null,
       country: this._fb.group({
         countryCode: ['']
       }),
       hsnOrSac: [''],
-      hsnNumber: [{ value: '', disabled: false }, []],
-      sacNumber: [{ value: '', disabled: false }, []]
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }]
+    });
+
+    this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
+      const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
+      const sac: AbstractControl = this.addAccountForm.get('sacNumber');
+      if (a === 'hsn') {
+        // hsn.reset();
+        sac.reset();
+        hsn.enable();
+        sac.disable();
+      } else {
+        // sac.reset();
+        hsn.reset();
+        sac.enable();
+        hsn.disable();
+      }
+    });
+
+    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
+      if (a) {
+        this.addAccountForm.get('companyName').patchValue(a);
+      }
     });
   }
 
@@ -177,7 +219,25 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.moreGstDetailsVisible = false;
   }
   public submit() {
-    //
+    let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
+
+    if (this.isHsnSacEnabledAcc) {
+      delete accountRequest['country'];
+      delete accountRequest['addresses'];
+      delete accountRequest['hsnOrSac'];
+      delete accountRequest['mobileNo'];
+      delete accountRequest['email'];
+      delete accountRequest['attentionTo'];
+    } else {
+      delete accountRequest['hsnOrSac'];
+      delete accountRequest['hsnNumber'];
+      delete accountRequest['sacNumber'];
+    }
+
+    this.submitClicked.emit({
+      activeGroupUniqueName: this.activeGroupUniqueName,
+      accountRequest: this.addAccountForm.value
+    });
   }
 
   public ngOnDestroy() {
