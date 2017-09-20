@@ -1656,7 +1656,7 @@ li:last-child .angular-ui-tree-handle {
 }
 
 .tb-head th {
-    padding: 5px 10px !important;
+    padding: 8px !important;
     border-right: 1px solid #fff;
 }
 
@@ -2196,15 +2196,17 @@ table.borderless th {
     cursor: pointer;
 }
 
-.input-group .glyphicon.glyphicon-remove {
+
+/* .input-group .glyphicon.glyphicon-remove {
     position: absolute;
     right: 10px;
     top: 9px;
     z-index: 9;
-}
+} */
 
 .table-container .row {
     margin: 0px;
+    padding: 0;
 }
 
 .table-container section {
@@ -2221,9 +2223,14 @@ table.borderless th {
     padding-right: 20px;
 }
 
-.table-container section div {
+.table-container section div>div {
     margin: 0;
-    padding: 0;
+    border-right: 1px solid #ddd;
+    font-weight: 400;
+    padding: 8px 8px 8px 0;
+    font-size: 14px;
+    line-height: normal;
+    text-transform: capitalize;
 }
 
 .table-container>.row {
@@ -2235,7 +2242,7 @@ table.borderless th {
 
 .table-container div.row {
     border-bottom: 1px solid #e0e0e0;
-    border-right: 1px solid #e0e0e0;
+    /* border-right: 1px solid #e0e0e0; */
 }
 
 .table-container .isHidden {
@@ -2247,23 +2254,23 @@ table.borderless th {
 }
 
 .trial-balance.table-container>div>section {
-    border-left: 10px solid #e0e0e0;
+    border-left: 7px solid #e0e0e0;
 }
 
 .table-container>div>section.assets {
-    border-left: 10px solid #FFD800;
+    border-left: 7px solid #FFD800;
 }
 
 .table-container>div>section.liabilities {
-    border-left: 10px solid #587058;
+    border-left: 7px solid #587058;
 }
 
 .table-container>div>section.income {
-    border-left: 10px solid #6495ED;
+    border-left: 7px solid #6495ED;
 }
 
 .table-container>div>section.expenses {
-    border-left: 10px solid #E86850;
+    border-left: 7px solid #E86850;
 }
 
 .no-data {
@@ -2356,7 +2363,7 @@ table:focus {
 /*tbpl list*/
 
 .tbplList .list-inline {
-    line-height: 34px;
+    line-height: normal;
 }
 
 .tbplList .circle {
