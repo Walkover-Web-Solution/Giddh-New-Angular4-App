@@ -112,7 +112,6 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   public filterData() {
     let request = this.filterForm.value as TrialBalanceRequest;
-    request.selectedDateOption = this.selectedDateOption;
     this.onPropertyChanged.emit(this.filterForm.value);
   }
 

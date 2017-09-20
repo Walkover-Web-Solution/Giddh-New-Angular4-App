@@ -26,7 +26,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public revenueChartData$: Observable<IRevenueChartClosingBalanceResponse>;
+  @Input() public revenueChartData: Observable<IRevenueChartClosingBalanceResponse>;
   public accountStrings: AccountChartDataLastCurrentYear[] = [];
   public activeYearAccounts: IChildGroups[] = [];
   public lastYearAccounts: IChildGroups[] = [];
@@ -36,7 +36,6 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.revenueChartData$ = this.store.select(p => p.home.revenueChart).takeUntil(this.destroyed$);
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
   }
@@ -70,7 +69,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.revenueChartData$.subscribe(rvn => {
+    this.revenueChartData.subscribe(rvn => {
       if (rvn) {
         if (rvn.revenuefromoperationsActiveyear && rvn.otherincomeActiveyear) {
           let revenuefromoperationsAccounts = [].concat.apply([], rvn.revenuefromoperationsActiveyear.childGroups);
