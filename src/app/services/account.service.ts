@@ -2,7 +2,11 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest, AccountSharedWithResponse, FlattenAccountsResponse, AccountsTaxHierarchyResponse } from '../models/api-models/Account';
+import {
+  AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest,
+  AccountSharedWithResponse, FlattenAccountsResponse, AccountsTaxHierarchyResponse,
+  AccountRequestV2, AccountResponseV2
+} from '../models/api-models/Account';
 import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
@@ -279,5 +283,21 @@ export class AccountService implements OnInit {
       data.queryString = { accountUniqueName };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e));
+  }
+  public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(ACCOUNTS_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model)
+      .map((res) => {
+        let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res.json();
+        data.request = model;
+        data.queryString = { groupUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName }));
   }
 }
