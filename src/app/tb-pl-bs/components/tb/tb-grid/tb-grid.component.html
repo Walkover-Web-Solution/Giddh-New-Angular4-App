@@ -14,20 +14,20 @@
             <table class="tb-head table basic">
                 <thead>
                     <tr>
-                        <th class="col-xs-4">Particular</th>
-                        <th class="col-xs-2 text-right">Opening Bal</th>
-                        <th class="col-xs-4 text-center">
+                        <th style="width: 33.5%;" class="">Particular</th>
+                        <th style="width: 16.5%;" class="text-right">Opening Bal</th>
+                        <th style="width: 33.4%;" class="text-center">
                             Transactions
-                            <table class="col-xs-12">
+                            <table class="width100">
                                 <thead>
                                     <tr>
-                                        <th class="col-xs-6 text-right">Debit (Dr.)</th>
-                                        <th class="col-xs-6 text-right">Credit (Cr.)</th>
+                                        <th style="width: 49.8%;" class="text-right">Debit (Dr.)</th>
+                                        <th style="width: 49.8%;" class="text-right">Credit (Cr.)</th>
                                     </tr>
                                 </thead>
                             </table>
                         </th>
-                        <th class="col-xs-2 text-right">Closing Bal</th>
+                        <th class="text-right">Closing Bal</th>
                     </tr>
                 </thead>
             </table>
@@ -59,22 +59,14 @@
                     <table class="table basic" style="margin-bottom:0;">
                         <thead>
                             <tr>
-                                <th class="col-xs-4">
+                                <th class="" style="width: 33.5%;">
                                     <span class="">Grand Total</span>
                                 </th>
-                                <th class="col-xs-2  text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
-                                <th class="col-xs-4">
-                                    <table class="col-xs-12">
-                                        <thead>
-                                            <tr>
-                                                <th class="col-xs-6 text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
-                                                <th class="col-xs-6 text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </th>
-                                <th class="col-xs-2  text-right">
-                                    <span class="pdR1">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
+                                <th class="text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
+                                <th class="text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
+                                <th class="text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
+                                <th class="text-right">
+                                    <span class="">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
                                 </th>
                             </tr>
                         </thead>
