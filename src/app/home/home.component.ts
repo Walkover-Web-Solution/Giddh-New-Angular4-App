@@ -47,10 +47,10 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.compare.fetchChartData();
 
     this.expence.refresh = true;
-    this.expence.refreshData();
+    this.expence.fetchChartData();
 
     this.revenue.refresh = true;
-    this.revenue.refreshData();
+    this.revenue.fetchChartData();
 
     this.history.requestInFlight = true;
     // this.history.refresh = true;

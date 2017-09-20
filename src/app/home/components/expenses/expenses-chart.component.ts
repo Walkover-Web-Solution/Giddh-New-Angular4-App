@@ -63,7 +63,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          if (activeCmpUniqueName) { this.refreshData(); }
+          if (activeCmpUniqueName) { this.fetchChartData(); }
         }
       }
     });
@@ -71,7 +71,6 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
     this.expensesChartData$.subscribe(exp => {
       if (exp) {
         if (exp.operatingcostActiveyear && exp.indirectexpensesActiveyear) {
-          debugger;
           let indirectexpensesGroups = [].concat.apply([], exp.indirectexpensesActiveyear.childGroups);
           let operatingcostGroups = [].concat.apply([], exp.operatingcostActiveyear.childGroups);
           let accounts = _.unionBy(indirectexpensesGroups as IChildGroups[], operatingcostGroups as IChildGroups[]) as IChildGroups[];
@@ -100,7 +99,11 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       ];
     });
   }
-  public refreshData() {
+  public refreshChart() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
+  public fetchChartData() {
     this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
 

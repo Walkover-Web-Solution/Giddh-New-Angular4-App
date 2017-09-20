@@ -65,7 +65,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          if (activeCmpUniqueName) { this.refreshData(); }
+          if (activeCmpUniqueName) { this.fetchChartData(); }
         }
       }
     });
@@ -100,7 +100,11 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
       ];
     });
   }
-  public refreshData() {
+  public refreshChart() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
+  public fetchChartData() {
     this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getRevenueChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts,
       this.activeFinancialYear.financialYearEnds, this.refresh));
