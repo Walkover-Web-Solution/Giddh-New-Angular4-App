@@ -56,7 +56,7 @@ export class NetworthChartComponent implements OnInit {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public comparisionChartData$: Observable<IComparisionChartResponse>;
+  @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
   public requestInFlight = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
@@ -66,7 +66,6 @@ export class NetworthChartComponent implements OnInit {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.comparisionChartData$ = this.store.select(p => p.home.networth_comparisionChart).takeUntil(this.destroyed$);
     this.options = this.monthlyOption;
   }
 
@@ -102,7 +101,7 @@ export class NetworthChartComponent implements OnInit {
     this.refresh = false;
   }
   public ngOnInit() {
-    this.comparisionChartData$
+    this.comparisionChartData
       .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
       // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
       .subscribe(p => {

@@ -25,7 +25,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
+  @Input() public expensesChartData: Observable<IExpensesChartClosingBalanceResponse>;
   public accountStrings: AccountChartDataLastCurrentYear[] = [];
   public activeYearAccounts: IChildGroups[] = [];
   public lastYearAccounts: IChildGroups[] = [];
@@ -34,7 +34,6 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.expensesChartData$ = this.store.select(p => p.home.expensesChart).takeUntil(this.destroyed$);
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
   }
@@ -68,7 +67,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.expensesChartData$.subscribe(exp => {
+    this.expensesChartData.subscribe(exp => {
       if (exp) {
         if (exp.operatingcostActiveyear && exp.indirectexpensesActiveyear) {
           let indirectexpensesGroups = [].concat.apply([], exp.indirectexpensesActiveyear.childGroups);

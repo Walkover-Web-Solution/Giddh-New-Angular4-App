@@ -39,3 +39,17 @@ export const HOME = {
     REST_BANKACCOUNT: 'REST_BANKACCOUNT'
   }
 };
+
+export enum CHART_CALLED_FROM {
+  PAGEINIT,
+  HISTORY,
+  COMPARISION,
+  NETWORTH
+}
+
+export enum API_TO_CALL {
+  REVENUE,
+  EXPENCE,
+  PL,
+  LY
+}

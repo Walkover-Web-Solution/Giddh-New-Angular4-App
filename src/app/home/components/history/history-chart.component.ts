@@ -28,7 +28,7 @@ export class HistoryChartComponent implements OnInit {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public comparisionChartData$: Observable<IComparisionChartResponse>;
+  @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
   public requestInFlight = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
@@ -42,7 +42,7 @@ export class HistoryChartComponent implements OnInit {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.comparisionChartData$ = this.store.select(p => p.home.history_comparisionChart).takeUntil(this.destroyed$);
+
     this.AllSeries = [{
       name: 'Expense',
       data: this.expenseData,
@@ -72,16 +72,16 @@ export class HistoryChartComponent implements OnInit {
   public fetchChartData() {
     this.requestInFlight = true;
     this.expenseData = [];
-    if (this.activeFinancialYear) {
-      this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-        this.activeFinancialYear.financialYearStarts,
-        this.activeFinancialYear.financialYearEnds, this.refresh));
-    }
-    if (this.lastFinancialYear) {
-      this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
-        this.lastFinancialYear.financialYearStarts,
-        this.lastFinancialYear.financialYearEnds, this.refresh));
-    }
+    // if (this.activeFinancialYear) {
+    //   this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+    //     this.activeFinancialYear.financialYearStarts,
+    //     this.activeFinancialYear.financialYearEnds, this.refresh));
+    // }
+    // if (this.lastFinancialYear) {
+    //   this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
+    //     this.lastFinancialYear.financialYearStarts,
+    //     this.lastFinancialYear.financialYearEnds, this.refresh));
+    // }
     this.refresh = false;
   }
 
@@ -176,7 +176,7 @@ export class HistoryChartComponent implements OnInit {
   }
   public ngOnInit() {
     //
-    this.comparisionChartData$
+    this.comparisionChartData
       .skipWhile(p => (isNullOrUndefined(p)))
       // .distinctUntilChanged((p, q) => p.ExpensesActiveYearly === this.expenseData)
       .subscribe(p => {
