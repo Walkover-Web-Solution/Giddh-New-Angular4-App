@@ -13,6 +13,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public showClearSearch: boolean;
   @Input() public search: string = '';
   @Input() public bsData: BalanceSheetData;
+  @Input() public padding: string;
 
   @Input()
   public set expandAll(value: boolean) {

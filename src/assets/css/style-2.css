@@ -3891,3 +3891,40 @@ input[type='checkbox'][disabled]:after {
     color: #ff5f00;
     font-size: 16px;
 }
+
+.table-container {
+    background: #fff;
+}
+
+.table-container section div .group {
+    font-family: 'LatoWebSemibold';
+    text-transform: uppercase;
+}
+
+.table-container section div:last-child {
+    border-right: 0;
+}
+
+.success {
+    color: #3fab63;
+}
+
+.danger {
+    color: #EF5350;
+}
+
+.table-container thead tr th:first-child {
+    border-left: 6px solid #525252;
+}
+
+.table-container .account {
+    background: #f4f5f8;
+}
+
+.table-container>div>section>.tb-pl-bs-grid-row>div:nth-child(1) {
+    padding-left: 7px !important;
+}
+
+.table-container .profitLoss section div>div {
+    border-right: 0;
+}
