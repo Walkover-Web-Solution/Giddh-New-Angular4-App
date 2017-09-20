@@ -48,7 +48,7 @@ export interface CurrentGroupAndAccountState {
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
   activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
-  activeAccount: AccountResponse;
+  activeAccount: AccountResponseV2;
   fetchingGrpUniqueName: boolean;
   isCreateGroupInProcess?: boolean;
   isCreateGroupSuccess?: boolean;
