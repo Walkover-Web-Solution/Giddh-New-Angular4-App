@@ -10,6 +10,8 @@ import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, AfterViewIn
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
+import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'home',  // <home></home>
@@ -17,6 +19,11 @@ import { CompanyActions } from '../services/actions/company.actions';
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
+  public revenueChartData$: Observable<IRevenueChartClosingBalanceResponse>;
+  public networthComparisionChartData$: Observable<IComparisionChartResponse>;
+  public historyComparisionChartData$: Observable<IComparisionChartResponse>;
+  public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
+  public comparisionChartData$: Observable<IComparisionChartResponse>;
   @ViewChild('liveaccount') public liveaccount: LiveAccountsComponent;
   @ViewChild('expence') public expence: ExpensesChartComponent;
   @ViewChild('revenue') public revenue: RevenueChartComponent;
@@ -25,6 +32,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   @ViewChild('networth') public networth: NetworthChartComponent;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef) {
+    this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
+    this.expensesChartData$ = this.store.select(p => p.home.expensesChart).takeUntil(this.destroyed$);
+    this.historyComparisionChartData$ = this.store.select(p => p.home.history_comparisionChart).takeUntil(this.destroyed$);
+    this.networthComparisionChartData$ = this.store.select(p => p.home.networth_comparisionChart).takeUntil(this.destroyed$);
+    this.revenueChartData$ = this.store.select(p => p.home.revenueChart).takeUntil(this.destroyed$);
     //
   }
 
@@ -34,7 +46,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'home';
-
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 

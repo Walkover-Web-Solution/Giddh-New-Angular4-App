@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { HOME } from './home.const';
+import { HOME, CHART_CALLED_FROM, API_TO_CALL } from './home.const';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../toaster.service';
 import { DashboardService } from '../../dashboard.service';
@@ -11,7 +11,7 @@ import {
   IExpensesChartClosingBalanceResponse,
   IRevenueChartClosingBalanceResponse
 } from '../../../models/interfaces/dashboard.interface';
-import { RefreshBankAccountResponse, GroupHistoryRequest, BankAccountsResponse } from '../../../models/api-models/Dashboard';
+import { RefreshBankAccountResponse, GroupHistoryRequest, BankAccountsResponse, GroupHistoryResponse, DashboardResponse } from '../../../models/api-models/Dashboard';
 import * as _ from 'lodash';
 @Injectable()
 
@@ -159,23 +159,42 @@ export class HomeActions {
         groups: ['indirectexpenses', 'operatingcost']
       };
 
+      let ExpenceResp: Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> = new Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>>
+        ((o) => { o.next({ status: 'success', body: { groups: [] } }); });
+
+      let RevenueResp: Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> = new Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>>
+        ((o) => { o.next({ status: 'success', body: { groups: [] } }); });
+      let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next(null); });
+      let a: Observable<Action> = new Observable<Action>((o) => { o.next(action); });
+      (action.payload.ApiToCall as API_TO_CALL[]).forEach(element => {
+        if (element === API_TO_CALL.EXPENCE) {
+          ExpenceResp = this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh);
+        }
+        if (element === API_TO_CALL.REVENUE) {
+          RevenueResp = this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh);
+        }
+        if (element === API_TO_CALL.PL) {
+          PlResp = this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh);
+        }
+      });
       return Observable.zip(
-        this._dashboardService.GetGroupHistory(revenueModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
-        this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
-        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        RevenueResp, ExpenceResp, PlResp, a
       );
     }).map((res) => {
-      if (res[0].status === 'success' && res[1].status === 'success') {
-        let obj: IComparisionChartResponse = {
-          revenueLastYear: res[0].body.groups,
-          ExpensesLastYear: res[1].body.groups,
-          ProfitLossLastYear: res[2].body,
-          NetworthLastYear: _.cloneDeep(res[2].body)
-        };
-        return {
-          type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
-          payload: obj
-        };
+      // debugger;
+      if ((res[3] as Action).payload.CalledFrom === CHART_CALLED_FROM.PAGEINIT) {
+        if ((res[0] === null || res[0].status === 'success') && (res[1] === null || res[1].status === 'success') && (res[2] === null || res[2].status === 'success')) {
+          let obj: IComparisionChartResponse = {
+            revenueActiveYear: res[0].body.groups,
+            ExpensesActiveYear: res[1].body.groups,
+            ProfitLossActiveYear: res[2].body,
+            NetworthActiveYear: _.cloneDeep(res[2].body)
+          };
+          return {
+            type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
+            payload: obj
+          };
+        }
       }
       return {
         type: ''
@@ -187,7 +206,7 @@ export class HomeActions {
     .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR)
     .switchMap(action => {
       return Observable.zip(
-        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh)
       );
     }).map((res) => {
       if (res[0].status === 'success') {
@@ -275,17 +294,17 @@ export class HomeActions {
     };
   }
 
-  public getComparisionChartDataOfLastYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
+  public getComparisionChartDataOfLastYear(fromDate: string = '', toDate: string = '', refresh: boolean = false, CalledFrom: CHART_CALLED_FROM, ApiToCall: API_TO_CALL[]): Action {
     return {
       type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR,
-      payload: { fromDate, toDate, refresh }
+      payload: { fromDate, toDate, refresh, CalledFrom, ApiToCall }
     };
   }
 
-  public getComparisionChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {
+  public getComparisionChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false, CalledFrom: CHART_CALLED_FROM, ApiToCall: API_TO_CALL[]): Action {
     return {
       type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR,
-      payload: { fromDate, toDate, refresh }
+      payload: { fromDate, toDate, refresh, CalledFrom, ApiToCall }
     };
   }
   public getNetworthChartDataOfActiveYear(fromDate: string = '', toDate: string = '', refresh: boolean = false): Action {

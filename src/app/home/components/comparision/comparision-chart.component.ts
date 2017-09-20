@@ -11,6 +11,7 @@ import * as _ from 'lodash';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
+import { CHART_CALLED_FROM, API_TO_CALL } from '../../../services/actions/home/home.const';
 
 @Component({
   selector: 'compare-chart',
@@ -23,12 +24,13 @@ export class ComparisionChartComponent implements OnInit {
   @Input() public showExpense: boolean = false;
   @Input() public showRevenue: boolean = false;
   @Input() public showProfitLoss: boolean = true;
+  public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public comparisionChartData$: Observable<IComparisionChartResponse>;
+  @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
   public requestInFlight = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
@@ -42,7 +44,6 @@ export class ComparisionChartComponent implements OnInit {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
     this.AllSeries = [{
       name: 'Expense',
       data: this.expenseData,
@@ -99,7 +100,7 @@ export class ComparisionChartComponent implements OnInit {
       }
     });
 
-    this.comparisionChartData$
+    this.comparisionChartData
       .skipWhile(p => (isNullOrUndefined(p)))
       // .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
       .subscribe(p => {
@@ -116,15 +117,21 @@ export class ComparisionChartComponent implements OnInit {
   public fetchChartData() {
     this.expenseData = [];
     this.requestInFlight = true;
+    this.ApiToCALL = [];
+    if (this.showExpense) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
+    if (this.showRevenue) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
+    if (this.showProfitLoss) { this.ApiToCALL.push(API_TO_CALL.PL); }
     if (this.activeFinancialYear) {
+      debugger;
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
         this.activeFinancialYear.financialYearStarts,
-        this.activeFinancialYear.financialYearEnds, this.refresh));
+        this.activeFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.COMPARISION, this.ApiToCALL));
     }
-    if (this.lastFinancialYear) {
+    if (this.lastFinancialYear && this.showLastYear) {
+      debugger;
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
-        this.lastFinancialYear.financialYearEnds, this.refresh));
+        this.lastFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.COMPARISION, this.ApiToCALL));
     }
     this.refresh = false;
   }
