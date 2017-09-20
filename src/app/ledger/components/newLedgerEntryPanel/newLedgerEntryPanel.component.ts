@@ -108,9 +108,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       text: 'Credit Note',
       id: 'credit note'
     }]);
-
-    this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
-    this.store.dispatch(this._companyActions.getTax());
   }
 
   public ngOnInit() {
