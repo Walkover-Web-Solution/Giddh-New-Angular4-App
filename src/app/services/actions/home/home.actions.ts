@@ -195,7 +195,7 @@ export class HomeActions {
           NetworthActiveYear: res[0].body
         };
         return {
-          type: HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
+          type: HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
           payload: obj
         };
       }
