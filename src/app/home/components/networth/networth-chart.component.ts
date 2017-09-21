@@ -101,14 +101,6 @@ export class NetworthChartComponent implements OnInit {
     this.refresh = false;
   }
   public ngOnInit() {
-    this.comparisionChartData
-      .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
-      // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
-      .subscribe(p => {
-        this.networthData = p.NetworthActiveYear;
-        this.generateCharts();
-        this.requestInFlight = false;
-      });
     this.companies$.subscribe(c => {
       if (c) {
         let activeCompany: ComapnyResponse;
@@ -129,7 +121,7 @@ export class NetworthChartComponent implements OnInit {
                 financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
                   let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
                   let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
-                  console.log(b.diff(a, 'days'));
+
                   return b.diff(a, 'days') < 0;
                 });
                 financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
@@ -145,5 +137,14 @@ export class NetworthChartComponent implements OnInit {
         // this.fetchChartData();
       }
     });
+    this.comparisionChartData
+      .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
+      // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
+      .subscribe(p => {
+        this.networthData = p.NetworthActiveYear;
+        this.generateCharts();
+        this.requestInFlight = false;
+      });
+
   }
 }

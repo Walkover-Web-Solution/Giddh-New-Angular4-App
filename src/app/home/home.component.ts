@@ -80,7 +80,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
                 financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
                   let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
                   let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
-                  console.log(b.diff(a, 'days'));
+
                   return b.diff(a, 'days') < 0;
                 });
                 financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
@@ -114,31 +114,53 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   public hardRefresh() {
+    let API = [API_TO_CALL.PL];
     if (this.activeFinancialYear) {
-      //
+      this.expence.refresh = true;
+      this.compare.requestInFlight = true;
+      this.history.requestInFlight = true;
+      this.networth.requestInFlight = true;
+      this.expence.fetchChartData();
+
+      this.revenue.refresh = true;
+      this.revenue.fetchChartData();
+      if (this.compare.showProfitLoss) { API.push(API_TO_CALL.PL); }
+      if (this.compare.showExpense) { API.push(API_TO_CALL.EXPENCE); }
+      if (this.compare.showRevenue) { API.push(API_TO_CALL.REVENUE); }
+
+      if (this.history.showProfitLoss) { API.push(API_TO_CALL.PL); }
+      if (this.history.showExpense) { API.push(API_TO_CALL.EXPENCE); }
+      if (this.history.showRevenue) { API.push(API_TO_CALL.REVENUE); }
+
+      // if(this.networth.)
+      let unique = API.filter((elem, index, self) => {
+        return index === self.indexOf(elem);
+      });
+      debugger;
+
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+        this.activeFinancialYear.financialYearStarts,
+        this.activeFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.PAGEINIT, unique));
+      API = [];
+      if (this.compare.showProfitLoss && this.compare.showLastYear) { API.push(API_TO_CALL.PL); }
+      if (this.compare.showExpense && this.compare.showLastYear) { API.push(API_TO_CALL.EXPENCE); }
+      if (this.compare.showRevenue && this.compare.showLastYear) { API.push(API_TO_CALL.REVENUE); }
+
+      if (this.history.showProfitLoss && this.history.showLastYear) { API.push(API_TO_CALL.PL); }
+      if (this.history.showExpense && this.history.showLastYear) { API.push(API_TO_CALL.EXPENCE); }
+      if (this.history.showRevenue && this.history.showLastYear) { API.push(API_TO_CALL.REVENUE); }
+
+      // if(this.networth.)
+      unique = API.filter((elem, index, self) => {
+        return index === self.indexOf(elem);
+      });
+      if (this.lastFinancialYear && this.history.showLastYear && this.compare.showLastYear) {
+        this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
+          this.lastFinancialYear.financialYearStarts,
+          this.lastFinancialYear.financialYearEnds, true, CHART_CALLED_FROM.HISTORY, unique));
+      }
+      // debugger;
     }
-    //
-    this.compare.refresh = true;
-    this.compare.fetchChartData();
-
-    this.expence.refresh = true;
-    this.expence.fetchChartData();
-
-    this.revenue.refresh = true;
-    this.revenue.fetchChartData();
-
-    this.history.refresh = true;
-    this.history.requestInFlight = true;
-    this.history.fetchChartData();
-    // this.history.refresh = true;
-    // this.history.fetchChartData();
-
-    this.networth.requestInFlight = true;
-    this.networth.fetchChartData();
-    // this.networth.refresh = true;
-    // this.networth.fetchChartData();
-
-    // this.expence
   }
 
   public ngOnDestroy() {

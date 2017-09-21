@@ -58,7 +58,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
                 financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
                   let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
                   let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
-                  console.log(b.diff(a, 'days'));
+
                   return b.diff(a, 'days') < 0;
                 });
                 financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
