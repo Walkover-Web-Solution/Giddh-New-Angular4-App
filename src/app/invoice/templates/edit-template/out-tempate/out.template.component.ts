@@ -26,6 +26,7 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../
 
 export class OutTemplateComponent implements OnInit, OnDestroy {
 
+  @Input() public isPreviewMode: boolean = false;
   public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
   public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
   public logoSrc: string;
@@ -40,10 +41,6 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
       this.inputTemplate = _.cloneDeep(template);
     });
 
-    this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
-      this.templateUISectionVisibility = _.cloneDeep(info);
-    });
-
     this._invoiceUiDataService.logoPath.subscribe((path: string) => {
       this.logoSrc = _.cloneDeep(path);
     });
@@ -55,10 +52,24 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
       this.showCompanyName = _.cloneDeep(yesOrNo);
     });
+
+    if (this.isPreviewMode) {
+      this.templateUISectionVisibility = {
+        header: true,
+        table: true,
+        footer: true
+      };
+    } else {
+      this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+        this.templateUISectionVisibility = _.cloneDeep(info);
+      });
+    }
   }
 
   public onClickSection(sectionName: string) {
-    this._invoiceUiDataService.setSelectedSection(sectionName);
+    if (!this.isPreviewMode) {
+      this._invoiceUiDataService.setSelectedSection(sectionName);
+    }
   }
 
   public ngOnDestroy() {
@@ -66,295 +77,3 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 }
-  // public createTemplate() {
-  //   // let temp = new GetInvoiceTemplateDetailsResponse();
-  //   this.store.take(1).subscribe(val => {
-  //     this.templateMeta = val.invtemp.templateMeta;
-  //   });
-  //   let temp: any = {
-  //     name: 'my template',
-  //     uniqueName: this.templateMeta.templateId,
-  //     isSample: false,
-  //     sections: [
-  //       {
-  //         sectionName: 'header',
-  //         content: [
-  //           {
-  //             field: 'companyName',
-  //             label: '',
-  //             display: this.fieldDisplayState.enableCompanyName
-  //           },
-  //           {
-  //             field: 'GSTIN',
-  //             label: this.templateMeta.GSTIN,
-  //             display: true
-  //           },
-  //           {
-  //             field: 'PAN',
-  //             label: this.templateMeta.PAN,
-  //             display: true
-  //           },
-  //           {
-  //             field: 'address',
-  //             label: this.templateMeta.address,
-  //             display: this.fieldDisplayState.enableCompanyAddress
-  //           },
-  //           {
-  //             field: 'invoiceDate',
-  //             label: this.templateMeta.invoiceDate,
-  //             display: this.fieldDisplayState.enableInvoiceDate
-  //           },
-  //           {
-  //             field: 'invoiceNumber',
-  //             label: this.templateMeta.invoiceNumber,
-  //             display: this.fieldDisplayState.enableInvoiceNo
-  //           },
-  //           {
-  //             field: 'shippingDate',
-  //             label: this.templateMeta.shippingDate,
-  //             display: this.fieldDisplayState.enableShipDate
-  //           },
-  //           {
-  //             field: 'shippedVia',
-  //             label: this.templateMeta.shippingVia,
-  //             display: this.fieldDisplayState.enableShipVia
-  //           },
-  //           {
-  //             field: 'TrackingNumber',
-  //             label: this.templateMeta.trackingNumber,
-  //             display: this.fieldDisplayState.enableTrackingNo
-  //           },
-  //           {
-  //             field: 'TrackingNumber',
-  //             label: this.templateMeta.trackingNumber,
-  //             display: this.fieldDisplayState.enableTrackingNo
-  //           },
-  //           {
-  //             field: 'customerName',
-  //             label: this.templateMeta.customerName,
-  //             display: true
-  //           },
-  //           {
-  //             field: 'customerEmail',
-  //             label: this.templateMeta.customerEmail,
-  //             display: true
-  //           },
-  //           {
-  //             field: 'customerMobileNumber',
-  //             label: this.templateMeta.customerMobileNumber,
-  //             display: true
-  //           },
-  //           {
-  //             field: 'dueDate',
-  //             label: this.templateMeta.dueDate,
-  //             display: this.fieldDisplayState.enableDueDate
-  //           },
-  //           {
-  //             field: 'billingState',
-  //             label: this.templateMeta.billingState,
-  //             display: this.fieldDisplayState.enableBillingState
-  //           },
-  //           {
-  //             field: 'billingAddress',
-  //             label: this.templateMeta.billingAddress,
-  //             display: this.fieldDisplayState.enableBillingAddress
-  //           },
-  //           {
-  //             field: 'billingGstin',
-  //             label: this.templateMeta.billingGstin,
-  //             display: this.fieldDisplayState.enableBillingGstin
-  //           },
-  //           {
-  //             field: 'shippingAddress',
-  //             label: this.templateMeta.shippingAddress,
-  //             display: this.fieldDisplayState.enableShippingAddress
-  //           },
-  //           {
-  //             field: 'shippingState',
-  //             label: this.templateMeta.shippingState,
-  //             display: this.fieldDisplayState.enableShippingState
-  //           },
-  //           {
-  //             field: 'shippingGstin',
-  //             label: this.templateMeta.shippingGstin,
-  //             display: this.fieldDisplayState.enableShippingGstin
-  //           },
-  //           {
-  //             field: 'customField1',
-  //             label: this.templateMeta.customField1,
-  //             display: this.fieldDisplayState.enableCustom1
-  //           },
-  //           {
-  //             field: 'customField2',
-  //             label: this.templateMeta.customField2,
-  //             display: this.fieldDisplayState.enableCustom2
-  //           },
-  //           {
-  //             field: 'customField3',
-  //             label: this.templateMeta.customField3,
-  //             display: this.fieldDisplayState.enableCustom3
-  //           },
-  //           {
-  //             field: 'formNameInvoice',
-  //             label: this.templateMeta.formNameInvoice,
-  //             display: this.fieldDisplayState.enableDocTitle
-  //           },
-  //           {
-  //             field: 'formNameTaxInvoice',
-  //             label: this.templateMeta.formNameTaxInvoice,
-  //             display: this.fieldDisplayState.enableDocTitle
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         sectionName: 'table',
-  //         content: [
-  //           {
-  //             field: 'sNo',
-  //             display: this.fieldDisplayState.enableSno,
-  //             label: this.templateMeta.sNoLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'date',
-  //             display: this.fieldDisplayState.enableDis,
-  //             label: this.templateMeta.dateLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'item',
-  //             display: this.fieldDisplayState.enableItem,
-  //             label: this.templateMeta.itemLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'hsnSac',
-  //             display: this.fieldDisplayState.enableHsn,
-  //             label: this.templateMeta.hsnSacLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'itemCode',
-  //             display: true,
-  //             label: this.templateMeta.itemCodeLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'description',
-  //             display: true,
-  //             label: this.templateMeta.description,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'rate',
-  //             display: this.fieldDisplayState.enableRate,
-  //             label: this.templateMeta.rateLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'discount',
-  //             display: this.fieldDisplayState.enableDis,
-  //             label: this.templateMeta.discountLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'taxableValue',
-  //             display: this.fieldDisplayState.enableTaxableValue,
-  //             label: this.templateMeta.taxableValueLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'tax',
-  //             display: this.fieldDisplayState.enableTax,
-  //             label: this.templateMeta.taxLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'total',
-  //             display: this.fieldDisplayState.enableTotal,
-  //             label: this.templateMeta.totalLabel,
-  //             width: 10
-  //           },
-  //           {
-  //             field: 'quantity',
-  //             display: this.fieldDisplayState.enableQty,
-  //             label: this.templateMeta.quantityLabel,
-  //             width: 10
-  //           }
-  //         ]
-  //       },
-  //       {
-  //         sectionName: 'footer',
-  //         content: [
-  //           {
-  //             field: 'taxableAmount',
-  //             display: this.fieldDisplayState.enableTaxableAmount,
-  //             label: this.templateMeta.taxableAmount
-  //           },
-  //           {
-  //             field: 'totalTax',
-  //             display: this.fieldDisplayState.enableTotalTax,
-  //             label: this.templateMeta.totalTax
-  //           },
-  //           {
-  //             field: 'otherDeduction',
-  //             display: this.fieldDisplayState.enableOtherDeductions,
-  //             label: this.templateMeta.otherDeduction
-  //           },
-  //           {
-  //             field: 'total',
-  //             display: this.fieldDisplayState.enableInvoiceTotal,
-  //             label: this.templateMeta.total
-  //           },
-  //           {
-  //             field: 'totalInWords',
-  //             display: this.fieldDisplayState.enableInvoiceTotal,
-  //             label: this.templateMeta.totalInWords
-  //           },
-  //           {
-  //             field: 'message1',
-  //             display: this.fieldDisplayState.enableMessage1,
-  //             label: this.templateMeta.message1
-  //           },
-  //           {
-  //             field: 'message2',
-  //             display: this.fieldDisplayState.enableMessage2,
-  //             label: this.templateMeta.message1
-  //           },
-  //           {
-  //             field: 'thanks',
-  //             display: this.fieldDisplayState.enableThanks,
-  //             label: this.templateMeta.thanks
-  //           },
-  //           {
-  //             field: 'companyAddress',
-  //             display: this.fieldDisplayState.enableCompanyAddress,
-  //             label: this.templateMeta.address
-  //           },
-  //           {
-  //             field: 'imageSignature',
-  //             display: true,
-  //             label: this.templateMeta.imageSignature
-  //           },
-  //           {
-  //             field: 'slogan',
-  //             display: true,
-  //             label: this.templateMeta.slogan
-  //           }
-  //         ]
-  //       }
-  //     ],
-  //     copyFrom: this.templateMeta.companyName,
-  //     color: this.templateMeta.color,
-  //     font: this.templateMeta.font,
-  //     fontSize: '10pt',
-  //     topMargin: this.templateMeta.topMargin,
-  //     leftMargin: this.templateMeta.leftMargin,
-  //     rightMargin: this.templateMeta.rightMargin,
-  //     bottomMargin: this.templateMeta.bottomMargin,
-  //     logoPosition: '',
-  //     logoSize: ''
-  // }
-  // }
-
-// }
