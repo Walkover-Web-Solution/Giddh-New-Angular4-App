@@ -1,10 +1,10 @@
-<div id="design" class="tabcontent pdT2 pdB2" *ngIf="design" (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
+<div id="design" class="tabcontent pdT2 pdB2" [hidden]="!design" (clickOutside)="clickedOutside()" (click)="$event.stopPropagation()">
 
 
     <div class="clearfix">
         <div class="col-xs-9">
             <div class="row">
-                <label><input type="text" class="form-control" #templateName placeholder="My Invoice Template" (keyup)="setTemplateName(templateName.value)" /></label>
+                <label><input type="text" class="form-control" placeholder="My Invoice Template" name="templateName" [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)" /></label>
             </div>
         </div>
     </div>
@@ -17,41 +17,41 @@
   </button> {{imagePreview}} -->
     <div class="clearfix">
         <ul class="designTool">
-            <li *ngIf="!ifTemplateSelected" (click)="selectTemplate()">
+            <li [hidden]="templateUISectionVisibility.templates" (click)="onChangeVisibility('templates')">
                 <i class="ico-template"></i> <label>Change up to template</label>
             </li>
-            <li *ngIf="ifTemplateSelected">
+            <li [hidden]="!templateUISectionVisibility.templates">
                 <i class="ico-template"></i> <label>Change up to template</label>
                 <!-- edit template  start -->
                 <div class="clearfix">
                     <ul class="templateView">
 
-                        <li (click)="showTemplate('gst_template_a')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_a')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <li (click)="showTemplate('common_template_a')">
+                        <li (click)="onDesignChange('uniqueName', 'common_template_a')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <li (click)="showTemplate('gst_template_b')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_b')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <li (click)="showTemplate('gst_template_c')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_c')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <li (click)="showTemplate('gst_template_d')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_d')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
-                        <li (click)="showTemplate('gst_template_e')">
+                        <li (click)="onDesignChange('uniqueName', 'gst_template_e')">
                             <img src="./assets/images/template1.jpg" alt="" />
                         </li>
                     </ul>
                 </div>
                 <!--<template-selector></template-selector>-->
             </li>
-            <li *ngIf="!ifLogoSelected" (click)="selectLogo()">
+            <li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
             </li>
-            <li [hidden]="!ifLogoSelected">
+            <li [hidden]="!templateUISectionVisibility.logo">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
                 <!-- edit logo  start -->
                 <div class="clearfix mrT1">
@@ -70,27 +70,27 @@
                         <div class="pull-left mrL1 mrT1">
                             <p>Size</p>
                             <ul>
-                                <li (click)="setLogoSize('small')">S</li>
-                                <li (click)="setLogoSize('medium')">M</li>
-                                <li (click)="setLogoSize('large')">L</li>
+                                <li (click)="onValueChange('logoSize', '70')">S</li>
+                                <li (click)="onValueChange('logoSize', '140')">M</li>
+                                <li (click)="onValueChange('logoSize', '180')">L</li>
                             </ul>
-                            <a href="javascript:void(0);" class="primary_clr" [hidden]="!logoAttached" (click)="hideLogo()"><span [hidden]="showLogo">Show</span><span [hidden]="!showLogo">Hide</span> logo</a>
+                            <a href="javascript:void(0);" class="primary_clr" [hidden]="!logoAttached" (click)="toogleLogoVisibility()"><span [hidden]="showLogo">Show</span><span [hidden]="!showLogo">Hide</span> logo</a>
                         </div>
                     </div>
                 </div>
                 <!-- edit logo end -->
             </li>
 
-            <li *ngIf="!ifColorSelected" (click)="selectColor()">
+            <li [hidden]="templateUISectionVisibility.color" (click)="onChangeVisibility('color')">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
             </li>
             <!--<li *ngIf="ifColorSelected">-->
-            <li [hidden]="!ifColorSelected">
+            <li [hidden]="!templateUISectionVisibility.color">
                 <i class="ico-swatch"></i> <label>Try other colour</label>
                 <!-- edit color  start -->
                 <div class="clearfix mrT1">
                     <div class="swatch text-center">
-                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': primaryColor}"></span> {{this.primaryColor}}
+                        <span class="swatch-preview"><span class="" [ngStyle] = "{ 'background-color': customTemplate.primaryColor}"></span> {{customTemplate.primaryColor}}
                         </span>
                         <div class="mrL1 pull-left">
                             <ul>
@@ -118,10 +118,10 @@
                 </div>
                 <!-- edit color end -->
             </li>
-            <li *ngIf="!ifFontSelected" (click)="selectFonts()">
+            <li [hidden]="templateUISectionVisibility.font" (click)="onChangeVisibility('font')">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
             </li>
-            <li *ngIf="ifFontSelected">
+            <li [hidden]="!templateUISectionVisibility.font">
                 <i class="ico-txt"></i> <label>Select different fonts</label>
                 <div class="col-xs-9 font-selector mrT1">
                     <div class="row">
@@ -133,10 +133,10 @@
                     </div>
                 </div>
             </li>
-            <li *ngIf="!ifPrintSelected" (click)="printSettings()">
+            <li [hidden]="templateUISectionVisibility.print" (click)="onChangeVisibility('print')">
                 <i class="ico-print"></i> <label>Edit print setting</label>
             </li>
-            <li *ngIf="ifPrintSelected">
+            <li [hidden]="!templateUISectionVisibility.print">
                 <i class="ico-print"></i> <label>Edit print setting</label>
                 <!-- edit print setting  start  -->
                 <div class="clearfix mrT1">
@@ -153,10 +153,10 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><input type="text" class="form-control" [(ngModel)]=top (ngModelChange)='onPageMarginChange(top,"topMargin")' /></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMargin")' /></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")' /></td>
-                                    <td><input type="text" class="form-control" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMargin")' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.topMargin' (ngModelChange)='onValueChange(null, null)' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.leftMargin' (ngModelChange)='onValueChange(null, null)' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.bottomMargin' (ngModelChange)='onValueChange(null, null)' /></td>
+                                    <td><input type="text" class="form-control" [(ngModel)]='customTemplate.rightMargin' (ngModelChange)='onValueChange(null, null)' /></td>
                                     <td><a href="javascript:void(0);" class="pdR1" (click)="resetPrintSetting()">Reset</a></td>
                                 </tr>
                             </tbody>
@@ -168,58 +168,4 @@
             </li>
         </ul>
     </div>
-
-
-
-
-
-    <!-- <div class="tab">
-        <button class="tablinks" (click)="showTemplate('common_template_a')" id="defaultOpen">template1</button>
-        <button class="tablinks" (click)="showTemplate('gst_template_a')">template2</button>
-        <button class="tablinks" (click)="showTemplate('gst_template_b')">template3</button>
-    </div>
-
-    <div class="tab">
-        <button class="tablinks" (click)="showTemplate('gst_template_c')">template4</button>
-        <button class="tablinks" (click)="showTemplate('gst_template_d')">template5</button>
-        <button class="tablinks" (click)="showTemplate('gst_template_e')">template6</button>
-    </div> -->
-    <!-- edit template  end -->
-
-
-
-
-
-
-
-
-
-
-    <!-- <p style="margin-bottom: 20px" *ngIf="!ifTemplateSelected"> <button (click)="selectTemplate()" type="submit" class="btn btn-primary">1</button> Change up to template </p>
-    <template-selector *ngIf="ifTemplateSelected"></template-selector>
-    <p style="margin-bottom: 20px" *ngIf="!ifLogoSelected"> <button (click)="selectLogo()" type="submit" class="btn btn-primary">2</button> Make logo edit </p>
-    <p style="margin-bottom: 20px" *ngIf="!ifColorSelected"> <button (click)="selectColor()" type="submit" class="btn btn-primary">3</button> Try other color </p>
-    <p style="margin-bottom: 20px" *ngIf="!ifFontSelected"> <button (click)="selectFonts()" type="submit" class="btn btn-primary">4</button> Select different fonts </p>
-    <p style="margin-bottom: 20px" *ngIf="!ifPrintSelected"> <button (click)="printSettings()" type="submit" class="btn btn-primary">5</button> Edit print settings </p> -->
-
-    <!-- <div class="swatch">
-        <ul>
-            <li class="black"></li>
-            <li class="grey"></li>
-            <li class="yellow"></li>
-            <li class="cyan"></li>
-            <li class="red"></li>
-            <li class="orange"></li>
-            <li class="blue"></li>
-            <li class="purple"></li>
-        </ul>
-    </div>  -->
-
-    <!-- <p><input name="top" id="top-margin" type="text" [(ngModel)]=top (ngModelChange)='onPageMarginChange(top,"topMargin")' />
-        <input name="left" id="left-margin" type="text" [(ngModel)]=left (ngModelChange)='onPageMarginChange(left, "leftMargin")' />
-        <input name="bottom" id="bottom-margin" type="text" [(ngModel)]=bottom (ngModelChange)='onPageMarginChange(bottom, "bottomMargin")' />
-        <input name="right" id="right-margin" type="text" [(ngModel)]=right (ngModelChange)='onPageMarginChange(right, "rightMargin")' /></p> -->
-
-
-
 </div>
