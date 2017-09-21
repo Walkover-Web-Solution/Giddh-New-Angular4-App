@@ -4,7 +4,7 @@
     <div class="clearfix">
         <div class="col-xs-9">
             <div class="row">
-                <label><input type="text" class="form-control" placeholder="My Invoice Template" name="templateName" [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)" /></label>
+                <label><input type="text" class="form-control" placeholder="My Template Name" name="templateName" [(ngModel)]="customTemplate.name" (ngModelChange)="onValueChange(null, null)" /></label>
             </div>
         </div>
     </div>
@@ -66,7 +66,7 @@
                             </label>
 
                         </span>
-                        <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" [hidden]="!logoAttached">Start Upload</button>
+                        <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" tooltip="Clicking on Upload, will Upload image on server" [hidden]="!logoAttached">Upload</button>
                         <div class="pull-left mrL1 mrT1">
                             <p>Size</p>
                             <ul>

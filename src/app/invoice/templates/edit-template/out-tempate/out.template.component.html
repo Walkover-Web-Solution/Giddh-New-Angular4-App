@@ -47,7 +47,7 @@
         #default .item th,
         #default tfoot tr th {
             /* background: #f2f2f2; */
-            border: 0;
+            /*border: 0;*/
         }
         /* page */
         
@@ -300,8 +300,13 @@
             z-index: 0;
             left: 0;
         }
+
+        #default .docTitle h2.no-content:after {
+            content: '';
+            background: transparent;
+        }
         
-        #default p {
+        #default p { 
             margin: 0;
         }
         
@@ -429,8 +434,9 @@
                 <!--<hr [ngStyle]="{ 'background-color': color}" />-->
                 <!--</h2>-->
                 <!--</div>-->
-                <div class="docTitle" *ngIf="inputTemplate.sections[0].content[24] && inputTemplate.sections[0].content[24].display">
-                    <h2 [ngStyle]="{ 'color': inputTemplate.primaryColor}" title="{{(inputTemplate.sections[0].content[24].label.length > 0) ? inputTemplate.sections[0].content[24].label : 'INVOICE' }}">
+                <!--*ngIf="inputTemplate.sections[0].content[24] && inputTemplate.sections[0].content[24].display"-->
+                <div class="docTitle">
+                    <h2 [ngClass]="{'no-content' : (inputTemplate.sections[0].content[24] && !inputTemplate.sections[0].content[24].display)}" [ngStyle]="{ 'color': inputTemplate.primaryColor}" title="{{( inputTemplate.sections[0].content[24] && inputTemplate.sections[0].content[24].label.length > 0) ? inputTemplate.sections[0].content[24].label : 'INVOICE' }}">
                         <hr [ngStyle]="{ 'background-color': inputTemplate.primaryColor}" />
                     </h2>
                 </div>
@@ -441,8 +447,8 @@
                     <tr>
                         <td *ngIf="inputTemplate.sections[0].content[10].display || inputTemplate.sections[0].content[11].display || inputTemplate.sections[0].content[12].display">
                             <p *ngIf="inputTemplate.sections[0].content[10].display"><strong>{{inputTemplate.sections[0].content[10].label}}</strong></p>
-                            <p *ngIf="inputTemplate.sections[0].content[11].display">{{inputTemplate.sections[0].content[10].label}}</p>
-                            <p *ngIf="inputTemplate.sections[0].content[12].display">{{inputTemplate.sections[0].content[10].label}}</p>
+                            <p *ngIf="inputTemplate.sections[0].content[11].display">{{inputTemplate.sections[0].content[11].label}}</p>
+                            <p *ngIf="inputTemplate.sections[0].content[12].display">{{inputTemplate.sections[0].content[12].label}}</p>
                         </td>
                         <td *ngIf="inputTemplate.sections[0].content[15].display">
                             <p><strong>{{(inputTemplate.sections[0].content[15].label.length > 0) ? inputTemplate.sections[0].content[15].label : 'Billing Address'}}</strong></p>
@@ -603,9 +609,9 @@
                         <tr>
                             <td *ngIf="inputTemplate.sections[2].content[5].display || inputTemplate.sections[2].content[6].display">
                                 <p *ngIf="inputTemplate.sections[2].content[5].display" style="margin-bottom: 15px;">
-                                    <strong>{{inputTemplate.sections[2].content[5].label}}</strong>
+                                    <strong  style="white-space:pre-line;">{{inputTemplate.sections[2].content[5].label}}</strong>
                                 </p>
-                                <p *ngIf="inputTemplate.sections[2].content[6].display"> {{inputTemplate.sections[2].content[6].label}}</p>
+                                <p *ngIf="inputTemplate.sections[2].content[6].display" style="white-space:pre-line;"> {{inputTemplate.sections[2].content[6].label}}</p>
                             </td>
                             <td>&nbsp;</td>
                             <td style="text-align: center;vertical-align: bottom;">
@@ -617,7 +623,7 @@
                             </td>
                         </tr>
                         <tr *ngIf="inputTemplate.sections[2].content[7].display">
-                            <td><strong><h4 [ngStyle]="{ 'color': inputTemplate.primaryColor}">{{inputTemplate.sections[2].content[7].label}}</h4></strong></td>
+                            <td><strong><h4 [ngStyle]="{ 'color': inputTemplate.primaryColor}" [innerHTML]="inputTemplate.sections[2].content[7].label"></h4></strong></td>
                         </tr>
                     </tbody>
                 </table>

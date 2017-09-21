@@ -41,7 +41,7 @@
             <h3>Form</h3>
             <div class="form-group" *ngIf="customTemplate.sections[0].content[24]">
                 <input type="checkbox" [(ngModel)]="customTemplate.sections[0].content[24].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Document Title
-                <div class="mrL3 mrT1">Invoice <input type="text" [disabled]="!customTemplate.sections[0].content[24].label" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[24].label' (ngModelChange)='onFieldChange(null, null, null)' /></div>
+                <div class="mrL3 mrT1">Invoice <input type="text" class="form-control" name="tl" [(ngModel)]='customTemplate.sections[0].content[24].label' (ngModelChange)='onFieldChange(null, null, null)' /></div>
                 <div class="mrL3">Tax Invoice <input type="text" class="form-control" name="title" [(ngModel)]='customTemplate.sections[0].content[24].label' (ngModelChange)='onFieldChange(null, null, null)' [disabled]="!customTemplate.sections[0].content[24].display" /></div>
             </div>
         </div>
@@ -192,7 +192,7 @@
 
         <div class="clearfix mrT1">
             <div>
-                <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections[2].content[5].display" ((ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Message 1
+                <input type="checkbox" name="msg1" [(ngModel)]="customTemplate.sections[2].content[5].display" ((ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Note 1
             </div>
             <div class="form-group mrL3 clearfix">
                 <div class="col-xs-12">
@@ -204,7 +204,7 @@
 
         <div class="clearfix">
             <div>
-                <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections[2].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Message 2
+                <input type="checkbox" name="msg2" [(ngModel)]="customTemplate.sections[2].content[6].display" (ngModelChange)="onChangeFieldVisibility(null, null, null)"  checked/> Note 2
             </div>
             <div class="form-group mrL3 clearfix">
                 <div class="col-xs-12">
