@@ -2,7 +2,7 @@ import { Component, OnInit, Input, EventEmitter, Output, OnDestroy, ViewChild } 
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
 import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
-import { AccountRequestV2, AccountResponseV2, AccountResponse } from '../../../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, AccountResponse, IAccountAddress } from '../../../../models/api-models/Account';
 import { Select2OptionData } from '../../../theme/select2/index';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -18,6 +18,26 @@ import { ModalDirective } from 'ngx-bootstrap';
 @Component({
   selector: 'account-update-new',
   templateUrl: 'account-update-new.component.html',
+  styles: [`
+  .hsn-sac{
+    left: 51px;
+      position: relative;
+  }
+  .hsn-sac-radio{
+    top: 34px;
+      position: relative;
+      left: -10px;
+  }
+  .hsn-sac-w-m-input{
+    width: 144px;
+      margin-left: 50px;
+  }
+  .hsn-sac-group{
+    position: relative;
+      top: -75px;
+      left: 197px;
+  }
+  `]
 })
 export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public addAccountForm: FormGroup;
@@ -31,7 +51,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public activeGroup$: Observable<GroupResponse>;
-  public activeAccount$: Observable<AccountResponse>;
+  public activeAccount$: Observable<AccountResponseV2>;
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
   public showOtherDetails: boolean = false;
@@ -49,11 +69,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
     private _companyService: CompanyService, private _toaster: ToasterService) {
-      this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
-      this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
-      this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-      this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
-      this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
+    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
+    this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
+    this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
 
     this._companyService.getAllStates().subscribe((data) => {
       let states: Select2OptionData[] = [];
@@ -82,7 +102,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       attentionTo: [''],
       description: [''],
       addresses: this.isGstEnabledAcc ? this._fb.array([
-        this.initialGstDetailsForm()
+        this.initialGstDetailsForm(null)
       ]) : null,
       country: this._fb.group({
         countryCode: ['']
@@ -91,7 +111,25 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       hsnNumber: [{ value: '', disabled: false }],
       sacNumber: [{ value: '', disabled: false }]
     });
+    // fill form with active account
+    this.activeAccount$.subscribe(acc => {
+      if (acc) {
+        let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
 
+        // accountDetails.name = acc.name;
+        // accountDetails.uniqueName = acc.uniqueName;
+        // accountDetails.openingBalanceType = acc.openingBalanceType;
+        // accountDetails.openingBalance = acc.openingBalance;
+        // accountDetails.attentionTo = acc.attentionTo;
+        accountDetails.addresses.map(a => {
+          if (a.gstNumber) {
+            this.addGstDetailsForm(true, a);
+          }
+        });
+        this.addAccountForm.patchValue(accountDetails);
+      }
+    });
+    // get hsn and sac value changes
     this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -107,7 +145,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         hsn.disable();
       }
     });
-
+    // get active company
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
       if (a) {
         this.addAccountForm.get('companyName').patchValue(a);
@@ -115,7 +153,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
   }
 
-  public initialGstDetailsForm(): FormGroup {
+  public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
@@ -124,13 +162,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       isComposite: [false],
       partyType: ['']
     });
+    if (val) {
+      gstFields.patchValue(val);
+    }
     return gstFields;
   }
 
-  public addGstDetailsForm(gstForm: FormGroup) {
-    if (gstForm.valid) {
+  public addGstDetailsForm(isValid: boolean, val: IAccountAddress = null) {
+    if (isValid) {
       const addresses = this.addAccountForm.get('addresses') as FormArray;
-      addresses.push(this.initialGstDetailsForm());
+      addresses.push(this.initialGstDetailsForm(val));
     } else {
       this._toaster.clearAllToaster();
       this._toaster.errorToast('Please fill GSTIN field first');
