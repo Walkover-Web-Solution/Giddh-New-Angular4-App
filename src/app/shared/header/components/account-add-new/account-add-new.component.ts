@@ -52,11 +52,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
-  public partyTypeSource: Select2OptionData[] = [
-    { id: 'not applicable', text: 'Not Applicable' },
-    { id: 'deemed export', text: 'Deemed Export' },
-    { id: 'government entity', text: 'Government Entity' },
-    { id: 'sez', text: 'Sez' }
+  public partyTypeSource = [
+    { value: 'not applicable', label: 'Not Applicable' },
+    { value: 'deemed export', label: 'Deemed Export' },
+    { value: 'government entity', label: 'Government Entity' },
+    { value: 'sez', label: 'Sez' }
   ];
   public countrySource: Select2OptionData[] = [];
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
