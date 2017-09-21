@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { AccountResponse, AccountSharedWithResponse, ShareAccountRequest } from '../../../../models/api-models/Account';
+import { AccountResponse, AccountSharedWithResponse, ShareAccountRequest, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 
 @Component({
@@ -13,7 +13,7 @@ import { AccountsAction } from '../../../../services/actions/accounts.actions';
 
 export class ShareAccountModalComponent implements OnInit, OnDestroy {
   public email: string;
-  public activeAccount$: Observable<AccountResponse>;
+  public activeAccount$: Observable<AccountResponseV2>;
   public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
   @Output() public closeShareAccountModal: EventEmitter<any> = new EventEmitter();
 

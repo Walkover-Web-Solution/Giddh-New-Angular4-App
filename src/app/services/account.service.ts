@@ -271,7 +271,7 @@ export class AccountService implements OnInit {
   /**
    * accounts v2 api's
    */
-  public GetAccountDetailsV2(accountUniqueName: string): Observable<BaseResponse<AccountResponse, string>> {
+  public GetAccountDetailsV2(accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -279,10 +279,10 @@ export class AccountService implements OnInit {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(ACCOUNTS_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
-      let data: BaseResponse<AccountResponse, string> = res.json();
+      let data: BaseResponse<AccountResponseV2, string> = res.json();
       data.queryString = { accountUniqueName };
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<AccountResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e));
   }
   public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
     this.store.take(1).subscribe(s => {
