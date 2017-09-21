@@ -55,7 +55,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
     this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
       if (!_.isEmpty(o)) {
         this.companyProfile = _.cloneDeep(o);
-        this.country = this.companyProfile.country.toLocaleLowerCase();
+        if (this.companyProfile.country) {
+          this.country = this.companyProfile.country.toLocaleLowerCase();
+        } else {
+          this.country = 'india';
+        }
       } else {
         this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
       }
