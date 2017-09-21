@@ -64,7 +64,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.companies$.subscribe(c => {
       if (c) {
         let activeCmpUniqueName = '';
-        let financialYears = [];
+        let financialYears: ActiveFinancialYear[] = [];
         this.activeCompanyUniqueName$.take(1).subscribe(a => {
           activeCmpUniqueName = a;
           let res = c.find(p => p.uniqueName === a);
@@ -77,8 +77,16 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             if (cmp.uniqueName === activeCmpUniqueName) {
               if (cmp.financialYears.length > 1) {
                 financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.orderBy(financialYears, (it) => {
-                  return moment(it.financialYearStarts, 'DD-MM-YYYY');
+                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+                  console.log(b.diff(a, 'days'));
+                  return b.diff(a, 'days') < 0;
+                });
+                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
+                  return b.diff(a, 'days');
                 }, 'desc');
                 this.lastFinancialYear = financialYears[0];
               }
@@ -106,6 +114,9 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   }
   public hardRefresh() {
+    if (this.activeFinancialYear) {
+      //
+    }
     //
     this.compare.refresh = true;
     this.compare.fetchChartData();
@@ -116,11 +127,14 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.revenue.refresh = true;
     this.revenue.fetchChartData();
 
+    this.history.refresh = true;
     this.history.requestInFlight = true;
+    this.history.fetchChartData();
     // this.history.refresh = true;
     // this.history.fetchChartData();
 
     this.networth.requestInFlight = true;
+    this.networth.fetchChartData();
     // this.networth.refresh = true;
     // this.networth.fetchChartData();
 
