@@ -136,7 +136,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       let unique = API.filter((elem, index, self) => {
         return index === self.indexOf(elem);
       });
-      debugger;
 
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
         this.activeFinancialYear.financialYearStarts,
