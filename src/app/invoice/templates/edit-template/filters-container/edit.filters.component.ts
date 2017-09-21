@@ -40,42 +40,4 @@ export class EditFiltersContainersComponent {
       this.ifEmailSelected = true;
     }
   }
-  // public selectTemplate() {
-  //   this.ifTemplateSelected = true;
-  //   this.ifLogoSelected = false;
-  //   this.ifColorSelected = false;
-  //   this.ifPrintSelected = false;
-  //   this.ifFontSelected = false;
-  // }
-  //
-  // public selectLogo() {
-  //   this.ifLogoSelected = true;
-  //   this.ifColorSelected = false;
-  //   this.ifPrintSelected = false;
-  //   this.ifFontSelected = false;
-  //   this.ifTemplateSelected = false;
-  // }
-  //
-  // public selectColor() {
-  //   this.ifColorSelected = true;
-  //   this.ifLogoSelected = false;
-  //   this.ifPrintSelected = false;
-  //   this.ifFontSelected = false;
-  //   this.ifTemplateSelected = false;
-  // }
-  // public selectFonts() {
-  //   this.ifFontSelected = true;
-  //   this.ifColorSelected = false;
-  //   this.ifLogoSelected = false;
-  //   this.ifPrintSelected = false;
-  //   this.ifTemplateSelected = false;
-  // }
-  //
-  // public printSettings() {
-  //   this.ifPrintSelected = true;
-  //   this.ifFontSelected = false;
-  //   this.ifColorSelected = false;
-  //   this.ifLogoSelected = false;
-  //   this.ifTemplateSelected = false;
-  // }
 }

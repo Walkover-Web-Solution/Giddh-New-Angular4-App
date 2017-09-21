@@ -332,7 +332,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'Signature',
+            label: 'Walkover Web Solutions Private Limited',
             field: 'slogan',
             width: null
           }
