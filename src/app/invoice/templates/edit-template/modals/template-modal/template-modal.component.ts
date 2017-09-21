@@ -23,11 +23,11 @@ export class InvoiceTemplateModalComponent implements DoCheck {
   }
 
   public ngDoCheck() {
-    let obj = this.invoiceUiDataService.getEmailSettingObj();
-    if (obj)  {
-      this.emailObject = obj;
-      this.isEmailTabSelected = obj.isEmailTabSelected;
-    }
+    // let obj = this.invoiceUiDataService.getEmailSettingObj();
+    // if (obj)  {
+    //   this.emailObject = obj;
+    //   this.isEmailTabSelected = obj.isEmailTabSelected;
+    // }
   }
 
 }

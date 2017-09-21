@@ -18,7 +18,7 @@ export class EditFiltersContainersComponent {
   public ifEmailSelected: boolean = false;
 
   constructor() {
-    this.openTab('content');
+    this.openTab('design');
   }
 
   public openTab(tab) {
