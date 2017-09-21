@@ -18,16 +18,16 @@ import {
   PreviewInvoiceRequest,
   PreviewInvoiceResponseClass,
   GetInvoiceTemplateDetailsResponse,
-  Template,
   InvoiceTemplateDetailsResponse,
   GenerateInvoiceRequestClass,
-  GenerateBulkInvoiceRequest
+  GenerateBulkInvoiceRequest,
+  CustomTemplateResponse
 } from '../../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
-import {
-  IsDivVisible,
-  TaxInvoiceLabel
-} from '../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
+// import {
+//   IsDivVisible,
+//   TaxInvoiceLabel
+// } from '../../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 import { InvoiceSetting } from '../../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../../models/api-models/SettingsIntegraion';
 // import {Section, Template} from "../../../models/api-models/invoice";
@@ -355,13 +355,37 @@ export class InvoiceActions {
 
   // write above except kunal
   // get all templates
+  // @Effect()
+  // public GetUserTemplates$ = this.action$
+  //   .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES)
+  //   .switchMap(action => this._invoiceTemplatesService.getTemplates())
+  //   .map((response: BaseResponse<CustomTemplateResponse[], string>) => {
+  //     if (response.status === 'error') {
+  //       this._toasty.errorToast(response.message, response.code);
+  //     } else {
+  //        return this.getSampleTemplateResponse(response.body);
+  //     }
+  //     return { type: '' };
+  //   });
+
+  // GET SAMPLE TEMPLATES
   @Effect()
-  public GetUserTemplates$ = this.action$
-    .ofType(INVOICE.TEMPLATE.GET_USER_TEMPLATES)
+  private GetSampleTemplates$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES)
     .switchMap(action => this._invoiceTemplatesService.getTemplates())
-    .map((response: Template) => {
-      // console.log('SET STATE ACTION CALLED');
-      return this.setTemplateState(response);
+    .map(response => {
+      return this.getSampleTemplateResponse(response);
+    });
+
+  @Effect()
+  private getSampleTemplateResponse$: Observable<Action> = this.action$
+    .ofType(INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<any, any> = response.payload;
+      if (data && data.status === 'error') {
+        this._toasty.errorToast(data.message, data.code);
+      }
+      return { type: '' };
     });
 
   // GET CUSTOM CREATED TEMPLATES
@@ -378,7 +402,7 @@ export class InvoiceActions {
     .ofType(INVOICE.TEMPLATE.GET_ALL_CREATED_TEMPLATES_RESPONSE)
     .map(response => {
       let data: BaseResponse<any, any> = response.payload;
-      if (data.status === 'error') {
+      if (data && data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
       return { type: '' };
@@ -571,7 +595,7 @@ export class InvoiceActions {
 
   public getTemplateState(): Action {
     return {
-      type: INVOICE.TEMPLATE.GET_USER_TEMPLATES
+      type: INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES
     };
   }
 
@@ -623,10 +647,10 @@ export class InvoiceActions {
     };
   }
 
-  public setTemplateState(temp: Template): Action {
+  public getSampleTemplateResponse(response): Action {
     return {
-      type: INVOICE.TEMPLATE.SET_TEMPLATE_STATE,
-      payload: { temp }
+      type: INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE,
+      payload: response
     };
   }
 
@@ -817,19 +841,19 @@ export class InvoiceActions {
     };
   }
 
-  public updateFormNameInvoice(ti: TaxInvoiceLabel): Action {
-    return {
-      type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE,
-      payload: { ti }
-    };
-  }
+  // public updateFormNameInvoice(ti: TaxInvoiceLabel): Action {
+  //   return {
+  //     type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_INVOICE,
+  //     payload: { ti }
+  //   };
+  // }
 
-  public updateFormNameTaxInvoice(ti: TaxInvoiceLabel): Action {
-    return {
-      type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE,
-      payload: { ti }
-    };
-  }
+  // public updateFormNameTaxInvoice(ti: TaxInvoiceLabel): Action {
+  //   return {
+  //     type: INVOICE.TEMPLATE.UPDATE_FORM_NAME_TAX_INVOICE,
+  //     payload: { ti }
+  //   };
+  // }
 
   public updateSnoLabel(data: string): Action {
     return {
@@ -956,13 +980,13 @@ export class InvoiceActions {
       payload: { data }
     };
   }
-  public setDivVisible(div: IsDivVisible): Action {
-    // console.log(div);
-    return {
-      type: INVOICE.TEMPLATE.SET_VISIBLE,
-      payload: { div }
-    };
-  }
+  // public setDivVisible(div: IsDivVisible): Action {
+  //   // console.log(div);
+  //   return {
+  //     type: INVOICE.TEMPLATE.SET_VISIBLE,
+  //     payload: { div }
+  //   };
+  // }
 
   public getInvoiceSetting(): Action {
     return {

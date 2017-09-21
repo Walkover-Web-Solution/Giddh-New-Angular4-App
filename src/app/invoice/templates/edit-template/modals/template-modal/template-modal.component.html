@@ -3,10 +3,11 @@
         <ng-container>
             <div style="width: 100%">
                 <edit-template-filters class="templateEditor"></edit-template-filters>
-                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scrollAuto" [templateSections]="templateSections" [templateId]="templateId"></invoice-template>
+                <!--[templateSections]="templateSections" [templateId]="templateId"-->
+                <invoice-template [hidden]="isEmailTabSelected" class="invoice-preview scrollAuto" ></invoice-template>
                 <div class="invoice-preview scrollAuto" [hidden]="!isEmailTabSelected" PageHeight>
                     <!--{{ emailObject | json}}-->
-                    <div id="email-template" class="clearfix">
+                    <!--<div id="email-template" class="clearfix">
                         <div class="input-group">
                             <span class="input-group-addon grey_clr">Subject</span>
                             <input type="text" class="form-control" disabled placeholder="Subject" [value]="emailObject.subject">
@@ -15,12 +16,11 @@
                             <span class="input-group-addon grey_clr">From</span>
                             <input type="text" class="form-control" disabled placeholder="From" [value]="emailObject.form">
                         </div>
-                        <!--<div><textarea rows="10" placeholder="Body" class="form-control"></textarea></div>-->
                         <div class="pd2" id="email-body">
                             <p [hidden]="!emailObject.useGreeting"><b>{{emailObject.greeting}} {{emailObject.username}}</b> </p>
                             <p class="pdT2">{{emailObject.body}}</p>
                         </div>
-                    </div>
+                    </div>-->
                 </div>
             </div>
         </ng-container>
