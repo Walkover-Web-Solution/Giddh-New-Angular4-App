@@ -156,9 +156,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public startUpload(): void {
     const event: UploadInput = {
       type: 'uploadAll',
-      url: 'http://ngx-uploader.com/upload',
+      // url: 'http://ngx-uploader.com/upload',
+      url: 'http://apitest.giddh.com/company/newsncindore15000172022770ygv88/logo',
       method: 'POST',
-      data: { foo: 'bar' },
+      headers: { 'Session-Id': 'bYUWOIFl1dEJwi756dmSPA==' },
     };
 
     this.uploadInput.emit(event);
