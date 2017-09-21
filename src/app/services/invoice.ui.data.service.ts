@@ -24,6 +24,8 @@ export class InvoiceUiDataService {
   public logoPath: Subject<string> = new Subject();
   public selectedSection: Subject<TemplateContentUISectionVisibility> = new Subject();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  private companyName: string;
+  private companyAddress: string;
 
   constructor(private store: Store<AppState>) {
     this.initCustomTemplate();
@@ -33,9 +35,26 @@ export class InvoiceUiDataService {
    * initCustomTemplate
    */
   public initCustomTemplate() {
+    this.store.select(p => p.session).subscribe(session => {
+      if (session) {
+        let uniqueName = session.companyUniqueName;
+        let currentCompany = session.companies.find((company) => company.uniqueName === uniqueName);
+        if (currentCompany) {
+          this.companyName = currentCompany.name;
+          this.companyAddress = currentCompany.address;
+        }
+      }
+    });
     this.isCompanyNameVisible.next(true);
     this.store.select(p => p.invoiceTemplate).subscribe((data) => {
       if (data && data.defaultTemplate) {
+        if (this.companyName) {
+          data.defaultTemplate.sections[0].content[0].label = this.companyName;
+          data.defaultTemplate.sections[2].content[10].label = this.companyName;
+        }
+        if (this.companyAddress) {
+          data.defaultTemplate.sections[2].content[8].label = this.companyAddress;
+        }
         this.customTemplate.next(_.cloneDeep(data.defaultTemplate));
       }
     });
@@ -113,6 +132,13 @@ export class InvoiceUiDataService {
         if (selectedTemplate) {
           if (selectedTemplate.sections[0].content[0].display) {
             this.isCompanyNameVisible.next(true);
+          }
+          if (this.companyName) {
+            selectedTemplate.sections[0].content[0].label = this.companyName;
+            selectedTemplate.sections[2].content[10].label = this.companyName;
+          }
+          if (this.companyAddress) {
+            selectedTemplate.sections[2].content[8].label = this.companyAddress;
           }
           this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }
