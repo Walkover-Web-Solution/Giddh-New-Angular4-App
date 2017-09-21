@@ -110,11 +110,11 @@ export class InvoiceUiDataService {
    * setTemplateUniqueName
    */
   public setTemplateUniqueName(uniqueName: string) {
-    this.selectedSection.next({
-      header: true,
-      table: true,
-      footer: true
-    });
+    // this.selectedSection.next({
+    //   header: true,
+    //   table: true,
+    //   footer: true
+    // });
     this.store.select(p => p.invoiceTemplate).subscribe((data) => {
       if (data && data.customCreatedTemplates && data.customCreatedTemplates.length) {
         let allTemplates = _.cloneDeep(data.customCreatedTemplates);
