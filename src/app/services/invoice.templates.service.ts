@@ -1,5 +1,5 @@
 
-import { Template, GetInvoiceTemplateDetailsResponse } from '../models/api-models/Invoice';
+import { Template, GetInvoiceTemplateDetailsResponse, CustomTemplateResponse } from '../models/api-models/Invoice';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { INVOICE_API } from './apiurls/invoice';
@@ -11,7 +11,7 @@ import { map } from 'rxjs/operator/map';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { IsDivVisible } from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
+// import { IsDivVisible } from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 @Injectable()
 export class InvoiceTemplatesService {
@@ -21,7 +21,7 @@ export class InvoiceTemplatesService {
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
-  public getTemplates(): Observable<Template> {
+  public getTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>>  {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -29,16 +29,12 @@ export class InvoiceTemplatesService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(INVOICE_API.GET_USER_TEMPLATES).map((res) => {
-      let data: Template = res.json();
-      // console.log('API RESPONSE', data);
+      let data: BaseResponse<CustomTemplateResponse[], string> = res.json();
       return data;
-    }).catch((e) => {
-      let object = this.errorHandler.HandleCatch<Template, string>(e);
-      return object.map(p => p.body);
-    });
+    }).catch((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, ''));
   }
 
-  public getAllCreatedTemplates(): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse[], string>> {
+  public getAllCreatedTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -46,12 +42,9 @@ export class InvoiceTemplatesService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(INVOICE_API.GET_CREATED_TEMPLATES.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
-      let data: BaseResponse<GetInvoiceTemplateDetailsResponse[], string> = res.json();
+      let data: BaseResponse<CustomTemplateResponse[], string> = res.json();
       return data;
-    }).catch((e) => {
-      let object = this.errorHandler.HandleCatch<any, string>(e);
-      return object.map(p => p.body);
-    });
+    }).catch((e) => this.errorHandler.HandleCatch<CustomTemplateResponse[], string>(e, ''));
   }
 
   public getCustomTemplate(templateUniqueName: string): Observable<BaseResponse<GetInvoiceTemplateDetailsResponse, string>> {
@@ -359,7 +352,7 @@ export class InvoiceTemplatesService {
   // public getSlogan(): Observable<string> {
   //   return this.store.select((state: AppState) => state.invtemp.templateMeta.slogan);
   // }
-  public getDivStatus(): Observable<IsDivVisible> {
-    return this.store.select((state: AppState) => state.invtemp.templateMeta.div);
-  }
+  // public getDivStatus(): Observable<IsDivVisible> {
+  //   return this.store.select((state: AppState) => state.invtemp.templateMeta.div);
+  // }
 }

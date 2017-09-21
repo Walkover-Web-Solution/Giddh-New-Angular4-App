@@ -12,10 +12,11 @@ import * as _ from 'lodash';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import {
   GetInvoiceTemplateDetailsResponse, GetTemplateResponse, ISection,
-  Template
+  Template,
+  CustomTemplateResponse
 } from '../../../../models/api-models/Invoice';
-import { InvoiceUiDataService } from '../../../../services/invoice.ui.data.service';
-import { IsDivVisible, IsFieldVisible } from '../filters-container/content-filters/content.filters.component';
+import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../services/invoice.ui.data.service';
+// import { IsDivVisible, IsFieldVisible } from '../filters-container/content-filters/content.filters.component';
 
 @Component({
   selector: 'invoice-template',
@@ -24,139 +25,47 @@ import { IsDivVisible, IsFieldVisible } from '../filters-container/content-filte
 })
 
 export class OutTemplateComponent implements OnInit, OnDestroy {
-  @Input() public templateId: string;
-  @Input() public templateSections: ISection[];
+
+  public inputTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+  public templateUISectionVisibility: TemplateContentUISectionVisibility = new TemplateContentUISectionVisibility();
   public logoSrc: string;
-  public imageSignatureSrc: string;
-  public taxInvoiceLabelFlag$: Observable<boolean>;
-  public activeHeader: boolean = true;
-  public activeGrid: boolean = false;
-  public activeFooter: boolean = false;
-  public templateMeta: any;
-  public divVis: IsDivVisible = {
-    header: true,
-    grid: false,
-    footer: false,
-  };
-  public fieldDisplayState: IsFieldVisible = {
-    enableCompanyName: true,
-    enableCompanyAddress: true,
-    enableInvoiceDate: true,
-    enableInvoiceNo: true,
-    enableDueDate: true,
-    enableCustomerName: true,
-    enableCustomerAddress: true,
-    enableEmailId: true,
-    enableMobileNo: true,
-    enableBillingAddress: true,
-    enableShipDate: true,
-    enableShipVia: true,
-    enableTrackingNo: true,
-    enableDocTitle: true,
-    enableBillingState: true,
-    enableBillingGstin: true,
-    enableShippingAddress: true,
-    enableShippingState: true,
-    enableShippingGstin: true,
-    enableCustom1: true,
-    enableCustom2: true,
-    enableCustom3: true,
-    enableSno: true,
-    enableDate: true,
-    enableItem: true,
-    enableHsn: true,
-    enableQty: true,
-    enableRate: true,
-    enableDis: true,
-    enableTaxableValue: true,
-    enableTax: true,
-    enableTotal: true,
-    enableTaxableAmount: true,
-    enableTotalTax: true,
-    enableOtherDeductions: true,
-    enableInvoiceTotal: true,
-    enableMessage1: true,
-    enableMessage2: true,
-    enableThanks: true,
-    enableTotalInWords: true
-  };
   public showLogo: boolean = true;
-  public logoSize: string;
-  // public tableMeta$: Observable<TableMetaMap>;
+  public showCompanyName: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
-
-    this.store.subscribe(val => {
-      if (val) {
-        this.templateMeta = val.invtemp.templateMeta;
-      }
-    });
-    this._invoiceUiDataService.setFieldDisplay.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
-      this.fieldDisplayState = val;
-    });
-
-    this._invoiceUiDataService.logoPath.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
-      this.logoSrc = val;
-    });
-
-    this._invoiceUiDataService.imageSignaturePath.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((val) => {
-      this.imageSignatureSrc = val;
-    });
-    this._invoiceUiDataService.logoSize.subscribe((val) => {
-      this.logoSize = val;
-    });
-    this._invoiceUiDataService.defaultPrintSetting.subscribe((val) => {
-      this.templateMeta.leftMargin = val;
-      this.templateMeta.rightMargin = val;
-      this.templateMeta.topMargin = val;
-      this.templateMeta.bottomMargin = val;
-    });
-    this._invoiceUiDataService.showLogo.subscribe((val) => {
-      this.showLogo = val;
-    });
-  }
+  constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {}
 
   public ngOnInit() {
-    // do something
+    this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+      this.inputTemplate = _.cloneDeep(template);
+    });
+
+    this._invoiceUiDataService.selectedSection.subscribe((info: TemplateContentUISectionVisibility) => {
+      this.templateUISectionVisibility = _.cloneDeep(info);
+    });
+
+    this._invoiceUiDataService.logoPath.subscribe((path: string) => {
+      this.logoSrc = _.cloneDeep(path);
+    });
+
+    this._invoiceUiDataService.isLogoVisible.subscribe((yesOrNo: boolean) => {
+      this.showLogo = _.cloneDeep(yesOrNo);
+    });
+
+    this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
+      this.showCompanyName = _.cloneDeep(yesOrNo);
+    });
   }
 
-  public onClickHeader() {
-    this.activeHeader = true;
-    this.activeGrid = false;
-    this.activeFooter = false;
-    this.divVis = {
-      header: true,
-      grid: false,
-      footer: false
-    };
-    this._invoiceUiDataService.setDivStatus(this.divVis);
+  public onClickSection(sectionName: string) {
+    this._invoiceUiDataService.setSelectedSection(sectionName);
   }
 
-  public onClickGrid() {
-    this.activeHeader = false;
-    this.activeGrid = true;
-    this.activeFooter = false;
-    this.divVis = {
-      header: false,
-      grid: true,
-      footer: false
-    };
-    this._invoiceUiDataService.setDivStatus(this.divVis);
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
-
-  public onClickFooter() {
-    this.activeHeader = false;
-    this.activeGrid = false;
-    this.activeFooter = true;
-    this.divVis = {
-      header: false,
-      grid: false,
-      footer: true
-    };
-    this._invoiceUiDataService.setDivStatus(this.divVis);
-  }
-
+}
   // public createTemplate() {
   //   // let temp = new GetInvoiceTemplateDetailsResponse();
   //   this.store.take(1).subscribe(val => {
@@ -447,8 +356,5 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   //     logoSize: ''
   // }
   // }
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
-  }
-}
+
+// }
