@@ -85,7 +85,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
             }
           }
           if (activeCmpUniqueName) {
-            debugger;
+            // debugger;
             this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
               this.activeFinancialYear.financialYearStarts,
               this.activeFinancialYear.financialYearEnds, false, CHART_CALLED_FROM.PAGEINIT, [API_TO_CALL.PL]));

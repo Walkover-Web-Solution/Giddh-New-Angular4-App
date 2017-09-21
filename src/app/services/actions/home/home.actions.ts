@@ -226,7 +226,7 @@ export class HomeActions {
         ((o) => { o.next({ status: 'success', body: { groups: [] } }); });
       let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next({ status: 'success', body: { networth: [], profitLoss: [] } }); });
       let a: Observable<Action> = new Observable<Action>((o) => { o.next(action); });
-      debugger;
+      // debugger;
       (action.payload.ApiToCall as API_TO_CALL[]).forEach(element => {
         if (element === API_TO_CALL.EXPENCE) {
           ExpenceResp = this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh);

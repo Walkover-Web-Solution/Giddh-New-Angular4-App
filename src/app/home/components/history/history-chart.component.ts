@@ -88,7 +88,7 @@ export class HistoryChartComponent implements OnInit {
     if (this.showExpense && this.showLastYear && (!(this.expenseDataLY && this.expenseDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
     if (this.showRevenue && this.showLastYear && (!(this.revenueDataLY && this.revenueDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
     if (this.showProfitLoss && this.showLastYear && (!(this.profitLossDataLY && this.profitLossDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
-    debugger;
+    // debugger;
     if (this.lastFinancialYear && this.showLastYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
@@ -224,7 +224,7 @@ export class HistoryChartComponent implements OnInit {
     this.comparisionChartData
       .skipWhile(p => (isNullOrUndefined(p)))
       .subscribe(p => {
-        debugger;
+        // debugger;
         this.expenseData = (p.ExpensesActiveYearYearly);
         this.expenseDataLY = (p.ExpensesLastYearYearly);
         this.revenueData = (p.revenueActiveYearYearly);
