@@ -11,6 +11,7 @@ import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment';
 import * as _ from 'lodash';
 import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
+import { CHART_CALLED_FROM, API_TO_CALL } from "../../../services/actions/home/home.const";
 
 @Component({
   selector: 'history-chart',
@@ -23,6 +24,7 @@ export class HistoryChartComponent implements OnInit {
   @Input() public showExpense: boolean = false;
   @Input() public showRevenue: boolean = false;
   @Input() public showProfitLoss: boolean = true;
+  public ApiToCALL: API_TO_CALL[] = [API_TO_CALL.PL];
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
@@ -70,18 +72,29 @@ export class HistoryChartComponent implements OnInit {
     }];
   }
   public fetchChartData() {
-    this.requestInFlight = true;
     this.expenseData = [];
-    // if (this.activeFinancialYear) {
-    //   this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
-    //     this.activeFinancialYear.financialYearStarts,
-    //     this.activeFinancialYear.financialYearEnds, this.refresh));
-    // }
-    // if (this.lastFinancialYear) {
-    //   this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
-    //     this.lastFinancialYear.financialYearStarts,
-    //     this.lastFinancialYear.financialYearEnds, this.refresh));
-    // }
+    this.requestInFlight = true;
+    this.ApiToCALL = [];
+    if (this.showExpense && (!(this.expenseData && this.expenseData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
+    if (this.showRevenue && (!(this.revenueData && this.revenueData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
+    if (this.showProfitLoss && (!(this.profitLossData && this.profitLossData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
+
+    if (this.activeFinancialYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
+        this.activeFinancialYear.financialYearStarts,
+        this.activeFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.COMPARISION, this.ApiToCALL));
+    }
+
+    this.ApiToCALL = [];
+    if (this.showExpense && this.showLastYear && (this.expenseDataLY || this.expenseDataLY.length < 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
+    if (this.showRevenue && this.showLastYear && (this.revenueDataLY || this.revenueDataLY.length < 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
+    if (this.showProfitLoss && this.showLastYear && (this.profitLossDataLY || this.profitLossDataLY.length < 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
+
+    if (this.lastFinancialYear && this.showLastYear) {
+      this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
+        this.lastFinancialYear.financialYearStarts,
+        this.lastFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.COMPARISION, this.ApiToCALL));
+    }
     this.refresh = false;
   }
 
@@ -89,25 +102,30 @@ export class HistoryChartComponent implements OnInit {
     _.each(this.AllSeries, (p) => {
       if (p.name === 'Expense') {
         p.data = this.expenseData;
+        p.color = '#005b77';
       }
       if (p.name === 'Revenue') {
         p.data = this.revenueData;
+        p.color = '#d37c59';
       }
       if (p.name === 'Profit/Loss') {
         p.data = this.profitLossData;
+        p.color = '#aeaec4';
       }
       if (p.name === 'LY Expense') {
         p.data = this.expenseDataLY;
+        p.color = '#77a1b8';
       }
       if (p.name === 'LY Revenue') {
         p.data = this.revenueDataLY;
+        p.color = '#c45022';
       }
       if (p.name === 'LY Profit/Loss') {
         p.data = this.profitLossDataLY;
+        p.color = '#28283c';
       }
     });
     this.options = {
-      colors: ['#005b77', '#d37c59', '#aeaec4', '#77a1b8', '#c45022', '#28283c'],
       chart: {
         height: '320px',
       },
@@ -140,12 +158,12 @@ export class HistoryChartComponent implements OnInit {
       this.showRevenue = !this.showRevenue;
     }
     this.ShowLastYear();
-    this.generateCharts();
+    // this.generateCharts();
   }
   public LyToggle() {
     this.showLastYear = !this.showLastYear;
     this.ShowLastYear();
-    this.generateCharts();
+    // this.generateCharts();
   }
   public ShowLastYear() {
     this.AllSeries = [{

@@ -62,7 +62,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          if (activeCmpUniqueName) { this.fetchChartData(); }
+          // if (activeCmpUniqueName) { this.fetchChartData(); }
         }
       }
     });
@@ -104,6 +104,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   }
   public fetchChartData() {
     this.requestInFlight = true;
+    debugger;
     this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
 
     if (this.lastFinancialYear) {

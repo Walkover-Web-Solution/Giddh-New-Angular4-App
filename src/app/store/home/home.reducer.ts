@@ -142,7 +142,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     // End Revenue Chart
     // START COMPARISION CHART API
-    case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+    case HOME.COMPARISION_CHART.GET_PAGEINIT_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IComparisionChartResponse;
       let revenueActiveYear = processDataForGroupHistory(data.revenueActiveYear);
       let ExpensesActiveYear = processDataForGroupHistory(data.ExpensesActiveYear);
@@ -196,7 +196,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
-    case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE: {
+    case HOME.COMPARISION_CHART.GET_PAGEINIT_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IComparisionChartResponse;
       let revenueLastYear = processDataForGroupHistory(data.revenueLastYear);
       let ExpensesLastYear = processDataForGroupHistory(data.ExpensesLastYear);
@@ -235,6 +235,54 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         },
         networth_comparisionChart: {
           ...state.networth_comparisionChart,
+          revenueLastYear,
+          revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
+          revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
+          ExpensesLastYear,
+          ExpensesLastYearMonthly: ExpensesLastYear.map(p => p.closingBalance.amount),
+          ExpensesLastYearYearly: ExpensesLastYear.map(p => p.total.amount),
+          ProfitLossLastYear,
+          ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
+          ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueActiveYear = processDataForGroupHistory(data.revenueActiveYear);
+      let ExpensesActiveYear = processDataForGroupHistory(data.ExpensesActiveYear);
+      let ProfitLossActiveYear = processDataForProfitLoss(data.ProfitLossActiveYear);
+      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
+      return Object.assign({}, state, {
+        comparisionChart: {
+          ...state.comparisionChart,
+          revenueActiveYear,
+          revenueActiveYearMonthly: revenueActiveYear.map(p => p.closingBalance.amount),
+          revenueActiveYearYearly: revenueActiveYear.map(p => p.total.amount),
+          ExpensesActiveYear,
+          ExpensesActiveYearMonthly: ExpensesActiveYear.map(p => p.closingBalance.amount),
+          ExpensesActiveYearYearly: ExpensesActiveYear.map(p => p.total.amount),
+          ProfitLossActiveYear,
+          ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
+          ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueLastYear = processDataForGroupHistory(data.revenueLastYear);
+      let ExpensesLastYear = processDataForGroupHistory(data.ExpensesLastYear);
+      let ProfitLossLastYear = processDataForProfitLoss(data.ProfitLossLastYear);
+      let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
+      return Object.assign({}, state, {
+        comparisionChart: {
+          ...state.comparisionChart,
           revenueLastYear,
           revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
           revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
@@ -330,6 +378,7 @@ export function homeReducer(state = initialState, action: Action): HomeState {
         }
       });
     }
+
     // End COMPARISSION CHART API
     // Bank API
     case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
