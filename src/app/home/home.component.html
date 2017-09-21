@@ -6,32 +6,30 @@
 
     <div class="container-fluid">
         <div class="row">
-
-            <!-- commented for saltedge
-                    <div class="col-xs-4">
-                        <live-accounts #liveaccount></live-accounts>
-                    </div>
-                commented for saltedge-->
+            <!-- comment due to saltedge 
+            <div class="col-xs-4">
+            <live-accounts #liveaccount></live-accounts>
+        </div> -->
 
             <div class="col-xs-6">
-                <expenses-chart #expence></expenses-chart>
+                <expenses-chart [expensesChartData]="expensesChartData$" #expence></expenses-chart>
             </div>
 
 
             <div class="col-xs-6">
-                <revenue-chart #revenue></revenue-chart>
+                <revenue-chart [revenueChartData]='revenueChartData$' #revenue></revenue-chart>
             </div>
 
             <div class="col-xs-6">
-                <compare-chart #compare></compare-chart>
+                <compare-chart [comparisionChartData]="comparisionChartData$" #compare></compare-chart>
             </div>
 
             <div class="col-xs-6">
-                <history-chart #history></history-chart>
+                <history-chart [comparisionChartData]="historyComparisionChartData$" #history></history-chart>
             </div>
 
             <div class="col-xs-6">
-                <networth-chart #networth></networth-chart>
+                <networth-chart [comparisionChartData]="networthComparisionChartData$" #networth></networth-chart>
             </div>
 
         </div>
