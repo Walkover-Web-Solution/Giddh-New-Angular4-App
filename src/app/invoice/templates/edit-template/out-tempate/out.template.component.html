@@ -429,7 +429,7 @@
                 <!--<hr [ngStyle]="{ 'background-color': color}" />-->
                 <!--</h2>-->
                 <!--</div>-->
-                <div class="docTitle" *ngIf="inputTemplate.sections[0].content[24].display">
+                <div class="docTitle" *ngIf="inputTemplate.sections[0].content[24] && inputTemplate.sections[0].content[24].display">
                     <h2 [ngStyle]="{ 'color': inputTemplate.primaryColor}" title="{{(inputTemplate.sections[0].content[24].label.length > 0) ? inputTemplate.sections[0].content[24].label : 'INVOICE' }}">
                         <hr [ngStyle]="{ 'background-color': inputTemplate.primaryColor}" />
                     </h2>
