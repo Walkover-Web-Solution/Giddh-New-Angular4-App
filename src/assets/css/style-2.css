@@ -3928,3 +3928,8 @@ input[type='checkbox'][disabled]:after {
 .table-container .profitLoss section div>div {
     border-right: 0;
 }
+
+.active-toggle-btn {
+    color: white;
+    background-color: #ff5f00;
+}

@@ -20,13 +20,13 @@ import { ChildGroup } from '../../../../models/api-models/Search';
         <div class="col-xs-4  account text-right">
           <span>{{account.closingBalance.amount | number:'1.2-2'}}{{account.closingBalance | recType}}</span>
         </div>
-        <div class="col-xs-4  group text-right">
+        <div class="col-xs-4  account text-right">
           <span>{{account.openingBalance.amount | number:'1.2-2'}}{{account.openingBalance | recType}}</span>
         </div>
       </div>
     </section>
     <ng-content></ng-content>
-  `
+  `,
 })
 export class PlGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;

@@ -10,7 +10,7 @@ import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from './VM';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import * as _ from 'lodash';
-import { AccountResponse } from '../../../../models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({
@@ -31,7 +31,7 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   @Input() public isSearchingGroups: boolean = false;
   public breadcrumbPath: string[] = [];
   @Output() public breadcrumbPathChanged: EventEmitter<string[]> = new EventEmitter();
-  public activeAccount: Observable<AccountResponse>;
+  public activeAccount: Observable<AccountResponseV2>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 

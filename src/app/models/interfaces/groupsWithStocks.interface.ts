@@ -9,7 +9,6 @@ export interface IGroupsWithStocksFlattenItem extends INameUniqueName {
 
 export interface IGroupsWithStocksHierarchyMinItem extends INameUniqueName {
   childStockGroups: IGroupsWithStocksHierarchyMinItem[];
-
   isActive?: boolean;
   isOpen?: boolean;
   stocks?: INameUniqueName[];
