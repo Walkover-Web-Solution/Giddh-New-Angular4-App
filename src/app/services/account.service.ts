@@ -2,8 +2,12 @@ import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
 import { Response } from '@angular/http';
-import { AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest, AccountSharedWithResponse, FlattenAccountsResponse, AccountsTaxHierarchyResponse } from '../models/api-models/Account';
-import { ACCOUNTS_API } from './apiurls/account.api';
+import {
+  AccountMergeRequest, AccountRequest, AccountUnMergeRequest, AccountResponse, AccountMoveRequest, ShareAccountRequest,
+  AccountSharedWithResponse, FlattenAccountsResponse, AccountsTaxHierarchyResponse,
+  AccountRequestV2, AccountResponseV2
+} from '../models/api-models/Account';
+import { ACCOUNTS_API, ACCOUNTS_API_V2 } from './apiurls/account.api';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -44,18 +48,18 @@ export class AccountService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e, model, { groupUniqueName }));
   }
 
-  public UpdateAccount(model: AccountRequest, accountName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
+  public UpdateAccount(model: AccountRequest, accountUniqueName: string): Observable<BaseResponse<AccountResponse, AccountRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountName', accountName), model)
+    return this._http.put(ACCOUNTS_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
         let data: BaseResponse<AccountResponse, AccountRequest> = res.json();
         data.request = model;
-        data.queryString = { accountName };
+        data.queryString = { accountUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<AccountResponse, AccountRequest>(e));
@@ -97,7 +101,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(ACCOUNTS_API.MERGE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+    return this._http.put(ACCOUNTS_API.MERGE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, AccountMergeRequest[]> = res.json();
         data.request = model;
@@ -114,7 +118,7 @@ export class AccountService implements OnInit {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.UNMERGE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+    return this._http.post(ACCOUNTS_API.UNMERGE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
       .map((res) => {
         let data: BaseResponse<string, AccountUnMergeRequest> = res.json();
         data.request = model;
@@ -211,7 +215,7 @@ export class AccountService implements OnInit {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(ACCOUNTS_API.DELETE_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
+    return this._http.delete(ACCOUNTS_API.DELETE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = accountUniqueName;
       data.queryString = { accountUniqueName };
@@ -262,5 +266,38 @@ export class AccountService implements OnInit {
       data.queryString = { accountUniqueName };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountsTaxHierarchyResponse, string>(e));
+  }
+
+  /**
+   * accounts v2 api's
+   */
+  public GetAccountDetailsV2(accountUniqueName: string): Observable<BaseResponse<AccountResponseV2, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(ACCOUNTS_API_V2.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName))).map((res) => {
+      let data: BaseResponse<AccountResponseV2, string> = res.json();
+      data.queryString = { accountUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, string>(e));
+  }
+  public CreateAccountV2(model: AccountRequestV2, groupUniqueName: string): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(ACCOUNTS_API_V2.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), model)
+      .map((res) => {
+        let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res.json();
+        data.request = model;
+        data.queryString = { groupUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName }));
   }
 }

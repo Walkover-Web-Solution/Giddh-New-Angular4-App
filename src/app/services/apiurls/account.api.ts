@@ -1,17 +1,25 @@
 import { Configuration } from '../../app.constant';
+const COMMON_URL_FOR_ACCOUNT = Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName';
+const COMMON_URL_FOR_ACCOUNT_V2 = Configuration.ApiUrl + 'v2/company/:companyUniqueName/accounts/:accountUniqueName';
+
+export const ACCOUNTS_API_V2 = {
+  UPDATE: COMMON_URL_FOR_ACCOUNT_V2,
+  GET: COMMON_URL_FOR_ACCOUNT_V2,
+  CREATE: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/accounts'
+};
 
 export const ACCOUNTS_API = {
   CREATE: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/accounts',
-  UPDATE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountName',
-  DETAILS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName',
-  MERGE_ACCOUNT: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/merge',
-  UNMERGE_ACCOUNT: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/un-merge',
-  MOVE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/move',
-  DELETE_ACCOUNT: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName', // delete method,
-  SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/share',
-  UNSHARE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/unshare',
-  SHARED_WITH: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/shared-with',
+  UPDATE: COMMON_URL_FOR_ACCOUNT,
+  DETAILS: COMMON_URL_FOR_ACCOUNT,
+  DELETE: COMMON_URL_FOR_ACCOUNT, // delete method,
+  MERGE: COMMON_URL_FOR_ACCOUNT + '/merge',
+  UNMERGE: COMMON_URL_FOR_ACCOUNT + '/un-merge',
+  MOVE: COMMON_URL_FOR_ACCOUNT + '/move',
+  SHARE: COMMON_URL_FOR_ACCOUNT + '/share',
+  UNSHARE: COMMON_URL_FOR_ACCOUNT + '/unshare',
+  SHARED_WITH: COMMON_URL_FOR_ACCOUNT + '/shared-with',
+  TAX_HIERARCHY: COMMON_URL_FOR_ACCOUNT + '/tax-hierarchy', // get call
   FLATTEN_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-accounts?q=:q&page=:page&count=:count', // get call
-  TAX_HIERARCHY: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/tax-hierarchy', // get call
   FLATTEN_ACCOUNTS_OF_GROUPS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-accounts?count=:count&page=:page&q=:q'
 };

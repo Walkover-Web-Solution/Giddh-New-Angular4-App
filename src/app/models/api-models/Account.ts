@@ -9,40 +9,44 @@ import { IPaginatedResponse } from '../interfaces/paginatedResponse.interface';
 /**
  * Model for create account api response
  * API:: (create-account) /company/companyUniqueName/groups/:groupUniqueName:/accounts
+ * same model can be use in v2 api here are the details
+ * missing keys - gstDetails, state, stateCode, address
+ * new keys - [addresses] will be an array of IAccountAddress
  */
 export class AccountResponse implements IAccountCreate {
-    public gstDetails: IGstDetailListItem[];
-    public city?: string;
-    public pincode?: string;
-    public email: string;
-    public country?: string;
-    public createdAt: string;
-    public updatedAt: string;
-    public updatedBy: IUserInfo;
-    public mobileNo: string;
-    public sacNumber?: string;
-    public attentionTo: string;
-    public stateCode?: string;
-    public createdBy: IUserInfo;
-    public companyName: string;
-    public parentGroups: INameUniqueName[];
-    public openingBalanceDate: string;
-    public applicableTaxes: INameUniqueName[];
-    public isFixed: boolean;
-    public yodleeAdded: boolean;
-    public accountType?: string;
-    public hsnNumber?: string;
-    public openingBalanceType: string;
-    public openingBalance: number;
-    public state?: string;
-    public description?: string;
-    public address: string;
-    public role: INameUniqueName;
-    public stocks?: any[];
-    public mergedAccounts: string;
-    public uniqueName: string;
-    public name: string;
-    public isComposite?: boolean;
+  public gstDetails?: IGstDetailListItem[];
+  public stateCode?: string;
+  public state?: string;
+  public city?: string;
+  public address?: string;
+  public addresses?: IAccountAddress[];
+  public pincode?: string;
+  public email: string;
+  public country?: string;
+  public createdAt: string;
+  public updatedAt: string;
+  public updatedBy: IUserInfo;
+  public mobileNo: string;
+  public sacNumber?: string;
+  public attentionTo: string;
+  public createdBy: IUserInfo;
+  public companyName: string;
+  public parentGroups: INameUniqueName[];
+  public openingBalanceDate: string;
+  public applicableTaxes: INameUniqueName[];
+  public isFixed: boolean;
+  public yodleeAdded: boolean;
+  public accountType?: string;
+  public hsnNumber?: string;
+  public openingBalanceType: string;
+  public openingBalance: number;
+  public description?: string;
+  public role: INameUniqueName;
+  public stocks?: any[];
+  public mergedAccounts: string;
+  public uniqueName: string;
+  public name: string;
+  public isComposite?: boolean;
 }
 
 /**
@@ -158,6 +162,7 @@ export class AccountsTaxHierarchyResponse {
 export class IAccountAddress {
   public gstNumber: string;
   public address: string;
+  public state: string;
   public stateCode: string;
   public isDefault: boolean;
   public isComposite: boolean;
@@ -165,7 +170,7 @@ export class IAccountAddress {
 }
 
 export class AccountRequestV2 {
-  public addresses: IAccountAddress;
+  public addresses: IAccountAddress[];
   public attentionTo?: string;
   public companyName?: string;
   public description?: string;
@@ -179,4 +184,34 @@ export class AccountRequestV2 {
   public hsnNumber: string;
   public country: { countryCode: string };
   public sacNumber: string;
+}
+export class AccountResponseV2 {
+  public name: string;
+  public country: { countryCode: string, countryName: string };
+  public stocks?: any[];
+  public hsnNumber?: string;
+  public openingBalanceDate?: string;
+  public applicableTaxes: INameUniqueName[];
+  public isFixed: boolean;
+  public yodleeAdded: boolean;
+  public accountType: any;
+  public mobileNo: string;
+  public sacNumber?: string;
+  public attentionTo: string;
+  public openingBalanceType: string;
+  public openingBalance: number;
+  public companyName: string;
+  public parentGroups: INameUniqueName[];
+  public description?: string;
+  public role: INameUniqueName;
+  public email: string;
+  public mergedAccounts: string;
+  public createdAt: string;
+  public createdBy: IUserInfo;
+  public updatedAt: string;
+  public updatedBy: IUserInfo;
+  public city?: string;
+  public pincode?: string;
+  public uniqueName: string;
+  public addresses: IAccountAddress[];
 }
