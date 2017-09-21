@@ -64,7 +64,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
               }
             }
           }
-          if (activeCmpUniqueName) { this.fetchChartData(); }
+          // if (activeCmpUniqueName) { this.fetchChartData(); }
         }
       }
     });
