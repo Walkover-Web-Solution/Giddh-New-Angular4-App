@@ -13,6 +13,7 @@ export class PlGridComponent {
   public showClearSearch: boolean;
   @Input() public search: string = '';
   @Input() public plData: ProfitLossData;
+  @Input() public padding: string;
 
   @Input()
   public set expandAll(value: boolean) {

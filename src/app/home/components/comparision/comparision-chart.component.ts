@@ -102,20 +102,19 @@ export class ComparisionChartComponent implements OnInit {
 
     this.comparisionChartData
       .skipWhile(p => (isNullOrUndefined(p)))
-      // .distinctUntilChanged((p, q) => p.ExpensesActiveMonthly === this.expenseData)
       .subscribe(p => {
-        this.expenseData = (p.ExpensesActiveMonthly);
+        this.expenseData = (p.ExpensesActiveYearMonthly);
         this.expenseDataLY = (p.ExpensesLastYearMonthly);
         this.revenueData = (p.revenueActiveYearMonthly);
         this.revenueDataLY = (p.revenueLastYearMonthly);
         this.profitLossData = p.ProfitLossActiveYearMonthly;
+        this.profitLossDataLY = p.ProfitLossLastYearMonthly;
         this.generateCharts();
         this.requestInFlight = false;
       });
   }
 
   public fetchChartData() {
-    this.expenseData = [];
     this.requestInFlight = true;
     this.ApiToCALL = [];
     if (this.showExpense && (!(this.expenseData && this.expenseData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
@@ -129,9 +128,9 @@ export class ComparisionChartComponent implements OnInit {
     }
 
     this.ApiToCALL = [];
-    if (this.showExpense && this.showLastYear && (this.expenseDataLY || this.expenseDataLY.length === 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
-    if (this.showRevenue && this.showLastYear && (this.revenueDataLY || this.revenueDataLY.length === 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
-    if (this.showProfitLoss && this.showLastYear && (this.profitLossDataLY || this.profitLossDataLY.length === 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
+    if (this.showExpense && this.showLastYear && (!(this.expenseDataLY && this.expenseDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
+    if (this.showRevenue && this.showLastYear && (!(this.revenueDataLY && this.revenueDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
+    if (this.showProfitLoss && this.showLastYear && (!(this.profitLossDataLY && this.profitLossDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
 
     if (this.lastFinancialYear && this.showLastYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
