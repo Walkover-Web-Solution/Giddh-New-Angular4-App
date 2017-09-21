@@ -1,6 +1,7 @@
 import {
   Component, Input, EventEmitter, Output, OnInit, OnChanges,
-  SimpleChanges
+  SimpleChanges,
+  OnDestroy
 } from '@angular/core';
 import * as _ from 'lodash';
 import { Font } from 'ngx-font-picker/dist';
@@ -10,6 +11,16 @@ import { AppState } from '../../../../../store/roots';
 import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
 import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
+import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
+import { ReplaySubject } from 'rxjs/Rx';
+
+export class TemplateDesignUISectionVisibility {
+  public templates: boolean = false;
+  public logo: boolean = false;
+  public color: boolean = false;
+  public font: boolean = false;
+  public print: boolean = false;
+}
 
 @Component({
   selector: 'design-filters',
@@ -17,13 +28,12 @@ import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.se
   styleUrls: ['design.filters.component.css']
 })
 
-export class DesignFiltersContainerComponent {
-  public formData: FormData;
-  public files: UploadFile[] = [];
-  public uploadInput: EventEmitter<UploadInput>;
-  public humanizeBytes: any;
-  public dragOver: boolean;
-  public imagePreview: any;
+export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
+  @Input() public design: boolean;
+  public customTemplate: CustomTemplateResponse = new CustomTemplateResponse();
+  public templateUISectionVisibility: TemplateDesignUISectionVisibility = new TemplateDesignUISectionVisibility();
+  public logoAttached: boolean = false;
+  public showLogo: boolean = true;
 
   public font: Font = new Font({
     family: 'Roboto',
@@ -31,84 +41,98 @@ export class DesignFiltersContainerComponent {
     style: 'regular',
     styles: ['regular']
   });
-  public primaryColor: string;
-  public secondaryColor: string;
-  public top: string;
-  public left: string;
-  public bottom: string;
-  public right: string;
-  public ifTemplateSelected: boolean = false;
-  public ifLogoSelected: boolean = false;
-  public ifColorSelected: boolean = false;
-  public ifFontSelected: boolean = false;
-  public ifPrintSelected: boolean = false;
-  public sampleJsonString: string;
-  @Input() public design: boolean;
+
   public _presetFonts = ['Arial', 'Serif', 'Helvetica', 'Sans-Serif', 'Open Sans', 'Roboto Slab'];
-  public sizeSelect: boolean = true;
-  public styleSelect: boolean = true;
   public presetFonts = this._presetFonts;
-  public logoAttached: boolean = false;
-  public logoSize: string;
-  public showLogo: boolean = true;
-  constructor(private _invoiceUiDataService: InvoiceUiDataService, private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService) {
+
+  public formData: FormData;
+  public files: UploadFile[] = [];
+  public uploadInput: EventEmitter<UploadInput>;
+  public humanizeBytes: any;
+  public dragOver: boolean;
+  public imagePreview: any;
+
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  constructor(private _invoiceUiDataService: InvoiceUiDataService) {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
-    this.primaryColor = '#df4927';
-    this.secondaryColor = '#fdf6f4';
-    this.logoSize = '140';
-    this._invoiceUiDataService.setLogoSize(this.logoSize);
-    this._invoiceUiDataService.updateEmailSettingObj({ isEmailTabSelected: false });
   }
 
-  public selectTemplate() {
-    this.ifTemplateSelected = true;
-    this.ifLogoSelected = false;
-    this.ifColorSelected = false;
-    this.ifPrintSelected = false;
-    this.ifFontSelected = false;
+  public ngOnInit() {
+    this._invoiceUiDataService.customTemplate.subscribe((template: CustomTemplateResponse) => {
+      this.customTemplate = _.cloneDeep(template);
+    });
   }
 
-  public selectLogo() {
-    this.ifLogoSelected = true;
-    this.ifColorSelected = false;
-    this.ifPrintSelected = false;
-    this.ifFontSelected = false;
-    this.ifTemplateSelected = false;
+  /**
+   * onValueChange
+   */
+  public onValueChange(fieldName: string, value: string) {
+    let template = _.cloneDeep(this.customTemplate);
+    if (fieldName && value) {
+      template[fieldName] = value;
+    }
+    this._invoiceUiDataService.setCustomTemplate(template);
   }
 
-  public selectColor() {
-    this.ifColorSelected = true;
-    this.ifLogoSelected = false;
-    this.ifPrintSelected = false;
-    this.ifFontSelected = false;
-    this.ifTemplateSelected = false;
-  }
-  public selectFonts() {
-    this.ifFontSelected = true;
-    this.ifColorSelected = false;
-    this.ifLogoSelected = false;
-    this.ifPrintSelected = false;
-    this.ifTemplateSelected = false;
+  /**
+   * changeColor
+   */
+  public changeColor(primaryColor: string, secondaryColor: string) {
+    let template = _.cloneDeep(this.customTemplate);
+    template.primaryColor = primaryColor;
+    template.secondaryColor = secondaryColor;
+    this._invoiceUiDataService.setCustomTemplate(template);
   }
 
-  public printSettings() {
-    this.ifPrintSelected = true;
-    this.ifFontSelected = false;
-    this.ifColorSelected = false;
-    this.ifLogoSelected = false;
-    this.ifTemplateSelected = false;
+  /**
+   * onDesignChange
+   */
+  public onDesignChange(fieldName, value) {
+    let template = _.cloneDeep(this.customTemplate);
+    template[fieldName] = value;
+    this._invoiceUiDataService.setCustomTemplate(template);
   }
 
-  public togglePresetFonts() {
-    this.presetFonts = this.presetFonts.length ? [] : this._presetFonts;
+  /**
+   * resetPrintSetting
+   */
+  public resetPrintSetting() {
+     let template = _.cloneDeep(this.customTemplate);
+     template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
+     this.customTemplate = _.cloneDeep(template);
+     this.onValueChange(null, null);
   }
 
-  public toggleExtraOptions() {
-    this.sizeSelect = !this.sizeSelect;
-    this.styleSelect = !this.styleSelect;
+  /**
+   * onFontSelect
+   */
+  public onFontSelect(font: Font) {
+    this.onValueChange('font', font.family);
   }
+
+  /**
+   * onChangeVisibility
+   */
+  public onChangeVisibility(section: string) {
+    let visibility = _.cloneDeep(this.templateUISectionVisibility);
+    visibility.color = false;
+    visibility.font = false;
+    visibility.logo = false;
+    visibility.print = false;
+    visibility.templates = false;
+    if (section) {
+      visibility[section] = true;
+    }
+    this.templateUISectionVisibility = visibility;
+  }
+
+  public clickedOutside() {
+    this.onChangeVisibility(null);
+  }
+
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
       this.files.push(output.file);
@@ -170,69 +194,15 @@ export class DesignFiltersContainerComponent {
   public removeAllFiles(): void {
     this.uploadInput.emit({ type: 'removeAll' });
   }
-  public onPageMarginChange(value, margin) {
-    if (margin === 'topMargin') {
-      this.store.dispatch(this.invoiceAction.setTopPageMargin(value));
-    }
-    if (margin === 'leftMargin') {
-      this.store.dispatch(this.invoiceAction.setLeftPageMargin(value));
-    }
-    if (margin === 'bottomMargin') {
-      this.store.dispatch(this.invoiceAction.setBottomPageMargin(value));
-    }
-    if (margin === 'rightMargin') {
-      this.store.dispatch(this.invoiceAction.setRightPageMargin(value));
 
-    }
-  }
-
-  public showTemplate(id) {
-    this.store.dispatch(this.invoiceAction.setTemplateId(id));
-  }
-  public onFontSelect(fo: Font) {
-
-    this.store.dispatch(this.invoiceAction.setFont(fo.family));
-  }
-  public changeColor(primaryColor, secondaryColor) {
-    this.primaryColor = primaryColor;
-    this.secondaryColor = secondaryColor;
-    this.store.dispatch(this.invoiceAction.setColor(this.primaryColor, this.secondaryColor));
-  }
-  public setLogoSize(size) {
-    if (size === 'small') {
-      this.logoSize = '40';
-    } else if (size === 'large') {
-      this.logoSize = '180';
-    } else {
-      this.logoSize = '140';
-    }
-    this._invoiceUiDataService.setLogoSize(this.logoSize);
-  }
-
-  public resetPrintSetting() {
-    this._invoiceUiDataService.resetPrintSetting(10);
-    this.left = '';
-    this.top = '';
-    this.right = '';
-    this.bottom = '';
-  }
-  public hideLogo() {
+  public toogleLogoVisibility(): void {
     this.showLogo = !this.showLogo;
-    this._invoiceUiDataService.logoState(this.showLogo);
+    this._invoiceUiDataService.setLogoVisibility(this.showLogo);
   }
 
-  public clickedOutside() {
-    this.ifColorSelected = false;
-    this.ifLogoSelected = false;
-    this.ifPrintSelected = false;
-    this.ifFontSelected = false;
-    this.ifTemplateSelected = false;
-  }
-
-  /**
-   * setTemplateName
-   */
-  public setTemplateName(name: string) {
-    this._invoiceUiDataService.setTemplateName(name);
+   public ngOnDestroy() {
+    // this._invoiceUiDataService.customTemplate.unsubscribe();
+    // this.destroyed$.next(true);
+    // this.destroyed$.complete();
   }
 }

@@ -9,8 +9,6 @@ import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
 
 export class InvoiceTemplatePreviewModelComponent {
 
-  @Input() public templateSections: any;
-  @Input() public templateId: any;
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   constructor(public sanitizer: DomSanitizer) {
