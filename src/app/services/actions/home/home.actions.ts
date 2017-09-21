@@ -130,7 +130,7 @@ export class HomeActions {
 
       let RevenueResp: Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> = new Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>>
         ((o) => { o.next({ status: 'success', body: { groups: [] } }); });
-      let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next({ status: 'success', body:  { networth: [], profitLoss: [] } }); });
+      let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next({ status: 'success', body: { networth: [], profitLoss: [] } }); });
       let a: Observable<Action> = new Observable<Action>((o) => { o.next(action); });
       (action.payload.ApiToCall as API_TO_CALL[]).forEach(element => {
         if (element === API_TO_CALL.EXPENCE) {
@@ -153,7 +153,8 @@ export class HomeActions {
             revenueActiveYear: res[0].body ? res[0].body.groups : null,
             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
             ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            NetworthActiveYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_PAGEINIT_CHART_DATA_ACTIVE_YEAR_RESPONSE,
@@ -166,7 +167,8 @@ export class HomeActions {
             revenueActiveYear: res[0].body ? res[0].body.groups : null,
             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
             ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            NetworthActiveYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE,
@@ -179,7 +181,8 @@ export class HomeActions {
             revenueActiveYear: res[0].body ? res[0].body.groups : null,
             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
             ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            NetworthActiveYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_HISTORY_CHART_DATA_ACTIVE_YEAR_RESPONSE,
@@ -192,7 +195,8 @@ export class HomeActions {
             revenueActiveYear: res[0].body ? res[0].body.groups : null,
             ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
             ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            NetworthActiveYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
@@ -220,8 +224,9 @@ export class HomeActions {
 
       let RevenueResp: Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>> = new Observable<BaseResponse<GroupHistoryResponse, GroupHistoryRequest>>
         ((o) => { o.next({ status: 'success', body: { groups: [] } }); });
-      let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next({ status: 'success', body:  { networth: [], profitLoss: [] } }); });
+      let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next({ status: 'success', body: { networth: [], profitLoss: [] } }); });
       let a: Observable<Action> = new Observable<Action>((o) => { o.next(action); });
+      debugger;
       (action.payload.ApiToCall as API_TO_CALL[]).forEach(element => {
         if (element === API_TO_CALL.EXPENCE) {
           ExpenceResp = this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh);
@@ -241,10 +246,11 @@ export class HomeActions {
       if ((res[3] as Action).payload.CalledFrom === CHART_CALLED_FROM.PAGEINIT) {
         if ((res[0] === null || res[0].status === 'success') && (res[1] === null || res[1].status === 'success') && (res[2] === null || res[2].status === 'success')) {
           let obj: IComparisionChartResponse = {
-            revenueActiveYear: res[0].body ? res[0].body.groups : null,
-            ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
-            ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            revenueLastYear: res[0].body ? res[0].body.groups : null,
+            ExpensesLastYear: res[1].body ? res[1].body.groups : null,
+            ProfitLossLastYear: res[2].body,
+            NetworthLastYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_PAGEINIT_CHART_DATA_ACTIVE_YEAR_RESPONSE,
@@ -254,10 +260,11 @@ export class HomeActions {
       } else if ((res[3] as Action).payload.CalledFrom === CHART_CALLED_FROM.COMPARISION) {
         if ((res[0] === null || res[0].status === 'success') && (res[1] === null || res[1].status === 'success') && (res[2] === null || res[2].status === 'success')) {
           let obj: IComparisionChartResponse = {
-            revenueActiveYear: res[0].body ? res[0].body.groups : null,
-            ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
-            ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            revenueLastYear: res[0].body ? res[0].body.groups : null,
+            ExpensesLastYear: res[1].body ? res[1].body.groups : null,
+            ProfitLossLastYear: res[2].body,
+            NetworthLastYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE,
@@ -267,10 +274,11 @@ export class HomeActions {
       } else if ((res[3] as Action).payload.CalledFrom === CHART_CALLED_FROM.HISTORY) {
         if ((res[0] === null || res[0].status === 'success') && (res[1] === null || res[1].status === 'success') && (res[2] === null || res[2].status === 'success')) {
           let obj: IComparisionChartResponse = {
-            revenueActiveYear: res[0].body ? res[0].body.groups : null,
-            ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
-            ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            revenueLastYear: res[0].body ? res[0].body.groups : null,
+            ExpensesLastYear: res[1].body ? res[1].body.groups : null,
+            ProfitLossLastYear: res[2].body,
+            NetworthLastYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_HISTORY_CHART_DATA_LAST_YEAR_RESPONSE,
@@ -280,10 +288,11 @@ export class HomeActions {
       } else if ((res[3] as Action).payload.CalledFrom === CHART_CALLED_FROM.NETWORTH) {
         if ((res[0] === null || res[0].status === 'success') && (res[1] === null || res[1].status === 'success') && (res[2] === null || res[2].status === 'success')) {
           let obj: IComparisionChartResponse = {
-            revenueActiveYear: res[0].body ? res[0].body.groups : null,
-            ExpensesActiveYear: res[1].body ? res[1].body.groups : null,
-            ProfitLossActiveYear: res[2].body,
-            NetworthActiveYear: _.cloneDeep(res[2].body)
+            revenueLastYear: res[0].body ? res[0].body.groups : null,
+            ExpensesLastYear: res[1].body ? res[1].body.groups : null,
+            ProfitLossLastYear: res[2].body,
+            NetworthLastYear: _.cloneDeep(res[2].body),
+            refresh: (res[3] as Action).payload.refresh
           };
           return {
             type: HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_LAST_YEAR_RESPONSE,
@@ -300,13 +309,16 @@ export class HomeActions {
   public GetNetworthChartActiveYear$: Observable<Action> = this.action$
     .ofType(HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR)
     .switchMap(action => {
+      let a: Observable<Action> = new Observable<Action>((o) => { o.next(action); });
       return Observable.zip(
-        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh)
+        this._dashboardService.Dashboard(action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh),
+        a
       );
     }).map((res) => {
       if (res[0].status === 'success') {
         let obj: IComparisionChartResponse = {
-          NetworthActiveYear: res[0].body
+          NetworthActiveYear: res[0].body,
+          refresh: (res[1] as Action).payload.refresh
         };
         return {
           type: HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE,
