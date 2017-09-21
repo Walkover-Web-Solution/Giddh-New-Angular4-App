@@ -165,8 +165,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addGstDetailsForm(gstForm: FormGroup) {
-    if (gstForm.valid) {
+  public addGstDetailsForm(isValid: boolean) {
+    if (isValid) {
       const addresses = this.addAccountForm.get('addresses') as FormArray;
       addresses.push(this.initialGstDetailsForm());
     } else {
