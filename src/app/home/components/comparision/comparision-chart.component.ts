@@ -91,7 +91,7 @@ export class ComparisionChartComponent implements OnInit {
                 financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
                   let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
                   let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
-                  console.log(b.diff(a, 'days'));
+
                   return b.diff(a, 'days') < 0;
                 });
                 financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
@@ -121,7 +121,10 @@ export class ComparisionChartComponent implements OnInit {
         this.requestInFlight = false;
       });
   }
-
+  public hardRefresh() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
   public fetchChartData() {
     this.requestInFlight = true;
     this.ApiToCALL = [];
