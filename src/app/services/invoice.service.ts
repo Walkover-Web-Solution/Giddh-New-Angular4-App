@@ -6,7 +6,7 @@ import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { INVOICE_API } from './apiurls/invoice.api';
+import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
@@ -147,7 +147,7 @@ export class InvoiceService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(INVOICE_API.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.post(INVOICE_API_2.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
         let data: BaseResponse<GenerateInvoiceRequestClass, string> = res.json();
         data.request = '';

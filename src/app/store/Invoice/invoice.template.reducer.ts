@@ -16,6 +16,7 @@ export const initialState: CustomTemplateState = {
   sampleTemplates: null,
   customCreatedTemplates: null,
   defaultTemplate: {
+    logoUniqueName: null,
     createdBy: null,
     uniqueName: '',
     fontSize: '10pt',
