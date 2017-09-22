@@ -202,14 +202,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public changeCompany(selectedCompanyUniqueName: string) {
-    // let stateDetailsRequest = new StateDetailsRequest();
-    // stateDetailsRequest.companyUniqueName = selectedCompanyUniqueName;
-    // // debugger;
-    // if (this.route.firstChild.snapshot.url.length > 0) {
-    //   let path = this.route.firstChild.snapshot.url;
-    //   let parament = {};
-    //   // debugger;
-    //   stateDetailsRequest.lastState = path[0].path;
     this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
     // }
   }
