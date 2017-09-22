@@ -61,6 +61,7 @@ export class ComapnyResponse {
   public role: Role;
   public name: string;
   public gstDetails: GstDetail[];
+  public panNumber?: string;
 }
 
 export interface Role {

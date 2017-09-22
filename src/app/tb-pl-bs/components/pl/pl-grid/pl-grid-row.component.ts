@@ -4,7 +4,7 @@ import { ChildGroup } from '../../../../models/api-models/Search';
 @Component({
   selector: '[pl-grid-row]',  // <home></home>
   template: `
-    <div class="row pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName">
+    <div class="row pl-grid-row" [trial-accordion]="groupDetail" *ngIf="groupDetail.groupName" [ngClass]="{'isHidden': !groupDetail.isVisible }">
       <div class="col-xs-4  group" [innerHTML]="groupDetail.groupName | uppercase | highlight:search" [ngStyle]="{'padding-left': padding+'px'}"></div>
       <div class="col-xs-4  group text-right">
         <span> {{groupDetail.closingBalance.amount | number:'1.2-2'}}{{groupDetail.closingBalance | recType}} </span>
