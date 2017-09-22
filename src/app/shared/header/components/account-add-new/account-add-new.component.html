@@ -92,25 +92,30 @@
     </ng-container>
     <!-- hsn/sac container -->
     <ng-container *ngIf="isHsnSacEnabledAcc">
-      <!-- hsn and sac -->
-      <div class="row" style="height: 100px">
-        <div class="col">
-          <div class="form-group">
-            <label class="hsn-sac">HSN</label>
-            <input type="radio" class="hsn-sac-radio" formControlName="hsnOrSac" value='hsn' name="hsnOrSac" />
-            <input type="text" digitsOnlyDirective formControlName="hsnNumber" class="form-control hsn-sac-w-m-input" name="hsnNumber"
-              maxLength="10">
-          </div>
+        <!-- hsn and sac -->
 
-          <div class="form-group hsn-sac-group">
-            <label class="hsn-sac">SAC</label>
-            <input type="radio" class="hsn-sac-radio" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
-            <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control hsn-sac-w-m-input" name="sacNumber"
-              maxLength="10">
+        <div class="row">
+          <div class="col-xs-6 form-group">
+            <label class="d-block">HSN</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+              </span>
+              <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber"
+                maxLength="10">
+            </div>
+          </div>
+          <div class="col-xs-6 form-group">
+            <label class="d-block">SAC</label>
+            <div class="input-group">
+              <span class="input-group-addon">
+                <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+              </span>
+              <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
+            </div>
           </div>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
 
     <!-- other details -->
     <div class="row">
