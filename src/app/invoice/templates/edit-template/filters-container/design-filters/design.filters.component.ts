@@ -159,7 +159,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
       // url: 'http://ngx-uploader.com/upload',
       url: 'http://apitest.giddh.com/company/newsncindore15000172022770ygv88/logo',
       method: 'POST',
-      headers: { 'Session-Id': 'bYUWOIFl1dEJwi756dmSPA==' },
+      headers: { 'Session-Id': 'zBNU8fjk_-zZ6WDwDVO_5Q==' },
     };
 
     this.uploadInput.emit(event);
