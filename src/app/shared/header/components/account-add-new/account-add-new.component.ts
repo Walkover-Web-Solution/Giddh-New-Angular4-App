@@ -39,6 +39,12 @@ import { IOption } from '../../../theme/ng-select/option.interface';
       top: -75px;
       left: 197px;
   }
+  .save-btn{
+    font-weight: 600;
+    color: #0aa50a;
+    letter-spacing: 1px;
+    background-color: #dcdde4;
+  }
   `]
 })
 
@@ -55,10 +61,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    { value: 'not applicable', label: 'Not Applicable' },
-    { value: 'deemed export', label: 'Deemed Export' },
-    { value: 'government entity', label: 'Government Entity' },
-    { value: 'sez', label: 'Sez' }
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
@@ -123,6 +129,16 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         hsn.disable();
       }
     });
+    // get country code value change
+    this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+      if (a !== 'IN') {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        addresses.controls.map((ctr, index) => {
+          this.removeGstDetailsForm(index);
+        });
+        this.addGstDetailsForm(true);
+      }
+    });
 
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
       if (a) {
@@ -141,7 +157,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
-      partyType: ['not applicable']
+      partyType: ['NOT APPLICABLE']
     });
     return gstFields;
   }

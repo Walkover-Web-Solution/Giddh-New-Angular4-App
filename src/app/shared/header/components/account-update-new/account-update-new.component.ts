@@ -65,14 +65,15 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Output() public submitClicked: EventEmitter<
   { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
   = new EventEmitter();
+  @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
 
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    { value: 'not applicable', label: 'Not Applicable' },
-    { value: 'deemed export', label: 'Deemed Export' },
-    { value: 'government entity', label: 'Government Entity' },
-    { value: 'sez', label: 'Sez' }
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
@@ -146,6 +147,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         hsn.reset();
         sac.enable();
         hsn.disable();
+      }
+    });
+    // get country code value change
+    this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+      if (a !== 'IN') {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        addresses.controls.map((ctr, index) => {
+          this.removeGstDetailsForm(index);
+        });
+        this.addGstDetailsForm(true);
       }
     });
     // get active company
@@ -228,19 +239,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public showLessGst() {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
-  }
-  public showDeleteAccountModal() {
-    this.deleteAccountModal.show();
-  }
-  public hideDeleteAccountModal() {
-    this.deleteAccountModal.hide();
-  }
-  public deleteAccount() {
-    let activeAccUniqueName = null;
-    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
-    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
-    this.hideDeleteAccountModal();
-    this.addAccountForm.reset();
   }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
