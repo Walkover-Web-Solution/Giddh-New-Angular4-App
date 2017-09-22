@@ -74,34 +74,44 @@ export interface IRevenueChartClosingBalanceResponse {
   otherincomeLastyear?: ClosingBalanceResponse;
 }
 
-export interface IComparisionChartResponse {
+export class IComparisionChartResponse {
+  // Referesh
+  public refresh?: boolean;
   // revenue
-  revenueActiveYear?: any[];
-  revenueActiveYearMonthly?: any[];
-  revenueActiveYearYearly?: any[];
-  revenueLastYear?: any[];
-  revenueLastYearMonthly?: any[];
-  revenueLastYearYearly?: any[];
+  public revenueActiveYear?: any[];
+  public revenueActiveYearMonthly?: any[];
+  public revenueActiveYearYearly?: any[];
+  public revenueLastYear?: any[];
+  public revenueLastYearMonthly?: any[];
+  public revenueLastYearYearly?: any[];
   // expenses
-  ExpensesActiveYear?: any[];
-  ExpensesActiveMonthly?: any[];
-  ExpensesActiveYearly?: any[];
-  ExpensesLastYear?: any[];
-  ExpensesLastYearMonthly?: any[];
-  ExpensesLastYearYearly?: any[];
-  NetworthActiveYear?: any;
-  NetworthActiveYearMonthly?: any[];
-  NetworthActiveYearYearly?: any[];
-  NetworthLastYear?: any;
-  NetworthLastYearMonthly?: any[];
-  NetworthLastYearYearly?: any[];
+  public ExpensesActiveYear?: any[];
+  public ExpensesActiveYearMonthly?: any[];
+  public ExpensesActiveYearYearly?: any[];
+  public ExpensesLastYear?: any[];
+  public ExpensesLastYearMonthly?: any[];
+  public ExpensesLastYearYearly?: any[];
+  // networth
+  public NetworthActiveYear?: any;
+  public NetworthActiveYearMonthly?: any[];
+  public NetworthActiveYearYearly?: any[];
+  public NetworthLastYear?: any;
+  public NetworthLastYearMonthly?: any[];
+  public NetworthLastYearYearly?: any[];
   // P/L
-  ProfitLossActiveYear?: any;
-  ProfitLossActiveYearMonthly?: any[];
-  ProfitLossActiveYearYearly?: any[];
-  ProfitLossLastYear?: any;
-  ProfitLossLastYearMonthly?: any[];
-  ProfitLossLastYearYearly?: any[];
+  public ProfitLossActiveYear?: any;
+  public ProfitLossActiveYearMonthly?: any[];
+  public ProfitLossActiveYearYearly?: any[];
+  public ProfitLossLastYear?: any;
+  public ProfitLossLastYearMonthly?: any[];
+  public ProfitLossLastYearYearly?: any[];
+}
+
+export interface ProfitLossChart {
+  networth: any[];
+  profitLoss: any[];
+  monthlyBalances?: any;
+  yearlyBalances?: any;
 }
 
 export interface IBankAccount {
@@ -115,3 +125,45 @@ export interface IBankAccount {
   linkedAccount: INameUniqueName;
   name: string;
 }
+let cost = {
+  // revenue
+  revenueActiveYear: [],
+  revenueActiveYearMonthly: [],
+  revenueActiveYearYearly: [],
+  revenueLastYear: [],
+  revenueLastYearMonthly: [],
+  revenueLastYearYearly: [],
+  // expenses
+  ExpensesActiveYear: [],
+  ExpensesActiveYearMonthly: [],
+  ExpensesActiveYearYearly: [],
+  ExpensesLastYear: [],
+  ExpensesLastYearMonthly: [],
+  ExpensesLastYearYearly: [],
+  // networth
+  NetworthActiveYear: {
+    networth: [],
+    profitLoss: []
+  },
+  NetworthActiveYearMonthly: [],
+  NetworthActiveYearYearly: [],
+  NetworthLastYear: {
+    networth: [],
+    profitLoss: []
+  },
+  NetworthLastYearMonthly: [],
+  NetworthLastYearYearly: [],
+  // P/L
+  ProfitLossActiveYear: {
+    networth: [],
+    profitLoss: []
+  },
+  ProfitLossActiveYearMonthly: [],
+  ProfitLossActiveYearYearly: [],
+  ProfitLossLastYear: {
+    networth: [],
+    profitLoss: []
+  },
+  ProfitLossLastYearMonthly: [],
+  ProfitLossLastYearYearly: [],
+};
