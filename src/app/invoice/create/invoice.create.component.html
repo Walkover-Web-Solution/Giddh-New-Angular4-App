@@ -115,7 +115,7 @@
           <td *ngIf="customThead[1].display">{{ entry.entryDate }}</td>
           <td *ngIf="customThead[2].display">
             {{ transaction.accountName }}<br>
-            <input type="text" name="transaction.description" class="form-control" [(ngModel)]="transaction.description" />
+            <input type="text" name="transaction.description_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td *ngIf="customThead[3].display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
           <td *ngIf="customThead[5].display">{{ transaction.quantity }}</td>
