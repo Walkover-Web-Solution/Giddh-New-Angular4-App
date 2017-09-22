@@ -74,6 +74,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('accountSelect2') public accountSelect2: Select2Component;
   @ViewChild('accountForMoveSelect2') public accountForMoveSelect2: Select2Component;
+  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   @Input() public breadcrumbPath: string[] = [];
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
@@ -155,6 +156,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showDeleteMove: boolean = false;
   public isGstEnabledAcc: boolean = false;
   public isHsnSacEnabledAcc: boolean = false;
+  public showTaxes: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -695,6 +697,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
   }
 
+  public showDeleteAccountModal() {
+    this.deleteAccountModal.show();
+  }
+  public hideDeleteAccountModal() {
+    this.deleteAccountModal.hide();
+  }
+  public deleteAccount() {
+    let activeAccUniqueName = null;
+    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
+    this.hideDeleteAccountModal();
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

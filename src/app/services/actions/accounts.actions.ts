@@ -448,6 +448,7 @@ export class AccountsAction {
         this._toasty.successToast(action.payload.body, '');
         let activeGroup: GroupResponse = null;
         this.store.take(1).subscribe(s => activeGroup = s.groupwithaccounts.activeGroup);
+        return this.groupWithAccountsAction.getGroupDetails(activeGroup.uniqueName);
       }
       return {
         type: ''
