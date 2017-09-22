@@ -48,8 +48,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Input() public noFilter: number = 0;
 
   // Style settings.
-  @Input() public highlightColor: string;
-  @Input() public highlightTextColor: string;
+  @Input() public highlightColor: string = '#d25f29';
+  @Input() public highlightTextColor: string = '#ffffff';
 
   // Text settings.
   @Input() public notFoundMsg: string = 'No results found';
