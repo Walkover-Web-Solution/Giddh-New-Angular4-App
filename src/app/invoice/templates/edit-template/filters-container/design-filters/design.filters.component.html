@@ -58,15 +58,16 @@
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
-                                <input type="file" id="logo-edit" ngFileSelect (uploadOutput)="onUploadOutput($event)" [uploadInput]="uploadInput">
+                                <input type="file" id="logo-edit" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
                             </label>
                             <label for="logo-edit">
                                 <img src="" alt="" id="logoImage" [hidden]="!logoAttached"/>
                             </label>
-
                         </span>
-                        <button type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" tooltip="Clicking on Upload, will Upload image on server" [hidden]="!logoAttached">Upload</button>
+                        <button *ngIf="!isFileUploaded" type="button" class="start-upload-btn btn btn-success" (click)="startUpload()" tooltip="Clicking on Upload, will Upload image on server" [hidden]="!logoAttached || isFileUploadInProgress">Upload</button>
+                        <span class="start-upload-btn" *ngIf="isFileUploadInProgress"><b>Uploading...</b></span>
+                        <button *ngIf="isFileUploaded" type="button" class="start-upload-btn btn btn-danger" (click)="deleteLogo()" tooltip="Clicking on this, will delete image from server" [hidden]="!logoAttached">Delete</button>
                         <div class="pull-left mrL1 mrT1">
                             <p>Size</p>
                             <ul>
