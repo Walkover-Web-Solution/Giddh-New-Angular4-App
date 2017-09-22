@@ -22,17 +22,17 @@ class FormatCsv implements IFormatable {
   private title: string = 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
   public csv = () => `${this.header}\r\n\r\n${this.title}\r\n${this.body}\r\n${this.footer}\r\n`;
 
-  setHeader(selectedCompany: ComapnyResponse) {
+  public setHeader(selectedCompany: ComapnyResponse) {
     this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\nTrial Balance: fromDate to toDate\r\n`;
   }
 
-  setRowData(data: any[], padding: number) {
+  public setRowData(data: any[], padding: number) {
     this.body += ' '.repeat(padding);
     data.forEach(value => this.body += `${value},`);
     this.body += `\r\n`;
   }
 
-  setFooter(data: any[]) {
+  public setFooter(data: any[]) {
     this.footer += `Total,`;
     data.forEach(value => this.footer += `${value},`);
     this.footer += `\r\n`;
