@@ -133,6 +133,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         } else {
           this.addGstDetailsForm(true);
         }
+        // hsn/sac enable disable
+        if (acc.hsnNumber) {
+          this.addAccountForm.get('sacNumber').disable();
+          this.addAccountForm.get('hsnNumber').enable();
+          this.addAccountForm.get('hsnOrSac').patchValue('hsn');
+        } else if (acc.sacNumber) {
+          this.addAccountForm.get('hsnNumber').disable();
+          this.addAccountForm.get('sacNumber').enable();
+          this.addAccountForm.get('hsnOrSac').patchValue('sac');
+        }
         this.addAccountForm.patchValue(accountDetails);
       }
     });
