@@ -5,7 +5,7 @@ const COMMON_URL_FOR_ACCOUNT_V2 = Configuration.ApiUrl + 'v2/company/:companyUni
 export const ACCOUNTS_API_V2 = {
   UPDATE: COMMON_URL_FOR_ACCOUNT_V2,
   GET: COMMON_URL_FOR_ACCOUNT_V2,
-  CREATE: Configuration.ApiUrl + 'company/:companyUniqueName/groups/:groupUniqueName/accounts'
+  CREATE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/groups/:groupUniqueName/accounts'
 };
 
 export const ACCOUNTS_API = {

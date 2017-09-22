@@ -1,199 +1,199 @@
 <div class="container-fluid mrT1">
 
-  <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+    <form class="horizontal-form" name="addAccountForm" [formGroup]="addAccountForm" (ngSubmit)="submit()">
 
-    <div class="row">
-      <div class="form-group" [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}">
-        <label for="">Account Name</label>
-        <input type="text" class="form-control" formControlName="name" name="accountName" />
-      </div>
-
-      <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
-        <label for="">Country</label>
-        <select2 [data]="countrySource" formControlName="countryCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select Country' }">
-        </select2>
-      </div>
-
-    </div>
-
-    <!-- gst container -->
-    <ng-container *ngIf="isGstEnabledAcc && addAccountForm.get('country').value.countryCode === 'IN'">
-
-      <!-- gst details -->
-      <div formArrayName="addresses">
-        <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
-          [formGroupName]="i">
-
-          <div class="row">
-            <div class="form-group col-xs-6">
-              <label for="" class="d-block">GSTIN</label>
-              <div class="input-group">
-                <input type="text" class="form-control" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst"
-                  placeholder="">
-                <div class="input-group-addon">
-                  <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
-                    tooltip="DEFAULT GST" placement="bottom">
-                </div>
-              </div>
+        <div class="row">
+            <div class="form-group" [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}">
+                <label for="">Account Name</label>
+                <input type="text" class="form-control" formControlName="name" name="accountName" />
             </div>
-            <div class="form-group col-xs-6">
-              <label class="d-block">&nbsp;</label>
-              <div class="mrT1">
-                <label>
+
+            <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
+                <label for="">Country</label>
+                <select2 class="select2-parent" [data]="countrySource" formControlName="countryCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select Country' }">
+                </select2>
+            </div>
+
+        </div>
+
+        <!-- gst container -->
+        <ng-container *ngIf="isGstEnabledAcc && addAccountForm.get('country').value.countryCode === 'IN'">
+
+            <!-- gst details -->
+            <div formArrayName="addresses">
+                <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
+
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label for="" class="d-block">GSTIN</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst" placeholder="">
+                                <div class="input-group-addon">
+                                    <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="bottom">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group col-xs-6">
+                            <label class="d-block">&nbsp;</label>
+                            <div class="mrT1">
+                                <label>
                   <input class="" type="checkbox" name="isComposite" formControlName="isComposite"> Is Composite?</label>
-                <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
-                  <i class="fa fa-times"></i> Remove</a>
-              </div>
-            </div>
-          </div>
+                                <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
+                                    <i class="fa fa-times"></i> Remove</a>
+                            </div>
+                        </div>
+                    </div>
 
-          <div class="row">
-            <div class="form-group col-xs-6">
-              <label for="">Address</label>
-              <textarea name="gstAddr" rows="5" maxlength="120" class="form-control"></textarea>
-            </div>
+                    <div class="row">
+                        <div class="form-group col-xs-6">
+                            <label for="">Address</label>
+                            <textarea name="gstAddr" rows="5" maxlength="120" class="form-control"></textarea>
+                        </div>
 
-            <div class="form-group col-xs-6">
-              <label for="">Party Type *</label>
-              <div class="custom-select pos-rel">
-                <select2 [data]="partyTypeSource" formControlName="partyType" [options]="{ width:'100%', multiple: false, placeholder: 'Select Party Type' }"></select2>
-              </div>
+                        <div class="form-group col-xs-6">
+                            <div class="form-group">
+                                <label for="">Party Type *</label>
+                                <div class="custom-select pos-rel">
+                                    <ng-select [options]="partyTypeSource" formControlName="partyType"></ng-select>
+                                    <!-- <select2 class="select2-parent" [data]="partyTypeSource" formControlName="partyType" [options]="{ width:'100%', multiple: false, placeholder: 'Select Party Type' }"></select2> -->
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="">State *</label>
+                                <div class="custom-select pos-rel">
+                                    <select2 class="select2-parent" [data]="statesSource$ | async" #states [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }" formControlName="stateCode"></select2>
+                                </div>
+                            </div>
+                            <div class="row">
 
-              <label for="">State *</label>
-              <div class="custom-select pos-rel">
-                <select2 [data]="statesSource$ | async" #states [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
-                  formControlName="stateCode"></select2>
-              </div>
-              <div class="row">
-
-                <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)"
-                  class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">
+                                <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">
                   Show all ({{addAccountForm.get('addresses')['controls'].length}})</a>
 
-                <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && moreGstDetailsVisible"
-                  class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">
+                                <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && moreGstDetailsVisible" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">
                   Show Less </a>
 
-                <a class="text-right col-xs-6" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst.valid, null)">
-                  <i class="fa fa-plus"></i> Add More GSTIN
-                </a>
+                                <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst.valid, null)">
+                                    <i class="fa fa-plus"></i> Add More GSTIN
+                                </a>
 
-              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      <!-- gst details -->
+            <!-- gst details -->
 
-    </ng-container>
-    <!-- hsn/sac container -->
-    <ng-container *ngIf="isHsnSacEnabledAcc">
-      <!-- hsn and sac -->
-      <div class="row" style="height: 100px">
-        <div class="col">
-          <div class="form-group">
-            <label class="hsn-sac">HSN</label>
-            <input type="radio" class="hsn-sac-radio" formControlName="hsnOrSac" value='hsn' name="hsnOrSac" />
-            <input type="text" digitsOnlyDirective formControlName="hsnNumber" class="form-control hsn-sac-w-m-input" name="hsnNumber"
-              maxLength="10">
-          </div>
+        </ng-container>
+        <!-- hsn/sac container -->
+        <ng-container *ngIf="isHsnSacEnabledAcc">
+            <!-- hsn and sac -->
 
-          <div class="form-group hsn-sac-group">
-            <label class="hsn-sac">SAC</label>
-            <input type="radio" class="hsn-sac-radio" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
-            <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control hsn-sac-w-m-input" name="sacNumber"
-              maxLength="10">
-          </div>
-        </div>
-      </div>
-    </ng-container>
+            <div class="row">
+                <div class="col-xs-6 form-group">
+                    <label class="d-block">HSN</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+        <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+      </span>
+                        <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber" maxLength="10">
+                    </div>
+                </div>
+                <div class="col-xs-6 form-group">
+                    <label class="d-block">SAC</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+        <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+      </span>
+                        <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
+                    </div>
+                </div>
+            </div>
+        </ng-container>
 
-    <!-- other details -->
-    <div class="row">
-      <div class="col-xs-12">
-        <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
-          <label class="cp">
+        <!-- other details -->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
+                    <label class="cp">
             <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other Details
           </label>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
 
-    <!-- other details container -->
-    <ng-container *ngIf="showOtherDetails">
-      <!-- attention to -->
-      <div class="row" *ngIf="isGstEnabledAcc">
-        <div class="form-group col-xs-12">
-          <label for="">Attention to (will be used in Invoice)</label>
-          <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
-        </div>
-      </div>
+        <!-- other details container -->
+        <ng-container *ngIf="showOtherDetails">
+            <!-- attention to -->
+            <div class="row" *ngIf="isGstEnabledAcc">
+                <div class="form-group col-xs-12">
+                    <label for="">Attention to (will be used in Invoice)</label>
+                    <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
+                </div>
+            </div>
 
-      <!-- opening Balance -->
-      <div class="row">
-        <div class="form-group col-xs-6">
-          <label for="">Opening Balance</label>
-          <div class="input-group">
-            <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
-            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+            <!-- opening Balance -->
+            <div class="row">
+                <div class="form-group col-xs-6">
+                    <label for="">Opening Balance</label>
+                    <div class="input-group">
+                        <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
+                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
-            </div>
-            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                        </div>
+                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">CR.
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="">Unique Name</label>
+                    <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
+                </div>
             </div>
-          </div>
-        </div>
-        <div class="form-group col-xs-6">
-          <label for="">Unique Name</label>
-          <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
-        </div>
-      </div>
 
-      <!-- mobile no and email -->
-      <div class="row" *ngIf="isGstEnabledAcc">
-        <div class="form-group col-xs-6">
-          <label for="">Mobile Number</label>
-          <div class="input-group">
-            <div class="input-group-addon">+91</div>
-            <input type="text" class="form-control" formControlName="mobileNo" digitsOnlyDirective name="mobileno." placeholder="9198XXXXXXXX">
-            <input type="hidden" name="phoneCode" value="" />
-          </div>
-        </div>
-        <div class="form-group col-xs-6">
-          <label for="">Email Id</label>
-          <input type="email" class="form-control" formControlName="email" name="emailId" />
-        </div>
-      </div>
+            <!-- mobile no and email -->
+            <div class="row" *ngIf="isGstEnabledAcc">
+                <div class="form-group col-xs-6">
+                    <label for="">Mobile Number</label>
+                    <div class="input-group">
+                        <div class="input-group-addon">+91</div>
+                        <input type="text" class="form-control" formControlName="mobileNo" digitsOnlyDirective name="mobileno." placeholder="9198XXXXXXXX">
+                        <input type="hidden" name="phoneCode" value="" />
+                    </div>
+                </div>
+                <div class="form-group col-xs-6">
+                    <label for="">Email Id</label>
+                    <input type="email" class="form-control" formControlName="email" name="emailId" />
+                </div>
+            </div>
 
-      <!-- description -->
-      <div class="row">
-        <div class="form-group col-xs-12">
-          <label for="">Description</label>
-          <textarea rows="3" cols="" name="description" formControlName="description" class="form-control"></textarea>
-        </div>
-      </div>
-    </ng-container>
+            <!-- description -->
+            <div class="row">
+                <div class="form-group col-xs-12">
+                    <label for="">Description</label>
+                    <textarea rows="3" cols="" name="description" formControlName="description" class="form-control"></textarea>
+                </div>
+            </div>
+        </ng-container>
 
-    <!-- submit and clear buttons -->
-    <div class="row mrT3">
-      <div class="form-group col-xs-12 text-right">
-        <button class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-default" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
-      </div>
-    </div>
-  </form>
+        <!-- submit and clear buttons -->
+        <div class="row mrT3">
+            <div class="form-group col-xs-12 text-right">
+                <button class="btn btn-default">Cancel</button>
+                <button type="submit" class="btn btn-default" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <!--delete Account modal  -->
 <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'"
-                     (cancelCallBack)="hideDeleteAccountModal()"
-                     (successCallBack)="deleteAccount()">
-      </confirm-modal>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
+            </confirm-modal>
+        </div>
     </div>
-  </div>
 </div>

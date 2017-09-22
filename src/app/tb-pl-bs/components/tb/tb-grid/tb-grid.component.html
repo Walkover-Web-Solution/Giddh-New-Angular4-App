@@ -3,95 +3,84 @@
 
 <!-- no data start -->
 <div class="no-data" *ngIf="noData">
-  <h1>Sorry, No Data Found!</h1>
-  <img src="/assets/images/no-data.png" alt="">
+    <h1>Sorry, No Data Found!</h1>
+    <img src="/assets/images/no-data.png" alt="">
 </div>
 <!-- nodata end -->
 <div *ngIf="!noData">
-  <div class="pd15">
-    <!-- start main content -->
-    <div class="table-container clearfix trial-balance">
-      <table class="col-xs-12 tb-head">
-        <thead>
-          <tr>
-            <th class="col-xs-4">Particular</th>
-            <th class="col-xs-2">Opening Bal</th>
-            <th class="col-xs-4 text-center">
-              Transactions
-              <table class="col-xs-12">
+    <div class="mrT2 clearfix">
+        <!-- start main content -->
+        <div class="table-container clearfix trial-balance">
+            <table class="tb-head table basic">
                 <thead>
-                  <tr>
-                    <th class="col-xs-6 text-left">Debit(Dr.)</th>
-                    <th class="col-xs-6 text-left">Credit(Cr.)</th>
-                  </tr>
+                    <tr>
+                        <th style="width: 33.5%;" class="">Particular</th>
+                        <th style="width: 16.5%;" class="text-right">Opening Bal</th>
+                        <th style="width: 33.4%;" class="text-center">
+                            Transactions
+                            <table class="width100">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 49.8%;" class="text-right">Debit (Dr.)</th>
+                                        <th style="width: 49.8%;" class="text-right">Credit (Cr.)</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </th>
+                        <th class="text-right">Closing Bal</th>
+                    </tr>
                 </thead>
-              </table>
-            </th>
-            <th class="col-xs-2">Closing Bal</th>
-          </tr>
-        </thead>
-      </table>
+            </table>
 
-      <!--Start Grid-->
-      <div *ngIf="data$.groupDetails">
+            <!--Start Grid-->
+            <div *ngIf="data$.groupDetails">
 
-        <ng-template #groupDetails let-list let-padding="padding" >
-                    <section class="row row-1"
-                    *ngFor="let grp of list"
-                    [ngClass]="grp.category" [hidden]="!grp.isVisible"   tb-pl-bs-grid-row
-            [groupDetail]="grp" [padding]="padding" [search]="search" >
-            <ng-container  *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
-          </section>
-        </ng-template>
-        <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 0 }"></ng-container>
+                <ng-template #groupDetails let-list let-padding="padding">
+                    <section class="row row-1" *ngFor="let grp of list" [ngClass]="grp.category" [hidden]="!grp.isVisible" tb-pl-bs-grid-row [groupDetail]="grp" [padding]="padding" [search]="search">
+                        <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+                    </section>
+                </ng-template>
+                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: data$.groupDetails | tbsearch: search, padding: 0 }"></ng-container>
 
 
 
-      </div>
-      <!--<section class="row row-1"-->
-      <!--*ngFor="let grp of (data$ | async).groupDetails"-->
-      <!--[ngClass]="grp.category">-->
-      <!--&lt;!&ndash; filter:filterTBSearch:index:data  &ndash;&gt;-->
-      <!--&lt;!&ndash; |  tbsearch:keyWord | filter:filterTBSearch:tbsearch &ndash;&gt;-->
+            </div>
+            <!--<section class="row row-1"-->
+            <!--*ngFor="let grp of (data$ | async).groupDetails"-->
+            <!--[ngClass]="grp.category">-->
+            <!--&lt;!&ndash; filter:filterTBSearch:index:data  &ndash;&gt;-->
+            <!--&lt;!&ndash; |  tbsearch:keyWord | filter:filterTBSearch:tbsearch &ndash;&gt;-->
 
 
-      <!--</section>-->
-      <!--End Grid-->
-      <div>
-        <div class="table-responsive">
-          <table class="table bdrL bdrR">
-            <thead>
-              <tr>
-                <th class="col-xs-4">
-                  <span class="pdL1">Grand Total</span>
-                </th>
-                <th class="col-xs-2  text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
-                <th class="col-xs-4">
-                  <table class="col-xs-12">
-                    <thead>
-                      <tr>
-                        <th class="col-xs-6 text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
-                        <th class="col-xs-6 text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
-                      </tr>
-                    </thead>
-                  </table>
-                </th>
-                <th class="col-xs-2  text-right">
-                  <span class="pdR1">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
-                </th>
-              </tr>
-            </thead>
-          </table>
+            <!--</section>-->
+            <!--End Grid-->
+            <div>
+                <div class="table-responsive">
+                    <table class="table basic" style="margin-bottom:0;">
+                        <thead>
+                            <tr>
+                                <th class="" style="width: 33.5%;">
+                                    <span class="">Grand Total</span>
+                                </th>
+                                <th style="width: 16.6%;" class="text-right">{{ data$.forwardedBalance?.amount | number:'1.2-2' }}</th>
+                                <th style="width: 16.6%;" class="text-right">{{ data$.debitTotal | number:'1.2-2' }}</th>
+                                <th style="width: 16.6%;" class="text-right">{{ data$.creditTotal | number:'1.2-2' }}</th>
+                                <th style="width: 16.6%;" class="text-right">
+                                    <span class="">{{ data$.closingBalance?.amount | number:'1.2-2' }}</span>
+                                </th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <!-- end main content -->
+
+        <!-- start template trial bal -->
+        <!--<script type="text/ng-template" id="trialBalSubGroup">-->
+
+        <!--</script>-->
+        <!-- end template -->
     </div>
-
-    <!-- end main content -->
-
-    <!-- start template trial bal -->
-    <!--<script type="text/ng-template" id="trialBalSubGroup">-->
-
-    <!--</script>-->
-    <!-- end template -->
-  </div>
 </div>

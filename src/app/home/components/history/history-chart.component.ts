@@ -11,7 +11,7 @@ import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment';
 import * as _ from 'lodash';
 import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
-import { CHART_CALLED_FROM, API_TO_CALL } from "../../../services/actions/home/home.const";
+import { CHART_CALLED_FROM, API_TO_CALL } from '../../../services/actions/home/home.const';
 
 @Component({
   selector: 'history-chart',
@@ -71,8 +71,11 @@ export class HistoryChartComponent implements OnInit {
       visible: (this.showProfitLoss && this.showLastYear)
     }];
   }
+  public hardRefresh() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
   public fetchChartData() {
-    this.expenseData = [];
     this.requestInFlight = true;
     this.ApiToCALL = [];
     if (this.showExpense && (!(this.expenseData && this.expenseData.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
@@ -82,22 +85,21 @@ export class HistoryChartComponent implements OnInit {
     if (this.activeFinancialYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfActiveYear(
         this.activeFinancialYear.financialYearStarts,
-        this.activeFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.COMPARISION, this.ApiToCALL));
+        this.activeFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.HISTORY, this.ApiToCALL));
     }
 
     this.ApiToCALL = [];
-    if (this.showExpense && this.showLastYear && (this.expenseDataLY || this.expenseDataLY.length < 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
-    if (this.showRevenue && this.showLastYear && (this.revenueDataLY || this.revenueDataLY.length < 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
-    if (this.showProfitLoss && this.showLastYear && (this.profitLossDataLY || this.profitLossDataLY.length < 0 || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
-
+    if (this.showExpense && this.showLastYear && (!(this.expenseDataLY && this.expenseDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.EXPENCE); }
+    if (this.showRevenue && this.showLastYear && (!(this.revenueDataLY && this.revenueDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.REVENUE); }
+    if (this.showProfitLoss && this.showLastYear && (!(this.profitLossDataLY && this.profitLossDataLY.length > 0) || this.refresh)) { this.ApiToCALL.push(API_TO_CALL.PL); }
+    // debugger;
     if (this.lastFinancialYear && this.showLastYear) {
       this.store.dispatch(this._homeActions.getComparisionChartDataOfLastYear(
         this.lastFinancialYear.financialYearStarts,
-        this.lastFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.COMPARISION, this.ApiToCALL));
+        this.lastFinancialYear.financialYearEnds, this.refresh, CHART_CALLED_FROM.HISTORY, this.ApiToCALL));
     }
     this.refresh = false;
   }
-
   public generateCharts() {
     _.each(this.AllSeries, (p) => {
       if (p.name === 'Expense') {
@@ -150,6 +152,7 @@ export class HistoryChartComponent implements OnInit {
     };
   }
   public toggle(str: string) {
+    let ApiToCALL: API_TO_CALL[] = [];
     if (str === 'Profit/Loss') {
       this.showProfitLoss = !this.showProfitLoss;
     } else if (str === 'Expense') {
@@ -158,12 +161,12 @@ export class HistoryChartComponent implements OnInit {
       this.showRevenue = !this.showRevenue;
     }
     this.ShowLastYear();
-    // this.generateCharts();
+    this.fetchChartData();
   }
   public LyToggle() {
     this.showLastYear = !this.showLastYear;
     this.ShowLastYear();
-    // this.generateCharts();
+    this.fetchChartData();
   }
   public ShowLastYear() {
     this.AllSeries = [{
@@ -194,18 +197,6 @@ export class HistoryChartComponent implements OnInit {
   }
   public ngOnInit() {
     //
-    this.comparisionChartData
-      .skipWhile(p => (isNullOrUndefined(p)))
-      // .distinctUntilChanged((p, q) => p.ExpensesActiveYearly === this.expenseData)
-      .subscribe(p => {
-        this.expenseData = (p.ExpensesActiveYearly);
-        this.expenseDataLY = (p.ExpensesLastYearYearly);
-        this.revenueData = (p.revenueActiveYearYearly);
-        this.revenueDataLY = (p.revenueLastYearYearly);
-        this.profitLossData = p.ProfitLossActiveYearYearly;
-        this.generateCharts();
-        this.requestInFlight = false;
-      });
     this.companies$.subscribe(c => {
       if (c) {
         let activeCompany: ComapnyResponse;
@@ -223,8 +214,16 @@ export class HistoryChartComponent implements OnInit {
             if (cmp.uniqueName === activeCmpUniqueName) {
               if (cmp.financialYears.length > 1) {
                 financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.orderBy(financialYears, (it) => {
-                  return moment(it.financialYearStarts, 'DD-MM-YYYY');
+                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+
+                  return b.diff(a, 'days') < 0;
+                });
+                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
+                  return b.diff(a, 'days');
                 }, 'desc');
                 this.lastFinancialYear = financialYears[0];
               }
@@ -234,5 +233,18 @@ export class HistoryChartComponent implements OnInit {
         // this.fetchChartData();
       }
     });
+    this.comparisionChartData
+      .skipWhile(p => (isNullOrUndefined(p)))
+      .subscribe(p => {
+        // debugger;
+        this.expenseData = (p.ExpensesActiveYearYearly);
+        this.expenseDataLY = (p.ExpensesLastYearYearly);
+        this.revenueData = (p.revenueActiveYearYearly);
+        this.revenueDataLY = (p.revenueLastYearYearly);
+        this.profitLossData = p.ProfitLossActiveYearYearly;
+        this.profitLossDataLY = p.ProfitLossLastYearYearly;
+        this.generateCharts();
+        this.requestInFlight = false;
+      });
   }
 }
