@@ -3930,7 +3930,7 @@ input[type='checkbox'][disabled]:after {
 
 .active-toggle-btn {
     color: white;
-    background-color: #ff5f00;
+    background-color: #d25f29;
 }
 
 .input-group-addon input[type="radio"] {
