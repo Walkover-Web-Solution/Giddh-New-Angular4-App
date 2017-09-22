@@ -165,6 +165,15 @@ export interface InvoiceDetails {
     dueDate: string;
 }
 
+export class OtherDetailsClass {
+  public shippingDate: string;
+  public shippedVia: string;
+  public trackingNumber: string;
+  public customField1: string;
+  public customField2: string;
+  public customField3: string;
+}
+
 export interface Logo {
     path: string;
 }
@@ -386,4 +395,42 @@ export interface IContent {
   label: string;
   field: string;
   width?: string;
+}
+
+//////////// NEW //////////////
+export interface CreatedBy {
+  name: string;
+  email: string;
+  uniqueName: string;
+  mobileNo: string;
+}
+
+export interface UpdatedBy {
+  name: string;
+  email: string;
+  uniqueName: string;
+  mobileNo: string;
+}
+
+export class CustomTemplateResponse {
+  public createdBy: CreatedBy;
+  public uniqueName: string;
+  public fontSize: string;
+  public createdAt: string;
+  public updatedAt: string;
+  public updatedBy: UpdatedBy;
+  public sample?: any;
+  public primaryColor: string; // design
+  public secondaryColor: string; // design
+  public font: string; // design
+  public topMargin: number; // design
+  public leftMargin: number; // design
+  public rightMargin: number; // design
+  public bottomMargin: number; // design
+  public logoPosition: string;
+  public logoSize: string; // design
+  public isDefault: boolean;
+  public sections: ISection[]; // done
+  public name: string;
+  public copyFrom?: string; // done
 }

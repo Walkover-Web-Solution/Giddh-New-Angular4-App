@@ -31,7 +31,7 @@ export interface AppState {
   permission: fromPermission.PermissionState;
   flyAccounts: fromFlyAccounts.FlyAccountsState;
   invoice: fromInvoice.InvoiceState;
-  invtemp: fromInvoiceTemp.InvoiceTempState;
+  invoiceTemplate: fromInvoiceTemp.CustomTemplateState;
   tlPl: fromTlPl.TBPlBsState;
   ledger: fromLedger.LedgerState;
   settings: fromSettings.SettingsState;
@@ -52,7 +52,7 @@ export const reducers = {
   verifyMobile: fromVerifyMobileReducer.VerifyMobileReducer,
   inventory: fromInventory.InventoryReducer,
   invoice: fromInvoice.InvoiceReducer,
-  invtemp: fromInvoiceTemp.InvoiceTemplateReducer,
+  invoiceTemplate: fromInvoiceTemp.InvoiceTemplateReducer,
   search: fromSearch.searchReducer,
   auditlog: fromAuditLogs.auditLogsReducer,
   flyAccounts: fromFlyAccounts.FlyAccountsReducer,
