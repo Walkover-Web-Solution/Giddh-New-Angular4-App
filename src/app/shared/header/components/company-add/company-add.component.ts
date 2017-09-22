@@ -64,7 +64,11 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           AdministratorLevel: undefined,
           Country: undefined,
           OnlyCity: true
-        }).subscribe((res) => observer.next(res));
+        }).subscribe((res) => {
+          let data = res.map(item => item.formatted_address);
+          console.log (res, data);
+          observer.next(data);
+        });
       }).takeUntil(this.destroyed$);
 
     this.isMobileVerified.subscribe(p => {

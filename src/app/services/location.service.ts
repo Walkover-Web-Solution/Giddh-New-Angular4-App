@@ -34,11 +34,13 @@ export class LocationService {
     }
     return this._http.get(this.GoogleApiURL + '&' + query)
       .map((res) => {
+        // return res.json();
         let r = res.json();
         let data = r.results.filter((i) => _.includes(i.types, 'locality'));
-        return data.map(item =>
-          item.address_components[0].long_name
-        );
+        return data;
+        // return data.map(item =>
+        //   item.address_components[0].long_name
+        // );
       })
       .catch((e) => e);
   }
