@@ -3,6 +3,7 @@ import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
+import moment from 'moment';
 
 @Component({
   selector: 'bs-grid',  // <home></home>
@@ -14,7 +15,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public search: string = '';
   @Input() public bsData: BalanceSheetData;
   @Input() public padding: string;
-
+  public moment = moment;
   @Input()
   public set expandAll(value: boolean) {
     if (this.bsData) {

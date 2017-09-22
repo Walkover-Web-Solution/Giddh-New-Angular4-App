@@ -1,109 +1,129 @@
 <!-- no data start -->
 <div class="no-data" *ngIf="noData">
-    <h1>Sorry, No Data Found!</h1>
-    <img src="/assets/images/no-data.png" alt="">
+  <h1>Sorry, No Data Found!</h1>
+  <img src="/assets/images/no-data.png" alt="">
 </div>
 <!-- nodata end -->
 
 <div>
-    <div *ngIf="!noData">
-        <div class="mrT2 clearfix">
-            <!--top heading  labels-->
+  <div *ngIf="!noData">
+    <div class="mrT2 clearfix">
+      <!--top heading  labels-->
 
 
-            <!--Main Grid-->
-            <div class="table-container">
+      <!--Main Grid-->
+      <div class="table-container">
 
-                <div class="income mrB1">
-                    <div class="clearfix profitLoss">
-                        <table class="mrB table basic">
-                            <thead>
-                                <tr>
-                                    <th class="col-xs-4 ">Particular</th>
-                                    <!-- <th class="col-xs-3 ">Note</th> -->
-                                    <th class="col-xs-4 text-right">
-                                        As Of {{plData?.dates?.to }}
-                                    </th>
-                                    <th class="col-xs-4 text-right">
-                                        As Of {{plData?.dates?.from }}
-                                    </th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <!--Grid-->
-                        <div class="mr1">
-                            <div class="">
-                                <strong class="fs18">I INCOME</strong>
-                            </div>
-                        </div>
-                        <section class="row row-1" *ngFor="let incGrp  of  plData.incArr | tbsearch: search" pl-grid-row [groupDetail]="incGrp" [search]="search" [padding]="10">
-                            <section class="row row-2 childgroups" *ngFor="let subGrp  of  incGrp.childGroups" pl-grid-row [search]="search" [groupDetail]="subGrp" [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
-
-                                <section class="row row-2 accounts" *ngFor="let acc  of subGrp.accounts" pl-grid-row [groupDetail]="acc" [search]="search" [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
-                                </section>
-                            </section>
-                        </section>
-                        <!--/Grid-->
-                        <div class="account top_bar clearfix">
-                            <div class="col-xs-4  group pdL1"><strong>Total Income</strong></div>
-                            <div class="col-xs-4  group text-right"><strong>{{ plData?.incomeTotal | number:'1.2-2' }}</strong></div>
-                            <div class="col-xs-4  group text-right"><strong>{{ plData?.incomeTotal | number:'1.2-2' }}</strong></div>
-                        </div>
-                        <hr class="bdrT" />
-                    </div>
-                </div>
-
-                <div class="expenses">
-                    <div class="clearfix profitLoss table-responsive">
-                        <!--Grid-->
-                        <div class="mr1">
-                            <div class="">
-                                <strong class="fs18">II EXPENSES</strong>
-                            </div>
-                        </div>
-                        <section class="row row-1" *ngFor="let expGrp of plData.expArr | tbsearch: search" pl-grid-row [groupDetail]="expGrp" [search]="search" [padding]="10">
-                            <section class="row row-2 childgroups" *ngFor="let subGrp of  expGrp.childGroups" pl-grid-row [groupDetail]="subGrp" [search]="search" [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
-                                <section class="row row-2 accounts" *ngFor="let acc of subGrp.accounts" pl-grid-row [groupDetail]="acc" [search]="search" [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
-                                </section>
-                            </section>
-                        </section>
-                        <!--/Grid-->
-                    </div>
-                </div>
-                <div class="account top_bar clearfix">
-                    <div class="col-xs-4  group pdL1"><strong>Total Expenses</strong></div>
-                    <div class="col-xs-4  group text-right"><strong>{{ plData?.expenseTotal | number:'1.2-2' }}</strong></div>
-                    <div class="col-xs-4  group text-right"><strong>{{ plData?.expenseTotal | number:'1.2-2' }}</strong></div>
-                </div>
-                <hr class="bdrT" />
-                <!-- end of expenses -->
+        <div class="income mrB1">
+          <div class="clearfix profitLoss">
+            <table class="mrB table basic">
+              <thead>
+                <tr>
+                  <th class="col-xs-4 ">Particular</th>
+                  <!-- <th class="col-xs-3 ">Note</th> -->
+                  <th class="col-xs-4 text-right">
+                    As Of
+                    <span *ngIf="plData && plData.dates && plData.dates.to && plData.dates.to!=='Invalid date'"> {{ moment(plData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                  </th>
+                  <th class="col-xs-4 text-right">
+                    As Of
+                    <span *ngIf="plData && plData.dates && plData.dates.from && plData.dates.from!=='Invalid date'"> {{ moment(plData?.dates?.from, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+            <!--Grid-->
+            <div class="mr1">
+              <div class="">
+                <strong class="fs18">I INCOME</strong>
+              </div>
             </div>
-            <!-- end row -->
+            <section class="row row-1" *ngFor="let incGrp  of  plData.incArr | tbsearch: search" pl-grid-row [groupDetail]="incGrp" [search]="search"
+              [padding]="10">
+              <section class="row row-2 childgroups" *ngFor="let subGrp  of  incGrp.childGroups" pl-grid-row [search]="search" [groupDetail]="subGrp"
+                [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
 
-            <!-- bottom table start -->
-            <div class="table-responsive">
-                <table class="table plBtTbl">
-                    <thead>
-                        <tr>
-                            <th class="col-xs-4">
-                                <strong class="pdR25 pdL-5">
-                                    Profit/Loss of the year
-                                </strong>
-                            </th>
-                            <th class="col-xs-4">
-                                <strong class="pdL2 pdR1">
-                                    <span class="pull-right success">{{ plData?.closingBalance | number:'1.2-2' }}</span>
-                                </strong>
-                            </th>
-                            <th class="col-xs-4">
-                                <strong class="pdL2 pdR1">
-                                    <span class="pull-right success">{{ plData?.closingBalance | number:'1.2-2' }}</span>
-                                </strong>
-                            </th>
-                        </tr>
-                    </thead>
-                </table>
+                <section class="row row-2 accounts" *ngFor="let acc  of subGrp.accounts" pl-grid-row [groupDetail]="acc" [search]="search"
+                  [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
+                </section>
+              </section>
+            </section>
+            <!--/Grid-->
+            <div class="account top_bar clearfix">
+              <div class="col-xs-4  group pdL1">
+                <strong>Total Income</strong>
+              </div>
+              <div class="col-xs-4  group text-right">
+                <strong>{{ plData?.incomeTotal | number:'1.2-2' }}</strong>
+              </div>
+              <div class="col-xs-4  group text-right">
+                <strong>{{ plData?.incomeTotal | number:'1.2-2' }}</strong>
+              </div>
             </div>
+            <hr class="bdrT" />
+          </div>
         </div>
+
+        <div class="expenses">
+          <div class="clearfix profitLoss table-responsive">
+            <!--Grid-->
+            <div class="mr1">
+              <div class="">
+                <strong class="fs18">II EXPENSES</strong>
+              </div>
+            </div>
+            <section class="row row-1" *ngFor="let expGrp of plData.expArr | tbsearch: search" pl-grid-row [groupDetail]="expGrp" [search]="search"
+              [padding]="10">
+              <section class="row row-2 childgroups" *ngFor="let subGrp of  expGrp.childGroups" pl-grid-row [groupDetail]="subGrp" [search]="search"
+                [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
+                <section class="row row-2 accounts" *ngFor="let acc of subGrp.accounts" pl-grid-row [groupDetail]="acc" [search]="search"
+                  [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
+                </section>
+              </section>
+            </section>
+            <!--/Grid-->
+          </div>
+        </div>
+        <div class="account top_bar clearfix">
+          <div class="col-xs-4  group pdL1">
+            <strong>Total Expenses</strong>
+          </div>
+          <div class="col-xs-4  group text-right">
+            <strong>{{ plData?.expenseTotal | number:'1.2-2' }}</strong>
+          </div>
+          <div class="col-xs-4  group text-right">
+            <strong>{{ plData?.expenseTotal | number:'1.2-2' }}</strong>
+          </div>
+        </div>
+        <hr class="bdrT" />
+        <!-- end of expenses -->
+      </div>
+      <!-- end row -->
+
+      <!-- bottom table start -->
+      <div class="table-responsive">
+        <table class="table plBtTbl">
+          <thead>
+            <tr>
+              <th class="col-xs-4">
+                <strong class="pdR25 pdL-5">
+                  Profit/Loss of the year
+                </strong>
+              </th>
+              <th class="col-xs-4">
+                <strong class="pdL2 pdR1">
+                  <span class="pull-right success">{{ plData?.closingBalance | number:'1.2-2' }}</span>
+                </strong>
+              </th>
+              <th class="col-xs-4">
+                <strong class="pdL2 pdR1">
+                  <span class="pull-right success">{{ plData?.closingBalance | number:'1.2-2' }}</span>
+                </strong>
+              </th>
+            </tr>
+          </thead>
+        </table>
+      </div>
     </div>
+  </div>
 </div>

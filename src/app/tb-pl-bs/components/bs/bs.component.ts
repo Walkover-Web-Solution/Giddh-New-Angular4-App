@@ -54,9 +54,12 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
   public set selectedCompany(value: ComapnyResponse) {
     this._selectedCompany = value;
     if (value) {
+      let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
-        fy: 0
+        fy: index,
+        from: value.activeFinancialYear.financialYearStarts,
+        to: value.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
     }
@@ -94,5 +97,18 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public exportXLS(event) {
     //
+  }
+  public findIndex(activeFY, financialYears) {
+    let tempFYIndex = 0;
+    _.each(financialYears, (fy: any, index: number) => {
+      if (fy.uniqueName === activeFY.uniqueName) {
+        if (index === 0) {
+          tempFYIndex = index;
+        } else {
+          tempFYIndex = index * -1;
+        }
+      }
+    });
+    return tempFYIndex;
   }
 }

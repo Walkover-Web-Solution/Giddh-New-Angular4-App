@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnCha
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
+import moment from 'moment';
 import { Observable } from 'rxjs/Observable';
 
 @Component({
@@ -14,7 +15,7 @@ export class PlGridComponent {
   @Input() public search: string = '';
   @Input() public plData: ProfitLossData;
   @Input() public padding: string;
-
+  public moment = moment;
   @Input()
   public set expandAll(value: boolean) {
     if (this.plData) {

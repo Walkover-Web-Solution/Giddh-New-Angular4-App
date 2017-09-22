@@ -1,80 +1,102 @@
 <!-- no data start -->
 <div class="no-data" *ngIf="noData">
-    <h1>Sorry, No Data Found!</h1>
-    <img src="/assets/images/no-data.png" alt="">
+  <h1>Sorry, No Data Found!</h1>
+  <img src="/assets/images/no-data.png" alt="">
 </div>
 <!-- nodata end -->
 
 <div>
-    <div *ngIf="!noData">
-        <div class="mrT2 clearfix">
-            <!--top heading  labels-->
+  <div *ngIf="!noData">
+    <div class="mrT2 clearfix">
+      <!--top heading  labels-->
 
 
-            <!--Main Grid-->
-            <div class="table-container">
+      <!--Main Grid-->
+      <div class="table-container">
 
-                <div class="income mrB1">
-                    <div class="clearfix profitLoss">
-                        <table class="mrB table basic">
-                            <thead>
-                                <tr>
-                                    <th class="col-xs-3 ">Particular</th>
-                                    <th class="col-xs-3 text-right">As Of {{bsData?.dates?.to}}</th>
-                                    <th class="col-xs-3 text-right">As Of {{bsData?.dates?.from}}</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <!--Grid-->
-                        <div class="mr1">
-                            <div class="">
-                                <strong class="fs18">I EQUITY AND LIABILITIES </strong>
-                            </div>
-                        </div>
-                        <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp" [search]="search" [padding]="10">
-                            <section class="row row-2 childgroups" *ngFor="let subGrp  of  liabilityGrp.childGroups" bs-grid-row [search]="search" [groupDetail]="subGrp" [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
-
-                                <section class="row row-2 accounts" *ngFor="let acc  of subGrp.accounts" bs-grid-row [groupDetail]="acc" [search]="search" [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
-                                </section>
-                            </section>
-                        </section>
-                        <!--/Grid-->
-                        <div class="account top_bar clearfix">
-                            <div class="col-xs-4  group"><strong>Total Liabilities</strong></div>
-                            <div class="col-xs-4  group text-right"><strong>{{ bsData?.liabTotal  | number:'1.2-2' }}</strong></div>
-                            <div class="col-xs-4  group text-right"><strong>{{ bsData?.liabTotal | number:'1.2-2' }}</strong></div>
-                        </div>
-                        <hr class="bdrT" />
-                    </div>
-                </div>
-
-                <div class="expenses">
-                    <div class="clearfix profitLoss table-responsive">
-                        <!--Grid-->
-                        <div class="mr1">
-                            <div class="">
-                                <strong class="fs18">II ASSETS</strong>
-                            </div>
-                        </div>
-                        <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search" [padding]="10">
-                            <section class="row row-2 childgroups" *ngFor="let subGrp of  assets.childGroups" bs-grid-row [groupDetail]="subGrp" [search]="search" [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
-                                <section class="row row-2 accounts" *ngFor="let acc of subGrp.accounts" pl-grid-row [groupDetail]="acc" [search]="search" [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
-                                </section>
-                            </section>
-                        </section>
-                        <!--/Grid-->
-                    </div>
-                </div>
-
-                <div class="account top_bar clearfix">
-                    <div class="col-xs-4  group"><strong>Total Assets</strong></div>
-                    <div class="col-xs-4  group text-right"><strong>{{ bsData?.assetTotal | number:'1.2-2' }}</strong></div>
-                    <div class="col-xs-4  group text-right"><strong>{{ bsData?.assetTotal | number:'1.2-2' }}</strong></div>
-                </div>
-                <hr class="bdrT" />
-                <!-- end of expenses -->
+        <div class="income mrB1">
+          <div class="clearfix profitLoss">
+            <table class="mrB table basic">
+              <thead>
+                <tr>
+                  <th class="col-xs-3 ">Particular</th>
+                  <th class="col-xs-3 text-right">As Of
+                    <span *ngIf="bsData && bsData.dates && bsData.dates.to && bsData.dates.to!=='Invalid date'"> {{ moment(bsData?.dates?.to, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                  </th>
+                  <th class="col-xs-3 text-right">As Of
+                    <span *ngIf="bsData && bsData.dates && bsData.dates.from && bsData.dates.from!=='Invalid date'"> {{ moment(bsData?.dates?.from, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                  </th>
+                </tr>
+              </thead>
+            </table>
+            <!--Grid-->
+            <div class="mr1">
+              <div class="">
+                <strong class="fs18">I EQUITY AND LIABILITIES </strong>
+              </div>
             </div>
-            <!-- end row -->
+            <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp"
+              [search]="search" [padding]="10">
+              <section class="row row-2 childgroups" *ngFor="let subGrp  of  liabilityGrp.childGroups" bs-grid-row [search]="search" [groupDetail]="subGrp"
+                [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
+
+                <section class="row row-2 accounts" *ngFor="let acc  of subGrp.accounts" bs-grid-row [groupDetail]="acc" [search]="search"
+                  [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
+                </section>
+              </section>
+            </section>
+            <!--/Grid-->
+            <div class="account top_bar clearfix">
+              <div class="col-xs-4  group">
+                <strong>Total Liabilities</strong>
+              </div>
+              <div class="col-xs-4  group text-right">
+                <strong>{{ bsData?.liabTotal | number:'1.2-2' }}</strong>
+              </div>
+              <div class="col-xs-4  group text-right">
+                <strong>{{ bsData?.liabTotal | number:'1.2-2' }}</strong>
+              </div>
+            </div>
+            <hr class="bdrT" />
+          </div>
         </div>
+
+        <div class="expenses">
+          <div class="clearfix profitLoss table-responsive">
+            <!--Grid-->
+            <div class="mr1">
+              <div class="">
+                <strong class="fs18">II ASSETS</strong>
+              </div>
+            </div>
+            <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search"
+              [padding]="10">
+              <section class="row row-2 childgroups" *ngFor="let subGrp of  assets.childGroups" bs-grid-row [groupDetail]="subGrp" [search]="search"
+                [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
+                <section class="row row-2 accounts" *ngFor="let acc of subGrp.accounts" pl-grid-row [groupDetail]="acc" [search]="search"
+                  [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
+                </section>
+              </section>
+            </section>
+            <!--/Grid-->
+          </div>
+        </div>
+
+        <div class="account top_bar clearfix">
+          <div class="col-xs-4  group">
+            <strong>Total Assets</strong>
+          </div>
+          <div class="col-xs-4  group text-right">
+            <strong>{{ bsData?.assetTotal | number:'1.2-2' }}</strong>
+          </div>
+          <div class="col-xs-4  group text-right">
+            <strong>{{ bsData?.assetTotal | number:'1.2-2' }}</strong>
+          </div>
+        </div>
+        <hr class="bdrT" />
+        <!-- end of expenses -->
+      </div>
+      <!-- end row -->
     </div>
+  </div>
 </div>
