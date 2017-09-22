@@ -58,14 +58,15 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public createAccountInProcess$: Observable<boolean>;
   @Input() public createAccountIsSuccess$: Observable<boolean>;
   @Input() public isGstEnabledAcc: boolean = false;
+  @Input() public activeAccount$: Observable<AccountResponseV2>;
   @Input() public isHsnSacEnabledAcc: boolean = false;
-  @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
+  @Input() public updateAccountInProcess$: Observable<boolean>;
+  @Input() public updateAccountIsSuccess$: Observable<boolean>;
+  @Output() public submitClicked: EventEmitter<
+  { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
+  = new EventEmitter();
 
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
-  public activeGroup$: Observable<GroupResponse>;
-  public activeAccount$: Observable<AccountResponseV2>;
-  public updateAccountInProcess$: Observable<boolean>;
-  public updateAccountIsSuccess$: Observable<boolean>;
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
     { value: 'not applicable', label: 'Not Applicable' },
@@ -81,12 +82,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
     private _companyService: CompanyService, private _toaster: ToasterService) {
-    this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
-    this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
-    this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
 
+    // bind state sources
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
       data.body.map(d => {
@@ -96,7 +95,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }, (err) => {
       // console.log(err);
     });
-
+    // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
@@ -113,7 +112,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       companyName: [''],
       attentionTo: [''],
       description: [''],
-      addresses: this._fb.array([]) ,
+      addresses: this._fb.array([]),
       country: this._fb.group({
         countryCode: ['']
       }),
@@ -174,7 +173,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
     return gstFields;
   }
-
   public addGstDetailsForm(isValid: boolean, val: IAccountAddress = null) {
     if (isValid) {
       const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -189,7 +187,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
     addresses.removeAt(i);
   }
-
   public isDefaultAddressSelected(val: boolean, i: number) {
     if (val) {
       let addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -199,7 +196,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       addresses.controls[i].get('isDefault').patchValue(true);
     }
   }
-
   public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
@@ -219,13 +215,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       gstForm.get('stateCode').patchValue(null);
     }
   }
-
   public showMoreGst() {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
     this.gstDetailsLength = addresses.controls.length;
     this.moreGstDetailsVisible = true;
   }
-
   public openingBalanceTypeChnaged(type: string) {
     if (this.addAccountForm.get('openingBalance').value > 0) {
       this.addAccountForm.get('openingBalanceType').patchValue(type);
@@ -235,11 +229,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
-
   public showDeleteAccountModal() {
     this.deleteAccountModal.show();
   }
-
   public hideDeleteAccountModal() {
     this.deleteAccountModal.hide();
   }
@@ -250,10 +242,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.hideDeleteAccountModal();
     this.addAccountForm.reset();
   }
-
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-
+    let activeAccountName: string;
+    this.activeAccount$.take(1).subscribe(a => activeAccountName = a.uniqueName);
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
       delete accountRequest['addresses'];
@@ -268,11 +260,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
 
     this.submitClicked.emit({
-      activeGroupUniqueName: this.activeGroupUniqueName,
+      value: { groupUniqueName: this.activeGroupUniqueName, accountUniqueName: activeAccountName },
       accountRequest: this.addAccountForm.value
     });
   }
-
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
