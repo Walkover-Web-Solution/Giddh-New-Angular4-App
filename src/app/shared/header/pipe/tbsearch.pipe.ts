@@ -27,7 +27,7 @@ export class TbsearchPipe implements PipeTransform {
       this.performSearch(input);
     } else {
       if (!_.isUndefined(this.srch)) {
-        if (this.srch.length !== 0) {
+        if (this.srch.length < 3) {
           this.resetSearch(input);
         }
       }
