@@ -168,6 +168,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         this.addAccountForm.get('companyName').patchValue(a);
       }
     });
+    // get openingblance value changes
+    this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+      if (a === 0 || a < 0) {
+        this.addAccountForm.get('openingBalanceType').patchValue('');
+      }
+    });
   }
 
   public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {

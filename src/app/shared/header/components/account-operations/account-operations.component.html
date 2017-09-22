@@ -80,7 +80,7 @@
           <input formControlName="moveto" (typeaheadOnSelect)="moveToAccountSelected($event)" [typeahead]="groupsList" typeaheadOptionField="name"
             [typeaheadItemTemplate]="moveGroupTemplate" placeholder="Group name" class="form-control">
           <span class="input-group-btn pdL2">
-            <button class="btn btn-default" [disabled]="!moveAccountForm.valid" type="button">Move</button>
+            <button  type="submit" class="btn btn-default" [disabled]="moveAccountForm.invalid">Move</button>
           </span>
         </div>
       </form>
