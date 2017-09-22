@@ -6,13 +6,37 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ComapnyResponse } from '../../../models/api-models/Company';
 import { saveAs } from 'file-saver';
-import { DataFormatter } from './data-formatter.class';
+import { DataFormatter, IFormatable } from './data-formatter.class';
 
 export interface Total {
   ob: number;
   cb: number;
   cr: number;
   dr: number;
+}
+
+class FormatCsv implements IFormatable {
+  private header: string = '';
+  private body: string = '';
+  private footer: string = '';
+  private title: string = 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
+  public csv = () => `${this.header}\r\n\r\n${this.title}\r\n${this.body}\r\n${this.footer}\r\n`;
+
+  public setHeader(selectedCompany: ComapnyResponse) {
+    this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\nTrial Balance: fromDate to toDate\r\n`;
+  }
+
+  public setRowData(data: any[], padding: number) {
+    this.body += ' '.repeat(padding);
+    data.forEach(value => this.body += `${value},`);
+    this.body += `\r\n`;
+  }
+
+  public setFooter(data: any[]) {
+    this.footer += `Total,`;
+    data.forEach(value => this.footer += `${value},`);
+    this.footer += `\r\n`;
+  }
 }
 
 @Component({
@@ -70,17 +94,20 @@ export class TbExportCsvComponent implements OnInit, OnDestroy {
     this.showCsvDownloadOptions = false;
     let csv = '';
     let name = '';
+    let formatCsv = new FormatCsv();
     switch (value) {
       case 'group-wise':
         csv = this.dataFormatter.formatDataGroupWise();
         name = 'Trial_Balance_group-wise.csv';
         break;
       case 'condensed':
-        csv = this.dataFormatter.formatDataCondensed();
+        this.dataFormatter.formatDataCondensed(formatCsv);
+        csv = formatCsv.csv();
         name = 'Trial_Balance_condensed.csv';
         break;
       case 'account-wise':
-        csv = this.dataFormatter.formatDataAccountWise();
+        this.dataFormatter.formatDataAccountWise(formatCsv);
+        csv = formatCsv.csv();
         name = 'Trial_Balance_account-wise.csv';
         break;
       default:

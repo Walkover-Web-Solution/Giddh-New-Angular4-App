@@ -17,8 +17,8 @@ import * as _ from 'lodash';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import {
   AccountMoveRequest,
-  AccountRequest,
-  AccountResponse,
+  AccountRequest, AccountRequestV2,
+  AccountResponse, AccountResponseV2,
   AccountSharedWithResponse,
   AccountsTaxHierarchyResponse
 } from '../../models/api-models/Account';
@@ -48,7 +48,7 @@ export interface CurrentGroupAndAccountState {
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
   activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
-  activeAccount: AccountResponse;
+  activeAccount: AccountResponseV2;
   fetchingGrpUniqueName: boolean;
   isCreateGroupInProcess?: boolean;
   isCreateGroupSuccess?: boolean;
@@ -577,10 +577,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       return Object.assign({}, state, {
         moveAccountSuccess: false
       });
-    case AccountsAction.CREATE_ACCOUNT:
+    case AccountsAction.CREATE_ACCOUNTV2:
       return Object.assign({}, state, { createAccountInProcess: true });
-    case AccountsAction.CREATE_ACCOUNT_RESPONSE:
-      let accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
+    case AccountsAction.CREATE_ACCOUNT_RESPONSEV2:
+      let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
       if (accountData.status === 'success') {
         return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: true });
       }
