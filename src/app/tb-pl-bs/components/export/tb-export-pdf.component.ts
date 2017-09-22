@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as jsPDF from 'jspdf';
-import { DataFormatter } from './data-formatter.class';
+import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
@@ -21,13 +21,71 @@ interface GroupViewModel {
   parent: string;
 }
 
+class FormatPdf implements IFormatable {
+  private pdf: jsPDF = new jsPDF();
+  private colX: number;
+  private colY: number;
+
+  constructor() {
+    this.colX = 10;
+    this.colY = 50;
+  }
+
+  setHeader(selectedCompany: ComapnyResponse) {
+    this.pdf.setFontSize(16);
+    this.pdf.text(10, 20, selectedCompany.name);
+    this.pdf.setFontSize(10);
+    this.pdf.text(10, 25, selectedCompany.address);
+    this.pdf.text(10, 30, selectedCompany.city + '-' + selectedCompany.pincode);
+    this.pdf.text(10, 35, "Trial Balance: ");
+    this.pdf.line(10, 38, 200, 38);
+
+    this.pdf.setFontSize(9);
+    this.pdf.text(10, 43, 'PARTICULAR');
+    this.pdf.text(70, 43, 'OPENING BALANCE');
+    this.pdf.text(105, 43, 'DEBIT');
+    this.pdf.text(140, 43, 'CREDIT');
+    this.pdf.text(170, 43, 'CLOSING BALANCE');
+    this.pdf.line(10, 45, 200, 45);
+  }
+
+  setRowData(data: any[], padding: number) {
+    this.pdf.setFontSize(10);
+    this.pdf.text(this.colX + padding, this.colY, data[0].toString());
+    this.pdf.text(70, this.colY, data[1].toString());
+    this.pdf.text(105, this.colY, data[2].toString());
+    this.pdf.text(140, this.colY, data[3].toString());
+    this.pdf.text(170, this.colY, data[4].toString());
+    if (this.colY > 247) {
+      this.pdf.addPage();
+      this.colY = 20;
+    }
+    else {
+      this.colY += 5
+    }
+  }
+
+  setFooter(data: any[]) {
+    this.pdf.line(10, this.colY, 200, this.colY);
+    this.pdf.text(10, this.colY + 5, "TOTAL",);
+    this.pdf.text(70, this.colY + 5, data[0].toString());
+    this.pdf.text(105, this.colY + 5, data[1].toString());
+    this.pdf.text(140, this.colY + 5, data[2].toString());
+    this.pdf.text(170, this.colY + 5, data[3].toString());
+  }
+
+  save() {
+    this.pdf.save('');
+  }
+}
+
 @Component({
   selector: 'tb-export-pdf',  // <home></home>
   template: `
-    <div class="form-group pdf-export" (clickOutside)="showpdf=false;">
-      <a (click)="showpdf = !showpdf" *ngIf="enableDownload"><img
+    <div class="form-group pdf-export" (clickOutside)="showPdf=false;">
+      <a (click)="showPdf = !showPdf" *ngIf="enableDownload"><img
         src="/assets/images/pdf-icon.png"/></a>
-      <div class="export-options" *ngIf="showpdf">
+      <div class="export-options" *ngIf="showPdf">
         <span class="arrow"></span>
         <ul class="list-unstyled">
           <li><a (click)="downloadPdf('group-wise')">Group Wise
@@ -48,7 +106,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
   @Input() public selectedCompany: ComapnyResponse;
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
-  public showpdf: boolean;
+  public showPdf: boolean;
   private exportData: ChildGroup[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private dataFormatter: DataFormatter;
@@ -84,7 +142,7 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
   }
 
   private downloadPdfGroupWise() {
-    this.showpdf = false;
+    this.showPdf = false;
     let pdf = new jsPDF('p', 'pt') as JsPDFAutoTable;
     let columns = [
       {
@@ -161,13 +219,19 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
 
   private downloadPdfCondensed() {
     //
+    let formatPdf = new FormatPdf();
+    this.dataFormatter.formatDataCondensed(formatPdf);
+    formatPdf.save();
   }
 
   private createPdf(rows: any, cols: any): void {
     //
+
   }
 
   private downloadPdfAccountWise(): void {
-    throw new Error('Method not implemented.');
+    let formatPdf = new FormatPdf();
+    this.dataFormatter.formatDataAccountWise(formatPdf);
+    formatPdf.save();
   }
 }
