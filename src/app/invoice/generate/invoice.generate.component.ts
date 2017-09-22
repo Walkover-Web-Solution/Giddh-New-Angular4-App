@@ -126,6 +126,12 @@ export class InvoiceGenerateComponent implements OnInit {
     }
   }
 
+  public pageChanged(event: any): void {
+    this.ledgerSearchRequest.page = event.page;
+    this.selectedLedgerItems = [];
+    this.getLedgersOfInvoice();
+  }
+
   public toggleAllItems(type: boolean) {
     if (type) {
       this.allItemsSelected = true;
