@@ -88,8 +88,16 @@ export class ComparisionChartComponent implements OnInit {
             if (cmp.uniqueName === activeCmpUniqueName) {
               if (cmp.financialYears.length > 1) {
                 financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.orderBy(financialYears, (it) => {
-                  return moment(it.financialYearStarts, 'DD-MM-YYYY');
+                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+
+                  return b.diff(a, 'days') < 0;
+                });
+                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
+                  return b.diff(a, 'days');
                 }, 'desc');
                 this.lastFinancialYear = financialYears[0];
               }
@@ -113,7 +121,10 @@ export class ComparisionChartComponent implements OnInit {
         this.requestInFlight = false;
       });
   }
-
+  public hardRefresh() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
   public fetchChartData() {
     this.requestInFlight = true;
     this.ApiToCALL = [];
