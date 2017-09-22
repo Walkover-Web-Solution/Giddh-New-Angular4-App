@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TooltipModule } from 'ngx-bootstrap';
+import { TooltipModule, PaginationModule } from 'ngx-bootstrap';
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { SharedModule } from '../shared/shared.module';
@@ -73,6 +73,7 @@ const INVOICE_ROUTES: Routes = [
     SharedModule,
     RouterModule.forChild(INVOICE_ROUTES),
     TooltipModule.forRoot(),
+    PaginationModule.forRoot(),
     InvoiceTemplatesModule,
     FontPickerModule.forRoot(FONT_PICKER_CONFIG),
     NgUploaderModule

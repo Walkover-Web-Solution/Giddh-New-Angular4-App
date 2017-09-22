@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html id="default" *ngIf="templateId == 'common_template_a'">
+ <!--*ngIf="templateId == 'common_template_a'"-->
+<html id="default">
 
 <head>
     <title></title>
@@ -369,16 +370,15 @@
     </style>
 </head>
 
-
-<body [ngStyle]="{ 'padding': templateMeta.topMargin+'px'+' '+templateMeta.rightMargin+'px'+' '+templateMeta.bottomMargin+'px'+' '+templateMeta.leftMargin+'px', 'font-family': templateMeta.font}">
+<body *ngIf="inputTemplate.sections && inputTemplate.sections.length" [ngStyle]="{ 'padding': inputTemplate.topMargin+'px'+' '+inputTemplate.rightMargin+'px'+' '+inputTemplate.bottomMargin+'px'+' '+inputTemplate.leftMargin+'px', 'font-family': inputTemplate.font}">
     <!--class="disabled-area"-->
     <div>
-        <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[activeHeader]" (click)="onClickHeader()">
-            <a href="javascript:void(0);" class="edit-template" *ngIf="!activeHeader"><i class="fa fa-pencil"></i></a>
+        <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]" (click)="onClickSection('header')">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.header"><i class="fa fa-pencil"></i></a>
             <header>
-                <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" [hidden]='!showLogo' /></figure>
-                <figure class="col-xs-6" *ngIf="fieldDisplayState.enableCompanyName">
-                    <strong><h2 [ngStyle]="{ 'color': templateMeta.primaryColor}" >{{this.templateMeta.companyName}}</h2></strong>
+                <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' /></figure>
+                <figure class="col-xs-6" *ngIf="inputTemplate.sections[0].content[0].display">
+                    <strong *ngIf="inputTemplate.sections[0].content[0].display"><h2 [ngStyle]="{ 'color': inputTemplate.primaryColor}" >{{inputTemplate.sections[0].content[0].label}}</h2></strong>
                 </figure>
                 <table cellspacing="0" cellpadding="0">
                     <tbody>
@@ -387,10 +387,10 @@
                                 <table class="numDetail">
                                     <tbody>
                                         <tr>
-                                            <td><strong>{{this.templateMeta.GSTIN}}</strong> 01234567890123</td>
+                                            <td><strong>{{inputTemplate.sections[0].content[1].label}}</strong> 01234567890123</td>
                                         </tr>
                                         <tr>
-                                            <td><strong>{{this.templateMeta.PAN}}</strong> 1234567890</td>
+                                            <td><strong>{{inputTemplate.sections[0].content[2].label}}</strong> 1234567890</td>
 
                                         </tr>
                                     </tbody>
@@ -402,18 +402,18 @@
                             <td class="pull-right">
                                 <table>
                                     <tbody>
-                                        <tr *ngIf="fieldDisplayState.enableInvoiceDate">
-                                            <td><strong>{{(this.templateMeta.invoiceDate.length > 0) ? this.templateMeta.invoiceDate : 'Invoice Date'}}</strong></td>
+                                        <tr *ngIf="inputTemplate.sections[0].content[4].display">
+                                            <td><strong>{{(inputTemplate.sections[0].content[4].label.length > 0) ? inputTemplate.sections[0].content[4].label : 'Invoice Date'}}</strong></td>
                                             <td>
                                                 <p> 23/06/2017 </p>
                                             </td>
                                         </tr>
-                                        <tr *ngIf="fieldDisplayState.enableInvoiceNo">
-                                            <td><strong>{{(this.templateMeta.invoiceNumber.length > 0) ? this.templateMeta.invoiceNumber : 'Invoice No.'}}</strong></td>
+                                        <tr *ngIf="inputTemplate.sections[0].content[5].display">
+                                            <td><strong>{{(inputTemplate.sections[0].content[5].label.length > 0) ? inputTemplate.sections[0].content[5].label : 'Invoice No.'}}</strong></td>
                                             <td>201770323-64</td>
                                         </tr>
-                                        <tr *ngIf="fieldDisplayState.enableDueDate">
-                                            <td><strong>{{(this.templateMeta.dueDate.length > 0) ? this.templateMeta.dueDate : 'Due Date'}}</strong></td>
+                                        <tr *ngIf="inputTemplate.sections[0].content[13].display">
+                                            <td><strong>{{(inputTemplate.sections[0].content[13].label.length > 0) ? inputTemplate.sections[0].content[13].label : 'Due Date'}}</strong></td>
                                             <td>30/06/2017</td>
                                         </tr>
 
@@ -429,9 +429,9 @@
                 <!--<hr [ngStyle]="{ 'background-color': color}" />-->
                 <!--</h2>-->
                 <!--</div>-->
-                <div class="docTitle" *ngIf="fieldDisplayState.enableDocTitle">
-                    <h2 [ngStyle]="{ 'color': templateMeta.primaryColor}" title="{{(this.templateMeta.formNameTaxInvoice.length > 0) ? this.templateMeta.formNameTaxInvoice : 'INVOICE' }}">
-                        <hr [ngStyle]="{ 'background-color': templateMeta.primaryColor}" />
+                <div class="docTitle" *ngIf="inputTemplate.sections[0].content[24] && inputTemplate.sections[0].content[24].display">
+                    <h2 [ngStyle]="{ 'color': inputTemplate.primaryColor}" title="{{(inputTemplate.sections[0].content[24].label.length > 0) ? inputTemplate.sections[0].content[24].label : 'INVOICE' }}">
+                        <hr [ngStyle]="{ 'background-color': inputTemplate.primaryColor}" />
                     </h2>
                 </div>
             </header>
@@ -439,39 +439,39 @@
             <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldDisplayState.enableCustomerName || fieldDisplayState.enableEmailId || fieldDisplayState.enableMobileNo">
-                            <p *ngIf="fieldDisplayState.enableCustomerName"><strong>{{this.templateMeta.customerName}}</strong></p>
-                            <p *ngIf="fieldDisplayState.enableEmailId">{{this.templateMeta.customerEmail}}</p>
-                            <p *ngIf="fieldDisplayState.enableMobileNo">{{this.templateMeta.customerMobileNumber}}</p>
+                        <td *ngIf="inputTemplate.sections[0].content[10].display || inputTemplate.sections[0].content[11].display || inputTemplate.sections[0].content[12].display">
+                            <p *ngIf="inputTemplate.sections[0].content[10].display"><strong>{{inputTemplate.sections[0].content[10].label}}</strong></p>
+                            <p *ngIf="inputTemplate.sections[0].content[11].display">{{inputTemplate.sections[0].content[10].label}}</p>
+                            <p *ngIf="inputTemplate.sections[0].content[12].display">{{inputTemplate.sections[0].content[10].label}}</p>
                         </td>
-                        <td *ngIf="fieldDisplayState.enableBillingAddress">
-                            <p><strong>{{(this.templateMeta.billingAddress.length > 0) ? this.templateMeta.billingAddress : 'Billing Address'}}</strong></p>
+                        <td *ngIf="inputTemplate.sections[0].content[15].display">
+                            <p><strong>{{(inputTemplate.sections[0].content[15].label.length > 0) ? inputTemplate.sections[0].content[15].label : 'Billing Address'}}</strong></p>
                             <p>Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
-                            <p *ngIf="fieldDisplayState.enableBillingState">Madhya Pradesh</p>
+                            <p *ngIf="inputTemplate.sections[0].content[14].display">Madhya Pradesh</p>
                         </td>
-                        <td *ngIf="fieldDisplayState.enableShippingAddress">
-                            <p><strong>{{(this.templateMeta.shippingAddress.length > 0) ? this.templateMeta.shippingAddress : 'Shipping Address'}}</strong></p>
+                        <td *ngIf="inputTemplate.sections[0].content[17].display">
+                            <p><strong>{{(inputTemplate.sections[0].content[17].label > 0) ? inputTemplate.sections[0].content[17].label : 'Shipping Address'}}</strong></p>
                             <p>Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
-                            <p *ngIf="fieldDisplayState.enableShippingState">Madhya Pradesh</p>
+                            <p *ngIf="inputTemplate.sections[0].content[18].display">Madhya Pradesh</p>
                         </td>
                     </tr>
                     <tr>
 
-                        <td *ngIf="fieldDisplayState.enableCustomerName || fieldDisplayState.enableEmailId || fieldDisplayState.enableMobileNo">&nbsp;</td>
+                        <td *ngIf="inputTemplate.sections[0].content[10].display || inputTemplate.sections[0].content[11].display || inputTemplate.sections[0].content[12].display">&nbsp;</td>
                         <!--<td>-->
-                        <!--&lt;!&ndash;<p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{(this.templateMeta.dueDate.length > 0) ? this.templateMeta.dueDate : 'Due Date'}}</strong></p>&ndash;&gt;-->
+                        <!--&lt;!&ndash;<p><strong [ngClass]="{false: 'hidden-label', true: ' ' }[fieldDisplayState.enableDueDate]">{{(this.inputTemplate.dueDate.length > 0) ? this.inputTemplate.dueDate : 'Due Date'}}</strong></p>&ndash;&gt;-->
                         <!--&lt;!&ndash;<p>30/06/2017</p>&ndash;&gt;-->
                         <!--</td>-->
-                        <td *ngIf="fieldDisplayState.enableBillingAddress">
-                            <p><strong>{{(this.templateMeta.billingGstin.length > 0) ? this.templateMeta.billingGstin : 'GSTIN'}}</strong></p>
+                        <td *ngIf="inputTemplate.sections[0].content[16].display">
+                            <p><strong>{{(inputTemplate.sections[0].content[16].label.length > 0) ? inputTemplate.sections[0].content[16].label : 'GSTIN'}}</strong></p>
                             <p>22BBBBBB000A1Z0</p>
                         </td>
-                        <td *ngIf="fieldDisplayState.enableShippingAddress">
-                            <p><strong>{{(this.templateMeta.shippinGstin.length > 0) ? this.templateMeta.shippinGstin : 'GSTIN'}}</strong></p>
+                        <td *ngIf="inputTemplate.sections[0].content[19].display">
+                            <p><strong>{{(inputTemplate.sections[0].content[19].label.length > 0) ? inputTemplate.sections[0].content[19].label : 'GSTIN'}}</strong></p>
                             <p>22BBBBBB000A1Z0</p>
                         </td>
                     </tr>
@@ -480,150 +480,151 @@
             <table class="meta">
                 <tbody>
                     <tr>
-                        <td *ngIf="fieldDisplayState.enableShipDate">
-                            <strong>{{(this.templateMeta.shippingDate.length > 0) ? this.templateMeta.shippingDate : 'Ship Date'}}</strong>
+                        <td *ngIf="inputTemplate.sections[0].content[6].display">
+                            <strong>{{(inputTemplate.sections[0].content[6].label.length > 0) ? inputTemplate.sections[0].content[6].label : 'Ship Date'}}</strong>
                             <p>30/06/2017</p>
                         </td>
 
-                        <td *ngIf="fieldDisplayState.enableShipVia">
-                            <strong>{{(this.templateMeta.shippingVia.length > 0) ? this.templateMeta.shippingVia : 'Ship Via'}}</strong>
+                        <td *ngIf="inputTemplate.sections[0].content[7].display">
+                            <strong>{{(inputTemplate.sections[0].content[7].label.length > 0) ? inputTemplate.sections[0].content[7].label : 'Ship Via'}}</strong>
                             <p>30/06/2017</p>
                         </td>
 
-                        <td *ngIf="fieldDisplayState.enableTrackingNo">
-                            <strong>{{(this.templateMeta.trackingNumber.length > 0) ? this.templateMeta.trackingNumber : 'Tracking No'}}</strong>
+                        <td *ngIf="inputTemplate.sections[0].content[8].display">
+                            <strong>{{(inputTemplate.sections[0].content[8].label.length > 0) ? inputTemplate.sections[0].content[8].label : 'Tracking No'}}</strong>
                             <p>00115467</p>
                         </td>
-                        <td *ngIf="fieldDisplayState.enableCustom1">
-                            <strong>{{(this.templateMeta.customField1.length > 0) ? this.templateMeta.customField1 : 'Custom Field1'}}</strong>
+                        <td *ngIf="inputTemplate.sections[0].content[20].display">
+                            <strong>{{(inputTemplate.sections[0].content[20].label.length > 0) ? inputTemplate.sections[0].content[20].label : 'Custom Field1'}}</strong>
                             <p>Hello this is custom field</p>
                         </td>
 
-                        <td *ngIf="fieldDisplayState.enableCustom2">
-                            <strong>{{(this.templateMeta.customField2.length > 0) ? this.templateMeta.customField2 : 'Custom Field2'}}</strong>
+                        <td *ngIf="inputTemplate.sections[0].content[21].display">
+                            <strong>{{(inputTemplate.sections[0].content[21].label.length > 0) ? inputTemplate.sections[0].content[21].label : 'Custom Field2'}}</strong>
                             <p>2324342424432</p>
                         </td>
 
-                        <td *ngIf="fieldDisplayState.enableCustom3">
-                            <strong>{{(this.templateMeta.customField3.length > 0) ? this.templateMeta.customField3 : 'Custom Field3'}}</strong>
+                        <td *ngIf="inputTemplate.sections[0].content[22].display">
+                            <strong>{{(inputTemplate.sections[0].content[22].label.length > 0) ? inputTemplate.sections[0].content[22].label : 'Custom Field3'}}</strong>
                             <p>Field 3</p>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div id="Template-table" [ngClass]="{false: 'disabled-area', true: ' ' }[activeGrid]" (click)="onClickGrid()">
-            <a href="javascript:void(0);" class="edit-template" *ngIf="!activeGrid"><i class="fa fa-pencil"></i></a>
+        <div id="Template-table" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.table]" (click)="onClickSection('table')">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.table"><i class="fa fa-pencil"></i></a>
             <article>
                 <table class="item" cellpadding="0" cellspacing="0">
                     <thead>
                         <tr>
-                            <th *ngIf="fieldDisplayState.enableSno" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.sNoLabel.length > 0) ? this.templateMeta.sNoLabel : 'S No'}}</th>
-                            <th *ngIf="fieldDisplayState.enableDate" class="text-left" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.dateLabel.length > 0) ? this.templateMeta.dateLabel : 'Date'}}</th>
-                            <th *ngIf="fieldDisplayState.enableItem" colspan="2" class="text-left" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.itemLabel.length > 0) ? this.templateMeta.itemLabel : 'Item'}}</th>
-                            <th *ngIf="fieldDisplayState.enableHsn" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.hsnSacLabel.length > 0) ? this.templateMeta.hsnSacLabel : 'HSN/SAC'}}</th>
-                            <th *ngIf="fieldDisplayState.enableQty" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.quantityLabel.length > 0) ? this.templateMeta.quantityLabel : 'Qty.'}}</th>
-                            <th *ngIf="fieldDisplayState.enableRate" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.rateLabel.length > 0) ? this.templateMeta.rateLabel : 'Rate'}} (₹)</th>
-                            <th *ngIf="fieldDisplayState.enableDis" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.discountLabel.length > 0) ? this.templateMeta.discountLabel : 'Disc.'}} (₹)</th>
-                            <th *ngIf="fieldDisplayState.enableTaxableValue" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.taxableValueLabel.length > 0) ? this.templateMeta.taxableValueLabel : 'Taxable Value'}}</th>
-                            <th *ngIf="fieldDisplayState.enableTax" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.taxLabel.length > 0) ? this.templateMeta.taxLabel : 'Tax'}}(₹)</th>
-                            <th colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">{{(this.templateMeta.totalLabel.length > 0) ? this.templateMeta.totalLabel : 'Total'}} (₹)</th>
+                            <th *ngIf="inputTemplate.sections[1].content[0].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[0].label.length > 0) ? inputTemplate.sections[1].content[0].label : 'S No'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[1].display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[1].label.length > 0) ? inputTemplate.sections[1].content[1].label : 'Date'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[2].label.length > 0) ? inputTemplate.sections[1].content[2].label : 'Item'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[3].label.length > 0) ? inputTemplate.sections[1].content[3].label : 'HSN/SAC'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[11].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[11].label.length > 0) ? inputTemplate.sections[1].content[11].label : 'Qty.'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[6].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[6].label.length > 0) ? inputTemplate.sections[1].content[6].label : 'Rate'}} (₹)</th>
+                            <th *ngIf="inputTemplate.sections[1].content[7].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[7].label.length > 0) ? inputTemplate.sections[1].content[7].label : 'Disc.'}} (₹)</th>
+                            <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[8].label.length > 0) ? inputTemplate.sections[1].content[8].label : 'Taxable Value'}}</th>
+                            <th *ngIf="inputTemplate.sections[1].content[9].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[9].label.length > 0) ? inputTemplate.sections[1].content[9].label : 'Tax'}}(₹)</th>
+                            <th colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">{{(inputTemplate.sections[1].content[10].label.length > 0) ? inputTemplate.sections[1].content[10].label : 'Total'}} (₹)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td *ngIf="fieldDisplayState.enableSno" class="text-right">1</td>
-                            <td *ngIf="fieldDisplayState.enableDate" class="text-left">23/07/17</td>
-                            <td colspan="2" *ngIf="fieldDisplayState.enableItem" class="text-left">Dummy Product Edition 2</td>
-                            <td *ngIf="fieldDisplayState.enableHsn" class="text-right">123456</td>
-                            <td *ngIf="fieldDisplayState.enableQty" class="text-right">10 No.</td>
-                            <td *ngIf="fieldDisplayState.enableRate" class="text-right">1000.00</td>
-                            <td *ngIf="fieldDisplayState.enableDis" class="text-right">30.00</td>
-                            <td *ngIf="fieldDisplayState.enableTaxableValue" class="text-right">9700.00</td>
-                            <td *ngIf="fieldDisplayState.enableTax" class="text-right">9700.00
+                            <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-right">1</td>
+                            <td *ngIf="inputTemplate.sections[1].content[1].display" class="text-left">23/07/17</td>
+                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="inputTemplate.sections[1].content[3].display" class="text-right">123456</td>
+                            <td *ngIf="inputTemplate.sections[1].content[11].display" class="text-right">10 No.</td>
+                            <td *ngIf="inputTemplate.sections[1].content[6].display" class="text-right">1000.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[7].display" class="text-right">30.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[8].display" class="text-right">9700.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[9].display" class="text-right">9700.00
                                 <p>@10%</p>
                             </td>
-                            <td colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right">11000344640.00</td>
+                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">11000344640.00</td>
                         </tr>
                         <tr>
-                            <td *ngIf="fieldDisplayState.enableSno" class="text-right">1</td>
-                            <td *ngIf="fieldDisplayState.enableDate" class="text-left">23/07/17</td>
-                            <td colspan="2" *ngIf="fieldDisplayState.enableItem" class="text-left">Dummy Product Edition 2</td>
-                            <td *ngIf="fieldDisplayState.enableHsn" class="text-right">123456</td>
-                            <td *ngIf="fieldDisplayState.enableQty" class="text-right">10 No.</td>
-                            <td *ngIf="fieldDisplayState.enableRate" class="text-right">1000.00</td>
-                            <td *ngIf="fieldDisplayState.enableDis" class="text-right">30.00</td>
-                            <td *ngIf="fieldDisplayState.enableTaxableValue" class="text-right">9700.00</td>
-                            <td *ngIf="fieldDisplayState.enableTax" class="text-right">9700.00
+                            <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-right">1</td>
+                            <td *ngIf="inputTemplate.sections[1].content[1].display" class="text-left">23/07/17</td>
+                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Dummy Product Edition 2</td>
+                            <td *ngIf="inputTemplate.sections[1].content[3].display" class="text-right">123456</td>
+                            <td *ngIf="inputTemplate.sections[1].content[11].display" class="text-right">10 No.</td>
+                            <td *ngIf="inputTemplate.sections[1].content[6].display" class="text-right">1000.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[7].display" class="text-right">30.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[8].display" class="text-right">9700.00</td>
+                            <td *ngIf="inputTemplate.sections[1].content[9].display" class="text-right">9700.00
                                 <p>@10%</p>
                             </td>
-                            <td colspan="2" *ngIf="fieldDisplayState.enableTotal" class="text-right">11000344640.00</td>
+                            <td colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">11000344640.00</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th *ngIf="fieldDisplayState.enableSno" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">&nbsp;</th>
-                            <th *ngIf="fieldDisplayState.enableDate" class="text-left" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">&nbsp;</th>
-                            <th *ngIf="fieldDisplayState.enableItem" colspan="2" class="text-left" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">&nbsp;</th>
-                            <th *ngIf="fieldDisplayState.enableHsn" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">&nbsp;</th>
-                            <th *ngIf="fieldDisplayState.enableQty" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">&nbsp;</th>
-                            <th *ngIf="fieldDisplayState.enableRate" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">30100.00</th>
-                            <th *ngIf="fieldDisplayState.enableDis" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">30100.00</th>
-                            <th *ngIf="fieldDisplayState.enableTaxableValue" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">30100.00</th>
-                            <th *ngIf="fieldDisplayState.enableTax" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">30100.00</th>
-                            <th *ngIf="fieldDisplayState.enableTotal" colspan="2" class="text-right" [ngStyle]="{ 'background-color': templateMeta.secondaryColor}">30100.00</th>
+                            <th *ngIf="inputTemplate.sections[1].content[0].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">&nbsp;</th>
+                            <th *ngIf="inputTemplate.sections[1].content[1].display" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">&nbsp;</th>
+                            <th *ngIf="inputTemplate.sections[1].content[2].display" colspan="2" class="text-left" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">&nbsp;</th>
+                            <th *ngIf="inputTemplate.sections[1].content[3].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">&nbsp;</th>
+                            <th *ngIf="inputTemplate.sections[1].content[11].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">&nbsp;</th>
+                            <th *ngIf="inputTemplate.sections[1].content[6].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">30100.00</th>
+                            <th *ngIf="inputTemplate.sections[1].content[7].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">30100.00</th>
+                            <th *ngIf="inputTemplate.sections[1].content[8].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">30100.00</th>
+                            <th *ngIf="inputTemplate.sections[1].content[9].display" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">30100.00</th>
+                            <th *ngIf="inputTemplate.sections[1].content[10].display" colspan="2" class="text-right" [ngStyle]="{ 'background-color': inputTemplate.secondaryColor}">30100.00</th>
                         </tr>
                     </tfoot>
                 </table>
             </article>
         </div>
-        <div id="Template-footer" [ngClass]="{false: 'disabled-area', true: ' ' }[activeFooter]" (click)="onClickFooter()">
-            <a href="javascript:void(0);" class="edit-template" *ngIf="!activeFooter"><i class="fa fa-pencil"></i></a>
+        <div id="Template-footer" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.footer]" (click)="onClickSection('footer')">
+            <a href="javascript:void(0);" class="edit-template" *ngIf="!templateUISectionVisibility.footer"><i class="fa fa-pencil"></i></a>
             <aside>
                 <table class="balance">
-                    <tr *ngIf="fieldDisplayState.enableTaxableAmount">
-                        <th><strong>{{this.templateMeta.taxableAmount}}</strong></th>
+                    <tr *ngIf="inputTemplate.sections[2].content[0].display">
+                        <th><strong>{{inputTemplate.sections[2].content[0].label}}</strong></th>
                         <td><span>₹30100.00</span></td>
                     </tr>
-                    <tr *ngIf="fieldDisplayState.enableTotalTax">
-                        <th><strong>{{this.templateMeta.totalTax}}</strong></th>
+                    <tr *ngIf="inputTemplate.sections[2].content[1].display">
+                        <th><strong>{{inputTemplate.sections[2].content[1].label}}</strong></th>
                         <td><span>₹5920.00</span></td>
                     </tr>
-                    <tr *ngIf="fieldDisplayState.enableInvoiceTotal">
-                        <th><strong>{{this.templateMeta.total}}</strong></th>
+                    <tr *ngIf="inputTemplate.sections[2].content[3].display">
+                        <th><strong>{{inputTemplate.sections[2].content[3].label}}</strong></th>
                         <td><span>₹36020.00</span></td>
                     </tr>
-                    <tr *ngIf="fieldDisplayState.enableTotalInWords">
-                        <th><strong>{{this.templateMeta.totalInWords}}</strong></th>
+                    <tr *ngIf="inputTemplate.sections[2].content[4].display">
+                        <th><strong>{{inputTemplate.sections[2].content[4].label}}</strong></th>
                         <td>Thirty Six Thousand Twenty Only</td>
                     </tr>
                 </table>
                 <table cellpadding="0" cellspacing="0" class="subfooter">
                     <tbody>
                         <tr>
-                            <td *ngIf="fieldDisplayState.enableMessage1 || fieldDisplayState.enableMessage2">
-                                <p *ngIf="fieldDisplayState.enableMessage1" style="margin-bottom: 15px;">
-                                    <strong>{{this.templateMeta.message1}}</strong>
+                            <td *ngIf="inputTemplate.sections[2].content[5].display || inputTemplate.sections[2].content[6].display">
+                                <p *ngIf="inputTemplate.sections[2].content[5].display" style="margin-bottom: 15px;">
+                                    <strong>{{inputTemplate.sections[2].content[5].label}}</strong>
                                 </p>
-                                <p *ngIf="fieldDisplayState.enableMessage2"> {{this.templateMeta.message2}}</p>
+                                <p *ngIf="inputTemplate.sections[2].content[6].display"> {{inputTemplate.sections[2].content[6].label}}</p>
                             </td>
                             <td>&nbsp;</td>
                             <td style="text-align: center;vertical-align: bottom;">
-                                <img [src]="templateMeta.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />
+                                <!--<img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />-->
                                 <hr />
-                                <strong><h3>{{this.templateMeta.companyName}}</h3></strong>
-                                <strong><small>{{this.templateMeta.slogan}}</small></strong>
+                                <!--<strong><h3>{{inputTemplate.sections[2].content[5].display}}</h3></strong>-->
+                                <strong><small>{{inputTemplate.sections[2].content[10].label}}</small></strong>
+                                <!--<p><small>(Signature)</small></p>-->
                             </td>
                         </tr>
-                        <tr *ngIf="fieldDisplayState.enableThanks">
-                            <td><strong><h4 [ngStyle]="{ 'color': templateMeta.primaryColor}">{{this.templateMeta.thanks}}</h4></strong></td>
+                        <tr *ngIf="inputTemplate.sections[2].content[7].display">
+                            <td><strong><h4 [ngStyle]="{ 'color': inputTemplate.primaryColor}">{{inputTemplate.sections[2].content[7].label}}</h4></strong></td>
                         </tr>
                     </tbody>
                 </table>
 
             </aside>
-            <footer *ngIf="fieldDisplayState.enableCompanyAddress" style="text-align: center;" [ngStyle]="{ 'border-color': templateMeta.primaryColor}">
-                {{this.templateMeta.address}}
+            <footer *ngIf="inputTemplate.sections[2].content[8].display" style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.primaryColor}">
+                {{inputTemplate.sections[2].content[8].label}}
             </footer>
         </div>
 

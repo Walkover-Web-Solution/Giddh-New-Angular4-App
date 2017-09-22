@@ -5,7 +5,7 @@ export const INVOICE_API = {
   GET_USER_TEMPLATES: Configuration.ApiUrl + 'v2/sample-templates',
   // CREATE_NEW_TEMPLATE: Configuration.ApiUrl + 'company/:companyUniqueName/templates-v2', // POST
   CREATE_NEW_TEMPLATE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/templates', // POST
-  UPDATE_TEMPLATE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/templates', // PUT
+  UPDATE_TEMPLATE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/templates/:templateUniqueName', // PUT
   // GET_CREATED_TEMPLATES: Configuration.ApiUrl + 'company/:companyUniqueName/templates-v2', // GET
   GET_CREATED_TEMPLATES: Configuration.ApiUrl + 'v2/company/:companyUniqueName/templates', // GET
   // GET_CUSTOM_TEMPLATE: Configuration.ApiUrl + 'company/:companyUniqueName/templates-v2/:templateUniqueName', // GET

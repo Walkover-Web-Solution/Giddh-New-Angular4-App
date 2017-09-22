@@ -15,24 +15,24 @@ export class InvoiceEmailFilterComponent implements OnInit, OnDestroy {
   constructor(private invoiceUiDataService: InvoiceUiDataService) { }
 
   public ngOnInit() {
-    let emailObj = _.cloneDeep(this.emailObject);
-    emailObj.isEmailTabSelected = true;
-    this.invoiceUiDataService.updateEmailSettingObj(emailObj);
+    // let emailObj = _.cloneDeep(this.emailObject);
+    // emailObj.isEmailTabSelected = true;
+    // this.invoiceUiDataService.updateEmailSettingObj(emailObj);
   }
 
   /**
   * onUpdateEmailObject
   */
   public onUpdateEmailObject() {
-    let emailObj = _.cloneDeep(this.emailObject);
-    emailObj.isEmailTabSelected = true;
-    this.invoiceUiDataService.updateEmailSettingObj(emailObj);
+    // let emailObj = _.cloneDeep(this.emailObject);
+    // emailObj.isEmailTabSelected = true;
+    // this.invoiceUiDataService.updateEmailSettingObj(emailObj);
   }
 
   public ngOnDestroy() {
-    let emailObj = _.cloneDeep(this.emailObject);
-    emailObj.isEmailTabSelected = false;
-    this.invoiceUiDataService.updateEmailSettingObj(emailObj);
+    // let emailObj = _.cloneDeep(this.emailObject);
+    // emailObj.isEmailTabSelected = false;
+    // this.invoiceUiDataService.updateEmailSettingObj(emailObj);
   }
 
 }
