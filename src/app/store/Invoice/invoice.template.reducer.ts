@@ -16,6 +16,7 @@ export const initialState: CustomTemplateState = {
   sampleTemplates: null,
   customCreatedTemplates: null,
   defaultTemplate: {
+    logoUniqueName: null,
     createdBy: null,
     uniqueName: '',
     fontSize: '10pt',
@@ -308,7 +309,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'NOTE 1',
+            label: 'NOTE 2',
             field: 'message2',
             width: null
           },

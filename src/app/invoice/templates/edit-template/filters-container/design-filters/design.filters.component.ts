@@ -13,6 +13,9 @@ import { InvoiceTemplatesService } from '../../../../../services/invoice.templat
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import { ReplaySubject } from 'rxjs/Rx';
+import { ToasterService } from '../../../../../services/toaster.service';
+import { INVOICE_API } from '../../../../../services/apiurls/invoice';
+import { Observable } from 'rxjs/Observable';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -51,13 +54,18 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public humanizeBytes: any;
   public dragOver: boolean;
   public imagePreview: any;
-
+  public isFileUploaded: boolean = false;
+  public isFileUploadInProgress: boolean = false;
+  public sessionId$: Observable<string>;
+  public companyUniqueName$: Observable<string>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _invoiceUiDataService: InvoiceUiDataService) {
+  constructor(private _invoiceUiDataService: InvoiceUiDataService, private _toasty: ToasterService, private store: Store<AppState>) {
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
+    this.sessionId$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
+    this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -71,7 +79,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    */
   public onValueChange(fieldName: string, value: string) {
     let template = _.cloneDeep(this.customTemplate);
-    if (fieldName && value) {
+    if (fieldName) {
       template[fieldName] = value;
     }
     this._invoiceUiDataService.setCustomTemplate(template);
@@ -133,32 +141,35 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.onChangeVisibility(null);
   }
 
-  public onUploadOutput(output: UploadOutput): void {
+  public onUploadMyFileOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
-      this.files.push(output.file);
-      this.previewFile(this.files);
-    } else if (output.type === 'addedToQueue' && typeof output.file !== 'undefined') {
-      this.files.push(output.file);
-    } else if (output.type === 'uploading' && typeof output.file !== 'undefined') {
-      const index = this.files.findIndex(file => typeof output.file !== 'undefined' && file.id === output.file.id);
-      this.files[index] = output.file;
-    } else if (output.type === 'removed') {
-      this.files = this.files.filter((file: UploadFile) => file !== output.file);
-    } else if (output.type === 'dragOver') {
-      this.dragOver = true;
-    } else if (output.type === 'dragOut') {
-      this.dragOver = false;
-    } else if (output.type === 'drop') {
-      this.dragOver = false;
+        this.previewFile(output.file);
+    } else if (output.type === 'start') {
+        this.isFileUploadInProgress = true;
+        this.removeAllFiles();
+    } else if (output.type === 'done') {
+      this.isFileUploadInProgress = false;
+      if (output.file.response.status === 'success') {
+        this.onValueChange('logoUniqueName', output.file.response.body.uniqueName);
+        this.isFileUploaded = true;
+        this._toasty.successToast('file uploaded successfully.');
+      } else {
+        this._toasty.errorToast(output.file.response.message, output.file.response.code);
+      }
     }
   }
 
   public startUpload(): void {
+    let sessionId = null;
+    let companyUniqueName = null;
+    this.sessionId$.take(1).subscribe(a => sessionId = a);
+    this.companyUniqueName$.take(1).subscribe(a => companyUniqueName = a);
     const event: UploadInput = {
       type: 'uploadAll',
-      url: 'http://ngx-uploader.com/upload',
+      url: INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
       method: 'POST',
-      data: { foo: 'bar' },
+      headers: { 'Session-Id': sessionId },
+      concurrency: 1,
     };
 
     this.uploadInput.emit(event);
@@ -198,6 +209,21 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public toogleLogoVisibility(): void {
     this.showLogo = !this.showLogo;
     this._invoiceUiDataService.setLogoVisibility(this.showLogo);
+  }
+
+  /**
+   * deleteLogo
+   */
+  public deleteLogo() {
+    this.onValueChange('logoUniqueName', null);
+    this._invoiceUiDataService.setLogoPath('');
+    this.files = []; // local uploading files array
+    this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
+    this.humanizeBytes = humanizeBytes;
+    this.logoAttached = false;
+    this.isFileUploaded = false;
+    this.isFileUploadInProgress = false;
+    this.removeAllFiles();
   }
 
    public ngOnDestroy() {
