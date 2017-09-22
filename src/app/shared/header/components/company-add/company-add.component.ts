@@ -10,10 +10,11 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
 import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { Router } from '@angular/router';
-import { ModalDirective } from 'ngx-bootstrap';
+import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
 import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
+import * as _ from 'lodash';
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
@@ -35,6 +36,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public showMobileVarifyMsg: boolean = false;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public dataSource: Observable<any>;
+  public dataSourceBackup: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -65,8 +67,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           Country: undefined,
           OnlyCity: true
         }).subscribe((res) => {
-          let data = res.map(item => item.formatted_address);
-          console.log (res, data);
+          let data = res.map(item => item.address_components[0].long_name);
+          this.dataSourceBackup = res;
           observer.next(data);
         });
       }).takeUntil(this.destroyed$);
@@ -83,18 +85,31 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = this.company.uniqueName;
         stateDetailsRequest.lastState = 'home';
         this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-        // this._route.navigate(['/ledger', 'cash']);
         this.closeModal();
       }
     });
-    // this.store
-    //   .select(c => c.session.companies).takeUntil(this.destroyed$)
-    //   .subscribe(p => {
-    //     if (p && p.find(c => c.name === this.company.name) !== undefined) {
-    //       this.company = new CompanyRequest();
-    //       this.wizard.next();
-    //     }
-    //   });
+  }
+
+  public typeaheadOnSelect(e: TypeaheadMatch): void {
+    this.dataSourceBackup.forEach(item => {
+      if (item.address_components[0].long_name === e.item) {
+        // set country and state values
+        try {
+          item.address_components.forEach(address => {
+            let stateIdx = _.indexOf(address.types, 'administrative_area_level_1');
+            let countryIdx = _.indexOf(address.types, 'country');
+            if (stateIdx !== -1) {
+              this.company.state = address.long_name;
+            }
+            if (countryIdx !== -1) {
+              this.company.country = address.long_name;
+            }
+          });
+        } catch (e) {
+          console.log (e);
+        }
+      }
+    });
   }
 
   public textOnly(e) {
@@ -131,12 +146,8 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
    * createCompany
    */
   public createCompany() {
-    let company = new CompanyRequest();
-    company.name = this.company.name;
-    company.city = this.company.city;
-    company.uniqueName = this.getRandomString(company.name, company.city);
-    this.company.uniqueName = company.uniqueName;
-    this.store.dispatch(this.companyActions.CreateCompany(company));
+    this.company.uniqueName = this.getRandomString(this.company.name, this.company.city);
+    this.store.dispatch(this.companyActions.CreateCompany(this.company));
   }
 
   public closeModal() {
