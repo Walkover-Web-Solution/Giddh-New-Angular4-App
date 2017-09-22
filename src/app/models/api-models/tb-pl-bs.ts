@@ -22,7 +22,9 @@ export interface BalanceSheetData {
   liabilities?: ChildGroup[];
   othArr?: ChildGroup[];
   assetTotal?: number;
+  assetTotalEnd?: number;
   liabTotal?: number;
+  liabTotalEnd?: number;
   dates?: BalanceSheetRequest;
 }
 
@@ -32,8 +34,11 @@ export interface ProfitLossData {
   expArr?: ChildGroup[];
   othArr?: ChildGroup[];
   expenseTotal?: number;
+  expenseTotalEnd?: number;
   incomeTotal?: number;
+  incomeTotalEnd?: number;
   closingBalance?: number;
+  frowardBalance?: number;
   dates?: ProfitLossRequest;
 }
 
