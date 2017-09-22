@@ -31,13 +31,13 @@ class FormatPdf implements IFormatable {
     this.colY = 50;
   }
 
-  setHeader(selectedCompany: ComapnyResponse) {
+  public setHeader(selectedCompany: ComapnyResponse) {
     this.pdf.setFontSize(16);
     this.pdf.text(10, 20, selectedCompany.name);
     this.pdf.setFontSize(10);
     this.pdf.text(10, 25, selectedCompany.address);
     this.pdf.text(10, 30, selectedCompany.city + '-' + selectedCompany.pincode);
-    this.pdf.text(10, 35, "Trial Balance: ");
+    this.pdf.text(10, 35, 'Trial Balance: ');
     this.pdf.line(10, 38, 200, 38);
 
     this.pdf.setFontSize(9);
@@ -49,7 +49,7 @@ class FormatPdf implements IFormatable {
     this.pdf.line(10, 45, 200, 45);
   }
 
-  setRowData(data: any[], padding: number) {
+  public setRowData(data: any[], padding: number) {
     this.pdf.setFontSize(10);
     this.pdf.text(this.colX + padding, this.colY, data[0].toString());
     this.pdf.text(70, this.colY, data[1].toString());
@@ -59,22 +59,21 @@ class FormatPdf implements IFormatable {
     if (this.colY > 247) {
       this.pdf.addPage();
       this.colY = 20;
-    }
-    else {
-      this.colY += 5
+    } else {
+      this.colY += 5;
     }
   }
 
-  setFooter(data: any[]) {
+  public setFooter(data: any[]) {
     this.pdf.line(10, this.colY, 200, this.colY);
-    this.pdf.text(10, this.colY + 5, "TOTAL",);
+    this.pdf.text(10, this.colY + 5, 'TOTAL', );
     this.pdf.text(70, this.colY + 5, data[0].toString());
     this.pdf.text(105, this.colY + 5, data[1].toString());
     this.pdf.text(140, this.colY + 5, data[2].toString());
     this.pdf.text(170, this.colY + 5, data[3].toString());
   }
 
-  save() {
+  public save() {
     this.pdf.save('');
   }
 }
