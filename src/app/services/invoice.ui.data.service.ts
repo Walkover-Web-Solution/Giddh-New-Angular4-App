@@ -23,7 +23,11 @@ export class InvoiceUiDataService {
   public isCompanyNameVisible: Subject<boolean> = new Subject();
   public logoPath: Subject<string> = new Subject();
   public selectedSection: Subject<TemplateContentUISectionVisibility> = new Subject();
+  // Current company real values
+  public companyGSTIN: BehaviorSubject<string> = new BehaviorSubject(null);
+  public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   private companyName: string;
   private companyAddress: string;
 
@@ -42,6 +46,12 @@ export class InvoiceUiDataService {
         if (currentCompany) {
           this.companyName = currentCompany.name;
           this.companyAddress = currentCompany.address;
+          if (currentCompany.gstDetails[0]) {
+            this.companyGSTIN.next(currentCompany.gstDetails[0].gstNumber);
+          }
+          if (currentCompany.panNumber) {
+            this.companyPAN.next(currentCompany.panNumber);
+          }
         }
       }
     });
