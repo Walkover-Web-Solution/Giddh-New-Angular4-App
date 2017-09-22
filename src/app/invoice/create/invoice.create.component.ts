@@ -14,7 +14,8 @@ import {
   IInvoiceTransaction,
   InvoiceTemplateDetailsResponse,
   ISection,
-  PreviewInvoiceResponseClass
+  PreviewInvoiceResponseClass,
+  OtherDetailsClass
 } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -71,6 +72,11 @@ const THEAD = [
   {
     display: false,
     label: '',
+    field: 'taxableValue'
+  },
+  {
+    display: false,
+    label: '',
     field: 'tax'
   },
   {
@@ -81,7 +87,7 @@ const THEAD = [
 ];
 
 @Component({
-  styleUrls: ['./invoice.create.component.css'],
+  styleUrls: ['./invoice.create.component.scss'],
   selector: 'invoice-create',
   templateUrl: './invoice.create.component.html'
 })
@@ -100,9 +106,11 @@ export class InvoiceCreateComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isInvoiceGenerated$: Observable<boolean>;
 
-  constructor(private store: Store<AppState>,
-              private invoiceActions: InvoiceActions,
-              private invoiceService: InvoiceService) {
+  constructor(
+    private store: Store<AppState>,
+    private invoiceActions: InvoiceActions,
+    private invoiceService: InvoiceService
+  ) {
     this.isInvoiceGenerated$ = this.store.select(state => state.invoice.generate.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
   }
 
@@ -116,6 +124,7 @@ export class InvoiceCreateComponent implements OnInit {
           } else {
             this.invFormData = new PreviewInvoiceResponseClass();
           }
+          this.invFormData.other = new OtherDetailsClass();
         }
       );
 
@@ -228,6 +237,11 @@ export class InvoiceCreateComponent implements OnInit {
 
   public closePopupEvent() {
     this.closeEvent.emit();
+  }
+
+  public getSerialNos(entryIndex: number, transIndex: number) {
+    // logic
+    return entryIndex + 1 + transIndex;
   }
 
 }
