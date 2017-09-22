@@ -102,6 +102,7 @@ export class InvoiceCreateComponent implements OnInit {
   public invTempCond: InvoiceTemplateDetailsResponse;
   public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
+  public totalBalance: number = null;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private isInvoiceGenerated$: Observable<boolean>;
@@ -161,7 +162,6 @@ export class InvoiceCreateComponent implements OnInit {
     Object.keys(dummyObj).sort().forEach( (key) => {
       this.templateHeader[key] = dummyObj[key];
     });
-    console.log (this.templateHeader);
   }
 
   public prepareThead() {
