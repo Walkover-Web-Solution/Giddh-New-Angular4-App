@@ -10,6 +10,7 @@ export const LEDGER_API = {
   MAIL_LEDGER: UNIVERSAL_URI_LEDGER + 'mail', // post call
   // get call
   RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
-  DOWNLOAD_INVOICE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
+  // DOWNLOAD_INVOICE: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
+  DOWNLOAD_INVOICE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
   UPLOAD_FILE: Configuration.ApiUrl + 'company/:companyUniqueName/ledger/upload'
 };
