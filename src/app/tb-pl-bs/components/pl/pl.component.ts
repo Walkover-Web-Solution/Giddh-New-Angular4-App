@@ -34,7 +34,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
           <h1>loading ledger</h1>
         </div>
     </div>
-    <div *ngIf="(data$ | async).expArr && !(showLoader | async)">
+    <div *ngIf="!(showLoader | async)">
       <pl-grid #plGrid
       [search]="filter.search"
         [plData]="data$ | async"
