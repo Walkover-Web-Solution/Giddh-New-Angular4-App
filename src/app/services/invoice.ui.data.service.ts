@@ -1,9 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-// import {
-//   IsDivVisible,
-//   IsFieldVisible
-// } from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 import { EmailSettingObjDefinition } from '../models/interfaces/invoice.setting.interface';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { Store } from '@ngrx/store';
@@ -27,7 +23,13 @@ export class InvoiceUiDataService {
   public isCompanyNameVisible: Subject<boolean> = new Subject();
   public logoPath: Subject<string> = new Subject();
   public selectedSection: Subject<TemplateContentUISectionVisibility> = new Subject();
+  // Current company real values
+  public companyGSTIN: BehaviorSubject<string> = new BehaviorSubject(null);
+  public companyPAN: BehaviorSubject<string> = new BehaviorSubject(null);
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
+  private companyName: string;
+  private companyAddress: string;
 
   constructor(private store: Store<AppState>) {
     this.initCustomTemplate();
@@ -37,9 +39,33 @@ export class InvoiceUiDataService {
    * initCustomTemplate
    */
   public initCustomTemplate() {
+    this.isLogoVisible.next(true);
+    this.store.select(p => p.session).subscribe(session => {
+      if (session) {
+        let uniqueName = session.companyUniqueName;
+        let currentCompany = session.companies.find((company) => company.uniqueName === uniqueName);
+        if (currentCompany) {
+          this.companyName = currentCompany.name;
+          this.companyAddress = currentCompany.address;
+          if (currentCompany.gstDetails[0]) {
+            this.companyGSTIN.next(currentCompany.gstDetails[0].gstNumber);
+          }
+          if (currentCompany.panNumber) {
+            this.companyPAN.next(currentCompany.panNumber);
+          }
+        }
+      }
+    });
     this.isCompanyNameVisible.next(true);
     this.store.select(p => p.invoiceTemplate).subscribe((data) => {
       if (data && data.defaultTemplate) {
+        if (this.companyName) {
+          data.defaultTemplate.sections[0].content[0].label = this.companyName;
+          data.defaultTemplate.sections[2].content[10].label = this.companyName;
+        }
+        if (this.companyAddress) {
+          data.defaultTemplate.sections[2].content[8].label = this.companyAddress;
+        }
         this.customTemplate.next(_.cloneDeep(data.defaultTemplate));
       }
     });
@@ -110,11 +136,6 @@ export class InvoiceUiDataService {
    * setTemplateUniqueName
    */
   public setTemplateUniqueName(uniqueName: string) {
-    // this.selectedSection.next({
-    //   header: true,
-    //   table: true,
-    //   footer: true
-    // });
     this.store.select(p => p.invoiceTemplate).subscribe((data) => {
       if (data && data.customCreatedTemplates && data.customCreatedTemplates.length) {
         let allTemplates = _.cloneDeep(data.customCreatedTemplates);
@@ -123,60 +144,21 @@ export class InvoiceUiDataService {
           if (selectedTemplate.sections[0].content[0].display) {
             this.isCompanyNameVisible.next(true);
           }
+          if (this.companyName) {
+            selectedTemplate.sections[0].content[0].label = this.companyName;
+            selectedTemplate.sections[2].content[10].label = this.companyName;
+          }
+          if (this.companyAddress) {
+            selectedTemplate.sections[2].content[8].label = this.companyAddress;
+          }
+          if (!selectedTemplate.logoUniqueName) {
+            this.isLogoVisible.next(false);
+          } else {
+            this.isLogoVisible.next(true);
+          }
           this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }
       }
     });
   }
-
-  // public templateName: string;
-  // public logoPath: Subject<string> = new Subject();
-  // public imageSignaturePath: Subject<string> = new Subject();
-  // public setDivVisible: Subject<IsDivVisible> = new Subject();
-  // public setFieldDisplay: Subject<IsFieldVisible> = new Subject();
-  // public logoSize: Subject<string> = new Subject();
-  // public defaultPrintSetting: Subject<number> = new Subject();
-  // public showLogo: Subject<boolean> = new Subject();
-  // public invoiceEmailSettingObject: EmailSettingObjDefinition = new EmailSettingObjDefinition();
-
-  // public setLogoPath(val) {
-  //   // console.log('The value is :', val);
-  //   this.logoPath.next(val);
-  // }
-
-  // public setImageSignatgurePath(val) {
-  //   // console.log('The value is :', val);
-  //   this.imageSignaturePath.next(val);
-  // }
-
-  // public setDivStatus(div: IsDivVisible) {
-  //   this.setDivVisible.next(div);
-  // }
-
-  // public setFieldDisplayState(field: IsFieldVisible) {
-  //   this.setFieldDisplay.next(field);
-  // }
-
-  // public setLogoSize(size: string) {
-  //   this.logoSize.next(size);
-  // }
-  // public resetPrintSetting(margin: number) {
-  //   this.defaultPrintSetting.next(margin);
-  // }
-  // public logoState(state) {
-  //   this.showLogo.next(state);
-  // }
-  // // Email
-  // public updateEmailSettingObj(emailSettingObj) {
-  //   this.invoiceEmailSettingObject = emailSettingObj;
-  // }
-  // public getEmailSettingObj() {
-  //   return this.invoiceEmailSettingObject;
-  // }
-  // public setTemplateName(name: string) {
-  //   this.templateName = name;
-  // }
-  // public getTemplateName() {
-  //   return this.templateName;
-  // }
 }
