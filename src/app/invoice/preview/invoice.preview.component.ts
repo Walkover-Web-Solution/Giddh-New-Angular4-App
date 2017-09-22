@@ -104,6 +104,11 @@ export class InvoicePreviewComponent implements OnInit {
     this.getInvoices();
   }
 
+  public pageChanged(event: any): void {
+    this.invoiceSearchRequest.page = event.page;
+    this.getInvoices();
+  }
+
   public getInvoicesByFilters(f: NgForm) {
     if (f.valid) {
       this.getInvoices();

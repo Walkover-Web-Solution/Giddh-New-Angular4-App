@@ -165,6 +165,15 @@ export interface InvoiceDetails {
     dueDate: string;
 }
 
+export class OtherDetailsClass {
+  public shippingDate: string;
+  public shippedVia: string;
+  public trackingNumber: string;
+  public customField1: string;
+  public customField2: string;
+  public customField3: string;
+}
+
 export interface Logo {
     path: string;
 }

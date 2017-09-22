@@ -107,6 +107,15 @@
             <th class="text-center">Delete</th>
         </tr>
     </thead>
+    <tfoot>
+      <tr>
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="invoiceData.totalPages" [(ngModel)]="invoiceData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
     <tbody>
         <tr *ngFor="let item of invoiceData.results; let i = index">
             <td>{{ i + 1}}</td>
