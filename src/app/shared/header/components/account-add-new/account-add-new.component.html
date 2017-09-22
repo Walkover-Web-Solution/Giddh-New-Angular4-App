@@ -10,8 +10,9 @@
 
       <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
         <label for="">Country</label>
-        <select2 class="select2-parent" [data]="countrySource" formControlName="countryCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select Country' }">
-        </select2>
+        <ng-select [options]="countrySource" formControlName="countryCode"></ng-select>
+        <!-- <select2 class="select2-parent" [data]="countrySource" formControlName="countryCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select Country' }">
+        </select2> -->
       </div>
 
     </div>
@@ -29,7 +30,7 @@
             <div class="form-group col-xs-6">
               <label for="" class="d-block">GSTIN</label>
               <div class="input-group">
-                <input type="text" class="form-control" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst"
+                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst"
                   placeholder="">
                 <div class="input-group-addon">
                   <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
@@ -57,14 +58,15 @@
             <div class="form-group col-xs-6">
               <label for="">Party Type *</label>
               <div class="custom-select pos-rel">
-                <ng-select [options]="partyTypeSource" formControlName="partyType"></ng-select>
+                  <ng-select [options]="partyTypeSource" formControlName="partyType"></ng-select>
                 <!-- <select2 class="select2-parent" [data]="partyTypeSource" formControlName="partyType" [options]="{ width:'100%', multiple: false, placeholder: 'Select Party Type' }"></select2> -->
               </div>
 
               <label for="">State *</label>
               <div class="custom-select pos-rel">
-                <select2 class="select2-parent" [data]="statesSource$ | async" #states [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
-                  formControlName="stateCode"></select2>
+                  <ng-select #states [options]="statesSource$ | async" formControlName="stateCode"></ng-select>
+                <!-- <select2 class="select2-parent" [data]="statesSource$ | async" #states [options]="{ width:'100%', multiple: false, placeholder: 'Select State' }"
+                  formControlName="stateCode"></select2> -->
               </div>
               <div class="row">
 
@@ -181,8 +183,8 @@
     <!-- submit and clear buttons -->
     <div class="row mrT3">
       <div class="form-group col-xs-12 text-right">
-        <button class="btn btn-default">Cancel</button>
-        <button type="submit" class="btn btn-default" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
+        <!-- <button class="btn btn-default">Cancel</button> -->
+        <button type="submit" class="btn save-btn" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
       </div>
     </div>
   </form>
