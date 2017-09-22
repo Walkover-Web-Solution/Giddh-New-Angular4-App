@@ -27,7 +27,7 @@
                   </th>
                   <th class="col-xs-4 text-right">
                     As Of
-                    <span *ngIf="plData && plData.dates && plData.dates.from && plData.dates.from!=='Invalid date'"> {{ moment(plData?.dates?.from, 'DD-MM-YYYY').toString() | date:'dd MMMM yyyy' }}</span>
+                    <span *ngIf="plData && plData.dates && plData.dates.from && plData.dates.from!=='Invalid date'"> {{ moment(plData?.dates?.from, 'DD-MM-YYYY').add(-1,'days').toString() | date:'dd MMMM yyyy' }}</span>
                   </th>
                 </tr>
               </thead>
@@ -57,7 +57,7 @@
                 <strong>{{ plData?.incomeTotal | number:'1.2-2' }}</strong>
               </div>
               <div class="col-xs-4  group text-right">
-                <strong>{{ plData?.incomeTotal | number:'1.2-2' }}</strong>
+                <strong>{{ plData?.incomeTotalEnd | number:'1.2-2' }}</strong>
               </div>
             </div>
             <hr class="bdrT" />
@@ -92,7 +92,7 @@
             <strong>{{ plData?.expenseTotal | number:'1.2-2' }}</strong>
           </div>
           <div class="col-xs-4  group text-right">
-            <strong>{{ plData?.expenseTotal | number:'1.2-2' }}</strong>
+            <strong>{{ plData?.expenseTotalEnd | number:'1.2-2' }}</strong>
           </div>
         </div>
         <hr class="bdrT" />
@@ -112,12 +112,12 @@
               </th>
               <th class="col-xs-4">
                 <strong class="pdL2 pdR1">
-                  <span class="pull-right success">{{ plData?.closingBalance | number:'1.2-2' }}</span>
+                  <span class="pull-right" [ngClass]="{'success': (plData?.closingBalance>-1), 'error':(plData?.closingBalance<0)}">{{ plData?.closingBalance | number:'1.2-2' }}</span>
                 </strong>
               </th>
               <th class="col-xs-4">
                 <strong class="pdL2 pdR1">
-                  <span class="pull-right success">{{ plData?.closingBalance | number:'1.2-2' }}</span>
+                  <span class="pull-right " [ngClass]="{'success': (plData?.frowardBalance>-1), 'error':(plData?.frowardBalance<0)}">{{ plData?.frowardBalance | number:'1.2-2' }}</span>
                 </strong>
               </th>
             </tr>
