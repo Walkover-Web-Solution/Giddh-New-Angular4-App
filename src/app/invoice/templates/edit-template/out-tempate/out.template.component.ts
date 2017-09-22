@@ -32,6 +32,8 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
   public logoSrc: string;
   public showLogo: boolean = true;
   public showCompanyName: boolean;
+  public companyGSTIN: string;
+  public companyPAN: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private invoiceAction: InvoiceActions, private invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {}
@@ -52,6 +54,9 @@ export class OutTemplateComponent implements OnInit, OnDestroy {
     this._invoiceUiDataService.isCompanyNameVisible.subscribe((yesOrNo: boolean) => {
       this.showCompanyName = _.cloneDeep(yesOrNo);
     });
+
+    this.companyGSTIN = this._invoiceUiDataService.companyGSTIN.getValue();
+    this.companyPAN = this._invoiceUiDataService.companyPAN.getValue();
 
     if (this.isPreviewMode) {
       this.templateUISectionVisibility = {

@@ -9,7 +9,7 @@
       </div>
       <div class="col-xs-6 text-right">
         <label>&nbsp;</label>
-        <p class="lead b">Balance Due: {{ totalBalance | currency:'INR':true }}</p>
+        <p class="lead b">Balance Due: {{ invFormData.grandTotal | currency:'INR':true }}</p>
       </div>
     </div>
 
@@ -87,16 +87,16 @@
           <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.other.trackingNumber" />
         </div>
         <div class="form-group size_175">
-          <label>{{templateHeader.shippingDate.label}}</label>
-          <input type="text" name="shippingDate" class="form-control" />
+          <label>{{templateHeader.customField1.label || 'Custom Field 1'}}</label>
+          <input type="text" name="customField1" class="form-control" [(ngModel)]="invFormData.other.customField1" />
         </div>
         <div class="form-group size_175">
-          <label>{{templateHeader.shippedVia.label}}</label>
-          <input type="text" name="shippedVia" class="form-control" />
+          <label>{{templateHeader.customField2.label || 'Custom Field 2' }}</label>
+          <input type="text" name="customField2" class="form-control" [(ngModel)]="invFormData.other.customField2" />
         </div>
         <div class="form-group size_175">
-          <label>Tracking No.</label>
-          <input type="text" name="country" class="form-control" />
+          <label>{{templateHeader.customField3.label || 'Custom Field 3' }}</label>
+          <input type="text" name="customField3" class="form-control" [(ngModel)]="invFormData.other.customField3" />
         </div>
       </div>
     </section>
@@ -115,7 +115,7 @@
           <td *ngIf="customThead[1].display">{{ entry.entryDate }}</td>
           <td *ngIf="customThead[2].display">
             {{ transaction.accountName }}<br>
-            <input type="text" name="transaction.description" class="form-control" [(ngModel)]="transaction.description" />
+            <input type="text" name="transaction.description_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td *ngIf="customThead[3].display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
           <td *ngIf="customThead[5].display">{{ transaction.quantity }}</td>
