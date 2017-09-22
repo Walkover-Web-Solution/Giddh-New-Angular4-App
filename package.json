@@ -182,7 +182,6 @@
     "ncp": "^2.0.0",
     "ng-click-outside": "^2.3.5",
     "ng-router-loader": "^2.1.0",
-    "ng-select": "^1.0.0-beta.5",
     "ng2-daterangepicker": "^2.0.7",
     "ng2-ui-auth": "^7.0.2",
     "ngc-webpack": "~2.0.0",
