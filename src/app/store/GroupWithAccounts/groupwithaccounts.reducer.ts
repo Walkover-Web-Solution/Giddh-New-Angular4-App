@@ -571,7 +571,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
           moveAccountSuccess: true,
-          activeAccount: null
+          activeAccount: null,
+          showEditGroup: true,
+          showEditAccount: false,
+          showAddNewAccount: false
         });
       }
       return Object.assign({}, state, {

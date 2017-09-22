@@ -139,7 +139,12 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         this.addGstDetailsForm(true);
       }
     });
-
+    // get openingblance value changes
+    this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+      if (a === 0 || a < 0) {
+        this.addAccountForm.get('openingBalanceType').patchValue('');
+      }
+    });
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
       if (a) {
         this.companiesList$.take(1).subscribe(companies => {
