@@ -433,4 +433,5 @@ export class CustomTemplateResponse {
   public sections: ISection[]; // done
   public name: string;
   public copyFrom?: string; // done
+  public logoUniqueName?: string;
 }

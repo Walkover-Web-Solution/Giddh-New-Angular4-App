@@ -39,6 +39,7 @@ export class InvoiceUiDataService {
    * initCustomTemplate
    */
   public initCustomTemplate() {
+    this.isLogoVisible.next(true);
     this.store.select(p => p.session).subscribe(session => {
       if (session) {
         let uniqueName = session.companyUniqueName;
@@ -149,6 +150,11 @@ export class InvoiceUiDataService {
           }
           if (this.companyAddress) {
             selectedTemplate.sections[2].content[8].label = this.companyAddress;
+          }
+          if (!selectedTemplate.logoUniqueName) {
+            this.isLogoVisible.next(false);
+          } else {
+            this.isLogoVisible.next(true);
           }
           this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }
