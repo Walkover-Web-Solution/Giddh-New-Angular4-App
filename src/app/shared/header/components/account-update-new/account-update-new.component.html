@@ -18,7 +18,6 @@
     </div>
     <!-- gst container -->
     <ng-container *ngIf="isGstEnabledAcc && addAccountForm.get('country').value.countryCode === 'IN'">
-
       <!-- gst details -->
       <div formArrayName="addresses">
         <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"

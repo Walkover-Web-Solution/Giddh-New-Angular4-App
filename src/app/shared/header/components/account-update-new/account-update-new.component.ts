@@ -125,11 +125,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.activeAccount$.subscribe(acc => {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
-        accountDetails.addresses.map(a => {
-          if (a.gstNumber) {
+        // render gst details if ther's no details add one automatically
+        if (accountDetails.addresses.length > 0) {
+          accountDetails.addresses.map(a => {
             this.addGstDetailsForm(true, a);
-          }
-        });
+          });
+        } else {
+          this.addGstDetailsForm(true);
+        }
         this.addAccountForm.patchValue(accountDetails);
       }
     });
