@@ -90,8 +90,8 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
-      let from = moment(action.payload.from, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
-      let to = moment(action.payload.to, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
+      let from = action.payload.from;
+      let to = action.payload.to;
       return {
         ...state,
         pl: { ...state.pl, showLoader: true, data: { ...state.pl.data, dates: { from, to } } }
@@ -107,8 +107,8 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_BALANCE_SHEET_REQUEST: {
-      let from = moment(action.payload.from, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
-      let to = moment(action.payload.to, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
+      let from = action.payload.from;
+      let to = action.payload.to;
       return {
         ...state,
         bs: { ...state.bs, showLoader: true, data: { ...state.bs.data, dates: { from, to } } }

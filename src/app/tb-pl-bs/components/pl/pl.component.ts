@@ -59,7 +59,9 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
-        fy: index
+        fy: index,
+        from: value.activeFinancialYear.financialYearStarts,
+        to: value.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
     }
