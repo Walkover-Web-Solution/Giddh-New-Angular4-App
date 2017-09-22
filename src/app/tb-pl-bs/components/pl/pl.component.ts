@@ -72,8 +72,16 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef) {
     this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p =>
-      _.cloneDeep(p.tlPl.pl.data)
+    this.data$ = this.store.select(p => {
+      let data = _.cloneDeep(p.tlPl.pl.data);
+      if (data.expArr) {
+        data.expArr.forEach(q => { q.isVisible = true; });
+      }
+      if (data.incArr) {
+        data.incArr.forEach(q => { q.isVisible = true; });
+      }
+      return data;
+    }
     ).takeUntil(this.destroyed$);
   }
 
