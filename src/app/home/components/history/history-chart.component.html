@@ -3,7 +3,7 @@
 
     <div class="panel-heading">
       <strong>Financial Year</strong>
-      <div class="pull-right dashboard-filter" >
+      <div class="pull-right dashboard-filter">
         <label>
           <input type="checkbox" [checked]="showLastYear" (change)="LyToggle('LY')" />LY
         </label>
@@ -16,7 +16,7 @@
         <label>
           <input type="checkbox" [checked]="showProfitLoss" (change)="toggle('Profit/Loss')" />Profit / Loss
         </label>
-        <i class="glyphicon glyphicon-refresh mrL1" (click)="fetchChartData();"></i>
+        <i class="glyphicon glyphicon-refresh mrL1" (click)="hardRefresh();"></i>
       </div>
     </div>
 

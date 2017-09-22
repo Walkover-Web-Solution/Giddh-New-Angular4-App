@@ -13,8 +13,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent } from './theme';
-import { SelectModule } from './theme/select/select.module';
+import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent, SelectModule } from './theme';
+// import { SelectModule } from './theme/select/select.module';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { ChartModule } from 'angular2-highcharts';
 
@@ -53,6 +53,7 @@ import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.direc
 // social login injection
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
 import { DisableFormFieldDirective } from './helpers/directives/disableFormField.directive';
+// import * as newSelect from 'ng-select';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -78,7 +79,7 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
 ]);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG || {id: null, providers: []};
+  return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({
@@ -102,20 +103,21 @@ export function provideConfig() {
     }),
     SocialLoginModule,
     FormWizardModule,
-    SelectModule,
+    // SelectModule,
     Select2Module, TagsModule,
     ClickOutsideModule,
     Daterangepicker,
     ChartModule,
     TextMaskModule,
-    NgUploaderModule
+    NgUploaderModule,
+    SelectModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
-    AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
+    AccountFilterPipe, TbsearchPipe, HighlightPipe, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
-    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective
+    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent, AccountAddNewComponent],
