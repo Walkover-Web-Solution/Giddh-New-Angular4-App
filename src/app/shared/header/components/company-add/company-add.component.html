@@ -59,8 +59,10 @@
                                     <input #name="ngModel" type="text" [ngClass]="{'hasError': name.invalid, 'has-success':name.valid}" [(ngModel)]="company.name" class="form-control" placeholder="Company Name" required name="name" pattern="[a-zA-Z0-9^ ]{5,100}">
                                 </div>
                                 <div class="form-group">
-                                    <input #city="ngModel" [typeahead]="dataSource" type="text" [ngClass]="{'hasError': city.invalid, 'has-success':city.valid}" [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="Company City"
-                                        pattern="^[^\s]+(\s+[^\s]+)*$">
+                                    <input #city="ngModel"
+                                      (typeaheadOnSelect)="typeaheadOnSelect($event)"
+                                      [typeahead]="dataSource"
+                                      type="text" [ngClass]="{'hasError': city.invalid, 'has-success':city.valid}" [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off" required maxlength="50" placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$">
                                 </div>
                                 <div class="modal-footer">
                                     <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async" [disabled]="createCompanyForm.invalid">Create</button>
