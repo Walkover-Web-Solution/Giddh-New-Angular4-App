@@ -77,7 +77,8 @@
                   class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">
                   Show Less </a>
 
-                <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst.valid, null)">
+                <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l"
+                  (click)="addGstDetailsForm(gst.get('gstNumber').value)">
                   <i class="fa fa-plus"></i> Add More GSTIN
                 </a>
 
