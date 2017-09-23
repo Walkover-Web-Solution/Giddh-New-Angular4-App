@@ -11,5 +11,5 @@ export interface IGroupsWithStocksHierarchyMinItem extends INameUniqueName {
   childStockGroups: IGroupsWithStocksHierarchyMinItem[];
   isActive?: boolean;
   isOpen?: boolean;
-  stocks?: INameUniqueName[];
+  stocks: INameUniqueName[];
 }
