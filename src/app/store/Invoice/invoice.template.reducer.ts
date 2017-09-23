@@ -48,13 +48,13 @@ export const initialState: CustomTemplateState = {
           {
             display: true,
             label: 'GSTIN',
-            field: 'GSTIN',
+            field: 'gstin',
             width: null
           },
           {
             display: true,
             label: 'PAN',
-            field: 'PAN',
+            field: 'pan',
             width: null
           },
           {
@@ -90,13 +90,13 @@ export const initialState: CustomTemplateState = {
           {
             display: true,
             label: 'Tracking No.',
-            field: 'TrackingNumber',
+            field: 'trackingNumber',
             width: null
           },
           {
             display: true,
             label: 'Tracking No.',
-            field: 'TrackingNumber',
+            field: 'trackingNumber',
             width: null
           },
           {
