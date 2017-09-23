@@ -128,10 +128,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         // render gst details if ther's no details add one automatically
         if (accountDetails.addresses.length > 0) {
           accountDetails.addresses.map(a => {
-            this.addGstDetailsForm(true, a);
+            this.renderGstDetails(a);
           });
         } else {
-          this.addGstDetailsForm(true);
+          this.addBlankGstForm();
         }
         // hsn/sac enable disable
         if (acc.hsnNumber) {
@@ -165,11 +165,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
       if (a !== 'IN') {
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
-        addresses.controls.map((ctr, index) => {
-          this.removeGstDetailsForm(index);
-        });
-        this.addGstDetailsForm(true);
+        this.addAccountForm.controls['addresses'] = this._fb.array([]);
+      } else {
+        this.addBlankGstForm();
       }
     });
     // get active company
@@ -203,10 +201,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
     return gstFields;
   }
-  public addGstDetailsForm(isValid: boolean, val: IAccountAddress = null) {
-    if (isValid) {
+  public addGstDetailsForm(value: string) {
+    if (value && !value.startsWith(' ', 0)) {
       const addresses = this.addAccountForm.get('addresses') as FormArray;
-      addresses.push(this.initialGstDetailsForm(val));
+      addresses.push(this.initialGstDetailsForm(null));
     } else {
       this._toaster.clearAllToaster();
       this._toaster.errorToast('Please fill GSTIN field first');
@@ -216,6 +214,15 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public removeGstDetailsForm(i: number) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
     addresses.removeAt(i);
+  }
+
+  public addBlankGstForm() {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    addresses.push(this.initialGstDetailsForm(null));
+  }
+  public renderGstDetails(val: IAccountAddress = null) {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    addresses.push(this.initialGstDetailsForm(val));
   }
   public isDefaultAddressSelected(val: boolean, i: number) {
     if (val) {
