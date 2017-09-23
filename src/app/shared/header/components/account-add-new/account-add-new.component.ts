@@ -14,6 +14,8 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
 import { Select2Component } from '../../../theme/select2/select2.component';
 import { ComapnyResponse } from '../../../../models/api-models/Company';
+import { SelectComponent } from '../../../theme/ng-select/select.component';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'account-add-new',
@@ -37,6 +39,12 @@ import { ComapnyResponse } from '../../../../models/api-models/Company';
       top: -75px;
       left: 197px;
   }
+  .save-btn{
+    font-weight: 600;
+    color: #0aa50a;
+    letter-spacing: 1px;
+    background-color: #dcdde4;
+  }
   `]
 })
 
@@ -52,14 +60,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   @Output() public submitClicked: EventEmitter<{ activeGroupUniqueName: string, accountRequest: AccountRequestV2 }> = new EventEmitter();
 
   public showOtherDetails: boolean = false;
-  public partyTypeSource = [
-    { value: 'not applicable', label: 'Not Applicable' },
-    { value: 'deemed export', label: 'Deemed Export' },
-    { value: 'government entity', label: 'Government Entity' },
-    { value: 'sez', label: 'Sez' }
+  public partyTypeSource: IOption[] = [
+    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
+    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
+    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
+    { value: 'SEZ', label: 'SEZ' }
   ];
-  public countrySource: Select2OptionData[] = [];
-  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
+  public countrySource: IOption[] = [];
+  public statesSource$: Observable<IOption[]> = Observable.of([]);
   public companiesList$: Observable<ComapnyResponse[]>;
   public activeCompany: ComapnyResponse;
   public moreGstDetailsVisible: boolean = false;
@@ -70,9 +78,9 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     private _companyService: CompanyService, private _toaster: ToasterService) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this._companyService.getAllStates().subscribe((data) => {
-      let states: Select2OptionData[] = [];
+      let states: IOption[] = [];
       data.body.map(d => {
-        states.push({ text: d.name, id: d.code });
+        states.push({ label: d.name, value: d.code });
       });
       this.statesSource$ = Observable.of(states);
     }, (err) => {
@@ -80,7 +88,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
 
     contriesWithCodes.map(c => {
-      this.countrySource.push({ id: c.countryflag, text: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
   }
 
@@ -121,7 +129,22 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         hsn.disable();
       }
     });
-
+    // get country code value change
+    this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
+      if (a !== 'IN') {
+        const addresses = this.addAccountForm.get('addresses') as FormArray;
+        addresses.controls.map((ctr, index) => {
+          this.removeGstDetailsForm(index);
+        });
+        this.addGstDetailsForm(true);
+      }
+    });
+    // get openingblance value changes
+    this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
+      if (a === 0 || a < 0) {
+        this.addAccountForm.get('openingBalanceType').patchValue('');
+      }
+    });
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
       if (a) {
         this.companiesList$.take(1).subscribe(companies => {
@@ -139,7 +162,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
-      partyType: ['']
+      partyType: ['NOT APPLICABLE']
     });
     return gstFields;
   }
@@ -190,14 +213,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getStateCode(gstForm: FormGroup, statesEle: Select2Component) {
+  public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
-        let s = state.find(st => st.id === gstVal.substr(0, 2));
-        statesEle.element.attr('disabled', 'true');
+        let s = state.find(st => st.value === gstVal.substr(0, 2));
+        statesEle.disabled = true;
         if (s) {
-          gstForm.get('stateCode').patchValue(s.id);
+          gstForm.get('stateCode').patchValue(s.value);
         } else {
           gstForm.get('stateCode').patchValue(null);
           this._toaster.clearAllToaster();
@@ -205,7 +228,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      statesEle.element.removeAttr('disabled');
+      statesEle.disabled = false;
       gstForm.get('stateCode').patchValue(null);
     }
   }
