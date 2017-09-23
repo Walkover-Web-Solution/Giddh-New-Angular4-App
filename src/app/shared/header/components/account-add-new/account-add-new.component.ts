@@ -96,16 +96,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['', [Validators.required]],
+      openingBalanceType: ['CREDIT'],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
       description: [''],
-      addresses: this.isGstEnabledAcc ? this._fb.array([
-        this.initialGstDetailsForm()
-      ]) : null,
+      addresses: this._fb.array([]),
       country: this._fb.group({
         countryCode: ['']
       }),
@@ -132,11 +130,9 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
       if (a !== 'IN') {
-        const addresses = this.addAccountForm.get('addresses') as FormArray;
-        addresses.controls.map((ctr, index) => {
-          this.removeGstDetailsForm(index);
-        });
-        this.addGstDetailsForm(true);
+        this.addAccountForm.controls['addresses'] = this._fb.array([]);
+      } else {
+        this.addBlankGstForm();
       }
     });
     // get openingblance value changes
@@ -157,7 +153,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public initialGstDetailsForm(): FormGroup {
     let gstFields = this._fb.group({
-      gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
+      gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
@@ -188,8 +184,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addGstDetailsForm(isValid: boolean) {
-    if (isValid) {
+  public addGstDetailsForm(value: string) {
+    if (value && !value.startsWith(' ', 0)) {
       const addresses = this.addAccountForm.get('addresses') as FormArray;
       addresses.push(this.initialGstDetailsForm());
     } else {
@@ -203,6 +199,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     addresses.removeAt(i);
   }
 
+  public addBlankGstForm() {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    addresses.push(this.initialGstDetailsForm());
+  }
   public isDefaultAddressSelected(val: boolean, i: number) {
     if (val) {
       let addresses = this.addAccountForm.get('addresses') as FormArray;
