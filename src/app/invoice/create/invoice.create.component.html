@@ -47,7 +47,7 @@
           <div class="form-group">
             <div class="mrB2" *ngIf="templateHeader.billingState.display">
               <label>{{templateHeader.billingState.label}}</label>
-              <input type="text" name="billingDetails.stateCode" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateCode" />
+              <input type="text" name="billingDetails.stateName" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateName" />
             </div>
             <div class="" *ngIf="templateHeader.billingGstin.display">
               <label>{{templateHeader.billingGstin.label}}</label>
@@ -63,7 +63,7 @@
           <div class="form-group">
             <div class="mrB2" *ngIf="templateHeader.shippingState.display">
               <label>{{templateHeader.shippingState.label}}</label>
-              <input type="text" name="shippingDetails.stateCode" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateCode" />
+              <input type="text" name="shippingDetails.stateName" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateName" />
             </div>
             <div class="" *ngIf="templateHeader.shippingGstin.display">
               <label>{{templateHeader.shippingGstin.label}}</label>
