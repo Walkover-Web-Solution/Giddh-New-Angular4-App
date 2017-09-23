@@ -20,7 +20,7 @@
             <button class="btn btn-link" (click)="onPreview(template)">
                 <i class="fa fa-eye fa-2x" tooltip="Preview" aria-hidden="true"></i>
             </button>
-            <button [disabled]="template.isDefault" class="btn btn-link" (click)="onUpdateTemplate(template)">
+            <button class="btn btn-link" (click)="onUpdateTemplate(template)">
                 <i class="fa fa fa-wrench fa-rotate-270 fa-2x" tooltip="Edit template" aria-hidden="true"></i>
             </button>
             <button [disabled]="template.isDefault" class="btn btn-link" (click)="onDeleteTemplate(template)">
