@@ -26,7 +26,7 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
 /**
  * Webpack Constants
  */
-const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
+const ENV = process.env.NODE_ENV = process.env.ENV = 'staging';
 const HOST = process.env.HOST || 'giddh.com';
 const PORT = process.env.PORT || 80;
 const AppUrl = 'http://test.giddh.com/electron/';
