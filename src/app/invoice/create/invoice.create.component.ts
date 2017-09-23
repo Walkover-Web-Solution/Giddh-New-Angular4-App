@@ -104,8 +104,8 @@ export class InvoiceCreateComponent implements OnInit {
   public updtFlag: boolean = false;
   public totalBalance: number = null;
   // public methods above
+  public isInvoiceGenerated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private isInvoiceGenerated$: Observable<boolean>;
 
   constructor(
     private store: Store<AppState>,

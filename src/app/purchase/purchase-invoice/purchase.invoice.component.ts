@@ -117,8 +117,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public timeCounter: number = 10; // Max number of seconds to wait
   public eventLog = '';
   public selectedRowIndex: number;
-  private intervalId: any;
-  private undoEntryTypeChange: boolean = false;
+  public intervalId: any;
+  public undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(
     private router: Router,

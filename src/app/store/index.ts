@@ -12,8 +12,6 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 
 export { reducers, AppState } from './roots';
 
-declare const ENV: string;
-
 // Generate a reducer to set the root state in dev mode for HMR
 function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
   return (state, action) => {
@@ -30,7 +28,8 @@ const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys
 const productionReducer = compose(localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);
 
 export function rootReducer(state: any, action: any) {
-  if (ENV !== 'development') {
+  console.log(ENV + ': reducer');
+  if (ENV === 'development') {
     return developmentReducer(state, action);
   } else {
     return productionReducer(state, action);
