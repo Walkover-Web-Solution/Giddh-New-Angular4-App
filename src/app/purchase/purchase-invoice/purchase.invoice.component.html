@@ -1,5 +1,5 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
-    <!--<div>   
+    <!--<div>
         {{ allPurchaseInvoices | json}}
     </div>-->
     <!-- Top filter -->
@@ -194,6 +194,25 @@
                     <td class="text-right">{{invoice.sgstAmount}}</td>
                     <td class="text-right">{{invoice.utgstAmount}}</td>
                 </tr>
+                <!--<div class="form-group" *ngIf="newRoleObj.isFresh">-->
+                  <!--<div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">-->
+                    <!--<button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">-->
+                      <!--{{ dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>-->
+                    <!--</button>-->
+                    <!--<ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">-->
+                      <!--<li>-->
+                        <!--<label>-->
+                          <!--<input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllPages($event)" [(ngModel)]="newRoleObj.isSelectedAllPages"> Select all-->
+                        <!--</label>-->
+                      <!--</li>-->
+                      <!--<li *ngFor="let item of newRoleObj.pageList; let i = index">-->
+                        <!--<label>-->
+                          <!--<input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectPage($event)" [(ngModel)]="item.isSelected"> {{ item.name | capitalize}}-->
+                        <!--</label>-->
+                      <!--</li>-->
+                    <!--</ul>-->
+                  <!--</div>-->
+                <!--</div>-->
             </tbody>
         </table>
     </div>
