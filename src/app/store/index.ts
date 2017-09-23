@@ -29,7 +29,7 @@ const productionReducer = compose(localStorageSync({ keys: ['session', 'permissi
 
 export function rootReducer(state: any, action: any) {
   console.log(ENV + ': reducer');
-  if (ENV !== 'development') {
+  if (ENV === 'development') {
     return developmentReducer(state, action);
   } else {
     return productionReducer(state, action);
