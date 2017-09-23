@@ -9,7 +9,7 @@
       </div>
       <div class="col-xs-6 text-right">
         <label>&nbsp;</label>
-        <p class="lead b">Balance Due: {{ invFormData.grandTotal | currency:'INR':true }}</p>
+        <p class="lead b">Balance Due: {{ invFormData.grandTotal }}</p>
       </div>
     </div>
 
@@ -121,10 +121,16 @@
           <td *ngIf="customThead[5].display">{{ transaction.quantity }}</td>
           <td *ngIf="customThead[4].display">{{ transaction.stockUnit }}</td>
           <td *ngIf="customThead[6].display">{{ transaction.rate}}</td>
-          <td *ngIf="customThead[7].display">{{ getEntryTotalDiscount(entry.discounts) | currency:'INR':true }}</td>
-          <td>{{ getEntryTaxableAmount(transaction, entry.discounts) | currency:'INR':true }}</td>
-          <td>{{ getTransactionTotalTax(entry.taxes) | currency:'INR':true }}</td>
-          <td>{{ getEntryTotal(entry, transIndex) | currency:'INR':true }}</td>
+          <td *ngIf="customThead[7].display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}</td>
+          <td *ngIf="customThead[8].display || customThead[9].display && transaction.category === 'income'">{{ getEntryTaxableAmount(transaction, entry.discounts) }}</td>
+          <td *ngIf="customThead[10].display && transaction.category === 'income'">{{ getTransactionTotalTax(entry.taxes) }}</td>
+          <td *ngIf="customThead[11].display && transaction.category === 'income'">{{ getEntryTotal(entry, transIndex) }}</td>
+
+          <!-- empty tds -->
+          <td *ngIf="customThead[7].display && transaction.category !== 'income'">&nbsp;</td>
+          <td *ngIf="customThead[8].display || customThead[9].display && transaction.category !== 'income'">&nbsp;</td>
+          <td *ngIf="customThead[10].display && transaction.category !== 'income'">&nbsp;</td>
+          <td *ngIf="customThead[11].display && transaction.category !== 'income'">{{ transaction.amount }}</td>
         </tr>
       </tbody>
     </table>
