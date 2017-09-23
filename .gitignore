@@ -79,3 +79,4 @@ POSTMAN/
 
 yarn.lock
 tsconfig.main.temp.json
+src/assets/.htaccess
