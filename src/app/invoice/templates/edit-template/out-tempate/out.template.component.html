@@ -608,16 +608,16 @@
                         <tr>
                             <td *ngIf="inputTemplate.sections[2].content[5].display || inputTemplate.sections[2].content[6].display">
                                 <p *ngIf="inputTemplate.sections[2].content[5].display" style="margin-bottom: 15px;">
-                                    <strong  style="white-space:pre-line;">{{inputTemplate.sections[2].content[5].label}}</strong>
+                                    <strong  style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[5].label"></strong>
                                 </p>
-                                <p *ngIf="inputTemplate.sections[2].content[6].display" style="white-space:pre-line;"> {{inputTemplate.sections[2].content[6].label}}</p>
+                                <p *ngIf="inputTemplate.sections[2].content[6].display" style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[6].label"></p>
                             </td>
                             <td>&nbsp;</td>
                             <td style="text-align: center;vertical-align: bottom;">
                                 <!--<img [src]="inputTemplate.imageSignatureSrc" alt="" [ngStyle]="{ 'max-width': logoSize+'px'}" />-->
                                 <hr />
                                 <!--<strong><h3>{{inputTemplate.sections[2].content[5].display}}</h3></strong>-->
-                                <strong><small>{{inputTemplate.sections[2].content[10].label}}</small></strong>
+                                <strong><small style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[10].label"></small></strong>
                                 <!--<p><small>(Signature)</small></p>-->
                             </td>
                         </tr>
