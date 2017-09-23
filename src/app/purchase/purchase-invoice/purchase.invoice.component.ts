@@ -4,8 +4,8 @@ import { Location } from '@angular/common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
 import * as  moment from 'moment';
 import * as  _ from 'lodash';
-import { IInvoicePurchaseResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
-
+import { IInvoicePurchaseResponse, PurchaseInvoiceService, ITaxResponse, GeneratePurchaseInvoiceRequest } from '../../services/purchase-invoice.service';
+import { Observable } from 'rxjs/Rx';
 import { PipeTransform, Pipe, OnInit, trigger, state, style, transition, animate, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -15,6 +15,9 @@ import { ToasterService } from '../../services/toaster.service';
 import { ComapnyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { saveAs } from 'file-saver';
+import 'rxjs/add/operator/distinct';
+import 'rxjs/add/operator/takeUntil';
+import 'rxjs/add/operator/map';
 import { AccountService } from '../../services/account.service';
 import { AccountRequest } from '../../models/api-models/Account';
 
@@ -61,12 +64,17 @@ const fileGstrOptions = [
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
   public allPurchaseInvoices: IInvoicePurchaseResponse[] = [];
+  public allTaxes: ITaxResponse[] = [];
   public selectedDateForGSTR1: string = '';
   public selectedEntryTypeValue: string = '';
   public moment = moment;
   public selectedGstrType: string;
   public showGSTR1DatePicker: boolean = false;
   public accountAsideMenuState: string = 'out';
+  public dropdownHeading: string = 'Select taxes';
+  public isSelectedAllTaxes: boolean = false;
+  public purchaseInvoiceObject: IInvoicePurchaseResponse = new IInvoicePurchaseResponse() ;
+  public purchaseInvoiceRequestObject: GeneratePurchaseInvoiceRequest = new GeneratePurchaseInvoiceRequest();
 
   public datePickerOptions: any = {
     locale: {
@@ -101,6 +109,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       ]
     }
   };
+  
   public otherFilters: any[] = otherFiltersOptions;
   public gstrOptions: any[] = gstrOptions;
   public purchaseReportOptions: any[] = purchaseReportOptions;
@@ -120,6 +129,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public isReverseChargeSelected: boolean = false;
   constructor(
     private router: Router,
     private location: Location,
@@ -130,8 +140,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     private purchaseInvoiceService: PurchaseInvoiceService,
     private accountService: AccountService
   ) {
+    this.purchaseInvoiceObject.TaxList = [];
+    this.purchaseInvoiceRequestObject.entryUniqueName = [];
+    this.purchaseInvoiceRequestObject.taxes = [];
     this.selectedDateForGSTR1 = String(moment());
-    // console.log('Hi this is purchase invoice component');
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
       if (c) {
         this.activeCompanyUniqueName = _.cloneDeep(c);
@@ -163,7 +175,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       }
       this.isDownloadingFileInProgress = o.isDownloadingFile;
     });
+    this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
+    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+      if (o.taxes && o.taxes.length) {
+        this.allTaxes = _.cloneDeep(o.taxes);
+      }
+    });
+
   }
+  
+
   public selectedDate(value: any, dateInput: any) {
     // console.log('value is :', value);
     // console.log('dateInput is :', dateInput);
@@ -284,7 +305,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     if (indx > -1 && (value === 'composite' || value === '')) {
       this.selectedRowIndex = indx;
       this.selectedEntryTypeValue = value;
-
+      this.isReverseChargeSelected = false;
+       
+      this.intervalId = setInterval(() => {
+        // console.log('running...');
+        this.timeCounter--;
+        this.checkForCounterValue(this.timeCounter);
+      }, 1000);
+    } else if (value === 'reverse charge'){
+      this.isReverseChargeSelected = true;
       this.intervalId = setInterval(() => {
         // console.log('running...');
         this.timeCounter--;
@@ -350,6 +379,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       });
     }
   }
+  
 
   /**
    * toggleSettingAsidePane
@@ -360,6 +390,82 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
+  /**
+  * SelectAllTaxes
+  */
+  public selectAllTaxes(event) {
+    if (event.target.checked) {
+        this.purchaseInvoiceObject.isAllTaxSelected = true;
+        this.allTaxes.forEach((tax: ITaxResponse) => tax.isSelected = true);
+        this.purchaseInvoiceObject.TaxList = _.clone(this.allTaxes);
+    } else {  
+        this.isSelectedAllTaxes = false;
+        this.allTaxes.forEach((tax: ITaxResponse) => tax.isSelected = false);
+        this.purchaseInvoiceObject.TaxList = _.clone(this.allTaxes);
+    }
+  }
+  
+  /**
+  * KeepCountofSelectedOptions
+  */
+  public makeCount() {
+    let count: number = 0;
+    let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+    purchaseInvoiceObject.TaxList.forEach((tax: ITaxResponse) => {
+        if (tax.isSelected) {
+            count += 1;
+        }
+    });
+    this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    return count;
+}
+  /**
+  * selectTaxOption
+  */
+  public selectTax(event ,tax) {
+    if (event.target.checked) {
+      let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+      purchaseInvoiceObject.TaxList.push(tax)
+        if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
+            purchaseInvoiceObject.isAllTaxSelected = true;
+            this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+        }
+        this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    } else {
+      let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+          if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
+          let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+          purchaseInvoiceObject.isAllTaxSelected = false;
+          // purchaseInvoiceObject.TaxList.pop();
+          this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+        }
+        this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    }
+    
+}
+
+  /**
+  * toggle dropdown heading
+  */
+  public onDDShown() {
+    this.dropdownHeading = 'Close list';
+  }
+  
+  /**
+  * toggle dropdown heading
+  */
+  public onDDHidden(uniqueName: string, accountUniqueName: string) {
+    let taxUniqueNames:string[] = [];
+    this.dropdownHeading = 'Select taxes';
+    let purchaseInvoiceRequestObject = _.cloneDeep(this.purchaseInvoiceRequestObject);
+    let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+    purchaseInvoiceRequestObject.entryUniqueName.push(uniqueName);
+    purchaseInvoiceRequestObject.taxes = purchaseInvoiceObject.TaxList;
+    for (var tax of purchaseInvoiceRequestObject.taxes){
+        taxUniqueNames.push(tax.uniqueName)
+    }
+    this.invoicePurchaseActions.GeneratePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName);
+    }
 
   /**
    * ngOnDestroy

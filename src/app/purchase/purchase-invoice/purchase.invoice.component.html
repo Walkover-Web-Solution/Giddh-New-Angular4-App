@@ -162,10 +162,11 @@
                     <th>Voucher No.</th>
                     <th>Entry</th>
                     <th class="text-right">Taxable Value</th>
+                    <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th>
                     <th class="text-right">IGST</th>
                     <th class="text-right">CGST</th>
                     <th class="text-right">SGST</th>
-                    <th class="text-right">UTGST</th>
+                    <th class="text-right">UTGST</th>   
                 </tr>
             </thead>
             <tbody>
@@ -179,7 +180,7 @@
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
                         <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType);">
+                            <select [(ngModel)]="value" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, value);">
                             <option value="">None selected</option>
                             <option value="composite"> Composite </option>
                             <option value="reverse charge"> Reverse Charge</option>
@@ -189,34 +190,34 @@
                         <button *ngIf="timeCounter != 10 && selectedRowIndex == i" (click)="onUndoEntryTypeChange()" class="btn btn-link">Undo in {{timeCounter}}s</button>
                     </td>
                     <td class="text-right">{{invoice.taxableValue}}</td>
+                  <td class="form-group" *ngIf="isReverseChargeSelected">
+                    <div class="btn-group btn-block" dropdown  (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)">
+                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                        {{dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                      </button>
+                      <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
+                        <li>
+                          <label>
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
+                          </label>
+                        </li>
+                        <li *ngFor="let tax of allTaxes; let i = index">
+                          <label>
+                            <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"> {{ tax.name}}
+                          </label>
+                        </li>
+                      </ul>
+                    </div>
+                </td>
                     <td class="text-right">{{invoice.igstAmount}}</td>
                     <td class="text-right">{{invoice.cgstAmount}}</td>
                     <td class="text-right">{{invoice.sgstAmount}}</td>
                     <td class="text-right">{{invoice.utgstAmount}}</td>
                 </tr>
-                <!--<div class="form-group" *ngIf="newRoleObj.isFresh">-->
-                  <!--<div class="btn-group btn-block" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden()">-->
-                    <!--<button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">-->
-                      <!--{{ dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>-->
-                    <!--</button>-->
-                    <!--<ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">-->
-                      <!--<li>-->
-                        <!--<label>-->
-                          <!--<input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllPages($event)" [(ngModel)]="newRoleObj.isSelectedAllPages"> Select all-->
-                        <!--</label>-->
-                      <!--</li>-->
-                      <!--<li *ngFor="let item of newRoleObj.pageList; let i = index">-->
-                        <!--<label>-->
-                          <!--<input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectPage($event)" [(ngModel)]="item.isSelected"> {{ item.name | capitalize}}-->
-                        <!--</label>-->
-                      <!--</li>-->
-                    <!--</ul>-->
-                  <!--</div>-->
-                <!--</div>-->
+
             </tbody>
         </table>
     </div>
-    <!-- open account aside -->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
