@@ -51,14 +51,14 @@ export class InvoicePreviewComponent implements OnInit {
     placeholder: 'Select Accounts',
     allowClear: true
   };
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private modalRef: BsModalRef;
-  private config = {
+  public modalRef: BsModalRef;
+  public config = {
     animated: true,
     keyboard: false,
     backdrop: true,
     ignoreBackdropClick: true
   };
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private modalService: BsModalService,
@@ -101,6 +101,11 @@ export class InvoicePreviewComponent implements OnInit {
         this.getInvoices();
       }
     });
+    this.getInvoices();
+  }
+
+  public pageChanged(event: any): void {
+    this.invoiceSearchRequest.page = event.page;
     this.getInvoices();
   }
 
@@ -203,11 +208,11 @@ export class InvoicePreviewComponent implements OnInit {
     this.invoiceSearchRequest[model] = '';
   }
 
-  private getInvoices() {
+  public getInvoices() {
     this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi()));
   }
 
-  private prepareModelForInvoiceApi() {
+  public prepareModelForInvoiceApi() {
     let model: InvoiceFilterClass = {};
     let o = _.cloneDeep(this.invoiceSearchRequest);
     if (o.accountUniqueName) {
@@ -235,7 +240,7 @@ export class InvoicePreviewComponent implements OnInit {
     return model;
   }
 
-  private prepareQueryParamsForInvoiceApi() {
+  public prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
     return {
       from: moment(o.from).format('DD-MM-YYYY'),

@@ -20,9 +20,9 @@
             <button class="btn btn-link" (click)="onPreview(template)">
                 <i class="fa fa-eye fa-2x" tooltip="Preview" aria-hidden="true"></i>
             </button>
-            <!--<button [disabled]="template.isDefault" class="btn btn-link" (click)="onUpdateTemplate(template)">
+            <button class="btn btn-link" (click)="onUpdateTemplate(template)">
                 <i class="fa fa fa-wrench fa-rotate-270 fa-2x" tooltip="Edit template" aria-hidden="true"></i>
-            </button>-->
+            </button>
             <button [disabled]="template.isDefault" class="btn btn-link" (click)="onDeleteTemplate(template)">
                 <i class="fa fa-trash-o fa-2x" tooltip="Delete" aria-hidden="true"></i>
             </button>
@@ -39,8 +39,9 @@
     </div>
   </div>
   <div class="sticky-footer pd2">
-    <button class="btn btn-default">Preview</button>
-    <button class="btn btn-success" (click)="createTemplate()">Save</button>
+    <!--<button class="btn btn-default">Preview</button>-->
+    <button *ngIf="transactionMode == 'create'" class="btn btn-success" (click)="createTemplate()">Save</button>
+    <button *ngIf="transactionMode == 'update'" class="btn btn-success" (click)="updateTemplate()">Update</button>
     <button class="btn btn-danger" (click)="onCloseTemplateModal()">Close</button>
   </div>
 </div>
@@ -60,7 +61,7 @@
     <div class="modal-dialog modal-lg">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-            <invoice-template-preview-modal [templateId]="templateId" [templateSections]='currentTemplateSections' (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
+            <invoice-template-preview-modal (closeModelEvent)="onClosePreviewModal()"></invoice-template-preview-modal>
         </div>
     </div>
 </div>
