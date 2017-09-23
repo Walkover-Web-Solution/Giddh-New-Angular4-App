@@ -32,7 +32,7 @@ import { BsGridComponent } from './bs-grid/bs-grid.component';
           <h1>loading ledger</h1>
         </div>
     </div>
-    <div *ngIf="(data$ | async) && !(showLoader | async)">
+    <div *ngIf="!(showLoader | async)">
       <bs-grid #bsGrid
       [search]="filter.search"
         [bsData]="data$ | async"
@@ -70,7 +70,16 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions) {
     this.showLoader = this.store.select(p => p.tlPl.bs.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p => _.cloneDeep(p.tlPl.bs.data)).takeUntil(this.destroyed$);
+    this.data$ = this.store.select(p => {
+      let data = _.cloneDeep(p.tlPl.bs.data);
+      if (data.liabilities) {
+        data.liabilities.forEach(q => { q.isVisible = true; });
+      }
+      if (data.assets) {
+        data.assets.forEach(q => { q.isVisible = true; });
+      }
+      return data;
+    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {

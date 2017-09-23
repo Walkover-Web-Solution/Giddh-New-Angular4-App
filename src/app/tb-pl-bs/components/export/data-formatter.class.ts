@@ -11,14 +11,13 @@ export interface IFormatable {
   setFooter(data: any[]);
 }
 
-
 export class DataFormatter {
   public accounts: Account[] = [];
   public groups: ChildGroup[] = [];
 
   constructor(private exportData: ChildGroup[],
-              private selectedCompany: ComapnyResponse,
-              private recType: RecTypePipe) {
+    private selectedCompany: ComapnyResponse,
+    private recType: RecTypePipe) {
 
   }
 
@@ -66,13 +65,13 @@ export class DataFormatter {
         if (group.accounts.length > 0) {
           group.accounts.forEach(account => {
             // if (account.isVisible === true) {
-            let data = [];
-            data.push(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`);
-            data.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
-            data.push(account.debitTotal);
-            data.push(account.creditTotal);
-            data.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
-            formatable.setRowData(data, 0);
+            let data1 = [];
+            data1.push(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`);
+            data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
+            data1.push(account.debitTotal);
+            data1.push(account.creditTotal);
+            data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
+            formatable.setRowData(data1, 0);
             total = this.calculateTotal(group, total);
             // }
           });
@@ -99,7 +98,7 @@ export class DataFormatter {
     data.push(total.cr);
     data.push(this.suffixRecordType(total.cb));
     formatable.setFooter(data);
-  };
+  }
 
   public formatDataCondensed = (formatable: IFormatable): void => {
     let total;
@@ -121,27 +120,27 @@ export class DataFormatter {
           strIndex += 3;
         }
         if (group.closingBalance.amount !== 0) {
-          let data: any[] = [];
-          data.push(group.groupName.toUpperCase());
-          data.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
-          data.push(group.debitTotal);
-          data.push(group.creditTotal);
-          data.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
-          formatable.setRowData(data, strIndex);
-          data = [];
+          let data1: any[] = [];
+          data1.push(group.groupName.toUpperCase());
+          data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
+          data1.push(group.debitTotal);
+          data1.push(group.creditTotal);
+          data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
+          formatable.setRowData(data1, strIndex);
+          data1 = [];
           if (group.accounts === void 0) {
             // console.log(group);
           }
           if (group.accounts.length > 0) {
             group.accounts.forEach(acc => {
               if (true) {
-                data.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
-                data.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
-                data.push(acc.debitTotal);
-                data.push(acc.creditTotal);
-                data.push(`${acc.closingBalance.amount}${this.recType.transform(acc.closingBalance)}`);
-                formatable.setRowData(data, strIndex);
-                data = [];
+                data1.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
+                data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
+                data1.push(acc.debitTotal);
+                data1.push(acc.creditTotal);
+                data1.push(`${acc.closingBalance.amount}${this.recType.transform(acc.closingBalance)}`);
+                formatable.setRowData(data1, strIndex);
+                data1 = [];
                 total = this.calculateTotal(group, total);
               }
             });
@@ -187,6 +186,4 @@ export class DataFormatter {
       return `${balance} Dr`;
     }
   }
-
-
 }
