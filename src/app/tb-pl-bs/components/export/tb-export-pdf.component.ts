@@ -233,4 +233,6 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     this.dataFormatter.formatDataAccountWise(formatPdf);
     formatPdf.save('PdfAccountWise.pdf');
   }
+
+
 }
