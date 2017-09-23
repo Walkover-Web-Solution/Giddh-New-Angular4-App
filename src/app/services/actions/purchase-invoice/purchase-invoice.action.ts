@@ -7,7 +7,7 @@ import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../settings.profile.service';
 import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
 import { PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
-import { PurchaseInvoiceService, IInvoicePurchaseResponse } from '../../purchase-invoice.service';
+import { PurchaseInvoiceService, IInvoicePurchaseResponse, ITaxResponse } from '../../purchase-invoice.service';
 import { ToasterService } from '../../toaster.service';
 import { AppState } from '../../../store/roots';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -27,6 +27,18 @@ export class InvoicePurchaseActions {
         type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
         payload: res
       }));
+
+      @Effect()
+      public GetTaxesForThisCompany$: Observable<Action> = this.action$
+        .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES)
+        .switchMap(action => this.purchaseInvoiceService.GetTaxesForThisCompany())
+        .map(res => this.validateResponse<ITaxResponse[], string>(res, {
+          type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+          payload: res
+        }, true, {
+            type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+            payload: res
+          }));
 
   @Effect()
   public UpdatePurchaseInvoice$: Observable<Action> = this.action$
@@ -93,6 +105,14 @@ export class InvoicePurchaseActions {
       return { type: '' };
     });
 
+ @Effect()
+  private GeneratePurchaseInvoice$: Observable<Action> = this.action$
+      .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
+      .switchMap(action => {
+        return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName )
+          .map(response => this.UpdatePurchaseInvoiceResponse(response));
+      });
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -133,6 +153,19 @@ export class InvoicePurchaseActions {
   public GetPurchaseInvoices(): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES
+    };
+  }
+
+  public  GeneratePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[] , accountUniqueName: string): Action{
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE,
+      payload: { entryUniqueName, taxUniqueName, accountUniqueName }
+    };
+  }
+  
+  public GetTaxesForThisCompany(): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.GET_TAXES
     };
   }
 

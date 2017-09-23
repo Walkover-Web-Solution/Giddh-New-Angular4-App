@@ -1,16 +1,18 @@
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
-import { IInvoicePurchaseResponse } from '../../services/purchase-invoice.service';
+import { IInvoicePurchaseResponse, ITaxResponse } from '../../services/purchase-invoice.service';
 import { PURCHASE_INVOICE_ACTIONS } from '../../services/actions/purchase-invoice/purchase-invoice.const';
 
 export interface InvoicePurchaseState {
     purchaseInvoices: IInvoicePurchaseResponse[];
+    taxes: ITaxResponse[];
     isDownloadingFile: boolean;
 }
 
 export const initialState: InvoicePurchaseState = {
     purchaseInvoices: [],
+    taxes: [],
     isDownloadingFile: false
 };
 
@@ -22,6 +24,16 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
             if (response.status === 'success') {
               let newState = _.cloneDeep(state);
               newState.purchaseInvoices =  response.body;
+              return Object.assign({}, state, newState);
+            }
+            return state;
+        }
+        case PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY:
+        {
+            let response: BaseResponse<ITaxResponse[], string> = action.payload;
+            if (response.status === 'success') {
+              let newState = _.cloneDeep(state);
+              newState.taxes =  response.body;
               return Object.assign({}, state, newState);
             }
             return state;
