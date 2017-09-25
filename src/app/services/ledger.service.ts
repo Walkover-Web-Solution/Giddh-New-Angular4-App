@@ -111,7 +111,7 @@ export class LedgerService {
   /*
   * Ledger get transaction details
   */
-  public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse[], string>> {
+  public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -119,10 +119,10 @@ export class LedgerService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).map((res) => {
-      let data: BaseResponse<LedgerResponse[], string> = res.json();
+      let data: BaseResponse<LedgerResponse, string> = res.json();
       data.queryString = { accountUniqueName, entryUniqueName };
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<LedgerResponse, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /**

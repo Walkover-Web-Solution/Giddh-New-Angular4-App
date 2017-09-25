@@ -34,9 +34,9 @@ export class LedgerActions {
       type: LEDGER.GET_TRANSACTION_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.GET_TRANSACTION_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.GET_TRANSACTION_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
@@ -46,9 +46,9 @@ export class LedgerActions {
       type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public DownloadInvoiceFile$: Observable<Action> = this.action$
@@ -58,9 +58,9 @@ export class LedgerActions {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public GetDiscountAccounts$: Observable<Action> = this.action$
@@ -70,9 +70,9 @@ export class LedgerActions {
       type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public CreateBlankLedger$: Observable<Action> = this.action$
@@ -82,16 +82,16 @@ export class LedgerActions {
       type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
+        payload: res
+      }));
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _ledgerService: LedgerService,
-              private _accountService: AccountService,
-              private _groupService: GroupService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _ledgerService: LedgerService,
+    private _accountService: AccountService,
+    private _groupService: GroupService) {
   }
 
   public GetTransactions(request: TransactionsRequest): Action {
@@ -111,7 +111,7 @@ export class LedgerActions {
   public DownloadInvoice(value: DownloadLedgerRequest, accountUniqueName: string): Action {
     return {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE,
-      payload: {body: value, accountUniqueName}
+      payload: { body: value, accountUniqueName }
     };
   }
 
@@ -124,17 +124,23 @@ export class LedgerActions {
   public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): Action {
     return {
       type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
-      payload: {model, accountUniqueName}
+      payload: { model, accountUniqueName }
     };
   }
 
+  public setTxnForEdit(txnUniqueName: string) {
+    return {
+      type: LEDGER.SET_SELECTED_TXN_FOR_EDIT,
+      payload: txnUniqueName
+    };
+  }
   public ResetLedger(): Action {
     return {
       type: LEDGER.RESET_LEDGER
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

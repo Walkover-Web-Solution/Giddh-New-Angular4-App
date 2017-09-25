@@ -171,11 +171,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
     });
     // get active company
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
-      if (a) {
-        this.addAccountForm.get('companyName').patchValue(a);
-      }
-    });
+    // this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
+    //   if (a) {
+    //     this.addAccountForm.get('companyName').patchValue(a);
+    //   }
+    // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
       if (a === 0 || a < 0) {
@@ -186,7 +186,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
     let gstFields = this._fb.group({
-      gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
+      gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],

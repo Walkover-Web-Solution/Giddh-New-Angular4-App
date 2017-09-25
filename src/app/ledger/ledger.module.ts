@@ -8,12 +8,14 @@ import { LedgerRoutingModule } from './ledger.routing.module';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { LedgerDiscountComponent } from './components/ledgerDiscount/ledgerDiscount.component';
 
+import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
     LedgerComponent,
     NewLedgerEntryPanelComponent,
-    LedgerDiscountComponent
+    LedgerDiscountComponent,
+    UpdateLedgerEntryPanelComponent
   ],
   exports: [
     LedgerComponent
