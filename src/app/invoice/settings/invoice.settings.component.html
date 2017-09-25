@@ -11,7 +11,7 @@
                                 <div class="row">
                                     <div class="" [ngClass]="{'input-group': !invoiceSetting.emailVerified}">
                                         <input type="email" class="form-control" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' />
-                                        <span class="input-group-addon" [hidden]="invoiceSetting.emailVerified"><i class="glyphicon glyphicon-exclamation-sign"></i></span>
+                                        <span class="input-group-addon" [hidden]="invoiceSetting.emailVerified"><i class="glyphicon glyphicon-exclamation-sign" tooltip="Unverified"></i></span>
                                     </div>
                                 </div>
                             </div>
@@ -33,7 +33,7 @@
                                         <input type="text" class="form-control" maxlength="2" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' [disabled]='webhook.uniqueName' />
                                     </div>
                                     <div class="col-xs-6">
-                                        <label [hidden]="i != '0'">Webhook URL</label>
+                                        <label [hidden]="i != '0'">Webhook URL <i class="glyphicon glyphicon-exclamation-sign" tooltip="Add a webhook URL & specify due days to send all your Invoice details"></i></label>
                                         <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
                                     </div>
                                     <label class="mrL1 cp" [hidden]="i == invoiceWebhook.length-1"> <i class="fa fa-trash-o delete-ico" (click)="deleteWebhook(webhook, i)"></i></label>

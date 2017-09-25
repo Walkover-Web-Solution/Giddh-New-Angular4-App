@@ -89,10 +89,16 @@
 </form>
 <!--list of data  -->
 <div class="no-data mrT2" *ngIf="!invoiceData">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
-    <a class="btn btn-primary">Go to Sales</a>
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
+  <!-- <a class="btn btn-primary">Go to Sales</a> -->
 </div>
+
+<div class="no-data" *ngIf="invoiceData && invoiceData.results.length === 0">
+  <h1>No entries found within given criteria.</h1>
+  <h1>Do search with some other dates</h1>
+</div>
+
 <table class="table basic table-bordered mrT2" *ngIf="invoiceData && invoiceData.results.length > 0">
     <thead class="t-h-bg1">
         <tr>
@@ -107,6 +113,15 @@
             <th class="text-center">Delete</th>
         </tr>
     </thead>
+    <tfoot>
+      <tr>
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="invoiceData.totalPages" [(ngModel)]="invoiceData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
+    </tfoot>
     <tbody>
         <tr *ngFor="let item of invoiceData.results; let i = index">
             <td>{{ i + 1}}</td>

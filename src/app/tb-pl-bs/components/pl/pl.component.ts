@@ -34,7 +34,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
           <h1>loading ledger</h1>
         </div>
     </div>
-    <div *ngIf="(data$ | async).expArr && !(showLoader | async)">
+    <div *ngIf="!(showLoader | async)">
       <pl-grid #plGrid
       [search]="filter.search"
         [plData]="data$ | async"
@@ -59,7 +59,9 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
       this.request = {
         refresh: false,
-        fy: index
+        fy: index,
+        from: value.activeFinancialYear.financialYearStarts,
+        to: value.activeFinancialYear.financialYearEnds
       };
       this.filterData(this.request);
     }
@@ -70,8 +72,16 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef) {
     this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p =>
-      _.cloneDeep(p.tlPl.pl.data)
+    this.data$ = this.store.select(p => {
+      let data = _.cloneDeep(p.tlPl.pl.data);
+      if (data.expArr) {
+        data.expArr.forEach(q => { q.isVisible = true; });
+      }
+      if (data.incArr) {
+        data.incArr.forEach(q => { q.isVisible = true; });
+      }
+      return data;
+    }
     ).takeUntil(this.destroyed$);
   }
 

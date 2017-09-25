@@ -170,7 +170,7 @@ export class IAccountAddress {
 }
 
 export class AccountRequestV2 {
-  public addresses: IAccountAddress;
+  public addresses: IAccountAddress[];
   public attentionTo?: string;
   public companyName?: string;
   public description?: string;
@@ -184,4 +184,34 @@ export class AccountRequestV2 {
   public hsnNumber: string;
   public country: { countryCode: string };
   public sacNumber: string;
+}
+export class AccountResponseV2 {
+  public name: string;
+  public country: { countryCode: string, countryName: string };
+  public stocks?: any[];
+  public hsnNumber?: string;
+  public openingBalanceDate?: string;
+  public applicableTaxes: INameUniqueName[];
+  public isFixed: boolean;
+  public yodleeAdded: boolean;
+  public accountType: any;
+  public mobileNo: string;
+  public sacNumber?: string;
+  public attentionTo: string;
+  public openingBalanceType: string;
+  public openingBalance: number;
+  public companyName: string;
+  public parentGroups: INameUniqueName[];
+  public description?: string;
+  public role: INameUniqueName;
+  public email: string;
+  public mergedAccounts: string;
+  public createdAt: string;
+  public createdBy: IUserInfo;
+  public updatedAt: string;
+  public updatedBy: IUserInfo;
+  public city?: string;
+  public pincode?: string;
+  public uniqueName: string;
+  public addresses: IAccountAddress[];
 }

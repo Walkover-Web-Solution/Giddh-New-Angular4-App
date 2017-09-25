@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { Select2Component } from '../../../theme/select2/select2.component';
-import { AccountResponse } from '../../../../models/api-models/Account';
+import { AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
@@ -188,7 +188,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     });
     this.activeGroupTaxHierarchy$.subscribe((a) => {
-      let activeAccount: AccountResponse = null;
+      let activeAccount: AccountResponseV2 = null;
       let activeGroup: GroupResponse = null;
       this.store.take(1).subscribe(s => {
         if (s.groupwithaccounts) {
@@ -279,7 +279,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public async taxHierarchy() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     let activeGroupUniqueName: string = null;
     this.store.take(1).subscribe(s => {
       if (s.groupwithaccounts) {
@@ -300,7 +300,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public applyTax() {
-    let activeAccount: AccountResponse = null;
+    let activeAccount: AccountResponseV2 = null;
     let activeGroup: GroupResponse = null;
     this.store.take(1).subscribe(s => {
       if (s.groupwithaccounts) {

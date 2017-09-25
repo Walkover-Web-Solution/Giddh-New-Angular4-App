@@ -51,14 +51,14 @@ export class InvoiceGenerateComponent implements OnInit {
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private modalRef: BsModalRef;
-  private config = {
+  public  modalRef: BsModalRef;
+  public config = {
     animated: true,
     keyboard: false,
     backdrop: true,
     ignoreBackdropClick: true
   };
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private modalService: BsModalService,
@@ -124,6 +124,12 @@ export class InvoiceGenerateComponent implements OnInit {
       this.selectedLedgerItems = [];
       this.getLedgersOfInvoice();
     }
+  }
+
+  public pageChanged(event: any): void {
+    this.ledgerSearchRequest.page = event.page;
+    this.selectedLedgerItems = [];
+    this.getLedgersOfInvoice();
   }
 
   public toggleAllItems(type: boolean) {
@@ -194,19 +200,19 @@ export class InvoiceGenerateComponent implements OnInit {
     this.ledgerSearchRequest[model] = '';
   }
 
-  private getInvoiceTemplateDetails(templateUniqueName: string) {
+  public getInvoiceTemplateDetails(templateUniqueName: string) {
     this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
   }
 
-  private showInvoiceModal() {
+  public showInvoiceModal() {
     this.invoiceGenerateModel.show();
   }
 
-  private getLedgersOfInvoice() {
+  public getLedgersOfInvoice() {
     this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
   }
 
-  private prepareModelForLedgerApi() {
+  public prepareModelForLedgerApi() {
     let model: InvoiceFilterClass = {};
     let o = _.cloneDeep(this.ledgerSearchRequest);
     if (o.accountUniqueName) {
@@ -234,7 +240,7 @@ export class InvoiceGenerateComponent implements OnInit {
     return model;
   }
 
-  private prepareQueryParamsForLedgerApi() {
+  public prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
     return {
       from: moment(o.from).format('DD-MM-YYYY'),
@@ -244,7 +250,7 @@ export class InvoiceGenerateComponent implements OnInit {
     };
   }
 
-  private countAndToggleVar() {
+  public countAndToggleVar() {
     let total: number = this.ledgersData.results.length;
     let count: number = 0;
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
@@ -257,7 +263,7 @@ export class InvoiceGenerateComponent implements OnInit {
     }
   }
 
-  private insertItemsIntoArr() {
+  public insertItemsIntoArr() {
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
       if (item.isSelected) {

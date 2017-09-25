@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
+import { SettingsProfileActions } from '../../../services/actions/settings/profile/settings.profile.action';
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({
@@ -34,10 +35,12 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public updateCustomStockInProcess$: Observable<boolean>;
   public deleteCustomStockInProcessCode$: Observable<any[]>;
   public stockUnitsList = StockUnits;
+  public companyProfile: any;
+  public country: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
-    private sidebarAction: SidebarAction) {
+    private sidebarAction: SidebarAction, private settingsProfileActions: SettingsProfileActions) {
     this.customUnitObj = new StockUnitRequest();
     this.stockUnit$ = this.store.select(p => p.inventory.stockUnits).takeUntil(this.destroyed$);
     this.stockUnitsDropDown$ = this.store.select(p => {
@@ -47,6 +50,18 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         return units.map(unit => {
           return { text: unit.name, id: unit.code };
         });
+      }
+    });
+    this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
+      if (!_.isEmpty(o)) {
+        this.companyProfile = _.cloneDeep(o);
+        if (this.companyProfile.country) {
+          this.country = this.companyProfile.country.toLocaleLowerCase();
+        } else {
+          this.country = 'india';
+        }
+      } else {
+        this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
       }
     });
     this.activeGroupUniqueName$ = this.store.select(s => s.inventory.activeGroupUniqueName).takeUntil(this.destroyed$);

@@ -162,7 +162,7 @@
 
         <!-- books search -->
         <li>
-          <div class="ledger_search form-inline" *ngIf="(isProd === 'development' || isElectron) && (selectedCompany | async)">
+          <div class="ledger_search form-inline" *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)">
             <div class="form-group">
               <div class="input-group">
                 <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
@@ -242,8 +242,8 @@
     </div>
   </nav>
 
-  <accounts-side-bar *ngIf="(isProd === 'development' || isElectron) && (selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)"
-    [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+  <accounts-side-bar *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)"
+    (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
