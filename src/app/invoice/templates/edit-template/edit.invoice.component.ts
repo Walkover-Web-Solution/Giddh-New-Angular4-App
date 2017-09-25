@@ -41,9 +41,9 @@ export class EditInvoiceComponent implements OnInit {
   public transactionMode: string = 'create';
   public invoiceTemplateBase64Data: string;
 
-  private selectedTemplateUniqueName: string;
-  private templateMeta: any;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public selectedTemplateUniqueName: string;
+  public templateMeta: any;
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());

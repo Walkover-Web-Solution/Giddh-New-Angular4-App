@@ -9,7 +9,7 @@
                 <label>
         <input type="radio" name="chart"  class="radio_theme" (click)="togle('Yearly')" />Yearly
       </label>
-                <i class="glyphicon glyphicon-refresh pull-right mrL1" (click)="fetchChartData()"></i>
+                <i class="glyphicon glyphicon-refresh pull-right mrL1" (click)="refreshChart()"></i>
             </div>
         </div>
         <div class="panel-body pos-rel">
@@ -17,7 +17,7 @@
                 <div class="giddh-spinner vertical-center-spinner" ng-if="errorMessage == ''"></div>
                 <label class="font-black" ng-if="errorMessage != ''">{{""}}</label>
             </div>
-            <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a>
+            <!-- <a ng-if="chartDataAvailable" class="pull-right btn btn-primary" ng-click="goToReports()">view detailed</a> -->
             <div class="chart-div" google-chart chart="myChartData">
                 <chart [options]="options"></chart>
             </div>

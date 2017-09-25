@@ -1,27 +1,34 @@
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 import {
-  AccountUnMergeRequest,
   AccountMergeRequest,
-  AccountsTaxHierarchyResponse
+  AccountMoveRequest,
+  AccountRequest,
+  AccountRequestV2,
+  AccountResponse,
+  AccountResponseV2,
+  AccountSharedWithResponse,
+  AccountsTaxHierarchyResponse,
+  AccountUnMergeRequest,
+  ShareAccountRequest
 } from '../../models/api-models/Account';
 import { AccountService } from './../account.service';
 import { AppState } from './../../store/roots';
 import { ToasterService } from './../toaster.service';
-import { AccountResponse, AccountRequest } from './../../models/api-models/Account';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Effect, Actions } from '@ngrx/effects';
+import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
-import { ShareAccountRequest, AccountSharedWithResponse, AccountMoveRequest } from '../../models/api-models/Account';
 import { GroupResponse } from '../../models/api-models/Group';
 
 @Injectable()
 export class AccountsAction {
   public static CREATE_ACCOUNT = 'CreateAccount';
   public static CREATE_ACCOUNT_RESPONSE = 'CreateAccountResponse';
+  public static CREATE_ACCOUNTV2 = 'CreateAccountV2';
+  public static CREATE_ACCOUNT_RESPONSEV2 = 'CreateAccountResponseV2';
   public static SHARE_ACCOUNT = 'AccountShare';
   public static SHARE_ACCOUNT_RESPONSE = 'AccountShareResponse';
   public static UNSHARE_ACCOUNT = 'AccountUnShare';
@@ -32,6 +39,8 @@ export class AccountsAction {
   public static MOVE_ACCOUNT_RESPONSE = 'AccountMoveResponse';
   public static UPDATE_ACCOUNT = 'UpdateAccount';
   public static UPDATE_ACCOUNT_RESPONSE = 'UpdateAccountResponse';
+  public static UPDATE_ACCOUNTV2 = 'UpdateAccountV2';
+  public static UPDATE_ACCOUNT_RESPONSEV2 = 'UpdateAccountResponseV2';
   public static GET_ACCOUNT_DETAILS = 'AccountDetails';
   public static GET_ACCOUNT_DETAILS_RESPONSE = 'AccountDetailsResponse';
   public static GET_ACCOUNT_UNIQUENAME = 'AccountUniqueName';
@@ -107,10 +116,43 @@ export class AccountsAction {
       }
       return { type: '' };
     });
+
+  @Effect()
+  public CreateAccountV2$: Observable<Action> = this.action$
+    .ofType(AccountsAction.CREATE_ACCOUNTV2)
+    .switchMap(action => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
+    .map(response => {
+      return this.createAccountResponseV2(response);
+    });
+
+  @Effect()
+  public CreateAccountResponseV2$: Observable<Action> = this.action$
+    .ofType(AccountsAction.CREATE_ACCOUNT_RESPONSEV2)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.clearAllToaster();
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        this._toasty.successToast('Account Created Successfully');
+      }
+      this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
+      let groupSearchString: string;
+      this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
+      if (groupSearchString) {
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+      } else {
+        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+      }
+      return { type: '' };
+    });
+
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS)
-    .switchMap(action => this._accountService.GetAccountDetails(action.payload))
+    .switchMap(action => this._accountService.GetAccountDetailsV2(action.payload))
     .map(response => {
       return this.getAccountDetailsResponse(response);
     });
@@ -118,7 +160,7 @@ export class AccountsAction {
   public GetAccountDetailsResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE)
     .map(action => {
-      let data: BaseResponse<AccountResponse, string> = action.payload;
+      let data: BaseResponse<AccountResponseV2, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
@@ -174,6 +216,35 @@ export class AccountsAction {
       return { type: '' };
     });
 
+  @Effect()
+  public UpdateAccountV2$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ACCOUNTV2)
+    .switchMap(action => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value))
+    .map(response => {
+      return this.updateAccountResponseV2(response);
+    });
+
+  @Effect()
+  public UpdateAccountResponseV2$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.clearAllToaster();
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast('Account Updated Successfully');
+        let groupSearchString: string;
+        this.store.take(1).subscribe(a => {
+          groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
+        });
+        if (groupSearchString) {
+          this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+        } else {
+          this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        }
+      }
+      return { type: '' };
+    });
   @Effect()
   public getGroupTaxHierarchy$: Observable<Action> = this.action$
     .ofType(AccountsAction.GET_ACCOUNT_TAX_HIERARCHY)
@@ -377,6 +448,7 @@ export class AccountsAction {
         this._toasty.successToast(action.payload.body, '');
         let activeGroup: GroupResponse = null;
         this.store.take(1).subscribe(s => activeGroup = s.groupwithaccounts.activeGroup);
+        return this.groupWithAccountsAction.getGroupDetails(activeGroup.uniqueName);
       }
       return {
         type: ''
@@ -408,6 +480,24 @@ export class AccountsAction {
     };
   }
 
+  public createAccountV2(value: string, account: AccountRequestV2): Action {
+    return {
+      type: AccountsAction.CREATE_ACCOUNTV2,
+      payload: Object.assign({}, {
+        accountUniqueName: value
+      }, {
+          account
+        })
+    };
+  }
+
+  public createAccountResponseV2(value: BaseResponse<AccountResponseV2, AccountRequestV2>): Action {
+    return {
+      type: AccountsAction.CREATE_ACCOUNT_RESPONSEV2,
+      payload: value
+    };
+  }
+
   public updateAccount(value: string, account: AccountRequest): Action {
     return {
       type: AccountsAction.UPDATE_ACCOUNT,
@@ -426,6 +516,20 @@ export class AccountsAction {
     };
   }
 
+  public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): Action {
+    return {
+      type: AccountsAction.UPDATE_ACCOUNTV2,
+      payload: { account, value }
+    };
+  }
+
+  public updateAccountResponseV2(value: BaseResponse<AccountResponseV2, AccountRequestV2>): Action {
+    return {
+      type: AccountsAction.UPDATE_ACCOUNT_RESPONSEV2,
+      payload: value
+    };
+  }
+
   public getAccountDetails(value: string): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_DETAILS,
@@ -433,7 +537,7 @@ export class AccountsAction {
     };
   }
 
-  public getAccountDetailsResponse(value: BaseResponse<AccountResponse, string>): Action {
+  public getAccountDetailsResponse(value: BaseResponse<AccountResponseV2, string>): Action {
     return {
       type: AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value

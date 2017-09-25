@@ -56,7 +56,7 @@ export class NetworthChartComponent implements OnInit {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public comparisionChartData$: Observable<IComparisionChartResponse>;
+  @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
   public requestInFlight = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private monthArray = ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'];
@@ -66,7 +66,6 @@ export class NetworthChartComponent implements OnInit {
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
-    this.comparisionChartData$ = this.store.select(p => p.home.comparisionChart).takeUntil(this.destroyed$);
     this.options = this.monthlyOption;
   }
 
@@ -89,6 +88,10 @@ export class NetworthChartComponent implements OnInit {
       }];
     }
   }
+  public refreshChart() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
   public fetchChartData() {
     this.requestInFlight = true;
     this.networthData = [];
@@ -98,14 +101,6 @@ export class NetworthChartComponent implements OnInit {
     this.refresh = false;
   }
   public ngOnInit() {
-    this.comparisionChartData$
-      .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
-      // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
-      .subscribe(p => {
-        this.networthData = p.NetworthActiveYear;
-        this.generateCharts();
-        this.requestInFlight = false;
-      });
     this.companies$.subscribe(c => {
       if (c) {
         let activeCompany: ComapnyResponse;
@@ -123,8 +118,16 @@ export class NetworthChartComponent implements OnInit {
             if (cmp.uniqueName === activeCmpUniqueName) {
               if (cmp.financialYears.length > 1) {
                 financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.orderBy(financialYears, (it) => {
-                  return moment(it.financialYearStarts, 'DD-MM-YYYY');
+                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+
+                  return b.diff(a, 'days') < 0;
+                });
+                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
+                  return b.diff(a, 'days');
                 }, 'desc');
                 this.lastFinancialYear = financialYears[0];
               }
@@ -134,5 +137,14 @@ export class NetworthChartComponent implements OnInit {
         // this.fetchChartData();
       }
     });
+    this.comparisionChartData
+      .skipWhile(p => (isNullOrUndefined(p) || isNullOrUndefined(p.NetworthActiveYear)))
+      // .distinctUntilChanged((p, q) => p.NetworthActiveYear === this.networthData)
+      .subscribe(p => {
+        this.networthData = p.NetworthActiveYear;
+        this.generateCharts();
+        this.requestInFlight = false;
+      });
+
   }
 }
