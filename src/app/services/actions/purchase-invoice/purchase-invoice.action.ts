@@ -28,6 +28,16 @@ export class InvoicePurchaseActions {
         payload: res
       }));
 
+  @Effect()
+  public GeneratePurchaseInvoice$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
+    .switchMap(action => {
+      console.log('Effect CAlled');
+      return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName )
+      .map(response => this.UpdatePurchaseInvoiceResponse(response));
+    });
+        
+
       @Effect()
       public GetTaxesForThisCompany$: Observable<Action> = this.action$
         .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES)
@@ -105,14 +115,7 @@ export class InvoicePurchaseActions {
       return { type: '' };
     });
 
- @Effect()
-  private GeneratePurchaseInvoice$: Observable<Action> = this.action$
-      .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
-      .switchMap(action => {
-        return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName )
-          .map(response => this.UpdatePurchaseInvoiceResponse(response));
-      });
-
+ 
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
