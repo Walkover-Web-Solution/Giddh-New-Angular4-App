@@ -3,6 +3,7 @@ import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
+import { ROUTES } from '../../app.routes';
 
 @Injectable()
 export class UserAuthenticated implements CanActivate {
@@ -11,7 +12,11 @@ export class UserAuthenticated implements CanActivate {
   public canActivate() {
     return this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').map(p => {
       if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
-        this._router.navigate([p.lastState]);
+        if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
+          this._router.navigate([p.lastState]);
+        } else {
+          this._router.navigate(['home']);
+        }
       }
       if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
         this._router.navigate(['/new-user']);

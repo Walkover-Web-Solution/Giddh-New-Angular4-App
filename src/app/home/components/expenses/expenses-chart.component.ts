@@ -25,16 +25,15 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public lastFinancialYear: ActiveFinancialYear;
   public companies$: Observable<ComapnyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
-  public expensesChartData$: Observable<IExpensesChartClosingBalanceResponse>;
+  @Input() public expensesChartData: Observable<IExpensesChartClosingBalanceResponse>;
   public accountStrings: AccountChartDataLastCurrentYear[] = [];
-  public activeYearAccounts: ICbAccount[] = [];
-  public lastYearAccounts: ICbAccount[] = [];
+  public activeYearAccounts: IChildGroups[] = [];
+  public lastYearAccounts: IChildGroups[] = [];
   public activeYearAccountsRanks: number[] = [];
   public lastYearAccountsRanks: number[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _homeActions: HomeActions) {
-    this.expensesChartData$ = this.store.select(p => p.home.expensesChart).takeUntil(this.destroyed$);
     this.activeCompanyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(p => p.session.companies).takeUntil(this.destroyed$);
   }
@@ -56,31 +55,39 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
             if (cmp.uniqueName === activeCmpUniqueName) {
               if (cmp.financialYears.length > 1) {
                 financialYears = cmp.financialYears.filter(cm => cm.uniqueName !== this.activeFinancialYear.uniqueName);
-                financialYears = _.orderBy(financialYears, (it) => {
-                  return moment(it.financialYearStarts, 'DD-MM-YYYY');
+                financialYears = _.filter(financialYears, (it: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(it.financialYearEnds, 'DD-MM-YYYY');
+
+                  return b.diff(a, 'days') < 0;
+                });
+                financialYears = _.orderBy(financialYears, (p: ActiveFinancialYear) => {
+                  let a = moment(this.activeFinancialYear.financialYearStarts, 'DD-MM-YYYY');
+                  let b = moment(p.financialYearEnds, 'DD-MM-YYYY');
+                  return b.diff(a, 'days');
                 }, 'desc');
                 this.lastFinancialYear = financialYears[0];
               }
             }
           }
-          if (activeCmpUniqueName) { this.refreshData(); }
+          // if (activeCmpUniqueName) { this.fetchChartData(); }
         }
       }
     });
 
-    this.expensesChartData$.subscribe(exp => {
+    this.expensesChartData.subscribe(exp => {
       if (exp) {
         if (exp.operatingcostActiveyear && exp.indirectexpensesActiveyear) {
-          let indirectexpensesAccounts = [].concat.apply([], this.flattenGroup([exp.indirectexpensesActiveyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let operatingcostAccounts = [].concat.apply([], this.flattenGroup([exp.operatingcostActiveyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let accounts = _.unionBy(indirectexpensesAccounts as ICbAccount[], operatingcostAccounts as ICbAccount[]) as ICbAccount[];
+          let indirectexpensesGroups = [].concat.apply([], exp.indirectexpensesActiveyear.childGroups);
+          let operatingcostGroups = [].concat.apply([], exp.operatingcostActiveyear.childGroups);
+          let accounts = _.unionBy(indirectexpensesGroups as IChildGroups[], operatingcostGroups as IChildGroups[]) as IChildGroups[];
           this.activeYearAccounts = accounts;
         }
 
         if (exp.operatingcostLastyear && exp.indirectexpensesLastyear) {
-          let indirectexpensesAccounts = [].concat.apply([], this.flattenGroup([exp.indirectexpensesLastyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let operatingcostAccounts = [].concat.apply([], this.flattenGroup([exp.operatingcostLastyear] as IChildGroups[]).map((p: IChildGroups) => p.accounts));
-          let lastAccounts = _.unionBy(indirectexpensesAccounts as ICbAccount[], operatingcostAccounts as ICbAccount[]) as ICbAccount[];
+          let indirectexpensesGroups = [].concat.apply([], exp.indirectexpensesLastyear.childGroups);
+          let operatingcostGroups = [].concat.apply([], exp.operatingcostLastyear.childGroups);
+          let lastAccounts = _.unionBy(indirectexpensesGroups as IChildGroups[], operatingcostGroups as IChildGroups[]) as IChildGroups[];
           this.lastYearAccounts = lastAccounts;
         }
       }
@@ -99,7 +106,11 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
       ];
     });
   }
-  public refreshData() {
+  public refreshChart() {
+    this.refresh = true;
+    this.fetchChartData();
+  }
+  public fetchChartData() {
     this.requestInFlight = true;
     this.store.dispatch(this._homeActions.getExpensesChartDataOfActiveYear(this.activeFinancialYear.financialYearStarts, this.activeFinancialYear.financialYearEnds, this.refresh));
 
@@ -183,7 +194,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public generateActiveYearString(): INameUniqueName[] {
     let activeStrings: INameUniqueName[] = [];
     this.activeYearAccounts.map(acc => {
-      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.name });
+      activeStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
     });
     return activeStrings;
   }
@@ -191,7 +202,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public generateLastYearString(): INameUniqueName[] {
     let lastStrings: INameUniqueName[] = [];
     this.lastYearAccounts.map(acc => {
-      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.name });
+      lastStrings.push({ uniqueName: acc.uniqueName, name: acc.groupName });
     });
     return lastStrings;
   }

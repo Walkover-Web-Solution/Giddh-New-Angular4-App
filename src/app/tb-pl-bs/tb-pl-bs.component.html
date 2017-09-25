@@ -1,12 +1,14 @@
-<tabset>
-  <tab heading="Trial Balance">
-    <tb [selectedCompany]="selectedCompany"></tb>
-  </tab>
+<div class="container-fluid">
+    <tabset id="settingTab">
+        <tab heading="Trial Balance">
+            <tb [selectedCompany]="selectedCompany"></tb>
+        </tab>
 
-  <tab heading="Profit &amp; Loss">
-    <pl [selectedCompany]="selectedCompany"></pl>
-  </tab>
-  <tab heading="Balance Sheet">
-      <bs [selectedCompany]="selectedCompany"></bs>
-  </tab>
-</tabset>
+        <tab heading="Profit &amp; Loss">
+            <pl [selectedCompany]="selectedCompany"></pl>
+        </tab>
+        <tab heading="Balance Sheet">
+            <bs [selectedCompany]="selectedCompany"></bs>
+        </tab>
+    </tabset>
+</div>

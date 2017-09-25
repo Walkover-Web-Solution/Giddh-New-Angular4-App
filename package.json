@@ -1,7 +1,7 @@
 {
   "name": "giddh-app",
-  "version": "6.1.12",
-  "description": "An Angular Webpack Starter kit featuring Angular (Router, Http, Forms, Services, Tests, E2E, Coverage), Karma, Protractor, Jasmine, Istanbul, TypeScript, and Webpack by AngularClass",
+  "version": "6.2.2",
+  "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
     "angular2",
@@ -14,15 +14,24 @@
   "license": "MIT",
   "scripts": {
     "rebuild": "electron-rebuild",
-    "build:aot:prod": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
-    "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
+
     "build:aot": "npm run build:aot:prod",
     "build:aot:renderer": "npm run build:aot:prod",
+
     "build:dev": "npm run clean:dist && npm run webpack -- --config config/webpack.dev.js --progress --profile",
     "build:dev:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.dev.js --progress --profile",
     "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
+
     "build:prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
     "build:prod:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
+    "build:aot:prod": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
+    "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
+
+    "build:stage": "npm run clean:dist && npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
+    "build:stage:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
+    "build:aot:stage": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
+    "build:aot:stage:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
+
     "build": "npm run build:dev",
     "build:renderer": "npm run build:dev:renderer",
     "ci:aot": "npm run lint && npm run test && npm run build:aot && npm run e2e",
@@ -182,7 +191,6 @@
     "ncp": "^2.0.0",
     "ng-click-outside": "^2.3.5",
     "ng-router-loader": "^2.1.0",
-    "ng-select": "^1.0.0-beta.5",
     "ng2-daterangepicker": "^2.0.7",
     "ng2-ui-auth": "^7.0.2",
     "ngc-webpack": "~2.0.0",
