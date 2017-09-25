@@ -3,6 +3,7 @@ import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
+import moment from 'moment';
 
 @Component({
   selector: 'bs-grid',  // <home></home>
@@ -13,12 +14,21 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public showClearSearch: boolean;
   @Input() public search: string = '';
   @Input() public bsData: BalanceSheetData;
-
+  @Input() public padding: string;
+  public moment = moment;
   @Input()
   public set expandAll(value: boolean) {
     if (this.bsData) {
       if (this.bsData.assets) { this.toggleVisibility(this.bsData.assets, value); }
       if (this.bsData.liabilities) { this.toggleVisibility(this.bsData.liabilities, value); }
+      if (this.search.length < 3) {
+        if (this.bsData.liabilities) {
+          this.bsData.liabilities.forEach(p => p.isVisible = true);
+        }
+        if (this.bsData.assets) {
+          this.bsData.assets.forEach(p => p.isVisible = true);
+        }
+      }
       this.bsData = _.cloneDeep(this.bsData);
     }
   }

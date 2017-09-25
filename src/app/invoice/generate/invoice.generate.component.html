@@ -100,9 +100,14 @@
 <!--list of data  -->
 
 <div class="no-data" *ngIf="!ledgersData">
-    <h1>No Entry found in sales!</h1>
-    <h1>Have to do some sales before creating invoice</h1>
-    <a class="btn btn-primary">Go to Sales</a>
+  <h1>No Entry found in sales!</h1>
+  <h1>Have to do some sales before creating invoice</h1>
+  <!-- <a class="btn btn-primary">Go to Sales</a> -->
+</div>
+
+<div class="no-data" *ngIf="ledgersData && ledgersData.results.length === 0">
+  <h1>No entries found within given criteria.</h1>
+  <h1>Do search with some other dates</h1>
 </div>
 
 <table class="table basic table-bordered" *ngIf="ledgersData && ledgersData.results.length > 0">
@@ -121,21 +126,13 @@
         </tr>
     </thead>
     <tfoot>
-        <tr>
-            <td colspan="100%">
-                <div class="pagination pull-right">
-                    <!-- <ul class="list-inline">
-            <li>
-              <button class="btn btn-default" ng-disabled="ledgerCurrentPage == 1" ng-click="prevPageLed(); getAllTransaction()">Prev</button>
-            </li>
-            <li>{{ledgerCurrentPage}}/{{ledgers.totalPages}}</li>
-            <li>
-              <button class="btn btn-default" ng-disabled="ledgerCurrentPage == ledgers.totalPages" ng-click="nextPageLed(); getAllTransaction()">Next</button>
-            </li>
-          </ul> -->
-                </div>
-            </td>
-        </tr>
+      <tr>
+        <td colspan="100%">
+          <div class="alC">
+            <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+          </div>
+        </td>
+      </tr>
     </tfoot>
     <tbody>
         <!--ng-class="{'danger': checkTransaction(ledger.uniqueName)}"  -->
