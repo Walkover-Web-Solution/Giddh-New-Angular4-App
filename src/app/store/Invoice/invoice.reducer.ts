@@ -33,20 +33,20 @@ export const initialState: InvoiceState = {
 export function InvoiceReducer(state = initialState, action: Action): InvoiceState {
     switch (action.type) {
         case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
-            if (res.status === 'success') {
-                newState.preview.invoices = res.body;
-                return Object.assign({}, state, newState);
-            }
-            return state;
+          let newState = _.cloneDeep(state);
+          let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
+          if (res.status === 'success') {
+            newState.preview.invoices = res.body;
+            return Object.assign({}, state, newState);
+          }
+          return state;
         }
         case INVOICE_ACTIONS.DOWNLOAD_INVOICE_RESPONSE: {
           let newState = _.cloneDeep(state);
           let res: BaseResponse<string, string> = action.payload;
           if (res.status === 'success') {
-              newState.preview.base64Data = res.body;
-              return Object.assign({}, state, newState);
+            newState.preview.base64Data = res.body;
+            return Object.assign({}, state, newState);
           }
           return state;
         }
@@ -56,14 +56,18 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             if (res.status === 'success') {
                 let body = _.cloneDeep(res.body);
                 if (body.results.length > 0) {
-                    body.results.map((item: ILedgersInvoiceResult) => {
-                        item.isSelected = (item.isSelected) ? true : false;
-                    });
+                  body.results.map((item: ILedgersInvoiceResult) => {
+                    item.isSelected = (item.isSelected) ? true : false;
+                  });
                 }
                 newState.generate.ledgers = body;
                 return Object.assign({}, state, newState);
+            }else {
+              let o: GetAllLedgersOfInvoicesResponse = new GetAllLedgersOfInvoicesResponse();
+              o.results = [];
+              newState.generate.ledgers = o;
+              return Object.assign({}, state, newState);
             }
-            return state;
         }
         case INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA: {
             let newState = _.cloneDeep(state);

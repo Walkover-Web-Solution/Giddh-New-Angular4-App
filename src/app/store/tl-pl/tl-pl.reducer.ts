@@ -90,8 +90,8 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_PROFIT_LOSS_REQUEST: {
-      let from = moment(action.payload.from, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
-      let to = moment(action.payload.to, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
+      let from = action.payload.from;
+      let to = action.payload.to;
       return {
         ...state,
         pl: { ...state.pl, showLoader: true, data: { ...state.pl.data, dates: { from, to } } }
@@ -107,8 +107,8 @@ export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState
     }
 
     case TBPlBsActions.GET_BALANCE_SHEET_REQUEST: {
-      let from = moment(action.payload.from, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
-      let to = moment(action.payload.to, 'DD-MM-YYYY').format('DD-MMMM-YYYY');
+      let from = action.payload.from;
+      let to = action.payload.to;
       return {
         ...state,
         bs: { ...state.bs, showLoader: true, data: { ...state.bs.data, dates: { from, to } } }
@@ -243,8 +243,11 @@ const filterProfitLossData = data => {
 const prepareProfitLossData = (data) => {
   let plData: ProfitLossData = filterProfitLossData(data.groupDetails);
   plData.expenseTotal = calculateTotalExpense(plData.expArr);
+  plData.expenseTotalEnd = calculateTotalExpenseEnd(plData.expArr);
   plData.incomeTotal = calculateTotalIncome(plData.incArr);
+  plData.incomeTotalEnd = calculateTotalIncomeEnd(plData.incArr);
   plData.closingBalance = Math.abs(plData.incomeTotal - plData.expenseTotal);
+  plData.frowardBalance = Math.abs(plData.incomeTotalEnd - plData.expenseTotalEnd);
   if (plData.incomeTotal >= plData.expenseTotal) {
     plData.inProfit = true;
     // plData.expenseTotal += plData.closingBalance;
@@ -268,6 +271,18 @@ const calculateTotalIncome = data => {
   });
   return Number(eTtl.toFixed(2));
 };
+const calculateTotalIncomeEnd = data => {
+  let eTtl;
+  eTtl = 0;
+  _.each(data, (item: any) => {
+    if (item.forwardedBalance.type === 'DEBIT') {
+      return eTtl -= Number(item.forwardedBalance.amount);
+    } else {
+      return eTtl += Number(item.forwardedBalance.amount);
+    }
+  });
+  return Number(eTtl.toFixed(2));
+};
 
 const calculateTotalExpense = data => {
   let eTtl;
@@ -277,6 +292,19 @@ const calculateTotalExpense = data => {
       return eTtl -= Number(item.closingBalance.amount);
     } else {
       return eTtl += Number(item.closingBalance.amount);
+    }
+  });
+  return Number(eTtl.toFixed(2));
+};
+
+const calculateTotalExpenseEnd = data => {
+  let eTtl;
+  eTtl = 0;
+  _.each(data, (item: any) => {
+    if (item.forwardedBalance.type === 'CREDIT') {
+      return eTtl -= Number(item.forwardedBalance.amount);
+    } else {
+      return eTtl += Number(item.forwardedBalance.amount);
     }
   });
   return Number(eTtl.toFixed(2));
@@ -305,7 +333,9 @@ const filterBalanceSheetData = data => {
 const prepareBalanceSheetData = (data) => {
   let bsData: BalanceSheetData = filterBalanceSheetData(data.groupDetails);
   bsData.assetTotal = calCulateTotalAssets(bsData.assets);
+  bsData.assetTotalEnd = calCulateTotalAssetsEnd(bsData.assets);
   bsData.liabTotal = calCulateTotalLiab(bsData.liabilities);
+  bsData.liabTotalEnd = calCulateTotalLiabEnd(bsData.liabilities);
   return bsData;
 };
 
@@ -321,6 +351,18 @@ const calCulateTotalAssets = data => {
   });
   return total;
 };
+const calCulateTotalAssetsEnd = data => {
+  let total;
+  total = 0;
+  _.each(data, (obj: any) => {
+    if (obj.forwardedBalance.type === 'CREDIT') {
+      return total -= obj.forwardedBalance.amount;
+    } else {
+      return total += obj.forwardedBalance.amount;
+    }
+  });
+  return total;
+};
 const calCulateTotalLiab = data => {
   let total;
   total = 0;
@@ -329,6 +371,18 @@ const calCulateTotalLiab = data => {
       return total -= obj.closingBalance.amount;
     } else {
       return total += obj.closingBalance.amount;
+    }
+  });
+  return total;
+};
+const calCulateTotalLiabEnd = data => {
+  let total;
+  total = 0;
+  _.each(data, (obj: any) => {
+    if (obj.forwardedBalance.type === 'DEBIT') {
+      return total -= obj.forwardedBalance.amount;
+    } else {
+      return total += obj.forwardedBalance.amount;
     }
   });
   return total;

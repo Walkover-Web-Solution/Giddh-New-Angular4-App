@@ -2618,8 +2618,7 @@ label {
 
 .accmerge {
     padding: 0;
-    margin-top: 10px;
-    display: inline-block;
+    display: block;
     clear: both;
     width: 100%;
 }
@@ -2647,10 +2646,10 @@ label {
 
 .accmerge li .fa {
     color: #949494;
-    margin-left: 7px;
+    margin: 0 8px;
     font-size: 12px;
-    top: -6px;
-    right: 1px;
+    top: -1px;
+    /* right: 1px; */
     position: relative;
     cursor: pointer;
 }
@@ -3890,4 +3889,75 @@ input[type='checkbox'][disabled]:after {
 .toggle-btn label {
     color: #ff5f00;
     font-size: 16px;
+}
+
+.table-container {
+    background: #fff;
+}
+
+.table-container section div .group {
+    font-family: 'LatoWebSemibold';
+    text-transform: uppercase;
+}
+
+.table-container section div:last-child {
+    border-right: 0;
+}
+
+.success {
+    color: #3fab63;
+}
+
+.danger {
+    color: #EF5350;
+}
+
+.table-container thead tr th:first-child {
+    border-left: 6px solid #525252;
+}
+
+.table-container .account {
+    background: #f4f5f8;
+}
+
+.table-container>div>section>.tb-pl-bs-grid-row>div:nth-child(1) {
+    padding-left: 7px !important;
+}
+
+.table-container .profitLoss section div>div {
+    border-right: 0;
+}
+
+.active-toggle-btn {
+    color: white;
+    background-color: #d25f29;
+}
+
+.input-group-addon input[type="radio"] {
+    position: relative;
+}
+
+.input-group-addon input[type="radio"]:before {
+    content: ' ';
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: #fff;
+    top: -3px;
+    right: -2px;
+    border: 2px solid #969696;
+    border-radius: 50%;
+}
+
+.input-group-addon input[type="radio"]:checked:after {
+    content: ' ';
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    background: #ff5f00;
+    left: 2px;
+    top: 3px;
+    border-radius: 50%;
+    right: 0;
+    text-align: center;
 }

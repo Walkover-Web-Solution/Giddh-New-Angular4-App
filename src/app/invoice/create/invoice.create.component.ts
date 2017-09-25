@@ -77,7 +77,7 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'tax'
+    field: 'taxes'
   },
   {
     display: false,
@@ -102,9 +102,10 @@ export class InvoiceCreateComponent implements OnInit {
   public invTempCond: InvoiceTemplateDetailsResponse;
   public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
+  public totalBalance: number = null;
   // public methods above
+  public isInvoiceGenerated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private isInvoiceGenerated$: Observable<boolean>;
 
   constructor(
     private store: Store<AppState>,
@@ -161,7 +162,6 @@ export class InvoiceCreateComponent implements OnInit {
     Object.keys(dummyObj).sort().forEach( (key) => {
       this.templateHeader[key] = dummyObj[key];
     });
-    console.log (this.templateHeader);
   }
 
   public prepareThead() {
@@ -199,40 +199,56 @@ export class InvoiceCreateComponent implements OnInit {
     return arr;
   }
 
-  public getTransactionTotalTax(taxArr: IInvoiceTax[]): number {
+  public getTransactionTotalTax(taxArr: IInvoiceTax[]): any {
     let count: number = 0;
     if (taxArr.length > 0) {
       _.forEach(taxArr, (item: IInvoiceTax) => {
         count += item.amount;
       });
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTotal(entry: GstEntry, idx: number): number {
+  public getEntryTotal(entry: GstEntry, idx: number): any {
     let count: number = 0;
     count = this.getEntryTaxableAmount(entry.transactions[idx], entry.discounts) + this.getTransactionTotalTax(entry.taxes);
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTaxableAmount(transaction: IInvoiceTransaction, discountArr: ICommonItemOfTransaction[]): number {
+  public getEntryTaxableAmount(transaction: IInvoiceTransaction, discountArr: ICommonItemOfTransaction[]): any {
     let count: number = 0;
     if (transaction.quantity && transaction.rate) {
       count = (transaction.rate * transaction.quantity) - this.getEntryTotalDiscount(discountArr);
     } else {
-      count = transaction.amount + this.getEntryTotalDiscount(discountArr);
+      count = transaction.amount - this.getEntryTotalDiscount(discountArr);
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): number {
+  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
     let count: number = 0;
     if (discountArr.length > 0) {
       _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
         count += Math.abs(item.amount);
       });
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
   public closePopupEvent() {

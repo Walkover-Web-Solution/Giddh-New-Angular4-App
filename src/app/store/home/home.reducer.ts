@@ -17,8 +17,17 @@ export interface HomeState {
   expensesChartError?: string;
   revenueChart?: IRevenueChartClosingBalanceResponse;
   revenueChartError?: string;
-  comparisionChart?: IComparisionChartResponse;
+
+  // ComparisionChart
+  comparisionChart: IComparisionChartResponse;
   comparisionChartError?: string;
+
+  history_comparisionChart: IComparisionChartResponse;
+  history_comparisionChartError?: string;
+
+  networth_comparisionChart: IComparisionChartResponse;
+  networth_comparisionChartError?: string;
+
   isExpensesChartDataInProcess: boolean;
   isExpensesChartDataAvailable: boolean;
   isRevenueChartDataInProcess: boolean;
@@ -41,7 +50,145 @@ export const initialState: HomeState = {
   isRevenueChartDataAvailable: false,
   isGetBankAccountsInProcess: false,
   isRefereshBankAccount: false,
-  isReConnectBankAccount: false
+  isReConnectBankAccount: false,
+  comparisionChart: {
+    // revenue
+    revenueActiveYear: [],
+    revenueActiveYearMonthly: [],
+    revenueActiveYearYearly: [],
+    revenueLastYear: [],
+    revenueLastYearMonthly: [],
+    revenueLastYearYearly: [],
+    // expenses
+    ExpensesActiveYear: [],
+    ExpensesActiveYearMonthly: [],
+    ExpensesActiveYearYearly: [],
+    ExpensesLastYear: [],
+    ExpensesLastYearMonthly: [],
+    ExpensesLastYearYearly: [],
+    // networth
+    NetworthActiveYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    NetworthActiveYearMonthly: [],
+    NetworthActiveYearYearly: [],
+    NetworthLastYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    NetworthLastYearMonthly: [],
+    NetworthLastYearYearly: [],
+    // P/L
+    ProfitLossActiveYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    ProfitLossActiveYearMonthly: [],
+    ProfitLossActiveYearYearly: [],
+    ProfitLossLastYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    ProfitLossLastYearMonthly: [],
+    ProfitLossLastYearYearly: [],
+  },
+  history_comparisionChart: {
+    // revenue
+    revenueActiveYear: [],
+    revenueActiveYearMonthly: [],
+    revenueActiveYearYearly: [],
+    revenueLastYear: [],
+    revenueLastYearMonthly: [],
+    revenueLastYearYearly: [],
+    // expenses
+    ExpensesActiveYear: [],
+    ExpensesActiveYearMonthly: [],
+    ExpensesActiveYearYearly: [],
+    ExpensesLastYear: [],
+    ExpensesLastYearMonthly: [],
+    ExpensesLastYearYearly: [],
+    // networth
+    NetworthActiveYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    NetworthActiveYearMonthly: [],
+    NetworthActiveYearYearly: [],
+    NetworthLastYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    NetworthLastYearMonthly: [],
+    NetworthLastYearYearly: [],
+    // P/L
+    ProfitLossActiveYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    ProfitLossActiveYearMonthly: [],
+    ProfitLossActiveYearYearly: [],
+    ProfitLossLastYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    ProfitLossLastYearMonthly: [],
+    ProfitLossLastYearYearly: [],
+  },
+  networth_comparisionChart: {
+    // revenue
+    revenueActiveYear: [],
+    revenueActiveYearMonthly: [],
+    revenueActiveYearYearly: [],
+    revenueLastYear: [],
+    revenueLastYearMonthly: [],
+    revenueLastYearYearly: [],
+    // expenses
+    ExpensesActiveYear: [],
+    ExpensesActiveYearMonthly: [],
+    ExpensesActiveYearYearly: [],
+    ExpensesLastYear: [],
+    ExpensesLastYearMonthly: [],
+    ExpensesLastYearYearly: [],
+    // networth
+    NetworthActiveYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    NetworthActiveYearMonthly: [],
+    NetworthActiveYearYearly: [],
+    NetworthLastYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    NetworthLastYearMonthly: [],
+    NetworthLastYearYearly: [],
+    // P/L
+    ProfitLossActiveYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    ProfitLossActiveYearMonthly: [],
+    ProfitLossActiveYearYearly: [],
+    ProfitLossLastYear: {
+      networth: [],
+      profitLoss: [],
+      monthlyBalances: []
+    },
+    ProfitLossLastYearMonthly: [],
+    ProfitLossLastYearYearly: [],
+  }
 };
 
 export function homeReducer(state = initialState, action: Action): HomeState {
@@ -95,6 +242,18 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       }
       return state;
     }
+
+    // Revenue CHART API
+    case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR_RESPONSE: {
+      let data = action.payload as IRevenueChartClosingBalanceResponse;
+      return Object.assign({}, state, {
+        revenueChart: {
+          ...state.revenueChart,
+          revenuefromoperationsLastyear: data.revenuefromoperationsLastyear,
+          otherincomeLastyear: data.otherincomeLastyear
+        }
+      });
+    }
     case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IRevenueChartClosingBalanceResponse;
       return Object.assign({}, state, {
@@ -119,32 +278,122 @@ export function homeReducer(state = initialState, action: Action): HomeState {
       }
       return state;
     }
-    case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
-      return Object.assign({}, state, { isGetBankAccountsInProcess: true, });
-    }
-    case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
-      let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
-      if (bankresponse.status === 'success') {
-        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: bankresponse.body.length === 0 ? 'No data Availble' : null });
-      }
-      return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
-    }
-    case HOME.REVENUE_CHART.GET_REVENUE_CHART_DATA_LAST_YEAR_RESPONSE: {
-      let data = action.payload as IRevenueChartClosingBalanceResponse;
+    // End Revenue Chart
+    // START COMPARISION CHART API
+    case HOME.COMPARISION_CHART.GET_PAGEINIT_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueActiveYear && (state.comparisionChart.revenueActiveYear.length === 0))) ? processDataForGroupHistory(data.revenueActiveYear) : _.cloneDeep(state.comparisionChart.revenueActiveYear);
+      let ExpensesActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesActiveYear && (state.comparisionChart.ExpensesActiveYear.length === 0))) ? processDataForGroupHistory(data.ExpensesActiveYear) : _.cloneDeep(state.comparisionChart.ExpensesActiveYear);
+      let ProfitLossActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossActiveYear && (state.comparisionChart.ProfitLossActiveYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossActiveYear) : _.cloneDeep(state.comparisionChart.ProfitLossActiveYear);
+      let NetworthActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthActiveYear && (state.comparisionChart.NetworthActiveYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthActiveYear) : _.cloneDeep(state.comparisionChart.NetworthActiveYear);
       return Object.assign({}, state, {
-        revenueChart: {
-          ...state.revenueChart,
-          revenuefromoperationsLastyear: data.revenuefromoperationsLastyear,
-          otherincomeLastyear: data.otherincomeLastyear
+        comparisionChart: {
+          ...state.comparisionChart,
+          revenueActiveYear,
+          revenueActiveYearMonthly: revenueActiveYear.map(p => p.closingBalance.amount),
+          revenueActiveYearYearly: revenueActiveYear.map(p => p.total.amount),
+          ExpensesActiveYear,
+          ExpensesActiveYearMonthly: ExpensesActiveYear.map(p => p.closingBalance.amount),
+          ExpensesActiveYearYearly: ExpensesActiveYear.map(p => p.total.amount),
+          ProfitLossActiveYear,
+          ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
+          ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        },
+        history_comparisionChart: {
+          ...state.history_comparisionChart,
+          revenueActiveYear,
+          revenueActiveYearMonthly: revenueActiveYear.map(p => p.closingBalance.amount),
+          revenueActiveYearYearly: revenueActiveYear.map(p => p.total.amount),
+          ExpensesActiveYear,
+          ExpensesActiveYearMonthly: ExpensesActiveYear.map(p => p.closingBalance.amount),
+          ExpensesActiveYearYearly: ExpensesActiveYear.map(p => p.total.amount),
+          ProfitLossActiveYear,
+          ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
+          ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        },
+        networth_comparisionChart: {
+          ...state.networth_comparisionChart,
+          revenueActiveYear,
+          revenueActiveYearMonthly: revenueActiveYear.map(p => p.closingBalance.amount),
+          revenueActiveYearYearly: revenueActiveYear.map(p => p.total.amount),
+          ExpensesActiveYear,
+          ExpensesActiveYearMonthly: ExpensesActiveYear.map(p => p.closingBalance.amount),
+          ExpensesActiveYearYearly: ExpensesActiveYear.map(p => p.total.amount),
+          ProfitLossActiveYear,
+          ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
+          ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_PAGEINIT_CHART_DATA_LAST_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueLastYear && (state.comparisionChart.revenueLastYear.length === 0))) ? processDataForGroupHistory(data.revenueLastYear) : _.cloneDeep(state.comparisionChart.revenueLastYear);
+      let ExpensesLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesLastYear && (state.comparisionChart.ExpensesLastYear.length === 0))) ? processDataForGroupHistory(data.ExpensesLastYear) : _.cloneDeep(state.comparisionChart.ExpensesLastYear);
+      let ProfitLossLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossLastYear && (state.comparisionChart.ProfitLossLastYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossLastYear) : _.cloneDeep(state.comparisionChart.ProfitLossLastYear);
+      let NetworthLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthLastYear && (state.comparisionChart.NetworthLastYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthLastYear) : _.cloneDeep(state.comparisionChart.NetworthLastYear);
+      return Object.assign({}, state, {
+        comparisionChart: {
+          ...state.comparisionChart,
+          revenueLastYear,
+          revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
+          revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
+          ExpensesLastYear,
+          ExpensesLastYearMonthly: ExpensesLastYear.map(p => p.closingBalance.amount),
+          ExpensesLastYearYearly: ExpensesLastYear.map(p => p.total.amount),
+          ProfitLossLastYear,
+          ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
+          ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
+        },
+        history_comparisionChart: {
+          ...state.history_comparisionChart,
+          revenueLastYear,
+          revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
+          revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
+          ExpensesLastYear,
+          ExpensesLastYearMonthly: ExpensesLastYear.map(p => p.closingBalance.amount),
+          ExpensesLastYearYearly: ExpensesLastYear.map(p => p.total.amount),
+          ProfitLossLastYear,
+          ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
+          ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
+        },
+        networth_comparisionChart: {
+          ...state.networth_comparisionChart,
+          revenueLastYear,
+          revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
+          revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
+          ExpensesLastYear,
+          ExpensesLastYearMonthly: ExpensesLastYear.map(p => p.closingBalance.amount),
+          ExpensesLastYearYearly: ExpensesLastYear.map(p => p.total.amount),
+          ProfitLossLastYear,
+          ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
+          ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
         }
       });
     }
     case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IComparisionChartResponse;
-      let revenueActiveYear = processDataForGroupHistory(data.revenueActiveYear);
-      let ExpensesActiveYear = processDataForGroupHistory(data.ExpensesActiveYear);
-      let ProfitLossActiveYear = processDataForProfitLoss(data.ProfitLossActiveYear);
-      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
+      let revenueActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueActiveYear && (state.comparisionChart.revenueActiveYear.length === 0))) ? processDataForGroupHistory(data.revenueActiveYear) : _.cloneDeep(state.comparisionChart.revenueActiveYear);
+      let ExpensesActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesActiveYear && (state.comparisionChart.ExpensesActiveYear.length === 0))) ? processDataForGroupHistory(data.ExpensesActiveYear) : _.cloneDeep(state.comparisionChart.ExpensesActiveYear);
+      let ProfitLossActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossActiveYear && (state.comparisionChart.ProfitLossActiveYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossActiveYear) : _.cloneDeep(state.comparisionChart.ProfitLossActiveYear);
+      let NetworthActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthActiveYear && (state.comparisionChart.NetworthActiveYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthActiveYear) : _.cloneDeep(state.comparisionChart.NetworthActiveYear);
       return Object.assign({}, state, {
         comparisionChart: {
           ...state.comparisionChart,
@@ -165,10 +414,10 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.COMPARISION_CHART.GET_COMPARISION_CHART_DATA_LAST_YEAR_RESPONSE: {
       let data = action.payload as IComparisionChartResponse;
-      let revenueLastYear = processDataForGroupHistory(data.revenueLastYear);
-      let ExpensesLastYear = processDataForGroupHistory(data.ExpensesLastYear);
-      let ProfitLossLastYear = processDataForProfitLoss(data.ProfitLossLastYear);
-      let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
+      let revenueLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueLastYear && (state.comparisionChart.revenueLastYear.length === 0))) ? processDataForGroupHistory(data.revenueLastYear) : _.cloneDeep(state.comparisionChart.revenueLastYear);
+      let ExpensesLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesLastYear && (state.comparisionChart.ExpensesLastYear.length === 0))) ? processDataForGroupHistory(data.ExpensesLastYear) : _.cloneDeep(state.comparisionChart.ExpensesLastYear);
+      let ProfitLossLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossLastYear && (state.comparisionChart.ProfitLossLastYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossLastYear) : _.cloneDeep(state.comparisionChart.ProfitLossLastYear);
+      let NetworthLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthLastYear && (state.comparisionChart.NetworthLastYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthLastYear) : _.cloneDeep(state.comparisionChart.NetworthLastYear);
       return Object.assign({}, state, {
         comparisionChart: {
           ...state.comparisionChart,
@@ -186,6 +435,101 @@ export function homeReducer(state = initialState, action: Action): HomeState {
           NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
         }
       });
+    }
+    case HOME.COMPARISION_CHART.GET_HISTORY_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueActiveYear && (state.comparisionChart.revenueActiveYear.length === 0))) ? processDataForGroupHistory(data.revenueActiveYear) : _.cloneDeep(state.comparisionChart.revenueActiveYear);
+      let ExpensesActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesActiveYear && (state.comparisionChart.ExpensesActiveYear.length === 0))) ? processDataForGroupHistory(data.ExpensesActiveYear) : _.cloneDeep(state.comparisionChart.ExpensesActiveYear);
+      let ProfitLossActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossActiveYear && (state.comparisionChart.ProfitLossActiveYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossActiveYear) : _.cloneDeep(state.comparisionChart.ProfitLossActiveYear);
+      let NetworthActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthActiveYear && (state.comparisionChart.NetworthActiveYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthActiveYear) : _.cloneDeep(state.comparisionChart.NetworthActiveYear);
+      return Object.assign({}, state, {
+        history_comparisionChart: {
+          ...state.history_comparisionChart,
+          revenueActiveYear,
+          revenueActiveYearMonthly: revenueActiveYear.map(p => p.closingBalance.amount),
+          revenueActiveYearYearly: revenueActiveYear.map(p => p.total.amount),
+          ExpensesActiveYear,
+          ExpensesActiveYearMonthly: ExpensesActiveYear.map(p => p.closingBalance.amount),
+          ExpensesActiveYearYearly: ExpensesActiveYear.map(p => p.total.amount),
+          ProfitLossActiveYear,
+          ProfitLossActiveYearMonthly: ProfitLossActiveYear.monthlyBalances,
+          ProfitLossActiveYearYearly: ProfitLossActiveYear.yearlyBalances,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_HISTORY_CHART_DATA_LAST_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueLastYear && (state.comparisionChart.revenueLastYear.length === 0))) ? processDataForGroupHistory(data.revenueLastYear) : _.cloneDeep(state.comparisionChart.revenueLastYear);
+      let ExpensesLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesLastYear && (state.comparisionChart.ExpensesLastYear.length === 0))) ? processDataForGroupHistory(data.ExpensesLastYear) : _.cloneDeep(state.comparisionChart.ExpensesLastYear);
+      let ProfitLossLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossLastYear && (state.comparisionChart.ProfitLossLastYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossLastYear) : _.cloneDeep(state.comparisionChart.ProfitLossLastYear);
+      let NetworthLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthLastYear && (state.comparisionChart.NetworthLastYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthLastYear) : _.cloneDeep(state.comparisionChart.NetworthLastYear);
+      return Object.assign({}, state, {
+        history_comparisionChart: {
+          ...state.history_comparisionChart,
+          revenueLastYear,
+          revenueLastYearMonthly: revenueLastYear.map(p => p.closingBalance.amount),
+          revenueLastYearYearly: revenueLastYear.map(p => p.total.amount),
+          ExpensesLastYear,
+          ExpensesLastYearMonthly: ExpensesLastYear.map(p => p.closingBalance.amount),
+          ExpensesLastYearYearly: ExpensesLastYear.map(p => p.total.amount),
+          ProfitLossLastYear,
+          ProfitLossLastYearMonthly: ProfitLossLastYear.monthlyBalances,
+          ProfitLossLastYearYearly: ProfitLossLastYear.yearlyBalances,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      // let revenueActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueActiveYear && (state.comparisionChart.revenueActiveYear.length === 0))) ? processDataForGroupHistory(data.revenueActiveYear) : _.cloneDeep(state.comparisionChart.revenueActiveYear);
+      // let ExpensesActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesActiveYear && (state.comparisionChart.ExpensesActiveYear.length === 0))) ? processDataForGroupHistory(data.ExpensesActiveYear) : _.cloneDeep(state.comparisionChart.ExpensesActiveYear);
+      // let ProfitLossActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossActiveYear && (state.comparisionChart.ProfitLossActiveYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossActiveYear) : _.cloneDeep(state.comparisionChart.ProfitLossActiveYear);
+      let NetworthActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthActiveYear && (state.comparisionChart.NetworthActiveYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthActiveYear) : _.cloneDeep(state.comparisionChart.NetworthActiveYear);
+      // debugger;
+      // let ProfitLossActiveYear = processDataForProfitLoss(data.Net);
+      return Object.assign({}, state, {
+        networth_comparisionChart: {
+          ...state.networth_comparisionChart,
+          NetworthActiveYear,
+          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+        }
+      });
+    }
+    case HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_LAST_YEAR_RESPONSE: {
+      let data = action.payload as IComparisionChartResponse;
+      let revenueLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueLastYear && (state.comparisionChart.revenueLastYear.length === 0))) ? processDataForGroupHistory(data.revenueLastYear) : _.cloneDeep(state.comparisionChart.revenueLastYear);
+      let ExpensesLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesLastYear && (state.comparisionChart.ExpensesLastYear.length === 0))) ? processDataForGroupHistory(data.ExpensesLastYear) : _.cloneDeep(state.comparisionChart.ExpensesLastYear);
+
+      // debugger;
+      // let ProfitLossLastYear = processDataForProfitLoss(data.NetworthLastYear);
+      let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
+      return Object.assign({}, state, {
+        networth_comparisionChart: {
+          ...state.networth_comparisionChart,
+          NetworthLastYear,
+          NetworthLastYearMonthly: NetworthLastYear.monthlyBalances,
+          NetworthLastYearYearly: NetworthLastYear.yearlyBalances,
+        }
+      });
+    }
+
+    // End COMPARISSION CHART API
+    // Bank API
+    case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS: {
+      return Object.assign({}, state, { isGetBankAccountsInProcess: true, });
+    }
+    case HOME.BANK_ACCOUNTS.GET_BANK_ACCOUNTS_RESPONSE: {
+      let bankresponse: BaseResponse<BankAccountsResponse[], string> = action.payload;
+      if (bankresponse.status === 'success') {
+        return Object.assign({}, state, { isGetBankAccountsInProcess: false, BankAccounts: bankresponse.body, getBankAccountError: bankresponse.body.length === 0 ? 'No data Availble' : null });
+      }
+      return Object.assign({}, state, { isGetBankAccountsInProcess: false, getBankAccountError: bankresponse.message });
     }
     case HOME.BANK_ACCOUNTS.RECONNECT_BANK_ACCOUNT: {
       return Object.assign({}, state, { isReConnectBankAccount: true });
@@ -213,18 +557,19 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
       return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
     }
-    case HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
-      let data = action.payload as IComparisionChartResponse;
-      let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
-      return Object.assign({}, state, {
-        comparisionChart: {
-          ...state.comparisionChart,
-          NetworthActiveYear,
-          NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
-          NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
-        }
-      });
-    }
+    // End Bank API
+    // case HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
+    //   let data = action.payload as IComparisionChartResponse;
+    //   let NetworthActiveYear = processDataForNetworth(data.NetworthActiveYear);
+    //   return Object.assign({}, state, {
+    //     comparisionChart: {
+    //       ...state.comparisionChart,
+    //       NetworthActiveYear,
+    //       NetworthActiveYearMonthly: NetworthActiveYear.monthlyBalances,
+    //       NetworthActiveYearYearly: NetworthActiveYear.yearlyBalances,
+    //     }
+    //   });
+    // }
     default: {
       return state;
     }
@@ -315,7 +660,7 @@ const processDataForProfitLoss = plData => {
   let nwLabels = [];
   monthlyBalances = [];
   yearlyBalances = [];
-  if (plData.profitLoss) {
+  if (plData && plData.profitLoss) {
     _.each(plData.profitLoss.periodBalances, (nw: any) => {
       let str;
       str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');
@@ -336,7 +681,7 @@ const processDataForNetworth = plData => {
   let nwLabels = [];
   monthlyBalances = [];
   yearlyBalances = [];
-  if (plData.networth) {
+  if (plData && plData.networth) {
     _.each(plData.networth.periodBalances, (nw: any) => {
       let str;
       str = monthArray[moment(nw.to, 'DD-MM-YYYY').get('months')] + moment(nw.to, 'DD-MM-YYYY').get('y');

@@ -3,6 +3,14 @@ import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
 
+export interface IFormatable {
+  setHeader(selectedCompany: ComapnyResponse);
+
+  setRowData(data: any[], padding: number);
+
+  setFooter(data: any[]);
+}
+
 export class DataFormatter {
   public accounts: Account[] = [];
   public groups: ChildGroup[] = [];
@@ -42,14 +50,8 @@ export class DataFormatter {
     return csv;
   }
 
-  public formatDataAccountWise = (): string => {
-    let body;
+  public formatDataAccountWise = (formatable: IFormatable): void => {
     let createCsv;
-    let csv;
-    let footer;
-    let header;
-    let row;
-    let title;
     let total;
     total = {
       ob: 0,
@@ -57,18 +59,19 @@ export class DataFormatter {
       cr: 0,
       dr: 0
     };
-    row = '';
-    title = '';
-    body = '';
-    footer = '';
-    header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\nTrial Balance: fromDate to toDate\r\n`;
-    title += 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
+    formatable.setHeader(this.selectedCompany);
     createCsv = (groups: ChildGroup[]) => {
       const addRow = (group: ChildGroup) => {
         if (group.accounts.length > 0) {
           group.accounts.forEach(account => {
             // if (account.isVisible === true) {
-            row += `${account.name} (${group.groupName}),${account.openingBalance.amount} ${this.recType.transform(account.openingBalance)},${account.debitTotal},${account.creditTotal},${account.closingBalance.amount},${this.recType.transform(account.closingBalance)}\r\n`;
+            let data1 = [];
+            data1.push(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`);
+            data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
+            data1.push(account.debitTotal);
+            data1.push(account.creditTotal);
+            data1.push(`${account.closingBalance.amount}${this.recType.transform(account.closingBalance)}`);
+            formatable.setRowData(data1, 0);
             total = this.calculateTotal(group, total);
             // }
           });
@@ -87,20 +90,17 @@ export class DataFormatter {
           }
         });
       });
-      return `${row}\r\n`;
     };
-    body = createCsv(this.exportData);
-    footer += `Total,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
-    csv = `${header}\r\n\r\n${title}\r\n${body}${footer}`;
-    return csv;
+    createCsv(this.exportData);
+    let data: any[] = [];
+    data.push(this.suffixRecordType(total.ob));
+    data.push(total.dr);
+    data.push(total.cr);
+    data.push(this.suffixRecordType(total.cb));
+    formatable.setFooter(data);
   }
 
-  public formatDataCondensed = (): string => {
-    let body;
-    let csv;
-    let footer;
-    let header;
-    let title;
+  public formatDataCondensed = (formatable: IFormatable): void => {
     let total;
     total = {
       ob: 0,
@@ -108,50 +108,56 @@ export class DataFormatter {
       cr: 0,
       dr: 0
     };
-    csv = '';
-    title = '';
-    footer = '';
-    header = `${this.selectedCompany.name}\r\n"${this.selectedCompany.address}"\r\n${this.selectedCompany.city}-${this.selectedCompany.pincode}\r\nTrial Balance: fromDate to toDate\r\n`;
-    title += 'Name' + ',' + 'Opening Balance' + ',' + 'Debit' + ',' + 'Credit' + ',' + 'Closing Balance' + '\r\n';
+    formatable.setHeader(this.selectedCompany);
     const createCsv = (groupDetails: ChildGroup[], index) => {
-      let bd;
-      bd = '';
       groupDetails.forEach(group => {
         let i;
         let j;
         let ref;
-        let row;
         let strIndex;
-        row = '';
-        strIndex = '';
+        strIndex = 0;
         for (i = j = 0, ref = index; 0 <= ref ? j < ref : j > ref; i = 0 <= ref ? ++j : --j) {
-          strIndex += '   ';
+          strIndex += 3;
         }
         if (group.closingBalance.amount !== 0) {
-          row += `${strIndex + group.groupName.toUpperCase()},${group.forwardedBalance.amount}${this.recType.transform(group.forwardedBalance)},${group.debitTotal},${group.creditTotal},${group.closingBalance.amount}${this.recType.transform(group.closingBalance)}\r\n`;
+          let data1: any[] = [];
+          data1.push(group.groupName.toUpperCase());
+          data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
+          data1.push(group.debitTotal);
+          data1.push(group.creditTotal);
+          data1.push(`${group.closingBalance.amount} ${this.recType.transform(group.closingBalance)}`);
+          formatable.setRowData(data1, strIndex);
+          data1 = [];
           if (group.accounts === void 0) {
             // console.log(group);
           }
           if (group.accounts.length > 0) {
             group.accounts.forEach(acc => {
-              if (acc.isVisible === true) {
-                row += `${strIndex}   ${this.firstCapital(acc.name)} (${this.firstCapital(group.groupName)}),${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)},${acc.debitTotal},${acc.creditTotal},${acc.closingBalance.amount}${this.recType.transform(acc.closingBalance)}\r\n`;
+              if (true) {
+                data1.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
+                data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
+                data1.push(acc.debitTotal);
+                data1.push(acc.creditTotal);
+                data1.push(`${acc.closingBalance.amount}${this.recType.transform(acc.closingBalance)}`);
+                formatable.setRowData(data1, strIndex);
+                data1 = [];
                 total = this.calculateTotal(group, total);
               }
             });
           }
           if (group.childGroups.length > 0) {
-            row += createCsv(group.childGroups, index + 1);
+            createCsv(group.childGroups, index + 1);
           }
         }
-        return bd += row;
       });
-      return bd;
     };
-    body = createCsv(this.exportData, 0);
-    footer += `Total,${this.suffixRecordType(total.ob)},${total.dr},${total.cr},${this.suffixRecordType(total.cb)}\n`;
-    csv = `${header}\r\n\r\n${title}\r\n${body}\r\n${footer}\r\n`;
-    return csv;
+    createCsv(this.exportData, 0);
+    let data: any[] = [];
+    data.push(this.suffixRecordType(total.ob));
+    data.push(total.dr);
+    data.push(total.cr);
+    data.push(this.suffixRecordType(total.cb));
+    formatable.setFooter(data);
   }
 
   public calculateTotal = (group: ChildGroup, total: Total): Total => {
