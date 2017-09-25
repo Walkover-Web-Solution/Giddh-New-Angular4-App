@@ -191,7 +191,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
-      partyType: ['']
+      partyType: ['NOT APPLICABLE']
     });
     if (val) {
       gstFields.patchValue(val);
@@ -266,6 +266,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
+  public resetUpdateAccountForm() {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    const countries = this.addAccountForm.get('country') as FormGroup;
+    addresses.reset();
+    countries.reset();
+    this.addAccountForm.reset();
+    this.addBlankGstForm();
+  }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     let activeAccountName: string;
@@ -289,6 +297,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
   }
   public ngOnDestroy() {
+    this.resetUpdateAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
