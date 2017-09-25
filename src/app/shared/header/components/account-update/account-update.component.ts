@@ -1,4 +1,4 @@
-import { AccountRequest, AccountResponse } from '../../../../models/api-models/Account';
+import { AccountRequest, AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { Observable } from 'rxjs';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store/roots';
@@ -30,7 +30,7 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
   public showDefaultGstListLength: number = 2;
   public updateAccountForm: FormGroup;
   public activeGroup$: Observable<GroupResponse>;
-  public activeAccount$: Observable<AccountResponse>;
+  public activeAccount$: Observable<AccountResponseV2>;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public updateAccountInProcess$: Observable<boolean>;
@@ -91,14 +91,14 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
           this.updateAccountForm.get('hsnOrSac').patchValue('sac');
         }
 
-        this.statesSource$.takeUntil(this.destroyed$).delay(500).subscribe((data) => {
-          data.map(d => {
-            if (d.text === acc.state) {
-              this.updateAccountForm.patchValue({state: d.id});
-              this.stateSelected({value: d.id});
-            }
-          });
-        });
+        // this.statesSource$.takeUntil(this.destroyed$).delay(500).subscribe((data) => {
+        //   data.map(d => {
+        //     if (d.text === acc.state) {
+        //       this.updateAccountForm.patchValue({state: d.id});
+        //       this.stateSelected({value: d.id});
+        //     }
+        //   });
+        // });
       }
     });
     this.fetchingAccUniqueName$.subscribe(f => {

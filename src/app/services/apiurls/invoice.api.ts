@@ -25,3 +25,8 @@ export const INVOICE_API = {
   DOWNLOAD_INVOICE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // POST
   SEND_INVOICE_ON_MAIL: COMMON_URL + 'accounts/:accountUniqueName/invoices/mail' // POST
 };
+
+let COMMON_URL_2 = Configuration.ApiUrl + 'v2/company/:companyUniqueName/';
+export const INVOICE_API_2 = {
+  GENERATE_INVOICE: COMMON_URL_2 + 'accounts/:accountUniqueName/invoices/generate',
+};

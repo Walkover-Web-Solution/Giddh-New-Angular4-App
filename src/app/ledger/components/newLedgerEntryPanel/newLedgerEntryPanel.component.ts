@@ -56,7 +56,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public uploadInput: EventEmitter<UploadInput>;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
-  public authKey$: Observable<string>;
+  public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
 
   public voucherDropDownOptions: Select2Options = {
@@ -80,7 +80,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
-    this.authKey$ = this.store.select(p => p.session.user.authKey).takeUntil(this.destroyed$);
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
@@ -108,9 +108,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       text: 'Credit Note',
       id: 'credit note'
     }]);
-
-    this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
-    this.store.dispatch(this._companyActions.getTax());
   }
 
   public ngOnInit() {
@@ -185,11 +182,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public onUploadOutput(output: UploadOutput): void {
-
     if (output.type === 'allAddedToQueue') {
-      let authKey = null;
+      let sessionKey = null;
       let companyUniqueName = null;
-      this.authKey$.take(1).subscribe(a => authKey = a);
+      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
       this.companyName$.take(1).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
@@ -197,10 +193,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         method: 'POST',
         fieldName: 'file',
         data: { company: companyUniqueName },
-        headers: { 'Auth-Key': authKey },
-        concurrency: 1
+        headers: { 'Session-Id': sessionKey },
+        concurrency: 0
       };
-
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
       this.isFileUploading = true;

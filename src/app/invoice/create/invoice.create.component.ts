@@ -14,7 +14,8 @@ import {
   IInvoiceTransaction,
   InvoiceTemplateDetailsResponse,
   ISection,
-  PreviewInvoiceResponseClass
+  PreviewInvoiceResponseClass,
+  OtherDetailsClass
 } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -68,7 +69,12 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'tax'
+    field: 'taxableValue'
+  },
+  {
+    display: false,
+    label: '',
+    field: 'taxes'
   },
   {
     display: false,
@@ -78,7 +84,7 @@ const THEAD = [
 ];
 
 @Component({
-  styleUrls: ['./invoice.create.component.css'],
+  styleUrls: ['./invoice.create.component.scss'],
   selector: 'invoice-create',
   templateUrl: './invoice.create.component.html'
 })
@@ -93,13 +99,16 @@ export class InvoiceCreateComponent implements OnInit {
   public invTempCond: InvoiceTemplateDetailsResponse;
   public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
+  public totalBalance: number = null;
   // public methods above
+  public isInvoiceGenerated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private isInvoiceGenerated$: Observable<boolean>;
 
-  constructor(private store: Store<AppState>,
-              private invoiceActions: InvoiceActions,
-              private invoiceService: InvoiceService) {
+  constructor(
+    private store: Store<AppState>,
+    private invoiceActions: InvoiceActions,
+    private invoiceService: InvoiceService
+  ) {
     this.isInvoiceGenerated$ = this.store.select(state => state.invoice.generate.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
   }
 
@@ -113,6 +122,7 @@ export class InvoiceCreateComponent implements OnInit {
           } else {
             this.invFormData = new PreviewInvoiceResponseClass();
           }
+          this.invFormData.other = new OtherDetailsClass();
         }
       );
 
@@ -149,7 +159,6 @@ export class InvoiceCreateComponent implements OnInit {
     Object.keys(dummyObj).sort().forEach( (key) => {
       this.templateHeader[key] = dummyObj[key];
     });
-    console.log (this.templateHeader);
   }
 
   public prepareThead() {
@@ -187,44 +196,65 @@ export class InvoiceCreateComponent implements OnInit {
     return arr;
   }
 
-  public getTransactionTotalTax(taxArr: IInvoiceTax[]): number {
+  public getTransactionTotalTax(taxArr: IInvoiceTax[]): any {
     let count: number = 0;
     if (taxArr.length > 0) {
       _.forEach(taxArr, (item: IInvoiceTax) => {
         count += item.amount;
       });
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTotal(entry: GstEntry, idx: number): number {
+  public getEntryTotal(entry: GstEntry, idx: number): any {
     let count: number = 0;
     count = this.getEntryTaxableAmount(entry.transactions[idx], entry.discounts) + this.getTransactionTotalTax(entry.taxes);
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTaxableAmount(transaction: IInvoiceTransaction, discountArr: ICommonItemOfTransaction[]): number {
+  public getEntryTaxableAmount(transaction: IInvoiceTransaction, discountArr: ICommonItemOfTransaction[]): any {
     let count: number = 0;
     if (transaction.quantity && transaction.rate) {
       count = (transaction.rate * transaction.quantity) - this.getEntryTotalDiscount(discountArr);
     } else {
-      count = transaction.amount + this.getEntryTotalDiscount(discountArr);
+      count = transaction.amount - this.getEntryTotalDiscount(discountArr);
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): number {
+  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
     let count: number = 0;
     if (discountArr.length > 0) {
       _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
         count += Math.abs(item.amount);
       });
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
   public closePopupEvent() {
     this.closeEvent.emit();
+  }
+
+  public getSerialNos(entryIndex: number, transIndex: number) {
+    // logic
+    return entryIndex + 1 + transIndex;
   }
 
 }
