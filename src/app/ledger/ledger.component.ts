@@ -22,6 +22,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'ledger',
@@ -96,6 +97,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   };
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -342,6 +344,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public hideNewLedgerEntryPopup() {
     this.lc.showNewLedgerPanel = false;
+  }
+
+  public showUpdateLedgerModal(txn: ITransactionItem) {
+    this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
+    this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+    this.updateLedgerModal.show();
   }
 
   public saveBlankTransaction() {

@@ -138,7 +138,7 @@ export class AccountsAction {
       } else {
         this._toasty.successToast('Account Created Successfully');
       }
-      this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
+      // this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
       let groupSearchString: string;
       this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
       if (groupSearchString) {
