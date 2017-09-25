@@ -1,151 +1,166 @@
 <div class="box clearfix mrT2">
-    <!--<div>
+  <!--<div>
     {{ companyProfileObj | json }}
   </div>-->
-    <form (ngSubmit)="updateProfile(companyProfileObj)">
-        <div class="row">
-            <div class="form-group col-xs-3">
-                <label>Name</label><br>
-                <input type="text" placeholder="Name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" />
-            </div>
-            <div class="form-group col-xs-3">
-                <label>Unique Name</label><br>
-                <input type="text" placeholder="Unique Name" class="form-control" [(ngModel)]="companyProfileObj.uniqueName" name="uniqueName" />
-            </div>
-            <div class="form-group col-xs-3">
-                <label>Email Address</label><br>
-                <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email" name="email" />
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-xs-3">
+  <form (ngSubmit)="updateProfile(companyProfileObj)">
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>Name</label><br>
+        <input type="text" placeholder="Name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" />
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Unique Name</label><br>
+        <input type="text" placeholder="Unique Name" [disabled]="true" class="form-control" [(ngModel)]="companyProfileObj.uniqueName"
+          name="uniqueName" />
+      </div>
+      <div class="form-group col-xs-3">
+        <label>Email Address</label><br>
+        <input type="text" placeholder="Email Address" class="form-control" [(ngModel)]="companyProfileObj.email" name="email" />
+      </div>
+    </div>
+    <div class="row">
+      <!--<div class="form-group col-xs-3">
                 <label>Contact No.</label><br>
                 <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.mobileNo" name="contactNo" />
+            </div>-->
+      <div class="form-group col-xs-3">
+        <label>Contact No.</label>
+        <div class="input-group ">
+          <span class="input-group-addon">+{{countryCode}}</span>
+          <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.mobileNo" name="contactNo"
+          />
+        </div>
+      </div>
+
+      <div class="form-group col-xs-3">
+        <label>Currency</label><br>
+        <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency"
+        />
+      </div>
+      <div class="col-xs-3">
+        <div class="row">
+          <div class="col-xs-12">
+            <div class="form-group">
+              <label>PAN Number</label><br>
+              <input type="text" placeholder="PAN Number" class="form-control" [(ngModel)]="companyProfileObj.panNumber" #panNumberField (blue)="isValidPAN(panNumberField)" name="panNumber"
+              />
             </div>
-            <div class="form-group col-xs-3">
-                <label>Currency</label><br>
-                <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency" />
-            </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>PAN Number</label><br>
-                            <input type="text" placeholder="PAN Number" class="form-control" [(ngModel)]="companyProfileObj.panNumber" name="panNumber" />
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
+          </div>
+          <!--<div class="col-xs-6">
                         <div class="form-group">
                             <label>GST Number</label><br>
                             <input type="text" #gstNumberField placeholder="GST Number" (keyup)="setMainState(gstNumberField)" minlength="15" maxlength="15" (blur)="checkGstNumValidation(gstNumberField)" class="form-control" name="gstNumber" (value)="getDefaultGstNumber()" />
                         </div>
-                    </div>
-                </div>
-            </div>
+                    </div>-->
         </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-xs-3">
+        <label>Address</label><br>
+        <textarea rows="3" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address"></textarea>
+      </div>
+      <div class="col-xs-3">
         <div class="row">
-            <div class="form-group col-xs-3">
-                <label>Address</label><br>
-                <textarea rows="3" type="text" placeholder="Address" class="form-control" [(ngModel)]="companyProfileObj.address" name="address"></textarea>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label>City</label><br>
+              <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" />
             </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>City</label><br>
-                            <input type="text" placeholder="City" class="form-control" [(ngModel)]="companyProfileObj.city" name="city" />
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Pincode</label><br>
-                            <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode" name="pincode" />
-                        </div>
-                    </div>
-                </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label>Pincode</label><br>
+              <input type="text" placeholder="Pincode" class="form-control" [(ngModel)]="companyProfileObj.pincode" name="pincode" />
             </div>
-            <div class="col-xs-3">
-                <div class="row">
-                    <div class="col-xs-6">
-                        <div class="form-group select2-parent">
-                            <label>State</label><br>
-                            <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="companyProfileObj.state" name="state"/>-->
-                            <select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
-                            </select2>
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="form-group">
-                            <label>Country</label><br>
-                            <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" name="country" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+          </div>
         </div>
-        <div class="row mrB4">
-            <div class="col-xs-12">
-                <hr><br>
-                <h3 class="subHead"> Add More GST Number (Note: Check to set to default)</h3>
-                <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-                <div *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
-                    <div class="row">
-                        <div class="col-xs-3">
-                            <div class="row">
-                                <div class="col-xs-12">
-                                    <div class="form-group">
-                                        <label>GST No.</label><br>
-                                        <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)" #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="form-group select2-parent">
-                                        <label>State</label><br>
-                                        <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="gst.addressList[0].stateCode" name="newstateCode+{{i}}" />-->
-                                        <select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [(ngModel)]="gst.addressList[0].stateCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event, i)">
-                                        </select2>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-3">
-                            <div class="form-group">
-                                <label>Address</label><br>
-                                <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.addressList[0].address" name="newaddress+{{i}}"></textarea>
-                            </div>
-                        </div>
-                        <div class="col-xs-3 pdT2">
-                            <div class="row">
-                                <div class="col-xs-12 mrB1">
-                                    <div class="row">
-                                        <label>
+      </div>
+      <div class="col-xs-3">
+        <div class="row">
+          <div class="col-xs-6">
+            <div class="form-group select2-parent">
+              <label>State</label><br>
+              <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="companyProfileObj.state" name="state"/>-->
+              <select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
+              </select2>
+            </div>
+          </div>
+          <div class="col-xs-6">
+            <div class="form-group">
+              <label>Country</label><br>
+              <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" name="country" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mrB4">
+      <div class="col-xs-12">
+        <hr><br>
+        <h3 class="subHead"> Add More GST Number (Note: Check to set to default)</h3>
+        <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
+        <div *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+          <div class="row">
+            <div class="col-xs-3">
+              <div class="row">
+                <div class="col-xs-12">
+                  <div class="form-group">
+                    <label>GST No.</label><br>
+                    <input type="text"  placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)"
+                      #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
+                    />
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <div class="form-group select2-parent">
+                    <label>State</label><br>
+                    <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="gst.addressList[0].stateCode" name="newstateCode+{{i}}" />-->
+                    <select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [disabled]="gst.addressList[0].stateCode" [(ngModel)]="gst.addressList[0].stateCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
+                      (valueChanged)="stateSelected($event, i)">
+                    </select2>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-3">
+              <div class="form-group">
+                <label>Address</label><br>
+                <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.addressList[0].address" name="newaddress+{{i}}"></textarea>
+              </div>
+            </div>
+            <div class="col-xs-3 pdT2">
+              <div class="row">
+                <div class="col-xs-12 mrB1">
+                  <div class="row">
+                    <label>
                     <input type="checkbox" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}">Set as Default
                   </label>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="row">
-                                        <label class="cp" (click)="removeGstEntry(i)">
+                  </div>
+                </div>
+                <div class="col-xs-12">
+                  <div class="row">
+                    <label class="cp" (click)="removeGstEntry(i)">
                     <i class="fa fa-trash-o" aria-hidden="true" style="font-size:22px;"></i> Remove
                   </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
         </div>
-        <div class="clearfix mrT2">
-            <button type="submit" class="btn btn-success mrR1">Update</button>
-            <button type="button" class="btn btn-primary">Cancel</button>
-        </div>
-    </form>
+      </div>
+    </div>
+    <div class="clearfix mrT2">
+      <button type="submit" class="btn btn-success mrR1">Update</button>
+      <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
+    </div>
+  </form>
 </div>
 
 <style>
-    .error-box {
-        border: 2px solid red;
-    }
+  .error-box {
+    border: 2px solid red;
+  }
+
 </style>

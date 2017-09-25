@@ -59,14 +59,15 @@ export class InvoiceUiDataService {
     this.isCompanyNameVisible.next(true);
     this.store.select(p => p.invoiceTemplate).subscribe((data) => {
       if (data && data.defaultTemplate) {
+        let defaultTemplate = _.cloneDeep(data.defaultTemplate);
         if (this.companyName) {
-          data.defaultTemplate.sections[0].content[0].label = this.companyName;
-          data.defaultTemplate.sections[2].content[10].label = this.companyName;
+          defaultTemplate.sections[0].content[0].label = this.companyName;
+          defaultTemplate.sections[2].content[10].label = this.companyName;
         }
         if (this.companyAddress) {
-          data.defaultTemplate.sections[2].content[8].label = this.companyAddress;
+          defaultTemplate.sections[2].content[8].label = this.companyAddress;
         }
-        this.customTemplate.next(_.cloneDeep(data.defaultTemplate));
+        this.customTemplate.next(_.cloneDeep(defaultTemplate));
       }
     });
 
@@ -149,7 +150,7 @@ export class InvoiceUiDataService {
             selectedTemplate.sections[2].content[10].label = this.companyName;
           }
           if (this.companyAddress) {
-            selectedTemplate.sections[2].content[8].label = this.companyAddress;
+            // selectedTemplate.sections[2].content[8].label = this.companyAddress;
           }
           if (!selectedTemplate.logoUniqueName) {
             this.isLogoVisible.next(false);
