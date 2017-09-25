@@ -464,7 +464,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     for (var tax of purchaseInvoiceRequestObject.taxes){
         taxUniqueNames.push(tax.uniqueName)
     }
-    this.invoicePurchaseActions.GeneratePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName);
+    this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName));
+    
     }
 
   /**

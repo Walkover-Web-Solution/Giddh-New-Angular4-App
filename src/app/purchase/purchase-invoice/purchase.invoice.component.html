@@ -183,7 +183,7 @@
                             <select [(ngModel)]="value" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, value);">
                             <option value="">None selected</option>
                             <option value="composite"> Composite </option>
-                            <option value="reverse charge"> Reverse Charge</option>
+                            <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0'))"> Reverse Charge</option>
                         </select>
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                         </div>
