@@ -146,7 +146,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         this.companiesList$.take(1).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
         });
-        this.addAccountForm.get('companyName').patchValue(a);
+        // this.addAccountForm.get('companyName').patchValue(a);
+      }
+    });
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
+      if (p) {
+        // reset with default values
+        this.addAccountForm.reset();
+        this.addBlankGstForm();
       }
     });
   }
