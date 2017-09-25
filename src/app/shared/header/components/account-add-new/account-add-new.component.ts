@@ -137,7 +137,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a === 0 || a < 0) {
+      if (a && (a === 0 || a < 0)) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
       }
     });
@@ -152,8 +152,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
       if (p) {
         // reset with default values
-        this.addAccountForm.reset();
-        this.addBlankGstForm();
+        this.resetAddAccountForm();
       }
     });
   }
@@ -254,6 +253,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
+  public resetAddAccountForm() {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    const countries = this.addAccountForm.get('country') as FormGroup;
+    addresses.reset();
+    countries.reset();
+    this.addAccountForm.reset();
+    // this.addBlankGstForm();
+  }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
 
@@ -276,6 +283,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
   }
   public ngOnDestroy() {
+    this.resetAddAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
