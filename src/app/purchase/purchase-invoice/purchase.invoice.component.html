@@ -162,53 +162,55 @@
                     <th>Voucher No.</th>
                     <th>Entry</th>
                     <th class="text-right">Taxable Value</th>
-                    <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th>
+                    <!-- <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th> -->
                     <th class="text-right">IGST</th>
                     <th class="text-right">CGST</th>
                     <th class="text-right">SGST</th>
-                    <th class="text-right">UTGST</th>   
+                    <th class="text-right">UTGST</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let invoice of allPurchaseInvoices; let i = index">
                     <td class="text-center"><input type="checkbox" (click)="onSelectRow(i)" [disabled]="invoice.entryType === ''" /></td>
                     <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.particulars | highlight: searchBox.value"></td>
+                    <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.account.accountName | highlight: searchBox.value"></td>
                     <td><input type="text" class="form-control" [value]="invoice.account.gstIn" /></td>
                     <td><input type="text" class="form-control" [value]="invoice.invoiceNo" /></td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
                         <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="value" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, value);">
+                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType);">
                             <option value="">None selected</option>
                             <option value="composite"> Composite </option>
                             <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0'))"> Reverse Charge</option>
                         </select>
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                         </div>
-                        <button *ngIf="timeCounter != 10 && selectedRowIndex == i" (click)="onUndoEntryTypeChange()" class="btn btn-link">Undo in {{timeCounter}}s</button>
+                        <button *ngIf="timeCounter != 10 && selectedRowIndex == i" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
+
+                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && selectedRowIndex == i" [autoClose]="false">
+                            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
+                            {{dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                        </button>
+                            <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
+                                <li>
+                                    <label>
+                                <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
+                            </label>
+                                </li>
+                                <li *ngFor="let tax of allTaxes; let i = index">
+                                    <label>
+                                <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"> {{ tax.name}}
+                            </label>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                     <td class="text-right">{{invoice.taxableValue}}</td>
-                  <td class="form-group" *ngIf="isReverseChargeSelected">
-                    <div class="btn-group btn-block" dropdown  (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)">
-                      <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
-                        {{dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
-                      </button>
-                      <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
-                        <li>
-                          <label>
-                            <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
-                          </label>
-                        </li>
-                        <li *ngFor="let tax of allTaxes; let i = index">
-                          <label>
-                            <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"> {{ tax.name}}
-                          </label>
-                        </li>
-                      </ul>
-                    </div>
-                </td>
+                    <!-- <td class="form-group" *ngIf="isReverseChargeSelected">
+
+                </td> -->
                     <td class="text-right">{{invoice.igstAmount}}</td>
                     <td class="text-right">{{invoice.cgstAmount}}</td>
                     <td class="text-right">{{invoice.sgstAmount}}</td>

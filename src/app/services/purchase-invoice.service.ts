@@ -24,7 +24,7 @@ export class IInvoicePurchaseResponse {
   public voucherNo: number;
   public entryType: string;
   public gstin: string;
-  public particulars: string;
+  public particular: string;
   public invoiceNo: string;
   public utgstAmount: number;
   public igstAmount: number;
@@ -41,35 +41,33 @@ export interface TaxAccount {
   name: string;
 }
 
-
 export interface TaxDetail {
   taxValue: number;
   date: string;
 }
 
 export class ITaxResponse {
-  uniqueName: string;
-  taxType: string;
-  accounts: TaxAccount[]; 
-  taxNumber: string;
-  taxDetail: TaxDetail[];
-  taxFileDate: number;
-  duration: string;
-  name: string;
-  isSelected?: boolean;
+  public uniqueName: string;
+  public taxType: string;
+  public accounts: TaxAccount[];
+  public taxNumber: string;
+  public taxDetail: TaxDetail[];
+  public taxFileDate: number;
+  public duration: string;
+  public name: string;
+  public isSelected?: boolean;
 }
 
 /**** TAX MODEL ****/
 
 /**** GENERATE PURCHASE INVOICE REQUEST ****/
 
-export class GeneratePurchaseInvoiceRequest{
+export class GeneratePurchaseInvoiceRequest {
   public entryUniqueName: string[];
   public taxes: ITaxResponse[];
 }
 
 /**** GENERATE PURCHASE INVOICE REQUEST ****/
-
 
 // export interface IInvoicePurchaseResponse {
 //   accountName: string;
@@ -113,7 +111,7 @@ export class PurchaseInvoiceService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse[], string>(e));
   }
-  
+
   /*
   * Get Taxes
   * API: 'company/:companyUniqueName/tax'
@@ -132,7 +130,6 @@ export class PurchaseInvoiceService {
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<ITaxResponse[], string>(e));
   }
-
 
   /*
   * Update Purchase Invoice
@@ -167,7 +164,7 @@ export class PurchaseInvoiceService {
     });
     return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', month).replace(':company_gstin', gstNumber)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
-      data.queryString =  { month, gstNumber };
+      data.queryString = { month, gstNumber };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -186,13 +183,13 @@ export class PurchaseInvoiceService {
     });
     return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', month).replace(':company_gstin', gstNumber)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
-      data.queryString =  { month, gstNumber };
+      data.queryString = { month, gstNumber };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
 
-  public GeneratePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[] , accountUniqueName: string): Observable<BaseResponse<any, string>> {
-    console.log('ENTRY',entryUniqueName);
+  public GeneratePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Observable<BaseResponse<any, string>> {
+    console.log('ENTRY', entryUniqueName);
     console.log('TAX', taxUniqueName);
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -200,13 +197,13 @@ export class PurchaseInvoiceService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    var req = {
-      'uniqueNames' : entryUniqueName,
-      'taxes' : taxUniqueName
-    }
+    let req = {
+      uniqueNames: entryUniqueName,
+      taxes: taxUniqueName
+    };
     return this._http.post(PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), req).map((res) => {
       let data: BaseResponse<any, string> = res.json();
-      data.queryString =  { };
+      data.queryString = {};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
