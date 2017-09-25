@@ -73,7 +73,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public accountAsideMenuState: string = 'out';
   public dropdownHeading: string = 'Select taxes';
   public isSelectedAllTaxes: boolean = false;
-  public purchaseInvoiceObject: IInvoicePurchaseResponse = new IInvoicePurchaseResponse() ;
+  public purchaseInvoiceObject: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
   public purchaseInvoiceRequestObject: GeneratePurchaseInvoiceRequest = new GeneratePurchaseInvoiceRequest();
 
   public datePickerOptions: any = {
@@ -109,7 +109,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       ]
     }
   };
-  
   public otherFilters: any[] = otherFiltersOptions;
   public gstrOptions: any[] = gstrOptions;
   public purchaseReportOptions: any[] = purchaseReportOptions;
@@ -126,10 +125,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public timeCounter: number = 10; // Max number of seconds to wait
   public eventLog = '';
   public selectedRowIndex: number;
+  public isReverseChargeSelected: boolean = false;
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  public isReverseChargeSelected: boolean = false;
   constructor(
     private router: Router,
     private location: Location,
@@ -183,7 +182,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     });
 
   }
-  
 
   public selectedDate(value: any, dateInput: any) {
     // console.log('value is :', value);
@@ -300,25 +298,26 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * onChangeEntryType
    */
   public onChangeEntryType(indx, value) {
+    console.log(value);
     clearInterval(this.intervalId);
     this.timeCounter = 10;
     if (indx > -1 && (value === 'composite' || value === '')) {
       this.selectedRowIndex = indx;
       this.selectedEntryTypeValue = value;
       this.isReverseChargeSelected = false;
-       
+
       this.intervalId = setInterval(() => {
         // console.log('running...');
         this.timeCounter--;
         this.checkForCounterValue(this.timeCounter);
       }, 1000);
-    } else if (value === 'reverse charge'){
+    } else if (value === 'reverse charge') {
       this.isReverseChargeSelected = true;
-      this.intervalId = setInterval(() => {
-        // console.log('running...');
-        this.timeCounter--;
-        this.checkForCounterValue(this.timeCounter);
-      }, 1000);
+      this.selectedRowIndex = indx;
+      // this.intervalId = setInterval(() => {
+      //   this.timeCounter--;
+      //   this.checkForCounterValue(this.timeCounter);
+      // }, 1000);
     }
   }
 
@@ -339,8 +338,20 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * onUndoEntryTypeChange
    */
-  public onUndoEntryTypeChange() {
+  public onUndoEntryTypeChange(idx, itemObj) {
     this.undoEntryTypeChange = true;
+    console.log(idx, itemObj);
+    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
+      if (o.purchaseInvoices) {
+        if (this.allPurchaseInvoices[idx].invoiceNo === itemObj.invoiceNo) {
+          this.allPurchaseInvoices[idx] = _.cloneDeep(o.purchaseInvoices[idx]);
+          this.selectedRowIndex = idx;
+          if (this.allPurchaseInvoices[idx].entryType !== 'reverse charge') {
+            this.isReverseChargeSelected = false;
+          }
+        }
+      }
+    });
   }
 
   /**
@@ -379,7 +390,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       });
     }
   }
-  
 
   /**
    * toggleSettingAsidePane
@@ -395,16 +405,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   */
   public selectAllTaxes(event) {
     if (event.target.checked) {
-        this.purchaseInvoiceObject.isAllTaxSelected = true;
-        this.allTaxes.forEach((tax: ITaxResponse) => tax.isSelected = true);
-        this.purchaseInvoiceObject.TaxList = _.clone(this.allTaxes);
-    } else {  
-        this.isSelectedAllTaxes = false;
-        this.allTaxes.forEach((tax: ITaxResponse) => tax.isSelected = false);
-        this.purchaseInvoiceObject.TaxList = _.clone(this.allTaxes);
+      this.purchaseInvoiceObject.isAllTaxSelected = true;
+      this.allTaxes.forEach((tax: ITaxResponse) => tax.isSelected = true);
+      this.purchaseInvoiceObject.TaxList = _.clone(this.allTaxes);
+    } else {
+      this.isSelectedAllTaxes = false;
+      this.allTaxes.forEach((tax: ITaxResponse) => tax.isSelected = false);
+      this.purchaseInvoiceObject.TaxList = _.clone(this.allTaxes);
     }
   }
-  
+
   /**
   * KeepCountofSelectedOptions
   */
@@ -412,37 +422,37 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     let count: number = 0;
     let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
     purchaseInvoiceObject.TaxList.forEach((tax: ITaxResponse) => {
-        if (tax.isSelected) {
-            count += 1;
-        }
+      if (tax.isSelected) {
+        count += 1;
+      }
     });
     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
     return count;
-}
+  }
   /**
   * selectTaxOption
   */
-  public selectTax(event ,tax) {
+  public selectTax(event, tax) {
     if (event.target.checked) {
       let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-      purchaseInvoiceObject.TaxList.push(tax)
-        if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-            purchaseInvoiceObject.isAllTaxSelected = true;
-            this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-        }
+      purchaseInvoiceObject.TaxList.push(tax);
+      if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
+        purchaseInvoiceObject.isAllTaxSelected = true;
         this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+      }
+      this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
     } else {
       let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-          if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-          let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-          purchaseInvoiceObject.isAllTaxSelected = false;
-          // purchaseInvoiceObject.TaxList.pop();
-          this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-        }
+      if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
+        let purchaseInvoiceObj = _.cloneDeep(this.purchaseInvoiceObject);
+        purchaseInvoiceObj.isAllTaxSelected = false;
+        // purchaseInvoiceObject.TaxList.pop();
         this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+      }
+      this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
     }
-    
-}
+
+  }
 
   /**
   * toggle dropdown heading
@@ -450,23 +460,23 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public onDDShown() {
     this.dropdownHeading = 'Close list';
   }
-  
+
   /**
   * toggle dropdown heading
   */
   public onDDHidden(uniqueName: string, accountUniqueName: string) {
-    let taxUniqueNames:string[] = [];
+    let taxUniqueNames: string[] = [];
     this.dropdownHeading = 'Select taxes';
     let purchaseInvoiceRequestObject = _.cloneDeep(this.purchaseInvoiceRequestObject);
     let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
     purchaseInvoiceRequestObject.entryUniqueName.push(uniqueName);
     purchaseInvoiceRequestObject.taxes = purchaseInvoiceObject.TaxList;
-    for (var tax of purchaseInvoiceRequestObject.taxes){
-        taxUniqueNames.push(tax.uniqueName)
+    for (let tax of purchaseInvoiceRequestObject.taxes) {
+      taxUniqueNames.push(tax.uniqueName);
     }
     this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName));
-    
-    }
+
+  }
 
   /**
    * ngOnDestroy
