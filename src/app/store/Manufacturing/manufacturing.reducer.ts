@@ -76,10 +76,11 @@ export function ManufacturingReducer(state = initialState, action: Action): Manu
             let newState = _.cloneDeep(state);
             let res: BaseResponse<IStocksItem, ManufacturingItemRequest> = action.payload;
             if (res.status === 'success') {
-                let indx = newState.reportData.results.findIndex((obj) => obj.uniqueName === res.body.uniqueName);
-                if (indx > -1) {
-                    newState.reportData.results[indx] = res.body;
-                }
+                // let indx = newState.reportData.results.findIndex((obj) => obj.uniqueName === res.body.uniqueName);
+                // if (indx > -1) {
+                //     newState.reportData.results[indx] = res.body;
+                // }
+                newState.reportData = null;
                 return Object.assign({}, state, newState);
             }
             return state;
