@@ -12,7 +12,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { SalesService } from '../../sales.service';
 import { SALES_ACTIONS } from './sales.const';
 import { Router } from '@angular/router';
-import { AccountResponse } from '../../../models/api-models/Account';
+import { AccountResponseV2 } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../../group.service';
@@ -32,7 +32,7 @@ export class SalesActions {
   public GetAccountDetailsResponse$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE)
     .map(action => {
-      let data: BaseResponse<AccountResponse, string> = action.payload;
+      let data: BaseResponse<AccountResponseV2, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
@@ -76,7 +76,7 @@ export class SalesActions {
     };
   }
 
-  public getAccountDetailsForSalesResponse(value: BaseResponse<AccountResponse, string>): Action {
+  public getAccountDetailsForSalesResponse(value: BaseResponse<AccountResponseV2, string>): Action {
     return {
       type: SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value
