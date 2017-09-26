@@ -16,11 +16,9 @@
       </div>
 
     </div>
-
     <!-- gst container -->
     <ng-container *ngIf="isGstEnabledAcc &&
     (addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')">
-
       <!-- gst details -->
       <div formArrayName="addresses">
         <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
@@ -189,7 +187,7 @@
     <!-- submit and clear buttons -->
     <div class="row mrT3">
       <div class="form-group col-xs-12 text-right">
-        <!-- <button class="btn btn-default">Cancel</button> -->
+        <button class="btn btn-default" type="button" (click)="addAccountForm.reset()">Cancel</button>
         <button type="submit" class="btn save-btn" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save</button>
       </div>
     </div>
