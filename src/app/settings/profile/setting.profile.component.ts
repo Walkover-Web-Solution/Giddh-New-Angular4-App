@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, trigger, transition, style, animate } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -20,7 +20,15 @@ export interface IGstObj {
 
 @Component({
   selector: 'setting-profile',
-  templateUrl: './setting.profile.component.html'
+  templateUrl: './setting.profile.component.html',
+  animations: [
+    trigger('fadeInAndSlide', [
+      transition(':enter', [
+        style({ opacity: '0', marginTop: '100px'  }),
+        animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
+      ]),
+    ]),
+  ],
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
@@ -30,7 +38,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public newGstObj: any = {};
   public states: Select2OptionData[] = [];
   public isGstValid: boolean = false;
+  public isPANValid: boolean = false;
+  public isMobileNumberValid: boolean = false;
   public countryCode: string = '91';
+  public gstDetailsBackup: object[] = null;
+  public showAllGST: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -57,10 +69,21 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public initProfileObj() {
      this.isGstValid = true;
+     this.isPANValid = true;
+     this.isMobileNumberValid = true;
     // getting profile info from store
     this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
       if (o) {
-        this.companyProfileObj = _.cloneDeep(o);
+        let profileObj = _.cloneDeep(o);
+        if (profileObj.contactNo && profileObj.contactNo.indexOf('-') > -1) {
+          profileObj.contactNo = profileObj.contactNo.substring(profileObj.contactNo.indexOf('-') + 1);
+        }
+        if (profileObj.gstDetails && profileObj.gstDetails.length > 3) {
+          this.gstDetailsBackup = _.cloneDeep(profileObj.gstDetails);
+          this.showAllGST = false;
+          profileObj.gstDetails = profileObj.gstDetails.slice(0, 3);
+        }
+        this.companyProfileObj = profileObj;
       }
     });
     this.store.take(1).subscribe(s => {
@@ -118,7 +141,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     delete dataToSave.financialYears;
     delete dataToSave.activeFinancialYear;
+    dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
     this.companyProfileObj = dataToSave;
+    if (this.gstDetailsBackup) {
+      dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+    }
     console.log('THe data is :', dataToSave);
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
   }
@@ -127,6 +154,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     if (indx > -1) {
       profileObj.gstDetails.splice(indx, 1);
+      this.gstDetailsBackup.splice(indx, 1);
     }
     this.companyProfileObj = profileObj;
   }
@@ -200,7 +228,46 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public isValidPAN(ele: HTMLInputElement) {
-    // check if PAN number is valid
+    let panNumberRegExp = new RegExp(/[A-Za-z]{5}\d{4}[A-Za-z]{1}/g);
+    if (ele.value) {
+      if (ele.value.match(panNumberRegExp)) {
+        ele.classList.remove('error-box');
+        this.isPANValid = true;
+      } else {
+        this.isPANValid = false;
+        this._toasty.errorToast('Invalid PAN number');
+        ele.classList.add('error-box');
+      }
+    }
+  }
+
+  public isValidMobileNumber(ele: HTMLInputElement) {
+    let mobileNumberRegExp = new RegExp(/^\d+$/);
+    if (ele.value) {
+      if (ele.value.match(mobileNumberRegExp) && ele.value.length === 10) {
+        ele.classList.remove('error-box');
+        this.isMobileNumberValid = true;
+      } else {
+        this.isMobileNumberValid = false;
+        this._toasty.errorToast('Invalid Contact number');
+        ele.classList.add('error-box');
+      }
+    }
+  }
+
+  public onToggleAllGSTDetails() {
+    if ((this.companyProfileObj.gstDetails.length === this.gstDetailsBackup.length) && (this.gstDetailsBackup.length === 3)) {
+      this.gstDetailsBackup = null;
+    } else {
+      this.showAllGST = !this.showAllGST;
+      if (this.gstDetailsBackup) {
+        if (this.showAllGST) {
+          this.companyProfileObj.gstDetails = _.cloneDeep(this.gstDetailsBackup);
+        } else {
+          this.companyProfileObj.gstDetails = this.companyProfileObj.gstDetails.slice(0, 3);
+        }
+      }
+    }
   }
 
 }

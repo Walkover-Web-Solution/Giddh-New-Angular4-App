@@ -4,6 +4,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
+import { SettingsProfileActions } from '../services/actions/settings/profile/settings.profile.action';
 
 @Component({
   templateUrl: './settings.component.html',
@@ -12,7 +13,7 @@ import { AppState } from '../store/roots';
 export class SettingsComponent implements OnInit {
   @ViewChild('staticTabs') public staticTabs: TabsetComponent;
 
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private settingsProfileActions: SettingsProfileActions) {
 
   }
   public ngOnInit() {
@@ -31,5 +32,10 @@ export class SettingsComponent implements OnInit {
   }
   public disableEnable() {
     this.staticTabs.tabs[2].disabled = ! this.staticTabs.tabs[2].disabled;
+  }
+  public profileSelected(e) {
+    if (!e.target) { // It will prevent from inside tab click
+      this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
+    }
   }
 }
