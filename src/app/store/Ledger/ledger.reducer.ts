@@ -22,11 +22,13 @@ export interface LedgerState {
   discountAccountsList?: IFlattenGroupsAccountsDetail;
   ledgerCreateSuccess?: boolean;
   ledgerCreateInProcess?: boolean;
+  selectedTxnForEditUniqueName: string;
 }
 
 export const initialState: LedgerState = {
   transactionInprogress: false,
-  accountInprogress: false
+  accountInprogress: false,
+  selectedTxnForEditUniqueName: ''
 };
 
 export function ledgerReducer(state = initialState, action: Action): LedgerState {
@@ -65,13 +67,13 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         transactionInprogress: false
       });
     case LEDGER.DOWNLOAD_LEDGER_INVOICE:
-      return Object.assign({}, state, {downloadInvoiceInProcess: true});
+      return Object.assign({}, state, { downloadInvoiceInProcess: true });
     case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
       let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
       if (downloadData.status === 'success') {
-        return Object.assign({}, state, {downloadInvoiceInProcess: false});
+        return Object.assign({}, state, { downloadInvoiceInProcess: false });
       }
-      return Object.assign({}, state, {downloadInvoiceInProcess: false});
+      return Object.assign({}, state, { downloadInvoiceInProcess: false });
     case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
       let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
       if (discountData.status === 'success') {
@@ -97,6 +99,11 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         ledgerCreateSuccess: false,
         ledgerCreateInProcess: false
       });
+    case LEDGER.SET_SELECTED_TXN_FOR_EDIT:
+      return {
+        ...state,
+        selectedTxnForEditUniqueName: action.payload
+      };
     case LEDGER.RESET_LEDGER:
       return Object.assign({}, state, {
         account: null,
