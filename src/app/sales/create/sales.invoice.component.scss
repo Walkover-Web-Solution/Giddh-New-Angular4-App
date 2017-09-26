@@ -171,3 +171,17 @@ $themeClr : #fe5f00;
     }
   }
 }
+
+.action-panel-td{
+  width: 80px;
+  span{
+    padding: 5px;
+    display: inline-block
+  }
+}
+.nested-table-wrap{
+  padding: 8px 0;
+}
+.nested-table th, .nested-table td{
+  padding: 0 8px;
+}

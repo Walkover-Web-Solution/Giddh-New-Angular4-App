@@ -172,47 +172,87 @@
       <thead>
         <tr>
           <th *ngFor="let item of theadArr;" [hidden]="!item.display">{{item.label}}</th>
+          <th class="nested-table-wrap">
+            <table width="100%" class="nested-table" cellspacing="0" cellspadding="0">
+              <thead>
+                <tr>
+                  <th width="25%" *ngFor="let item of theadArrOpt;">{{item.label}}</th>
+                </tr>
+              </thead>
+            </table>
+          </th>
+          <th *ngFor="let item of theadArrReadOnly;" [hidden]="!item.display">{{item.label}}</th>
         </tr>
       </thead>
-      <tbody *ngFor="let entry of invFormData.entries;">
-        <tr *ngFor="let transaction of entry.transactions; let i = index">
-          <td>{{ i+1 }}</td>
-          <td><input type="text" placeholder="DD-MM-YYYY" name="tr.date" class="form-control" [(ngModel)]="transaction.date" /></td>
+      <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
+        <tr *ngFor="let transaction of entry.transactions;">
+          <td>{{ entryIdx+1 }}</td>
+          <td><input type="text" placeholder="DD-MM-YYYY" name="transaction.date_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.date" /></td>
           <td>
             <div class="select2-parent select2-ledger">
               <select2
-                name="tr.fakeAccForSelect2"
+                name="transaction.fakeAccForSelect2_{{entryIdx}}"
                 [data]="salesAccounts$ | async"
                 (valueChanged)="onSelectSalesAccount($event, transaction)"
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="accountsOptions"
               ></select2>
             </div>
-            <input type="text" placeholder="Description" name="tr.description" class="form-control" [(ngModel)]="transaction.description" />
+            <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
-            <input type="text" placeholder="HSN" name="tr.hsnNumber" class="form-control" [(ngModel)]="transaction.hsnNumber" />
-            <input type="text" placeholder="SAC" name="tr.sacNumber" class="form-control" [(ngModel)]="transaction.sacNumber" />
+            <input type="text" placeholder="HSN" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
+            <input type="text" placeholder="SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
           </td>
-          <td *ngIf="isStockTxn">
-            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="tr.quantity" class="form-control" [(ngModel)]="transaction.quantity" />
-          </td>
-          <td *ngIf="isStockTxn">
-            <select class="form-control" name="tr.stockUnit" [(ngModel)]="transaction.stockUnit">
-              <option [ngValue]="select">Select</option>
-              <option *ngFor="let stock of stockList" [ngValue]="stock.id">{{stock.text}}</option>
-            </select>
-          </td>
-          <td *ngIf="isStockTxn">
-            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Rate" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
-          </td>
-          <td *ngIf="!isStockTxn">
-            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Amount" name="tr.amount" class="form-control" [(ngModel)]="transaction.amount" />
+
+          <!-- show/hide fields -->
+          <td class="nested-table-wrap">
+            <table width="100%" cellspacing="0" cellspadding="0">
+              <tbody>
+                <tr>
+                  <td *ngIf="transaction.isStockTxn">
+                    <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
+                      <tbody>
+                        <tr>
+                          <td width="25%">
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
+                          </td>
+                          <td width="25%">
+                            <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
+                              <option [ngValue]="select">Select</option>
+                              <option *ngFor="let stock of stockList" [ngValue]="stock.id">{{stock.text}}</option>
+                            </select>
+                          </td>
+                          <td width="25%">
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
+                          </td>
+                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td *ngIf="!transaction.isStockTxn">
+                    <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
+                      <tbody>
+                        <tr>
+                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
+                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
+                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
+                          <td width="25%">
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </td>
           <td>
-            <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction)"></discount-list>
+            <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
           </td>
-          <td><input type="text" name="tr.taxableValue" class="form-control" readonly [(ngModel)]="transaction.taxableValue" /></td>
+          <td><input type="text" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue" /></td>
           <td class="tax-list-dd-wrap" *ngIf="showTaxBox">
             <tax-control *ngIf="showTaxBox"
               [taxes]="companyTaxesList$ | async"
@@ -224,7 +264,11 @@
               (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
             </tax-control>
           </td>
-          <td><input type="text" name="tr.total" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
+          <td><input type="text" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
+          <td class="action-panel-td">
+            <span class="cp" (click)="addBlankRow(transaction)"><i class="icon-add" aria-hidden="true"></i></span>
+            <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)"><i class="icon-cross" aria-hidden="true"></i></span>
+          </td>
         </tr>
       </tbody>
     </table>

@@ -76,25 +76,27 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public taxableValue: number;
   public total?: number;
   public fakeAccForSelect2?: string;
+  public isStockTxn?: boolean;
   constructor() {
     super();
     this.date = moment().format('DD-MM-YYYY');
     this.amount = 0;
     this.total = 0;
+    this.isStockTxn = false;
   }
 
   // basic check for valid transaction
   public isValid() {
     let r: any = true;
     if (this.taxableValue === 0) {
-      r = 'Without amount sales-invoice can\'t be generated';
+      r = 'Without Taxable sales-invoice can\'t be generated';
     }
     if (this.accountUniqueName) {
       if (_.isEmpty(this.accountUniqueName)) {
-        r = 'Account Name can\'t be empty';
+        r = 'Product/Service can\'t be empty';
       }
     }else {
-      r = 'Account Name can\'t be empty';
+      r = 'Product/Service can\'t be empty';
     }
     return r;
   }
@@ -121,16 +123,6 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     }else {
       return count;
     }
-  }
-
-  public setQty(entry: SalesEntryClass) {
-    console.log ('in setQty', this);
-    console.log ('setQty entry', entry);
-  }
-
-  public setRate(entry: SalesEntryClass) {
-    console.log ('in setRate', this);
-    console.log ('setRate entry', entry);
   }
 
   public checkForInfinity(value): number {
