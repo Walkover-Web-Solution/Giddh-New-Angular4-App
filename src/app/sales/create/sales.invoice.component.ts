@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit } from '../../models/api-models/Sales';
+import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem } from '../../models/api-models/Sales';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -15,15 +15,68 @@ import { AccountService } from '../../services/account.service';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
 import { SalesActions } from '../../services/actions/sales/sales.action';
-import { AccountResponse } from '../../models/api-models/Account';
+import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { TaxControlData } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { StockUnits } from '../../inventory/components/custom-stock-components/stock-unit';
-import { BaseResponse } from "../../models/api-models/BaseResponse";
-const THEAD_ARR = ['Sno.', 'Date', 'Product/Service', 'HSN/SAC', 'Qty.', 'Unit', 'Rate', 'Discount', 'Taxable', 'Tax', 'Total'];
+import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
+import * as uuid from 'uuid';
+import { IContentCommon, ICommonItemOfTransaction, IInvoiceTax } from '../../models/api-models/Invoice';
+const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
+const THEAD_ARR = [
+  {
+    display: true,
+    label: 'Sno'
+  },
+  {
+    display: true,
+    label: 'Date'
+  },
+  {
+    display: true,
+    label: 'Product/Service'
+  },
+  {
+    display: true,
+    label: 'HSN/SAC'
+  },
+  {
+    display: false,
+    label: 'Qty.'
+  },
+  {
+    display: false,
+    label: 'Unit'
+  },
+  {
+    display: false,
+    label: 'Rate'
+  },
+  {
+    display: true,
+    label: 'Amount'
+  },
+  {
+    display: true,
+    label: 'Discount'
+  },
+  {
+    display: true,
+    label: 'Taxable.'
+  },
+  {
+    display: false,
+    label: 'Tax'
+  },
+  {
+    display: true,
+    label: 'Total'
+  }
+];
 
 @Component({
   styleUrls: ['./sales.invoice.component.scss'],
@@ -55,17 +108,36 @@ export class SalesInvoiceComponent implements OnInit {
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
-  public salesAccounts$: Observable<INameUniqueName[]>;
+  public salesAccounts$: Observable<Select2OptionData[]>;
   public accountAsideMenuState: string = 'out';
-  public theadArr: string[] = THEAD_ARR;
+  public theadArr: IContentCommon[] = THEAD_ARR;
   public activeGroupUniqueName$: Observable<string>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public selectedTaxes: string[] = [];
   public showTaxBox: boolean = false;
   public stockList: IStockUnit[] = [];
+  public isStockTxn: boolean = false;
+  public accountsOptions: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Accounts',
+    allowClear: true,
+    // maximumSelectionLength: 1,
+    templateSelection: (data) => data.text,
+    templateResult: (data: any) => {
+      if (data.text === 'Searching…') {
+        return;
+      }
+      if (!data.additional.stock) {
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;"><span class="account-list-item" style="display: block;font-size:14px">${data.text}</span><span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span></a>`);
+      } else {
+        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;"><span class="account-list-item" style="display: block;font-size:14px">${data.text}</span><span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span><span class="account-list-item" style="display: block;font-size:11px">Stock: ${data.additional.stock.name}</span></a>`);
+      }
+    }
+  };
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private selectedAccountDetails$: Observable<AccountResponse>;
+  private selectedAccountDetails$: Observable<AccountResponseV2>;
 
   constructor(
     private store: Store<AppState>,
@@ -87,7 +159,7 @@ export class SalesInvoiceComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: INameUniqueName[] = [];
         let bankaccounts: INameUniqueName[] = [];
-        let salesAccounts: INameUniqueName[] = [];
+        let accountsArray: Select2OptionData[] = [];
         _.forEach(data.body.results, (item) => {
           // creating account list only of sundrydebtors category
           if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
@@ -98,16 +170,25 @@ export class SalesInvoiceComponent implements OnInit {
             bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
 
-          // creating sales account list
-          if (_.find(item.parentGroups, (o) => o.uniqueName === 'sales')) {
-            salesAccounts.push({ name: item.name, uniqueName: item.uniqueName });
+          // creating account list
+          if (item.stocks) {
+            item.stocks.map(as => {
+              accountsArray.push({
+                id: uuid.v4(),
+                text: item.name,
+                additional: Object.assign({}, item, { stock: as })
+              });
+            });
+            accountsArray.push({ id: uuid.v4(), text: item.name, additional: item });
+          } else {
+            accountsArray.push({ id: uuid.v4(), text: item.name, additional: item });
           }
         });
         // accounts.unshift({ name: '+ Add Customer', uniqueName: 'addnewcustomer'});
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
-        this.salesAccounts$ = Observable.of(salesAccounts);
-        console.log('salesAccounts', salesAccounts);
+        this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
+        console.log ('accountsArray', accountsArray);
       }
     });
 
@@ -123,6 +204,13 @@ export class SalesInvoiceComponent implements OnInit {
     this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
       if (o) {
         this.companyTaxesList$ = Observable.of(o);
+        _.map(this.theadArr, (item: IContentCommon) => {
+          // show tax label
+          if (item.label === 'Tax') {
+            item.display = true;
+          }
+          return item;
+        });
         this.showTaxBox = true;
       }
     });
@@ -137,7 +225,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   }
 
-  public assignValuesInForm(data: AccountResponse) {
+  public assignValuesInForm(data: AccountResponseV2) {
     console.log ('assignValuesInForm', data);
     // toggle all collapse
     this.isGenDtlCollapsed = false;
@@ -172,13 +260,57 @@ export class SalesInvoiceComponent implements OnInit {
     this.typeaheadNoResultsOfSalesAccount = e;
   }
 
-  public onSelectSalesAccount(e: TypeaheadMatch): void {
-    this.accountService.GetAccountDetailsV2(e.item.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponse, string>) => {
-      if (data.status === 'success') {
-        let o = _.cloneDeep(data.body);
-        console.log ('set data in tr', o);
+  public onSelectSalesAccount(e: any, txn: SalesTransactionItemClass): void {
+    if (e.value) {
+      let selectedAcc: any = null;
+      this.salesAccounts$.take(1).subscribe(data => {
+        data.map(item => {
+          if (item.id === e.value) {
+            selectedAcc = item;
+          }
+        });
+      });
+      if (selectedAcc) {
+        this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
+          if (data.status === 'success') {
+            let o = _.cloneDeep(data.body);
+            console.log ('set data in tr', o);
+            txn.accountName = o.name;
+            txn.accountUniqueName = o.uniqueName;
+            txn.hsnNumber = o.hsnNumber;
+            txn.sacNumber = o.sacNumber;
+            txn.description = 'Entry generated by sales module';
+            if (o.stocks && selectedAcc.additional.stock) {
+              txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+              // 'KGS' not printing values due to mismatching spells.
+              this.isStockTxn = true;
+            } else {
+              this.isStockTxn = false;
+              txn.stockUnit = null;
+            }
+            // toggle stock related fields
+            this.toggleStockFields();
+            return txn;
+          }
+        });
       }
-      console.log ('data:', data);
+    } else {
+      this.isStockTxn = false;
+      this.toggleStockFields();
+    }
+  }
+
+  public toggleStockFields() {
+    _.map(this.theadArr, (item: IContentCommon) => {
+      // show labels related to stock entry
+      if (_.indexOf(STOCK_OPT_FIELDS, item.label) !== -1 ) {
+        item.display = this.isStockTxn;
+      }
+      // hide amount label
+      if (item.label === 'Amount') {
+        item.display = !this.isStockTxn;
+      }
+      return item;
     });
   }
 
@@ -203,36 +335,47 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public addBlankRowInTransaction() {
-    // let transItem: SalesTransactionItemClass = {
-    //   discount: null,
-    //   description: 'Fresh entry desc',
-    //   amount: 0,
-    //   accountUniqueName: null,
-    //   accountName: 'Fresh',
-    //   hsnNumber: null,
-    //   sacNumber: null,
-    //   quantity: null,
-    //   stockUnit: null,
-    //   rate: null,
-    // };
-    // let entryItem: SalesEntryClass = {
-    //   uniqueName: null,
-    //   transactions: [transItem]
-    // };
-    // this.invFormData.entries.push(entryItem);
+    // logic to add new blank row
   }
 
-  public taxAmountEvent($event) {
-    console.log ('taxAmountEvent', $event);
+  public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
+    txn.total = txn.getTransactionTotal(tax, entry);
   }
 
-  public selectedTaxEvent(arr: string[]) {
-    console.log ('selectedTaxEvent', arr);
+  public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
     this.selectedTaxes = arr;
+    if (this.selectedTaxes.length > 0) {
+      entry.taxes = [];
+      this.companyTaxesList$.take(1).subscribe(data => {
+        data.map(item => {
+          if ( _.indexOf(arr, item.uniqueName) !== -1 ) {
+            let o: IInvoiceTax = {
+              accountName: item.accounts[0].name,
+              accountUniqueName: item.accounts[0].uniqueName,
+              rate: item.taxDetail[0].taxValue,
+              amount: item.taxDetail[0].taxValue
+            };
+            entry.taxes.push(o);
+          }
+        });
+      });
+    }
   }
 
-  public selectedDiscountEvent(arr: any[]) {
-    console.log ('selectedDiscountEvent', arr);
+  public selectedDiscountEvent(arr: FakeDiscountItem[], txn: SalesTransactionItemClass) {
+    this.invFormData.entries[0].discounts = [];
+    // modified values according to api model
+    _.forEach(arr, (item: FakeDiscountItem) => {
+      let o: ICommonItemOfTransaction = {
+        amount: item.amount,
+        accountName: item.name,
+        accountUniqueName: item.particular
+      };
+      this.invFormData.entries[0].discounts.push(o);
+    });
+
+    // call taxableValue method
+    txn.setAmount(this.invFormData.entries[0]);
   }
 
 }

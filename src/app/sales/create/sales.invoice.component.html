@@ -139,27 +139,27 @@
       <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3">
         <div class="form-group size_175">
           <label>Ship Date</label>
-          <input type="text" name="shipDate" class="form-control" />
+          <input type="text" placeholder="DD-MM-YYYY" name="shippingDate" [(ngModel)]="invFormData.other.shippingDate" class="form-control" />
         </div>
         <div class="form-group size_175">
           <label>Ship Via</label>
-          <input type="text" name="duedate" class="form-control" />
+          <input type="text" name="shippedVia" [(ngModel)]="invFormData.other.shippedVia" class="form-control" />
         </div>
         <div class="form-group size_175">
           <label>Tracking No.</label>
-          <input type="text" name="country" class="form-control" />
+          <input type="text" name="trackingNumber" [(ngModel)]="invFormData.other.trackingNumber" class="form-control" />
         </div>
         <div class="form-group size_175">
           <label>Field 1</label>
-          <input type="text" name="field_1" class="form-control" />
+          <input type="text" name="customField1" [(ngModel)]="invFormData.other.customField1" class="form-control" />
         </div>
         <div class="form-group size_175">
           <label>Field 2</label>
-          <input type="text" name="field_2" class="form-control" />
+          <input type="text" name="customField2" [(ngModel)]="invFormData.other.customField2" class="form-control" />
         </div>
         <div class="form-group size_175">
           <label>Field 3</label>
-          <input type="text" name="field_3" class="form-control" />
+          <input type="text" name="customField3" [(ngModel)]="invFormData.other.customField3" class="form-control" />
         </div>
       </div>
     </div>
@@ -171,67 +171,60 @@
    <table class="table">
       <thead>
         <tr>
-          <th *ngFor="let item of theadArr;">{{item}}</th>
+          <th *ngFor="let item of theadArr;" [hidden]="!item.display">{{item.label}}</th>
         </tr>
       </thead>
       <tbody *ngFor="let entry of invFormData.entries;">
         <tr *ngFor="let transaction of entry.transactions; let i = index">
           <td>{{ i+1 }}</td>
-          <td><input type="text" name="tr.date" class="form-control" [(ngModel)]="transaction.date" /></td>
+          <td><input type="text" placeholder="DD-MM-YYYY" name="tr.date" class="form-control" [(ngModel)]="transaction.date" /></td>
           <td>
-            <input
-              autocomplete="off"
-              name="tr.accountName"
-              [(ngModel)]="transaction.accountName"
-              [typeahead]="salesAccounts$ | async"
-              typeaheadOptionField="name"
-              placeholder="Search from accounts"
-              typeaheadOptionsLimit="10"
-              (typeaheadNoResults)="noResultsForSalesAccount($event)"
-              (typeaheadOnSelect)="onSelectSalesAccount($event)"
-              class="form-control">
-            <br>
+            <div class="select2-parent select2-ledger">
+              <select2
+                name="tr.fakeAccForSelect2"
+                [data]="salesAccounts$ | async"
+                (valueChanged)="onSelectSalesAccount($event, transaction)"
+                [(ngModel)]="transaction.fakeAccForSelect2"
+                [options]="accountsOptions"
+              ></select2>
+            </div>
             <input type="text" placeholder="Description" name="tr.description" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
             <input type="text" placeholder="HSN" name="tr.hsnNumber" class="form-control" [(ngModel)]="transaction.hsnNumber" />
             <input type="text" placeholder="SAC" name="tr.sacNumber" class="form-control" [(ngModel)]="transaction.sacNumber" />
           </td>
-          <td>
-            <input type="text" placeholder="Quantity" name="tr.quantity" class="form-control" [(ngModel)]="transaction.quantity" />
+          <td *ngIf="isStockTxn">
+            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="tr.quantity" class="form-control" [(ngModel)]="transaction.quantity" />
           </td>
-          <td>
+          <td *ngIf="isStockTxn">
             <select class="form-control" name="tr.stockUnit" [(ngModel)]="transaction.stockUnit">
               <option [ngValue]="select">Select</option>
               <option *ngFor="let stock of stockList" [ngValue]="stock.id">{{stock.text}}</option>
             </select>
           </td>
-          <td>
-            <input type="text" placeholder="Rate" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
+          <td *ngIf="isStockTxn">
+            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Rate" name="tr.rate" class="form-control" [(ngModel)]="transaction.rate" />
+          </td>
+          <td *ngIf="!isStockTxn">
+            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Amount" name="tr.amount" class="form-control" [(ngModel)]="transaction.amount" />
           </td>
           <td>
-            <discount-list (selectedDiscountItems)="selectedDiscountEvent($event)"></discount-list>
-            <!-- <select class="form-control" name="tr.discount" [(ngModel)]="transaction.discount">
-              <option [ngValue]="'select'">Select</option>
-            </select> -->
+            <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction)"></discount-list>
           </td>
-          <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.taxable" /></td>
-          <td class="tax-list-dd-wrap">
+          <td><input type="text" name="tr.taxableValue" class="form-control" readonly [(ngModel)]="transaction.taxableValue" /></td>
+          <td class="tax-list-dd-wrap" *ngIf="showTaxBox">
             <tax-control *ngIf="showTaxBox"
               [taxes]="companyTaxesList$ | async"
               [applicableTaxes]="[]"
               [taxRenderData]="[]"
               [showTaxPopup]="false"
               [showHeading]="false"
-              (selectedTaxEvent)="selectedTaxEvent($event)"
-              (taxAmountSumEvent)="taxAmountEvent($event)">
+              (selectedTaxEvent)="selectedTaxEvent($event, entry)"
+              (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
             </tax-control>
-            <!-- <select multiple class="form-control" name="tr.tax" [(ngModel)]="transaction.tax">
-              <option [ngValue]="'select'">Select</option>
-              <option [ngValue]="tax.uniqueName" *ngFor="let tax of taxList$ | async">{{tax.name}}</option>
-            </select> -->
           </td>
-          <td><input type="text" name="tr.discount" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
+          <td><input type="text" name="tr.total" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
         </tr>
       </tbody>
     </table>
