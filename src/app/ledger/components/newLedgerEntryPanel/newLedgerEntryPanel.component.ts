@@ -33,7 +33,7 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { find } from 'lodash';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import * as moment from 'moment';
 @Component({
   selector: 'new-ledger-entry-panel',
   templateUrl: 'newLedgerEntryPanel.component.html',
@@ -45,6 +45,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
+  public options: Select2Options = {
+    multiple: false,
+    width: '60px',
+    placeholder: '',
+    allowClear: false
+  };
+  public selectedValue: any;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
@@ -116,9 +123,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['needToReCalculate'] && changes['needToReCalculate'].currentValue) {
-    //   this.amountChanged();
-    // }
+    if (changes['blankLedger']) {
+      // this.amountChanged();
+      // if (moment(changes['blankLedger'].currentValue.entryDate, 'DD-MM-yyyy').isValid()) {
+      //   this.taxControll.date = changes['blankLedger'].currentValue.entryDate;
+      // }
+      // debugger;
+    }
   }
 
   public ngAfterViewInit(): void {
