@@ -32,6 +32,9 @@ class GstDetailsClass {
   public address: string[];
   public stateCode?: any;
   public panNumber?: any;
+  constructor() {
+    this.address = [];
+  }
 }
 
 class AccountClass {
@@ -79,6 +82,25 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     this.amount = 0;
     this.total = 0;
   }
+
+  // basic check for valid transaction
+  public isValid() {
+    let r: any = true;
+    if (this.taxableValue === 0) {
+      r = 'Without amount sales-invoice can\'t be generated';
+    }
+    if (this.accountUniqueName) {
+      if (_.isEmpty(this.accountUniqueName)) {
+        r = 'Account Name can\'t be empty';
+      }
+    }else {
+      r = 'Account Name can\'t be empty';
+    }
+    return r;
+  }
+
+  // public throwCustomErrMsg() {
+  // }
 
   public setAmount(entry: SalesEntryClass) {
     // delaying due to ngModel change

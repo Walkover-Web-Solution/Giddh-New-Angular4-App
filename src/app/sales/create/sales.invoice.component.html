@@ -92,7 +92,7 @@
           <div class="flex-row-child">
             <div class="form-group size_340">
               <label>Billing Address</label>
-              <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address"></textarea>
+              <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"></textarea>
             </div>
             <div class="form-group">
               <div>
@@ -108,7 +108,7 @@
           <div class="flex-row-child">
             <div class="form-group size_340">
               <label>Shipping Address</label>
-              <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address"></textarea>
+              <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
             </div>
             <div class="form-group">
               <div>
@@ -233,8 +233,8 @@
   <section class="row">
     <section id="actionPane" class="text-center">
       <div class="col-xs-12">
-        <button type="button" class="btn btn-default pull-left">Clear</button>
         <div class="pull-right pr">
+          <button type="button" class="btn btn-default mrR1">Clear</button>
           <button type="submit" class="btn btn-default">Generate Invoice</button>
         </div>
       </div>
