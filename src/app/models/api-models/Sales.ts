@@ -1,5 +1,6 @@
-
+import * as _ from 'lodash';
 import * as moment from 'moment';
+import { IInvoiceTax } from './Invoice';
 
 export interface IStockUnit {
   text: string;
@@ -54,18 +55,107 @@ class ICommonItemOfTransaction {
   public accountName: string;
 }
 
+export class FakeDiscountItem {
+  public amount: number;
+  public particular: string;
+  public name: string;
+}
+
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public discount: any[];
-  public hsnNumber: number;
-  public sacNumber: number;
+  public hsnNumber: string;
+  public sacNumber: string;
   public description: string;
   public quantity: number;
   public stockUnit: string;
   public rate: number;
   public date: string;
+  public taxableValue: number;
+  public total?: number;
+  public fakeAccForSelect2?: string;
   constructor() {
     super();
     this.date = moment().format('DD-MM-YYYY');
+    this.amount = 0;
+    this.total = 0;
+  }
+
+  public setAmount(entry: SalesEntryClass) {
+    // delaying due to ngModel change
+    setTimeout(() => {
+      this.taxableValue = this.getTaxableValue(entry);
+      let tax = this.getTotalTaxOfEntry(entry.taxes);
+      this.total = this.getTransactionTotal(tax, entry);
+    }, 500);
+  }
+
+  public getTotalTaxOfEntry(taxArr: IInvoiceTax[]): number {
+    let count: number = 0;
+    if (taxArr.length > 0) {
+      _.forEach(taxArr, (item: IInvoiceTax) => {
+        count += item.amount;
+      });
+      return this.checkForInfinity(count);
+    }else {
+      return count;
+    }
+  }
+
+  public setQty(entry: SalesEntryClass) {
+    console.log ('in setQty', this);
+    console.log ('setQty entry', entry);
+  }
+
+  public setRate(entry: SalesEntryClass) {
+    console.log ('in setRate', this);
+    console.log ('setRate entry', entry);
+  }
+
+  public checkForInfinity(value): number {
+    return (value === Infinity) ? 0 : value;
+  }
+
+  public getTransactionTotal(tax: number, entry: SalesEntryClass): number {
+    let count: number = 0;
+    if (tax > 0) {
+      let a = this.getTaxableValue(entry) * (tax / 100);
+      a = this.checkForInfinity(a);
+      let b = _.cloneDeep(this.getTaxableValue(entry));
+      count = a + b;
+    }else {
+      count = _.cloneDeep(this.getTaxableValue(entry));
+    }
+    return Number(count.toFixed(2));
+  }
+
+  /**
+   * @param entry: SalesEntryClass object
+   * @return taxable value after calculation
+   * @scenerio one -- without stock entry -- amount - discount = taxableValue
+   * @scenerio two -- stock entry { rate*qty -(discount) = taxableValue}
+   */
+  public getTaxableValue(entry: SalesEntryClass): number {
+    let count: number = 0;
+    if (this.quantity && this.rate) {
+      count = this.checkForInfinity((this.rate * this.quantity) - this.getTotalDiscount(entry.discounts));
+    } else {
+      count = this.checkForInfinity(this.amount - this.getTotalDiscount(entry.discounts));
+    }
+    return count;
+  }
+
+  /**
+   * @return numeric value
+   * @param discountArr collection of discount items
+   */
+  public getTotalDiscount(discountArr: ICommonItemOfTransaction[]) {
+    let count: number = 0;
+    if (discountArr.length > 0) {
+      _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
+        count += Math.abs(item.amount);
+      });
+    }
+    return count;
   }
 }
 
@@ -79,8 +169,15 @@ class IRoundOff {
 export class SalesEntryClass {
   public uniqueName: string;
   public transactions: SalesTransactionItemClass[];
+  public discounts: ICommonItemOfTransaction[];
+  public taxes: IInvoiceTax[];
+  public description: string;
+  public taxableValue: number;
+  public entryTotal: number;
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
+    this.taxes = [];
+    this.discounts = [];
   }
 }
 
@@ -97,6 +194,18 @@ class ITotaltaxBreakdown {
 class CountryClass {
   public countryName: string;
   public countryCode: string;
+}
+
+class OtherSalesItemClass {
+  public shippingDate: string;
+  public shippedVia: string;
+  public trackingNumber: string;
+  public customField1: string;
+  public customField2: string;
+  public customField3: string;
+  constructor() {
+    this.shippingDate = moment().format('DD-MM-YYYY');
+  }
 }
 
 export class InvoiceFormClass {
@@ -119,7 +228,7 @@ export class InvoiceFormClass {
   public totaltaxBreakdown: ITotaltaxBreakdown[];
   public totalTax?: any;
   public invoiceDetails: InvoiceDetailsClass;
-  public other?: any;
+  public other?: OtherSalesItemClass;
   public country: CountryClass;
   constructor() {
     this.invoiceDetails = new InvoiceDetailsClass();
@@ -131,6 +240,7 @@ export class InvoiceFormClass {
     this.account = new AccountClass();
     this.signature = new SignatureClass();
     this.country = new CountryClass();
+    this.other = new OtherSalesItemClass();
   }
 }
 /**
