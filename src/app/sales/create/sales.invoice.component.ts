@@ -26,6 +26,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import * as uuid from 'uuid';
 import { IContentCommon, ICommonItemOfTransaction, IInvoiceTax } from '../../models/api-models/Invoice';
+import { SalesService } from '../../services/sales.service';
+import { ToasterService } from '../../services/toaster.service';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR = [
   {
@@ -144,7 +146,9 @@ export class SalesInvoiceComponent implements OnInit {
     private accountService: AccountService,
     private salesAction: SalesActions,
     private companyActions: CompanyActions,
-    private ledgerActions: LedgerActions
+    private ledgerActions: LedgerActions,
+    private salesService: SalesService,
+    private _toasty: ToasterService,
   ) {
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
@@ -188,7 +192,6 @@ export class SalesInvoiceComponent implements OnInit {
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
         this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
-        console.log ('accountsArray', accountsArray);
       }
     });
 
@@ -226,16 +229,17 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public assignValuesInForm(data: AccountResponseV2) {
-    console.log ('assignValuesInForm', data);
     // toggle all collapse
     this.isGenDtlCollapsed = false;
     this.isMlngAddrCollapsed = false;
     this.isOthrDtlCollapsed = false;
 
     // auto fill all the details
+    this.invFormData.account.name = data.name;
+    this.invFormData.account.uniqueName = data.uniqueName;
     this.invFormData.account.attentionTo = data.attentionTo;
-    this.invFormData.invoiceDetails.invoiceDate = moment().format('DD-MM-YYYY');
     this.invFormData.country.countryName = data.country.countryName;
+    this.invFormData.invoiceDetails.invoiceDate = moment().format('DD-MM-YYYY');
     // fill address conditionally
     if (data.addresses.length > 0) {
       // set billing
@@ -252,8 +256,55 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public onSubmitInvoiceForm(f: NgForm) {
-    console.log (f, 'onSubmitInvoiceForm');
+
+    let txnErr: boolean;
+    console.log (f.form.valid, 'form is valid');
     console.log (this.invFormData, 'actual class object');
+
+    // before submit request making some validation rules
+    // check for account uniquename
+    if (this.invFormData.account && !this.invFormData.account.uniqueName) {
+      this._toasty.warningToast('Please select account');
+      return;
+    }
+
+    // check for valid entries and transactions
+    if ( this.invFormData.entries) {
+      _.forEach(this.invFormData.entries, (entry) => {
+        _.forEach(entry.transactions, (txn) => {
+          // will get errors of string and if not error then true boolean
+          let txnResponse = txn.isValid();
+          if (txnResponse !== true) {
+            this._toasty.warningToast(txnResponse);
+            txnErr = true;
+            return false;
+          }else {
+            txnErr = false;
+          }
+        });
+      });
+    }else {
+      this._toasty.warningToast('At least a single entry needed to generate sales-invoice');
+      return;
+    }
+
+    // if txn has errors
+    if (txnErr) {
+      return false;
+    }
+
+    this.salesService.generateSales(this.invFormData).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
+      console.log (response);
+      if (response.status === 'success') {
+        if (typeof response.body === 'string') {
+          this._toasty.successToast(response.body);
+        } else {
+          this._toasty.successToast('Invoice Generated Successfully');
+        }
+      } else {
+        this._toasty.errorToast(response.code);
+      }
+    });
   }
 
   public noResultsForSalesAccount(e: boolean): void {
@@ -274,7 +325,6 @@ export class SalesInvoiceComponent implements OnInit {
         this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
           if (data.status === 'success') {
             let o = _.cloneDeep(data.body);
-            console.log ('set data in tr', o);
             txn.accountName = o.name;
             txn.accountUniqueName = o.uniqueName;
             txn.hsnNumber = o.hsnNumber;
@@ -319,7 +369,6 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public onSelectCustomer(e: TypeaheadMatch): void {
-    console.log('Selected value: ', e.value, e.item);
     this.getAccountDetails(e.item.uniqueName);
   }
 
