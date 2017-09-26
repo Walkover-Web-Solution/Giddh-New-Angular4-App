@@ -122,6 +122,9 @@ export class AccountsAction {
     .ofType(AccountsAction.CREATE_ACCOUNTV2)
     .switchMap(action => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
     .map(response => {
+      if (response.status === 'success') {
+        this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
+      }
       return this.createAccountResponseV2(response);
     });
 
@@ -138,7 +141,6 @@ export class AccountsAction {
       } else {
         this._toasty.successToast('Account Created Successfully');
       }
-      // this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
       let groupSearchString: string;
       this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
       if (groupSearchString) {
@@ -146,6 +148,7 @@ export class AccountsAction {
       } else {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
+      setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
       return { type: '' };
     });
 
