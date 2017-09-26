@@ -106,7 +106,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['', [Validators.required]],
+      openingBalanceType: ['CREDIT', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
