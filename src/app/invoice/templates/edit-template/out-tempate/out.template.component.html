@@ -551,7 +551,7 @@
                             <td colspan="2" *ngIf="inputTemplate.sections[1].content[10].display" class="text-right">11000344640.00</td>
                         </tr>
                         <tr>
-                            <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-right">1</td>
+                            <td *ngIf="inputTemplate.sections[1].content[0].display" class="text-right">2</td>
                             <td *ngIf="inputTemplate.sections[1].content[1].display" class="text-left">23/07/17</td>
                             <td colspan="2" *ngIf="inputTemplate.sections[1].content[2].display" class="text-left">Dummy Product Edition 2</td>
                             <td *ngIf="inputTemplate.sections[1].content[3].display" class="text-right">123456</td>
@@ -622,13 +622,19 @@
                             </td>
                         </tr>
                         <tr *ngIf="inputTemplate.sections[2].content[7].display">
-                            <td><strong><h4 [ngStyle]="{ 'color': inputTemplate.primaryColor}" [innerHTML]="inputTemplate.sections[2].content[7].label"></h4></strong></td>
+                            <td>
+                                <strong>
+                                    <h4 *ngIf="inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.primaryColor}" [innerHTML]="inputTemplate.sections[2].content[7].label"></h4>
+                                    <h4 *ngIf="!inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.primaryColor}">Thank You for your business.</h4>
+                                </strong>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
 
             </aside>
             <footer *ngIf="inputTemplate.sections[2].content[8].display" style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.primaryColor}">
+                <span *ngIf="inputTemplate.sections[0].content[0].display">{{inputTemplate.sections[0].content[0].label}}</span> <br>
                 {{inputTemplate.sections[2].content[8].label}}
             </footer>
         </div>
