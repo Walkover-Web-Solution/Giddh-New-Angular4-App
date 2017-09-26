@@ -154,7 +154,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     if (indx > -1) {
       profileObj.gstDetails.splice(indx, 1);
-      this.gstDetailsBackup.splice(indx, 1);
+      if (this.gstDetailsBackup) {
+         this.gstDetailsBackup.splice(indx, 1);
+      }
     }
     this.companyProfileObj = profileObj;
   }
