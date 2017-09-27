@@ -12,6 +12,7 @@
                                     <div class="" [ngClass]="{'input-group': !invoiceSetting.emailVerified}">
                                         <input type="email" class="form-control" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' />
                                         <span class="input-group-addon" [hidden]="invoiceSetting.emailVerified"><i class="glyphicon glyphicon-exclamation-sign" tooltip="Unverified"></i></span>
+                                        <span class="input-group-addon" [hidden]="!invoiceSetting.emailVerified"><i class="glyphicon glyphicon-ok" tooltip="Verified"></i></span>
                                     </div>
                                 </div>
                             </div>
