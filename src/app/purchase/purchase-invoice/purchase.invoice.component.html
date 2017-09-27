@@ -128,7 +128,7 @@
                             <button type="button" class="btn btn-success">GO</button>
                             <a class="btn btn-link">Reset</a>
                         </div>
-                        <button (click)="onUpdate()" class="btn btn-generate pull-right">Generate <br />Purchase Invoice</button>
+                        <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="generateInvoiceArr.length == 0">Generate <br />Purchase Invoice</button>
                     </div>
                 </form>
 
@@ -171,18 +171,20 @@
             </thead>
             <tbody>
                 <tr *ngFor="let invoice of allPurchaseInvoices; let i = index">
-                    <td class="text-center"><input type="checkbox" (click)="onSelectRow(i)" [disabled]="invoice.entryType === ''" /></td>
+                    <td class="text-center"><input type="checkbox" (click)="onSelectRow(i); generateInvoice(invoice);" [disabled]="invoice.entryType !== 'reverse charge'" /></td>
                     <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.account.accountName | highlight: searchBox.value"></td>
-                    <td><input type="text" class="form-control" [value]="invoice.account.gstIn" /></td>
+                    <td><input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
+                        <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small>
+                    </td>
                     <td><input type="text" class="form-control" [value]="invoice.invoiceNo" /></td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
                         <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
                             <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType);">
                             <option value="">None selected</option>
-                            <option value="composite"> Composite </option>
+                            <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
                             <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0'))"> Reverse Charge</option>
                         </select>
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
