@@ -180,7 +180,7 @@
               </td>
             </tr>
 
-            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
+            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" (dblclick)="showUpdateLedgerModal(txn)"
               (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
               <td class="col-xs-2">{{ txn.entryDate }}</td>
               <td class="col-xs-7">
@@ -351,9 +351,9 @@
 
 <!-- update ladger entry popup -->
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="width:90%">
+    <div class="modal-dialog modal-lg" style="width:90%" *ngIf="showUpdateLedgerForm">
         <div class="modal-content">
-            <update-ledger-entry-panel>
+            <update-ledger-entry-panel (closeUpdateLedgerModal)="hideUpdateLedgerModal()">
             </update-ledger-entry-panel>
         </div>
     </div>

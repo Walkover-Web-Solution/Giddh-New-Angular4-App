@@ -63,7 +63,7 @@ export class LedgerResponse {
   public transactions: ILedgerTransactionItem[];
   public unconfirmedEntry: boolean;
   public uniqueName: string;
-  public voucher: IVoucherItem;
+  public voucher: IVoucherItem = { name: '', shortCode: '' };
   public voucherNo: number;
 }
 
