@@ -141,7 +141,13 @@ export class InvoiceUiDataService {
       if (data && data.customCreatedTemplates && data.customCreatedTemplates.length) {
         let allTemplates = _.cloneDeep(data.customCreatedTemplates);
         let selectedTemplate = allTemplates.find((template) => template.uniqueName === uniqueName);
+
         if (selectedTemplate) {
+
+          if (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' && data.defaultTemplate) { // this is default(old) template
+            selectedTemplate.sections = _.cloneDeep(data.defaultTemplate.sections);
+          }
+
           if (selectedTemplate.sections[0].content[0].display) {
             this.isCompanyNameVisible.next(true);
           }
@@ -150,7 +156,7 @@ export class InvoiceUiDataService {
             selectedTemplate.sections[2].content[10].label = this.companyName;
           }
           if (this.companyAddress) {
-            // selectedTemplate.sections[2].content[8].label = this.companyAddress;
+            selectedTemplate.sections[2].content[8].label = this.companyAddress;
           }
           if (!selectedTemplate.logoUniqueName) {
             this.isLogoVisible.next(false);
