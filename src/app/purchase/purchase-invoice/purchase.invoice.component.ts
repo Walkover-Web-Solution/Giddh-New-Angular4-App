@@ -20,6 +20,7 @@ import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/map';
 import { AccountService } from '../../services/account.service';
 import { AccountRequest } from '../../models/api-models/Account';
+import { StateList } from './state-list';
 
 const otherFiltersOptions = [
   { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
@@ -126,6 +127,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public eventLog = '';
   public selectedRowIndex: number;
   public isReverseChargeSelected: boolean = false;
+  public stateList = StateList;
+  public generateInvoiceArr: any = [];
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -212,7 +215,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         let allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoices);
 
         allPurchaseInvoices = allPurchaseInvoices.filter((invoice: IInvoicePurchaseResponse) => {
-          return (patt.test(invoice.account.gstIn) || patt.test(invoice.entryUniqueName) || patt.test(invoice.account.accountName) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNo) || patt.test(invoice.particulars));
+          return (patt.test(invoice.account.gstIn) || patt.test(invoice.entryUniqueName) || patt.test(invoice.account.accountName) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNo) || patt.test(invoice.particular));
         });
 
         this.allPurchaseInvoices = allPurchaseInvoices;
@@ -344,7 +347,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.purchaseInvoices) {
         if (this.allPurchaseInvoices[idx].invoiceNo === itemObj.invoiceNo) {
-          this.allPurchaseInvoices[idx] = _.cloneDeep(o.purchaseInvoices[idx]);
+          this.allPurchaseInvoices[idx].entryType = _.cloneDeep(o.purchaseInvoices[idx].entryType);
           this.selectedRowIndex = idx;
           if (this.allPurchaseInvoices[idx].entryType !== 'reverse charge') {
             this.isReverseChargeSelected = false;
@@ -458,7 +461,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   * toggle dropdown heading
   */
   public onDDShown() {
-    this.dropdownHeading = 'Close list';
+    this.dropdownHeading = 'Selected Taxes';
   }
 
   /**
@@ -466,7 +469,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   */
   public onDDHidden(uniqueName: string, accountUniqueName: string) {
     let taxUniqueNames: string[] = [];
-    this.dropdownHeading = 'Select taxes';
+    this.dropdownHeading = 'Select Taxes';
     let purchaseInvoiceRequestObject = _.cloneDeep(this.purchaseInvoiceRequestObject);
     let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
     purchaseInvoiceRequestObject.entryUniqueName.push(uniqueName);
@@ -488,4 +491,36 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.updateEntryType(this.selectedRowIndex, this.selectedEntryTypeValue);
     }
   }
+
+  /**
+   * generateInvoice
+   */
+  public generateInvoice(item) {
+    if (item) {
+      let index = this.generateInvoiceArr.filter((obj, i) => obj.entryUniqueName === item.entryUniqueName);
+      console.log(index);
+    } else {
+      this.generateInvoiceArr.push(item);
+    }
+  }
+
+  /**
+   * COMMENTED DUE TO PHASE-2
+   * validateGstin
+   */
+  // public validateGstin(val, idx) {
+  //   if (val && val.length === 15) {
+  //     let code = val.substr(0, 2);
+  //     console.log(code);
+  //     let Gststate = this.stateList.filter((obj) => obj.code === code);
+  //     if (_.isEmpty(Gststate)) {
+  //       this.toasty.errorToast(val + ' Invalid GSTIN Number.');
+  //     }
+  //     console.log(Gststate);
+  //   } else if (val) {
+  //     this.toasty.errorToast(val + ' Invalid GSTIN Number.');
+  //     console.log(idx);
+  //   }
+  // }
+
 }
