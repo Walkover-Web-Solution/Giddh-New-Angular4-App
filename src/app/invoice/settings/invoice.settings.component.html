@@ -30,11 +30,11 @@
                             <li *ngFor="let webhook of invoiceWebhook; let i = index" class="col-xs-12">
                                 <div class="row">
                                     <div class="w100 pull-left">
-                                        <label [hidden]="i != '0'">Due Days</label>
-                                        <input type="text" class="form-control" maxlength="2" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' [disabled]='webhook.uniqueName' />
+                                        <label [hidden]="i !== 0">Due Days</label>
+                                        <input type="text" class="form-control" [maxlength]="3" name='alertDuedate_+{{i}}' [(ngModel)]='webhook.triggerAt' (ngModelChange)="checkDueDays(webhook.triggerAt, i, 'alpha')" (blur)="checkDueDays(webhook.triggerAt, i, 'length')" [disabled]='webhook.uniqueName' />
                                     </div>
                                     <div class="col-xs-6">
-                                        <label [hidden]="i != '0'">Webhook URL <i class="glyphicon glyphicon-exclamation-sign" tooltip="Add a webhook URL & specify due days to send all your Invoice details"></i></label>
+                                        <label [hidden]="i !== 0">Webhook URL <i class="glyphicon glyphicon-exclamation-sign" tooltip="Add a webhook URL & specify due days to send all your Invoice details"></i></label>
                                         <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
                                     </div>
                                     <label class="mrL1 cp" [hidden]="i == invoiceWebhook.length-1"> <i class="fa fa-trash-o delete-ico" (click)="deleteWebhook(webhook, i)"></i></label>
