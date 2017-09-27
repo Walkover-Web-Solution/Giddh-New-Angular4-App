@@ -6,3 +6,7 @@ export interface IFlattenAccountsResultItem extends IAccountsInfo {
   isFixed: boolean;
   parentGroups: INameUniqueName[];
 }
+
+export interface IFlattenAccountItem extends IFlattenAccountsResultItem {
+  stock: any;
+}

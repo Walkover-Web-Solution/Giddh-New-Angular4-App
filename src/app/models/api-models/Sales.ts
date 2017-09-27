@@ -77,6 +77,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public total?: number;
   public fakeAccForSelect2?: string;
   public isStockTxn?: boolean;
+  public stockDetails?: any;
+  public stockList?: IStockUnit[] = [];
   constructor() {
     super();
     this.date = moment().format('DD-MM-YYYY');
