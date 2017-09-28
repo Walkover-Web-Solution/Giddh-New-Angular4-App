@@ -15,6 +15,7 @@ import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
+import { InvoiceService } from '../../services/invoice.service';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
@@ -64,7 +65,8 @@ export class InvoicePreviewComponent implements OnInit {
     private modalService: BsModalService,
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _invoiceService: InvoiceService,
   ) {
     this.invoiceSearchRequest.entryTotalBy = '';
   }
@@ -91,8 +93,8 @@ export class InvoicePreviewComponent implements OnInit {
     });
 
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o.preview && o.preview.invoices) {
-        this.invoiceData = _.cloneDeep(o.preview.invoices);
+      if (o && o.invoices) {
+        this.invoiceData = _.cloneDeep(o.invoices);
         _.map(this.invoiceData.results, (item: IInvoiceResult) => {
           item.isSelected = false;
           return o;
@@ -150,8 +152,16 @@ export class InvoicePreviewComponent implements OnInit {
    */
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(invoice.account.uniqueName, { invoiceNumber: [invoice.invoiceNumber]}));
-    this.downloadOrSendMailModel.show();
+
+    // this.store.dispatch(this.invoiceActions.DownloadInvoice(invoice.account.uniqueName, { invoiceNumber: [invoice.invoiceNumber]}));
+
+    // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(res.account.uniqueName, model));
+
+    this._invoiceService.GetGeneratedInvoicePreview(invoice.account.uniqueName, invoice.invoiceNumber).takeUntil(this.destroyed$).subscribe(data => {
+      console.log (data);
+    });
+
+    // this.downloadOrSendMailModel.show();
   }
 
   /**
@@ -196,8 +206,12 @@ export class InvoicePreviewComponent implements OnInit {
     }
   }
 
-  public closeDownloadOrSendMailPopup(data) {
+  public closeDownloadOrSendMailPopup(userResponse: {action: string}) {
+    console.log ('close model', userResponse);
     this.downloadOrSendMailModel.hide();
+    if (userResponse.action === 'update') {
+      // do something
+    }
   }
 
   public setToday(model: string) {

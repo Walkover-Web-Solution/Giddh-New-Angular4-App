@@ -104,6 +104,7 @@ export class InvoiceCreateComponent implements OnInit {
   public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
   public totalBalance: number = null;
+  public invoiceDataFound: boolean = false;
   // public methods above
   public isInvoiceGenerated$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -114,24 +115,28 @@ export class InvoiceCreateComponent implements OnInit {
     private _toasty: ToasterService,
     private invoiceService: InvoiceService
   ) {
-    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.generate.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.generate.invoiceData)
+    this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
           if (o) {
             this.invFormData = _.cloneDeep(o);
-          } else {
-            this.invFormData = new PreviewInvoiceResponseClass();
+            this.invFormData.other = new OtherDetailsClass();
+            this.invoiceDataFound = true;
+          }else {
+            this.invoiceDataFound = false;
           }
-          this.invFormData.other = new OtherDetailsClass();
+          // else {
+          //   this.invFormData = new PreviewInvoiceResponseClass();
+          // }
         }
       );
 
-    this.store.select(p => p.invoice.generate.invoiceTemplateConditions)
+    this.store.select(p => p.invoice.invoiceTemplateConditions)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: InvoiceTemplateDetailsResponse) => {

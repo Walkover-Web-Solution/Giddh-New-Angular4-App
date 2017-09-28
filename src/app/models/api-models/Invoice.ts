@@ -232,6 +232,7 @@ export class PreviewInvoiceResponseClass {
   public totalTax?: any;
   public invoiceDetails: InvoiceDetails;
   public other?: any;
+  public dataPreview?: string;
 }
 
  export interface TotaltaxBreakdown {
