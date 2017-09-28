@@ -71,8 +71,8 @@ export class InvoicePreviewComponent implements OnInit {
 
   public ngOnInit() {
     // set initial values
-    this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
-    this.invoiceSearchRequest.to = String(moment());
+    // this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
+    // this.invoiceSearchRequest.to = String(moment());
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
 

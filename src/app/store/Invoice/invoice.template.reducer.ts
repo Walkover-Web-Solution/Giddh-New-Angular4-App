@@ -185,7 +185,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'INVOICE',
+            label: 'TAX INVOICE',
             field: 'formNameTaxInvoice',
             width: null
           }
