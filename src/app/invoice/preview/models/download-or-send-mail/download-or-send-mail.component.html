@@ -1,8 +1,8 @@
 <div id="" class="">
     <div class="modal-header clearfix">
+      <button type="button" class="btn btn-md btn-info mrR1" (click)="onCancel('update')">Edit</button>
       <button type="button" class="btn btn-md btn-primary mrR1" (click)="showEmailTextarea = !showEmailTextarea">Send Email</button>
-      <!-- <button type="button" class="btn btn-md btn-primary">Edit</button> -->
-      <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
+      <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel('none')"></i>
       <!-- drop down for email area -->
       <div class="dropdown-menu" [ngClass]="{open: showEmailTextarea}">
         <div class="form-group">

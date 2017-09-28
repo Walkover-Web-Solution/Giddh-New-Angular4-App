@@ -586,6 +586,13 @@ export class InvoiceActions {
     };
   }
 
+  public ResetInvoiceData(): Action {
+    return {
+      type: INVOICE_ACTIONS.RESET_INVOICE_DATA,
+      payload: ''
+    };
+  }
+
   public setTemplateData(section: any) {
     return {
       payload: section,
