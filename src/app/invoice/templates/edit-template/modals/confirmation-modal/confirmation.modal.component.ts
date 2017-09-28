@@ -9,13 +9,22 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 export class DeleteTemplateConfirmationModelComponent {
 
   @Input() public message: string;
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Input() public flag: string;
+  @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter(null);
 
   public onConfirmation() {
-    this.closeModelEvent.emit(true);
+    if (this.flag === 'closeConfirmation') {
+      this.closeModelEvent.emit({ response: true, close: 'closeConfirmation'});
+    } else {
+      this.closeModelEvent.emit({ response: true, close: 'deleteConfirmation'});
+    }
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(false);
+    if (this.flag === 'closeConfirmation') {
+      this.closeModelEvent.emit({ response: false, close: 'closeConfirmation'});
+    } else {
+      this.closeModelEvent.emit({ response: false, close: 'deleteConfirmation'});
+    }
   }
 }
