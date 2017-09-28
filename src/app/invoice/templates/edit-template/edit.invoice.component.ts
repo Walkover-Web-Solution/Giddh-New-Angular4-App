@@ -38,6 +38,7 @@ export class EditInvoiceComponent implements OnInit {
   public currentTemplate: any;
   public currentTemplateSections: ISection[];
   public deleteTemplateConfirmationMessage: string;
+  public confirmationFlag: string;
   public transactionMode: string = 'create';
   public invoiceTemplateBase64Data: string;
 
@@ -72,27 +73,29 @@ export class EditInvoiceComponent implements OnInit {
    * onCloseTemplateModal
    */
   public onCloseTemplateModal() {
-    this._invoiceUiDataService.resetCustomTemplate();
-    this.templateModal.hide();
+    this.confirmationFlag = 'closeConfirmation';
+    this.selectedTemplateUniqueName = null;
+    this.deleteTemplateConfirmationMessage = `Are you sure want to close this popup? Your unsaved changes will be discarded`;
+    this.customTemplateConfirmationModal.show();
   }
 
   /**
    * createTemplate
    */
   public createTemplate() {
-    let data =  _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
-          this.onCloseTemplateModal();
+          this.templateModal.hide();
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
         } else {
           this._toasty.errorToast(res.message, res.code);
         }
       });
     } else {
-       this._toasty.errorToast('Please enter template name.');
+      this._toasty.errorToast('Please enter template name.');
     }
   }
 
@@ -100,7 +103,7 @@ export class EditInvoiceComponent implements OnInit {
    * updateTemplate
    */
   public updateTemplate() {
-    let data =  _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
       data.updatedAt = null;
       data.updatedBy = null;
@@ -108,14 +111,18 @@ export class EditInvoiceComponent implements OnInit {
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Updated Successfully.');
-          this.onCloseTemplateModal();
+          this.confirmationFlag = null;
+          this.selectedTemplateUniqueName = null;
+          this.deleteTemplateConfirmationMessage = null;
+          this.customTemplateConfirmationModal.hide();
+          this.templateModal.hide();
           this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
         } else {
           this._toasty.errorToast(res.message, res.code);
         }
       });
     } else {
-       this._toasty.errorToast('Please enter template name.');
+      this._toasty.errorToast('Please enter template name.');
     }
   }
 
@@ -124,7 +131,7 @@ export class EditInvoiceComponent implements OnInit {
    */
   public onPreview(template) {
     this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName);
-    let data =  _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     this.invoiceTemplatePreviewModal.show();
   }
 
@@ -153,6 +160,7 @@ export class EditInvoiceComponent implements OnInit {
    */
   public onDeleteTemplate(template) {
     if (template) {
+      this.confirmationFlag = 'deleteConfirmation';
       let selectedTemplate = _.cloneDeep(template);
       this.deleteTemplateConfirmationMessage = `Are you sure want to delete "<b>${selectedTemplate.name}</b>" template?`;
       this.selectedTemplateUniqueName = selectedTemplate.uniqueName;
@@ -163,9 +171,13 @@ export class EditInvoiceComponent implements OnInit {
   /**
    * onCloseConfirmationModal
    */
-  public onCloseConfirmationModal(userResponse: boolean) {
-    if (userResponse && this.selectedTemplateUniqueName) {
+  public onCloseConfirmationModal(userResponse: any) {
+    console.log('THe user res is :', userResponse);
+    if (userResponse.response && userResponse.close === 'deleteConfirmation') {
       this.store.dispatch(this.invoiceActions.deleteTemplate(this.selectedTemplateUniqueName));
+    } else if (userResponse.response && userResponse.close === 'closeConfirmation') {
+      this._invoiceUiDataService.resetCustomTemplate();
+      this.templateModal.hide();
     }
     this.customTemplateConfirmationModal.hide();
   }
