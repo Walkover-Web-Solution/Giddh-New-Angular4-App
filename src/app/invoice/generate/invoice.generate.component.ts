@@ -88,7 +88,7 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.invoice.generate.ledgers)
+    this.store.select(p => p.invoice.ledgers)
       .takeUntil(this.destroyed$)
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
@@ -96,7 +96,7 @@ export class InvoiceGenerateComponent implements OnInit {
         }
       });
 
-    this.store.select(p => p.invoice.generate.invoiceData)
+    this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
         if (p && q) {
@@ -117,6 +117,9 @@ export class InvoiceGenerateComponent implements OnInit {
 
   public closeInvoiceModel() {
     this.invoiceGenerateModel.hide();
+    setTimeout(() => {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }, 2000);
   }
 
   public getLedgersByFilters(f: NgForm) {
