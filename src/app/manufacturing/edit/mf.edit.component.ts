@@ -42,6 +42,8 @@ export class MfEditComponent implements OnInit {
     multiple: false,
     placeholder: 'Select'
   };
+  public expenseGroupAccounts$: Observable<Select2OptionData[]>;
+  public liabilityGroupAccounts$: Observable<Select2OptionData[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -72,29 +74,36 @@ export class MfEditComponent implements OnInit {
     });
 
     // Get group with accounts
-    // this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
-    //   if (data.status === 'success') {
-    //     let groups: Select2OptionData[] = [];
-    //     data.body.map((d: any) => {
-    //       if (d.category === 'expenses') {
-    //         this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
-    //       }
-    //       if (d.category === 'liabilities') {
-    //         this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
-    //       }
-    //     });
-    //   }
-    // });
-
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        data.body.results.map(d => {
-          this.liabilityGroupAccounts.push({ text: d.name, id: d.uniqueName });
-          this.expenseGroupAccounts.push({ text: d.name, id: d.uniqueName });
+        let GroupWithAccResponse = _.cloneDeep(data.body);
+        this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(response => {
+          if (response.status === 'success') {
+          let flattenGroupResponse = _.cloneDeep(response.body.results);
+
+            _.forEach(GroupWithAccResponse, (d: any) => {
+              _.forEach(flattenGroupResponse, acc => {
+              if (d.category === 'expenses' || d.category === 'liabilities' || d.category === 'assets') {
+                let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
+                if (matchedAccIndex > -1) {
+                  if (d.category === 'expenses') {
+                    this.expenseGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                  }
+                  if (d.category === 'liabilities' || d.category === 'assets') {
+                    this.liabilityGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                  }
+                }
+              }
+            });
+            });
+            this.expenseGroupAccounts$ = Observable.of(this.expenseGroupAccounts);
+            this.liabilityGroupAccounts$ = Observable.of(this.liabilityGroupAccounts);
+          }
         });
       }
     });
 
+    this.manufacturingDetails.quantity = 1;
   }
   public ngOnInit() {
     // console.log('hello from MfEditComponent');
@@ -102,7 +111,7 @@ export class MfEditComponent implements OnInit {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
     }
-    // dispatch stocklist request
+    // dispatch stockList request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (!o.stocksList) {
         this.store.dispatch(this.inventoryAction.GetStock());
@@ -301,7 +310,7 @@ export class MfEditComponent implements OnInit {
     return 0;
   }
 
-  public onQuantityChange(event) {
+  public onQuantityChange(value: number) {
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
     // || this.initialQuantityObj.length !== manufacturingObj.linkedStocks.length
     if (!this.initialQuantityObj.length) {
@@ -311,10 +320,10 @@ export class MfEditComponent implements OnInit {
       });
     }
 
-    if (event && !isNaN(event) && event > 0) {
-      event = event;
+    if (value && !isNaN(value) && value > 0) {
+      value = value;
     } else {
-      event = 1;
+      value = 1;
     }
 
     if (manufacturingObj && manufacturingObj.linkedStocks) {
@@ -322,7 +331,7 @@ export class MfEditComponent implements OnInit {
 
         let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
         if (selectedStock) {
-          stock.quantity = selectedStock.quantity * event;
+          stock.quantity = selectedStock.quantity * value;
           stock.amount = stock.quantity * stock.rate;
         }
       });

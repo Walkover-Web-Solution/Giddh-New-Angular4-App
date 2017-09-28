@@ -32,6 +32,7 @@ export class InvoiceSettingComponent implements OnInit {
   public updateRazor: boolean = false;
   public accountList: any;
   public accountToSend: any = {};
+  public numOnlyPattern: RegExp = new RegExp(/^[0-9]*$/g);
   public linkAccountDropDown$: Observable<Select2OptionData[]>;
   public options: Select2Options = {
     multiple: false,
@@ -56,8 +57,22 @@ export class InvoiceSettingComponent implements OnInit {
 
   public ngOnInit() {
     this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+    // get flatten_accounts list
+    this.initSettingObj();
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let linkAccount: Select2OptionData[] = [];
+        this.accountList = _.cloneDeep(data.body.results);
+        data.body.results.map(d => {
+          linkAccount.push({ text: d.name, id: d.uniqueName });
+        });
+        this.linkAccountDropDown$ = Observable.of(linkAccount);
+      }
+    });
+  }
 
-    this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((setting: InvoiceSetting) => {
+  public initSettingObj() {
+     this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
         this.settingResponse = setting;
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
@@ -91,20 +106,7 @@ export class InvoiceSettingComponent implements OnInit {
         }
       }
     });
-
-    // get flatten_accounts list
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let linkAccount: Select2OptionData[] = [];
-        this.accountList = _.cloneDeep(data.body.results);
-        data.body.results.map(d => {
-          linkAccount.push({ text: d.name, id: d.uniqueName });
-        });
-        this.linkAccountDropDown$ = Observable.of(linkAccount);
-      }
-    });
   }
-
   /**
    * Add New Webhook
    */
@@ -135,6 +137,7 @@ export class InvoiceSettingComponent implements OnInit {
   public deleteWebhook(webhook, index) {
     if (webhook.uniqueName) {
       this.store.dispatch(this.invoiceActions.deleteWebhook(webhook.uniqueName));
+      this.initSettingObj();
     } else {
       this.invoiceWebhook.splice(index, 1);
     }
@@ -146,8 +149,8 @@ export class InvoiceSettingComponent implements OnInit {
   public UpdateForm(form) {
     let razorpayObj: RazorPayDetailsResponse = _.cloneDeep(this.settingResponse.razorPayform) || new RazorPayDetailsResponse();
     // check whether form is updated or not
-    if (!_.isEqual(form, this.invoiceLastState) || !_.isEqual(this.razorpayObj, razorpayObj)) {
-      if (!_.isEqual(form, this.invoiceLastState)) {
+    // if (!_.isEqual(form, this.invoiceLastState)) {
+      // if (!_.isEqual(form, this.invoiceLastState)) {
 
         if (!this.invoiceWebhook[this.invoiceWebhook.length - 1].url && !this.invoiceWebhook[this.invoiceWebhook.length - 1].triggerAt) {
           this.invoiceWebhook.splice(this.invoiceWebhook.length - 1);
@@ -160,15 +163,15 @@ export class InvoiceSettingComponent implements OnInit {
         this.formToSave.webhooks = _.cloneDeep(this.webhooksToSend);
         delete this.formToSave.razorPayform; // delete razorPay before sending form
         this.store.dispatch(this.invoiceActions.updateInvoiceSetting(this.formToSave));
-      }
+      // }
 
       if (!_.isEqual(this.razorpayObj, razorpayObj) && form.createPaymentEntry) {
         this.saveRazorPay(this.razorpayObj, form);
       }
-    } else {
-      this._toasty.warningToast('No changes made.');
-      return false;
-    }
+    // } else {
+    //   this._toasty.warningToast('No changes made.');
+    //   return false;
+    // }
   }
 
   /**
@@ -206,7 +209,8 @@ export class InvoiceSettingComponent implements OnInit {
    * Reset Form
    */
   public resetForm() {
-    this.invoiceSetting = this.invoiceLastState;
+    // this.invoiceSetting = this.invoiceLastState;
+    this.initSettingObj();
   }
 
   /**
@@ -264,6 +268,24 @@ export class InvoiceSettingComponent implements OnInit {
       let emailTodelete = _.cloneDeep(emailId);
       emailTodelete = null;
       this.store.dispatch(this.invoiceActions.deleteInvoiceEmail(emailTodelete));
+    }
+  }
+
+  /**
+   * checkDueDays
+   */
+  public checkDueDays(value: number, indx: number, flag: string) {
+    if (indx > -1 && value > 90 && flag === 'length') {
+      let webhooks = _.cloneDeep(this.invoiceWebhook);
+      webhooks[indx].triggerAt = 90;
+      this.invoiceWebhook = webhooks;
+    }
+    if (indx > -1 && flag === 'alpha') {
+      let webhooks = _.cloneDeep(this.invoiceWebhook);
+      if (isNaN(webhooks[indx].triggerAt)) {
+        webhooks[indx].triggerAt = null;
+        this.invoiceWebhook = webhooks;
+      }
     }
   }
 }
