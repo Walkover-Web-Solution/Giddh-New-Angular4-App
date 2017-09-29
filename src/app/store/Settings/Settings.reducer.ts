@@ -18,7 +18,7 @@ export interface LinkedAccountsState {
 }
 export interface SettingsState {
   integration: IntegrationPage;
-  profile: object;
+  profile: any;
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
 }
