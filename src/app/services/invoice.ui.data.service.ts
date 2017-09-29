@@ -133,10 +133,17 @@ export class InvoiceUiDataService {
     this.customTemplate.next(new CustomTemplateResponse());
   }
 
+   public BRToNewLine(template) {
+    template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
+    template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
+    template.sections[2].content[10].label = template.sections[2].content[10].label.replace(/<br\s*[\/]?>/gi, '\n');
+    return template;
+  }
+
   /**
    * setTemplateUniqueName
    */
-  public setTemplateUniqueName(uniqueName: string) {
+  public setTemplateUniqueName(uniqueName: string, mode: string) {
     this.store.select(p => p.invoiceTemplate).subscribe((data) => {
       if (data && data.customCreatedTemplates && data.customCreatedTemplates.length) {
         let allTemplates = _.cloneDeep(data.customCreatedTemplates);
@@ -144,18 +151,18 @@ export class InvoiceUiDataService {
 
         if (selectedTemplate) {
 
-          if (selectedTemplate.sections[0].content[9].field !== 'trackingNumber' && data.defaultTemplate) { // this is default(old) template
+          if (mode === 'create' && selectedTemplate.sections[0].content[9].field !== 'trackingNumber' && data.defaultTemplate) { // this is default(old) template
             selectedTemplate.sections = _.cloneDeep(data.defaultTemplate.sections);
           }
 
           if (selectedTemplate.sections[0].content[0].display) {
             this.isCompanyNameVisible.next(true);
           }
-          if (this.companyName) {
+          if (this.companyName && mode === 'create') {
             selectedTemplate.sections[0].content[0].label = this.companyName;
             selectedTemplate.sections[2].content[10].label = this.companyName;
           }
-          if (this.companyAddress) {
+          if (this.companyAddress && mode === 'create') {
             selectedTemplate.sections[2].content[8].label = this.companyAddress;
           }
           if (!selectedTemplate.logoUniqueName) {
@@ -163,6 +170,7 @@ export class InvoiceUiDataService {
           } else {
             this.isLogoVisible.next(true);
           }
+          selectedTemplate = this.BRToNewLine(selectedTemplate);
           this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }
       }
