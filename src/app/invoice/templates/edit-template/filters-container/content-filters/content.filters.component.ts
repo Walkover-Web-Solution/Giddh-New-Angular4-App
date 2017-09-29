@@ -84,6 +84,16 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
       }
     }
 
+    if (!template.sections[0].content[14].display) {
+      template.sections[0].content[13].display = false;
+      template.sections[0].content[15].display = false;
+    }
+
+    if (!template.sections[0].content[16].display) {
+      template.sections[0].content[17].display = false;
+      template.sections[0].content[18].display = false;
+    }
+
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 

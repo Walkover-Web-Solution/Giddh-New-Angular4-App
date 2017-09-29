@@ -187,28 +187,31 @@
 
                             <tr *ngIf="toggleAddExpenses">
                                 <td colspan="1">
-                                    <div class="custom-select pos-rel">
+                                    <select2 class="cp" [data]="expenseGroupAccounts$ | async" [options]="options" name="baseAccountUniqueName" [(ngModel)]="otherExpenses.baseAccountUniqueName"></select2>
+                                    <!--<div class="custom-select pos-rel">
                                         <select class="form-control cp" required #baseAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName">
                                           <option value="">-- Select Expense A/C --</option>
-                                          <option [ngValue]="account.id" *ngFor="let account of expenseGroupAccounts">{{ account.text }}</option>
+                                          <option [ngValue]="account.id" *ngFor="let account of expenseGroupAccounts">{{account.text}} ({{account.id}})</option>
                                     </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                                    </div>
+                                    </div>-->
                                 </td>
                                 <td class="text-center">
                                     <label class="pd">to</label>
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
-                                        <select class="form-control cp" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
+                                        <select2 class="cp" [data]="liabilityGroupAccounts$ | async" [options]="options" name="transactionAccountUniqueName" [(ngModel)]="otherExpenses.transactionAccountUniqueName"></select2>
+                                        <!--<select class="form-control cp" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
                                           <option value="">-- Select Liabilities/Assets A/C --</option>
-                                          <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{ account.text }}</option>  
+                                          <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{account.text}} ({{account.id}})</option>  
                                         </select>
-                                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+                                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>-->
                                     </div>
                                 </td>
+                                <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
                                 <td class="text-right"><label class="pd"><input type="number" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control text-right" #transactionAmount="ngModel"></label></td>
-                                <td><button [disabled]="transactionAmount.invalid || transactionAccountUniqueName.invalid || baseAccountUniqueName.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button></td>
+                                <td><button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button></td>
                             </tr>
                         </tbody>
                     </table>

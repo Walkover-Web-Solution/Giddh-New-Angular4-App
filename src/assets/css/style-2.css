@@ -2250,7 +2250,8 @@ select.form-control {
 
 .searchBar {
     background: #f8f7f2;
-    border: 1px solid #949494;
+    border: 0;
+    position: relative;
 }
 
 .searchBar .input-group-addon,
@@ -2441,21 +2442,6 @@ label {
 
 .form_bg {
     background: #f4f5f5;
-}
-
-.searchBar {
-    background: #f8f7f2;
-    border: 1px solid #949494;
-}
-
-.searchBar .input-group-addon,
-.searchBar .form-control {
-    background: none;
-    border: 0;
-}
-
-.searchBar .form-control {
-    min-width: 260px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3960,4 +3946,11 @@ input[type='checkbox'][disabled]:after {
     border-radius: 50%;
     right: 0;
     text-align: center;
+}
+
+.searchBar a {
+    right: 7px;
+    z-index: 9;
+    top: 7px;
+    font-size: 14px;
 }
