@@ -85,6 +85,7 @@ export class EditInvoiceComponent implements OnInit {
   public createTemplate() {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
+      data = this.newLineToBR(data);
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
@@ -108,6 +109,10 @@ export class EditInvoiceComponent implements OnInit {
       data.updatedAt = null;
       data.updatedBy = null;
       data.copyFrom = 'gst_template_a';
+      data.sections[0].content[3].label = '';
+
+      data = this.newLineToBR(data);
+
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Updated Successfully.');
@@ -126,11 +131,18 @@ export class EditInvoiceComponent implements OnInit {
     }
   }
 
+  public newLineToBR(template) {
+    template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections[2].content[10].label = template.sections[2].content[10].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    return template;
+  }
+
   /**
    * onPreview
    */
   public onPreview(template) {
-    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName);
+    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview');
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     this.invoiceTemplatePreviewModal.show();
   }
@@ -140,7 +152,7 @@ export class EditInvoiceComponent implements OnInit {
    */
   public onUpdateTemplate(template) {
     this.transactionMode = 'update';
-    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName);
+    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'update');
     this.templateModal.show();
   }
 
