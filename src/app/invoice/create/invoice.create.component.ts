@@ -19,6 +19,7 @@ import {
 } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
+import { ToasterService } from '../../services/toaster.service';
 
 // {
 //   field: 'description'
@@ -110,6 +111,7 @@ export class InvoiceCreateComponent implements OnInit {
   constructor(
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
+    private _toasty: ToasterService,
     private invoiceService: InvoiceService
   ) {
     this.isInvoiceGenerated$ = this.store.select(state => state.invoice.generate.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
@@ -183,12 +185,16 @@ export class InvoiceCreateComponent implements OnInit {
   public onSubmitInvoiceForm() {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
-    model.invoice = _.cloneDeep(this.invFormData);
-    model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
-    model.validateTax = true;
-    model.updateAccountDetails = this.updtFlag;
-    this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
-    this.updtFlag = false;
+    if (accountUniqueName) {
+      model.invoice = _.cloneDeep(this.invFormData);
+      model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
+      model.validateTax = true;
+      model.updateAccountDetails = this.updtFlag;
+      this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+      this.updtFlag = false;
+    }else {
+      this._toasty.warningToast('Something went wrong, please reload the page');
+    }
   }
 
   public getEntryUniqueNames(entryArr: GstEntry[]): string[] {
