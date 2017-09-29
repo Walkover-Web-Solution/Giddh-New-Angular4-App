@@ -100,6 +100,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+  public showUpdateLedgerForm: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -387,11 +388,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showUpdateLedgerModal(txn: ITransactionItem) {
+    this.showUpdateLedgerForm = true;
     this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
     this.lc.selectedTxnUniqueName = txn.entryUniqueName;
     this.updateLedgerModal.show();
   }
 
+  public hideUpdateLedgerModal() {
+    this.showUpdateLedgerForm = false;
+    this.updateLedgerModal.hide();
+  }
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
