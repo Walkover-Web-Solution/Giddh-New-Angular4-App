@@ -54,10 +54,10 @@ export class InvoicePreviewComponent implements OnInit {
     allowClear: true
   };
   public modalRef: BsModalRef;
-  public config = {
+  public modalConfig = {
     animated: true,
     keyboard: false,
-    backdrop: true,
+    backdrop: 'static',
     ignoreBackdropClick: true
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -184,10 +184,8 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   public closeDownloadOrSendMailPopup(userResponse: {action: string}) {
-    console.log ('close model', userResponse);
     this.downloadOrSendMailModel.hide();
     if (userResponse.action === 'update') {
-      // do something
       this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
       this.invoiceGenerateModel.show();
     }else if (userResponse.action === 'closed') {
@@ -196,7 +194,6 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   public closeInvoiceModel(e) {
-    console.log (e, 'closeInvoiceModal');
     this.invoiceGenerateModel.hide();
     setTimeout(() => {
       this.store.dispatch(this.invoiceActions.ResetInvoiceData());
