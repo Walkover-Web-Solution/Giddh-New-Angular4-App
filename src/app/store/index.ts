@@ -28,7 +28,6 @@ const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys
 const productionReducer = compose(localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);
 
 export function rootReducer(state: any, action: any) {
-  console.log(ENV + ': reducer');
   if (ENV === 'development') {
     return developmentReducer(state, action);
   } else {
