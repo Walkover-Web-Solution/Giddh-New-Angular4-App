@@ -613,7 +613,9 @@
                     <tbody>
                         <tr>
                             <td *ngIf="inputTemplate.sections[2].content[5].display || inputTemplate.sections[2].content[6].display">
-                                <p *ngIf="inputTemplate.sections[2].content[5].display" style="margin-bottom: 15px;white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[5].label"></p>
+                                <p *ngIf="inputTemplate.sections[2].content[5].display" style="margin-bottom: 15px;">
+                                    <strong style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[5].label"></strong>
+                                </p>
                                 <p *ngIf="inputTemplate.sections[2].content[6].display" style="white-space:pre-line;" [innerHTML]="inputTemplate.sections[2].content[6].label"></p>
                             </td>
                             <td>&nbsp;</td>

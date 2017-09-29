@@ -204,16 +204,17 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
         case INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
-            let blankWebhook = {
-                url: '',
-                triggerAt: 0,
-                entity: '',
-                uniqueName: ''
-            };
+            // let blankWebhook = {
+            //     url: '',
+            //     triggerAt: 0,
+            //     entity: '',
+            //     uniqueName: ''
+            // };
             if (res.status === 'success') {
-                let newWebhook = res.queryString.webhook;
-                newState.settings.webhooks.push(newWebhook);
-                newState.settings.webhooks.push(blankWebhook);
+                newState.settings.webhooks = null;
+                // let newWebhook = res.queryString.webhook;
+                // newState.settings.webhooks.push(newWebhook);
+                // newState.settings.webhooks.push(blankWebhook);
                 return Object.assign({}, state, newState);
             }
             return state;

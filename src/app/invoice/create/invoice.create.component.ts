@@ -126,6 +126,9 @@ export class InvoiceCreateComponent implements OnInit {
       .subscribe((o: PreviewInvoiceResponseClass) => {
         if (o) {
           this.invFormData = _.cloneDeep(o);
+          // if address found prepare local var due to array and string issue
+          this.prepareAddressForUI('billingDetails');
+          this.prepareAddressForUI('shippingDetails');
           if (!this.invFormData.other) {
             this.invFormData.other = new OtherDetailsClass();
           }
@@ -167,6 +170,30 @@ export class InvoiceCreateComponent implements OnInit {
     );
   }
 
+  public getArrayFromString(str) {
+    if (str.length > 0 ) {
+      return str.split('\n');
+    }else {
+      return [];
+    }
+  }
+
+  public getStringFromArr(arr) {
+    if (Array.isArray(arr) && arr.length > 0 ) {
+      return arr.toString().replace(RegExp(',', 'g'), '\n');
+    }else {
+      return null;
+    }
+  }
+
+  public prepareAddressForUI(type: string) {
+    this.invFormData.account[type].addressStr = this.getStringFromArr(this.invFormData.account[type].address);
+  }
+
+  public prepareAddressForAPI(type: string) {
+    this.invFormData.account[type].address = this.getArrayFromString(this.invFormData.account[type].addressStr);
+  }
+
   public prepareTemplateHeader() {
     let obj = _.cloneDeep(this.headerCond.content);
     let dummyObj = {};
@@ -199,6 +226,8 @@ export class InvoiceCreateComponent implements OnInit {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
     if (accountUniqueName) {
+      this.prepareAddressForAPI('billingDetails');
+      this.prepareAddressForAPI('shippingDetails');
       model.invoice = _.cloneDeep(this.invFormData);
       model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
       model.validateTax = true;
