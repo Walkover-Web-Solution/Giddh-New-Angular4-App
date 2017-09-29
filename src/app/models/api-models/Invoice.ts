@@ -307,6 +307,7 @@ export interface GstEntry {
 export interface IGstDetails {
   gstNumber?: any;
   address: string[];
+  addressStr?: string;
   stateCode?: any;
   panNumber?: any;
 }
