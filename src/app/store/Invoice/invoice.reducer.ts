@@ -13,6 +13,7 @@ export interface InvoiceState {
   invoiceData: PreviewInvoiceResponseClass;
   invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
   isInvoiceGenerated: boolean;
+  visitedFromPreview: boolean;
   settings: InvoiceSetting;
 }
 
@@ -23,6 +24,7 @@ export const initialState: InvoiceState = {
   invoiceData: null,
   invoiceTemplateConditions: null,
   isInvoiceGenerated: false,
+  visitedFromPreview: false,
   settings: null
 };
 
@@ -87,6 +89,36 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
           }
           return state;
         }
+        case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
+          let newState = _.cloneDeep(state);
+          let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
+          if (res.status === 'success') {
+            newState.invoiceData = res.body;
+            return Object.assign({}, state, newState);
+          }
+          return state;
+        }
+        case INVOICE_ACTIONS.VISIT_FROM_PREVIEW: {
+          return Object.assign({}, state, { visitedFromPreview: true });
+        }
+        case INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE: {
+          return Object.assign({}, state, {
+            isInvoiceGenerated: true
+          });
+        }
+        case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
+          return Object.assign({}, state, {
+            isInvoiceGenerated: false,
+            invoiceTemplateConditions: null,
+            invoiceData: null,
+            visitedFromPreview: false
+          });
+        }
+        case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
+          let newState = _.cloneDeep(state);
+          newState.isInvoiceGenerated = false;
+          return Object.assign({}, state, newState);
+        }
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
           let newState = _.cloneDeep(state);
           let res: BaseResponse<string, string> = action.payload;
@@ -114,16 +146,6 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
               return Object.assign({}, state, newState);
             }
             return state;
-        }
-        case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
-            let newState = _.cloneDeep(state);
-            newState.isInvoiceGenerated = false;
-            return Object.assign({}, state, newState);
-        }
-        case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
-          let newState = _.cloneDeep(state);
-          newState.invoiceData = null;
-          return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
             let newState = _.cloneDeep(state);

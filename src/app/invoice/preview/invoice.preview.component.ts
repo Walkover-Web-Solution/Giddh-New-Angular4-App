@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -35,6 +35,7 @@ export class InvoicePreviewComponent implements OnInit {
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
+  @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
 
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
@@ -103,7 +104,33 @@ export class InvoicePreviewComponent implements OnInit {
         this.getInvoices();
       }
     });
+
+    this.store.select(p => p.invoice.invoiceData)
+    .takeUntil(this.destroyed$)
+    .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+      if (p && q) {
+        return (p.templateUniqueName === q.templateUniqueName);
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+    }).subscribe((o: PreviewInvoiceResponseClass) => {
+      if (o) {
+        this.getInvoiceTemplateDetails(o.templateUniqueName);
+      }
+    });
+
     this.getInvoices();
+  }
+
+  public getInvoiceTemplateDetails(templateUniqueName: string) {
+    if (templateUniqueName) {
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    }else {
+      console.log ('error hardcoded: templateUniqueName');
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
+    }
   }
 
   public pageChanged(event: any): void {
@@ -152,16 +179,28 @@ export class InvoicePreviewComponent implements OnInit {
    */
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
+    this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
+    this.downloadOrSendMailModel.show();
+  }
 
-    // this.store.dispatch(this.invoiceActions.DownloadInvoice(invoice.account.uniqueName, { invoiceNumber: [invoice.invoiceNumber]}));
+  public closeDownloadOrSendMailPopup(userResponse: {action: string}) {
+    console.log ('close model', userResponse);
+    this.downloadOrSendMailModel.hide();
+    if (userResponse.action === 'update') {
+      // do something
+      this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
+      this.invoiceGenerateModel.show();
+    }else if (userResponse.action === 'closed') {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }
+  }
 
-    // this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(res.account.uniqueName, model));
-
-    this._invoiceService.GetGeneratedInvoicePreview(invoice.account.uniqueName, invoice.invoiceNumber).takeUntil(this.destroyed$).subscribe(data => {
-      console.log (data);
-    });
-
-    // this.downloadOrSendMailModel.show();
+  public closeInvoiceModel(e) {
+    console.log (e, 'closeInvoiceModal');
+    this.invoiceGenerateModel.hide();
+    setTimeout(() => {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }, 2000);
   }
 
   /**
@@ -203,14 +242,6 @@ export class InvoicePreviewComponent implements OnInit {
       this.downloadFile();
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
-    }
-  }
-
-  public closeDownloadOrSendMailPopup(userResponse: {action: string}) {
-    console.log ('close model', userResponse);
-    this.downloadOrSendMailModel.hide();
-    if (userResponse.action === 'update') {
-      // do something
     }
   }
 

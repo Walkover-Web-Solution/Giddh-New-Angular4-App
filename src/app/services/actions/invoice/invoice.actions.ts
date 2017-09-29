@@ -78,6 +78,32 @@ export class InvoiceActions {
         payload: res
       }));
 
+  // Preview of Generated Invoice
+  @Effect()
+  public PreviewOfGeneratedInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE)
+    .switchMap(action => this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber))
+    .map(res => this.validateResponse<PreviewInvoiceResponseClass, string>(res, {
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+        type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+        payload: res
+      }));
+
+  // Preview of Generated Invoice
+  @Effect()
+  public UpdateGeneratedInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE)
+    .switchMap(action => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body))
+    .map(res => this.validateResponse<string, GenerateInvoiceRequestClass>(res, {
+      type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+        type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
+        payload: res
+      }));
+
   // Generate Invoice
   @Effect()
   public GenerateInvoice$: Observable<Action> = this.action$
@@ -499,6 +525,34 @@ export class InvoiceActions {
     return {
       type: INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE,
       payload: model
+    };
+  }
+
+  public VisitToInvoiceFromPreview(): Action {
+    return {
+      type: INVOICE_ACTIONS.VISIT_FROM_PREVIEW,
+      payload: { }
+    };
+  }
+
+  public PreviewOfGeneratedInvoice(accountUniqueName: string, invoiceNumber: string): Action {
+    return {
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE,
+      payload: { accountUniqueName, invoiceNumber }
+    };
+  }
+
+  public PreviewOfGeneratedInvoiceResponse(model: PreviewInvoiceResponseClass): Action {
+    return {
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Action {
+    return {
+      type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE,
+      payload: { accountUniqueName, body: model }
     };
   }
 

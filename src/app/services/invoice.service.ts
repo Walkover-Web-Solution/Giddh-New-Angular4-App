@@ -117,7 +117,7 @@ export class InvoiceService {
 
   /**
    * PREVIEW OF GENERATED INVOICE
-   * URL:: /company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{invoiceNumber}/preview
+   * URL:: v2/company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{invoiceNumber}/preview
    */
   public GetGeneratedInvoicePreview(accountUniqueName: string, invoiceNumber: string): Observable<BaseResponse<PreviewInvoiceResponseClass, string>> {
     this.store.take(1).subscribe(s => {
@@ -126,7 +126,7 @@ export class InvoiceService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVOICE_API.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':invoiceNumber', invoiceNumber))
+    return this._http.get(INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':invoiceNumber', invoiceNumber))
       .map((res) => {
         let data: BaseResponse<PreviewInvoiceResponseClass, string> = res.json();
         data.request = invoiceNumber;
@@ -134,6 +134,26 @@ export class InvoiceService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, string>(e, invoiceNumber));
+  }
+
+  /**
+   * Update Generated Invoice
+   */
+  public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Observable<BaseResponse<string, GenerateInvoiceRequestClass>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.put(INVOICE_API_2.UPDATE_GENERATED_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string, GenerateInvoiceRequestClass> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model));
   }
 
   /*

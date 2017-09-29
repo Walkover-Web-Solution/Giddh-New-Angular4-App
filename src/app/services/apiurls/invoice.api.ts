@@ -19,14 +19,13 @@ export const INVOICE_API = {
   SAVE_INVOICE_WEBHOOK: COMMON_URL + 'settings/webhooks', // Save Webhook
   GET_RAZORPAY_DETAIL: COMMON_URL + 'razorpay', // Get RazorPay Detail
   SEND_INVOICE_ON_MAIL: COMMON_URL + PART_B + 'mail', // POST
-  GENERATED_INVOICE_PREVIEW: COMMON_URL + PART_B + ':invoiceNumber/preview'
 };
 
 export const INVOICE_API_2 = {
+  UPDATE_GENERATED_INVOICE: URI_ONLY_FOR_INVOICE,
   GENERATE_INVOICE: URI_ONLY_FOR_INVOICE + 'generate',
   PREVIEW_INVOICE: URI_ONLY_FOR_INVOICE + 'preview',
-  DOWNLOAD_INVOICE: URI_ONLY_FOR_INVOICE + 'download', // POST
-  GET_INVOICE_TEMPLATE_DETAILS: PART_A  + 'templates/:templateUniqueName', // get call for single template details
+  DOWNLOAD_INVOICE: URI_ONLY_FOR_INVOICE + 'download',
+  GENERATED_INVOICE_PREVIEW: URI_ONLY_FOR_INVOICE + ':invoiceNumber/preview',
+  GET_INVOICE_TEMPLATE_DETAILS: PART_A  + 'templates/:templateUniqueName'
 };
-
-// GET: /company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{invoiceNumber}/preview

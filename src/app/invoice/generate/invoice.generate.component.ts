@@ -115,7 +115,8 @@ export class InvoiceGenerateComponent implements OnInit {
 
   }
 
-  public closeInvoiceModel() {
+  public closeInvoiceModel(e) {
+    console.log (e);
     this.invoiceGenerateModel.hide();
     setTimeout(() => {
       this.store.dispatch(this.invoiceActions.ResetInvoiceData());
@@ -204,7 +205,12 @@ export class InvoiceGenerateComponent implements OnInit {
   }
 
   public getInvoiceTemplateDetails(templateUniqueName: string) {
-    this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    if (templateUniqueName) {
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    }else {
+      console.log ('error hardcoded: templateUniqueName');
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
+    }
   }
 
   public showInvoiceModal() {
