@@ -167,10 +167,19 @@
 </div>
 <!-- Download or Send Invoice on mail -->
 <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <!-- modal-liq90 class is removed for now-->
-        <div class="modal-content">
-            <download-or-send-mail-invoice (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)" (closeModelEvent)="closeDownloadOrSendMailPopup($event)"></download-or-send-mail-invoice>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <!-- modal-liq90 class is removed for now-->
+    <div class="modal-content">
+      <download-or-send-mail-invoice (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)" (closeModelEvent)="closeDownloadOrSendMailPopup($event)"></download-or-send-mail-invoice>
     </div>
+  </div>
+</div>
+
+<!-- modal dialog -->
+<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog gray modal-liquid">
+    <div class="modal-content">
+      <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+    </div>
+  </div>
 </div>
