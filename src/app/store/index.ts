@@ -6,6 +6,7 @@
 import { compose } from '@ngrx/core/compose';
 import { ActionReducer, combineReducers } from '@ngrx/store';
 import { storeFreeze } from 'ngrx-store-freeze';
+// import { storeLogger } from 'ngrx-store-logger';
 import { AppState, reducers } from './roots';
 import { localStorageSync } from 'ngrx-store-localstorage';
 
@@ -27,6 +28,7 @@ const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys
 const productionReducer = compose(localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);
 
 export function rootReducer(state: any, action: any) {
+  console.log(ENV + ': reducer');
   if (ENV === 'development') {
     return developmentReducer(state, action);
   } else {
