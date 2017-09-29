@@ -166,7 +166,7 @@
     </div>
 </div>
 <!-- Download or Send Invoice on mail -->
-<div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog">
+<div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
   <div class="modal-dialog modal-lg">
     <!-- modal-liq90 class is removed for now-->
     <div class="modal-content">
@@ -176,7 +176,7 @@
 </div>
 
 <!-- modal dialog -->
-<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog">
+<div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
   <div class="modal-dialog gray modal-liquid">
     <div class="modal-content">
       <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>

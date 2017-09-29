@@ -52,10 +52,10 @@ export class InvoiceGenerateComponent implements OnInit {
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
   public  modalRef: BsModalRef;
-  public config = {
+  public modalConfig = {
     animated: true,
     keyboard: false,
-    backdrop: true,
+    backdrop: 'static',
     ignoreBackdropClick: true
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -116,7 +116,9 @@ export class InvoiceGenerateComponent implements OnInit {
   }
 
   public closeInvoiceModel(e) {
-    console.log (e);
+    if (e.action === 'generate') {
+      this.selectedLedgerItems = [];
+    }
     this.invoiceGenerateModel.hide();
     setTimeout(() => {
       this.store.dispatch(this.invoiceActions.ResetInvoiceData());
