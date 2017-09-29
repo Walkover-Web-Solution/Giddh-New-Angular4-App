@@ -162,9 +162,9 @@
 
 <!--modal dialog  -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog gray modal-liquid">
-        <div class="modal-content">
-            <invoice-generate-model (closeEvent)="closeInvoiceModel()"></invoice-generate-model>
-        </div>
+  <div class="modal-dialog gray modal-liquid">
+    <div class="modal-content">
+      <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
     </div>
+  </div>
 </div>

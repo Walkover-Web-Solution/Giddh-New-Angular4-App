@@ -105,8 +105,9 @@ export class InvoiceCreateComponent implements OnInit {
   public updtFlag: boolean = false;
   public totalBalance: number = null;
   public invoiceDataFound: boolean = false;
-  // public methods above
   public isInvoiceGenerated$: Observable<boolean>;
+  public updateMode: boolean;
+  // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -123,40 +124,47 @@ export class InvoiceCreateComponent implements OnInit {
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
-          if (o) {
-            this.invFormData = _.cloneDeep(o);
+        if (o) {
+          this.invFormData = _.cloneDeep(o);
+          if (!this.invFormData.other) {
             this.invFormData.other = new OtherDetailsClass();
-            this.invoiceDataFound = true;
-          }else {
-            this.invoiceDataFound = false;
           }
-          // else {
-          //   this.invFormData = new PreviewInvoiceResponseClass();
-          // }
+          this.invoiceDataFound = true;
+        }else {
+          this.invoiceDataFound = false;
         }
-      );
+      }
+    );
 
     this.store.select(p => p.invoice.invoiceTemplateConditions)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: InvoiceTemplateDetailsResponse) => {
-          if (o) {
-            this.invTempCond = _.cloneDeep(o);
-            let obj = _.cloneDeep(o);
-            this.tableCond = _.find(obj.sections, {sectionName: 'table'});
-            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
-            this.prepareThead();
-            this.prepareTemplateHeader();
-          }
+        if (o) {
+          this.invTempCond = _.cloneDeep(o);
+          let obj = _.cloneDeep(o);
+          this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+          this.headerCond = _.find(obj.sections, {sectionName: 'header'});
+          this.prepareThead();
+          this.prepareTemplateHeader();
         }
-      );
+      }
+    );
 
     this.isInvoiceGenerated$.subscribe((o) => {
       if (o) {
-        this.closePopupEvent();
-        this.store.dispatch(this.invoiceActions.InvoiceGenerationCompleted());
+        let action = (this.updateMode) ? 'update' : 'generate';
+        this.closePopupEvent({action});
       }
     });
+
+    this.store.select(state => state.invoice.visitedFromPreview)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((val: boolean) => {
+        this.updateMode = val;
+      }
+    );
   }
 
   public prepareTemplateHeader() {
@@ -195,7 +203,12 @@ export class InvoiceCreateComponent implements OnInit {
       model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
       model.validateTax = true;
       model.updateAccountDetails = this.updtFlag;
-      this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+      if (this.updateMode) {
+        // bingo hit api for already generated invoice
+        this.store.dispatch(this.invoiceActions.UpdateGeneratedInvoice(accountUniqueName, model));
+      }else {
+        this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+      }
       this.updtFlag = false;
     }else {
       this._toasty.warningToast('Something went wrong, please reload the page');
@@ -262,8 +275,8 @@ export class InvoiceCreateComponent implements OnInit {
     }
   }
 
-  public closePopupEvent() {
-    this.closeEvent.emit();
+  public closePopupEvent(o) {
+    this.closeEvent.emit(o);
   }
 
   public getSerialNos(entryIndex: number, transIndex: number) {
