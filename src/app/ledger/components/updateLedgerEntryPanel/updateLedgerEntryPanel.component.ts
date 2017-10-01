@@ -66,6 +66,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public uploadInput: EventEmitter<UploadInput>;
   public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
   public grandTotal: number = 0;
+  public totalAmount: number = 0;
   public selectedAccount: IFlattenAccountsResultItem = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
@@ -109,21 +110,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
           if (acc.stocks) {
             acc.stocks.map(as => {
               accountsArray.push({
-                id: uuid.v4(),
+                id: acc.uniqueName,
                 text: acc.name,
                 additional: Object.assign({}, acc, { stock: as })
               });
             });
-            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
+            accountsArray.push({ id: acc.uniqueName, text: acc.name, additional: acc });
           } else {
-            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
+            accountsArray.push({ id: acc.uniqueName, text: acc.name, additional: acc });
           }
         });
         this.flatternAccountList = Observable.of(orderBy(accountsArray, 'text'));
       }
     });
   }
-
   public ngOnInit() {
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.accountUniqueName = params['accountUniqueName'];
@@ -141,19 +141,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
             }
             this.getEntryTotal();
             this.generateGrandTotal();
+            this.getPanelAmount();
           }
         });
       }
     });
   }
-
-  public addBlankTrx(type: string = 'DEBIT', txn: ITransactionItem) {
+  public addBlankTrx(type: string = 'DEBIT', txn: ITransactionItem, event: Event) {
     let lastTxn = last(filter(this.selectedLedger.transactions, p => p.type === type));
-    if (txn.particular.name && lastTxn.particular.name) {
+    if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       this.selectedLedger.transactions.push(this.blankTransactionItem(type));
     }
   }
-
   public blankTransactionItem(type: string = 'DEBIT'): ITransactionItem {
     return {
       amount: 0,
@@ -164,7 +163,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     } as ITransactionItem;
   }
-
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
@@ -197,8 +195,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     }
   }
-
   public selectAccount(e, txn) {
+    this.onTxnAmountChange();
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       this.selectedAccount = null;
@@ -241,12 +239,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     // }
     // return this.entryTotal;
   }
-
   public onTxnAmountChange() {
     this.generateGrandTotal();
+    this.getPanelAmount();
+  }
+  public getPanelAmount() {
+    this.totalAmount = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
   }
   public generateGrandTotal() {
-    this.grandTotal = sumBy(this.selectedLedger.transactions, 'amount');
+    this.grandTotal = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
   }
   public showDeleteAttachedFileModal(merge: string) {
     this.deleteAttachedFileModal.show();
