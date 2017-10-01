@@ -51,7 +51,7 @@
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
+            <delete-template-confirmation-modal [message]='deleteTemplateConfirmationMessage' [flag]="confirmationFlag" (closeModelEvent)="onCloseConfirmationModal($event)"></delete-template-confirmation-modal>
         </div>
     </div>
 </div>

@@ -45,6 +45,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
+  public options: Select2Options = {
+    multiple: false,
+    width: '60px',
+    placeholder: '',
+    allowClear: false
+  };
+  public selectedValue: any;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
