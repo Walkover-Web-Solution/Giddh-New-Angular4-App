@@ -1,190 +1,206 @@
 <div class="ledger-panel" (click)="hideDiscountTax()">
-    <div class="wrapper">
-        <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
-            <table>
-                <tbody class="mrB1 pull-left">
-                    <tr *ngIf="currentTxn.selectedAccount">
-                        <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
-                                            <label>Quantity</label>
-                                            <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.quantity" ng-change="ledgerCtrl.onNewPanelChange().quantity(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)" />
-                                        </td>
-                                        <td ng-if="ledgerCtrl.selectedTxn.panel.unit">
-                                            <label>Unit</label>
-                                            <select class="form-control" ng-options="unit as unit.stockUnitCode for unit in ledgerCtrl.selectedTxn.panel.units" ng-model="ledgerCtrl.selectedTxn.panel.unit" ng-change="ledgerCtrl.onNewPanelChange().unit(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)">
-                                 </select>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </td>
-                        <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
-                            <label>&nbsp;</label>
-                            <label class="pdR pdL default_clr">x</label>
-                        </td>
-                        <td style="max-width:150px" class="pItem" *ngIf="currentTxn.selectedAccount.stock">
-                            <label>Price</label>
-                            <input type="number" name="" class="form-control" ng-model="ledgerCtrl.selectedTxn.panel.price" ng-change="ledgerCtrl.onNewPanelChange().price(ledgerCtrl.selectedTxn, ledgerCtrl.blankLedger)" />
-                        </td>
-                        <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
-                            <label>&nbsp;</label>
-                            <label class="pdR pdL default_clr">=</label>
-                        </td>
-                        <td class="pItem">
-                            <label class="primary_color">Amount</label>
-                            <input type="text" decimalDigitsDirective name="" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()" />
-                        </td>
-                        <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
-                            <label>&nbsp;</label>
-                            <label class="pdR pdL default_clr">-</label>
-                        </td>
-                        <!--discount-->
-                        <td style="max-width:150px" class="pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails.length" (clickOutside)="hideDiscount()" (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
-                            <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts" (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
-                            </ledger-discount>
-                        </td>
-                        <td class="pItem" ng-if="ledgerCtrl.taxList.length > 0 && ledgerCtrl.discountAccount != undefined && ledgerCtrl.discountAccount.accountDetails.length > 0">
-                            <label>&nbsp;</label>
-                            <label class="pdR pdL default_clr">+</label>
-                        </td>
-                        <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length" class="pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
-                            <!--tax control component-->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes" [date]='blankLedger.entryDate' [taxRenderData]="currentTxn.taxes" (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
-                            </tax-control>
-                        </td>
-                        <td class="pItem">
-                            <label>&nbsp;</label>
-                            <label class="pdR pdL default_clr"> = </label>
-                        </td>
-                        <td class="pItem">
-                            <label class="primary_color">Total</label>
-                            <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.total" (keyup)="calculateAmount()" />
-                        </td>
-                    </tr>
+  <div class="wrapper">
+    <div class="basic_detail mrB1" *ngIf="showTaxationDiscountBox">
+      <table>
+        <tbody class="mrB1 pull-left">
+          <tr *ngIf="currentTxn.selectedAccount">
+            <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
+              <table>
+                <tbody>
+                  <tr>
+                    <td ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
+                      <label>Quantity</label>
+                      <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.inventory.quantity" />
+                    </td>
+                    <td *ngIf="currentTxn.unitRate">
+                      <label>Unit</label>
+                      <!-- <select2 class="form-control" [data]="currentTxn.selectedAccount.stock.accountStockDetails.unitRates"
+                        [options]="options" [(ngModel)]="currentTxn.inventory.unit"></select2> -->
+                      <!-- <ng-select [options]="countrySource" formControlName="countryCode"></ng-select> -->
+                      <select class="form-control" style="width: 60px;" [(ngModel)]="currentTxn.inventory.unit">
+                        <option *ngFor="let item of currentTxn.selectedAccount.stock.accountStockDetails.unitRates" [selected]="item.stockUnitCode===currentTxn.inventory.unit.stockUnitCode"
+                          value="item.code">{{item.stockUnitCode}}</option>
+                      </select>
+                    </td>
+                  </tr>
                 </tbody>
-            </table>
-        </div>
-        <div class="pdB1 inWords" *ngIf="currentTxn.total">
-            {{ currentTxn.total | myNumberToWordsPipe }}
-        </div>
-        <div class="row">
-            <div class="col-xs-12">
-                <textarea rows="3" cols="" class="form-control" placeholder="Description" [(ngModel)]="blankLedger.description"></textarea>
-            </div>
-        </div>
-        <div class="col-xs-12 mrT mrB">
-            <div class="row">
-                <div class="cheq col-xs-7 pdT" *ngIf="showAdvanced">
-                    <div class="row">
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td class="pdR1">
-                                        <label class="default_clr">Cheque Number</label>
-                                        <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber" />
-                                    </td>
-                                    <td>
-                                        <label class="default_clr">Cheque Date</label>
-                                        <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate" />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--map bank transactions-->
-        <div class="row">
-            <div class="col-xs-7 form-group pr" *ngIf="false" ng-if="ledgerCtrl.selectedLedger.isBankTransaction">
-                <a href="javascript:void(0)">Map Transaction
-            <span ng-if="ledgerCtrl.showMatchingEntries">with</span>
-            </a>
-                <ul class="list-unstyled map-txn-container" ng-if="ledgerCtrl.showMatchingEntries">
-                    <li class="cp" ng-repeat="entry in ledgerCtrl.matchingEntries">
-                        <table class="table table-bordered mr0">
-                            <tbody>
-                                <tr ng-repeat="txn in entry.transactions">
-                                    <td>{{""}}</td>
-                                    <td>{{""}}</td>
-                                    <td>{{""}}</td>
-                                    <td>{{""}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="clearfix bdrB pdB1 mrB1" *ngIf="showAdvanced">
-            <div class="clearfix pdT">
-                <table class="col-xs-8">
-                    <tr>
-                        <td class="pdR1"><label class="default_clr pull-left">Voucher type</label></td>
-                        <td colspan="4" class="select2-parent">
-                            <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
-                        </td>
-                        <td class="pdL1">
-                            <span>{{""}}</span>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-6">
-                <button class="no-btn pdL0" (click)="showAdvanced = !showAdvanced">Advance <i
-               class="glyphicon glyphicon-triangle-bottom" [ngClass]="{rotate180:showAdvanced}"></i></button>
-            </div>
-            <div class="col-xs-6 text-right">
-                <span class="primary_color">Compound Total: {{ currentTxn?.total }}</span>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-xs-12 clearfix mrT1">
-                <div class="mrR1 form-group pull-left cp" [ngClass]="{hide:blankLedger.attachedFile}">
-                    <label class="pull-left cp fs16">
-               <input class="pull-left" type="checkbox" name="generateInvoice" [(ngModel)]="blankLedger.generateInvoice"> Generate Invoice
-               </label>
-                </div>
-                <div class="file_attached pull-right text-right" *ngIf="blankLedger.attachedFile.length > 0">
-                    <div class="">
-                        <span>{{ blankLedger.attachedFileName }}</span>
-                        <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
-                    </div>
-                </div>
-                <div class="pull-right">
-                    <label class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
-               <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
-               <label for="invoiceFile"  class="cp fs16"><i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
-                    </label>
-                </div>
-            </div>
-            <div class="col-xs-12 pdT1">
-                <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
-            Reset
-            </button>
-                <div class="pull-right">
-                    <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('DEBIT',$event)">Add to DR
-               </button>
-                    <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('CREDIT',$event)">Add to CR
-               </button>
-                    <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading" [ladda]="isLedgerCreateInProcess$ | async" (click)="saveLedger()">Save
-               </button>
-                </div>
-            </div>
-        </div>
+              </table>
+            </td>
+            <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
+              <label>&nbsp;</label>
+              <label class="pdR pdL default_clr">x</label>
+            </td>
+            <td style="max-width:150px" class="pItem" *ngIf="currentTxn.selectedAccount.stock">
+              <label>Price</label>
+              <input type="number" [value]="currentTxn?.inventory?.unit?.rate" name="" class="form-control" />
+            </td>
+            <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
+              <label>&nbsp;</label>
+              <label class="pdR pdL default_clr">=</label>
+            </td>
+            <td class="pItem">
+              <label class="primary_color">Amount</label>
+              <input type="text" decimalDigitsDirective name="" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()"
+              />
+            </td>
+            <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
+              <label>&nbsp;</label>
+              <label class="pdR pdL default_clr">-</label>
+            </td>
+            <!--discount-->
+            <td style="max-width:150px" class="pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails.length" (clickOutside)="hideDiscount()"
+              (click)="$event.stopPropagation()" (mouseenter)="hideTax()">
+              <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts" (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
+              </ledger-discount>
+            </td>
+            <td class="pItem" ng-if="ledgerCtrl.taxList.length > 0 && ledgerCtrl.discountAccount != undefined && ledgerCtrl.discountAccount.accountDetails.length > 0">
+              <label>&nbsp;</label>
+              <label class="pdR pdL default_clr">+</label>
+            </td>
+            <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length" class="pos-rel dropdown-container" (clickOutside)="hideTax()"
+              (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
+              <!--tax control component-->
+              <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes" [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes"
+                (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+              </tax-control>
+            </td>
+            <td class="pItem">
+              <label>&nbsp;</label>
+              <label class="pdR pdL default_clr"> = </label>
+            </td>
+            <td class="pItem">
+              <label class="primary_color">Total</label>
+              <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.total" (keyup)="calculateAmount()" />
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+    <div class="pdB1 inWords" *ngIf="currentTxn.total">
+      {{ currentTxn.total | myNumberToWordsPipe }}
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <textarea rows="3" cols="" class="form-control" placeholder="Description" [(ngModel)]="blankLedger.description"></textarea>
+      </div>
+    </div>
+    <div class="col-xs-12 mrT mrB">
+      <div class="row">
+        <div class="cheq col-xs-7 pdT" *ngIf="showAdvanced">
+          <div class="row">
+            <table>
+              <tbody>
+                <tr>
+                  <td class="pdR1">
+                    <label class="default_clr">Cheque Number</label>
+                    <input type="text" placeholder="XXXX2619" class="form-control" [(ngModel)]="blankLedger.chequeNumber" />
+                  </td>
+                  <td>
+                    <label class="default_clr">Cheque Date</label>
+                    <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--map bank transactions-->
+    <div class="row">
+      <div class="col-xs-7 form-group pr" *ngIf="false" ng-if="ledgerCtrl.selectedLedger.isBankTransaction">
+        <a href="javascript:void(0)">Map Transaction
+          <span ng-if="ledgerCtrl.showMatchingEntries">with</span>
+        </a>
+        <ul class="list-unstyled map-txn-container" ng-if="ledgerCtrl.showMatchingEntries">
+          <li class="cp" ng-repeat="entry in ledgerCtrl.matchingEntries">
+            <table class="table table-bordered mr0">
+              <tbody>
+                <tr ng-repeat="txn in entry.transactions">
+                  <td>{{""}}</td>
+                  <td>{{""}}</td>
+                  <td>{{""}}</td>
+                  <td>{{""}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="clearfix bdrB pdB1 mrB1" *ngIf="showAdvanced">
+      <div class="clearfix pdT">
+        <table class="col-xs-8">
+          <tr>
+            <td class="pdR1">
+              <label class="default_clr pull-left">Voucher type</label>
+            </td>
+            <td colspan="4" class="select2-parent">
+              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
+            </td>
+            <td class="pdL1">
+              <span>{{""}}</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-6">
+        <button class="no-btn pdL0" (click)="showAdvanced = !showAdvanced">Advance
+          <i class="glyphicon glyphicon-triangle-bottom" [ngClass]="{rotate180:showAdvanced}"></i>
+        </button>
+      </div>
+      <div class="col-xs-6 text-right">
+        <span class="primary_color">Compound Total: {{ currentTxn?.total }}</span>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 clearfix mrT1">
+        <div class="mrR1 form-group pull-left cp" [ngClass]="{hide:blankLedger.attachedFile}">
+          <label class="pull-left cp fs16">
+            <input class="pull-left" type="checkbox" name="generateInvoice" [(ngModel)]="blankLedger.generateInvoice"> Generate Invoice
+          </label>
+        </div>
+        <div class="file_attached pull-right text-right" *ngIf="blankLedger.attachedFile.length > 0">
+          <div class="">
+            <span>{{ blankLedger.attachedFileName }}</span>
+            <label class="remove cp primary_clr" (click)="showDeleteAttachedFileModal()">(remove)</label>
+          </div>
+        </div>
+        <div class="pull-right">
+          <label class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
+            <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+            <label for="invoiceFile" class="cp fs16">
+              <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
+          </label>
+        </div>
+      </div>
+      <div class="col-xs-12 pdT1">
+        <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
+          Reset
+        </button>
+        <div class="pull-right">
+          <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('DEBIT',$event)">Add to DR
+          </button>
+          <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('CREDIT',$event)">Add to CR
+          </button>
+          <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading" [ladda]="isLedgerCreateInProcess$ | async"
+            (click)="saveLedger()">Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 <!--deleteAttachedFile  -->
 <div bsModal #deleteAttachedFileModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'" (cancelCallBack)="hideDeleteAttachedFileModal()" (successCallBack)="deleteAttachedFile()">
-            </confirm-modal>
-        </div>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'" (cancelCallBack)="hideDeleteAttachedFileModal()"
+        (successCallBack)="deleteAttachedFile()">
+      </confirm-modal>
     </div>
+  </div>
 </div>

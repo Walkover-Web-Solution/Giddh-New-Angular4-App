@@ -192,6 +192,46 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
         if (fa.id === e.value) {
           txn.selectedAccount = fa.additional;
+          let rate = 0;
+          let unitCode = '';
+          let unitName = '';
+          let stockName = '';
+          let stockUniqueName = '';
+
+          if (fa.additional && fa.additional.stock && fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
+            rate = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code).rate;
+          }
+          if (fa.additional && fa.additional.stock && fa.additional.stock.stockUnit) {
+            unitName = fa.additional.stock.stockUnit.name;
+            unitCode = fa.additional.stock.stockUnit.code;
+          }
+          if (fa.additional && fa.additional.stock) {
+            stockName = fa.additional.stock.name;
+            stockUniqueName = fa.additional.stock.uniqueName;
+          }
+          if (stockName && stockUniqueName) {
+            if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
+              txn.unitRate = fa.additional.stock.accountStockDetails.unitRates.map(p => {
+                return {
+                  stockUnitCode: p.stockUnitCode,
+                  code: p.stockUnitCode,
+                  rate: p.rate
+                };
+              });
+            }
+            txn.inventory = {
+              stock: {
+                name: stockName,
+                uniqueName: stockUniqueName
+              },
+              quantity: 1,
+              unit: {
+                stockUnitCode: unitCode,
+                code: unitCode,
+                rate
+              }
+            };
+          }
           // reset taxes and discount on selected account change
           txn.tax = 0;
           txn.taxes = [];
