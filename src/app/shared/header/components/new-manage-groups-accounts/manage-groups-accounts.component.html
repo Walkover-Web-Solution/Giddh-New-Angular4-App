@@ -16,7 +16,8 @@
                             <i class="glyphicon glyphicon-search"></i>
                         </div>
 
-                        <input type="text" name="grpSrch" #grpSrch id="grpSrch" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search"> <i class="fa fa-times reset" (click)="resetGroupSearchString()"></i>
+                        <input type="text" name="grpSrch" #grpSrch id="grpSrch" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search" /> <a href="javascript:void(0);" class="pos-abs btn-link"
+                            (click)="resetGroupSearchString()" *ngIf="grpSrch.value">Clear</a>
 
 
                     </div>
