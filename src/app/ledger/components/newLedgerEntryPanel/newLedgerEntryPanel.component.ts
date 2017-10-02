@@ -11,7 +11,10 @@ import {
   SimpleChanges,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  DoCheck,
+  KeyValueDiffers,
+  KeyValueDiffer
 } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store/roots';
@@ -34,13 +37,14 @@ import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWit
 import { find } from 'lodash';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import * as moment from 'moment';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 @Component({
   selector: 'new-ledger-entry-panel',
   templateUrl: 'newLedgerEntryPanel.component.html',
   styleUrls: ['./newLedgerEntryPanel.component.css']
 })
 
-export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
+export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit, DoCheck {
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
@@ -84,7 +88,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private _ledgerActions: LedgerActions,
     private _companyActions: CompanyActions,
     private cdRef: ChangeDetectorRef,
-    private _toasty: ToasterService) {
+    private _toasty: ToasterService,
+    private _differs: KeyValueDiffers) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -143,6 +148,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.cdRef.detectChanges();
   }
 
+  public ngDoCheck() {
+    // if (this._differs.find(''))
+    // if (this.currentTxn.selectedAccount) {
+    //   debugger
+    //   if (this.currentTxn.selectedAccount.stock) {
+    //     debugger
+    //   }
+    // }
+  }
   /**
    *
    * @param {string} type
@@ -171,6 +185,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let total = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax)
       * this.currentTxn.discount);
     this.currentTxn.amount = Number((total / (100 + this.currentTxn.tax)).toFixed(2));
+    if (this.currentTxn.selectedAccount.stock) {
+      this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
+    }
     if (this.isTotalFirts || this.isAmountFirst) {
       return;
     } else {

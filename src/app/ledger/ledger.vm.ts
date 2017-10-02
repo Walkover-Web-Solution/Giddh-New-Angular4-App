@@ -159,7 +159,7 @@ export class TransactionVM {
   public discount?: number;
   public selectedAccount?: IFlattenAccountsResultItem | any;
   public unitRate?: IInventoryUnit[];
-  public isStock?: boolean;
+  public isStock?: boolean = false;
   public inventory?: IInventory;
 }
 
