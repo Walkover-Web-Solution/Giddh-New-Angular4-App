@@ -51,8 +51,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   public ngOnChanges(changes: SimpleChanges) {
     // chang
     if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
-      // debugger;
-      if (moment(changes['date'].currentValue, 'DD-MM-yyyy').isValid()) {
+      if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
         this.sum = 0;
         this.prepareTaxObject();
         this.change();
@@ -71,11 +70,18 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       taxObj.uniqueName = tx.uniqueName;
       if (this.date) {
         let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
-          return moment(p.date, 'DD-MM-yyyy');
+          return moment(p.date, 'DD-MM-YYYY');
         }, 'desc');
-        let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-yyyy').toDate() < moment(this.date, 'DD-MM-yyyy').toDate());
-        if (filteredTaxObject.length > 0) {
-          taxObj.amount = filteredTaxObject[0].taxValue;
+        let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+        if (exactDate.length > 0) {
+          taxObj.amount = exactDate[0].taxValue;
+        } else {
+          let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
+          if (filteredTaxObject.length > 0) {
+            taxObj.amount = filteredTaxObject[0].taxValue;
+          } else {
+            taxObj.amount = 0;
+          }
         }
       } else {
         taxObj.amount = tx.taxDetail[0].taxValue;
