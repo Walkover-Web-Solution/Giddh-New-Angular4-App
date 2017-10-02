@@ -90,7 +90,7 @@ export class LedgerActions {
   public DeleteTrxEntry$: Observable<Action> = this.action$
     .ofType(LEDGER.DELETE_TRX_ENTRY)
     .switchMap(action => this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName))
-    .map(res => this.deleteTrxEntryResponse());
+    .map(res => this.deleteTrxEntryResponse(res));
 
   @Effect()
   public DeleteTrxEntryResponse$: Observable<Action> = this.action$
@@ -168,9 +168,10 @@ export class LedgerActions {
     };
   }
 
-  public deleteTrxEntryResponse(): Action {
+  public deleteTrxEntryResponse(res: BaseResponse<string, string>): Action {
     return {
-      type: LEDGER.DELETE_TRX_ENTRY_RESPONSE
+      type: LEDGER.DELETE_TRX_ENTRY_RESPONSE,
+      payload: res
     };
   }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
