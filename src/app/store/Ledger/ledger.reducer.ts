@@ -23,12 +23,14 @@ export interface LedgerState {
   ledgerCreateSuccess?: boolean;
   ledgerCreateInProcess?: boolean;
   selectedTxnForEditUniqueName: string;
+  isDeleteTrxEntrySuccessfull: boolean;
 }
 
 export const initialState: LedgerState = {
   transactionInprogress: false,
   accountInprogress: false,
-  selectedTxnForEditUniqueName: ''
+  selectedTxnForEditUniqueName: '',
+  isDeleteTrxEntrySuccessfull: false
 };
 
 export function ledgerReducer(state = initialState, action: Action): LedgerState {
@@ -103,6 +105,17 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
       return {
         ...state,
         selectedTxnForEditUniqueName: action.payload
+      };
+    case LEDGER.DELETE_TRX_ENTRY:
+      return {
+        ...state,
+        isDeleteTrxEntrySuccessfull: true
+      };
+    case LEDGER.DELETE_TRX_ENTRY_RESPONSE:
+      let delResp = action.payload as BaseResponse<string, string>;
+      return {
+        ...state,
+        isDeleteTrxEntrySuccessfull: delResp.status === 'success'
       };
     case LEDGER.RESET_LEDGER:
       return Object.assign({}, state, {

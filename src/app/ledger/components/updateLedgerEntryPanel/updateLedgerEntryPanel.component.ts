@@ -19,6 +19,7 @@ import { last, filter, orderBy, reduce, sumBy } from 'lodash';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import * as uuid from 'uuid';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -27,7 +28,9 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 })
 export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
+  @Output() public entryDeleted: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
+  @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
   public flatternAccountList: Observable<Select2OptionData[]>;
@@ -68,14 +71,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public grandTotal: number = 0;
   public totalAmount: number = 0;
   public selectedAccount: IFlattenAccountsResultItem = null;
+  public isDeleteTrxEntrySuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService, ) {
+    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+    private _ledgerAction: LedgerActions) {
     this.selectedLedger = new LedgerResponse();
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
     this.voucherTypeList = [{
       label: 'Sales',
       value: 'sal'
@@ -125,10 +131,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     });
   }
   public ngOnInit() {
+    // get Account name from url
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.accountUniqueName = params['accountUniqueName'];
     });
+
+    // emit upload event
     this.uploadInput = new EventEmitter<UploadInput>();
+
+    //  get entry from server
     this.entryUniqueName$.distinctUntilChanged().subscribe(entryName => {
       if (entryName) {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
@@ -144,6 +155,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
             this.getPanelAmount();
           }
         });
+      }
+    });
+
+    // check if delete entry is success
+    this.isDeleteTrxEntrySuccess$.subscribe(del => {
+      if (del) {
+        this.hideDeleteEntryModal();
+        this.entryDeleted.emit(true);
       }
     });
   }
@@ -254,6 +273,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
   public hideDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.hide();
+  }
+  public showDeleteEntryModal(merge: string) {
+    this.deleteEntryModal.show();
+  }
+  public hideDeleteEntryModal() {
+    this.deleteEntryModal.hide();
+  }
+  public deleteTrxEntry() {
+    let entryName: string = null;
+    this.entryUniqueName$.take(1).subscribe(en => entryName = en);
+    this.store.dispatch(this._ledgerAction.deleteTrxEntry(this.accountUniqueName, entryName));
   }
   public deleteAttachedFile() {
     this.selectedLedger.attachedFile = '';

@@ -86,6 +86,27 @@ export class LedgerActions {
         payload: res
       }));
 
+  @Effect()
+  public DeleteTrxEntry$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_TRX_ENTRY)
+    .switchMap(action => this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName))
+    .map(res => this.deleteTrxEntryResponse());
+
+  @Effect()
+  public DeleteTrxEntryResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE)
+    .map(action => {
+      let res = action.payload as BaseResponse<string, string>;
+      if (res.status === 'success') {
+        this._toasty.successToast('Entry deleted successfully', 'Success');
+      } else {
+        this._toasty.errorToast(res.body);
+      }
+      return {
+        type: ''
+      };
+    });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
@@ -140,6 +161,18 @@ export class LedgerActions {
     };
   }
 
+  public deleteTrxEntry(accountUniqueName: string, entryUniqueName: string): Action {
+    return {
+      type: LEDGER.DELETE_TRX_ENTRY,
+      payload: { accountUniqueName, entryUniqueName }
+    };
+  }
+
+  public deleteTrxEntryResponse(): Action {
+    return {
+      type: LEDGER.DELETE_TRX_ENTRY_RESPONSE
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {

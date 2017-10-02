@@ -406,6 +406,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
   }
+
+  public entryDeleted() {
+    this.hideUpdateLedgerModal();
+    this.trxRequest = new TransactionsRequest();
+    this.trxRequest.accountUniqueName = this.lc.accountUnq;
+    this.getTransactionData();
+  }
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];
     let flatternAccountList;

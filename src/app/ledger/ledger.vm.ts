@@ -10,7 +10,7 @@ import * as uuid from 'uuid';
 import { cloneDeep } from 'lodash';
 import { createAutoCorrectedDatePipe } from '../shared/helpers/autoCorrectedDatePipe';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
-import { INameUniqueName } from "../models/interfaces/nameUniqueName.interface";
+import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 
 export class LedgerVM {
   public groupsArray: Observable<GroupsWithAccountsResponse[]>;
