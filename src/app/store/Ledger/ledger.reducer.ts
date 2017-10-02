@@ -118,7 +118,8 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         isDeleteTrxEntrySuccessfull: delResp.status === 'success'
       };
     case LEDGER.RESET_LEDGER:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         account: null,
         transcationRequest: null,
         transactionsResponse: null,
@@ -126,8 +127,11 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         accountInprogress: false,
         downloadInvoiceInProcess: false,
         discountAccountsList: null,
-        ledgerCreateSuccess: false
-      });
+        ledgerCreateSuccess: false,
+        isDeleteTrxEntrySuccessfull: false,
+        ledgerCreateInProcess: false,
+        selectedTxnForEditUniqueName: ''
+      };
     default: {
       return state;
     }
