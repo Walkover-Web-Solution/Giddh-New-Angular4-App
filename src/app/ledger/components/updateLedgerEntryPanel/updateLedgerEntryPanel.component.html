@@ -48,8 +48,8 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                      <select2 [data]="flatternAccountList | async" (click)="addBlankTrx('DEBIT', txn, $event)" (valueChanged)="selectAccount($event,txn)" [(ngModel)]="txn.particular.uniqueName"
-                      [options]="accountsOptions"></select2>
+                    <select2 [data]="flatternAccountList | async" (click)="addBlankTrx('DEBIT', txn, $event)" (valueChanged)="selectAccount($event,txn)"
+                      [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"></select2>
                     <!-- <input type="text" [(ngModel)]="txn.particular.name" typeahead-append-to-body="true" uib-typeahead="accounts as accounts.name for accounts in fltAccntListPaginated | addStockinAccountList:ledgerCtrl.baseAccount | searchAccountInPaginated:$viewValue | limitTo: 25"
                       typeahead-template-url="accountPopUp.html" typeahead-on-select="ledgerCtrl.isEntryAllowed(txn)" class="form-control"
                      (click)="addBlankTrx('DEBIT', txn)" is-open="txn.isOpen"> -->
@@ -98,15 +98,15 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                      <select2 [data]="flatternAccountList | async" (click)="addBlankTrx('CREDIT', txn, $event)" (valueChanged)="selectAccount($event,txn)" [(ngModel)]="txn.particular.uniqueName"
-                      [options]="accountsOptions"></select2>
+                    <select2 [data]="flatternAccountList | async" (click)="addBlankTrx('CREDIT', txn, $event)" (valueChanged)="selectAccount($event,txn)"
+                      [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"></select2>
                     <!-- <input class="form-control" type="text" [(ngModel)]="txn.particular.name" typeahead-append-to-body="true" uib-typeahead="accounts as accounts.name for accounts in fltAccntListPaginated  |addStockinAccountList:ledgerCtrl.baseAccount | searchAccountInPaginated:$viewValue | limitTo: 25"
                       typeahead-template-url="accountPopUp.html" typeahead-on-select="ledgerCtrl.isEntryAllowed(txn)" (click)="addBlankTrx('CREDIT', txn)"
                       is-open="txn.isOpen"> -->
                   </td>
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" is-open="txn.isOpen"
-                    (input)="onTxnAmountChange()">
+                      (input)="onTxnAmountChange()">
                     <span class="download-invoice-ledger" ng-if="ledgerCtrl.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
                       tooltip-append-to-body="true" tooltip="Download file : {{'ledgerCtrl.selectedLedger.attachedFileName'}}"
                       tooltip-placement="top">
@@ -130,8 +130,7 @@
           <tbody>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
-                <span *ngIf="entryTotal.drTotal < entryTotal.crTotal" tooltip="{{'ledgerCtrl.understanding.balanceText.cr'}}"
-                  tooltip-placement="top">C/F: CR {{entryTotal.drTotal - entryTotal.crTotal | number: '1.2-2'}}</span>
+                <span *ngIf="entryTotal.drTotal < entryTotal.crTotal" tooltip="{{'ledgerCtrl.understanding.balanceText.cr'}}" tooltip-placement="top">C/F: CR {{entryTotal.drTotal - entryTotal.crTotal | number: '1.2-2'}}</span>
               </td>
             </tr>
             <tr class="total_col">
@@ -248,7 +247,7 @@
             </table>
           </div>
           <div class="col-xs-12 pd1 text-right" ng-if="(ledgerCtrl.selectedLedger.panel.show || ledgerCtrl.selectedLedger.isBlankLedger)">
-            <span class="inWords">{{"ledgerCtrl.selectedLedger.panel.total | numtowords | lowercase"}}</span>
+            <span class="inWords">{{grandTotal| myNumberToWordsPipe | lowercase}}</span>
           </div>
           <div class="col-xs-12">
             <div class="row">
@@ -315,7 +314,7 @@
           <span class="primary_color">Compound Total: {{selectedLedger.total?.amount}}</span>
         </div>
         <div class="col-xs-12 pdT1">
-          <button class="btn btn-danger" ng-click="ledgerCtrl.deleteEntryConfirm()">Delete</button>
+          <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
           <div class="pull-right">
             <div class="mrR1 pull-left" [ngClass]="{hide:selectedLedger.attachedFile}">
               <label class="checkbox oh">
@@ -364,6 +363,18 @@
     <div class="modal-content">
       <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'" (cancelCallBack)="hideDeleteAttachedFileModal()"
         (successCallBack)="deleteAttachedFile()">
+      </confirm-modal>
+    </div>
+  </div>
+</div>
+
+<!--delete entry  -->
+<div bsModal #deleteEntryModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete this entry?'"
+      (cancelCallBack)="hideDeleteEntryModal()"
+        (successCallBack)="deleteTrxEntry()">
       </confirm-modal>
     </div>
   </div>
