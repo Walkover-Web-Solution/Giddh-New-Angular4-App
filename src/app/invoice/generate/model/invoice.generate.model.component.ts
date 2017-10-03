@@ -20,23 +20,23 @@ export class InvoiceGenerateModelComponent implements OnDestroy, OnInit {
     ) {}
 
     public ngOnInit() {
-        this.store.select(p => p.invoice.generate)
-          .takeUntil(this.destroyed$)
-          .distinctUntilChanged()
-          .subscribe((o: any) => {
-            if (o && o.invoiceData && o.invoiceTemplateConditions) {
-              this.goAhead = true;
-            }
+      this.store.select(p => p.invoice)
+        .takeUntil(this.destroyed$)
+        .distinctUntilChanged()
+        .subscribe((o: any) => {
+          if (o && o.invoiceData && o.invoiceTemplateConditions) {
+            this.goAhead = true;
           }
-        );
+        }
+      );
     }
 
     public ngOnDestroy() {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+      this.destroyed$.next(true);
+      this.destroyed$.complete();
     }
 
-    public closePopupEvent() {
-        this.closeEvent.emit('close');
+    public closePopupEvent(e) {
+      this.closeEvent.emit(e);
     }
 }
