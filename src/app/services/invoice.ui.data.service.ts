@@ -159,12 +159,12 @@ export class InvoiceUiDataService {
             this.isCompanyNameVisible.next(true);
           }
           if (this.companyName && mode === 'create') {
-            selectedTemplate.sections[0].content[0].label = this.companyName;
             selectedTemplate.sections[2].content[10].label = this.companyName;
           }
           if (this.companyAddress && mode === 'create') {
             selectedTemplate.sections[2].content[8].label = this.companyAddress;
           }
+          selectedTemplate.sections[0].content[0].label = this.companyName;
           if (!selectedTemplate.logoUniqueName) {
             this.isLogoVisible.next(false);
           } else {
