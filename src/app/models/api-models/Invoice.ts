@@ -232,6 +232,7 @@ export class PreviewInvoiceResponseClass {
   public totalTax?: any;
   public invoiceDetails: InvoiceDetails;
   public other?: any;
+  public dataPreview?: string;
 }
 
  export interface TotaltaxBreakdown {
@@ -306,6 +307,7 @@ export interface GstEntry {
 export interface IGstDetails {
   gstNumber?: any;
   address: string[];
+  addressStr?: string;
   stateCode?: any;
   panNumber?: any;
 }
