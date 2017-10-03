@@ -10,14 +10,14 @@
                             <div class="col-xs-5">
                                 <div class="row">
                                     <div class="" [ngClass]="{'input-group': true}">
-                                        <input type="email" class="form-control" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' />
+                                        <input type="email" class="form-control" name="invoiceEmail" [(ngModel)]='invoiceSetting.email' (ngModelChange)="onChangeEmail($event)" />
                                         <span class="input-group-addon" *ngIf="!invoiceSetting.emailVerified"><i class="glyphicon glyphicon-exclamation-sign" tooltip="Unverified"></i></span>
                                         <span class="input-group-addon" *ngIf="invoiceSetting.emailVerified"><i class="glyphicon glyphicon-ok" tooltip="Verified"></i></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-xs-5">
-                                <button class="btn btn-success" (click)="verfiyEmail(invoiceSetting.email)" [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4 || invoiceSetting.emailVerified">Verify</button>
+                                <button class="btn btn-success" (click)="verfiyEmail(invoiceSetting.email)" [disabled]="!isEmailChanged && (!invoiceSetting.email || invoiceSetting.email.length < 4 || invoiceSetting.emailVerified)">Verify</button>
                                 <button class="btn btn-danger" (click)="deleteEmail(invoiceSetting.email)" [disabled]="!invoiceSetting.email || invoiceSetting.email.length < 4">Delete</button>
                             </div>
                         </div>
