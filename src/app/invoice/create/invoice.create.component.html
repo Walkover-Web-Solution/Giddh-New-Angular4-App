@@ -1,17 +1,17 @@
-<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2">
+<form #invoiceForm="ngForm" (ngSubmit)="onSubmitInvoiceForm()" novalidate class="clearfix mrB2" *ngIf="invoiceDataFound">
 
-    <div class="bdrB clearfix">
-      <div class="col-xs-6">
-        <div class="form-group size_380" *ngIf="templateHeader.customerName.display">
-          <label>Customer Name</label>
-          <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.customerName" />
-        </div>
-      </div>
-      <div class="col-xs-6 text-right">
-        <label>&nbsp;</label>
-        <p class="lead b">Balance Due: {{ invFormData.grandTotal }}</p>
+  <div class="bdrB clearfix">
+    <div class="col-xs-6">
+      <div class="form-group size_380" *ngIf="templateHeader.customerName.display">
+        <label>Customer Name</label>
+        <input type="text" name="customerName" class="form-control" [(ngModel)]="invFormData.customerName" />
       </div>
     </div>
+    <div class="col-xs-6 text-right">
+      <label>&nbsp;</label>
+      <p class="lead b">Balance Due: {{ invFormData.grandTotal }}</p>
+    </div>
+  </div>
 
   <section class="clearfix mrB4">
     <section class="form-inline col-xs-12">
@@ -42,7 +42,7 @@
         <div class="flex-row-child">
           <div class="form-group size_340" *ngIf="templateHeader.billingAddress.display">
             <label>{{templateHeader.billingAddress.label}}</label>
-            <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"></textarea>
+            <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.addressStr"></textarea>
           </div>
           <div class="form-group">
             <div class="mrB2" *ngIf="templateHeader.billingState.display">
@@ -58,7 +58,7 @@
         <div class="flex-row-child">
           <div class="form-group size_340" *ngIf="templateHeader.shippingAddress.display">
             <label>{{templateHeader.shippingAddress.label}}</label>
-            <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
+            <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.addressStr"></textarea>
           </div>
           <div class="form-group">
             <div class="mrB2" *ngIf="templateHeader.shippingState.display">
@@ -118,7 +118,7 @@
             <input type="text" name="transaction.description_{{transIndex}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td *ngIf="customThead[3].display">{{ transaction.hsnNumber || transaction.sacNumber }}</td>
-          <td *ngIf="customThead[5].display">{{ transaction.quantity }}</td>
+          <td *ngIf="customThead[5].display">{{ transaction.quantity }} {{ transaction.stockUnit }}</td>
           <td *ngIf="customThead[4].display">{{ transaction.stockUnit }}</td>
           <td *ngIf="customThead[6].display">{{ transaction.rate}}</td>
           <td *ngIf="customThead[7].display && transaction.category === 'income'">{{ getEntryTotalDiscount(entry.discounts) }}</td>
@@ -140,9 +140,15 @@
     <section id="actionPane" class="text-center">
       <div class="col-xs-12">
         <div class="pull-right">
-          <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent()">Close</button>
-          <button type="button" class="btn btn-default mrR1" (click)="setUpdateAccFlag()">Generate Invoice &amp; Update Account Details</button>
-          <button type="submit" class="btn btn-default">Generate Invoice</button>
+          <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close</button>
+          <button type="button" class="btn btn-default mrR1" (click)="setUpdateAccFlag()">
+            <span *ngIf="!updateMode">Generate Invoice &amp; Update A/c Details</span>
+            <span *ngIf="updateMode">Update Invoice &amp; A/c Details</span>
+          </button>
+          <button type="submit" class="btn btn-default">
+            <span *ngIf="updateMode">Update Invoice</span>
+            <span *ngIf="!updateMode">Generate Invoice</span>
+          </button>
         </div>
       </div>
     </section>

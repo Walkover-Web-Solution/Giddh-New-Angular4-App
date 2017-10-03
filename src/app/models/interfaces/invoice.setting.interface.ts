@@ -12,7 +12,7 @@ export class InvoiceISetting {
     public autoMail: boolean;
     public autoPaid: string;
     public createPaymentEntry?: boolean;
-    public duePeriod?: string;
+    public duePeriod?: number;
     public email: string;
     public emailVerified: boolean;
     public showSeal: boolean;
