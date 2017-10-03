@@ -74,7 +74,7 @@ export class LedgerResponse {
  * its response will be success message in body
  */
 export class MailLedgerRequest {
-  public recipients: string[];
+  public recipients: string[] = [];
 }
 
 /*
@@ -156,4 +156,10 @@ export class MagicLinkRequest {
 
 export class MagicLinkResponse {
   public magicLink: string;
+}
+
+export class ExportLedgerRequest {
+  public from: string = '';
+  public to: string = '';
+  public type: string = '';
 }
