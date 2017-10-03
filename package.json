@@ -14,24 +14,19 @@
   "license": "MIT",
   "scripts": {
     "rebuild": "electron-rebuild",
-
     "build:aot": "npm run build:aot:prod",
     "build:aot:renderer": "npm run build:aot:prod",
-
     "build:dev": "npm run clean:dist && npm run webpack -- --config config/webpack.dev.js --progress --profile",
     "build:dev:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.dev.js --progress --profile",
     "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
-
     "build:prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
     "build:prod:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
     "build:aot:prod": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
     "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
-
     "build:stage": "npm run clean:dist && npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
     "build:stage:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
     "build:aot:stage": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
     "build:aot:stage:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
-
     "build": "npm run build:dev",
     "build:renderer": "npm run build:dev:renderer",
     "ci:aot": "npm run lint && npm run test && npm run build:aot && npm run e2e",
@@ -106,6 +101,7 @@
     "jspdf-autotable": "^2.3.2",
     "lodash": "4.17.4",
     "ng4-social-login": "^1.3.3",
+    "ngx-clipboard": "^8.1.0",
     "rxjs": "^5.4.3"
   },
   "devDependencies": {

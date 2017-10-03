@@ -23,11 +23,11 @@
         <div class="col-xs-4 pull-right text-right">
           <div class="row">
 
-            <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" ng-click="ledgerCtrl.shareLedger(); ledgerCtrl.toggleExportFucntion()">
+            <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" (click)="showExportLedgerModal()">
               <i class="icon-download"></i>
             </a>
 
-            <a href="" id="share" class="icomoon_ico" ng-click="ledgerCtrl.shareLedger();ledgerCtrl.getSharedWithList(); ledgerCtrl.toggleShareFucntion()">
+            <a href="javascript:void(0)" id="share" class="icomoon_ico" (click)="showShareLedgerModal()">
               <i [tooltip]="'Share Ledger'" [placement]="'right'" class="icon-share"></i>
             </a>
 
@@ -360,4 +360,24 @@
     </div>
 </div>
 <!-- update ladger entry popup -->
+
+<!-- export ladger popup -->
+<div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:90%">
+      <div class="modal-content">
+          <export-ledger (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+      </div>
+  </div>
+</div>
+
+<!-- share ladger popup -->
+<div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:90%">
+      <div class="modal-content">
+          <share-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to"
+          (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
+      </div>
+  </div>
+</div>
+
 <!-- modal sections -->

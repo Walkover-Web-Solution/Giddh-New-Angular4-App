@@ -98,6 +98,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
+  @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
+  @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   public showUpdateLedgerForm: boolean = false;
@@ -400,6 +402,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public hideUpdateLedgerModal() {
     this.showUpdateLedgerForm = false;
     this.updateLedgerModal.hide();
+  }
+
+  public showShareLedgerModal() {
+    this.shareLedgerModal.show();
+  }
+
+  public hideShareLedgerModal() {
+    this.shareLedgerModal.hide();
+  }
+
+  public showExportLedgerModal() {
+    this.exportLedgerModal.show();
+  }
+
+  public hideExportLedgerModal() {
+    this.exportLedgerModal.hide();
   }
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();

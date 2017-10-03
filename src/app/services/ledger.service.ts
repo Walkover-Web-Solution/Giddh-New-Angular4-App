@@ -11,7 +11,9 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import {
   TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest,
-  DownloadLedgerRequest
+  DownloadLedgerRequest,
+  MagicLinkRequest,
+  MagicLinkResponse
 } from '../models/api-models/Ledger';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 
@@ -160,5 +162,24 @@ export class LedgerService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, DownloadLedgerRequest>(e, model, { accountUniqueName }));
+  }
+
+  public GenerateMagicLink(model: MagicLinkRequest, accountUniqueName: string): Observable<BaseResponse<MagicLinkResponse, MagicLinkRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+    .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+    .replace(':from', model.from).replace(':to', model.to), model)
+    .map((res) => {
+      let data: BaseResponse<MagicLinkResponse, MagicLinkRequest> = res.json();
+      data.request = model;
+      data.queryString = { accountUniqueName };
+      return data;
+    })
+    .catch((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, { accountUniqueName }));
   }
 }

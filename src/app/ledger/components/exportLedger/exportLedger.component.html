@@ -1,0 +1,54 @@
+<div id="exportModal" class="" ng-if="ledgerCtrl.LedgerExport">
+  <div class="modal-header themeBg pd2 pdL2 pdR2">
+    <h3 class="modal-title bg" id="modal-title">Export</h3>
+    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeExportLedgerModal.emit()"></i>
+  </div>
+  <div class="modal-body pdT5 pdB5 pdL2 pdR2" id="export-body">
+    <form name="addShareEmailForm" novalidate class="" autocomplete="off">
+      <div class="modal_wrap mrB2">
+        <table class="list-unstyled email-type mrB2">
+          <tr>
+            <!--             <td>
+              <label class="radio" ng-click="$event.stopPropagation()">
+                  <input type="radio" ng-model="ledgerCtrl.ledgerEmailData.emailType" name="emailType" ng-value="ledgerCtrl.ledgerEmailData.viewDetailed"/>super mini
+               </label>
+            </td> -->
+            <td>
+              <label class="radio" ng-click="$event.stopPropagation()">
+                <input type="radio" ng-model="ledgerCtrl.ledgerEmailData.emailType" name="emailType" ng-value="ledgerCtrl.ledgerEmailData.adminCondensed"
+                />mini
+              </label>
+            </td>
+            <!--             <td ng-if="canUpdate">
+              <label class="radio" ng-click="$event.stopPropagation()">
+                  <input type="radio" ng-model=" ledgerCtrl.ledgerEmailData.emailType" name="emailType"  ng-value="ledgerCtrl.ledgerEmailData.adminDetailed"/>brief
+              </label>
+            </td> -->
+            <td ng-if="canUpdate">
+              <label class="radio" ng-click="$event.stopPropagation()">
+                <input type="radio" ng-model="ledgerCtrl.ledgerEmailData.emailType" name="emailType" ng-value="ledgerCtrl.ledgerEmailData.adminDetailed"
+                />detailed
+              </label>
+            </td>
+          </tr>
+        </table>
+        <button class="btn-success btn" ng-click="ledgerCtrl.exportLedger(ledgerCtrl.ledgerEmailData.emailType)">Download
+          <i class="icon-download"></i>
+        </button>
+      </div>
+      <div class="clearfix"></div>
+      <h3 class="pdB2">Or</h3>
+      <div class="modal_wrap">
+
+        <textarea ng-model="ledgerCtrl.ledgerEmailData.email" required name="ledgerEmailSendForm.email" class="form-control" placeholder="Recipents Email Id's"></textarea>
+        <h3 class="l8grey pdT1 size-xs">You can add multiple id's separated comma</h3>
+
+        <div class="clearfix"></div>
+        <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success btn-md mrT1" ng-click="ledgerCtrl.sendLedgEmail(ledgerCtrl.ledgerEmailData.email, ledgerCtrl.ledgerEmailData.emailType)">Send email</button>
+
+
+      </div>
+      <!-- add mailer -->
+    </form>
+  </div>
+</div>
