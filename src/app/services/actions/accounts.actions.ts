@@ -224,6 +224,9 @@ export class AccountsAction {
     .ofType(AccountsAction.UPDATE_ACCOUNTV2)
     .switchMap(action => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value))
     .map(response => {
+      if (response.status === 'success') {
+        this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+      }
       return this.updateAccountResponseV2(response);
     });
 
@@ -231,6 +234,7 @@ export class AccountsAction {
   public UpdateAccountResponseV2$: Observable<Action> = this.action$
     .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2)
     .map(action => {
+      let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -245,6 +249,8 @@ export class AccountsAction {
         } else {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
+        this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
+        this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
       }
       return { type: '' };
     });
