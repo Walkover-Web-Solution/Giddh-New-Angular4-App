@@ -34,6 +34,8 @@ export class InvoiceSettingComponent implements OnInit {
   public accountToSend: any = {};
   public numOnlyPattern: RegExp = new RegExp(/^[0-9]*$/g);
   public linkAccountDropDown$: Observable<Select2OptionData[]>;
+  public originalEmail: string;
+  public isEmailChanged: boolean = false;
   public options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -74,6 +76,9 @@ export class InvoiceSettingComponent implements OnInit {
   public initSettingObj() {
      this.store.select(p => p.invoice.settings).takeUntil(this.destroyed$).subscribe((setting: InvoiceSetting) => {
       if (setting && setting.invoiceSettings && setting.webhooks) {
+
+        this.originalEmail = _.cloneDeep(setting.invoiceSettings.email);
+
         this.settingResponse = setting;
         this.invoiceSetting = _.cloneDeep(setting.invoiceSettings);
 
@@ -284,24 +289,50 @@ export class InvoiceSettingComponent implements OnInit {
       }
       if (indx > -1 && isNaN(value) && flag === 'alpha') {
         let webhooks = _.cloneDeep(this.invoiceWebhook);
-        webhooks[indx].triggerAt = null;
+        webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, ''));
         this.invoiceWebhook = webhooks;
       }
+    }
+  }
+
+  /**
+   * onChangeEmail
+   */
+  public onChangeEmail(email: string) {
+    if (email === this.originalEmail) {
+      this.isEmailChanged = false;
     } else {
-      let newValue = _.clone(value);
-      if (newValue > 999 || flag === 'length') {
-        let invoiceSetting = _.cloneDeep(this.invoiceSetting);
-        if (String(newValue).indexOf('-') !== String(newValue).lastIndexOf('-')) {
-          invoiceSetting.duePeriod = 0;
-        } else {
-          invoiceSetting.duePeriod = Number(String(invoiceSetting.duePeriod).substring(0, 3));
-        }
-        this.invoiceSetting = invoiceSetting;
+      this.isEmailChanged = true;
+    }
+  }
+
+  /**
+   * validateDefaultDueDate
+   */
+  public validateDefaultDueDate(defaultDueDate: string) {
+    if (defaultDueDate) {
+      let invoiceSetting = _.cloneDeep(this.invoiceSetting);
+      if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
+        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, ''));
+        setTimeout(() => {
+          this.invoiceSetting = invoiceSetting;
+        });
       }
-      if (flag === 'alpha') {
-        let invoiceSetting = _.cloneDeep(this.invoiceSetting);
-        invoiceSetting.duePeriod = 0;
-        this.invoiceSetting = invoiceSetting;
+      if (defaultDueDate.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
+        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, ''));
+        setTimeout(() => {
+          this.invoiceSetting = invoiceSetting;
+        });
+      }
+      if (String(defaultDueDate).length > 3) {
+        if (defaultDueDate.indexOf('-') !== -1) {
+          invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
+        } else {
+          invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 3));
+        }
+        setTimeout(() => {
+          this.invoiceSetting = invoiceSetting;
+        });
       }
     }
   }
