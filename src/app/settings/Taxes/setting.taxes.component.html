@@ -113,10 +113,12 @@
                         <tr *ngFor="let tax of availableTaxes; let i = index">
                             <td>{{i+1}}</td>
                             <td *ngIf="!taxToEdit[i]">{{tax.taxNumber}}</td>
-                            <td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>
+                            <!--<td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>-->
+                            <td *ngIf="taxToEdit[i]">{{tax.taxNumber}}</td>
                             <td *ngIf="!taxToEdit[i]">{{tax.name}}</td>
                             <td *ngIf="taxToEdit[i]">
-                                <input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">
+                                <!--<input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">-->
+                                {{tax.name}}
                             </td>
                             <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
                             <td *ngIf="tax.accounts[0] && !taxToEdit[i]">
