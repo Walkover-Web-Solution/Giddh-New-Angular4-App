@@ -289,24 +289,8 @@ export class InvoiceSettingComponent implements OnInit {
       }
       if (indx > -1 && isNaN(value) && flag === 'alpha') {
         let webhooks = _.cloneDeep(this.invoiceWebhook);
-        webhooks[indx].triggerAt = null;
+        webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, ''));
         this.invoiceWebhook = webhooks;
-      }
-    } else {
-      let newValue = _.clone(value);
-      if (newValue > 999 || flag === 'length') {
-        let invoiceSetting = _.cloneDeep(this.invoiceSetting);
-        if (String(newValue).indexOf('-') !== String(newValue).lastIndexOf('-')) {
-          invoiceSetting.duePeriod = 0;
-        } else {
-          invoiceSetting.duePeriod = Number(String(invoiceSetting.duePeriod).substring(0, 3));
-        }
-        this.invoiceSetting = invoiceSetting;
-      }
-      if (flag === 'alpha') {
-        let invoiceSetting = _.cloneDeep(this.invoiceSetting);
-        invoiceSetting.duePeriod = 0;
-        this.invoiceSetting = invoiceSetting;
       }
     }
   }
@@ -328,16 +312,28 @@ export class InvoiceSettingComponent implements OnInit {
   public validateDefaultDueDate(defaultDueDate: string) {
     if (defaultDueDate) {
       let invoiceSetting = _.cloneDeep(this.invoiceSetting);
-      if (Number(defaultDueDate) > 999) {
-        invoiceSetting.duePeriod = 99;
+      if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
+        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, ''));
+        setTimeout(() => {
+          this.invoiceSetting = invoiceSetting;
+        });
       }
-      // if (defaultDueDate.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-'))) {
-      //   defaultDueDate.replace('-', '');
-      //   invoiceSetting.duePeriod = Number(defaultDueDate);
-      // }
-      setTimeout(() => {
-        this.invoiceSetting = invoiceSetting;
-      });
+      if (defaultDueDate.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-')) || defaultDueDate.indexOf('-') > 0) {
+        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, ''));
+        setTimeout(() => {
+          this.invoiceSetting = invoiceSetting;
+        });
+      }
+      if (String(defaultDueDate).length > 3) {
+        if (defaultDueDate.indexOf('-') !== -1) {
+          invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 4));
+        } else {
+          invoiceSetting.duePeriod = Number(String(defaultDueDate).substring(0, 3));
+        }
+        setTimeout(() => {
+          this.invoiceSetting = invoiceSetting;
+        });
+      }
     }
   }
 }
