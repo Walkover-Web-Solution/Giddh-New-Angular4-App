@@ -7,7 +7,7 @@ import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse } from '../../models/api-models/Invoice';
+import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
@@ -15,6 +15,7 @@ import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
+import { InvoiceService } from '../../services/invoice.service';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
@@ -34,6 +35,7 @@ export class InvoicePreviewComponent implements OnInit {
   @ViewChild('invoiceConfirmationModel') public invoiceConfirmationModel: ModalDirective;
   @ViewChild('performActionOnInvoiceModel') public performActionOnInvoiceModel: ModalDirective;
   @ViewChild('downloadOrSendMailModel') public downloadOrSendMailModel: ModalDirective;
+  @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
 
   public base64Data: string;
   public selectedInvoice: IInvoiceResult;
@@ -52,10 +54,10 @@ export class InvoicePreviewComponent implements OnInit {
     allowClear: true
   };
   public modalRef: BsModalRef;
-  public config = {
+  public modalConfig = {
     animated: true,
     keyboard: false,
-    backdrop: true,
+    backdrop: 'static',
     ignoreBackdropClick: true
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -64,15 +66,16 @@ export class InvoicePreviewComponent implements OnInit {
     private modalService: BsModalService,
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
-    private _accountService: AccountService
+    private _accountService: AccountService,
+    private _invoiceService: InvoiceService,
   ) {
     this.invoiceSearchRequest.entryTotalBy = '';
   }
 
   public ngOnInit() {
     // set initial values
-    // this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
-    // this.invoiceSearchRequest.to = String(moment());
+    this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
+    this.invoiceSearchRequest.to = String(moment());
     this.invoiceSearchRequest.page = 1;
     this.invoiceSearchRequest.count = 25;
 
@@ -91,8 +94,8 @@ export class InvoicePreviewComponent implements OnInit {
     });
 
     this.store.select(p => p.invoice).takeUntil(this.destroyed$).subscribe((o: InvoiceState) => {
-      if (o.preview && o.preview.invoices) {
-        this.invoiceData = _.cloneDeep(o.preview.invoices);
+      if (o && o.invoices) {
+        this.invoiceData = _.cloneDeep(o.invoices);
         _.map(this.invoiceData.results, (item: IInvoiceResult) => {
           item.isSelected = false;
           return o;
@@ -101,7 +104,33 @@ export class InvoicePreviewComponent implements OnInit {
         this.getInvoices();
       }
     });
+
+    this.store.select(p => p.invoice.invoiceData)
+    .takeUntil(this.destroyed$)
+    .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+      if (p && q) {
+        return (p.templateUniqueName === q.templateUniqueName);
+      }
+      if ((p && !q) || (!p && q)) {
+        return false;
+      }
+      return true;
+    }).subscribe((o: PreviewInvoiceResponseClass) => {
+      if (o) {
+        this.getInvoiceTemplateDetails(o.templateUniqueName);
+      }
+    });
+
     this.getInvoices();
+  }
+
+  public getInvoiceTemplateDetails(templateUniqueName: string) {
+    if (templateUniqueName) {
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    }else {
+      console.log ('error hardcoded: templateUniqueName');
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
+    }
   }
 
   public pageChanged(event: any): void {
@@ -150,8 +179,25 @@ export class InvoicePreviewComponent implements OnInit {
    */
   public onSelectInvoice(invoice: IInvoiceResult) {
     this.selectedInvoice = _.cloneDeep(invoice);
-    this.store.dispatch(this.invoiceActions.DownloadInvoice(invoice.account.uniqueName, { invoiceNumber: [invoice.invoiceNumber]}));
+    this.store.dispatch(this.invoiceActions.PreviewOfGeneratedInvoice(invoice.account.uniqueName, invoice.invoiceNumber));
     this.downloadOrSendMailModel.show();
+  }
+
+  public closeDownloadOrSendMailPopup(userResponse: {action: string}) {
+    this.downloadOrSendMailModel.hide();
+    if (userResponse.action === 'update') {
+      this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
+      this.invoiceGenerateModel.show();
+    }else if (userResponse.action === 'closed') {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }
+  }
+
+  public closeInvoiceModel(e) {
+    this.invoiceGenerateModel.hide();
+    setTimeout(() => {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }, 2000);
   }
 
   /**
@@ -194,10 +240,6 @@ export class InvoicePreviewComponent implements OnInit {
     } else if (userResponse.action === 'send_mail' && userResponse.emails && userResponse.emails.length) {
       this.store.dispatch(this.invoiceActions.SendInvoiceOnMail(this.selectedInvoice.account.uniqueName, { emailId: userResponse.emails, invoiceNumber: [this.selectedInvoice.invoiceNumber] }));
     }
-  }
-
-  public closeDownloadOrSendMailPopup(data) {
-    this.downloadOrSendMailModel.hide();
   }
 
   public setToday(model: string) {

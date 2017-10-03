@@ -1,10 +1,17 @@
 <section>
-    <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">Invoice</h3>
+  <div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Invoice</h3>
+  </div>
+  <div class="modal-body">
+    <div class="loader mrT4" *ngIf="!goAhead">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
+      <span></span>
     </div>
-    <div class="modal-body">
-        <section *ngIf="goAhead">
-            <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent()"></invoice-create>
-        </section>
-    </div>
+    <section *ngIf="goAhead">
+      <invoice-create [showCloseButton]="true" (closeEvent)="closePopupEvent($event)"></invoice-create>
+    </section>
+  </div>
 </section>
