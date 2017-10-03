@@ -14,8 +14,8 @@
                </label>
             </td> -->
             <td>
-              <label class="radio" ng-click="$event.stopPropagation()">
-                <input type="radio" ng-model="ledgerCtrl.ledgerEmailData.emailType" name="emailType" ng-value="ledgerCtrl.ledgerEmailData.adminCondensed"
+              <label class="radio">
+                <input type="radio" name="emailType"
                 />mini
               </label>
             </td>
@@ -26,13 +26,13 @@
             </td> -->
             <td ng-if="canUpdate">
               <label class="radio" ng-click="$event.stopPropagation()">
-                <input type="radio" ng-model="ledgerCtrl.ledgerEmailData.emailType" name="emailType" ng-value="ledgerCtrl.ledgerEmailData.adminDetailed"
+                <input type="radio" checked="checked" name="emailType"
                 />detailed
               </label>
             </td>
           </tr>
         </table>
-        <button class="btn-success btn" ng-click="ledgerCtrl.exportLedger(ledgerCtrl.ledgerEmailData.emailType)">Download
+        <button class="btn-success btn" (click)="exportLedger()">Download
           <i class="icon-download"></i>
         </button>
       </div>
@@ -40,11 +40,11 @@
       <h3 class="pdB2">Or</h3>
       <div class="modal_wrap">
 
-        <textarea ng-model="ledgerCtrl.ledgerEmailData.email" required name="ledgerEmailSendForm.email" class="form-control" placeholder="Recipents Email Id's"></textarea>
+        <textarea [(ngModel)]="emailData" required name="email" class="form-control" placeholder="Recipents Email Id's"></textarea>
         <h3 class="l8grey pdT1 size-xs">You can add multiple id's separated comma</h3>
 
         <div class="clearfix"></div>
-        <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success btn-md mrT1" ng-click="ledgerCtrl.sendLedgEmail(ledgerCtrl.ledgerEmailData.email, ledgerCtrl.ledgerEmailData.emailType)">Send email</button>
+        <button ng-disabled="ledgerEmailSendForm.$invalid" class="btn btn-success btn-md mrT1" (click)="sendLedgEmail()">Send email</button>
 
 
       </div>

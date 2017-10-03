@@ -23,6 +23,7 @@ import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ModalDirective } from 'ngx-bootstrap';
+import { base64ToBlob } from '../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'ledger',
@@ -331,7 +332,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
-      let blob = this.base64ToBlob(d.body, 'application/pdf', 512);
+      let blob = base64ToBlob(d.body, 'application/pdf', 512);
       return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
     }, error => {
       // console.log(error);
@@ -444,26 +445,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       return parentGroup.category === 'income' || parentGroup.category === 'expenses';
     }
     return false;
-  }
-  public base64ToBlob(b64Data, contentType, sliceSize) {
-    contentType = contentType || '';
-    sliceSize = sliceSize || 512;
-    let byteCharacters = atob(b64Data);
-    let byteArrays = [];
-    let offset = 0;
-    while (offset < byteCharacters.length) {
-      let slice = byteCharacters.slice(offset, offset + sliceSize);
-      let byteNumbers = new Array(slice.length);
-      let i = 0;
-      while (i < slice.length) {
-        byteNumbers[i] = slice.charCodeAt(i);
-        i++;
-      }
-      let byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-      offset += sliceSize;
-    }
-    return new Blob(byteArrays, { type: contentType });
   }
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerActions.ResetLedger());
