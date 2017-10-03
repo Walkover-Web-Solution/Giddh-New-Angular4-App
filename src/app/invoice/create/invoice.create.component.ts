@@ -104,8 +104,10 @@ export class InvoiceCreateComponent implements OnInit {
   public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
   public totalBalance: number = null;
-  // public methods above
+  public invoiceDataFound: boolean = false;
   public isInvoiceGenerated$: Observable<boolean>;
+  public updateMode: boolean;
+  // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -114,44 +116,82 @@ export class InvoiceCreateComponent implements OnInit {
     private _toasty: ToasterService,
     private invoiceService: InvoiceService
   ) {
-    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.generate.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.generate.invoiceData)
+    this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
-          if (o) {
-            this.invFormData = _.cloneDeep(o);
-          } else {
-            this.invFormData = new PreviewInvoiceResponseClass();
+        if (o) {
+          this.invFormData = _.cloneDeep(o);
+          // if address found prepare local var due to array and string issue
+          this.prepareAddressForUI('billingDetails');
+          this.prepareAddressForUI('shippingDetails');
+          if (!this.invFormData.other) {
+            this.invFormData.other = new OtherDetailsClass();
           }
-          this.invFormData.other = new OtherDetailsClass();
+          this.invoiceDataFound = true;
+        }else {
+          this.invoiceDataFound = false;
         }
-      );
+      }
+    );
 
-    this.store.select(p => p.invoice.generate.invoiceTemplateConditions)
+    this.store.select(p => p.invoice.invoiceTemplateConditions)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: InvoiceTemplateDetailsResponse) => {
-          if (o) {
-            this.invTempCond = _.cloneDeep(o);
-            let obj = _.cloneDeep(o);
-            this.tableCond = _.find(obj.sections, {sectionName: 'table'});
-            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
-            this.prepareThead();
-            this.prepareTemplateHeader();
-          }
+        if (o) {
+          this.invTempCond = _.cloneDeep(o);
+          let obj = _.cloneDeep(o);
+          this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+          this.headerCond = _.find(obj.sections, {sectionName: 'header'});
+          this.prepareThead();
+          this.prepareTemplateHeader();
         }
-      );
+      }
+    );
 
     this.isInvoiceGenerated$.subscribe((o) => {
       if (o) {
-        this.closePopupEvent();
-        this.store.dispatch(this.invoiceActions.InvoiceGenerationCompleted());
+        let action = (this.updateMode) ? 'update' : 'generate';
+        this.closePopupEvent({action});
       }
     });
+
+    this.store.select(state => state.invoice.visitedFromPreview)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((val: boolean) => {
+        this.updateMode = val;
+      }
+    );
+  }
+
+  public getArrayFromString(str) {
+    if (str.length > 0 ) {
+      return str.split('\n');
+    }else {
+      return [];
+    }
+  }
+
+  public getStringFromArr(arr) {
+    if (Array.isArray(arr) && arr.length > 0 ) {
+      return arr.toString().replace(RegExp(',', 'g'), '\n');
+    }else {
+      return null;
+    }
+  }
+
+  public prepareAddressForUI(type: string) {
+    this.invFormData.account[type].addressStr = this.getStringFromArr(this.invFormData.account[type].address);
+  }
+
+  public prepareAddressForAPI(type: string) {
+    this.invFormData.account[type].address = this.getArrayFromString(this.invFormData.account[type].addressStr);
   }
 
   public prepareTemplateHeader() {
@@ -186,11 +226,18 @@ export class InvoiceCreateComponent implements OnInit {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
     if (accountUniqueName) {
+      this.prepareAddressForAPI('billingDetails');
+      this.prepareAddressForAPI('shippingDetails');
       model.invoice = _.cloneDeep(this.invFormData);
       model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
       model.validateTax = true;
       model.updateAccountDetails = this.updtFlag;
-      this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+      if (this.updateMode) {
+        // bingo hit api for already generated invoice
+        this.store.dispatch(this.invoiceActions.UpdateGeneratedInvoice(accountUniqueName, model));
+      }else {
+        this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+      }
       this.updtFlag = false;
     }else {
       this._toasty.warningToast('Something went wrong, please reload the page');
@@ -257,8 +304,8 @@ export class InvoiceCreateComponent implements OnInit {
     }
   }
 
-  public closePopupEvent() {
-    this.closeEvent.emit();
+  public closePopupEvent(o) {
+    this.closeEvent.emit(o);
   }
 
   public getSerialNos(entryIndex: number, transIndex: number) {
