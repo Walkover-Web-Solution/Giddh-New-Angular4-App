@@ -171,7 +171,7 @@ export class InvoiceCreateComponent implements OnInit {
   }
 
   public getArrayFromString(str) {
-    if (str.length > 0 ) {
+    if (str && str.length > 0 ) {
       return str.split('\n');
     }else {
       return [];
