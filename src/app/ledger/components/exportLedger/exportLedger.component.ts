@@ -36,6 +36,7 @@ export class ExportLedgerComponent implements OnInit {
   }
 
   public sendLedgEmail() {
+    this._toaster.clearAllToaster();
     let data = this.emailData;
     const sendData = new MailLedgerRequest();
     data = data.replace(RegExp(' ', 'g'), '');
