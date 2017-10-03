@@ -201,6 +201,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
           if (fa.additional && fa.additional.stock && fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
             rate = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code).rate;
           }
+          if (rate > 0 && txn.amount === 0) {
+            txn.amount = rate;
+          }
           if (fa.additional && fa.additional.stock && fa.additional.stock.stockUnit) {
             unitName = fa.additional.stock.stockUnit.name;
             unitCode = fa.additional.stock.stockUnit.code;
