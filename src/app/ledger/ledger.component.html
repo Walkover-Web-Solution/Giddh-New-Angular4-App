@@ -365,7 +365,8 @@
 <div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg" style="width:90%">
       <div class="modal-content">
-          <export-ledger (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+          <export-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to"
+          (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
       </div>
   </div>
 </div>
