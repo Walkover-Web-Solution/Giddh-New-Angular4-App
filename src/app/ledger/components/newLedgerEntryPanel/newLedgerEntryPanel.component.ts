@@ -173,6 +173,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public amountChanged() {
+    if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+      if (this.currentTxn.inventory.unit.rate) {
+        this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+      }
+    }
+
     if (this.isAmountFirst || this.isTotalFirts) {
       return;
     } else {
