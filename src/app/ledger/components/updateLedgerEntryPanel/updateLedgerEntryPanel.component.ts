@@ -268,13 +268,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public generateGrandTotal() {
     this.grandTotal = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
   }
-  public showDeleteAttachedFileModal(merge: string) {
+  public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }
   public hideDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.hide();
   }
-  public showDeleteEntryModal(merge: string) {
+  public showDeleteEntryModal() {
     this.deleteEntryModal.show();
   }
   public hideDeleteEntryModal() {
