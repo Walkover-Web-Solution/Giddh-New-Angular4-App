@@ -52,10 +52,10 @@ export class InvoiceGenerateComponent implements OnInit {
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
   public  modalRef: BsModalRef;
-  public config = {
+  public modalConfig = {
     animated: true,
     keyboard: false,
-    backdrop: true,
+    backdrop: 'static',
     ignoreBackdropClick: true
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -88,7 +88,7 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.invoice.generate.ledgers)
+    this.store.select(p => p.invoice.ledgers)
       .takeUntil(this.destroyed$)
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
@@ -96,7 +96,7 @@ export class InvoiceGenerateComponent implements OnInit {
         }
       });
 
-    this.store.select(p => p.invoice.generate.invoiceData)
+    this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
         if (p && q) {
@@ -115,8 +115,14 @@ export class InvoiceGenerateComponent implements OnInit {
 
   }
 
-  public closeInvoiceModel() {
+  public closeInvoiceModel(e) {
+    if (e.action === 'generate') {
+      this.selectedLedgerItems = [];
+    }
     this.invoiceGenerateModel.hide();
+    setTimeout(() => {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }, 2000);
   }
 
   public getLedgersByFilters(f: NgForm) {
@@ -201,7 +207,12 @@ export class InvoiceGenerateComponent implements OnInit {
   }
 
   public getInvoiceTemplateDetails(templateUniqueName: string) {
-    this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    if (templateUniqueName) {
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    }else {
+      console.log ('error hardcoded: templateUniqueName');
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
+    }
   }
 
   public showInvoiceModal() {

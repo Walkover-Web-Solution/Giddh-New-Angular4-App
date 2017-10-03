@@ -104,6 +104,8 @@ export class InvoiceSettingComponent implements OnInit {
           this.store.dispatch(this.invoiceActions.getRazorPayDetail());
           this.getRazorPayDetailResponse = true;
         }
+      } else if (!setting || !setting.webhooks) {
+        this.store.dispatch(this.invoiceActions.getInvoiceSetting());
       }
     });
   }
@@ -115,8 +117,7 @@ export class InvoiceSettingComponent implements OnInit {
     if (!objToSave.url || !objToSave.triggerAt) {
       this._toasty.warningToast("Last row can't be blank.");
       return false;
-    } else
-      if (objToSave.url && objToSave.triggerAt) {
+    } else if (objToSave.url && objToSave.triggerAt) {
         this.validateWebhook(objToSave);
         if (this.webhookIsValidate) {
           this.saveWebhook(objToSave);
@@ -275,16 +276,32 @@ export class InvoiceSettingComponent implements OnInit {
    * checkDueDays
    */
   public checkDueDays(value: number, indx: number, flag: string) {
-    if (indx > -1 && value > 90 && flag === 'length') {
-      let webhooks = _.cloneDeep(this.invoiceWebhook);
-      webhooks[indx].triggerAt = 90;
-      this.invoiceWebhook = webhooks;
-    }
-    if (indx > -1 && flag === 'alpha') {
-      let webhooks = _.cloneDeep(this.invoiceWebhook);
-      if (isNaN(webhooks[indx].triggerAt)) {
+    if (indx !== null) {
+      if (indx > -1 && value > 90 && flag === 'length') {
+        let webhooks = _.cloneDeep(this.invoiceWebhook);
+        webhooks[indx].triggerAt = 90;
+        this.invoiceWebhook = webhooks;
+      }
+      if (indx > -1 && isNaN(value) && flag === 'alpha') {
+        let webhooks = _.cloneDeep(this.invoiceWebhook);
         webhooks[indx].triggerAt = null;
         this.invoiceWebhook = webhooks;
+      }
+    } else {
+      let newValue = _.clone(value);
+      if (newValue > 999 || flag === 'length') {
+        let invoiceSetting = _.cloneDeep(this.invoiceSetting);
+        if (String(newValue).indexOf('-') !== String(newValue).lastIndexOf('-')) {
+          invoiceSetting.duePeriod = 0;
+        } else {
+          invoiceSetting.duePeriod = Number(String(invoiceSetting.duePeriod).substring(0, 3));
+        }
+        this.invoiceSetting = invoiceSetting;
+      }
+      if (flag === 'alpha') {
+        let invoiceSetting = _.cloneDeep(this.invoiceSetting);
+        invoiceSetting.duePeriod = 0;
+        this.invoiceSetting = invoiceSetting;
       }
     }
   }
