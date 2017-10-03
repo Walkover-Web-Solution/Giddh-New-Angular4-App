@@ -5,7 +5,7 @@ import {
   TransactionsRequest,
   TransactionsResponse
 } from '../../models/api-models/Ledger';
-import { AccountResponse } from '../../models/api-models/Account';
+import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
 import { LEDGER } from '../../services/actions/ledger/ledger.const';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
@@ -24,13 +24,15 @@ export interface LedgerState {
   ledgerCreateInProcess?: boolean;
   selectedTxnForEditUniqueName: string;
   isDeleteTrxEntrySuccessfull: boolean;
+  activeAccountSharedWith?: AccountSharedWithResponse[];
 }
 
 export const initialState: LedgerState = {
   transactionInprogress: false,
   accountInprogress: false,
   selectedTxnForEditUniqueName: '',
-  isDeleteTrxEntrySuccessfull: false
+  isDeleteTrxEntrySuccessfull: false,
+  activeAccountSharedWith: null,
 };
 
 export function ledgerReducer(state = initialState, action: Action): LedgerState {
@@ -117,6 +119,24 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         ...state,
         isDeleteTrxEntrySuccessfull: delResp.status === 'success'
       };
+    case LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE:
+      let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
+      if (sharedAccountData.status === 'success') {
+        return {
+          ...state,
+          activeAccountSharedWith: sharedAccountData.body
+        };
+      }
+      return state;
+    case LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE:
+      let unSharedAccData: BaseResponse<string, string> = action.payload;
+      if (unSharedAccData.status === 'success') {
+        return {
+          ...state,
+          activeAccountSharedWith: state.activeAccountSharedWith.filter(ac => unSharedAccData.request !== ac.userEmail)
+        };
+      }
+      return state;
     case LEDGER.RESET_LEDGER:
       return {
         ...state,
@@ -130,7 +150,8 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         ledgerCreateSuccess: false,
         isDeleteTrxEntrySuccessfull: false,
         ledgerCreateInProcess: false,
-        selectedTxnForEditUniqueName: ''
+        selectedTxnForEditUniqueName: '',
+        activeAccountSharedWith: null
       };
     default: {
       return state;
