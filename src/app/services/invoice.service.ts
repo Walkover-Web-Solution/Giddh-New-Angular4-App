@@ -493,7 +493,7 @@ export class InvoiceService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(INVOICE_API.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
+    return this._http.post(INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.queryString =  { accountUniqueName, dataToSend };
       return data;
