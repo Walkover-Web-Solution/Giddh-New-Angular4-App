@@ -321,4 +321,23 @@ export class InvoiceSettingComponent implements OnInit {
       this.isEmailChanged = true;
     }
   }
+
+  /**
+   * validateDefaultDueDate
+   */
+  public validateDefaultDueDate(defaultDueDate: string) {
+    if (defaultDueDate) {
+      let invoiceSetting = _.cloneDeep(this.invoiceSetting);
+      if (Number(defaultDueDate) > 999) {
+        invoiceSetting.duePeriod = 99;
+      }
+      // if (defaultDueDate.indexOf('-') !== -1 && (defaultDueDate.indexOf('-') !== defaultDueDate.lastIndexOf('-'))) {
+      //   defaultDueDate.replace('-', '');
+      //   invoiceSetting.duePeriod = Number(defaultDueDate);
+      // }
+      setTimeout(() => {
+        this.invoiceSetting = invoiceSetting;
+      });
+    }
+  }
 }
