@@ -10,7 +10,7 @@
                   <tr>
                     <td ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
                       <label>Quantity</label>
-                      <input type="number" name="" class="form-control" [(ngModel)]="currentTxn.inventory.quantity" />
+                      <input type="number" name="" class="form-control" (change)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity" />
                     </td>
                     <td *ngIf="currentTxn.unitRate">
                       <label>Unit</label>
@@ -32,7 +32,7 @@
             </td>
             <td style="max-width:150px" class="pItem" *ngIf="currentTxn.selectedAccount.stock">
               <label>Price</label>
-              <input type="number" [value]="currentTxn?.inventory?.unit?.rate" name="" class="form-control" />
+              <input type="number" [value]="currentTxn?.inventory?.unit?.rate" (change)="changePrice($event.target.value)" name="" class="form-control" />
             </td>
             <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
               <label>&nbsp;</label>
