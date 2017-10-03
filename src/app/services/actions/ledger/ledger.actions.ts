@@ -1,4 +1,4 @@
-import { AccountResponse } from '../../../models/api-models/Account';
+import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import {
   DownloadLedgerRequest,
@@ -106,6 +106,81 @@ export class LedgerActions {
         type: ''
       };
     });
+  @Effect()
+  public shareAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountShare(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.shareAccountResponse(response);
+    });
+  @Effect()
+  public shareAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        this._toasty.successToast(action.payload.body, '');
+        return this.sharedAccountWith(data.queryString.accountUniqueName);
+      }
+    });
+
+  @Effect()
+  public unShareAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountUnshare(
+        action.payload.user,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.unShareAccountResponse(response);
+    });
+
+  @Effect()
+  public unShareAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      let data: BaseResponse<string, string> = action.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+      }
+      return {
+        type: ''
+      };
+      // return this.sharedAccountWith(data.queryString.accountUniqueName);
+    });
+
+  @Effect()
+  public sharedAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH)
+    .switchMap(action => this._accountService.AccountShareWith(action.payload))
+    .map(response => {
+      return this.sharedAccountWithResponse(response);
+    });
+  @Effect()
+  public sharedAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return {
+        type: ''
+      };
+    });
 
   constructor(private action$: Actions,
     private _toasty: ToasterService,
@@ -165,6 +240,56 @@ export class LedgerActions {
     return {
       type: LEDGER.DELETE_TRX_ENTRY,
       payload: { accountUniqueName, entryUniqueName }
+    };
+  }
+
+  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_SHARE_ACCOUNT,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
+    return {
+      type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public unShareAccount(value: string, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_UNSHARE_ACCOUNT,
+      payload: Object.assign({}, {
+        user: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public unShareAccountResponse(value: BaseResponse<string, string>): Action {
+    return {
+      type: LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public sharedAccountWith(accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH,
+      payload: accountUniqueName
+    };
+  }
+
+  public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): Action {
+    return {
+      type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE,
+      payload: value
     };
   }
 

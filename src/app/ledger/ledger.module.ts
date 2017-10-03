@@ -9,13 +9,17 @@ import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/n
 import { LedgerDiscountComponent } from './components/ledgerDiscount/ledgerDiscount.component';
 
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { ShareLedgerComponent } from './components/shareLedger/shareLedger.component';
+import { ExportLedgerComponent } from './components/exportLedger/exportLedger.component';
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
     LedgerComponent,
     NewLedgerEntryPanelComponent,
     LedgerDiscountComponent,
-    UpdateLedgerEntryPanelComponent
+    UpdateLedgerEntryPanelComponent,
+    ShareLedgerComponent,
+    ExportLedgerComponent
   ],
   exports: [
     LedgerComponent

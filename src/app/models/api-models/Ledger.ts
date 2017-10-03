@@ -148,3 +148,12 @@ export class ReconcileResponse {
   public entryDate: string;
   public taxes: string[];
 }
+
+export class MagicLinkRequest {
+  public from: string = '';
+  public to: string = '';
+}
+
+export class MagicLinkResponse {
+  public magicLink: string;
+}
