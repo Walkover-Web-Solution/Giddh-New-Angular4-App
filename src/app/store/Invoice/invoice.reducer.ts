@@ -6,28 +6,26 @@ import { CommonPaginatedRequest, GetAllLedgersOfInvoicesResponse, GetAllInvoices
 import { InvoiceSetting } from '../../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 
-export class GeneratePage {
-    public ledgers: GetAllLedgersOfInvoicesResponse;
-    public invoiceData: PreviewInvoiceResponseClass;
-    public invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
-    public isInvoiceGenerated: boolean;
-}
-
-export class PreviewPage {
-    public invoices: GetAllInvoicesPaginatedResponse;
-    public base64Data: string;
-}
-
 export interface InvoiceState {
-    preview: PreviewPage;
-    generate: GeneratePage;
-    settings: InvoiceSetting;
+  invoices: GetAllInvoicesPaginatedResponse;
+  base64Data: string;
+  ledgers: GetAllLedgersOfInvoicesResponse;
+  invoiceData: PreviewInvoiceResponseClass;
+  invoiceTemplateConditions: InvoiceTemplateDetailsResponse;
+  isInvoiceGenerated: boolean;
+  visitedFromPreview: boolean;
+  settings: InvoiceSetting;
 }
 
 export const initialState: InvoiceState = {
-    preview: { invoices: null, base64Data: null },
-    generate: { ledgers: null, invoiceData: null, invoiceTemplateConditions: null, isInvoiceGenerated: false },
-    settings: null
+  invoices: null,
+  base64Data: null,
+  ledgers: null,
+  invoiceData: null,
+  invoiceTemplateConditions: null,
+  isInvoiceGenerated: false,
+  visitedFromPreview: false,
+  settings: null
 };
 
 export function InvoiceReducer(state = initialState, action: Action): InvoiceState {
@@ -36,7 +34,7 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
           let newState = _.cloneDeep(state);
           let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
           if (res.status === 'success') {
-            newState.preview.invoices = res.body;
+            newState.invoices = res.body;
             return Object.assign({}, state, newState);
           }
           return state;
@@ -45,7 +43,7 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
           let newState = _.cloneDeep(state);
           let res: BaseResponse<string, string> = action.payload;
           if (res.status === 'success') {
-            newState.preview.base64Data = res.body;
+            newState.base64Data = res.body;
             return Object.assign({}, state, newState);
           }
           return state;
@@ -60,55 +58,78 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                     item.isSelected = (item.isSelected) ? true : false;
                   });
                 }
-                newState.generate.ledgers = body;
+                newState.ledgers = body;
                 return Object.assign({}, state, newState);
             }else {
               let o: GetAllLedgersOfInvoicesResponse = new GetAllLedgersOfInvoicesResponse();
               o.results = [];
-              newState.generate.ledgers = o;
+              newState.ledgers = o;
               return Object.assign({}, state, newState);
             }
         }
         case INVOICE_ACTIONS.MODIFIED_INVOICE_STATE_DATA: {
-            let newState = _.cloneDeep(state);
-            let uniq: string[] = action.payload;
-            newState.generate.ledgers.results.map((item: ILedgersInvoiceResult) => {
-              let idx = _.indexOf(uniq, item.uniqueName);
-              if (idx !== -1) {
-                return item.isSelected = true;
-              }else {
-                return item.isSelected = false;
-              }
-            });
-            // newState.generate.ledgers.results.map((item: ILedgersInvoiceResult) => {
-            //   if (item.uniqueName === value) {
-            //     item.isSelected = true;
-            //   } else {
-            //     item.isSelected = false;
-            //   }
-            // });
-            return Object.assign({}, state, newState);
+          let newState = _.cloneDeep(state);
+          let uniq: string[] = action.payload;
+          newState.ledgers.results.map((item: ILedgersInvoiceResult) => {
+            let idx = _.indexOf(uniq, item.uniqueName);
+            if (idx !== -1) {
+              return item.isSelected = true;
+            }else {
+              return item.isSelected = false;
+            }
+          });
+          return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.PREVIEW_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
-            if (res.status === 'success') {
-                newState.generate.invoiceData = res.body;
-                return Object.assign({}, state, newState);
-            }
-            return state;
+          let newState = _.cloneDeep(state);
+          let res: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = action.payload;
+          if (res.status === 'success') {
+            newState.invoiceData = res.body;
+            return Object.assign({}, state, newState);
+          }
+          return state;
+        }
+        case INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE: {
+          let newState = _.cloneDeep(state);
+          let res: BaseResponse<PreviewInvoiceResponseClass, string> = action.payload;
+          if (res.status === 'success') {
+            newState.invoiceData = res.body;
+            return Object.assign({}, state, newState);
+          }
+          return state;
+        }
+        case INVOICE_ACTIONS.VISIT_FROM_PREVIEW: {
+          return Object.assign({}, state, { visitedFromPreview: true });
+        }
+        case INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE: {
+          return Object.assign({}, state, {
+            isInvoiceGenerated: true
+          });
+        }
+        case INVOICE_ACTIONS.RESET_INVOICE_DATA: {
+          return Object.assign({}, state, {
+            isInvoiceGenerated: false,
+            invoiceTemplateConditions: null,
+            invoiceData: null,
+            visitedFromPreview: false
+          });
+        }
+        case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
+          let newState = _.cloneDeep(state);
+          newState.isInvoiceGenerated = false;
+          return Object.assign({}, state, newState);
         }
         case INVOICE_ACTIONS.GENERATE_INVOICE_RESPONSE: {
-            let newState = _.cloneDeep(state);
-            let res: BaseResponse<string, string> = action.payload;
-            if (res.status === 'success') {
-                newState.generate.isInvoiceGenerated = true;
-                newState.generate.ledgers.results = _.remove(newState.generate.ledgers.results, (item: ILedgersInvoiceResult) => {
-                    return !item.isSelected;
-                });
-                return Object.assign({}, state, newState);
-            }
-            return state;
+          let newState = _.cloneDeep(state);
+          let res: BaseResponse<string, string> = action.payload;
+          if (res.status === 'success') {
+            newState.isInvoiceGenerated = true;
+            newState.ledgers.results = _.remove(newState.ledgers.results, (item: ILedgersInvoiceResult) => {
+              return !item.isSelected;
+            });
+            return Object.assign({}, state, newState);
+          }
+          return state;
         }
         case INVOICE_ACTIONS.GENERATE_BULK_INVOICE_RESPONSE: {
             let newState = _.cloneDeep(state);
@@ -117,7 +138,7 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             if (res.status === 'success' && reqObj.length > 0) {
               _.forEach(reqObj, (item: GenerateBulkInvoiceRequest) => {
                 _.forEach(item.entries, (uniqueName: string) => {
-                  newState.generate.ledgers.results = _.remove(newState.generate.ledgers.results, (o: ILedgersInvoiceResult) => {
+                  newState.ledgers.results = _.remove(newState.ledgers.results, (o: ILedgersInvoiceResult) => {
                     return o.uniqueName !== uniqueName;
                   });
                 });
@@ -126,16 +147,11 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             }
             return state;
         }
-        case INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED: {
-            let newState = _.cloneDeep(state);
-            newState.generate.isInvoiceGenerated = false;
-            return Object.assign({}, state, newState);
-        }
         case INVOICE_ACTIONS.GET_INVOICE_TEMPLATE_DETAILS_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<InvoiceTemplateDetailsResponse, string> = action.payload;
             if (res.status === 'success') {
-                newState.generate.invoiceTemplateConditions = res.body;
+                newState.invoiceTemplateConditions = res.body;
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -144,9 +160,9 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
             if (res.status === 'success') {
-                let indx = newState.preview.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
+                let indx = newState.invoices.results.findIndex((o) => o.invoiceNumber === res.request);
                 if (indx > -1) {
-                    newState.preview.invoices.results.splice(indx, 1);
+                    newState.invoices.results.splice(indx, 1);
                 }
                 return Object.assign({}, state, newState);
             }
@@ -188,16 +204,17 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
         case INVOICE.SETTING.SAVE_INVOICE_WEBHOOK_RESPONSE: {
             let newState = _.cloneDeep(state);
             let res: BaseResponse<string, string> = action.payload;
-            let blankWebhook = {
-                url: '',
-                triggerAt: 0,
-                entity: '',
-                uniqueName: ''
-            };
+            // let blankWebhook = {
+            //     url: '',
+            //     triggerAt: 0,
+            //     entity: '',
+            //     uniqueName: ''
+            // };
             if (res.status === 'success') {
-                let newWebhook = res.queryString.webhook;
-                newState.settings.webhooks.push(newWebhook);
-                newState.settings.webhooks.push(blankWebhook);
+                newState.settings.webhooks = null;
+                // let newWebhook = res.queryString.webhook;
+                // newState.settings.webhooks.push(newWebhook);
+                // newState.settings.webhooks.push(blankWebhook);
                 return Object.assign({}, state, newState);
             }
             return state;
@@ -268,19 +285,19 @@ export function InvoiceReducer(state = initialState, action: Action): InvoiceSta
                 // Client side modification can useful when using pagination
                 /* let status = res.queryString.action.action;
                 let uniqueName = res.queryString.invoiceUniqueName;
-                let indx = newState.preview.invoices.results.findIndex((o) => o.uniqueName === uniqueName);
+                let indx = newState.invoices.results.findIndex((o) => o.uniqueName === uniqueName);
                 if (indx > -1) {
-                    newState.preview.invoices.results[indx].balanceStatus = status;
+                    newState.invoices.results[indx].balanceStatus = status;
                     if (status === 'paid') {
-                        newState.preview.invoices.results[indx].balanceDue = newState.preview.invoices.results[indx].grandTotal - res.queryString.action.amount;
-                        if (newState.preview.invoices.results[indx].grandTotal > newState.preview.invoices.results[indx].balanceDue) {
-                            newState.preview.invoices.results[indx].balanceStatus = 'Partial-Paid';
+                        newState.invoices.results[indx].balanceDue = newState.invoices.results[indx].grandTotal - res.queryString.action.amount;
+                        if (newState.invoices.results[indx].grandTotal > newState.invoices.results[indx].balanceDue) {
+                            newState.invoices.results[indx].balanceStatus = 'Partial-Paid';
                         }
                     }
                 } */
 
                 // Just refreshing the list for now
-                newState.preview.invoices = null;
+                newState.invoices = null;
                 return Object.assign({}, state, newState);
             }
             return state;
