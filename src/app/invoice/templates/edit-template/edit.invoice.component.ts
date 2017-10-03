@@ -86,6 +86,9 @@ export class EditInvoiceComponent implements OnInit {
     let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     if (data.name) {
       data = this.newLineToBR(data);
+      data.sections[0].content[0].label = '';
+      data.sections[1].content[8].field = 'taxes';
+      data.sections[2].content[3].field = 'grandTotal';
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
@@ -110,7 +113,9 @@ export class EditInvoiceComponent implements OnInit {
       data.updatedBy = null;
       data.copyFrom = 'gst_template_a';
       data.sections[0].content[3].label = '';
-
+      data.sections[0].content[0].label = '';
+      data.sections[1].content[8].field = 'taxes';
+      data.sections[2].content[3].field = 'grandTotal';
       data = this.newLineToBR(data);
 
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {
