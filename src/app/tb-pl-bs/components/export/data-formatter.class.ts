@@ -16,8 +16,8 @@ export class DataFormatter {
   public groups: ChildGroup[] = [];
 
   constructor(private exportData: ChildGroup[],
-    private selectedCompany: ComapnyResponse,
-    private recType: RecTypePipe) {
+              private selectedCompany: ComapnyResponse,
+              private recType: RecTypePipe) {
 
   }
 
@@ -66,7 +66,7 @@ export class DataFormatter {
           group.accounts.forEach(account => {
             // if (account.isVisible === true) {
             let data1 = [];
-            data1.push(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`);
+            data1.push(this.truncate(`${this.firstCapital(account.name)}(${this.firstCapital(group.groupName)})`, true, 25));
             data1.push(`${account.openingBalance.amount}${this.recType.transform(account.openingBalance)}`);
             data1.push(account.debitTotal);
             data1.push(account.creditTotal);
@@ -121,7 +121,7 @@ export class DataFormatter {
         }
         if (group.closingBalance.amount !== 0) {
           let data1: any[] = [];
-          data1.push(group.groupName.toUpperCase());
+          data1.push(this.truncate(group.groupName.toUpperCase(), true, 25));
           data1.push(`${group.forwardedBalance.amount} ${this.recType.transform(group.forwardedBalance)}`);
           data1.push(group.debitTotal);
           data1.push(group.creditTotal);
@@ -134,7 +134,7 @@ export class DataFormatter {
           if (group.accounts.length > 0) {
             group.accounts.forEach(acc => {
               if (true) {
-                data1.push(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`);
+                data1.push(this.truncate(`${this.firstCapital(acc.name)}(${this.firstCapital(group.groupName)})`, true, 25));
                 data1.push(`${acc.openingBalance.amount}${this.recType.transform(acc.openingBalance)}`);
                 data1.push(acc.debitTotal);
                 data1.push(acc.creditTotal);
@@ -174,7 +174,7 @@ export class DataFormatter {
     total.cr += group.creditTotal;
     total.dr += group.debitTotal;
     return total;
-  }
+  };
 
   private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
 
@@ -185,5 +185,26 @@ export class DataFormatter {
     } else {
       return `${balance} Dr`;
     }
+  }
+
+  private truncate(value: string, wordWise: boolean, max: number, tail?: string) {
+    if (!value) {
+      return '';
+    }
+    if (!max) {
+      return value;
+    }
+    if (value.length <= max) {
+      return value;
+    }
+    value = value.substr(0, max);
+    let lastspace;
+    if (wordWise) {
+      lastspace = value.lastIndexOf(' ');
+    }
+    if (lastspace != -1) {
+      value = value.substr(0, lastspace);
+    }
+    return value + (tail ? tail : ' …');
   }
 }
