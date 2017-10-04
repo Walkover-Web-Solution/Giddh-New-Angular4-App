@@ -122,6 +122,9 @@ export class AccountsAction {
     .ofType(AccountsAction.CREATE_ACCOUNTV2)
     .switchMap(action => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
     .map(response => {
+      if (response.status === 'success') {
+        this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
+      }
       return this.createAccountResponseV2(response);
     });
 
@@ -138,7 +141,6 @@ export class AccountsAction {
       } else {
         this._toasty.successToast('Account Created Successfully');
       }
-      this.store.dispatch(this.groupWithAccountsAction.hideAddAccountForm());
       let groupSearchString: string;
       this.store.select(p => p.groupwithaccounts.groupAndAccountSearchString).take(1).subscribe(a => groupSearchString = a);
       if (groupSearchString) {
@@ -146,6 +148,7 @@ export class AccountsAction {
       } else {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
+      setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
       return { type: '' };
     });
 
@@ -221,6 +224,9 @@ export class AccountsAction {
     .ofType(AccountsAction.UPDATE_ACCOUNTV2)
     .switchMap(action => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value))
     .map(response => {
+      if (response.status === 'success') {
+        this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+      }
       return this.updateAccountResponseV2(response);
     });
 
@@ -228,6 +234,7 @@ export class AccountsAction {
   public UpdateAccountResponseV2$: Observable<Action> = this.action$
     .ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSEV2)
     .map(action => {
+      let resData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -242,6 +249,8 @@ export class AccountsAction {
         } else {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
+        this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
+        this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
       }
       return { type: '' };
     });

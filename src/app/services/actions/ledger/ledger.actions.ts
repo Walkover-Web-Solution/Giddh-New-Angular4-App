@@ -1,4 +1,4 @@
-import { AccountResponse } from '../../../models/api-models/Account';
+import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import {
   DownloadLedgerRequest,
@@ -34,9 +34,9 @@ export class LedgerActions {
       type: LEDGER.GET_TRANSACTION_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.GET_TRANSACTION_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.GET_TRANSACTION_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
@@ -46,9 +46,9 @@ export class LedgerActions {
       type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public DownloadInvoiceFile$: Observable<Action> = this.action$
@@ -58,9 +58,9 @@ export class LedgerActions {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public GetDiscountAccounts$: Observable<Action> = this.action$
@@ -70,9 +70,9 @@ export class LedgerActions {
       type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
+        payload: res
+      }));
 
   @Effect()
   public CreateBlankLedger$: Observable<Action> = this.action$
@@ -82,16 +82,112 @@ export class LedgerActions {
       type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
       payload: res
     }, true, {
-      type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
-      payload: res
-    }));
+        type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
+        payload: res
+      }));
+
+  @Effect()
+  public DeleteTrxEntry$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_TRX_ENTRY)
+    .switchMap(action => this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName))
+    .map(res => this.deleteTrxEntryResponse(res));
+
+  @Effect()
+  public DeleteTrxEntryResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE)
+    .map(action => {
+      let res = action.payload as BaseResponse<string, string>;
+      if (res.status === 'success') {
+        this._toasty.successToast('Entry deleted successfully', 'Success');
+      } else {
+        this._toasty.errorToast(res.body);
+      }
+      return {
+        type: ''
+      };
+    });
+  @Effect()
+  public shareAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountShare(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.shareAccountResponse(response);
+    });
+  @Effect()
+  public shareAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        this._toasty.successToast(action.payload.body, '');
+        return this.sharedAccountWith(data.queryString.accountUniqueName);
+      }
+    });
+
+  @Effect()
+  public unShareAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountUnshare(
+        action.payload.user,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.unShareAccountResponse(response);
+    });
+
+  @Effect()
+  public unShareAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      let data: BaseResponse<string, string> = action.payload;
+      if (data.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      } else {
+        this._toasty.successToast(action.payload.body, '');
+      }
+      return {
+        type: ''
+      };
+      // return this.sharedAccountWith(data.queryString.accountUniqueName);
+    });
+
+  @Effect()
+  public sharedAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH)
+    .switchMap(action => this._accountService.AccountShareWith(action.payload))
+    .map(response => {
+      return this.sharedAccountWithResponse(response);
+    });
+  @Effect()
+  public sharedAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+      }
+      return {
+        type: ''
+      };
+    });
 
   constructor(private action$: Actions,
-              private _toasty: ToasterService,
-              private store: Store<AppState>,
-              private _ledgerService: LedgerService,
-              private _accountService: AccountService,
-              private _groupService: GroupService) {
+    private _toasty: ToasterService,
+    private store: Store<AppState>,
+    private _ledgerService: LedgerService,
+    private _accountService: AccountService,
+    private _groupService: GroupService) {
   }
 
   public GetTransactions(request: TransactionsRequest): Action {
@@ -111,7 +207,7 @@ export class LedgerActions {
   public DownloadInvoice(value: DownloadLedgerRequest, accountUniqueName: string): Action {
     return {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE,
-      payload: {body: value, accountUniqueName}
+      payload: { body: value, accountUniqueName }
     };
   }
 
@@ -124,17 +220,86 @@ export class LedgerActions {
   public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): Action {
     return {
       type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
-      payload: {model, accountUniqueName}
+      payload: { model, accountUniqueName }
     };
   }
 
+  public setTxnForEdit(txnUniqueName: string) {
+    return {
+      type: LEDGER.SET_SELECTED_TXN_FOR_EDIT,
+      payload: txnUniqueName
+    };
+  }
   public ResetLedger(): Action {
     return {
       type: LEDGER.RESET_LEDGER
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public deleteTrxEntry(accountUniqueName: string, entryUniqueName: string): Action {
+    return {
+      type: LEDGER.DELETE_TRX_ENTRY,
+      payload: { accountUniqueName, entryUniqueName }
+    };
+  }
+
+  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_SHARE_ACCOUNT,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
+    return {
+      type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public unShareAccount(value: string, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_UNSHARE_ACCOUNT,
+      payload: Object.assign({}, {
+        user: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public unShareAccountResponse(value: BaseResponse<string, string>): Action {
+    return {
+      type: LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public sharedAccountWith(accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH,
+      payload: accountUniqueName
+    };
+  }
+
+  public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): Action {
+    return {
+      type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE,
+      payload: value
+    };
+  }
+
+  public deleteTrxEntryResponse(res: BaseResponse<string, string>): Action {
+    return {
+      type: LEDGER.DELETE_TRX_ENTRY_RESPONSE,
+      payload: res
+    };
+  }
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);
