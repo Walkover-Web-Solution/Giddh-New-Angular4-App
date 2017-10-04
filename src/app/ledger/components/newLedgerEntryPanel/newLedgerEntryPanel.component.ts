@@ -168,9 +168,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateTotal() {
-    if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
-      if (this.currentTxn.inventory.unit.rate) {
-        this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn.inventory.unit.rate) {
+          this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+        }
       }
     }
     let total = this.currentTxn.amount - this.currentTxn.discount;
@@ -178,9 +180,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public amountChanged() {
-    if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
-      if (this.currentTxn.inventory.unit.rate) {
-        this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn.inventory.unit.rate) {
+          this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+        }
       }
     }
 
@@ -209,9 +213,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     let total = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax)
       * this.currentTxn.discount);
     this.currentTxn.amount = Number((total / (100 + this.currentTxn.tax)).toFixed(2));
-    if (this.currentTxn.selectedAccount.stock) {
-      this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
+
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock) {
+        this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
+      }
     }
+
     if (this.isTotalFirts || this.isAmountFirst) {
       return;
     } else {
