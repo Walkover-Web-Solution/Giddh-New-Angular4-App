@@ -21,7 +21,14 @@ export class PlGridComponent {
     if (this.plData) {
       this.toggleVisibility(this.plData.expArr, value);
       this.toggleVisibility(this.plData.incArr, value);
-      if (this.search.length < 3) {
+      if (!this.search) {
+        if (this.plData.incArr) {
+          this.plData.incArr.forEach(p => p.isVisible = true);
+        }
+        if (this.plData.expArr) {
+          this.plData.expArr.forEach(p => p.isVisible = true);
+        }
+      } else if (this.search && this.search.length < 3) {
         if (this.plData.incArr) {
           this.plData.incArr.forEach(p => p.isVisible = true);
         }
