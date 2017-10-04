@@ -29,32 +29,31 @@ export class InvoicePurchaseActions {
       }));
 
   @Effect()
-  public GeneratePurchaseInvoice$: Observable<Action> = this.action$
-    .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
-    .switchMap(action => {
-      console.log('Effect CAlled');
-      return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName )
-      .map(response => this.UpdatePurchaseInvoiceResponse(response));
-    });
-        
-
-      @Effect()
-      public GetTaxesForThisCompany$: Observable<Action> = this.action$
-        .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES)
-        .switchMap(action => this.purchaseInvoiceService.GetTaxesForThisCompany())
-        .map(res => this.validateResponse<ITaxResponse[], string>(res, {
-          type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
-          payload: res
-        }, true, {
-            type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
-            payload: res
-          }));
-
-  @Effect()
   public UpdatePurchaseInvoice$: Observable<Action> = this.action$
     .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE)
     .switchMap(action => {
-      return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload)
+      console.log('Effect CAlled');
+      return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName)
+        .map(response => this.UpdatePurchaseInvoiceResponse(response));
+    });
+
+  @Effect()
+  public GetTaxesForThisCompany$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES)
+    .switchMap(action => this.purchaseInvoiceService.GetTaxesForThisCompany())
+    .map(res => this.validateResponse<ITaxResponse[], string>(res, {
+      type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+      payload: res
+    }, true, {
+        type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+        payload: res
+      }));
+
+  @Effect()
+  public GeneratePurchaseInvoice$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
+    .switchMap(action => {
+      return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload)
         .map(response => this.UpdatePurchaseInvoiceResponse(response));
     });
 
@@ -115,7 +114,6 @@ export class InvoicePurchaseActions {
       return { type: '' };
     });
 
- 
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -159,22 +157,22 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public  GeneratePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[] , accountUniqueName: string): Action{
+  public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Action {
     return {
-      type: PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE,
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE,
       payload: { entryUniqueName, taxUniqueName, accountUniqueName }
     };
   }
-  
+
   public GetTaxesForThisCompany(): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.GET_TAXES
     };
   }
 
-  public UpdatePurchaseInvoice(model: IInvoicePurchaseResponse): Action {
+  public GeneratePurchaseInvoice(model: IInvoicePurchaseResponse): Action {
     return {
-      type: PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE,
+      type: PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE,
       payload: model
     };
   }

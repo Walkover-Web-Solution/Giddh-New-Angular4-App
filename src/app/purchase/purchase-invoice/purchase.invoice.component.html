@@ -128,7 +128,7 @@
                             <button type="button" class="btn btn-success">GO</button>
                             <a class="btn btn-link">Reset</a>
                         </div>
-                        <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="generateInvoiceArr.length == 0">Generate <br />Purchase Invoice</button>
+                        <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="!generateInvoiceArr.length">Generate <br />Purchase Invoice</button>
                     </div>
                 </form>
 
@@ -171,18 +171,18 @@
             </thead>
             <tbody>
                 <tr *ngFor="let invoice of allPurchaseInvoices; let i = index">
-                    <td class="text-center"><input type="checkbox" (click)="onSelectRow(i); generateInvoice(invoice);" [disabled]="invoice.entryType !== 'reverse charge'" /></td>
+                    <td class="text-center"><input type="checkbox" (click)="onSelectRow(i); generateInvoice(invoice, $event);" [disabled]="invoice.entryType !== 'reverse charge'" [checked]="selectedRowIndex == i" /></td>
                     <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.account.accountName | highlight: searchBox.value"></td>
+                    <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
                     <td><input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
                         <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small>
                     </td>
-                    <td><input type="text" class="form-control" [value]="invoice.invoiceNo" /></td>
+                    <td><input type="text" class="form-control" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated" /></td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
                         <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType);">
+                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated">
                             <option value="">None selected</option>
                             <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
                             <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0'))"> Reverse Charge</option>
@@ -191,7 +191,7 @@
                         </div>
                         <button *ngIf="timeCounter != 10 && selectedRowIndex == i" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
 
-                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && selectedRowIndex == i" [autoClose]="false">
+                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && selectedRowIndex == i && !invoice.invoiceGenerated" [autoClose]="false">
                             <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                             {{dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
                         </button>
