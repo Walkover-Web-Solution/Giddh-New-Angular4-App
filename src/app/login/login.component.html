@@ -10,25 +10,26 @@
                         <div class="clearfix mrB1">
                             <p class="lead ">Sign In or register</p>
                         </div>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
               <img src="./assets/images/google-plus-icon.png">
               connect with Google
             </button>
-            <!-- <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" [disabled]="true">
+                        <!-- <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" [disabled]="true">
               <img src="./assets/images/twitter-icon.png">
               Login with Twitter
             </button> -->
-            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
               <img src="./assets/images/linkedin-icon.png">
               Login with LinkedIn
-            </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
-              <i class="glyphicon glyphicon-phone"></i>
-              Login with Mobile
             </button>
                         <button type="login" class="btn sharp btn-block btn-lg btn-login email btn-default" (click)="showEmailModal()">
               <i class="glyphicon glyphicon-envelope"></i>
               connect with Email
+            </button>
+
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
+              <i class="glyphicon glyphicon-phone"></i>
+              Login with Mobile
             </button>
                     </div>
                 </div>
@@ -47,7 +48,7 @@
                     <button type="button" class="close" (click)="hideEmailModal()" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body clearfix">
                     <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
 
@@ -79,14 +80,17 @@
                     <button type="button" class="close" (click)="hideMobileModal()" aria-label="Close"><span
                 aria-hidden="true">&times;</span></button>
                 </div>
-                <div class="modal-body" style="height:400px">
-                    <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
-                        <div *ngIf="!(isLoginWithMobileSubmited$ | async)" class="clearfix form-group form-group-lg pd2">
-                            <input pattern="[0-9]{10}" class="form-control mrT1" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required>
-                            <button class="btn sharp btn-block btn-success btn-lg mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value)" [ladda]="isLoginWithMobileInProcess$ | async" [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ | async) ? 'Get Otp' : 'Resend' }}</button>
-                            <!--     -->
+                <div class="modal-body clearfix">
+                    <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
+                        <div class="input-group phoneNum clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                            <span class="input-group-addon select2-parent">
+                                <select2 [data]="countryCodeList" [options]="options" formControlName="country" (valueChanged)="setCountryCode($event)" ></select2>
+                            </span>
+                            <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required />
                         </div>
-                        <div class="clearfix form-group form-group-lg pd2" *ngIf="(isLoginWithMobileSubmited$ | async)">
+                        <button *ngIf="!(isLoginWithMobileSubmited$ | async)" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)" [ladda]="isLoginWithMobileInProcess$ | async"
+                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ | async) ? 'Get Otp' : 'Resend' }}</button>
+                        <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
                             <hr class="mrtb10">
                             <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
                             <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isVerifyMobileInProcess$ | async" (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)" [disabled]="!mobileVerifyForm.controls['otp'].valid">Login</button>

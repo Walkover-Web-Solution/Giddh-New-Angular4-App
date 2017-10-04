@@ -17,6 +17,7 @@ import { RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
+import { IContriesWithCodes, contriesWithCodes } from '../shared/helpers/countryWithCodes';
 
 @Component({
   selector: 'login',
@@ -36,6 +37,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isVerifyEmailInProcess$: Observable<boolean>;
   public isLoginWithEmailInProcess$: Observable<boolean>;
   public isSocialLogoutAttempted$: Observable<boolean>;
+  public countryCCode: IContriesWithCodes[] = contriesWithCodes;
+  public countryCodeList = [];
+  public selectedCountry: string;
+  public options: Select2Options = {
+    multiple: false,
+    width: '80px',
+    allowClear: false,
+    dropdownCssClass: 'text-right'
+  };
   private imageURL: string;
   private email: string;
   private name: string;
@@ -92,6 +102,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   // tslint:disable-next-line:no-empty
   public ngOnInit() {
     this.mobileVerifyForm = this._fb.group({
+      country: ['India', [Validators.required]],
       mobileNumber: ['', [Validators.required]],
       otp: ['', [Validators.required]],
     });
@@ -100,6 +111,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
+    this.CountryWithCode(this.countryCCode);
+    this.setCountryCode({ value: 'India' });
+
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
       this.authService.authState.takeUntil(this.destroyed$).subscribe((user: SocialUser) => {
@@ -146,7 +160,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   public VerifyCode(mobile: string, code: string) {
     let data = new VerifyMobileModel();
-    data.countryCode = 91;
+    data.countryCode = Number(this.selectedCountry);
     data.mobileNumber = mobile;
     data.oneTimePassword = code;
     this.store.dispatch(this.loginAction.VerifyMobileRequest(data));
@@ -164,10 +178,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   // tslint:disable-next-line:no-empty
-  public getOtp(mobileNumber: string) {
+  public getOtp(mobileNumber: string, code: string) {
     let data: SignupWithMobile = new SignupWithMobile();
     data.mobileNumber = mobileNumber;
-    data.countryCode = 91;
+    data.countryCode = Number(this.selectedCountry);
     this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
   }
 
@@ -240,4 +254,25 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
+  /**
+   * setCountryCode
+   */
+  public setCountryCode(id) {
+    if (id) {
+      let country = this.countryCodeList.filter((obj) => obj.id === id.value);
+      this.selectedCountry = country[0].text;
+    }
+  }
+
+  /**
+   * CountryWithCode
+   */
+  private CountryWithCode(countryCCode) {
+    countryCCode.forEach(obj => {
+      this.countryCodeList.push({
+        id: obj.countryName,
+        text: obj.value
+      });
+    });
+  }
 }
