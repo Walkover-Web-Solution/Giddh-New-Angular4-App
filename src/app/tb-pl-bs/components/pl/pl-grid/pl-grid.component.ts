@@ -28,8 +28,7 @@ export class PlGridComponent {
         if (this.plData.expArr) {
           this.plData.expArr.forEach(p => p.isVisible = true);
         }
-      }
-      else if (this.search && this.search.length < 3) {
+      } else if (this.search && this.search.length < 3) {
         if (this.plData.incArr) {
           this.plData.incArr.forEach(p => p.isVisible = true);
         }
