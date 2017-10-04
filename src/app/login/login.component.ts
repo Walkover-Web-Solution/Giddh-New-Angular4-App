@@ -18,6 +18,7 @@ import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
 import { IContriesWithCodes, contriesWithCodes } from '../shared/helpers/countryWithCodes';
+import { IOption } from '../shared/theme/index';
 
 @Component({
   selector: 'login',
@@ -38,7 +39,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isLoginWithEmailInProcess$: Observable<boolean>;
   public isSocialLogoutAttempted$: Observable<boolean>;
   public countryCCode: IContriesWithCodes[] = contriesWithCodes;
-  public countryCodeList = [];
+  public countryCodeList: IOption[] = [];
   public selectedCountry: string;
   public options: Select2Options = {
     multiple: false,
@@ -257,10 +258,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * setCountryCode
    */
-  public setCountryCode(id) {
-    if (id) {
-      let country = this.countryCodeList.filter((obj) => obj.id === id.value);
-      this.selectedCountry = country[0].text;
+  public setCountryCode(event) {
+    if (event.value) {
+      let country = this.countryCodeList.filter((obj) => obj.value === event.value);
+      this.selectedCountry = country[0].label;
     }
   }
 
@@ -270,8 +271,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   private CountryWithCode(countryCCode) {
     countryCCode.forEach(obj => {
       this.countryCodeList.push({
-        id: obj.countryName,
-        text: obj.value
+        value: obj.countryName,
+        label: obj.value
       });
     });
   }
