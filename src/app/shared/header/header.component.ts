@@ -164,6 +164,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (this.route.snapshot.url.toString() === 'new-user') {
       this.showAddCompanyModal();
     }
+    this.store.dispatch(this.loginAction.FetchUserDetails());
   }
 
   public ngAfterViewChecked() {
