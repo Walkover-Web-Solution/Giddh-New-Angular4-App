@@ -48,6 +48,8 @@ export class LoginActions {
   public static SetLoginStatus = 'SetLoginStatus';
   public static GoogleLoginElectron = 'GoogleLoginElectron';
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
+  public static AddNewMobileNo = 'AddNewMobileNo';
+  public static AddNewMobileNoResponse = 'AddNewMobileNoResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -276,6 +278,23 @@ export class LoginActions {
       return this.ChangeCompanyResponse(response);
     });
 
+  @Effect()
+  public addNewMobile$: Observable<Action> = this.actions$
+    .ofType(LoginActions.AddNewMobileNo)
+    .switchMap(action => this.auth.VerifyNumber(action.payload))
+    .map(response => this.AddNewMobileNoResponce(response));
+
+  @Effect()
+  public addNewMobileResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.AddNewMobileNoResponse)
+    .map(action => {
+      if (action.payload.status === 'success') {
+        this._toaster.successToast(action.payload.body);
+      } else {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -419,6 +438,19 @@ export class LoginActions {
   public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): Action {
     return {
       type: CompanyActions.CHANGE_COMPANY_RESPONSE,
+      payload: value
+    };
+  }
+
+  public AddNewMobileNo(value: SignupWithMobile): Action {
+    return {
+      type: LoginActions.AddNewMobileNo,
+      payload: value
+    };
+  }
+  public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): Action {
+    return {
+      type: LoginActions.AddNewMobileNoResponse,
       payload: value
     };
   }
