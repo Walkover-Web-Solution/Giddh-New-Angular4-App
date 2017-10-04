@@ -4,6 +4,7 @@
 </label>
 <div
   #selection
+  [ngStyle]="{'width': '150px'}"
   [attr.tabindex]="disabled ? null : 0"
   [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
   (click)="onSelectContainerClick($event)"

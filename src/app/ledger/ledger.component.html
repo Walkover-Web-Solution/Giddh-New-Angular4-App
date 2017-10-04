@@ -23,11 +23,11 @@
         <div class="col-xs-4 pull-right text-right">
           <div class="row">
 
-            <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" ng-click="ledgerCtrl.shareLedger(); ledgerCtrl.toggleExportFucntion()">
+            <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" (click)="showExportLedgerModal()">
               <i class="icon-download"></i>
             </a>
 
-            <a href="" id="share" class="icomoon_ico" ng-click="ledgerCtrl.shareLedger();ledgerCtrl.getSharedWithList(); ledgerCtrl.toggleShareFucntion()">
+            <a href="javascript:void(0)" id="share" class="icomoon_ico" (click)="showShareLedgerModal()">
               <i [tooltip]="'Share Ledger'" [placement]="'right'" class="icon-share"></i>
             </a>
 
@@ -89,7 +89,7 @@
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
               </td>
             </tr>
-            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
+            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" (dblclick)="showUpdateLedgerModal(txn)"
               (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
               <td class="col-xs-2">{{ txn.entryDate }}</td>
               <td class="col-xs-7">
@@ -138,10 +138,10 @@
                   </tbody>
                 </table>
                 <!--new ledge popup-->
-                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                  <new-ledger-entry-panel [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                <div class="Width600" style="z-index: 10" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                  <new-ledger-entry-panel  class="Width600"  [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
+                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" >
                   </new-ledger-entry-panel>
                 </div>
 
@@ -180,7 +180,7 @@
               </td>
             </tr>
 
-            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" ng-dblclick="ledgerCtrl.fetchEntryDetails(txn, true)"
+            <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" (dblclick)="showUpdateLedgerModal(txn)"
               (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}">
               <td class="col-xs-2">{{ txn.entryDate }}</td>
               <td class="col-xs-7">
@@ -237,8 +237,8 @@
                 </table>
 
                 <!--new ledge popup-->
-                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                  <new-ledger-entry-panel [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                <div class="Width600" style="z-index: 10" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                  <new-ledger-entry-panel class="Width600" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                     (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
                   </new-ledger-entry-panel>
@@ -346,3 +346,39 @@
   </div>
 
 </section>
+
+<!-- modal sections -->
+
+<!-- update ladger entry popup -->
+<div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-lg" style="width:90%" *ngIf="showUpdateLedgerForm">
+        <div class="modal-content">
+            <update-ledger-entry-panel (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+            (entryDeleted)="entryDeleted()">
+            </update-ledger-entry-panel>
+        </div>
+    </div>
+</div>
+<!-- update ladger entry popup -->
+
+<!-- export ladger popup -->
+<div bsModal #exportLedgerModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:90%">
+      <div class="modal-content">
+          <export-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to"
+          (closeExportLedgerModal)="hideExportLedgerModal()"></export-ledger>
+      </div>
+  </div>
+</div>
+
+<!-- share ladger popup -->
+<div bsModal #shareLedgerModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg" style="width:90%">
+      <div class="modal-content">
+          <share-ledger [accountUniqueName]="lc.accountUnq" [from]="trxRequest.from" [to]="trxRequest.to"
+          (closeShareLedgerModal)="hideShareLedgerModal()"></share-ledger>
+      </div>
+  </div>
+</div>
+
+<!-- modal sections -->
