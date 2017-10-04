@@ -93,25 +93,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.addAccountForm = this._fb.group({
-      name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
-      uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['CREDIT'],
-      openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileNo: [''],
-      email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
-      companyName: [''],
-      attentionTo: [''],
-      description: [''],
-      addresses: this._fb.array([]),
-      country: this._fb.group({
-        countryCode: ['']
-      }),
-      hsnOrSac: [''],
-      hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }]
-    });
-
+    this.initializeNewForm();
     this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -137,7 +119,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a === 0 || a < 0) {
+      if (a && (a === 0 || a < 0)) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
       }
     });
@@ -146,11 +128,37 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         this.companiesList$.take(1).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
         });
-        this.addAccountForm.get('companyName').patchValue(a);
+        // this.addAccountForm.get('companyName').patchValue(a);
       }
     });
+    // this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
+    //   if (p) {
+    //     // reset with default values
+    //     this.resetAddAccountForm();
+    //   }
+    // });
   }
 
+  public initializeNewForm() {
+    this.addAccountForm = this._fb.group({
+      name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
+      uniqueName: ['', [Validators.required]],
+      openingBalanceType: ['CREDIT'],
+      openingBalance: [0, Validators.compose([digitsOnly])],
+      mobileNo: [''],
+      email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+      companyName: [''],
+      attentionTo: [''],
+      description: [''],
+      addresses: this._fb.array([]),
+      country: this._fb.group({
+        countryCode: ['']
+      }),
+      hsnOrSac: [''],
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }]
+    });
+  }
   public initialGstDetailsForm(): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
@@ -247,6 +255,18 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
+  public resetAddAccountForm() {
+    this.addAccountForm.reset();
+    // const addresses = this.addAccountForm.get('addresses') as FormArray;
+    // const countries = this.addAccountForm.get('country') as FormGroup;
+    // addresses.controls.map((a, index) => {
+    //   a.reset();
+    //   addresses.removeAt(index);
+    // });
+    // // countries.reset();
+    // this.addAccountForm.reset();
+    // // this.addBlankGstForm();
+  }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
 
@@ -269,6 +289,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
   }
   public ngOnDestroy() {
+    this.resetAddAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

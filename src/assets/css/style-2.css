@@ -3042,7 +3042,7 @@ label {
 }
 
 .col_wrapper:last-child {
-    border: 0;
+    /* border: 0; */
 }
 
 .height100 {
