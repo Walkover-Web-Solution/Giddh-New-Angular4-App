@@ -128,7 +128,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public selectedRowIndex: number;
   public isReverseChargeSelected: boolean = false;
   public stateList = StateList;
-  public generateInvoiceArr: any = [];
+  public generateInvoiceArr: IInvoicePurchaseResponse[] = [];
+  public invoiceSelected: boolean = false;
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -215,7 +216,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         let allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoices);
 
         allPurchaseInvoices = allPurchaseInvoices.filter((invoice: IInvoicePurchaseResponse) => {
-          return (patt.test(invoice.account.gstIn) || patt.test(invoice.entryUniqueName) || patt.test(invoice.account.accountName) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNo) || patt.test(invoice.particular));
+          return (patt.test(invoice.account.gstIn) || patt.test(invoice.entryUniqueName) || patt.test(invoice.account.name) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNumber) || patt.test(invoice.particular));
         });
 
         this.allPurchaseInvoices = allPurchaseInvoices;
@@ -244,11 +245,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * onUpdate
    */
   public onUpdate() {
-    if (this.selectedRowIndex > -1) {
-      let data = _.cloneDeep(this.allPurchaseInvoices);
-      let dataToSave = data[this.selectedRowIndex];
-      this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(dataToSave));
+    // if (this.selectedRowIndex > -1) {
+    //   let data = _.cloneDeep(this.allPurchaseInvoices);
+    //   let dataToSave = data[this.selectedRowIndex];
+    //   this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(dataToSave));
+    // }
+    if (this.generateInvoiceArr.length && this.generateInvoiceArr.length < 2) {
+      let dataToSave = _.cloneDeep(this.generateInvoiceArr[0]);
+      this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(dataToSave));
     }
+
   }
 
   /**
@@ -300,7 +306,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * onChangeEntryType
    */
-  public onChangeEntryType(indx, value) {
+  public onChangeEntryType(indx, value, accUniqName) {
     console.log(value);
     clearInterval(this.intervalId);
     this.timeCounter = 10;
@@ -317,10 +323,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     } else if (value === 'reverse charge') {
       this.isReverseChargeSelected = true;
       this.selectedRowIndex = indx;
-      // this.intervalId = setInterval(() => {
-      //   this.timeCounter--;
-      //   this.checkForCounterValue(this.timeCounter);
-      // }, 1000);
+      this.intervalId = setInterval(() => {
+        this.timeCounter--;
+        this.checkForCounterValue(this.timeCounter);
+      }, 1000);
     }
   }
 
@@ -346,7 +352,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     console.log(idx, itemObj);
     this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.purchaseInvoices) {
-        if (this.allPurchaseInvoices[idx].invoiceNo === itemObj.invoiceNo) {
+        if (this.allPurchaseInvoices[idx].invoiceNumber === itemObj.invoiceNumber) {
           this.allPurchaseInvoices[idx].entryType = _.cloneDeep(o.purchaseInvoices[idx].entryType);
           this.selectedRowIndex = idx;
           if (this.allPurchaseInvoices[idx].entryType !== 'reverse charge') {
@@ -477,7 +483,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     for (let tax of purchaseInvoiceRequestObject.taxes) {
       taxUniqueNames.push(tax.uniqueName);
     }
-    this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName));
+    this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName));
 
   }
 
@@ -495,13 +501,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * generateInvoice
    */
-  public generateInvoice(item) {
-    if (item) {
-      let index = this.generateInvoiceArr.filter((obj, i) => obj.entryUniqueName === item.entryUniqueName);
-      console.log(index);
+  public generateInvoice(item, event) {
+    if (event.target.checked) {
+      this.generateInvoiceArr[0] = item; // temporary fix for single invoice generate
+      this.invoiceSelected = true;
     } else {
-      this.generateInvoiceArr.push(item);
+      _.remove(this.generateInvoiceArr, (obj) => obj.entryUniqueName === item.entryUniqueName);
+      this.invoiceSelected = false;
     }
+    console.log(this.generateInvoiceArr);
   }
 
   /**
