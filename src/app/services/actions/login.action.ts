@@ -10,7 +10,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import {
   VerifyEmailResponseModel,
   VerifyEmailModel,
-  LinkedInRequestModel
+  LinkedInRequestModel,
+  UserDetails
 } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
@@ -50,6 +51,8 @@ export class LoginActions {
   public static LinkedInLoginElectron = 'LinkedInLoginElectron';
   public static AddNewMobileNo = 'AddNewMobileNo';
   public static AddNewMobileNoResponse = 'AddNewMobileNoResponse';
+  public static FetchUserDetails = 'FetchUserDetails';
+  public static FetchUserDetailsResponse = 'FetchUserDetailsResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -150,7 +153,6 @@ export class LoginActions {
     .switchMap((action) => {
       return Observable.zip(this._companyService.getStateDetails(''), this._companyService.CompanyList());
     }).map((results: any[]) => {
-      // console.log(results);
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
       let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
@@ -295,6 +297,22 @@ export class LoginActions {
       }
       return { type: '' };
     });
+
+  @Effect()
+  public FectchUserDetails$: Observable<Action> = this.actions$
+    .ofType(LoginActions.FetchUserDetails)
+    .switchMap(action => this.auth.FetchUserDetails(action.payload))
+    .map(response => this.FetchUserDetailsResponse(response));
+
+  @Effect()
+  public FectchUserDetailsResponse$: Observable<Action> = this.actions$
+      .ofType(LoginActions.FetchUserDetailsResponse)
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toaster.errorToast(action.payload.message, action.payload.code);
+        }
+        return { type: '' };
+      });
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -452,6 +470,19 @@ export class LoginActions {
     return {
       type: LoginActions.AddNewMobileNoResponse,
       payload: value
+    };
+  }
+
+  public FetchUserDetails(): Action {
+    return {
+      type: LoginActions.FetchUserDetails
+    };
+  }
+
+  public FetchUserDetailsResponse(resp: BaseResponse<UserDetails, string>): Action {
+    return {
+      type: LoginActions.FetchUserDetailsResponse,
+      payload: resp
     };
   }
 }

@@ -13,7 +13,8 @@ import {
   VerifyEmailResponseModel,
   VerifyMobileModel,
   VerifyMobileResponseModel,
-  LinkedInRequestModel
+  LinkedInRequestModel,
+  UserDetails
 } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
@@ -138,5 +139,23 @@ export class AuthenticationService {
         // data.response.results.forEach(p => p.isOpen = false);
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
+
+  public FetchUserDetails(model): Observable<BaseResponse<UserDetails, string>> {
+    let sessionId = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        sessionId = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.get(LOGIN_API.FETCH_DETAILS
+      .replace(':sessionId', sessionId)).map((res) => {
+        let data: BaseResponse<UserDetails, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, ''));
   }
 }

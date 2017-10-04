@@ -7,7 +7,8 @@ import {
   VerifyMobileModel,
   VerifyMobileResponseModel,
   LinkedInRequestModel,
-  SignupWithMobile
+  SignupWithMobile,
+  UserDetails
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
@@ -377,6 +378,19 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         isAddNewMobileNoInProcess: false,
         isMobileNoVerifiedSuccess: false
       };
+    case LoginActions.FetchUserDetailsResponse:
+      let userResp: BaseResponse<UserDetails, string> = action.payload;
+      if (userResp.status === 'success') {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            user: userResp.body
+          }
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }
