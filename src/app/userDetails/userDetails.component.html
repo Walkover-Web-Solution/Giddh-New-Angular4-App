@@ -176,7 +176,7 @@
             </div>
             <p class="mrT">
               <b>Note: </b>Format should be like 9898989898</p>
-            <button class="btn btn-success mrT" [ladda]="isAddNewMobileNoInProcess | async" (click)="addNumber(phoneNumber)">Add</button>
+            <button class="btn btn-success mrT" [ladda]="isAddNewMobileNoInProcess$ | async" (click)="addNumber(phoneNumber)">Add</button>
           </form>
 
           <div class="pd2 clearfix" *ngIf="showVerificationBox" style="padding-top:0;">
