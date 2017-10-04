@@ -6,7 +6,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import moment from 'moment';
+import * as moment from 'moment';
 import * as _ from 'lodash';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';

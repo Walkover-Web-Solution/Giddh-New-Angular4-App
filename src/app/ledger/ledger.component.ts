@@ -22,6 +22,8 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { ModalDirective } from 'ngx-bootstrap';
+import { base64ToBlob } from '../shared/helpers/helperFunctions';
 
 @Component({
   selector: 'ledger',
@@ -96,8 +98,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   };
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
+  @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
+  @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
+  public showUpdateLedgerForm: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
@@ -189,6 +195,49 @@ export class LedgerComponent implements OnInit, OnDestroy {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
         if (fa.id === e.value) {
           txn.selectedAccount = fa.additional;
+          let rate = 0;
+          let unitCode = '';
+          let unitName = '';
+          let stockName = '';
+          let stockUniqueName = '';
+
+          if (fa.additional && fa.additional.stock && fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
+            rate = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code).rate;
+          }
+          if (rate > 0 && txn.amount === 0) {
+            txn.amount = rate;
+          }
+          if (fa.additional && fa.additional.stock && fa.additional.stock.stockUnit) {
+            unitName = fa.additional.stock.stockUnit.name;
+            unitCode = fa.additional.stock.stockUnit.code;
+          }
+          if (fa.additional && fa.additional.stock) {
+            stockName = fa.additional.stock.name;
+            stockUniqueName = fa.additional.stock.uniqueName;
+          }
+          if (stockName && stockUniqueName) {
+            if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
+              txn.unitRate = fa.additional.stock.accountStockDetails.unitRates.map(p => {
+                return {
+                  stockUnitCode: p.stockUnitCode,
+                  code: p.stockUnitCode,
+                  rate: p.rate
+                };
+              });
+            }
+            txn.inventory = {
+              stock: {
+                name: stockName,
+                uniqueName: stockUniqueName
+              },
+              quantity: 1,
+              unit: {
+                stockUnitCode: unitCode,
+                code: unitCode,
+                rate
+              }
+            };
+          }
           // reset taxes and discount on selected account change
           txn.tax = 0;
           txn.taxes = [];
@@ -283,7 +332,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
-      let blob = this.base64ToBlob(d.body, 'application/pdf', 512);
+      let blob = base64ToBlob(d.body, 'application/pdf', 512);
       return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
     }, error => {
       // console.log(error);
@@ -344,6 +393,33 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showNewLedgerPanel = false;
   }
 
+  public showUpdateLedgerModal(txn: ITransactionItem) {
+    this.showUpdateLedgerForm = true;
+    this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
+    this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+    this.updateLedgerModal.show();
+  }
+
+  public hideUpdateLedgerModal() {
+    this.showUpdateLedgerForm = false;
+    this.updateLedgerModal.hide();
+  }
+
+  public showShareLedgerModal() {
+    this.shareLedgerModal.show();
+  }
+
+  public hideShareLedgerModal() {
+    this.shareLedgerModal.hide();
+  }
+
+  public showExportLedgerModal() {
+    this.exportLedgerModal.show();
+  }
+
+  public hideExportLedgerModal() {
+    this.exportLedgerModal.hide();
+  }
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
@@ -351,6 +427,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     } else {
       this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
+  }
+
+  public entryDeleted() {
+    this.hideUpdateLedgerModal();
+    this.trxRequest = new TransactionsRequest();
+    this.trxRequest.accountUniqueName = this.lc.accountUnq;
+    this.getTransactionData();
   }
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];
@@ -362,26 +445,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
       return parentGroup.category === 'income' || parentGroup.category === 'expenses';
     }
     return false;
-  }
-  public base64ToBlob(b64Data, contentType, sliceSize) {
-    contentType = contentType || '';
-    sliceSize = sliceSize || 512;
-    let byteCharacters = atob(b64Data);
-    let byteArrays = [];
-    let offset = 0;
-    while (offset < byteCharacters.length) {
-      let slice = byteCharacters.slice(offset, offset + sliceSize);
-      let byteNumbers = new Array(slice.length);
-      let i = 0;
-      while (i < slice.length) {
-        byteNumbers[i] = slice.charCodeAt(i);
-        i++;
-      }
-      let byteArray = new Uint8Array(byteNumbers);
-      byteArrays.push(byteArray);
-      offset += sliceSize;
-    }
-    return new Blob(byteArrays, { type: contentType });
   }
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerActions.ResetLedger());

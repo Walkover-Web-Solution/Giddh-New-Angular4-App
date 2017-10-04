@@ -106,7 +106,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['', [Validators.required]],
+      openingBalanceType: ['CREDIT', [Validators.required]],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -171,11 +171,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       }
     });
     // get active company
-    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
-      if (a) {
-        this.addAccountForm.get('companyName').patchValue(a);
-      }
-    });
+    // this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
+    //   if (a) {
+    //     this.addAccountForm.get('companyName').patchValue(a);
+    //   }
+    // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
       if (a === 0 || a < 0) {
@@ -186,12 +186,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
   public initialGstDetailsForm(val: IAccountAddress = null): FormGroup {
     let gstFields = this._fb.group({
-      gstNumber: ['', Validators.compose([Validators.required, Validators.maxLength(15)])],
+      gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
       stateCode: [{ value: '', disabled: false }],
       isDefault: [false],
       isComposite: [false],
-      partyType: ['']
+      partyType: ['NOT APPLICABLE']
     });
     if (val) {
       gstFields.patchValue(val);
@@ -266,6 +266,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
+  public resetUpdateAccountForm() {
+    const addresses = this.addAccountForm.get('addresses') as FormArray;
+    const countries = this.addAccountForm.get('country') as FormGroup;
+    addresses.reset();
+    countries.reset();
+    this.addAccountForm.reset();
+    this.addBlankGstForm();
+  }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     let activeAccountName: string;
@@ -289,6 +297,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
   }
   public ngOnDestroy() {
+    this.resetUpdateAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

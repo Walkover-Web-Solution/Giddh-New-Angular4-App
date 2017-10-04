@@ -205,9 +205,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
       }
     }
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
-    this.store.dispatch(this.accountsAction.getAccountDetails(item.uniqueName));
     this.mc.selectedType = 'acc';
     this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
+    this.store.dispatch(this.accountsAction.getAccountDetails(item.uniqueName));
   }
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
