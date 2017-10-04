@@ -38,7 +38,7 @@
                 <strong class="fs18">I INCOME</strong>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let incGrp  of  plData.incArr | tbsearch: search" pl-grid-row [groupDetail]="incGrp" [search]="search"
+            <!-- <section class="row row-1" *ngFor="let incGrp  of  plData.incArr | tbsearch: search" pl-grid-row [groupDetail]="incGrp" [search]="search"
               [padding]="10">
               <section class="row row-2 childgroups" *ngFor="let subGrp  of  incGrp.childGroups" pl-grid-row [search]="search" [groupDetail]="subGrp"
                 [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
@@ -47,7 +47,14 @@
                   [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
                 </section>
               </section>
-            </section>
+            </section> -->
+            <ng-template #groupDetails let-list let-padding="padding">
+              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp" [padding]="padding"
+                [search]="search" [padding]="padding">
+                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+              </section>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.incArr | tbsearch: search, padding: 10 }"></ng-container>
 
             <!--/Grid-->
             <div class="account top_bar clearfix">
@@ -73,7 +80,7 @@
                 <strong class="fs18">II EXPENSES</strong>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let expGrp of plData.expArr | tbsearch: search" pl-grid-row [groupDetail]="expGrp" [search]="search"
+            <!-- <section class="row row-1" *ngFor="let expGrp of plData.expArr | tbsearch: search" pl-grid-row [groupDetail]="expGrp" [search]="search"
               [padding]="10">
               <section class="row row-2 childgroups" *ngFor="let subGrp of  expGrp.childGroups" pl-grid-row [groupDetail]="subGrp" [search]="search"
                 [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
@@ -81,7 +88,14 @@
                   [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
                 </section>
               </section>
-            </section>
+            </section> -->
+            <ng-template #groupDetails let-list let-padding="padding">
+              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp" [padding]="padding"
+                [search]="search" [padding]="padding">
+                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+              </section>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.expArr | tbsearch: search, padding: 10 }"></ng-container>
             <!--/Grid-->
           </div>
         </div>
