@@ -15,6 +15,7 @@ import { ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
   `
 })
 export class PlExportXlsComponent implements OnInit, OnDestroy {
+
   @Input() public fy: number;
   public enableDownload: boolean = true;
   @Output() public plBsExportPdfEvent = new EventEmitter<boolean>();
