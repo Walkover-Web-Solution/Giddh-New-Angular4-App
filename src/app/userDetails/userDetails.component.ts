@@ -40,6 +40,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.isMobileNoVerifiedSuccess$.subscribe(s => this.showVerificationBox = s);
     this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
     this.store.dispatch(this.loginAction.FetchUserDetails());
+    this.store.dispatch(this._loginAction.SubscribedCompanies());
   }
 
   public addNumber(no: string) {
@@ -49,7 +50,6 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       request.countryCode = Number(this.countryCode) || 91;
       request.mobileNumber = this.phoneNumber;
       this.store.dispatch(this._loginAction.AddNewMobileNo(request));
-      // return userServices.addNumber(data).then($scope.addNumberSuccess, $scope.addNumberFailure);
     } else {
       this._toasty.errorToast('Please enter number in format: 9998899988');
     }

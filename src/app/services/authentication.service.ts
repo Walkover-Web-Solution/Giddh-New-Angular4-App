@@ -158,4 +158,22 @@ export class AuthenticationService {
         return data;
       }).catch((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, ''));
   }
+
+  public GetSubScribedCompanies(): Observable<BaseResponse<string, string>> {
+    let userUniqueName = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        userUniqueName = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.get(LOGIN_API.SUBSCRIBED_COMPANIES
+      .replace(':userUniqueName', userUniqueName)).map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
 }
