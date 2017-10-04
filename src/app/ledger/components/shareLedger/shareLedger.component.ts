@@ -61,7 +61,7 @@ export class ShareLedgerComponent implements OnInit {
     this.email = '';
   }
 
-  public async unShareAccount(val) {
+  public unShareAccount(val) {
     this.store.dispatch(this._ledgerActions.unShareAccount(val, this.accountUniqueName));
   }
 }

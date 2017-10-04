@@ -138,7 +138,7 @@
                   </tbody>
                 </table>
                 <!--new ledge popup-->
-                <div class="Width600" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                <div class="Width600" style="z-index: 10" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                   <new-ledger-entry-panel  class="Width600"  [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                     (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" >
@@ -237,7 +237,7 @@
                 </table>
 
                 <!--new ledge popup-->
-                <div *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                <div class="Width600" style="z-index: 10" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                   <new-ledger-entry-panel class="Width600" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                     (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
