@@ -10,5 +10,6 @@ export const LOGIN_API = {
   LOGIN_WITH_GOOGLE: Configuration.ApiUrl + 'v2/login-with-google',
   LOGIN_WITH_LINKEDIN: Configuration.ApiUrl + 'v3/login-with-linkedIn',
   CLEAR_SESSION: Configuration.ApiUrl + 'users/:userUniqueName/destroy-session',
-  SET_SETTINGS: Configuration.ApiUrl + 'users/:userUniqueName/settings'
+  SET_SETTINGS: Configuration.ApiUrl + 'users/:userUniqueName/settings',
+  FETCH_DETAILS: Configuration.ApiUrl + 'users/:sessionId'
 };
