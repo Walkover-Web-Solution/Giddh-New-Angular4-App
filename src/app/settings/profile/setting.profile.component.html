@@ -27,23 +27,31 @@
         <label>Contact No.</label>
         <div class="input-group ">
           <span class="input-group-addon">+{{countryCode}}</span>
-          <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo"
-          />
+          <input type="text" placeholder="Contact Number" class="form-control" [(ngModel)]="companyProfileObj.contactNo" #mobileNumberField
+            (blur)="isValidMobileNumber(mobileNumberField)" name="contactNo" />
         </div>
       </div>
-
-      <div class="form-group col-xs-3">
-        <label>Currency</label><br>
-        <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency"
-        />
+      <div class="col-xs-3 pd0">
+        <div class="form-group col-xs-6">
+          <label>Currency</label><br>
+          <input type="text" placeholder="Currency" class="form-control" [(ngModel)]="companyProfileObj.baseCurrency" name="baseCurrency"
+          />
+        </div>
+        <div class="form-group col-xs-6">
+          <div class="checkbox pdT2"> 
+            <label>
+                <input type="checkbox" [(ngModel)]="companyProfileObj.isMultipleCurrency" name="isMultiple">Multiple currency?
+            </label>
+          </div>
+        </div>
       </div>
       <div class="col-xs-3">
         <div class="row">
           <div class="col-xs-12">
             <div class="form-group">
               <label>PAN Number</label><br>
-              <input type="text" placeholder="PAN Number" class="form-control" [(ngModel)]="companyProfileObj.panNumber" #panNumberField (blur)="isValidPAN(panNumberField)" name="panNumber"
-              />
+              <input type="text" placeholder="PAN Number" class="form-control" [(ngModel)]="companyProfileObj.panNumber" #panNumberField
+                (blur)="isValidPAN(panNumberField)" name="panNumber" />
             </div>
           </div>
           <!--<div class="col-xs-6">
@@ -107,7 +115,7 @@
                 <div class="col-xs-12">
                   <div class="form-group">
                     <label>GST No.</label><br>
-                    <input type="text"  placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)"
+                    <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)"
                       #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
                     />
                   </div>
@@ -116,8 +124,8 @@
                   <div class="form-group select2-parent">
                     <label>State</label><br>
                     <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="gst.addressList[0].stateCode" name="newstateCode+{{i}}" />-->
-                    <select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [disabled]="gst.addressList[0].stateCode" [(ngModel)]="gst.addressList[0].stateCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                      (valueChanged)="stateSelected($event, i)">
+                    <select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [disabled]="gst.addressList[0].stateCode" [(ngModel)]="gst.addressList[0].stateCode"
+                      [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event, i)">
                     </select2>
                   </div>
                 </div>
