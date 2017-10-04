@@ -313,7 +313,7 @@ export class InvoiceSettingComponent implements OnInit {
     if (defaultDueDate) {
       let invoiceSetting = _.cloneDeep(this.invoiceSetting);
       if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
-        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, '')) !== 0 ? Number(defaultDueDate.replace(/\D/g, '')) : null;
+        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate.replace(/\D/g, ''))) ? Number(defaultDueDate.replace(/\D/g, '')) : null;
         setTimeout(() => {
           this.invoiceSetting = invoiceSetting;
         });
