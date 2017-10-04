@@ -141,7 +141,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
     delete dataToSave.financialYears;
     delete dataToSave.activeFinancialYear;
-    dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
+    // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
     this.companyProfileObj = dataToSave;
     if (this.gstDetailsBackup) {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
