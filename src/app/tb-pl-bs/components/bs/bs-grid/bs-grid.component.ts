@@ -21,7 +21,15 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
     if (this.bsData) {
       if (this.bsData.assets) { this.toggleVisibility(this.bsData.assets, value); }
       if (this.bsData.liabilities) { this.toggleVisibility(this.bsData.liabilities, value); }
-      if (this.search.length < 3) {
+      if (!this.search) {
+        if (this.bsData.liabilities) {
+          this.bsData.liabilities.forEach(p => p.isVisible = true);
+        }
+        if (this.bsData.assets) {
+          this.bsData.assets.forEach(p => p.isVisible = true);
+        }
+      }
+      else if (this.search && this.search.length < 3) {
         if (this.bsData.liabilities) {
           this.bsData.liabilities.forEach(p => p.isVisible = true);
         }
