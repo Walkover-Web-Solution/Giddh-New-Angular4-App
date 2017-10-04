@@ -35,16 +35,23 @@
                 <strong class="fs18">I EQUITY AND LIABILITIES </strong>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp"
+            <!-- <section class="row row-1" *ngFor="let liabilityGrp  of  bsData?.liabilities | tbsearch: search" bs-grid-row [groupDetail]="liabilityGrp"
               [search]="search" [padding]="10">
               <section class="row row-2 childgroups" *ngFor="let subGrp  of  liabilityGrp.childGroups" bs-grid-row [search]="search" [groupDetail]="subGrp"
                 [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
-
                 <section class="row row-2 accounts" *ngFor="let acc  of subGrp.accounts" bs-grid-row [groupDetail]="acc" [search]="search"
                   [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
                 </section>
               </section>
-            </section>
+            </section> -->
+
+            <ng-template #groupDetails let-list let-padding="padding">
+              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row [groupDetail]="grp" [padding]="padding"
+                [search]="search" [padding]="padding">
+                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+              </section>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.liabilities| tbsearch: search, padding: 10 }"></ng-container>
             <!--/Grid-->
             <div class="account top_bar clearfix">
               <div class="col-xs-4  group">
@@ -69,7 +76,7 @@
                 <strong class="fs18">II ASSETS</strong>
               </div>
             </div>
-            <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search"
+            <!-- <section class="row row-1" *ngFor="let assets of bsData?.assets | tbsearch: search" bs-grid-row [groupDetail]="assets" [search]="search"
               [padding]="10">
               <section class="row row-2 childgroups" *ngFor="let subGrp of  assets.childGroups" bs-grid-row [groupDetail]="subGrp" [search]="search"
                 [padding]="20" [ngClass]="{'isHidden': !subGrp.isVisible }">
@@ -77,7 +84,14 @@
                   [padding]="0" [ngClass]="{'isHidden': !acc.isVisible }">
                 </section>
               </section>
-            </section>
+            </section> -->
+            <ng-template #groupDetails let-list let-padding="padding">
+              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" bs-grid-row [groupDetail]="grp" [padding]="padding"
+                [search]="search" [padding]="padding">
+                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+              </section>
+            </ng-template>
+            <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit:  bsData?.assets| tbsearch: search, padding: 10 }"></ng-container>
             <!--/Grid-->
           </div>
         </div>
