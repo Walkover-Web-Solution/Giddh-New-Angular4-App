@@ -16,12 +16,21 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public bsData: BalanceSheetData;
   @Input() public padding: string;
   public moment = moment;
+
   @Input()
   public set expandAll(value: boolean) {
     if (this.bsData) {
       if (this.bsData.assets) { this.toggleVisibility(this.bsData.assets, value); }
       if (this.bsData.liabilities) { this.toggleVisibility(this.bsData.liabilities, value); }
-      if (this.search.length < 3) {
+      if (!this.search) {
+        if (this.bsData.liabilities) {
+          this.bsData.liabilities.forEach(p => p.isVisible = true);
+        }
+        if (this.bsData.assets) {
+          this.bsData.assets.forEach(p => p.isVisible = true);
+        }
+      }
+      else if (this.search && this.search.length < 3) {
         if (this.bsData.liabilities) {
           this.bsData.liabilities.forEach(p => p.isVisible = true);
         }
@@ -50,6 +59,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
+    debugger;
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
