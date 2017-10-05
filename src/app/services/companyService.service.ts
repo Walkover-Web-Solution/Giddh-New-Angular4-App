@@ -12,7 +12,8 @@ import {
   CompanyRequest,
   StateDetailsRequest,
   StateDetailsResponse,
-  States
+  States,
+  GetCouponResp
 } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -175,5 +176,19 @@ export class CompanyService {
       let data: BaseResponse<States[], string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<States[], string>(e));
+  }
+
+  /**
+   * get coupon details
+   * @param {string} couponCode
+   * @returns {Observable<BaseResponse<GetCouponResp, string>>}
+   * @memberof CompanyService
+   */
+  public getCoupon(couponCode: string): Observable<BaseResponse<GetCouponResp, string>> {
+    return this._http.get(COMPANY_API.GET_COUPON
+      .replace(':couponCode', encodeURIComponent(couponCode))).map((res) => {
+      let data: BaseResponse<GetCouponResp, string> = res.json();
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e));
   }
 }

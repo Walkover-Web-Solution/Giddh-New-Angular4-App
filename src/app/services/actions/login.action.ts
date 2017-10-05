@@ -502,7 +502,6 @@ export class LoginActions {
   }
 
   public SubscribedCompaniesResponse(response): Action {
-    debugger;
     return {
       type: LoginActions.SubscribedCompaniesResponse,
       payload: {}
