@@ -24,7 +24,7 @@ export interface IGstObj {
   animations: [
     trigger('fadeInAndSlide', [
       transition(':enter', [
-        style({ opacity: '0', marginTop: '100px'  }),
+        style({ opacity: '0', marginTop: '100px' }),
         animate('.1s ease-out', style({ opacity: '1', marginTop: '20px' })),
       ]),
     ]),
@@ -68,9 +68,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public initProfileObj() {
-     this.isGstValid = true;
-     this.isPANValid = true;
-     this.isMobileNumberValid = true;
+    this.isGstValid = true;
+    this.isPANValid = true;
+    this.isMobileNumberValid = true;
     // getting profile info from store
     this.store.select(p => p.settings.profile).takeUntil(this.destroyed$).subscribe((o) => {
       if (o) {
@@ -142,7 +142,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     delete dataToSave.financialYears;
     delete dataToSave.activeFinancialYear;
     // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
-    this.companyProfileObj = dataToSave;
+    this.companyProfileObj = _.cloneDeep(dataToSave);
     if (this.gstDetailsBackup) {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
     }
@@ -155,7 +155,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     if (indx > -1) {
       profileObj.gstDetails.splice(indx, 1);
       if (this.gstDetailsBackup) {
-         this.gstDetailsBackup.splice(indx, 1);
+        this.gstDetailsBackup.splice(indx, 1);
       }
     }
     this.companyProfileObj = profileObj;
@@ -188,7 +188,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public checkGstNumValidation(ele: HTMLInputElement) {
     let isInvalid: boolean = false;
     if (ele.value) {
-       if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
+      if (ele.value.length !== 15 || (Number(ele.value.substring(0, 2)) < 1) || (Number(ele.value.substring(0, 2)) > 37)) {
         this._toasty.errorToast('Invalid GST number');
         ele.classList.add('error-box');
         this.isGstValid = false;
@@ -207,7 +207,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public setChildState(ele: HTMLInputElement, index: number) {
     let stateCode: any = Number(ele.value.substring(0, 2));
-    if (stateCode <= 37 ) {
+    if (stateCode <= 37) {
       if (stateCode < 10 && stateCode !== 0) {
         stateCode = (stateCode < 10) ? '0' + stateCode.toString() : stateCode.toString();
       }
