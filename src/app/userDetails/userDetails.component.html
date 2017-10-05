@@ -6,7 +6,7 @@
       <tabset>
 
         <!-- start auth tab tab -->
-        <tab heading="Auth Key" active="tabs[0].active">
+        <tab heading="Auth Key" [active]="true">
           <div class="pd2">
             <p class="lead">Main Auth-key</p>
             <form name="authKeyForm" novalidate role="form">
@@ -22,7 +22,7 @@
         <!-- end of auth tab tab -->
 
         <!-- start Wallet tab tab -->
-        <tab heading="Wallet" active="tabs[1].active" select="getSubscriptionList()">
+        <tab heading="Wallet" select="getSubscriptionList()">
           <div class="pd2">
             <h3 class="fs16 mrB1">Payment details</h3>
             <label class="mrB1">Current Balance {{'basicInfo.availableCredit'}}
@@ -84,42 +84,45 @@
             <!-- modal end -->
 
             <section>
-              <form name="walletForm" novalidate class="form-inline">
+              <form name="walletForm" #walletForm="ngForm" novalidate class="form-inline">
                 <div class="form-group mrR1 " ng-class="(walletForm.amount.$valid  && walletForm.amount.$touched) ? 'has-success' : (walletForm.amount.$touched) ? 'has-error' : '' ">
-                  <input ng-disabled="wlt.status" type="text" name="amount" placeholder="Amount" class="form-control max100" ng-model="wlt.Amnt"
-                    ng-minlength="3" ng-maxlength="7" autocomplete="off" required valid-number/>
+                  <input type="text" name="amount" placeholder="Amount" class="form-control max100" [(ngModel)]="amount"
+                    minlength="3" maxlength="7" [disabled]="payStep2" autocomplete="off" required digitsOnlyDirective/>
                 </div>
                 <div class="form-group">
-                  <button ng-disabled="walletForm.$invalid" class="btn btn-success" ng-click="addMoneyInWallet()">Add money in wallet</button>
+                  <button [disabled]="walletForm.invalid" class="btn btn-success" (click)="addMoneyInWallet()">Add money in wallet</button>
                 </div>
               </form>
             </section>
             <!-- section one end -->
 
-            <section ng-show="payStep2">
+            <section *ngIf="payStep2">
               <div class="bdrT mrT2 mrB2"></div>
               <p class="lead mrB1">
-                You are making a payment of {{'wlt.Amnt'}} &#x20B9;
+                You are making a payment of {{ amount }} &#x20B9;
                 <small class="mrL1" style="font-size:14px">
-                  <a href="javascript:void(0)" ng-click="resetSteps()">Edit</a>
+                  <a href="javascript:void(0)" (click)="resetSteps()">Edit</a>
                 </small>
               </p>
               <div class="checkbox">
                 <label>
-                  <input ng-change="resetDiscount(isHaveCoupon)" ng-model="isHaveCoupon" type="checkbox">Have a coupon code
+                  <input ng-change="resetDiscount(isHaveCoupon)" [(ngModel)]="isHaveCoupon" type="checkbox">Have a coupon code
                 </label>
               </div>
-              <form class="form-inline mrB2" name="couponForm" novalidate ng-show="isHaveCoupon">
-                <div class="form-group mrR1" ng-class="(couponForm.couponcode.$valid  && couponForm.couponcode.$touched) ? 'has-success' : (couponForm.couponcode.$touched) ? 'has-error' : '' ">
-                  <input type="text" name="couponcode" class="form-control max200" ng-model="coupon.code" placeholder="Coupon code" required
+              <form class="form-inline mrB2" name="couponForm" #couponForm="ngForm" novalidate *ngIf="isHaveCoupon">
+                <div class="form-group mrR1"
+                [ngClass]="{'has-success': couponForm.valid && couponForm.touched,'has-error': couponForm.invalid && couponForm.touched}">
+                  <input type="text" name="couponcode" class="form-control max200" [(ngModel)]="couponcode" placeholder="Coupon code" required
                     autocomplete="off">
                 </div>
-                <button ng-disabled="couponForm.$invalid" class="btn btn-primary" ng-click="redeemCoupon(coupon.code)">Redeem</button>
+                <button [disabled]="couponForm.invalid" class="btn btn-primary" (click)="redeemCoupon()">Redeem</button>
               </form>
 
-              <!-- <uib-alert ng-repeat="alert in payAlert" type="{{alert.type}}" close="closeAlert($index)">{{alert.msg}}</uib-alert> -->
+              <alert *ngFor="let alert of payAlert; let i = index;" [type]="alert.type" [dismissible]="true" (onClose)="closeAlert(i)">
+                {{ alert.msg }}
+              </alert>
 
-              <div ng-if="directPay">
+              <div *ngIf="directPay">
                 <div class="search-loading">
                   <span class="spinner small"></span> Please wait we are recharging your wallet
                 </div>
@@ -166,7 +169,7 @@
         <!-- end of Wallet tab tab -->
 
         <!-- start Mobile Number tab tab -->
-        <tab heading="Mobile Number" active="tabs[2].active" select="getUserDetails()">
+        <tab heading="Mobile Number" select="getUserDetails()">
 
           <form class="pd2 clearfix" name="mobileForm" novalidate>
             <h1>Add/Edit Mobile Number</h1>
@@ -176,7 +179,7 @@
             </div>
             <p class="mrT">
               <b>Note: </b>Format should be like 9898989898</p>
-            <button class="btn btn-success mrT" [ladda]="isAddNewMobileNoInProcess | async" (click)="addNumber(phoneNumber)">Add</button>
+            <button class="btn btn-success mrT" [ladda]="isAddNewMobileNoInProcess$ | async" (click)="addNumber(phoneNumber)">Add</button>
           </form>
 
           <div class="pd2 clearfix" *ngIf="showVerificationBox" style="padding-top:0;">

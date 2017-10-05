@@ -164,7 +164,12 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.groupList$.subscribe((a) => {
       if (a) {
+        let activeGroupUniqueName: string;
+        this.activeGroup$.take(1).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
         this.accountList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
+        this.accountList = _.filter(this.accountList, grp => {
+         return grp.uniqueName !== activeGroupUniqueName;
+        });
       }
     });
   }
