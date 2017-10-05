@@ -62,6 +62,7 @@ export class ComapnyResponse {
   public name: string;
   public gstDetails: GstDetail[];
   public panNumber?: string;
+  public isMultipleCurrency?: boolean;
 }
 
 export interface Role {
