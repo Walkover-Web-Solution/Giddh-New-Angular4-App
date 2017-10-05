@@ -3954,3 +3954,42 @@ input[type='checkbox'][disabled]:after {
     top: 7px;
     font-size: 14px;
 }
+
+.phoneNum .input-group-addon {
+    padding: 0;
+    border: 0;
+}
+
+.phoneNum .select2-parent .select2-container .select2-selection--single {
+    line-height: 21px !important;
+    text-align: right;
+}
+
+#verifyMobile .phoneNum ng-select>div,
+#verifyMobile .phoneNum ng-select>div>div.single,
+#verifyMobile .phoneNum ng-select>div>div.single>div.value,
+#verifyMobile .phoneNum ng-select>div>div.single>div.placeholder {
+    height: 46px !important;
+    line-height: 46px !important;
+    text-align: right;
+    outline: 0;
+    font-size: 18px;
+}
+
+#verifyMobile .phoneNum ng-select>div>div.single>div.toggle {
+    line-height: 46px;
+    color: #4d4d4d;
+    height: 44px;
+}
+
+#verifyMobile .phoneNum select-dropdown>div .options ul li {
+    text-align: right;
+}
+
+#verifyMobile .phoneNum ng-select>div {
+    width: 80px !important;
+}
+
+#verifyMobile .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 44px;
+}
