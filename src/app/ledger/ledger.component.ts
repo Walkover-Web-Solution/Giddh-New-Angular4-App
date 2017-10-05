@@ -285,7 +285,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.currentPage = lc.page;
       }
     });
-    this.isLedgerCreateSuccess$.distinct().subscribe(s => {
+    this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.trxRequest = new TransactionsRequest();
