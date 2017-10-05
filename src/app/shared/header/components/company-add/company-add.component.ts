@@ -15,6 +15,7 @@ import { LoginActions } from '../../../../services/actions/login.action';
 import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import * as _ from 'lodash';
+import { IContriesWithCodes, contriesWithCodes } from '../../../helpers/countryWithCodes';
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
@@ -37,6 +38,15 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public dataSource: Observable<any>;
   public dataSourceBackup: any;
+  public country: string;
+  public countryCodeList = [];
+  public selectedCountry: string;
+  public options: Select2Options = {
+    multiple: false,
+    width: '80px',
+    allowClear: false,
+    dropdownCssClass: 'text-right'
+  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -44,7 +54,11 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
     private _aunthenticationServer: AuthenticationService) {
-      this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+    this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+
+    contriesWithCodes.map(c => {
+      this.countryCodeList.push({ id: c.countryName, text: c.value });
+    });
   }
 
   // tslint:disable-next-line:no-empty
@@ -52,7 +66,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
-
+    this.setCountryCode({ value: 'India' });
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         return s.session.user.user.mobileNo !== null;
@@ -106,7 +120,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
             }
           });
         } catch (e) {
-          console.log (e);
+          console.log(e);
         }
       }
     });
@@ -129,6 +143,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public addNumber() {
     let model = new SignupWithMobile();
     model.mobileNumber = this.phoneNumber;
+    model.countryCode = Number(this.selectedCountry);
     this.store.dispatch(this.verifyActions.verifyNumberRequest(model));
   }
 
@@ -190,12 +205,24 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
           });
           this.store.dispatch(this._loginAction.ClearSession());
           this.store.dispatch(this._loginAction.socialLogoutAttempt());
-        }else {
+        } else {
           this.store.dispatch(this._loginAction.ClearSession());
         }
       });
     }
   }
+
+  /**
+   * setCountryCode
+   */
+  public setCountryCode(id) {
+    if (id.value) {
+      let country = this.countryCodeList.filter((obj) => obj.id === id.value);
+      this.country = country[0].id;
+      this.selectedCountry = country[0].text;
+    }
+  }
+
   private getRandomString(comnanyName, city) {
     // tslint:disable-next-line:one-variable-per-declaration
     let d, dateString, randomGenerate, strings;
@@ -217,4 +244,5 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   private getSixCharRandom() {
     return Math.random().toString(36).replace(/[^a-zA-Z0-9]+/g, '').substr(0, 6);
   }
+
 }
