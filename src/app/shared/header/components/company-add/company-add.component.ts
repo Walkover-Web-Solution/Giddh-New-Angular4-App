@@ -38,7 +38,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public dataSource: Observable<any>;
   public dataSourceBackup: any;
-  public countryCCode: IContriesWithCodes[] = contriesWithCodes;
   public country: string;
   public countryCodeList = [];
   public selectedCountry: string;
@@ -56,6 +55,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
     private _aunthenticationServer: AuthenticationService) {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
+
+    contriesWithCodes.map(c => {
+      this.countryCodeList.push({ id: c.countryName, text: c.value });
+    });
   }
 
   // tslint:disable-next-line:no-empty
@@ -63,7 +66,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
-    this.CountryWithCode(this.countryCCode);
     this.setCountryCode({ value: 'India' });
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
@@ -214,23 +216,11 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
    * setCountryCode
    */
   public setCountryCode(id) {
-    if (id) {
+    if (id.value) {
       let country = this.countryCodeList.filter((obj) => obj.id === id.value);
       this.country = country[0].id;
       this.selectedCountry = country[0].text;
     }
-  }
-
-  /**
-   * Map Country With Code
-   */
-  private CountryWithCode(countryCCode) {
-    countryCCode.forEach(obj => {
-      this.countryCodeList.push({
-        id: obj.countryName,
-        text: obj.value
-      });
-    });
   }
 
   private getRandomString(comnanyName, city) {

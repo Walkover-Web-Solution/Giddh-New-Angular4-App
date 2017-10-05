@@ -38,15 +38,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   public isVerifyEmailInProcess$: Observable<boolean>;
   public isLoginWithEmailInProcess$: Observable<boolean>;
   public isSocialLogoutAttempted$: Observable<boolean>;
-  public countryCCode: IContriesWithCodes[] = contriesWithCodes;
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
-  public options: Select2Options = {
-    multiple: false,
-    width: '80px',
-    allowClear: false,
-    dropdownCssClass: 'text-right'
-  };
   private imageURL: string;
   private email: string;
   private name: string;
@@ -98,6 +91,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       }
     });
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
+
+    contriesWithCodes.map(c => {
+      this.countryCodeList.push({ value: c.countryName, label: c.value });
+    });
   }
 
   // tslint:disable-next-line:no-empty
@@ -112,7 +109,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
-    this.CountryWithCode(this.countryCCode);
     this.setCountryCode({ value: 'India' });
 
     // get user object when google auth is complete
@@ -263,17 +259,5 @@ export class LoginComponent implements OnInit, OnDestroy {
       let country = this.countryCodeList.filter((obj) => obj.value === event.value);
       this.selectedCountry = country[0].label;
     }
-  }
-
-  /**
-   * CountryWithCode
-   */
-  private CountryWithCode(countryCCode) {
-    countryCCode.forEach(obj => {
-      this.countryCodeList.push({
-        value: obj.countryName,
-        label: obj.value
-      });
-    });
   }
 }
