@@ -186,7 +186,7 @@ export class CompanyService {
    */
   public getCoupon(couponCode: string): Observable<BaseResponse<GetCouponResp, string>> {
     return this._http.get(COMPANY_API.GET_COUPON
-      .replace(':couponCode', encodeURIComponent(couponCode))).map((res) => {
+      .replace(':code', encodeURIComponent(couponCode))).map((res) => {
       let data: BaseResponse<GetCouponResp, string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<GetCouponResp, string>(e));
