@@ -140,7 +140,7 @@
 
       <!-- opening Balance -->
       <div class="row">
-        <div class="form-group col-xs-6">
+        <div class="form-group col-xs-3">
           <label for="">Opening Balance</label>
           <div class="input-group">
             <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
@@ -154,9 +154,38 @@
             </div>
           </div>
         </div>
+        <div class="form-group col-xs-3">
+          <label class="d-block" *ngIf="isMultipleCurrency" >Currency</label>
+          <label class="d-block" *ngIf="!isMultipleCurrency" tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="left"><i class="fa fa-info-circle" aria-hidden="true"></i> Currency</label>
+          <!--<input type="text" class="form-control" [(ngModel)]="" name="baseCurrency" />-->
+          <p class="mrT1">{{companyCurrency}}</p>
+        </div>
         <div class="form-group col-xs-6">
           <label for="">Unique Name</label>
           <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
+        </div>
+      </div>
+
+      <div class="row" *ngIf="isMultipleCurrency">
+        <div class="form-group col-xs-3">
+          <label for="">Opening Balance</label>
+          <div class="input-group">
+            <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id="" placeholder="00.00">
+            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
+                  'cp': addAccountForm.get('openingBalance').value > 0}">DR.
+            </div>
+            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                 {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
+                  'cp': addAccountForm.get('openingBalance').value > 0}">CR.
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-xs-3">
+          <label for="">Currency</label>
+          <input type="text" class="form-control" formControlName="currency" name="currency" />
+        </div>
+        <div class="form-group col-xs-6">
         </div>
       </div>
 

@@ -14,6 +14,8 @@ import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
+import * as _ from 'lodash';
+import { CompanyActions } from '../../../../services/actions/company.actions';
 
 @Component({
   selector: 'account-update-new',
@@ -79,10 +81,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
+  public isMultipleCurrency: boolean = false;
+  public companyCurrency: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
 
@@ -100,6 +104,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
+
+    this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
+      this.store.dispatch(this.companyActions.RefreshCompanies());
+    });
+
   }
 
   public ngOnInit() {
@@ -107,6 +116,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
       openingBalanceType: ['CREDIT', [Validators.required]],
+      foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -118,6 +128,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         countryCode: ['']
       }),
       hsnOrSac: [''],
+      currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
       sacNumber: [{ value: '', disabled: false }]
     });
@@ -161,6 +172,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         sac.enable();
         hsn.disable();
       }
+
     });
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
@@ -180,6 +192,26 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
       if (a === 0 || a < 0) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
+      }
+    });
+
+    this.store.select(s => s.session).takeUntil(this.destroyed$).subscribe((session) => {
+      let companyUniqueName: string;
+      if (session.companyUniqueName) {
+        companyUniqueName = _.cloneDeep(session.companyUniqueName);
+      }
+      if (session.companies && session.companies.length) {
+        let companies = _.cloneDeep(session.companies);
+        let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
+        if (currentCompany) {
+          this.companyCurrency = _.clone(currentCompany.baseCurrency);
+          this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
+          if (this.isMultipleCurrency) {
+            this.addAccountForm.get('currency').enable();
+          } else {
+            this.addAccountForm.get('currency').disable();
+          }
+        }
       }
     });
   }
