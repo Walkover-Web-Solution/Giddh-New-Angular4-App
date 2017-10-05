@@ -11,5 +11,5 @@ export const COMPANY_API = {
   TAX: Configuration.ApiUrl + 'company/:companyUniqueName/tax', // get call
   GET_COMPANY_USERS: Configuration.ApiUrl + 'company/:companyUniqueName/users',
   GET_ALL_STATES:  Configuration.ApiUrl + 'states',
-  GET_COUPON: Configuration.ApiUrl + 'coupon/get-coupon?couponCode=:couponCode',
+  GET_COUPON: Configuration.ApiUrl + 'coupon/:code'
 };
