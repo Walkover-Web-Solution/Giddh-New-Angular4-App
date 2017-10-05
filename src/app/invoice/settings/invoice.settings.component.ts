@@ -289,7 +289,7 @@ export class InvoiceSettingComponent implements OnInit {
       }
       if (indx > -1 && isNaN(value) && flag === 'alpha') {
         let webhooks = _.cloneDeep(this.invoiceWebhook);
-        webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, ''));
+        webhooks[indx].triggerAt = Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) !== 0 ? Number(String(webhooks[indx].triggerAt).replace(/\D/g, '')) : null;
         this.invoiceWebhook = webhooks;
       }
     }
@@ -313,7 +313,7 @@ export class InvoiceSettingComponent implements OnInit {
     if (defaultDueDate) {
       let invoiceSetting = _.cloneDeep(this.invoiceSetting);
       if (isNaN(Number(defaultDueDate)) && defaultDueDate.indexOf('-') === -1) {
-        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, ''));
+        invoiceSetting.duePeriod = Number(defaultDueDate.replace(/\D/g, '')) !== 0 && !isNaN(Number(defaultDueDate.replace(/\D/g, ''))) ? Number(defaultDueDate.replace(/\D/g, '')) : null;
         setTimeout(() => {
           this.invoiceSetting = invoiceSetting;
         });
