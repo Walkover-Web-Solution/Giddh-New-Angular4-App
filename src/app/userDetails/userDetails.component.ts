@@ -9,6 +9,7 @@ import { LoginActions } from '../services/actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { CompanyService } from '../services/companyService.service';
+import { GetCouponResp } from '../models/api-models/Company';
 
 @Component({
   selector: 'user-details',
@@ -30,6 +31,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public payAlert: any[] = [];
   public directPay: boolean = false;
   public disableRazorPay: boolean = false;
+  public coupRes: GetCouponResp = new GetCouponResp();
   public contactNo$: Observable<string>;
   public countryCode$: Observable<string>;
   public isAddNewMobileNoInProcess$: Observable<boolean>;
@@ -67,7 +69,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public changeTwoWayAuth() {
-    this._loginService.SetSettings({authenticateTwoWay: this.twoWayAuth}).subscribe(res => {
+    this._loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).subscribe(res => {
       if (res.status === 'success') {
         this._toasty.successToast(res.body);
       } else {
@@ -92,30 +94,70 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public redeemCoupon() {
-    this._companyService.getCoupon(this.couponcode).subscribe(res =>  {
+    this._companyService.getCoupon(this.couponcode).subscribe(res => {
       if (res.status === 'success') {
+        this.coupRes = res.body;
         switch (res.body.type) {
           case 'balance_add':
-          this.directPay = true;
-          this.disableRazorPay = true;
-          break;
-        case 'cashback':
-          break;
-        case 'cashback_discount':
-          this.discount = 0;
-          break;
-        case 'discount':
-          break;
-        case 'discount_amount':
-          break;
-        default:
-          this._toasty.warningToast('Something went wrong', 'Warning');
+            this.directPay = true;
+            this.disableRazorPay = true;
+            break;
+          case 'cashback':
+            break;
+          case 'cashback_discount':
+            this.discount = 0;
+            break;
+          case 'discount':
+            break;
+          case 'discount_amount':
+            break;
+          default:
+            this._toasty.warningToast('Something went wrong', 'Warning');
         }
       } else {
         this._toasty.errorToast(res.message, res.status);
-        this.payAlert.push({msg: res.message, type: 'warning'});
+        this.payAlert.push({ msg: res.message, type: 'warning' });
       }
     });
+  }
+
+  public checkDiffAndAlert(type) {
+    this.directPay = false;
+    switch (type) {
+      case 'cashback_discount':
+        this.disableRazorPay = false;
+        return this.payAlert.push({ msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. {$scope.cbDiscount}` });
+      case 'cashback':
+        if (this.amount < this.coupRes.value) {
+          this.disableRazorPay = true;
+          return this.payAlert.push({ msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}` });
+        } else {
+          this.disableRazorPay = false;
+          return this.payAlert.push({ type: 'success', msg: `Your cashback amount will be credited in your account withing 48 hours after payment has been done. Your will get a refund of Rs. ${this.coupRes.value}` });
+        }
+
+      case 'discount':
+        let diff = this.amount - this.discount;
+        if (diff < 100) {
+          this.disableRazorPay = true;
+          return this.payAlert.push({ msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}` });
+        } else {
+          this.disableRazorPay = false;
+          return this.payAlert.push({ type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}` });
+        }
+      case 'discount_amount':
+        diff = this.amount - this.discount;
+        if (diff < 100) {
+          this.disableRazorPay = true;
+          return this.payAlert.push({ msg: `After discount amount cannot be less than 100 Rs. To avail coupon you have to add more money. Currently payable amount is Rs. ${diff}` });
+        } else if (this.amount < this.coupRes.value) {
+          this.disableRazorPay = true;
+          return this.payAlert.push({ msg: `Your coupon is redeemed but to avail coupon, You need to make a payment of Rs. ${this.coupRes.value}` });
+        } else {
+          this.disableRazorPay = false;
+          return this.payAlert.push({ type: 'success', msg: `Hurray you have availed a discount of Rs. ${this.discount}. Now payable amount is Rs. ${diff}` });
+        }
+    }
   }
 
   public closeAlert(index: number) {

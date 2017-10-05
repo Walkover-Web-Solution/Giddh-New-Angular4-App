@@ -55,6 +55,8 @@ export class LoginActions {
   public static FetchUserDetailsResponse = 'FetchUserDetailsResponse';
   public static SubscribedCompanies = 'SubscribedCompanies';
   public static SubscribedCompaniesResponse = 'SubscribedCompaniesResponse';
+  public static AddBalance = 'AddBalance';
+  public static AddBalanceResponse = 'AddBalanceResponse';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -322,6 +324,22 @@ export class LoginActions {
     .switchMap(action => this.auth.GetSubScribedCompanies())
     .map(response => this.SubscribedCompaniesResponse(response));
 
+  @Effect()
+  public AddBalance$: Observable<Action> = this.actions$
+    .ofType(LoginActions.AddBalance)
+    .switchMap(action => this.auth.AddBalance(action.payload))
+    .map(response => this.AddBalanceResponse(response));
+
+  @Effect()
+  public AddBalanceResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.AddBalanceResponse)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+      }
+      return { type: '' };
+    });
+
   constructor(
     public _router: Router,
     private actions$: Actions,
@@ -505,6 +523,19 @@ export class LoginActions {
     return {
       type: LoginActions.SubscribedCompaniesResponse,
       payload: {}
+    };
+  }
+
+  public AddBalance(): Action {
+    return {
+      type: LoginActions.AddBalance
+    };
+  }
+
+  public AddBalanceResponse(resp: BaseResponse<string, string>): Action {
+    return {
+      type: LoginActions.AddBalanceResponse,
+      payload: resp
     };
   }
 }

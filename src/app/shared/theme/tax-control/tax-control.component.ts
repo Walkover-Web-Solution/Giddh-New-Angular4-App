@@ -102,7 +102,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnDestroy() {
-    debugger
     this.taxAmountSumEvent.unsubscribe();
     this.isApplicableTaxesEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
