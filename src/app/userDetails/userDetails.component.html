@@ -9,12 +9,12 @@
         <tab heading="Auth Key" [active]="true">
           <div class="pd2">
             <p class="lead">Main Auth-key</p>
-            <form name="authKeyForm" novalidate role="form">
+            <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
               <div class="form-group">
-                <input id="authKey" class="form-control" ng-model="userAuthKey" ng-readonly="true" value="{{userAuthKey}}" />
+                <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey" [readonly]="true" />
               </div>
               <div class="form-group">
-                <button class="btn btn-primary" ng-click="regenerateKey()">Regenerate Auth Key</button>
+                <button class="btn btn-primary" (click)="regenerateKey()">Regenerate Auth Key</button>
               </div>
             </form>
           </div>

@@ -54,6 +54,13 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
     this.authenticateTwoWay$.subscribe(s => this.twoWayAuth = s);
     this.store.dispatch(this.loginAction.FetchUserDetails());
     this.store.dispatch(this._loginAction.SubscribedCompanies());
+    this._loginService.GetAuthKey().subscribe(a => {
+      if (a.status === 'success') {
+        this.userAuthKey = a.body.authKey;
+      } else {
+        this._toasty.errorToast(a.message, a.status);
+      }
+    });
   }
 
   public addNumber(no: string) {
@@ -163,6 +170,17 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public closeAlert(index: number) {
     this.payAlert.splice(index, 1);
   }
+
+  public regenerateKey() {
+    this._loginService.RegenerateAuthKey().subscribe(a => {
+      if (a.status === 'success') {
+        this.userAuthKey = a.body.authKey;
+      } else {
+        this._toasty.errorToast(a.message, a.status);
+      }
+    });
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
