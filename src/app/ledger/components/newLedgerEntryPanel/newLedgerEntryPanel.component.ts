@@ -198,7 +198,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public changePrice(val: string) {
     this.currentTxn.inventory.unit.rate = Number(val);
-    this.currentTxn.amount = (this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity);
+    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
     // this.amountChanged();
     this.calculateTotal();
   }
@@ -281,6 +281,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.deleteAttachedFileModal.hide();
   }
 
+  public unitChanged(stockUnitCode: string) {
+    this.currentTxn.inventory.unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
+    this.changePrice(this.currentTxn.inventory.unit.rate.toString());
+  }
   public deleteAttachedFile() {
     this.blankLedger.attachedFile = '';
     this.blankLedger.attachedFileName = '';
