@@ -10,7 +10,6 @@ import { AuthenticationService } from '../services/authentication.service';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { CompanyService } from '../services/companyService.service';
 import { GetCouponResp } from '../models/api-models/Company';
-
 @Component({
   selector: 'user-details',
   templateUrl: './userDetails.component.html'
@@ -48,6 +47,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    // console.log(RazorPay);
     this.contactNo$.subscribe(s => this.phoneNumber = s);
     this.countryCode$.subscribe(s => this.countryCode = s);
     this.isMobileNoVerifiedSuccess$.subscribe(s => this.showVerificationBox = s);
