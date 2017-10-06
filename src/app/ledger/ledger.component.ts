@@ -75,7 +75,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     placeholder: 'Select Accounts',
     allowClear: true,
     // maximumSelectionLength: 1,
-    templateSelection: (data) => data.text,
+    templateSelection: (data: any) => {
+      if (data.text === 'Select Accounts') {
+        return;
+      }
+      if (!data.additional.stock) {
+        return data.text;
+      } else {
+        return `${data.text} (${data.additional.stock.name})`;
+      }
+    },
     templateResult: (data: any) => {
       if (data.text === 'Searching…') {
         return;
@@ -183,6 +192,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
+      txn.amount = 0;
       // reset taxes and discount on selected account change
       txn.tax = 0;
       txn.taxes = [];
@@ -285,7 +295,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.currentPage = lc.page;
       }
     });
-    this.isLedgerCreateSuccess$.distinct().subscribe(s => {
+    this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
         this.trxRequest = new TransactionsRequest();
