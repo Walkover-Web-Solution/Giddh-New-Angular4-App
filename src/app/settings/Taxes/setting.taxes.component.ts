@@ -79,6 +79,9 @@ export class SettingTaxesComponent implements OnInit {
     }];
 
     if (dataToSave.taxType === 'others') {
+      if (!dataToSave.accounts) {
+        dataToSave.accounts = [];
+      }
       this.accounts$.forEach((obj) => {
         if (obj.id === dataToSave.account) {
           dataToSave.accounts.push({ name: obj.text, uniqueName: obj.id });
