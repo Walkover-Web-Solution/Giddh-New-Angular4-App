@@ -69,7 +69,11 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.setCountryCode({ value: 'India' });
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
-        return s.session.user.user.mobileNo !== null;
+        if (s.session.user.user.mobileNo) {
+          return s.session.user.user.mobileNo !== null;
+        } else {
+          return s.session.user.user.contactNo !== null;
+        }
       }
     }).takeUntil(this.destroyed$);
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
