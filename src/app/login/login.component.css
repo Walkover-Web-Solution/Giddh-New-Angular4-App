@@ -31,7 +31,7 @@ body.ununresponsive {
 }
 
 .modal-header h3 {
-    color: #000;
+    color: #fff;
     font-size: 1.3rem;
 }
 
@@ -180,6 +180,15 @@ body.ununresponsive {
     left: 0;
 }
 
+button.close {
+    float: right;
+    font-size: 21px;
+    font-weight: 700;
+    line-height: 1;
+    color: #db7f53;
+    text-shadow: none;
+    opacity: 1;
+}
 
 /* .modal-body {
     overflow: hidden;

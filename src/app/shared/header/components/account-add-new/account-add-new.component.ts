@@ -16,6 +16,8 @@ import { Select2Component } from '../../../theme/select2/select2.component';
 import { ComapnyResponse } from '../../../../models/api-models/Company';
 import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { CompanyActions } from '../../../../services/actions/company.actions';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'account-add-new',
@@ -72,10 +74,12 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public activeCompany: ComapnyResponse;
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
+  public isMultipleCurrency: boolean = false;
+  public companyCurrency: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
@@ -89,6 +93,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+    });
+
+    this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
+      this.store.dispatch(this.companyActions.RefreshCompanies());
     });
   }
 
@@ -137,6 +145,25 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     //     this.resetAddAccountForm();
     //   }
     // });
+    this.store.select(s => s.session).takeUntil(this.destroyed$).subscribe((session) => {
+      let companyUniqueName: string;
+      if (session.companyUniqueName) {
+        companyUniqueName = _.cloneDeep(session.companyUniqueName);
+      }
+      if (session.companies && session.companies.length) {
+        let companies = _.cloneDeep(session.companies);
+        let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
+        if (currentCompany) {
+          this.companyCurrency = _.clone(currentCompany.baseCurrency);
+          this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
+          if (this.isMultipleCurrency) {
+            this.addAccountForm.get('currency').enable();
+          } else {
+            this.addAccountForm.get('currency').disable();
+          }
+        }
+      }
+    });
   }
 
   public initializeNewForm() {
@@ -144,6 +171,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
       openingBalanceType: ['CREDIT'],
+      foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
@@ -155,6 +183,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         countryCode: ['']
       }),
       hsnOrSac: [''],
+      currency: [''],
       hsnNumber: [{ value: '', disabled: false }],
       sacNumber: [{ value: '', disabled: false }]
     });
