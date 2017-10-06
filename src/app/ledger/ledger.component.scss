@@ -87,7 +87,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledger-footer-1 {
-    position: relative;
+    position: absolute;
     bottom: 0;
 }
 
@@ -177,11 +177,12 @@ table td[class*=col-]:last-child {
 .ledger_book {
     border: 1px solid #ccc;
     clear: both;
-    // overflow: hidden;
+    overflow: hidden;
     position: relative;
     background: #fff;
 }
-.Width600{
-  position: absolute;
-  width: 600px;
+
+.Width600 {
+    position: absolute;
+    width: 600px;
 }
