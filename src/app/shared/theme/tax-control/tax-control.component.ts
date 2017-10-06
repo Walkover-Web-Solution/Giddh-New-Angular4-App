@@ -43,9 +43,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.sum = 0;
-    this.prepareTaxObject();
-    this.change();
+    // this.sum = 0;
+    // this.prepareTaxObject();
+    // this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges) {
@@ -63,7 +63,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
    */
   public prepareTaxObject() {
     let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
-    this.taxRenderData = [];
+    while (this.taxRenderData.length > 0) {
+      this.taxRenderData.pop();
+    }
     this.taxes.map(tx => {
       let taxObj = new TaxControlData();
       taxObj.name = tx.name;
@@ -90,7 +92,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
         oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
       }
-      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1)) || (oldValue && oldValue.isChecked) || false;
+      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1)) || (oldValue && oldValue.isChecked);
       if (taxObj.amount && taxObj.amount > 0) {
         this.taxRenderData.push(taxObj);
       }
