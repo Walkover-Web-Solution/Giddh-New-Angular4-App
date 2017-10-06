@@ -89,7 +89,9 @@ export class EditInvoiceComponent implements OnInit {
       data.sections[0].content[0].label = '';
       data.sections[1].content[8].field = 'taxes';
       data.sections[2].content[3].field = 'grandTotal';
-      data.sections[1].content[8].field = 'taxableValue';
+      if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
+        data.sections[1].content[8].field = 'taxableValue';
+      }
       this._invoiceTemplatesService.saveTemplates(data).subscribe((res) => {
         if (res.status === 'success') {
           this._toasty.successToast('Template Saved Successfully.');
@@ -117,7 +119,10 @@ export class EditInvoiceComponent implements OnInit {
       data.sections[0].content[0].label = '';
       data.sections[1].content[8].field = 'taxes';
       data.sections[2].content[3].field = 'grandTotal';
-      data.sections[1].content[8].field = 'taxableValue';
+      if (data.sections[1].content[8].field === 'taxes' && data.sections[1].content[7].field !== 'taxableValue') {
+        data.sections[1].content[8].field = 'taxableValue';
+      }
+
       data = this.newLineToBR(data);
 
       this._invoiceTemplatesService.updateTemplate(data.uniqueName, data).subscribe((res) => {

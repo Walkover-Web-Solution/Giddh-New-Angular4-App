@@ -730,7 +730,7 @@ export class InvoiceActions {
   public setColor(primaryColor: string, secondaryColor: string): Action {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
-      payload: { primaryColor, secondaryColor }
+      payload: { templateColor: primaryColor, tableColor: secondaryColor }
     };
   }
   public updateGSTIN(data: string): Action {

@@ -422,8 +422,8 @@ export class CustomTemplateResponse {
   public updatedAt: string;
   public updatedBy: UpdatedBy;
   public sample?: any;
-  public primaryColor: string; // design
-  public secondaryColor: string; // design
+  public templateColor: string; // design
+  public tableColor: string; // design
   public font: string; // design
   public topMargin: number; // design
   public leftMargin: number; // design
