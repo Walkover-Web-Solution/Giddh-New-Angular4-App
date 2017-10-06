@@ -383,7 +383,7 @@
             <header>
                 <figure class="col-xs-12"><img [src]="logoSrc" class="pull-left" alt="" [ngStyle]="{ 'max-width': inputTemplate.logoSize+'px'}" [hidden]='!showLogo' /></figure>
                 <figure class="col-xs-6" *ngIf="inputTemplate.sections[0].content[0].display">
-                    <strong *ngIf="inputTemplate.sections[0].content[0].display"><h2 [ngStyle]="{ 'color': inputTemplate.primaryColor}" >{{inputTemplate.sections[0].content[0].label}}</h2></strong>
+                    <strong *ngIf="inputTemplate.sections[0].content[0].display"><h2 [ngStyle]="{ 'color': inputTemplate.templateColor}" >{{inputTemplate.sections[0].content[0].label}}</h2></strong>
                 </figure>
                 <table cellspacing="0" cellpadding="0">
                     <tbody>
@@ -435,8 +435,8 @@
                 <!--</div>-->
                 <!--*ngIf="inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].display"-->
                 <div class="docTitle">
-                    <h2 [ngClass]="{'no-content' : (inputTemplate.sections[0].content[23] && !inputTemplate.sections[0].content[23].display)}" [ngStyle]="{ 'color': inputTemplate.primaryColor}" title="{{( inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].label.length > 0) ? inputTemplate.sections[0].content[23].label : 'INVOICE' }}">
-                        <hr [ngStyle]="{ 'background-color': inputTemplate.primaryColor}" />
+                    <h2 [ngClass]="{'no-content' : (inputTemplate.sections[0].content[23] && !inputTemplate.sections[0].content[23].display)}" [ngStyle]="{ 'color': inputTemplate.templateColor}" title="{{( inputTemplate.sections[0].content[23] && inputTemplate.sections[0].content[23].label.length > 0) ? inputTemplate.sections[0].content[23].label : 'INVOICE' }}">
+                        <hr [ngStyle]="{ 'background-color': inputTemplate.templateColor}" />
                     </h2>
                 </div>
             </header>
@@ -630,8 +630,8 @@
                         <tr *ngIf="inputTemplate.sections[2].content[7].display">
                             <td>
                                 <strong>
-                                    <h4 *ngIf="inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.primaryColor}" [innerHTML]="inputTemplate.sections[2].content[7].label"></h4>
-                                    <h4 *ngIf="!inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.primaryColor}">Thank You for your business.</h4>
+                                    <h4 *ngIf="inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.templateColor}" [innerHTML]="inputTemplate.sections[2].content[7].label"></h4>
+                                    <h4 *ngIf="!inputTemplate.sections[2].content[7].label" [ngStyle]="{ 'color': inputTemplate.templateColor}">Thank You for your business.</h4>
                                 </strong>
                             </td>
                         </tr>
@@ -639,7 +639,7 @@
                 </table>
 
             </aside>
-            <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.primaryColor}">
+            <footer style="text-align: center;" [ngStyle]="{ 'border-color': inputTemplate.templateColor}">
                 <span *ngIf="inputTemplate.sections[0].content[0].display">{{inputTemplate.sections[0].content[0].label}}</span> <br>
                 <span *ngIf="inputTemplate.sections[2].content[8].display">{{inputTemplate.sections[2].content[8].label}}</span>
             </footer>

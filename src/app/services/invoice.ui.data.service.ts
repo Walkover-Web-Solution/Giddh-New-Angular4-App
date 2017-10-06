@@ -67,6 +67,7 @@ export class InvoiceUiDataService {
         if (this.companyAddress) {
           defaultTemplate.sections[2].content[8].label = this.companyAddress;
         }
+        console.log('the custom template is :', defaultTemplate);
         this.customTemplate.next(_.cloneDeep(defaultTemplate));
       }
     });
@@ -171,6 +172,8 @@ export class InvoiceUiDataService {
             this.isLogoVisible.next(true);
           }
           selectedTemplate = this.BRToNewLine(selectedTemplate);
+          console.log('THe selected template is :', selectedTemplate);
+
           this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }
       }
