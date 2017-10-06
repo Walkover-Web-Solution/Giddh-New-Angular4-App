@@ -163,7 +163,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     });
 
     this.groupList$.subscribe((a) => {
-      if (a) {
+      if (a && a.length > 0) {
         let activeGroupUniqueName: string;
         this.activeGroup$.take(1).subscribe(grp => activeGroupUniqueName = grp.uniqueName);
         this.accountList = this.makeGroupListFlatwithLessDtl(this.flattenGroup(a, []));
