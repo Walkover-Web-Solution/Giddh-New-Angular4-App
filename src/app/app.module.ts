@@ -26,6 +26,7 @@ import { ServiceModule } from './services/service.module';
 import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
+import { SalesModule } from './sales/sales.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
@@ -90,6 +91,7 @@ if (ENV === 'development') {
     RouterModule.forRoot(ROUTES, { useHash: true, preloadingStrategy: PreloadAllModules }),
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS,
+    SalesModule,
   ],
   /**
    * Expose our Services and Providers into Angular's dependency injection.
