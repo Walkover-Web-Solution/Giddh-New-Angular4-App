@@ -96,8 +96,15 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public addGst() {
     let gstDetails = _.cloneDeep(this.companyProfileObj.gstDetails);
-    let gstNumber = gstDetails[gstDetails.length - 1].gstNumber;
-    let isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
+    let gstNumber;
+    let isValid;
+    if (gstDetails && gstDetails.length) {
+      gstNumber = gstDetails[gstDetails.length - 1].gstNumber;
+      isValid = (Number(gstNumber.substring(0, 2)) > 37 || Number(gstNumber.substring(0, 2)) < 1 || gstNumber.length !== 15) ? false : true;
+    } else {
+      isValid = true;
+    }
+
     // this.isGstValid
     if (isValid) {
       let companyDetails = _.cloneDeep(this.companyProfileObj);
