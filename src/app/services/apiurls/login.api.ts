@@ -15,5 +15,5 @@ export const LOGIN_API = {
   SUBSCRIBED_COMPANIES: Configuration.ApiUrl + 'users/:userUniqueName/subscribed-companies',
   ADD_BALANCE: Configuration.ApiUrl + 'users/:uniqueName/balance',
   GET_AUTH_KEY: Configuration.ApiUrl + 'users/:uniqueName/get-auth-key',
-  REGENERATE_AUTH_KEY: Configuration.ApiUrl + 'users/:uniqueName/generate-auth-key',
+  REGENERATE_AUTH_KEY: Configuration.ApiUrl + 'users/:userEmail/generate-auth-key',
 };
