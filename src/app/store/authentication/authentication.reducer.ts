@@ -314,7 +314,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
     case CompanyActions.CREATE_COMPANY:
       return Object.assign({}, state, { isCompanyCreationInProcess: true });
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false });
+      return Object.assign({}, state, { isCompanyCreated: state.isCompanyCreated, isCompanyCreationInProcess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
@@ -322,14 +322,14 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         newState.isCompanyCreationInProcess = false;
         newState.isCompanyCreated = true;
         newState.companies.push(companyResp.body);
-        return newState;
+        return Object.assign({}, state, newState);
       }
       return state;
     }
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
-        isCompanyCreated: false
+        // isCompanyCreated: state.isCompanyCreated
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
       let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
