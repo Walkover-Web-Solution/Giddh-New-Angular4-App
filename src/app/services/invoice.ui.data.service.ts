@@ -67,7 +67,6 @@ export class InvoiceUiDataService {
         if (this.companyAddress) {
           defaultTemplate.sections[2].content[8].label = this.companyAddress;
         }
-        console.log('the custom template is :', defaultTemplate);
         this.customTemplate.next(_.cloneDeep(defaultTemplate));
       }
     });

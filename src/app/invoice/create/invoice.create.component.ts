@@ -21,9 +21,6 @@ import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
 
-// {
-//   field: 'description'
-// },
 const THEAD = [
   {
     display: false,
