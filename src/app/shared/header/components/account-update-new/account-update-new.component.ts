@@ -154,6 +154,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
           this.addAccountForm.get('sacNumber').enable();
           this.addAccountForm.get('hsnOrSac').patchValue('sac');
         }
+        this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
         this.addAccountForm.patchValue(accountDetails);
       }
     });
@@ -190,8 +191,10 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a === 0 || a < 0) {
+      if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
+      } else if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value !== '') {
+        this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
       }
     });
 

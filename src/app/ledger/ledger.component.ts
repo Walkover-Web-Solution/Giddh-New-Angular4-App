@@ -188,7 +188,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.getTransactionData();
   }
 
-  public selectAccount(e: any, txn) {
+  public selectAccount(e: any, txn: TransactionVM) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
@@ -210,31 +210,40 @@ export class LedgerComponent implements OnInit, OnDestroy {
           let unitName = '';
           let stockName = '';
           let stockUniqueName = '';
+          let unitArray = [];
 
-          if (fa.additional && fa.additional.stock && fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
-            rate = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code).rate;
-          }
-          if (rate > 0 && txn.amount === 0) {
-            txn.amount = rate;
-          }
-          if (fa.additional && fa.additional.stock && fa.additional.stock.stockUnit) {
+          if (fa.additional && fa.additional.stock) {
+            let defaultUnit = {
+              stockUnitCode: fa.additional.stock.stockUnit.name,
+              code: fa.additional.stock.stockUnit.code,
+              rate: 0
+            };
+            if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
+              let cond = fa.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === fa.additional.stock.stockUnit.code);
+              if (cond) {
+                defaultUnit.rate = cond.rate;
+                rate = defaultUnit.rate;
+              }
+              unitArray.join(fa.additional.stock.accountStockDetails.unitRates.map(p => {
+                return {
+                  stockUnitCode: p.code,
+                  code: p.code,
+                  rate: 0
+                };
+              }));
+              if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
+                unitArray.push(defaultUnit);
+              }
+            } else {
+              unitArray.push(defaultUnit);
+            }
+            txn.unitRate = unitArray;
+            stockName = fa.additional.stock.name;
+            stockUniqueName = fa.additional.stock.uniqueName;
             unitName = fa.additional.stock.stockUnit.name;
             unitCode = fa.additional.stock.stockUnit.code;
           }
-          if (fa.additional && fa.additional.stock) {
-            stockName = fa.additional.stock.name;
-            stockUniqueName = fa.additional.stock.uniqueName;
-          }
           if (stockName && stockUniqueName) {
-            if (fa.additional.stock.accountStockDetails && fa.additional.stock.accountStockDetails.unitRates) {
-              txn.unitRate = fa.additional.stock.accountStockDetails.unitRates.map(p => {
-                return {
-                  stockUnitCode: p.stockUnitCode,
-                  code: p.stockUnitCode,
-                  rate: p.rate
-                };
-              });
-            }
             txn.inventory = {
               stock: {
                 name: stockName,
@@ -248,6 +257,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
               }
             };
           }
+          if (rate > 0 && txn.amount === 0) {
+            txn.amount = rate;
+          }
+
           // reset taxes and discount on selected account change
           txn.tax = 0;
           txn.taxes = [];
