@@ -189,7 +189,16 @@
           <td>{{ entryIdx+1 }}</td>
           <td><input type="text" placeholder="DD-MM-YYYY" name="transaction.date_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.date" /></td>
           <td>
-            <div class="select2-parent select2-ledger">
+            <div>
+              <ng-select
+                class="form-inline"
+                name="transaction.fakeAccForSelect2_{{entryIdx}}"
+                [(ngModel)]="transaction.fakeAccForSelect2"
+                [options]="salesAccounts$ | async"
+                (selected)="onSelectSalesAccount($event, transaction)"
+                ></ng-select>
+            </div>
+            <!-- <div class="select2-parent select2-ledger">
               <select2
                 name="transaction.fakeAccForSelect2_{{entryIdx}}"
                 [data]="salesAccounts$ | async"
@@ -197,7 +206,7 @@
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="accountsOptions"
               ></select2>
-            </div>
+            </div> -->
             <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
