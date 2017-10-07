@@ -94,7 +94,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }).takeUntil(this.destroyed$);
 
     this.companies$ = this.store.select(state => {
-      return _.orderBy(state.session.companies, 'name');
+      if (state.session.companies && state.session.companies.length) {
+        return _.orderBy(state.session.companies, 'name');
+      }
     }).takeUntil(this.destroyed$);
 
     this.selectedCompany = this.store.select(state => {
