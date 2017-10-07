@@ -189,24 +189,28 @@
           <td>{{ entryIdx+1 }}</td>
           <td><input type="text" placeholder="DD-MM-YYYY" name="transaction.date_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.date" /></td>
           <td>
-            <div>
+            <div class="ng-select-wrap">
               <ng-select
                 class="form-inline"
                 name="transaction.fakeAccForSelect2_{{entryIdx}}"
+                placeholder="Select A/c"
+                filterPlaceholder="Type to search..."
+                notFoundMsg="No A/c found"
+                [allowClear]="true"
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="salesAccounts$ | async"
                 (selected)="onSelectSalesAccount($event, transaction)"
-                ></ng-select>
+                (noOptionsFound)="onNoOptionsFoundInSalesAccount($event)"
+                >
+                <ng-template #optionTemplate let-option="option">
+                  <div class="account-list-item">{{option?.label}}</div>
+                  <div class="account-list-item fs12">{{option?.value}}</div>
+                  <div class="account-list-item fs11">
+                    {{option?.additional?.stock?.name}}
+                  </div>
+                </ng-template>
+              </ng-select>
             </div>
-            <!-- <div class="select2-parent select2-ledger">
-              <select2
-                name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                [data]="salesAccounts$ | async"
-                (valueChanged)="onSelectSalesAccount($event, transaction)"
-                [(ngModel)]="transaction.fakeAccForSelect2"
-                [options]="accountsOptions"
-              ></select2>
-            </div> -->
             <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
