@@ -1,4 +1,4 @@
-import { IAccountCreate, IAccount } from '../interfaces/accountCreate.interface';
+import { IAccountCreate, IAccount, ICountryClass } from '../interfaces/accountCreate.interface';
 import { IGstDetailListItem } from '../interfaces/gstDetailListItem.interface';
 import { IUserInfo } from '../interfaces/userInfo.interface';
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
@@ -22,7 +22,7 @@ export class AccountResponse implements IAccountCreate {
   public addresses?: IAccountAddress[];
   public pincode?: string;
   public email: string;
-  public country?: string;
+  public country?: ICountryClass;
   public createdAt: string;
   public updatedAt: string;
   public updatedBy: IUserInfo;
@@ -70,7 +70,7 @@ export class AccountRequest implements IAccount {
   public hsnNumber: string;
   public city: string;
   public pincode: string;
-  public country: string;
+  public country: any;
   public state?: string;
   public sacNumber: string;
   public stateCode: string;
