@@ -32,7 +32,7 @@ class FormatPdf implements IFormatable {
     // this.colY = 50;
   }
 
-  setHeader(selectedCompany: ComapnyResponse) {
+  public setHeader(selectedCompany: ComapnyResponse) {
     console.log(selectedCompany.address);
     this.pdf.setFontSize(16);
     this.pdf.text(10, this.colY, selectedCompany.name);
@@ -53,7 +53,7 @@ class FormatPdf implements IFormatable {
     this.pdf.line(10, this.colY += 3, 200, this.colY);
   }
 
-  setRowData(data: any[], padding: number) {
+  public setRowData(data: any[], padding: number) {
     this.pdf.setFontSize(10);
     this.pdf.text(this.colX + padding, this.colY += 5, data[0].toString());
     this.pdf.text(70, this.colY, data[1].toString());
@@ -66,16 +66,16 @@ class FormatPdf implements IFormatable {
     }
   }
 
-  setFooter(data: any[]) {
+  public setFooter(data: any[]) {
     this.pdf.line(10, this.colY += 5, 200, this.colY);
-    this.pdf.text(10, this.colY + 5, "TOTAL",);
+    this.pdf.text(10, this.colY + 5, 'TOTAL', );
     this.pdf.text(70, this.colY + 5, data[0].toString());
     this.pdf.text(105, this.colY + 5, data[1].toString());
     this.pdf.text(140, this.colY + 5, data[2].toString());
     this.pdf.text(170, this.colY + 5, data[3].toString());
   }
 
-  save(name) {
+  public save(name) {
     this.pdf.save(name);
   }
 }
@@ -227,12 +227,10 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     formatPdf.save('PdfCondensed.pdf');
   }
 
-
   private downloadPdfAccountWise(): void {
     let formatPdf = new FormatPdf(this.trialBalanceRequest);
     this.dataFormatter.formatDataAccountWise(formatPdf);
     formatPdf.save('PdfAccountWise.pdf');
   }
-
 
 }
