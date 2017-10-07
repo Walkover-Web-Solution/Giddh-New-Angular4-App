@@ -29,8 +29,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
         if (this.bsData.assets) {
           this.bsData.assets.forEach(p => p.isVisible = true);
         }
-      }
-      else if (this.search && this.search.length < 3) {
+      } else if (this.search && this.search.length < 3) {
         if (this.bsData.liabilities) {
           this.bsData.liabilities.forEach(p => p.isVisible = true);
         }
@@ -59,7 +58,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    debugger;
+    // debugger;
     return _.each(data, (grp) => {
       grp.isVisible = isVisible;
       _.each(grp.accounts, (acc) => {
