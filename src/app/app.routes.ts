@@ -27,6 +27,7 @@ export const ROUTES: Routes = [
   { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
   { path: 'sales',  redirectTo: 'pages/sales', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
+  { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
@@ -47,6 +48,7 @@ export const ROUTES: Routes = [
       { path: 'permissions', loadChildren: './permissions/permission.module#PermissionModule' },
       { path: 'settings', loadChildren: './settings/settings.module#SettingsModule' },
       { path: 'manufacturing', loadChildren: './manufacturing/manufacturing.module#ManufacturingModule' },
+      { path: 'user-details', loadChildren: './userDetails/userDetails.module#UserDetailsModule' },
       { path: '**', redirectTo: 'home', pathMatch: 'full' }
     ]
   },

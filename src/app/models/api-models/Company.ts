@@ -62,6 +62,7 @@ export class ComapnyResponse {
   public name: string;
   public gstDetails: GstDetail[];
   public panNumber?: string;
+  public isMultipleCurrency?: boolean;
 }
 
 export interface Role {
@@ -128,4 +129,13 @@ export class TaxResponse implements ITax {
 export class States {
   public name: string;
   public code: string;
+}
+
+export class GetCouponResp {
+  public validUntil: string;
+  public maxAmount: number;
+  public code: string;
+  public count: number;
+  public value: number;
+  public type: string;
 }

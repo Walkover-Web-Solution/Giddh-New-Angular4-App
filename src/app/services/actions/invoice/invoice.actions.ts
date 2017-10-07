@@ -78,6 +78,32 @@ export class InvoiceActions {
         payload: res
       }));
 
+  // Preview of Generated Invoice
+  @Effect()
+  public PreviewOfGeneratedInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE)
+    .switchMap(action => this._invoiceService.GetGeneratedInvoicePreview(action.payload.accountUniqueName, action.payload.invoiceNumber))
+    .map(res => this.validateResponse<PreviewInvoiceResponseClass, string>(res, {
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+        type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+        payload: res
+      }));
+
+  // Preview of Generated Invoice
+  @Effect()
+  public UpdateGeneratedInvoice$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE)
+    .switchMap(action => this._invoiceService.UpdateGeneratedInvoice(action.payload.accountUniqueName, action.payload.body))
+    .map(res => this.validateResponse<string, GenerateInvoiceRequestClass>(res, {
+      type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
+      payload: res
+    }, true, {
+        type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE_RESPONSE,
+        payload: res
+      }));
+
   // Generate Invoice
   @Effect()
   public GenerateInvoice$: Observable<Action> = this.action$
@@ -502,6 +528,34 @@ export class InvoiceActions {
     };
   }
 
+  public VisitToInvoiceFromPreview(): Action {
+    return {
+      type: INVOICE_ACTIONS.VISIT_FROM_PREVIEW,
+      payload: { }
+    };
+  }
+
+  public PreviewOfGeneratedInvoice(accountUniqueName: string, invoiceNumber: string): Action {
+    return {
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE,
+      payload: { accountUniqueName, invoiceNumber }
+    };
+  }
+
+  public PreviewOfGeneratedInvoiceResponse(model: PreviewInvoiceResponseClass): Action {
+    return {
+      type: INVOICE_ACTIONS.PREVIEW_OF_GENERATED_INVOICE_RESPONSE,
+      payload: model
+    };
+  }
+
+  public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Action {
+    return {
+      type: INVOICE_ACTIONS.UPDATE_GENERATED_INVOICE,
+      payload: { accountUniqueName, body: model }
+    };
+  }
+
   public GenerateInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Action {
     return {
       type: INVOICE_ACTIONS.GENERATE_INVOICE,
@@ -582,6 +636,13 @@ export class InvoiceActions {
   public InvoiceGenerationCompleted(): Action {
     return {
       type: INVOICE_ACTIONS.INVOICE_GENERATION_COMPLETED,
+      payload: ''
+    };
+  }
+
+  public ResetInvoiceData(): Action {
+    return {
+      type: INVOICE_ACTIONS.RESET_INVOICE_DATA,
       payload: ''
     };
   }
@@ -669,7 +730,7 @@ export class InvoiceActions {
   public setColor(primaryColor: string, secondaryColor: string): Action {
     return {
       type: INVOICE.TEMPLATE.SET_COLOR,
-      payload: { primaryColor, secondaryColor }
+      payload: { templateColor: primaryColor, tableColor: secondaryColor }
     };
   }
   public updateGSTIN(data: string): Action {

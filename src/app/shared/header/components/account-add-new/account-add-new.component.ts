@@ -16,6 +16,8 @@ import { Select2Component } from '../../../theme/select2/select2.component';
 import { ComapnyResponse } from '../../../../models/api-models/Company';
 import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { CompanyActions } from '../../../../services/actions/company.actions';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'account-add-new',
@@ -72,10 +74,12 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public activeCompany: ComapnyResponse;
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
+  public isMultipleCurrency: boolean = false;
+  public companyCurrency: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService) {
+    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
@@ -90,28 +94,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
+
+    this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
+      this.store.dispatch(this.companyActions.RefreshCompanies());
+    });
   }
 
   public ngOnInit() {
-    this.addAccountForm = this._fb.group({
-      name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
-      uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['CREDIT'],
-      openingBalance: [0, Validators.compose([digitsOnly])],
-      mobileNo: [''],
-      email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
-      companyName: [''],
-      attentionTo: [''],
-      description: [''],
-      addresses: this._fb.array([]),
-      country: this._fb.group({
-        countryCode: ['']
-      }),
-      hsnOrSac: [''],
-      hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }]
-    });
-
+    this.initializeNewForm();
     this.addAccountForm.get('hsnOrSac').valueChanges.subscribe(a => {
       const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
       const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -137,7 +127,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a === 0 || a < 0) {
+      if (a && (a === 0 || a < 0)) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
       }
     });
@@ -146,11 +136,58 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         this.companiesList$.take(1).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
         });
-        this.addAccountForm.get('companyName').patchValue(a);
+        // this.addAccountForm.get('companyName').patchValue(a);
+      }
+    });
+    // this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
+    //   if (p) {
+    //     // reset with default values
+    //     this.resetAddAccountForm();
+    //   }
+    // });
+    this.store.select(s => s.session).takeUntil(this.destroyed$).subscribe((session) => {
+      let companyUniqueName: string;
+      if (session.companyUniqueName) {
+        companyUniqueName = _.cloneDeep(session.companyUniqueName);
+      }
+      if (session.companies && session.companies.length) {
+        let companies = _.cloneDeep(session.companies);
+        let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
+        if (currentCompany) {
+          this.companyCurrency = _.clone(currentCompany.baseCurrency);
+          this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
+          if (this.isMultipleCurrency) {
+            this.addAccountForm.get('currency').enable();
+          } else {
+            this.addAccountForm.get('currency').disable();
+          }
+        }
       }
     });
   }
 
+  public initializeNewForm() {
+    this.addAccountForm = this._fb.group({
+      name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
+      uniqueName: ['', [Validators.required]],
+      openingBalanceType: ['CREDIT'],
+      foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
+      openingBalance: [0, Validators.compose([digitsOnly])],
+      mobileNo: [''],
+      email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+      companyName: [''],
+      attentionTo: [''],
+      description: [''],
+      addresses: this._fb.array([]),
+      country: this._fb.group({
+        countryCode: ['']
+      }),
+      hsnOrSac: [''],
+      currency: [''],
+      hsnNumber: [{ value: '', disabled: false }],
+      sacNumber: [{ value: '', disabled: false }]
+    });
+  }
   public initialGstDetailsForm(): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
@@ -247,6 +284,18 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
+  public resetAddAccountForm() {
+    this.addAccountForm.reset();
+    // const addresses = this.addAccountForm.get('addresses') as FormArray;
+    // const countries = this.addAccountForm.get('country') as FormGroup;
+    // addresses.controls.map((a, index) => {
+    //   a.reset();
+    //   addresses.removeAt(index);
+    // });
+    // // countries.reset();
+    // this.addAccountForm.reset();
+    // // this.addBlankGstForm();
+  }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
 
@@ -269,6 +318,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
   }
   public ngOnDestroy() {
+    this.resetAddAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

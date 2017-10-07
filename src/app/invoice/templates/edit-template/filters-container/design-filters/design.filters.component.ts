@@ -90,8 +90,8 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    */
   public changeColor(primaryColor: string, secondaryColor: string) {
     let template = _.cloneDeep(this.customTemplate);
-    template.primaryColor = primaryColor;
-    template.secondaryColor = secondaryColor;
+    template.templateColor = primaryColor;
+    template.tableColor = secondaryColor;
     this._invoiceUiDataService.setCustomTemplate(template);
   }
 

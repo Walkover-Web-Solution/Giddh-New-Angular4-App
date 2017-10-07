@@ -232,6 +232,7 @@ export class PreviewInvoiceResponseClass {
   public totalTax?: any;
   public invoiceDetails: InvoiceDetails;
   public other?: any;
+  public dataPreview?: string;
 }
 
  export interface TotaltaxBreakdown {
@@ -306,6 +307,7 @@ export interface GstEntry {
 export interface IGstDetails {
   gstNumber?: any;
   address: string[];
+  addressStr?: string;
   stateCode?: any;
   panNumber?: any;
 }
@@ -423,8 +425,8 @@ export class CustomTemplateResponse {
   public updatedAt: string;
   public updatedBy: UpdatedBy;
   public sample?: any;
-  public primaryColor: string; // design
-  public secondaryColor: string; // design
+  public templateColor: string; // design
+  public tableColor: string; // design
   public font: string; // design
   public topMargin: number; // design
   public leftMargin: number; // design
