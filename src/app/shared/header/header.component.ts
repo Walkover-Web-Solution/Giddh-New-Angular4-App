@@ -56,6 +56,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public selectedCompany: Observable<ComapnyResponse>;
+  public selectedCompanyCountry: string;
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
@@ -112,6 +113,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         this.userIsSuperUser = false;
       }
+      this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
@@ -164,6 +166,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (this.route.snapshot.url.toString() === 'new-user') {
       this.showAddCompanyModal();
     }
+    this.store.dispatch(this.loginAction.FetchUserDetails());
   }
 
   public ngAfterViewChecked() {

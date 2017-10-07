@@ -53,16 +53,6 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi trialB">
-                      <a [routerLink]="['/pages/purchase/invoice']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Taxes</div>
-                            <div class="subTitle">Goods and Services Tax</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
                     <li class="dmLi">
                       <a [routerLink]="['trial-balance-and-profit-loss']">
                         <div class="media">
@@ -98,7 +88,17 @@
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Manufacturing</div>
-                            <div class="subTitle">Some info about manufacturing module</div>
+                            <div class="subTitle">Manufacture product</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                      <a [routerLink]="['/pages/purchase/invoice']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Taxes</div>
+                            <div class="subTitle">Goods and Services Tax</div>
                           </div>
                         </div>
                       </a>
@@ -148,7 +148,7 @@
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Permissions</div>
-                            <div class="subTitle">Some info about permission module</div>
+                            <div class="subTitle">Add and manage Roles</div>
                           </div>
                         </div>
                       </a>
@@ -218,7 +218,7 @@
               <a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a>
             </li>
             <li>
-              <a ui-sref="company.content.user">User Detail</a>
+              <a [routerLink]="['user-details']">User Detail</a>
             </li>
             <li>
               <a href="javascript:void(0)">Run Tour</a>

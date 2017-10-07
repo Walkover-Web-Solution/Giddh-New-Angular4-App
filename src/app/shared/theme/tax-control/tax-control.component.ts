@@ -1,8 +1,9 @@
-import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TaxResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment';
 import * as _ from 'lodash';
+import { ITaxDetail } from '../../../models/interfaces/tax.interface';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -23,8 +24,8 @@ export class TaxControlData {
   templateUrl: 'tax-control.component.html',
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
-export class TaxControlComponent implements OnInit, OnDestroy {
-
+export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
+  @Input() public date: string;
   @Input() public taxes: TaxResponse[];
   @Input() public applicableTaxes: any[];
   @Input() public taxRenderData: TaxControlData[];
@@ -47,20 +48,53 @@ export class TaxControlComponent implements OnInit, OnDestroy {
     this.change();
   }
 
+  public ngOnChanges(changes: SimpleChanges) {
+    // chang
+    if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
+      if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
+        this.sum = 0;
+        this.prepareTaxObject();
+        this.change();
+      }
+    }
+  }
   /**
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    if (!this.taxRenderData.length) {
-      this.taxes.map(tx => {
-        let taxObj = new TaxControlData();
-        taxObj.name = tx.name;
-        taxObj.uniqueName = tx.uniqueName;
+    let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
+    this.taxRenderData = [];
+    this.taxes.map(tx => {
+      let taxObj = new TaxControlData();
+      taxObj.name = tx.name;
+      taxObj.uniqueName = tx.uniqueName;
+      if (this.date) {
+        let taxObject = _.orderBy(tx.taxDetail, (p: ITaxDetail) => {
+          return moment(p.date, 'DD-MM-YYYY');
+        }, 'desc');
+        let exactDate = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY').isSame(moment(this.date, 'DD-MM-YYYY')));
+        if (exactDate.length > 0) {
+          taxObj.amount = exactDate[0].taxValue;
+        } else {
+          let filteredTaxObject = taxObject.filter(p => moment(p.date, 'DD-MM-YYYY') < moment(this.date, 'DD-MM-YYYY'));
+          if (filteredTaxObject.length > 0) {
+            taxObj.amount = filteredTaxObject[0].taxValue;
+          } else {
+            taxObj.amount = 0;
+          }
+        }
+      } else {
         taxObj.amount = tx.taxDetail[0].taxValue;
-        taxObj.isChecked = this.applicableTaxes.indexOf(tx.uniqueName) > -1;
+      }
+      let oldValue = null;
+      if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
+        oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
+      }
+      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1)) || (oldValue && oldValue.isChecked) || false;
+      if (taxObj.amount && taxObj.amount > 0) {
         this.taxRenderData.push(taxObj);
-      });
-    }
+      }
+    });
   }
 
   public trackByFn(index) {

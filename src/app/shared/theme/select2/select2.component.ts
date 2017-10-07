@@ -57,6 +57,9 @@ export class Select2Component implements AfterViewInit, OnChanges, OnDestroy, On
   // all additional options
   @Input() public options: Select2Options;
 
+  // use as typeahead
+  @Input() public isTypeahedMode: boolean = false;
+
   // emitter when value is changed
   @Output() public valueChanged = new EventEmitter();
 
