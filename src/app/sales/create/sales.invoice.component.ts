@@ -184,26 +184,28 @@ export class SalesInvoiceComponent implements OnInit {
           if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts')) {
             bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
-
-          // creating account list
-          if (item.stocks) {
-            item.stocks.map(as => {
-              accountsArray.push({
-                value: item.uniqueName,
-                label: item.name,
-                additional: Object.assign({}, item, { stock: as })
+          // revenuefromoperations, otherincome
+          // creating account list only from revenue and income category
+          if (_.find(item.parentGroups, (o) => o.uniqueName === 'otherincome' || o.uniqueName === 'revenuefromoperations')) {
+            if (item.stocks) {
+              item.stocks.map(as => {
+                accountsArray.push({
+                  value: item.uniqueName,
+                  label: item.name,
+                  additional: Object.assign({}, item, { stock: as })
+                });
               });
-            });
-            accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
-          } else {
-            accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
+              accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
+            } else {
+              accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
+            }
           }
         });
         // accounts.unshift({ name: '+ Add Customer', uniqueName: 'addnewcustomer'});
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
         this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
-        console.log (this.salesAccounts$);
+        console.log ('this.salesAccounts$', this.salesAccounts$);
       }
     });
 
