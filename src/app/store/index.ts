@@ -23,12 +23,10 @@ function stateSetter(reducer: ActionReducer<any>): ActionReducer<any> {
 }
 
 const DEV_REDUCERS = [stateSetter, storeFreeze];
-
 const developmentReducer: any = compose(...DEV_REDUCERS, localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);
 const productionReducer = compose(localStorageSync({ keys: ['session', 'permission'], rehydrate: true }), combineReducers)(reducers);
 
 export function rootReducer(state: any, action: any) {
-  // console.log(ENV + ': reducer');
   if (ENV === 'development') {
     return developmentReducer(state, action);
   } else {

@@ -63,7 +63,7 @@ export class LedgerResponse {
   public transactions: ILedgerTransactionItem[];
   public unconfirmedEntry: boolean;
   public uniqueName: string;
-  public voucher: IVoucherItem;
+  public voucher: IVoucherItem = { name: '', shortCode: '' };
   public voucherNo: number;
 }
 
@@ -74,7 +74,7 @@ export class LedgerResponse {
  * its response will be success message in body
  */
 export class MailLedgerRequest {
-  public recipients: string[];
+  public recipients: string[] = [];
 }
 
 /*
@@ -147,4 +147,19 @@ export class ReconcileResponse {
   public invoiceNumber: string;
   public entryDate: string;
   public taxes: string[];
+}
+
+export class MagicLinkRequest {
+  public from: string = '';
+  public to: string = '';
+}
+
+export class MagicLinkResponse {
+  public magicLink: string;
+}
+
+export class ExportLedgerRequest {
+  public from: string = '';
+  public to: string = '';
+  public type: string = '';
 }

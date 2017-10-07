@@ -6,7 +6,9 @@ import {
   VerifyEmailResponseModel,
   VerifyMobileModel,
   VerifyMobileResponseModel,
-  LinkedInRequestModel
+  LinkedInRequestModel,
+  SignupWithMobile,
+  UserDetails
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
@@ -47,6 +49,8 @@ export interface SessionState {
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
   isCompanyCreated: boolean;
+  isAddNewMobileNoInProcess: boolean;
+  isMobileNoVerifiedSuccess: boolean;
 }
 
 /**
@@ -77,7 +81,9 @@ const sessionInitialState: SessionState = {
   companies: [],
   isCompanyCreated: false,
   isCompanyCreationInProcess: false,
-  isRefreshing: false
+  isRefreshing: false,
+  isAddNewMobileNoInProcess: false,
+  isMobileNoVerifiedSuccess: false
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -348,6 +354,43 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         userLoginState: action.payload
       });
     }
+    case LoginActions.AddNewMobileNo:
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: true,
+        isMobileNoVerifiedSuccess: false
+      };
+    case LoginActions.AddNewMobileNoResponse:
+      let resp: BaseResponse<string, SignupWithMobile> = action.payload;
+      if (resp.status === 'success') {
+        return {
+          ...state,
+          user: Object.assign({}, state.user, {
+            contactNumber: resp.request.mobileNumber,
+            countryCode: resp.request.countryCode
+          }),
+          isAddNewMobileNoInProcess: false,
+          isMobileNoVerifiedSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: false,
+        isMobileNoVerifiedSuccess: false
+      };
+    case LoginActions.FetchUserDetailsResponse:
+      let userResp: BaseResponse<UserDetails, string> = action.payload;
+      if (userResp.status === 'success') {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            user: userResp.body
+          }
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }
