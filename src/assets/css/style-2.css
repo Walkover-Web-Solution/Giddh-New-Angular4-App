@@ -3998,27 +3998,3 @@ input[type='checkbox'][disabled]:after {
 #verifyMobile .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 44px;
 }
-
-/* for sales page */
-.ng-select-wrap > ng-select > div > div.single > div.value,
-.ng-select-wrap > ng-select > div > div.single > div.placeholder{
-  font-size: 14px !important;
-  padding: 0 6px !important;
-}
-.ng-select-wrap > ng-select > div > div.single > div.placeholder{
-  color: rgba(0, 0, 0, 0.3) !important;
-}
-.ng-select-wrap select-dropdown > div .filter input{
-  padding: 6px !important;
-  color: rgba(0, 0, 0, 0.6);
-  font-size: 14px !important;
-}
-.ng-select-wrap select-dropdown .filter input::-webkit-input-placeholder,
-.ng-select-wrap select-dropdown .filter input::-webkit-input-placeholder,
-.ng-select-wrap select-dropdown .filter input::-moz-placeholder,
-.ng-select-wrap select-dropdown .filter input:-ms-input-placeholder,
-.ng-select-wrap select-dropdown .filter input:-moz-placeholder {
-    color: rgba(0, 0, 0, 0.3);
-}
-
-/* for sales page end */
