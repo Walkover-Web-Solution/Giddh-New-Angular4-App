@@ -10,7 +10,7 @@ import { HandleCatch, ErrorHandler } from './catchManager/catchmanger';
 import { Configuration } from '../app.constant';
 import { InvoiceFormClass } from '../models/api-models/Sales';
 // Configuration.ApiUrl +
-const COMMON_URL = 'http://apidev.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName/';
+const COMMON_URL = 'http://apitest.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName/';
 
 const SALES_API_V2 = {
   GENERATE_SALES: COMMON_URL + 'invoices/generate-sales'
