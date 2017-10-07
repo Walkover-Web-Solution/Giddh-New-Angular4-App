@@ -158,6 +158,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     let model = new VerifyMobileModel();
     model.mobileNumber = this.phoneNumber;
     model.oneTimePassword = this.verificationCode;
+    model.countryCode = Number(this.selectedCountry);
     this.store.dispatch(this.verifyActions.verifyNumberCodeRequest(model));
   }
 
