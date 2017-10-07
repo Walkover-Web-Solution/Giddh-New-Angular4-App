@@ -3319,10 +3319,6 @@ label {
     text-align: center;
 }
 
-.open>.dropdown-menu {
-    display: block;
-}
-
 .dropdown-container .dropdown-menu {
     display: block;
     height: 200px;
@@ -3376,6 +3372,15 @@ label {
 .ledger-panel .dropdown-menu {
     border-radius: 0;
     margin: 0;
+}
+/* sales universal styles */
+.tax-list-dd-wrap .dropdown-menu{
+  min-width: 200px;
+}
+.tax-list-dd-wrap .dropdown-menu li label{
+  clear: both;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 

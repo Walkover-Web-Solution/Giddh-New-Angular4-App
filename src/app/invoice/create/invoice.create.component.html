@@ -141,10 +141,10 @@
       <div class="col-xs-12">
         <div class="pull-right">
           <button *ngIf="showCloseButton" type="button" class="btn btn-default mrR1" (click)="closePopupEvent({ action: 'closed' })">Close</button>
-          <button type="button" class="btn btn-default mrR1" (click)="setUpdateAccFlag()">
+          <!--<button type="button" class="btn btn-default mrR1" (click)="setUpdateAccFlag()">
             <span *ngIf="!updateMode">Generate Invoice &amp; Update A/c Details</span>
             <span *ngIf="updateMode">Update Invoice &amp; A/c Details</span>
-          </button>
+          </button>-->
           <button type="submit" class="btn btn-default">
             <span *ngIf="updateMode">Update Invoice</span>
             <span *ngIf="!updateMode">Generate Invoice</span>
