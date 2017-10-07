@@ -231,12 +231,12 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
       },
       modal: {
         ondismiss: (a, b, c) => {
-          debugger;
+          // debugger;
         }
       }
     };
     options.handler = ((response) => {
-      debugger;
+      // debugger;
     });
     let rzp1 = new (window as any).Razorpay(options);
     rzp1.open();
