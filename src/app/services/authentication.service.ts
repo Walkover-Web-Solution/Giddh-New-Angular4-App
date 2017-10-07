@@ -215,15 +215,15 @@ export class AuthenticationService {
   }
 
   public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-    let uniqueName = null;
+    let userEmail = null;
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
-        uniqueName = s.session.user.user.uniqueName;
+        userEmail = s.session.user.user.email;
       }
     });
 
-    return this._http.get(LOGIN_API.REGENERATE_AUTH_KEY
-      .replace(':uniqueName', uniqueName)).map((res) => {
+    return this._http.put(LOGIN_API.REGENERATE_AUTH_KEY
+      .replace(':userEmail', userEmail), {}).map((res) => {
         let data: BaseResponse<AuthKeyResponse, string> = res.json();
         data.request = '';
         data.queryString = { };
