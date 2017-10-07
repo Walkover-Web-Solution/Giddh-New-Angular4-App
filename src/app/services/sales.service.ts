@@ -9,12 +9,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch, ErrorHandler } from './catchManager/catchmanger';
 import { Configuration } from '../app.constant';
 import { InvoiceFormClass } from '../models/api-models/Sales';
-// Configuration.ApiUrl +
-const COMMON_URL = 'http://apitest.giddh.com/v2/company/:companyUniqueName/accounts/:accountUniqueName/';
-
-const SALES_API_V2 = {
-  GENERATE_SALES: COMMON_URL + 'invoices/generate-sales'
-};
+import { SALES_API_V2 } from './apiurls/sales.api';
 
 @Injectable()
 export class SalesService {
