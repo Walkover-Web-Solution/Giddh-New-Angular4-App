@@ -392,9 +392,12 @@ export interface ISection {
   content: IContent[];
 }
 
-export interface IContent {
+export interface IContentCommon {
   display: boolean;
   label: string;
+}
+
+export interface IContent extends IContentCommon {
   field: string;
   width?: string;
 }

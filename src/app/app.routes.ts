@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { NeedsAuthentication } from './services/decorators/needsAuthentication';
 import { UserAuthenticated } from './services/decorators/UserAuthenticated';
 import { DummyComponent } from './dummy.component';
+import { SalesComponent } from './sales/sales.component';
 import { NewUserComponent } from './newUser.component';
 import { NewUserAuthGuard } from './services/decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
@@ -24,6 +25,7 @@ export const ROUTES: Routes = [
   { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
   { path: 'social-login-callback', component: SocialLoginCallbackComponent },
   { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
+  { path: 'sales',  redirectTo: 'pages/sales', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
   {
@@ -31,6 +33,7 @@ export const ROUTES: Routes = [
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
       { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule' },
+      { path: 'sales', component: SalesComponent },
       { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule' },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule' },
