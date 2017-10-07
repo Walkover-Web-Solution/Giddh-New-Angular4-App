@@ -18,7 +18,7 @@ import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
-import { TaxControlData } from '../../shared/theme/index';
+import { TaxControlData, IOption } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -119,7 +119,8 @@ export class SalesInvoiceComponent implements OnInit {
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
-  public salesAccounts$: Observable<Select2OptionData[]>;
+  // public salesAccounts$: Observable<Select2OptionData[]>;
+  public salesAccounts$: Observable<IOption[]> = Observable.of([]);
   public accountAsideMenuState: string = 'out';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
   public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
@@ -173,7 +174,7 @@ export class SalesInvoiceComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: INameUniqueName[] = [];
         let bankaccounts: INameUniqueName[] = [];
-        let accountsArray: Select2OptionData[] = [];
+        let accountsArray: IOption[] = [];
         _.forEach(data.body.results, (item) => {
           // creating account list only of sundrydebtors category
           if (_.find(item.parentGroups, (o) => o.uniqueName === 'sundrydebtors')) {
@@ -188,20 +189,21 @@ export class SalesInvoiceComponent implements OnInit {
           if (item.stocks) {
             item.stocks.map(as => {
               accountsArray.push({
-                id: uuid.v4(),
-                text: item.name,
+                value: item.uniqueName,
+                label: item.name,
                 additional: Object.assign({}, item, { stock: as })
               });
             });
-            accountsArray.push({ id: uuid.v4(), text: item.name, additional: item });
+            accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
           } else {
-            accountsArray.push({ id: uuid.v4(), text: item.name, additional: item });
+            accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
           }
         });
         // accounts.unshift({ name: '+ Add Customer', uniqueName: 'addnewcustomer'});
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
         this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
+        console.log (this.salesAccounts$);
       }
     });
 
@@ -331,7 +333,7 @@ export class SalesInvoiceComponent implements OnInit {
       let selectedAcc: any = null;
       this.salesAccounts$.take(1).subscribe(data => {
         data.map(item => {
-          if (item.id === e.value) {
+          if (item.value === e.value) {
             selectedAcc = item;
           }
         });
