@@ -424,6 +424,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {
     this.selectedTaxes = arr;
+    entry.taxList = arr;
     if (this.selectedTaxes.length > 0) {
       entry.taxes = [];
       this.companyTaxesList$.take(1).subscribe(data => {

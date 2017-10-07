@@ -187,12 +187,14 @@ export class SalesEntryClass {
   public transactions: SalesTransactionItemClass[];
   public discounts: ICommonItemOfTransaction[];
   public taxes: IInvoiceTax[];
+  public taxList?: string[];
   public description: string;
   public taxableValue: number;
   public entryTotal: number;
   constructor() {
     this.transactions = [new SalesTransactionItemClass()];
     this.taxes = [];
+    this.taxList = [];
     this.discounts = [];
   }
 }
