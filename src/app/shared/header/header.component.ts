@@ -53,6 +53,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
+  public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public selectedCompany: Observable<ComapnyResponse>;
@@ -93,6 +94,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return state.session.isRefreshing;
     }).takeUntil(this.destroyed$);
 
+    this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(state => {
       return _.orderBy(state.session.companies, 'name');
     }).takeUntil(this.destroyed$);
@@ -149,6 +151,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.zone.run(() => {
           this.filterAccounts('');
         });
+      }
+    });
+    this.isCompanyCreationSuccess$.subscribe(created => {
+      if (created) {
+        this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
       }
     });
   }
