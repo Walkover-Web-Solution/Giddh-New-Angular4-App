@@ -204,7 +204,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           stockUnitCode: a.stockUnit ? a.stockUnit.code : '', openingQuantity: a.openingQuantity,
           openingAmount: a.openingAmount
         });
-
+        this.calCulateRate();
         if (a.purchaseAccountDetails) {
           this.addStockForm.patchValue({ purchaseAccountUniqueName: a.purchaseAccountDetails.accountUniqueName });
 
