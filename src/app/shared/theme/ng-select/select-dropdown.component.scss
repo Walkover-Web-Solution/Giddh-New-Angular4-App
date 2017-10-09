@@ -28,6 +28,9 @@ select-dropdown {
           padding: 6px;
           cursor: pointer;
           user-select: none;
+          &.message{
+            cursor: default;
+          }
         }
       }
     }
