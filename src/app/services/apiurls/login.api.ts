@@ -7,8 +7,8 @@ export const LOGIN_API = {
   VerifyOTP: Configuration.ApiUrl + 'v2/verify-number',
   VerifyNumber: Configuration.ApiUrl + 'users/system_admin/verify-number',
   LoginWithNumber: Configuration.ApiUrl + 'login-with-number?countryCode=:countryCode&mobileNumber=:mobileNumber', // get call
-  LOGIN_WITH_GOOGLE: Configuration.ApiUrl + 'v2/login-with-google',
-  LOGIN_WITH_LINKEDIN: Configuration.ApiUrl + 'v3/login-with-linkedIn',
+  LOGIN_WITH_GOOGLE: Configuration.ApiUrl + 'v2/signup-with-google',
+  LOGIN_WITH_LINKEDIN: Configuration.ApiUrl + 'v3/signup-with-linkedIn',
   CLEAR_SESSION: Configuration.ApiUrl + 'users/:userUniqueName/destroy-session',
   SET_SETTINGS: Configuration.ApiUrl + 'users/:userUniqueName/settings',
   FETCH_DETAILS: Configuration.ApiUrl + 'users/:sessionId',
