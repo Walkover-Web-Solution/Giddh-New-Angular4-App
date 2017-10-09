@@ -303,8 +303,8 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
-  public onNoOptionsFoundInSalesAccount(e: any) {
-    console.log ('onNoOptionsFoundInSalesAccount', e);
+  public onNoResultsClicked() {
+    console.log ('onNoResultsClicked open dialog');
   }
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {

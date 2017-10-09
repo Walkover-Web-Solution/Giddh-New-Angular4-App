@@ -305,7 +305,7 @@ export class LoginActions {
   @Effect()
   public FectchUserDetails$: Observable<Action> = this.actions$
     .ofType(LoginActions.FetchUserDetails)
-    .switchMap(action => this.auth.FetchUserDetails(action.payload))
+    .switchMap(action => this.auth.FetchUserDetails())
     .map(response => this.FetchUserDetailsResponse(response));
 
   @Effect()

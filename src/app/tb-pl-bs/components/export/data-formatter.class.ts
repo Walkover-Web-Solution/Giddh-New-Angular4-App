@@ -174,7 +174,7 @@ export class DataFormatter {
     total.cr += group.creditTotal;
     total.dr += group.debitTotal;
     return total;
-  };
+  }
 
   private firstCapital = (s: string) => s[0].toUpperCase() + s.slice(1);
 
@@ -202,7 +202,7 @@ export class DataFormatter {
     if (wordWise) {
       lastspace = value.lastIndexOf(' ');
     }
-    if (lastspace != -1) {
+    if (lastspace !== -1) {
       value = value.substr(0, lastspace);
     }
     return value + (tail ? tail : ' …');
