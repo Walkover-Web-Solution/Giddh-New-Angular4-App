@@ -444,14 +444,14 @@
             <table class="meta cargoDetail" cellspacing="0" cellpadding="0">
                 <tbody>
                     <tr>
-                        <td *ngIf="inputTemplate.sections[0].content[9].display || inputTemplate.sections[0].content[10].display || inputTemplate.sections[0].content[11].display">
+                        <td *ngIf="inputTemplate.sections[0].content[9].display || inputTemplate.sections[0].content[10].display || inputTemplate.sections[0].content[11].display || inputTemplate.sections[0].content[24].display">
                             <p *ngIf="inputTemplate.sections[0].content[9].display"><strong>{{inputTemplate.sections[0].content[9].label}}</strong></p>
+                            <p *ngIf="inputTemplate.sections[0].content[24].display">Green Soft Solutions</p>
                             <p *ngIf="inputTemplate.sections[0].content[10].display">{{inputTemplate.sections[0].content[10].label}}</p>
                             <p *ngIf="inputTemplate.sections[0].content[11].display">{{inputTemplate.sections[0].content[11].label}}</p>
                         </td>
                         <td *ngIf="inputTemplate.sections[0].content[14].display">
                             <p><strong>{{(inputTemplate.sections[0].content[14].label.length > 0) ? inputTemplate.sections[0].content[14].label : 'Billing Address'}}</strong></p>
-                            <p>Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="inputTemplate.sections[0].content[13].display">Madhya Pradesh</p>
@@ -461,7 +461,6 @@
                         </td>
                         <td *ngIf="inputTemplate.sections[0].content[16].display">
                             <p><strong>{{(inputTemplate.sections[0].content[16].label.length > 0) ? inputTemplate.sections[0].content[16].label : 'Shipping Address'}}</strong></p>
-                            <p>Green Soft Solutions</p>
                             <p>5 A.B. Road</p>
                             <p>Indore (M.P.) 452000</p>
                             <p *ngIf="inputTemplate.sections[0].content[17].display">Madhya Pradesh</p>
