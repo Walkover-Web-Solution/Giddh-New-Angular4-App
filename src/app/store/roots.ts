@@ -15,6 +15,7 @@ import * as fromInvoiceTemp from './Invoice/invoice.template.reducer';
 import * as fromTlPl from './tl-pl/tl-pl.reducer';
 import * as fromLedger from './Ledger/ledger.reducer';
 import * as fromSettings from './Settings/Settings.reducer';
+import * as fromSales from './Sales/sales.reducer';
 import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
 
 export interface AppState {
@@ -23,6 +24,7 @@ export interface AppState {
   login: fromLogin.AuthenticationState;
   session: fromLogin.SessionState;
   company: fromCompany.CurrentCompanyState;
+  sales: fromSales.SalesState;
   groupwithaccounts: fromGroupAndAccounts.CurrentGroupAndAccountState;
   verifyMobile: fromVerifyMobileReducer.VerifyMobileState;
   inventory: fromInventory.InventoryState;
@@ -42,6 +44,7 @@ export interface AppState {
 export const reducers = {
   router: routerReducer,
   home: fromHome.homeReducer,
+  sales: fromSales.salesReducer,
   permission: fromPermission.PermissionReducer,
   settings: fromSettings.SettingsReducer,
   manufacturing: fromManufacturing.ManufacturingReducer,

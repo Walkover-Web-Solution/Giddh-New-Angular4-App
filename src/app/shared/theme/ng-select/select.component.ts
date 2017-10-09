@@ -46,6 +46,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Input() public disabled: boolean = false;
   @Input() public multiple: boolean = false;
   @Input() public noFilter: number = 0;
+  @Input() public notFoundLink: boolean = false;
 
   // Style settings.
   @Input() public highlightColor: string = '#d25f29';
@@ -65,6 +66,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Output() public focus = new EventEmitter<null>();
   @Output() public blur = new EventEmitter<null>();
   @Output() public noOptionsFound = new EventEmitter<string>();
+  @Output() public noResultsClicked = new EventEmitter<null>();
 
   @ViewChild('selection') public selectionSpan: ElementRef;
   @ViewChild('dropdown') public dropdown: SelectDropdownComponent;
@@ -213,6 +215,10 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public onDeselectOptionClick(option: Option) {
     this.clearClicked = true;
     this.deselectOption(option);
+  }
+
+  public onNoResultClicked() {
+    this.noResultsClicked.emit(null);
   }
 
   /** API. **/

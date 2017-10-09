@@ -51,6 +51,8 @@ import { SettingsProfileActions } from './actions/settings/profile/settings.prof
 import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
 import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
+import { SalesActions } from './actions/sales/sales.action';
+import { SalesService } from './sales.service';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { InvoiceService } from './invoice.service';
@@ -91,6 +93,7 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
     EffectsModule.run(SettingsIntegrationActions),
     EffectsModule.run(SettingsProfileActions),
     EffectsModule.run(SettingsTaxesActions),
+    EffectsModule.run(SalesActions),
     EffectsModule.run(SettingsLinkedAccountsActions),
     EffectsModule.run(InvoicePurchaseActions),
     EffectsModule.run(SettingsFinancialYearActions)
@@ -109,6 +112,7 @@ export class ServiceModule {
         ToasterService,
         DashboardService,
         CompanyService,
+        SalesService,
         NeedsAuthentication,
         LocationService,
         UserAuthenticated,

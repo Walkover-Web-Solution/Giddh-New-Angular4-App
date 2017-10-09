@@ -9,12 +9,12 @@
         <tab heading="Auth Key" [active]="true">
           <div class="pd2">
             <p class="lead">Main Auth-key</p>
-            <form name="authKeyForm" novalidate role="form">
+            <form name="authKeyForm" #authKeyForm="ngForm" novalidate role="form">
               <div class="form-group">
-                <input id="authKey" class="form-control" ng-model="userAuthKey" ng-readonly="true" value="{{userAuthKey}}" />
+                <input id="authKey" class="form-control" name="userAuthKey" [(ngModel)]="userAuthKey" [readonly]="true" />
               </div>
               <div class="form-group">
-                <button class="btn btn-primary" ng-click="regenerateKey()">Regenerate Auth Key</button>
+                <button class="btn btn-primary" (click)="regenerateKey()">Regenerate Auth Key</button>
               </div>
             </form>
           </div>
@@ -22,7 +22,7 @@
         <!-- end of auth tab tab -->
 
         <!-- start Wallet tab tab -->
-        <tab heading="Wallet" select="getSubscriptionList()">
+        <tab heading="Wallet" (select)="getSubscriptionList()">
           <div class="pd2">
             <h3 class="fs16 mrB1">Payment details</h3>
             <label class="mrB1">Current Balance {{'basicInfo.availableCredit'}}
@@ -128,7 +128,7 @@
                 </div>
               </div>
               <div class="">
-                <button ng-disabled="disableRazorPay" razor-pay class="btn btn-primary">Pay with Razorpay</button>
+                <button [disabled]="disableRazorPay" (click)="payWithRazor()" class="btn btn-primary">Pay with Razorpay</button>
               </div>
             </section>
             <!-- end of section -->

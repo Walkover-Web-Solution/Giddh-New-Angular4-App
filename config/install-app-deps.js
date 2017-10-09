@@ -21,7 +21,7 @@ function getElectronVersion(root) {
   const electronPath = path.join(root, 'node_modules', 'electron');
   const file = path.join(electronPath, 'package.json');
   const package = require(file);
-  return package.version;
+  return { frameworkInfo: { version: package.version, useCustomDist: false } };
 }
 
 function writeAppPackage(metadata, appDir) {
