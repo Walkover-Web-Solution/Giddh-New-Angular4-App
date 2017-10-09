@@ -196,11 +196,12 @@
                 placeholder="Select A/c"
                 filterPlaceholder="Type to search..."
                 notFoundMsg="No A/c found"
+                notFoundLink="true"
                 [allowClear]="true"
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="salesAccounts$ | async"
                 (selected)="onSelectSalesAccount($event, transaction)"
-                (noOptionsFound)="onNoOptionsFoundInSalesAccount($event)"
+                (noResultsClicked)="onNoResultsClicked()"
                 >
                 <ng-template #optionTemplate let-option="option">
                   <div class="account-list-item">{{option?.label}}</div>

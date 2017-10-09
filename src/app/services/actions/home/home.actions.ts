@@ -438,6 +438,11 @@ export class HomeActions {
       payload: loginid
     };
   }
+  public ResetHomeState(): Action {
+    return {
+      type: HOME.RESET_HOME_STATE
+    };
+  }
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {

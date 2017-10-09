@@ -163,6 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this._homeActions.ResetHomeState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
