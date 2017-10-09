@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div class="row mrB4">
+        <div class="row mrB4" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
             <div class="col-xs-12">
                 <hr><br>
                 <h3 class="subHead"> Add More GST Number (Note: Check to set to default)</h3>

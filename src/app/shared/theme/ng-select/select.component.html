@@ -36,7 +36,24 @@
     </div>
 
 </div>
-<select-dropdown *ngIf="isOpen" #dropdown [multiple]="multiple" [optionList]="optionList" [notFoundMsg]="notFoundMsg" [highlightColor]="highlightColor" [highlightTextColor]="highlightTextColor" [filterEnabled]="filterEnabled" [placeholder]="filterPlaceholder"
-    [width]="width" [top]="top" [left]="left" [optionTemplate]="optionTemplate" (optionClicked)="onDropdownOptionClicked($event)" (optionsListClick)="onOptionsListClick()" (singleFilterClick)="onSingleFilterClick()" (singleFilterFocus)="onSingleFilterFocus()"
-    (singleFilterInput)="onFilterInput($event)" (singleFilterKeydown)="onSingleFilterKeydown($event)">
-</select-dropdown>
+<select-dropdown
+  *ngIf="isOpen"
+  #dropdown
+  [multiple]="multiple"
+  [optionList]="optionList"
+  [notFoundMsg]="notFoundMsg"
+  [highlightColor]="highlightColor"
+  [highlightTextColor]="highlightTextColor"
+  [filterEnabled]="filterEnabled"
+  [noResultLinkEnabled]="notFoundLink"
+  [placeholder]="filterPlaceholder"
+  [width]="width" [top]="top" [left]="left"
+  [optionTemplate]="optionTemplate"
+  (noResultClicked)="onNoResultClicked()"
+  (optionClicked)="onDropdownOptionClicked($event)"
+  (optionsListClick)="onOptionsListClick()"
+  (singleFilterClick)="onSingleFilterClick()"
+  (singleFilterFocus)="onSingleFilterFocus()"
+  (singleFilterInput)="onFilterInput($event)"
+  (singleFilterKeydown)="onSingleFilterKeydown($event)"
+></select-dropdown>

@@ -170,6 +170,16 @@ export class InvoiceUiDataService {
           } else {
             this.isLogoVisible.next(true);
           }
+
+          if (selectedTemplate.sections[0].content.length === 24) {
+            selectedTemplate.sections[0].content[24] = {
+              display: true,
+              label: 'Attention To',
+              field: 'attentionTo',
+              width: null
+            };
+          }
+
           selectedTemplate = this.BRToNewLine(selectedTemplate);
           console.log('THe selected template is :', selectedTemplate);
 

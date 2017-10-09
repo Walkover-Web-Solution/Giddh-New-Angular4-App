@@ -20,7 +20,7 @@ import { WizardStepComponent } from './wizard-step.component';
   styles: [
     '.card { height: 100%; }',
     '.card-header { background-color: #fff; padding: 0; font-size: 1.25rem; }',
-    '.card-block { overflow-y: auto; }',
+    // '.card-block { overflow-y: auto; }',
     '.card-footer { background-color: #fff; border-top: 0 none; }',
     '.nav-item { padding: 1rem 0rem; }',
     '.disabled { color: #ccc; }',
