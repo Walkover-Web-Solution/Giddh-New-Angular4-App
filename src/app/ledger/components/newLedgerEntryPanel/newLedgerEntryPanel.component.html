@@ -18,7 +18,7 @@
                         [options]="options" [(ngModel)]="currentTxn.inventory.unit"></select2> -->
                       <!-- <ng-select [options]="countrySource" formControlName="countryCode"></ng-select> -->
                       <select class="form-control" style="width: 60px;" (change)="unitChanged($event.target.value)">
-                        <option *ngFor="let item of currentTxn.selectedAccount.stock.accountStockDetails.unitRates"
+                        <option *ngFor="let item of currentTxn.unitRate"
                           [value]="item.stockUnitCode" >{{item.stockUnitCode}}</option>
                       </select>
                     </td>

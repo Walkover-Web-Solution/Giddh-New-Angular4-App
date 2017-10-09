@@ -29,7 +29,8 @@
             <li
                 *ngIf="!optionList.hasShown"
                 class="message">
-                {{notFoundMsg}}
+                <span *ngIf="noResultLinkEnabled">{{notFoundMsg}} <br><a class="noResultLink" href="javascript:void(0)" (click)="onNoResultClick()">Click to add new</a></span>
+                <span *ngIf="!noResultLinkEnabled">{{notFoundMsg}}</span>
             </li>
         </ul>
     </div>

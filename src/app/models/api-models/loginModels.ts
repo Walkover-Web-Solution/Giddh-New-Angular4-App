@@ -113,3 +113,8 @@ export class CreatedBy {
   public name: string;
   public uniqueName: string;
 }
+
+export class AuthKeyResponse {
+  public authKey: string;
+  public uniqueName: string;
+}
