@@ -557,6 +557,9 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
       return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
     }
+    case HOME.RESET_HOME_STATE: {
+      return initialState;
+    }
     // End Bank API
     // case HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
     //   let data = action.payload as IComparisionChartResponse;
