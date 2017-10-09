@@ -292,6 +292,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeAccount$.subscribe((a) => {
       if (a) {
         this.showEditTaxSection = false;
+        if (a.parentGroups[0].uniqueName) {
+          let col = a.parentGroups[0].uniqueName;
+          this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+          this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+        }
       }
     });
 

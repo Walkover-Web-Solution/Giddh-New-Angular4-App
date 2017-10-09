@@ -48,6 +48,7 @@ export interface SessionState {
   companies: ComapnyResponse[];
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
+  isCompanyCreationSuccess: boolean;
   isCompanyCreated: boolean;
   isAddNewMobileNoInProcess: boolean;
   isMobileNoVerifiedSuccess: boolean;
@@ -81,6 +82,7 @@ const sessionInitialState: SessionState = {
   companies: [],
   isCompanyCreated: false,
   isCompanyCreationInProcess: false,
+  isCompanyCreationSuccess: false,
   isRefreshing: false,
   isAddNewMobileNoInProcess: false,
   isMobileNoVerifiedSuccess: false
@@ -312,14 +314,15 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return newState;
     }
     case CompanyActions.CREATE_COMPANY:
-      return Object.assign({}, state, { isCompanyCreationInProcess: true });
+      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, { isCompanyCreated: state.isCompanyCreated, isCompanyCreationInProcess: false });
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
         let newState = _.cloneDeep(state);
         newState.isCompanyCreationInProcess = false;
+        newState.isCompanyCreationSuccess = true;
         newState.isCompanyCreated = true;
         newState.companies.push(companyResp.body);
         return Object.assign({}, state, newState);

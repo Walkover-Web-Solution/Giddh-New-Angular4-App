@@ -30,6 +30,7 @@ export class SelectDropdownComponent
   @Input() public left: number;
   @Input() public multiple: boolean;
   @Input() public notFoundMsg: string;
+  @Input() public noResultLinkEnabled: boolean;
   @Input() public optionList: OptionList;
   @Input() public top: number;
   @Input() public width: number;
@@ -42,6 +43,7 @@ export class SelectDropdownComponent
   @Output() public singleFilterFocus = new EventEmitter<null>();
   @Output() public singleFilterInput = new EventEmitter<string>();
   @Output() public singleFilterKeydown = new EventEmitter<any>();
+  @Output() public noResultClicked = new EventEmitter<null>();
 
   @ViewChild('filterInput') public filterInput: any;
   @ViewChild('optionsList') public optionsList: any;
@@ -98,6 +100,10 @@ export class SelectDropdownComponent
 
   public onOptionClick(option: Option) {
     this.optionClicked.emit(option);
+  }
+
+  public onNoResultClick() {
+    this.noResultClicked.emit();
   }
 
   /** View. **/

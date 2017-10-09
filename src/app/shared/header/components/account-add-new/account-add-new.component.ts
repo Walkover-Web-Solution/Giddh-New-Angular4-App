@@ -127,8 +127,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a && (a === 0 || a < 0)) {
+      if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
+      } else if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value !== '') {
+        this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
       }
     });
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {

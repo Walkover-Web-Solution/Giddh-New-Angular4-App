@@ -1,7 +1,8 @@
-export const StockUnits = [{
+export const StockUnits = [
+  {
     text: 'BAGS',
     id: 'BAG'
-},
+  },
 {
     text: 'BALE',
     id: 'BAL'
