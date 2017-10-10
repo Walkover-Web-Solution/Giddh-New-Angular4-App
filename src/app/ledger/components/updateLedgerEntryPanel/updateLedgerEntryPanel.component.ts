@@ -21,6 +21,7 @@ import * as uuid from 'uuid';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
+import { Select2Component } from '../../../shared/theme/select2/select2.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -177,7 +178,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     }
   }
-  public selectAccount(e, txn) {
+  public selectAccount(e, txn: ITransactionItem, select2Cmp: Select2Component) {
     this.vm.onTxnAmountChange();
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
@@ -188,12 +189,32 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       // txn.discount = 0;
       // txn.discounts = [];
       return;
+    } else {
+      if (!this.vm.isValidEntry(e.value)) {
+        txn.particular.uniqueName = null;
+        txn.particular.name = null;
+        this.selectedAccount = null;
+        select2Cmp.writeValue(null);
+        return;
+      }
     }
     this.vm.flatternAccountList4Select2.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
         if (fa.id === e.value) {
-          this.selectedAccount = fa.additional;
+
+          // check if ther's multiple stock entry
+          if (fa.additional.stock) {
+            if (this.vm.isThereStockEntry()) {
+              txn.particular.uniqueName = null;
+              txn.particular.name = null;
+              this.selectedAccount = null;
+              select2Cmp.writeValue(null);
+              this._toasty.warningToast('you can\'t add multiple stock entry');
+            } else {
+              this.selectedAccount = fa.additional;
+            }
+          }
           // reset taxes and discount on selected account change
           // txn.tax = 0;
           // txn.taxes = [];
