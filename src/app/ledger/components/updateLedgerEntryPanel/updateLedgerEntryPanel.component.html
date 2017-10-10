@@ -48,7 +48,7 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                    <select2 [data]="vm.flatternAccountList4Select2 | async" (click)="addBlankTrx('DEBIT', txn, $event)" (valueChanged)="selectAccount($event,txn)"
+                    <select2 [data]="vm.flatternAccountList4Select2 | async" #select2CmpDbt (click)="addBlankTrx('DEBIT', txn, $event)" (valueChanged)="selectAccount($event,txn, select2CmpDbt)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"></select2>
                     <!-- <input type="text" [(ngModel)]="txn.particular.name" typeahead-append-to-body="true" uib-typeahead="accounts as accounts.name for accounts in fltAccntListPaginated | addStockinAccountList:ledgerCtrl.baseAccount | searchAccountInPaginated:$viewValue | limitTo: 25"
                       typeahead-template-url="accountPopUp.html" typeahead-on-select="ledgerCtrl.isEntryAllowed(txn)" class="form-control"
@@ -98,7 +98,7 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                    <select2 [data]="vm.flatternAccountList4Select2 | async" (click)="addBlankTrx('CREDIT', txn, $event)" (valueChanged)="selectAccount($event,txn)"
+                    <select2 [data]="vm.flatternAccountList4Select2 | async" #select2CmpCrd (click)="addBlankTrx('CREDIT', txn, $event)" (valueChanged)="selectAccount($event,txn, select2CmpCrd)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"></select2>
                     <!-- <input class="form-control" type="text" [(ngModel)]="txn.particular.name" typeahead-append-to-body="true" uib-typeahead="accounts as accounts.name for accounts in fltAccntListPaginated  |addStockinAccountList:ledgerCtrl.baseAccount | searchAccountInPaginated:$viewValue | limitTo: 25"
                       typeahead-template-url="accountPopUp.html" typeahead-on-select="ledgerCtrl.isEntryAllowed(txn)" (click)="addBlankTrx('CREDIT', txn)"
@@ -278,9 +278,9 @@
                 </table>
               </div>
             </div>
-            <div class="file_attached col-xs-5 pull-right text-right" *ngIf="vm.selectedLedger.attachedFile?.length > 0">
+            <div class="file_attached col-xs-5 pull-right text-right" *ngIf="(vm.selectedLedger)?.attachedFile?.length > 0">
               <div class="row">
-                <span>{{ vm.selectedLedger.attachedFileName }}</span>
+                <span>{{ (vm.selectedLedger)?.attachedFileName }}</span>
                 <label class="remove cp mrL1" (click)="showDeleteAttachedFileModal()">(remove)</label>
               </div>
             </div>
@@ -316,7 +316,7 @@
         <div class="col-xs-12 pdT1">
           <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
           <div class="pull-right">
-            <div class="mrR1 pull-left" [ngClass]="{hide:selectedLedger.attachedFile}">
+            <div class="mrR1 pull-left" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
               <label class="checkbox oh">
                 <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice" [(ngModel)]="vm.selectedLedger.invoiceGenerated"
                   ng-click="$event.stopPropagation()">
@@ -325,7 +325,7 @@
             </div>
 
             <div class="pull-right">
-              <label class="upload_div" [ngClass]="{hide:selectedLedger.invoiceGenerated || selectedLedger.attachedFile}">
+              <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.invoiceGenerated || vm.selectedLedger.attachedFile}">
                 <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
                 <label for="invoiceFile" class="cp fs16">
                   <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>

@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../../shared/theme/select2/index';
 import { ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { sumBy, find } from 'lodash';
+import { sumBy, find, filter } from 'lodash';
 import { IOption } from '../../../shared/theme/index';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';
@@ -58,9 +58,9 @@ export class UpdateLedgerVm {
     if (account && account.parentGroups[0]) {
       let parent = account.parentGroups[0];
       if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
-        return 'assets';
-      } else if (find(['fixedassets', 'noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
         return 'liabilities';
+      } else if (find(['fixedassets', 'noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+        return 'assets';
       } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
         return 'income';
       } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
@@ -69,7 +69,7 @@ export class UpdateLedgerVm {
         }
         let subParent = account.parentGroups[1];
         if (subParent && subParent.uniqueName === 'discount') {
-          return '3';
+          return 'discount';
         }
         return 'expenses';
       } else {
@@ -78,28 +78,64 @@ export class UpdateLedgerVm {
     }
     return '';
   }
-  public isValidEntry(accountName: string, type: string = 'DEBIT'): boolean {
-    let filterdTrx = this.selectedLedger.transactions.filter(f => f.type === type);
-    let parentCategory = this.getCategoryNameFromAccount(filterdTrx[0].particular.uniqueName);
-    let accountCategory = this.getCategoryNameFromAccount(accountName);
-    if (parentCategory && accountCategory) {
-      return this.validCategory(accountCategory, parentCategory);
+  public isValidEntry(accountName: string): boolean {
+    if (!this.isItDuplicate(accountName)) {
+      let parentCategory = this.getCategoryNameFromAccount(this.selectedLedger.transactions[0].particular.uniqueName);
+      let accountCategory = this.getCategoryNameFromAccount(accountName);
+      if (parentCategory && accountCategory) {
+        return this.validCategory(accountCategory, accountName, parentCategory);
+      }
+      return false;
+    } else {
+      this._toasty.warningToast('you can\'t add same account twice');
+      return false;
     }
-    return true;
   }
 
-  public validCategory(categoryName: string, parentCategoryName: string) {
-    switch (categoryName) {
+  public validCategory(accountCategoryName: string, accountUniqueName: string, parentCategoryName: string) {
+    switch (parentCategoryName) {
       case 'assets':
+        return false;
       case 'liabilities':
+        return false;
       case 'income':
-        if (categoryName === parentCategoryName) {
+        if (accountCategoryName === 'income' || accountCategoryName === 'expenses') {
+          this._toasty.warningToast('you can\'t add income | expenses category account in income category');
+          return false;
+        } else if (accountCategoryName === 'roundoff' || accountCategoryName === 'discount') {
+          return true;
+        }
+        return false;
+      case 'expenses':
+        if (accountCategoryName === 'income') {
+          this._toasty.warningToast('you can\'t add income | expenses category account in expenses category');
           return false;
         }
-      case 'expenses':
+        return true;
+      case 'roundoff':
+        if (accountCategoryName === 'income') {
+          return true;
+        } else {
+          return false;
+        }
+      case 'discount':
+        if (accountCategoryName === 'income') {
+          return true;
+        } else {
+          return false;
+        }
       default:
         this._toasty.errorToast('this category account is not allowed');
+        return false;
     }
+  }
+
+  public isItDuplicate(accountUniqueName: string): boolean {
+    return filter(this.selectedLedger.transactions, (f => f.particular.uniqueName === accountUniqueName)).length > 1;
+  }
+
+  public isThereStockEntry(): boolean {
+    return find(this.selectedLedger.transactions, (f => f.inventory.stock)) !== undefined;
   }
 
   public getEntryTotal() {
