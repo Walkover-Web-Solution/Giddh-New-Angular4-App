@@ -225,7 +225,7 @@ export class AccountsAction {
     .switchMap(action => this._accountService.UpdateAccountV2(action.payload.account, action.payload.value))
     .map(response => {
       if (response.status === 'success') {
-        // this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
+        this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
       }
       return this.updateAccountResponseV2(response);
     });
@@ -249,8 +249,8 @@ export class AccountsAction {
         } else {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
-        // this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
-        // this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
+        this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
+        this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
       }
       return { type: '' };
     });
