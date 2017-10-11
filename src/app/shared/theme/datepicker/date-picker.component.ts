@@ -15,7 +15,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 
 export const DATEPICKER_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
