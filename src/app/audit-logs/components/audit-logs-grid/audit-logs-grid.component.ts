@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { AppState } from '../../../store/roots';
 
 @Component({

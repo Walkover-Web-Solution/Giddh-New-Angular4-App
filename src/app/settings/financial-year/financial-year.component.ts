@@ -7,7 +7,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { ToasterService } from '../../services/toaster.service';
 import { SettingsFinancialYearActions } from '../../services/actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
