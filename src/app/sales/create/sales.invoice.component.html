@@ -300,5 +300,8 @@
 </form>
 
 <!-- open account aside -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
 <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+
+<!-- open product service aside -->
+<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"></aside-menu-product-service>

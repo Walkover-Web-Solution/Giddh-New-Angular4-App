@@ -119,9 +119,9 @@ export class SalesInvoiceComponent implements OnInit {
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
-  // public salesAccounts$: Observable<Select2OptionData[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of([]);
   public accountAsideMenuState: string = 'out';
+  public asideMenuStateForProductService: string = 'in';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
   public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
@@ -152,6 +152,44 @@ export class SalesInvoiceComponent implements OnInit {
   public ngOnInit() {
 
     // get accounts and select only accounts which belong in sundrydebtors category
+    this.getAllFlattenAc();
+
+    // get account details and set it to local var
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
+    this.selectedAccountDetails$.subscribe(o => {
+      if (o) {
+        this.assignValuesInForm(o);
+      }
+    });
+
+    // get tax list and assign values to local vars
+    this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
+      if (o) {
+        this.companyTaxesList$ = Observable.of(o);
+        _.map(this.theadArrReadOnly, (item: IContentCommon) => {
+          // show tax label
+          if (item.label === 'Tax') {
+            item.display = true;
+          }
+          return item;
+        });
+        this.showTaxBox = true;
+      }
+    });
+
+    this.toggleBodyClass();
+
+    // get discount list
+
+    // this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).subscribe((o: IFlattenGroupsAccountsDetail) => {
+    //   if (o) {
+    //     this.discountItem$ = Observable.of(o);
+    //   }
+    // });
+
+  }
+
+  public getAllFlattenAc() {
     this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: INameUniqueName[] = [];
@@ -189,38 +227,6 @@ export class SalesInvoiceComponent implements OnInit {
         this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
       }
     });
-
-    // get account details and set it to local var
-    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
-    this.selectedAccountDetails$.subscribe(o => {
-      if (o) {
-        this.assignValuesInForm(o);
-      }
-    });
-
-    // get tax list and assign values to local vars
-    this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
-      if (o) {
-        this.companyTaxesList$ = Observable.of(o);
-        _.map(this.theadArrReadOnly, (item: IContentCommon) => {
-          // show tax label
-          if (item.label === 'Tax') {
-            item.display = true;
-          }
-          return item;
-        });
-        this.showTaxBox = true;
-      }
-    });
-
-    // get discount list
-
-    // this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).subscribe((o: IFlattenGroupsAccountsDetail) => {
-    //   if (o) {
-    //     this.discountItem$ = Observable.of(o);
-    //   }
-    // });
-
   }
 
   public assignValuesInForm(data: AccountResponseV2) {
@@ -304,7 +310,17 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public onNoResultsClicked() {
-    console.log ('onNoResultsClicked open dialog');
+    this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+    this.getAllFlattenAc();
+  }
+
+  public toggleBodyClass() {
+    if (this.asideMenuStateForProductService === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    }else {
+      document.querySelector('body').classList.remove('fixed');
+    }
   }
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
