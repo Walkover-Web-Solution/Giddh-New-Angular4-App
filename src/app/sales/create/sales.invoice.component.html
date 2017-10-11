@@ -304,4 +304,19 @@
 <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
 
 <!-- open product service aside -->
-<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"></aside-menu-product-service>
+<aside-menu-product-service
+  [class]="asideMenuStateForProductService"
+  [@slideInOut]="asideMenuStateForProductService"
+  (closeAsideEvent)="onNoResultsClicked()"
+  (animatePAside)="animateAside($event)"
+></aside-menu-product-service>
+
+
+<!-- create Group modal -->
+<div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
+    </div>
+  </div>
+</div>

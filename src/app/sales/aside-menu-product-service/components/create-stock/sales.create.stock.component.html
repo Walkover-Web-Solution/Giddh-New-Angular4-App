@@ -15,7 +15,6 @@
         [allowClear]="true"
         [(ngModel)]="selectedGroupUniqueName"
         [options]="stockGroups$ | async"
-        (selected)="onSelectGroup($event)"
         (noResultsClicked)="onNoResultsOfGroup()"
         >
         <ng-template #optionTemplate let-option="option">

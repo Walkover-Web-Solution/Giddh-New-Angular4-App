@@ -4,16 +4,17 @@ import { SALES_ACTIONS } from '../../services/actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
+import { IOption } from '../../shared/theme/index';
 
 export interface SalesState {
   invObj: any;
   acDtl: AccountResponseV2;
-  groupList: GroupsWithAccountsResponse[];
+  hierarchicalStockGroups: IOption[];
 }
 const initialState = {
   invObj: null,
   acDtl: null,
-  groupList: null
+  hierarchicalStockGroups: null
 };
 
 export function salesReducer(state = initialState, action: Action): SalesState {
@@ -26,6 +27,11 @@ export function salesReducer(state = initialState, action: Action): SalesState {
         });
       }
       return state;
+    }
+    case SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE : {
+      return Object.assign({}, state, {
+        hierarchicalStockGroups: action.payload
+      });
     }
     default: {
       return state;
