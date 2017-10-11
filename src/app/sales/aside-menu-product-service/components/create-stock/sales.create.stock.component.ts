@@ -23,6 +23,7 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces
 import { IOption } from '../../../../shared/theme/index';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
+import { SalesActions } from '../../../../services/actions/sales/sales.action';
 
 @Component({
   selector: 'sales-create-stock',
@@ -33,6 +34,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 export class SalesAddStockComponent implements OnInit, OnDestroy {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
   // public
   public selectedGroupUniqueName: string;
@@ -57,6 +59,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     private customStockActions: CustomStockUnitAction,
     private ref: ChangeDetectorRef,
     private toasty: ToasterService,
+    private _salesActions: SalesActions
   ) {
     // get all stock groups
     this.getStockGroups();
@@ -95,10 +98,12 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
       ])
     });
 
-    // listen to form controls
-    // this.addStockForm.controls['stockUnitCode'].valueChanges.subscribe((val) => {
-    //   console.log ('bingo', val);
-    // });
+    // get groups list and assign values
+    this.store.select(state => state.sales.hierarchicalStockGroups).takeUntil(this.destroyed$).subscribe((o) => {
+      if (o) {
+        this.stockGroups$ = Observable.of(o);
+      }
+    });
 
     // get purchase accounts
     this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).takeUntil(this.destroyed$).subscribe(data => {
@@ -259,43 +264,13 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
   // get all stock groups and flatten it and use in dom
   public getStockGroups() {
-    this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let flattenData = this.makeStockGroupsFlatten(data.body.results, []);
-        this.stockGroups$ = Observable.of(flattenData);
-      }
-    });
-  }
-
-  // create flatten groups
-  public makeStockGroupsFlatten(rawList: IGroupsWithStocksHierarchyMinItem[], parents) {
-    let a = _.map(rawList, (item) => {
-      let result;
-      if (item.childStockGroups && item.childStockGroups.length > 0) {
-        result = this.makeStockGroupsFlatten(item.childStockGroups, []);
-        result.push({
-          label: item.name,
-          value: item.uniqueName
-        });
-      } else {
-        result = {
-          label: item.name,
-          value: item.uniqueName
-        };
-      }
-      return result;
-    });
-    return _.flatten(a);
-  }
-
-  public onSelectGroup(e: any) {
-    // this.selectedGroup = e;
-    console.log ('selectedGroup', this.selectedGroup);
-    console.log ('selectedGroupUniqueName', this.selectedGroupUniqueName);
+    this.store.dispatch(this._salesActions.getGroupsListForSales());
   }
 
   public onNoResultsOfGroup() {
-    console.log ('onNoResultsOfGroup');
+    let obj: any = {};
+    obj.type = 'groupModal';
+    this.animateAside.emit(obj);
   }
 
 }

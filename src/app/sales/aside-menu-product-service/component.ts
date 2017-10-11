@@ -17,6 +17,9 @@ import * as _ from 'lodash';
       width: 500px;
       z-index: 1045;
     }
+    :host.shifted{
+      right: 300px;
+    }
     #close{
       display: none;
     }
@@ -46,6 +49,7 @@ import * as _ from 'lodash';
 export class AsideMenuProductServiceComponent implements OnInit {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
 
   // public
   public isAddStockOpen: boolean = false;
@@ -69,5 +73,9 @@ export class AsideMenuProductServiceComponent implements OnInit {
 
   public closeAsidePane() {
     this.closeAsideEvent.emit();
+  }
+
+  public animateAside(e: any) {
+    this.animatePAside.emit(e);
   }
 }

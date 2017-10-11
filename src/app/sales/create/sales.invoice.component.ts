@@ -28,6 +28,7 @@ import { IContentCommon, ICommonItemOfTransaction, IInvoiceTax } from '../../mod
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IFlattenAccountItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { ModalDirective } from 'ngx-bootstrap';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -110,6 +111,7 @@ const THEAD_ARR_READONLY = [
 export class SalesInvoiceComponent implements OnInit {
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
+  @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -131,6 +133,15 @@ export class SalesInvoiceComponent implements OnInit {
   public showTaxBox: boolean = false;
   public stockList: IStockUnit[] = [];
   public allKindOfTxns: boolean = false;
+
+  // modals related
+  public modalConfig = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -473,6 +484,18 @@ export class SalesInvoiceComponent implements OnInit {
 
     // call taxableValue method
     txn.setAmount(entry);
+  }
+
+  // animate group window
+  public animateAside(e: any) {
+    if (e.type === 'groupModal') {
+      this.createGroupModal.show();
+    }
+  }
+
+  public closeCreateGroupModal(e: any) {
+    console.log ('closeCreateGroupModal', e);
+    this.createGroupModal.hide();
   }
 
 }
