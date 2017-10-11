@@ -36,7 +36,7 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { find } from 'lodash';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 @Component({
   selector: 'new-ledger-entry-panel',
