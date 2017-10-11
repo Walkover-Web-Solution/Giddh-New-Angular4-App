@@ -1,7 +1,7 @@
 import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TaxResponse } from '../../../models/api-models/Company';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
 

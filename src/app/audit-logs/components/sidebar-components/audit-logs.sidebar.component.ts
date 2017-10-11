@@ -12,7 +12,7 @@ import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from 'lodash';
