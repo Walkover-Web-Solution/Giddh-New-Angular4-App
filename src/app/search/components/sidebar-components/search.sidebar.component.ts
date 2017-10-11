@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../services/actions/search.actions';
 import { GroupService } from '../../../services/group.service';
