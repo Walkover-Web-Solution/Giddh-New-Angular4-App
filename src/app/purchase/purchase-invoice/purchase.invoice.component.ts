@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
-import * as  moment from 'moment';
+import * as  moment from 'moment/moment';
 import * as  _ from 'lodash';
 import { IInvoicePurchaseResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 
