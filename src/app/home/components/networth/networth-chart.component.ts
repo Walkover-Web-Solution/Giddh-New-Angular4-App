@@ -8,7 +8,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
 import { Observable } from 'rxjs/Observable';
 import { isNullOrUndefined } from 'util';
-import * as  moment from 'moment';
+import * as  moment from 'moment/moment';
 import * as _ from 'lodash';
 import { Store } from '@ngrx/store';
 

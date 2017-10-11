@@ -238,7 +238,6 @@ export class InventoryService {
    * Create Stock
    */
   public CreateStock(model: CreateStockRequest, stockGroupUniqueName: string): Observable<BaseResponse<StockDetailResponse, CreateStockRequest>> {
-    debugger
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
