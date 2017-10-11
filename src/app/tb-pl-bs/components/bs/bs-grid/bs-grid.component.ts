@@ -3,7 +3,7 @@ import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'bs-grid',  // <home></home>
