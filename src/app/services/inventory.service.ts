@@ -242,9 +242,9 @@ export class InventoryService {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
-      this.companyUniqueName = s.session.companyUniqueName;
+      this.companyUniqueName = encodeURIComponent(s.session.companyUniqueName);
     });
-    return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniqueName)), model).map((res) => {
+    return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName), model).map((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
       data.request = model;
       data.queryString = { stockGroupUniqueName };
