@@ -46,8 +46,6 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
 
-    this.getStockGroups();
-
     // init stock group form
     this.addStockGroupForm = this._fb.group({
       name: [null, [Validators.required]],
@@ -71,6 +69,8 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
     this._store.select(state => state.sales.hierarchicalStockGroups).takeUntil(this.destroyed$).subscribe((o) => {
       if (o) {
         this.stockGroups$ = Observable.of(o);
+      }else {
+        this.getStockGroups();
       }
     });
 
@@ -118,6 +118,7 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
 
   public addStockGroupFormReset() {
     this.addStockGroupForm.reset();
+    this.closeCreateGroupModal();
   }
 
   public closeCreateGroupModal() {
