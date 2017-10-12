@@ -69,6 +69,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public uploadInput: EventEmitter<UploadInput>;
   public selectedAccount: IFlattenAccountsResultItem = null;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
+  public discountArray = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
@@ -114,7 +115,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.uploadInput = new EventEmitter<UploadInput>();
 
     //  get entry from server
-    this.entryUniqueName$.distinctUntilChanged().subscribe(entryName => {
+    this.entryUniqueName$.subscribe(entryName => {
       if (entryName) {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
           if (resp.status === 'success') {
@@ -198,6 +199,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         return;
       }
     }
+    this.vm.isDisabledTaxesAndDiscounts = this.vm.isThereIncomeOrExpenseEntry();
     this.vm.flatternAccountList4Select2.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
@@ -214,6 +216,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
             } else {
               this.selectedAccount = fa.additional;
             }
+          } else {
+            this.selectedAccount = fa.additional;
           }
           // reset taxes and discount on selected account change
           // txn.tax = 0;
@@ -248,6 +252,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.hideDeleteAttachedFileModal();
   }
   public ngOnDestroy(): void {
+    this.vm.selectedLedger = null;
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

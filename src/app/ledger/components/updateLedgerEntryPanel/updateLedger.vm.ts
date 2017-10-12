@@ -15,6 +15,7 @@ export class UpdateLedgerVm {
   public grandTotal: number = 0;
   public totalAmount: number = 0;
   public voucherTypeList: IOption[];
+  public isDisabledTaxesAndDiscounts: boolean = false;
   constructor(private _toasty: ToasterService) {
     this.voucherTypeList = [{
       label: 'Sales',
@@ -138,6 +139,15 @@ export class UpdateLedgerVm {
     return find(this.selectedLedger.transactions, (f => f.inventory.stock)) !== undefined;
   }
 
+  public isThereIncomeOrExpenseEntry(): boolean {
+    for (let trx of this.selectedLedger.transactions) {
+      let category = this.getCategoryNameFromAccount(trx.particular.uniqueName);
+      if (category === 'income' || category === 'expenses') {
+        return true;
+      }
+    }
+    return false;
+  }
   public getEntryTotal() {
     this.entryTotal.crTotal = 0;
     this.entryTotal.drTotal = 0;
