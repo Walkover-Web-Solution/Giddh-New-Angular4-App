@@ -598,7 +598,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
 
-    this.store.dispatch(this.inventoryAction.createStock(stockObj, this.groupUniqueName));
+    this.store.dispatch(this.inventoryAction.createStock(stockObj, encodeURIComponent(this.groupUniqueName)));
   }
 
   public update() {
