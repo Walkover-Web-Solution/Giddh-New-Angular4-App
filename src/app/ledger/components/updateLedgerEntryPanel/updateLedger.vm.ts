@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../../shared/theme/select2/index';
 import { ITransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { sumBy, find, filter } from 'lodash';
+import { sumBy, find, filter, findIndex } from 'lodash';
 import { IOption } from '../../../shared/theme/index';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';
@@ -54,6 +54,31 @@ export class UpdateLedgerVm {
       }
     } as ITransactionItem;
   }
+
+  // TODO: fix entry index problems
+  public addDiscountEntry(total: number) {
+    if (this.selectedLedger.transactions) {
+      let checkTrxEntryIndex = findIndex(this.selectedLedger.transactions, t => t.particular.uniqueName === 'discount');
+      if (checkTrxEntryIndex > -1) {
+        this.selectedLedger.transactions[checkTrxEntryIndex].amount = total;
+      } else {
+        let trx: ITransactionItem = this.blankTransactionItem('DEBIT');
+        let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
+        let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
+        trx.amount = total;
+        trx.particular.uniqueName = 'discount';
+        trx.particular.name = 'discount';
+        if (filterdDebitTrx[0].particular.uniqueName) {
+          this.selectedLedger.transactions.push(trx);
+        } else {
+          filterdDebitTrx[0] = trx;
+          this.selectedLedger.transactions = [...filterdDebitTrx, ...filterdCrditTrx];
+        }
+      }
+    }
+    this.generatePanelAmount();
+    return;
+  }
   public getCategoryNameFromAccount(accountName: string): string {
     let account = find(this.flatternAccountList, (fla) => fla.uniqueName === accountName);
     if (account && account.parentGroups[0]) {
@@ -95,6 +120,7 @@ export class UpdateLedgerVm {
 
   public validCategory(accountCategoryName: string, accountUniqueName: string, parentCategoryName: string) {
     switch (parentCategoryName) {
+      // TODO: add all categories related rules
       case 'assets':
         return false;
       case 'liabilities':
@@ -167,12 +193,34 @@ export class UpdateLedgerVm {
   }
   public onTxnAmountChange() {
     this.generateGrandTotal();
-    this.getPanelAmount();
+    this.generatePanelAmount();
   }
-  public getPanelAmount() {
-    this.totalAmount = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
+  // FIXME: fix amount calculation
+  public generatePanelAmount() {
+    if (this.selectedLedger.transactions && this.selectedLedger.transactions.length) {
+      let creditEntriesSum = sumBy(this.selectedLedger.transactions, (tr) => {
+        if (tr.type === 'CREDIT') {
+          return Number(tr.amount);
+        }
+        return 0;
+      });
+      let debitEntriesSum = sumBy(this.selectedLedger.transactions, (tr) => {
+        if (tr.type === 'DEBIT') {
+          return Number(tr.amount);
+        }
+        return 0;
+      });
+      // let amount = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
+      // let discount = this.selectedLedger.transactions.find(p => p.particular.uniqueName === 'discount');
+
+      this.totalAmount = creditEntriesSum - debitEntriesSum;
+      // if (discount) {
+      //   this.totalAmount = this.totalAmount - discount.amount;
+      // }
+    }
   }
+  // FIXME: fix total calculation
   public generateGrandTotal() {
-    this.grandTotal = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
+    this.grandTotal = this.totalAmount;
   }
 }

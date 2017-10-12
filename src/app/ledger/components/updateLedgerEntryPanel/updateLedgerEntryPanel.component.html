@@ -214,7 +214,7 @@
                   </td>
                   <td ng-if="ledgerCtrl.discountAccount && ledgerCtrl.discountAccount.accountDetails.length > 0">
                     <span auto-close="outsideClick">
-                      <ledger-discount #discount [discountAccountsDetails]="discountArray">
+                      <ledger-discount #discount [discountAccountsDetails]="discountArray" (discountTotalUpdated)="vm.addDiscountEntry($event)">
                       </ledger-discount>
                       <!-- <input readonly="true" type="text" name="" class="form-control" ng-model="ledgerCtrl.selectedLedger.panel.discount" /> -->
                     </span>
