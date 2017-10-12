@@ -308,7 +308,7 @@
   [class]="asideMenuStateForProductService"
   [@slideInOut]="asideMenuStateForProductService"
   (closeAsideEvent)="onNoResultsClicked()"
-  (animatePAside)="animateAside($event)"
+  (animatePAside)="getActionFromAside($event)"
 ></aside-menu-product-service>
 
 
@@ -320,3 +320,14 @@
     </div>
   </div>
 </div>
+
+<!-- create Ac modal -->
+<section *ngIf="showCreateAcModal">
+  <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>
+      </div>
+    </div>
+  </div>
+</section>

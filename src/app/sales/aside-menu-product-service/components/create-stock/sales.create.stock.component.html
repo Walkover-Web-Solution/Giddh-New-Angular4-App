@@ -77,7 +77,7 @@
           [allowClear]="true"
           formControlName="purchaseAccountUniqueName"
           [options]="purchaseAccountsDropDown$ | async"
-          (noResultsClicked)="onNoResultsOfPurchaseAc()"
+          (noResultsClicked)="onNoResultsOfAc('Purchase')"
           >
           <ng-template #optionTemplate let-option="option">
             <div class="account-list-item">{{option?.label}}</div>
@@ -127,7 +127,7 @@
           [allowClear]="true"
           formControlName="salesAccountUniqueName"
           [options]="salesAccountsDropDown$ | async"
-          (noResultsClicked)="onNoResultsOfSalesAc()"
+          (noResultsClicked)="onNoResultsOfAc('Sales')"
           >
           <ng-template #optionTemplate let-option="option">
             <div class="account-list-item">{{option?.label}}</div>

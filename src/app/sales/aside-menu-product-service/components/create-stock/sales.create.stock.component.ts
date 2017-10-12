@@ -234,13 +234,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   /**
    * Accounts related funcs
    */
-
-  public onNoResultsOfPurchaseAc() {
-    console.log ('onNoResultsOfPurchaseAc');
-  }
-
-  public onNoResultsOfSalesAc() {
-    console.log ('onNoResultsOfSalesAc');
+  public onNoResultsOfAc(val: string) {
+    this.animateAside.emit({type: val});
   }
 
   /**

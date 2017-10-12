@@ -112,6 +112,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
+  @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -133,6 +134,8 @@ export class SalesInvoiceComponent implements OnInit {
   public showTaxBox: boolean = false;
   public stockList: IStockUnit[] = [];
   public allKindOfTxns: boolean = false;
+  public showCreateAcModal: boolean = false;
+  public createAcCategory: string = null;
 
   // modals related
   public modalConfig = {
@@ -490,16 +493,26 @@ export class SalesInvoiceComponent implements OnInit {
     txn.setAmount(entry);
   }
 
-  // animate group window
-  public animateAside(e: any) {
+  // get action type from aside window and open respective modal
+  public getActionFromAside(e: any) {
     if (e.type === 'groupModal') {
       this.createGroupModal.show();
+    }else {
+      this.showCreateAcModal = true;
+      this.createAcCategory = e.type;
+      // delay just for ng cause
+      setTimeout(() => {
+        this.createAcModal.show();
+      }, 1500);
     }
   }
 
   public closeCreateGroupModal(e: any) {
-    console.log ('closeCreateGroupModal', e);
     this.createGroupModal.hide();
+  }
+
+  public closeCreateAcModal() {
+    this.createAcModal.hide();
   }
 
 }
