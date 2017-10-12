@@ -1,0 +1,135 @@
+import { Directive, OnInit, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { KeyValueDiffer, KeyValueDiffers, ElementRef, OnDestroy, DoCheck } from '@angular/core';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { DaterangepickerConfig } from './config.service';
+
+import * as $ from 'jquery';
+import * as moment from 'moment/moment';
+import 'bootstrap-daterangepicker';
+
+@Directive({
+  selector: '[daterangepicker]',
+})
+export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoCheck {
+
+  public datePicker: any;
+
+  // daterangepicker properties
+  @Input() public options: any = {};
+
+  // daterangepicker events
+  @Output() public selected = new EventEmitter();
+  @Output() public cancelDaterangepicker = new EventEmitter();
+  @Output() public applyDaterangepicker = new EventEmitter();
+  @Output() public hideCalendarDaterangepicker = new EventEmitter();
+  @Output() public showCalendarDaterangepicker = new EventEmitter();
+  @Output() public hideDaterangepicker = new EventEmitter();
+  @Output() public showDaterangepicker = new EventEmitter();
+
+  private activeRange: any;
+  private targetOptions: any = {};
+  private _differ: any = {};
+  constructor(
+    private input: ElementRef,
+    private config: DaterangepickerConfig,
+    private differs: KeyValueDiffers
+  ) {
+    this._differ['options'] = differs.find(this.options).create(null);
+    this._differ['settings'] = differs.find(this.config.settings).create(null);
+  }
+
+  public ngAfterViewInit() {
+    this.config.embedCSS();
+    this.render();
+    this.attachEvents();
+  }
+
+  public render() {
+    this.targetOptions = Object.assign({}, this.config.settings, this.options);
+
+    // cast $ to any to avoid jquery type checking
+    ($(this.input.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this));
+
+    this.datePicker = ($(this.input.nativeElement) as any).data('daterangepicker');
+  }
+
+  public attachEvents() {
+    $(this.input.nativeElement).on('cancel.daterangepicker',
+      (e: any, picker: any) => {
+        let event = { event: e, picker };
+        this.cancelDaterangepicker.emit(event);
+      }
+    );
+
+    $(this.input.nativeElement).on('apply.daterangepicker',
+      (e: any, picker: any) => {
+        let event = { event: e, picker };
+        this.applyDaterangepicker.emit(event);
+      }
+    );
+
+    $(this.input.nativeElement).on('hideCalendar.daterangepicker',
+      (e: any, picker: any) => {
+        let event = { event: e, picker };
+        this.hideCalendarDaterangepicker.emit(event);
+      }
+    );
+
+    $(this.input.nativeElement).on('showCalendar.daterangepicker',
+      (e: any, picker: any) => {
+        let event = { event: e, picker };
+        this.showCalendarDaterangepicker.emit(event);
+      }
+    );
+
+    $(this.input.nativeElement).on('hide.daterangepicker',
+      (e: any, picker: any) => {
+        let event = { event: e, picker };
+        this.hideDaterangepicker.emit(event);
+      }
+    );
+
+    $(this.input.nativeElement).on('show.daterangepicker',
+      (e: any, picker: any) => {
+        let event = { event: e, picker };
+        this.showDaterangepicker.emit(event);
+      }
+    );
+  }
+
+  public destroyPicker() {
+    try {
+      ($(this.input.nativeElement) as any).data('daterangepicker').remove();
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+
+  public ngOnDestroy() {
+    this.destroyPicker();
+  }
+
+  public ngDoCheck() {
+    let optionsChanged = this._differ['options'].diff(this.options);
+    let settingsChanged = this._differ['settings'].diff(this.config.settings);
+
+    if (optionsChanged || settingsChanged) {
+      this.render();
+      this.attachEvents();
+      if (this.activeRange && this.datePicker) {
+        this.datePicker.setStartDate(this.activeRange.start);
+        this.datePicker.setEndDate(this.activeRange.end);
+      }
+    }
+  }
+
+  private callback(start?: any, end?: any, label?: any): void {
+    this.activeRange = {
+      start,
+      end,
+      label
+    };
+
+    this.selected.emit(this.activeRange);
+  }
+}
