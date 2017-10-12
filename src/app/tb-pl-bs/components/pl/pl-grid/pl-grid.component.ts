@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnCha
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { Observable } from 'rxjs/Observable';
 
 @Component({

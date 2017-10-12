@@ -3,7 +3,7 @@ import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
 import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from 'lodash';
 import { ChildGroup } from '../../models/api-models/Search';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 
 interface TbState {
   data?: AccountDetails;
