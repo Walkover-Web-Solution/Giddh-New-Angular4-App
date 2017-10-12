@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, trigger, state, style, transition, animate, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
