@@ -64,6 +64,10 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     // get all stock groups
     this.getStockGroups();
 
+    // get all ac
+    this.store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
+    this.store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
+
     // get all stock units
     this._inventoryService.GetStockUnit().takeUntil(this.destroyed$).subscribe((data) => {
       if (data.status === 'success') {
@@ -105,27 +109,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
       }
     });
 
-    // get purchase accounts
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let purchaseAccounts: IOption[] = [];
-        data.body.results.map(d => {
-          purchaseAccounts.push({ label: d.name, value: d.uniqueName });
-        });
-        this.purchaseAccountsDropDown$ = Observable.of(purchaseAccounts);
-      }
-    });
-
-    // get sales accounts
-    this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['sales'] }).takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let salesAccounts: IOption[] = [];
-        data.body.results.map(d => {
-          salesAccounts.push({ label: d.name, value: d.uniqueName });
-        });
-        this.salesAccountsDropDown$ = Observable.of(salesAccounts);
-      }
-    });
+    this.purchaseAccountsDropDown$ = this.store.select(state => state.sales.purchaseAcList).takeUntil(this.destroyed$);
+    this.salesAccountsDropDown$ = this.store.select(state => state.sales.salesAcList).takeUntil(this.destroyed$);
 
   }
 

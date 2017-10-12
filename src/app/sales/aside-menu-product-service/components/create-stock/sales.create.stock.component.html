@@ -166,7 +166,7 @@
 
   <div class="row mrB4">
     <div class="col-xs-12">
-      <button type="submit" (click)="addStockFormSubmit()" class="btn btn-md btn-success mrR1" [disabled]="addStockForm.invalid || stockCreationInProcess">Save</button>
+      <button type="submit" [ladda]="stockCreationInProcess" (click)="addStockFormSubmit()" class="btn btn-md btn-success mrR1" [disabled]="addStockForm.invalid">Save</button>
       <button type="button" (click)="resetStockForm()" class="btn btn-md btn-primary">Cancel</button>
     </div>
   </div>

@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import * as _ from 'lodash';
 import { SALES_ACTIONS } from '../../services/actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AccountResponseV2 } from '../../models/api-models/Account';
+import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../shared/theme/index';
 
@@ -10,11 +10,15 @@ export interface SalesState {
   invObj: any;
   acDtl: AccountResponseV2;
   hierarchicalStockGroups: IOption[];
+  purchaseAcList: IOption[];
+  salesAcList: IOption[];
 }
 const initialState = {
   invObj: null,
   acDtl: null,
-  hierarchicalStockGroups: null
+  hierarchicalStockGroups: null,
+  purchaseAcList: null,
+  salesAcList: null
 };
 
 export function salesReducer(state = initialState, action: Action): SalesState {
@@ -32,6 +36,26 @@ export function salesReducer(state = initialState, action: Action): SalesState {
       return Object.assign({}, state, {
         hierarchicalStockGroups: action.payload
       });
+    }
+    case SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE : {
+      let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = action.payload;
+      let purchaseAcList: IOption[] = [];
+      if (data.status === 'success') {
+        data.body.results.map(d => {
+          purchaseAcList.push({ label: d.name, value: d.uniqueName });
+        });
+      }
+      return Object.assign({}, state, { purchaseAcList });
+    }
+    case SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE : {
+      let data: BaseResponse<FlattenAccountsResponse, { groupUniqueNames: string[] }> = action.payload;
+      let salesAcList: IOption[] = [];
+      if (data.status === 'success') {
+        data.body.results.map(d => {
+          salesAcList.push({ label: d.name, value: d.uniqueName });
+        });
+      }
+      return Object.assign({}, state, { salesAcList });
     }
     default: {
       return state;

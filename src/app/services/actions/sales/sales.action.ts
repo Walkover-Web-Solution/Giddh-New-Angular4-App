@@ -12,7 +12,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { SalesService } from '../../sales.service';
 import { SALES_ACTIONS } from './sales.const';
 import { Router } from '@angular/router';
-import { AccountResponseV2 } from '../../../models/api-models/Account';
+import { AccountResponseV2, FlattenAccountsResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { GroupService } from '../../group.service';
@@ -61,6 +61,32 @@ export class SalesActions {
       };
     });
 
+  // get purhase Ac list
+  @Effect()
+  public getFlattenAcOfPurchase$: Observable<Action> = this.action$
+    .ofType(SALES_ACTIONS.GET_PURCHASE_AC_LIST)
+    .switchMap(action => this._accountService.GetFlatternAccountsOfGroup(action.payload))
+    .map(res => this.validateResponse<FlattenAccountsResponse, {groupUniqueNames: string[]}>(res, {
+      type: SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE,
+      payload: res
+    }, true, {
+        type: SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE,
+        payload: res
+      }));
+
+  // get sales Ac list
+  @Effect()
+  public getFlattenAcOfSales$: Observable<Action> = this.action$
+    .ofType(SALES_ACTIONS.GET_SALES_AC_LIST)
+    .switchMap(action => this._accountService.GetFlatternAccountsOfGroup(action.payload))
+    .map(res => this.validateResponse<FlattenAccountsResponse, {groupUniqueNames: string[]}>(res, {
+      type: SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE,
+      payload: res
+    }, true, {
+        type: SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE,
+        payload: res
+      }));
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private _router: Router,
@@ -100,6 +126,20 @@ export class SalesActions {
         payload: this._inventoryService.makeStockGroupsFlatten(value.body.results, [])
       };
     }
+  }
+
+  public getFlattenAcOfPurchase(value: { groupUniqueNames: string[] }): Action {
+    return {
+      type: SALES_ACTIONS.GET_PURCHASE_AC_LIST,
+      payload: value
+    };
+  }
+
+  public getFlattenAcOfSales(value: { groupUniqueNames: string[] }): Action {
+    return {
+      type: SALES_ACTIONS.GET_SALES_AC_LIST,
+      payload: value
+    };
   }
 
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
