@@ -15,7 +15,7 @@ import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent, SelectModule } from './theme';
 // import { SelectModule } from './theme/select/select.module';
-import { Daterangepicker } from 'ng2-daterangepicker';
+import { Daterangepicker } from './theme/ng2-daterangepicker/daterangepicker.module';
 import { ChartModule } from 'angular2-highcharts';
 
 import {
