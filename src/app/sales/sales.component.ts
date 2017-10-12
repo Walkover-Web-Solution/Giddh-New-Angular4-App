@@ -22,9 +22,7 @@ export class SalesComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private companyActions: CompanyActions
-  ) {
-    console.log('hello from SalesComponent');
-  }
+  ) {}
 
   public ngOnInit() {
     let companyUniqueName = null;

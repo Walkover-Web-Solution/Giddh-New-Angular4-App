@@ -70,13 +70,11 @@ export class AsideMenuAccountComponent implements OnInit {
           }
         });
         this.flatAccountWGroupsList$ = Observable.of(result);
-        console.log(this.flatAccountWGroupsList$);
       }
     });
   }
 
   public addNewGroup(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
-    console.log ('account creation', accRequestObject);
     this.store.dispatch(this.accountsAction.createAccount(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
     this.closeAsidePane(event);
   }
