@@ -84,7 +84,7 @@ if (ENV === 'development') {
     HttpModule,
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),

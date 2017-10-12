@@ -105,7 +105,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
 
-    this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
+    this.store.select(s => s.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((profile) => {
       this.store.dispatch(this.companyActions.RefreshCompanies());
     });
 

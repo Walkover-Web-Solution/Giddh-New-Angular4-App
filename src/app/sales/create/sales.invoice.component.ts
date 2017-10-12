@@ -28,6 +28,7 @@ import { IContentCommon, ICommonItemOfTransaction, IInvoiceTax } from '../../mod
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IFlattenAccountItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { ModalDirective } from 'ngx-bootstrap';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -110,6 +111,8 @@ const THEAD_ARR_READONLY = [
 export class SalesInvoiceComponent implements OnInit {
 
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
+  @ViewChild('createGroupModal') public createGroupModal: ModalDirective;
+  @ViewChild('createAcModal') public createAcModal: ModalDirective;
 
   public isGenDtlCollapsed: boolean = true;
   public isMlngAddrCollapsed: boolean = true;
@@ -119,9 +122,9 @@ export class SalesInvoiceComponent implements OnInit {
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
-  // public salesAccounts$: Observable<Select2OptionData[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of([]);
   public accountAsideMenuState: string = 'out';
+  public asideMenuStateForProductService: string = 'out';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
   public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
@@ -131,6 +134,18 @@ export class SalesInvoiceComponent implements OnInit {
   public showTaxBox: boolean = false;
   public stockList: IStockUnit[] = [];
   public allKindOfTxns: boolean = false;
+  public showCreateAcModal: boolean = false;
+  public showCreateGroupModal: boolean = false;
+  public createAcCategory: string = null;
+
+  // modals related
+  public modalConfig = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
@@ -152,6 +167,34 @@ export class SalesInvoiceComponent implements OnInit {
   public ngOnInit() {
 
     // get accounts and select only accounts which belong in sundrydebtors category
+    this.getAllFlattenAc();
+
+    // get account details and set it to local var
+    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
+    this.selectedAccountDetails$.subscribe(o => {
+      if (o) {
+        this.assignValuesInForm(o);
+      }
+    });
+
+    // get tax list and assign values to local vars
+    this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
+      if (o) {
+        this.companyTaxesList$ = Observable.of(o);
+        _.map(this.theadArrReadOnly, (item: IContentCommon) => {
+          // show tax label
+          if (item.label === 'Tax') {
+            item.display = true;
+          }
+          return item;
+        });
+        this.showTaxBox = true;
+      }
+    });
+
+  }
+
+  public getAllFlattenAc() {
     this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: INameUniqueName[] = [];
@@ -189,38 +232,6 @@ export class SalesInvoiceComponent implements OnInit {
         this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
       }
     });
-
-    // get account details and set it to local var
-    this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
-    this.selectedAccountDetails$.subscribe(o => {
-      if (o) {
-        this.assignValuesInForm(o);
-      }
-    });
-
-    // get tax list and assign values to local vars
-    this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
-      if (o) {
-        this.companyTaxesList$ = Observable.of(o);
-        _.map(this.theadArrReadOnly, (item: IContentCommon) => {
-          // show tax label
-          if (item.label === 'Tax') {
-            item.display = true;
-          }
-          return item;
-        });
-        this.showTaxBox = true;
-      }
-    });
-
-    // get discount list
-
-    // this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).subscribe((o: IFlattenGroupsAccountsDetail) => {
-    //   if (o) {
-    //     this.discountItem$ = Observable.of(o);
-    //   }
-    // });
-
   }
 
   public assignValuesInForm(data: AccountResponseV2) {
@@ -304,7 +315,17 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public onNoResultsClicked() {
-    console.log ('onNoResultsClicked open dialog');
+    this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
+    this.getAllFlattenAc();
+  }
+
+  public toggleBodyClass() {
+    if (this.asideMenuStateForProductService === 'in') {
+      document.querySelector('body').classList.add('fixed');
+    }else {
+      document.querySelector('body').classList.remove('fixed');
+    }
   }
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
@@ -319,6 +340,10 @@ export class SalesInvoiceComponent implements OnInit {
           txn.description = 'Entry generated by sales module';
           if (o.stocks && selectedAcc.additional.stock) {
             txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
+            // set rate auto
+            if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
+              txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
+            }
             let obj: IStockUnit = {
               id: selectedAcc.additional.stock.stockUnit.code,
               text: selectedAcc.additional.stock.stockUnit.name
@@ -457,6 +482,32 @@ export class SalesInvoiceComponent implements OnInit {
 
     // call taxableValue method
     txn.setAmount(entry);
+  }
+
+  // get action type from aside window and open respective modal
+  public getActionFromAside(e: any) {
+    if (e.type === 'groupModal') {
+      this.showCreateGroupModal = true;
+      // delay just for ng cause
+      setTimeout(() => {
+        this.createGroupModal.show();
+      }, 1000);
+    }else {
+      this.showCreateAcModal = true;
+      this.createAcCategory = e.type;
+      // delay just for ng cause
+      setTimeout(() => {
+        this.createAcModal.show();
+      }, 1000);
+    }
+  }
+
+  public closeCreateGroupModal(e: any) {
+    this.createGroupModal.hide();
+  }
+
+  public closeCreateAcModal() {
+    this.createAcModal.hide();
   }
 
 }
