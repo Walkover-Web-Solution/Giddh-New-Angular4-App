@@ -2,7 +2,7 @@ import { Configuration } from '../../app.constant';
 
 export const INVENTORY_API = {
   CREATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group', // post call
-  UPDATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniquename', // put call
+  UPDATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
   DELETE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
   STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stocks', // get call
   GROUPS_STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
