@@ -7,7 +7,7 @@ import {
   IGroupHistoryGroups,
   IRevenueChartClosingBalanceResponse
 } from '../../models/interfaces/dashboard.interface';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { RefreshBankAccountResponse, BankAccountsResponse } from '../../models/api-models/Dashboard';
 
