@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store/roots';
@@ -6,18 +6,15 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { IOption } from '../../../shared/theme/index';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
-import { ITransactionItem, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { TransactionVM } from '../../ledger.vm';
-import { last, filter, orderBy, reduce, sumBy } from 'lodash';
+import { ITransactionItem } from '../../../models/interfaces/ledger.interface';
+import { filter, findIndex, last, orderBy } from 'lodash';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
-import * as uuid from 'uuid';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
@@ -71,6 +68,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
   public discountArray = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
     private _ledgerAction: LedgerActions) {
@@ -105,7 +103,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   public ngOnInit() {
+    // TODO: save backup of response for future use
     // get Account name from url
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.accountUniqueName = params['accountUniqueName'];
@@ -127,7 +127,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
             }
             this.vm.getEntryTotal();
             this.vm.generateGrandTotal();
-            this.vm.getPanelAmount();
+            this.vm.generatePanelAmount();
           }
         });
       }
@@ -141,12 +141,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   public addBlankTrx(type: string = 'DEBIT', txn: ITransactionItem, event: Event) {
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem(type));
     }
   }
+
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
@@ -179,6 +181,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     }
   }
+
   public selectAccount(e, txn: ITransactionItem, select2Cmp: Select2Component) {
     this.vm.onTxnAmountChange();
     if (!e.value) {
@@ -229,28 +232,35 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       });
     });
   }
+
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }
+
   public hideDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.hide();
   }
+
   public showDeleteEntryModal() {
     this.deleteEntryModal.show();
   }
+
   public hideDeleteEntryModal() {
     this.deleteEntryModal.hide();
   }
+
   public deleteTrxEntry() {
     let entryName: string = null;
     this.entryUniqueName$.take(1).subscribe(en => entryName = en);
     this.store.dispatch(this._ledgerAction.deleteTrxEntry(this.accountUniqueName, entryName));
   }
+
   public deleteAttachedFile() {
     this.vm.selectedLedger.attachedFile = '';
     this.vm.selectedLedger.attachedFileName = '';
     this.hideDeleteAttachedFileModal();
   }
+
   public ngOnDestroy(): void {
     this.vm.selectedLedger = null;
     this.destroyed$.next(true);
