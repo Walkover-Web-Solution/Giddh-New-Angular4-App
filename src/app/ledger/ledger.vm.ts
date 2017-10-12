@@ -2,7 +2,7 @@ import { TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';

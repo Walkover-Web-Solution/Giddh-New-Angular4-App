@@ -2,7 +2,7 @@ import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../../../models/api-models/Search';
 import { AppState } from '../../../store/roots';
 import { isNullOrUndefined } from 'util';
