@@ -102,7 +102,6 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
   public addStockGroupFormSubmit() {
     this.isAddStockGroupInProcess = true;
     let formObj: StockGroupRequest = this.addStockGroupForm.value;
-    console.log ('finally', formObj);
     this._inventoryService.CreateStockGroup(formObj).takeUntil(this.destroyed$).subscribe((res) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
       if (data.status === 'success') {
