@@ -305,7 +305,6 @@
 
 <!-- open product service aside -->
 <aside-menu-product-service
-  [class]="asideMenuStateForProductService"
   [@slideInOut]="asideMenuStateForProductService"
   (closeAsideEvent)="onNoResultsClicked()"
   (animatePAside)="getActionFromAside($event)"
@@ -313,13 +312,15 @@
 
 
 <!-- create Group modal -->
-<div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
+<section *ngIf="showCreateGroupModal">
+  <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
+      </div>
     </div>
   </div>
-</div>
+</section>
 
 <!-- create Ac modal -->
 <section *ngIf="showCreateAcModal">

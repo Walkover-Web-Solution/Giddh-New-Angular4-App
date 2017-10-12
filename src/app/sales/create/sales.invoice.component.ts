@@ -124,7 +124,7 @@ export class SalesInvoiceComponent implements OnInit {
   public bankAccounts$: Observable<INameUniqueName[]>;
   public salesAccounts$: Observable<IOption[]> = Observable.of([]);
   public accountAsideMenuState: string = 'out';
-  public asideMenuStateForProductService: string = 'in';
+  public asideMenuStateForProductService: string = 'out';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
   public theadArrOpt: IContentCommon[] = THEAD_ARR_OPTIONAL;
   public theadArrReadOnly: IContentCommon[] = THEAD_ARR_READONLY;
@@ -135,6 +135,7 @@ export class SalesInvoiceComponent implements OnInit {
   public stockList: IStockUnit[] = [];
   public allKindOfTxns: boolean = false;
   public showCreateAcModal: boolean = false;
+  public showCreateGroupModal: boolean = false;
   public createAcCategory: string = null;
 
   // modals related
@@ -190,16 +191,6 @@ export class SalesInvoiceComponent implements OnInit {
         this.showTaxBox = true;
       }
     });
-
-    this.toggleBodyClass();
-
-    // get discount list
-
-    // this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$).subscribe((o: IFlattenGroupsAccountsDetail) => {
-    //   if (o) {
-    //     this.discountItem$ = Observable.of(o);
-    //   }
-    // });
 
   }
 
@@ -496,14 +487,18 @@ export class SalesInvoiceComponent implements OnInit {
   // get action type from aside window and open respective modal
   public getActionFromAside(e: any) {
     if (e.type === 'groupModal') {
-      this.createGroupModal.show();
+      this.showCreateGroupModal = true;
+      // delay just for ng cause
+      setTimeout(() => {
+        this.createGroupModal.show();
+      }, 1000);
     }else {
       this.showCreateAcModal = true;
       this.createAcCategory = e.type;
       // delay just for ng cause
       setTimeout(() => {
         this.createAcModal.show();
-      }, 1500);
+      }, 1000);
     }
   }
 
