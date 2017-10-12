@@ -10,6 +10,7 @@ import { DiscountListComponent } from './discount-list/discountList.component';
 import { AsideMenuProductServiceComponent } from './aside-menu-product-service/component';
 import { SalesAddStockComponent } from './aside-menu-product-service/components/create-stock/sales.create.stock.component';
 import { SalesAddStockGroupComponent } from './aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
+import { CreateAccountModalComponent } from './aside-menu-product-service/components/create-account-modal/create.account.modal';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -21,7 +22,8 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     AsideMenuProductServiceComponent,
     DiscountListComponent,
     SalesAddStockComponent,
-    SalesAddStockGroupComponent
+    SalesAddStockGroupComponent,
+    CreateAccountModalComponent
   ],
   imports: [
     FormsModule,
