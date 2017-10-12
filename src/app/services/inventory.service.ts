@@ -265,18 +265,13 @@ export class InventoryService {
    * Create Stock
    */
   public CreateStock(model: CreateStockRequest, stockGroupUniqueName: string): Observable<BaseResponse<StockDetailResponse, CreateStockRequest>> {
-    debugger
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = encodeURIComponent(s.session.companyUniqueName);
     });
-<<<<<<< HEAD
-    return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', this.companyUniqueName).replace(':stockGroupUniqueName', stockGroupUniqueName), model).map((res) => {
-=======
     return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)), model).map((res) => {
->>>>>>> master
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
       data.request = model;
       data.queryString = { stockGroupUniqueName };
