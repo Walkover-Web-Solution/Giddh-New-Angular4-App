@@ -9,7 +9,7 @@ import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import { Subject } from 'rxjs/Subject';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { cloneDeep, filter, find, orderBy } from 'lodash';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';

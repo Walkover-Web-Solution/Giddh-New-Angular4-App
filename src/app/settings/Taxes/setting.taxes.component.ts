@@ -8,7 +8,7 @@ import { CompanyService } from '../../services/companyService.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../services/actions/settings/taxes/settings.taxes.action';
