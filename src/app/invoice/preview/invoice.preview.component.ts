@@ -5,7 +5,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
