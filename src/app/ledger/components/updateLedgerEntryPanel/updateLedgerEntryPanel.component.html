@@ -48,11 +48,28 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                    <select2 [data]="vm.flatternAccountList4Select2 | async" #select2CmpDbt (click)="addBlankTrx('DEBIT', txn, $event)" (valueChanged)="selectAccount($event,txn, select2CmpDbt)"
-                      [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"></select2>
-                    <!-- <input type="text" [(ngModel)]="txn.particular.name" typeahead-append-to-body="true" uib-typeahead="accounts as accounts.name for accounts in fltAccntListPaginated | addStockinAccountList:ledgerCtrl.baseAccount | searchAccountInPaginated:$viewValue | limitTo: 25"
-                      typeahead-template-url="accountPopUp.html" typeahead-on-select="ledgerCtrl.isEntryAllowed(txn)" class="form-control"
-                     (click)="addBlankTrx('DEBIT', txn)" is-open="txn.isOpen"> -->
+                    <ng-select [options]="vm.flatternAccountList4Select | async" [allowClear]="true" (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn)"
+                      [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
+                      <ng-template #optionTemplate let-option="option">
+                          <ng-container *ngIf="!option.additional?.stock">
+                            <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                              <span class="account-list-item" style="display: block;font-size:14px">{{ option.label }}</span>
+                              <span class="account-list-item" style="display: block;font-size:12px">
+                                {{ option.additional?.uniqueName }}</span>
+                            </a>
+                          </ng-container>
+                          <ng-container *ngIf="option.additional?.stock">
+                            <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                <span class="account-list-item" style="display: block;font-size:14px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:12px">
+                                    {{ option.additional?.uniqueName }}</span>
+                                <span class="account-list-item" style="display: block;font-size:11px">
+                                    Stock: {{ option.additional?.stock.name }}
+                                </span>
+                              </a>
+                          </ng-container>
+                      </ng-template>
+                    </ng-select>
                   </td>
                   <td class="col-xs-3 pos-rel">
                     <input type="text" [(ngModel)]="txn.amount" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)"
@@ -98,11 +115,28 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                    <select2 [data]="vm.flatternAccountList4Select2 | async" #select2CmpCrd (click)="addBlankTrx('CREDIT', txn, $event)" (valueChanged)="selectAccount($event,txn, select2CmpCrd)"
-                      [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"></select2>
-                    <!-- <input class="form-control" type="text" [(ngModel)]="txn.particular.name" typeahead-append-to-body="true" uib-typeahead="accounts as accounts.name for accounts in fltAccntListPaginated  |addStockinAccountList:ledgerCtrl.baseAccount | searchAccountInPaginated:$viewValue | limitTo: 25"
-                      typeahead-template-url="accountPopUp.html" typeahead-on-select="ledgerCtrl.isEntryAllowed(txn)" (click)="addBlankTrx('CREDIT', txn)"
-                      is-open="txn.isOpen"> -->
+                      <ng-select [options]="vm.flatternAccountList4Select | async" [allowClear]="true" (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn)"
+                      [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
+                      <ng-template #optionTemplate let-option="option">
+                          <ng-container *ngIf="!option.additional?.stock">
+                            <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                              <span class="account-list-item" style="display: block;font-size:14px">{{ option.label }}</span>
+                              <span class="account-list-item" style="display: block;font-size:12px">
+                                {{ option.additional?.uniqueName }}</span>
+                            </a>
+                          </ng-container>
+                          <ng-container *ngIf="option.additional?.stock">
+                            <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                <span class="account-list-item" style="display: block;font-size:14px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:12px">
+                                    {{ option.additional.uniqueName }}</span>
+                                <span class="account-list-item" style="display: block;font-size:11px">
+                                    Stock: {{ option.additional?.stock.name }}
+                                </span>
+                              </a>
+                          </ng-container>
+                      </ng-template>
+                    </ng-select>
                   </td>
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" is-open="txn.isOpen"

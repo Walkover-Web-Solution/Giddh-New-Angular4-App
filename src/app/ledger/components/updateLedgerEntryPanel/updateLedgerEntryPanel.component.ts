@@ -19,6 +19,8 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { Select2Component } from '../../../shared/theme/select2/select2.component';
+import { IOption } from '../../../shared/theme/index';
+import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -31,6 +33,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @Output() public entryDeleted: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
+  @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
   public accountsOptions: Select2Options = {
@@ -71,7 +74,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
     private _ledgerAction: LedgerActions) {
-    this.vm = new UpdateLedgerVm(this._toasty);
+    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
     this.vm.selectedLedger = new LedgerResponse();
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
@@ -82,23 +85,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accountsArray: Select2OptionData[] = [];
+        let accountsArray: IOption[] = [];
         this.vm.flatternAccountList = data.body.results;
         data.body.results.map(acc => {
           if (acc.stocks) {
             acc.stocks.map(as => {
               accountsArray.push({
-                id: acc.uniqueName,
-                text: acc.name,
+                value: acc.uniqueName,
+                label: acc.name,
                 additional: Object.assign({}, acc, { stock: as })
               });
             });
-            accountsArray.push({ id: acc.uniqueName, text: acc.name, additional: acc });
+            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
           } else {
-            accountsArray.push({ id: acc.uniqueName, text: acc.name, additional: acc });
+            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
           }
         });
-        this.vm.flatternAccountList4Select2 = Observable.of(orderBy(accountsArray, 'text'));
+        this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
       }
     });
   }
@@ -182,7 +185,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  public selectAccount(e, txn: ITransactionItem, select2Cmp: Select2Component) {
+  public selectAccount(e: IOption, txn: ITransactionItem) {
     this.vm.onTxnAmountChange();
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
@@ -198,41 +201,58 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         txn.particular.uniqueName = null;
         txn.particular.name = null;
         this.selectedAccount = null;
-        select2Cmp.writeValue(null);
         return;
       }
     }
-    this.vm.isDisabledTaxesAndDiscounts = this.vm.isThereIncomeOrExpenseEntry();
-    this.vm.flatternAccountList4Select2.take(1).subscribe(data => {
-      data.map(fa => {
-        // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-        if (fa.id === e.value) {
 
-          // check if ther's multiple stock entry
-          if (fa.additional.stock) {
-            if (this.vm.isThereStockEntry()) {
-              txn.particular.uniqueName = null;
-              txn.particular.name = null;
-              this.selectedAccount = null;
-              select2Cmp.writeValue(null);
-              this._toasty.warningToast('you can\'t add multiple stock entry');
-            } else {
-              this.selectedAccount = fa.additional;
-            }
-          } else {
-            this.selectedAccount = fa.additional;
-          }
-          // reset taxes and discount on selected account change
-          // txn.tax = 0;
-          // txn.taxes = [];
-          // txn.discount = 0;
-          // txn.discounts = [];
-          return;
-        }
-      });
-    });
+    if (e.additional.stock) {
+      if (this.vm.isThereStockEntry()) {
+        txn.particular.uniqueName = null;
+        txn.particular.name = null;
+        this.selectedAccount = null;
+        this._toasty.warningToast('you can\'t add multiple stock entry');
+      } else {
+        this.selectedAccount = e.additional;
+      }
+    } else {
+      this.selectedAccount = e.additional;
+    }
+    // this.vm.flatternAccountList4Select.take(1).subscribe(data => {
+    //   data.map(fa => {
+    //     // change (e.value[0]) to e.value to use in single select for ledger transaction entry
+    //     if (fa.value === e.value) {
+
+    //       // check if ther's multiple stock entry
+    //       if (fa.additional.stock) {
+    //         if (this.vm.isThereStockEntry()) {
+    //           txn.particular.uniqueName = null;
+    //           txn.particular.name = null;
+    //           this.selectedAccount = null;
+    //           this._toasty.warningToast('you can\'t add multiple stock entry');
+    //         } else {
+    //           this.selectedAccount = fa.additional;
+    //         }
+    //       } else {
+    //         this.selectedAccount = fa.additional;
+    //       }
+    //       // reset taxes and discount on selected account change
+    //       // txn.tax = 0;
+    //       // txn.taxes = [];
+    //       // txn.discount = 0;
+    //       // txn.discounts = [];
+    //       return;
+    //     }
+    //   });
+    // });
   }
-
+  public deSelectAccount(e: IOption, txn: ITransactionItem) {
+    this.vm.discountArray.map(d => {
+      if (d.particular === e.value) {
+        d.amount = 0;
+      }
+    });
+    this.discountComponent.change();
+  }
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }

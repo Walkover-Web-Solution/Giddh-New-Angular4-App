@@ -7,11 +7,11 @@ import { IOption } from '../../../shared/theme/index';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
+import { UpdateLedgerDiscountData, UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
-  public flatternAccountList4Select2: Observable<Select2OptionData[]>;
+  public flatternAccountList4Select: Observable<IOption[]>;
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
   public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
@@ -20,7 +20,7 @@ export class UpdateLedgerVm {
   public voucherTypeList: IOption[];
   public isDisabledTaxesAndDiscounts: boolean = false;
   public discountArray: ILedgerDiscount[] = [];
-  constructor(private _toasty: ToasterService) {
+  constructor(private _toasty: ToasterService, private discountComponent: UpdateLedgerDiscountComponent) {
     this.voucherTypeList = [{
       label: 'Sales',
       value: 'sal'
@@ -75,7 +75,7 @@ export class UpdateLedgerVm {
               let trx: ITransactionItem = this.blankTransactionItem('DEBIT');
               let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
               let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
-              let index = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '');
+              let index = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '' || undefined || null);
 
               trx.amount = dx.amount;
               trx.particular = dx.particular;
