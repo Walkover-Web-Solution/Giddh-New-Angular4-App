@@ -18,6 +18,7 @@ import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWit
 import { GroupService } from '../../group.service';
 import { GroupsWithStocksHierarchyMin } from '../../../models/api-models/GroupsWithStocks';
 import { InventoryService } from '../../inventory.service';
+import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 
 @Injectable()
 export class SalesActions {
@@ -138,6 +139,13 @@ export class SalesActions {
   public getFlattenAcOfSales(value: { groupUniqueNames: string[] }): Action {
     return {
       type: SALES_ACTIONS.GET_SALES_AC_LIST,
+      payload: value
+    };
+  }
+
+  public createStockGroupSuccess(value: INameUniqueName): Action {
+    return {
+      type: SALES_ACTIONS.STOCK_GROUP_SUCCESS,
       payload: value
     };
   }
