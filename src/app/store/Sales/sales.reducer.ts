@@ -5,6 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../shared/theme/index';
+import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
 export interface SalesState {
   invObj: any;
@@ -12,13 +13,15 @@ export interface SalesState {
   hierarchicalStockGroups: IOption[];
   purchaseAcList: IOption[];
   salesAcList: IOption[];
+  newlyCreatedGroup: INameUniqueName;
 }
 const initialState = {
   invObj: null,
   acDtl: null,
   hierarchicalStockGroups: null,
   purchaseAcList: null,
-  salesAcList: null
+  salesAcList: null,
+  newlyCreatedGroup: null
 };
 
 export function salesReducer(state = initialState, action: Action): SalesState {
@@ -56,6 +59,10 @@ export function salesReducer(state = initialState, action: Action): SalesState {
         });
       }
       return Object.assign({}, state, { salesAcList });
+    }
+    case SALES_ACTIONS.STOCK_GROUP_SUCCESS: {
+      let data = action.payload;
+      return Object.assign({}, state, { newlyCreatedGroup: data });
     }
     default: {
       return state;

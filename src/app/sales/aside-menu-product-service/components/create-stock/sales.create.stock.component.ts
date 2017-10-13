@@ -24,6 +24,7 @@ import { IOption } from '../../../../shared/theme/index';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 
 @Component({
   selector: 'sales-create-stock',
@@ -46,6 +47,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public salesAccountsDropDown$: Observable<IOption[]>;
   public isStockNameAvailable$: Observable<boolean>;
   public stockCreationInProcess: boolean = false;
+  public newlyGroupCreated$: Observable<INameUniqueName>;
 
   // private
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -80,6 +82,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     });
 
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).takeUntil(this.destroyed$);
+    this.newlyGroupCreated$ = this.store.select(state => state.sales.newlyCreatedGroup).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -111,6 +114,13 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
     this.purchaseAccountsDropDown$ = this.store.select(state => state.sales.purchaseAcList).takeUntil(this.destroyed$);
     this.salesAccountsDropDown$ = this.store.select(state => state.sales.salesAcList).takeUntil(this.destroyed$);
+
+    // listen for newly created group
+    this.newlyGroupCreated$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
+      if (o) {
+        this.selectedGroupUniqueName = o.uniqueName;
+      }
+    });
 
   }
 
