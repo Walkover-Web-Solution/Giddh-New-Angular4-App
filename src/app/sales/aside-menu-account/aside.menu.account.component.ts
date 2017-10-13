@@ -22,7 +22,10 @@ import { AccountsAction } from '../../services/actions/accounts.actions';
       width: 400px;
       z-index: 1045;
     }
-    .aside-pane > #close{
+    #close{
+      display: none;
+    }
+    :host.in  #close{
       display: block;
       position: fixed;
       left: -42px;
