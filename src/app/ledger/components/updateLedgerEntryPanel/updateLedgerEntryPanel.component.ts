@@ -66,7 +66,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public uploadInput: EventEmitter<UploadInput>;
   public selectedAccount: IFlattenAccountsResultItem = null;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
-  public discountArray = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
@@ -120,6 +119,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
           if (resp.status === 'success') {
             this.vm.selectedLedger = resp.body;
+            this.vm.selectedLedgerBackup = resp.body;
             if (this.vm.selectedLedger.total.type === 'DEBIT') {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
             } else {

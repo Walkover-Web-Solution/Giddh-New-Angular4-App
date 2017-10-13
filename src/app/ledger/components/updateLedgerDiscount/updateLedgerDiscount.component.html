@@ -1,0 +1,21 @@
+<span (blur)="hideDiscountMenu()" >
+  <label>Discount</label>
+  <a (click)="discountMenu = !discountMenu" id="discount">
+      <input type="number" name="" class="form-control cursor-pointer"
+             [(ngModel)]="discountTotal" disabled="disabled"/>
+  </a>
+  <ul class="my-dropdown-menu pd" *ngIf="discountMenu" (click)="$event.stopPropagation()">
+    <li>
+        <table>
+            <tr
+              *ngFor="let discount of discountAccountsDetails;">
+                <td class="pdL w100">{{ discount.name }}</td>
+                <td class="pdR pdT w50">
+                    <input type="number" class="form-control"
+                           (change)="change()" [(ngModel)]="discount.amount"/>
+                </td>
+            </tr>
+        </table>
+    </li>
+</ul>
+</span>
