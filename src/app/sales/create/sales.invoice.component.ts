@@ -137,6 +137,7 @@ export class SalesInvoiceComponent implements OnInit {
   public showCreateAcModal: boolean = false;
   public showCreateGroupModal: boolean = false;
   public createAcCategory: string = null;
+  public newlyCreatedAc$: Observable<INameUniqueName>;
 
   // modals related
   public modalConfig = {
@@ -162,6 +163,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
+    this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -189,6 +191,14 @@ export class SalesInvoiceComponent implements OnInit {
           return item;
         });
         this.showTaxBox = true;
+      }
+    });
+
+    // listen for new add account utils
+    this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
+      if (o) {
+        this.invFormData.customerName = o.name;
+        this.getAccountDetails(o.uniqueName);
       }
     });
 
@@ -321,7 +331,7 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public toggleBodyClass() {
-    if (this.asideMenuStateForProductService === 'in') {
+    if (this.asideMenuStateForProductService === 'in' || this.accountAsideMenuState === 'in') {
       document.querySelector('body').classList.add('fixed');
     }else {
       document.querySelector('body').classList.remove('fixed');
@@ -422,6 +432,7 @@ export class SalesInvoiceComponent implements OnInit {
       event.preventDefault();
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
+    this.toggleBodyClass();
   }
 
   public addBlankRow(txn: SalesTransactionItemClass) {
