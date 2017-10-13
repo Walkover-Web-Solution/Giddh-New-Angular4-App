@@ -82,7 +82,11 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
       if (o) {
         this.addAcFormReset();
         this.closeCreateAcModal();
-        this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: [this.selectedGroup]}));
+        if (this.gType === 'Sales') {
+          this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
+        } else if (this.gType === 'Purchase') {
+          this._store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
+        }
       }
     });
 
