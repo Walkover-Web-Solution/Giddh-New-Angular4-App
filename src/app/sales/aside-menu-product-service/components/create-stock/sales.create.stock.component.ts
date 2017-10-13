@@ -48,6 +48,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public isStockNameAvailable$: Observable<boolean>;
   public stockCreationInProcess: boolean = false;
   public newlyGroupCreated$: Observable<INameUniqueName>;
+  public newlyCreatedAc$: Observable<INameUniqueName>;
+  public modalType: string;
 
   // private
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -83,6 +85,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).takeUntil(this.destroyed$);
     this.newlyGroupCreated$ = this.store.select(state => state.sales.newlyCreatedGroup).takeUntil(this.destroyed$);
+    this.newlyCreatedAc$ = this.store.select(state => state.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -119,6 +122,17 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     this.newlyGroupCreated$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
       if (o) {
         this.selectedGroupUniqueName = o.uniqueName;
+      }
+    });
+
+    // listen for new add account utils
+    this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
+      if (o) {
+        if (this.modalType === 'Purchase') {
+          this.addStockForm.patchValue({ purchaseAccountUniqueName: o.uniqueName });
+        } else if (this.modalType === 'Sales') {
+          this.addStockForm.patchValue({ salesAccountUniqueName: o.uniqueName });
+        }
       }
     });
 
@@ -245,6 +259,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
    * Accounts related funcs
    */
   public onNoResultsOfAc(val: string) {
+    this.modalType = val;
     this.animateAside.emit({type: val});
   }
 
