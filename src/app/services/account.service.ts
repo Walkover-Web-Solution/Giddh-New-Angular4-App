@@ -300,4 +300,23 @@ export class AccountService implements OnInit {
       })
       .catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e, model, { groupUniqueName }));
   }
+
+  public UpdateAccountV2(model: AccountRequestV2, reqObj: { groupUniqueName: string, accountUniqueName: string }): Observable<BaseResponse<AccountResponseV2, AccountRequestV2>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.put(ACCOUNTS_API_V2.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':groupUniqueName', encodeURIComponent(reqObj.groupUniqueName))
+      .replace(':accountUniqueName', reqObj.accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<AccountResponseV2, AccountRequestV2> = res.json();
+        data.request = model;
+        data.queryString = reqObj;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<AccountResponseV2, AccountRequestV2>(e));
+  }
 }

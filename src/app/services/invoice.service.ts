@@ -6,7 +6,7 @@ import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { INVOICE_API } from './apiurls/invoice.api';
+import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
 import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
@@ -115,6 +115,47 @@ export class InvoiceService {
       .catch((e) => this.errorHandler.HandleCatch<string, GenerateBulkInvoiceRequest[]>(e, reqObj, model));
   }
 
+  /**
+   * PREVIEW OF GENERATED INVOICE
+   * URL:: v2/company/{companyUniqueName}/accounts/{accountUniqueName}/invoices/{invoiceNumber}/preview
+   */
+  public GetGeneratedInvoicePreview(accountUniqueName: string, invoiceNumber: string): Observable<BaseResponse<PreviewInvoiceResponseClass, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVOICE_API_2.GENERATED_INVOICE_PREVIEW.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':invoiceNumber', invoiceNumber))
+      .map((res) => {
+        let data: BaseResponse<PreviewInvoiceResponseClass, string> = res.json();
+        data.request = invoiceNumber;
+        data.queryString = { invoiceNumber, accountUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<PreviewInvoiceResponseClass, string>(e, invoiceNumber));
+  }
+
+  /**
+   * Update Generated Invoice
+   */
+  public UpdateGeneratedInvoice(accountUniqueName: string, model: GenerateInvoiceRequestClass): Observable<BaseResponse<string, GenerateInvoiceRequestClass>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.put(INVOICE_API_2.UPDATE_GENERATED_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      .map((res) => {
+        let data: BaseResponse<string, GenerateInvoiceRequestClass> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, GenerateInvoiceRequestClass>(e, model));
+  }
+
   /*
   * Preview Invoice
   * method: 'POST'
@@ -128,7 +169,7 @@ export class InvoiceService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(INVOICE_API.PREVIEW_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.post(INVOICE_API_2.PREVIEW_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
         let data: BaseResponse<PreviewInvoiceResponseClass, PreviewInvoiceRequest> = res.json();
         data.request = model;
@@ -147,7 +188,7 @@ export class InvoiceService {
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(INVOICE_API.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+    return this._http.post(INVOICE_API_2.GENERATE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
       .map((res) => {
         let data: BaseResponse<GenerateInvoiceRequestClass, string> = res.json();
         data.request = '';
@@ -167,7 +208,7 @@ export class InvoiceService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVOICE_API.GET_INVOICE_TEMPLATE_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
+    return this._http.get(INVOICE_API_2.GET_INVOICE_TEMPLATE_DETAILS.replace(':companyUniqueName', this.companyUniqueName).replace(':templateUniqueName', templateUniqueName))
       .map((res) => {
         let data: BaseResponse<InvoiceTemplateDetailsResponse, string> = res.json();
         data.request = templateUniqueName;
@@ -433,7 +474,7 @@ export class InvoiceService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(INVOICE_API.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
+    return this._http.post(INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.queryString =  { accountUniqueName, dataToSend };
       return data;
@@ -452,7 +493,7 @@ export class InvoiceService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.post(INVOICE_API.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
+    return this._http.post(INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.queryString =  { accountUniqueName, dataToSend };
       return data;

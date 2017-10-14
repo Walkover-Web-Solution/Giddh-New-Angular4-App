@@ -8,7 +8,7 @@ import { HomeActions } from '../../../services/actions/home/home.actions';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { isNullOrUndefined } from 'util';
-import * as  moment from 'moment';
+import * as  moment from 'moment/moment';
 import * as _ from 'lodash';
 import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
 import { CHART_CALLED_FROM, API_TO_CALL } from '../../../services/actions/home/home.const';

@@ -6,7 +6,9 @@ import {
   VerifyEmailResponseModel,
   VerifyMobileModel,
   VerifyMobileResponseModel,
-  LinkedInRequestModel
+  LinkedInRequestModel,
+  SignupWithMobile,
+  UserDetails
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
@@ -46,7 +48,10 @@ export interface SessionState {
   companies: ComapnyResponse[];
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
+  isCompanyCreationSuccess: boolean;
   isCompanyCreated: boolean;
+  isAddNewMobileNoInProcess: boolean;
+  isMobileNoVerifiedSuccess: boolean;
 }
 
 /**
@@ -77,7 +82,10 @@ const sessionInitialState: SessionState = {
   companies: [],
   isCompanyCreated: false,
   isCompanyCreationInProcess: false,
-  isRefreshing: false
+  isCompanyCreationSuccess: false,
+  isRefreshing: false,
+  isAddNewMobileNoInProcess: false,
+  isMobileNoVerifiedSuccess: false
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -306,24 +314,25 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return newState;
     }
     case CompanyActions.CREATE_COMPANY:
-      return Object.assign({}, state, { isCompanyCreationInProcess: true });
+      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false });
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
         let newState = _.cloneDeep(state);
         newState.isCompanyCreationInProcess = false;
+        newState.isCompanyCreationSuccess = true;
         newState.isCompanyCreated = true;
         newState.companies.push(companyResp.body);
-        return newState;
+        return Object.assign({}, state, newState);
       }
       return state;
     }
     case CompanyActions.REFRESH_COMPANIES:
       return Object.assign({}, state, {
         isRefreshing: true,
-        isCompanyCreated: false
+        // isCompanyCreated: state.isCompanyCreated
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
       let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
@@ -348,6 +357,43 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         userLoginState: action.payload
       });
     }
+    case LoginActions.AddNewMobileNo:
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: true,
+        isMobileNoVerifiedSuccess: false
+      };
+    case LoginActions.AddNewMobileNoResponse:
+      let resp: BaseResponse<string, SignupWithMobile> = action.payload;
+      if (resp.status === 'success') {
+        return {
+          ...state,
+          user: Object.assign({}, state.user, {
+            contactNumber: resp.request.mobileNumber,
+            countryCode: resp.request.countryCode
+          }),
+          isAddNewMobileNoInProcess: false,
+          isMobileNoVerifiedSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isAddNewMobileNoInProcess: false,
+        isMobileNoVerifiedSuccess: false
+      };
+    case LoginActions.FetchUserDetailsResponse:
+      let userResp: BaseResponse<UserDetails, string> = action.payload;
+      if (userResp.status === 'success') {
+        return {
+          ...state,
+          user: {
+            ...state.user,
+            user: userResp.body
+          }
+        };
+      } else {
+        return state;
+      }
     default:
       return state;
   }

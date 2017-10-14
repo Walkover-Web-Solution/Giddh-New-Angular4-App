@@ -25,6 +25,7 @@ import {
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { of } from 'rxjs/observable/of';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
+import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -62,6 +63,7 @@ export interface CurrentGroupAndAccountState {
   updateAccountInProcess?: boolean;
   updateAccountIsSuccess?: boolean;
   moveAccountSuccess?: boolean;
+  newlyCreatedAccount: INameUniqueName;
 }
 
 const prepare = (mockData: GroupsWithAccountsResponse[]): GroupsWithAccountsResponse[] => {
@@ -109,13 +111,13 @@ const initialState: CurrentGroupAndAccountState = {
   activeAccount: null,
   fetchingGrpUniqueName: false,
   fetchingAccUniqueName: false,
-  flattenGroupsAccounts: []
+  flattenGroupsAccounts: [],
+  newlyCreatedAccount: null
 };
 
 export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
   switch (action.type) {
     case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
-
       return Object.assign({}, state, {
         showAddNew: true,
         showAddNewAccount: false,
@@ -445,7 +447,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         isUpdateGroupSuccess: false
       });
     case AccountsAction.GET_ACCOUNT_DETAILS_RESPONSE:
-      let activeAccount: BaseResponse<AccountResponse, string> = action.payload;
+      let activeAccount: BaseResponse<AccountResponseV2, string> = action.payload;
       if (activeAccount.status === 'success') {
         return Object.assign({}, state, {
           activeAccount: action.payload.body,
@@ -453,10 +455,10 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
-    case AccountsAction.UPDATE_ACCOUNT:
+    case AccountsAction.UPDATE_ACCOUNTV2:
       return Object.assign({}, state, { updateAccountInProcess: true, updateAccountIsSuccess: false });
-    case AccountsAction.UPDATE_ACCOUNT_RESPONSE:
-      let updatedAccount: BaseResponse<AccountResponse, AccountRequest> = action.payload;
+    case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2:
+      let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
       if (updatedAccount.status === 'success') {
         return Object.assign({}, state, {
           activeAccount: action.payload.body,
@@ -550,7 +552,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         });
       }
       return state;
-    case AccountsAction.MOVE_ACCOUNT_RESPONSE:
+    case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
       let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
       if (mAcc.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
@@ -571,22 +573,58 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         return Object.assign({}, state, {
           groupswithaccounts: groupArray,
           moveAccountSuccess: true,
-          activeAccount: null
+          activeAccount: null,
+          showEditGroup: true,
+          showEditAccount: false,
+          showAddNewAccount: false
         });
       }
       return Object.assign({}, state, {
         moveAccountSuccess: false
       });
+    }
+
     case AccountsAction.CREATE_ACCOUNTV2:
+    case AccountsAction.CREATE_ACCOUNT: {
       return Object.assign({}, state, { createAccountInProcess: true });
-    case AccountsAction.CREATE_ACCOUNT_RESPONSEV2:
+    }
+
+    case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
       let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
       if (accountData.status === 'success') {
-        return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: true });
+        let o: INameUniqueName = {
+          name: accountData.body.name,
+          uniqueName: accountData.body.uniqueName
+        };
+        return Object.assign({}, state, {
+          createAccountInProcess: false,
+          createAccountIsSuccess: true,
+          newlyCreatedAccount: o
+        });
+      }else {
+        return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: false, newlyCreatedAccount: null });
       }
-      return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: false });
-    default:
+    }
+
+    case AccountsAction.CREATE_ACCOUNT_RESPONSE: {
+      let accountData: BaseResponse<AccountResponse, AccountRequest> = action.payload;
+      if (accountData.status === 'success') {
+        let o: INameUniqueName = {
+          name: accountData.body.name,
+          uniqueName: accountData.body.uniqueName
+        };
+        return Object.assign({}, state, {
+          createAccountInProcess: false,
+          createAccountIsSuccess: true,
+          newlyCreatedAccount: o
+        });
+      }else {
+        return Object.assign({}, state, { createAccountInProcess: false, createAccountIsSuccess: false, newlyCreatedAccount: null });
+      }
+    }
+    default: {
       return state;
+    }
   }
 };
 

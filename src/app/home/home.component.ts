@@ -12,7 +12,7 @@ import { StateDetailsRequest, ComapnyResponse, ActiveFinancialYear } from '../mo
 import { CompanyActions } from '../services/actions/company.actions';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
 import { Observable } from 'rxjs/Observable';
-import moment from 'moment';
+import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { CHART_CALLED_FROM, API_TO_CALL } from '../services/actions/home/home.const';
 import { HomeActions } from '../services/actions/home/home.actions';
@@ -163,6 +163,7 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public ngOnDestroy() {
+    this.store.dispatch(this._homeActions.ResetHomeState());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }

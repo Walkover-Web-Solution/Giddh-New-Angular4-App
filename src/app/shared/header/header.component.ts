@@ -53,9 +53,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
   public isCompanyRefreshInProcess$: Observable<boolean>;
+  public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public companies$: Observable<ComapnyResponse[]>;
   public selectedCompany: Observable<ComapnyResponse>;
+  public selectedCompanyCountry: string;
   public markForDeleteCompany: ComapnyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
@@ -92,8 +94,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return state.session.isRefreshing;
     }).takeUntil(this.destroyed$);
 
+    this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).takeUntil(this.destroyed$);
     this.companies$ = this.store.select(state => {
-      return _.orderBy(state.session.companies, 'name');
+      if (state.session.companies && state.session.companies.length) {
+        return _.orderBy(state.session.companies, 'name');
+      }
     }).takeUntil(this.destroyed$);
 
     this.selectedCompany = this.store.select(state => {
@@ -112,6 +117,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       } else {
         this.userIsSuperUser = false;
       }
+      this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
@@ -149,6 +155,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
       }
     });
+    this.isCompanyCreationSuccess$.subscribe(created => {
+      if (created) {
+        this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -164,6 +175,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     if (this.route.snapshot.url.toString() === 'new-user') {
       this.showAddCompanyModal();
     }
+    this.store.dispatch(this.loginAction.FetchUserDetails());
   }
 
   public ngAfterViewChecked() {

@@ -2,7 +2,7 @@ import { TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -10,6 +10,7 @@ import * as uuid from 'uuid';
 import { cloneDeep } from 'lodash';
 import { createAutoCorrectedDatePipe } from '../shared/helpers/autoCorrectedDatePipe';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
+import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 
 export class LedgerVM {
   public groupsArray: Observable<GroupsWithAccountsResponse[]>;
@@ -90,7 +91,7 @@ export class LedgerVM {
     requestObj = cloneDeep(this.blankLedger);
 
     // filter transactions which have selected account
-    requestObj.transactions = requestObj.transactions.filter(bl => bl.particular);
+    requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
 
     // map over transactions array
     requestObj.transactions.map((bl: any) => {
@@ -100,6 +101,7 @@ export class LedgerVM {
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount > 0);
+      bl.inventory = bl.inventory;
       // delete local id
       delete bl['id'];
     });
@@ -156,4 +158,18 @@ export class TransactionVM {
   public discounts: ILedgerDiscount[];
   public discount?: number;
   public selectedAccount?: IFlattenAccountsResultItem | any;
+  public unitRate?: IInventoryUnit[];
+  public isStock?: boolean = false;
+  public inventory?: IInventory;
+}
+
+export interface IInventory {
+  unit: IInventoryUnit;
+  quantity: number;
+  stock: INameUniqueName;
+}
+export interface IInventoryUnit {
+  stockUnitCode: string;
+  code: string;
+  rate: number;
 }

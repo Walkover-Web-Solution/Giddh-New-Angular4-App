@@ -20,7 +20,7 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Name</label><br>
-                <input type="text" placeholder="Unique Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control" />
+                <input type="text" placeholder="Name" [(ngModel)]="newTaxObj.name" name="name" class="form-control" />
             </div>
             <div class="form-group col-xs-3">
                 <label>Linked Account</label><br>
@@ -113,14 +113,24 @@
                         <tr *ngFor="let tax of availableTaxes; let i = index">
                             <td>{{i+1}}</td>
                             <td *ngIf="!taxToEdit[i]">{{tax.taxNumber}}</td>
-                            <td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>
+                            <!--<td *ngIf="taxToEdit[i]"><input type="text" class="form-control" [(ngModel)]="availableTaxes[i].taxNumber" name="tn{{i}}"></td>-->
+                            <td *ngIf="taxToEdit[i]">{{tax.taxNumber}}</td>
                             <td *ngIf="!taxToEdit[i]">{{tax.name}}</td>
                             <td *ngIf="taxToEdit[i]">
-                                <input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">
+                                <!--<input type="text" class="form-control" disabled [(value)]="availableTaxes[i].uniqueName">-->
+                                {{tax.name}}
                             </td>
                             <td *ngIf="!tax.accounts[0] && !taxToEdit[i]">--</td>
-                            <td *ngIf="tax.accounts[0] && !taxToEdit[i]">{{tax.accounts[0].name}}</td>
-                            <td *ngIf="tax.accounts[0] && taxToEdit[i]"> <input class="form-control" type="text" [(ngModel)]="availableTaxes[i].accounts[0].name" name="acc_0_name{{i}}"></td>
+                            <td *ngIf="tax.accounts[0] && !taxToEdit[i]">
+                                <p *ngFor="let acc of tax.accounts;">
+                                    {{acc.name}}
+                                </p>
+                            </td>
+                            <td *ngIf="tax.accounts[0] && taxToEdit[i]"> 
+                                <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
+                                    <input [disabled]="true" class="form-control" type="text" [(ngModel)]="acc.name" name="acc_0_name{{i}}_{{ind}}">
+                                </p>
+                            </td>
                             <td *ngIf="!tax.taxDetail || !tax.taxDetail.length">--</td>
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && !taxToEdit[i]">
                                 <div *ngFor="let t of tax.taxDetail">
@@ -146,10 +156,12 @@
                             <td *ngIf="tax.taxDetail && tax.taxDetail.length && taxToEdit[i]">
                                 <div class="input-group mrB1" *ngFor="let t of tax.taxDetail; let j = index; let last = last">
                                     <input type="text" class="form-control" [(ngModel)]="t.taxValue" name="tax_taxValue_{{i}}_{{j}}">
-                                    <span class="input-group-addon cursor-pointer">
-                              <i *ngIf="!last" (click)="removeDateAndPercentage(i, j)" class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
-                              <i *ngIf="last" (click)="addMoreDateAndPercentage(i)" class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
-                              </span>
+                                    <span *ngIf="!last" (click)="removeDateAndPercentage(i, j)" class="input-group-addon cursor-pointer">
+                                        <i class="fa fa-minus cursor-pointer" aria-hidden="true"></i>
+                                    </span>
+                                    <span *ngIf="last" (click)="addMoreDateAndPercentage(i)" class="input-group-addon cursor-pointer">
+                                        <i class="fa fa-plus cursor-pointer" aria-hidden="true"></i>
+                                    </span>
                                 </div>
                             </td>
                             <!--<td *ngIf="!tax.taxDetail[0] && !taxToEdit[i]">--</td>
@@ -194,10 +206,10 @@
                                 </div>
                             </td>
                             <td class="text-center icon-btn">
-                                <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="taxToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true"></i></button>
-                                <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax.uniqueName);"><i class="fa fa-trash" aria-hidden="true"></i></button>
-                                <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="updateTax(i); taxToEdit[i] = false"><i class="fa fa-check" aria-hidden="true"></i></button>
-                                <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="reloadTaxList(); taxToEdit[i] = false"><i class="fa fa-times" aria-hidden="true"></i></button>
+                                <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="taxToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true" tooltip="Edit"></i></button>
+                                <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax.uniqueName);"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
+                                <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="updateTax(i); taxToEdit[i] = false"><i class="fa fa-check" aria-hidden="true" tooltip="Save"></i></button>
+                                <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="reloadTaxList(); taxToEdit[i] = false"><i class="fa fa-times" aria-hidden="true" tooltip="Reset"></i></button>
                             </td>
                         </tr>
                     </tbody>

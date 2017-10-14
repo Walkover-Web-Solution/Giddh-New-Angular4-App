@@ -7,7 +7,7 @@ import {
   IGroupHistoryGroups,
   IRevenueChartClosingBalanceResponse
 } from '../../models/interfaces/dashboard.interface';
-import moment from 'moment';
+import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { RefreshBankAccountResponse, BankAccountsResponse } from '../../models/api-models/Dashboard';
 
@@ -556,6 +556,9 @@ export function homeReducer(state = initialState, action: Action): HomeState {
     }
     case HOME.BANK_ACCOUNTS.RESET_REFRESH_BANK_ACCOUNT_RESPONSE: {
       return Object.assign({}, state, { isRefereshBankAccount: false, RefereshBankAccount: null });
+    }
+    case HOME.RESET_HOME_STATE: {
+      return initialState;
     }
     // End Bank API
     // case HOME.NETWORTH_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {

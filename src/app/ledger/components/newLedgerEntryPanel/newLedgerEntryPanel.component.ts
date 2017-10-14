@@ -11,7 +11,10 @@ import {
   SimpleChanges,
   ViewChild,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  DoCheck,
+  KeyValueDiffers,
+  KeyValueDiffer
 } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store/roots';
@@ -33,18 +36,26 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { find } from 'lodash';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-
+import * as moment from 'moment/moment';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 @Component({
   selector: 'new-ledger-entry-panel',
   templateUrl: 'newLedgerEntryPanel.component.html',
   styleUrls: ['./newLedgerEntryPanel.component.css']
 })
 
-export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
+export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit, DoCheck {
   @Input() public blankLedger: BlankLedgerVM;
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
+  public options: Select2Options = {
+    multiple: false,
+    width: '60px',
+    placeholder: '',
+    allowClear: false
+  };
+  public selectedValue: any;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
@@ -56,7 +67,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public uploadInput: EventEmitter<UploadInput>;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
-  public authKey$: Observable<string>;
+  public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
 
   public voucherDropDownOptions: Select2Options = {
@@ -77,10 +88,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     private _ledgerActions: LedgerActions,
     private _companyActions: CompanyActions,
     private cdRef: ChangeDetectorRef,
-    private _toasty: ToasterService) {
+    private _toasty: ToasterService,
+    private _differs: KeyValueDiffers) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
-    this.authKey$ = this.store.select(p => p.session.user.authKey).takeUntil(this.destroyed$);
+    this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
@@ -116,8 +128,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['needToReCalculate'] && changes['needToReCalculate'].currentValue) {
-    //   this.amountChanged();
+    // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
+    //   // this.amountChanged();
+    //   if (moment(changes['blankLedger'].currentValue.entryDate, 'DD-MM-yyyy').isValid()) {
+    //     this.taxControll.date = changes['blankLedger'].currentValue.entryDate;
+    //   }
     // }
   }
 
@@ -133,6 +148,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.cdRef.detectChanges();
   }
 
+  public ngDoCheck() {
+    // if (this._differs.find(''))
+    // if (this.currentTxn.selectedAccount) {
+    //   debugger
+    //   if (this.currentTxn.selectedAccount.stock) {
+    //     debugger
+    //   }
+    // }
+  }
   /**
    *
    * @param {string} type
@@ -144,11 +168,26 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateTotal() {
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn.inventory.unit.rate) {
+          this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+        }
+      }
+    }
     let total = this.currentTxn.amount - this.currentTxn.discount;
     this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
   }
 
   public amountChanged() {
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
+        if (this.currentTxn.inventory.unit.rate) {
+          this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+        }
+      }
+    }
+
     if (this.isAmountFirst || this.isTotalFirts) {
       return;
     } else {
@@ -157,10 +196,30 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
+  public changePrice(val: string) {
+    this.currentTxn.inventory.unit.rate = Number(val);
+    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
+    // this.amountChanged();
+    this.calculateTotal();
+  }
+
+  public changeQuantity(val: string) {
+    this.currentTxn.inventory.quantity = Number(val);
+    this.currentTxn.amount = (this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity);
+    // this.amountChanged();
+    this.calculateTotal();
+  }
   public calculateAmount() {
     let total = ((this.currentTxn.total * 100) + (100 + this.currentTxn.tax)
       * this.currentTxn.discount);
     this.currentTxn.amount = Number((total / (100 + this.currentTxn.tax)).toFixed(2));
+
+    if (this.currentTxn.selectedAccount) {
+      if (this.currentTxn.selectedAccount.stock) {
+        this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
+      }
+    }
+
     if (this.isTotalFirts || this.isAmountFirst) {
       return;
     } else {
@@ -182,11 +241,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public onUploadOutput(output: UploadOutput): void {
-
     if (output.type === 'allAddedToQueue') {
-      let authKey = null;
+      let sessionKey = null;
       let companyUniqueName = null;
-      this.authKey$.take(1).subscribe(a => authKey = a);
+      this.sessionKey$.take(1).subscribe(a => sessionKey = a);
       this.companyName$.take(1).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
@@ -194,10 +252,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         method: 'POST',
         fieldName: 'file',
         data: { company: companyUniqueName },
-        headers: { 'Auth-Key': authKey },
-        concurrency: 1
+        headers: { 'Session-Id': sessionKey },
+        concurrency: 0
       };
-
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
       this.isFileUploading = true;
@@ -224,6 +281,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.deleteAttachedFileModal.hide();
   }
 
+  public unitChanged(stockUnitCode: string) {
+    this.currentTxn.inventory.unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
+    this.changePrice(this.currentTxn.inventory.unit.rate.toString());
+  }
   public deleteAttachedFile() {
     this.blankLedger.attachedFile = '';
     this.blankLedger.attachedFileName = '';
