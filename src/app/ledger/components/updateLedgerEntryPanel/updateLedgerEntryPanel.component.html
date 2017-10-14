@@ -26,13 +26,13 @@
           <table class="width100">
             <thead>
               <tr class="t-h-bg1">
-                <th class="col-xs-2" style="border-top:none">
+                <th class="col-xs-3" style="border-top:none">
                   <span ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')"
                     class="cursor-pointer">
                     Date
                   </span>
                 </th>
-                <th class="col-xs-7" style="border-top:none">Paticular</th>
+                <th class="col-xs-6" style="border-top:none">Paticular</th>
                 <th class="col-xs-3" style="border-top:none">
                   Amount
                 </th>
@@ -48,7 +48,7 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-6">
-                    <ng-select [options]="vm.flatternAccountList4Select | async" #dbtSelect [allowClear]="true" (click)="addBlankTrx('DEBIT', txn, $event)"
+                    <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
                     (selected)="selectAccount($event,txn, dbtSelect)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
                       <ng-template #optionTemplate let-option="option">
@@ -75,11 +75,11 @@
                   <td class="col-xs-3 pos-rel">
                     <input type="text" [(ngModel)]="txn.amount" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)"
                       (input)="vm.onTxnAmountChange(txn)">
-                    <span class="download-invoice-ledger" ng-if="ledgerCtrl.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
+                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
                       tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
-                    <span class="download-invoice-ledger " ng-if="ledgerCtrl.selectedLedger.invoiceNumber.length> 0" ng-click="ledgerCtrl.downloadInvoice(ledgerCtrl.selectedLedger.invoiceNumber, $event)"
+                    <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.invoiceNumber.length> 0" ng-click="ledgerCtrl.downloadInvoice(ledgerCtrl.selectedLedger.invoiceNumber, $event)"
                       tooltip-append-to-body="true" tooltip="Download Invoice : {{vm.selectedLedger.invoiceNumber}}" tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
@@ -96,13 +96,13 @@
           <table class="width100">
             <thead>
               <tr class="t-h-bg1">
-                <th class="col-xs-2" style="border-top:none">
+                <th class="col-xs-3" style="border-top:none">
                   <span ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')"
                     class="cursor-pointer">
                     Date
                   </span>
                 </th>
-                <th class="col-xs-7" style="border-top:none">Paticular</th>
+                <th class="col-xs-6" style="border-top:none">Paticular</th>
                 <th class="col-xs-3" style="border-top:none">Amount</th>
               </tr>
             </thead>
@@ -116,7 +116,7 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-6">
-                      <ng-select [options]="vm.flatternAccountList4Select | async" #crdSelect [allowClear]="true" (click)="addBlankTrx('CREDIT', txn, $event)"
+                      <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
                       (selected)="selectAccount($event,txn, crdSelect)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
                       <ng-template #optionTemplate let-option="option">
@@ -143,12 +143,12 @@
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" is-open="txn.isOpen"
                       (input)="vm.onTxnAmountChange(txn)">
-                    <span class="download-invoice-ledger" ng-if="ledgerCtrl.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
-                      tooltip-append-to-body="true" tooltip="Download file : {{'ledgerCtrl.selectedLedger.attachedFileName'}}"
+                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
+                      tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
                       tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
-                    <span class="download-invoice-ledger" ng-if="ledgerCtrl.selectedLedger.invoiceNumber.length > 0" ng-click="ledgerCtrl.downloadInvoice(ledgerCtrl.selectedLedger.invoiceNumber, $event)"
+                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.invoiceNumber.length > 0" ng-click="ledgerCtrl.downloadInvoice(ledgerCtrl.selectedLedger.invoiceNumber, $event)"
                       tooltip-append-to-body="true" tooltip="Download Invoice : {{'ledgerCtrl.selectedLedger.invoiceNumber'}}"
                       tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
