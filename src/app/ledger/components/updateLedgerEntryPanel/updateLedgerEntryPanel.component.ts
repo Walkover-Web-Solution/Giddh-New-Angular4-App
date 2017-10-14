@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store/roots';
@@ -6,22 +6,22 @@ import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { IOption } from '../../../shared/theme/index';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
-import { ITransactionItem, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { TransactionVM } from '../../ledger.vm';
-import { last, filter, orderBy, reduce, sumBy } from 'lodash';
+import { ITransactionItem } from '../../../models/interfaces/ledger.interface';
+import { filter, findIndex, last, orderBy } from 'lodash';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
-import * as uuid from 'uuid';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { Select2Component } from '../../../shared/theme/select2/select2.component';
+import { IOption } from '../../../shared/theme/index';
+import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
+import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -34,6 +34,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @Output() public entryDeleted: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
+  @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
   public accountsOptions: Select2Options = {
@@ -69,13 +70,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public uploadInput: EventEmitter<UploadInput>;
   public selectedAccount: IFlattenAccountsResultItem = null;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
-  public discountArray = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
     private _ledgerAction: LedgerActions) {
-    this.vm = new UpdateLedgerVm(this._toasty);
-    this.vm.selectedLedger = new LedgerResponse();
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -85,27 +84,31 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accountsArray: Select2OptionData[] = [];
+        let accountsArray: IOption[] = [];
         this.vm.flatternAccountList = data.body.results;
         data.body.results.map(acc => {
           if (acc.stocks) {
             acc.stocks.map(as => {
               accountsArray.push({
-                id: acc.uniqueName,
-                text: acc.name,
+                value: acc.uniqueName,
+                label: acc.name,
                 additional: Object.assign({}, acc, { stock: as })
               });
             });
-            accountsArray.push({ id: acc.uniqueName, text: acc.name, additional: acc });
+            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
           } else {
-            accountsArray.push({ id: acc.uniqueName, text: acc.name, additional: acc });
+            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
           }
         });
-        this.vm.flatternAccountList4Select2 = Observable.of(orderBy(accountsArray, 'text'));
+        this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
       }
     });
   }
+
   public ngOnInit() {
+    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
+    this.vm.selectedLedger = new LedgerResponse();
+    // TODO: save backup of response for future use
     // get Account name from url
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       this.accountUniqueName = params['accountUniqueName'];
@@ -120,14 +123,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
           if (resp.status === 'success') {
             this.vm.selectedLedger = resp.body;
+            this.vm.selectedLedgerBackup = resp.body;
             if (this.vm.selectedLedger.total.type === 'DEBIT') {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
             } else {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
             }
             this.vm.getEntryTotal();
+            this.vm.generatePanelAmount();
             this.vm.generateGrandTotal();
-            this.vm.getPanelAmount();
           }
         });
       }
@@ -141,12 +145,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     });
   }
+
   public addBlankTrx(type: string = 'DEBIT', txn: ITransactionItem, event: Event) {
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem(type));
     }
   }
+
   public onUploadOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
       let sessionKey = null;
@@ -179,11 +185,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     }
   }
-  public selectAccount(e, txn: ITransactionItem, select2Cmp: Select2Component) {
-    this.vm.onTxnAmountChange();
+
+  public selectAccount(e: IOption, txn: ITransactionItem, selectCmp: SelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       this.selectedAccount = null;
+      txn.selectedAccount = null;
       // reset taxes and discount on selected account change
       // txn.tax = 0;
       // txn.taxes = [];
@@ -192,65 +199,66 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       return;
     } else {
       if (!this.vm.isValidEntry(e.value)) {
-        txn.particular.uniqueName = null;
-        txn.particular.name = null;
+        selectCmp.clear();
         this.selectedAccount = null;
-        select2Cmp.writeValue(null);
+        txn.selectedAccount = null;
         return;
       }
     }
-    this.vm.isDisabledTaxesAndDiscounts = this.vm.isThereIncomeOrExpenseEntry();
-    this.vm.flatternAccountList4Select2.take(1).subscribe(data => {
-      data.map(fa => {
-        // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-        if (fa.id === e.value) {
 
-          // check if ther's multiple stock entry
-          if (fa.additional.stock) {
-            if (this.vm.isThereStockEntry()) {
-              txn.particular.uniqueName = null;
-              txn.particular.name = null;
-              this.selectedAccount = null;
-              select2Cmp.writeValue(null);
-              this._toasty.warningToast('you can\'t add multiple stock entry');
-            } else {
-              this.selectedAccount = fa.additional;
-            }
-          } else {
-            this.selectedAccount = fa.additional;
-          }
-          // reset taxes and discount on selected account change
-          // txn.tax = 0;
-          // txn.taxes = [];
-          // txn.discount = 0;
-          // txn.discounts = [];
-          return;
-        }
-      });
+    if (e.additional.stock) {
+      if (this.vm.isThereStockEntry()) {
+        txn.particular.uniqueName = null;
+        txn.particular.name = null;
+        this.selectedAccount = null;
+        txn.selectedAccount = null;
+        this._toasty.warningToast('you can\'t add multiple stock entry');
+      } else {
+        this.selectedAccount = e.additional;
+        txn.selectedAccount = e.additional;
+      }
+    } else {
+      this.selectedAccount = e.additional;
+      txn.selectedAccount = e.additional;
+    }
+    this.vm.onTxnAmountChange(txn);
+  }
+  public deSelectAccount(e: IOption, txn: ITransactionItem) {
+    this.vm.discountArray.map(d => {
+      if (d.particular === e.value) {
+        d.amount = 0;
+      }
     });
+    this.discountComponent.change();
   }
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }
+
   public hideDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.hide();
   }
+
   public showDeleteEntryModal() {
     this.deleteEntryModal.show();
   }
+
   public hideDeleteEntryModal() {
     this.deleteEntryModal.hide();
   }
+
   public deleteTrxEntry() {
     let entryName: string = null;
     this.entryUniqueName$.take(1).subscribe(en => entryName = en);
     this.store.dispatch(this._ledgerAction.deleteTrxEntry(this.accountUniqueName, entryName));
   }
+
   public deleteAttachedFile() {
     this.vm.selectedLedger.attachedFile = '';
     this.vm.selectedLedger.attachedFileName = '';
     this.hideDeleteAttachedFileModal();
   }
+
   public ngOnDestroy(): void {
     this.vm.selectedLedger = null;
     this.destroyed$.next(true);
