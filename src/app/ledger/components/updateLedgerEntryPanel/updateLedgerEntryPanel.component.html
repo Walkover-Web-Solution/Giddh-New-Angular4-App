@@ -48,7 +48,8 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                    <ng-select [options]="vm.flatternAccountList4Select | async" [allowClear]="true" (click)="addBlankTrx('DEBIT', txn, $event)" (selected)="selectAccount($event,txn)"
+                    <ng-select [options]="vm.flatternAccountList4Select | async" #dbtSelect [allowClear]="true" (click)="addBlankTrx('DEBIT', txn, $event)"
+                    (selected)="selectAccount($event,txn, dbtSelect)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
                       <ng-template #optionTemplate let-option="option">
                           <ng-container *ngIf="!option.additional?.stock">
@@ -73,7 +74,7 @@
                   </td>
                   <td class="col-xs-3 pos-rel">
                     <input type="text" [(ngModel)]="txn.amount" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)"
-                      (input)="vm.onTxnAmountChange()">
+                      (input)="vm.onTxnAmountChange(txn)">
                     <span class="download-invoice-ledger" ng-if="ledgerCtrl.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
                       tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -115,7 +116,8 @@
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
                   <td class="col-xs-7">
-                      <ng-select [options]="vm.flatternAccountList4Select | async" [allowClear]="true" (click)="addBlankTrx('CREDIT', txn, $event)" (selected)="selectAccount($event,txn)"
+                      <ng-select [options]="vm.flatternAccountList4Select | async" #crdSelect [allowClear]="true" (click)="addBlankTrx('CREDIT', txn, $event)"
+                      (selected)="selectAccount($event,txn, crdSelect)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
                       <ng-template #optionTemplate let-option="option">
                           <ng-container *ngIf="!option.additional?.stock">
@@ -140,7 +142,7 @@
                   </td>
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" is-open="txn.isOpen"
-                      (input)="vm.onTxnAmountChange()">
+                      (input)="vm.onTxnAmountChange(txn)">
                     <span class="download-invoice-ledger" ng-if="ledgerCtrl.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
                       tooltip-append-to-body="true" tooltip="Download file : {{'ledgerCtrl.selectedLedger.attachedFileName'}}"
                       tooltip-placement="top">
@@ -274,7 +276,7 @@
                   </td>
                   <td>
                     <label class="primary_color">Total</label>
-                    <input type="text" name="" class="form-control" [(ngModel)]="vm.grandTotal" ng-change="ledgerCtrl.onTxnTotalChange(ledgerCtrl.selectedLedger)"
+                    <input type="text" name="" class="form-control" [(ngModel)]="vm.totalAmount" ng-change="ledgerCtrl.onTxnTotalChange(ledgerCtrl.selectedLedger)"
                     />
                   </td>
                 </tr>
@@ -282,7 +284,7 @@
             </table>
           </div>
           <div class="col-xs-12 pd1 text-right" ng-if="(ledgerCtrl.selectedLedger.panel.show || ledgerCtrl.selectedLedger.isBlankLedger)">
-            <span class="inWords">{{vm.grandTotal| myNumberToWordsPipe | lowercase}}</span>
+            <span class="inWords">{{vm.totalAmount | myNumberToWordsPipe | lowercase}}</span>
           </div>
           <div class="col-xs-12">
             <div class="row">
@@ -346,7 +348,7 @@
           </div>
         </div>
         <div class="col-xs-12 pd0 text-right mrT">
-          <span class="primary_color">Compound Total: {{vm.selectedLedger.total?.amount}}</span>
+          <span class="primary_color">Compound Total: {{vm.totalAmount}}</span>
         </div>
         <div class="col-xs-12 pdT1">
           <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>

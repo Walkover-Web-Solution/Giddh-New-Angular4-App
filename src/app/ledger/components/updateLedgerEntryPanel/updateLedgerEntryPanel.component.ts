@@ -21,6 +21,7 @@ import { UpdateLedgerVm } from './updateLedger.vm';
 import { Select2Component } from '../../../shared/theme/select2/select2.component';
 import { IOption } from '../../../shared/theme/index';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
+import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -74,8 +75,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
     private _ledgerAction: LedgerActions) {
-    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
-    this.vm.selectedLedger = new LedgerResponse();
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -107,6 +106,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
+    this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
@@ -129,8 +130,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
             }
             this.vm.getEntryTotal();
-            this.vm.generateGrandTotal();
             this.vm.generatePanelAmount();
+            this.vm.generateGrandTotal();
           }
         });
       }
@@ -185,11 +186,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  public selectAccount(e: IOption, txn: ITransactionItem) {
-    this.vm.onTxnAmountChange();
+  public selectAccount(e: IOption, txn: ITransactionItem, selectCmp: SelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       this.selectedAccount = null;
+      txn.selectedAccount = null;
       // reset taxes and discount on selected account change
       // txn.tax = 0;
       // txn.taxes = [];
@@ -198,9 +199,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       return;
     } else {
       if (!this.vm.isValidEntry(e.value)) {
-        txn.particular.uniqueName = null;
-        txn.particular.name = null;
+        selectCmp.clear();
         this.selectedAccount = null;
+        txn.selectedAccount = null;
         return;
       }
     }
@@ -210,40 +211,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         txn.particular.uniqueName = null;
         txn.particular.name = null;
         this.selectedAccount = null;
+        txn.selectedAccount = null;
         this._toasty.warningToast('you can\'t add multiple stock entry');
       } else {
         this.selectedAccount = e.additional;
+        txn.selectedAccount = e.additional;
       }
     } else {
       this.selectedAccount = e.additional;
+      txn.selectedAccount = e.additional;
     }
-    // this.vm.flatternAccountList4Select.take(1).subscribe(data => {
-    //   data.map(fa => {
-    //     // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-    //     if (fa.value === e.value) {
-
-    //       // check if ther's multiple stock entry
-    //       if (fa.additional.stock) {
-    //         if (this.vm.isThereStockEntry()) {
-    //           txn.particular.uniqueName = null;
-    //           txn.particular.name = null;
-    //           this.selectedAccount = null;
-    //           this._toasty.warningToast('you can\'t add multiple stock entry');
-    //         } else {
-    //           this.selectedAccount = fa.additional;
-    //         }
-    //       } else {
-    //         this.selectedAccount = fa.additional;
-    //       }
-    //       // reset taxes and discount on selected account change
-    //       // txn.tax = 0;
-    //       // txn.taxes = [];
-    //       // txn.discount = 0;
-    //       // txn.discounts = [];
-    //       return;
-    //     }
-    //   });
-    // });
+    this.vm.onTxnAmountChange(txn);
   }
   public deSelectAccount(e: IOption, txn: ITransactionItem) {
     this.vm.discountArray.map(d => {
