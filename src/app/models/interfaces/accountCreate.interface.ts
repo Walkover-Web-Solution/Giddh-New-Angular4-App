@@ -3,6 +3,11 @@ import { IUserInfo } from './userInfo.interface';
 import { INameUniqueName } from './nameUniqueName.interface';
 import { IGstDetailListItem } from './gstDetailListItem.interface';
 
+export interface ICountryClass {
+  countryName: string;
+  countryCode: string;
+}
+
 export interface IAccount extends INameUniqueName {
     address?: string;
     attentionTo?: string;
@@ -17,7 +22,7 @@ export interface IAccount extends INameUniqueName {
     hsnNumber?: string;
     city?: string;
     pincode?: string;
-    country?: string;
+    country?: ICountryClass;
     sacNumber?: string;
     stateCode?: string;
 }

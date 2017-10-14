@@ -14,4 +14,5 @@ export const INVOICE_API = {
   SET_AS_DEFAULT: Configuration.ApiUrl + 'v2/company/:companyUniqueName/templates/:templateUniqueName/default', // PATCH
   // DELETE_TEMPLATE: Configuration.ApiUrl + 'company/:companyUniqueName/templates-v2/:templateUniqueName', // DELETE
   DELETE_TEMPLATE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/templates/:templateUniqueName', // DELETE
+  UPLOAD_LOGO: Configuration.ApiUrl + 'company/:companyUniqueName/images', // POST
 };

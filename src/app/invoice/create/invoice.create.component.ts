@@ -19,10 +19,8 @@ import {
 } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
+import { ToasterService } from '../../services/toaster.service';
 
-// {
-//   field: 'description'
-// },
 const THEAD = [
   {
     display: false,
@@ -77,7 +75,7 @@ const THEAD = [
   {
     display: false,
     label: '',
-    field: 'tax'
+    field: 'taxes'
   },
   {
     display: false,
@@ -103,53 +101,94 @@ export class InvoiceCreateComponent implements OnInit {
   public customThead: IContent[] = THEAD;
   public updtFlag: boolean = false;
   public totalBalance: number = null;
+  public invoiceDataFound: boolean = false;
+  public isInvoiceGenerated$: Observable<boolean>;
+  public updateMode: boolean;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private isInvoiceGenerated$: Observable<boolean>;
 
   constructor(
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
+    private _toasty: ToasterService,
     private invoiceService: InvoiceService
   ) {
-    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.generate.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
+    this.isInvoiceGenerated$ = this.store.select(state => state.invoice.isInvoiceGenerated).takeUntil(this.destroyed$).distinctUntilChanged();
   }
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.generate.invoiceData)
+    this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: PreviewInvoiceResponseClass) => {
-          if (o) {
-            this.invFormData = _.cloneDeep(o);
-          } else {
-            this.invFormData = new PreviewInvoiceResponseClass();
+        if (o) {
+          this.invFormData = _.cloneDeep(o);
+          // if address found prepare local var due to array and string issue
+          this.prepareAddressForUI('billingDetails');
+          this.prepareAddressForUI('shippingDetails');
+          if (!this.invFormData.other) {
+            this.invFormData.other = new OtherDetailsClass();
           }
-          this.invFormData.other = new OtherDetailsClass();
+          this.invoiceDataFound = true;
+        }else {
+          this.invoiceDataFound = false;
         }
-      );
+      }
+    );
 
-    this.store.select(p => p.invoice.generate.invoiceTemplateConditions)
+    this.store.select(p => p.invoice.invoiceTemplateConditions)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged()
       .subscribe((o: InvoiceTemplateDetailsResponse) => {
-          if (o) {
-            this.invTempCond = _.cloneDeep(o);
-            let obj = _.cloneDeep(o);
-            this.tableCond = _.find(obj.sections, {sectionName: 'table'});
-            this.headerCond = _.find(obj.sections, {sectionName: 'header'});
-            this.prepareThead();
-            this.prepareTemplateHeader();
-          }
+        if (o) {
+          this.invTempCond = _.cloneDeep(o);
+          let obj = _.cloneDeep(o);
+          this.tableCond = _.find(obj.sections, {sectionName: 'table'});
+          this.headerCond = _.find(obj.sections, {sectionName: 'header'});
+          this.prepareThead();
+          this.prepareTemplateHeader();
         }
-      );
+      }
+    );
 
     this.isInvoiceGenerated$.subscribe((o) => {
       if (o) {
-        this.closePopupEvent();
-        this.store.dispatch(this.invoiceActions.InvoiceGenerationCompleted());
+        let action = (this.updateMode) ? 'update' : 'generate';
+        this.closePopupEvent({action});
       }
     });
+
+    this.store.select(state => state.invoice.visitedFromPreview)
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged()
+      .subscribe((val: boolean) => {
+        this.updateMode = val;
+      }
+    );
+  }
+
+  public getArrayFromString(str) {
+    if (str && str.length > 0 ) {
+      return str.split('\n');
+    }else {
+      return [];
+    }
+  }
+
+  public getStringFromArr(arr) {
+    if (Array.isArray(arr) && arr.length > 0 ) {
+      return arr.toString().replace(RegExp(',', 'g'), '\n');
+    }else {
+      return null;
+    }
+  }
+
+  public prepareAddressForUI(type: string) {
+    this.invFormData.account[type].addressStr = this.getStringFromArr(this.invFormData.account[type].address);
+  }
+
+  public prepareAddressForAPI(type: string) {
+    this.invFormData.account[type].address = this.getArrayFromString(this.invFormData.account[type].addressStr);
   }
 
   public prepareTemplateHeader() {
@@ -183,12 +222,23 @@ export class InvoiceCreateComponent implements OnInit {
   public onSubmitInvoiceForm() {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let accountUniqueName = this.invFormData.account.uniqueName;
-    model.invoice = _.cloneDeep(this.invFormData);
-    model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
-    model.validateTax = true;
-    model.updateAccountDetails = this.updtFlag;
-    this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
-    this.updtFlag = false;
+    if (accountUniqueName) {
+      this.prepareAddressForAPI('billingDetails');
+      this.prepareAddressForAPI('shippingDetails');
+      model.invoice = _.cloneDeep(this.invFormData);
+      model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
+      model.validateTax = true;
+      model.updateAccountDetails = this.updtFlag;
+      if (this.updateMode) {
+        // bingo hit api for already generated invoice
+        this.store.dispatch(this.invoiceActions.UpdateGeneratedInvoice(accountUniqueName, model));
+      }else {
+        this.store.dispatch(this.invoiceActions.GenerateInvoice(accountUniqueName, model));
+      }
+      this.updtFlag = false;
+    }else {
+      this._toasty.warningToast('Something went wrong, please reload the page');
+    }
   }
 
   public getEntryUniqueNames(entryArr: GstEntry[]): string[] {
@@ -199,44 +249,60 @@ export class InvoiceCreateComponent implements OnInit {
     return arr;
   }
 
-  public getTransactionTotalTax(taxArr: IInvoiceTax[]): number {
+  public getTransactionTotalTax(taxArr: IInvoiceTax[]): any {
     let count: number = 0;
     if (taxArr.length > 0) {
       _.forEach(taxArr, (item: IInvoiceTax) => {
         count += item.amount;
       });
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTotal(entry: GstEntry, idx: number): number {
+  public getEntryTotal(entry: GstEntry, idx: number): any {
     let count: number = 0;
     count = this.getEntryTaxableAmount(entry.transactions[idx], entry.discounts) + this.getTransactionTotalTax(entry.taxes);
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTaxableAmount(transaction: IInvoiceTransaction, discountArr: ICommonItemOfTransaction[]): number {
+  public getEntryTaxableAmount(transaction: IInvoiceTransaction, discountArr: ICommonItemOfTransaction[]): any {
     let count: number = 0;
     if (transaction.quantity && transaction.rate) {
       count = (transaction.rate * transaction.quantity) - this.getEntryTotalDiscount(discountArr);
     } else {
-      count = transaction.amount + this.getEntryTotalDiscount(discountArr);
+      count = transaction.amount - this.getEntryTotalDiscount(discountArr);
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): number {
+  public getEntryTotalDiscount(discountArr: ICommonItemOfTransaction[]): any {
     let count: number = 0;
     if (discountArr.length > 0) {
       _.forEach(discountArr, (item: ICommonItemOfTransaction) => {
         count += Math.abs(item.amount);
       });
     }
-    return count;
+    if (count > 0) {
+      return count;
+    }else {
+      return null;
+    }
   }
 
-  public closePopupEvent() {
-    this.closeEvent.emit();
+  public closePopupEvent(o) {
+    this.closeEvent.emit(o);
   }
 
   public getSerialNos(entryIndex: number, transIndex: number) {

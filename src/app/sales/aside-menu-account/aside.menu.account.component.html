@@ -1,0 +1,24 @@
+<div class="aside-pane">
+  <button id="close" class="btn btn-default" (click)="closeAsidePane($event)">X</button>
+  <div class="aside-header">
+    <h3 class="aside-title">Create Account</h3>
+  </div>
+  <div class="aside-body">
+    <div class="form-group pdT2">
+      <label class="mrB1">Select Group</label>
+      <select2 name="flatAccountWGroupsList" [data]="flatAccountWGroupsList$ | async" class="select2-parent" [(ngModel)]="activeGroupUniqueName" [options]="select2Options" (valueChanged)="groupSelected($event)"></select2>
+    </div>
+
+    <account-add
+      *ngIf="isGroupItemSelected"
+      [activeGroupUniqueName]="activeGroupUniqueName"
+      [fetchingAccUniqueName$]="fetchingAccUniqueName$"
+      [isAccountNameAvailable$]="isAccountNameAvailable$"
+      [createAccountInProcess$]="createAccountInProcess$"
+      [createAccountIsSuccess$]="createAccountIsSuccess$"
+      (submitClicked)="addNewAcSubmit($event)"
+      [isGstEnabledAcc]="isGstEnabledAcc"
+      [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
+    </account-add>
+  </div>
+</div>

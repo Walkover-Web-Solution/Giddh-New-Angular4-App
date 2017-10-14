@@ -10,6 +10,7 @@ import { ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
 import { JsPDFAutoTable } from '../../../../customTypes/jsPDF/index';
+import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 
 interface GroupViewModel {
   credit: number;
@@ -24,34 +25,37 @@ interface GroupViewModel {
 class FormatPdf implements IFormatable {
   private pdf: jsPDF = new jsPDF();
   private colX: number;
-  private colY: number;
+  private colY: number = 20;
 
-  constructor() {
+  constructor(private request: TrialBalanceRequest) {
     this.colX = 10;
-    this.colY = 50;
+    // this.colY = 50;
   }
 
   public setHeader(selectedCompany: ComapnyResponse) {
+    console.log(selectedCompany.address);
     this.pdf.setFontSize(16);
-    this.pdf.text(10, 20, selectedCompany.name);
+    this.pdf.text(10, this.colY, selectedCompany.name);
     this.pdf.setFontSize(10);
-    this.pdf.text(10, 25, selectedCompany.address);
-    this.pdf.text(10, 30, selectedCompany.city + '-' + selectedCompany.pincode);
-    this.pdf.text(10, 35, 'Trial Balance: ');
-    this.pdf.line(10, 38, 200, 38);
+    selectedCompany.address.split('\n')
+      .forEach(p => this.pdf.text(10, this.colY += 5, p));
+
+    this.pdf.text(10, this.colY += 5, selectedCompany.city + '-' + selectedCompany.pincode);
+    this.pdf.text(10, this.colY += 5, `Trial Balance: ${this.request.from} to ${this.request.to}`);
+    this.pdf.line(10, this.colY += 5, 200, this.colY);
 
     this.pdf.setFontSize(9);
-    this.pdf.text(10, 43, 'PARTICULAR');
-    this.pdf.text(70, 43, 'OPENING BALANCE');
-    this.pdf.text(105, 43, 'DEBIT');
-    this.pdf.text(140, 43, 'CREDIT');
-    this.pdf.text(170, 43, 'CLOSING BALANCE');
-    this.pdf.line(10, 45, 200, 45);
+    this.pdf.text(10, this.colY += 5, 'PARTICULAR');
+    this.pdf.text(70, this.colY, 'OPENING BALANCE');
+    this.pdf.text(105, this.colY, 'DEBIT');
+    this.pdf.text(140, this.colY, 'CREDIT');
+    this.pdf.text(170, this.colY, 'CLOSING BALANCE');
+    this.pdf.line(10, this.colY += 3, 200, this.colY);
   }
 
   public setRowData(data: any[], padding: number) {
     this.pdf.setFontSize(10);
-    this.pdf.text(this.colX + padding, this.colY, data[0].toString());
+    this.pdf.text(this.colX + padding, this.colY += 5, data[0].toString());
     this.pdf.text(70, this.colY, data[1].toString());
     this.pdf.text(105, this.colY, data[2].toString());
     this.pdf.text(140, this.colY, data[3].toString());
@@ -59,13 +63,11 @@ class FormatPdf implements IFormatable {
     if (this.colY > 247) {
       this.pdf.addPage();
       this.colY = 20;
-    } else {
-      this.colY += 5;
     }
   }
 
   public setFooter(data: any[]) {
-    this.pdf.line(10, this.colY, 200, this.colY);
+    this.pdf.line(10, this.colY += 5, 200, this.colY);
     this.pdf.text(10, this.colY + 5, 'TOTAL', );
     this.pdf.text(70, this.colY + 5, data[0].toString());
     this.pdf.text(105, this.colY + 5, data[1].toString());
@@ -73,8 +75,8 @@ class FormatPdf implements IFormatable {
     this.pdf.text(170, this.colY + 5, data[3].toString());
   }
 
-  public save() {
-    this.pdf.save('');
+  public save(name) {
+    this.pdf.save(name);
   }
 }
 
@@ -101,7 +103,7 @@ class FormatPdf implements IFormatable {
   providers: [RecTypePipe]
 })
 export class TbExportPdfComponent implements OnInit, OnDestroy {
-
+  @Input() public trialBalanceRequest: TrialBalanceRequest;
   @Input() public selectedCompany: ComapnyResponse;
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
@@ -182,11 +184,12 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
           debit: p.debitTotal
         } as GroupViewModel;
       });
-
+    let colY = 50;
     pdf.autoTable(columns, rows, {
       theme: 'plain',
       margin: {
-        top: 110
+        top: 110 + (this.selectedCompany.address.split('\n').length * 15)
+
       },
       drawCell: (cell, data) => {
         if (data.column.name === 'name') {
@@ -195,11 +198,12 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
       },
       addPageContent: () => {
         pdf.setFontSize(16);
-        pdf.text(40, 50, this.selectedCompany.name);
+        pdf.text(40, colY, this.selectedCompany.name);
         pdf.setFontSize(10);
-        pdf.text(40, 65, this.selectedCompany.address);
-        pdf.text(40, 80, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
-        pdf.text(40, 95, 'Trial Balance: ');
+        this.selectedCompany.address.split('\n')
+          .forEach(p => pdf.text(40, colY += 15, p));
+        pdf.text(40, colY += 15, this.selectedCompany.city + '-' + this.selectedCompany.pincode);
+        pdf.text(40, colY += 15, `Trial Balance: ${this.trialBalanceRequest.from} to ${this.trialBalanceRequest.to}`);
       }
     });
     let footerX = 40;
@@ -213,24 +217,20 @@ export class TbExportPdfComponent implements OnInit, OnDestroy {
     pdf.text(footerX + 365, lastY + 20, total.cr.toFixed(2));
     pdf.text(footerX + 430, lastY + 20, total.cb.toFixed(2));
     // Save the PDF
-    pdf.save('Test.pdf');
+    pdf.save('PdfGroupWise.pdf');
   }
 
   private downloadPdfCondensed() {
     //
-    let formatPdf = new FormatPdf();
+    let formatPdf = new FormatPdf(this.trialBalanceRequest);
     this.dataFormatter.formatDataCondensed(formatPdf);
-    formatPdf.save();
-  }
-
-  private createPdf(rows: any, cols: any): void {
-    //
-
+    formatPdf.save('PdfCondensed.pdf');
   }
 
   private downloadPdfAccountWise(): void {
-    let formatPdf = new FormatPdf();
+    let formatPdf = new FormatPdf(this.trialBalanceRequest);
     this.dataFormatter.formatDataAccountWise(formatPdf);
-    formatPdf.save();
+    formatPdf.save('PdfAccountWise.pdf');
   }
+
 }

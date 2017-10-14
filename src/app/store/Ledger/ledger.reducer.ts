@@ -5,7 +5,7 @@ import {
   TransactionsRequest,
   TransactionsResponse
 } from '../../models/api-models/Ledger';
-import { AccountResponse } from '../../models/api-models/Account';
+import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
 import { LEDGER } from '../../services/actions/ledger/ledger.const';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
@@ -22,11 +22,17 @@ export interface LedgerState {
   discountAccountsList?: IFlattenGroupsAccountsDetail;
   ledgerCreateSuccess?: boolean;
   ledgerCreateInProcess?: boolean;
+  selectedTxnForEditUniqueName: string;
+  isDeleteTrxEntrySuccessfull: boolean;
+  activeAccountSharedWith?: AccountSharedWithResponse[];
 }
 
 export const initialState: LedgerState = {
   transactionInprogress: false,
-  accountInprogress: false
+  accountInprogress: false,
+  selectedTxnForEditUniqueName: '',
+  isDeleteTrxEntrySuccessfull: false,
+  activeAccountSharedWith: null,
 };
 
 export function ledgerReducer(state = initialState, action: Action): LedgerState {
@@ -65,13 +71,13 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         transactionInprogress: false
       });
     case LEDGER.DOWNLOAD_LEDGER_INVOICE:
-      return Object.assign({}, state, {downloadInvoiceInProcess: true});
+      return Object.assign({}, state, { downloadInvoiceInProcess: true });
     case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
       let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
       if (downloadData.status === 'success') {
-        return Object.assign({}, state, {downloadInvoiceInProcess: false});
+        return Object.assign({}, state, { downloadInvoiceInProcess: false });
       }
-      return Object.assign({}, state, {downloadInvoiceInProcess: false});
+      return Object.assign({}, state, { downloadInvoiceInProcess: false });
     case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
       let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
       if (discountData.status === 'success') {
@@ -97,8 +103,43 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         ledgerCreateSuccess: false,
         ledgerCreateInProcess: false
       });
+    case LEDGER.SET_SELECTED_TXN_FOR_EDIT:
+      return {
+        ...state,
+        selectedTxnForEditUniqueName: action.payload
+      };
+    case LEDGER.DELETE_TRX_ENTRY:
+      return {
+        ...state,
+        isDeleteTrxEntrySuccessfull: true
+      };
+    case LEDGER.DELETE_TRX_ENTRY_RESPONSE:
+      let delResp = action.payload as BaseResponse<string, string>;
+      return {
+        ...state,
+        isDeleteTrxEntrySuccessfull: delResp.status === 'success'
+      };
+    case LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE:
+      let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;
+      if (sharedAccountData.status === 'success') {
+        return {
+          ...state,
+          activeAccountSharedWith: sharedAccountData.body
+        };
+      }
+      return state;
+    case LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE:
+      let unSharedAccData: BaseResponse<string, string> = action.payload;
+      if (unSharedAccData.status === 'success') {
+        return {
+          ...state,
+          activeAccountSharedWith: state.activeAccountSharedWith.filter(ac => unSharedAccData.request !== ac.userEmail)
+        };
+      }
+      return state;
     case LEDGER.RESET_LEDGER:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         account: null,
         transcationRequest: null,
         transactionsResponse: null,
@@ -106,8 +147,12 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         accountInprogress: false,
         downloadInvoiceInProcess: false,
         discountAccountsList: null,
-        ledgerCreateSuccess: false
-      });
+        ledgerCreateSuccess: false,
+        isDeleteTrxEntrySuccessfull: false,
+        ledgerCreateInProcess: false,
+        selectedTxnForEditUniqueName: '',
+        activeAccountSharedWith: null
+      };
     default: {
       return state;
     }

@@ -11,7 +11,11 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
 import {
   TransactionsResponse, ReconcileResponse, LedgerResponse, LedgerRequest, TransactionsRequest,
-  DownloadLedgerRequest
+  DownloadLedgerRequest,
+  MagicLinkRequest,
+  MagicLinkResponse,
+  ExportLedgerRequest,
+  MailLedgerRequest
 } from '../models/api-models/Ledger';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 
@@ -111,7 +115,7 @@ export class LedgerService {
   /*
   * Ledger get transaction details
   */
-  public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse[], string>> {
+  public GetLedgerTransactionDetails(accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -119,10 +123,10 @@ export class LedgerService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName)).map((res) => {
-      let data: BaseResponse<LedgerResponse[], string> = res.json();
+      let data: BaseResponse<LedgerResponse, string> = res.json();
       data.queryString = { accountUniqueName, entryUniqueName };
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<LedgerResponse[], string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
+    }).catch((e) => this.errorHandler.HandleCatch<LedgerResponse, string>(e, accountUniqueName, { accountUniqueName, entryUniqueName }));
   }
 
   /**
@@ -160,5 +164,62 @@ export class LedgerService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, DownloadLedgerRequest>(e, model, { accountUniqueName }));
+  }
+
+  public GenerateMagicLink(model: MagicLinkRequest, accountUniqueName: string): Observable<BaseResponse<MagicLinkResponse, MagicLinkRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(LEDGER_API.MAGIC_LINK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+    .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+    .replace(':from', model.from).replace(':to', model.to), model)
+    .map((res) => {
+      let data: BaseResponse<MagicLinkResponse, MagicLinkRequest> = res.json();
+      data.request = model;
+      data.queryString = { accountUniqueName };
+      return data;
+    })
+    .catch((e) => this.errorHandler.HandleCatch<MagicLinkResponse, MagicLinkRequest>(e, model, { accountUniqueName }));
+  }
+
+  public ExportLedger(model: ExportLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, ExportLedgerRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.get(LEDGER_API.EXPORT_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+      .replace(':from', model.from).replace(':to', model.to).replace(':type', encodeURIComponent(model.type)))
+      .map((res) => {
+        let data: BaseResponse<string, ExportLedgerRequest> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, ExportLedgerRequest>(e, model, { accountUniqueName }));
+  }
+
+  public MailLedger(model: MailLedgerRequest, accountUniqueName: string, from: string = '', to: string = '', format: string = ''): Observable<BaseResponse<string, MailLedgerRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(LEDGER_API.MAIL_LEDGER.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+      .replace(':from', from).replace(':to', to).replace(':format', encodeURIComponent(format)), model)
+      .map((res) => {
+        let data: BaseResponse<string, MailLedgerRequest> = res.json();
+        data.request = model;
+        data.queryString = { accountUniqueName, from, to, format };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, { accountUniqueName }));
   }
 }

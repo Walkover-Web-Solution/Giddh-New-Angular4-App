@@ -74,6 +74,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
   @ViewChild('accountSelect2') public accountSelect2: Select2Component;
   @ViewChild('accountForMoveSelect2') public accountForMoveSelect2: Select2Component;
+  @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   @Input() public breadcrumbPath: string[] = [];
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
   public activeAccountTaxHierarchy$: Observable<AccountsTaxHierarchyResponse>;
@@ -120,6 +121,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
   public createAccountIsSuccess$: Observable<boolean>;
+  public updateAccountInProcess$: Observable<boolean>;
+  public updateAccountIsSuccess$: Observable<boolean>;
   public taxPopOverTemplate: string = `
   <div class="popover-content">
   <label>Tax being inherited from:</label>
@@ -153,6 +156,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showDeleteMove: boolean = false;
   public isGstEnabledAcc: boolean = false;
   public isHsnSacEnabledAcc: boolean = false;
+  public showTaxes: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
@@ -229,6 +233,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
     this.createAccountInProcess$ = this.store.select(state => state.groupwithaccounts.createAccountInProcess).takeUntil(this.destroyed$);
     this.createAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.createAccountIsSuccess).takeUntil(this.destroyed$);
+    this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
+    this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -286,6 +292,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeAccount$.subscribe((a) => {
       if (a) {
         this.showEditTaxSection = false;
+        if (a.parentGroups[0].uniqueName) {
+          let col = a.parentGroups[0].uniqueName;
+          this.isHsnSacEnabledAcc = col === 'revenuefromoperations' || col === 'otherincome' || col === 'operatingcost' || col === 'indirectexpenses';
+          this.isGstEnabledAcc = !this.isHsnSacEnabledAcc;
+        }
       }
     });
 
@@ -687,6 +698,22 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
   }
 
+  public updateAccount(accRequestObject: { value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }) {
+    this.store.dispatch(this.accountsAction.updateAccountV2(accRequestObject.value, accRequestObject.accountRequest));
+  }
+
+  public showDeleteAccountModal() {
+    this.deleteAccountModal.show();
+  }
+  public hideDeleteAccountModal() {
+    this.deleteAccountModal.hide();
+  }
+  public deleteAccount() {
+    let activeAccUniqueName = null;
+    this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
+    this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
+    this.hideDeleteAccountModal();
+  }
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

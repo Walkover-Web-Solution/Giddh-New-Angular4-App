@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { INVENTORY_API } from './apiurls/inventory.api';
+import * as  _ from 'lodash';
 
 import {
   CreateStockRequest,
@@ -22,6 +23,7 @@ import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
+import { IGroupsWithStocksHierarchyMinItem } from '../models/interfaces/groupsWithStocks.interface';
 
 @Injectable()
 export class InventoryService {
@@ -29,6 +31,31 @@ export class InventoryService {
   private user: UserDetails;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  }
+
+  /**
+   * return flatten group list
+   * @param rawList array of IGroupsWithStocksHierarchyMinItem
+   * @param parents an empty []
+   */
+  public makeStockGroupsFlatten(rawList: IGroupsWithStocksHierarchyMinItem[], parents) {
+    let a = _.map(rawList, (item) => {
+      let result;
+      if (item.childStockGroups && item.childStockGroups.length > 0) {
+        result = this.makeStockGroupsFlatten(item.childStockGroups, []);
+        result.push({
+          label: item.name,
+          value: item.uniqueName
+        });
+      } else {
+        result = {
+          label: item.name,
+          value: item.uniqueName
+        };
+      }
+      return result;
+    });
+    return _.flatten(a);
   }
 
   public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
@@ -55,7 +82,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(INVENTORY_API.UPDATE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniquename)), model).map((res) => {
+    return this._http.put(INVENTORY_API.UPDATE_STOCK_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniquename)), model).map((res) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res.json();
       data.request = model;
       data.queryString = { stockGroupUniquename };
@@ -242,9 +269,9 @@ export class InventoryService {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
-      this.companyUniqueName = s.session.companyUniqueName;
+      this.companyUniqueName = encodeURIComponent(s.session.companyUniqueName);
     });
-    return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniqueName)), model).map((res) => {
+    return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)), model).map((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
       data.request = model;
       data.queryString = { stockGroupUniqueName };
@@ -262,7 +289,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.put(INVENTORY_API.UPDATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
+    return this._http.put(INVENTORY_API.UPDATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
       data.request = model;
       data.queryString = { stockGroupUniqueName, stockUniqueName };
@@ -280,7 +307,7 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.delete(INVENTORY_API.DELETE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
+    return this._http.delete(INVENTORY_API.DELETE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = '';
       data.queryString = { stockGroupUniqueName, stockUniqueName };
@@ -298,12 +325,30 @@ export class InventoryService {
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(INVENTORY_API.STOCK_DETAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniquename', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
+    return this._http.get(INVENTORY_API.STOCK_DETAIL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName))).map((res) => {
       let data: BaseResponse<StockDetailResponse, string> = res.json();
       data.request = '';
       data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', { stockGroupUniqueName, stockUniqueName }));
+  }
+
+  /**
+   * get Get-Rate-For-Stoke
+   */
+  public GetRateForStoke(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(INVENTORY_API.GET_RATE_FOR_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.request = '';
+      data.queryString = { stockUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', { stockUniqueName }));
   }
 
   /**
