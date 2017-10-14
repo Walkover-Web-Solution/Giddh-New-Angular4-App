@@ -122,7 +122,7 @@ export class SalesInvoiceComponent implements OnInit {
   public invFormData: InvoiceFormClass;
   public accounts$: Observable<INameUniqueName[]>;
   public bankAccounts$: Observable<INameUniqueName[]>;
-  public salesAccounts$: Observable<IOption[]> = Observable.of([]);
+  public salesAccounts$: Observable<IOption[]>;
   public accountAsideMenuState: string = 'out';
   public asideMenuStateForProductService: string = 'out';
   public theadArr: IContentCommon[] = THEAD_ARR_1;
@@ -138,6 +138,7 @@ export class SalesInvoiceComponent implements OnInit {
   public showCreateGroupModal: boolean = false;
   public createAcCategory: string = null;
   public newlyCreatedAc$: Observable<INameUniqueName>;
+  public newlyCreatedStockAc$: Observable<INameUniqueName>;
 
   // modals related
   public modalConfig = {
@@ -150,6 +151,7 @@ export class SalesInvoiceComponent implements OnInit {
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
+  private entryIdx: number;
 
   constructor(
     private store: Store<AppState>,
@@ -164,12 +166,13 @@ export class SalesInvoiceComponent implements OnInit {
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
     this.newlyCreatedAc$ = this.store.select(p => p.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
+    this.newlyCreatedStockAc$ = this.store.select(p => p.sales.newlyCreatedStockAc).takeUntil(this.destroyed$);
+    this.salesAccounts$ = this.store.select(p => p.sales.flattenSalesAc).takeUntil(this.destroyed$);
+    // get all flatten accounts
+    this.getAllFlattenAc();
   }
 
   public ngOnInit() {
-
-    // get accounts and select only accounts which belong in sundrydebtors category
-    this.getAllFlattenAc();
 
     // get account details and set it to local var
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
@@ -202,6 +205,26 @@ export class SalesInvoiceComponent implements OnInit {
       }
     });
 
+    // logic to autoComplete
+    this.salesAccounts$.takeUntil(this.destroyed$).distinctUntilChanged((p, n) => {
+      if (p && n && p.length < n.length) {
+        return false;
+      }
+      return true;
+    }).subscribe((arr: IOption[]) => {
+      if (arr && arr.length) {
+        // listen for newly added stock
+        this.newlyCreatedStockAc$.takeUntil(this.destroyed$).subscribe((o: any) => {
+          if (o) {
+            let result: IOption = _.find(arr, (item: IOption) => item.value === o.linkedAc && item.additional && item.additional.stock && item.additional.stock.uniqueName === o.uniqueName );
+            if (result && !_.isUndefined(this.entryIdx)) {
+              this.invFormData.entries[this.entryIdx].transactions[0].fakeAccForSelect2 = o.linkedAc;
+              this.onSelectSalesAccount(result, this.invFormData.entries[this.entryIdx].transactions[0]);
+            }
+          }
+        });
+      }
+    });
   }
 
   public getAllFlattenAc() {
@@ -230,16 +253,15 @@ export class SalesInvoiceComponent implements OnInit {
                   additional: Object.assign({}, item, { stock: as })
                 });
               });
-              accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
+              accountsArray.push({ value: item.uniqueName, label: item.name});
             } else {
-              accountsArray.push({ value: item.uniqueName, label: item.name, additional: item });
+              accountsArray.push({ value: item.uniqueName, label: item.name});
             }
           }
         });
-        // accounts.unshift({ name: '+ Add Customer', uniqueName: 'addnewcustomer'});
         this.accounts$ = Observable.of(accounts);
         this.bankAccounts$ = Observable.of(bankaccounts);
-        this.salesAccounts$ = Observable.of(_.orderBy(accountsArray, 'text'));
+        this.store.dispatch(this.salesAction.storeSalesFlattenAc(_.orderBy(accountsArray, 'text')));
       }
     });
   }
@@ -324,10 +346,14 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
-  public onNoResultsClicked() {
+  public onNoResultsClicked(idx: number) {
+    if (_.isUndefined(idx)) {
+      this.getAllFlattenAc();
+    }else {
+      this.entryIdx = idx;
+    }
     this.asideMenuStateForProductService = this.asideMenuStateForProductService === 'out' ? 'in' : 'out';
     this.toggleBodyClass();
-    this.getAllFlattenAc();
   }
 
   public toggleBodyClass() {
@@ -340,7 +366,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
     if (selectedAcc.value) {
-      this.accountService.GetAccountDetailsV2(selectedAcc.additional.uniqueName).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
+      this.accountService.GetAccountDetailsV2(selectedAcc.value).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
         if (data.status === 'success') {
           let o = _.cloneDeep(data.body);
           txn.accountName = o.name;

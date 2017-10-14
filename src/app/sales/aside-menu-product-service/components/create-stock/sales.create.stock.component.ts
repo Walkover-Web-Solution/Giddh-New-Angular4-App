@@ -232,14 +232,19 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     stockObj.isFsStock =  false;
     this._inventoryService.CreateStock(stockObj, encodeURIComponent(this.selectedGroupUniqueName)).takeUntil(this.destroyed$).subscribe((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res;
+      let item = data.body;
       if (data.status === 'success') {
         // show message
         this.toasty.successToast('Stock created successfully!');
         // form reset, call for get product
         this.addStockForm.reset();
         this.closeAsidePane();
+        // announce other modules if sales ac is linked
+        if (item.salesAccountDetails && item.salesAccountDetails.accountUniqueName) {
+          this.store.dispatch(this._salesActions.createStockAcSuccess({linkedAc: item.salesAccountDetails.accountUniqueName, name: item.name, uniqueName: item.uniqueName}));
+        }
       }else {
-        this.toasty.errorToast('Something went wrong, Please reload page');
+        this.toasty.errorToast(data.message, data.code);
       }
       this.stockCreationInProcess = false;
     });
