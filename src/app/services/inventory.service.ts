@@ -334,6 +334,24 @@ export class InventoryService {
   }
 
   /**
+   * get Get-Rate-For-Stoke
+   */
+  public GetRateForStoke(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(INVENTORY_API.GET_RATE_FOR_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.request = '';
+      data.queryString = { stockUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', { stockUniqueName }));
+  }
+
+  /**
    * get GetStocksReport
    */
   public GetStocksReport(stockReportRequest: StockReportRequest): Observable<BaseResponse<StockReportResponse, StockReportRequest>> {
