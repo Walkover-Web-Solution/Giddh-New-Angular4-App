@@ -114,6 +114,33 @@ export class InvoicePurchaseActions {
       return { type: '' };
     });
 
+  /**
+   * UPDATE PURCHASE ENTRY
+   */
+  @Effect()
+  private UpdatePurchaseEntry$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY)
+    .switchMap(action => {
+      return this.purchaseInvoiceService.UpdatePurchaseEntry(action.payload)
+        .map(response => this.UpdatePurchaseEntryResponse(response));
+    });
+
+  /**
+   * UPDATE PURCHASE ENTRY RESPONSE
+   */
+  @Effect()
+  private UpdatePurchaseEntryResponse$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast('Entry Updated Successfully.');
+      }
+      return { type: '' };
+    });
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -209,6 +236,20 @@ export class InvoicePurchaseActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE,
       payload: value
+    };
+  }
+
+  public UpdatePurchaseEntry(model): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY,
+      payload: model
+    };
+  }
+
+  public UpdatePurchaseEntryResponse(response): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE,
+      payload: response
     };
   }
 

@@ -130,6 +130,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public stateList = StateList;
   public generateInvoiceArr: IInvoicePurchaseResponse[] = [];
   public invoiceSelected: boolean = false;
+  public editMode: boolean = false;
+
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -252,6 +254,20 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     // }
     if (this.generateInvoiceArr.length && this.generateInvoiceArr.length < 2) {
       let dataToSave = _.cloneDeep(this.generateInvoiceArr[0]);
+      let tax = _.cloneDeep(this.generateInvoiceArr[0].taxes[1]);
+      if (!tax) {
+        this.toasty.errorToast('Minimum 1 Tax should be selected in Voucher No.' + dataToSave.voucherNo);
+        return false;
+      }
+      dataToSave.taxes[0] = tax;
+      dataToSave.taxes.splice(1, 1);
+      if (dataToSave.taxes.length > 1) {
+        this.toasty.errorToast('Only 1 Tax should be selected in Voucher No.' + dataToSave.voucherNo);
+        return false;
+      } else if (dataToSave.taxes.length < 1) {
+        this.toasty.errorToast('Minimum 1 Tax should be selected in Voucher No.' + dataToSave.voucherNo);
+        return false;
+      }
       this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(dataToSave));
     }
 
@@ -327,6 +343,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         this.timeCounter--;
         this.checkForCounterValue(this.timeCounter);
       }, 1000);
+      // this.selectTax({ target: { checked: true } }, selectedTax);
     }
   }
 
@@ -441,26 +458,47 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
   * selectTaxOption
   */
-  public selectTax(event, tax) {
+  public selectTax(event, tax, idx) {
     if (event.target.checked) {
-      let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-      purchaseInvoiceObject.TaxList.push(tax);
-      if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-        purchaseInvoiceObject.isAllTaxSelected = true;
-        this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-      }
-      this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+      console.log(tax);
+      this.allPurchaseInvoices[idx].taxes[1] = tax.uniqueName;
+      // this.allPurchaseInvoices[idx].taxes[0] = tax.uniqueName;
+      console.log(this.allPurchaseInvoices[idx]);
     } else {
-      let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-      if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-        let purchaseInvoiceObj = _.cloneDeep(this.purchaseInvoiceObject);
-        purchaseInvoiceObj.isAllTaxSelected = false;
-        // purchaseInvoiceObject.TaxList.pop();
-        this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-      }
-      this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+      event.preventDefault();
+      this.toasty.errorToast('Minimun 1 tax should be selected.');
+      return;
     }
+    // if (event.target.checked) {
+    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+    //   purchaseInvoiceObject.TaxList[0] = tax;
+    //   $('.invoiceTax').prop('checked', false);
+    //   $(elem).prop('checked', true);
+    // } else {
+    //   $(elem).prop('checked', true);
+    //   this.toasty.errorToast('Minimun 1 tax should be selected.');
+    //   return;
+    // }
 
+    // if (event.target.checked) {
+    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+    //   // purchaseInvoiceObject.TaxList.push(tax);
+    //   purchaseInvoiceObject.TaxList[0] = tax;
+    //   if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
+    //     purchaseInvoiceObject.isAllTaxSelected = true;
+    //     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    //   }
+    //   this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    // } else {
+    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
+    //   if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
+    //     let purchaseInvoiceObj = _.cloneDeep(this.purchaseInvoiceObject);
+    //     purchaseInvoiceObj.isAllTaxSelected = false;
+    //     // purchaseInvoiceObject.TaxList.pop();
+    //     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    //   }
+    //   this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
+    // }
   }
 
   /**
@@ -483,8 +521,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     for (let tax of purchaseInvoiceRequestObject.taxes) {
       taxUniqueNames.push(tax.uniqueName);
     }
-    this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(purchaseInvoiceRequestObject.entryUniqueName, taxUniqueNames, accountUniqueName));
-
   }
 
   /**
@@ -510,6 +546,33 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.invoiceSelected = false;
     }
     console.log(this.generateInvoiceArr);
+  }
+
+  /**
+   * editRow
+   */
+  public editRow(idx) {
+    this.selectedRowIndex = idx;
+    this.editMode = true;
+    console.log(idx);
+  }
+
+  /**
+   * updateEntry
+   */
+  public updateEntry(invoiceObj) {
+    console.log(invoiceObj);
+    let invoice = _.cloneDeep(invoiceObj);
+    if (invoice.invoiceNumber) {
+      let dataToSave = {
+        accountUniqueName: invoice.account.uniqueName,
+        voucherNo: invoice.invoiceNumber,
+        ledgerUniqname: invoice.entryUniqueName
+      };
+      this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseEntry(dataToSave));
+    }
+    this.editMode = false;
+    this.selectedRowIndex = null;
   }
 
   /**
