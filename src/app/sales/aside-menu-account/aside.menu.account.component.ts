@@ -13,15 +13,25 @@ import { AccountsAction } from '../../services/actions/accounts.actions';
 @Component({
   selector: 'aside-menu-account',
   styles: [`
-  :host{
-    position: fixed;
-    left: auto;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 400px;
-    z-index: 1045;
-  }
+    :host{
+      position: fixed;
+      left: auto;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 400px;
+      z-index: 1045;
+    }
+    #close{
+      display: none;
+    }
+    :host.in  #close{
+      display: block;
+      position: fixed;
+      left: -42px;
+      top: 0;
+      z-index: 5;
+    }
   `],
   templateUrl: './aside.menu.account.component.html'
 })
@@ -72,11 +82,16 @@ export class AsideMenuAccountComponent implements OnInit {
         this.flatAccountWGroupsList$ = Observable.of(result);
       }
     });
+
+    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
+      if (o) {
+        this.closeAsidePane(event);
+      }
+    });
   }
 
-  public addNewGroup(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
+  public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
     this.store.dispatch(this.accountsAction.createAccount(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
-    this.closeAsidePane(event);
   }
 
   public groupSelected(data) {
