@@ -201,7 +201,7 @@
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="salesAccounts$ | async"
                 (selected)="onSelectSalesAccount($event, transaction)"
-                (noResultsClicked)="onNoResultsClicked()"
+                (noResultsClicked)="onNoResultsClicked(entryIdx)"
                 >
                 <ng-template #optionTemplate let-option="option">
                   <div class="account-list-item">{{option?.label}}</div>
