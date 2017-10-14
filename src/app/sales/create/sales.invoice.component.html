@@ -201,7 +201,7 @@
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="salesAccounts$ | async"
                 (selected)="onSelectSalesAccount($event, transaction)"
-                (noResultsClicked)="onNoResultsClicked()"
+                (noResultsClicked)="onNoResultsClicked(entryIdx)"
                 >
                 <ng-template #optionTemplate let-option="option">
                   <div class="account-list-item">{{option?.label}}</div>
@@ -301,10 +301,14 @@
 
 <!-- open account aside -->
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-<aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+<aside-menu-account
+[class]="accountAsideMenuState"
+[@slideInOut]="accountAsideMenuState"
+(closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
 
 <!-- open product service aside -->
 <aside-menu-product-service
+  [class]="asideMenuStateForProductService"
   [@slideInOut]="asideMenuStateForProductService"
   (closeAsideEvent)="onNoResultsClicked()"
   (animatePAside)="getActionFromAside($event)"
