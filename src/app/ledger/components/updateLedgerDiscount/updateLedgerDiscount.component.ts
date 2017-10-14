@@ -67,13 +67,17 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
     this.appliedDiscountEvent.emit(this.appliedDiscount);
   }
 
+  public genTotal() {
+    this.discountTotal = this.generateTotal();
+  }
+
   /**
    * generate total of discount amount
    * @returns {number}
    */
   public generateTotal() {
     return this.discountAccountsDetails.reduce((pv, cv) => {
-      return cv.amount ? pv + cv.amount : pv;
+      return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
     }, 0);
   }
 

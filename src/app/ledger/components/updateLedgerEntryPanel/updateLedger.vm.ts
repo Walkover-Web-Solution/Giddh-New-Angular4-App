@@ -90,27 +90,6 @@ export class UpdateLedgerVm {
           }
         }
       });
-      // let checkTrxEntryIndex = findIndex(this.selectedLedger.transactions, t => t.particular.uniqueName === 'discount');
-      // if (checkTrxEntryIndex > -1) {
-      //   this.selectedLedger.transactions[checkTrxEntryIndex].amount = total;
-      // } else {
-      //   let trx: ITransactionItem = this.blankTransactionItem('DEBIT');
-      //   let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
-      //   let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
-      //   let index = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '');
-
-      //   trx.amount = total;
-      //   trx.particular.uniqueName = 'discount';
-      //   trx.particular.name = 'discount';
-
-      //   if (index > -1) {
-      //     filterdDebitTrx[index] = trx;
-      //     this.selectedLedger.transactions = [...filterdDebitTrx, ...filterdCrditTrx];
-      //   } else {
-      //     this.selectedLedger.transactions.push(trx);
-      //   }
-
-      // }
     }
     this.generatePanelAmount();
     return;
@@ -256,9 +235,17 @@ export class UpdateLedgerVm {
     // }
     // return this.entryTotal;
   }
-  public onTxnAmountChange() {
+  public onTxnAmountChange(txn: ITransactionItem) {
+    if (txn.selectedAccount && txn.selectedAccount.parentGroups.length > 1 && txn.selectedAccount.parentGroups[1].uniqueName === 'discount') {
+      this.discountComponent.discountAccountsDetails.map(f => {
+        if (f.particular === txn.particular.uniqueName) {
+          f.amount = txn.amount;
+        }
+      });
+    }
     this.generateGrandTotal();
     this.generatePanelAmount();
+    this.discountComponent.genTotal();
   }
   // FIXME: fix amount calculation
   public generatePanelAmount() {

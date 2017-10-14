@@ -1,5 +1,6 @@
 import { INameUniqueName } from './nameUniqueName.interface';
 import { IPagination } from './paginatedResponse.interface';
+import { IFlattenAccountsResultItem } from './flattenAccountsResultItem.interface';
 
 /**
  * interface used in transaction item everywhere
@@ -106,6 +107,7 @@ export interface ITransactionItem {
   particular: INameUniqueName;
   type: string;
   unconfirmedEntry: boolean;
+  selectedAccount?: IFlattenAccountsResultItem | any;
 }
 
 /**
