@@ -1,7 +1,7 @@
 <label *ngIf="label !== ''">
   {{label}}
 </label>
-<div #selection [ngStyle]="{'width': '150px'}" [attr.tabindex]="disabled ? null : 0" [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}" (click)="onSelectContainerClick($event)" (focus)="onSelectContainerFocus()" (keydown)="onSelectContainerKeydown($event)">
+<div #selection [attr.tabindex]="disabled ? null : 0" [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}" (click)="onSelectContainerClick($event)" (focus)="onSelectContainerFocus()" (keydown)="onSelectContainerKeydown($event)">
 
     <div class="single" *ngIf="!multiple">
         <div class="value" *ngIf="optionList.hasSelected">
