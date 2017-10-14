@@ -43,11 +43,11 @@
             <tbody class="ledger-main">
               <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
                 <ng-container *ngIf="txn.type === 'DEBIT'">
-                  <td class="col-xs-2">
+                  <td class="col-xs-3">
                     <input type="text" [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)"
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
-                  <td class="col-xs-7">
+                  <td class="col-xs-6">
                     <ng-select [options]="vm.flatternAccountList4Select | async" #dbtSelect [allowClear]="true" (click)="addBlankTrx('DEBIT', txn, $event)"
                     (selected)="selectAccount($event,txn, dbtSelect)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
@@ -111,11 +111,11 @@
             <tbody class="ledger-main">
               <tr class="" *ngFor="let txn of vm.selectedLedger.transactions" ng-click="$event.stopPropagation()">
                 <ng-container *ngIf="txn.type == 'CREDIT'">
-                  <td class="col-xs-2">
+                  <td class="col-xs-3">
                     <input class="form-control" type="text" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
                       is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
                   </td>
-                  <td class="col-xs-7">
+                  <td class="col-xs-6">
                       <ng-select [options]="vm.flatternAccountList4Select | async" #crdSelect [allowClear]="true" (click)="addBlankTrx('CREDIT', txn, $event)"
                       (selected)="selectAccount($event,txn, crdSelect)"
                       [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions" (deselected)="deSelectAccount($event, txn)">
