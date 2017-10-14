@@ -14,6 +14,7 @@ import { SidebarAction } from '../../../../services/actions/inventory/sidebar.ac
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 
 @Component({
   selector: 'sales-add-group-modal',
@@ -104,11 +105,17 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
     let formObj: StockGroupRequest = this.addStockGroupForm.value;
     this._inventoryService.CreateStockGroup(formObj).takeUntil(this.destroyed$).subscribe((res) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = res;
+      let o: INameUniqueName;
       if (data.status === 'success') {
+        o = {
+          name: data.body.name,
+          uniqueName: data.body.uniqueName
+        };
         this._toasty.successToast('Stock group Created Successfully');
         this.getStockGroups();
         this.addStockGroupFormReset();
         this.closeCreateGroupModal();
+        this._store.dispatch(this._salesActions.createStockGroupSuccess(o));
       } else {
         this._toasty.errorToast(data.message, data.code);
       }
