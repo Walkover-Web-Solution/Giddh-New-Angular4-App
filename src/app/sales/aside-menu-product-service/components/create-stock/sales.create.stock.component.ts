@@ -24,6 +24,7 @@ import { IOption } from '../../../../shared/theme/index';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 
 @Component({
   selector: 'sales-create-stock',
@@ -46,6 +47,9 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public salesAccountsDropDown$: Observable<IOption[]>;
   public isStockNameAvailable$: Observable<boolean>;
   public stockCreationInProcess: boolean = false;
+  public newlyGroupCreated$: Observable<INameUniqueName>;
+  public newlyCreatedAc$: Observable<INameUniqueName>;
+  public modalType: string;
 
   // private
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -80,6 +84,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     });
 
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).takeUntil(this.destroyed$);
+    this.newlyGroupCreated$ = this.store.select(state => state.sales.newlyCreatedGroup).takeUntil(this.destroyed$);
+    this.newlyCreatedAc$ = this.store.select(state => state.groupwithaccounts.newlyCreatedAccount).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -111,6 +117,24 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
 
     this.purchaseAccountsDropDown$ = this.store.select(state => state.sales.purchaseAcList).takeUntil(this.destroyed$);
     this.salesAccountsDropDown$ = this.store.select(state => state.sales.salesAcList).takeUntil(this.destroyed$);
+
+    // listen for newly created group
+    this.newlyGroupCreated$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
+      if (o) {
+        this.selectedGroupUniqueName = o.uniqueName;
+      }
+    });
+
+    // listen for new add account utils
+    this.newlyCreatedAc$.takeUntil(this.destroyed$).subscribe((o: INameUniqueName) => {
+      if (o) {
+        if (this.modalType === 'Purchase') {
+          this.addStockForm.patchValue({ purchaseAccountUniqueName: o.uniqueName });
+        } else if (this.modalType === 'Sales') {
+          this.addStockForm.patchValue({ salesAccountUniqueName: o.uniqueName });
+        }
+      }
+    });
 
   }
 
@@ -208,14 +232,19 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     stockObj.isFsStock =  false;
     this._inventoryService.CreateStock(stockObj, encodeURIComponent(this.selectedGroupUniqueName)).takeUntil(this.destroyed$).subscribe((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res;
+      let item = data.body;
       if (data.status === 'success') {
         // show message
         this.toasty.successToast('Stock created successfully!');
         // form reset, call for get product
         this.addStockForm.reset();
         this.closeAsidePane();
+        // announce other modules if sales ac is linked
+        if (item.salesAccountDetails && item.salesAccountDetails.accountUniqueName) {
+          this.store.dispatch(this._salesActions.createStockAcSuccess({linkedAc: item.salesAccountDetails.accountUniqueName, name: item.name, uniqueName: item.uniqueName}));
+        }
       }else {
-        this.toasty.errorToast('Something went wrong, Please reload page');
+        this.toasty.errorToast(data.message, data.code);
       }
       this.stockCreationInProcess = false;
     });
@@ -235,6 +264,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
    * Accounts related funcs
    */
   public onNoResultsOfAc(val: string) {
+    this.modalType = val;
     this.animateAside.emit({type: val});
   }
 
