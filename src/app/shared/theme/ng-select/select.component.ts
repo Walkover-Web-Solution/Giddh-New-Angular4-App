@@ -47,6 +47,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Input() public multiple: boolean = false;
   @Input() public noFilter: number = 0;
   @Input() public notFoundLink: boolean = false;
+  @Input() public isTypeAheadMode: boolean = false;
 
   // Style settings.
   @Input() public highlightColor: string = '#d25f29';
@@ -93,6 +94,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   private isDisabled: boolean = false;
 
   private clearClicked: boolean = false;
+  private showTypeAheadInput: boolean = false;
   private selectContainerClicked: boolean = false;
   private optionListClicked: boolean = false;
   private optionClicked: boolean = false;
@@ -179,7 +181,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public onDropdownOptionClicked(option: Option) {
     this.optionClicked = true;
-    this.multiple ? this.toggleSelectOption(option) : this.selectOption(option);
+    this.multiple || this.isTypeAheadMode ? this.toggleSelectOption(option) : this.selectOption(option);
   }
 
   public onSingleFilterClick() {
@@ -263,6 +265,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public _blur() {
     if (this.hasFocus) {
       this.hasFocus = false;
+      if (this.isTypeAheadMode) {
+        this.showTypeAheadInput = false;
+      }
       this.onTouched();
       this.blur.emit(null);
     }
@@ -273,6 +278,12 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       this.hasFocus = true;
       this.openDropdown();
       this.focus.emit(null);
+    }
+    if (this.isTypeAheadMode) {
+      this.showTypeAheadInput = true;
+      this.filterInput.nativeElement.value = this.optionList.hasSelected ? this.optionList.selection[0].label : '';
+      setTimeout(() => { this.filterInput.nativeElement.focus(); }, 300);
+
     }
   }
 
@@ -342,7 +353,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   private selectOption(option: Option) {
     if (!option.selected && !option.disabled) {
-      this.optionList.select(option, this.multiple);
+      this.optionList.select(option, this.multiple, this.isTypeAheadMode);
+
       this.valueChanged();
       this.selected.emit(option.wrappedOption);
     }
@@ -398,7 +410,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     if (sel.length > 0) {
       let option: Option = sel[sel.length - 1];
       this.deselectOption(option);
-      this.setMultipleFilterInput(option.label + ' ');
+      if (!this.isTypeAheadMode) {
+        this.setMultipleFilterInput(option.label + ' ');
+      }
     }
   }
 
@@ -454,6 +468,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   private clearFilterInput() {
     if (this.multiple && this.filterEnabled) {
       this.filterInput.nativeElement.value = '';
+    } else if (this.isTypeAheadMode && this.filterEnabled) {
+      this.filterInput.nativeElement.value = this.optionList.selection.length > 0 ? this.optionList.selection[0].label : '';
     }
   }
 
@@ -513,7 +529,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
     if (key === this.KEYS.BACKSPACE) {
       if (this.optionList.hasSelected && this.filterEnabled &&
-        this.filterInput.nativeElement.value === '') {
+        (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
         this.deselectLast();
       }
     }
