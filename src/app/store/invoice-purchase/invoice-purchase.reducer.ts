@@ -76,6 +76,21 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
                 newState.isDownloadingFile = false;
                 return Object.assign({}, state, newState);
             }
+        case PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE:
+            {
+                let response: BaseResponse<any, string> = action.payload;
+                if (response.status === 'success') {
+                    let newState = _.cloneDeep(state);
+                    let uniqueName = response.body.uniqueName;
+                    let indx = newState.purchaseInvoices.findIndex((obj) => obj.entryUniqueName === uniqueName);
+                    if (indx) {
+                        newState.purchaseInvoices[indx].invoiceNumber = response.body.invoiceNumberAgainstVoucher;
+                    }
+                    console.log(response.body);
+                    return Object.assign({}, state, newState);
+                }
+                return state;
+            }
         default:
             {
                 return state;
