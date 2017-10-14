@@ -127,3 +127,7 @@ ng-select {
     padding: 4px 0;
   }
 }
+
+.ng-select-wrap.liq ng-select .below{
+  width: 100% !important;
+}
