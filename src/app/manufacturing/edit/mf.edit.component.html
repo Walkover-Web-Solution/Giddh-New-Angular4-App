@@ -86,8 +86,10 @@
                             <tr *ngFor="let stock of manufacturingDetails.linkedStocks; let i = index;">
                                 <td colspan="2"><span class="hr"></span>{{ stock.stockUniqueName }}</td>
                                 <td>{{ stock.quantity | number:'1.0-4'}}</td>
-                                <td *ngIf="!isUpdateCase">{{ stock.stockUnitCode }}</td>
-                                <td *ngIf="isUpdateCase">{{ stock.manufacturingUnit }}</td>
+                                <td *ngIf="stock.manufacturingUnit; else other">{{ stock.manufacturingUnit }}</td>
+                                <ng-template #other>
+                                    <td>{{ stock.stockUnitCode }}</td>
+                                </ng-template>
                                 <!--<td><input type="text" [(ngModel)]="stock.quantity" name="quantity_{{i}}"></td>-->
                                 <td>{{ stock.rate | number:'1.0-4'}}</td>
                                 <!--<td><input type="text" [(ngModel)]="stock.rate" name="rate_{{i}}"></td>-->
