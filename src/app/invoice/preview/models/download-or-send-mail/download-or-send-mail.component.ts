@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ILedgersInvoiceResult } from '../../../../models/api-models/Invoice';
+import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
@@ -44,11 +44,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   ) {}
 
   public ngOnInit() {
-    this.store.select(p => p.invoice.preview.base64Data).takeUntil(this.destroyed$).subscribe((o: string) => {
-      if (o) {
-        this.base64Data = o;
+    this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
+      if (o && o.dataPreview) {
+        this.base64Data = o.dataPreview;
         this.showPdfWrap = true;
-        let str = 'data:application/pdf;base64,' + o;
+        let str = 'data:application/pdf;base64,' + o.dataPreview;
         this.base64StringForModel = this.sanitizer.bypassSecurityTrustResourceUrl(str);
       }
     });
@@ -58,8 +58,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     this.closeModelEvent.emit(amount);
   }
 
-  public onCancel() {
-    this.closeModelEvent.emit(0);
+  public onCancel(t) {
+    let o: any = {
+      action: t
+    };
+    this.closeModelEvent.emit(o);
   }
 
   /**

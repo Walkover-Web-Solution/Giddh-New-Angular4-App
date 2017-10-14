@@ -2,7 +2,7 @@ import { Configuration } from '../../app.constant';
 
 export const INVENTORY_API = {
   CREATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group', // post call
-  UPDATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniquename', // put call
+  UPDATE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // put call
   DELETE_STOCK_GROUP: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // DELETE call
   STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stocks', // get call
   GROUPS_STOCKS: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName', // get call
@@ -18,4 +18,5 @@ export const INVENTORY_API = {
   DELETE_STOCK_UNIT: Configuration.ApiUrl + 'company/:companyUniqueName/stock-unit/:uName', // DELETE call
   UPDATE_STOCK: Configuration.ApiUrl + 'company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock/:stockUniqueName', // PUT call
   UPDATE_STOCK_UNIT: Configuration.ApiUrl + 'company/:companyUniqueName/stock-unit/:uName', // PUT call
+  GET_RATE_FOR_STOCK: Configuration.ApiUrl + 'company/:companyUniqueName/stock/:stockUniqueName/rate-for-stock', // Get call
 };

@@ -34,21 +34,21 @@
                       </a>
                     </li>
                     <li class="dmLi trialB">
+                        <a [routerLink]="['/pages/sales']">
+                            <div class="media">
+                                <div class="media-body">
+                                    <div class="title">Sales</div>
+                                    <div class="subTitle">Generate sales invoice</div>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    <li class="dmLi trialB">
                       <a [routerLink]="['/pages/settings']">
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Settings</div>
                             <div class="subTitle">Manage your company settings.</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="dmLi trialB">
-                      <a [routerLink]="['/pages/purchase/invoice']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Taxes</div>
-                            <div class="subTitle">Goods and Services Tax</div>
                           </div>
                         </div>
                       </a>
@@ -88,7 +88,17 @@
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Manufacturing</div>
-                            <div class="subTitle">Some info about manufacturing module</div>
+                            <div class="subTitle">Manufacture product</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                      <a [routerLink]="['/pages/purchase/invoice']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Taxes</div>
+                            <div class="subTitle">Goods and Services Tax</div>
                           </div>
                         </div>
                       </a>
@@ -138,7 +148,7 @@
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Permissions</div>
-                            <div class="subTitle">Some info about permission module</div>
+                            <div class="subTitle">Add and manage Roles</div>
                           </div>
                         </div>
                       </a>
@@ -152,7 +162,7 @@
 
         <!-- books search -->
         <li>
-          <div class="ledger_search form-inline" *ngIf="(isProd === 'development' || isElectron) && (selectedCompany | async)">
+          <div class="ledger_search form-inline" *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)">
             <div class="form-group">
               <div class="input-group">
                 <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
@@ -188,7 +198,7 @@
 
             </li>
             <li style="padding:0px;">
-              <ul style="max-height: 260px; overflow:auto;">
+              <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
                 <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
                   (click)="changeCompany(cmp.uniqueName)">
                   <span tooltip-placement="right">{{ cmp.name }}</span>
@@ -208,7 +218,7 @@
               <a href="javascript:void(0)" (click)="showAddCompanyModal()">Create Company</a>
             </li>
             <li>
-              <a ui-sref="company.content.user">User Detail</a>
+              <a [routerLink]="['user-details']">User Detail</a>
             </li>
             <li>
               <a href="javascript:void(0)">Run Tour</a>
@@ -232,8 +242,8 @@
     </div>
   </nav>
 
-  <accounts-side-bar *ngIf="(isProd === 'development' || isElectron) && (selectedCompany | async)" (clickOutside)="closeSidebar($event.target.id)"
-    [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+  <accounts-side-bar *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)"
+    (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->

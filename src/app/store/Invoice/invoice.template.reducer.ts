@@ -16,6 +16,7 @@ export const initialState: CustomTemplateState = {
   sampleTemplates: null,
   customCreatedTemplates: null,
   defaultTemplate: {
+    logoUniqueName: null,
     createdBy: null,
     uniqueName: '',
     fontSize: '10pt',
@@ -23,8 +24,8 @@ export const initialState: CustomTemplateState = {
     updatedAt: '16-09-2017 13:36:17',
     updatedBy: null,
     sample: true,
-    primaryColor: '#df4927',
-    secondaryColor: '#fdf6f4',
+    templateColor: '#df4927',
+    tableColor: '#fdf6f4',
     font: 'Roboto',
     topMargin: 10,
     leftMargin: 10,
@@ -47,18 +48,18 @@ export const initialState: CustomTemplateState = {
           {
             display: true,
             label: 'GSTIN',
-            field: 'GSTIN',
+            field: 'gstin',
             width: null
           },
           {
             display: true,
             label: 'PAN',
-            field: 'PAN',
+            field: 'pan',
             width: null
           },
           {
             display: true,
-            label: 'Walkover Web Solutions Private Limited, 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)',
+            label: '',
             field: 'address',
             width: null
           },
@@ -89,24 +90,24 @@ export const initialState: CustomTemplateState = {
           {
             display: true,
             label: 'Tracking No.',
-            field: 'TrackingNumber',
+            field: 'trackingNumber',
             width: null
           },
+          // {
+          //   display: true,
+          //   label: 'Tracking No.',
+          //   field: 'trackingNumber',
+          //   width: null
+          // },
           {
             display: true,
-            label: 'Tracking No.',
-            field: 'TrackingNumber',
-            width: null
-          },
-          {
-            display: true,
-            label: 'Mr. Alok Gangrade',
+            label: 'Mr. John Doe',
             field: 'customerName',
             width: null
           },
           {
             display: true,
-            label: 'alokgangrade@gmail.com',
+            label: 'john@gmail.com',
             field: 'customerEmail',
             width: null
           },
@@ -184,8 +185,14 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'INVOICE',
+            label: 'TAX INVOICE',
             field: 'formNameTaxInvoice',
+            width: null
+          },
+          {
+            display: true,
+            label: 'Attention To',
+            field: 'attentionTo',
             width: null
           }
         ]
@@ -217,12 +224,12 @@ export const initialState: CustomTemplateState = {
             field: 'hsnSac',
             width: '10'
           },
-          {
-            display: true,
-            label: 'Item Code',
-            field: 'itemCode',
-            width: '10'
-          },
+          // {
+          //   display: true,
+          //   label: 'Item Code',
+          //   field: 'itemCode',
+          //   width: '10'
+          // },
           {
             display: true,
             label: null,
@@ -320,7 +327,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'Walkover Web Solutions Private Limited, 405-406, Capt. C. S. Naydu Arcade, 10/2, Old Palasia, near Greater Kailash Hospital, Indore 452001(M. P.)',
+            label: '',
             field: 'companyAddress',
             width: null
           },
@@ -332,7 +339,7 @@ export const initialState: CustomTemplateState = {
           },
           {
             display: true,
-            label: 'Walkover Web Solutions Private Limited',
+            label: '',
             field: 'slogan',
             width: null
           }

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../services/actions/home/home.actions';
-import moment from 'moment';
+import * as moment from 'moment/moment';
 import * as _ from 'lodash';
 import { ICbAccount, IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';

@@ -13,7 +13,9 @@ import {
   VerifyEmailResponseModel,
   VerifyMobileModel,
   VerifyMobileResponseModel,
-  LinkedInRequestModel
+  LinkedInRequestModel,
+  UserDetails,
+  AuthKeyResponse
 } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
@@ -122,4 +124,111 @@ export class AuthenticationService {
     }).catch((e) => this.errorHandler.HandleCatch<VerifyEmailResponseModel, LinkedInRequestModel>(e, args));
   }
 
+  public SetSettings(model): Observable<BaseResponse<string, string>> {
+    let uniqueName = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        uniqueName = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.put(LOGIN_API.SET_SETTINGS
+      .replace(':userUniqueName', encodeURIComponent(uniqueName)), model).map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
+
+  public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
+    let sessionId = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        sessionId = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.get(LOGIN_API.FETCH_DETAILS
+      .replace(':sessionId', sessionId)).map((res) => {
+        let data: BaseResponse<UserDetails, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, ''));
+  }
+
+  public GetSubScribedCompanies(): Observable<BaseResponse<string, string>> {
+    let userUniqueName = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        userUniqueName = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.get(LOGIN_API.SUBSCRIBED_COMPANIES
+      .replace(':userUniqueName', userUniqueName)).map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
+
+  public AddBalance(model): Observable<BaseResponse<string, string>> {
+    let uniqueName = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        uniqueName = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.get(LOGIN_API.ADD_BALANCE
+      .replace(':uniqueName', uniqueName)).map((res) => {
+        let data: BaseResponse<string, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+  }
+
+  public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
+    let uniqueName = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        uniqueName = s.session.user.user.uniqueName;
+      }
+    });
+
+    return this._http.get(LOGIN_API.GET_AUTH_KEY
+      .replace(':uniqueName', uniqueName)).map((res) => {
+        let data: BaseResponse<AuthKeyResponse, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+  }
+
+  public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
+    let userEmail = null;
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        userEmail = s.session.user.user.email;
+      }
+    });
+
+    return this._http.put(LOGIN_API.REGENERATE_AUTH_KEY
+      .replace(':userEmail', userEmail), {}).map((res) => {
+        let data: BaseResponse<AuthKeyResponse, string> = res.json();
+        data.request = '';
+        data.queryString = { };
+        // data.response.results.forEach(p => p.isOpen = false);
+        return data;
+      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+  }
 }

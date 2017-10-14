@@ -274,6 +274,11 @@ header .navbar {
     border-radius: 2px;
     font-size: 14px;
 }
+.btn-group-lg>.btn, .btn.btn-lg {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.3333333;
+}
 
 .btn-default {
     background: #f8f7f2;
@@ -1951,7 +1956,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 .modal-title {
     font-size: 18px !important;
-    color: black !important
+    /* color: black !important */
 }
 
 .radio {
@@ -2250,7 +2255,8 @@ select.form-control {
 
 .searchBar {
     background: #f8f7f2;
-    border: 1px solid #949494;
+    border: 0;
+    position: relative;
 }
 
 .searchBar .input-group-addon,
@@ -2441,21 +2447,6 @@ label {
 
 .form_bg {
     background: #f4f5f5;
-}
-
-.searchBar {
-    background: #f8f7f2;
-    border: 1px solid #949494;
-}
-
-.searchBar .input-group-addon,
-.searchBar .form-control {
-    background: none;
-    border: 0;
-}
-
-.searchBar .form-control {
-    min-width: 260px;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3056,7 +3047,7 @@ label {
 }
 
 .col_wrapper:last-child {
-    border: 0;
+    /* border: 0; */
 }
 
 .height100 {
@@ -3333,10 +3324,6 @@ label {
     text-align: center;
 }
 
-.open>.dropdown-menu {
-    display: block;
-}
-
 .dropdown-container .dropdown-menu {
     display: block;
     height: 200px;
@@ -3390,6 +3377,15 @@ label {
 .ledger-panel .dropdown-menu {
     border-radius: 0;
     margin: 0;
+}
+/* sales universal styles */
+.tax-list-dd-wrap .dropdown-menu{
+  min-width: 200px;
+}
+.tax-list-dd-wrap .dropdown-menu li label{
+  clear: both;
+  overflow: hidden;
+  cursor: pointer;
 }
 
 
@@ -3960,4 +3956,50 @@ input[type='checkbox'][disabled]:after {
     border-radius: 50%;
     right: 0;
     text-align: center;
+}
+
+.searchBar a {
+    right: 7px;
+    z-index: 9;
+    top: 7px;
+    font-size: 14px;
+}
+
+.phoneNum .input-group-addon {
+    padding: 0;
+    border: 0;
+}
+
+.phoneNum .select2-parent .select2-container .select2-selection--single {
+    line-height: 21px !important;
+    text-align: right;
+}
+
+#verifyMobile .phoneNum ng-select>div,
+#verifyMobile .phoneNum ng-select>div>div.single,
+#verifyMobile .phoneNum ng-select>div>div.single>div.value,
+#verifyMobile .phoneNum ng-select>div>div.single>div.placeholder {
+    height: 46px !important;
+    line-height: 46px !important;
+    text-align: right;
+    outline: 0;
+    font-size: 18px;
+}
+
+#verifyMobile .phoneNum ng-select>div>div.single>div.toggle {
+    line-height: 46px;
+    color: #4d4d4d;
+    height: 44px;
+}
+
+#verifyMobile .phoneNum select-dropdown>div .options ul li {
+    text-align: right;
+}
+
+#verifyMobile .phoneNum ng-select>div {
+    width: 80px !important;
+}
+
+#verifyMobile .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
+    height: 44px;
 }

@@ -5,7 +5,7 @@ import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewInvoiceResponseClass, GetAllLedgersForInvoiceResponse, GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
@@ -51,14 +51,14 @@ export class InvoiceGenerateComponent implements OnInit {
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
   public allItemsSelected: boolean = false;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-  private modalRef: BsModalRef;
-  private config = {
+  public  modalRef: BsModalRef;
+  public modalConfig = {
     animated: true,
     keyboard: false,
-    backdrop: true,
+    backdrop: 'static',
     ignoreBackdropClick: true
   };
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private modalService: BsModalService,
@@ -88,7 +88,7 @@ export class InvoiceGenerateComponent implements OnInit {
       }
     });
 
-    this.store.select(p => p.invoice.generate.ledgers)
+    this.store.select(p => p.invoice.ledgers)
       .takeUntil(this.destroyed$)
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
@@ -96,7 +96,7 @@ export class InvoiceGenerateComponent implements OnInit {
         }
       });
 
-    this.store.select(p => p.invoice.generate.invoiceData)
+    this.store.select(p => p.invoice.invoiceData)
       .takeUntil(this.destroyed$)
       .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
         if (p && q) {
@@ -115,8 +115,14 @@ export class InvoiceGenerateComponent implements OnInit {
 
   }
 
-  public closeInvoiceModel() {
+  public closeInvoiceModel(e) {
+    if (e.action === 'generate') {
+      this.selectedLedgerItems = [];
+    }
     this.invoiceGenerateModel.hide();
+    setTimeout(() => {
+      this.store.dispatch(this.invoiceActions.ResetInvoiceData());
+    }, 2000);
   }
 
   public getLedgersByFilters(f: NgForm) {
@@ -200,19 +206,24 @@ export class InvoiceGenerateComponent implements OnInit {
     this.ledgerSearchRequest[model] = '';
   }
 
-  private getInvoiceTemplateDetails(templateUniqueName: string) {
-    this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+  public getInvoiceTemplateDetails(templateUniqueName: string) {
+    if (templateUniqueName) {
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
+    }else {
+      console.log ('error hardcoded: templateUniqueName');
+      this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
+    }
   }
 
-  private showInvoiceModal() {
+  public showInvoiceModal() {
     this.invoiceGenerateModel.show();
   }
 
-  private getLedgersOfInvoice() {
+  public getLedgersOfInvoice() {
     this.store.dispatch(this.invoiceActions.GetAllLedgersForInvoice(this.prepareQueryParamsForLedgerApi(), this.prepareModelForLedgerApi()));
   }
 
-  private prepareModelForLedgerApi() {
+  public prepareModelForLedgerApi() {
     let model: InvoiceFilterClass = {};
     let o = _.cloneDeep(this.ledgerSearchRequest);
     if (o.accountUniqueName) {
@@ -240,7 +251,7 @@ export class InvoiceGenerateComponent implements OnInit {
     return model;
   }
 
-  private prepareQueryParamsForLedgerApi() {
+  public prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
     return {
       from: moment(o.from).format('DD-MM-YYYY'),
@@ -250,7 +261,7 @@ export class InvoiceGenerateComponent implements OnInit {
     };
   }
 
-  private countAndToggleVar() {
+  public countAndToggleVar() {
     let total: number = this.ledgersData.results.length;
     let count: number = 0;
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
@@ -263,7 +274,7 @@ export class InvoiceGenerateComponent implements OnInit {
     }
   }
 
-  private insertItemsIntoArr() {
+  public insertItemsIntoArr() {
     _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
       let idx = _.indexOf(this.selectedLedgerItems, item.uniqueName);
       if (item.isSelected) {

@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
-import path from 'path';
-import url from 'url';
+import * as path from 'path';
+import * as url from 'url';
 import './dev-extensions';
 import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from './main-auth.config';
 

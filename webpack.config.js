@@ -12,6 +12,10 @@ switch (process.env.NODE_ENV) {
   case 'development:renderer':
     module.exports = require('./config/webpack.renderer.dev')({env: 'production'});
     break;
+  case 'stage':
+  case 'stageing':
+    module.exports = require('./config/webpack.stage')({env: 'production'});
+  break;
   case 'prod':
   case 'production':
     module.exports = require('./config/webpack.prod')({env: 'production'});
