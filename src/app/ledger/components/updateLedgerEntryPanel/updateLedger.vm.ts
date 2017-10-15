@@ -91,6 +91,13 @@ export class UpdateLedgerVm {
               }
             }
           }
+        } else {
+          this.discountArray.map(d => {
+            if (d.particular === dx.particular.uniqueName) {
+              d.amount = 0;
+            }
+          });
+          this.discountComponent.genTotal();
         }
       });
     }

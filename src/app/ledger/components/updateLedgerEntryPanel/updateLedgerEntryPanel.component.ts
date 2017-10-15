@@ -31,7 +31,7 @@ import { SelectComponent } from '../../../shared/theme/ng-select/select.componen
 export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
-  @Output() public entryDeleted: EventEmitter<boolean> = new EventEmitter();
+  @Output() public entryManipulated: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
@@ -147,7 +147,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
       if (del) {
         this.hideDeleteEntryModal();
-        this.entryDeleted.emit(true);
+        this.entryManipulated.emit(true);
+      }
+    });
+
+    // chek if update entry is success
+    this.isTxnUpdateSuccess$.subscribe(upd => {
+      if (upd) {
+        this.entryManipulated.emit(true);
       }
     });
   }
@@ -268,9 +275,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public saveLedgerTransaction() {
     this.vm.selectedLedger.voucherType = this.vm.selectedLedger.voucher.shortCode;
     this.vm.selectedLedger.transactions = this.vm.selectedLedger.transactions.filter(p => p.particular.uniqueName);
-    this._ledgerService.UpdateLedgerTransactions(this.vm.selectedLedger, this.accountUniqueName, this.entryUniqueName).subscribe(a => {
-      debugger;
-    });
+    this.store.dispatch(this._ledgerAction.updateTxnEntry(this.vm.selectedLedger, this.accountUniqueName, this.entryUniqueName));
   }
   public ngOnDestroy(): void {
     this.vm.selectedLedger = null;
