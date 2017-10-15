@@ -8,6 +8,7 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountData, UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
+import { LedgerService } from '../../../services/ledger.service';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -20,7 +21,9 @@ export class UpdateLedgerVm {
   public voucherTypeList: IOption[];
   public isDisabledTaxesAndDiscounts: boolean = false;
   public discountArray: ILedgerDiscount[] = [];
-  constructor(private _toasty: ToasterService, private discountComponent: UpdateLedgerDiscountComponent) {
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  constructor(private _toasty: ToasterService, private discountComponent: UpdateLedgerDiscountComponent,
+    private _ledgerService: LedgerService) {
     this.voucherTypeList = [{
       label: 'Sales',
       value: 'sal'
@@ -275,4 +278,8 @@ export class UpdateLedgerVm {
   public generateGrandTotal() {
     this.grandTotal = this.totalAmount;
   }
+
+  // public submitUpdateRequest() {
+  //   this._ledgerService.UpdateLedgerTransactions();
+  // }
 }

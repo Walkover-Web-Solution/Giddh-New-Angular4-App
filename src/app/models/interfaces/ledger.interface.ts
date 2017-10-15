@@ -65,7 +65,7 @@ export interface ILedger {
   transactions: ILedgerTransactionItem[];
   unconfirmedEntry?: boolean;
   voucher: IVoucherItem;
-  voucherType: string;
+  voucherType?: string;
 }
 
 export interface ITransactions extends IPagination {

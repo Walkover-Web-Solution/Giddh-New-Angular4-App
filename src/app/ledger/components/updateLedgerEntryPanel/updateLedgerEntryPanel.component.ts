@@ -66,10 +66,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public isFileUploading: boolean = false;
   public accountUniqueName: string;
   public entryUniqueName$: Observable<string>;
+  public entryUniqueName: string;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public uploadInput: EventEmitter<UploadInput>;
   public selectedAccount: IFlattenAccountsResultItem = null;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
+  public isTxnUpdateInProcess$: Observable<boolean>;
+  public isTxnUpdateSuccess$: Observable<boolean>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
@@ -80,6 +83,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
+    this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
+    this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
 
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
@@ -106,7 +111,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
+    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent, this._ledgerService);
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
@@ -119,6 +124,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
     //  get entry from server
     this.entryUniqueName$.subscribe(entryName => {
+      this.entryUniqueName = entryName;
       if (entryName) {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
           if (resp.status === 'success') {
@@ -259,6 +265,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.hideDeleteAttachedFileModal();
   }
 
+  public saveLedgerTransaction() {
+    this.vm.selectedLedger.voucherType = this.vm.selectedLedger.voucher.shortCode;
+    this.vm.selectedLedger.transactions = this.vm.selectedLedger.transactions.filter(p => p.particular.uniqueName);
+    this._ledgerService.UpdateLedgerTransactions(this.vm.selectedLedger, this.accountUniqueName, this.entryUniqueName).subscribe(a => {
+      debugger;
+    });
+  }
   public ngOnDestroy(): void {
     this.vm.selectedLedger = null;
     this.destroyed$.next(true);

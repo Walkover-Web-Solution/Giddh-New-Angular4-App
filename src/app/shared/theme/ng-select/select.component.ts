@@ -526,7 +526,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   private handleMultipleFilterKeydown(event: any) {
     let key = event.which;
-
     if (key === this.KEYS.BACKSPACE) {
       if (this.optionList.hasSelected && this.filterEnabled &&
         (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
