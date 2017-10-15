@@ -342,7 +342,7 @@
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg" style="width:90%" *ngIf="showUpdateLedgerForm">
         <div class="modal-content">
-            <update-ledger-entry-panel (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (entryDeleted)="entryDeleted()">
+            <update-ledger-entry-panel (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (entryManipulated)="entryManipulated()">
             </update-ledger-entry-panel>
         </div>
     </div>

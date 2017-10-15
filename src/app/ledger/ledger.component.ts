@@ -452,7 +452,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
-  public entryDeleted() {
+  public entryManipulated() {
     this.hideUpdateLedgerModal();
     this.trxRequest = new TransactionsRequest();
     this.trxRequest.accountUniqueName = this.lc.accountUnq;
