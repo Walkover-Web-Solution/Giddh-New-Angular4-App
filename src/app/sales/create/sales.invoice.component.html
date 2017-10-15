@@ -28,7 +28,7 @@
             <div class="form-group noMarg">
               <label>Add Entry Against</label>
               <select class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
-                <option [ngValue]="select">Select Bank</option>
+                <option [ngValue]="'select'">Select Bank</option>
                 <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async" >{{ bank.name }}</option>
               </select>
             </div>

@@ -44,8 +44,8 @@
               <tr class="debit-blank-row" *ngFor="let txn of vm.selectedLedger.transactions">
                 <ng-container *ngIf="txn.type === 'DEBIT'">
                   <td class="col-xs-3">
-                    <input type="text" [(ngModel)]="vm.selectedLedger.entryDate" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)"
-                      is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
+                    <input type="text" [(ngModel)]="vm.selectedLedger.entryDate" (focus)="$event.target.select()" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)"
+                    [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="col-xs-6">
                     <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
@@ -112,8 +112,8 @@
               <tr class="" *ngFor="let txn of vm.selectedLedger.transactions" ng-click="$event.stopPropagation()">
                 <ng-container *ngIf="txn.type == 'CREDIT'">
                   <td class="col-xs-3">
-                    <input class="form-control" type="text" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
-                      is-open="txn.isOpen" ui-mask="99-99-9999" model-view-value="true">
+                    <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
+                    [textMask]="{mask: vm.dateMask, guide: true}">
                   </td>
                   <td class="col-xs-6">
                       <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
@@ -375,7 +375,7 @@
               </label>
             </div> -->
 
-            <button class="btn btn-success" ng-click="ledgerCtrl.saveUpdateLedger()">Update</button>
+            <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()">Update</button>
           </div>
         </div>
       </div>
