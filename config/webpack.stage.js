@@ -30,7 +30,7 @@ const ENV = process.env.NODE_ENV = process.env.ENV = 'staging';
 const HOST = process.env.HOST || 'giddh.com';
 const PORT = process.env.PORT || 80;
 const AppUrl = 'http://test.giddh.com/electron/';
-const ApiUrl = 'http://apitest.giddh.com/';
+const ApiUrl = 'http://apidev.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
 }).metadata, {

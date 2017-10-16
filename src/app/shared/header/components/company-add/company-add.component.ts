@@ -8,7 +8,7 @@ import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
-import { ComapnyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
@@ -33,7 +33,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public isMobileVerified: Observable<boolean>;
   public isCompanyCreationInProcess$: Observable<boolean>;
   public isCompanyCreated$: Observable<boolean>;
-  public companies$: Observable<ComapnyResponse[]>;
+  public companies$: Observable<CompanyResponse[]>;
   public showMobileVarifyMsg: boolean = false;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
   public dataSource: Observable<any>;
