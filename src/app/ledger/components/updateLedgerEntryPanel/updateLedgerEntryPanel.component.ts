@@ -35,6 +35,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
+  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
   public accountsOptions: Select2Options = {
