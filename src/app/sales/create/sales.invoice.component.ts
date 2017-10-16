@@ -346,7 +346,7 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
-  public onNoResultsClicked(idx: number) {
+  public onNoResultsClicked(idx?: number) {
     if (_.isUndefined(idx)) {
       this.getAllFlattenAc();
     }else {
