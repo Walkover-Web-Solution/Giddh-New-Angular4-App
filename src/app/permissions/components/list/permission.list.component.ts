@@ -61,7 +61,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
             return cmp.uniqueName === session.companyUniqueName;
           });
           if (selectedCompany && selectedCompany.uniqueName === session.companyUniqueName) {
-            if (selectedCompany.role.uniqueName !== 'super_admin') {
+            if (selectedCompany.userEntityRoles[0].role.uniqueName !== 'super_admin') {
               this.redirectToDashboard();
             }
           } else {
