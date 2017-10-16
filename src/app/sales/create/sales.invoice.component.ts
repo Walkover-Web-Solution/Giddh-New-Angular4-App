@@ -346,7 +346,7 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
-  public onNoResultsClicked(idx: number) {
+  public onNoResultsClicked(idx?: number) {
     if (_.isUndefined(idx)) {
       this.getAllFlattenAc();
     }else {
@@ -453,7 +453,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.store.dispatch(this.salesAction.getAccountDetailsForSales(accountUniqueName));
   }
 
-  public toggleAccountAsidePane(event): void {
+  public toggleAccountAsidePane(event?): void {
     if (event) {
       event.preventDefault();
     }
@@ -522,7 +522,7 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   // get action type from aside window and open respective modal
-  public getActionFromAside(e: any) {
+  public getActionFromAside(e?: any) {
     if (e.type === 'groupModal') {
       this.showCreateGroupModal = true;
       // delay just for ng cause
@@ -539,7 +539,7 @@ export class SalesInvoiceComponent implements OnInit {
     }
   }
 
-  public closeCreateGroupModal(e: any) {
+  public closeCreateGroupModal(e?: any) {
     this.createGroupModal.hide();
   }
 
