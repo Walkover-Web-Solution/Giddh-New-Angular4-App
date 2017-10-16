@@ -96,7 +96,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
           if (acc.stocks) {
             acc.stocks.map(as => {
               accountsArray.push({
-                value: acc.uniqueName,
+                value: `${acc.uniqueName}#${as.uniqueName}`,
                 label: acc.name,
                 additional: Object.assign({}, acc, { stock: as })
               });
@@ -131,6 +131,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
           if (resp.status === 'success') {
             this.vm.selectedLedger = resp.body;
             this.vm.selectedLedgerBackup = resp.body;
+
+            this.vm.selectedLedger.transactions.map(t => {
+              if (t.inventory) {
+                t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+              }
+            });
             if (this.vm.selectedLedger.total.type === 'DEBIT') {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
             } else {
