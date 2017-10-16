@@ -12,7 +12,7 @@ import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoicePurchaseActions } from '../../services/actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
-import { ComapnyResponse } from '../../models/api-models/Company';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { saveAs } from 'file-saver';
 import { AccountService } from '../../services/account.service';
@@ -107,7 +107,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public fileGstrOptions: any[] = fileGstrOptions;
   public activeCompanyUniqueName: string;
   public activeCompanyGstNumber: string;
-  public companies: ComapnyResponse[];
+  public companies: CompanyResponse[];
   public isDownloadingFileInProgress: boolean = false;
   public mainInput = {
     start: moment().subtract(12, 'month'),
@@ -141,7 +141,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       if (c.length) {
         let companies = this.companies = _.cloneDeep(c);
         if (this.activeCompanyUniqueName) {
-          let activeCompany: any = companies.find((o: ComapnyResponse) => o.uniqueName === this.activeCompanyUniqueName);
+          let activeCompany: any = companies.find((o: CompanyResponse) => o.uniqueName === this.activeCompanyUniqueName);
           if (activeCompany && activeCompany.gstDetails[0]) {
             this.activeCompanyGstNumber = activeCompany.gstDetails[0].gstNumber;
           } else {

@@ -5,7 +5,7 @@ import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
 import 'jspdf-autotable';
@@ -32,7 +32,7 @@ class FormatPdf implements IFormatable {
     // this.colY = 50;
   }
 
-  public setHeader(selectedCompany: ComapnyResponse) {
+  public setHeader(selectedCompany: CompanyResponse) {
     console.log(selectedCompany.address);
     this.pdf.setFontSize(16);
     this.pdf.text(10, this.colY, selectedCompany.name);
@@ -104,7 +104,7 @@ class FormatPdf implements IFormatable {
 })
 export class TbExportPdfComponent implements OnInit, OnDestroy {
   @Input() public trialBalanceRequest: TrialBalanceRequest;
-  @Input() public selectedCompany: ComapnyResponse;
+  @Input() public selectedCompany: CompanyResponse;
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   public enableDownload: boolean = true;
   public showPdf: boolean;

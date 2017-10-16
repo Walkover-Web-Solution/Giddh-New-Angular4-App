@@ -1,5 +1,5 @@
 import { UserDetails } from '../../../models/api-models/loginModels';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 
 import * as moment from 'moment/moment';
@@ -40,7 +40,7 @@ export class AuditLogsSidebarVM {
     { text: 'ledger', id: 'ledger' },
     { text: 'voucher', id: 'voucher' },
     { text: 'logs', id: 'logs' }];
-  public selectedCompany: Observable<ComapnyResponse>;
+  public selectedCompany: Observable<CompanyResponse>;
   public getLogsInprocess$: Observable<boolean>;
   public dateOptions: any[] = [{ text: 'Date Range', id: 1 }, { text: 'Entry/Log Date', id: 0 }];
   public showFromDatePicker: boolean = false;
