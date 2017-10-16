@@ -157,11 +157,16 @@ export class UpdateLedgerVm {
   public isValidEntry(accountName: string): boolean {
     let flag = true;
     if (!this.isItDuplicate(accountName)) {
-      // let parentCategory = this.getCategoryNameFromAccount(this.selectedLedger.transactions[0].particular.uniqueName);
       let accountCategory = this.getCategoryNameFromAccount(accountName);
       if (accountCategory === 'income') {
         for (let key of this.selectedLedger.transactions) {
-          let keyCategory = this.getCategoryNameFromAccount(key.particular.uniqueName);
+          let uniqueName = null;
+          if (key.inventory) {
+            uniqueName = key.particular.uniqueName.split('#')[0];
+          } else {
+            uniqueName = key.particular.uniqueName;
+          }
+          let keyCategory = this.getCategoryNameFromAccount(uniqueName);
           if (keyCategory === 'income' || keyCategory === 'expenses') {
             flag = false;
             this._toasty.warningToast('you can\'t add income | expenses account if expenses account is already added');
@@ -171,7 +176,13 @@ export class UpdateLedgerVm {
         return flag;
       } else if (accountCategory === 'expenses') {
         for (let key of this.selectedLedger.transactions) {
-          let keyCategory = this.getCategoryNameFromAccount(key.particular.uniqueName);
+          let uniqueName = null;
+          if (key.inventory) {
+            uniqueName = key.particular.uniqueName.split('#')[0];
+          } else {
+            uniqueName = key.particular.uniqueName;
+          }
+          let keyCategory = this.getCategoryNameFromAccount(uniqueName);
           if (keyCategory === 'income' || this.isThereAssestOrLiabilitiesEntry()) {
             flag = false;
             this._toasty.warningToast('you can\'t add income | same expenses account |  if income account is already added');
@@ -181,7 +192,13 @@ export class UpdateLedgerVm {
         return flag;
       } else if (accountCategory === 'discount') {
         let filterdArray = this.selectedLedger.transactions.filter(p => {
-          let keyCategory = this.getCategoryNameFromAccount(p.particular.uniqueName);
+          let uniqueName = null;
+          if (p.inventory) {
+            uniqueName = p.particular.uniqueName.split('#')[0];
+          } else {
+            uniqueName = p.particular.uniqueName;
+          }
+          let keyCategory = this.getCategoryNameFromAccount(uniqueName);
           if (keyCategory === 'income' || keyCategory === 'expenses' || keyCategory === 'roundoff' || keyCategory === 'discount') {
             return true;
           }

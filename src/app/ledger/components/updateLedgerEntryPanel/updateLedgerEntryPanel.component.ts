@@ -218,7 +218,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       // txn.discounts = [];
       return;
     } else {
-      if (!this.vm.isValidEntry(e.value)) {
+      // handle accountUniqueName for inventory purpose
+      let accountUniqueName = null;
+      if (e.additional.stock) {
+        accountUniqueName = e.value.split('#')[0];
+      } else {
+        accountUniqueName = e.value;
+      }
+
+      if (txn.selectedAccount) {
+        // check if discount is added and update component as needed
+        this.vm.discountArray.map(d => {
+          if (d.particular === txn.selectedAccount.uniqueName) {
+            d.amount = 0;
+          }
+        });
+        this.discountComponent.genTotal();
+      }
+
+      if (!this.vm.isValidEntry(accountUniqueName)) {
         selectCmp.clear();
         this.selectedAccount = null;
         txn.selectedAccount = null;
@@ -228,6 +246,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
     if (e.additional.stock) {
       if (this.vm.isThereStockEntry()) {
+        selectCmp.clear();
         txn.particular.uniqueName = null;
         txn.particular.name = null;
         this.selectedAccount = null;
@@ -249,7 +268,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         d.amount = 0;
       }
     });
-    this.discountComponent.change();
+    this.discountComponent.genTotal();
   }
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
