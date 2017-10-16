@@ -33,7 +33,7 @@
       {{placeholderView}}
     </div>
     <input *ngIf="filterEnabled" #filterInput autocomplete="off" tabindex="-1" [placeholder]="placeholderView" [ngStyle]="{'width.px': filterInputWidth}"
-      (input)="onFilterInput($event.target.value)" (keydown)="onMultipleFilterKeydown($event)" (focus)="onMultipleFilterFocus()"
+      (input)="onFilterInput($event.target.value)" (keydown)="onMultipleFilterKeydown($event)"  (focus)="onMultipleFilterFocus()"
     />
 
   </div>
@@ -42,7 +42,7 @@
     <div class="option" style="width:100%;">
       <ng-container *ngIf="optionList.hasSelected  && !showTypeAheadInput"> {{optionList.selection[0].label}}</ng-container>
       <input *ngIf="filterEnabled" [ngStyle]="{'display': showTypeAheadInput ? 'block':'none'}" #filterInput autocomplete="off" tabindex="-1" [placeholder]="placeholderView"
-        (input)="onFilterInput($event.target.value)" (keydown)="onMultipleFilterKeydown($event)" (focus)="onMultipleFilterFocus()"
+        (input)="onFilterInput($event.target.value)" (keydown)="onMultipleFilterKeydown($event)" (keyup)="onMultipleFilterKeyup($event)" (focus)="onMultipleFilterFocus()"
         class="form-control"  />
       <ng-container *ngIf="optionList.hasSelected && !showTypeAheadInput">
         <span class="deselect-option" (click)=onDeselectOptionClick(optionList.selection[0])>
