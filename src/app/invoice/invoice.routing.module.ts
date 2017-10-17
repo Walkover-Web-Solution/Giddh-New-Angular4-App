@@ -31,6 +31,7 @@ import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/
 import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
 import { DeleteTemplateConfirmationModelComponent } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
+import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
 
 const INVOICE_ROUTES: Routes = [
   {
@@ -39,9 +40,9 @@ const INVOICE_ROUTES: Routes = [
     component: InvoiceComponent,
     children: [
       { path: '', redirectTo: 'preview', pathMatch: 'full' },
-      { path: 'preview',  component: InvoicePreviewComponent  },
-      { path: 'generate',  component: InvoiceGenerateComponent },
-      { path: 'templates',  component: EditInvoiceComponent },
+      { path: 'preview', component: InvoicePreviewComponent },
+      { path: 'generate', component: InvoiceGenerateComponent },
+      { path: 'templates', component: EditInvoiceComponent },
       { path: 'settings', component: InvoiceSettingComponent },
     ]
   }
@@ -64,7 +65,8 @@ const INVOICE_ROUTES: Routes = [
     InvoiceTemplateModalComponent,
     InvoiceEmailFilterComponent,
     DeleteTemplateConfirmationModelComponent,
-    InvoiceTemplatePreviewModelComponent
+    InvoiceTemplatePreviewModelComponent,
+    EsignModalComponent
   ],
   imports: [
     FormsModule,
