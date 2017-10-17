@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
