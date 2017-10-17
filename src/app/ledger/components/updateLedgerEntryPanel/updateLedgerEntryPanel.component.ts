@@ -263,6 +263,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.vm.onTxnAmountChange(txn);
   }
   public deSelectAccount(e: IOption, txn: ITransactionItem) {
+    this.vm.selectedLedger.transactions.map(t => {
+      if (t.particular.uniqueName === e.value) {
+        t.inventory = null;
+        t.particular.name = undefined;
+        t.particular.uniqueName = undefined;
+      }
+    });
     this.vm.discountArray.map(d => {
       if (d.particular === e.value) {
         d.amount = 0;
@@ -299,9 +306,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public saveLedgerTransaction() {
-    this.vm.selectedLedger.voucherType = this.vm.selectedLedger.voucher.shortCode;
-    this.vm.selectedLedger.transactions = this.vm.selectedLedger.transactions.filter(p => p.particular.uniqueName);
-    this.store.dispatch(this._ledgerAction.updateTxnEntry(this.vm.selectedLedger, this.accountUniqueName, this.entryUniqueName));
+    let requestObj: LedgerResponse = { ...this.vm.selectedLedger };
+    requestObj.voucherType = requestObj.voucher.shortCode;
+    requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
+    requestObj.transactions.map(trx => {
+      if (trx.inventory && trx.inventory.stock) {
+        trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
+      }
+    });
+    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
   }
   public ngOnDestroy(): void {
     this.vm.selectedLedger = null;
