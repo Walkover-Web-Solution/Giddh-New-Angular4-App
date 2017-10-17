@@ -135,6 +135,7 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
   }
 
   public closeCreateAcModal() {
+    this.addAcForm.reset();
     this.actionFired.emit();
   }
 }
