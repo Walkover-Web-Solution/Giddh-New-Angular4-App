@@ -479,15 +479,6 @@ export class InvoiceActions {
       return { type: '' };
     });
 
-  // E_Signature
-  @Effect()
-  private eSignature$: Observable<Action> = this.action$
-    .ofType(INVOICE_ACTIONS.E_SIGNATURE)
-    .switchMap(action => this._invoiceTemplatesService.SaveEsignature(action.payload))
-    .map(response => {
-      return this.deleteTemplateResponse(response);
-    });
-
   constructor(
     private action$: Actions,
     private _invoiceService: InvoiceService,
