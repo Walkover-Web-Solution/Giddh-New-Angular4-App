@@ -14,6 +14,8 @@ export interface SalesState {
   purchaseAcList: IOption[];
   salesAcList: IOption[];
   newlyCreatedGroup: INameUniqueName;
+  newlyCreatedStockAc: any;
+  flattenSalesAc: IOption[];
 }
 const initialState = {
   invObj: null,
@@ -21,7 +23,9 @@ const initialState = {
   hierarchicalStockGroups: null,
   purchaseAcList: null,
   salesAcList: null,
-  newlyCreatedGroup: null
+  newlyCreatedGroup: null,
+  newlyCreatedStockAc: null,
+  flattenSalesAc: []
 };
 
 export function salesReducer(state = initialState, action: Action): SalesState {
@@ -63,6 +67,14 @@ export function salesReducer(state = initialState, action: Action): SalesState {
     case SALES_ACTIONS.STOCK_GROUP_SUCCESS: {
       let data = action.payload;
       return Object.assign({}, state, { newlyCreatedGroup: data });
+    }
+    case SALES_ACTIONS.STOCK_AC_SUCCESS: {
+      let data = action.payload;
+      return Object.assign({}, state, { newlyCreatedStockAc: data });
+    }
+    case SALES_ACTIONS.SALES_FLATTEN_AC_STORED: {
+      let data = action.payload;
+      return Object.assign({}, state, { flattenSalesAc: data });
     }
     default: {
       return state;
