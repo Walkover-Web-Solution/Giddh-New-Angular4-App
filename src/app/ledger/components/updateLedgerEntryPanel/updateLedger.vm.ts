@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../../shared/theme/select2/index';
-import { ITransactionItem, ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
+import { ITransactionItem, ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { sumBy, find, filter, findIndex } from 'lodash';
 import { IOption } from '../../../shared/theme/index';
@@ -223,7 +223,7 @@ export class UpdateLedgerVm {
   }
 
   public isThereStockEntry(): boolean {
-    return find(this.selectedLedger.transactions, (f => f.inventory.stock)) !== undefined;
+    return find(this.selectedLedger.transactions, (f: ILedgerTransactionItem) => (f.inventory && f.inventory.stock) ? true : false) !== undefined;
   }
 
   public isThereIncomeOrExpenseEntry(): boolean {
