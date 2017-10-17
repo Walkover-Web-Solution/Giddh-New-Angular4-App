@@ -21,7 +21,8 @@ import {
   InvoiceTemplateDetailsResponse,
   GenerateInvoiceRequestClass,
   GenerateBulkInvoiceRequest,
-  CustomTemplateResponse
+  CustomTemplateResponse,
+  Esignature
 } from '../../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
 // import {
@@ -453,7 +454,7 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast('Template successfully marked as default.');
       }
-      return { type : ''};
+      return { type: '' };
     });
 
   // DELETE TEMPLATE
@@ -476,6 +477,15 @@ export class InvoiceActions {
         this._toasty.successToast(data.body);
       }
       return { type: '' };
+    });
+
+  // E_Signature
+  @Effect()
+  private eSignature$: Observable<Action> = this.action$
+    .ofType(INVOICE_ACTIONS.E_SIGNATURE)
+    .switchMap(action => this._invoiceTemplatesService.SaveEsignature(action.payload))
+    .map(response => {
+      return this.deleteTemplateResponse(response);
     });
 
   constructor(
@@ -531,7 +541,7 @@ export class InvoiceActions {
   public VisitToInvoiceFromPreview(): Action {
     return {
       type: INVOICE_ACTIONS.VISIT_FROM_PREVIEW,
-      payload: { }
+      payload: {}
     };
   }
 
@@ -1140,6 +1150,13 @@ export class InvoiceActions {
   public SendInvoiceOnMailResponse(model: BaseResponse<string, string>): Action {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL_RESPONSE,
+      payload: model
+    };
+  }
+
+  public Esignature(model: Esignature): Action {
+    return {
+      type: INVOICE_ACTIONS.E_SIGNATURE,
       payload: model
     };
   }
