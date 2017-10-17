@@ -107,15 +107,19 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
   public generateUniqueName() {
     let val: string = this.addAcForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
-    this._store.dispatch(this._accountsAction.getAccountUniqueName(val));
-    this.isAccountNameAvailable$.subscribe(a => {
-      if (a) {
-        this.addAcForm.patchValue({ uniqueName: val });
-      } else {
-        let num = 1;
-        this.addAcForm.patchValue({ uniqueName: val + num });
-      }
-    });
+    if (val) {
+      this._store.dispatch(this._accountsAction.getAccountUniqueName(val));
+      this.isAccountNameAvailable$.subscribe(a => {
+        if (a) {
+          this.addAcForm.patchValue({ uniqueName: val });
+        } else {
+          let num = 1;
+          this.addAcForm.patchValue({ uniqueName: val + num });
+        }
+      });
+    }else {
+      this.addAcForm.patchValue({ uniqueName: null });
+    }
 
   }
 
