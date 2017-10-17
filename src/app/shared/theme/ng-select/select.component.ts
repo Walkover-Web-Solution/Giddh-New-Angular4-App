@@ -395,6 +395,19 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     }
   }
 
+  private clearSelectionManually() {
+    let selection: Option[] = this.optionList.selection;
+    if (selection.length > 0) {
+      if (selection.length === 1) {
+        this.deselected.emit(selection[0].wrappedOption);
+      } else {
+        this.deselected.emit(selection.map(option => option.wrappedOption));
+      }
+      this.optionList.clearSelection();
+      // this.valueChanged();
+    }
+  }
+
   private toggleSelectOption(option: Option) {
     option.selected ? this.deselectOption(option) : this.selectOption(option);
   }
@@ -531,9 +544,12 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     let key = event.which;
     if (key === this.KEYS.BACKSPACE) {
       if (this.optionList.hasSelected && this.filterEnabled &&
-        (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
+        (this.filterInput.nativeElement.value === '' && !this.isTypeAheadMode)) {
         this.deselectLast();
-      }
+      } else if (this.optionList.hasSelected && this.filterEnabled &&
+        (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
+          this.clearSelectionManually();
+        }
     }
   }
   private handleMultipleFilterKeyup(event: any) {
