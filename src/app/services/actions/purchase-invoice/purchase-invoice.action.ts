@@ -7,7 +7,7 @@ import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../settings.profile.service';
 import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
 import { PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
-import { PurchaseInvoiceService, IInvoicePurchaseResponse } from '../../purchase-invoice.service';
+import { PurchaseInvoiceService, IInvoicePurchaseResponse, ITaxResponse } from '../../purchase-invoice.service';
 import { ToasterService } from '../../toaster.service';
 import { AppState } from '../../../store/roots';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
@@ -32,7 +32,28 @@ export class InvoicePurchaseActions {
   public UpdatePurchaseInvoice$: Observable<Action> = this.action$
     .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE)
     .switchMap(action => {
-      return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload)
+      console.log('Effect CAlled');
+      return this.purchaseInvoiceService.UpdatePurchaseInvoice(action.payload.entryUniqueName, action.payload.taxUniqueName, action.payload.accountUniqueName)
+        .map(response => this.UpdatePurchaseInvoiceResponse(response));
+    });
+
+  @Effect()
+  public GetTaxesForThisCompany$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.GET_TAXES)
+    .switchMap(action => this.purchaseInvoiceService.GetTaxesForThisCompany())
+    .map(res => this.validateResponse<ITaxResponse[], string>(res, {
+      type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+      payload: res
+    }, true, {
+        type: PURCHASE_INVOICE_ACTIONS.SET_TAXES_FOR_COMPANY,
+        payload: res
+      }));
+
+  @Effect()
+  public GeneratePurchaseInvoice$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE)
+    .switchMap(action => {
+      return this.purchaseInvoiceService.GeneratePurchaseInvoice(action.payload)
         .map(response => this.UpdatePurchaseInvoiceResponse(response));
     });
 
@@ -93,6 +114,33 @@ export class InvoicePurchaseActions {
       return { type: '' };
     });
 
+  /**
+   * UPDATE PURCHASE ENTRY
+   */
+  @Effect()
+  private UpdatePurchaseEntry$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY)
+    .switchMap(action => {
+      return this.purchaseInvoiceService.UpdatePurchaseEntry(action.payload)
+        .map(response => this.UpdatePurchaseEntryResponse(response));
+    });
+
+  /**
+   * UPDATE PURCHASE ENTRY RESPONSE
+   */
+  @Effect()
+  private UpdatePurchaseEntryResponse$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast('Entry Updated Successfully.');
+      }
+      return { type: '' };
+    });
+
   constructor(private action$: Actions,
     private toasty: ToasterService,
     private router: Router,
@@ -136,9 +184,22 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public UpdatePurchaseInvoice(model: IInvoicePurchaseResponse): Action {
+  public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE,
+      payload: { entryUniqueName, taxUniqueName, accountUniqueName }
+    };
+  }
+
+  public GetTaxesForThisCompany(): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.GET_TAXES
+    };
+  }
+
+  public GeneratePurchaseInvoice(model: IInvoicePurchaseResponse): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE,
       payload: model
     };
   }
@@ -175,6 +236,20 @@ export class InvoicePurchaseActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE,
       payload: value
+    };
+  }
+
+  public UpdatePurchaseEntry(model): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY,
+      payload: model
+    };
+  }
+
+  public UpdatePurchaseEntryResponse(response): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE,
+      payload: response
     };
   }
 
