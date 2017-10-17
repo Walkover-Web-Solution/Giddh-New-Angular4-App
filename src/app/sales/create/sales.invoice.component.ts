@@ -157,6 +157,7 @@ export class SalesInvoiceComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
   private entryIdx: number;
+  private updateAccount: boolean = false;
 
   constructor(
     private store: Store<AppState>,
@@ -262,7 +263,7 @@ export class SalesInvoiceComponent implements OnInit {
             accounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
           // creating bank account list
-          if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts')) {
+          if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
             bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
           // revenuefromoperations, otherincome
@@ -340,7 +341,12 @@ export class SalesInvoiceComponent implements OnInit {
     f.form.reset();
   }
 
-  public onSubmitInvoiceForm(f: NgForm) {
+  public triggerSubmitInvoiceForm(f: NgForm) {
+    this.updateAccount = true;
+    this.onSubmitInvoiceForm(f);
+  }
+
+  public onSubmitInvoiceForm(f?: NgForm) {
 
     let txnErr: boolean;
     // before submit request making some validation rules
@@ -375,7 +381,7 @@ export class SalesInvoiceComponent implements OnInit {
       return false;
     }
 
-    this.salesService.generateSales(this.invFormData).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
+    this.salesService.generateSales(this.invFormData, this.updateAccount).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
       if (response.status === 'success') {
         f.form.reset();
         if (typeof response.body === 'string') {
@@ -386,6 +392,7 @@ export class SalesInvoiceComponent implements OnInit {
       } else {
         this._toasty.errorToast(response.code);
       }
+      this.updateAccount = false;
     });
   }
 
@@ -420,6 +427,7 @@ export class SalesInvoiceComponent implements OnInit {
           if (o.stocks && selectedAcc.additional.stock) {
             txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
             // set rate auto
+            txn.rate = null;
             if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
               txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
             }
@@ -427,6 +435,7 @@ export class SalesInvoiceComponent implements OnInit {
               id: selectedAcc.additional.stock.stockUnit.code,
               text: selectedAcc.additional.stock.stockUnit.name
             };
+            txn.stockList = [];
             txn.stockList.push(obj);
             txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
             txn.isStockTxn = true;

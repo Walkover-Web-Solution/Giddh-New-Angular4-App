@@ -34,7 +34,7 @@ import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.in
 
 export class SalesAddStockComponent implements OnInit, OnDestroy {
 
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
   @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
   // public
@@ -253,6 +253,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   // reset stock form
   public resetStockForm() {
     this.addStockForm.reset();
+    this.closeAsideEvent.emit({action: 'first'});
   }
 
   // close pane
