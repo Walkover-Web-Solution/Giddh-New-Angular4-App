@@ -1,40 +1,34 @@
 <div id="" class="">
-    <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix">
-        <h3 class="modal-title bg" id="modal-title">Your Aadhar No. </h3>
-        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
-    </div>
-    <div class="modal-body pdL2 pdR2 clearfix" id="export-body">
+    <div class="clearfix" id="export-body">
+        <form name="esignature" #eSign class="" autocomplete="off" action="https://testgateway.emsigner.com/eMsecure/SignerGateway/Index" target="_blank" method="post">
+            <input id="File" Name="File" type="hidden" value="{{base64Data}}" />
+            <input id="Name" name="Name" type="hidden" value="Priyanka">
+            <input id="SelectPage" name="SelectPage" type="hidden" value="ALL">
+            <input data-val="true" data-val-number="The field SignatureType must be a number." data-val-required="The SignatureType field is required." id="SignatureType" name="SignatureType" type="hidden" value="1">
+            <input id="SignaturePosition" name="SignaturePosition" type="hidden" value="Bottom-Right">
+            <input id="AuthToken" name="AuthToken" type="hidden" value="{{authToken}}">
+            <input id="PageNumber" name="PageNumber" type="hidden" value="">
+            <input id="Data" name="Data" type="hidden" value="">
+            <input id="FileType" name="FileType" type="hidden" value="PDF">
+            <input data-val="true" data-val-required="The PreviewRequired field is required." id="PreviewRequired" name="PreviewRequired" type="hidden" value="True">
+            <input id="CustomizeCoordinates" name="CustomizeCoordinates" type="hidden" value="">
+            <input id="PagelevelCoordinates" name="PagelevelCoordinates" type="hidden" value="">
+            <input id="AadhaarNumber" placeholder="Your Aadhaar No." name="AadhaarNumber" type="text" class="form-control" [(ngModel)]="aadhaarNum">
+            <input id="ReferenceNumber" name="ReferenceNumber" type="hidden" value="{{referenceNum}}">
+            <input id="SUrl" name="SUrl" type="hidden" value="https://sokt.io/Fu59xHxuPsQFWEy4zhwB/giddh-e-signature?authkey=xYgjNVbbu4seGCunYKnp">
+            <input id="CUrl" name="CUrl" type="hidden" value="https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp">
+            <input id="FUrl" name="FUrl" type="hidden" value="https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp">
+            <input data-val="true" data-val-required="The UploadSignatureOption field is required." id="UploadSignatureOption" name="UploadSignatureOption" type="hidden" value="True">
+            <input data-val="true" data-val-required="The SelectFontOption field is required." id="SelectFontOption" name="SelectFontOption" type="hidden" value="True">
+            <input data-val="true" data-val-required="The DrawSignatureOption field is required." id="DrawSignatureOption" name="DrawSignatureOption" type="hidden" value="True">
+            <input data-val="true" data-val-requiresd="The eSignaturePadOption field is required." id="eSignaturePadOption" name="eSignaturePadOption" type="hidden" value="True">
+            <p class="mrT1">NOTE: Aadhaar is required for <strong>Aadhaar eSign</strong></p>
+            <div class="pull-left mrT1">
+                <!-- <button type="submit" class="btn btn-md btn-primary" (click)="onConfirmation(eSign)">Save</button> -->
+                <button type="submit" class="btn btn-md btn-success" (click)="onConfirmation(eSign)">Go</button>
+            </div>
+        </form>
 
-        <div class="modal_wrap mrB2">
-            <form name="newRole" #eSign class="" autocomplete="off" action="https://testgateway.emsigner.com/eMsecure/SignerGateway/Index" method="post">
-                <input id="File" Name="File" type="hidden" value="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0m3pdgpVG8dEebfODhjvVnyTOiU2zLO3UBS/TtTtr+bMHuuYHOzL7QGzoQh+0uDFNGwHC0r1StITjGre7LGOycz+HB8wN6o0JA1iTEN3uMBU7yQ94ajmzh7rmOzsz/EBs6PKQ9IgxjR0+0vsceu17Qkvp/J+ysB9D8WZrIJh0hf8bbh6rGNqYX+OD1gLqqwnDWJMQ7e/oB+3QqxO5x9TDPaA/hExp8QrZkK5j/CHQl7umI6TdL1cGYgtLCw0Xont59UxQsBR0/UKxcoLqeaW3ETuIhCQ/sFEFwLYfFCTuMO32VxDou5GqPD8UB7cGNxjm9S3PSZhldCbDvq1YZWnS6GsJY/xzYMRWXQF39FDmk3vVWpea2PuFoq0B1t0d/Bm36vF5xl6vV5Os9kUvVzMb1dfNh/ozTKuLm7myLJrivJyDgkDzEOpTMDMvJXAK2vcsIZSlM2tdYTKajyQkfYtRqk/B7KcSMAxHyzTq2eXi/kyWq2zWRVDgyuwFLcKjkK8iU+wFw4pM5PbaPkRfUnX6H2ayc8MXa/vF8vaRa5iVJJVwKHfBuXAlF/CMxybyhdV1+d3BnxATaykLTAJRPn/FILNhZuNKa6ZthxbrTUrqVz45M0+T/1ifKJEzrgD9XQRzTs3mzpwrBw4tHCdKxIdLGicK2SH0mKh9L1C4m3BCVd2HfY4ah25mMs7gVLH85jm0kqsvh1uVxZW+rfSv5X+rfRvpX8r/Vvp30r/406yrfRvpX8r/Vvp30r/Vvq30r+V/q30b6V/K/1b6d9K/x3HVvq30r+V/q30b6V/K/1b6d9K/1b6//bSvxWPv7V4/Nb5H3upRGgNCmVuZHN0cmVhbQplbmRvYmoKNiAwIG9iago8PAovRm9udCA3IDAgUgo+PgplbmRvYmoKNyAwIG9iago8PAovRjEgOCAwIFIKL0YyIDkgMCBSCj4+CmVuZG9iago4IDAgb2JqCjw8Ci9UeXBlIC9Gb250Ci9TdWJ0eXBlIC9UeXBlMQovQmFzZUZvbnQgL1RpbWVzLUJvbGQKL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCjkgMCBvYmoKPDwKL1R5cGUgL0ZvbnQKL1N1YnR5cGUgL1R5cGUxCi9CYXNlRm9udCAvVGltZXMtUm9tYW4KL0VuY29kaW5nIC9XaW5BbnNpRW5jb2RpbmcKPj4KZW5kb2JqCnhyZWYKMCAxMAowMDAwMDAwMDAwIDY1NTM1IGYNCjAwMDAwMDAwMTUgMDAwMDAgbg0KMDAwMDAwMDE3OSAwMDAwMCBuDQowMDAwMDAwMDc4IDAwMDAwIG4NCjAwMDAwMDAyMzYgMDAwMDAgbg0KMDAwMDAwMDM1MiAwMDAwMCBuDQowMDAwMDAyNDQ4IDAwMDAwIG4NCjAwMDAwMDI0ODEgMDAwMDAgbg0KMDAwMDAwMjUyMiAwMDAwMCBuDQowMDAwMDAyNjIwIDAwMDAwIG4NCnRyYWlsZXIKPDwKL1Jvb3QgMSAwIFIKL0luZm8gMyAwIFIKL0lEIFs8ODMyN0MzMDU4RTJDMzFENDNDNTBDQzE0OTgyOUZGQ0Q+IDw4MzI3QzMwNThFMkMzMUQ0M0M1MENDMTQ5ODI5RkZDRD5dCi9TaXplIDEwCj4+CnN0YXJ0eHJlZgoyNzE5CiUlRU9GCg=="
-                />
-                <input id="Name" name="Name" type="hidden" value="Priyanka">
-                <input id="SelectPage" name="SelectPage" type="hidden" value="ALL">
-                <input data-val="true" data-val-number="The field SignatureType must be a number." data-val-required="The SignatureType field is required." id="SignatureType" name="SignatureType" type="hidden" value="1">
-                <input id="SignaturePosition" name="SignaturePosition" type="hidden" value="Bottom-Right">
-                <input id="AuthToken" name="AuthToken" type="hidden" value="3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja">
-                <input id="PageNumber" name="PageNumber" type="hidden" value="">
-                <input id="Data" name="Data" type="hidden" value="">
-                <input id="FileType" name="FileType" type="hidden" value="PDF">
-                <input data-val="true" data-val-required="The PreviewRequired field is required." id="PreviewRequired" name="PreviewRequired" type="hidden" value="True">
-                <input id="CustomizeCoordinates" name="CustomizeCoordinates" type="hidden" value="">
-                <input id="PagelevelCoordinates" name="PagelevelCoordinates" type="hidden" value="">
-                <input id="AadhaarNumber" name="AadhaarNumber" type="hidden" value="390860523924">
-                <input id="ReferenceNumber" name="ReferenceNumber" type="hidden" value="REF12345679899">
-                <input id="SUrl" name="SUrl" type="hidden" value="https://testgateway.emsigner.com/Success">
-                <input id="CUrl" name="CUrl" type="hidden" value="https://sokt.io/XZRQUrfQbBNESmuXCiJ/personal-e-signature?authkey=sErmxXUtUSZrcEMS27t">
-                <input id="FUrl" name="FUrl" type="hidden" value="https://sokt.io/XZRQUrfQbBNESmuXCiJ/personal-e-signature?authkey=sErmxXUtUSZrcEMS27t">
-                <input data-val="true" data-val-required="The UploadSignatureOption field is required." id="UploadSignatureOption" name="UploadSignatureOption" type="hidden" value="True">
-                <input data-val="true" data-val-required="The SelectFontOption field is required." id="SelectFontOption" name="SelectFontOption" type="hidden" value="True">
-                <input data-val="true" data-val-required="The DrawSignatureOption field is required." id="DrawSignatureOption" name="DrawSignatureOption" type="hidden" value="True">
-                <input data-val="true" data-val-requiresd="The eSignaturePadOption field is required." id="eSignaturePadOption" name="eSignaturePadOption" type="hidden" value="True">
 
-                <div class="pull-right">
-                    <button type="submit" class="btn btn-md btn-success mrR1" (click)="onConfirmation(eSign)">Yes</button>
-                    <button type="submit" class="btn btn-md btn-primary" (click)="onCancel()">No</button>
-                </div>
-            </form>
-        </div>
     </div>
 </div>
