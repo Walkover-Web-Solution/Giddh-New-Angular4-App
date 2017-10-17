@@ -1,27 +1,27 @@
 <div id="" class="">
     <div class="clearfix" id="export-body">
         <form name="esignature" #eSign class="" autocomplete="off" action="https://testgateway.emsigner.com/eMsecure/SignerGateway/Index" target="_blank" method="post">
-            <input id="File" Name="File" type="hidden" value="{{base64Data}}" />
-            <input id="Name" name="Name" type="hidden" value="Priyanka">
-            <input id="SelectPage" name="SelectPage" type="hidden" value="ALL">
-            <input data-val="true" data-val-number="The field SignatureType must be a number." data-val-required="The SignatureType field is required." id="SignatureType" name="SignatureType" type="hidden" value="1">
-            <input id="SignaturePosition" name="SignaturePosition" type="hidden" value="Bottom-Right">
-            <input id="AuthToken" name="AuthToken" type="hidden" value="{{authToken}}">
-            <input id="PageNumber" name="PageNumber" type="hidden" value="">
+            <input id="File" name="File" type="hidden" value="" [(ngModel)]="eSignModel.file" />
+            <input id="Name" name="Name" type="hidden" value="" [(ngModel)]="eSignModel.companyName">
+            <input id="SelectPage" name="SelectPage" type="hidden" value="" [(ngModel)]="eSignModel.selectPage">
+            <input data-val="true" data-val-number="The field SignatureType must be a number." data-val-required="The SignatureType field is required." id="SignatureType" name="SignatureType" type="hidden" value="" [(ngModel)]="eSignModel.signatureType">
+            <input id="SignaturePosition" name="SignaturePosition" type="hidden" [(ngModel)]="eSignModel.signaturePosition">
+            <input id="AuthToken" name="AuthToken" type="hidden" [(ngModel)]="eSignModel.authToken">
+            <input id="PageNumber" name="PageNumber" type="hidden" value="" [(ngModel)]="eSignModel.pageNumber">
             <input id="Data" name="Data" type="hidden" value="">
-            <input id="FileType" name="FileType" type="hidden" value="PDF">
-            <input data-val="true" data-val-required="The PreviewRequired field is required." id="PreviewRequired" name="PreviewRequired" type="hidden" value="True">
-            <input id="CustomizeCoordinates" name="CustomizeCoordinates" type="hidden" value="">
-            <input id="PagelevelCoordinates" name="PagelevelCoordinates" type="hidden" value="">
-            <input id="AadhaarNumber" placeholder="Your Aadhaar No." name="AadhaarNumber" type="text" class="form-control" [(ngModel)]="aadhaarNum">
-            <input id="ReferenceNumber" name="ReferenceNumber" type="hidden" value="{{referenceNum}}">
-            <input id="SUrl" name="SUrl" type="hidden" value="https://sokt.io/Fu59xHxuPsQFWEy4zhwB/giddh-e-signature?authkey=xYgjNVbbu4seGCunYKnp">
-            <input id="CUrl" name="CUrl" type="hidden" value="https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp">
-            <input id="FUrl" name="FUrl" type="hidden" value="https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp">
-            <input data-val="true" data-val-required="The UploadSignatureOption field is required." id="UploadSignatureOption" name="UploadSignatureOption" type="hidden" value="True">
-            <input data-val="true" data-val-required="The SelectFontOption field is required." id="SelectFontOption" name="SelectFontOption" type="hidden" value="True">
-            <input data-val="true" data-val-required="The DrawSignatureOption field is required." id="DrawSignatureOption" name="DrawSignatureOption" type="hidden" value="True">
-            <input data-val="true" data-val-requiresd="The eSignaturePadOption field is required." id="eSignaturePadOption" name="eSignaturePadOption" type="hidden" value="True">
+            <input id="FileType" name="FileType" type="hidden" [(ngModel)]="eSignModel.fileType">
+            <input data-val="true" data-val-required="The PreviewRequired field is required." id="PreviewRequired" name="PreviewRequired" type="hidden" [(ngModel)]="eSignModel.previewRequired">
+            <input id="CustomizeCoordinates" name="CustomizeCoordinates" type="hidden" [(ngModel)]="eSignModel.customizeCoordinates" />
+            <input id="PagelevelCoordinates" name="PagelevelCoordinates" type="hidden" [(ngModel)]="eSignModel.pagelevelCoordinates" />
+            <input id="AadhaarNumber" placeholder="Your Aadhaar No." name="AadhaarNumber" type="text" class="form-control" [(ngModel)]="eSignModel.aadharNo">
+            <input id="ReferenceNumber" name="ReferenceNumber" type="hidden" [(ngModel)]="eSignModel.referenceNumber">
+            <input id="SUrl" name="SUrl" type="hidden" [(ngModel)]="eSignModel.sUrl">
+            <input id="CUrl" name="CUrl" type="hidden" [(ngModel)]="eSignModel.cUrl">
+            <input id="FUrl" name="FUrl" type="hidden" [(ngModel)]="eSignModel.fUrl">
+            <input data-val="true" data-val-required="The UploadSignatureOption field is required." id="UploadSignatureOption" name="UploadSignatureOption" type="hidden" [(ngModel)]="eSignModel.uploadSignatureOption">
+            <input data-val="true" data-val-required="The SelectFontOption field is required." id="SelectFontOption" name="SelectFontOption" type="hidden" [(ngModel)]="eSignModel.selectFontOption" />
+            <input data-val="true" data-val-required="The DrawSignatureOption field is required." id="DrawSignatureOption" name="DrawSignatureOption" type="hidden" [(ngModel)]="eSignModel.drawSignatureOption" />
+            <input data-val="true" data-val-requiresd="The eSignaturePadOption field is required." id="eSignaturePadOption" name="eSignaturePadOption" type="hidden" [(ngModel)]="eSignModel.eSignaturePadOption" />
             <p class="mrT1">NOTE: Aadhaar is required for <strong>Aadhaar eSign</strong></p>
             <div class="pull-left mrT1">
                 <!-- <button type="submit" class="btn btn-md btn-primary" (click)="onConfirmation(eSign)">Save</button> -->

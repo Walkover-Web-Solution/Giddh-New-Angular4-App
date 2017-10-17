@@ -21,8 +21,7 @@ import {
   InvoiceTemplateDetailsResponse,
   GenerateInvoiceRequestClass,
   GenerateBulkInvoiceRequest,
-  CustomTemplateResponse,
-  Esignature
+  CustomTemplateResponse
 } from '../../../models/api-models/Invoice';
 import { Font } from 'ngx-font-picker';
 // import {
@@ -1141,13 +1140,6 @@ export class InvoiceActions {
   public SendInvoiceOnMailResponse(model: BaseResponse<string, string>): Action {
     return {
       type: INVOICE_ACTIONS.SEND_MAIL_RESPONSE,
-      payload: model
-    };
-  }
-
-  public Esignature(model: Esignature): Action {
-    return {
-      type: INVOICE_ACTIONS.E_SIGNATURE,
       payload: model
     };
   }
