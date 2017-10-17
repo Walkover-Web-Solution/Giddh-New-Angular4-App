@@ -28,5 +28,6 @@ export const INVOICE_API_2 = {
   PREVIEW_INVOICE: URI_ONLY_FOR_INVOICE + 'preview',
   DOWNLOAD_INVOICE: URI_ONLY_FOR_INVOICE + 'download',
   GENERATED_INVOICE_PREVIEW: URI_ONLY_FOR_INVOICE + ':invoiceNumber/preview',
-  GET_INVOICE_TEMPLATE_DETAILS: PART_A  + 'templates/:templateUniqueName'
+  GET_INVOICE_TEMPLATE_DETAILS: PART_A + 'templates/:templateUniqueName',
+  E_SIGN_URL: 'https://testgateway.emsigner.com/eMsecure/SignerGateway/Index'
 };
