@@ -46,7 +46,7 @@ import * as _ from 'lodash';
   `],
   templateUrl: './component.html'
 })
-export class AsideMenuProductServiceComponent implements OnInit {
+export class AsideMenuProductServiceComponent {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
@@ -63,16 +63,16 @@ export class AsideMenuProductServiceComponent implements OnInit {
     // constructor methods
   }
 
-  public ngOnInit() {
-    //
-  }
-
   public toggleStockPane() {
     this.isAddStockOpen = !this.isAddStockOpen;
   }
 
-  public closeAsidePane() {
-    this.closeAsideEvent.emit();
+  public closeAsidePane(e?: any) {
+    if (e) {
+      this.isAddStockOpen = false;
+    }else {
+      this.closeAsideEvent.emit();
+    }
   }
 
   public animateAside(e: any) {

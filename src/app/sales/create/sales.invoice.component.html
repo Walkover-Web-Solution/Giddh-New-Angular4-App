@@ -86,7 +86,7 @@
             <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
           </div>
         </div>
-        <div class="ico-head">Mailing Address</div>
+        <div class="ico-head">Address</div>
       </div>
       <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3">
         <div class="flex-row wid90p">
@@ -216,8 +216,8 @@
             <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
-            <input type="text" placeholder="HSN" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
-            <input type="text" placeholder="SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
+            <input type="text" digitsOnlyDirective  maxLength="10" placeholder="HSN" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
+            <input type="text" digitsOnlyDirective  maxLength="10" placeholder="SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
           </td>
 
           <!-- show/hide fields -->
@@ -293,6 +293,7 @@
       <div class="col-xs-12">
         <div class="pull-right pr">
           <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-default mrR1">Clear</button>
+          <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default mrR1">Generate Invoice &amp; Update A/c</button>
           <button type="submit" class="btn btn-default">Generate Invoice</button>
         </div>
       </div>

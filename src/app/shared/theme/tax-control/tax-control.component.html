@@ -6,7 +6,7 @@
       <span class="caret"></span>
     </div>
   </a>
-  <ul class="dropdown-menu pd" *ngIf="showTaxPopup" (click)="$event.stopPropagation()">
+  <ul class="dropdown-menu pd" *ngIf="showTaxPopup && taxRenderData.length > 0" (click)="$event.stopPropagation()">
     <li *ngFor="let tax of taxRenderData;trackBy: trackByFn">
         <label class="checkbox oh width100 bdrB pdB" (click)="$event.stopPropagation()">
           <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" (change)="change()" (click)="$event.stopPropagation()"/>

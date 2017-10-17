@@ -1,7 +1,7 @@
 <span class="pr" [ngClass]="{'open': isMenuOpen}" (blur)="hideDiscountMenu()">
   <label *ngIf="isHeadingVisible">Discount</label>
   <a (click)="isMenuOpen = !isMenuOpen" class="clearfix">
-    <input type="number" name="" class="form-control cursor-pointer" [(ngModel)]="discountTotal" disabled="disabled"/>
+    <input type="number" name="" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
   </a>
   <ul class="dropdown-menu" *ngIf="isMenuOpen" (click)="$event.stopPropagation()">
     <li>
