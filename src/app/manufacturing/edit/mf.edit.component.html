@@ -189,7 +189,8 @@
 
                             <tr *ngIf="toggleAddExpenses">
                                 <td colspan="1">
-                                    <select2 class="cp" [data]="expenseGroupAccounts$ | async" [options]="options" name="baseAccountUniqueName" [(ngModel)]="otherExpenses.baseAccountUniqueName"></select2>
+                                        <select2 class="cp" [data]="liabilityGroupAccounts$ | async" [options]="options" name="transactionAccountUniqueName" [(ngModel)]="otherExpenses.transactionAccountUniqueName"></select2>
+                                    
                                     <!--<div class="custom-select pos-rel">
                                         <select class="form-control cp" required #baseAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName">
                                           <option value="">-- Select Expense A/C --</option>
@@ -203,7 +204,8 @@
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
-                                        <select2 class="cp" [data]="liabilityGroupAccounts$ | async" [options]="options" name="transactionAccountUniqueName" [(ngModel)]="otherExpenses.transactionAccountUniqueName"></select2>
+                                    <select2 class="cp" [data]="expenseGroupAccounts$ | async" [options]="options" name="baseAccountUniqueName" [(ngModel)]="otherExpenses.baseAccountUniqueName"></select2>
+                                        
                                         <!--<select class="form-control cp" required #transactionAccountUniqueName="ngModel" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="transactionAccountUniqueName">
                                           <option value="">-- Select Liabilities/Assets A/C --</option>
                                           <option [ngValue]="account.id" *ngFor="let account of liabilityGroupAccounts">{{account.text}} ({{account.id}})</option>  
