@@ -38,14 +38,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public showPdfWrap: boolean = false;
   public showEsign: boolean = false;
 
-  public modalConfig = {
-    animated: true,
-    keyboard: false,
-    backdrop: 'static',
-    ignoreBackdropClick: true,
-    class: 'bs-modal-parent'
-  };
-
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
