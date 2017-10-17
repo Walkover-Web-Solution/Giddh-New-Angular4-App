@@ -32,11 +32,11 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   @Input() public selectedInvoiceForDelete: ILedgersInvoiceResult;
   @Output() public closeModelEvent: EventEmitter<number> = new EventEmitter();
   @Output() public downloadOrSendMailEvent: EventEmitter<object> = new EventEmitter();
-  @ViewChild('eSignModal') public eSignModal: ModalDirective;
 
   public showEmailTextarea: boolean = false;
   public base64StringForModel: any;
   public showPdfWrap: boolean = false;
+  public showEsign: boolean = false;
 
   public modalConfig = {
     animated: true,
@@ -99,19 +99,4 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
     }
   }
 
-  /**
-   * openSignModal
-   */
-  public openSignModal() {
-    console.log('openSignModal');
-    this.eSignModal.show();
-  }
-
-  public closeEsignModal() {
-    this.eSignModal.hide();
-    console.log('Close Esign modal');
-  }
-  // public closeConfirmationPopup() {
-  //   this.eSignModal.hide();
-  // }
 }
