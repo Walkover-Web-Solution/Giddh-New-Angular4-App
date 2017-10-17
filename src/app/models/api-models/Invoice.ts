@@ -445,11 +445,11 @@ export class Esignature {
   public file: string;
   public companyName: string = 'companyName';
   public selectPage: string = 'ALL';
-  public referenceNumber: string = 'REF12345679899';
+  public referenceNumber: string = '';
   public aadharNo: string = '';
   public signatureType: string = '1';
   public signaturePosition: string = 'Bottom-Right';
-  public authToken: string = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
+  public authToken: string = '';
   public pageNumber: string = '';
   public fileType: string = 'PDF';
   public previewRequired: boolean = true;

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -7,7 +7,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
-import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
@@ -37,14 +36,6 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public base64StringForModel: any;
   public showPdfWrap: boolean = false;
   public showEsign: boolean = false;
-
-  public modalConfig = {
-    animated: true,
-    keyboard: false,
-    backdrop: 'static',
-    ignoreBackdropClick: true,
-    class: 'bs-modal-parent'
-  };
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
