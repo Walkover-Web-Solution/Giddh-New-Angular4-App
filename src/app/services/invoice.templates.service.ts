@@ -145,21 +145,6 @@ export class InvoiceTemplatesService {
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, model));
   }
 
-  public SaveEsignature(model): Observable<BaseResponse<string, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
-    return this._http.post(INVOICE_API_2.E_SIGN_URL, model).map((res) => {
-      let data: BaseResponse<string, string> = res.json();
-      data.request = model;
-      data.queryString = {};
-      return data;
-    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, model));
-  }
-
   // public getTopMargin(): Observable<number> {
   //   return this.store.select((state: AppState) => state.invtemp.templateMeta.topMargin);
   // }

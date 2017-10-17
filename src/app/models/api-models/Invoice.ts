@@ -443,9 +443,9 @@ export class CustomTemplateResponse {
 
 export class Esignature {
   public file: string;
-  public companyName: string;
+  public companyName: string = 'companyName';
   public selectPage: string = 'ALL';
-  public referenceNumber: string;
+  public referenceNumber: string = 'REF12345679899';
   public aadharNo: string = '';
   public signatureType: string = '1';
   public signaturePosition: string = 'Bottom-Right';
@@ -459,7 +459,7 @@ export class Esignature {
   public selectFontOption: boolean = true;
   public drawSignatureOption: boolean = true;
   public eSignaturePadOption: boolean = true;
-  public sUrl: string = 'https://r.sokt.io/t/XZRQUrfQbBNESmuXCiJ/personal-e-signature?authkey=sErmxXUtUSZrcEMS27t';
-  public cUrl: string = 'http://localapp.giddh.com:3000/#/pages/invoice/preview';
-  public fUrl: string = 'http://localapp.giddh.com:3000/#/pages/invoice/preview';
+  public sUrl: string = 'https://sokt.io/Fu59xHxuPsQFWEy4zhwB/giddh-e-signature?authkey=xYgjNVbbu4seGCunYKnp';
+  public fUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
+  public cUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
 }
