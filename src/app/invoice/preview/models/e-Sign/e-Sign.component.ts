@@ -16,29 +16,24 @@ import * as _ from 'lodash';
 
 export class EsignModalComponent implements OnInit {
   @Input() public base64Data: string;
-  // @Output() public eSignModalEvent: EventEmitter<object> = new EventEmitter();
   @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
-  public showEmailTextarea: boolean = false;
-  public aadhaarNum: string;
   public eSignModel: Esignature = new Esignature();
-  public referenceNum: string;
-  public authToken: string = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>, private invoiceActions: InvoiceActions,
   ) {
-    this.referenceNum = this.generateReferenceNumber();
+    this.eSignModel.referenceNumber = this.generateReferenceNumber();
+    this.eSignModel.authToken = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
   }
 
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
-        this.base64Data = o.dataPreview;
-
+        this.eSignModel.file = o.dataPreview;
       }
     });
   }
@@ -46,25 +41,19 @@ export class EsignModalComponent implements OnInit {
   public onConfirmation(eSignForm) {
     // console.log(this.aadharNum);
     let validateAdadhar = new RegExp(/^\d{4}\d{4}\d{4}$/g);
-    if (this.aadhaarNum) {
-      let isValidate = validateAdadhar.test(this.aadhaarNum);
+    if (this.eSignModel.aadharNo) {
+      let isValidate = validateAdadhar.test(this.eSignModel.aadharNo);
       if (isValidate) {
         eSignForm.submit();
         this.closeModelEvent.emit(true);
       } else {
-        this._toasty.errorToast('Invalid Aadhar No:' + this.aadhaarNum);
+        this._toasty.errorToast('Invalid Aadhar No:' + this.eSignModel.aadharNo);
         return false;
       }
     } else {
       eSignForm.submit();
       this.closeModelEvent.emit(true);
     }
-
-    // this.store.dispatch(this.invoiceActions.Esignature(dataToSave));
-  }
-
-  public onCancel() {
-    this.closeModelEvent.emit(true);
   }
 
   /**
