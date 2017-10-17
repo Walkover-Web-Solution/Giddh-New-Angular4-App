@@ -81,18 +81,22 @@ export class SalesAddStockGroupComponent implements OnInit, OnDestroy {
   public generateUniqueName() {
     let val: string = this.addStockGroupForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
-    this._store.dispatch(this._sideBarAction.GetGroupUniqueName(val));
-    this.isGroupNameAvailable$.subscribe(a => {
-      if (a !== null && a !== undefined) {
-        if (a) {
-          this.addStockGroupForm.patchValue({ uniqueName: val });
+    if (val) {
+      this._store.dispatch(this._sideBarAction.GetGroupUniqueName(val));
+      this.isGroupNameAvailable$.subscribe(a => {
+        if (a !== null && a !== undefined) {
+          if (a) {
+            this.addStockGroupForm.patchValue({ uniqueName: val });
+          } else {
+            this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
+          }
         } else {
           this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
         }
-      } else {
-        this.addStockGroupForm.patchValue({ uniqueName: val + 1 });
-      }
-    });
+      });
+    }else {
+      this.addStockGroupForm.patchValue({ uniqueName: null });
+    }
   }
 
   // get all stock groups and flatten it and use in dom

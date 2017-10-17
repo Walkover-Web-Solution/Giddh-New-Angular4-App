@@ -177,6 +177,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     let val: string = this.addStockForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
     if (_.isEmpty(this.selectedGroupUniqueName || val)) {
+      this.addStockForm.patchValue({ uniqueName: null });
       return;
     }else {
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(this.selectedGroupUniqueName, val));
