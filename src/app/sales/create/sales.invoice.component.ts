@@ -143,6 +143,7 @@ export class SalesInvoiceComponent implements OnInit {
   public newlyCreatedStockAc$: Observable<INameUniqueName>;
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public activeAccount$: Observable<AccountResponseV2>;
 
   // modals related
   public modalConfig = {
@@ -167,6 +168,7 @@ export class SalesInvoiceComponent implements OnInit {
     private _toasty: ToasterService,
     private _companyService: CompanyService
   ) {
+    this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
