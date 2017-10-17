@@ -131,3 +131,21 @@ ng-select {
 .ng-select-wrap.liq ng-select .below{
   width: 100% !important;
 }
+
+ng-select.splSales {
+  width:190px;
+  height: 42px;
+  >div {
+    border-color: #d6d6d6;
+    height: 41px;
+    >.single{
+      height: 39px;
+      .placeholder, .value{
+        line-height: 39px;
+      }
+    }
+  }
+  .glyphicon{
+    top: 7px;
+  }
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, trigger, state, style, transition, animate, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment/moment';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
@@ -18,7 +18,7 @@ import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { TaxResponse } from '../../models/api-models/Company';
-import { TaxControlData, IOption } from '../../shared/theme/index';
+import { TaxControlData, IOption, SelectComponent } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -29,6 +29,8 @@ import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IFlattenAccountItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { ModalDirective } from 'ngx-bootstrap';
+import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
+import { CompanyService } from '../../services/companyService.service';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -139,6 +141,8 @@ export class SalesInvoiceComponent implements OnInit {
   public createAcCategory: string = null;
   public newlyCreatedAc$: Observable<INameUniqueName>;
   public newlyCreatedStockAc$: Observable<INameUniqueName>;
+  public countrySource: IOption[] = [];
+  public statesSource$: Observable<IOption[]> = Observable.of([]);
 
   // modals related
   public modalConfig = {
@@ -161,6 +165,7 @@ export class SalesInvoiceComponent implements OnInit {
     private ledgerActions: LedgerActions,
     private salesService: SalesService,
     private _toasty: ToasterService,
+    private _companyService: CompanyService
   ) {
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
@@ -170,6 +175,22 @@ export class SalesInvoiceComponent implements OnInit {
     this.salesAccounts$ = this.store.select(p => p.sales.flattenSalesAc).takeUntil(this.destroyed$);
     // get all flatten accounts
     this.getAllFlattenAc();
+
+    // bind countries
+    contriesWithCodes.map(c => {
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+    });
+
+    // bind state sources
+    this._companyService.getAllStates().subscribe((data) => {
+      let arr: IOption[] = [];
+      data.body.map(d => {
+        arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+      });
+      this.statesSource$ = Observable.of(arr);
+    }, (err) => {
+      // console.log(err);
+    });
   }
 
   public ngOnInit() {
@@ -290,6 +311,26 @@ export class SalesInvoiceComponent implements OnInit {
       this.invFormData.account.shippingDetails.address.push(data.addresses[0].address);
       this.invFormData.account.shippingDetails.stateCode = data.addresses[0].stateCode;
       this.invFormData.account.shippingDetails.gstNumber = data.addresses[0].gstNumber;
+    }
+  }
+
+  public getStateCode(type: string, statesEle: SelectComponent) {
+    let gstVal = _.cloneDeep(this.invFormData.account[type].gstNumber);
+    if (gstVal.length >= 2) {
+      this.statesSource$.take(1).subscribe(st => {
+        let s = st.find(item => item.value === gstVal.substr(0, 2));
+        if (s) {
+          this.invFormData.account[type].stateCode = s.value;
+        } else {
+          this.invFormData.account[type].stateCode = null;
+          this._toasty.clearAllToaster();
+          this._toasty.warningToast('Invalid GSTIN.');
+        }
+        statesEle.disabled = true;
+      });
+    } else {
+      statesEle.disabled = false;
+      this.invFormData.account[type].stateCode = null;
     }
   }
 

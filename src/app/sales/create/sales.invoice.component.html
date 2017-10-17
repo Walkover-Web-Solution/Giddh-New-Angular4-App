@@ -59,21 +59,22 @@
           <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
         </div>
         <div class="form-group">
+          <label>Country</label>
+          <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.country.countryName"></ng-select>
+        </div>
+        <div class="form-group">
           <label>Invoice Date</label>
           <input type="text" name="invoiceDate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <label>Invoice Number</label>
           <input type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
-        </div>
+        </div> -->
         <div class="form-group">
           <label>Due Date</label>
           <input type="text" name="dueDate" class="form-control" [(ngModel)]="invFormData.invoiceDetails.dueDate" />
         </div>
-        <div class="form-group">
-          <label>Country</label>
-          <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.country.countryName" />
-        </div>
+
       </div>
     </div>
     <!-- end general details collapse pane -->
@@ -94,14 +95,14 @@
               <label>Billing Address</label>
               <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
               <div>
                 <label>State</label>
-                <input type="text" name="billingDetails.stateCode" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateCode" />
+                <ng-select #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.billingDetails.stateCode"></ng-select>
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <input type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" />
+                <input type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling)" />
               </div>
             </div>
           </div>
@@ -110,14 +111,14 @@
               <label>Shipping Address</label>
               <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
               <div>
                 <label>State</label>
-                <input type="text" name="shippingDetails.stateCode" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateCode" />
+                <ng-select #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <input type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" />
+                <input type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
               </div>
             </div>
           </div>
