@@ -113,56 +113,56 @@ export class GetTemplateResponse {
 }
 
 export interface Template {
-    uniqueName: string;
-    template: string;
-    sectionsV2: any[];
-    sections: Sections;
-    isDefault: boolean;
-    name: string;
+  uniqueName: string;
+  template: string;
+  sectionsV2: any[];
+  sections: Sections;
+  isDefault: boolean;
+  name: string;
 }
 
 export interface TemplateData {
-    email?: any;
-    emailVerified?: any;
-    account: Account;
-    companyIdentities: CompanyIdentities;
-    company: Company;
-    terms: any[];
-    taxes?: any;
-    template?: any;
-    invoiceDetails: InvoiceDetails;
-    logo: Logo;
-    totalAmount: TotalAmount;
-    signature: Signature;
-    entries?: any;
+  email?: any;
+  emailVerified?: any;
+  account: Account;
+  companyIdentities: CompanyIdentities;
+  company: Company;
+  terms: any[];
+  taxes?: any;
+  template?: any;
+  invoiceDetails: InvoiceDetails;
+  logo: Logo;
+  totalAmount: TotalAmount;
+  signature: Signature;
+  entries?: any;
 }
 
 export interface Sections {
-    logo: boolean;
-    company: boolean;
-    invoiceDetails: boolean;
-    companyIdentities: boolean;
-    account: boolean;
-    signature: boolean;
-    terms: boolean;
-    entries: boolean;
-    taxes: boolean;
-    signatureType: string;
+  logo: boolean;
+  company: boolean;
+  invoiceDetails: boolean;
+  companyIdentities: boolean;
+  account: boolean;
+  signature: boolean;
+  terms: boolean;
+  entries: boolean;
+  taxes: boolean;
+  signatureType: string;
 }
 
 export interface CompanyIdentities {
-    data: string;
+  data: string;
 }
 
 export interface Company {
-    name: string;
-    data: any[];
+  name: string;
+  data: any[];
 }
 
 export interface InvoiceDetails {
-    invoiceNumber: string;
-    invoiceDate: string;
-    dueDate: string;
+  invoiceNumber: string;
+  invoiceDate: string;
+  dueDate: string;
 }
 
 export class OtherDetailsClass {
@@ -175,19 +175,19 @@ export class OtherDetailsClass {
 }
 
 export interface Logo {
-    path: string;
+  path: string;
 }
 
 export interface TotalAmount {
-    subTotal?: any;
-    taxTotal?: any;
-    grandTotal?: any;
+  subTotal?: any;
+  taxTotal?: any;
+  grandTotal?: any;
 }
 
 export interface Signature {
-    name: string;
-    data: string;
-    path: string;
+  name: string;
+  data: string;
+  path: string;
 }
 
 /**
@@ -233,9 +233,10 @@ export class PreviewInvoiceResponseClass {
   public invoiceDetails: InvoiceDetails;
   public other?: any;
   public dataPreview?: string;
+  public uniqueName?: string;
 }
 
- export interface TotaltaxBreakdown {
+export interface TotaltaxBreakdown {
   amount: number;
   visibleTaxRate: number;
   accountName: string;
@@ -439,4 +440,27 @@ export class CustomTemplateResponse {
   public name: string;
   public copyFrom?: string; // done
   public logoUniqueName?: string;
+}
+
+export class Esignature {
+  public file: string;
+  public companyName: string = 'companyName';
+  public selectPage: string = 'ALL';
+  public referenceNumber: string = '';
+  public aadharNo: string = '';
+  public signatureType: string = '1';
+  public signaturePosition: string = 'Bottom-Right';
+  public authToken: string = '';
+  public pageNumber: string = '';
+  public fileType: string = 'PDF';
+  public previewRequired: boolean = true;
+  public customizeCoordinates: string = '';
+  public pagelevelCoordinates: string = '';
+  public uploadSignatureOption: boolean = true;
+  public selectFontOption: boolean = true;
+  public drawSignatureOption: boolean = true;
+  public eSignaturePadOption: boolean = true;
+  public sUrl: string = 'https://sokt.io/Fu59xHxuPsQFWEy4zhwB/giddh-e-signature?authkey=xYgjNVbbu4seGCunYKnp';
+  public fUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
+  public cUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
 }

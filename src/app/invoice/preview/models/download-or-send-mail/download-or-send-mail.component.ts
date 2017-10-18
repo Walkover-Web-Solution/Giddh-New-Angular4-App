@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, ViewChild } from '@angular/core';
 // import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ILedgersInvoiceResult, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
@@ -7,6 +7,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'download-or-send-mail-invoice',
@@ -35,13 +36,14 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
   public showEmailTextarea: boolean = false;
   public base64StringForModel: any;
   public showPdfWrap: boolean = false;
+  public showEsign: boolean = false;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>,
-  ) {}
+  ) { }
 
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
@@ -88,4 +90,5 @@ export class DownloadOrSendInvoiceOnMailComponent implements OnInit {
       this._toasty.errorToast('Invalid email(s).');
     }
   }
+
 }
