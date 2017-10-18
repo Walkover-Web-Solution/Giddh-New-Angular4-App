@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
 import { AccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../services/actions/accounts.actions';
+const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
 @Component({
   selector: 'aside-menu-account',
@@ -32,6 +33,10 @@ import { AccountsAction } from '../../services/actions/accounts.actions';
       top: 0;
       z-index: 5;
     }
+    :host .container-fluid{
+      padding-left: 0;
+      padding-right: 0;
+    }
   `],
   templateUrl: './aside.menu.account.component.html'
 })
@@ -48,7 +53,7 @@ export class AsideMenuAccountComponent implements OnInit {
   public activeGroupUniqueName: string;
   public isGroupItemSelected: boolean = false;
   public isGstEnabledAcc: boolean = true;
-  public isHsnSacEnabledAcc: boolean = true;
+  public isHsnSacEnabledAcc: boolean = false;
   public fetchingAccUniqueName$: Observable<boolean>;
   public isAccountNameAvailable$: Observable<boolean>;
   public createAccountInProcess$: Observable<boolean>;
@@ -98,6 +103,18 @@ export class AsideMenuAccountComponent implements OnInit {
     if (data.value) {
       this.isGroupItemSelected = true;
       this.activeGroupUniqueName = data.value;
+      this.flatAccountWGroupsList$.takeUntil(this.destroyed$).subscribe( (arr: Select2OptionData[]) => {
+        let res: Select2OptionData = _.find(arr, { id: data.value });
+        if (res) {
+          console.log (_.indexOf(GROUP, res.id));
+          if (data.value === res.id && _.indexOf(GROUP, res.id) !==  -1) {
+            this.isHsnSacEnabledAcc = true;
+            console.log ('bingo');
+          }
+        }else {
+          this.isHsnSacEnabledAcc = false;
+        }
+      });
     }else {
       this.isGroupItemSelected = false;
       this.activeGroupUniqueName = null;
