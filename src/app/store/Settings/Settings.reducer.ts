@@ -1,3 +1,4 @@
+import { SETTINGS_PERMISSION_ACTIONS } from './../../services/actions/settings/permissions/settings.permissions.const';
 import * as _ from 'lodash';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -21,13 +22,15 @@ export interface SettingsState {
   profile: any;
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
+  usersWithCompanyPermissions: any;
 }
 
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
   linkedAccounts: {},
-  financialYears: null
+  financialYears: null,
+  usersWithCompanyPermissions: null
 };
 
 export function SettingsReducer(state = initialState, action: Action): SettingsState {
@@ -222,6 +225,15 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.financialYears = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = null;
+        newState.usersWithCompanyPermissions = response.body;
         return Object.assign({}, state, newState);
       }
       return state;
