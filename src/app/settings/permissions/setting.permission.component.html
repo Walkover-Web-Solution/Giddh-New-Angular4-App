@@ -1,0 +1,41 @@
+<div class="box clearfix mrT2">
+    <div class="box clearfix">
+        <div class="row">
+            <div class="col-xs-2">
+                <label>Give permission to:</label>
+            </div>
+            <div class="col-xs-2">
+                <input #emailEle type="email" class="form-control">
+            </div>
+            <div class="col-xs-2">
+                <select class="form-control" #roleList>
+                    <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
+                </select>
+            </div>
+            <div class="col-xs-2">
+                <button class="btn btn-info" (click)="onShareCompany(emailEle.value, roleList.value)">Add</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="box row">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <tbody class="text-left">
+                    <tr *ngFor="let user of sharedWith; let i = index">
+                        <td> <i class="fa fa-user"></i> {{user.name}} <br> {{user.uniqueName}}</td>
+                        <td>
+                            <select style="max-width:200px;" #roleListDisplay (change)="onShareCompany(user.email, roleListDisplay.value)" class="form-control" #roleList [(ngModel)]="user.roleUniquename" name="roleList_{{i}}">
+                                <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
+                            </select>
+                        </td>
+                        <td>
+                            <button (click)="onRevokePermission(user.email, roleListDisplay.value)"><i class="fa fa-trash"></i></button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+   
+</div>

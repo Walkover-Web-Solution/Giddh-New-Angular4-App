@@ -1,3 +1,4 @@
+import { ShareEntityRequest } from './../models/api-models/Account';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -161,22 +162,56 @@ export class AccountService implements OnInit {
       })
       .catch((e) => this.errorHandler.HandleCatch<string, AccountMoveRequest>(e));
   }
-  public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string, ShareAccountRequest>> {
+  // public AccountShare(model: ShareAccountRequest, accountUniqueName: string): Observable<BaseResponse<string, ShareAccountRequest>> {
+  //   this.store.take(1).subscribe(s => {
+  //     if (s.session.user) {
+  //       this.user = s.session.user.user;
+  //       this.companyUniqueName = s.session.companyUniqueName;
+  //     }
+  //   });
+  //   return this._http.put(ACCOUNTS_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+  //     .map((res) => {
+  //       let data: BaseResponse<string, ShareAccountRequest> = res.json();
+  //       data.request = model;
+  //       data.queryString = { accountUniqueName };
+  //       return data;
+  //     })
+  //     .catch((e) => this.errorHandler.HandleCatch<string, ShareAccountRequest>(e));
+  // }
+  public Share(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.put(ACCOUNTS_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), model)
+    return this._http.post(ACCOUNTS_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', encodeURIComponent(roleUniqueName)), model)
       .map((res) => {
-        let data: BaseResponse<string, ShareAccountRequest> = res.json();
+        let data: BaseResponse<string, ShareEntityRequest> = res.json();
         data.request = model;
-        data.queryString = { accountUniqueName };
+        data.queryString = { roleUniqueName };
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<string, ShareAccountRequest>(e));
+      .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
   }
+
+  public UnShare(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(ACCOUNTS_API.UN_SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', encodeURIComponent(roleUniqueName)), model)
+      .map((res) => {
+        let data: BaseResponse<string, ShareEntityRequest> = res.json();
+        data.request = model;
+        data.queryString = { roleUniqueName };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
+  }
+
   public AccountUnshare(userEmail: string, accountUniqueName: string): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -185,7 +220,7 @@ export class AccountService implements OnInit {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(ACCOUNTS_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).map((res) => {
+    return this._http.put(ACCOUNTS_API.UN_SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = userEmail;
       data.queryString = { accountUniqueName };
