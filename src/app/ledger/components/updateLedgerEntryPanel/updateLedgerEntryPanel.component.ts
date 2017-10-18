@@ -13,7 +13,7 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ITransactionItem } from '../../../models/interfaces/ledger.interface';
-import { filter, findIndex, last, orderBy } from 'lodash';
+import { filter, findIndex, last, orderBy, cloneDeep } from 'lodash';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
@@ -137,6 +137,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
                 t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
               }
             });
+            this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
             if (this.vm.selectedLedger.total.type === 'DEBIT') {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
             } else {
@@ -306,7 +307,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public saveLedgerTransaction() {
-    let requestObj: LedgerResponse = { ...this.vm.selectedLedger };
+    let requestObj: LedgerResponse = cloneDeep(this.vm.selectedLedger);
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
     requestObj.transactions.map(trx => {
