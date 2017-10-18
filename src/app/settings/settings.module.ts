@@ -1,3 +1,4 @@
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -26,7 +27,8 @@ import { FinancialYearComponent } from './financial-year/financial-year.componen
     SettingLinkedAccountsComponent,
     ConnectBankModalComponent,
     SettingLinkedAccountsConfirmationModalComponent,
-    FinancialYearComponent
+    FinancialYearComponent,
+    SettingPermissionComponent
   ],
   imports: [
     SharedModule,

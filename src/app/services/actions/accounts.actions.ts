@@ -1,3 +1,4 @@
+import { ShareEntityRequest } from './../../models/api-models/Account';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 import {
   AccountMergeRequest,
@@ -29,6 +30,12 @@ export class AccountsAction {
   public static CREATE_ACCOUNT_RESPONSE = 'CreateAccountResponse';
   public static CREATE_ACCOUNTV2 = 'CreateAccountV2';
   public static CREATE_ACCOUNT_RESPONSEV2 = 'CreateAccountResponseV2';
+  public static SHARE_ENTITY = 'EntityShare';
+  public static SHARE_ENTITY_RESPONSE = 'EntityShareResponse';
+  public static UPDATE_SHARED_ENTITY = 'UpdateSharedEntity';
+  public static UPDATE_SHARED_ENTITY_RESPONSE = 'UpdateSharedEntityResponse';
+  public static UN_SHARE_ENTITY = 'EntityUnShare';
+  public static UN_SHARE_ENTITY_RESPONSE = 'EntityUnShareResponse';
   public static SHARE_ACCOUNT = 'AccountShare';
   public static SHARE_ACCOUNT_RESPONSE = 'AccountShareResponse';
   public static UNSHARE_ACCOUNT = 'AccountUnShare';
@@ -275,20 +282,48 @@ export class AccountsAction {
     });
 
   @Effect()
-  public shareAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARE_ACCOUNT)
+  public shareEntity$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARE_ENTITY)
     .switchMap(action =>
-      this._accountService.AccountShare(
+      this._accountService.Share(
         action.payload.body,
         action.payload.accountUniqueName
       )
     )
     .map(response => {
-      return this.shareAccountResponse(response);
+      return this.shareEntityResponse(response);
     });
   @Effect()
-  public shareAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARE_ACCOUNT_RESPONSE)
+  public shareEntityResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARE_ENTITY_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        this._toasty.successToast('Shared successfully', '');
+        return this.sharedAccountWith(data.queryString.accountUniqueName);
+      }
+    });
+
+  @Effect()
+  public unShareEntity$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UN_SHARE_ENTITY)
+    .switchMap(action =>
+      this._accountService.UnShare(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.UnShareEntityResponse(response);
+    });
+  @Effect()
+  public unShareEntityResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE)
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -567,9 +602,10 @@ export class AccountsAction {
     };
   }
 
-  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
+  // SHARE
+  public shareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
     return {
-      type: AccountsAction.SHARE_ACCOUNT,
+      type: AccountsAction.SHARE_ENTITY,
       payload: Object.assign({}, {
         body: value
       }, {
@@ -578,9 +614,28 @@ export class AccountsAction {
     };
   }
 
-  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
+  public shareEntityResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
     return {
-      type: AccountsAction.SHARE_ACCOUNT_RESPONSE,
+      type: AccountsAction.SHARE_ENTITY_RESPONSE,
+      payload: value
+    };
+  }
+
+  // UNSHARE
+  public unShareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.UN_SHARE_ENTITY,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public UnShareEntityResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
+    return {
+      type: AccountsAction.UN_SHARE_ENTITY_RESPONSE,
       payload: value
     };
   }

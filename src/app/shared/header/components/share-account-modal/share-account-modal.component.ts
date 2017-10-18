@@ -30,11 +30,13 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
 
   public async shareAccount() {
     let activeAccount = await this.activeAccount$.first().toPromise();
+    let userRole = {
+      emailId: this.email,
+      entity: 'account',
+      entityUniqueName: activeAccount.uniqueName,
+    };
 
-    let accObject = new ShareAccountRequest();
-    accObject.role = 'view_only';
-    accObject.user = this.email;
-    this.store.dispatch(this.accountActions.shareAccount(accObject, activeAccount.uniqueName));
+    this.store.dispatch(this.accountActions.shareEntity(userRole, 'view'));
     this.email = '';
   }
 
