@@ -28,7 +28,7 @@
             <div class="form-group noMarg">
               <label>Add Entry Against</label>
               <select class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
-                <option [ngValue]="select">Select Bank</option>
+                <option [ngValue]="select">Select Bank/Cash</option>
                 <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async" >{{ bank.name }}</option>
               </select>
             </div>
@@ -102,7 +102,7 @@
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <input type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling)" />
+                <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling)" />
               </div>
             </div>
           </div>
@@ -118,7 +118,7 @@
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <input type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                <input maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
               </div>
             </div>
           </div>

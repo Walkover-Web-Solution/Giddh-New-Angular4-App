@@ -53,6 +53,8 @@ export class AsideMenuProductServiceComponent {
 
   // public
   public isAddStockOpen: boolean = false;
+  public isAddServiceOpen: boolean = false;
+  public hideFirstStep: boolean = false;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -64,15 +66,22 @@ export class AsideMenuProductServiceComponent {
   }
 
   public toggleStockPane() {
+    this.hideFirstStep = true;
+    this.isAddServiceOpen = false;
     this.isAddStockOpen = !this.isAddStockOpen;
   }
 
+  public toggleServicePane() {
+    this.hideFirstStep = true;
+    this.isAddStockOpen = false;
+    this.isAddServiceOpen = !this.isAddServiceOpen;
+  }
+
   public closeAsidePane(e?: any) {
-    if (e) {
-      this.isAddStockOpen = false;
-    }else {
-      this.closeAsideEvent.emit();
-    }
+    this.hideFirstStep = false;
+    this.isAddStockOpen = false;
+    this.isAddServiceOpen = false;
+    this.closeAsideEvent.emit();
   }
 
   public animateAside(e: any) {
