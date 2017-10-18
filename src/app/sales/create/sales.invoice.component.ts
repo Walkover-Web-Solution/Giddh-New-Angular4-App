@@ -210,7 +210,6 @@ export class SalesInvoiceComponent implements OnInit {
     this.store.select(p => p.company.taxes).takeUntil(this.destroyed$).subscribe((o: TaxResponse[]) => {
       if (o) {
         this.companyTaxesList$ = Observable.of(o);
-        console.log ( 'this.companyTaxesList$', this.companyTaxesList$);
         _.map(this.theadArrReadOnly, (item: IContentCommon) => {
           // show tax label
           if (item.label === 'Tax') {
