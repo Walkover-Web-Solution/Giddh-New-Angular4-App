@@ -21,6 +21,7 @@ export class UpdateLedgerVm {
   public voucherTypeList: IOption[];
   public isDisabledTaxesAndDiscounts: boolean = false;
   public discountArray: ILedgerDiscount[] = [];
+  public isInvoiceGeneratedAlready: boolean = false;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   constructor(private _toasty: ToasterService, private discountComponent: UpdateLedgerDiscountComponent,
     private _ledgerService: LedgerService) {
@@ -292,7 +293,7 @@ export class UpdateLedgerVm {
       // let amount = sumBy(this.selectedLedger.transactions, (tr) => Number(tr.amount));
       // let discount = this.selectedLedger.transactions.find(p => p.particular.uniqueName === 'discount');
 
-      this.totalAmount = creditEntriesSum - debitEntriesSum;
+      this.totalAmount = Number((creditEntriesSum - debitEntriesSum).toFixed(2));
       // if (discount) {
       //   this.totalAmount = this.totalAmount - discount.amount;
       // }
@@ -300,7 +301,7 @@ export class UpdateLedgerVm {
   }
   // FIXME: fix total calculation
   public generateGrandTotal() {
-    this.grandTotal = this.totalAmount;
+    this.grandTotal = Number((this.totalAmount).toFixed(2));
   }
 
   // public submitUpdateRequest() {
