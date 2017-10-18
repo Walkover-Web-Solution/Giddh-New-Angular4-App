@@ -12,7 +12,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
-import { ITransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ITransactionItem, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { filter, findIndex, last, orderBy, cloneDeep } from 'lodash';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
@@ -112,7 +112,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent, this._ledgerService);
+    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
@@ -136,6 +136,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
               if (t.inventory) {
                 t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
               }
+            });
+            this.vm.selectedLedger.transactions.forEach(t => {
+              this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
             });
             this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
             if (this.vm.selectedLedger.total.type === 'DEBIT') {
@@ -167,7 +170,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     });
   }
 
-  public addBlankTrx(type: string = 'DEBIT', txn: ITransactionItem, event: Event) {
+  public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem(type));
@@ -207,16 +210,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     }
   }
 
-  public selectAccount(e: IOption, txn: ITransactionItem, selectCmp: SelectComponent) {
+  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       this.selectedAccount = null;
       txn.selectedAccount = null;
-      // reset taxes and discount on selected account change
-      // txn.tax = 0;
-      // txn.taxes = [];
-      // txn.discount = 0;
-      // txn.discounts = [];
       return;
     } else {
       // handle accountUniqueName for inventory purpose
@@ -234,15 +232,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
             d.amount = 0;
           }
         });
-        this.discountComponent.genTotal();
+        if (this.discountComponent) {
+          this.discountComponent.genTotal();
+        }
       }
-
-      if (!this.vm.isValidEntry(accountUniqueName)) {
-        selectCmp.clear();
-        this.selectedAccount = null;
-        txn.selectedAccount = null;
-        return;
-      }
+      // if (!this.vm.isValidEntry(accountUniqueName)) {
+      //   selectCmp.clear();
+      //   this.selectedAccount = null;
+      //   txn.selectedAccount = null;
+      //   this.vm.showNewEntryPanel = false;
+      //   return;
+      // }
     }
 
     if (e.additional.stock) {
@@ -253,6 +253,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         this.selectedAccount = null;
         txn.selectedAccount = null;
         this._toasty.warningToast('you can\'t add multiple stock entry');
+        return;
       } else {
         this.selectedAccount = e.additional;
         txn.selectedAccount = e.additional;
@@ -260,10 +261,74 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     } else {
       this.selectedAccount = e.additional;
       txn.selectedAccount = e.additional;
+      let rate = 0;
+      let unitCode = '';
+      let unitName = '';
+      let stockName = '';
+      let stockUniqueName = '';
+      let unitArray = [];
+
+      let defaultUnit = {
+        stockUnitCode: e.additional.stock.stockUnit.name,
+        code: e.additional.stock.stockUnit.code,
+        rate: 0
+      };
+
+      if (e.additional.stock.accountStockDetails && e.additional.stock.accountStockDetails.unitRates) {
+        let cond = e.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === e.additional.stock.stockUnit.code);
+        if (cond) {
+          defaultUnit.rate = cond.rate;
+          rate = defaultUnit.rate;
+        }
+        unitArray.join(e.additional.stock.accountStockDetails.unitRates.map(p => {
+          return {
+            stockUnitCode: p.code,
+            code: p.code,
+            rate: 0
+          };
+        }));
+        if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
+          unitArray.push(defaultUnit);
+        }
+      } else {
+        unitArray.push(defaultUnit);
+      }
+      txn.unitRate = unitArray;
+      stockName = e.additional.stock.name;
+      stockUniqueName = e.additional.stock.uniqueName;
+      unitName = e.additional.stock.stockUnit.name;
+      unitCode = e.additional.stock.stockUnit.code;
+
+      if (stockName && stockUniqueName) {
+        txn.inventory = {
+          stock: {
+            name: stockName,
+            uniqueName: stockUniqueName,
+          },
+          quantity: 1,
+          unit: {
+            stockUnitCode: unitCode,
+            code: unitCode,
+            rate
+          },
+          amount: 0,
+          rate: 0
+        };
+      }
+      if (rate > 0 && txn.amount === 0) {
+        txn.amount = rate;
+      }
+    }
+    // check if need to showEntryPanel
+    this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
+    if (this.vm.showNewEntryPanel) {
+      // check if ther stockentry or not
+      this.vm.showStockDetails = this.vm.isThereStockEntry();
     }
     this.vm.onTxnAmountChange(txn);
   }
   public deSelectAccount(e: IOption, txn: ITransactionItem) {
+    // set deselected transaction = undefined
     this.vm.selectedLedger.transactions.map(t => {
       if (t.particular.uniqueName === e.value) {
         t.inventory = null;
@@ -271,12 +336,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         t.particular.uniqueName = undefined;
       }
     });
-    this.vm.discountArray.map(d => {
-      if (d.particular === e.value) {
-        d.amount = 0;
-      }
+    // check if need to showEntryPanel
+    this.vm.selectedLedger.transactions.forEach(t => {
+      this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
     });
-    this.discountComponent.genTotal();
+    if (this.vm.showNewEntryPanel) {
+      // check if ther stockentry or not
+      this.vm.showStockDetails = this.vm.isThereStockEntry();
+    }
+    // set discount amount to 0 when deselected account
+    if (this.discountComponent) {
+      this.vm.discountArray.map(d => {
+        if (d.particular === e.value) {
+          d.amount = 0;
+        }
+      });
+      this.discountComponent.genTotal();
+    }
   }
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
