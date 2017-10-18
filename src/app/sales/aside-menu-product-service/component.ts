@@ -81,7 +81,11 @@ export class AsideMenuProductServiceComponent {
     this.hideFirstStep = false;
     this.isAddStockOpen = false;
     this.isAddServiceOpen = false;
-    this.closeAsideEvent.emit();
+    if (e) {
+      //
+    } else {
+      this.closeAsideEvent.emit();
+    }
   }
 
   public animateAside(e: any) {

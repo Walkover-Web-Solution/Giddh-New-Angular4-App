@@ -3,7 +3,7 @@
   <a (click)="isMenuOpen = !isMenuOpen" class="clearfix">
     <input type="number" name="" class="form-control cursor-pointer" [(ngModel)]="discountTotal" readonly="true" />
   </a>
-  <ul class="dropdown-menu" *ngIf="isMenuOpen" (click)="$event.stopPropagation()">
+  <ul class="dropdown-menu" *ngIf="isMenuOpen && discountAccountsList.length > 0" (click)="$event.stopPropagation()">
     <li>
       <table>
         <tr *ngFor="let discount of discountAccountsList;">
