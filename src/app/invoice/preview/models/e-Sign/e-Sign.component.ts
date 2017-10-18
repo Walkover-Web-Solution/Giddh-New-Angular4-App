@@ -26,13 +26,14 @@ export class EsignModalComponent implements OnInit {
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>, private invoiceActions: InvoiceActions,
   ) {
-    this.eSignModel.referenceNumber = this.generateReferenceNumber();
     this.eSignModel.authToken = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
   }
 
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
+        this.eSignModel.referenceNumber = o.uniqueName;
+        this.eSignModel.companyName = o.company.name;
         this.eSignModel.file = o.dataPreview;
       }
     });
