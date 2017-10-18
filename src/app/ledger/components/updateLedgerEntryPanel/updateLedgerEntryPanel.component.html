@@ -356,7 +356,7 @@
             <div class="mrR1 pull-left" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
               <label class="checkbox oh">
                 <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice" [(ngModel)]="vm.selectedLedger.invoiceGenerated"
-                  ng-click="$event.stopPropagation()">
+                  [disabled]="vm.isInvoiceGeneratedAlready">
                 <span class="pull-left">Generate Invoice</span>
               </label>
             </div>
