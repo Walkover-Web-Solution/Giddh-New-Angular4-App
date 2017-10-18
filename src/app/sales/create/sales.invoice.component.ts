@@ -341,6 +341,15 @@ export class SalesInvoiceComponent implements OnInit {
     f.form.reset();
   }
 
+  // toggle values
+  public toggleHSNSAC(txn: SalesTransactionItemClass) {
+    if (txn.hsnOrSac === 'sac') {
+      txn.hsnNumber = null;
+    }else if (txn.hsnOrSac === 'hsn') {
+      txn.sacNumber = null;
+    }
+  }
+
   public triggerSubmitInvoiceForm(f: NgForm) {
     this.updateAccount = true;
     this.onSubmitInvoiceForm(f);
