@@ -105,7 +105,9 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
       ]),
       salesUnitRates: this._fb.array([
         this.initUnitAndRates()
-      ])
+      ]),
+      manufacturingDetails: null,
+      isFsStock: false
     });
 
     // get groups list and assign values
@@ -229,8 +231,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
       accountUniqueName: formObj.purchaseAccountUniqueName,
       unitRates: formObj.purchaseUnitRates
     };
-    stockObj.manufacturingDetails = null;
-    stockObj.isFsStock =  false;
+
     this._inventoryService.CreateStock(stockObj, encodeURIComponent(this.selectedGroupUniqueName)).takeUntil(this.destroyed$).subscribe((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res;
       let item = data.body;
