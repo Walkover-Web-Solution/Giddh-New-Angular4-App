@@ -210,6 +210,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public addStockFormSubmit() {
     this.stockCreationInProcess = true;
     let formObj = this.addStockForm.value;
+    formObj.manufacturingDetails = null;
+    formObj.isFsStock = false;
     let stockObj = new CreateStockRequest();
     // remove empty values from array
     formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
@@ -220,7 +222,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     });
 
     stockObj = _.cloneDeep(formObj);
-    stockObj = _.omit( stockObj, ['salesAccountUniqueName', 'purchaseAccountUniqueName', 'salesUnitRates', 'purchaseUnitRates']);
+    // stockObj = _.omit( stockObj, ['salesAccountUniqueName', 'purchaseAccountUniqueName', 'salesUnitRates', 'purchaseUnitRates']);
 
     // set sales and purchase obj
     stockObj.salesAccountDetails = {
