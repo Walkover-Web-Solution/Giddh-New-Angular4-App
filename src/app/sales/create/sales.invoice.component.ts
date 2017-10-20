@@ -145,6 +145,7 @@ export class SalesInvoiceComponent implements OnInit {
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
+  public applicableTaxes: string[] = [];
 
   // modals related
   public modalConfig = {
@@ -435,9 +436,19 @@ export class SalesInvoiceComponent implements OnInit {
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
     if (selectedAcc.value) {
+      this.showTaxBox = false;
+      this.applicableTaxes = [];
       this.accountService.GetAccountDetailsV2(selectedAcc.value).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
         if (data.status === 'success') {
           let o = _.cloneDeep(data.body);
+
+          // assign taxes and create fluctuation
+          _.forEach(o.applicableTaxes, (item) => {
+            this.applicableTaxes.push(item.uniqueName);
+          });
+
+          this.showTaxBox = true;
+
           txn.accountName = o.name;
           txn.accountUniqueName = o.uniqueName;
           if (o.hsnNumber) {
