@@ -217,18 +217,8 @@
           </td>
           <td>
             <div class="">
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <input type="radio" value='hsn' (change)="toggleHSNSAC(transaction)" [(ngModel)]="transaction.hsnOrSac" name="hsnOrSac_{{entryIdx}}">
-                </span>
-                <input type="text" [disabled]="transaction.hsnOrSac !== 'hsn'" digitsOnlyDirective  maxLength="10" placeholder="HSN" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
-              </div>
-              <div class="input-group">
-                <span class="input-group-addon">
-                  <input type="radio" value='sac' (change)="toggleHSNSAC(transaction)" [(ngModel)]="transaction.hsnOrSac" name="hsnOrSac_{{entryIdx}}" />
-                </span>
-                <input type="text" [disabled]="transaction.hsnOrSac !== 'sac'" digitsOnlyDirective  maxLength="10" placeholder="SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
-              </div>
+              <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly  maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
+              <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly  maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
             </div>
           </td>
 
