@@ -144,6 +144,7 @@ export class SalesInvoiceComponent implements OnInit {
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
+  public autoFillShipping: boolean = true;
 
   // modals related
   public modalConfig = {
@@ -354,6 +355,11 @@ export class SalesInvoiceComponent implements OnInit {
     if (this.invFormData.account && !this.invFormData.account.uniqueName) {
       this._toasty.warningToast('Customer Name can\'t be empty');
       return;
+    }
+
+    // auto fill shipping address
+    if (this.autoFillShipping) {
+      this.invFormData.account.shippingDetails.address = _.cloneDeep(this.invFormData.account.billingDetails.address);
     }
 
     // check for valid entries and transactions
