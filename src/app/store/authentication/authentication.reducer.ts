@@ -11,7 +11,7 @@ import {
   UserDetails
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
+import { StateDetailsRequest, StateDetailsResponse, CompanyResponse, CompanyRequest } from '../../models/api-models/Company';
 import * as _ from 'lodash';
 
 /**
@@ -45,7 +45,7 @@ export interface SessionState {
   lastState: string;
   companyUniqueName: string;                   // current user | null
   userLoginState: userLoginStateEnum;
-  companies: ComapnyResponse[];
+  companies: CompanyResponse[];
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
   isCompanyCreationSuccess: boolean;
@@ -318,7 +318,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
       return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
-      let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
+      let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
         let newState = _.cloneDeep(state);
         newState.isCompanyCreationInProcess = false;
@@ -335,7 +335,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         // isCompanyCreated: state.isCompanyCreated
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
-      let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
+      let companies: BaseResponse<CompanyResponse[], string> = action.payload;
       if (companies.status === 'success') {
         return Object.assign({}, state, {
           isRefreshing: false,

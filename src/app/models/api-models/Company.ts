@@ -36,7 +36,7 @@ export class GstDetail {
   public gstNumber: string;
 }
 
-export class ComapnyResponse {
+export class CompanyResponse {
   public canUserSwitch: boolean;
   public companyIdentity: any[];
   public activeFinancialYear: ActiveFinancialYear;
