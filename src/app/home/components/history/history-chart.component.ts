@@ -3,7 +3,7 @@ import { Options } from 'highcharts';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { Observable } from 'rxjs/Observable';
-import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
@@ -28,7 +28,7 @@ export class HistoryChartComponent implements OnInit {
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
-  public companies$: Observable<ComapnyResponse[]>;
+  public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
   public requestInFlight = true;
@@ -199,7 +199,7 @@ export class HistoryChartComponent implements OnInit {
     //
     this.companies$.subscribe(c => {
       if (c) {
-        let activeCompany: ComapnyResponse;
+        let activeCompany: CompanyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
         this.activeCompanyUniqueName$.take(1).subscribe(a => {

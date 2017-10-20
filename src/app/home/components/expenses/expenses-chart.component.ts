@@ -3,7 +3,7 @@ import { Options } from 'highcharts';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable } from 'rxjs/Observable';
-import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import * as moment from 'moment/moment';
@@ -23,7 +23,7 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
-  public companies$: Observable<ComapnyResponse[]>;
+  public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   @Input() public expensesChartData: Observable<IExpensesChartClosingBalanceResponse>;
   public accountStrings: AccountChartDataLastCurrentYear[] = [];
