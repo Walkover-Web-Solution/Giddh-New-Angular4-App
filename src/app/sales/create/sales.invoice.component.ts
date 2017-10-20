@@ -17,7 +17,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { TaxResponse, ComapnyResponse } from '../../models/api-models/Company';
+import { TaxResponse, CompanyResponse } from '../../models/api-models/Company';
 import { TaxControlData, IOption, SelectComponent } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -160,7 +160,7 @@ export class SalesInvoiceComponent implements OnInit {
   private entryIdx: number;
   private updateAccount: boolean = false;
   private companyUniqueName$: Observable<string>;
-  private activeCompany: ComapnyResponse;
+  private activeCompany: CompanyResponse;
 
   constructor(
     private store: Store<AppState>,
@@ -202,8 +202,8 @@ export class SalesInvoiceComponent implements OnInit {
   public ngOnInit() {
     // get selected company for autofill country
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
-      this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: ComapnyResponse[]) => {
-        this.activeCompany = _.find(companies, (c: ComapnyResponse) => c.uniqueName === company);
+      this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
+        this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
         if (this.activeCompany) {
           this.invFormData.country.countryName = this.activeCompany.country;
         }
