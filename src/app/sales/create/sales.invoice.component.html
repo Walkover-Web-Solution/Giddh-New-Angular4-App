@@ -232,7 +232,7 @@
                       <tbody>
                         <tr>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
+                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
                           </td>
                           <td width="25%">
                             <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
@@ -280,7 +280,7 @@
               (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
             </tax-control>
           </td>
-          <td><input type="text" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
+          <td><input type="number" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
           <td class="action-panel-td">
             <span class="cp" (click)="addBlankRow(transaction)"><i class="icon-add" aria-hidden="true"></i></span>
             <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)"><i class="icon-cross" aria-hidden="true"></i></span>
