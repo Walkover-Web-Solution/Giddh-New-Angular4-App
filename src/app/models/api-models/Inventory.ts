@@ -140,7 +140,7 @@ export class StockDetailResponse implements IStockDetail {
  * API:: (create-stock) company/:companyUniqueName/stock-group/:stockGroupUniqueName/stock
  * its response will be hash as StockDetailResponse
  */
-export class CreateStockRequest implements Istock {
+export class CreateStockRequest {
   public isFsStock: boolean;
   public manufacturingDetails: IManufacturingDetails;
   public name: string;

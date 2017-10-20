@@ -178,24 +178,23 @@ export class InvoiceGenerateComponent implements OnInit {
       return false;
     }
     let arr: GenBulkInvoiceGroupByObj[] = [];
-    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult) => {
+    _.forEach(this.ledgersData.results, (item: ILedgersInvoiceResult): void => {
       if (item.isSelected) {
         arr.push({ accUniqueName: item.account.uniqueName, uniqueName: item.uniqueName });
       }
     });
     let res = _.groupBy(arr, 'accUniqueName');
     let model: GenerateBulkInvoiceRequest[] = [];
-    _.forEach(res, (items: GenBulkInvoiceGroupByObj) => {
+    _.forEach(res, (items: GenBulkInvoiceGroupByObj): void => {
       let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
       obj.entries = [];
-      _.forEach(items, (o: GenBulkInvoiceGroupByObj) => {
+      _.forEach(items, (o: GenBulkInvoiceGroupByObj): void => {
         obj.accountUniqueName = o.accUniqueName;
         obj.entries.push(o.uniqueName);
       });
       model.push(obj);
     });
-    let reqObj = { combined: action };
-    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice(reqObj, model));
+    this.store.dispatch(this.invoiceActions.GenerateBulkInvoice({combined: action}, model));
   }
 
   public setToday(model: string) {
