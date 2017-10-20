@@ -185,10 +185,10 @@ export class InvoiceGenerateComponent implements OnInit {
     });
     let res = _.groupBy(arr, 'accUniqueName');
     let model: GenerateBulkInvoiceRequest[] = [];
-    _.forEach(res, (items: GenBulkInvoiceGroupByObj): void => {
+    _.forEach(res, (item: any): void => {
       let obj: GenBulkInvoiceFinalObj = new GenBulkInvoiceFinalObj();
       obj.entries = [];
-      _.forEach(items, (o: GenBulkInvoiceGroupByObj): void => {
+      _.forEach(item, (o: GenBulkInvoiceGroupByObj): void => {
         obj.accountUniqueName = o.accUniqueName;
         obj.entries.push(o.uniqueName);
       });
