@@ -17,7 +17,7 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { TaxResponse } from '../../models/api-models/Company';
+import { TaxResponse, ComapnyResponse } from '../../models/api-models/Company';
 import { TaxControlData, IOption, SelectComponent } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -159,6 +159,8 @@ export class SalesInvoiceComponent implements OnInit {
   private selectedAccountDetails$: Observable<AccountResponseV2>;
   private entryIdx: number;
   private updateAccount: boolean = false;
+  private companyUniqueName$: Observable<string>;
+  private activeCompany: ComapnyResponse;
 
   constructor(
     private store: Store<AppState>,
@@ -170,6 +172,8 @@ export class SalesInvoiceComponent implements OnInit {
     private _toasty: ToasterService,
     private _companyService: CompanyService
   ) {
+
+    this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
@@ -192,12 +196,19 @@ export class SalesInvoiceComponent implements OnInit {
         arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
       });
       this.statesSource$ = Observable.of(arr);
-    }, (err) => {
-      // console.log(err);
     });
   }
 
   public ngOnInit() {
+    // get selected company for autofill country
+    this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
+      this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: ComapnyResponse[]) => {
+        this.activeCompany = _.find(companies, (c: ComapnyResponse) => c.uniqueName === company);
+        if (this.activeCompany) {
+          this.invFormData.country.countryName = this.activeCompany.country;
+        }
+      });
+    });
 
     // get account details and set it to local var
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
@@ -347,6 +358,13 @@ export class SalesInvoiceComponent implements OnInit {
     this.onSubmitInvoiceForm(f);
   }
 
+  public autoFillShippingDetails() {
+    // auto fill shipping address
+    if (this.autoFillShipping) {
+      this.invFormData.account.shippingDetails = _.cloneDeep(this.invFormData.account.billingDetails);
+    }
+  }
+
   public onSubmitInvoiceForm(f?: NgForm) {
 
     let txnErr: boolean;
@@ -355,11 +373,6 @@ export class SalesInvoiceComponent implements OnInit {
     if (this.invFormData.account && !this.invFormData.account.uniqueName) {
       this._toasty.warningToast('Customer Name can\'t be empty');
       return;
-    }
-
-    // auto fill shipping address
-    if (this.autoFillShipping) {
-      this.invFormData.account.shippingDetails.address = _.cloneDeep(this.invFormData.account.billingDetails.address);
     }
 
     // check for valid entries and transactions
