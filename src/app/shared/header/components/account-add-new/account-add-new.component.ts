@@ -10,10 +10,10 @@ import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
 import { Select2OptionData } from '../../../theme/select2/index';
 import { CompanyService } from '../../../../services/companyService.service';
-import { contriesWithCodes } from '../../../helpers/countryWithCodes';
+import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
 import { Select2Component } from '../../../theme/select2/select2.component';
-import { ComapnyResponse } from '../../../../models/api-models/Company';
+import { CompanyResponse } from '../../../../models/api-models/Company';
 import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { CompanyActions } from '../../../../services/actions/company.actions';
@@ -70,8 +70,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   ];
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
-  public companiesList$: Observable<ComapnyResponse[]>;
-  public activeCompany: ComapnyResponse;
+  public companiesList$: Observable<CompanyResponse[]>;
+  public activeCompany: CompanyResponse;
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
@@ -138,15 +138,9 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         this.companiesList$.take(1).subscribe(companies => {
           this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
         });
-        // this.addAccountForm.get('companyName').patchValue(a);
       }
     });
-    // this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe(p => {
-    //   if (p) {
-    //     // reset with default values
-    //     this.resetAddAccountForm();
-    //   }
-    // });
+
     this.store.select(s => s.session).takeUntil(this.destroyed$).subscribe((session) => {
       let companyUniqueName: string;
       if (session.companyUniqueName) {
@@ -156,6 +150,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         let companies = _.cloneDeep(session.companies);
         let currentCompany = companies.find((company) => company.uniqueName === companyUniqueName);
         if (currentCompany) {
+          // set country
+          this.setCountryByCompany(currentCompany);
           this.companyCurrency = _.clone(currentCompany.baseCurrency);
           this.isMultipleCurrency = _.clone(currentCompany.isMultipleCurrency);
           if (this.isMultipleCurrency) {
@@ -166,6 +162,13 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         }
       }
     });
+  }
+
+  public setCountryByCompany(company: CompanyResponse) {
+    let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
+    if (result) {
+      this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
+    }
   }
 
   public initializeNewForm() {
@@ -240,7 +243,9 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public addBlankGstForm() {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
-    addresses.push(this.initialGstDetailsForm());
+    if (addresses.value.length === 0) {
+      addresses.push(this.initialGstDetailsForm());
+    }
   }
   public isDefaultAddressSelected(val: boolean, i: number) {
     if (val) {

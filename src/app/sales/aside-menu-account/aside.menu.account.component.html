@@ -6,11 +6,11 @@
   <div class="aside-body">
     <div class="form-group pdT2">
       <label class="mrB1">Select Group</label>
-      <select2 name="flatAccountWGroupsList" [data]="flatAccountWGroupsList$ | async" class="select2-parent" [(ngModel)]="activeGroupUniqueName" [options]="select2Options" (valueChanged)="groupSelected($event)"></select2>
+      <select2 name="activeGroupUniqueName" [data]="flatAccountWGroupsList$ | async" class="select2-parent" [(ngModel)]="activeGroupUniqueName" [options]="select2Options"></select2>
     </div>
 
-    <account-add
-      *ngIf="isGroupItemSelected"
+    <account-add-new
+      *ngIf="activeGroupUniqueName"
       [activeGroupUniqueName]="activeGroupUniqueName"
       [fetchingAccUniqueName$]="fetchingAccUniqueName$"
       [isAccountNameAvailable$]="isAccountNameAvailable$"
@@ -19,6 +19,6 @@
       (submitClicked)="addNewAcSubmit($event)"
       [isGstEnabledAcc]="isGstEnabledAcc"
       [isHsnSacEnabledAcc]="isHsnSacEnabledAcc">
-    </account-add>
+    </account-add-new>
   </div>
 </div>

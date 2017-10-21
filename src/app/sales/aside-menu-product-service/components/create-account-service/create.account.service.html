@@ -1,10 +1,15 @@
-<div class="modal-header pd2 pdL2 pdR2 clearfix">
-  <h3 class="modal-title bg" id="modal-title">Create Account</h3>
-  <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeCreateAcModal()"></i>
+<div class="fake_header">
+  <h2>Create Service</h2>
 </div>
-<div class="modal-body">
 
-  <form name="addAcForm" [formGroup]="addAcForm" novalidate>
+<div class="row">
+  <div class="form-group col-xs-12">
+    <label class="mrB1">Select Group</label>
+    <select2 name="flatAccountWGroupsList" [data]="flatAccountWGroupsList$ | async" class="select2-parent" [(ngModel)]="activeGroupUniqueName" [options]="select2Options"></select2>
+  </div>
+</div>
+
+  <form *ngIf="activeGroupUniqueName" name="addAcForm" [formGroup]="addAcForm" novalidate>
 
     <div class="row">
       <div class="form-group col-xs-6">
@@ -58,9 +63,9 @@
       <div class="form-group col-xs-12">
         <button type="submit" class="btn btn-md btn-success mrR1" [ladda]="createAccountInProcess$ | async" (click)="addAcFormSubmit()"
           [disabled]="addAcForm.invalid">Save</button>
-        <button (click)="addAcFormReset()" class="btn btn-md btn-primary">Cancel</button>
+        <button (click)="closeCreateAcModal()" class="btn btn-md btn-primary">Cancel</button>
       </div>
     </div>
 
   </form>
-</div>
+

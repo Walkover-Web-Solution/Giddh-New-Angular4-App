@@ -34,7 +34,7 @@ import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.in
 
 export class SalesAddStockComponent implements OnInit, OnDestroy {
 
-  @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
   @Output() public animateAside: EventEmitter<any> = new EventEmitter();
 
   // public
@@ -105,7 +105,9 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
       ]),
       salesUnitRates: this._fb.array([
         this.initUnitAndRates()
-      ])
+      ]),
+      manufacturingDetails: null,
+      isFsStock: false
     });
 
     // get groups list and assign values
@@ -177,6 +179,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     let val: string = this.addStockForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
     if (_.isEmpty(this.selectedGroupUniqueName || val)) {
+      this.addStockForm.patchValue({ uniqueName: null });
       return;
     }else {
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(this.selectedGroupUniqueName, val));
@@ -207,6 +210,8 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   public addStockFormSubmit() {
     this.stockCreationInProcess = true;
     let formObj = this.addStockForm.value;
+    formObj.manufacturingDetails = null;
+    formObj.isFsStock = false;
     let stockObj = new CreateStockRequest();
     // remove empty values from array
     formObj.purchaseUnitRates = formObj.purchaseUnitRates.filter((pr) => {
@@ -217,7 +222,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
     });
 
     stockObj = _.cloneDeep(formObj);
-    stockObj = _.omit( stockObj, ['salesAccountUniqueName', 'purchaseAccountUniqueName', 'salesUnitRates', 'purchaseUnitRates']);
+    // stockObj = _.omit( stockObj, ['salesAccountUniqueName', 'purchaseAccountUniqueName', 'salesUnitRates', 'purchaseUnitRates']);
 
     // set sales and purchase obj
     stockObj.salesAccountDetails = {
@@ -228,8 +233,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
       accountUniqueName: formObj.purchaseAccountUniqueName,
       unitRates: formObj.purchaseUnitRates
     };
-    stockObj.manufacturingDetails = null;
-    stockObj.isFsStock =  false;
+
     this._inventoryService.CreateStock(stockObj, encodeURIComponent(this.selectedGroupUniqueName)).takeUntil(this.destroyed$).subscribe((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res;
       let item = data.body;
@@ -253,6 +257,7 @@ export class SalesAddStockComponent implements OnInit, OnDestroy {
   // reset stock form
   public resetStockForm() {
     this.addStockForm.reset();
+    this.closeAsideEvent.emit({action: 'first'});
   }
 
   // close pane
