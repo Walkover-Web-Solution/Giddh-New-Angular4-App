@@ -5,7 +5,7 @@ import { AppState } from './../../store/roots';
 import { ToasterService } from './../toaster.service';
 import { AuthenticationService } from './../authentication.service';
 import { Actions, Effect } from '@ngrx/effects';
-import { ComapnyResponse } from './../../models/api-models/Company';
+import { CompanyResponse } from './../../models/api-models/Company';
 import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';

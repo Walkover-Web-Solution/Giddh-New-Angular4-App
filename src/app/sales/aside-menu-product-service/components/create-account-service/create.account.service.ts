@@ -11,40 +11,61 @@ import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../../shared/theme/index';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { Select2OptionData } from '../../../../shared/theme/select2/select2.interface';
+import { IFlattenGroupsAccountsDetail } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { FIXED_CATEGORY_OF_GROUPS } from '../../../sales.module';
+import { GroupService } from '../../../../services/group.service';
+import { GroupResponse } from '../../../../models/api-models/Group';
+import { AccountService } from '../../../../services/account.service';
+import { ToasterService } from '../../../../services/toaster.service';
 
 export const PURCHASE_GROUPS = ['operatingcost']; // purchases
 export const SALES_GROUPS = ['revenuefromoperations']; // sales
 
 @Component({
-  selector: 'create-account-modal',
-  templateUrl: 'create.account.modal.html',
+  selector: 'create-account-service',
+  templateUrl: 'create.account.service.html',
   styles: [`
     .form-group label{
       margin-bottom:5px;
     }
+    .fake_header{
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 15px;
+      margin-bottom: 15px;
+      font-size: 20px;
+    }
   `]
 })
 
-export class CreateAccountModalComponent implements OnInit, OnDestroy {
+export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
-  @Input() public gType: string;
-  @Output() public actionFired: EventEmitter<any> = new EventEmitter();
+  @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter();
 
   // public
   public addAcForm: FormGroup;
   public isAccountNameAvailable$: Observable<boolean>;
   public flatGroupsList$: Observable<IOption[]>;
-  public selectedGroup: string = null;
   public createAccountInProcess$: Observable<boolean>;
   public createAccountIsSuccess$: Observable<boolean>;
-
+  public flatAccountWGroupsList$: Observable<Select2OptionData[]>;
+  public select2Options: Select2Options = {
+    multiple: false,
+    width: '100%',
+    placeholder: 'Select Group',
+    allowClear: true
+  };
+  public activeGroupUniqueName: string;
   // private
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _fb: FormBuilder,
+    private _toasty: ToasterService,
     private _store: Store<AppState>,
+    private _groupService: GroupService,
     private _salesActions: SalesActions,
+    private _accountService: AccountService,
     private _accountsAction: AccountsAction
   ) {
     this.isAccountNameAvailable$ = this._store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
@@ -77,17 +98,16 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
       }
     });
 
-    // listen for add account success
-    this.createAccountIsSuccess$.takeUntil(this.destroyed$).subscribe((o) => {
-      if (o) {
-        this.addAcFormReset();
-        this.closeCreateAcModal();
-        if (this.gType === 'Sales') {
-          this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
-        } else if (this.gType === 'Purchase') {
-          this._store.dispatch(this._salesActions.getFlattenAcOfPurchase({groupUniqueNames: ['purchases']}));
-        }
+    // get groups list
+    this._groupService.GetGroupSubgroups('revenuefromoperations').subscribe((res: any) => {
+      let result: Select2OptionData[] = [];
+      if (res.status === 'success' && res.body.length > 0) {
+        let flatGrps = this._groupService.flattenGroup(res.body, []);
+        _.forEach(flatGrps, (grp: GroupResponse) => {
+          result.push({ text: grp.name, id: grp.uniqueName });
+        });
       }
+      this.flatAccountWGroupsList$ = Observable.of(result);
     });
 
   }
@@ -125,21 +145,19 @@ export class CreateAccountModalComponent implements OnInit, OnDestroy {
 
   public addAcFormSubmit() {
     let formObj = this.addAcForm.value;
-    if (this.gType === 'Sales') {
-      this.selectedGroup = 'sales';
-    } else if (this.gType === 'Purchase') {
-      this.selectedGroup =  'purchases';
-    }
-    this._store.dispatch(this._accountsAction.createAccountV2(this.selectedGroup, formObj));
-  }
-
-  public addAcFormReset() {
-    this.addAcForm.reset();
-    this.closeCreateAcModal();
+    this._accountService.CreateAccountV2(formObj, this.activeGroupUniqueName).subscribe((res: any) => {
+      if (res.status === 'success') {
+        this._toasty.successToast('A/c created successfully.');
+        this.closeCreateAcModal();
+        this._store.dispatch(this._salesActions.getFlattenAcOfSales({groupUniqueNames: ['sales']}));
+      }else {
+        this._toasty.errorToast(res.message, res.code);
+      }
+    });
   }
 
   public closeCreateAcModal() {
     this.addAcForm.reset();
-    this.actionFired.emit();
+    this.closeAsideEvent.emit({action: 'from a/c service'});
   }
 }

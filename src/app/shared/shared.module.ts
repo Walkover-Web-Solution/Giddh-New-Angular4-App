@@ -19,7 +19,6 @@ import { Daterangepicker } from './theme/ng2-daterangepicker/daterangepicker.mod
 import { ChartModule } from 'angular2-highcharts';
 
 import {
-  AccountAddComponent,
   AccountAddNewComponent,
   AccountOperationsComponent,
   AccountsSideBarComponent,
@@ -87,8 +86,7 @@ export function provideConfig() {
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe,
-    AccountAddComponent, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
+    ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
     GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
     TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective,
     DisableFormFieldDirective],
@@ -118,12 +116,12 @@ export function provideConfig() {
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
-    AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddComponent,
+    AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
     DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ClipboardModule, UiSwitchModule
   ],
-  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddComponent, GroupsAccountSidebarComponent,
+  entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent, AccountAddNewComponent],
   providers: [
     {

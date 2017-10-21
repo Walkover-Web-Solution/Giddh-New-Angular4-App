@@ -12,13 +12,13 @@
 
 .btn-generate {
     margin-top: 4px;
-    color: #ff5f00;
-    background: #e5e5e5;
-}
-
-.btn-generate:hover {
     color: #fff;
     background: #ff5f00;
+}
+
+.btn-generate:disabled {
+    color: #ff5f00;
+    background: #e5e5e5;
 }
 
 .search-form .input-group-btn {
