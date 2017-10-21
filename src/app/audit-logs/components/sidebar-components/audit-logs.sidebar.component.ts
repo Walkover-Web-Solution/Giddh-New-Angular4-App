@@ -1,6 +1,6 @@
 import { LogsRequest } from '../../../models/api-models/Logs';
 import { UserDetails } from '../../../models/api-models/loginModels';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
@@ -64,7 +64,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.vm.groups$ = Observable.of(groups);
       }
     });
-    let selectedCompany: ComapnyResponse = null;
+    let selectedCompany: CompanyResponse = null;
     let loginUser: UserDetails = null;
     this.vm.selectedCompany.take(1).subscribe((c) => selectedCompany = c);
     this.vm.user$.take(1).subscribe((c) => loginUser = c);

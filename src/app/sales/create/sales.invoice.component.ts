@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, trigger, state, style, transition, animate, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import * as moment from 'moment/moment';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
@@ -17,8 +17,8 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { TaxResponse } from '../../models/api-models/Company';
-import { TaxControlData, IOption } from '../../shared/theme/index';
+import { TaxResponse, CompanyResponse } from '../../models/api-models/Company';
+import { TaxControlData, IOption, SelectComponent } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -29,6 +29,8 @@ import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
 import { IFlattenAccountItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { ModalDirective } from 'ngx-bootstrap';
+import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
+import { CompanyService } from '../../services/companyService.service';
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -139,6 +141,11 @@ export class SalesInvoiceComponent implements OnInit {
   public createAcCategory: string = null;
   public newlyCreatedAc$: Observable<INameUniqueName>;
   public newlyCreatedStockAc$: Observable<INameUniqueName>;
+  public countrySource: IOption[] = [];
+  public statesSource$: Observable<IOption[]> = Observable.of([]);
+  public activeAccount$: Observable<AccountResponseV2>;
+  public autoFillShipping: boolean = true;
+  public applicableTaxes: string[] = [];
 
   // modals related
   public modalConfig = {
@@ -152,6 +159,9 @@ export class SalesInvoiceComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccountDetails$: Observable<AccountResponseV2>;
   private entryIdx: number;
+  private updateAccount: boolean = false;
+  private companyUniqueName$: Observable<string>;
+  private activeCompany: CompanyResponse;
 
   constructor(
     private store: Store<AppState>,
@@ -161,7 +171,11 @@ export class SalesInvoiceComponent implements OnInit {
     private ledgerActions: LedgerActions,
     private salesService: SalesService,
     private _toasty: ToasterService,
+    private _companyService: CompanyService
   ) {
+
+    this.companyUniqueName$ = this.store.select(s => s.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(p => p.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.invFormData = new InvoiceFormClass();
     this.store.dispatch(this.companyActions.getTax());
     this.store.dispatch(this.ledgerActions.GetDiscountAccounts());
@@ -170,9 +184,32 @@ export class SalesInvoiceComponent implements OnInit {
     this.salesAccounts$ = this.store.select(p => p.sales.flattenSalesAc).takeUntil(this.destroyed$);
     // get all flatten accounts
     this.getAllFlattenAc();
+
+    // bind countries
+    contriesWithCodes.map(c => {
+      this.countrySource.push({ value: c.countryName, label: `${c.countryflag} - ${c.countryName}` });
+    });
+
+    // bind state sources
+    this._companyService.getAllStates().subscribe((data) => {
+      let arr: IOption[] = [];
+      data.body.map(d => {
+        arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+      });
+      this.statesSource$ = Observable.of(arr);
+    });
   }
 
   public ngOnInit() {
+    // get selected company for autofill country
+    this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
+      this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
+        this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
+        if (this.activeCompany) {
+          this.invFormData.country.countryName = this.activeCompany.country;
+        }
+      });
+    });
 
     // get account details and set it to local var
     this.selectedAccountDetails$ = this.store.select(p => p.sales.acDtl).takeUntil(this.destroyed$);
@@ -239,7 +276,7 @@ export class SalesInvoiceComponent implements OnInit {
             accounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
           // creating bank account list
-          if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts')) {
+          if (_.find(item.parentGroups, (o) => o.uniqueName === 'bankaccounts' || o.uniqueName === 'cash' )) {
             bankaccounts.push({ name: item.name, uniqueName: item.uniqueName });
           }
           // revenuefromoperations, otherincome
@@ -293,11 +330,43 @@ export class SalesInvoiceComponent implements OnInit {
     }
   }
 
+  public getStateCode(type: string, statesEle: SelectComponent) {
+    let gstVal = _.cloneDeep(this.invFormData.account[type].gstNumber);
+    if (gstVal.length >= 2) {
+      this.statesSource$.take(1).subscribe(st => {
+        let s = st.find(item => item.value === gstVal.substr(0, 2));
+        if (s) {
+          this.invFormData.account[type].stateCode = s.value;
+        } else {
+          this.invFormData.account[type].stateCode = null;
+          this._toasty.clearAllToaster();
+          this._toasty.warningToast('Invalid GSTIN.');
+        }
+        statesEle.disabled = true;
+      });
+    } else {
+      statesEle.disabled = false;
+      this.invFormData.account[type].stateCode = null;
+    }
+  }
+
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
   }
 
-  public onSubmitInvoiceForm(f: NgForm) {
+  public triggerSubmitInvoiceForm(f: NgForm) {
+    this.updateAccount = true;
+    this.onSubmitInvoiceForm(f);
+  }
+
+  public autoFillShippingDetails() {
+    // auto fill shipping address
+    if (this.autoFillShipping) {
+      this.invFormData.account.shippingDetails = _.cloneDeep(this.invFormData.account.billingDetails);
+    }
+  }
+
+  public onSubmitInvoiceForm(f?: NgForm) {
 
     let txnErr: boolean;
     // before submit request making some validation rules
@@ -332,7 +401,7 @@ export class SalesInvoiceComponent implements OnInit {
       return false;
     }
 
-    this.salesService.generateSales(this.invFormData).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
+    this.salesService.generateSales(this.invFormData, this.updateAccount).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
       if (response.status === 'success') {
         f.form.reset();
         if (typeof response.body === 'string') {
@@ -343,6 +412,7 @@ export class SalesInvoiceComponent implements OnInit {
       } else {
         this._toasty.errorToast(response.code);
       }
+      this.updateAccount = false;
     });
   }
 
@@ -366,17 +436,38 @@ export class SalesInvoiceComponent implements OnInit {
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
     if (selectedAcc.value) {
+      this.showTaxBox = false;
+      this.applicableTaxes = [];
       this.accountService.GetAccountDetailsV2(selectedAcc.value).takeUntil(this.destroyed$).subscribe((data: BaseResponse<AccountResponseV2, string>) => {
         if (data.status === 'success') {
           let o = _.cloneDeep(data.body);
+
+          // assign taxes and create fluctuation
+          _.forEach(o.applicableTaxes, (item) => {
+            this.applicableTaxes.push(item.uniqueName);
+          });
+
+          this.showTaxBox = true;
+
           txn.accountName = o.name;
           txn.accountUniqueName = o.uniqueName;
-          txn.hsnNumber = o.hsnNumber;
-          txn.sacNumber = o.sacNumber;
+          if (o.hsnNumber) {
+            txn.hsnNumber = o.hsnNumber;
+            txn.hsnOrSac = 'hsn';
+          }else {
+            txn.hsnNumber = null;
+          }
+          if (o.sacNumber) {
+            txn.sacNumber = o.sacNumber;
+            txn.hsnOrSac = 'sac';
+          }else {
+            txn.sacNumber = null;
+          }
           txn.description = 'Entry generated by sales module';
-          if (o.stocks && selectedAcc.additional.stock) {
+          if (o.stocks && selectedAcc.additional && selectedAcc.additional.stock) {
             txn.stockUnit = selectedAcc.additional.stock.stockUnit.code;
             // set rate auto
+            txn.rate = 0;
             if (selectedAcc.additional.stock.accountStockDetails && selectedAcc.additional.stock.accountStockDetails.unitRates && selectedAcc.additional.stock.accountStockDetails.unitRates.length > 0 ) {
               txn.rate = selectedAcc.additional.stock.accountStockDetails.unitRates[0].rate;
             }
@@ -384,6 +475,7 @@ export class SalesInvoiceComponent implements OnInit {
               id: selectedAcc.additional.stock.stockUnit.code,
               text: selectedAcc.additional.stock.stockUnit.name
             };
+            txn.stockList = [];
             txn.stockList.push(obj);
             txn.stockDetails = _.omit(selectedAcc.additional.stock, ['accountStockDetails', 'stockUnit']);
             txn.isStockTxn = true;
@@ -481,7 +573,9 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
-    txn.total = txn.getTransactionTotal(tax, entry);
+    setTimeout(() => {
+      txn.total = Number(txn.getTransactionTotal(tax, entry));
+    }, 1500);
   }
 
   public selectedTaxEvent(arr: string[], entry: SalesEntryClass) {

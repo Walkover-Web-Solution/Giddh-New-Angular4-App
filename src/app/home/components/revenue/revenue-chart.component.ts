@@ -2,7 +2,7 @@ import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.inter
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { Options } from 'highcharts';
-import { ActiveFinancialYear, ComapnyResponse } from '../../../models/api-models/Company';
+import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { ICbAccount, IChildGroups, IRevenueChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -24,7 +24,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
   public options: Options;
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
-  public companies$: Observable<ComapnyResponse[]>;
+  public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   @Input() public revenueChartData: Observable<IRevenueChartClosingBalanceResponse>;
   public accountStrings: AccountChartDataLastCurrentYear[] = [];

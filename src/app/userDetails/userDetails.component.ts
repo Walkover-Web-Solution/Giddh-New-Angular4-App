@@ -9,7 +9,7 @@ import { LoginActions } from '../services/actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { CompanyService } from '../services/companyService.service';
-import { GetCouponResp, ComapnyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { GetCouponResp, CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from 'lodash';
 import { CompanyActions } from '../services/actions/company.actions';
 
@@ -39,7 +39,7 @@ export class UserDetailsComponent implements OnInit, OnDestroy {
   public isAddNewMobileNoInProcess$: Observable<boolean>;
   public isMobileNoVerifiedSuccess$: Observable<boolean>;
   public authenticateTwoWay$: Observable<boolean>;
-  public selectedCompany: ComapnyResponse = null;
+  public selectedCompany: CompanyResponse = null;
   public user: UserDetails = null;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _toasty: ToasterService, private _loginAction: LoginActions,
