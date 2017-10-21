@@ -2,6 +2,7 @@ import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Gro
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
+import * as _ from 'lodash';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
 import { Router } from '@angular/router';
@@ -33,6 +34,30 @@ export class GroupService {
     private store: Store<AppState>
   ) {
   }
+
+  public flattenGroup(rawList: any[], parents: any[] = []) {
+    let listofUN;
+    listofUN = _.map(rawList, (listItem) => {
+      let newParents;
+      let result;
+      newParents = _.union([], parents);
+      newParents.push({
+        name: listItem.name,
+        uniqueName: listItem.uniqueName
+      });
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem.parentGroups = newParents;
+      if (listItem.groups.length > 0) {
+        result = this.flattenGroup(listItem.groups, newParents);
+        result.push(_.omit(listItem, 'groups'));
+      } else {
+        result = _.omit(listItem, 'groups');
+      }
+      return result;
+    });
+    return _.flatten(listofUN);
+  }
+
   public CreateGroup(model: GroupCreateRequest): Observable<BaseResponse<GroupResponse, GroupCreateRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
@@ -215,6 +240,25 @@ export class GroupService {
       data.queryString = { groupUniqueName };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<GroupsTaxHierarchyResponse, string>(e, groupUniqueName, { groupUniqueName }));
+  }
+
+  /**
+   * get subgroups of a group
+   * @param groupUniqueName
+   */
+  public GetGroupSubgroups(groupUniqueName: string): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.request = groupUniqueName;
+      data.queryString = { groupUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<any, string>(e, groupUniqueName, { groupUniqueName }));
   }
 
 }

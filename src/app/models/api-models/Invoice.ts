@@ -233,6 +233,7 @@ export class PreviewInvoiceResponseClass {
   public invoiceDetails: InvoiceDetails;
   public other?: any;
   public dataPreview?: string;
+  public uniqueName?: string;
 }
 
 export interface TotaltaxBreakdown {
@@ -349,8 +350,8 @@ export class GenerateInvoiceRequestClass {
 */
 
 export class GenBulkInvoiceGroupByObj {
-  public accUniqueName: string;
-  public uniqueName: string;
+  public accUniqueName: any;
+  public uniqueName: any;
 }
 
 export class GenBulkInvoiceFinalObj {
