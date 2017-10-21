@@ -151,7 +151,7 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
     case LEDGER.RESET_UPDATE_TXN_ENTRY:
       return {
         ...state,
-        isTxnUpdateInProcess: true,
+        isTxnUpdateInProcess: false,
         isTxnUpdateSuccess: false
       };
     case LEDGER.UPDATE_TXN_ENTRY_RESPONSE:
