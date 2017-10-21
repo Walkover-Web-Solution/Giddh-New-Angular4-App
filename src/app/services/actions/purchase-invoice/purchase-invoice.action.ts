@@ -7,11 +7,12 @@ import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../settings.profile.service';
 import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
 import { PURCHASE_INVOICE_ACTIONS } from './purchase-invoice.const';
-import { PurchaseInvoiceService, IInvoicePurchaseResponse, ITaxResponse } from '../../purchase-invoice.service';
+import { PurchaseInvoiceService, IInvoicePurchaseResponse, ITaxResponse, IInvoicePurchaseItem } from '../../purchase-invoice.service';
 import { ToasterService } from '../../toaster.service';
 import { AppState } from '../../../store/roots';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { saveAs } from 'file-saver';
+import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 
 @Injectable()
 export class InvoicePurchaseActions {
@@ -19,8 +20,8 @@ export class InvoicePurchaseActions {
   @Effect()
   public GetPurchaseInvoices$: Observable<Action> = this.action$
     .ofType(PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES)
-    .switchMap(action => this.purchaseInvoiceService.GetPurchaseInvoice())
-    .map(res => this.validateResponse<IInvoicePurchaseResponse[], string>(res, {
+    .switchMap(action => this.purchaseInvoiceService.GetPurchaseInvoice(action.payload))
+    .map(res => this.validateResponse<IInvoicePurchaseResponse, string>(res, {
       type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE,
       payload: res
     }, true, {
@@ -178,9 +179,10 @@ export class InvoicePurchaseActions {
     }
   }
 
-  public GetPurchaseInvoices(): Action {
+  public GetPurchaseInvoices(model: CommonPaginatedRequest): Action {
     return {
-      type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES
+      type: PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES,
+      payload: model
     };
   }
 
@@ -197,14 +199,14 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public GeneratePurchaseInvoice(model: IInvoicePurchaseResponse): Action {
+  public GeneratePurchaseInvoice(model: IInvoicePurchaseItem): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.GENERATE_PURCHASE_INVOICE,
       payload: model
     };
   }
 
-  public UpdatePurchaseInvoiceResponse(value: BaseResponse<IInvoicePurchaseResponse, string>): Action {
+  public UpdatePurchaseInvoiceResponse(value: BaseResponse<IInvoicePurchaseItem, string>): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE,
       payload: value

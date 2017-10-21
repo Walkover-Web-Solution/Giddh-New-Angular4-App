@@ -171,7 +171,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let invoice of allPurchaseInvoices; let i = index">
+                <tr *ngFor="let invoice of allPurchaseInvoices.items; let i = index">
                     <td class="text-center"><input type="checkbox" (click)="generateInvoice(invoice, $event);" [disabled]="invoice.entryType !== 'reverse charge' || invoice.invoiceGenerated || invoice.taxes[0]" /></td>
                     <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
@@ -193,7 +193,7 @@
                         </div>
                         <button *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
 
-                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber"
+                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber && selectedRowIndex == i"
                             [autoClose]="false">
                             <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" [disabled]="selectedRowIndex != i">
                             {{dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
@@ -222,13 +222,18 @@
                     <td class="text-right">{{invoice.sgstAmount}}</td>
                     <td class="text-right">{{invoice.utgstAmount}}</td>
                     <td class="text-center icon-btn">
-                        <button class="btn btn-xs" type="button" [disabled]="invoice.invoiceGenerated" *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)=editRow(i)><i aria-hidden="true" class="fa fa-pencil"></i></button>
+                        <button class="btn btn-xs" type="button" [disabled]="invoice.invoiceGenerated" *ngIf="!editMode || (selectedRowIndex != i && editMode) || invoice.invoiceGenerated" (click)=editRow(i)><i aria-hidden="true" class="fa fa-pencil"></i></button>
                         <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)" *ngIf="selectedRowIndex == i && editMode && !invoice.invoiceGenerated"><i aria-hidden="true" class="fa fa-check"></i></button>
                     </td>
                 </tr>
 
             </tbody>
         </table>
+
+        <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
+
+        <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
+        </pagination>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
