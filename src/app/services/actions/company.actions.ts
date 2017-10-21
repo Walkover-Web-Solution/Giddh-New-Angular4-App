@@ -2,7 +2,7 @@ import { Observable } from 'rxjs/Observable';
 import { CompanyService } from './../companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
 import {
-  ComapnyResponse,
+  CompanyResponse,
   CompanyRequest,
   StateDetailsRequest,
   StateDetailsResponse,
@@ -49,7 +49,7 @@ export class CompanyActions {
   public createCompanyResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY_RESPONSE)
     .map(action => {
-      let response = action.payload as BaseResponse<ComapnyResponse, CompanyRequest>;
+      let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
         return { type: '' };
@@ -166,7 +166,7 @@ export class CompanyActions {
     };
   }
 
-  public RefreshCompaniesResponse(response: BaseResponse<ComapnyResponse[], string>): Action {
+  public RefreshCompaniesResponse(response: BaseResponse<CompanyResponse[], string>): Action {
     return {
       type: CompanyActions.REFRESH_COMPANIES_RESPONSE,
       payload: response
@@ -180,7 +180,7 @@ export class CompanyActions {
     };
   }
 
-  public CreateCompanyResponse(value: BaseResponse<ComapnyResponse, CompanyRequest>): Action {
+  public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): Action {
     return {
       type: CompanyActions.CREATE_COMPANY_RESPONSE,
       payload: value

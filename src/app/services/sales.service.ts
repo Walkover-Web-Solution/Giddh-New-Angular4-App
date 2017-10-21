@@ -27,8 +27,9 @@ export class SalesService {
     /**
      *
      * @param model : InvoiceFormClass object
+     * @param updateAccount: boolean flag
      */
-    public generateSales(model: InvoiceFormClass): Observable<BaseResponse<string, InvoiceFormClass>> {
+    public generateSales(model: InvoiceFormClass, updateAccount: boolean): Observable<BaseResponse<string, InvoiceFormClass>> {
       let accountUniqueName = model.account.uniqueName;
       this.store.take(1).subscribe(s => {
         if (s.session.user) {
@@ -36,7 +37,7 @@ export class SalesService {
           this.companyUniqueName = s.session.companyUniqueName;
         }
       });
-      return this._http.post(SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
+      return this._http.post(SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':updateAccount', updateAccount.toString()), model)
         .map((res) => {
           let data: BaseResponse<string, InvoiceFormClass> = res.json();
           data.request = model;
