@@ -6,7 +6,7 @@ import { Select2OptionData } from '../../shared/theme/select2/select2.interface'
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { Observable } from 'rxjs/Observable';
 import * as _ from 'lodash';
-import { AccountRequest } from '../../models/api-models/Account';
+import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { GroupResponse } from '../../models/api-models/Group';
@@ -97,8 +97,8 @@ export class AsideMenuAccountComponent implements OnInit {
     });
   }
 
-  public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequest }) {
-    this.store.dispatch(this.accountsAction.createAccount(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
+  public addNewAcSubmit(accRequestObject: { activeGroupUniqueName: string, accountRequest: AccountRequestV2 }) {
+    this.store.dispatch(this.accountsAction.createAccountV2(accRequestObject.activeGroupUniqueName, accRequestObject.accountRequest));
   }
 
   public closeAsidePane(event) {
