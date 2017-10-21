@@ -272,7 +272,7 @@
           <td class="tax-list-dd-wrap" *ngIf="showTaxBox">
             <tax-control
               [taxes]="companyTaxesList$ | async"
-              [applicableTaxes]="applicableTaxes"
+              [applicableTaxes]="transaction.applicableTaxes"
               [taxRenderData]="[]"
               [showTaxPopup]="false"
               [showHeading]="false"
