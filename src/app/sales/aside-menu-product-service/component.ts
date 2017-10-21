@@ -46,13 +46,15 @@ import * as _ from 'lodash';
   `],
   templateUrl: './component.html'
 })
-export class AsideMenuProductServiceComponent implements OnInit {
+export class AsideMenuProductServiceComponent {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public animatePAside: EventEmitter<any> = new EventEmitter();
 
   // public
   public isAddStockOpen: boolean = false;
+  public isAddServiceOpen: boolean = false;
+  public hideFirstStep: boolean = false;
 
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -63,16 +65,27 @@ export class AsideMenuProductServiceComponent implements OnInit {
     // constructor methods
   }
 
-  public ngOnInit() {
-    //
-  }
-
   public toggleStockPane() {
+    this.hideFirstStep = true;
+    this.isAddServiceOpen = false;
     this.isAddStockOpen = !this.isAddStockOpen;
   }
 
-  public closeAsidePane() {
-    this.closeAsideEvent.emit();
+  public toggleServicePane() {
+    this.hideFirstStep = true;
+    this.isAddStockOpen = false;
+    this.isAddServiceOpen = !this.isAddServiceOpen;
+  }
+
+  public closeAsidePane(e?: any) {
+    this.hideFirstStep = false;
+    this.isAddStockOpen = false;
+    this.isAddServiceOpen = false;
+    if (e) {
+      //
+    } else {
+      this.closeAsideEvent.emit();
+    }
   }
 
   public animateAside(e: any) {

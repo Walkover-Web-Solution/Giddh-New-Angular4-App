@@ -3,7 +3,7 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../services/actions/settings/profile/settings.profile.const';
-import { ComapnyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
+import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
 import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass, RazorPayDetailsResponse, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.const';
@@ -84,7 +84,7 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       }
       return state;
     case SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE: {
-      let response: BaseResponse<ComapnyResponse, string> = action.payload;
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
         return Object.assign({}, state, newState);
@@ -92,7 +92,7 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       return state;
     }
     case SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE: {
-      let response: BaseResponse<ComapnyResponse, string> = action.payload;
+      let response: BaseResponse<CompanyResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.profile = response.body;
         return Object.assign({}, state, newState);
