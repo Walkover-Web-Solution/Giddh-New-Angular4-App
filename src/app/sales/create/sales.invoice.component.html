@@ -273,7 +273,7 @@
             <tax-control
               [taxes]="companyTaxesList$ | async"
               [applicableTaxes]="transaction.applicableTaxes"
-              [taxRenderData]="[]"
+              [taxRenderData]="transaction.taxRenderData"
               [showTaxPopup]="false"
               [showHeading]="false"
               (selectedTaxEvent)="selectedTaxEvent($event, entry)"
