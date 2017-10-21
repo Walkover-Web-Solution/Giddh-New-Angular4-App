@@ -256,6 +256,11 @@ export class LedgerActions {
       type: LEDGER.RESET_LEDGER
     };
   }
+  public ResetUpdateLedger(): Action {
+    return {
+      type: LEDGER.RESET_UPDATE_TXN_ENTRY
+    };
+  }
 
   public deleteTrxEntry(accountUniqueName: string, entryUniqueName: string): Action {
     return {

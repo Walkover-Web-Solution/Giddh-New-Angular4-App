@@ -340,10 +340,12 @@
 
 <!-- update ladger entry popup -->
 <div bsModal #updateLedgerModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg" style="width:90%" *ngIf="showUpdateLedgerForm">
+    <div class="modal-dialog modal-lg" style="width:90%" >
         <div class="modal-content">
-            <update-ledger-entry-panel (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (entryManipulated)="entryManipulated()">
-            </update-ledger-entry-panel>
+            <!-- <update-ledger-entry-panel (closeUpdateLedgerModal)="hideUpdateLedgerModal()" (entryManipulated)="entryManipulated()">
+            </update-ledger-entry-panel> -->
+            <ng-template element-view-container-ref #updateledgercomponent=elementviewcontainerref>
+            </ng-template>
         </div>
     </div>
 </div>
