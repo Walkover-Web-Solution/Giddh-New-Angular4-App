@@ -479,7 +479,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
   public loadUpdateLedgerComponent() {
-    debugger;
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
     let viewContainerRef = this.updateledgercomponent.viewContainerRef;
     viewContainerRef.clear();

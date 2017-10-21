@@ -182,6 +182,13 @@ export class UpdateLedgerVm {
   }
 
   public isThereMoreIncomeOrExpenseEntry(): boolean {
+    console.log(this.selectedLedger.transactions);
+    console.log(filter(this.selectedLedger.transactions, (trx) => {
+      if (trx.particular.uniqueName) {
+        let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
+        return category === 'income' || category === 'expenses';
+      }
+    }).length);
     return filter(this.selectedLedger.transactions, (trx) => {
       if (trx.particular.uniqueName) {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
@@ -247,7 +254,9 @@ export class UpdateLedgerVm {
   }
 
   public getUniqueName(txn: ILedgerTransactionItem) {
-    if (txn.selectedAccount && txn.selectedAccount.stock) {
+    if ((txn.selectedAccount && txn.selectedAccount.stock)) {
+      return txn.particular.uniqueName.split('#')[0];
+    } else if (txn.inventory && txn.inventory.stock) {
       return txn.particular.uniqueName.split('#')[0];
     }
     return txn.particular.uniqueName;

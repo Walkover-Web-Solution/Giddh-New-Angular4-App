@@ -128,6 +128,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       this.entryUniqueName = entryName;
       if (entryName) {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
+          debugger;
           if (resp.status === 'success') {
             this.vm.selectedLedger = resp.body;
             this.vm.selectedLedgerBackup = resp.body;
@@ -156,7 +157,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
     // check if delete entry is success
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
-      debugger;
       if (del) {
         this.hideDeleteEntryModal();
         this.entryManipulated.emit(true);
@@ -165,7 +165,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
     // chek if update entry is success
     this.isTxnUpdateSuccess$.subscribe(upd => {
-      debugger;
       if (upd) {
         this.entryManipulated.emit(true);
       }
@@ -246,21 +245,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       //   return;
       // }
     }
-
     if (e.additional.stock) {
-      if (this.vm.isThereStockEntry()) {
-        selectCmp.clear();
-        txn.particular.uniqueName = null;
-        txn.particular.name = null;
-        this.selectedAccount = null;
-        txn.selectedAccount = null;
-        this._toasty.warningToast('you can\'t add multiple stock entry');
-        return;
-      } else {
-        this.selectedAccount = e.additional;
-        txn.selectedAccount = e.additional;
-      }
-    } else {
       this.selectedAccount = e.additional;
       txn.selectedAccount = e.additional;
       let rate = 0;
@@ -320,6 +305,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       if (rate > 0 && txn.amount === 0) {
         txn.amount = rate;
       }
+    } else {
+      if (this.vm.isThereStockEntry()) {
+        selectCmp.clear();
+        txn.particular.uniqueName = null;
+        txn.particular.name = null;
+        this.selectedAccount = null;
+        txn.selectedAccount = null;
+        this._toasty.warningToast('you can\'t add multiple stock entry');
+        return;
+      } else {
+        this.selectedAccount = e.additional;
+        txn.selectedAccount = e.additional;
+      }
+
     }
     // check if need to showEntryPanel
     this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
@@ -338,6 +337,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         t.particular.uniqueName = undefined;
       }
     });
+    debugger;
     // check if need to showEntryPanel
     this.vm.selectedLedger.transactions.forEach(t => {
       this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
