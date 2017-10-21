@@ -148,6 +148,12 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         isTxnUpdateInProcess: true,
         isTxnUpdateSuccess: false
       };
+    case LEDGER.RESET_UPDATE_TXN_ENTRY:
+      return {
+        ...state,
+        isTxnUpdateInProcess: true,
+        isTxnUpdateSuccess: false
+      };
     case LEDGER.UPDATE_TXN_ENTRY_RESPONSE:
       let updateResponse: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
       if (updateResponse.status === 'success') {

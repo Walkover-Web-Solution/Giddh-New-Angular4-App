@@ -156,6 +156,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
     // check if delete entry is success
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
+      debugger;
       if (del) {
         this.hideDeleteEntryModal();
         this.entryManipulated.emit(true);
@@ -164,6 +165,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
     // chek if update entry is success
     this.isTxnUpdateSuccess$.subscribe(upd => {
+      debugger;
       if (upd) {
         this.entryManipulated.emit(true);
       }
@@ -394,6 +396,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
   }
   public ngOnDestroy(): void {
+    this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
     this.vm.selectedLedger = null;
     this.destroyed$.next(true);
     this.destroyed$.complete();

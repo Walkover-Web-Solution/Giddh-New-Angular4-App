@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter, ComponentFactoryResolver } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -24,6 +24,8 @@ import { CompanyActions } from '../services/actions/company.actions';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
+import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
+import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 
 @Component({
   selector: 'ledger',
@@ -31,6 +33,7 @@ import { base64ToBlob } from '../shared/helpers/helperFunctions';
   styleUrls: ['./ledger.component.scss']
 })
 export class LedgerComponent implements OnInit, OnDestroy {
+  @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
@@ -117,7 +120,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
     private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions) {
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -420,6 +423,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.showUpdateLedgerForm = true;
     this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
     this.lc.selectedTxnUniqueName = txn.entryUniqueName;
+    this.loadUpdateLedgerComponent();
     this.updateLedgerModal.show();
   }
 
@@ -473,5 +477,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.store.dispatch(this._ledgerActions.ResetLedger());
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public loadUpdateLedgerComponent() {
+    debugger;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
+    let viewContainerRef = this.updateledgercomponent.viewContainerRef;
+    viewContainerRef.clear();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    (componentRef.instance as UpdateLedgerEntryPanelComponent).closeUpdateLedgerModal.subscribe((a) => {
+      this.hideUpdateLedgerModal();
+    });
+    (componentRef.instance as UpdateLedgerEntryPanelComponent).entryManipulated.subscribe((a) => {
+      this.entryManipulated();
+    });
   }
 }
