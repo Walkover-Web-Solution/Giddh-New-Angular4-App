@@ -175,20 +175,13 @@ export class UpdateLedgerVm {
     return find(this.selectedLedger.transactions,
       (f: ILedgerTransactionItem) => {
         if (f.particular.uniqueName) {
-          return (f.selectedAccount && f.selectedAccount.stock) ? true : false;
+          return (f.inventory && f.inventory.stock) ? true : false;
         }
       }
     ) !== undefined;
   }
 
   public isThereMoreIncomeOrExpenseEntry(): boolean {
-    console.log(this.selectedLedger.transactions);
-    console.log(filter(this.selectedLedger.transactions, (trx) => {
-      if (trx.particular.uniqueName) {
-        let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-        return category === 'income' || category === 'expenses';
-      }
-    }).length);
     return filter(this.selectedLedger.transactions, (trx) => {
       if (trx.particular.uniqueName) {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
@@ -261,7 +254,12 @@ export class UpdateLedgerVm {
     }
     return txn.particular.uniqueName;
   }
-  // public submitUpdateRequest() {
-  //   this._ledgerService.UpdateLedgerTransactions();
-  // }
+
+  public inventoryPriceChanged(uniqueName: string, val: number) {
+    this.selectedLedger.transactions.map(t => {
+      if (t.particular.uniqueName === uniqueName) {
+        this.totalAmount = Number(val * t.inventory.quantity);
+      }
+    });
+  }
 }

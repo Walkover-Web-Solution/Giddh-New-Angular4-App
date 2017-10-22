@@ -70,7 +70,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public entryUniqueName: string;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public uploadInput: EventEmitter<UploadInput>;
-  public selectedAccount: IFlattenAccountsResultItem = null;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
@@ -128,19 +127,30 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       this.entryUniqueName = entryName;
       if (entryName) {
         this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
-          debugger;
           if (resp.status === 'success') {
             this.vm.selectedLedger = resp.body;
             this.vm.selectedLedgerBackup = resp.body;
 
             this.vm.selectedLedger.transactions.map(t => {
               if (t.inventory) {
+                let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
+                if (findStocks) {
+                  let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
+                  if (findUnitRates) {
+                    let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
+                    tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
+                    t.unitRate = tempUnitRates;
+                  }
+                }
                 t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
               }
             });
             this.vm.selectedLedger.transactions.forEach(t => {
               this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
             });
+            if (this.vm.showNewEntryPanel) {
+              this.vm.showStockDetails = this.vm.isThereStockEntry();
+            }
             this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
             if (this.vm.selectedLedger.total.type === 'DEBIT') {
               this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
@@ -214,7 +224,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
-      this.selectedAccount = null;
       txn.selectedAccount = null;
       return;
     } else {
@@ -246,7 +255,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       // }
     }
     if (e.additional.stock) {
-      this.selectedAccount = e.additional;
       txn.selectedAccount = e.additional;
       let rate = 0;
       let unitCode = '';
@@ -310,12 +318,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         selectCmp.clear();
         txn.particular.uniqueName = null;
         txn.particular.name = null;
-        this.selectedAccount = null;
         txn.selectedAccount = null;
         this._toasty.warningToast('you can\'t add multiple stock entry');
         return;
       } else {
-        this.selectedAccount = e.additional;
         txn.selectedAccount = e.additional;
       }
 
@@ -337,7 +343,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         t.particular.uniqueName = undefined;
       }
     });
-    debugger;
     // check if need to showEntryPanel
     this.vm.selectedLedger.transactions.forEach(t => {
       this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
