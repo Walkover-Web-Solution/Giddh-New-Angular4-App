@@ -221,17 +221,18 @@
                       <table>
                         <tbody>
                           <tr>
-                            <td ng-class="{width55: ledgerCtrl.selectedLedger.panel.unit != undefined}">
-                              <label>Quantity</label>
-                              <input type="text" name="" class="form-control" ng-model="ledgerCtrl.selectedLedger.panel.quantity" ng-change="ledgerCtrl.onQuantityChange(ledgerCtrl.selectedLedger)"
-                              />
-                            </td>
-                            <td ng-if="ledgerCtrl.selectedLedger.panel.unit">
-                              <label>Unit</label>
-                              <select class="form-control" ng-options="unit as unit.stockUnitCode for unit in ledgerCtrl.selectedLedger.panel.units" ng-model="ledgerCtrl.selectedLedger.panel.unit"
-                                ng-change="ledgerCtrl.onstockUnitChange(ledgerCtrl.selectedLedger)">
-                              </select>
-                            </td>
+                            <ng-template ngFor let-trx [ngForOf]="vm.selectedLedger.transactions">
+                              <td *ngIf="trx.inventory" [ngClass]="{width55: trx.inventory}">
+                                <label>Quantity</label>
+                                <input type="text" name="" class="form-control" [(ngModel)]="trx.inventory.quantity" />
+                              </td>
+                              <td *ngIf="trx.inventory">
+                                <label>Unit</label>
+                                <select class="form-control" style="width: 60px;">
+                                  <option *ngFor="let item of trx.unitRate" [value]="item.stockUnitCode">{{item.stockUnitCode}}</option>
+                                </select>
+                              </td>
+                            </ng-template>
                           </tr>
                         </tbody>
                       </table>
@@ -240,11 +241,12 @@
                       <label>&nbsp;</label>
                       <label class="pdR pdL default_clr">x</label>
                     </td>
-                    <td *ngIf="vm.showStockDetails">
-                      <label>Price</label>
-                      <input type="text" name="" class="form-control" ng-model="ledgerCtrl.selectedLedger.panel.price" ng-change="ledgerCtrl.onPriceChange(ledgerCtrl.selectedLedger) "
-                      />
-                    </td>
+                    <ng-template ngFor let-trx [ngForOf]="vm.selectedLedger.transactions">
+                      <td *ngIf="trx.inventory">
+                        <label>Price</label>
+                        <input type="number" name="" (input)="vm.inventoryPriceChanged(trx.particular.uniqueName, $event.target.value)" [(ngModel)]="trx.inventory.rate" class="form-control" />
+                      </td>
+                    </ng-template>
                     <td *ngIf="vm.showStockDetails">
                       <label>&nbsp;</label>
                       <label class="pdR pdL default_clr">=</label>
