@@ -222,6 +222,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
+    console.error(this.vm.stockTrxEntry);
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
