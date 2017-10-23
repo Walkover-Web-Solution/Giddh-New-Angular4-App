@@ -227,10 +227,11 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 defaultUnit.rate = cond.rate;
                 rate = defaultUnit.rate;
               }
-              unitArray.join(fa.additional.stock.accountStockDetails.unitRates.map(p => {
+
+              unitArray = unitArray.concat(fa.additional.stock.accountStockDetails.unitRates.map(p => {
                 return {
-                  stockUnitCode: p.code,
-                  code: p.code,
+                  stockUnitCode: p.stockUnitCode,
+                  code: p.stockUnitCode,
                   rate: 0
                 };
               }));
