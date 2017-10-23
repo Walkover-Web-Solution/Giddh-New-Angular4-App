@@ -8,6 +8,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountData, UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { LedgerService } from '../../../services/ledger.service';
+import { retry } from 'rxjs/operator/retry';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -17,6 +18,7 @@ export class UpdateLedgerVm {
   public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
   public grandTotal: number = 0;
   public totalAmount: number = 0;
+  public compoundTotal: number = 0;
   public voucherTypeList: IOption[];
   public isDisabledTaxesAndDiscounts: boolean = false;
   public discountArray: ILedgerDiscount[] = [];
@@ -108,7 +110,10 @@ export class UpdateLedgerVm {
         }
       });
     }
+    this.getEntryTotal();
     this.generatePanelAmount();
+    this.generateGrandTotal();
+    this.generateCompoundTotal();
     return;
   }
 
@@ -135,6 +140,11 @@ export class UpdateLedgerVm {
         }
       });
     }
+    this.getEntryTotal();
+    this.generatePanelAmount();
+    this.generateGrandTotal();
+    this.generateCompoundTotal();
+    return;
   }
 
   public getCategoryNameFromAccount(accountName: string): string {
@@ -229,6 +239,7 @@ export class UpdateLedgerVm {
     this.getEntryTotal();
     this.generateGrandTotal();
     this.generatePanelAmount();
+    this.generateCompoundTotal();
     if (this.discountComponent) {
       this.discountComponent.genTotal();
     }
@@ -250,9 +261,19 @@ export class UpdateLedgerVm {
 
   // FIXME: fix total calculation
   public generateGrandTotal() {
-    this.grandTotal = Number((this.totalAmount).toFixed(2));
+    let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
+      return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
+    }) || 0;
+    this.grandTotal = Number((this.totalAmount - discountTrxTotal).toFixed(2));
   }
 
+  public generateCompoundTotal() {
+    if (this.entryTotal.crTotal > this.entryTotal.drTotal) {
+      this.compoundTotal = Number((this.entryTotal.crTotal - this.entryTotal.drTotal).toFixed());
+    } else {
+      this.compoundTotal = Number((this.entryTotal.drTotal - this.entryTotal.crTotal).toFixed());
+    }
+  }
   public getUniqueName(txn: ILedgerTransactionItem) {
     if ((txn.selectedAccount && txn.selectedAccount.stock)) {
       return txn.particular.uniqueName.split('#')[0];
@@ -265,12 +286,17 @@ export class UpdateLedgerVm {
   public inventoryQuantityChanged(val: number) {
     this.stockTrxEntry.amount = Number(this.stockTrxEntry.inventory.rate * val);
     this.stockTrxEntry.inventory.unit.rate = this.stockTrxEntry.amount;
+    this.getEntryTotal();
     this.generatePanelAmount();
     this.generateGrandTotal();
+    this.generateCompoundTotal();
   }
   public inventoryPriceChanged(val: number) {
     this.stockTrxEntry.amount = Number(val * this.stockTrxEntry.inventory.quantity);
+    this.getEntryTotal();
     this.generatePanelAmount();
+    this.generateGrandTotal();
+    this.generateCompoundTotal();
   }
 
   public unitChanged(stockUnitCode: string) {
