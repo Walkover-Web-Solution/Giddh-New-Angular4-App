@@ -160,6 +160,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
               this.vm.getEntryTotal();
               this.vm.generatePanelAmount();
               this.vm.generateGrandTotal();
+              this.vm.generateCompoundTotal();
               //#endregion
             }
           });
@@ -228,14 +229,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       txn.selectedAccount = null;
       return;
     } else {
-      // handle accountUniqueName for inventory purpose
-      let accountUniqueName = null;
-      if (e.additional.stock) {
-        accountUniqueName = e.value.split('#')[0];
-      } else {
-        accountUniqueName = e.value;
-      }
-
+      // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
       if (txn.selectedAccount) {
         // check if discount is added and update component as needed
         this.vm.discountArray.map(d => {
@@ -247,96 +241,91 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
           this.discountComponent.genTotal();
         }
       }
-      // if (!this.vm.isValidEntry(accountUniqueName)) {
-      //   selectCmp.clear();
-      //   this.selectedAccount = null;
-      //   txn.selectedAccount = null;
-      //   this.vm.showNewEntryPanel = false;
-      //   return;
-      // }
-    }
-    if (e.additional.stock) {
-      txn.selectedAccount = e.additional;
-      let rate = 0;
-      let unitCode = '';
-      let unitName = '';
-      let stockName = '';
-      let stockUniqueName = '';
-      let unitArray = [];
-
-      let defaultUnit = {
-        stockUnitCode: e.additional.stock.stockUnit.name,
-        code: e.additional.stock.stockUnit.code,
-        rate: 0
-      };
-
-      if (e.additional.stock.accountStockDetails && e.additional.stock.accountStockDetails.unitRates) {
-        let cond = e.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === e.additional.stock.stockUnit.code);
-        if (cond) {
-          defaultUnit.rate = cond.rate;
-          rate = defaultUnit.rate;
-        }
-        unitArray.join(e.additional.stock.accountStockDetails.unitRates.map(p => {
-          return {
-            stockUnitCode: p.code,
-            code: p.code,
+      // if ther's stock entry
+      if (e.additional.stock) {
+        // check if we aleready have stock entry
+        if (this.vm.isThereStockEntry()) {
+          selectCmp.clear();
+          txn.particular.uniqueName = null;
+          txn.particular.name = null;
+          txn.selectedAccount = null;
+          this._toasty.warningToast('you can\'t add multiple stock entry');
+          return;
+        } else {
+          // add unitArrys in txn for stock entry
+          txn.selectedAccount = e.additional;
+          let rate = 0;
+          let unitCode = '';
+          let unitName = '';
+          let stockName = '';
+          let stockUniqueName = '';
+          let unitArray = [];
+          let defaultUnit = {
+            stockUnitCode: e.additional.stock.stockUnit.name,
+            code: e.additional.stock.stockUnit.code,
             rate: 0
           };
-        }));
-        if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
-          unitArray.push(defaultUnit);
+
+          if (e.additional.stock.accountStockDetails && e.additional.stock.accountStockDetails.unitRates) {
+            let cond = e.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === e.additional.stock.stockUnit.code);
+            if (cond) {
+              defaultUnit.rate = cond.rate;
+              rate = defaultUnit.rate;
+            }
+            unitArray = unitArray.concat(e.additional.stock.accountStockDetails.unitRates.map(p => {
+              return {
+                stockUnitCode: p.stockUnitCode,
+                code: p.stockUnitCode,
+                rate: 0
+              };
+            }));
+            if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
+              unitArray.push(defaultUnit);
+            }
+          } else {
+            unitArray.push(defaultUnit);
+          }
+          txn.unitRate = unitArray;
+          stockName = e.additional.stock.name;
+          stockUniqueName = e.additional.stock.uniqueName;
+          unitName = e.additional.stock.stockUnit.name;
+          unitCode = e.additional.stock.stockUnit.code;
+
+          if (stockName && stockUniqueName) {
+            txn.inventory = {
+              stock: {
+                name: stockName,
+                uniqueName: stockUniqueName,
+              },
+              quantity: 1,
+              unit: {
+                stockUnitCode: unitCode,
+                code: unitCode,
+                rate
+              },
+              amount: 0,
+              rate: 0
+            };
+          }
+          if (rate > 0 && txn.amount === 0) {
+            txn.amount = rate;
+          }
         }
       } else {
-        unitArray.push(defaultUnit);
-      }
-      txn.unitRate = unitArray;
-      stockName = e.additional.stock.name;
-      stockUniqueName = e.additional.stock.uniqueName;
-      unitName = e.additional.stock.stockUnit.name;
-      unitCode = e.additional.stock.stockUnit.code;
-
-      if (stockName && stockUniqueName) {
-        txn.inventory = {
-          stock: {
-            name: stockName,
-            uniqueName: stockUniqueName,
-          },
-          quantity: 1,
-          unit: {
-            stockUnitCode: unitCode,
-            code: unitCode,
-            rate
-          },
-          amount: 0,
-          rate: 0
-        };
-      }
-      if (rate > 0 && txn.amount === 0) {
-        txn.amount = rate;
-      }
-    } else {
-      if (this.vm.isThereStockEntry()) {
-        selectCmp.clear();
-        txn.particular.uniqueName = null;
-        txn.particular.name = null;
-        txn.selectedAccount = null;
-        this._toasty.warningToast('you can\'t add multiple stock entry');
-        return;
-      } else {
+        // directly assign additional property
         txn.selectedAccount = e.additional;
       }
-
+      // check if need to showEntryPanel
+      this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
+      if (this.vm.showNewEntryPanel) {
+        // check if ther stockentry or not
+        this.vm.showStockDetails = this.vm.isThereStockEntry();
+      }
+      this.vm.onTxnAmountChange(txn);
     }
-    // check if need to showEntryPanel
-    this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
-    if (this.vm.showNewEntryPanel) {
-      // check if ther stockentry or not
-      this.vm.showStockDetails = this.vm.isThereStockEntry();
-    }
-    this.vm.onTxnAmountChange(txn);
   }
   public deSelectAccount(e: IOption, txn: ITransactionItem) {
-    // set deselected transaction = undefined
+    // set deselected transaction = undefined for manually cleanup
     this.vm.selectedLedger.transactions.map(t => {
       if (t.particular.uniqueName === e.value) {
         t.inventory = null;
@@ -352,7 +341,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       // check if ther stockentry or not
       this.vm.showStockDetails = this.vm.isThereStockEntry();
     }
-    // set discount amount to 0 when deselected account
+    // set discount amount to 0 when deselected account is type of discount category
     if (this.discountComponent) {
       this.vm.discountArray.map(d => {
         if (d.particular === e.value) {
