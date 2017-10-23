@@ -24,7 +24,7 @@
       </div>-->
                 <div class="form-group pos-rel">
                     <label class="d-block">Quantity</label>
-                    <input type="text" class="form-control" (ngModelChange)="onQuantityChange($event)" [(ngModel)]="manufacturingDetails.quantity" name="multipleOf" />
+                    <input type="text" class="form-control" (ngModelChange)="onQuantityChange($event)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="multipleOf" />
                     <small class="pos-abs" style="right:0;">Multiple of {{manufacturingDetails.multipleOf | json}}</small>
                 </div>
                 <div class="form-group" (clickOutside)="showFromDatePicker=false;">
@@ -102,7 +102,7 @@
                                 <td colspan="2">
                                     <span class="hr"></span>
                                     <div class="custom-select pos-rel">
-                                        <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" (change)="getStockUnit(linkedStocks.stockUniqueName)" required #linkedStockList="ngModel">
+                                        <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel">
                                               <option value="select" [selected]="true">select</option>
                                               <option [ngValue]="stock.id" *ngFor="let stock of stockListDropDown$ | async" >{{ stock.text }}</option>
                                             </select>
@@ -110,7 +110,7 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <input type="number" required class="form-control" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
+                                    <input type="number" required class="form-control" (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
                                 </td>
                                 <td><input type="text" class="form-control" [(ngModel)]="linkedStocks.manufacturingUnit" [disabled]="true"></td>
                                 <!--<td *ngIf="!isUpdateCase">{{linkedStocks.stockUnitCode }}</td>
@@ -165,12 +165,15 @@
                         <tbody *ngIf="manufacturingDetails">
                             <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index;">
                                 <td colspan="1">
-                                    <div class="custom-select pos-rel">
+                                    <small>{{expense.baseAccount.uniqueName}}</small>
+                                    <select2 class="cp" [data]="expenseGroupAccounts$ | async" [options]="options" (value)="expense.baseAccount.uniqueName"></select2>
+                                    
+                                    <!--<div class="custom-select pos-rel">
                                         <select class="form-control cp">
                                         <option (value)="expense.baseAccount.uniqueName">{{ expense.baseAccount.uniqueName }}</option>
                                     </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                                    </div>
+                                    </div>-->
                                 </td>
                                 <td class="text-center">
                                     <label class="pd">to</label>
