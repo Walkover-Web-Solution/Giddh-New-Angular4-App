@@ -23,6 +23,9 @@ export class UpdateLedgerVm {
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
   public showStockDetails: boolean = false;
+  public get stockTrxEntry(): ILedgerTransactionItem {
+    return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
+  }
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
 
   constructor(private _toasty: ToasterService, private discountComponent: UpdateLedgerDiscountComponent) {
@@ -234,10 +237,14 @@ export class UpdateLedgerVm {
   // FIXME: fix amount calculation
   public generatePanelAmount() {
     if (this.selectedLedger.transactions && this.selectedLedger.transactions.length) {
-      let trx = find(this.selectedLedger.transactions, (t) => {
-        return this.getCategoryNameFromAccount(this.getUniqueName(t)) === 'income' || this.getCategoryNameFromAccount(this.getUniqueName(t)) === 'expenses';
-      });
-      this.totalAmount = trx ? Number(trx.amount) : 0;
+      if (this.stockTrxEntry) {
+        this.totalAmount = this.stockTrxEntry.amount;
+      } else {
+        let trx = find(this.selectedLedger.transactions, (t) => {
+          return this.getCategoryNameFromAccount(this.getUniqueName(t)) === 'income' || this.getCategoryNameFromAccount(this.getUniqueName(t)) === 'expenses';
+        });
+        this.totalAmount = trx ? Number(trx.amount) : 0;
+      }
     }
   }
 
@@ -255,11 +262,16 @@ export class UpdateLedgerVm {
     return txn.particular.uniqueName;
   }
 
-  public inventoryPriceChanged(uniqueName: string, val: number) {
-    this.selectedLedger.transactions.map(t => {
-      if (t.particular.uniqueName === uniqueName) {
-        this.totalAmount = Number(val * t.inventory.quantity);
-      }
-    });
+  public inventoryPriceChanged(val: number) {
+    this.stockTrxEntry.amount = Number(val * this.stockTrxEntry.inventory.quantity);
+    this.generatePanelAmount();
+  }
+
+  public unitChanged(stockUnitCode: string) {
+    if (this.stockTrxEntry) {
+      this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
+      this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
+    }
+    this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
   }
 }

@@ -1,4 +1,4 @@
-<div id="entryModal" ng-click="$event.stopPropagation(); $event.cancelBubble()">
+<div id="entryModal" >
   <div class="modal-header themeBg">
     <button type="button" class="close" data-dismiss="modal" (click)="closeUpdateLedgerModal.emit()" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -27,7 +27,7 @@
             <thead>
               <tr class="t-h-bg1">
                 <th class="col-xs-3" style="border-top:none">
-                  <span ng-click="ledgerCtrl.sortOrder.debit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.debit); ledgerCtrl.sortOrderChange('dr')"
+                  <span
                     class="cursor-pointer">
                     Date
                   </span>
@@ -74,11 +74,11 @@
                   </td>
                   <td class="col-xs-3 pos-rel">
                     <input type="text" [(ngModel)]="txn.amount" class="form-control" (click)="addBlankTrx('DEBIT', txn, $event)" (input)="vm.onTxnAmountChange(txn)">
-                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
+                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                       tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
-                    <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.invoiceNumber.length> 0" ng-click="ledgerCtrl.downloadInvoice(ledgerCtrl.selectedLedger.invoiceNumber, $event)"
+                    <span class="download-invoice-ledger " *ngIf="vm.selectedLedger.invoiceNumber.length> 0"
                       tooltip-append-to-body="true" tooltip="Download Invoice : {{vm.selectedLedger.invoiceNumber}}" tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
@@ -96,7 +96,7 @@
             <thead>
               <tr class="t-h-bg1">
                 <th class="col-xs-3" style="border-top:none">
-                  <span ng-click="ledgerCtrl.sortOrder.credit = ledgerCtrl.sortDirectionInvert(ledgerCtrl.sortOrder.credit); ledgerCtrl.sortOrderChange('cr')"
+                  <span
                     class="cursor-pointer">
                     Date
                   </span>
@@ -108,7 +108,7 @@
           </table>
           <table class="width100">
             <tbody class="ledger-main">
-              <tr class="" *ngFor="let txn of vm.selectedLedger.transactions" ng-click="$event.stopPropagation()">
+              <tr class="" *ngFor="let txn of vm.selectedLedger.transactions">
                 <ng-container *ngIf="txn.type == 'CREDIT'">
                   <td class="col-xs-3">
                     <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="vm.selectedLedger.entryDate" (click)="addBlankTrx('CREDIT', txn, $event)"
@@ -142,11 +142,11 @@
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control" type="text" [(ngModel)]="txn.amount" (click)="addBlankTrx('CREDIT', txn, $event)" is-open="txn.isOpen"
                       (input)="vm.onTxnAmountChange(txn)">
-                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0" ng-click="ledgerCtrl.downloadAttachedFile(ledgerCtrl.selectedLedger.attachedFile, $event)"
+                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                       tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}" tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
                     </span>
-                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.invoiceNumber.length > 0" ng-click="ledgerCtrl.downloadInvoice(ledgerCtrl.selectedLedger.invoiceNumber, $event)"
+                    <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.invoiceNumber.length > 0"
                       tooltip-append-to-body="true" tooltip="Download Invoice : {{'ledgerCtrl.selectedLedger.invoiceNumber'}}"
                       tooltip-placement="top">
                       <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -213,23 +213,23 @@
         <div>
           <!-- amount and discount container -->
           <ng-container *ngIf="vm.showNewEntryPanel">
-            <div class="basic_detail" ng-if="ledgerCtrl.selectedLedger.panel.show || ledgerCtrl.selectedLedger.isBlankLedger">
+            <div class="basic_detail">
               <table>
                 <tbody>
                   <tr>
-                    <td *ngIf="vm.showStockDetails">
+                    <td *ngIf="vm.stockTrxEntry">
                       <table>
                         <tbody>
                           <tr>
-                            <ng-template ngFor let-trx [ngForOf]="vm.selectedLedger.transactions">
-                              <td *ngIf="trx.inventory" [ngClass]="{width55: trx.inventory}">
+                            <ng-template [ngIf]="vm.stockTrxEntry">
+                              <td [ngClass]="{width55: vm.stockTrxEntry}">
                                 <label>Quantity</label>
-                                <input type="text" name="" class="form-control" [(ngModel)]="trx.inventory.quantity" />
+                                <input type="text" name="" class="form-control" [(ngModel)]="vm.stockTrxEntry.inventory.quantity" />
                               </td>
-                              <td *ngIf="trx.inventory">
+                              <td>
                                 <label>Unit</label>
-                                <select class="form-control" style="width: 60px;">
-                                  <option *ngFor="let item of trx.unitRate" [value]="item.stockUnitCode">{{item.stockUnitCode}}</option>
+                                <select class="form-control" style="width: 60px;" (change)="vm.unitChanged($event.target.value)">
+                                  <option *ngFor="let item of vm.stockTrxEntry.unitRate" [value]="item.stockUnitCode">{{item.stockUnitCode}}</option>
                                 </select>
                               </td>
                             </ng-template>
@@ -237,34 +237,33 @@
                         </tbody>
                       </table>
                     </td>
-                    <td *ngIf="vm.showStockDetails">
+                    <td *ngIf="vm.stockTrxEntry">
                       <label>&nbsp;</label>
                       <label class="pdR pdL default_clr">x</label>
                     </td>
-                    <ng-template ngFor let-trx [ngForOf]="vm.selectedLedger.transactions">
-                      <td *ngIf="trx.inventory">
+                    <ng-template [ngIf]="vm.stockTrxEntry">
+                      <td>
                         <label>Price</label>
-                        <input type="number" name="" (input)="vm.inventoryPriceChanged(trx.particular.uniqueName, $event.target.value)" [(ngModel)]="trx.inventory.rate" class="form-control" />
+                        <input type="number" name="" (input)="vm.inventoryPriceChanged($event.target.value)" [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control" />
                       </td>
                     </ng-template>
-                    <td *ngIf="vm.showStockDetails">
+                    <td *ngIf="vm.stockTrxEntry">
                       <label>&nbsp;</label>
                       <label class="pdR pdL default_clr">=</label>
                     </td>
                     <td>
                       <label class="primary_color">Amount</label>
-                      <input type="text" name="" class="form-control" [(ngModel)]="vm.totalAmount" ng-change="ledgerCtrl.onAmountChange(ledgerCtrl.selectedLedger)"
+                      <input type="text" name="" class="form-control" [(ngModel)]="vm.totalAmount"
                       />
                     </td>
-                    <td ng-if="ledgerCtrl.discountAccount && ledgerCtrl.discountAccount.accountDetails.length > 0">
+                    <td>
                       <label>&nbsp;</label>
                       <label class="pdR pdL default_clr">-</label>
                     </td>
-                    <td ng-if="ledgerCtrl.discountAccount && ledgerCtrl.discountAccount.accountDetails.length > 0">
+                    <td>
                       <span auto-close="outsideClick">
                         <update-ledger-discount #discount [discountAccountsDetails]="vm.discountArray" (appliedDiscountEvent)="vm.addDiscountEntry($event)">
                         </update-ledger-discount>
-                        <!-- <input readonly="true" type="text" name="" class="form-control" ng-model="ledgerCtrl.selectedLedger.panel.discount" /> -->
                       </span>
                     </td>
                     <td>
@@ -277,7 +276,7 @@
                       <div class="multi-select adjust"> -->
                         <update-ledger-tax-control [taxes]="companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="[]"
                           [applicableTaxes]="[]" (selectedTaxEvent)="vm.addTaxEntry($event)"></update-ledger-tax-control>
-                        <!-- <input type="text" name="" class="form-control" ng-model="ledgerCtrl.selectedLedger.panel.tax" />
+                        <!-- <input type="text" name="" class="form-control" />
                           <span class="caret"></span> -->
                         <!-- </div> -->
                       </span>
@@ -288,20 +287,20 @@
                     </td>
                     <td>
                       <label class="primary_color">Total</label>
-                      <input type="text" name="" class="form-control" [(ngModel)]="vm.totalAmount" ng-change="ledgerCtrl.onTxnTotalChange(ledgerCtrl.selectedLedger)"
+                      <input type="text" name="" class="form-control" [(ngModel)]="vm.totalAmount"
                       />
                     </td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <div class="col-xs-12 pd1 text-right" ng-if="(ledgerCtrl.selectedLedger.panel.show || ledgerCtrl.selectedLedger.isBlankLedger)">
+            <div class="col-xs-12 pd1 text-right">
               <span class="inWords">{{vm.totalAmount | myNumberToWordsPipe | lowercase}}</span>
             </div>
           </ng-container>
           <div class="col-xs-12">
             <div class="row">
-              <textarea rows="4" cols="" class="form-control" placeholder="Description" ng-model="ledgerCtrl.selectedLedger.description"></textarea>
+              <textarea rows="4" cols="" class="form-control" placeholder="Description"></textarea>
             </div>
           </div>
         </div>
@@ -347,7 +346,7 @@
                   <ng-select [options]="vm.voucherTypeList" [(ngModel)]="vm.selectedLedger.voucher.shortCode"></ng-select>
                 </td>
 
-                <td class="pdL1" ng-if="(ledgerCtrl.selectedLedger.voucher.shortCode == 'pur' || ledgerCtrl.selectedLedger.voucher.shortCode == 'debit note' || ledgerCtrl.selectedLedger.voucher.shortCode == 'credit note') && ledgerCtrl.showInvoiceAgainstVoucher">
+                <td class="pdL1">
                   <span>
                     <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="vm.selectedLedger.invoiceNumber" />
                   </span>
@@ -381,12 +380,7 @@
                   <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
               </label>
             </div>
-            <!-- <div class="upload_div" ng-click="$event.stopPropagation()" ng-if="ledgerCtrl.selectedLedger.attachedFileName.length == 0">
-              <input type="file" name="invoiceFile" id="invoiceFile" ng-click="$event.stopPropagation()" onchange="angular.element(this).scope().$parent.getInvoiceFile(this.files)">
-              <label for="invoiceFile" ng-click="$event.stopPropagation()" style="padding:0">
-                <i class="glyphicon glyphicon-paperclip"></i>
-              </label>
-            </div> -->
+
 
             <button class="btn btn-success" [ladda]="isTxnUpdateInProcess$ | async" (click)="saveLedgerTransaction()">Update</button>
           </div>
