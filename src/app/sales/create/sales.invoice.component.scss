@@ -194,4 +194,21 @@ $themeClr : #fe5f00;
 .fs11{
   font-size: 11px;
 }
-
+.tableSec{
+  display: table;
+  width: 100%;
+  .tableRow{
+    display: table-row;
+    vertical-align: top;
+    .tableCell{
+      line-height: 40px;
+      vertical-align: middle;
+      text-align: right;
+      display: table-cell;
+    }
+    .figureCell{
+      width: 200px;
+      padding-right: 80px;
+    }
+  }
+}
