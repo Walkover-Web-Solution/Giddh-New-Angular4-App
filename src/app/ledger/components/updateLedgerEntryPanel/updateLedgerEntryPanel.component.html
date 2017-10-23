@@ -224,7 +224,8 @@
                             <ng-template [ngIf]="vm.stockTrxEntry">
                               <td [ngClass]="{width55: vm.stockTrxEntry}">
                                 <label>Quantity</label>
-                                <input type="text" name="" class="form-control" [(ngModel)]="vm.stockTrxEntry.inventory.quantity" />
+                                <input type="number" name="" class="form-control" [(ngModel)]="vm.stockTrxEntry.inventory.quantity"
+                                (input)="vm.inventoryQuantityChanged($event.target.value)" />
                               </td>
                               <td>
                                 <label>Unit</label>
