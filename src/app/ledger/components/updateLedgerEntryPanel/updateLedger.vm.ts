@@ -262,16 +262,20 @@ export class UpdateLedgerVm {
     return txn.particular.uniqueName;
   }
 
+  public inventoryQuantityChanged(val: number) {
+    this.stockTrxEntry.amount = Number(this.stockTrxEntry.inventory.rate * val);
+    this.stockTrxEntry.inventory.unit.rate = this.stockTrxEntry.amount;
+    this.generatePanelAmount();
+    this.generateGrandTotal();
+  }
   public inventoryPriceChanged(val: number) {
     this.stockTrxEntry.amount = Number(val * this.stockTrxEntry.inventory.quantity);
     this.generatePanelAmount();
   }
 
   public unitChanged(stockUnitCode: string) {
-    if (this.stockTrxEntry) {
-      this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
-      this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
-    }
+    this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
+    this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
   }
 }

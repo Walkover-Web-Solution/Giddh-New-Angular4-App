@@ -22,6 +22,7 @@ import { Select2Component } from '../../../shared/theme/select2/select2.componen
 import { IOption } from '../../../shared/theme/index';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
+import { BaseResponse } from '../../../models/api-models/BaseResponse';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -85,29 +86,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
-
-    // get flatten_accounts list
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accountsArray: IOption[] = [];
-        this.vm.flatternAccountList = data.body.results;
-        data.body.results.map(acc => {
-          if (acc.stocks) {
-            acc.stocks.map(as => {
-              accountsArray.push({
-                value: `${acc.uniqueName}#${as.uniqueName}`,
-                label: acc.name,
-                additional: Object.assign({}, acc, { stock: as })
-              });
-            });
-            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-          } else {
-            accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
-          }
-        });
-        this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
-      }
-    });
   }
 
   public ngOnInit() {
@@ -126,42 +104,65 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.entryUniqueName$.subscribe(entryName => {
       this.entryUniqueName = entryName;
       if (entryName) {
-        this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName).subscribe(resp => {
-          if (resp.status === 'success') {
-            this.vm.selectedLedger = resp.body;
-            this.vm.selectedLedgerBackup = resp.body;
-
-            this.vm.selectedLedger.transactions.map(t => {
-              if (t.inventory) {
-                let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
-                if (findStocks) {
-                  let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
-                  if (findUnitRates) {
-                    let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
-                    tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
-                    t.unitRate = tempUnitRates;
-                  }
+        // get flatten_accounts list && get transactions list
+        Observable.zip(this._accountService.GetFlattenAccounts('', ''), this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName))
+          .subscribe((resp: Array<BaseResponse<any, any>>) => {
+            //#region flattern group list assign process
+            if (resp[0].status === 'success' && resp[1].status === 'success') {
+              let accountsArray: IOption[] = [];
+              this.vm.flatternAccountList = resp[0].body.results;
+              resp[0].body.results.map(acc => {
+                if (acc.stocks) {
+                  acc.stocks.map(as => {
+                    accountsArray.push({
+                      value: `${acc.uniqueName}#${as.uniqueName}`,
+                      label: acc.name,
+                      additional: Object.assign({}, acc, { stock: as })
+                    });
+                  });
+                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                } else {
+                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                 }
-                t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+              });
+              this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
+              //#endregion
+              //#region transaction assignment process
+              this.vm.selectedLedger = resp[1].body;
+              this.vm.selectedLedgerBackup = resp[1].body;
+
+              this.vm.selectedLedger.transactions.map(t => {
+                if (t.inventory) {
+                  let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
+                  if (findStocks) {
+                    let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
+                    if (findUnitRates) {
+                      let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
+                      tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
+                      t.unitRate = tempUnitRates;
+                    }
+                  }
+                  t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
+                }
+              });
+              this.vm.selectedLedger.transactions.forEach(t => {
+                this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
+              });
+              if (this.vm.showNewEntryPanel) {
+                this.vm.showStockDetails = this.vm.isThereStockEntry();
               }
-            });
-            this.vm.selectedLedger.transactions.forEach(t => {
-              this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
-            });
-            if (this.vm.showNewEntryPanel) {
-              this.vm.showStockDetails = this.vm.isThereStockEntry();
+              this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
+              if (this.vm.selectedLedger.total.type === 'DEBIT') {
+                this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+              } else {
+                this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+              }
+              this.vm.getEntryTotal();
+              this.vm.generatePanelAmount();
+              this.vm.generateGrandTotal();
+              //#endregion
             }
-            this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
-            if (this.vm.selectedLedger.total.type === 'DEBIT') {
-              this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
-            } else {
-              this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
-            }
-            this.vm.getEntryTotal();
-            this.vm.generatePanelAmount();
-            this.vm.generateGrandTotal();
-          }
-        });
+          });
       }
     });
 
@@ -222,7 +223,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
-    console.error(this.vm.stockTrxEntry);
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
