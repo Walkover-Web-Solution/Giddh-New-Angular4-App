@@ -80,6 +80,8 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public isStockTxn?: boolean;
   public stockDetails?: any;
   public stockList?: IStockUnit[] = [];
+  public applicableTaxes: string[] = [];
+  public taxRenderData: string[] = [];
   constructor() {
     super();
     this.date = moment().format('DD-MM-YYYY');
