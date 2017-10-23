@@ -63,10 +63,10 @@ export class MfEditComponent implements OnInit {
         if (manufacturingObj) {
           manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
           manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
-          delete manufacturingObj.manufacturingQuantity;
+          // delete manufacturingObj.manufacturingQuantity;
           manufacturingObj.linkedStocks.forEach((item) => {
             item.quantity = item.manufacturingQuantity;
-            delete item.manufacturingQuantity;
+            // delete item.manufacturingQuantity;
           });
           this.manufacturingDetails = manufacturingObj;
         }
@@ -339,7 +339,7 @@ export class MfEditComponent implements OnInit {
     }
   }
 
-  public getStockUnit(selectedItem) {
+  public getStockUnit(selectedItem, itemQuantity) {
     // console.log(selectedItem);
     let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
     this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
@@ -349,7 +349,7 @@ export class MfEditComponent implements OnInit {
 
         let data = {
           stockUniqueName: selectedItem,
-          quantity: 1,
+          quantity: itemQuantity,
           stockUnitCode: unitCode,
           rate : null,
           amount: null
