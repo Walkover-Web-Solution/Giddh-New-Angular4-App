@@ -19,7 +19,7 @@ import 'rxjs/add/operator/distinct';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/map';
 import { AccountService } from '../../services/account.service';
-import { AccountRequest } from '../../models/api-models/Account';
+import { AccountRequest, AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 
@@ -186,6 +186,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       this.isDownloadingFileInProgress = o.isDownloadingFile;
       if (o.invoiceGenerateSuccess) {
         this.generateInvoiceArr = [];
+        let event = { itemsPerPage: 10, page: this.allPurchaseInvoices.page };
+        this.pageChanged(event);
       }
     });
     this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
@@ -372,17 +374,21 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public onUndoEntryTypeChange(idx, itemObj) {
     this.undoEntryTypeChange = true;
     // console.log(idx, itemObj);
-    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
-      if (o.purchaseInvoices) {
-        if (this.allPurchaseInvoices.items[idx].invoiceNumber === itemObj.invoiceNumber) {
-          this.allPurchaseInvoices.items[idx].entryType = _.cloneDeep(o.purchaseInvoices[idx].entryType);
-          this.selectedRowIndex = idx;
-          if (this.allPurchaseInvoices.items[idx].entryType !== 'reverse charge') {
-            this.isReverseChargeSelected = false;
-          }
-        }
+    if (this.allPurchaseInvoices.items[idx].invoiceNumber === this.allPurchaseInvoicesBackup.items[idx].invoiceNumber) {
+      this.allPurchaseInvoices.items[idx].entryType = _.cloneDeep(this.allPurchaseInvoicesBackup.items[idx].entryType);
+      this.selectedRowIndex = idx;
+      if (this.allPurchaseInvoices.items[idx].entryType !== 'reverse charge') {
+        this.isReverseChargeSelected = false;
       }
-    });
+    }
+  }
+
+  public getDefaultGstAddress(addresses) {
+    if (addresses.length > 0) {
+      return addresses.findIndex((o) => o.isDefault);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -390,7 +396,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public updateEntryType(indx, value) {
     if (indx > -1 && (value === 'composite' || value === '')) {
-      let account: AccountRequest = new AccountRequest();
+      let account: AccountRequestV2 = new AccountRequestV2();
+      let defaultGstObj: IAccountAddress = new IAccountAddress();
       let isComposite: boolean;
       if (value === 'composite') {
         isComposite = true;
@@ -400,24 +407,37 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       let data = _.cloneDeep(this.allPurchaseInvoices.items);
       let selectedRow = data[indx];
       let selectedAccName = selectedRow.account.uniqueName;
-      this.accountService.GetAccountDetails(selectedAccName).subscribe((accDetails) => {
-        let accountData: any = _.cloneDeep(accDetails.body);
-        account.name = accountData.name;
-        account.uniqueName = accountData.uniqueName;
-        account.hsnNumber = accountData.hsnNumber;
-        account.city = accountData.city;
-        account.pincode = accountData.pincode;
-        account.country = accountData.country;
-        account.sacNumber = accountData.sacNumber;
-        account.stateCode = accountData.stateCode;
-        account.isComposite = isComposite;
-        this.accountService.UpdateAccount(account, selectedAccName).subscribe((res) => {
-          if (res.status === 'success') {
-            this.toasty.successToast('Entry type changed successfully.');
-          } else {
-            this.toasty.errorToast(res.message, res.code);
-          }
-        });
+      this.accountService.GetAccountDetailsV2(selectedAccName).subscribe((accDetails) => {
+
+        let addressesArr = _.cloneDeep(accDetails.body.addresses);
+        let defaultAddressIdx: any = this.getDefaultGstAddress(addressesArr);
+        let accountData: AccountResponseV2 = _.cloneDeep(accDetails.body);
+
+        defaultGstObj = accountData.addresses[defaultAddressIdx];
+        if (_.isNumber(defaultAddressIdx) && isComposite !== defaultGstObj.isComposite) {
+          account.name = accountData.name;
+          account.uniqueName = accountData.uniqueName;
+          account.hsnNumber = accountData.hsnNumber;
+          account.country = accountData.country;
+          account.sacNumber = accountData.sacNumber;
+          account.addresses = accountData.addresses;
+          account.addresses[defaultAddressIdx].isComposite = isComposite;
+          let parentGroup = accountData.parentGroups[accountData.parentGroups.length - 1];
+          let reqObj = {
+            groupUniqueName: parentGroup.uniqueName,
+            accountUniqueName: account.uniqueName
+          };
+
+          this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
+            if (res.status === 'success') {
+              this.toasty.successToast('Entry type changed successfully.');
+            } else {
+              this.toasty.errorToast(res.message, res.code);
+            }
+          });
+        } else {
+          return;
+        }
       });
     }
   }
@@ -431,6 +451,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
+
   /**
   * SelectAllTaxes
   */
@@ -555,7 +576,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     let paginationRequest = new CommonPaginatedRequest();
     paginationRequest.page = _.cloneDeep(event.page);
     this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
-
   }
 
   /**
@@ -573,7 +593,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * COMMENTED DUE TO PHASE-2
    * validateGstin
-   */
+  */
   // public validateGstin(val, idx) {
   //   if (val && val.length === 15) {
   //     let code = val.substr(0, 2);
