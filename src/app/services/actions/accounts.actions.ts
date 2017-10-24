@@ -1,3 +1,4 @@
+import { GroupSharedWithResponse } from './../../models/api-models/Group';
 import { ShareEntityRequest } from './../../models/api-models/Account';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 import {
@@ -305,7 +306,13 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast('Shared successfully', '');
-        return this.sharedAccountWith(data.queryString.accountUniqueName);
+        if (data.queryString.entity === 'account'){
+          return this.sharedAccountWith(data.queryString.entityUniqueName);
+        } else {
+          return {
+            type: ''
+          };
+        }
       }
     });
 
@@ -333,7 +340,16 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast(action.payload.body, '');
-        return this.sharedAccountWith(data.queryString.accountUniqueName);
+        if (data.queryString.entity === 'account'){
+          return this.sharedAccountWith(data.queryString.entityUniqueName);
+        } else {
+          return {
+            type: ''
+          };
+        }
+        // else if(data.queryString.entity === 'group'){
+        //   return this.GroupSharedWithResponse(data.queryString.accountUniqueName);
+        // }
       }
     });
 
