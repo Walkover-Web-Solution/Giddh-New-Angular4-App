@@ -104,8 +104,8 @@ export class OptionList {
     });
   }
 
-  public select(option: Option, multiple: boolean) {
-    if (!multiple) {
+  public select(option: Option, multiple: boolean, isTypeheadMode: boolean) {
+    if (!multiple || isTypeheadMode) {
       this.clearSelection();
     }
     option.selected = true;
