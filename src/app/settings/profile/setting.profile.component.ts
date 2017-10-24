@@ -91,7 +91,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
       }
     });
-    console.log('hello from SettingProfileComponent');
   }
 
   public addGst() {
