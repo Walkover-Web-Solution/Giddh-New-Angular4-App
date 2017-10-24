@@ -1,3 +1,4 @@
+import { GetAllPermissionResponse } from './../../permissions/permission.utility';
 import { Action } from '@ngrx/store';
 import { IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
 import { PERMISSION_ACTIONS } from '../../services/actions/permission/permission.const';
@@ -10,13 +11,15 @@ export interface PermissionState {
     newRole: object;
     pages: string[];
     createPermissionInProcess: boolean;
+    permissions: GetAllPermissionResponse[];
 }
 
 export const initialState: PermissionState = {
     roles: [],
     newRole: {},
     pages: [],
-    createPermissionInProcess: false
+    createPermissionInProcess: false,
+    permissions: []
 };
 
 export function PermissionReducer(state = initialState, action: Action): PermissionState {
@@ -102,13 +105,25 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                 }
                 return state;
             }
-        case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE: {
-            let newState = _.cloneDeep(state);
-            let res = action.payload;
-            newState.newRole = res;
-            return Object.assign({}, state, newState);
-        }
-        case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE: {
+        case PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE:
+            {
+                let newState = _.cloneDeep(state);
+                let res = action.payload as BaseResponse<GetAllPermissionResponse[], string> ;
+                if (res.status === 'success') {
+                    newState.permissions = res.body;
+                    return Object.assign({}, state, newState);
+                }
+                return state;
+            }
+        case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE:
+            {
+                let newState = _.cloneDeep(state);
+                let res = action.payload;
+                newState.newRole = res;
+                return Object.assign({}, state, newState);
+            }
+        case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE:
+        {
             let newState = _.cloneDeep(state);
             newState.newRole = {};
             return Object.assign({}, state, newState);
