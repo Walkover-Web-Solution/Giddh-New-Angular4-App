@@ -25,6 +25,7 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
                 let response: BaseResponse<IInvoicePurchaseResponse, string> = action.payload;
                 if (response.status === 'success') {
                     let newState = _.cloneDeep(state);
+                    newState.invoiceGenerateSuccess = false;
                     newState.purchaseInvoices = response.body;
                     return Object.assign({}, state, newState);
                 }
@@ -42,7 +43,7 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
             }
         case PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE:
             {
-                let response: BaseResponse<IInvoicePurchaseResponse, string> = action.payload;
+                let response: BaseResponse<IInvoicePurchaseItem, string> = action.payload;
                 if (response.status === 'success') {
                     let newState = _.cloneDeep(state);
                     let uniqueName = response.body[0].entryUniqueName;
