@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="col-xs-6 text-right">
-        <p class="lead b">Balance Due: {{invFormData.grandTotal | number:'1.2-2'}}</p>
+        <p class="lead b">Balance Due: {{invFormData.balanceDue | number:'1.2-2'}}</p>
       </div>
     </div>
     <div class="col-xs-12"><div class="bdrB"></div></div>
@@ -319,6 +319,16 @@
               <div class="tableRow">
                 <div class="tableCell"><strong>Total</strong></div>
                 <div class="tableCell figureCell"><strong>{{invFormData.grandTotal | number:'1.2-2'}}</strong></div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Deposit</div>
+                <div class="tableCell figureCell">
+                  <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount" />
+                </div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell"><strong>Balance Due</strong></div>
+                <div class="tableCell figureCell"><strong>{{invFormData.balanceDue | number:'1.2-2'}}</strong></div>
               </div>
             </section>
           </td>
