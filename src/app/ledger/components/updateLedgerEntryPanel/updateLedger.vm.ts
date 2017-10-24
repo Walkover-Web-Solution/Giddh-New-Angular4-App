@@ -1,13 +1,12 @@
 import { Observable } from 'rxjs/Observable';
-import { ITransactionItem, ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { sumBy, find, filter, findIndex } from 'lodash';
+import { filter, find, findIndex, sumBy } from 'lodash';
 import { IOption, TaxControlData } from '../../../shared/theme';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { UpdateLedgerDiscountData, UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { LedgerService } from '../../../services/ledger.service';
+import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -19,11 +18,9 @@ export class UpdateLedgerVm {
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
   public voucherTypeList: IOption[];
-  public isDisabledTaxesAndDiscounts: boolean = false;
   public discountArray: ILedgerDiscount[] = [];
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
-  public showStockDetails: boolean = false;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
   public taxRenderData: TaxControlData[] = [];
   public get stockTrxEntry(): ILedgerTransactionItem {
@@ -151,37 +148,23 @@ export class UpdateLedgerVm {
     }).length <= 1;
   }
 
-  public isItDuplicate(accountUniqueName: string): boolean {
-    return filter(this.selectedLedger.transactions, (f => f.particular.uniqueName === accountUniqueName)).length > 1;
-  }
-
   public isThereStockEntry(): boolean {
     return find(this.selectedLedger.transactions,
       (f: ILedgerTransactionItem) => {
         if (f.particular.uniqueName) {
-          return (f.inventory && f.inventory.stock) ? true : false;
+          return !!(f.inventory && f.inventory.stock);
         }
       }
     ) !== undefined;
   }
 
-  public isThereMoreIncomeOrExpenseEntry(): boolean {
+  public isThereIncomeOrExpenseEntry(): number {
     return filter(this.selectedLedger.transactions, (trx) => {
       if (trx.particular.uniqueName) {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-        return category === 'income' || category === 'expenses';
+        return category === 'income' || category === 'expenses' || category === 'roundoff' || category === 'discount';
       }
-    }).length > 1;
-  }
-
-  public isThereAssestOrLiabilitiesEntry(): boolean {
-    for (let trx of this.selectedLedger.transactions) {
-      let category = this.getCategoryNameFromAccount(trx.particular.uniqueName);
-      if (category === 'liabilities' || category === 'assets') {
-        return true;
-      }
-    }
-    return false;
+    }).length;
   }
 
   public getEntryTotal() {

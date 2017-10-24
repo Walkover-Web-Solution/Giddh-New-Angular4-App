@@ -320,7 +320,7 @@
                       </td>
                       <td>
                         <label class="default_clr">Cheque Date</label>
-                        <input type="text" class="form-control" [(ngModel)]="vm.selectedLedger.chequeClearanceDate" [textMask]="{mask: dateMask, guide: true}"
+                        <input type="text" class="form-control" [(ngModel)]="vm.selectedLedger.chequeClearanceDate" [textMask]="{mask: vm.dateMask, guide: true}"
                         />
                       </td>
                     </tr>
