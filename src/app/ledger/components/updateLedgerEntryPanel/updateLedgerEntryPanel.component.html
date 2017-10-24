@@ -275,8 +275,8 @@
                       <span auto-close="outsideClick">
                         <!-- <label>Tax %</label>
                       <div class="multi-select adjust"> -->
-                        <update-ledger-tax-control [taxes]="companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="[]"
-                          [applicableTaxes]="[]" (selectedTaxEvent)="vm.addTaxEntry($event)"></update-ledger-tax-control>
+                        <update-ledger-tax-control [taxes]="companyTaxesList$ | async" [date]="vm.selectedLedger.entryDate" [taxRenderData]="vm.taxRenderData"
+                          [applicableTaxes]="vm.selectedLedger.taxes" (selectedTaxEvent)="vm.taxTrxUpdated($event)"></update-ledger-tax-control>
                         <!-- <input type="text" name="" class="form-control" />
                           <span class="caret"></span> -->
                         <!-- </div> -->

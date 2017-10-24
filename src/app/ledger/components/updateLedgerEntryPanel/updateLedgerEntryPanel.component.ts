@@ -23,6 +23,7 @@ import { IOption } from '../../../shared/theme/index';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -265,7 +266,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
             code: e.additional.stock.stockUnit.code,
             rate: 0
           };
-
           if (e.additional.stock.accountStockDetails && e.additional.stock.accountStockDetails.unitRates) {
             let cond = e.additional.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === e.additional.stock.stockUnit.code);
             if (cond) {
@@ -276,7 +276,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
               return {
                 stockUnitCode: p.stockUnitCode,
                 code: p.stockUnitCode,
-                rate: 0
+                rate: p.rate
               };
             }));
             if (unitArray.findIndex(p => p.code === defaultUnit.code) === -1) {
@@ -304,7 +304,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
                 rate
               },
               amount: 0,
-              rate: 0
+              rate
             };
           }
           if (rate > 0 && txn.amount === 0) {
@@ -381,6 +381,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
 
   public saveLedgerTransaction() {
     let requestObj: LedgerResponse = cloneDeep(this.vm.selectedLedger);
+    let taxes: UpdateLedgerTaxData[] = cloneDeep(this.vm.selectedTaxes);
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
     requestObj.transactions.map(trx => {
@@ -388,11 +389,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
       }
     });
+    requestObj.taxes = taxes.map(t => t.particular.uniqueName);
     this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
   }
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
-    this.vm.selectedLedger = null;
+    this.vm.resetVM();
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
