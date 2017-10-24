@@ -27,8 +27,9 @@ export class UpdateLedgerVm {
     return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
   }
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
+  public discountComponent: UpdateLedgerDiscountComponent;
 
-  constructor(private _toasty: ToasterService, private discountComponent: UpdateLedgerDiscountComponent) {
+  constructor(private _toasty: ToasterService) {
     this.voucherTypeList = [{
       label: 'Sales',
       value: 'sal'
@@ -97,14 +98,7 @@ export class UpdateLedgerVm {
             }
           }
         } else {
-          this.discountArray.map(d => {
-            if (d.particular === dx.particular.uniqueName) {
-              d.amount = 0;
-            }
-          });
-          if (this.discountComponent) {
-            this.discountComponent.genTotal();
-          }
+          this.reInitilizeDiscount();
         }
       });
     }
@@ -162,7 +156,7 @@ export class UpdateLedgerVm {
     return filter(this.selectedLedger.transactions, (trx) => {
       if (trx.particular.uniqueName) {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-        return category === 'income' || category === 'expenses' || category === 'roundoff' || category === 'discount';
+        return category === 'income' || category === 'expenses';
       }
     }).length;
   }
@@ -183,13 +177,7 @@ export class UpdateLedgerVm {
   }
 
   public onTxnAmountChange(txn: ILedgerTransactionItem) {
-    if (txn.selectedAccount && txn.selectedAccount.parentGroups.length > 1 && txn.selectedAccount.parentGroups[1].uniqueName === 'discount' && this.discountComponent) {
-      this.discountComponent.discountAccountsDetails.map(f => {
-        if (f.particular === txn.particular.uniqueName) {
-          f.amount = txn.amount;
-        }
-      });
-    }
+    this.reInitilizeDiscount();
     this.getEntryTotal();
     this.generatePanelAmount();
     this.generateGrandTotal();
@@ -206,7 +194,8 @@ export class UpdateLedgerVm {
         this.totalAmount = this.stockTrxEntry.amount;
       } else {
         let trx = find(this.selectedLedger.transactions, (t) => {
-          return this.getCategoryNameFromAccount(this.getUniqueName(t)) === 'income' || this.getCategoryNameFromAccount(this.getUniqueName(t)) === 'expenses';
+          let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
+          return category === 'income' || category === 'expenses';
         });
         this.totalAmount = trx ? Number(trx.amount) : 0;
       }
@@ -254,7 +243,22 @@ export class UpdateLedgerVm {
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }
-
+  public inventoryAmountChanged(val: string) {
+    if (this.stockTrxEntry) {
+      this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
+    } else {
+      // find account that's from category income || expenses
+      let trx = find(this.selectedLedger.transactions, (t) => {
+        let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
+        return category === 'income' || category === 'expenses';
+      });
+      trx.amount = Number(Number(val).toFixed(2));
+    }
+    this.getEntryTotal();
+    this.generatePanelAmount();
+    this.generateGrandTotal();
+    this.generateCompoundTotal();
+  }
   public unitChanged(stockUnitCode: string) {
     this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
@@ -267,6 +271,19 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
+  public reInitilizeDiscount() {
+    this.discountArray.map(d => {
+      let discountRecord = find(this.selectedLedger.transactions, t => t.particular.uniqueName === d.particular);
+      if (discountRecord) {
+        d.amount = Number(discountRecord.amount);
+      } else {
+        d.amount = 0;
+      }
+    });
+    if (this.discountComponent) {
+      this.discountComponent.genTotal();
+    }
+  }
   public resetVM() {
     this.selectedLedger = null;
     this.selectedLedgerBackup = null;

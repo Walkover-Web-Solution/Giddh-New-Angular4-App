@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, AfterViewInit } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store/roots';
@@ -21,13 +21,14 @@ import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLed
 import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
+import { debounce } from 'rxjs/operator/debounce';
 
 @Component({
   selector: 'update-ledger-entry-panel',
   templateUrl: './updateLedgerEntryPanel.component.html',
   styleUrls: ['./updateLedgerEntryPanel.component.css']
 })
-export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
+export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @Output() public entryManipulated: EventEmitter<boolean> = new EventEmitter();
@@ -60,7 +61,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.vm = new UpdateLedgerVm(this._toasty, this.discountComponent);
+    this.vm = new UpdateLedgerVm(this._toasty);
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
@@ -124,6 +125,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
               }
               this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
               this.vm.getEntryTotal();
+              this.vm.reInitilizeDiscount();
               this.vm.generatePanelAmount();
               this.vm.generateGrandTotal();
               this.vm.generateCompoundTotal();
@@ -149,6 +151,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     });
   }
 
+  public ngAfterViewInit() {
+    this.vm.discountComponent = this.discountComponent;
+  }
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
@@ -282,6 +287,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
       // check if need to showEntryPanel
       this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
+      this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }
   }
@@ -298,12 +304,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
     this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
     // set discount amount to 0 when deselected account is type of discount category
     if (this.discountComponent) {
-      this.vm.discountArray.map(d => {
-        if (d.particular === e.value) {
-          d.amount = 0;
-        }
-      });
-      this.discountComponent.genTotal();
+      this.vm.reInitilizeDiscount();
     }
   }
   public showDeleteAttachedFileModal() {
