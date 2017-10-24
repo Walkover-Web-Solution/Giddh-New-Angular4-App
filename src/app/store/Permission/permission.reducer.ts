@@ -3,17 +3,20 @@ import { IRoleCommonResponseAndRequest } from '../../models/api-models/Permissio
 import { PERMISSION_ACTIONS } from '../../services/actions/permission/permission.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
+import { AccountsAction } from '../../services/actions/accounts.actions';
 
 export interface PermissionState {
     roles: IRoleCommonResponseAndRequest[];
     newRole: object;
     pages: string[];
+    createPermissionInProcess: boolean;
 }
 
 export const initialState: PermissionState = {
     roles: [],
     newRole: {},
-    pages: []
+    pages: [],
+    createPermissionInProcess: false
 };
 
 export function PermissionReducer(state = initialState, action: Action): PermissionState {
@@ -99,18 +102,22 @@ export function PermissionReducer(state = initialState, action: Action): Permiss
                 }
                 return state;
             }
-        case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE:
-            {
-                let newState = _.cloneDeep(state);
-                let res = action.payload;
-                newState.newRole = res;
-                return Object.assign({}, state, newState);
-            }
-        case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE:
-        {
+        case PERMISSION_ACTIONS.PUSH_TEMP_ROLE_IN_STORE: {
+            let newState = _.cloneDeep(state);
+            let res = action.payload;
+            newState.newRole = res;
+            return Object.assign({}, state, newState);
+        }
+        case PERMISSION_ACTIONS.REMOVE_NEWLY_CREATED_ROLE_FROM_STORE: {
             let newState = _.cloneDeep(state);
             newState.newRole = {};
             return Object.assign({}, state, newState);
+        }
+        case AccountsAction.SHARE_ENTITY: {
+          return Object.assign({}, state, {createPermissionInProcess: true});
+        }
+        case AccountsAction.SHARE_ENTITY_RESPONSE: {
+          return Object.assign({}, state, {createPermissionInProcess: false});
         }
         default:
         {
