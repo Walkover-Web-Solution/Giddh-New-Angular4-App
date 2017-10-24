@@ -184,7 +184,7 @@
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
                         <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || !selectedRowIndex ">
+                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || selectedRowIndex == null ">
                             <option value="" [selected]="invoice.invoiceNumber">None selected</option>
                             <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
                             <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber"> Reverse Charge</option>
@@ -232,7 +232,7 @@
 
         <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
 
-        <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
+        <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm center-block text-center" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
         </pagination>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
