@@ -1,41 +1,137 @@
-<div class="box clearfix mrT2">
-    <div class="box clearfix">
-        <div class="row">
-            <div class="col-xs-2">
-                <label>Give permission to:</label>
-            </div>
-            <div class="col-xs-2">
-                <input #emailEle type="email" class="form-control">
-            </div>
-            <div class="col-xs-2">
-                <select class="form-control" #roleList>
-                    <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
-                </select>
-            </div>
-            <div class="col-xs-2">
-                <button class="btn btn-info" (click)="onShareCompany(emailEle.value, roleList.value)">Add</button>
-            </div>
-        </div>
+<div class="container-fluid pdT2 pdB2">
+  <h3 class="mrB1"><strong>Give Permission to:</strong></h3>
+
+  <form name="permissionForm" [formGroup]="permissionForm" class="form-horizontal permissionForm" (ngSubmit)="submitPermissionForm()">
+    <div class="form-inline" style="margin-left:0;">
+      <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID" class="form-control w100" />
     </div>
 
-    <div class="box row">
-        <div class="table-responsive">
-            <table class="table table-striped">
-                <tbody class="text-left">
-                    <tr *ngFor="let user of sharedWith; let i = index">
-                        <td> <i class="fa fa-user"></i> {{user.name}} <br> {{user.uniqueName}}</td>
-                        <td>
-                            <select style="max-width:200px;" #roleListDisplay (change)="onShareCompany(user.email, roleListDisplay.value)" class="form-control" #roleList [(ngModel)]="user.roleUniquename" name="roleList_{{i}}">
-                                <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
-                            </select>
-                        </td>
-                        <td>
-                            <button (click)="onRevokePermission(user.email, roleListDisplay.value)"><i class="fa fa-trash"></i></button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="form-inline">
+      <select name="entityUniqueName" formControlName="entityUniqueName" class="form-control w100">
+        <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
+      </select>
     </div>
-   
+
+    <!-- time span -->
+    <div class="form-inline" (clickOutside)="methodForToggleSection('timeSpanSection')">
+      <div class="btn-group w100" [ngClass]="{'open': showTimeSpan}">
+        <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left w100">
+          Time Span
+          <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+        </button>
+        <section class="dropdown-menu custom_dropdown">
+
+          <div class="clearfix">
+            <label class="radio-inline">
+              <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"> Date Range
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"> Past Period
+            </label>
+          </div>
+
+          <section class="periods container-fluid" *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
+            <div class="row">
+              <div class="col-xs-6">
+                <label>From</label>
+                <input class="form-control w100" name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" />
+              </div>
+              <div class="col-xs-6">
+                <label>To</label>
+                <input class="form-control w100" name="to" formControlName="to" type="text" placeholder="DD-MM-YYYY" />
+              </div>
+            </div>
+          </section>
+
+          <section class="periods container-fluid" *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
+            <label>Select Past Period</label>
+            <div class="row">
+              <div class="col-xs-6">
+                <input class="form-control w100" name="duration" digitsOnlyDirective formControlName="duration" type="number" placeholder="Number" />
+              </div>
+              <div class="col-xs-6">
+                <select name="period" formControlName="period" class="form-control pull-right w100">
+                  <option value="null">Select</option>
+                  <option value="days">Days</option>
+                  <option value="week">Week</option>
+                  <option value="month">Month</option>
+                </select>
+              </div>
+            </div>
+          </section>
+
+        </section>
+      </div>
+    </div>
+    <!-- time span end -->
+
+    <div class="form-inline" (clickOutside)="methodForToggleSection('rangeSpanSection')">
+      <div class="btn-group w100" [ngClass]="{'open': showIPWrap}">
+        <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left w100">
+          IP Address <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+        </button>
+        <section class="dropdown-menu custom_dropdown" role="menu" >
+          <div class="clearfix">
+            <label class="radio-inline">
+              <input type="radio" name="ipOptions" formControlName="ipOptions" value="cidr_range"> CIDR Range
+            </label>
+            <label class="radio-inline">
+              <input type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address"> IP Address
+            </label>
+          </div>
+
+          <section formArrayName="allowedCidrs" class="iprange container-fluid" *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
+            <div class="row mrB1" *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last" [formGroupName]="i">
+              <div class="col-xs-10">
+                <input class="form-control w100" name="item_{{i}}" formControlName="range" type="text" placeholder="192.168.1.0/24" />
+              </div>
+              <div class="col-xs-2 lh34">
+                <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
+                <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)" class="fa fa-plus cursor-pointer"></i>
+              </div>
+            </div>
+          </section>
+
+          <section formArrayName="allowedIps" class="iprange container-fluid" *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
+            <div class="row mrB1" *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last" [formGroupName]="i">
+              <div class="col-xs-10">
+                <input class="form-control w100" decimalDigitsDirective name="item_{{i}}" formControlName="range" type="text" placeholder="192.168.1.0" />
+              </div>
+              <div class="col-xs-2 lh34">
+                <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
+                <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)" class="fa fa-plus cursor-pointer"></i>
+              </div>
+            </div>
+          </section>
+
+        </section>
+      </div>
+    </div>
+
+    <div class="form-inline">
+      <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid" class="btn btn-success">Add</button>
+    </div>
+  </form>
+</div>
+
+<div class="container-fluid">
+  <div class="row box">
+      <div class="table-responsive">
+          <table class="table table-striped">
+              <tbody class="text-left">
+                  <tr *ngFor="let user of sharedWith; let i = index">
+                      <td> <i class="fa fa-user"></i> {{user.name}} <br> {{user.uniqueName}}</td>
+                      <td>
+                          <select style="max-width:200px;" #roleListDisplay (change)="onShareCompany(user.email, roleListDisplay.value)" class="form-control" #roleList [(ngModel)]="user.roleUniquename" name="roleList_{{i}}">
+                              <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
+                          </select>
+                      </td>
+                      <td>
+                          <button (click)="onRevokePermission(user.email, roleListDisplay.value)"><i class="fa fa-trash"></i></button>
+                      </td>
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+  </div>
 </div>
