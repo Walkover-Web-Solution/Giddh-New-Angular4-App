@@ -308,6 +308,8 @@ export class AccountsAction {
         this._toasty.successToast('Shared successfully', '');
         if (data.queryString.entity === 'account'){
           return this.sharedAccountWith(data.queryString.entityUniqueName);
+        } else if (data.queryString.entity === 'group') {
+          return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
         } else {
           return {
             type: ''
@@ -328,6 +330,7 @@ export class AccountsAction {
     .map(response => {
       return this.UnShareEntityResponse(response);
     });
+
   @Effect()
   public unShareEntityResponse$: Observable<Action> = this.action$
     .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE)
@@ -342,6 +345,8 @@ export class AccountsAction {
         this._toasty.successToast(action.payload.body, '');
         if (data.queryString.entity === 'account'){
           return this.sharedAccountWith(data.queryString.entityUniqueName);
+        } else if (data.queryString.entity === 'group') {
+          return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
         } else {
           return {
             type: ''
