@@ -254,7 +254,7 @@
                     </td>
                     <td>
                       <label class="primary_color">Amount</label>
-                      <input type="text" name="" class="form-control" [(ngModel)]="vm.totalAmount"
+                      <input type="text" name="" class="form-control" (input)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"
                       />
                     </td>
                     <td>
