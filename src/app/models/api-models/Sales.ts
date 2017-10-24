@@ -107,9 +107,6 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     return r;
   }
 
-  // public throwCustomErrMsg() {
-  // }
-
   public setAmount(entry: SalesEntryClass) {
     // delaying due to ngModel change
     setTimeout(() => {
@@ -157,6 +154,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public getTaxableValue(entry: SalesEntryClass): number {
     let count: number = 0;
     if (this.quantity && this.rate) {
+      this.amount = this.rate * this.quantity;
       count = this.checkForInfinity((this.rate * this.quantity) - this.getTotalDiscount(entry.discounts));
     } else {
       count = this.checkForInfinity(this.amount - this.getTotalDiscount(entry.discounts));
