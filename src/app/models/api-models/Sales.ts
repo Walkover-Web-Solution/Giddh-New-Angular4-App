@@ -66,6 +66,7 @@ export class FakeDiscountItem {
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public discount: any[];
+  public hsnOrSac: string;
   public hsnNumber: string;
   public sacNumber: string;
   public description: string;
@@ -79,12 +80,15 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public isStockTxn?: boolean;
   public stockDetails?: any;
   public stockList?: IStockUnit[] = [];
+  public applicableTaxes: string[] = [];
+  public taxRenderData: string[] = [];
   constructor() {
     super();
     this.date = moment().format('DD-MM-YYYY');
     this.amount = 0;
     this.total = 0;
     this.isStockTxn = false;
+    this.hsnOrSac = 'sac';
   }
 
   // basic check for valid transaction

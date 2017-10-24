@@ -1,7 +1,7 @@
 <section id="purchaseInvoice" class="container-fluid mrT2">
-  <!--<div>
-      {{ allPurchaseInvoices | json}}
-  </div>-->
+    <!--<div>
+        {{ allPurchaseInvoices | json}}
+    </div>-->
     <!-- Top filter -->
     <form class="col-xs-12">
         <div class="row">
@@ -128,7 +128,7 @@
                             <button type="button" class="btn btn-success">GO</button>
                             <a class="btn btn-link">Reset</a>
                         </div>
-                        <button (click)="onUpdate()" class="btn btn-generate pull-right">Generate <br />Purchase Invoice</button>
+                        <button (click)="onUpdate()" class="btn btn-generate pull-right" [disabled]="!generateInvoiceArr.length">Generate <br />Purchase Invoice</button>
                     </div>
                 </form>
 
@@ -162,42 +162,74 @@
                     <th>Voucher No.</th>
                     <th>Entry</th>
                     <th class="text-right">Taxable Value</th>
+                    <!-- <th *ngIf="isReverseChargeSelected" class="text-right">Select Tax</th> -->
                     <th class="text-right">IGST</th>
                     <th class="text-right">CGST</th>
                     <th class="text-right">SGST</th>
                     <th class="text-right">UTGST</th>
+                    <th class="text-right">Action</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let invoice of allPurchaseInvoices; let i = index">
-                    <td class="text-center"><input type="checkbox" (click)="onSelectRow(i)" [disabled]="invoice.entryType === ''" /></td>
+                    <td class="text-center"><input type="checkbox" (click)="generateInvoice(invoice, $event);" [disabled]="invoice.entryType !== 'reverse charge' || invoice.invoiceGenerated || invoice.taxes[0]" /></td>
                     <td [innerHTML]="invoice.entryDate | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.particulars | highlight: searchBox.value"></td>
-                    <td [innerHTML]="invoice.account.accountName | highlight: searchBox.value"></td>
-                    <td><input type="text" class="form-control" [value]="invoice.account.gstIn" /></td>
-                    <td><input type="text" class="form-control" [value]="invoice.invoiceNo" /></td>
+                    <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
+                    <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
+                    <td><input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
+                        <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small>
+                    </td>
+                    <td><input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'"
+                        /></td>
                     <td>{{invoice.voucherNo}}</td>
                     <td class="select text-center">
                         <div *ngIf="timeCounter == 10 || selectedRowIndex != i" class="custom-select pos-rel">
-                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType);">
-                            <option value="">None selected</option>
-                            <option value="composite"> Composite </option>
-                            <option value="reverse charge"> Reverse Charge</option>
+                            <select [(ngModel)]="invoice.entryType" name="entryType" class="form-control cp" (change)="onChangeEntryType(i, invoice.entryType, invoice.account.uniqueName);" [disabled]="invoice.invoiceGenerated || invoice.taxes[0] || (selectedRowIndex != i && editMode) || (invoice.invoiceNumber && invoice.invoiceNumber.length) || !selectedRowIndex ">
+                            <option value="" [selected]="invoice.invoiceNumber">None selected</option>
+                            <option value="composite" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length == 15"> Composite </option>
+                            <option value="reverse charge" *ngIf="!(invoice.account.gstIn?.length >0 || ( invoice.igstAmount!='0' || invoice.cgstAmount!='0')) && !invoice.invoiceNumber"> Reverse Charge</option>
                         </select>
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                         </div>
-                        <button *ngIf="timeCounter != 10 && selectedRowIndex == i" (click)="onUndoEntryTypeChange()" class="btn btn-link">Undo in {{timeCounter}}s</button>
+                        <button *ngIf="(timeCounter != 10 && selectedRowIndex == i && invoice.invoiceNumber) || (timeCounter != 10 && selectedRowIndex == i && !invoice.invoiceNumber)" (click)="onUndoEntryTypeChange(i, invoice)" class="btn btn-link">Undo in {{timeCounter}}s</button>
+
+                        <div class="btn-group btn-block mrT" dropdown (onShown)="onDDShown()" (onHidden)="onDDHidden(invoice.entryUniqueName, invoice.account.uniqueName)" *ngIf="isReverseChargeSelected && invoice.entryType == 'reverse charge' && !invoice.invoiceGenerated && !invoice.invoiceNumber"
+                            [autoClose]="false">
+                            <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle" [disabled]="selectedRowIndex != i">
+                            {{dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
+                        </button>
+                            <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
+                                <!-- <li>
+                                    <label>
+                                <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllTaxes($event)" [(ngModel)]="invoice.isAllTaxSelected"> Select all
+                            </label>
+                                </li> -->
+                                <li *ngFor="let tax of allTaxes; let idx = index">
+                                    <label> {{ invoice.taxes[0] }}
+                                        <!--(click)="selectTax($event, tax)" [(ngModel)]="tax.isSelected"  -->
+                                <input type="checkbox" name="invoiceTax"  class="invoiceTax" (click)="selectTax($event, tax, i)" [checked]="tax.uniqueName === invoice.taxes[0] || tax.uniqueName === invoice.taxes[1]"> {{ tax.name}}
+                            </label>
+                                </li>
+                            </ul>
+                        </div>
                     </td>
                     <td class="text-right">{{invoice.taxableValue}}</td>
+                    <!-- <td class="form-group" *ngIf="isReverseChargeSelected">
+
+                </td> -->
                     <td class="text-right">{{invoice.igstAmount}}</td>
                     <td class="text-right">{{invoice.cgstAmount}}</td>
                     <td class="text-right">{{invoice.sgstAmount}}</td>
                     <td class="text-right">{{invoice.utgstAmount}}</td>
+                    <td class="text-center icon-btn">
+                        <button class="btn btn-xs" type="button" [disabled]="invoice.invoiceGenerated" *ngIf="!editMode || (selectedRowIndex != i && editMode)" (click)=editRow(i)><i aria-hidden="true" class="fa fa-pencil"></i></button>
+                        <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)" *ngIf="selectedRowIndex == i && editMode && !invoice.invoiceGenerated"><i aria-hidden="true" class="fa fa-check"></i></button>
+                    </td>
                 </tr>
+
             </tbody>
         </table>
     </div>
-    <!-- open account aside -->
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
 </section>
