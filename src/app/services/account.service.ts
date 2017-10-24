@@ -189,7 +189,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res.json();
         data.request = model;
-        data.queryString = { roleUniqueName };
+        data.queryString = { roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
@@ -206,7 +206,7 @@ export class AccountService implements OnInit {
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res.json();
         data.request = model;
-        data.queryString = { roleUniqueName };
+        data.queryString = { roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));

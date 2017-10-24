@@ -1,3 +1,5 @@
+import { PermissionActions } from './../../../../services/actions/permission/permission.action';
+import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { AccountsAction } from './../../../../services/actions/accounts.actions';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupResponse, GroupSharedWithResponse, ShareGroupRequest } from '../../../../models/api-models/Group';
@@ -6,6 +8,7 @@ import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
+import * as _ from 'lodash';
 
 @Component({
   selector: 'share-group-modal',
@@ -14,45 +17,47 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 export class ShareGroupModalComponent implements OnInit, OnDestroy {
   public email: string;
+  public selectedPermission: string;
   public activeGroup$: Observable<GroupResponse>;
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
+  public allPermissions$: Observable<GetAllPermissionResponse[]>;
+
   @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction) {
+  constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private accountActions: AccountsAction,  private _permissionActions: PermissionActions) {
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).takeUntil(this.destroyed$);
-  }
+    this.allPermissions$ = this.store.select(state => state.permission.permissions).takeUntil(this.destroyed$);
+}
 
   public ngOnInit() {
-    //
+      this.store.dispatch(this._permissionActions.GetAllPermissions());
   }
 
   public async shareGroup() {
     let activeGrp = await this.activeGroup$.first().toPromise();
-
-    // let grpObject = new ShareGroupRequest();
-    // grpObject.role = 'view_only';
-    // grpObject.user = this.email;
-    // this.store.dispatch(this.groupWithAccountsAction.shareGroup(grpObject, activeGrp.uniqueName));
-    // this.email = '';
-
-    // let activeAccount = await this.activeAccount$.first().toPromise();
     let userRole = {
       emailId: this.email,
       entity: 'group',
       entityUniqueName: activeGrp.uniqueName,
     };
-
-    this.store.dispatch(this.accountActions.shareEntity(userRole, 'view'));
+    let selectedPermission = _.clone(this.selectedPermission);
+    this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
     this.email = '';
+    this.selectedPermission = '';
   }
 
-  public async unShareGroup(val) {
+  public async unShareGroup(email: string, givenPermission: string) {
     let activeGrp = await this.activeGroup$.first().toPromise();
+    let userRole = {
+      emailId: email,
+      entity: 'group',
+      entityUniqueName: activeGrp.uniqueName,
+    };
 
-    this.store.dispatch(this.groupWithAccountsAction.unShareGroup(val, activeGrp.uniqueName));
+    this.store.dispatch(this.accountActions.unShareEntity(userRole, givenPermission));
   }
 
   public closeModal() {
