@@ -50,8 +50,19 @@ export class ShareRequestForm {
   public to: string; // dd-MM-yyyy format
   public duration: number; // numeric
   public period: string; // DAY
-  public allowedIps: any[];
-  public allowedCidrs: any[];
+  public allowedIps: any[]; // array of strings
+  public allowedCidrs: any[]; // array of strings
+  public ipsStr?: string; // converted from array for UI
+  public cidrsStr?: string; // converted from array for UI
   public entity: string;
   public entityUniqueName: string;
+  public userEmail?: string;
+  public userName?: string;
+  public userUniqueName?: string;
+  public roleName?: string;
+  public roleUniqueName?: string;
+}
+
+export interface ISharedWithResponseForUI {
+  [key: string]: ShareRequestForm[];
 }

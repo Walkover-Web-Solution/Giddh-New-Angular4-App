@@ -1,0 +1,50 @@
+.btn-group.btn-group-liq{
+  width: 100%;
+}
+.custom_dropdown {
+  width: 300px;
+  border-radius: 0;
+  margin: 0px 0;
+  box-shadow: none;
+  background: #fff !important;
+}
+.lh34{
+  line-height: 34px;
+}
+.form-group>label{
+  margin-bottom: 5px;
+}
+.permissionForm {
+  .form-group{
+    width: 188px;
+    display: inline-block;
+    margin: 0 10px;
+    position: relative;
+    .btn-group{
+      width: 188px;
+    }
+  }
+}
+.periods{
+  label{
+    margin-bottom: 5px;
+  }
+}
+
+.permissionForm .btn-group.open .dropdown-toggle {
+  box-shadow: none;
+  background: transparent;
+}
+
+.custom_dropdown>li>a {
+  padding: 6px;
+}
+
+.custom_dropdown>li>a:focus,
+.custom_dropdown>li>a:hover {
+  background: #d9d9d9 !important;
+}
+
+.custom_dropdown .caret {
+  transform: rotate(-90deg);
+}
