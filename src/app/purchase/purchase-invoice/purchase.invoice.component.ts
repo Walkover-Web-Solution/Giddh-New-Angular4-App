@@ -126,7 +126,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public singleDate: any;
   public timeCounter: number = 10; // Max number of seconds to wait
   public eventLog = '';
-  public selectedRowIndex: number;
+  public selectedRowIndex: number = null;
   public isReverseChargeSelected: boolean = false;
   public stateList = StateList;
   public generateInvoiceArr: IInvoicePurchaseItem[] = [];
@@ -255,11 +255,6 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * onUpdate
    */
   public onUpdate() {
-    // if (this.selectedRowIndex > -1) {
-    //   let data = _.cloneDeep(this.allPurchaseInvoices);
-    //   let dataToSave = data[this.selectedRowIndex];
-    //   this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(dataToSave));
-    // }
     if (this.generateInvoiceArr.length === 1) {
       let dataToSave = _.cloneDeep(this.generateInvoiceArr[0]);
       let tax = _.cloneDeep(this.generateInvoiceArr[0].taxes[1]);
@@ -277,6 +272,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         return false;
       }
       this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(dataToSave));
+    } else {
+      return;
     }
 
   }
@@ -331,7 +328,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * onChangeEntryType
    */
   public onChangeEntryType(indx, value, accUniqName) {
-    console.log(value);
+    // console.log(value);
     clearInterval(this.intervalId);
     this.timeCounter = 10;
     if (indx > -1 && (value === 'composite' || value === '')) {
@@ -374,7 +371,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public onUndoEntryTypeChange(idx, itemObj) {
     this.undoEntryTypeChange = true;
-    console.log(idx, itemObj);
+    // console.log(idx, itemObj);
     this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
       if (o.purchaseInvoices) {
         if (this.allPurchaseInvoices.items[idx].invoiceNumber === itemObj.invoiceNumber) {
@@ -468,45 +465,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   */
   public selectTax(event, tax, idx) {
     if (event.target.checked) {
-      console.log(tax);
+      // console.log(tax);
       this.allPurchaseInvoices.items[idx].taxes[1] = tax.uniqueName;
       // this.allPurchaseInvoices[idx].taxes[0] = tax.uniqueName;
-      console.log(this.allPurchaseInvoices.items[idx]);
+      // console.log(this.allPurchaseInvoices.items[idx]);
     } else {
       event.preventDefault();
       this.toasty.errorToast('Minimun 1 tax should be selected.');
       return;
     }
-    // if (event.target.checked) {
-    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-    //   purchaseInvoiceObject.TaxList[0] = tax;
-    //   $('.invoiceTax').prop('checked', false);
-    //   $(elem).prop('checked', true);
-    // } else {
-    //   $(elem).prop('checked', true);
-    //   this.toasty.errorToast('Minimun 1 tax should be selected.');
-    //   return;
-    // }
-
-    // if (event.target.checked) {
-    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-    //   // purchaseInvoiceObject.TaxList.push(tax);
-    //   purchaseInvoiceObject.TaxList[0] = tax;
-    //   if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-    //     purchaseInvoiceObject.isAllTaxSelected = true;
-    //     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    //   }
-    //   this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    // } else {
-    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-    //   if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-    //     let purchaseInvoiceObj = _.cloneDeep(this.purchaseInvoiceObject);
-    //     purchaseInvoiceObj.isAllTaxSelected = false;
-    //     // purchaseInvoiceObject.TaxList.pop();
-    //     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    //   }
-    //   this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    // }
   }
 
   /**
@@ -553,7 +520,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       _.remove(this.generateInvoiceArr, (obj) => obj.entryUniqueName === item.entryUniqueName);
       this.invoiceSelected = false;
     }
-    console.log(this.generateInvoiceArr);
+    // console.log(this.generateInvoiceArr);
   }
 
   /**
@@ -562,14 +529,14 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public editRow(idx) {
     this.selectedRowIndex = idx;
     this.editMode = true;
-    console.log(idx);
+    // console.log(idx);
   }
 
   /**
    * updateEntry
    */
   public updateEntry(invoiceObj) {
-    console.log(invoiceObj);
+    // console.log(invoiceObj);
     let invoice = _.cloneDeep(invoiceObj);
     if (invoice.invoiceNumber) {
       let dataToSave = {
