@@ -232,7 +232,7 @@
                       <tbody>
                         <tr>
                           <td width="25%">
-                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
+                            <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
                           </td>
                           <td width="25%">
                             <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
@@ -240,9 +240,9 @@
                             </select>
                           </td>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
                           </td>
-                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
+                          <td width="25%"><input type="text" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" /></td>
                         </tr>
                       </tbody>
                     </table>
@@ -255,7 +255,7 @@
                           <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
                           </td>
                         </tr>
                       </tbody>
@@ -268,7 +268,9 @@
           <td>
             <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
           </td>
-          <td><input type="text" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue" /></td>
+          <td>
+            <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue" />
+          </td>
           <td class="tax-list-dd-wrap" *ngIf="showTaxBox">
             <tax-control
               [taxes]="companyTaxesList$ | async"
@@ -280,7 +282,9 @@
               (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
             </tax-control>
           </td>
-          <td><input type="number" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
+          <td>
+            <input type="number" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" />
+          </td>
           <td class="action-panel-td">
             <span class="cp" (click)="addBlankRow(transaction)"><i class="icon-add" aria-hidden="true"></i></span>
             <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)"><i class="icon-cross" aria-hidden="true"></i></span>
@@ -288,6 +292,40 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- sub total and total calc -->
+    <table class="table">
+      <tbody>
+        <tr>
+          <td width="50%"></td>
+          <td width="50%">
+            <section class="tableSec">
+              <div class="tableRow">
+                <div class="tableCell">Total Amount</div>
+                <div class="tableCell figureCell">{{invFormData.subTotal | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Discount</div>
+                <div class="tableCell figureCell">-{{invFormData.totalDiscount | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Taxable Value</div>
+                <div class="tableCell figureCell">{{invFormData.totalTaxableValue | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Tax</div>
+                <div class="tableCell figureCell">{{invFormData.totalTax | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell"><strong>Total</strong></div>
+                <div class="tableCell figureCell"><strong>{{invFormData.grandTotal | number:'1.2-2'}}</strong></div>
+              </div>
+            </section>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- end -->
   </section>
 
   <section class="row">
