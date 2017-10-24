@@ -12,13 +12,10 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
-import { ITransactionItem, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { filter, findIndex, last, orderBy, cloneDeep } from 'lodash';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
-import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
+import { cloneDeep, filter, last, orderBy } from 'lodash';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
-import { Select2Component } from '../../../shared/theme/select2/select2.component';
 import { IOption } from '../../../shared/theme/index';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
@@ -37,35 +34,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
-  public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
-  public accountsOptions: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true,
-    templateSelection: (data) => data.text,
-    templateResult: (data: any) => {
-      if (data.text === 'Searching…') {
-        return;
-      }
-      if (!data.additional.stock) {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
-                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
-                      </a>`);
-      } else {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
-                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
-                        <span class="account-list-item" style="display: block;font-size:11px">
-                            Stock: ${data.additional.stock.name}
-                        </span>
-                      </a>`);
-      }
-    }
-  };
   public isFileUploading: boolean = false;
   public accountUniqueName: string;
   public entryUniqueName$: Observable<string>;
@@ -146,18 +116,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
                   t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
                 }
               });
-              this.vm.selectedLedger.transactions.forEach(t => {
-                this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
-              });
-              if (this.vm.showNewEntryPanel) {
-                this.vm.showStockDetails = this.vm.isThereStockEntry();
-              }
               this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
               if (this.vm.selectedLedger.total.type === 'DEBIT') {
                 this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
               } else {
                 this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
               }
+              this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
               this.vm.getEntryTotal();
               this.vm.generatePanelAmount();
               this.vm.generateGrandTotal();
@@ -316,11 +281,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
         txn.selectedAccount = e.additional;
       }
       // check if need to showEntryPanel
-      this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
-      if (this.vm.showNewEntryPanel) {
-        // check if ther stockentry or not
-        this.vm.showStockDetails = this.vm.isThereStockEntry();
-      }
+      this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
       this.vm.onTxnAmountChange(txn);
     }
   }
@@ -334,13 +295,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, OnDestroy {
       }
     });
     // check if need to showEntryPanel
-    this.vm.selectedLedger.transactions.forEach(t => {
-      this.vm.showNewEntryPanel = !this.vm.isThereMoreIncomeOrExpenseEntry();
-    });
-    if (this.vm.showNewEntryPanel) {
-      // check if ther stockentry or not
-      this.vm.showStockDetails = this.vm.isThereStockEntry();
-    }
+    this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
     // set discount amount to 0 when deselected account is type of discount category
     if (this.discountComponent) {
       this.vm.discountArray.map(d => {
