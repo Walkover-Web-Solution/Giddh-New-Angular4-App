@@ -43,9 +43,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnInit(): void {
-    // this.sum = 0;
-    // this.prepareTaxObject();
-    // this.change();
+    this.sum = 0;
+    this.prepareTaxObject();
+    this.change();
   }
 
   public ngOnChanges(changes: SimpleChanges) {

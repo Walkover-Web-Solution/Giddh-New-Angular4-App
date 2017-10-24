@@ -42,12 +42,6 @@
   <div *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)">
     <!--account add component-->
 
-    <!-- <account-add *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async"
-      [fetchingAccUniqueName$]="fetchingAccUniqueName$" [isAccountNameAvailable$]="isAccountNameAvailable$"
-      [createAccountInProcess$]="createAccountInProcess$"
-      [createAccountIsSuccess$]="createAccountIsSuccess$" (submitClicked)="addNewGroup($event)"
-      [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"></account-add> -->
-
     <account-add-new *ngIf="!(activeAccount$ | async)" [activeGroupUniqueName]="activeGroupUniqueName$ | async" [fetchingAccUniqueName$]="fetchingAccUniqueName$"
       [isAccountNameAvailable$]="isAccountNameAvailable$" [createAccountInProcess$]="createAccountInProcess$" [createAccountIsSuccess$]="createAccountIsSuccess$"
       [isGstEnabledAcc]="isGstEnabledAcc" [isHsnSacEnabledAcc]="isHsnSacEnabledAcc" (submitClicked)="addNewAccount($event)">

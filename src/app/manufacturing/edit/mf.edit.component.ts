@@ -209,12 +209,12 @@ export class MfEditComponent implements OnInit {
   public addExpense(data) {
     let objToPush = {
       baseAccount: {
-        uniqueName: data.baseAccountUniqueName
+        uniqueName: data.transactionAccountUniqueName
       },
       transactions: [
         {
           account: {
-            uniqueName: data.transactionAccountUniqueName
+            uniqueName: data.baseAccountUniqueName
           },
           amount: data.transactionAmount
         }
@@ -227,7 +227,7 @@ export class MfEditComponent implements OnInit {
     } else {
       manufacturingObj.otherExpenses = [objToPush];
     }
-
+    manufacturingObj.manufacturingMultipleOf = manufacturingObj.quantity;
     this.manufacturingDetails = manufacturingObj;
 
     this.otherExpenses = {};
@@ -346,11 +346,30 @@ export class MfEditComponent implements OnInit {
       // console.log('The response from the API is :', res);
       if (res.status === 'success') {
         let unitCode = res.body.stockUnit.code;
-        if (this.isUpdateCase) {
-          this.linkedStocks.manufacturingUnit = unitCode;
-        } else {
-          this.linkedStocks.stockUnitCode = unitCode;
-        }
+
+        let data = {
+          stockUniqueName: selectedItem,
+          quantity: 1,
+          stockUnitCode: unitCode,
+          rate : null,
+          amount: null
+        };
+
+        this._inventoryService.GetRateForStoke(selectedItem, data).subscribe((response) => {
+          if (response.status === 'success') {
+            this.linkedStocks.rate = _.cloneDeep(response.body.rate);
+          }
+        });
+
+        this.linkedStocks.manufacturingUnit = unitCode;
+        this.linkedStocks.stockUnitCode = unitCode;
+
+        // if (this.isUpdateCase) {
+        //   this.linkedStocks.manufacturingUnit = unitCode;
+        // } else {
+        //   this.linkedStocks.stockUnitCode = unitCode;
+        // }
+
         // console.log('unitCode is :', unitCode);
       }
     });
