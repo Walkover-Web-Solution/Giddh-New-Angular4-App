@@ -177,7 +177,7 @@
                     <td [innerHTML]="invoice.particular | highlight: searchBox.value"></td>
                     <td [innerHTML]="invoice.account.name | highlight: searchBox.value"></td>
                     <td><input type="text" class="form-control" maxlength="15" minlength="15" [(ngModel)]="invoice.account.gstIn" disabled="true" />
-                        <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small>
+                        <!-- <small class="danger" *ngIf="invoice.account.gstIn != null && invoice.account.gstIn.length != 15">Invalid GSTIN</small> -->
                     </td>
                     <td><input type="text" class="form-control" minlength="1" maxlength="16" [(ngModel)]="invoice.invoiceNumber" [disabled]="invoice.invoiceGenerated || (selectedRowIndex != i && editMode) || !selectedRowIndex || invoice.entryType == 'reverse charge'"
                         /></td>
@@ -222,7 +222,7 @@
                     <td class="text-right">{{invoice.sgstAmount}}</td>
                     <td class="text-right">{{invoice.utgstAmount}}</td>
                     <td class="text-center icon-btn">
-                        <button class="btn btn-xs" type="button" [disabled]="invoice.invoiceGenerated" *ngIf="!editMode || (selectedRowIndex != i && editMode) || invoice.invoiceGenerated" (click)=editRow(i)><i aria-hidden="true" class="fa fa-pencil"></i></button>
+                        <button class="btn btn-xs" type="button" [disabled]="invoice.invoiceGenerated" *ngIf="!editMode || (selectedRowIndex != i && editMode) || invoice.invoiceGenerated" (click)="editRow(i)"><i aria-hidden="true" class="fa fa-pencil"></i></button>
                         <button class="btn btn-xs" type="button" (click)="updateEntry(invoice)" *ngIf="selectedRowIndex == i && editMode && !invoice.invoiceGenerated"><i aria-hidden="true" class="fa fa-check"></i></button>
                     </td>
                 </tr>
@@ -231,9 +231,10 @@
         </table>
 
         <!-- <pagination [totalItems]="ledgersData.totalPages" [(ngModel)]="ledgersData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination> -->
-
-        <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm center-block text-center" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
-        </pagination>
+        <div class="center-block text-center">
+            <pagination [totalItems]="allPurchaseInvoices.totalItems" [(ngModel)]="allPurchaseInvoices.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [rotate]="false" (pageChanged)="pageChanged($event)">
+            </pagination>
+        </div>
     </div>
     <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
     <aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleSettingAsidePane($event)"></aside-menu-account>
