@@ -97,8 +97,6 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         states.push({ label: `${d.code} - ${d.name}`, value: d.code });
       });
       this.statesSource$ = Observable.of(states);
-    }, (err) => {
-      // console.log(err);
     });
     // bind countries
     contriesWithCodes.map(c => {

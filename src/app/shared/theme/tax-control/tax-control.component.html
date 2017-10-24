@@ -2,16 +2,16 @@
   <label *ngIf="showHeading">Tax %</label>
   <a id="tax" (click)="showTaxPopup = !showTaxPopup" class="clearfix">
     <div class="multi-select adjust">
-      <input type="number" readonly name="" class="form-control cursor-pointer" [(ngModel)]="sum" disabled/>
+      <input type="number" readonly name="sum" class="form-control cursor-pointer" [(ngModel)]="sum" />
       <span class="caret"></span>
     </div>
   </a>
-  <ul class="dropdown-menu pd" *ngIf="showTaxPopup" (click)="$event.stopPropagation()">
-    <li *ngFor="let tax of taxRenderData;trackBy: trackByFn">
-        <label class="checkbox oh width100 bdrB pdB" (click)="$event.stopPropagation()">
-          <input class="pull-left" type="checkbox" [(ngModel)]="tax.isChecked" (change)="change()" (click)="$event.stopPropagation()"/>
-          <span class="pull-left max150 ellp">{{tax.name}}</span>
-        </label>
+  <ul class="dropdown-menu pd" *ngIf="showTaxPopup && taxRenderData.length > 0" (click)="$event.stopPropagation()">
+    <li *ngFor="let tax of taxRenderData;trackBy: trackByFn; let idx = index">
+      <label class="checkbox oh width100 bdrB pdB" (click)="$event.stopPropagation()">
+        <input class="pull-left" name="tax_{{idx}}" type="checkbox" [(ngModel)]="tax.isChecked" (change)="change()" (click)="$event.stopPropagation()"/>
+        <span class="pull-left max150 ellp">{{tax.name}}</span>
+      </label>
     </li>
   </ul>
 </span>
