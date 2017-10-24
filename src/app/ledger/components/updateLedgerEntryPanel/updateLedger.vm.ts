@@ -2,13 +2,12 @@ import { Observable } from 'rxjs/Observable';
 import { ITransactionItem, ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { sumBy, find, filter, findIndex } from 'lodash';
-import { IOption } from '../../../shared/theme';
+import { IOption, TaxControlData } from '../../../shared/theme';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountData, UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { LedgerService } from '../../../services/ledger.service';
-import { retry } from 'rxjs/operator/retry';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -25,6 +24,8 @@ export class UpdateLedgerVm {
   public isInvoiceGeneratedAlready: boolean = false;
   public showNewEntryPanel: boolean = true;
   public showStockDetails: boolean = false;
+  public selectedTaxes: UpdateLedgerTaxData[] = [];
+  public taxRenderData: TaxControlData[] = [];
   public get stockTrxEntry(): ILedgerTransactionItem {
     return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
   }
@@ -106,36 +107,6 @@ export class UpdateLedgerVm {
           });
           if (this.discountComponent) {
             this.discountComponent.genTotal();
-          }
-        }
-      });
-    }
-    this.getEntryTotal();
-    this.generatePanelAmount();
-    this.generateGrandTotal();
-    this.generateCompoundTotal();
-    return;
-  }
-
-  public addTaxEntry(taxes: UpdateLedgerTaxData[]) {
-    if (this.selectedLedger.transactions) {
-      taxes.forEach(tx => {
-        let checkTrxEntryIndex = findIndex(this.selectedLedger.transactions, t => t.particular.uniqueName === tx.particular.uniqueName);
-        if (checkTrxEntryIndex > -1) {
-          this.selectedLedger.transactions[checkTrxEntryIndex].amount = tx.amount;
-        } else {
-          let trx: ILedgerTransactionItem = this.blankTransactionItem('DEBIT');
-          let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
-          let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
-          let blankIndex = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '');
-          trx.amount = tx.amount;
-          trx.particular = tx.particular;
-
-          if (blankIndex > -1) {
-            filterdDebitTrx[blankIndex] = trx;
-            this.selectedLedger.transactions = [...filterdDebitTrx, ...filterdCrditTrx];
-          } else {
-            this.selectedLedger.transactions.push(trx);
           }
         }
       });
@@ -237,8 +208,8 @@ export class UpdateLedgerVm {
       });
     }
     this.getEntryTotal();
-    this.generateGrandTotal();
     this.generatePanelAmount();
+    this.generateGrandTotal();
     this.generateCompoundTotal();
     if (this.discountComponent) {
       this.discountComponent.genTotal();
@@ -264,7 +235,9 @@ export class UpdateLedgerVm {
     let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
       return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
     }) || 0;
-    this.grandTotal = Number((this.totalAmount - discountTrxTotal).toFixed(2));
+    let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+    let total = this.totalAmount - discountTrxTotal;
+    this.grandTotal = Number((total + ((total * taxTotal) / 100)).toFixed(2));
   }
 
   public generateCompoundTotal() {
@@ -303,5 +276,19 @@ export class UpdateLedgerVm {
     this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
+  }
+
+  public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {
+    this.selectedTaxes = taxes;
+    this.generateGrandTotal();
+    this.generateCompoundTotal();
+  }
+
+  public resetVM() {
+    this.selectedLedger = null;
+    this.selectedLedgerBackup = null;
+    this.taxRenderData = [];
+    this.selectedTaxes = [];
+    this.discountArray = [];
   }
 }
