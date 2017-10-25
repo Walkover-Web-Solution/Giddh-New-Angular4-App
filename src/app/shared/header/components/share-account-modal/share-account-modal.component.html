@@ -15,7 +15,7 @@
             <div class="input-group-btn">
               <select name="selectedPermission" class="form-control" [(ngModel)]="selectedPermission" required>
                 <option value="">-Select permission-</option>
-                <option [value]="permission.name" *ngFor="let permission of allPermissions$ | async">{{permission.name}}</option>
+                <option [value]="permission.uniqueName" *ngFor="let permission of allPermissions$ | async">{{permission.name}}</option>
               </select>
               <button class="btn btn-success mrL1" type="submit" [disabled]="shareAccountForm.invalid" (click)="shareAccount()">Share</button>
             </div>
@@ -29,7 +29,7 @@
             <ul class="shared_list">
               <li *ngFor="let val of (activeAccountSharedWith$ | async)" class="clearfix">
                         <span class="pull-left">
-                           <small class="Useremail">{{ val.userEmail }}</small>
+                           <small class="Useremail">{{ val.userEmail }} - ({{val.role.name}})</small>
                         </span>
                 <span class="form-inline">
                            <span class="delIcon pull-right">

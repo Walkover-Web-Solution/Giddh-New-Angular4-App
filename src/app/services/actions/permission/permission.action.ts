@@ -36,7 +36,7 @@ export class PermissionActions {
   @Effect()
   private GetAllPermissions$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS)
-    .switchMap(action => this._permissionService.GetAllPermissions())
+    .switchMap(action => this._permissionService.GetAllRoles())
     .map(response => {
       return this.GetAllPermissionsResponse(response);
     });
