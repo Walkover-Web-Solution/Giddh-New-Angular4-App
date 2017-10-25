@@ -29,8 +29,11 @@ export interface IPage {
 }
 
 export interface GetAllPermissionResponse {
-  name: string;
-  code: string;
+    name: string;
+    scopes: Scope[];
+    isFixed?: boolean;
+    uniqueName?: string;
+    isUpdateCase?: boolean;
 }
 
 export interface Pages {
