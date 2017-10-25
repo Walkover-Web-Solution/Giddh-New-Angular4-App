@@ -125,6 +125,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
+    this.noGroups = true;
     //
     this.user$.subscribe((u) => {
       if (u) {
