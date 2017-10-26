@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-  @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
+  // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
   @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
@@ -129,7 +129,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
-
+    this.noGroups = true;
+    //
     this.user$.subscribe((u) => {
       if (u) {
         if (u.name.match(/\s/g)) {

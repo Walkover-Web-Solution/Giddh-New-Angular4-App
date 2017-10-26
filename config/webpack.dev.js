@@ -7,6 +7,7 @@ const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 // const webpackMergeDll = webpackMerge.strategy({plugins: 'replace'});
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * Webpack Plugins
@@ -149,7 +150,13 @@ module.exports = function(options) {
                     'HMR': METADATA.HMR
                 }
             }),
-
+            new HtmlWebpackPlugin({
+              template: 'src/index.html',
+              title: METADATA.title,
+              chunksSortMode: 'dependency',
+              metadata: METADATA,
+              inject: 'body'
+            }),
             // new DllBundlesPlugin({
             //   bundles: {
             //     polyfills: [

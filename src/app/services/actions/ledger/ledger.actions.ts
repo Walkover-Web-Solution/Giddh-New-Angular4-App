@@ -5,7 +5,8 @@ import {
   DownloadLedgerRequest,
   LedgerResponse,
   TransactionsRequest,
-  TransactionsResponse
+  TransactionsResponse,
+  LedgerUpdateRequest
 } from '../../../models/api-models/Ledger';
 /**
  * Created by ad on 04-07-2017.
@@ -183,6 +184,26 @@ export class LedgerActions {
       };
     });
 
+  @Effect()
+  public updateTxnEntry$: Observable<Action> = this.action$
+    .ofType(LEDGER.UPDATE_TXN_ENTRY)
+    .switchMap(action => this._ledgerService.UpdateLedgerTransactions(action.payload.model,
+      action.payload.accountUniqueName, action.payload.entryUniqueName))
+    .map(resp => {
+      return this.updateTxnEntryResponse(resp);
+    });
+
+  @Effect()
+  public updateTxnEntryResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.UPDATE_TXN_ENTRY_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return { type: '' };
+      }
+      this._toasty.successToast('entry updated successfully');
+      return { type: '' };
+    });
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
@@ -234,6 +255,11 @@ export class LedgerActions {
   public ResetLedger(): Action {
     return {
       type: LEDGER.RESET_LEDGER
+    };
+  }
+  public ResetUpdateLedger(): Action {
+    return {
+      type: LEDGER.RESET_UPDATE_TXN_ENTRY
     };
   }
 
@@ -300,6 +326,21 @@ export class LedgerActions {
       payload: res
     };
   }
+
+  public updateTxnEntry(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): Action {
+    return {
+      type: LEDGER.UPDATE_TXN_ENTRY,
+      payload: { model, accountUniqueName, entryUniqueName }
+    };
+  }
+
+  public updateTxnEntryResponse(payload: BaseResponse<LedgerResponse, LedgerUpdateRequest>): Action {
+    return {
+      type: LEDGER.UPDATE_TXN_ENTRY_RESPONSE,
+      payload
+    };
+  }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
     if (response.status === 'error') {
       if (showToast) {

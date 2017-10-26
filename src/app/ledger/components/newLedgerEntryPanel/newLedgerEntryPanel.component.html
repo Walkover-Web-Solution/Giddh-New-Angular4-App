@@ -97,7 +97,7 @@
                   </td>
                   <td>
                     <label class="default_clr">Cheque Date</label>
-                    <input type="text" [textMask]="{mask: dateMask, pipe: datePipe}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate"
+                    <input type="text" [textMask]="{mask: dateMask, guide: true}" class="form-control" [(ngModel)]="blankLedger.chequeClearanceDate"
                     />
                   </td>
                 </tr>

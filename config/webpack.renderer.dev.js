@@ -14,6 +14,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -148,7 +149,13 @@ module.exports = function (options) {
           'HMR': METADATA.HMR
         }
       }),
-
+      new HtmlWebpackPlugin({
+        template: 'src/index.html',
+        title: METADATA.title,
+        chunksSortMode: 'dependency',
+        metadata: METADATA,
+        inject: 'body'
+      }),
       // new DllBundlesPlugin({
       //   bundles: {
       //     polyfills: [
