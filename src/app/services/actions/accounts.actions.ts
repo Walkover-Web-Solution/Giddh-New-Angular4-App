@@ -308,7 +308,7 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast('Shared successfully', '');
-        if (data.queryString.entity === 'account'){
+        if (data.queryString.entity === 'account') {
           return this.sharedAccountWith(data.queryString.entityUniqueName);
         } else if (data.queryString.entity === 'group') {
           return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
@@ -345,7 +345,7 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast(action.payload.body, '');
-        if (data.queryString.entity === 'account'){
+        if (data.queryString.entity === 'account') {
           return this.sharedAccountWith(data.queryString.entityUniqueName);
         } else if (data.queryString.entity === 'group') {
           return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
@@ -383,7 +383,7 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         // this._toasty.successToast(action.payload.body, '');
-        if (data.queryString.model.updateInBackground){
+        if (data.queryString.model.updateInBackground) {
           return this.shareEntity(data.queryString.model, data.queryString.model.newPermission);
         }
       }
