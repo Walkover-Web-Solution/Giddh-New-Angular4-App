@@ -11,10 +11,12 @@
   <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
     <script type='text/javascript'>
       window._errLyticsConfig = {
-          apiKey: '<%= htmlWebpackPlugin.options.metadata.errlyticsKey %>'
+        apiKey: '<%= htmlWebpackPlugin.options.metadata.errlyticsKey %>'
       };
     </script>
     <script type="text/javascript" crossorigin="anonymous" src="https://cdn.errlytics.com/errlytics.min.js"></script>
+    <!-- tag manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-K2L9QG');</script>
   <% } %>
   <!-- end error tracking -->
   <script type='text/javascript'>
@@ -24,37 +26,31 @@
       window.jQuery || document.write('<script src="./assets/js/jquery-1.11.3.min.js"><\/script>');
     }
   </script>
-      <% if (webpackConfig.htmlElements.headTags) { %>
-        <!-- Configured Head Tags  -->
-        <%= webpackConfig.htmlElements.headTags %>
-          <% } %>
+  <% if (webpackConfig.htmlElements.headTags) { %>
+    <!-- Configured Head Tags  -->
+    <%= webpackConfig.htmlElements.headTags %>
+  <% } %>
 
 
-            <%= htmlWebpackPlugin.files.webpackManifest %>
+  <%= htmlWebpackPlugin.files.webpackManifest %>
 
-              <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
-                <!-- Webpack Dev Server reload -->
-                <script src="/webpack-dev-server.js"></script>
-                <% } %>
+  <% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
+    <!-- Webpack Dev Server reload -->
+    <script src="/webpack-dev-server.js"></script>
+  <% } %>
 
-                  <!-- Async Google Analytics: change UA-71073175-1 to be your site's ID -->
-                  <script>
-                    window.ga = window.ga || function () {
-                      (ga.q = ga.q || []).push(arguments)
-                    };
-                    ga.l = +new Date;
-                    ga('create', 'UA-71073175-1', 'auto');
-                    ga('send', 'pageview');
-                  </script>
-                  <script async src="https://www.google-analytics.com/analytics.js"></script>
-                  <!-- End Google Analytics -->
-
-                  <!-- CSS will be injected by webpack here -->
-                  <!-- Preload link tags will be injected by webpack here -->
+  <!-- CSS will be injected by webpack here -->
+  <!-- Preload link tags will be injected by webpack here -->
 
 </head>
 
 <body class="unresponsive">
+  <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <% } %>
   Loading...
   <!-- Scripts will be injected by webpack here -->
 </body>

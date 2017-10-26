@@ -193,9 +193,11 @@ export class SalesInvoiceComponent implements OnInit {
     // bind state sources
     this._companyService.getAllStates().subscribe((data) => {
       let arr: IOption[] = [];
-      data.body.map(d => {
-        arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(arr);
     });
   }

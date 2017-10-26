@@ -83,9 +83,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
-      data.body.map(d => {
-        states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(states);
     }, (err) => {
       // console.log(err);
