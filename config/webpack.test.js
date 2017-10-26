@@ -3,6 +3,7 @@
  */
 
 const helpers = require('./helpers');
+const ERRLYTICS_KEY_TEST = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
 
 /**
  * Webpack Plugins
@@ -203,6 +204,8 @@ module.exports = function (options) {
       new DefinePlugin({
         'ENV': JSON.stringify(ENV),
         'HMR': false,
+        'errlyticsNeeded': true,
+        'errlyticsKey': ERRLYTICS_KEY_TEST,
         'process.env': {
           'ENV': JSON.stringify(ENV),
           'NODE_ENV': JSON.stringify(ENV),

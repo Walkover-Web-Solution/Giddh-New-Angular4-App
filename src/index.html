@@ -10,20 +10,16 @@
   </title>
   <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
 
-  <!-- base url -->
-  <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
-    <!-- base url -->
-    <!-- <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>"> -->
-    <% } %>
-      <!-- error tracking -->
-      <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded === true) { %>
-      <script type='text/javascript'>
-        window._errLyticsConfig = {
-            apiKey: <%= htmlWebpackPlugin.options.metadata.errlyticsKey %>
-        };
-      </script>
-      <script type='text/javascript' crossorigin='anonymous' src='https://cdn.errlytics.com/errlytics.min.js'></script>
-      <% } %>
+
+  <!-- error tracking -->
+  <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded === true) { %>
+  <script type='text/javascript'>
+    window._errLyticsConfig = {
+        apiKey: <%= htmlWebpackPlugin.options.metadata.errlyticsKey %>
+    };
+  </script>
+  <script type='text/javascript' crossorigin='anonymous' src='https://cdn.errlytics.com/errlytics.min.js'></script>
+  <% } %>
       <script type='text/javascript'>
         if ( <%=htmlWebpackPlugin.options.metadata.isElectron %>)
         {
