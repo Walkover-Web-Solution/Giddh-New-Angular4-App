@@ -376,6 +376,11 @@ export class SalesInvoiceComponent implements OnInit {
       return;
     }
 
+    // replace /n to br in case of message
+    if (this.invFormData.other.message1.length > 0) {
+      this.invFormData.other.message2 = this.invFormData.other.message1.replace(/\n/g, '<br />');
+    }
+
     // check for valid entries and transactions
     if ( this.invFormData.entries) {
       _.forEach(this.invFormData.entries, (entry) => {
@@ -419,7 +424,7 @@ export class SalesInvoiceComponent implements OnInit {
           this._toasty.successToast('Invoice Generated Successfully');
         }
       } else {
-        this._toasty.errorToast(response.code);
+        this._toasty.errorToast(response.message, response.code);
       }
       this.updateAccount = false;
     });
