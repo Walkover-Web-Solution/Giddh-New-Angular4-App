@@ -15,7 +15,8 @@ import {
   MagicLinkRequest,
   MagicLinkResponse,
   ExportLedgerRequest,
-  MailLedgerRequest
+  MailLedgerRequest,
+  LedgerUpdateRequest
 } from '../models/api-models/Ledger';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 
@@ -78,7 +79,7 @@ export class LedgerService {
   /*
   * update Ledger transaction
   */
-  public UpdateLedgerTransactions(model: LedgerRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerRequest>> {
+  public UpdateLedgerTransactions(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): Observable<BaseResponse<LedgerResponse, LedgerUpdateRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -87,12 +88,12 @@ export class LedgerService {
     });
     return this._http.put(LEDGER_API.UNIVERSAL.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':entryUniqueName', entryUniqueName), model)
       .map((res) => {
-        let data: BaseResponse<LedgerResponse, LedgerRequest> = res.json();
+        let data: BaseResponse<LedgerResponse, LedgerUpdateRequest> = res.json();
         data.request = model;
         data.queryString = { accountUniqueName, entryUniqueName };
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<LedgerResponse, LedgerRequest>(e, model, { accountUniqueName, entryUniqueName }));
+      .catch((e) => this.errorHandler.HandleCatch<LedgerResponse, LedgerUpdateRequest>(e, model, { accountUniqueName, entryUniqueName }));
   }
 
   /*

@@ -5,26 +5,25 @@
   <meta charset="utf-8">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>
-    <%= htmlWebpackPlugin.options.title %>
-  </title>
-  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
-
-  <!-- base url -->
-  <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
-    <!-- base url -->
-    <!-- <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>"> -->
-    <% } %>
-      <!-- <script>
-
-            </script> -->
-      <script>
-        if ( <%=htmlWebpackPlugin.options.metadata.isElectron %>)
-        {
-          var jQuery = $ = window.$ = window.jQuery = require('jquery');
-        }
-        else { window.jQuery || document.write('<script src="./assets/js/jquery-1.11.3.min.js"><\/script>'); }
-      </script>
+  <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
+  <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software">
+  <!-- error tracking -->
+  <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
+    <script type='text/javascript'>
+      window._errLyticsConfig = {
+          apiKey: '<%= htmlWebpackPlugin.options.metadata.errlyticsKey %>'
+      };
+    </script>
+    <script type="text/javascript" crossorigin="anonymous" src="https://cdn.errlytics.com/errlytics.min.js"></script>
+  <% } %>
+  <!-- end error tracking -->
+  <script type='text/javascript'>
+    if ( <%=htmlWebpackPlugin.options.metadata.isElectron %>){
+      var jQuery = $ = window.$ = window.jQuery = require('jquery');
+    }else {
+      window.jQuery || document.write('<script src="./assets/js/jquery-1.11.3.min.js"><\/script>');
+    }
+  </script>
       <% if (webpackConfig.htmlElements.headTags) { %>
         <!-- Configured Head Tags  -->
         <%= webpackConfig.htmlElements.headTags %>

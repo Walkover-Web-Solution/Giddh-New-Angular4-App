@@ -37,7 +37,7 @@
             <div class="form-group col-xs-6">
               <label class="d-block">&nbsp;</label>
               <div class="mrT1">
-                <label>
+                <label *ngIf="gst.get('gstNumber').value">
                   <input class="" type="checkbox" name="isComposite" formControlName="isComposite"> Is Composite?</label>
                 <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
                   <i class="fa fa-times"></i> Remove</a>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="col-xs-6">
-              <div class="form-group">
+              <div class="form-group" *ngIf="gst.get('gstNumber').value">
                 <label for="">Party Type *</label>
                 <div class="custom-select pos-rel">
                     <ng-select [options]="partyTypeSource" formControlName="partyType"></ng-select>

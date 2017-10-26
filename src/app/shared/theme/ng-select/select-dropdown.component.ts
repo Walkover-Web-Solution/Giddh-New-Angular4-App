@@ -20,7 +20,6 @@ import { OptionList } from './option-list';
   styleUrls: ['./select-dropdown.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-
 export class SelectDropdownComponent
   implements AfterViewInit, OnChanges, OnInit {
 
@@ -29,6 +28,7 @@ export class SelectDropdownComponent
   @Input() public highlightTextColor: string;
   @Input() public left: number;
   @Input() public multiple: boolean;
+  @Input() public isTypeAheadMode: boolean;
   @Input() public notFoundMsg: string;
   @Input() public noResultLinkEnabled: boolean;
   @Input() public optionList: OptionList;
@@ -65,7 +65,7 @@ export class SelectDropdownComponent
 
   public ngAfterViewInit() {
     this.moveHighlightedIntoView();
-    if (!this.multiple && this.filterEnabled) {
+    if ((!this.multiple && !this.isTypeAheadMode) && this.filterEnabled) {
       this.filterInput.nativeElement.focus();
     }
   }
