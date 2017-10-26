@@ -37,6 +37,8 @@ export class AccountsAction {
   public static UPDATE_SHARED_ENTITY_RESPONSE = 'UpdateSharedEntityResponse';
   public static UN_SHARE_ENTITY = 'EntityUnShare';
   public static UN_SHARE_ENTITY_RESPONSE = 'EntityUnShareResponse';
+  public static UPDATE_ENTITY_PERMISSION = 'UpdateEntityPermission';
+  public static UPDATE_ENTITY_PERMISSION_RESPONSE = 'UpdateEntityPermissionResponse';
   public static SHARE_ACCOUNT = 'AccountShare';
   public static SHARE_ACCOUNT_RESPONSE = 'AccountShareResponse';
   public static UNSHARE_ACCOUNT = 'AccountUnShare';
@@ -352,9 +354,38 @@ export class AccountsAction {
             type: ''
           };
         }
-        // else if(data.queryString.entity === 'group'){
-        //   return this.GroupSharedWithResponse(data.queryString.accountUniqueName);
-        // }
+      }
+    });
+
+  // Update entity permission
+  @Effect()
+  public updateEntityPermission$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION)
+    .switchMap(action =>
+      this._accountService.UnShare(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.updateEntityPermissionResponse(response);
+    });
+
+  @Effect()
+  public updateEntityPermissionResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        // this._toasty.successToast(action.payload.body, '');
+        if (data.queryString.model.updateInBackground){
+          return this.shareEntity(data.queryString.model, data.queryString.model.newPermission);
+        }
       }
     });
 
@@ -657,6 +688,25 @@ export class AccountsAction {
   public UnShareEntityResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
     return {
       type: AccountsAction.UN_SHARE_ENTITY_RESPONSE,
+      payload: value
+    };
+  }
+
+  // updateEntityPermission
+  public updateEntityPermission(value: ShareEntityRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.UPDATE_ENTITY_PERMISSION,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public updateEntityPermissionResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
+    return {
+      type: AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE,
       payload: value
     };
   }
