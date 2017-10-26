@@ -85,14 +85,15 @@
                         <div class="form-group select2-parent">
                             <label>State</label><br>
                             <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="companyProfileObj.state" name="state"/>-->
-                            <select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
+                            <select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" *ngIf="countryIsIndia" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
                             </select2>
+                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label>Country</label><br>
-                            <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" name="country" />
+                            <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" />
                         </div>
                     </div>
                 </div>

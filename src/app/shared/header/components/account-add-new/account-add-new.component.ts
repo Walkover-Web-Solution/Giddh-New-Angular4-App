@@ -76,6 +76,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
+  public phoneCode: string;
+  public countryPhoneCode: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -93,6 +95,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+    });
+
+    // Country phone Code
+    contriesWithCodes.map(c => {
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
     });
 
     this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
@@ -127,10 +134,12 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value) {
+      if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
-      } else if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value !== '') {
+      } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+      } else if (!a) {
+        this.addAccountForm.get('openingBalanceType').patchValue('');
       }
     });
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
@@ -175,10 +184,13 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['CREDIT'],
+      openingBalanceType: [''],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
+      phone: this._fb.group({
+        phoneCode: ['']
+      }),
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
@@ -328,5 +340,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.resetAddAccountForm();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  /**
+   * set Phone Code
+   */
+  public setPhoneCode(code) {
+    console.log(code);
+    if (code.value) {
+      let country = this.countrySource.filter((obj) => obj.value === code.value);
+    }
   }
 }
