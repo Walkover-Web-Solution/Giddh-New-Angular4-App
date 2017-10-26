@@ -1,6 +1,7 @@
 import { INameUniqueName } from './nameUniqueName.interface';
 import { IPagination } from './paginatedResponse.interface';
 import { IFlattenAccountsResultItem } from './flattenAccountsResultItem.interface';
+import { IInventoryUnit } from '../../ledger/ledger.vm';
 
 /**
  * interface used in transaction item everywhere
@@ -14,6 +15,8 @@ export interface ILedgerTransactionItem {
   isBaseAccount?: boolean;
   particular: INameUniqueName;
   type: string;
+  selectedAccount?: IFlattenAccountsResultItem | any;
+  unitRate?: IInventoryUnit[];
 }
 
 export interface IInventory {
@@ -21,7 +24,7 @@ export interface IInventory {
   quantity: number;
   rate: number;
   stock?: INameUniqueName;
-  unit: IUnit;
+  unit: IInventoryUnit;
 }
 
 export interface IUnit {
@@ -65,7 +68,7 @@ export interface ILedger {
   transactions: ILedgerTransactionItem[];
   unconfirmedEntry?: boolean;
   voucher: IVoucherItem;
-  voucherType: string;
+  voucherType?: string;
 }
 
 export interface ITransactions extends IPagination {
