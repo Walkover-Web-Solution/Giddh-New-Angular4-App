@@ -12,6 +12,7 @@
   <!-- error tracking -->
   <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
     <script type='text/javascript'>
+    if ( <%=htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) {
       window._errLyticsConfig = {
           apiKey: '<%= htmlWebpackPlugin.options.metadata.errlyticsKey %>'
       };
