@@ -13,9 +13,9 @@
 
   <!-- error tracking -->
   <script type='text/javascript'>
-    if ( <%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) {
+    if ( <%=htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) {
       window._errLyticsConfig = {
-          apiKey: <%= htmlWebpackPlugin.options.metadata.errlyticsKey %>
+          apiKey: '<%= htmlWebpackPlugin.options.metadata.errlyticsKey %>'
       };
       document.write('<script type="text/javascript" crossorigin="anonymous" src="https://cdn.errlytics.com/errlytics.min.js"><\/script>');
     }
