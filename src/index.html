@@ -12,6 +12,7 @@
 
 
   <!-- error tracking -->
+  <%= htmlWebpackPlugin.options.metadata.errlyticsKey %>
   <script type='text/javascript'>
     if ( <%= htmlWebpackPlugin.options.metadata.errlyticsNeeded === true %>) {
       window._errLyticsConfig = {
