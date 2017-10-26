@@ -140,6 +140,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.needToReCalculate.subscribe(a => {
       if (a) {
         this.amountChanged();
+        this.calculateTotal();
       }
     });
   }
