@@ -112,13 +112,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-      try {
-        if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.userEntityRoles[0].role.uniqueName === 'super_admin') {
-          this.userIsSuperUser = true;
-        } else {
-          this.userIsSuperUser = false;
-        }
-      } catch (e) {
+      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
+        this.userIsSuperUser = true;
+      } else {
         this.userIsSuperUser = false;
       }
       this.selectedCompanyCountry = selectedCmp.country;
@@ -129,7 +125,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public ngOnInit() {
-    this.noGroups = true;
     //
     this.user$.subscribe((u) => {
       if (u) {
@@ -172,7 +167,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (s === userLoginStateEnum.notLoggedIn) {
         this.router.navigate(['/login']);
       } else if (s === userLoginStateEnum.newUserLoggedIn) {
+        // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
         this.router.navigate(['/new-user']);
+        // });
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
