@@ -11,8 +11,7 @@
   <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
   <!-- error tracking -->
   <% if (htmlWebpackPlugin.options.metadata.errlyticsNeeded) { %>
-  <script type='text/javascript'>
-    if ( <%=htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) {
+    <script type='text/javascript'>
       window._errLyticsConfig = {
           apiKey: '<%= htmlWebpackPlugin.options.metadata.errlyticsKey %>'
       };
