@@ -1,7 +1,7 @@
 /**
  * @author: @AngularClass
  */
-
+const ERRLYTICS_KEY_PROD = 'eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA';
 const helpers = require('./helpers');
 /**
  * Used to merge webpack configs
@@ -39,6 +39,8 @@ const METADATA = webpackMerge(commonConfig({
     ENV: ENV,
     HMR: false,
     isElectron: false,
+    errlyticsNeeded: true,
+    errlyticsKey: ERRLYTICS_KEY_PROD,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
   });
@@ -167,6 +169,8 @@ module.exports = function (env) {
           'ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
           'isElectron': false,
+          'errlyticsNeeded': true,
+          'errlyticsKey': ERRLYTICS_KEY_PROD,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
           'process.env': {
