@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem } from '../../models/api-models/Sales';
+import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem, GenerateSalesRequest } from '../../models/api-models/Sales';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -145,6 +145,7 @@ export class SalesInvoiceComponent implements OnInit {
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
+  public dueAmount: number;
 
   // modals related
   public modalConfig = {
@@ -400,7 +401,16 @@ export class SalesInvoiceComponent implements OnInit {
       return false;
     }
 
-    this.salesService.generateSales(this.invFormData, this.updateAccount).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
+    let obj: GenerateSalesRequest = {
+      invoice : this.invFormData,
+      updateAccountDetails: this.updateAccount,
+      paymentAction: {
+        action: 'paid',
+        amount: this.dueAmount
+      }
+    };
+
+    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
       if (response.status === 'success') {
         f.form.reset();
         if (typeof response.body === 'string') {
@@ -534,6 +544,13 @@ export class SalesInvoiceComponent implements OnInit {
       this.invFormData.totalTaxableValue = TAXABLE_VALUE;
       this.invFormData.totalTax = TAX;
       this.invFormData.grandTotal = GRAND_TOTAL;
+
+      // due amount
+      this.invFormData.balanceDue = GRAND_TOTAL;
+      if (this.dueAmount) {
+        this.invFormData.balanceDue = GRAND_TOTAL - this.dueAmount;
+      }
+
     }, 700);
   }
 

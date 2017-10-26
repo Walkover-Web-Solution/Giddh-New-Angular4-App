@@ -10,21 +10,20 @@
   </title>
   <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
 
-  <!-- base url -->
-  <% if (htmlWebpackPlugin.options.metadata.baseUrl) { %>
-    <!-- base url -->
-    <!-- <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>"> -->
-    <% } %>
-      <!-- <script>
 
-            </script> -->
-      <script>
-        if ( <%=htmlWebpackPlugin.options.metadata.isElectron %>)
-        {
-          var jQuery = $ = window.$ = window.jQuery = require('jquery');
-        }
-        else { window.jQuery || document.write('<script src="./assets/js/jquery-1.11.3.min.js"><\/script>'); }
-      </script>
+  <!-- error tracking -->
+  <script type='text/javascript'>
+    if ( <%= htmlWebpackPlugin.options.metadata.errlyticsNeeded %>) {
+      window._errLyticsConfig = {
+          apiKey: <%= htmlWebpackPlugin.options.metadata.errlyticsKey %>
+      };
+      document.write('<script type="text/javascript" crossorigin="anonymous" src="https://cdn.errlytics.com/errlytics.min.js"><\/script>');
+    }
+    if ( <%=htmlWebpackPlugin.options.metadata.isElectron %>){
+      var jQuery = $ = window.$ = window.jQuery = require('jquery');
+    }
+    else { window.jQuery || document.write('<script src="./assets/js/jquery-1.11.3.min.js"><\/script>'); }
+  </script>
       <% if (webpackConfig.htmlElements.headTags) { %>
         <!-- Configured Head Tags  -->
         <%= webpackConfig.htmlElements.headTags %>

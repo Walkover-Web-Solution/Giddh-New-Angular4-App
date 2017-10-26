@@ -63,10 +63,11 @@ export class MfEditComponent implements OnInit {
         if (manufacturingObj) {
           manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
           manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
-          delete manufacturingObj.manufacturingQuantity;
+          manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
+          // delete manufacturingObj.manufacturingQuantity;
           manufacturingObj.linkedStocks.forEach((item) => {
             item.quantity = item.manufacturingQuantity;
-            delete item.manufacturingQuantity;
+            // delete item.manufacturingQuantity;
           });
           this.manufacturingDetails = manufacturingObj;
         }
@@ -79,22 +80,22 @@ export class MfEditComponent implements OnInit {
         let GroupWithAccResponse = _.cloneDeep(data.body);
         this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(response => {
           if (response.status === 'success') {
-          let flattenGroupResponse = _.cloneDeep(response.body.results);
+            let flattenGroupResponse = _.cloneDeep(response.body.results);
 
             _.forEach(GroupWithAccResponse, (d: any) => {
               _.forEach(flattenGroupResponse, acc => {
-              if (d.category === 'expenses' || d.category === 'liabilities' || d.category === 'assets') {
-                let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
-                if (matchedAccIndex > -1) {
-                  if (d.category === 'expenses') {
-                    this.expenseGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
-                  }
-                  if (d.category === 'liabilities' || d.category === 'assets') {
-                    this.liabilityGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                if (d.category === 'expenses' || d.category === 'liabilities' || d.category === 'assets') {
+                  let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
+                  if (matchedAccIndex > -1) {
+                    if (d.category === 'expenses') {
+                      this.expenseGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                    }
+                    if (d.category === 'liabilities' || d.category === 'assets') {
+                      this.liabilityGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                    }
                   }
                 }
-              }
-            });
+              });
             });
             this.expenseGroupAccounts$ = Observable.of(this.expenseGroupAccounts);
             this.liabilityGroupAccounts$ = Observable.of(this.liabilityGroupAccounts);
@@ -339,40 +340,33 @@ export class MfEditComponent implements OnInit {
     }
   }
 
-  public getStockUnit(selectedItem) {
-    // console.log(selectedItem);
-    let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-    this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
-      // console.log('The response from the API is :', res);
-      if (res.status === 'success') {
-        let unitCode = res.body.stockUnit.code;
+  public getStockUnit(selectedItem, itemQuantity) {
+    if (selectedItem && itemQuantity) {
+      let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+      this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
 
-        let data = {
-          stockUniqueName: selectedItem,
-          quantity: 1,
-          stockUnitCode: unitCode,
-          rate : null,
-          amount: null
-        };
+        if (res.status === 'success') {
+          let unitCode = res.body.stockUnit.code;
 
-        this._inventoryService.GetRateForStoke(selectedItem, data).subscribe((response) => {
-          if (response.status === 'success') {
-            this.linkedStocks.rate = _.cloneDeep(response.body.rate);
-          }
-        });
+          let data = {
+            stockUniqueName: selectedItem,
+            quantity: itemQuantity,
+            stockUnitCode: unitCode,
+            rate: null,
+            amount: null
+          };
 
-        this.linkedStocks.manufacturingUnit = unitCode;
-        this.linkedStocks.stockUnitCode = unitCode;
+          this._inventoryService.GetRateForStoke(selectedItem, data).subscribe((response) => {
+            if (response.status === 'success') {
+              this.linkedStocks.rate = _.cloneDeep(response.body.rate);
+            }
+          });
 
-        // if (this.isUpdateCase) {
-        //   this.linkedStocks.manufacturingUnit = unitCode;
-        // } else {
-        //   this.linkedStocks.stockUnitCode = unitCode;
-        // }
-
-        // console.log('unitCode is :', unitCode);
-      }
-    });
+          this.linkedStocks.manufacturingUnit = unitCode;
+          this.linkedStocks.stockUnitCode = unitCode;
+        }
+      });
+    }
   }
 
   public setToday() {
@@ -381,5 +375,45 @@ export class MfEditComponent implements OnInit {
 
   public clearDate() {
     this.manufacturingDetails.date = '';
+  }
+
+  public getAccountName(uniqueName: string, category: string) {
+    let name;
+    if (category === 'liabilityGroupAccounts') {
+      this.liabilityGroupAccounts$.subscribe((data) => {
+        let account = data.find((acc) => acc.id === uniqueName);
+        if (account) {
+          name = account.text;
+        }
+      });
+    } else if (category === 'expenseGroupAccounts') {
+      this.expenseGroupAccounts$.subscribe((data) => {
+        let account = data.find((acc) => acc.id === uniqueName);
+        if (account) {
+          name = account.text;
+        }
+      });
+    }
+    return Observable.of(name);
+  }
+
+    /**
+   * validateDefaultDueDate
+   */
+  public validateNumberFourDigit(value: any, modelName: string) {
+    if (value) {
+      if (value.indexOf('.') !== -1 && (value.length - (value.indexOf('.') + 1)) > 4) {
+        value = value.substr(0, value.length - 1);
+        setTimeout(() => {
+          this.manufacturingDetails[modelName] = value;
+        });
+      }
+      if (isNaN(value)) {
+        value = value.replace(/\D/g, '') !== 0 && !isNaN(value.replace(/\D/g, '')) ? value.replace(/\D/g, '') : null;
+        setTimeout(() => {
+          this.manufacturingDetails[modelName] = value;
+        });
+      }
+    }
   }
 }

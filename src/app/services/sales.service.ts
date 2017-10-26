@@ -8,7 +8,7 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { HandleCatch, ErrorHandler } from './catchManager/catchmanger';
 import { Configuration } from '../app.constant';
-import { InvoiceFormClass } from '../models/api-models/Sales';
+import { InvoiceFormClass, GenerateSalesRequest } from '../models/api-models/Sales';
 import { SALES_API_V2 } from './apiurls/sales.api';
 
 @Injectable()
@@ -29,20 +29,20 @@ export class SalesService {
      * @param model : InvoiceFormClass object
      * @param updateAccount: boolean flag
      */
-    public generateSales(model: InvoiceFormClass, updateAccount: boolean): Observable<BaseResponse<string, InvoiceFormClass>> {
-      let accountUniqueName = model.account.uniqueName;
+    public generateSales(model: GenerateSalesRequest): Observable<BaseResponse<string, GenerateSalesRequest>> {
+      let accountUniqueName = model.invoice.account.uniqueName;
       this.store.take(1).subscribe(s => {
         if (s.session.user) {
           this.user = s.session.user.user;
           this.companyUniqueName = s.session.companyUniqueName;
         }
       });
-      return this._http.post(SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName).replace(':updateAccount', updateAccount.toString()), model)
+      return this._http.post(SALES_API_V2.GENERATE_SALES.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), model)
         .map((res) => {
-          let data: BaseResponse<string, InvoiceFormClass> = res.json();
+          let data: BaseResponse<string, GenerateSalesRequest> = res.json();
           data.request = model;
           return data;
         })
-        .catch((e) => this.errorHandler.HandleCatch<string, InvoiceFormClass>(e, model));
+        .catch((e) => this.errorHandler.HandleCatch<string, GenerateSalesRequest>(e, model));
     }
 }
