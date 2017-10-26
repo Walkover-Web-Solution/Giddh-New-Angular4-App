@@ -53,6 +53,8 @@ import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.direc
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
 import { DisableFormFieldDirective } from './helpers/directives/disableFormField.directive';
 import { ClipboardModule } from 'ngx-clipboard';
+import { UiSwitchModule } from 'angular2-ui-switch';
+// import * as newSelect from 'ng-select';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -109,13 +111,15 @@ export function provideConfig() {
     TextMaskModule,
     NgUploaderModule,
     SelectModule,
-    ClipboardModule
+    ClipboardModule,
+    UiSwitchModule
+    // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
-    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ClipboardModule, ElementViewContainerRef
+    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ClipboardModule, UiSwitchModule, ElementViewContainerRef
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent, AccountAddNewComponent],
