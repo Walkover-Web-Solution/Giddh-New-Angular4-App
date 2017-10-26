@@ -16,7 +16,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-
+const ERRLYTICS_KEY_DEV = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
 /**
  * Webpack Constants
  */
@@ -32,6 +32,8 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
     ENV: ENV,
     HMR: HMR,
     isElectron: false,
+    errlyticsNeeded: false,
+    errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
 });
@@ -142,6 +144,8 @@ module.exports = function(options) {
                 'ENV': JSON.stringify(METADATA.ENV),
                 'HMR': METADATA.HMR,
                 'isElectron': false,
+                'errlyticsNeeded': false,
+                'errlyticsKey': ERRLYTICS_KEY_DEV,
                 'AppUrl': JSON.stringify(METADATA.AppUrl),
                 'ApiUrl': JSON.stringify(METADATA.ApiUrl),
                 'process.env': {
