@@ -16,7 +16,7 @@ const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const ERRLYTICS_KEY_DEV = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
+const ERRLYTICS_KEY_DEV = '';
 
 /**
  * Webpack Constants
