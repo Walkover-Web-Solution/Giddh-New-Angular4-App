@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem } from '../../models/api-models/Sales';
+import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem, GenerateSalesRequest } from '../../models/api-models/Sales';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
@@ -145,6 +145,7 @@ export class SalesInvoiceComponent implements OnInit {
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
+  public dueAmount: number;
 
   // modals related
   public modalConfig = {
@@ -400,7 +401,16 @@ export class SalesInvoiceComponent implements OnInit {
       return false;
     }
 
-    this.salesService.generateSales(this.invFormData, this.updateAccount).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, InvoiceFormClass>) => {
+    let obj: GenerateSalesRequest = {
+      invoice : this.invFormData,
+      updateAccountDetails: this.updateAccount,
+      paymentAction: {
+        action: 'paid',
+        amount: this.dueAmount
+      }
+    };
+
+    this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
       if (response.status === 'success') {
         f.form.reset();
         if (typeof response.body === 'string') {
@@ -431,6 +441,117 @@ export class SalesInvoiceComponent implements OnInit {
     }else {
       document.querySelector('body').classList.remove('fixed');
     }
+  }
+
+  /**
+   * checkForInfinity
+   * @returns {number} always
+   */
+  public checkForInfinity(value): number {
+    return (value === Infinity) ? 0 : value;
+  }
+
+  /**
+   * generate total discount amount
+   * @returns {number}
+   */
+  public generateTotalDiscount(list: ICommonItemOfTransaction[]) {
+    return list.reduce((pv, cv) => {
+      return cv.amount ? pv + cv.amount : pv;
+    }, 0);
+  }
+
+  /**
+   * generate total taxable value
+   * @returns {number}
+   */
+  public generateTotalTaxableValue(txns: SalesTransactionItemClass[]) {
+    let res: number = 0;
+    _.forEach(txns, (txn: SalesTransactionItemClass) => {
+      res += this.checkForInfinity(txn.taxableValue);
+    });
+    return res;
+  }
+
+  /**
+   * generate total tax amount
+   * @returns {number}
+   */
+  public generateTotalTaxAmount(txns: SalesTransactionItemClass[]) {
+    let res: number = 0;
+    _.forEach(txns, (txn: SalesTransactionItemClass) => {
+      if (txn.total === 0) {
+        res += 0;
+      }else {
+        res += this.checkForInfinity((txn.total - txn.taxableValue));
+      }
+    });
+    return res;
+  }
+
+  /**
+   * generate total amounts of entries
+   * @returns {number}
+   */
+  public generateTotalAmount(txns: SalesTransactionItemClass[]) {
+    let res: number = 0;
+    _.forEach(txns, (txn: SalesTransactionItemClass) => {
+      if (txn.quantity && txn.rate) {
+        res += this.checkForInfinity(txn.rate) * this.checkForInfinity(txn.quantity);
+      }else {
+        res += Number(this.checkForInfinity(txn.amount));
+      }
+    });
+    return res;
+  }
+
+  /**
+   * generate grand total
+   * @returns {number}
+   */
+  public generateGrandTotal(txns: SalesTransactionItemClass[]) {
+    return txns.reduce((pv, cv) => {
+      return cv.total ? pv + cv.total : pv;
+    }, 0);
+  }
+
+  public txnChangeOccurred() {
+    let DISCOUNT: number = 0;
+    let TAX: number = 0;
+    let AMOUNT: number = 0;
+    let TAXABLE_VALUE: number = 0;
+    let GRAND_TOTAL: number = 0;
+    setTimeout(() => {
+      _.forEach(this.invFormData.entries, (entry) => {
+        // get discount
+        DISCOUNT += this.generateTotalDiscount(entry.discounts);
+
+        // get total amount of entries
+        AMOUNT += this.generateTotalAmount(entry.transactions);
+
+        // get taxable value
+        TAXABLE_VALUE += this.generateTotalTaxableValue(entry.transactions);
+
+        // generate total tax amount
+        TAX += this.generateTotalTaxAmount(entry.transactions);
+
+        // generate Grand Total
+        GRAND_TOTAL += this.generateGrandTotal(entry.transactions);
+      });
+
+      this.invFormData.subTotal = AMOUNT;
+      this.invFormData.totalDiscount = DISCOUNT;
+      this.invFormData.totalTaxableValue = TAXABLE_VALUE;
+      this.invFormData.totalTax = TAX;
+      this.invFormData.grandTotal = GRAND_TOTAL;
+
+      // due amount
+      this.invFormData.balanceDue = GRAND_TOTAL;
+      if (this.dueAmount) {
+        this.invFormData.balanceDue = GRAND_TOTAL - this.dueAmount;
+      }
+
+    }, 700);
   }
 
   public onSelectSalesAccount(selectedAcc: any, txn: SalesTransactionItemClass): void {
@@ -484,6 +605,9 @@ export class SalesInvoiceComponent implements OnInit {
           // toggle stock related fields
           this.toggleStockFields(txn);
           return txn;
+        }else {
+          txn.isStockTxn = false;
+          this.toggleStockFields(txn);
         }
       });
     }else {
@@ -571,6 +695,7 @@ export class SalesInvoiceComponent implements OnInit {
   public taxAmountEvent(tax, txn: SalesTransactionItemClass, entry: SalesEntryClass) {
     setTimeout(() => {
       txn.total = Number(txn.getTransactionTotal(tax, entry));
+      this.txnChangeOccurred();
     }, 1500);
   }
 
@@ -609,6 +734,7 @@ export class SalesInvoiceComponent implements OnInit {
 
     // call taxableValue method
     txn.setAmount(entry);
+    this.txnChangeOccurred();
   }
 
   // get action type from aside window and open respective modal

@@ -10,6 +10,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { SmsKeyClass, EmailKeyClass } from '../models/api-models/SettingsIntegraion';
 import { ActiveFinancialYear } from '../models/api-models/Company';
 import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
+import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 
 export interface Account {
   name: string;
@@ -17,7 +18,7 @@ export interface Account {
   uniqueName: string;
 }
 
-export class IInvoicePurchaseResponse {
+export class IInvoicePurchaseItem {
   public account: Account;
   public entryUniqueName: string;
   public entryDate: string;
@@ -35,6 +36,14 @@ export class IInvoicePurchaseResponse {
   public taxes: string[];
   public isAllTaxSelected?: boolean;
   public invoiceGenerated: boolean;
+}
+export class IInvoicePurchaseResponse {
+  public count: number;
+  public page: number;
+  public items: IInvoicePurchaseItem[];
+  public totalItems: number;
+  public totalPages: number;
+
 }
 
 /**** TAX MODEL ****/
@@ -100,18 +109,19 @@ export class PurchaseInvoiceService {
   * API: 'company/:companyUniqueName/invoices/purchase'
   * Method: GET
   */
-  public GetPurchaseInvoice(): Observable<BaseResponse<IInvoicePurchaseResponse[], string>> {
+  public GetPurchaseInvoice(model: CommonPaginatedRequest): Observable<BaseResponse<IInvoicePurchaseResponse, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
       this.companyUniqueName = s.session.companyUniqueName;
     });
-    return this._http.get(PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
-      let data: BaseResponse<IInvoicePurchaseResponse[], string> = res.json();
+    let req = model;
+    return this._http.get(PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).map((res) => {
+      let data: BaseResponse<IInvoicePurchaseResponse, string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse[], string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e));
   }
 
   /*
@@ -138,7 +148,7 @@ export class PurchaseInvoiceService {
   * API: '/company/:companyUniqueName/accounts/:accountUniqueName/invoices/generate-purchase'
   * Method: PUT
   */
-  public GeneratePurchaseInvoice(model: IInvoicePurchaseResponse): Observable<BaseResponse<IInvoicePurchaseResponse, string>> {
+  public GeneratePurchaseInvoice(model: IInvoicePurchaseItem): Observable<BaseResponse<IInvoicePurchaseItem, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -150,10 +160,10 @@ export class PurchaseInvoiceService {
       taxes: model.taxes
     };
     return this._http.post(PURCHASE_INVOICE_API.GENERATE_PURCHASE_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', model.account.uniqueName), dataToSend).map((res) => {
-      let data: BaseResponse<IInvoicePurchaseResponse, string> = res.json();
+      let data: BaseResponse<IInvoicePurchaseItem, string> = res.json();
       data.queryString = {};
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseResponse, string>(e));
+    }).catch((e) => this.errorHandler.HandleCatch<IInvoicePurchaseItem, string>(e));
   }
 
   /*

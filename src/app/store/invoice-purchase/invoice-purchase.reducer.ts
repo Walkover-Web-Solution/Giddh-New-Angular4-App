@@ -1,28 +1,31 @@
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
-import { IInvoicePurchaseResponse, ITaxResponse } from '../../services/purchase-invoice.service';
+import { IInvoicePurchaseResponse, ITaxResponse, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
 import { PURCHASE_INVOICE_ACTIONS } from '../../services/actions/purchase-invoice/purchase-invoice.const';
 
 export interface InvoicePurchaseState {
-    purchaseInvoices: IInvoicePurchaseResponse[];
+    purchaseInvoices: IInvoicePurchaseResponse;
     taxes: ITaxResponse[];
     isDownloadingFile: boolean;
+    invoiceGenerateSuccess: boolean;
 }
 
 export const initialState: InvoicePurchaseState = {
-    purchaseInvoices: [],
+    purchaseInvoices: new IInvoicePurchaseResponse(),
     taxes: [],
-    isDownloadingFile: false
+    isDownloadingFile: false,
+    invoiceGenerateSuccess: false
 };
 
 export function InvoicePurchaseReducer(state = initialState, action: Action): InvoicePurchaseState {
     switch (action.type) {
         case PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE:
             {
-                let response: BaseResponse<IInvoicePurchaseResponse[], string> = action.payload;
+                let response: BaseResponse<IInvoicePurchaseResponse, string> = action.payload;
                 if (response.status === 'success') {
                     let newState = _.cloneDeep(state);
+                    newState.invoiceGenerateSuccess = false;
                     newState.purchaseInvoices = response.body;
                     return Object.assign({}, state, newState);
                 }
@@ -40,13 +43,14 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
             }
         case PURCHASE_INVOICE_ACTIONS.UPDATE_PURCHASE_INVOICE_RESPONSE:
             {
-                let response: BaseResponse<IInvoicePurchaseResponse[], string> = action.payload;
+                let response: BaseResponse<IInvoicePurchaseItem, string> = action.payload;
                 if (response.status === 'success') {
                     let newState = _.cloneDeep(state);
                     let uniqueName = response.body[0].entryUniqueName;
-                    let indx = newState.purchaseInvoices.findIndex((obj) => obj.entryUniqueName === uniqueName);
+                    let indx = newState.purchaseInvoices.items.findIndex((obj) => obj.entryUniqueName === uniqueName);
+                    newState.invoiceGenerateSuccess = true;
                     if (indx) {
-                        newState.purchaseInvoices[indx] = response.body[0];
+                        newState.purchaseInvoices.items[indx] = response.body[0];
                     }
                     return Object.assign({}, state, newState);
                 }
@@ -82,9 +86,9 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
                 if (response.status === 'success') {
                     let newState = _.cloneDeep(state);
                     let uniqueName = response.body.uniqueName;
-                    let indx = newState.purchaseInvoices.findIndex((obj) => obj.entryUniqueName === uniqueName);
+                    let indx = newState.purchaseInvoices.items.findIndex((obj) => obj.entryUniqueName === uniqueName);
                     if (indx) {
-                        newState.purchaseInvoices[indx].invoiceNumber = response.body.invoiceNumberAgainstVoucher;
+                        newState.purchaseInvoices.items[indx].invoiceNumber = response.body.invoiceNumberAgainstVoucher;
                     }
                     console.log(response.body);
                     return Object.assign({}, state, newState);
