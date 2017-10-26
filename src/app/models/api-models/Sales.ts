@@ -223,6 +223,8 @@ class OtherSalesItemClass {
   public customField1: string;
   public customField2: string;
   public customField3: string;
+  public message2: string;
+  public message1: string;
   constructor() {
     this.shippingDate = moment().format('DD-MM-YYYY');
   }
