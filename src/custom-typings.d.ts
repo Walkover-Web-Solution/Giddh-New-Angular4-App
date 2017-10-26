@@ -63,6 +63,8 @@ declare var System: SystemJS;
 declare var AppUrl: string;
 declare var ApiUrl: string;
 declare var isElectron: boolean;
+declare var errlyticsNeeded: boolean;
+declare var errlyticsKey: string;
 // declare var $: JQueryStatic;
 // declare var jQuery: JQueryStatic;
 
@@ -78,6 +80,8 @@ interface GlobalEnvironment {
   AppUrl: string;
   ApiUrl: string;
   isElectron: boolean;
+  errlyticsNeeded: boolean;
+  errlyticsKey: string;
 }
 
 interface Es6PromiseLoader {
