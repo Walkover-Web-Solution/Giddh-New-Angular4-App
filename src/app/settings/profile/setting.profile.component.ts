@@ -54,9 +54,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private _toasty: ToasterService
   ) {
     this._companyService.getAllStates().subscribe((data) => {
-      data.body.map(d => {
-        this.states.push({ text: d.name, id: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          this.states.push({ text: d.name, id: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(this.states);
     }, (err) => {
       console.log(err);

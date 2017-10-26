@@ -23,6 +23,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -180,7 +181,13 @@ module.exports = function (env) {
             'HMR': METADATA.HMR
           }
         }),
-
+        new HtmlWebpackPlugin({
+          template: 'src/index.html',
+          title: METADATA.title,
+          chunksSortMode: 'dependency',
+          metadata: METADATA,
+          inject: 'body'
+        }),
         /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.

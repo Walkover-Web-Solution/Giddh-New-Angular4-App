@@ -173,7 +173,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         let purchaseAccounts: Select2OptionData[] = [];
         data.body.results.map(d => {
-          purchaseAccounts.push({ text: d.name, id: d.uniqueName });
+          purchaseAccounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
         });
         this.purchaseAccountsDropDown$ = Observable.of(purchaseAccounts);
       }
@@ -184,7 +184,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       if (data.status === 'success') {
         let salesAccounts: Select2OptionData[] = [];
         data.body.results.map(d => {
-          salesAccounts.push({ text: d.name, id: d.uniqueName });
+          salesAccounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
         });
         this.salesAccountsDropDown$ = Observable.of(salesAccounts);
       }
