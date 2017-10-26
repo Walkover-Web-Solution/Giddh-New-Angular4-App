@@ -24,7 +24,7 @@ export class SettingsComponent implements OnInit {
     stateDetailsRequest.lastState = 'settings';
 
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
-    this.selectTab(0);
+    this.selectTab(3);
   }
 
   public selectTab(id: number) {

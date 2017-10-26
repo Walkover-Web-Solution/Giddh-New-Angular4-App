@@ -1,5 +1,6 @@
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { TabsModule } from 'ngx-bootstrap';
 import { SettingsComponent } from './settings.component';
@@ -26,12 +27,14 @@ import { FinancialYearComponent } from './financial-year/financial-year.componen
     SettingLinkedAccountsComponent,
     ConnectBankModalComponent,
     SettingLinkedAccountsConfirmationModalComponent,
-    FinancialYearComponent
+    FinancialYearComponent,
+    SettingPermissionComponent
   ],
   imports: [
     SharedModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SettingRountingModule,
     TabsModule.forRoot(),
     SharedModule

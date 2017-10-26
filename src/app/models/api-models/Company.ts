@@ -53,21 +53,56 @@ export class CompanyResponse {
   public contactNo: string;
   public companySubscription: CompanySubscription;
   public financialYears: ActiveFinancialYear[];
-  public sharedEntity?: any;
+  public userEntityRoles: UserEntityRole[];
   public address: string;
   public state: string;
-  public shared: boolean;
   public alias?: any;
-  public role: Role;
   public name: string;
   public gstDetails: GstDetail[];
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
 }
 
-export interface Role {
-  uniqueName: string;
+export interface UserEntityRole {
+  sharedWith: ICommonShareItems;
+  sharedBy: ICommonShareItems;
+  fixedRole: FixedRole;
+  allowedCidrs: any[];
+  allowedIps: any[];
+  period?: any;
+  from?: any;
+  to?: any;
+  duration?: any;
+  entity: Entity;
+  role: Role;
+}
+
+export interface ICommonShareItems extends INameUniqueName {
+  email: string;
+  mobileNo: string;
+}
+
+export interface FixedRole extends INameUniqueName  {
+  isFixed: boolean;
+  scopes: Scope2[];
+}
+
+export interface Entity extends INameUniqueName  {
+  entity: string;
+}
+
+export interface Permission2 {
+  code: string;
+}
+
+export interface Scope2 {
+  permissions: Permission2[];
   name: string;
+}
+
+export interface Role extends INameUniqueName  {
+  isFixed?: boolean;
+  scopes?: Scope2[];
 }
 
 export interface CompanySubscription {
