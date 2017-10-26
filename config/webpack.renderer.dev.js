@@ -16,6 +16,8 @@ const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
+const ERRLYTICS_KEY_DEV = '';
+
 /**
  * Webpack Constants
  */
@@ -31,6 +33,8 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   ENV: ENV,
   HMR: HMR,
   isElectron: true,
+  errlyticsNeeded: false,
+  errlyticsKey: ERRLYTICS_KEY_DEV,
   AppUrl: AppUrl,
   ApiUrl: ApiUrl
 });
@@ -141,6 +145,8 @@ module.exports = function (options) {
         'ENV': JSON.stringify(METADATA.ENV),
         'HMR': METADATA.HMR,
         'isElectron': true,
+        'errlyticsNeeded': false,
+        'errlyticsKey': ERRLYTICS_KEY_DEV,
         'AppUrl': JSON.stringify(METADATA.AppUrl),
         'ApiUrl': JSON.stringify(METADATA.ApiUrl),
         'process.env': {
