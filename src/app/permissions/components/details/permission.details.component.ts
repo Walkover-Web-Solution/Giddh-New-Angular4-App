@@ -95,8 +95,7 @@ export class PermissionDetailsComponent implements OnInit {
     arr = _.forEach(data.scopes, (page: Scope) => {
       _.remove(page.permissions, (o: Permission) => !o.isSelected );
     });
-    // remove all unchecked pages
-    return _.remove(arr, (item) => item.permissions.length > 0 );
+    return arr;
   }
 
   public addNewRole(): any {

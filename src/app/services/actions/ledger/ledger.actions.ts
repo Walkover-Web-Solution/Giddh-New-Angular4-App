@@ -1,4 +1,3 @@
-import { ShareEntityRequest } from './../../../models/api-models/Account';
 import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import {
@@ -112,7 +111,7 @@ export class LedgerActions {
   public shareAccount$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
     .switchMap(action =>
-      this._accountService.Share(
+      this._accountService.AccountShare(
         action.payload.body,
         action.payload.accountUniqueName
       )
@@ -281,7 +280,7 @@ export class LedgerActions {
     };
   }
 
-  public shareAccountResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
+  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
     return {
       type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
       payload: value

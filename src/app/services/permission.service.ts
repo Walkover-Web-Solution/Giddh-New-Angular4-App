@@ -1,4 +1,3 @@
-import { GetAllPermissionResponse } from './../permissions/permission.utility';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Injectable, OnInit } from '@angular/core';
@@ -109,16 +108,5 @@ export class PermissionService {
             data.queryString = {};
             return data;
         }).catch((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e));
-    }
-
-    /*
-     * Get all permissions
-    */
-    public GetAllPermissions(): Observable<BaseResponse<GetAllPermissionResponse[], string>> {
-        return this._http.get(PERMISSION_API.GET_ALL_PERMISSIONS).map((res) => {
-            let data: BaseResponse<GetAllPermissionResponse[], string> = res.json();
-            data.queryString = {};
-            return data;
-        }).catch((e) => this.errorHandler.HandleCatch<GetAllPermissionResponse[], string>(e));
     }
 }

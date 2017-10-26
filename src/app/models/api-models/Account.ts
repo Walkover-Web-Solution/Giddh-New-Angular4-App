@@ -215,14 +215,3 @@ export class AccountResponseV2 {
   public uniqueName: string;
   public addresses: IAccountAddress[];
 }
-
-/*
- * Model for share Account, Group, company
- * POST call
- * API:: company/:companyUniqueName/role/:roleUniqueName/assign
- */
-export class ShareEntityRequest {
-  public emailId: string;
-  public entity: string;
-  public entityUniqueName: string;
-}
