@@ -34,21 +34,6 @@ export class PermissionActions {
     });
 
   @Effect()
-  private GetAllPermissions$: Observable<Action> = this.action$
-    .ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS)
-    .switchMap(action => this._permissionService.GetAllRoles())
-    .map(response => {
-      return this.GetAllPermissionsResponse(response);
-    });
-
-  @Effect()
-  private GetAllPermissionsResponse$: Observable<Action> = this.action$
-    .ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE)
-    .map(response => {
-      return { type : ''};
-    });
-
-  @Effect()
   private GetRoles$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ROLES)
     .switchMap(action => this._permissionService.GetAllRoles())
@@ -168,19 +153,6 @@ export class PermissionActions {
   public GetAllPagesResponse(value: any): Action {
     return {
       type: PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE,
-      payload: value
-    };
-  }
-
-  public GetAllPermissions(): Action {
-    return {
-      type: PERMISSION_ACTIONS.GET_ALL_PERMISSIONS,
-    };
-  }
-
-  public GetAllPermissionsResponse(value: any): Action {
-    return {
-      type: PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE,
       payload: value
     };
   }
