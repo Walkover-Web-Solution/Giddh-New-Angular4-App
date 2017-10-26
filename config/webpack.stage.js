@@ -2,6 +2,7 @@
  * @author: @AngularClass
  */
 
+const ERRLYTICS_KEY_TEST = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
 const helpers = require('./helpers');
 /**
  * Used to merge webpack configs
@@ -39,6 +40,8 @@ const METADATA = webpackMerge(commonConfig({
     ENV: ENV,
     HMR: false,
     isElectron: false,
+    errlyticsNeeded: true,
+    errlyticsKey: ERRLYTICS_KEY_TEST,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
   });
@@ -169,6 +172,8 @@ module.exports = function (env) {
           'isElectron': false,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'errlyticsNeeded': true,
+          'errlyticsKey': ERRLYTICS_KEY_TEST,
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
