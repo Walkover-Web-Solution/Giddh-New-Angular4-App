@@ -11,7 +11,7 @@ import { Store } from '@ngrx/store';
 export class PermissionComponent implements OnInit {
   constructor(private router: Router, private store: Store<AppState>, private companyActions: CompanyActions) {
     this.router.events.subscribe((event: NavigationStart) => {
-      if (event.url === '/permissions' || event.url === '/pages/permissions' || event.url === '/pages/permissions/') {
+      if (event.url === '/pages/permissions' || event.url === '/pages/permissions/') {
         this.router.navigate(['/pages', 'permissions', 'list']);
       }
     });
