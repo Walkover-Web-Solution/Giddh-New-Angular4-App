@@ -43,15 +43,3 @@ export interface IRoleCommonResponseAndRequest {
   isFixed?: boolean;
   uniqueName?: string;
 }
-
-export class ShareRequestForm {
-  public emailId: string;
-  public from: string; // dd-MM-yyyy format
-  public to: string; // dd-MM-yyyy format
-  public duration: number; // numeric
-  public period: string; // DAY
-  public allowedIps: any[];
-  public allowedCidrs: any[];
-  public entity: string;
-  public entityUniqueName: string;
-}
