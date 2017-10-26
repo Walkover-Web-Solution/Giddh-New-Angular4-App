@@ -107,9 +107,6 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     return r;
   }
 
-  // public throwCustomErrMsg() {
-  // }
-
   public setAmount(entry: SalesEntryClass) {
     // delaying due to ngModel change
     setTimeout(() => {
@@ -157,6 +154,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public getTaxableValue(entry: SalesEntryClass): number {
     let count: number = 0;
     if (this.quantity && this.rate) {
+      this.amount = this.rate * this.quantity;
       count = this.checkForInfinity((this.rate * this.quantity) - this.getTotalDiscount(entry.discounts));
     } else {
       count = this.checkForInfinity(this.amount - this.getTotalDiscount(entry.discounts));
@@ -244,6 +242,7 @@ export class InvoiceFormClass {
   public entries: SalesEntryClass[];
   public totalTaxableValue: number;
   public grandTotal: number;
+  public balanceDue: number;
   public totalInWords?: any;
   public subTotal: number;
   public totalDiscount: number;
@@ -268,3 +267,15 @@ export class InvoiceFormClass {
 /**
  * end draw invoice on ui and api model related class and interface
 */
+
+// generate sales interface
+
+interface IPaymentAction {
+  action: string;
+  amount: number;
+}
+export interface GenerateSalesRequest {
+  invoice: InvoiceFormClass;
+  updateAccountDetails: boolean;
+  paymentAction: IPaymentAction;
+}

@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
 import * as  moment from 'moment/moment';
 import * as  _ from 'lodash';
-import { IInvoicePurchaseResponse, PurchaseInvoiceService, ITaxResponse, GeneratePurchaseInvoiceRequest } from '../../services/purchase-invoice.service';
+import { IInvoicePurchaseResponse, PurchaseInvoiceService, ITaxResponse, GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
 import { Observable } from 'rxjs/Rx';
 import { PipeTransform, Pipe, OnInit, trigger, state, style, transition, animate, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
@@ -19,8 +19,9 @@ import 'rxjs/add/operator/distinct';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/map';
 import { AccountService } from '../../services/account.service';
-import { AccountRequest } from '../../models/api-models/Account';
+import { AccountRequest, AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { StateList } from './state-list';
+import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 
 const otherFiltersOptions = [
   { name: 'GSTIN Empty', uniqueName: 'GSTIN Empty' },
@@ -63,8 +64,8 @@ const fileGstrOptions = [
   ]
 })
 export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
-  public allPurchaseInvoicesBackup: IInvoicePurchaseResponse[];
-  public allPurchaseInvoices: IInvoicePurchaseResponse[] = [];
+  public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
+  public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
   public allTaxes: ITaxResponse[] = [];
   public selectedDateForGSTR1: string = '';
   public selectedEntryTypeValue: string = '';
@@ -74,7 +75,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public accountAsideMenuState: string = 'out';
   public dropdownHeading: string = 'Select taxes';
   public isSelectedAllTaxes: boolean = false;
-  public purchaseInvoiceObject: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
+  public purchaseInvoiceObject: IInvoicePurchaseItem = new IInvoicePurchaseItem();
   public purchaseInvoiceRequestObject: GeneratePurchaseInvoiceRequest = new GeneratePurchaseInvoiceRequest();
 
   public datePickerOptions: any = {
@@ -125,13 +126,13 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public singleDate: any;
   public timeCounter: number = 10; // Max number of seconds to wait
   public eventLog = '';
-  public selectedRowIndex: number;
+  public selectedRowIndex: number = null;
   public isReverseChargeSelected: boolean = false;
   public stateList = StateList;
-  public generateInvoiceArr: IInvoicePurchaseResponse[] = [];
+  public generateInvoiceArr: IInvoicePurchaseItem[] = [];
   public invoiceSelected: boolean = false;
   public editMode: boolean = false;
-
+  public pageChnageState: boolean = false;
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -172,13 +173,22 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
-    this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices());
+
+    let paginationRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
+    paginationRequest.page = 1;
+
+    this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
     this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
-      if (o.purchaseInvoices && o.purchaseInvoices.length) {
+      if (o.purchaseInvoices && o.purchaseInvoices.items) {
         this.allPurchaseInvoices = _.cloneDeep(o.purchaseInvoices);
         this.allPurchaseInvoicesBackup = _.cloneDeep(o.purchaseInvoices);
       }
       this.isDownloadingFileInProgress = o.isDownloadingFile;
+      if (o.invoiceGenerateSuccess) {
+        this.generateInvoiceArr = [];
+        let event = { itemsPerPage: 10, page: this.allPurchaseInvoices.page };
+        this.pageChanged(event);
+      }
     });
     this.store.dispatch(this.invoicePurchaseActions.GetTaxesForThisCompany());
     this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
@@ -200,7 +210,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * filterPurchaseInvoice
    */
   public filterPurchaseInvoice(searchString: string) {
-    this.allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoicesBackup);
+    this.allPurchaseInvoices.items = _.cloneDeep(this.allPurchaseInvoicesBackup.items);
 
     if (searchString) {
 
@@ -217,7 +227,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       if (isValidInput) {
         let allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoices);
 
-        allPurchaseInvoices = allPurchaseInvoices.filter((invoice: IInvoicePurchaseResponse) => {
+        allPurchaseInvoices.items = allPurchaseInvoices.items.filter((invoice: IInvoicePurchaseItem) => {
           return (patt.test(invoice.account.gstIn) || patt.test(invoice.entryUniqueName) || patt.test(invoice.account.name) || patt.test(invoice.entryDate) || patt.test(invoice.invoiceNumber) || patt.test(invoice.particular));
         });
 
@@ -232,7 +242,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public sortInvoicesBy(filedName: string) {
     let allPurchaseInvoices = _.cloneDeep(this.allPurchaseInvoices);
-    allPurchaseInvoices = _.sortBy(allPurchaseInvoices, [filedName]);
+    allPurchaseInvoices.items = _.sortBy(allPurchaseInvoices.items, [filedName]);
     this.allPurchaseInvoices = allPurchaseInvoices;
   }
 
@@ -247,12 +257,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * onUpdate
    */
   public onUpdate() {
-    // if (this.selectedRowIndex > -1) {
-    //   let data = _.cloneDeep(this.allPurchaseInvoices);
-    //   let dataToSave = data[this.selectedRowIndex];
-    //   this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseInvoice(dataToSave));
-    // }
-    if (this.generateInvoiceArr.length && this.generateInvoiceArr.length < 2) {
+    if (this.generateInvoiceArr.length === 1) {
       let dataToSave = _.cloneDeep(this.generateInvoiceArr[0]);
       let tax = _.cloneDeep(this.generateInvoiceArr[0].taxes[1]);
       if (!tax) {
@@ -269,6 +274,8 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
         return false;
       }
       this.store.dispatch(this.invoicePurchaseActions.GeneratePurchaseInvoice(dataToSave));
+    } else {
+      return;
     }
 
   }
@@ -323,7 +330,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    * onChangeEntryType
    */
   public onChangeEntryType(indx, value, accUniqName) {
-    console.log(value);
+    // console.log(value);
     clearInterval(this.intervalId);
     this.timeCounter = 10;
     if (indx > -1 && (value === 'composite' || value === '')) {
@@ -366,18 +373,22 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public onUndoEntryTypeChange(idx, itemObj) {
     this.undoEntryTypeChange = true;
-    console.log(idx, itemObj);
-    this.store.select(p => p.invoicePurchase).takeUntil(this.destroyed$).subscribe((o) => {
-      if (o.purchaseInvoices) {
-        if (this.allPurchaseInvoices[idx].invoiceNumber === itemObj.invoiceNumber) {
-          this.allPurchaseInvoices[idx].entryType = _.cloneDeep(o.purchaseInvoices[idx].entryType);
-          this.selectedRowIndex = idx;
-          if (this.allPurchaseInvoices[idx].entryType !== 'reverse charge') {
-            this.isReverseChargeSelected = false;
-          }
-        }
+    // console.log(idx, itemObj);
+    if (this.allPurchaseInvoices.items[idx].invoiceNumber === this.allPurchaseInvoicesBackup.items[idx].invoiceNumber) {
+      this.allPurchaseInvoices.items[idx].entryType = _.cloneDeep(this.allPurchaseInvoicesBackup.items[idx].entryType);
+      this.selectedRowIndex = idx;
+      if (this.allPurchaseInvoices.items[idx].entryType !== 'reverse charge') {
+        this.isReverseChargeSelected = false;
       }
-    });
+    }
+  }
+
+  public getDefaultGstAddress(addresses) {
+    if (addresses.length > 0) {
+      return addresses.findIndex((o) => o.isDefault);
+    } else {
+      return false;
+    }
   }
 
   /**
@@ -385,34 +396,48 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
    */
   public updateEntryType(indx, value) {
     if (indx > -1 && (value === 'composite' || value === '')) {
-      let account: AccountRequest = new AccountRequest();
+      let account: AccountRequestV2 = new AccountRequestV2();
+      let defaultGstObj: IAccountAddress = new IAccountAddress();
       let isComposite: boolean;
       if (value === 'composite') {
         isComposite = true;
       } else if (value === '') {
         isComposite = false;
       }
-      let data = _.cloneDeep(this.allPurchaseInvoices);
+      let data = _.cloneDeep(this.allPurchaseInvoices.items);
       let selectedRow = data[indx];
       let selectedAccName = selectedRow.account.uniqueName;
-      this.accountService.GetAccountDetails(selectedAccName).subscribe((accDetails) => {
-        let accountData: any = _.cloneDeep(accDetails.body);
-        account.name = accountData.name;
-        account.uniqueName = accountData.uniqueName;
-        account.hsnNumber = accountData.hsnNumber;
-        account.city = accountData.city;
-        account.pincode = accountData.pincode;
-        account.country = accountData.country;
-        account.sacNumber = accountData.sacNumber;
-        account.stateCode = accountData.stateCode;
-        account.isComposite = isComposite;
-        this.accountService.UpdateAccount(account, selectedAccName).subscribe((res) => {
-          if (res.status === 'success') {
-            this.toasty.successToast('Entry type changed successfully.');
-          } else {
-            this.toasty.errorToast(res.message, res.code);
-          }
-        });
+      this.accountService.GetAccountDetailsV2(selectedAccName).subscribe((accDetails) => {
+
+        let addressesArr = _.cloneDeep(accDetails.body.addresses);
+        let defaultAddressIdx: any = this.getDefaultGstAddress(addressesArr);
+        let accountData: AccountResponseV2 = _.cloneDeep(accDetails.body);
+
+        defaultGstObj = accountData.addresses[defaultAddressIdx];
+        if (_.isNumber(defaultAddressIdx) && isComposite !== defaultGstObj.isComposite) {
+          account.name = accountData.name;
+          account.uniqueName = accountData.uniqueName;
+          account.hsnNumber = accountData.hsnNumber;
+          account.country = accountData.country;
+          account.sacNumber = accountData.sacNumber;
+          account.addresses = accountData.addresses;
+          account.addresses[defaultAddressIdx].isComposite = isComposite;
+          let parentGroup = accountData.parentGroups[accountData.parentGroups.length - 1];
+          let reqObj = {
+            groupUniqueName: parentGroup.uniqueName,
+            accountUniqueName: account.uniqueName
+          };
+
+          this.accountService.UpdateAccountV2(account, reqObj).subscribe((res) => {
+            if (res.status === 'success') {
+              this.toasty.successToast('Entry type changed successfully.');
+            } else {
+              this.toasty.errorToast(res.message, res.code);
+            }
+          });
+        } else {
+          return;
+        }
       });
     }
   }
@@ -426,6 +451,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
     this.accountAsideMenuState = this.accountAsideMenuState === 'out' ? 'in' : 'out';
   }
+
   /**
   * SelectAllTaxes
   */
@@ -460,45 +486,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   */
   public selectTax(event, tax, idx) {
     if (event.target.checked) {
-      console.log(tax);
-      this.allPurchaseInvoices[idx].taxes[1] = tax.uniqueName;
+      // console.log(tax);
+      this.allPurchaseInvoices.items[idx].taxes[1] = tax.uniqueName;
       // this.allPurchaseInvoices[idx].taxes[0] = tax.uniqueName;
-      console.log(this.allPurchaseInvoices[idx]);
+      // console.log(this.allPurchaseInvoices.items[idx]);
     } else {
       event.preventDefault();
       this.toasty.errorToast('Minimun 1 tax should be selected.');
       return;
     }
-    // if (event.target.checked) {
-    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-    //   purchaseInvoiceObject.TaxList[0] = tax;
-    //   $('.invoiceTax').prop('checked', false);
-    //   $(elem).prop('checked', true);
-    // } else {
-    //   $(elem).prop('checked', true);
-    //   this.toasty.errorToast('Minimun 1 tax should be selected.');
-    //   return;
-    // }
-
-    // if (event.target.checked) {
-    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-    //   // purchaseInvoiceObject.TaxList.push(tax);
-    //   purchaseInvoiceObject.TaxList[0] = tax;
-    //   if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-    //     purchaseInvoiceObject.isAllTaxSelected = true;
-    //     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    //   }
-    //   this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    // } else {
-    //   let purchaseInvoiceObject = _.cloneDeep(this.purchaseInvoiceObject);
-    //   if (this.makeCount() === purchaseInvoiceObject.TaxList.length) {
-    //     let purchaseInvoiceObj = _.cloneDeep(this.purchaseInvoiceObject);
-    //     purchaseInvoiceObj.isAllTaxSelected = false;
-    //     // purchaseInvoiceObject.TaxList.pop();
-    //     this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    //   }
-    //   this.purchaseInvoiceObject = _.cloneDeep(purchaseInvoiceObject);
-    // }
   }
 
   /**
@@ -545,7 +541,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
       _.remove(this.generateInvoiceArr, (obj) => obj.entryUniqueName === item.entryUniqueName);
       this.invoiceSelected = false;
     }
-    console.log(this.generateInvoiceArr);
+    // console.log(this.generateInvoiceArr);
   }
 
   /**
@@ -554,14 +550,14 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public editRow(idx) {
     this.selectedRowIndex = idx;
     this.editMode = true;
-    console.log(idx);
+    // console.log(idx);
   }
 
   /**
    * updateEntry
    */
   public updateEntry(invoiceObj) {
-    console.log(invoiceObj);
+    // console.log(invoiceObj);
     let invoice = _.cloneDeep(invoiceObj);
     if (invoice.invoiceNumber) {
       let dataToSave = {
@@ -575,10 +571,29 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.selectedRowIndex = null;
   }
 
+  public pageChanged(event: any) {
+    this.resetStateOnPageChange();
+    let paginationRequest = new CommonPaginatedRequest();
+    paginationRequest.page = _.cloneDeep(event.page);
+    this.store.dispatch(this.invoicePurchaseActions.GetPurchaseInvoices(paginationRequest));
+  }
+
+  /**
+   * resetStateOnPageChange
+   */
+  public resetStateOnPageChange() {
+    this.timeCounter = 10;
+    clearInterval(this.intervalId);
+    this.pageChnageState = true;
+    this.generateInvoiceArr = [];
+    this.selectedRowIndex = null;
+    this.editMode = false;
+  }
+
   /**
    * COMMENTED DUE TO PHASE-2
    * validateGstin
-   */
+  */
   // public validateGstin(val, idx) {
   //   if (val && val.length === 15) {
   //     let code = val.substr(0, 2);
