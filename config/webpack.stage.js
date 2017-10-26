@@ -2,6 +2,7 @@
  * @author: @AngularClass
  */
 
+const ERRLYTICS_KEY_TEST = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
 const helpers = require('./helpers');
 /**
  * Used to merge webpack configs
@@ -22,6 +23,7 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * Webpack Constants
@@ -39,6 +41,8 @@ const METADATA = webpackMerge(commonConfig({
     ENV: ENV,
     HMR: false,
     isElectron: false,
+    errlyticsNeeded: true,
+    errlyticsKey: ERRLYTICS_KEY_TEST,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
   });
@@ -169,13 +173,21 @@ module.exports = function (env) {
           'isElectron': false,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'errlyticsNeeded': true,
+          'errlyticsKey': ERRLYTICS_KEY_TEST,
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
             'HMR': METADATA.HMR
           }
         }),
-
+        new HtmlWebpackPlugin({
+          template: 'src/index.html',
+          title: METADATA.title,
+          chunksSortMode: 'dependency',
+          metadata: METADATA,
+          inject: 'body'
+        }),
         /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.
