@@ -23,7 +23,7 @@ const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const AppUrl = 'localhost';
-const ApiUrl = 'http://apitest.giddh.com/';
+const ApiUrl = 'http://apidev.giddh.com/';
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
   host: HOST,
   port: PORT,
