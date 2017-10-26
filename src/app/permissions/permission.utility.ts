@@ -28,6 +28,14 @@ export interface IPage {
     isSelected: boolean;
 }
 
+export interface GetAllPermissionResponse {
+    name: string;
+    scopes: Scope[];
+    isFixed?: boolean;
+    uniqueName?: string;
+    isUpdateCase?: boolean;
+}
+
 export interface Pages {
     name: string;
     permissions: Permission[];

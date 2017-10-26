@@ -1,3 +1,5 @@
+import { SettingsPermissionService } from './settings.permission.service';
+import { SettingsPermissionActions } from './actions/settings/permissions/settings.permissions.action';
 import { LogsService } from './logs.service';
 import { StockReportActions } from './actions/inventory/stocks-report.actions';
 import { ErrorHandler } from './catchManager/catchmanger';
@@ -96,7 +98,8 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
     EffectsModule.run(SalesActions),
     EffectsModule.run(SettingsLinkedAccountsActions),
     EffectsModule.run(InvoicePurchaseActions),
-    EffectsModule.run(SettingsFinancialYearActions)
+    EffectsModule.run(SettingsFinancialYearActions),
+    EffectsModule.run(SettingsPermissionActions),
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -133,7 +136,8 @@ export class ServiceModule {
         SettingsTaxesService,
         SettingsLinkedAccountsService,
         PurchaseInvoiceService,
-        SettingsFinancialYearService
+        SettingsFinancialYearService,
+        SettingsPermissionService
       ]
     };
   }
