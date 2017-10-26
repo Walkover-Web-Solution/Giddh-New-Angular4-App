@@ -16,7 +16,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-const ERRLYTICS_KEY_DEV = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
+const ERRLYTICS_KEY_DEV = '';
 /**
  * Webpack Constants
  */
