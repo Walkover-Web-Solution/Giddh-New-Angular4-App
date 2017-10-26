@@ -49,9 +49,11 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
 
     this._companyService.getAllStates().subscribe((data) => {
       let states: Select2OptionData[] = [];
-      data.body.map(d => {
-        states.push({text: d.name, id: d.code});
-      });
+      if (data) {
+        data.body.map(d => {
+          states.push({text: d.name, id: d.code});
+        });
+      }
       this.statesSource$.next(states);
     }, (err) => {
       // console.log(err);

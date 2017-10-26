@@ -10,7 +10,7 @@
     "typescript"
   ],
   "author": "Govinda Alwani <govi2010@gmail.com>",
-  "homepage": "https://github.com/AngularClass/angular-starter",
+  "homepage": "https://github.com/Walkover-Web-Solution/Giddh-New-Angular4-App",
   "license": "MIT",
   "scripts": {
     "rebuild": "electron-rebuild",

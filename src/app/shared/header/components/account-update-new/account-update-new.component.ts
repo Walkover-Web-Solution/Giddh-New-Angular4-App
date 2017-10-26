@@ -93,9 +93,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // bind state sources
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
-      data.body.map(d => {
-        states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(states);
     });
     // bind countries
