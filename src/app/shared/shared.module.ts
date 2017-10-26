@@ -119,7 +119,7 @@ export function provideConfig() {
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
-    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ClipboardModule, UiSwitchModule
+    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ClipboardModule, UiSwitchModule, ElementViewContainerRef
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     NgxTypeAheadComponent, AccountAddNewComponent],
