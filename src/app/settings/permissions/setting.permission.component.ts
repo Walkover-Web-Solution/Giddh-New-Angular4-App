@@ -2,7 +2,7 @@ import { AccountsAction } from './../../services/actions/accounts.actions';
 import { PermissionActions } from './../../services/actions/permission/permission.action';
 import { SettingsPermissionActions } from './../../services/actions/settings/permissions/settings.permissions.action';
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy, trigger, transition, style, animate } from '@angular/core';
+import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -14,22 +14,30 @@ import { ToasterService } from '../../services/toaster.service';
 import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
 import { digitsOnly } from '../../shared/helpers/customValidationHelper';
 import isCidr from 'is-cidr';
-import { ShareRequestForm } from '../../models/api-models/Permission';
+import { ShareRequestForm, ISharedWithResponseForUI } from '../../models/api-models/Permission';
+import { ModalDirective } from 'ngx-bootstrap';
 
 @Component({
   selector: 'setting-permission',
-  templateUrl: './setting.permission.component.html',
-  styleUrls: ['./settings.permission.scss']
+  templateUrl: './setting.permission.component.html'
 })
 export class SettingPermissionComponent implements OnInit, OnDestroy {
 
-  public permissionForm: FormGroup;
+  @ViewChild('editUserModal') public editUserModal: ModalDirective;
+
   public sharedWith: object[] = [];
-  public allRoles: object[] = [];
+  public usersList: any;
   public selectedCompanyUniqueName: string;
-  public showTimeSpan: boolean = false;
-  public showIPWrap: boolean = false;
-  public createPermissionInProcess$: Observable<boolean>;
+  public selectedUser: ShareRequestForm;
+
+  // modals related
+  public showEditUserModal: boolean = false;
+  public modalConfig = {
+    animated: true,
+    keyboard: false,
+    backdrop: 'static',
+    ignoreBackdropClick: true
+  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -39,10 +47,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     private store: Store<AppState>,
     private _fb: FormBuilder,
     private _toasty: ToasterService
-  ) {
-    this.initAcForm();
-    this.createPermissionInProcess$ = this.store.select(p => p.permission.createPermissionInProcess).takeUntil(this.destroyed$);
-  }
+  ) {}
 
   public ngOnInit() {
     this.store.dispatch(this._permissionActions.GetRoles());
@@ -50,31 +55,12 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
-          let sharedWithArray = [];
-          data.forEach((d) => {
-            sharedWithArray.push({
-              name: d.userName,
-              uniqueName: d.userUniqueName,
-              email: d.userEmail,
-              roleUniquename: d.role.uniqueName
-            });
-          });
-
-          this.sharedWith = _.cloneDeep(sharedWithArray);
-      }
-    });
-
-    this.store.select(s => s.permission).takeUntil(this.destroyed$).subscribe(p => {
-      if (p && p.roles) {
-        let roles = _.cloneDeep(p.roles);
-        let allRoleArray = [];
-        roles.forEach((role) => {
-          allRoleArray.push({
-            name: role.name,
-            uniqueName: role.uniqueName
-          });
+        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userName');
+        let arr = [];
+        _.forIn(sortedArr, (value, key) => {
+          arr.push({ name: key, rows: value });
         });
-        this.allRoles = _.cloneDeep(allRoleArray);
+        this.usersList = _.sortBy(arr, ['name']);
       }
     });
 
@@ -83,119 +69,29 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
     });
 
-    this.createPermissionInProcess$.takeUntil(this.destroyed$).subscribe((val) => {
-      if (val) {
-        this.permissionForm.reset();
-        this.initAcForm();
+  }
+
+  public prepareDataForUI(data: ShareRequestForm[]) {
+    return data.map((o) => {
+      if (o.allowedCidrs.length > 0) {
+        o.cidrsStr = o.allowedCidrs.toString();
+      }else {
+        o.cidrsStr = null;
       }
-    });
-
-  }
-
-  public initAcForm(): void {
-    this.permissionForm = this._fb.group({
-      emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150)])],
-      entity: ['company'],
-      entityUniqueName: ['admin', [Validators.required]],
-      periodOptions: ['daterange'],
-      from: [null],
-      to: [null],
-      duration: [null],
-      period: [null],
-      ipOptions: ['cidr_range'],
-      allowedIps: this._fb.array([]),
-      allowedCidrs: this._fb.array([])
-    });
-    let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
-    let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
-    allowedCidrs.push(this.initRangeForm());
-    allowedIps.push(this.initRangeForm());
-  }
-
-  public initRangeForm(): FormGroup {
-    return this._fb.group({
-      range: [null]
+      if (o.allowedIps.length > 0) {
+        o.ipsStr = o.allowedIps.toString();
+      }else {
+        o.ipsStr = null;
+      }
+      return o;
     });
   }
 
-  public validateIPaddress(ipaddress: string) {
-    if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
-      return true;
+  public submitPermissionForm(e: {action: string, data: ShareRequestForm}) {
+    if (e.action === 'update') {
+      this.closeEditUserModal();
     }
-    return false;
-  }
-
-  public addNewRow(type: string, item: any, e: any) {
-    e.stopPropagation();
-    let errFound: boolean = false;
-    let msg: string;
-    let arow = this.permissionForm.get(type) as FormArray;
-    for (let control of arow.controls) {
-      let val = control.get('range').value;
-      if (_.isNull(val) || _.isEmpty(val)) {
-        errFound = true;
-        msg = undefined;
-      }
-      // match with regex
-      if (type === 'allowedIps') {
-        if (!this.validateIPaddress(val)) {
-          errFound = true;
-          msg = 'Invalid IP Address';
-        }
-      }
-      // match cidr
-      if (type === 'allowedCidrs') {
-        if (!isCidr(val)) {
-          errFound = true;
-          msg = 'Invalid CIDR Range';
-        }
-      }
-    }
-    if (errFound) {
-      this._toasty.warningToast(msg || 'Field Cannot be empty');
-    }else {
-      arow.push(this.initRangeForm());
-    }
-  }
-
-  public delRow(type: string, i: number, e: any) {
-    e.stopPropagation();
-    const arow = this.permissionForm.get(type) as FormArray;
-    arow.removeAt(i);
-  }
-
-  public submitPermissionForm() {
-    let form: ShareRequestForm = _.cloneDeep(this.permissionForm.value);
-    let CidrArr = [];
-    let IpArr = [];
-    _.forEach(form.allowedCidrs, (n) => {
-      if (n.range) {
-        CidrArr.push(n.range);
-      }
-    });
-
-    _.forEach(form.allowedIps, (n) => {
-      if (n.range) {
-        IpArr.push(n.range);
-      }
-    });
-    form.allowedCidrs = CidrArr;
-    form.allowedIps = IpArr;
-    this.store.dispatch(this._accountsAction.shareEntity(form, form.entityUniqueName));
     this.waitAndReloadCompany();
-  }
-
-  public methodForToggleSection(id: string) {
-    if (id === 'timeSpanSection') {
-      if (this.showTimeSpan) {
-        this.showTimeSpan = false;
-      }
-    }
-    if (id === 'rangeSpanSection') {
-      if (this.showIPWrap) {
-        this.showIPWrap = false;
-      }
-    }
   }
 
   public onRevokePermission(email: string, roleUniquename: string) {
@@ -204,6 +100,17 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
       this.store.dispatch(this._accountsAction.unShareEntity(obj, roleUniquename));
       this.waitAndReloadCompany();
     }
+  }
+
+  public showModalForEdit(user: any) {
+    this.selectedUser = user;
+    this.showEditUserModal = true;
+    setTimeout(() => this.editUserModal.show(), 700);
+  }
+
+  public closeEditUserModal() {
+    this.editUserModal.hide();
+    setTimeout(() => this.showEditUserModal = false, 700);
   }
 
   public waitAndReloadCompany() {
