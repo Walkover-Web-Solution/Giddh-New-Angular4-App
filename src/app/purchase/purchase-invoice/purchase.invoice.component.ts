@@ -609,4 +609,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   //   }
   // }
 
+  /**
+   * updateOncheck
+   */
+  public updateOncheck(invoiceObj, event) {
+    let invoice = _.cloneDeep(invoiceObj) || {};
+    if (invoice.entryUniqueName) {
+      this.updateEntry(invoice);
+    } else if (invoice.invoiceUniqueName) {
+      this.updateEntry(invoice);
+    }
+  }
+
 }
