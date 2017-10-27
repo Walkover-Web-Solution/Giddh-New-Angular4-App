@@ -107,7 +107,6 @@ export class MfEditComponent implements OnInit {
     this.manufacturingDetails.quantity = 1;
   }
   public ngOnInit() {
-    // console.log('hello from MfEditComponent');
     if (this.isUpdateCase) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
@@ -149,6 +148,7 @@ export class MfEditComponent implements OnInit {
         }
         this.manufacturingDetails = manufacturingDetailsObj;
       }
+      this.onQuantityChange(1);
     });
   }
 
@@ -271,20 +271,23 @@ export class MfEditComponent implements OnInit {
 
   public getTotal(from, field) {
     let total: number = 0;
+    let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
     if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
-      _.forEach(this.manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
+      _.forEach(manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
     }
     if (from === 'otherExpenses' && this.manufacturingDetails.otherExpenses) {
-      _.forEach(this.manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
+      _.forEach(manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
     }
 
     return total;
   }
 
-  public getCosePerProduct() {
-    let quantity = _.cloneDeep(this.manufacturingDetails).quantity;
+  public getCostPerProduct() {
+    let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
+    let quantity = manufacturingDetails.manufacturingMultipleOf;
     quantity = (quantity && quantity > 0) ? quantity : 1;
-    let cost = ((this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount')) / quantity);
+    let amount = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
+    let cost = (amount / quantity);
     if (!isNaN(cost)) {
       return cost;
     }
@@ -313,23 +316,25 @@ export class MfEditComponent implements OnInit {
 
   public onQuantityChange(value: number) {
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-    // || this.initialQuantityObj.length !== manufacturingObj.linkedStocks.length
+
     if (!this.initialQuantityObj.length) {
-      this.initialQuantityObj.length = [];
+      this.initialQuantityObj = [];
       manufacturingObj.linkedStocks.forEach((o) => {
         this.initialQuantityObj.push(o);
       });
     }
 
-    if (value && !isNaN(value) && value > 0) {
+    if (_.isNumber(value)) {
       value = value;
+    } else if (_.isEmpty(value)) {
+      // alert('now');
+      value = 1;
     } else {
       value = 1;
     }
 
     if (manufacturingObj && manufacturingObj.linkedStocks) {
       manufacturingObj.linkedStocks.forEach((stock) => {
-
         let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
         if (selectedStock) {
           stock.quantity = selectedStock.quantity * value;
@@ -341,7 +346,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public getStockUnit(selectedItem, itemQuantity) {
-    if (selectedItem && itemQuantity) {
+    if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
 
@@ -366,6 +371,10 @@ export class MfEditComponent implements OnInit {
           this.linkedStocks.stockUnitCode = unitCode;
         }
       });
+    } else {
+      this.linkedStocks.manufacturingUnit = null;
+      this.linkedStocks.stockUnitCode = null;
+      this.linkedStocks.rate = null;
     }
   }
 
@@ -395,25 +404,5 @@ export class MfEditComponent implements OnInit {
       });
     }
     return Observable.of(name);
-  }
-
-    /**
-   * validateDefaultDueDate
-   */
-  public validateNumberFourDigit(value: any, modelName: string) {
-    if (value) {
-      if (value.indexOf('.') !== -1 && (value.length - (value.indexOf('.') + 1)) > 4) {
-        value = value.substr(0, value.length - 1);
-        setTimeout(() => {
-          this.manufacturingDetails[modelName] = value;
-        });
-      }
-      if (isNaN(value)) {
-        value = value.replace(/\D/g, '') !== 0 && !isNaN(value.replace(/\D/g, '')) ? value.replace(/\D/g, '') : null;
-        setTimeout(() => {
-          this.manufacturingDetails[modelName] = value;
-        });
-      }
-    }
   }
 }
