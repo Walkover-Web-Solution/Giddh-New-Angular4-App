@@ -21,10 +21,10 @@ export class SettingsIntegrationActions {
     .map(res => this.validateResponse<SmsKeyClass, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
       payload: res
-    }, false, {
-        type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
-        payload: res
-      }));
+    }, true, {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public GetEmailKey$: Observable<Action> = this.action$
@@ -33,10 +33,10 @@ export class SettingsIntegrationActions {
     .map(res => this.validateResponse<EmailKeyClass, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
       payload: res
-    }, false, {
-        type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
-        payload: res
-      }));
+    }, true, {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public SaveSMSKey$: Observable<Action> = this.action$
@@ -46,9 +46,9 @@ export class SettingsIntegrationActions {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
       payload: res
     }, true, {
-        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
-        payload: res
-      }));
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public SaveEmailKey$: Observable<Action> = this.action$
@@ -58,9 +58,9 @@ export class SettingsIntegrationActions {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
       payload: res
     }, true, {
-        type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
-        payload: res
-      }));
+      type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
@@ -69,10 +69,10 @@ export class SettingsIntegrationActions {
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
-    }, false, {
-        type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
-        payload: res
-      }));
+    }, true, {
+      type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public SaveRazorPayDetails$: Observable<Action> = this.action$
@@ -82,9 +82,9 @@ export class SettingsIntegrationActions {
       type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
     }, true, {
-        type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
-        payload: res
-      }));
+      type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public DeleteRazorPayDetails$: Observable<Action> = this.action$
@@ -94,9 +94,9 @@ export class SettingsIntegrationActions {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
     }, true, {
-        type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
-        payload: res
-      }));
+      type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
+      payload: res
+    }));
 
   @Effect()
   public UpdateRazorPayDetails$: Observable<Action> = this.action$
@@ -106,9 +106,9 @@ export class SettingsIntegrationActions {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
     }, true, {
-        type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
-        payload: res
-      }));
+      type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
+      payload: res
+    }));
 
   constructor(private action$: Actions,
     private toasty: ToasterService,
@@ -169,7 +169,7 @@ export class SettingsIntegrationActions {
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);
