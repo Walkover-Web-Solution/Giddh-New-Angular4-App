@@ -15,6 +15,7 @@ import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked
 import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
 import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
+import { SettingPermissionFormComponent } from './permissions/form/form.component';
 @NgModule({
   declarations: [
     // components here
@@ -28,7 +29,8 @@ import { FinancialYearComponent } from './financial-year/financial-year.componen
     ConnectBankModalComponent,
     SettingLinkedAccountsConfirmationModalComponent,
     FinancialYearComponent,
-    SettingPermissionComponent
+    SettingPermissionComponent,
+    SettingPermissionFormComponent
   ],
   imports: [
     SharedModule,

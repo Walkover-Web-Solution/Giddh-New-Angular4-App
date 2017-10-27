@@ -1,137 +1,52 @@
 <div class="container-fluid pdT2 pdB2">
   <h3 class="mrB1"><strong>Give Permission to:</strong></h3>
-
-  <form name="permissionForm" [formGroup]="permissionForm" class="form-horizontal permissionForm" (ngSubmit)="submitPermissionForm()">
-    <div class="form-inline" style="margin-left:0;">
-      <input type="text" name="emailId" formControlName="emailId" placeholder="Unique Name/Email ID" class="form-control w100" />
-    </div>
-
-    <div class="form-inline">
-      <select name="entityUniqueName" formControlName="entityUniqueName" class="form-control w100">
-        <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
-      </select>
-    </div>
-
-    <!-- time span -->
-    <div class="form-inline" (clickOutside)="methodForToggleSection('timeSpanSection')">
-      <div class="btn-group w100" [ngClass]="{'open': showTimeSpan}">
-        <button (click)="showTimeSpan = !showTimeSpan" type="button" class="form-control text-left w100">
-          Time Span
-          <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-        </button>
-        <section class="dropdown-menu custom_dropdown">
-
-          <div class="clearfix">
-            <label class="radio-inline">
-              <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"> Date Range
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"> Past Period
-            </label>
-          </div>
-
-          <section class="periods container-fluid" *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
-            <div class="row">
-              <div class="col-xs-6">
-                <label>From</label>
-                <input class="form-control w100" name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" />
-              </div>
-              <div class="col-xs-6">
-                <label>To</label>
-                <input class="form-control w100" name="to" formControlName="to" type="text" placeholder="DD-MM-YYYY" />
-              </div>
-            </div>
-          </section>
-
-          <section class="periods container-fluid" *ngIf="permissionForm.get('periodOptions').value === 'pastperiod'">
-            <label>Select Past Period</label>
-            <div class="row">
-              <div class="col-xs-6">
-                <input class="form-control w100" name="duration" digitsOnlyDirective formControlName="duration" type="number" placeholder="Number" />
-              </div>
-              <div class="col-xs-6">
-                <select name="period" formControlName="period" class="form-control pull-right w100">
-                  <option value="null">Select</option>
-                  <option value="days">Days</option>
-                  <option value="week">Week</option>
-                  <option value="month">Month</option>
-                </select>
-              </div>
-            </div>
-          </section>
-
-        </section>
-      </div>
-    </div>
-    <!-- time span end -->
-
-    <div class="form-inline" (clickOutside)="methodForToggleSection('rangeSpanSection')">
-      <div class="btn-group w100" [ngClass]="{'open': showIPWrap}">
-        <button (click)="showIPWrap = !showIPWrap" type="button" class="form-control text-left w100">
-          IP Address <span class="pull-right"><span class="fa fa-caret-down"></span></span>
-        </button>
-        <section class="dropdown-menu custom_dropdown" role="menu" >
-          <div class="clearfix">
-            <label class="radio-inline">
-              <input type="radio" name="ipOptions" formControlName="ipOptions" value="cidr_range"> CIDR Range
-            </label>
-            <label class="radio-inline">
-              <input type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address"> IP Address
-            </label>
-          </div>
-
-          <section formArrayName="allowedCidrs" class="iprange container-fluid" *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
-            <div class="row mrB1" *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last" [formGroupName]="i">
-              <div class="col-xs-10">
-                <input class="form-control w100" name="item_{{i}}" formControlName="range" type="text" placeholder="192.168.1.0/24" />
-              </div>
-              <div class="col-xs-2 lh34">
-                <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
-                <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)" class="fa fa-plus cursor-pointer"></i>
-              </div>
-            </div>
-          </section>
-
-          <section formArrayName="allowedIps" class="iprange container-fluid" *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
-            <div class="row mrB1" *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last" [formGroupName]="i">
-              <div class="col-xs-10">
-                <input class="form-control w100" decimalDigitsDirective name="item_{{i}}" formControlName="range" type="text" placeholder="192.168.1.0" />
-              </div>
-              <div class="col-xs-2 lh34">
-                <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
-                <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)" class="fa fa-plus cursor-pointer"></i>
-              </div>
-            </div>
-          </section>
-
-        </section>
-      </div>
-    </div>
-
-    <div class="form-inline">
-      <button [ladda]="createPermissionInProcess$ | async" [disabled]="permissionForm.invalid" class="btn btn-success">Add</button>
-    </div>
-  </form>
+  <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
 </div>
 
 <div class="container-fluid">
   <div class="row box">
-      <div class="table-responsive">
-          <table class="table table-striped">
-              <tbody class="text-left">
-                  <tr *ngFor="let user of sharedWith; let i = index">
-                      <td> <i class="fa fa-user"></i> {{user.name}} <br> {{user.uniqueName}}</td>
-                      <td>
-                          <select style="max-width:200px;" #roleListDisplay (change)="onShareCompany(user.email, roleListDisplay.value)" class="form-control" #roleList [(ngModel)]="user.roleUniquename" name="roleList_{{i}}">
-                              <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
-                          </select>
-                      </td>
-                      <td>
-                          <button (click)="onRevokePermission(user.email, roleListDisplay.value)"><i class="fa fa-trash"></i></button>
-                      </td>
-                  </tr>
-              </tbody>
-          </table>
+    <div *ngFor="let usrGrp of usersList">
+      <div class="lead mrB1">{{usrGrp.name}}</div>
+      <div class="mrB1"><i class="fa fa-user"></i> {{usrGrp.rows[0].userUniqueName}}</div>
+      <table width="100%" class="table bdrB">
+        <tbody>
+          <tr *ngFor="let user of usrGrp.rows; let i = index">
+            <td width="30%">&nbsp;</td>
+            <td width="16%">
+              <input class="form-control" [value]="user.roleName">
+            </td>
+            <td width="22%">
+              <input *ngIf="user.from && user.to" class="form-control" value="{{user.from}} - {{user.to}}" />
+              <input *ngIf="user.period && user.duration" class="form-control" value="Past &nbsp;{{user.duration}} &nbsp; {{user.period}}S" />
+            </td>
+            <td width="22%">
+              <input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr">
+              <input *ngIf="user.cidrsStr" class="form-control" [value]="user.cidrsStr">
+            </td>
+            <td width="10%" class="alC">
+              <i class="fa fa-pencil cp mrR1" (click)="showModalForEdit(user)"></i>
+              <i (click)="onRevokePermission(user.email, user.roleName)" class="fa fa-trash cp"></i>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       </div>
   </div>
 </div>
+
+<!-- create Ac modal -->
+
+<div bsModal #editUserModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" *ngIf="showEditUserModal">
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+      <div class="modal-header pd2 pdL2 pdR2 clearfix">
+        <h3 class="modal-title bg" id="modal-title">Edit User</h3>
+        <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="closeEditUserModal()"></i>
+      </div>
+      <div class="modal-body">
+        <setting-permission-form [userdata]="selectedUser" [isLblShow]="true" [isUpdtCase]="true" [isHorizntl]="false" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
+      </div>
+    </div>
+  </div>
+</div>
+
