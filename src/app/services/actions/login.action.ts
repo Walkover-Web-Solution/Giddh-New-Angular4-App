@@ -35,9 +35,11 @@ export class LoginActions {
 
   public static SignupWithEmailRequest = 'SignupWithEmailRequest';
   public static SignupWithEmailResponce = 'SignupWithEmailResponce';
+  public static ResetSignupWithEmailState = 'ResetSignupWithEmailState';
   public static SignupWithMobileRequest = 'SignupWithMobileRequest';
   public static SignupWithMobileResponce = 'SignupWithMobileResponce';
 
+  public static ResetSignupWithMobileState = 'ResetSignupWithMobileState';
   public static VerifyEmailRequest = 'VerifyEmailRequest';
   public static VerifyEmailResponce = 'VerifyEmailResponce';
 
@@ -363,6 +365,12 @@ export class LoginActions {
     };
   }
 
+  public ResetSignupWithEmailState(): Action {
+    return {
+      type: LoginActions.ResetSignupWithEmailState
+    };
+  }
+
   public SignupWithMobileRequest(value: SignupWithMobile): Action {
     return {
       type: LoginActions.SignupWithMobileRequest,
@@ -373,6 +381,12 @@ export class LoginActions {
     return {
       type: LoginActions.SignupWithMobileResponce,
       payload: value
+    };
+  }
+
+  public ResetSignupWithMobileState(): Action {
+    return {
+      type: LoginActions.ResetSignupWithMobileState
     };
   }
 
