@@ -23,6 +23,16 @@ import { TbExportPdfComponent } from './components/export/tb-export-pdf.componen
 import { TbExportXlsComponent } from './components/export/tb-export-xls.component';
 import { BsExportXlsComponent } from './components/export/bs-export-xls.component';
 
+import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+
 @NgModule({
   declarations: [
     TbPlBsComponent,
@@ -53,6 +63,7 @@ import { BsExportXlsComponent } from './components/export/bs-export-xls.componen
     ReactiveFormsModule,
     TbPlBsRoutingModule,
     SharedModule,
+    TabsModule
   ],
 })
 export class TBPlBsModule {

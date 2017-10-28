@@ -10,6 +10,15 @@ import { RevenueChartComponent } from './components/revenue/revenue-chart.compon
 import { ComparisionChartComponent } from './components/comparision/comparision-chart.component';
 import { HistoryChartComponent } from './components/history/history-chart.component';
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
+// import { DatepickerModule,BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+// import { TooltipModule } from 'ngx-bootstrap/tooltip';
+// import { PaginationModule  } from 'ngx-bootstrap/pagination';
+// import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
+// import { TabsModule } from 'ngx-bootstrap/tabs';
+// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+// import { PopoverModule } from 'ngx-bootstrap/popover';
 
 // console.log('`Home` bundle loaded asynchronously');
 
@@ -31,6 +40,7 @@ import { NetworthChartComponent } from './components/networth/networth-chart.com
     FormsModule,
     HomeRoutingModule,
     SharedModule,
+    ModalModule
   ],
 })
 export class HomeModule {
