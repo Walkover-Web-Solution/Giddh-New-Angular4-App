@@ -43,6 +43,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public countryCode: string = '91';
   public gstDetailsBackup: object[] = null;
   public showAllGST: boolean = true;
+  public countryIsIndia: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -86,6 +87,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           profileObj.gstDetails = profileObj.gstDetails.slice(0, 3);
         }
         this.companyProfileObj = profileObj;
+        this.checkCountry(event);
       }
     });
     this.store.take(1).subscribe(s => {
@@ -139,15 +141,17 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   }
 
   public updateProfile(data) {
+
     let dataToSave = _.cloneDeep(data);
-    if (dataToSave.gstDetails.length > 0) {
-      for (let entry of dataToSave.gstDetails) {
-        if (entry.gstNumber === '') {
-          dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
+    if (this.countryIsIndia) {
+      if (dataToSave.gstDetails.length > 0) {
+        for (let entry of dataToSave.gstDetails) {
+          if (entry.gstNumber === '') {
+            dataToSave.gstDetails = _.without(dataToSave.gstDetails, entry);
+          }
         }
       }
     }
-
     delete dataToSave.financialYears;
     delete dataToSave.activeFinancialYear;
     // dataToSave.contactNo = this.countryCode + '-' + dataToSave.contactNo;
@@ -157,6 +161,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     }
     console.log('THe data is :', dataToSave);
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
+
   }
 
   public removeGstEntry(indx) {
@@ -277,6 +282,25 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         } else {
           this.companyProfileObj.gstDetails = this.companyProfileObj.gstDetails.slice(0, 3);
         }
+      }
+    }
+  }
+
+  /**
+   * checkCountry
+   */
+  public checkCountry(event) {
+    let country: any = _.cloneDeep(this.companyProfileObj.country || '');
+    country = country.toLocaleLowerCase();
+    if (country === 'india') {
+      this.countryIsIndia = true;
+      if (_.isString(event)) {
+        this.companyProfileObj.state = '';
+      }
+    } else {
+      this.countryIsIndia = false;
+      if (_.isString(event)) {
+        this.companyProfileObj.state = '';
       }
     }
   }
