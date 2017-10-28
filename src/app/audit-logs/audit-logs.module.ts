@@ -6,7 +6,7 @@ import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
-
+import { DatepickerModule,BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -24,7 +24,9 @@ import { AuditLogsRoutingModule } from './audit-logs.routing.module';
     FormsModule,
     ReactiveFormsModule,
     AuditLogsRoutingModule,
-    SharedModule
+    SharedModule,
+    DatepickerModule,
+    BsDatepickerModule
   ],
 })
 export class AuditLogsModule {

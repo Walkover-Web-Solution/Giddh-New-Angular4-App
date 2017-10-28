@@ -23,6 +23,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
 
 /**
  * Webpack Constants
@@ -251,7 +252,7 @@ module.exports = function (env) {
         ),
 
         new HashedModuleIdsPlugin(),
-
+        // new PurifyPlugin()
         /**
          * AoT
          */

@@ -43,8 +43,6 @@ export class AuditLogsSidebarVM {
   public selectedCompany: Observable<CompanyResponse>;
   public getLogsInprocess$: Observable<boolean>;
   public dateOptions: any[] = [{ text: 'Date Range', id: 1 }, { text: 'Entry/Log Date', id: 0 }];
-  public showFromDatePicker: boolean = false;
-  public showToDatePicker: boolean = false;
   public showLogDatePicker: boolean = false;
   public canManageCompany: boolean = false;
   public selectedOperation: string = '';
@@ -59,8 +57,6 @@ export class AuditLogsSidebarVM {
   public logOrEntry: string = 'entryDate';
   public selectedDateOption: string = '0';
   public reset() {
-    this.showFromDatePicker = false;
-    this.showToDatePicker = false;
     this.showLogDatePicker = false;
     this.canManageCompany = false;
     this.selectedOperation = '';

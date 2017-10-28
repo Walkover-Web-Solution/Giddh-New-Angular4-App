@@ -17,6 +17,7 @@ import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from 'lodash';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 @Component({
   selector: 'audit-logs-sidebar',
@@ -27,6 +28,7 @@ import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-log
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
     private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
@@ -145,6 +147,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public getLogfilters() {
     //
     let reqBody: LogsRequest = new LogsRequest();
+    debugger;
     reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
     reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
