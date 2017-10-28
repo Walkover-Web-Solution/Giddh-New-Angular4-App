@@ -32,6 +32,7 @@ module.exports = {
          * <link> tags for css.
          */
         { rel: 'stylesheet', href: 'assets/css/bootstrap.css' },
+        { rel: 'stylesheet', href: 'assets/css/ngx-bootstrap/bs-datepicker.css' },
         { rel: 'stylesheet', href: 'assets/css/font-awesome.css' },
         { rel: 'stylesheet', href: 'assets/css/style-1.css' },
         { rel: 'stylesheet', href: 'assets/css/style-2.css' },
