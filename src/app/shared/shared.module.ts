@@ -11,9 +11,8 @@ import { LaddaModule } from 'angular2-ladda';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
-import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent, SelectModule } from './theme';
+import { ConfirmModalComponent, FormWizardModule, TaxControlComponent, SelectModule } from './theme';
 import { Daterangepicker } from './theme/ng2-daterangepicker/daterangepicker.module';
-import { ChartModule } from 'angular2-highcharts';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -30,7 +29,6 @@ import {
   AccountUpdateNewComponent
 } from './header/components';
 import { Select2Module } from './theme/select2/select2.module';
-import { TagsModule } from './theme/tags/tags.module';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewContainerRef } from './helpers/directives/element.viewchild.directive';
@@ -42,8 +40,6 @@ import { ShareGroupModalComponent } from './header/components/share-group-modal/
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
 import { CheckscrollDirective } from './helpers/directives/checkscroll';
 import { TextMaskModule } from 'angular2-text-mask';
-import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
-import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 import { InvoicePageDDComponent } from './invoice-page-dd/invoice.page.dd.component';
 import { FullPageHeight } from './helpers/directives/pageHeight.directive';
@@ -54,21 +50,10 @@ import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.direc
 // social login injection
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
 import { DisableFormFieldDirective } from './helpers/directives/disableFormField.directive';
-import { ClipboardModule } from 'ngx-clipboard';
-import { UiSwitchModule } from 'angular2-ui-switch';
-// import * as newSelect from 'ng-select';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-
-export function highchartsFactory() {
-  const hc = require('highcharts');
-  const dd = require('highcharts/modules/drilldown');
-  dd(hc);
-
-  return hc;
-}
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
   {
@@ -89,7 +74,7 @@ export function provideConfig() {
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountFilterPipe, TbsearchPipe, HighlightPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, DigitsOnlyDirective, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective, NgxTypeAheadComponent,
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective,
     TaxControlComponent, NumberToWordsPipe, InvoicePageDDComponent, SafePipe, FullPageHeight, RecTypePipe, DecimalDigitsDirective,
     DisableFormFieldDirective],
   imports: [
@@ -110,30 +95,22 @@ export function provideConfig() {
     SocialLoginModule,
     FormWizardModule,
     // SelectModule,
-    Select2Module, TagsModule,
+    Select2Module,
     ClickOutsideModule,
     Daterangepicker,
-    ChartModule,
     TextMaskModule,
-    NgUploaderModule,
-    SelectModule,
-    ClipboardModule,
-    UiSwitchModule
+    SelectModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
-    Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
-    TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
-    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ClipboardModule, UiSwitchModule, ElementViewContainerRef
+    Daterangepicker, DigitsOnlyDirective, CheckscrollDirective, TextMaskModule,
+    TaxControlComponent, NumberToWordsPipe, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,
+    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective, SelectModule, ElementViewContainerRef
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, ConfirmModalComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
-    NgxTypeAheadComponent, AccountAddNewComponent],
+    AccountAddNewComponent],
   providers: [
-    {
-      provide: HighchartsStatic,
-      useFactory: highchartsFactory
-    },
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
