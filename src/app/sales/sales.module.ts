@@ -22,6 +22,7 @@ import { SalesAddStockComponent } from './aside-menu-product-service/components/
 import { SalesAddStockGroupComponent } from './aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
 import { CreateAccountModalComponent } from './aside-menu-product-service/components/create-account-modal/create.account.modal';
 import { CreateAccountServiceComponent } from './aside-menu-product-service/components/create-account-service/create.account.service';
+import { SalesRoutingModule } from './sales.routing.module';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -41,6 +42,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
+    SalesRoutingModule,
     SharedModule,
     ModalModule,
     TooltipModule,
@@ -52,4 +54,4 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
   ],
   providers: []
 })
-export class SalesModule {}
+export class SalesModule { }
