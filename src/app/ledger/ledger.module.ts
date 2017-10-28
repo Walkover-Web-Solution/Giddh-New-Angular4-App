@@ -15,6 +15,8 @@ import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-c
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
 // import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
 import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
+import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -49,7 +51,9 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     SharedModule,
     ModalModule,
     TooltipModule,
-    PaginationModule
+    PaginationModule,
+    NgUploaderModule,
+    ClipboardModule
   ],
 })
 export class LedgerModule {
