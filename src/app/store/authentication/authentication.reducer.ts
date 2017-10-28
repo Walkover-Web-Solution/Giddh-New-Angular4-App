@@ -13,6 +13,8 @@ import {
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsRequest, StateDetailsResponse, CompanyResponse, CompanyRequest } from '../../models/api-models/Company';
 import * as _ from 'lodash';
+import { retry } from 'rxjs/operator/retry';
+import { state } from '@angular/core';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -109,6 +111,13 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithEmailInProcess: true
       });
 
+    case LoginActions.ResetSignupWithEmailState:
+      return {
+        ...state,
+        isLoginWithEmailSubmited: false,
+        isLoginWithEmailInProcess: false
+      };
+
     case LoginActions.VerifyEmailRequest:
       return Object.assign({}, state, {
         isVerifyEmailInProcess: true
@@ -144,6 +153,13 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       return Object.assign({}, state, {
         isLoginWithMobileInProcess: true
       });
+
+      case LoginActions.ResetSignupWithMobileState:
+      return {
+        ...state,
+        isLoginWithMobileSubmited: false,
+        isLoginWithMobileInProcess: false
+      };
 
     case LoginActions.VerifyMobileRequest:
       return Object.assign({}, state, {

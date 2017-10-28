@@ -164,6 +164,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   public hideEmailModal() {
     this.emailVerifyModal.hide();
+    this.store.dispatch(this.loginAction.ResetSignupWithEmailState());
+    this.emailVerifyForm.reset();
   }
 
   public showMobileModal() {
@@ -172,6 +174,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public hideMobileModal() {
     this.mobileVerifyModal.hide();
+    this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
+    this.mobileVerifyForm.get('mobileNumber').reset();
   }
 
   // tslint:disable-next-line:no-empty

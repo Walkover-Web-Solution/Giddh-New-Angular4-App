@@ -7,16 +7,18 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { LaddaModule } from 'angular2-ladda';
-
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header/header.component';
 import { FooterComponent } from './footer/footer.component';
 import { ConfirmModalComponent, FormWizardModule, NgxTypeAheadComponent, TaxControlComponent, SelectModule } from './theme';
-// import { SelectModule } from './theme/select/select.module';
 import { Daterangepicker } from './theme/ng2-daterangepicker/daterangepicker.module';
 import { ChartModule } from 'angular2-highcharts';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import {
   AccountAddNewComponent,
@@ -95,8 +97,12 @@ export function provideConfig() {
     RouterModule,
     FormsModule,
     ReactiveFormsModule,
+    ModalModule,
+    TypeaheadModule,
+    TooltipModule,
+    BsDropdownModule,
+    PopoverModule,
     PerfectScrollbarModule.forChild(),
-    Ng2BootstrapModule.forRoot(),
     LaddaModule.forRoot({
       style: 'slide-left',
       spinnerSize: 30
@@ -115,7 +121,7 @@ export function provideConfig() {
     UiSwitchModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
-  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, Ng2BootstrapModule, ManageGroupsAccountsComponent,
+  exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
     Daterangepicker, DigitsOnlyDirective, ChartModule, CheckscrollDirective, NgxTypeAheadComponent, TextMaskModule,
     TaxControlComponent, NumberToWordsPipe, NgUploaderModule, ConfirmModalComponent, InvoicePageDDComponent, FullPageHeight,

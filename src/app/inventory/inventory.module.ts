@@ -13,6 +13,16 @@ import { InventoryStockReportComponent } from './components/stock-report-compone
 import { StockgrpListComponent } from './components/sidebar-components/stockgrplist.component';
 import { StockListComponent } from './components/sidebar-components/stockList.component';
 
+import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+// import { PaginationModule  } from 'ngx-bootstrap/pagination';
+// import { CollapseModule } from 'ngx-bootstrap/collapse';
+// import { ModalModule } from 'ngx-bootstrap/modal';
+// import { TabsModule } from 'ngx-bootstrap/tabs';
+// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+// import { PopoverModule } from 'ngx-bootstrap/popover';
+
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -43,7 +53,9 @@ import { StockListComponent } from './components/sidebar-components/stockList.co
     FormsModule,
     ReactiveFormsModule,
     InventoryRoutingModule,
-    SharedModule
+    SharedModule,
+    TooltipModule,
+    DatepickerModule
   ],
 })
 export class InventoryModule {
