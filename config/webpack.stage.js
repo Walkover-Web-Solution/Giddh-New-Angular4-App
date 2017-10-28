@@ -24,6 +24,7 @@ const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplaceme
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
 
 /**
  * Webpack Constants
@@ -127,6 +128,13 @@ module.exports = function (env) {
             }),
             include: [helpers.root('src', 'styles')]
           },
+          {
+            test: /\.js$/,
+            loader: '@angular-devkit/build-optimizer/webpack-loader',
+            options: {
+              sourceMap: false
+            }
+          }
 
         ]
 
@@ -197,7 +205,7 @@ module.exports = function (env) {
          *
          * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
-        // new UglifyJsPlugin({
+        new UglifyJsPlugin({
         //   // beautify: true, //debug
         //   // mangle: false, //debug
         //   // dead_code: false, //debug
@@ -213,27 +221,27 @@ module.exports = function (env) {
         //   // comments: true, //debug
 
 
-        //   beautify: false, //prod
-        //   output: {
-        //     comments: false
-        //   }, //prod
-        //   mangle: {
-        //     screw_ie8: true
-        //   }, //prod
-        //   compress: {
-        //     screw_ie8: true,
-        //     warnings: false,
-        //     conditionals: true,
-        //     unused: true,
-        //     comparisons: true,
-        //     sequences: true,
-        //     dead_code: true,
-        //     evaluate: true,
-        //     if_return: true,
-        //     join_vars: true,
-        //     negate_iife: false // we need this for lazy v8
-        //   },
-        // }),
+          beautify: false, //prod
+          output: {
+            comments: false
+          }, //prod
+          mangle: {
+            screw_ie8: true
+          }, //prod
+          compress: {
+            screw_ie8: true,
+            warnings: false,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            sequences: true,
+            dead_code: true,
+            evaluate: true,
+            if_return: true,
+            join_vars: true,
+            negate_iife: false // we need this for lazy v8
+          },
+        }),
 
         /**
          * Plugin: NormalModuleReplacementPlugin
@@ -252,6 +260,7 @@ module.exports = function (env) {
         ),
 
         new HashedModuleIdsPlugin(),
+        new PurifyPlugin(),
 
         /**
          * AoT
