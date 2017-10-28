@@ -31,6 +31,13 @@ import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import 'rxjs/add/operator/take';
+import { DatepickerModule,BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { PaginationModule  } from 'ngx-bootstrap/pagination';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -82,6 +89,13 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
+    ModalModule.forRoot(),
+    DatepickerModule.forRoot(),
+    PaginationModule.forRoot(),
+    CollapseModule.forRoot(),
+    TooltipModule.forRoot(),
+    TabsModule.forRoot(),
+    BsDatepickerModule.forRoot(),
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
