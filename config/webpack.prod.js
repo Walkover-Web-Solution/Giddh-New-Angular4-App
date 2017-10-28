@@ -127,6 +127,13 @@ module.exports = function (env) {
             }),
             include: [helpers.root('src', 'styles')]
           },
+          {
+            test: /\.js$/,
+            loader: '@angular-devkit/build-optimizer/webpack-loader',
+            options: {
+              sourceMap: false
+            }
+          }
 
         ]
 
@@ -252,7 +259,7 @@ module.exports = function (env) {
         ),
 
         new HashedModuleIdsPlugin(),
-        // new PurifyPlugin(),
+        new PurifyPlugin(),
         /**
          * AoT
          */
