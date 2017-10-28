@@ -252,7 +252,7 @@ module.exports = function (env) {
         ),
 
         new HashedModuleIdsPlugin(),
-        // new PurifyPlugin()
+        // new PurifyPlugin(),
         /**
          * AoT
          */

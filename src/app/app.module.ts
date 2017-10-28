@@ -31,12 +31,16 @@ import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import 'rxjs/add/operator/take';
-import { DatepickerModule,BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PaginationModule  } from 'ngx-bootstrap/pagination';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+import { LaddaModule } from 'angular2-ladda/module/module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -89,16 +93,13 @@ if (ENV === 'development') {
     FormsModule,
     ReactiveFormsModule,
     HttpModule,
-    ModalModule.forRoot(),
-    DatepickerModule.forRoot(),
-    PaginationModule.forRoot(),
-    CollapseModule.forRoot(),
-    TooltipModule.forRoot(),
-    TabsModule.forRoot(),
-    BsDatepickerModule.forRoot(),
+    LaddaModule.forRoot({
+      style: 'slide-left',
+      spinnerSize: 30
+    }),
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
-    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
+    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
