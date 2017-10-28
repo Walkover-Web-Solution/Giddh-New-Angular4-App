@@ -25,6 +25,7 @@ const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
+var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 
 /**
  * Webpack Constants
@@ -261,7 +262,12 @@ module.exports = function (env) {
 
         new HashedModuleIdsPlugin(),
         new PurifyPlugin(),
-
+        new StatsWriterPlugin({
+          transform: function(data, opts) {
+            let stats = opts.compiler.getStats().toJson({chunkModules: true});
+            return JSON.stringify(stats, null, 2);
+          }
+        }),
         /**
          * AoT
          */
