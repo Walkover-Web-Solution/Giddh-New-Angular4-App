@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, OnInit, OnDestroy, trigger, transition, style, animate } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -7,7 +7,7 @@ import { SettingsProfileActions } from '../../services/actions/settings/profile/
 import { CompanyService } from '../../services/companyService.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 
 export interface IGstObj {

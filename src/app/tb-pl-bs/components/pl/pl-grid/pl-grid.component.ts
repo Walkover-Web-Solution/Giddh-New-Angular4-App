@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { ProfitLossData } from '../../../../models/api-models/tb-pl-bs';
 import { ChildGroup } from '../../../../models/api-models/Search';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { Observable } from 'rxjs/Observable';
 

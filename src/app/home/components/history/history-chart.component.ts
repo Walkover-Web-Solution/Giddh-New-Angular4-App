@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
@@ -9,9 +9,9 @@ import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
-import { CHART_CALLED_FROM, API_TO_CALL } from '../../../services/actions/home/home.const';
+import { API_TO_CALL, CHART_CALLED_FROM } from '../../../services/actions/home/home.const';
 
 @Component({
   selector: 'history-chart',

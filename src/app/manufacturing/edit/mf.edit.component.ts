@@ -8,7 +8,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';

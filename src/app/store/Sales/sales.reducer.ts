@@ -1,9 +1,7 @@
 import { Action } from '@ngrx/store';
-import * as _ from 'lodash';
 import { SALES_ACTIONS } from '../../services/actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
-import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IOption } from '../../shared/theme/index';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 

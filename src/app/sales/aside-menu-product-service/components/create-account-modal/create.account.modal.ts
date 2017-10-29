@@ -1,11 +1,9 @@
-import * as _ from 'lodash';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormArray, FormBuilder, FormGroup, Validators, AbstractControl } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';

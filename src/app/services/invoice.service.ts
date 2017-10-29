@@ -7,10 +7,10 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
-import * as _ from 'lodash';
+import * as _ from '../lodash-optimized';
 
 @Injectable()
 export class InvoiceService {

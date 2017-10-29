@@ -14,7 +14,7 @@ import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
 import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import { IContriesWithCodes, contriesWithCodes } from '../../../helpers/countryWithCodes';
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
