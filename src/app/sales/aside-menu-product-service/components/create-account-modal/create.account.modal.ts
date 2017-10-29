@@ -7,8 +7,8 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { IOption } from '../../../../shared/theme/index';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 export const PURCHASE_GROUPS = ['operatingcost']; // purchases
 export const SALES_GROUPS = ['revenuefromoperations']; // sales

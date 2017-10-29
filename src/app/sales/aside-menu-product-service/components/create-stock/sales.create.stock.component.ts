@@ -20,11 +20,11 @@ import { IStockItemDetail, IUnitRateItem } from '../../../../models/interfaces/s
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { InventoryService } from '../../../../services/inventory.service';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groupsWithStocks.interface';
-import { IOption } from '../../../../shared/theme/index';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
 import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'sales-create-stock',
