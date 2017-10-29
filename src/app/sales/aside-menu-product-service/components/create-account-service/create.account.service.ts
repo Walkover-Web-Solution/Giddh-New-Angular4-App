@@ -8,13 +8,13 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { IOption } from '../../../../shared/theme/index';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
 import { Select2OptionData } from '../../../../shared/theme/select2/select2.interface';
 import { GroupService } from '../../../../services/group.service';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AccountService } from '../../../../services/account.service';
 import { ToasterService } from '../../../../services/toaster.service';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 export const PURCHASE_GROUPS = ['operatingcost']; // purchases
 export const SALES_GROUPS = ['revenuefromoperations']; // sales

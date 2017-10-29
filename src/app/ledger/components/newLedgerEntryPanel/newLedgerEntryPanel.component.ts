@@ -14,9 +14,9 @@ import { UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ToasterService } from '../../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
-import { TaxControlComponent } from '../../../shared/theme/index';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { TaxControlComponent } from '../tax-control/tax-control.component';
 
 @Component({
   selector: 'new-ledger-entry-panel',
