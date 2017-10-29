@@ -19,7 +19,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TaxControlComponent } from './components/tax-control/tax-control.component';
+import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 
 @NgModule({
   declarations: [
@@ -31,9 +31,7 @@ import { TaxControlComponent } from './components/tax-control/tax-control.compon
     ShareLedgerComponent,
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
-    UpdateLedgerDiscountComponent,
-    TaxControlComponent
-    // ElementViewContainerRef
+    UpdateLedgerDiscountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -44,6 +42,7 @@ import { TaxControlComponent } from './components/tax-control/tax-control.compon
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    TaxControlModule.forRoot(),
     LedgerRoutingModule,
     SharedModule,
     ModalModule,

@@ -10,7 +10,6 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { PopoverModule } from 'ngx-bootstrap/popover';
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesComponent } from './sales.component';
@@ -23,6 +22,9 @@ import { SalesAddStockGroupComponent } from './aside-menu-product-service/compon
 import { CreateAccountModalComponent } from './aside-menu-product-service/components/create-account-modal/create.account.modal';
 import { CreateAccountServiceComponent } from './aside-menu-product-service/components/create-account-service/create.account.service';
 import { SalesRoutingModule } from './sales.routing.module';
+import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { Select2Module } from '../theme/select2/select2.module';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -42,8 +44,10 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
+    SelectModule.forRoot(),
+    Select2Module.forRoot(),
+    TaxControlModule.forRoot(),
     SalesRoutingModule,
-    SharedModule,
     ModalModule,
     TooltipModule,
     TypeaheadModule,

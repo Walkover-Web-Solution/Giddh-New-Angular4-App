@@ -26,7 +26,6 @@ import {
   ManageGroupsAccountsComponent,
   AccountUpdateNewComponent
 } from './header/components';
-import { Select2Module } from './theme/select2';
 import { UniqueNameDirective } from './helpers/directives/uniqueName.directive';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewContainerRef } from './helpers/directives/element.viewchild.directive';
@@ -41,7 +40,6 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { NumberToWordsPipe } from './helpers/pipes/numberToWords.pipe';
 import { InvoicePageDDComponent } from './invoice-page-dd/invoice.page.dd.component';
 import { FullPageHeight } from './helpers/directives/pageHeight.directive';
-import { DatePickerModule } from './theme/datepicker/date-picker.module';
 import { RecTypePipe } from './helpers/pipes/recType.pipe';
 import { SafePipe } from './helpers/pipes/safe.pipe';
 import { DecimalDigitsDirective } from './helpers/directives/decimalDigits.directive';
@@ -51,7 +49,8 @@ import { DisableFormFieldDirective } from './helpers/directives/disableFormField
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { DatePickeCustomrModule } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { Select2Module } from '../theme/select2/select2.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -108,8 +107,7 @@ export function provideConfig() {
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
     Daterangepicker, DigitsOnlyDirective, CheckscrollDirective, TextMaskModule,
-    NumberToWordsPipe, InvoicePageDDComponent, FullPageHeight,
-    DatePickerModule, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective,
+    NumberToWordsPipe, InvoicePageDDComponent, FullPageHeight, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective,
     ElementViewContainerRef, ConfirmModalModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
