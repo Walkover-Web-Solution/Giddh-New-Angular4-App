@@ -21,7 +21,7 @@ import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.int
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { Router } from '@angular/router';

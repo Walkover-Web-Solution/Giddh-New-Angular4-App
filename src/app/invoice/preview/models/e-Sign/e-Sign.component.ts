@@ -1,13 +1,12 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { ILedgersInvoiceResult, PreviewInvoiceResponseClass, Esignature } from '../../../../models/api-models/Invoice';
+import { Esignature, PreviewInvoiceResponseClass } from '../../../../models/api-models/Invoice';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../../services/actions/invoice/invoice.actions';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'e-sign-modal-component',

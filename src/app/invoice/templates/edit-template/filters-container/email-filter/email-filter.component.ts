@@ -1,5 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import * as _ from 'lodash';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { EmailSettingObjDefinition } from '../../../../../models/interfaces/invoice.setting.interface';
 

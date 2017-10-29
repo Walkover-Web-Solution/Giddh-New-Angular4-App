@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
@@ -7,10 +7,9 @@ import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails } from '../models/api-models/loginModels';
 import { LoginActions } from '../services/actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
-import { TabsetComponent } from 'ngx-bootstrap';
 import { CompanyService } from '../services/companyService.service';
-import { GetCouponResp, CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
-import { cloneDeep } from 'lodash';
+import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
+import { cloneDeep } from '../lodash-optimized';
 import { CompanyActions } from '../services/actions/company.actions';
 
 @Component({

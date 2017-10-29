@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
 import { ISection, GetInvoiceTemplateDetailsResponse, CustomTemplateResponse } from '../../../models/api-models/Invoice';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';

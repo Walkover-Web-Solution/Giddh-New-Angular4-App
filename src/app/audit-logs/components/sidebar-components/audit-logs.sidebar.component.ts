@@ -15,7 +15,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
@@ -147,7 +147,6 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public getLogfilters() {
     //
     let reqBody: LogsRequest = new LogsRequest();
-    debugger;
     reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
     reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
