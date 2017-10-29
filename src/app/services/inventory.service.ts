@@ -1,4 +1,4 @@
-import { StockReportResponse } from '../models/api-models/Inventory';
+import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -6,19 +6,8 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { INVENTORY_API } from './apiurls/inventory.api';
-import * as  _ from 'lodash';
-
-import {
-  CreateStockRequest,
-  StockDetailResponse,
-  StockGroupRequest,
-  StockGroupResponse,
-  StockReportRequest,
-  StocksResponse,
-  StockUnitRequest,
-  StockUnitResponse
-} from '../models/api-models/Inventory';
-import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
+import * as  _ from '../lodash-optimized';
+import { GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';

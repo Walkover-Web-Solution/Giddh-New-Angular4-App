@@ -14,7 +14,7 @@ import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 
 @Component({

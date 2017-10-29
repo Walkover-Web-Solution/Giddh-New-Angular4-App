@@ -2,7 +2,7 @@ import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Gro
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import 'rxjs/add/operator/map';
-import * as _ from 'lodash';
+import * as _ from '../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
 import { Configuration, URLS } from '../app.constants';
 import { Router } from '@angular/router';
@@ -11,15 +11,7 @@ import { LoaderService } from './loader.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
-import {
-  FlattenGroupsAccountsResponse,
-  GroupCreateRequest,
-  GroupResponse,
-  GroupSharedWithResponse,
-  GroupsTaxHierarchyResponse,
-  MoveGroupRequest,
-  ShareGroupRequest
-} from '../models/api-models/Group';
+import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, MoveGroupRequest, ShareGroupRequest } from '../models/api-models/Group';
 import { AppState } from '../store/roots';
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';

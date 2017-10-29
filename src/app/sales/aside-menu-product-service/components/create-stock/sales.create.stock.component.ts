@@ -1,4 +1,4 @@
-import * as  _ from 'lodash';
+import * as  _ from '../../../../lodash-optimized';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild, EventEmitter, Output } from '@angular/core';
