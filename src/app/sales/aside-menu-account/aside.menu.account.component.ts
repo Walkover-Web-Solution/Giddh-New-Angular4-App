@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { GroupResponse } from '../../models/api-models/Group';
+
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
 @Component({

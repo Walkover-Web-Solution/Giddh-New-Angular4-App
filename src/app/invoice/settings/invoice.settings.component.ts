@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import * as _ from 'lodash';
-import { InvoiceSetting, InvoiceISetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
+import * as _ from '../../lodash-optimized';
+import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/interfaces/invoice.setting.interface';
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -10,7 +10,6 @@ import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegra
 import { AccountService } from '../../services/account.service';
 import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs/Observable';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
   templateUrl: './invoice.settings.component.html',

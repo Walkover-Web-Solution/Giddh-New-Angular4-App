@@ -7,8 +7,7 @@ import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccounts
 import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as uuid from 'uuid';
-import { cloneDeep } from 'lodash';
-import { createAutoCorrectedDatePipe } from '../shared/helpers/autoCorrectedDatePipe';
+import { cloneDeep } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 
