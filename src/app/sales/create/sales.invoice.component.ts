@@ -15,7 +15,6 @@ import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
-import { IOption, SelectComponent } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
@@ -24,6 +23,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { SelectComponent } from '../../theme/ng-select/select.component';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
