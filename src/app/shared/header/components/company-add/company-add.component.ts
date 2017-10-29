@@ -7,7 +7,7 @@ import { VerifyMobileActions } from './../../../../services/actions/verifyMobile
 import { AppState } from './../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { WizardComponent } from '../../../theme/ng2-wizard/wizard.component';
+import { WizardComponent } from '../../../../theme/ng2-wizard/wizard.component';
 import { CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';

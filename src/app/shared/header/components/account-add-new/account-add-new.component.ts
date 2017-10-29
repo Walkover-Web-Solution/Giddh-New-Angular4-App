@@ -14,8 +14,8 @@ import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryW
 import { ToasterService } from '../../../../services/toaster.service';
 import { Select2Component } from '../../../theme/select2/select2.component';
 import { CompanyResponse } from '../../../../models/api-models/Company';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { SelectComponent } from '../../../../theme/ng-select/select.component';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
 

@@ -2,8 +2,8 @@ import { Action } from '@ngrx/store';
 import { SALES_ACTIONS } from '../../services/actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
-import { IOption } from '../../shared/theme/index';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 export interface SalesState {
   invObj: any;

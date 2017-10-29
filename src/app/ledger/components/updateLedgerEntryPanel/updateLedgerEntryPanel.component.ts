@@ -16,11 +16,11 @@ import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interf
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
-import { IOption } from '../../../shared/theme/index';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { SelectComponent } from '../../../shared/theme/ng-select/select.component';
+import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'update-ledger-entry-panel',
