@@ -4,7 +4,7 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
 import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BsGridComponent } from './bs-grid/bs-grid.component';

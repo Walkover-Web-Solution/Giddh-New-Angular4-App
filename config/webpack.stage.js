@@ -22,6 +22,7 @@ const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
@@ -197,6 +198,7 @@ module.exports = function (env) {
           metadata: METADATA,
           inject: 'body'
         }),
+        new IgnorePlugin(/^\.\/locale$/, /moment$/),
         /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.

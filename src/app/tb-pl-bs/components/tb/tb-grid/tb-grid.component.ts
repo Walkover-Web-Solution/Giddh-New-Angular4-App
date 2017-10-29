@@ -2,7 +2,7 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, Chang
 import { AccountDetails } from '../../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ChildGroup } from '../../../../models/api-models/Search';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 
 @Component({
   selector: 'tb-grid',  // <home></home>

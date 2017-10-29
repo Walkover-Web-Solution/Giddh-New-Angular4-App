@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter, ComponentFactoryResolver } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -8,9 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy } from 'lodash';
+import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';

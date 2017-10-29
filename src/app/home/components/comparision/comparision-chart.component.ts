@@ -7,7 +7,7 @@ import { HomeActions } from '../../../services/actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';

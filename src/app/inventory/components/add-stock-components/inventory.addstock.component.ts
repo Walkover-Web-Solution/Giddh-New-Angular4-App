@@ -13,7 +13,7 @@ import {
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
-import * as  _ from 'lodash';
+import * as  _ from '../../../lodash-optimized';
 import { AccountService } from '../../../services/account.service';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

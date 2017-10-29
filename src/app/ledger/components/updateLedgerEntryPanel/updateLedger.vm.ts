@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { filter, find, findIndex, sumBy } from 'lodash';
+import { filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IOption, TaxControlData } from '../../../shared/theme';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { ToasterService } from '../../../services/toaster.service';

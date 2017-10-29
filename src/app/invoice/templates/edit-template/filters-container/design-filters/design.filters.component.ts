@@ -1,15 +1,9 @@
-import {
-  Component, Input, EventEmitter, Output, OnInit, OnChanges,
-  SimpleChanges,
-  OnDestroy
-} from '@angular/core';
-import * as _ from 'lodash';
+import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
+import * as _ from '../../../../../lodash-optimized';
 import { Font } from 'ngx-font-picker/dist';
-import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
+import { humanizeBytes, UploadFile, UploadInput, UploadOutput } from 'ngx-uploader';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../../store/roots';
-import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
-import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { InvoiceUiDataService } from '../../../../../services/invoice.ui.data.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import { ReplaySubject } from 'rxjs/Rx';

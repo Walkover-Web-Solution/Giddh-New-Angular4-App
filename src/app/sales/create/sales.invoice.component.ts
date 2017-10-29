@@ -1,14 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, trigger, state, style, transition, animate, ViewChild } from '@angular/core';
-import * as _ from 'lodash';
+import { animate, Component, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { NgForm, FormGroup } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem, GenerateSalesRequest } from '../../models/api-models/Sales';
-import { InvoiceState } from '../../store/Invoice/invoice.reducer';
-import { InvoiceService } from '../../services/invoice.service';
+import { FakeDiscountItem, GenerateSalesRequest, InvoiceFormClass, IStockUnit, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs/Observable';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { AccountService } from '../../services/account.service';
@@ -17,20 +14,17 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { TaxResponse, CompanyResponse } from '../../models/api-models/Company';
-import { TaxControlData, IOption, SelectComponent } from '../../shared/theme/index';
+import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
+import { IOption, SelectComponent } from '../../shared/theme/index';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import * as uuid from 'uuid';
-import { IContentCommon, ICommonItemOfTransaction, IInvoiceTax } from '../../models/api-models/Invoice';
+import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
-import { IFlattenAccountItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
+
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
