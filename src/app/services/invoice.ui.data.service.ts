@@ -5,7 +5,7 @@ import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ReplaySubject } from 'rxjs/Rx';
-import * as _ from 'lodash';
+import * as _ from '../lodash-optimized';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 export class TemplateContentUISectionVisibility {

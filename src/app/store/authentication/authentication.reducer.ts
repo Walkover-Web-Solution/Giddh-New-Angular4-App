@@ -12,7 +12,7 @@ import {
 } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsRequest, StateDetailsResponse, CompanyResponse, CompanyRequest } from '../../models/api-models/Company';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { retry } from 'rxjs/operator/retry';
 import { state } from '@angular/core';
 

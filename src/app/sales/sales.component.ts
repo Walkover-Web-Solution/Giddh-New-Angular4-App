@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import * as _ from 'lodash';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { StateDetailsRequest } from '../models/api-models/Company';

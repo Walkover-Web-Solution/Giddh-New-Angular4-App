@@ -6,12 +6,13 @@ import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
 import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
-import * as  _ from 'lodash';
+import * as  _ from '../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../services/actions/settings/profile/settings.profile.action';
+
 // import { Select2OptionData } from '../shared/theme/select2';
 
 @Component({

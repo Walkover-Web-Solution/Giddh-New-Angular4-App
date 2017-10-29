@@ -26,7 +26,7 @@ import {
   ViewChild
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import {
