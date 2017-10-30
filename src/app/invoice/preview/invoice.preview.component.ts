@@ -15,7 +15,7 @@ import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceService } from '../../services/invoice.service';
-import { Select2OptionData } from '../../theme/select2';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
@@ -43,16 +43,10 @@ export class InvoicePreviewComponent implements OnInit {
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: INameUniqueName[] = COMPARISON_FILTER;
   public counts: number[] = COUNTS;
-  public accounts$: Observable<Select2OptionData[]>;
+  public accounts$: Observable<IOption[]>;
   public moment = moment;
   public showFromDatePicker: boolean  = false;
   public showToDatePicker: boolean = false;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
   public modalRef: BsModalRef;
   public modalConfig = {
     animated: true,
@@ -82,11 +76,11 @@ export class InvoicePreviewComponent implements OnInit {
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
           // Select only sundry debtors account
           if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ text: d.name, id: d.uniqueName });
+            accounts.push({ label: d.name, value: d.uniqueName });
           }
         });
         this.accounts$ = Observable.of(accounts);
