@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
-import { HOME, CHART_CALLED_FROM, API_TO_CALL } from './home.const';
+import { API_TO_CALL, CHART_CALLED_FROM, HOME } from './home.const';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../toaster.service';
 import { DashboardService } from '../../dashboard.service';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
-import {
-  IComparisionChartResponse,
-  IExpensesChartClosingBalanceResponse,
-  IRevenueChartClosingBalanceResponse
-} from '../../../models/interfaces/dashboard.interface';
-import { RefreshBankAccountResponse, GroupHistoryRequest, BankAccountsResponse, GroupHistoryResponse, DashboardResponse } from '../../../models/api-models/Dashboard';
-import * as _ from 'lodash';
+import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
+import { BankAccountsResponse, DashboardResponse, GroupHistoryRequest, GroupHistoryResponse, RefreshBankAccountResponse } from '../../../models/api-models/Dashboard';
+import * as _ from '../../../lodash-optimized';
+
 @Injectable()
 
 export class HomeActions {

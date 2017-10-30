@@ -68,6 +68,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Output() public blur = new EventEmitter<null>();
   @Output() public noOptionsFound = new EventEmitter<string>();
   @Output() public noResultsClicked = new EventEmitter<null>();
+  @Output() public viewInitEvent = new EventEmitter<any>();
 
   @ViewChild('selection') public selectionSpan: ElementRef;
   @ViewChild('dropdown') public dropdown: SelectDropdownComponent;
@@ -94,7 +95,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   private isDisabled: boolean = false;
 
   private clearClicked: boolean = false;
-  private showTypeAheadInput: boolean = false;
+  // private showTypeAheadInput: boolean = false;
   private selectContainerClicked: boolean = false;
   private optionListClicked: boolean = false;
   private optionClicked: boolean = false;
@@ -133,6 +134,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public ngAfterViewInit() {
     this.updateState();
+    this.viewInitEvent.emit();
   }
 
   @HostListener('window:blur')
@@ -162,13 +164,22 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public onSelectContainerClick(event: any) {
     this.selectContainerClicked = true;
-    if (!this.clearClicked) {
-      this.toggleDropdown();
+    if (this.isTypeAheadMode) {
+      if (this.optionList.hasSelected) {
+        this.isOpen = false;
+        this.filter(this.optionList.selection[0].label);
+      }
+    } else {
+      if (!this.clearClicked) {
+        this.toggleDropdown();
+      }
     }
   }
 
   public onSelectContainerFocus() {
-    this._focus();
+    if (!this.isTypeAheadMode) {
+      this._focus();
+    }
   }
 
   public onSelectContainerKeydown(event: any) {
@@ -203,12 +214,25 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public onMultipleFilterKeydown(event: any) {
     this.handleMultipleFilterKeydown(event);
   }
+
   public onMultipleFilterKeyup(event: any) {
     this.handleMultipleFilterKeyup(event);
   }
 
-  public onMultipleFilterFocus() {
+  public onMultipleFilterFocus(event: any) {
     this._focus();
+  }
+
+  public onTypeAheadFilterFocus() {
+    this._focus();
+  }
+
+  public onTypeAheadFilterKeydown(event: any) {
+    this.handleMultipleFilterKeydown(event);
+  }
+
+  public onTypeAheadFilterKeyup(event: any) {
+    this.handleMultipleFilterKeyup(event);
   }
 
   public onClearSelectionClick(event: any) {
@@ -268,9 +292,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public _blur() {
     if (this.hasFocus) {
       this.hasFocus = false;
-      if (this.isTypeAheadMode) {
-        this.showTypeAheadInput = false;
-      }
       this.onTouched();
       this.blur.emit(null);
     }
@@ -281,12 +302,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       this.hasFocus = true;
       this.openDropdown();
       this.focus.emit(null);
-    }
-    if (this.isTypeAheadMode) {
-      this.showTypeAheadInput = true;
-      this.filterInput.nativeElement.value = this.optionList.hasSelected ? this.optionList.selection[0].label : '';
-      setTimeout(() => { this.filterInput.nativeElement.focus(); }, 300);
-
     }
   }
 
@@ -445,7 +460,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       this.updateWidth();
       this.updatePosition();
       this.isOpen = true;
-      if (this.multiple && this.filterEnabled) {
+      if ((this.multiple || this.isTypeAheadMode) && this.filterEnabled) {
         this.filterInput.nativeElement.focus();
       }
       this.opened.emit(null);
@@ -467,7 +482,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   /** Filter. **/
 
   private filter(term: string) {
-    if (this.multiple) {
+    if (this.multiple || this.isTypeAheadMode) {
       if (!this.isOpen) {
         this.openDropdown();
       }
@@ -548,20 +563,21 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
         this.deselectLast();
       } else if (this.optionList.hasSelected && this.filterEnabled &&
         (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
-          this.clearSelectionManually();
-        }
+        this.clearSelectionManually();
+      }
     }
   }
+
   private handleMultipleFilterKeyup(event: any) {
     // let key = event.which;
     // if (key === this.KEYS.BACKSPACE) {
     //   if (this.optionList.hasSelected && this.filterEnabled &&
     //     (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
-    //       debugger;
     //     this.deselectLast();
     //   }
     // }
   }
+
   private handleSingleFilterKeydown(event: any) {
     let key = event.which;
 

@@ -1,178 +1,178 @@
 export const StockUnits = [
   {
-    text: 'BAGS',
-    id: 'BAG'
+    label: 'BAGS',
+    value: 'BAG'
   },
 {
-    text: 'BALE',
-    id: 'BAL'
+    label: 'BALE',
+    value: 'BAL'
 },
 {
-    text: 'BUNDLES',
-    id: 'BDL'
+    label: 'BUNDLES',
+    value: 'BDL'
 },
 {
-    text: 'BUCKLES',
-    id: 'BKL'
+    label: 'BUCKLES',
+    value: 'BKL'
 },
 {
-    text: 'BILLION OF UNITS',
-    id: 'BOU'
+    label: 'BILLION OF UNITS',
+    value: 'BOU'
 },
 {
-    text: 'BOX',
-    id: 'BOX'
+    label: 'BOX',
+    value: 'BOX'
 },
 {
-    text: 'BOTTLES',
-    id: 'BTL'
+    label: 'BOTTLES',
+    value: 'BTL'
 },
 {
-    text: 'BUNCHES',
-    id: 'BUN'
+    label: 'BUNCHES',
+    value: 'BUN'
 },
 {
-    text: 'CANS',
-    id: 'CAN'
+    label: 'CANS',
+    value: 'CAN'
 },
 {
-    text: 'CUBIC METERS',
-    id: 'CBM'
+    label: 'CUBIC METERS',
+    value: 'CBM'
 },
 {
-    text: 'CUBIC CENTIMETERS',
-    id: 'CCM'
+    label: 'CUBIC CENTIMETERS',
+    value: 'CCM'
 },
 {
-    text: 'CENTIMETERS',
-    id: 'CMS'
+    label: 'CENTIMETERS',
+    value: 'CMS'
 },
 {
-    text: 'CARTONS',
-    id: 'CTN'
+    label: 'CARTONS',
+    value: 'CTN'
 },
 {
-    text: 'DOZENS',
-    id: 'DOZ'
+    label: 'DOZENS',
+    value: 'DOZ'
 },
 {
-    text: 'DRUMS',
-    id: 'DRM'
+    label: 'DRUMS',
+    value: 'DRM'
 },
 {
-    text: 'GREAT GROSS',
-    id: 'GGK'
+    label: 'GREAT GROSS',
+    value: 'GGK'
 },
 {
-    text: 'GRAMMES',
-    id: 'GMS'
+    label: 'GRAMMES',
+    value: 'GMS'
 },
 {
-    text: 'GROSS',
-    id: 'GRS'
+    label: 'GROSS',
+    value: 'GRS'
 },
 {
-    text: 'GROSS YARDS',
-    id: 'GYD'
+    label: 'GROSS YARDS',
+    value: 'GYD'
 },
 {
-    text: 'KILOGRAMS',
-    id: 'KGS'
+    label: 'KILOGRAMS',
+    value: 'KGS'
 },
 {
-    text: 'KILOLITRE',
-    id: 'KLR'
+    label: 'KILOLITRE',
+    value: 'KLR'
 },
 {
-    text: 'KILOMETRE',
-    id: 'KME'
+    label: 'KILOMETRE',
+    value: 'KME'
 },
 {
-    text: 'MILILITRE',
-    id: 'MLT'
+    label: 'MILILITRE',
+    value: 'MLT'
 },
 {
-    text: 'METERS',
-    id: 'MTR'
+    label: 'METERS',
+    value: 'MTR'
 },
 {
-    text: 'METRIC TON',
-    id: 'MTS'
+    label: 'METRIC TON',
+    value: 'MTS'
 },
 {
-    text: 'NUMBERS',
-    id: 'NOS'
+    label: 'NUMBERS',
+    value: 'NOS'
 },
 {
-    text: 'PACKS',
-    id: 'PAC'
+    label: 'PACKS',
+    value: 'PAC'
 },
 {
-    text: 'PIECES',
-    id: 'PCS'
+    label: 'PIECES',
+    value: 'PCS'
 },
 {
-    text: 'PAIRS',
-    id: 'PRS'
+    label: 'PAIRS',
+    value: 'PRS'
 },
 {
-    text: 'QUINTAL',
-    id: 'QTL'
+    label: 'QUINTAL',
+    value: 'QTL'
 },
 {
-    text: 'ROLLS',
-    id: 'ROL'
+    label: 'ROLLS',
+    value: 'ROL'
 },
 {
-    text: 'SETS',
-    id: 'SET'
+    label: 'SETS',
+    value: 'SET'
 },
 {
-    text: 'SQUARE FEET',
-    id: 'SQF'
+    label: 'SQUARE FEET',
+    value: 'SQF'
 },
 {
-    text: 'SQUARE METERS',
-    id: 'SQM'
+    label: 'SQUARE METERS',
+    value: 'SQM'
 },
 {
-    text: 'SQUARE YARDS',
-    id: 'SQY'
+    label: 'SQUARE YARDS',
+    value: 'SQY'
 },
 {
-    text: 'TABLETS',
-    id: 'TBS'
+    label: 'TABLETS',
+    value: 'TBS'
 },
 {
-    text: 'TEN GROSS',
-    id: 'TGM'
+    label: 'TEN GROSS',
+    value: 'TGM'
 },
 {
-    text: 'THOUSANDS',
-    id: 'THD'
+    label: 'THOUSANDS',
+    value: 'THD'
 },
 {
-    text: 'TONNES',
-    id: 'TON'
+    label: 'TONNES',
+    value: 'TON'
 },
 {
-    text: 'TUBES',
-    id: 'TUB'
+    label: 'TUBES',
+    value: 'TUB'
 },
 {
-    text: 'US GALLONS',
-    id: 'UGS'
+    label: 'US GALLONS',
+    value: 'UGS'
 },
 {
-    text: 'UNITS',
-    id: 'UNT'
+    label: 'UNITS',
+    value: 'UNT'
 },
 {
-    text: 'YARDS',
-    id: 'YDS'
+    label: 'YARDS',
+    value: 'YDS'
 },
 {
-    text: 'OTHERS',
-    id: 'OTH'
+    label: 'OTHERS',
+    value: 'OTH'
 }
 ];

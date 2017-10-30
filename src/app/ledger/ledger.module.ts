@@ -14,15 +14,14 @@ import { ExportLedgerComponent } from './components/exportLedger/exportLedger.co
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
 // import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
+import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PopoverModule } from 'ngx-bootstrap/popover';
+import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -33,8 +32,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     ShareLedgerComponent,
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
-    UpdateLedgerDiscountComponent,
-    // ElementViewContainerRef
+    UpdateLedgerDiscountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -45,11 +43,15 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    TaxControlModule.forRoot(),
     LedgerRoutingModule,
     SharedModule,
     ModalModule,
     TooltipModule,
-    PaginationModule
+    PaginationModule,
+    NgUploaderModule,
+    ClipboardModule,
+    Daterangepicker
   ],
 })
 export class LedgerModule {

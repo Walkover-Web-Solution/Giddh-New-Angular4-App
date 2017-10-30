@@ -4,22 +4,21 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
-import * as  _ from 'lodash';
+import * as  _ from '../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../services/actions/settings/profile/settings.profile.action';
-// import { Select2OptionData } from '../shared/theme/select2';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html'
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy {
-  public stockUnitsDropDown$: Observable<Select2OptionData[]>;
+  public stockUnitsDropDown$: Observable<IOption[]>;
   public activeGroupUniqueName$: Observable<string>;
   public options: Select2Options = {
     multiple: false,
@@ -48,7 +47,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         let units = p.inventory.stockUnits;
 
         return units.map(unit => {
-          return { text: unit.name, id: unit.code };
+          return { label: unit.name, value: unit.code };
         });
       }
     });
@@ -126,10 +125,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   }
 
   public setUnitName(name) {
-    let unit = this.stockUnitsList.filter((obj) => obj.id === name.value || obj.text === name.value);
+    let unit = this.stockUnitsList.filter((obj) => obj.value === name.value || obj.label === name.value);
     console.log(unit);
     if (unit !== undefined && unit.length > 0) {
-      this.customUnitObj.code = unit[0].id;
+      this.customUnitObj.code = unit[0].value;
     }
   }
 }

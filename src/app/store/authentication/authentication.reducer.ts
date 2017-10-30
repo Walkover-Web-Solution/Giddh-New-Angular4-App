@@ -1,20 +1,10 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import {
-  VerifyEmailModel,
-  VerifyEmailResponseModel,
-  VerifyMobileModel,
-  VerifyMobileResponseModel,
-  LinkedInRequestModel,
-  SignupWithMobile,
-  UserDetails
-} from '../../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsRequest, StateDetailsResponse, CompanyResponse, CompanyRequest } from '../../models/api-models/Company';
-import * as _ from 'lodash';
-import { retry } from 'rxjs/operator/retry';
-import { state } from '@angular/core';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
+import * as _ from '../../lodash-optimized';
 
 /**
  * Keeping Track of the AuthenticationState

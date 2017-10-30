@@ -1,3 +1,5 @@
+import { Select2OptionData } from '../../theme/select2';
+
 const filter1 = [
   { name: 'Greater', uniqueName: 'greaterThan' },
   { name: 'Less Than', uniqueName: 'lessThan' },
@@ -13,15 +15,14 @@ const filter2 = [
 ];
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { Component, OnInit } from '@angular/core';
 import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { Router } from '@angular/router';

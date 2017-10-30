@@ -9,12 +9,12 @@ import { StockGroupRequest, StockGroupResponse } from '../../../../models/api-mo
 import { InventoryAction } from '../../../../services/actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { IOption } from '../../../../shared/theme/index';
 import { SidebarAction } from '../../../../services/actions/inventory/sidebar.actions';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
 import { SalesActions } from '../../../../services/actions/sales/sales.action';
 import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'sales-add-group-modal',
