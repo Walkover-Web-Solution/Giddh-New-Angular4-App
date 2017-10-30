@@ -1,4 +1,4 @@
-import { SharedModule } from './../shared/shared.module';
+import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -13,8 +13,9 @@ import { InventoryStockReportComponent } from './components/stock-report-compone
 import { StockgrpListComponent } from './components/sidebar-components/stockgrplist.component';
 import { StockListComponent } from './components/sidebar-components/stockList.component';
 
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
 // import { CollapseModule } from 'ngx-bootstrap/collapse';
 // import { ModalModule } from 'ngx-bootstrap/modal';
@@ -55,7 +56,8 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
     InventoryRoutingModule,
     SharedModule,
     TooltipModule,
-    DatepickerModule
+    DatepickerModule,
+    DatePickerCustomModule
   ],
 })
 export class InventoryModule {
