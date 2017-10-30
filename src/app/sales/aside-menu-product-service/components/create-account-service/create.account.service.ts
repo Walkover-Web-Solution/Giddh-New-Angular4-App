@@ -14,7 +14,6 @@ import { GroupResponse } from '../../../../models/api-models/Group';
 import { AccountService } from '../../../../services/account.service';
 import { ToasterService } from '../../../../services/toaster.service';
 import { IOption } from '../../../../theme/ng-select/option.interface';
-import { Select2OptionData } from '../../../../theme/select2';
 
 export const PURCHASE_GROUPS = ['operatingcost']; // purchases
 export const SALES_GROUPS = ['revenuefromoperations']; // sales
@@ -45,13 +44,7 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
   public flatGroupsList$: Observable<IOption[]>;
   public createAccountInProcess$: Observable<boolean>;
   public createAccountIsSuccess$: Observable<boolean>;
-  public flatAccountWGroupsList$: Observable<Select2OptionData[]>;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Group',
-    allowClear: true
-  };
+  public flatAccountWGroupsList$: Observable<IOption[]>;
   public activeGroupUniqueName: string;
   // private
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -97,11 +90,11 @@ export class CreateAccountServiceComponent implements OnInit, OnDestroy {
 
     // get groups list
     this._groupService.GetGroupSubgroups('revenuefromoperations').subscribe((res: any) => {
-      let result: Select2OptionData[] = [];
+      let result: IOption[] = [];
       if (res.status === 'success' && res.body.length > 0) {
         let flatGrps = this._groupService.flattenGroup(res.body, []);
         _.forEach(flatGrps, (grp: GroupResponse) => {
-          result.push({ text: grp.name, id: grp.uniqueName });
+          result.push({ label: grp.name, value: grp.uniqueName });
         });
       }
       this.flatAccountWGroupsList$ = Observable.of(result);
