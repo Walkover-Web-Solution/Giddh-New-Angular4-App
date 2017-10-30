@@ -88,8 +88,7 @@
                     <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
                         <div class="input-group phoneNum clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <span class="input-group-addon select2-parent">
-                                <!-- <select2 [data]="countryCodeList" [options]="options" formControlName="country" (valueChanged)="setCountryCode($event)" ></select2> -->
-                                <ng-select [options]="countryCodeList" class="form-inline" (selected)="setCountryCode($event)" formControlName="country"></ng-select>
+                              <ng-select [options]="countryCodeList" class="form-inline" (selected)="setCountryCode($event)" formControlName="country"></ng-select>
                             </span>
                             <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required />
                         </div>
