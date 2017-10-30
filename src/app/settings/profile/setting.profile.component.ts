@@ -1,3 +1,4 @@
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
@@ -33,10 +34,10 @@ export interface IGstObj {
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public companyProfileObj: any = null;
-  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
+  public statesSource$: Observable<IOption[]> = Observable.of([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
-  public states: Select2OptionData[] = [];
+  public states: IOption[] = [];
   public isGstValid: boolean = false;
   public isPANValid: boolean = false;
   public isMobileNumberValid: boolean = false;
@@ -56,7 +57,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this._companyService.getAllStates().subscribe((data) => {
       if (data) {
         data.body.map(d => {
-          this.states.push({ text: d.name, id: d.code });
+          this.states.push({ label: d.name, value: d.code });
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -132,9 +133,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
   public stateSelected(v, indx) {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     let selectedStateCode = v.value;
-    let selectedState = this.states.find((state) => state.id === selectedStateCode);
-    if (selectedState && selectedState.text) {
-      profileObj.gstDetails[indx].addressList[0].stateName = selectedState.text;
+    let selectedState = this.states.find((state) => state.value === selectedStateCode);
+    if (selectedState && selectedState.label) {
+      profileObj.gstDetails[indx].addressList[0].stateName = selectedState.label;
       this.companyProfileObj = profileObj;
     }
     console.log('The selected state is :', selectedState);
@@ -225,9 +226,9 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       if (stateCode < 10 && stateCode !== 0) {
         stateCode = (stateCode < 10) ? '0' + stateCode.toString() : stateCode.toString();
       }
-      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = stateCode;
+      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = stateCode.toString();
     } else {
-      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = null;
+      this.companyProfileObj.gstDetails[index].addressList[0].stateCode = '';
     }
   }
 
