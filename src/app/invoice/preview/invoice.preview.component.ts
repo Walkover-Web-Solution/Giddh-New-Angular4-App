@@ -3,7 +3,7 @@ import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -13,9 +13,9 @@ import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interfac
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceService } from '../../services/invoice.service';
+import { Select2OptionData } from '../../theme/select2';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [

@@ -1,14 +1,14 @@
 import { Store } from '@ngrx/store';
 import { animate, Component, OnDestroy, OnInit, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsProfileActions } from '../../services/actions/settings/profile/settings.profile.action';
 import { CompanyService } from '../../services/companyService.service';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
+import { Select2OptionData } from '../../theme/select2';
 
 export interface IGstObj {
   newGstNumber: string;
