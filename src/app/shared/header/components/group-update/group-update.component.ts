@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { AppState } from '../../../../store/roots';
+import { AppState } from '../../../../store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupResponse, GroupsTaxHierarchyResponse, MoveGroupRequest } from '../../../../models/api-models/Group';
@@ -10,13 +10,11 @@ import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
-import { Select2Component } from '../../../theme/select2/select2.component';
-import { AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
+import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { Select2OptionData } from '../../../theme/select2/select2.interface';
-import { uniqueNameValidator } from '../../../helpers/customValidationHelper';
+import { Select2OptionData, Select2Component } from '../../../../theme/select2';
 
 @Component({
   selector: 'group-update',

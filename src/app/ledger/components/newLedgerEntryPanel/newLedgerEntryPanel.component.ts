@@ -1,12 +1,11 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, DoCheck, EventEmitter, Input, KeyValueDiffers, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { createAutoCorrectedDatePipe } from '../../../shared/helpers/autoCorrectedDatePipe';
 import { CompanyActions } from '../../../services/actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
@@ -16,7 +15,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-import { TaxControlComponent } from '../tax-control/tax-control.component';
+import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
+import { Select2OptionData } from '../../../theme/select2';
 
 @Component({
   selector: 'new-ledger-entry-panel',

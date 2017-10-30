@@ -6,8 +6,8 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { TaxControlData } from '../tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
