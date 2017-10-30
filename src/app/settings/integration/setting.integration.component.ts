@@ -2,15 +2,15 @@ import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../services/actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
 import { EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   selector: 'setting-integration',

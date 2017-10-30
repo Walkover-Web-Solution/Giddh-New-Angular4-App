@@ -49,8 +49,7 @@ import { DisableFormFieldDirective } from './helpers/directives/disableFormField
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { SelectModule } from '../theme/ng-select/ng-select';
-import { DatePickeCustomrModule } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { Select2Module } from '../theme/select2/select2.module';
+import { Select2Module } from '../theme/select2';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -98,7 +97,6 @@ export function provideConfig() {
     // SelectModule,
     Select2Module,
     ClickOutsideModule,
-    Daterangepicker,
     TextMaskModule,
     SelectModule,
     ConfirmModalModule
@@ -106,7 +104,7 @@ export function provideConfig() {
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, LaddaModule, ManageGroupsAccountsComponent,
     AccountFilterPipe, TbsearchPipe, HighlightPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
-    Daterangepicker, DigitsOnlyDirective, CheckscrollDirective, TextMaskModule,
+    DigitsOnlyDirective, CheckscrollDirective, TextMaskModule,
     NumberToWordsPipe, InvoicePageDDComponent, FullPageHeight, RecTypePipe, DecimalDigitsDirective, DisableFormFieldDirective,
     ElementViewContainerRef, ConfirmModalModule
   ],

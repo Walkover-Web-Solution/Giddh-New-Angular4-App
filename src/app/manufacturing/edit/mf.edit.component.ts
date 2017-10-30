@@ -6,7 +6,6 @@ import { ManufacturingActions } from '../../services/actions/manufacturing/manuf
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -16,6 +15,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CustomStockUnitAction } from '../../services/actions/inventory/customStockUnit.actions';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   templateUrl: './mf.edit.component.html'
