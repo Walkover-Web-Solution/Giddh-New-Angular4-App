@@ -8,7 +8,7 @@ import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { GroupResponse } from '../../models/api-models/Group';
-import { Select2OptionData } from '../../theme/select2';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 
@@ -44,7 +44,7 @@ const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirec
 export class AsideMenuAccountComponent implements OnInit {
 
   @Output() public closeAsideEvent: EventEmitter<boolean> = new EventEmitter(true);
-  public flatAccountWGroupsList$: Observable<Select2OptionData[]>;
+  public flatAccountWGroupsList$: Observable<IOption[]>;
   public select2Options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -76,13 +76,13 @@ export class AsideMenuAccountComponent implements OnInit {
   public ngOnInit() {
     // get groups list and refine list
     this.groupService.GetGroupSubgroups('currentassets').subscribe(res => {
-      let result: Select2OptionData[] = [];
+      let result: IOption[] = [];
       if (res.status === 'success' && res.body.length > 0) {
         let sundryGrp = _.find(res.body, { uniqueName: 'sundrydebtors'});
         if (sundryGrp) {
           let flatGrps = this.groupService.flattenGroup([sundryGrp], []);
           _.forEach(flatGrps, (grp: GroupResponse) => {
-            result.push({ text: grp.name, id: grp.uniqueName });
+            result.push({ label: grp.name, value: grp.uniqueName });
           });
         }
       }
