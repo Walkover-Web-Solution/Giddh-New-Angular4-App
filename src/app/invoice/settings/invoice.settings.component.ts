@@ -9,7 +9,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../theme/select2';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
   templateUrl: './invoice.settings.component.html',
@@ -32,15 +32,9 @@ export class InvoiceSettingComponent implements OnInit {
   public accountList: any;
   public accountToSend: any = {};
   public numOnlyPattern: RegExp = new RegExp(/^[0-9]*$/g);
-  public linkAccountDropDown$: Observable<Select2OptionData[]>;
+  public linkAccountDropDown$: Observable<IOption[]>;
   public originalEmail: string;
   public isEmailChanged: boolean = false;
-  public options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    allowClear: true,
-    placeholder: 'Select to link account'
-  };
   public webhookMock: any = {
     url: '',
     triggerAt: '',
@@ -62,10 +56,10 @@ export class InvoiceSettingComponent implements OnInit {
     this.initSettingObj();
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let linkAccount: Select2OptionData[] = [];
+        let linkAccount: IOption[] = [];
         this.accountList = _.cloneDeep(data.body.results);
         data.body.results.map(d => {
-          linkAccount.push({ text: d.name, id: d.uniqueName });
+          linkAccount.push({ label: d.name, value: d.uniqueName });
         });
         this.linkAccountDropDown$ = Observable.of(linkAccount);
       }
