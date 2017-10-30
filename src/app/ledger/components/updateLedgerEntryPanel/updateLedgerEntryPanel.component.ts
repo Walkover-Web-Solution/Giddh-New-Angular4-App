@@ -87,7 +87,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   acc.stocks.map(as => {
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
-                      label: acc.name,
+                      label: `${acc.name} (${as.uniqueName})`,
                       additional: Object.assign({}, acc, { stock: as })
                     });
                   });
