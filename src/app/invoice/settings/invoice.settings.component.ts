@@ -8,8 +8,8 @@ import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs/Observable';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   templateUrl: './invoice.settings.component.html',

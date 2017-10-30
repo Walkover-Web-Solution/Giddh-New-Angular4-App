@@ -1,9 +1,8 @@
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
@@ -13,6 +12,7 @@ import { SettingsLinkedAccountsActions } from '../../services/actions/settings/l
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   selector: 'setting-linked-accounts',
