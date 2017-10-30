@@ -1,3 +1,4 @@
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Select2OptionData } from '../../theme/select2';
 
 const filter1 = [
@@ -43,6 +44,8 @@ export class MfReportComponent implements OnInit {
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
   public moment = moment;
+  public startDate: Date;
+  public endDate: Date;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -52,6 +55,14 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
+
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate(this.startDate.getDate() - 30);
+    this.endDate.setDate(this.endDate.getDate());
+    this.mfStockSearchRequest.dateRange = [this.startDate, this.endDate];
+    this.mfStockSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
+    this.mfStockSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
   }
 
   public ngOnInit() {
@@ -103,8 +114,6 @@ export class MfReportComponent implements OnInit {
   }
 
   public getReports() {
-    this.mfStockSearchRequest.from = moment(this.mfStockSearchRequest.from).format('DD-MM-YYYY');
-    this.mfStockSearchRequest.to = moment(this.mfStockSearchRequest.to).format('DD-MM-YYYY');
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
     this.mfStockSearchRequest = new MfStockSearchRequestClass();
     this.initializeSearchReqObj();
@@ -112,8 +121,6 @@ export class MfReportComponent implements OnInit {
 
   public pageChanged(event: any): void {
     let data = _.cloneDeep(this.mfStockSearchRequest);
-    data.from = moment(data.from).format('DD-MM-YYYY');
-    data.to = moment(data.to).format('DD-MM-YYYY');
     data.page = event.page;
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
@@ -147,5 +154,13 @@ export class MfReportComponent implements OnInit {
         val = val.replace(new RegExp(char, 'g'), '');
         this.mfStockSearchRequest['searchValue'] = val;
     }
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.mfStockSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
+      this.mfStockSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+    }
+    console.log('THe event is :', event);
   }
 }

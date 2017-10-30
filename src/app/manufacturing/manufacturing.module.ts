@@ -34,6 +34,7 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     ManufacturingRoutingModule,
     PaginationModule,
     DatepickerModule,
+    BsDatepickerModule.forRoot(),
     ModalModule,
     SharedModule
   ],
