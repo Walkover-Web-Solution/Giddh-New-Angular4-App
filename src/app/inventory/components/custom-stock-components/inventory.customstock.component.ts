@@ -11,16 +11,14 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../services/actions/settings/profile/settings.profile.action';
-import { Select2OptionData } from '../../../theme/select2';
-
-// import { Select2OptionData } from '../shared/theme/select2';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>
   templateUrl: './inventory.customstock.component.html'
 })
 export class InventoryCustomStockComponent implements OnInit, OnDestroy {
-  public stockUnitsDropDown$: Observable<Select2OptionData[]>;
+  public stockUnitsDropDown$: Observable<IOption[]>;
   public activeGroupUniqueName$: Observable<string>;
   public options: Select2Options = {
     multiple: false,
@@ -49,7 +47,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
         let units = p.inventory.stockUnits;
 
         return units.map(unit => {
-          return { text: unit.name, id: unit.code };
+          return { label: unit.name, value: unit.code };
         });
       }
     });
@@ -127,10 +125,10 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   }
 
   public setUnitName(name) {
-    let unit = this.stockUnitsList.filter((obj) => obj.id === name.value || obj.text === name.value);
+    let unit = this.stockUnitsList.filter((obj) => obj.value === name.value || obj.label === name.value);
     console.log(unit);
     if (unit !== undefined && unit.length > 0) {
-      this.customUnitObj.code = unit[0].id;
+      this.customUnitObj.code = unit[0].value;
     }
   }
 }

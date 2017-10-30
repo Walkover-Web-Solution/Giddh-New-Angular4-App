@@ -16,6 +16,7 @@ import { StockListComponent } from './components/sidebar-components/stockList.co
 import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
+import { SelectModule } from '../theme/ng-select/ng-select';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
 // import { CollapseModule } from 'ngx-bootstrap/collapse';
 // import { ModalModule } from 'ngx-bootstrap/modal';
@@ -57,7 +58,8 @@ import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
     SharedModule,
     TooltipModule,
     DatepickerModule,
-    DatePickerCustomModule
+    DatePickerCustomModule,
+    SelectModule
   ],
 })
 export class InventoryModule {
