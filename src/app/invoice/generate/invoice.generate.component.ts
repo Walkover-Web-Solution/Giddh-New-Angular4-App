@@ -15,6 +15,7 @@ import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
@@ -51,6 +52,8 @@ export class InvoiceGenerateComponent implements OnInit {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public startDate: Date;
+  public endDate: Date;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -58,15 +61,20 @@ export class InvoiceGenerateComponent implements OnInit {
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService
-  ) { }
-
-  public ngOnInit() {
+  ) {
     // set initial values
-    this.ledgerSearchRequest.from = String(moment().subtract(30, 'days'));
-    this.ledgerSearchRequest.to = String(moment());
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate(this.startDate.getDate() - 30);
+    this.endDate.setDate(this.endDate.getDate());
+    this.ledgerSearchRequest.dateRange = [this.startDate, this.endDate];
+    this.ledgerSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
+    this.ledgerSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
+  }
 
+  public ngOnInit() {
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
@@ -246,11 +254,18 @@ export class InvoiceGenerateComponent implements OnInit {
   public prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
     return {
-      from: moment(o.from).format('DD-MM-YYYY'),
-      to: moment(o.to).format('DD-MM-YYYY'),
+      from: o.from,
+      to: o.to,
       count: o.count,
       page: o.page
     };
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.ledgerSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
+      this.ledgerSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+    }
   }
 
   public countAndToggleVar() {
