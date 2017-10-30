@@ -14,7 +14,7 @@ import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { Select2OptionData, Select2Component } from '../../../../theme/select2';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'group-update',
@@ -35,7 +35,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public activeGroupSelected$: Observable<string[]>;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
-  public companyTaxDropDown: Observable<Select2OptionData[]>;
+  public companyTaxDropDown: Observable<IOption[]>;
   public isUpdateGroupInProcess$: Observable<boolean>;
   public isUpdateGroupSuccess$: Observable<boolean>;
   public taxPopOverTemplate: string = `
@@ -46,28 +46,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     </ul>
   </div>
   `;
-  @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
-  public options: Select2Options = {
-    minimumResultsForSearch: 9001,
-    multiple: true,
-    width: '200px',
-    placeholder: 'Select Taxes',
-    templateResult: (data) => {
-      if (!data.id) {
-        return data.text;
-      }
-      // let text = this._translate.instant(data.text);
-      return $('<span>' + data.text + '</span>');
-    },
-    templateSelection: (data) => {
-
-      if (!data.id) {
-        return data.text;
-      }
-      // let text = this._translate.instant(data.text);
-      return $('<span>' + data.text + '</span>');
-    }
-  };
   public showEditTaxSection: boolean = false;
   public accountList: any[];
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
@@ -99,31 +77,31 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
     this.companyTaxDropDown = this.store.select(state => {
-      let arr: Select2OptionData[] = [];
+      let arr: IOption[] = [];
       if (state.company.taxes) {
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             });
           }
         }
@@ -185,10 +163,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return result;
     });
-    this.activeGroupSelected$.subscribe(() => {
-      if (this.applyTaxSelect2) {
-        this.applyTaxSelect2.cd.detectChanges();
-      }
+    this.activeGroupSelected$.subscribe((p) => {
+      this.taxGroupForm.patchValue({ taxes: p });
     });
     this.activeGroupTaxHierarchy$.subscribe((a) => {
       let activeAccount: AccountResponseV2 = null;
@@ -323,9 +299,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
       }
     });
-    if (this.applyTaxSelect2.value && Array.isArray(this.applyTaxSelect2.value)) {
-      data.taxes.push(...(this.applyTaxSelect2.value as string[]));
-    }
+    data.taxes = this.taxGroupForm.value.taxes;
     data.uniqueName = activeGroup.uniqueName;
     this.store.dispatch(this.groupWithAccountsAction.applyGroupTax(data));
     this.showEditTaxSection = false;
