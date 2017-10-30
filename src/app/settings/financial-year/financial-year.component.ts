@@ -73,7 +73,7 @@ export class FinancialYearComponent implements OnInit {
           this.currentCompanyName = comp.name;
           this.currentCompanyFinancialYearUN = comp.activeFinancialYear.uniqueName;
           this.financialOptions = comp.financialYears.map(q => {
-            return { text: q.uniqueName, id: q.uniqueName };
+            return { label: q.uniqueName, value: q.uniqueName };
           });
         }
       }
@@ -84,7 +84,7 @@ export class FinancialYearComponent implements OnInit {
     let yearArray = _.range(startYear, endYear + 1);
 
     this.yearOptions = yearArray.map(q => {
-      return { text: q, id: q };
+      return { label: q, value: q };
     });
   }
 
