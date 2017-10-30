@@ -1,45 +1,18 @@
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { Select2Component } from '../../../theme/select2/select2.component';
 import { TaxResponse } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import {
-  GroupResponse,
-  GroupSharedWithResponse,
-  GroupsTaxHierarchyResponse
-} from '../../../../models/api-models/Group';
+import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
-import { AppState } from '../../../../store/roots';
+import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
-import {
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild
-} from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import * as _ from '../../../../lodash-optimized';
-import { Select2OptionData } from '../../../theme/select2/select2.interface';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import {
-  AccountMergeRequest,
-  AccountMoveRequest,
-  AccountRequest, AccountRequestV2,
-  AccountResponse,
-  AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse,
-  AccountUnMergeRequest,
-  ShareAccountRequest,
-  AccountResponseV2
-} from '../../../../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequestV2, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../../../models/api-models/Account';
 import { ModalDirective } from 'ngx-bootstrap';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
@@ -47,6 +20,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
+import { Select2Component, Select2OptionData } from '../../../../theme/select2';
 
 @Component({
   selector: 'account-operations',

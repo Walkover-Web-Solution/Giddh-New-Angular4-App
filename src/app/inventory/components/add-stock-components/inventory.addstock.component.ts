@@ -1,4 +1,4 @@
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
@@ -9,9 +9,8 @@ import {
   decimalDigits,
   digitsOnly,
   stockManufacturingDetailsValidator
-} from '../../../shared/helpers/customValidationHelper';
+} from '../../../shared/helpers';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import * as  _ from '../../../lodash-optimized';
 import { AccountService } from '../../../services/account.service';
@@ -20,6 +19,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IStockItemDetail, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { Subject } from 'rxjs/Subject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
+import { Select2OptionData } from '../../../theme/select2';
 
 @Component({
   selector: 'invetory-add-stock',  // <home></home>

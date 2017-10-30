@@ -1,11 +1,10 @@
 import { Store } from '@ngrx/store';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { SettingsProfileActions } from '../../services/actions/settings/profile/settings.profile.action';
 import { CompanyService } from '../../services/companyService.service';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
@@ -14,6 +13,7 @@ import { TaxResponse } from '../../models/api-models/Company';
 import { SettingsTaxesActions } from '../../services/actions/settings/taxes/settings.taxes.action';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   selector: 'setting-taxes',

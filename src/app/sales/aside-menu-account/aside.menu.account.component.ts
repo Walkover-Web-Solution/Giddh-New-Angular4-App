@@ -1,14 +1,14 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { AccountRequestV2 } from '../../models/api-models/Account';
 import { AccountsAction } from '../../services/actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { GroupResponse } from '../../models/api-models/Group';
+import { Select2OptionData } from '../../theme/select2';
 
 const GROUP = ['revenuefromoperations', 'otherincome', 'operatingcost', 'indirectexpenses'];
 

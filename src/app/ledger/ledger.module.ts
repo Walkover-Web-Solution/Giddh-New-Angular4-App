@@ -20,6 +20,7 @@ import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { TaxControlModule } from '../theme/tax-control/tax-control.module';
     TooltipModule,
     PaginationModule,
     NgUploaderModule,
-    ClipboardModule
+    ClipboardModule,
+    Daterangepicker
   ],
 })
 export class LedgerModule {
