@@ -4,12 +4,12 @@ import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as uuid from 'uuid';
 import { cloneDeep } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
+import { Select2OptionData } from '../theme/select2';
 
 export class LedgerVM {
   public groupsArray: Observable<GroupsWithAccountsResponse[]>;

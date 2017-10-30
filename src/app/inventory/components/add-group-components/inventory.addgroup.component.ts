@@ -1,5 +1,4 @@
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
@@ -13,6 +12,7 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
+import { Select2OptionData } from '../../../theme/select2';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>

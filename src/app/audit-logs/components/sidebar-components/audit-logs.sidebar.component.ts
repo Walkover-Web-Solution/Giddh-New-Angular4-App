@@ -3,9 +3,8 @@ import { UserDetails } from '../../../models/api-models/loginModels';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../../services/account.service';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
@@ -18,6 +17,7 @@ import { AuditLogsSidebarVM } from './Vm';
 import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { Select2OptionData } from '../../../theme/select2';
 
 @Component({
   selector: 'audit-logs-sidebar',
