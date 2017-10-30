@@ -145,9 +145,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public getLogfilters() {
-    //
     let reqBody: LogsRequest = new LogsRequest();
-    debugger;
     reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
     reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';
     reqBody.operation = this.vm.selectedOperation === 'All' ? '' : this.vm.selectedOperation;
