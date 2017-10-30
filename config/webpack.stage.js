@@ -198,7 +198,7 @@ module.exports = function (env) {
           metadata: METADATA,
           inject: 'body'
         }),
-        new IgnorePlugin(/^\.\/locale$/, /moment$/),
+        // new IgnorePlugin(/^\.\/locale$/, /moment$/),
         /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.
