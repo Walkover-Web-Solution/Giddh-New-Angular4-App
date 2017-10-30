@@ -173,7 +173,9 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   public onSelectContainerFocus() {
-    this._focus();
+    if (!this.isTypeAheadMode) {
+      this._focus();
+    }
   }
 
   public onSelectContainerKeydown(event: any) {
@@ -208,12 +210,15 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public onMultipleFilterKeydown(event: any) {
     this.handleMultipleFilterKeydown(event);
   }
+
   public onMultipleFilterKeyup(event: any) {
     this.handleMultipleFilterKeyup(event);
   }
+
   public onMultipleFilterFocus(event: any) {
     this._focus();
   }
+
   public onTypeAheadFilterFocus() {
     this._focus();
   }
@@ -221,6 +226,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public onTypeAheadFilterKeydown(event: any) {
     this.handleMultipleFilterKeydown(event);
   }
+
   public onTypeAheadFilterKeyup(event: any) {
     this.handleMultipleFilterKeyup(event);
   }
@@ -557,6 +563,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       }
     }
   }
+
   private handleMultipleFilterKeyup(event: any) {
     // let key = event.which;
     // if (key === this.KEYS.BACKSPACE) {
@@ -566,6 +573,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     //   }
     // }
   }
+
   private handleSingleFilterKeydown(event: any) {
     let key = event.which;
 
