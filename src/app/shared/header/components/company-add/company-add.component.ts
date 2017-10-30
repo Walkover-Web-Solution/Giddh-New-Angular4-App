@@ -15,7 +15,9 @@ import { LoginActions } from '../../../../services/actions/login.action';
 import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import * as _ from '../../../../lodash-optimized';
-import { IContriesWithCodes, contriesWithCodes } from '../../../helpers/countryWithCodes';
+import { contriesWithCodes } from '../../../helpers/countryWithCodes';
+import { IOption } from '../../../../theme/ng-select/option.interface';
+
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
@@ -39,7 +41,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public dataSource: Observable<any>;
   public dataSourceBackup: any;
   public country: string;
-  public countryCodeList = [];
+  public countryCodeList: IOption[] = [];
   public selectedCountry: string;
   public options: Select2Options = {
     multiple: false,
@@ -57,7 +59,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({ id: c.countryName, text: c.value });
+      this.countryCodeList.push({ value: c.countryName, label: c.value });
     });
   }
 
@@ -220,11 +222,11 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   /**
    * setCountryCode
    */
-  public setCountryCode(id) {
-    if (id.value) {
-      let country = this.countryCodeList.filter((obj) => obj.id === id.value);
-      this.country = country[0].id;
-      this.selectedCountry = country[0].text;
+  public setCountryCode(model: Partial<IOption>) {
+    if (model.value) {
+      let country = this.countryCodeList.filter((obj) => obj.value === model.value);
+      this.country = country[0].value;
+      this.selectedCountry = country[0].label;
     }
   }
 
