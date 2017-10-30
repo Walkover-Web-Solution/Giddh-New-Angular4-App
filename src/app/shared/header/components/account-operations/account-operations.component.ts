@@ -20,7 +20,6 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
-import { Select2Component, Select2OptionData } from '../../../../theme/select2';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
@@ -41,13 +40,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
-  @ViewChild('applyTaxSelect2') public applyTaxSelect2: Select2Component;
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
-  @ViewChild('accountForMoveSelect2') public accountForMoveSelect2: Select2Component;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   @Input() public breadcrumbPath: string[] = [];
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
@@ -72,22 +69,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public isRootLevelGroup: boolean = false;
   public companyTaxes$: Observable<TaxResponse[]>;
-  public companyTaxDropDown: Observable<Select2OptionData[]>;
+  public companyTaxDropDown: Observable<IOption[]>;
   public groupsList: any[];
   public showEditTaxSection: boolean = false;
   public accounts$: Observable<IOption[]>;
-  public accountOptions: Select2Options = {
-    multiple: true,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
-  public accountOptions2: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
+
   public showAddAccountForm$: Observable<boolean>;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
@@ -134,8 +120,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-    private companyActions: CompanyActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-    private accountService: AccountService) {
+              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
+              private accountService: AccountService) {
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
@@ -170,31 +156,31 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
     this.isGroupNameAvailable$ = this.store.select(state => state.groupwithaccounts.isGroupNameAvailable).takeUntil(this.destroyed$);
     this.companyTaxDropDown = this.store.select(state => {
-      let arr: Select2OptionData[] = [];
+      let arr: IOption[] = [];
       if (state.company.taxes) {
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { text: p.name, id: p.uniqueName };
+              return { label: p.name, value: p.uniqueName };
             });
           }
         }
@@ -244,7 +230,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           this.showGroupForm = true;
           this.ShowForm.emit(true);
           this.showEditTaxSection = false;
-          this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
+          this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
           this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         }
         if (this.columnsRef) {
@@ -309,10 +295,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       }
       return result;
     });
-    this.activeGroupSelected$.subscribe(() => {
-      if (this.applyTaxSelect2) {
-        this.applyTaxSelect2.cd.detectChanges();
-      }
+    this.activeGroupSelected$.subscribe((p) => {
+      this.taxGroupForm.patchValue({taxes: p});
     });
     this.activeAccountTaxHierarchy$.subscribe((a) => {
       let activeAccount: AccountResponseV2 = null;
@@ -353,7 +337,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             let accounts: IOption[] = [];
             if (a.status === 'success') {
               a.body.results.map(acc => {
-                accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
+                accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
               });
             }
             this.accounts$ = Observable.of(accounts);
@@ -365,7 +349,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         let accounts: IOption[] = [];
         if (a.status === 'success') {
           a.body.results.map(acc => {
-            accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
+            accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
           });
         }
         this.accounts$ = Observable.of(accounts);
@@ -384,7 +368,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public moveToAccountSelected(event: any) {
-    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
+    this.moveAccountForm.patchValue({moveto: event.item.uniqueName});
   }
 
   public moveAccount() {
@@ -419,7 +403,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -528,9 +512,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       });
       let a = [];
       // console.log(data);
-      if (this.applyTaxSelect2.value && Array.isArray(this.applyTaxSelect2.value)) {
-        data.taxes.push(...(this.applyTaxSelect2.value as string[]));
-      }
+      data.taxes = this.taxGroupForm.value.taxes;
       data.uniqueName = activeAccount.uniqueName;
       this.store.dispatch(this.accountsAction.applyAccountTax(data));
     } else {
@@ -602,11 +584,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public selectAccount(v: IOption[]) {
     if (v.length) {
       // if (v.value instanceof Array) {
-        let accounts = [];
-        v.map(a => {
-          accounts.push(a.value);
-        });
-        this.selectedaccountForMerge = accounts;
+      let accounts = [];
+      v.map(a => {
+        accounts.push(a.value);
+      });
+      this.selectedaccountForMerge = accounts;
       // }
     } else {
       this.selectedaccountForMerge = '';
@@ -616,14 +598,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public setAccountForMoveFunc(v: string) {
     this.setAccountForMove = v;
     this.showDeleteMove = true;
-  }
-
-  public selectAccountForMove(v: any) {
-    if (v.value) {
-      this.selectedAccountForMove = v.value;
-    } else {
-      this.selectedAccountForMove = '';
-    }
   }
 
   public mergeAccounts() {
@@ -638,7 +612,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       });
       this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
       this.selectedaccountForMerge = '';
-      // this.accountSelect2.setElementValue('');
       this.showDeleteMove = false;
     } else {
       this._toaster.errorToast('Please Select at least one account');
@@ -664,7 +637,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.store.dispatch(this.accountsAction.unmergeAccount(activeAccount.uniqueName, obj));
     this.showDeleteMove = false;
     this.hideDeleteMergedAccountModal();
-    this.accountForMoveSelect2.setElementValue('');
+    // this.accountForMoveSelect2.setElementValue('');
     this.hideMoveMergedAccountModal();
   }
 
@@ -679,15 +652,18 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public showDeleteAccountModal() {
     this.deleteAccountModal.show();
   }
+
   public hideDeleteAccountModal() {
     this.deleteAccountModal.hide();
   }
+
   public deleteAccount() {
     let activeAccUniqueName = null;
     this.activeAccount$.take(1).subscribe(s => activeAccUniqueName = s.uniqueName);
     this.store.dispatch(this.accountsAction.deleteAccount(activeAccUniqueName));
     this.hideDeleteAccountModal();
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
