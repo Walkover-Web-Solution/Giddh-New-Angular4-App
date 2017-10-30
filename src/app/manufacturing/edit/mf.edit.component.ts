@@ -1,3 +1,5 @@
+import { validateEmail } from './../../shared/helpers/helperFunctions';
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -6,9 +8,8 @@ import { ManufacturingActions } from '../../services/actions/manufacturing/manuf
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
@@ -16,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CustomStockUnitAction } from '../../services/actions/inventory/customStockUnit.actions';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -24,7 +26,7 @@ import { AccountService } from '../../services/account.service';
 export class MfEditComponent implements OnInit {
   @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
 
-  public stockListDropDown$: Observable<Select2OptionData[]>;
+  public stockListDropDown$: Observable<IOption[]>;
   public consumptionDetail = [];
   public isUpdateCase: boolean = false;
   public manufacturingDetails: ManufacturingItemRequest;
@@ -42,8 +44,8 @@ export class MfEditComponent implements OnInit {
     multiple: false,
     placeholder: 'Select'
   };
-  public expenseGroupAccounts$: Observable<Select2OptionData[]>;
-  public liabilityGroupAccounts$: Observable<Select2OptionData[]>;
+  public expenseGroupAccounts$: Observable<IOption[]>;
+  public liabilityGroupAccounts$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -88,10 +90,10 @@ export class MfEditComponent implements OnInit {
                   let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
                   if (matchedAccIndex > -1) {
                     if (d.category === 'expenses') {
-                      this.expenseGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                      this.expenseGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                     if (d.category === 'liabilities' || d.category === 'assets') {
-                      this.liabilityGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                      this.liabilityGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                   }
                 }
@@ -129,7 +131,7 @@ export class MfEditComponent implements OnInit {
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
+            return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
           });
         }
       }
@@ -390,16 +392,16 @@ export class MfEditComponent implements OnInit {
     let name;
     if (category === 'liabilityGroupAccounts') {
       this.liabilityGroupAccounts$.subscribe((data) => {
-        let account = data.find((acc) => acc.id === uniqueName);
+        let account = data.find((acc) => acc.value === uniqueName);
         if (account) {
-          name = account.text;
+          name = account.label;
         }
       });
     } else if (category === 'expenseGroupAccounts') {
       this.expenseGroupAccounts$.subscribe((data) => {
-        let account = data.find((acc) => acc.id === uniqueName);
+        let account = data.find((acc) => acc.value === uniqueName);
         if (account) {
-          name = account.text;
+          name = account.label;
         }
       });
     }

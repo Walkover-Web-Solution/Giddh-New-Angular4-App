@@ -1,15 +1,15 @@
 import { AppState } from '../../../store/roots';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
-import { Component, OnInit, Input } from '@angular/core';
+import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
+import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
 import { Observable } from 'rxjs/Observable';
 import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { Store } from '@ngrx/store';
 
 @Component({

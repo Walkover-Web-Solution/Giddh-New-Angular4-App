@@ -1,11 +1,11 @@
-import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TaxResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { ITaxDetail } from '../../../models/interfaces/tax.interface';
-import { TaxControlData } from '../../../shared/theme/index';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
+import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 
 export const TAX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,

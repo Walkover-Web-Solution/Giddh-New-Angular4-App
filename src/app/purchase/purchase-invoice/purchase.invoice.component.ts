@@ -1,12 +1,10 @@
-import { Component } from '@angular/core';
+import { animate, Component, OnDestroy, OnInit, state, style, transition, trigger } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { BsDropdownConfig } from 'ngx-bootstrap';
 import * as  moment from 'moment/moment';
-import * as  _ from 'lodash';
-import { IInvoicePurchaseResponse, PurchaseInvoiceService, ITaxResponse, GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
-import { Observable } from 'rxjs/Rx';
-import { PipeTransform, Pipe, OnInit, trigger, state, style, transition, animate, OnDestroy } from '@angular/core';
+import * as  _ from '../../lodash-optimized';
+import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseResponse, ITaxResponse, PurchaseInvoiceService } from '../../services/purchase-invoice.service';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -14,12 +12,11 @@ import { InvoicePurchaseActions } from '../../services/actions/purchase-invoice/
 import { ToasterService } from '../../services/toaster.service';
 import { CompanyResponse } from '../../models/api-models/Company';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { saveAs } from 'file-saver';
 import 'rxjs/add/operator/distinct';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/map';
 import { AccountService } from '../../services/account.service';
-import { AccountRequest, AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../models/api-models/Account';
 import { StateList } from './state-list';
 import { CommonPaginatedRequest } from '../../models/api-models/Invoice';
 

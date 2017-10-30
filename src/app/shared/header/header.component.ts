@@ -15,7 +15,7 @@ import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Co
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';

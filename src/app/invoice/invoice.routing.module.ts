@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -8,6 +7,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
@@ -81,13 +81,13 @@ const INVOICE_ROUTES: Routes = [
     CommonModule,
     ReactiveFormsModule,
     SharedModule,
-    DatepickerModule,
     ModalModule,
     TooltipModule,
     PaginationModule,
     RouterModule.forChild(INVOICE_ROUTES),
     InvoiceTemplatesModule,
     FontPickerModule.forRoot(FONT_PICKER_CONFIG),
+    BsDatepickerModule.forRoot(),
     NgUploaderModule
   ],
   exports: [
