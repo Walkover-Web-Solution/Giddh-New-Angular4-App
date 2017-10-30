@@ -446,7 +446,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   private openDropdown() {
-    debugger;
     if (!this.isOpen) {
       this.updateWidth();
       this.updatePosition();
@@ -459,7 +458,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   private closeDropdown(focus: boolean) {
-    debugger;
     if (this.isOpen) {
       this.clearFilterInput();
       this.updateFilterWidth();
@@ -564,7 +562,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     // if (key === this.KEYS.BACKSPACE) {
     //   if (this.optionList.hasSelected && this.filterEnabled &&
     //     (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
-    //       debugger;
     //     this.deselectLast();
     //   }
     // }
