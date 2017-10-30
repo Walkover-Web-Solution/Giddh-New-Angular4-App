@@ -369,23 +369,23 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public onSubmitInvoiceForm(f?: NgForm) {
-
+    let data = _.cloneDeep(this.invFormData);
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniquename
-    if (this.invFormData.account && !this.invFormData.account.uniqueName) {
+    if (data.account && !data.account.uniqueName) {
       this._toasty.warningToast('Customer Name can\'t be empty');
       return;
     }
 
     // replace /n to br in case of message
-    if (this.invFormData.other.message1.length > 0) {
-      this.invFormData.other.message2 = this.invFormData.other.message1.replace(/\n/g, '<br />');
+    if (data.other.message2.length > 0) {
+      data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
     }
 
     // check for valid entries and transactions
-    if ( this.invFormData.entries) {
-      _.forEach(this.invFormData.entries, (entry) => {
+    if ( data.entries) {
+      _.forEach(data.entries, (entry) => {
         _.forEach(entry.transactions, (txn) => {
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
@@ -409,7 +409,7 @@ export class SalesInvoiceComponent implements OnInit {
     }
 
     let obj: GenerateSalesRequest = {
-      invoice : this.invFormData,
+      invoice : data,
       updateAccountDetails: this.updateAccount,
       paymentAction: {
         action: 'paid',
