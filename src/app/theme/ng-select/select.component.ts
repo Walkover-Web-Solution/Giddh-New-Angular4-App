@@ -569,7 +569,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
     // if (key === this.KEYS.BACKSPACE) {
     //   if (this.optionList.hasSelected && this.filterEnabled &&
     //     (this.filterInput.nativeElement.value === '' || (this.filterInput.nativeElement.value.length === 1 && this.isTypeAheadMode))) {
-    //       debugger;
     //     this.deselectLast();
     //   }
     // }
