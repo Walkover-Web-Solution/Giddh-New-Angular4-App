@@ -182,7 +182,6 @@
                     <div class="input-group">
                         <div class="input-group-addon" formGroupName="phone">
                             <ng-select [options]="countryPhoneCode" [required]="addAccountForm.get('mobileNo').value" class="form-inline" (selected)="setPhoneCode($event)" formControlName="phoneCode"></ng-select>
-                            <!-- <select2 [data]="countrySource" formControlName="phoneCode" (valueChanged)="setPhoneCode($event)"></select2> -->
                         </div>
                         <input type="text" class="form-control" formControlName="mobileNo" digitsOnlyDirective name="mobileno." placeholder="9198XXXXXXXX">
                         <input type="hidden" name="phoneCode" value="" />
