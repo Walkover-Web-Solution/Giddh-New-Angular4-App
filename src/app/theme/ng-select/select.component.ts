@@ -165,10 +165,14 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public onSelectContainerClick(event: any) {
     this.selectContainerClicked = true;
     if (this.isTypeAheadMode) {
-      this.isOpen = false;
-    }
-    if (!this.clearClicked) {
-      this.toggleDropdown();
+      if (this.optionList.hasSelected) {
+        this.isOpen = false;
+        this.filter(this.optionList.selection[0].label);
+      }
+    } else {
+      if (!this.clearClicked) {
+        this.toggleDropdown();
+      }
     }
   }
 
@@ -478,7 +482,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   /** Filter. **/
 
   private filter(term: string) {
-    if (this.multiple) {
+    if (this.multiple || this.isTypeAheadMode) {
       if (!this.isOpen) {
         this.openDropdown();
       }
