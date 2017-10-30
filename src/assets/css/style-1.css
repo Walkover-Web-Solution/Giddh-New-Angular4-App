@@ -385,6 +385,12 @@ aside-menu-account .container-fluid{
 /*dashboard panel*/
 
 
+/* override bootstrap */
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+  z-index: 1;
+}
+
+
 /*Dashboard*/
 
 .dshUl {
