@@ -1,103 +1,64 @@
-<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline">
+<form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
 
-    <div class="form-group" (clickOutside)="showFromDatePicker=false;">
-        <label class="d-block">From</label>
-        <div class="input-group">
-            <input type="text" name="from" [ngModel]="moment(invoiceSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-                </button>
-            </span>
-        </div>
-        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-            <ul class="my-dropdown-menu">
-                <li>
-                    <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="invoiceSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-                </li>
-                <li style="padding:10px 9px 2px" class="ng-scope">
-                    <span class="btn-group pull-left">
-                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('from');showFromDatePicker = false;">Today</button>
-                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('from');showFromDatePicker = false;">Clear</button></span>
-                    <button type="button" class="btn btn-sm btn-success pull-right" (click)="showFromDatePicker = false">Done</button>
-                </li>
-            </ul>
-        </div>
+  <div class="form-group">
+    <label class="d-block">Account</label>
+    <div class="ng-select-wrap">
+      <ng-select
+        placeholder="Select Account"
+        filterPlaceholder="Type to search..."
+        name="accountUniqueName"
+        [(ngModel)]="invoiceSearchRequest.accountUniqueName"
+        [options]="accounts$ | async"
+        >
+        <ng-template #optionTemplate let-option="option">
+          <div class="account-list-item">{{option?.label}}</div>
+          <div class="account-list-item fs12">{{option?.value}}</div>
+        </ng-template>
+      </ng-select>
     </div>
+  </div>
 
-    <div class="form-group" (clickOutside)="showToDatePicker=false;">
-        <label class="d-block">To</label>
-        <div class="input-group">
-            <input type="text" name="to" [ngModel]="moment(invoiceSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;" class="form-control" required/>
-            <span class="input-group-btn">
-                <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
-                <i class="glyphicon glyphicon-calendar"></i>
-                </button>
-            </span>
-        </div>
-        <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-            <ul class="my-dropdown-menu">
-                <li>
-                    <datepicker name="toDate" (click)="$event.stopPropagation()" [(ngModel)]="invoiceSearchRequest.to" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
-                </li>
-                <li style="padding:10px 9px 2px" class="ng-scope">
-                    <span class="btn-group pull-left">
-                    <button type="button" class="btn btn-sm btn-info" (click)="setToday('to');showToDatePicker = false;">Today</button>
-                    <button type="button" class="btn btn-sm btn-danger ng-binding" (click)="clearDate('to');showToDatePicker = false;">Clear</button></span>
-                    <button type="button" class="btn btn-sm btn-success pull-right" (click)="showToDatePicker = false">Done</button>
-                </li>
-            </ul>
-        </div>
+  <div class="form-group">
+      <label class="d-block">Description</label>
+      <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
+  </div>
+  <div class="form-group">
+      <label class="d-block">Count</label>
+      <div class="custom-select pos-rel">
+          <select class="form-control cp" name="count" [(ngModel)]="invoiceSearchRequest.count">
+    <option value="select">Select</option>
+    <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
+    </select>
+          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+      </div>
+  </div>
+  <div class="form-group">
+      <label class="d-block">Amount</label>
+      <div class="custom-select pos-rel">
+          <select class="form-control cp" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
+    <option value="">Please Select</option>
+    <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
+    </select>
+          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
+      </div>
+  </div>
+  <div class="form-group">
+      <label class="d-block">&nbsp;</label>
+      <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.entryTotal" placeholder="By amount">
+  </div>
+  <div class="form-group">
+    <label class="d-block">From - To</label>
+    <div class="input-group">
+      <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control"
+      [ngModel]="invoiceSearchRequest.dateRange"
+      (bsValueChange)="bsValueChange($event)"
+      bsDaterangepicker required >
     </div>
-    <div class="form-group">
-        <label class="d-block">Account</label>
-        <div class="ng-select-wrap">
-          <ng-select
-            placeholder="Sales Group"
-            filterPlaceholder="Type to search..."
-            name="accountUniqueName"
-            [(ngModel)]="invoiceSearchRequest.accountUniqueName"
-            [options]="accounts$ | async"
-            >
-            <ng-template #optionTemplate let-option="option">
-              <div class="account-list-item">{{option?.label}}</div>
-              <div class="account-list-item fs12">{{option?.value}}</div>
-            </ng-template>
-          </ng-select>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="d-block">Description</label>
-        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
-    </div>
-    <div class="form-group">
-        <label class="d-block">Count</label>
-        <div class="custom-select pos-rel">
-            <select class="form-control cp" name="count" [(ngModel)]="invoiceSearchRequest.count">
-      <option value="select">Select</option>
-      <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
-      </select>
-            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="d-block">Amount</label>
-        <div class="custom-select pos-rel">
-            <select class="form-control cp" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
-      <option value="">Please Select</option>
-      <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-      </select>
-            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="d-block">&nbsp;</label>
-        <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.entryTotal" placeholder="By amount">
-    </div>
-    <div class="form-group">
-        <label class="d-block">&nbsp;</label>
-        <button class="btn btn-success btn-sm" [ladda]="isLoadingInvoices">GO</button>
-    </div>
+  </div>
+  <div class="form-group">
+    <label class="d-block">&nbsp;</label>
+    <button class="btn btn-success btn-sm">GO</button>
+  </div>
 </form>
 <!--list of data  -->
 <div class="no-data mrT2" *ngIf="!invoiceData">
