@@ -10,10 +10,10 @@ import { DatepickerModule } from 'ngx-bootstrap';
   imports: [CommonModule, FormsModule, DatepickerModule]
 
 })
-export class DatePickeCustomrModule {
+export class DatePickerCustomModule {
   public static forRoot(): ModuleWithProviders {
     return {
-      ngModule: DatePickeCustomrModule,
+      ngModule: DatePickerCustomModule,
       providers: []
     };
   }
