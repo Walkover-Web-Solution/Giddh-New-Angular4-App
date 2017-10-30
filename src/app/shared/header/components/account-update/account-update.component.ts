@@ -1,4 +1,4 @@
-import { AccountRequest, AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
+import { AccountRequest, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { Observable } from 'rxjs';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AppState } from '../../../../store';
@@ -14,7 +14,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
 import { IGstDetailListItem } from '../../../../models/interfaces/gstDetailListItem.interface';
-import { Select2OptionData } from '../../../../theme/select2';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'account-update',
@@ -35,7 +35,7 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
   public isAccountNameAvailable$: Observable<boolean>;
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
-  public statesSource$: Subject<Select2OptionData[]> = new Subject<Select2OptionData[]>();
+  public statesSource$: Subject<IOption[]> = new Subject<IOption[]>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -48,10 +48,10 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
 
     this._companyService.getAllStates().subscribe((data) => {
-      let states: Select2OptionData[] = [];
+      let states: IOption[] = [];
       if (data) {
         data.body.map(d => {
-          states.push({text: d.name, id: d.code});
+          states.push({label: d.name, value: d.code});
         });
       }
       this.statesSource$.next(states);
