@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { IInvoiceTax } from './Invoice';
 

@@ -65,6 +65,7 @@ declare var ApiUrl: string;
 declare var isElectron: boolean;
 declare var errlyticsNeeded: boolean;
 declare var errlyticsKey: string;
+declare var _: any;
 // declare var $: JQueryStatic;
 // declare var jQuery: JQueryStatic;
 

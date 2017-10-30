@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { UserDetailsRoutingModule } from './userDetails.routing.module';
 import { UserDetailsComponent } from './userDetails.component';
+import { UiSwitchModule } from 'angular2-ui-switch';
 
 import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -30,7 +31,8 @@ import { AlertModule } from 'ngx-bootstrap/alert';
     SharedModule,
     UserDetailsRoutingModule,
     TabsModule,
-    AlertModule
+    AlertModule,
+    UiSwitchModule
   ],
 })
 export class UserDetailsModule {

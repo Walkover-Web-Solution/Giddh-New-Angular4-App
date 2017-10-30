@@ -1,15 +1,10 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { HOME } from '../../services/actions/home/home.const';
 import { Action } from '@ngrx/store';
-import {
-  IComparisionChartResponse,
-  IExpensesChartClosingBalanceResponse,
-  IGroupHistoryGroups,
-  IRevenueChartClosingBalanceResponse
-} from '../../models/interfaces/dashboard.interface';
+import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IGroupHistoryGroups, IRevenueChartClosingBalanceResponse } from '../../models/interfaces/dashboard.interface';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
-import { RefreshBankAccountResponse, BankAccountsResponse } from '../../models/api-models/Dashboard';
+import * as _ from '../../lodash-optimized';
+import { BankAccountsResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
 
 export interface HomeState {
   value?: string;

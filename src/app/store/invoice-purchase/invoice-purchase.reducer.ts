@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { IInvoicePurchaseResponse, ITaxResponse, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
 import { PURCHASE_INVOICE_ACTIONS } from '../../services/actions/purchase-invoice/purchase-invoice.const';
 

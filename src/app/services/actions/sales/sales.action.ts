@@ -19,7 +19,7 @@ import { GroupService } from '../../group.service';
 import { GroupsWithStocksHierarchyMin } from '../../../models/api-models/GroupsWithStocks';
 import { InventoryService } from '../../inventory.service';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
-import { IOption } from '../../../shared/theme/index';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Injectable()
 export class SalesActions {

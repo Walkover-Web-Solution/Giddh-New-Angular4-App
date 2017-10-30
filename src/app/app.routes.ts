@@ -25,7 +25,7 @@ export const ROUTES: Routes = [
   { path: 'new-user', component: NewUserComponent, canActivate: [NewUserAuthGuard] },
   { path: 'social-login-callback', component: SocialLoginCallbackComponent },
   { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
-  { path: 'sales',  redirectTo: 'pages/sales', pathMatch: 'full' },
+  { path: 'sales', redirectTo: 'pages/sales', pathMatch: 'full' },
   { path: 'purchase', redirectTo: 'pages/purchase', pathMatch: 'full' },
   { path: 'user-details', redirectTo: 'pages/user-details', pathMatch: 'full' },
   {
@@ -33,7 +33,7 @@ export const ROUTES: Routes = [
     children: [
       { path: 'home', loadChildren: './home/home.module#HomeModule' },
       { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule' },
-      { path: 'sales', component: SalesComponent },
+      { path: 'sales', loadChildren: './sales/sales.module#SalesModule' },
       { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule' },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule' },

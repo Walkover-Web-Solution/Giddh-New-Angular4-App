@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter, ComponentFactoryResolver } from '@angular/core';
+import { AppState } from '../store';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -8,14 +8,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy } from 'lodash';
+import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
 import { AccountService } from '../services/account.service';
-import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -26,6 +24,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { Select2OptionData } from '../theme/select2';
 
 @Component({
   selector: 'ledger',
