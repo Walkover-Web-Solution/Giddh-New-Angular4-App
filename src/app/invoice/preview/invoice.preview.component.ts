@@ -47,6 +47,7 @@ export class InvoicePreviewComponent implements OnInit {
   public moment = moment;
   public showFromDatePicker: boolean  = false;
   public showToDatePicker: boolean = false;
+  public isLoadingInvoices: boolean = false;
   public select2Options: Select2Options = {
     multiple: false,
     width: '100%',
@@ -104,6 +105,10 @@ export class InvoicePreviewComponent implements OnInit {
         this.getInvoices();
       }
     });
+
+    // this.store.select(p => p.invoice.isLoadingInvoices).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o: boolean) => {
+    //    this.isLoadingInvoices = _.cloneDeep(o);
+    // });
 
     this.store.select(p => p.invoice.invoiceData)
     .takeUntil(this.destroyed$)
