@@ -5,11 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { Observable } from 'rxjs/Observable';
 import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import {
-  decimalDigits,
-  digitsOnly,
-  stockManufacturingDetailsValidator
-} from '../../../shared/helpers';
+import { decimalDigits, digitsOnly, stockManufacturingDetailsValidator } from '../../../shared/helpers';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import * as  _ from '../../../lodash-optimized';
@@ -19,17 +15,17 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IStockItemDetail, IUnitRateItem } from '../../../models/interfaces/stocksItem.interface';
 import { Subject } from 'rxjs/Subject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
-import { Select2OptionData } from '../../../theme/select2';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'invetory-add-stock',  // <home></home>
   templateUrl: './inventory.addstock.component.html'
 })
 export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDestroy {
-  public stockListDropDown$: Observable<Select2OptionData[]>;
-  public stockUnitsDropDown$: Observable<Select2OptionData[]>;
-  public purchaseAccountsDropDown$: Observable<Select2OptionData[]>;
-  public salesAccountsDropDown$: Observable<Select2OptionData[]>;
+  public stockListDropDown$: Observable<IOption[]>;
+  public stockUnitsDropDown$: Observable<IOption[]>;
+  public purchaseAccountsDropDown$: Observable<IOption[]>;
+  public salesAccountsDropDown$: Observable<IOption[]>;
 
   @ViewChild('formDiv') public formDiv: ElementRef;
   public formDivBoundingRect: Subject<any> = new Subject<any>();
@@ -114,7 +110,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
+            return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
           });
         }
       }
@@ -126,7 +122,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         let units = p.inventory.stockUnits;
 
         return units.map(unit => {
-          return { text: `${unit.name} (${unit.code})`, id: unit.code };
+          return { label: `${unit.name} (${unit.code})`, value: unit.code };
         });
       }
     }).takeUntil(this.destroyed$);
@@ -171,9 +167,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // get purchase accounts
     this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['purchases'] }).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let purchaseAccounts: Select2OptionData[] = [];
+        let purchaseAccounts: IOption[] = [];
         data.body.results.map(d => {
-          purchaseAccounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
+          purchaseAccounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
         });
         this.purchaseAccountsDropDown$ = Observable.of(purchaseAccounts);
       }
@@ -182,9 +178,9 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     // get sales accounts
     this._accountService.GetFlatternAccountsOfGroup({ groupUniqueNames: ['sales'] }).takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let salesAccounts: Select2OptionData[] = [];
+        let salesAccounts: IOption[] = [];
         data.body.results.map(d => {
-          salesAccounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
+          salesAccounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
         });
         this.salesAccountsDropDown$ = Observable.of(salesAccounts);
       }
@@ -472,7 +468,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     linkedStokesControl.removeAt(i);
   }
 
-  public checkIfLinkedStockIsUnique(v) {
+  public checkIfLinkedStockIsUnique(v: IOption) {
     const manufacturingDetailsContorl = this.addStockForm.controls['manufacturingDetails'] as FormGroup;
     const control = manufacturingDetailsContorl.controls['linkedStocks'] as FormArray;
     const linkedStokes = control.value;
