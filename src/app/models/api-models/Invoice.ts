@@ -42,6 +42,7 @@ export class CommonPaginatedRequest {
   public to?: string;
   public count?: number;
   public page?: number;
+  public dateRange?: Date[];
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {

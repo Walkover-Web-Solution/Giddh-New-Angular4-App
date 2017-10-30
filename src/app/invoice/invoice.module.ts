@@ -14,7 +14,7 @@ import { InvoiceRoutingModule } from './invoice.routing.module';
   declarations: [
   ],
   imports: [
-    InvoiceRoutingModule,
+    InvoiceRoutingModule
   ]
 })
 export class InvoiceModule { }

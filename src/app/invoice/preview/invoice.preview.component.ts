@@ -16,6 +16,8 @@ import { Observable } from 'rxjs/Observable';
 import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceService } from '../../services/invoice.service';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
@@ -45,15 +47,16 @@ export class InvoicePreviewComponent implements OnInit {
   public counts: number[] = COUNTS;
   public accounts$: Observable<IOption[]>;
   public moment = moment;
-  public showFromDatePicker: boolean  = false;
-  public showToDatePicker: boolean = false;
   public modalRef: BsModalRef;
+  public bsConfig: Partial<BsDatepickerConfig>;
   public modalConfig = {
     animated: true,
     keyboard: false,
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public startDate: Date;
+  public endDate: Date;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -63,16 +66,19 @@ export class InvoicePreviewComponent implements OnInit {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
   ) {
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate(this.startDate.getDate() - 30);
+    this.endDate.setDate(this.endDate.getDate());
+    this.invoiceSearchRequest.dateRange = [this.startDate, this.endDate];
+    this.invoiceSearchRequest.page = 1;
+    this.invoiceSearchRequest.count = 25;
+    this.invoiceSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
+    this.invoiceSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.invoiceSearchRequest.entryTotalBy = '';
   }
 
   public ngOnInit() {
-    // set initial values
-    this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
-    this.invoiceSearchRequest.to = String(moment());
-    this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 25;
-
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
@@ -279,10 +285,17 @@ export class InvoicePreviewComponent implements OnInit {
   public prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
     return {
-      from: moment(o.from).format('DD-MM-YYYY'),
-      to: moment(o.to).format('DD-MM-YYYY'),
+      from: o.from,
+      to: o.to,
       count: o.count,
       page: o.page
     };
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.invoiceSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
+      this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+    }
   }
 }
