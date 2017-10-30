@@ -274,10 +274,12 @@ header .navbar {
     border-radius: 2px;
     font-size: 14px;
 }
-.btn-group-lg>.btn, .btn.btn-lg {
-  padding: 10px 16px;
-  font-size: 18px;
-  line-height: 1.3333333;
+
+.btn-group-lg>.btn,
+.btn.btn-lg {
+    padding: 10px 16px;
+    font-size: 18px;
+    line-height: 1.3333333;
 }
 
 .btn-default {
@@ -3378,14 +3380,18 @@ label {
     border-radius: 0;
     margin: 0;
 }
+
+
 /* sales universal styles */
-.tax-list-dd-wrap .dropdown-menu{
-  min-width: 200px;
+
+.tax-list-dd-wrap .dropdown-menu {
+    min-width: 200px;
 }
-.tax-list-dd-wrap .dropdown-menu li label{
-  clear: both;
-  overflow: hidden;
-  cursor: pointer;
+
+.tax-list-dd-wrap .dropdown-menu li label {
+    clear: both;
+    overflow: hidden;
+    cursor: pointer;
 }
 
 
@@ -4002,4 +4008,14 @@ input[type='checkbox'][disabled]:after {
 
 #verifyMobile .select2-parent .select2-container--default .select2-selection--single .select2-selection__arrow {
     height: 44px;
+}
+
+ng-select>div>div.single>div.clear {
+    font-size: 14px !important;
+    padding: 0 !important;
+    width: auto !important;
+}
+
+ng-select>div>div.single>div.clear:hover {
+    background: none;
 }
