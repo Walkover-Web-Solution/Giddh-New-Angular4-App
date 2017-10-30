@@ -21,6 +21,7 @@ import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interfa
 import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
 import { Select2Component, Select2OptionData } from '../../../../theme/select2';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'account-operations',
@@ -46,7 +47,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
   @ViewChild('moveMergedAccountModal') public moveMergedAccountModal: ModalDirective;
-  @ViewChild('accountSelect2') public accountSelect2: Select2Component;
   @ViewChild('accountForMoveSelect2') public accountForMoveSelect2: Select2Component;
   @ViewChild('deleteAccountModal') public deleteAccountModal: ModalDirective;
   @Input() public breadcrumbPath: string[] = [];
@@ -75,7 +75,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public companyTaxDropDown: Observable<Select2OptionData[]>;
   public groupsList: any[];
   public showEditTaxSection: boolean = false;
-  public accounts$: Observable<Select2OptionData[]>;
+  public accounts$: Observable<IOption[]>;
   public accountOptions: Select2Options = {
     multiple: true,
     width: '100%',
@@ -348,12 +348,12 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public loadAccountData() {
     if (this.accounts$) {
       this.accounts$.isEmpty().subscribe(bool => {
-        if (!bool) {
+        if (bool) {
           this.accountService.GetFlattenAccounts().subscribe(a => {
-            let accounts: Select2OptionData[] = [];
+            let accounts: IOption[] = [];
             if (a.status === 'success') {
               a.body.results.map(acc => {
-                accounts.push({ text: `${acc.name} (${acc.uniqueName})`, id: acc.uniqueName });
+                accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
               });
             }
             this.accounts$ = Observable.of(accounts);
@@ -362,10 +362,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       });
     } else {
       this.accountService.GetFlattenAccounts().subscribe(a => {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         if (a.status === 'success') {
           a.body.results.map(acc => {
-            accounts.push({ text: `${acc.name} (${acc.uniqueName})`, id: acc.uniqueName });
+            accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
           });
         }
         this.accounts$ = Observable.of(accounts);
@@ -599,15 +599,15 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.hideDeleteMergedAccountModal();
   }
 
-  public selectAccount(v: any) {
-    if (v.value) {
-      if (v.value instanceof Array) {
+  public selectAccount(v: IOption[]) {
+    if (v.length) {
+      // if (v.value instanceof Array) {
         let accounts = [];
-        v.value.map(a => {
-          accounts.push(a);
+        v.map(a => {
+          accounts.push(a.value);
         });
         this.selectedaccountForMerge = accounts;
-      }
+      // }
     } else {
       this.selectedaccountForMerge = '';
     }
@@ -638,7 +638,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       });
       this.store.dispatch(this.accountsAction.mergeAccount(activeAccount.uniqueName, finalData));
       this.selectedaccountForMerge = '';
-      this.accountSelect2.setElementValue('');
+      // this.accountSelect2.setElementValue('');
       this.showDeleteMove = false;
     } else {
       this._toaster.errorToast('Please Select at least one account');

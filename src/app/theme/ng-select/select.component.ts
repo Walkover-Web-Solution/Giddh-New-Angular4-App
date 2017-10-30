@@ -68,6 +68,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Output() public blur = new EventEmitter<null>();
   @Output() public noOptionsFound = new EventEmitter<string>();
   @Output() public noResultsClicked = new EventEmitter<null>();
+  @Output() public viewInitEvent = new EventEmitter<any>();
 
   @ViewChild('selection') public selectionSpan: ElementRef;
   @ViewChild('dropdown') public dropdown: SelectDropdownComponent;
@@ -133,6 +134,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public ngAfterViewInit() {
     this.updateState();
+    this.viewInitEvent.emit();
   }
 
   @HostListener('window:blur')
