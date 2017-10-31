@@ -25,6 +25,8 @@ import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { SelectComponent } from '../../theme/ng-select/select.component';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
@@ -141,6 +143,8 @@ export class SalesInvoiceComponent implements OnInit {
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
   public dueAmount: number;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
 
   // modals related
   public modalConfig = {
@@ -311,7 +315,10 @@ export class SalesInvoiceComponent implements OnInit {
     this.invFormData.account.uniqueName = data.uniqueName;
     this.invFormData.account.attentionTo = data.attentionTo;
     this.invFormData.country.countryName = data.country.countryName;
-    this.invFormData.invoiceDetails.invoiceDate = moment().format('DD-MM-YYYY');
+
+    // set dates
+    // this.invFormData.invoiceDetails.invoiceDate = new Date();
+    // this.invFormData.invoiceDetails.dueDate = new Date().setDate(new Date().getDate() + 10 );
     // fill address conditionally
     if (data.addresses.length > 0) {
       // set billing
@@ -349,6 +356,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
+    this.invFormData = new InvoiceFormClass();
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -363,8 +371,20 @@ export class SalesInvoiceComponent implements OnInit {
     }
   }
 
+  public convertDateForAPI(val: any): string {
+    if (val) {
+      try {
+        return moment(val).format(GIDDH_DATE_FORMAT);
+      } catch (error) {
+        return '';
+      }
+    }else {
+      return '';
+    }
+  }
+
   public onSubmitInvoiceForm(f?: NgForm) {
-    let data = _.cloneDeep(this.invFormData);
+    let data: InvoiceFormClass = _.cloneDeep(this.invFormData);
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniquename
@@ -374,14 +394,21 @@ export class SalesInvoiceComponent implements OnInit {
     }
 
     // replace /n to br in case of message
-    if (data.other.message2.length > 0) {
+    if (data.other.message2 && data.other.message2.length > 0) {
       data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
     }
+
+    // convert date object
+    data.invoiceDetails.invoiceDate = this.convertDateForAPI(data.invoiceDetails.invoiceDate);
+    data.invoiceDetails.dueDate = this.convertDateForAPI(data.invoiceDetails.dueDate);
+    data.other.shippingDate = this.convertDateForAPI(data.other.shippingDate);
 
     // check for valid entries and transactions
     if ( data.entries) {
       _.forEach(data.entries, (entry) => {
-        _.forEach(entry.transactions, (txn) => {
+        _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+          // convert date object
+          txn.date = this.convertDateForAPI(txn.date);
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -405,16 +432,20 @@ export class SalesInvoiceComponent implements OnInit {
 
     let obj: GenerateSalesRequest = {
       invoice : data,
-      updateAccountDetails: this.updateAccount,
-      paymentAction: {
+      updateAccountDetails: this.updateAccount
+    };
+
+    if (this.dueAmount && this.dueAmount > 0) {
+      obj.paymentAction = {
         action: 'paid',
         amount: this.dueAmount
-      }
-    };
+      };
+    }
 
     this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
       if (response.status === 'success') {
-        f.form.reset();
+        // reset form and other
+        this.resetInvoiceForm(f);
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
