@@ -135,9 +135,9 @@ export class MfEditComponent implements OnInit {
           return units.map(unit => {
             let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
             if (alreadyPushedElementindx > -1) {
-              return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName, isAlreadyPushed: true };
+              return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
             } else {
-              return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName, isAlreadyPushed: false };
+              return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
             }
           });
         }

@@ -3,4 +3,5 @@ export interface IOption {
     label: string;
     disabled?: boolean;
     additional?: any;
+    isAlreadyPushed?: boolean;
 }
