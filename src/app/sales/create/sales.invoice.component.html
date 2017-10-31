@@ -64,15 +64,11 @@
         </div>
         <div class="form-group">
           <label>Invoice Date</label>
-          <input type="text" placeholder="DD-MM-YYYY" name="invoiceDate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
+          <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.invoiceDetails.invoiceDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}" />
         </div>
-        <!-- <div class="form-group">
-          <label>Invoice Number</label>
-          <input type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
-        </div> -->
         <div class="form-group">
           <label>Due Date</label>
-          <input type="text" name="dueDate" class="form-control" [(ngModel)]="invFormData.invoiceDetails.dueDate" />
+          <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.invoiceDetails.dueDate" value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
         </div>
 
       </div>
@@ -108,7 +104,7 @@
           </div>
           <div class="flex-row-child">
             <div class="form-group size_340">
-              <label style="width:340px;"><input type="checkbox" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+              <label style="width:340px;"><input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
               <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
             </div>
             <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
@@ -140,7 +136,7 @@
       <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3">
         <div class="form-group size_175">
           <label>Ship Date</label>
-          <input type="text" placeholder="DD-MM-YYYY" name="shippingDate" [(ngModel)]="invFormData.other.shippingDate" class="form-control" />
+          <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.other.shippingDate" class="form-control" value="{{ invFormData.other.shippingDate | date: giddhDateFormatUI }}" />
         </div>
         <div class="form-group size_175">
           <label>Ship Via</label>
@@ -188,7 +184,7 @@
       <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
         <tr *ngFor="let transaction of entry.transactions;">
           <td>{{ entryIdx+1 }}</td>
-          <td><input type="text" placeholder="DD-MM-YYYY" name="transaction.date_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.date" /></td>
+          <td><input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.date" value="{{ transaction.date | date: giddhDateFormatUI }}" /></td>
           <td>
             <div class="ng-select-wrap">
               <ng-select
@@ -240,9 +236,9 @@
                             </select>
                           </td>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
+                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
                           </td>
-                          <td width="25%"><input type="text" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" /></td>
+                          <td width="25%"><input type="number" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" /></td>
                         </tr>
                       </tbody>
                     </table>
@@ -255,7 +251,7 @@
                           <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
+                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
                           </td>
                         </tr>
                       </tbody>
