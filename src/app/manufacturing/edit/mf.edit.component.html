@@ -27,7 +27,7 @@
                         >
                         <ng-template #optionTemplate let-option="option">
                             <div class="account-list-item">{{option?.label}}</div>
-                            <div class="account-list-item fs12">{{option?.value}}</div>
+                            <!--<div class="account-list-item fs12">{{option?.value}}</div>-->
                         </ng-template>
                     </ng-select>
                 </div>
@@ -117,7 +117,7 @@
                                     <div class="custom-select pos-rel">
                                         <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (change)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)">
                                               <option value="" [selected]="true">-Select-</option>
-                                              <option [ngValue]="stock.value" *ngFor="let stock of stockListDropDown$ | async" >{{ stock.label }}</option>
+                                              <option [disabled]="stock.isAlreadyPushed" [ngValue]="stock.value" *ngFor="let stock of stockListDropDown$ | async" >{{ stock.label }}</option>
                                             </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                                     </div>
@@ -213,7 +213,7 @@
                                         >
                                         <ng-template #optionTemplate let-option="option">
                                             <div class="account-list-item">{{option?.label}}</div>
-                                            <div class="account-list-item fs12">{{option?.value}}</div>
+                                            <!--<div class="account-list-item fs12">{{option?.value}}</div>-->
                                         </ng-template>
                                     </ng-select>
                                 </td>
@@ -231,7 +231,7 @@
                                         >
                                         <ng-template #optionTemplate let-option="option">
                                             <div class="account-list-item">{{option?.label}}</div>
-                                            <div class="account-list-item fs12">{{option?.value}}</div>
+                                            <!--<div class="account-list-item fs12">{{option?.value}}</div>-->
                                         </ng-template>
                                     </ng-select>
                                     </div>
