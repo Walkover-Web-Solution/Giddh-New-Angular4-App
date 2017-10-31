@@ -17,7 +17,7 @@ import { AuditLogsSidebarVM } from './Vm';
 import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Select2OptionData } from '../../../theme/select2';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'audit-logs-sidebar',
@@ -49,9 +49,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }).takeUntil(this.destroyed$);
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ text: d.name, id: d.uniqueName });
+          accounts.push({ label: d.name, value: d.uniqueName });
         });
         this.vm.accounts$ = Observable.of(accounts);
       }
@@ -59,9 +59,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accountList = this.flattenGroup(data.body, []);
-        let groups: Select2OptionData[] = [];
+        let groups: IOption[] = [];
         accountList.map((d: any) => {
-          groups.push({ text: d.name, id: d.uniqueName });
+          groups.push({ label: d.name, value: d.uniqueName });
         });
         this.vm.groups$ = Observable.of(groups);
       }
@@ -72,9 +72,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.vm.user$.take(1).subscribe((c) => loginUser = c);
     this._companyService.getComapnyUsers().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let users: Select2OptionData[] = [];
+        let users: IOption[] = [];
         data.body.map((d) => {
-          users.push({ text: d.userName, id: d.userUniqueName });
+          users.push({ label: d.userName, value: d.userUniqueName });
         });
         this.vm.canManageCompany = true;
         this.vm.users$ = Observable.of(users);
