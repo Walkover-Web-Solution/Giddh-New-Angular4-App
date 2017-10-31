@@ -1,3 +1,5 @@
+import { IOption } from './../../shared/theme/ng-select/option.interface';
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -25,14 +27,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public iframeSource: string;
   public ebankAccounts: BankAccountsResponse[] = [];
-  public accounts$: Select2OptionData[];
+  public accounts$: IOption[];
   public confirmationMessage: string;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -63,9 +59,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     // get flatternaccounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
+          accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
         });
         this.accounts$ = accounts;
       }
