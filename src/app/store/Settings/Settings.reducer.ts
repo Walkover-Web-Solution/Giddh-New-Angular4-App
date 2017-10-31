@@ -1,12 +1,14 @@
-import * as _ from '../../lodash-optimized';
+import { SETTINGS_PERMISSION_ACTIONS } from './../../services/actions/settings/permissions/settings.permissions.const';
+import * as _ from 'lodash';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
 import { SETTINGS_PROFILE_ACTIONS } from '../../services/actions/settings/profile/settings.profile.const';
-import { ActiveFinancialYear, CompanyResponse } from '../../models/api-models/Company';
-import { EmailKeyClass, IntegrationPage, IntegrationPageClass, RazorPayClass, RazorPayDetailsResponse, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
+import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
+import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass, RazorPayDetailsResponse, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.const';
+import { IGetAllEbankAccountResponse } from '../../models/api-models/SettingsLinkedAccounts';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../services/actions/settings/financial-year/financial-year.const';
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
 
@@ -20,13 +22,15 @@ export interface SettingsState {
   profile: any;
   linkedAccounts: LinkedAccountsState;
   financialYears: IFinancialYearResponse;
+  usersWithCompanyPermissions: any;
 }
 
 export const initialState: SettingsState = {
   integration: new IntegrationPageClass(),
   profile: {},
   linkedAccounts: {},
-  financialYears: null
+  financialYears: null,
+  usersWithCompanyPermissions: null
 };
 
 export function SettingsReducer(state = initialState, action: Action): SettingsState {
@@ -141,7 +145,6 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
         //   return Object.assign({}, state, newState);
         // }
         // return state;
-
         let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
         if (response.status === 'success') {
           newState.linkedAccounts.isBankAccountsInProcess = false;
@@ -173,7 +176,6 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
         //   }
         // }
         // return state;
-
         let response: BaseResponse<string, string> = action.payload;
           if (response.status === 'success') {
             newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
@@ -221,6 +223,15 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
       if (response.status === 'success') {
         newState.financialYears = null;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        newState.financialYears = null;
+        newState.usersWithCompanyPermissions = response.body;
         return Object.assign({}, state, newState);
       }
       return state;
