@@ -173,9 +173,12 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   public onSelectContainerFocus() {
-      this._focus();
+    let initialFocusValue = this.hasFocus;
+    this._focus();
+    if (!initialFocusValue) {
       this.processMyLogic();
       this.focused = true;
+    }
   }
   public processMyLogic() {
     if (this.isTypeAheadMode) {
@@ -185,7 +188,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       }
     } else {
       if (!this.clearClicked) {
-          this.toggleDropdown();
+        this.toggleDropdown();
       }
     }
   }
@@ -232,7 +235,13 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   public onTypeAheadFilterFocus() {
+    let initialFocusValue = this.hasFocus;
     this._focus();
+    if (!initialFocusValue) {
+      this.processMyLogic();
+      this.focused = true;
+    }
+    // this._focus();
   }
 
   public onTypeAheadFilterKeydown(event: any) {
