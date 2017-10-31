@@ -1,4 +1,3 @@
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -13,6 +12,7 @@ import { NetworthChartComponent } from './components/networth/networth-chart.com
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ChartModule } from 'angular2-highcharts';
 import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
+import { LaddaModule } from 'angular2-ladda';
 
 export function highchartsFactory() {
   const hc = require('highcharts');
@@ -44,9 +44,9 @@ export function highchartsFactory() {
     CommonModule,
     FormsModule,
     HomeRoutingModule,
-    SharedModule,
     ModalModule,
     ChartModule,
+    LaddaModule
   ],
 })
 export class HomeModule {

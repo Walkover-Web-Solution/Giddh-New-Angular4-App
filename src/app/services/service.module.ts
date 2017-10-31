@@ -13,7 +13,6 @@ import { GroupService } from './group.service';
 import { StorageService } from './storage.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ToasterService } from './toaster.service';
-import { SharedModule } from '../shared/shared.module';
 import { CompanyActions } from './actions/company.actions';
 import { LoginActions } from './actions/login.action';
 import { GroupWithAccountsAction } from './actions/groupwithaccounts.actions';
@@ -70,7 +69,6 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 
 @NgModule({
   imports: [CommonModule, RouterModule,
-    SharedModule.forRoot(),
     EffectsModule.run(HomeActions),
     EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions),

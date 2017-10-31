@@ -23,6 +23,9 @@ import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { Select2Module } from '../theme/select2';
 import { SharedModule } from '../shared/shared.module';
+import { LaddaModule } from 'angular2-ladda';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 // import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
@@ -52,11 +55,15 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     TypeaheadModule,
     CollapseModule,
     BsDatepickerModule.forRoot(),
-    SharedModule
+    SharedModule,
+    LaddaModule,
+    DigitsOnlyModule,
+    DecimalDigitsModule
   ],
   exports: [
     TooltipModule
   ],
   providers: []
 })
-export class SalesModule { }
+export class SalesModule {
+}

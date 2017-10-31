@@ -17,7 +17,7 @@ import { GroupWithAccountsAction } from '../../services/actions/groupwithaccount
 import { Router, ActivatedRoute } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';

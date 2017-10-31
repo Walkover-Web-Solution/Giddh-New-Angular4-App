@@ -12,7 +12,7 @@ import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
-import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
+import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
 import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
