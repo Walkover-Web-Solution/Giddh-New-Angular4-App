@@ -198,7 +198,7 @@ module.exports = function (env) {
         metadata: METADATA,
         inject: 'body'
       }),
-      new ContextReplacementPlugin(/moment[\/\\]locale$/),
+      new ContextReplacementPlugin(/moment[\/\\]locale$/, /en/),
       /**
        * Plugin: UglifyJsPlugin
        * Description: Minimize all JavaScript output of chunks.
