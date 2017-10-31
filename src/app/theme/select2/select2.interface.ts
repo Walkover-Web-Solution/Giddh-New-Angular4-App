@@ -4,7 +4,7 @@ export interface Select2OptionData {
     disabled?: boolean;
     children?: Select2OptionData[];
     additional?: any;
-    isAlreadyPushed: boolean;
+    isAlreadyPushed?: boolean;
 }
 
 export type Select2TemplateFunction = (state: Select2OptionData) => JQuery | string;
