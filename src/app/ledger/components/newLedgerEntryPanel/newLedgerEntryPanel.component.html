@@ -134,7 +134,7 @@
               <label class="default_clr pull-left">Voucher type</label>
             </td>
             <td colspan="4" class="select2-parent">
-              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
+              <ng-select [options]="voucherTypeList | async" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"></ng-select>
             </td>
             <td class="pdL1">
               <span>{{""}}</span>
