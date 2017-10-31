@@ -25,6 +25,7 @@ import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { Select2OptionData } from '../theme/select2';
+import { IOption } from '../theme/ng-select/option.interface';
 
 @Component({
   selector: 'ledger',
@@ -138,22 +139,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accountsArray: Select2OptionData[] = [];
+        let accountsArray: IOption[] = [];
         data.body.results.map(acc => {
           if (acc.stocks) {
             acc.stocks.map(as => {
               accountsArray.push({
-                id: uuid.v4(),
-                text: acc.name,
+                value: uuid.v4(),
+                label: acc.name,
                 additional: Object.assign({}, acc, { stock: as })
               });
             });
-            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
           } else {
-            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
           }
         });
-        this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'text'));
+        this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'label'));
       }
     });
 
@@ -205,7 +206,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-        if (fa.id === e.value) {
+        if (fa.value === e.value) {
           txn.selectedAccount = fa.additional;
           let rate = 0;
           let unitCode = '';

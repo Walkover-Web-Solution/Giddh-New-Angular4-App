@@ -10,6 +10,7 @@ import { cloneDeep } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { Select2OptionData } from '../theme/select2';
+import { IOption } from '../theme/ng-select/option.interface';
 
 export class LedgerVM {
   public groupsArray: Observable<GroupsWithAccountsResponse[]>;
@@ -19,7 +20,7 @@ export class LedgerVM {
   public currentTxn: ITransactionItem;
   public currentBlankTxn: TransactionVM;
   public currentPage: number;
-  public flatternAccountList: Observable<Select2OptionData[]>;
+  public flatternAccountList: Observable<IOption[]>;
   public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
