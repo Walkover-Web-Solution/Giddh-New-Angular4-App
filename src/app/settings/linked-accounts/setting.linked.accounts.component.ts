@@ -1,5 +1,3 @@
-import { IOption } from './../../shared/theme/ng-select/option.interface';
-import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -14,7 +12,7 @@ import { SettingsLinkedAccountsActions } from '../../services/actions/settings/l
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
-import { Select2OptionData } from '../../theme/select2';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'setting-linked-accounts',
