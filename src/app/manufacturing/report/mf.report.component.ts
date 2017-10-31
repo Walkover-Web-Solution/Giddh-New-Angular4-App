@@ -102,9 +102,11 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
 
-    let d = moment().subtract(30, 'days');
+    let f = moment().subtract(30, 'days');
+    let t = moment();
 
-    this.mfStockSearchRequest.from = String(d);
+    this.mfStockSearchRequest.from = String(f);
+    this.mfStockSearchRequest.to = String(t);
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
@@ -121,6 +123,12 @@ export class MfReportComponent implements OnInit {
 
   public pageChanged(event: any): void {
     let data = _.cloneDeep(this.mfStockSearchRequest);
+    let from = moment(data.from).format(GIDDH_DATE_FORMAT);
+    let to = moment(data.to).format(GIDDH_DATE_FORMAT);
+    if (from !== 'Invalid date' && to !== 'Invalid date') {
+      data.from = from;
+      data.to = to;
+    }
     data.page = event.page;
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
@@ -161,6 +169,5 @@ export class MfReportComponent implements OnInit {
       this.mfStockSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
       this.mfStockSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
     }
-    console.log('THe event is :', event);
   }
 }
