@@ -1,9 +1,7 @@
-import { Component, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'aside-menu-product-service',

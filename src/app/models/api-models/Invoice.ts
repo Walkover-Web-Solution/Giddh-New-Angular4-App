@@ -42,6 +42,7 @@ export class CommonPaginatedRequest {
   public to?: string;
   public count?: number;
   public page?: number;
+  public dateRange?: Date[];
 }
 
 export class InvoiceFilterClass extends CommonPaginatedRequest {
@@ -445,16 +446,16 @@ export class CustomTemplateResponse {
 export class Esignature {
   public file: string;
   public companyName: string = 'companyName';
-  public selectPage: string = 'ALL';
+  public selectPage: string = 'LAST';
   public referenceNumber: string = '';
   public aadharNo: string = '';
   public signatureType: string = '1';
-  public signaturePosition: string = 'Bottom-Right';
+  public signaturePosition: string = 'Customize';
   public authToken: string = '';
   public pageNumber: string = '';
   public fileType: string = 'PDF';
   public previewRequired: boolean = true;
-  public customizeCoordinates: string = '';
+  public customizeCoordinates: string = '420,200,540,150';
   public pagelevelCoordinates: string = '';
   public uploadSignatureOption: boolean = true;
   public selectFontOption: boolean = true;

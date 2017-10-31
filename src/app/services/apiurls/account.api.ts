@@ -16,10 +16,8 @@ export const ACCOUNTS_API = {
   MERGE: COMMON_URL_FOR_ACCOUNT + '/merge',
   UNMERGE: COMMON_URL_FOR_ACCOUNT + '/un-merge',
   MOVE: COMMON_URL_FOR_ACCOUNT + '/move',
-  // SHARE: COMMON_URL_FOR_ACCOUNT + '/share',
-  SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/role/:roleUniqueName/assign',
-  UN_SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/role/:roleUniqueName/revoke',
-  // UNSHARE: COMMON_URL_FOR_ACCOUNT + '/unshare',
+  SHARE: COMMON_URL_FOR_ACCOUNT + '/share',
+  UNSHARE: COMMON_URL_FOR_ACCOUNT + '/unshare',
   SHARED_WITH: COMMON_URL_FOR_ACCOUNT + '/shared-with',
   TAX_HIERARCHY: COMMON_URL_FOR_ACCOUNT + '/tax-hierarchy', // get call
   FLATTEN_ACCOUNTS: Configuration.ApiUrl + 'company/:companyUniqueName/flatten-accounts?q=:q&page=:page&count=:count', // get call

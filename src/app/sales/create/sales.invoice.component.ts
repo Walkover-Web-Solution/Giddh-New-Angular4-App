@@ -1,14 +1,11 @@
-import { Component, OnInit, Input, Output, EventEmitter, AfterViewInit, trigger, state, style, transition, animate, ViewChild } from '@angular/core';
-import * as _ from 'lodash';
+import { animate, Component, OnInit, state, style, transition, trigger, ViewChild } from '@angular/core';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { NgForm, FormGroup } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFormClass, SalesEntryClass, SalesTransactionItemClass, IStockUnit, FakeDiscountItem, GenerateSalesRequest } from '../../models/api-models/Sales';
-import { InvoiceState } from '../../store/Invoice/invoice.reducer';
-import { InvoiceService } from '../../services/invoice.service';
+import { FakeDiscountItem, GenerateSalesRequest, InvoiceFormClass, IStockUnit, SalesEntryClass, SalesTransactionItemClass } from '../../models/api-models/Sales';
 import { Observable } from 'rxjs/Observable';
 import { TypeaheadMatch } from 'ngx-bootstrap/typeahead';
 import { AccountService } from '../../services/account.service';
@@ -17,20 +14,20 @@ import { ElementViewContainerRef } from '../../shared/helpers/directives/element
 import { SalesActions } from '../../services/actions/sales/sales.action';
 import { AccountResponseV2 } from '../../models/api-models/Account';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { TaxResponse, CompanyResponse } from '../../models/api-models/Company';
-import { TaxControlData, IOption, SelectComponent } from '../../shared/theme/index';
+import { CompanyResponse, TaxResponse } from '../../models/api-models/Company';
 import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
-import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import * as uuid from 'uuid';
-import { IContentCommon, ICommonItemOfTransaction, IInvoiceTax } from '../../models/api-models/Invoice';
+import { ICommonItemOfTransaction, IContentCommon, IInvoiceTax } from '../../models/api-models/Invoice';
 import { SalesService } from '../../services/sales.service';
 import { ToasterService } from '../../services/toaster.service';
-import { IFlattenAccountItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { contriesWithCodes } from '../../shared/helpers/countryWithCodes';
 import { CompanyService } from '../../services/companyService.service';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { SelectComponent } from '../../theme/ng-select/select.component';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+
 const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 
 const THEAD_ARR_1 = [
@@ -146,6 +143,8 @@ export class SalesInvoiceComponent implements OnInit {
   public activeAccount$: Observable<AccountResponseV2>;
   public autoFillShipping: boolean = true;
   public dueAmount: number;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
 
   // modals related
   public modalConfig = {
@@ -193,9 +192,11 @@ export class SalesInvoiceComponent implements OnInit {
     // bind state sources
     this._companyService.getAllStates().subscribe((data) => {
       let arr: IOption[] = [];
-      data.body.map(d => {
-        arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(arr);
     });
   }
@@ -314,7 +315,10 @@ export class SalesInvoiceComponent implements OnInit {
     this.invFormData.account.uniqueName = data.uniqueName;
     this.invFormData.account.attentionTo = data.attentionTo;
     this.invFormData.country.countryName = data.country.countryName;
-    this.invFormData.invoiceDetails.invoiceDate = moment().format('DD-MM-YYYY');
+
+    // set dates
+    // this.invFormData.invoiceDetails.invoiceDate = new Date();
+    // this.invFormData.invoiceDetails.dueDate = new Date().setDate(new Date().getDate() + 10 );
     // fill address conditionally
     if (data.addresses.length > 0) {
       // set billing
@@ -352,6 +356,7 @@ export class SalesInvoiceComponent implements OnInit {
 
   public resetInvoiceForm(f: NgForm) {
     f.form.reset();
+    this.invFormData = new InvoiceFormClass();
   }
 
   public triggerSubmitInvoiceForm(f: NgForm) {
@@ -366,20 +371,44 @@ export class SalesInvoiceComponent implements OnInit {
     }
   }
 
-  public onSubmitInvoiceForm(f?: NgForm) {
+  public convertDateForAPI(val: any): string {
+    if (val) {
+      try {
+        return moment(val).format(GIDDH_DATE_FORMAT);
+      } catch (error) {
+        return '';
+      }
+    }else {
+      return '';
+    }
+  }
 
+  public onSubmitInvoiceForm(f?: NgForm) {
+    let data: InvoiceFormClass = _.cloneDeep(this.invFormData);
     let txnErr: boolean;
     // before submit request making some validation rules
     // check for account uniquename
-    if (this.invFormData.account && !this.invFormData.account.uniqueName) {
+    if (data.account && !data.account.uniqueName) {
       this._toasty.warningToast('Customer Name can\'t be empty');
       return;
     }
 
+    // replace /n to br in case of message
+    if (data.other.message2 && data.other.message2.length > 0) {
+      data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
+    }
+
+    // convert date object
+    data.invoiceDetails.invoiceDate = this.convertDateForAPI(data.invoiceDetails.invoiceDate);
+    data.invoiceDetails.dueDate = this.convertDateForAPI(data.invoiceDetails.dueDate);
+    data.other.shippingDate = this.convertDateForAPI(data.other.shippingDate);
+
     // check for valid entries and transactions
-    if ( this.invFormData.entries) {
-      _.forEach(this.invFormData.entries, (entry) => {
-        _.forEach(entry.transactions, (txn) => {
+    if ( data.entries) {
+      _.forEach(data.entries, (entry) => {
+        _.forEach(entry.transactions, (txn: SalesTransactionItemClass) => {
+          // convert date object
+          txn.date = this.convertDateForAPI(txn.date);
           // will get errors of string and if not error then true boolean
           let txnResponse = txn.isValid();
           if (txnResponse !== true) {
@@ -402,24 +431,28 @@ export class SalesInvoiceComponent implements OnInit {
     }
 
     let obj: GenerateSalesRequest = {
-      invoice : this.invFormData,
-      updateAccountDetails: this.updateAccount,
-      paymentAction: {
+      invoice : data,
+      updateAccountDetails: this.updateAccount
+    };
+
+    if (this.dueAmount && this.dueAmount > 0) {
+      obj.paymentAction = {
         action: 'paid',
         amount: this.dueAmount
-      }
-    };
+      };
+    }
 
     this.salesService.generateSales(obj).takeUntil(this.destroyed$).subscribe((response: BaseResponse<string, GenerateSalesRequest>) => {
       if (response.status === 'success') {
-        f.form.reset();
+        // reset form and other
+        this.resetInvoiceForm(f);
         if (typeof response.body === 'string') {
           this._toasty.successToast(response.body);
         } else {
           this._toasty.successToast('Invoice Generated Successfully');
         }
       } else {
-        this._toasty.errorToast(response.code);
+        this._toasty.errorToast(response.message, response.code);
       }
       this.updateAccount = false;
     });

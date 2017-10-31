@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
-import { Component, OnDestroy, OnInit, ElementRef, ViewChild, EventEmitter, ComponentFactoryResolver } from '@angular/core';
+import { AppState } from '../store';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -8,14 +8,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
-import { Subject } from 'rxjs/Subject';
 import * as moment from 'moment/moment';
-import { cloneDeep, filter, find, orderBy } from 'lodash';
+import { cloneDeep, filter, find, orderBy } from '../lodash-optimized';
 import * as uuid from 'uuid';
 import { LedgerService } from '../services/ledger.service';
 import { saveAs } from 'file-saver';
 import { AccountService } from '../services/account.service';
-import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
@@ -26,6 +24,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
+import { Select2OptionData } from '../theme/select2';
+import { IOption } from '../theme/ng-select/option.interface';
 
 @Component({
   selector: 'ledger',
@@ -139,22 +139,22 @@ export class LedgerComponent implements OnInit, OnDestroy {
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accountsArray: Select2OptionData[] = [];
+        let accountsArray: IOption[] = [];
         data.body.results.map(acc => {
           if (acc.stocks) {
             acc.stocks.map(as => {
               accountsArray.push({
-                id: uuid.v4(),
-                text: acc.name,
+                value: uuid.v4(),
+                label: acc.name,
                 additional: Object.assign({}, acc, { stock: as })
               });
             });
-            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
           } else {
-            accountsArray.push({ id: uuid.v4(), text: acc.name, additional: acc });
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
           }
         });
-        this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'text'));
+        this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'label'));
       }
     });
 
@@ -206,7 +206,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.flatternAccountList.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
-        if (fa.id === e.value) {
+        if (fa.value === e.value) {
           txn.selectedAccount = fa.additional;
           let rate = 0;
           let unitCode = '';

@@ -1,3 +1,5 @@
+import { validateEmail } from './../../shared/helpers/helperFunctions';
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -6,9 +8,8 @@ import { ManufacturingActions } from '../../services/actions/manufacturing/manuf
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
@@ -16,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { CustomStockUnitAction } from '../../services/actions/inventory/customStockUnit.actions';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
+import { Select2OptionData } from '../../theme/select2';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -24,7 +26,7 @@ import { AccountService } from '../../services/account.service';
 export class MfEditComponent implements OnInit {
   @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
 
-  public stockListDropDown$: Observable<Select2OptionData[]>;
+  public stockListDropDown$: Observable<IOption[]>;
   public consumptionDetail = [];
   public isUpdateCase: boolean = false;
   public manufacturingDetails: ManufacturingItemRequest;
@@ -42,8 +44,8 @@ export class MfEditComponent implements OnInit {
     multiple: false,
     placeholder: 'Select'
   };
-  public expenseGroupAccounts$: Observable<Select2OptionData[]>;
-  public liabilityGroupAccounts$: Observable<Select2OptionData[]>;
+  public expenseGroupAccounts$: Observable<IOption[]>;
+  public liabilityGroupAccounts$: Observable<IOption[]>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -88,10 +90,10 @@ export class MfEditComponent implements OnInit {
                   let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
                   if (matchedAccIndex > -1) {
                     if (d.category === 'expenses') {
-                      this.expenseGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                      this.expenseGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                     if (d.category === 'liabilities' || d.category === 'assets') {
-                      this.liabilityGroupAccounts.push({ text: acc.name, id: acc.uniqueName });
+                      this.liabilityGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                   }
                 }
@@ -107,7 +109,6 @@ export class MfEditComponent implements OnInit {
     this.manufacturingDetails.quantity = 1;
   }
   public ngOnInit() {
-    // console.log('hello from MfEditComponent');
     if (this.isUpdateCase) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this.store.dispatch(this.inventoryAction.GetStockUniqueName(manufacturingDetailsObj.uniqueName, manufacturingDetailsObj.stockUniqueName));
@@ -130,7 +131,7 @@ export class MfEditComponent implements OnInit {
           let units = p.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
+            return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
           });
         }
       }
@@ -149,6 +150,7 @@ export class MfEditComponent implements OnInit {
         }
         this.manufacturingDetails = manufacturingDetailsObj;
       }
+      this.onQuantityChange(1);
     });
   }
 
@@ -271,20 +273,23 @@ export class MfEditComponent implements OnInit {
 
   public getTotal(from, field) {
     let total: number = 0;
+    let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
     if (from === 'linkedStocks' && this.manufacturingDetails.linkedStocks) {
-      _.forEach(this.manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
+      _.forEach(manufacturingDetails.linkedStocks, (item) => total = total + Number(item[field]));
     }
     if (from === 'otherExpenses' && this.manufacturingDetails.otherExpenses) {
-      _.forEach(this.manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
+      _.forEach(manufacturingDetails.otherExpenses, (item) => total = total + Number(item.transactions[0][field]));
     }
 
     return total;
   }
 
-  public getCosePerProduct() {
-    let quantity = _.cloneDeep(this.manufacturingDetails).quantity;
+  public getCostPerProduct() {
+    let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
+    let quantity = manufacturingDetails.manufacturingMultipleOf;
     quantity = (quantity && quantity > 0) ? quantity : 1;
-    let cost = ((this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount')) / quantity);
+    let amount = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
+    let cost = (amount / quantity);
     if (!isNaN(cost)) {
       return cost;
     }
@@ -313,23 +318,25 @@ export class MfEditComponent implements OnInit {
 
   public onQuantityChange(value: number) {
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
-    // || this.initialQuantityObj.length !== manufacturingObj.linkedStocks.length
+
     if (!this.initialQuantityObj.length) {
-      this.initialQuantityObj.length = [];
+      this.initialQuantityObj = [];
       manufacturingObj.linkedStocks.forEach((o) => {
         this.initialQuantityObj.push(o);
       });
     }
 
-    if (value && !isNaN(value) && value > 0) {
+    if (_.isNumber(value)) {
       value = value;
+    } else if (_.isEmpty(value)) {
+      // alert('now');
+      value = 1;
     } else {
       value = 1;
     }
 
     if (manufacturingObj && manufacturingObj.linkedStocks) {
       manufacturingObj.linkedStocks.forEach((stock) => {
-
         let selectedStock = this.initialQuantityObj.find((obj) => obj.stockUniqueName === stock.stockUniqueName);
         if (selectedStock) {
           stock.quantity = selectedStock.quantity * value;
@@ -341,7 +348,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public getStockUnit(selectedItem, itemQuantity) {
-    if (selectedItem && itemQuantity) {
+    if (selectedItem && itemQuantity && Number(itemQuantity) > 0) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
       this._inventoryService.GetStockDetails(manufacturingDetailsObj.uniqueName, selectedItem).subscribe((res) => {
 
@@ -366,6 +373,10 @@ export class MfEditComponent implements OnInit {
           this.linkedStocks.stockUnitCode = unitCode;
         }
       });
+    } else {
+      this.linkedStocks.manufacturingUnit = null;
+      this.linkedStocks.stockUnitCode = null;
+      this.linkedStocks.rate = null;
     }
   }
 
@@ -381,39 +392,19 @@ export class MfEditComponent implements OnInit {
     let name;
     if (category === 'liabilityGroupAccounts') {
       this.liabilityGroupAccounts$.subscribe((data) => {
-        let account = data.find((acc) => acc.id === uniqueName);
+        let account = data.find((acc) => acc.value === uniqueName);
         if (account) {
-          name = account.text;
+          name = account.label;
         }
       });
     } else if (category === 'expenseGroupAccounts') {
       this.expenseGroupAccounts$.subscribe((data) => {
-        let account = data.find((acc) => acc.id === uniqueName);
+        let account = data.find((acc) => acc.value === uniqueName);
         if (account) {
-          name = account.text;
+          name = account.label;
         }
       });
     }
     return Observable.of(name);
-  }
-
-    /**
-   * validateDefaultDueDate
-   */
-  public validateNumberFourDigit(value: any, modelName: string) {
-    if (value) {
-      if (value.indexOf('.') !== -1 && (value.length - (value.indexOf('.') + 1)) > 4) {
-        value = value.substr(0, value.length - 1);
-        setTimeout(() => {
-          this.manufacturingDetails[modelName] = value;
-        });
-      }
-      if (isNaN(value)) {
-        value = value.replace(/\D/g, '') !== 0 && !isNaN(value.replace(/\D/g, '')) ? value.replace(/\D/g, '') : null;
-        setTimeout(() => {
-          this.manufacturingDetails[modelName] = value;
-        });
-      }
-    }
   }
 }

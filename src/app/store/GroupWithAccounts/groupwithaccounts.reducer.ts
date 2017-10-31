@@ -13,7 +13,7 @@ import {
 import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import {
   AccountMoveRequest,

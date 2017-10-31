@@ -1,6 +1,12 @@
 import { NgModule } from '@angular/core';
-import { TooltipModule, TypeaheadModule, CollapseModule } from 'ngx-bootstrap';
-import { SharedModule } from '../shared/shared.module';
+// import { TooltipModule, TypeaheadModule, CollapseModule } from 'ngx-bootstrap';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+// import { PaginationModule  } from 'ngx-bootstrap/pagination';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
+// import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SalesComponent } from './sales.component';
@@ -12,6 +18,12 @@ import { SalesAddStockComponent } from './aside-menu-product-service/components/
 import { SalesAddStockGroupComponent } from './aside-menu-product-service/components/create-stock-group-modal/create.stock.group.modal';
 import { CreateAccountModalComponent } from './aside-menu-product-service/components/create-account-modal/create.account.modal';
 import { CreateAccountServiceComponent } from './aside-menu-product-service/components/create-account-service/create.account.service';
+import { SalesRoutingModule } from './sales.routing.module';
+import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { Select2Module } from '../theme/select2';
+import { SharedModule } from '../shared/shared.module';
+// import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost', 'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
 
@@ -31,14 +43,20 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    SharedModule.forRoot(),
-    TooltipModule.forRoot(),
-    TypeaheadModule.forRoot(),
-    CollapseModule.forRoot()
+    SelectModule.forRoot(),
+    Select2Module.forRoot(),
+    TaxControlModule.forRoot(),
+    SalesRoutingModule,
+    ModalModule,
+    TooltipModule,
+    TypeaheadModule,
+    CollapseModule,
+    BsDatepickerModule.forRoot(),
+    SharedModule
   ],
   exports: [
     TooltipModule
   ],
   providers: []
 })
-export class SalesModule {}
+export class SalesModule { }
