@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 // import { TooltipModule, TypeaheadModule, CollapseModule } from 'ngx-bootstrap';
-// import { DatepickerModule,BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -51,6 +51,7 @@ export const FIXED_CATEGORY_OF_GROUPS = ['currentassets', 'fixedassets', 'noncur
     TooltipModule,
     TypeaheadModule,
     CollapseModule,
+    BsDatepickerModule.forRoot(),
     SharedModule
   ],
   exports: [
