@@ -124,12 +124,19 @@ export class MfEditComponent implements OnInit {
     });
     // get all stocks
     this.stockListDropDown$ = this.store.select(p => {
-      if (p.inventory.stocksList) {
-        if (p.inventory.stocksList.results) {
-          let units = p.inventory.stocksList.results;
+      let data = _.cloneDeep(p);
+      let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+      if (data.inventory.stocksList) {
+        if (data.inventory.stocksList.results) {
+          let units = data.inventory.stocksList.results;
 
           return units.map(unit => {
-            return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName };
+            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+            if (alreadyPushedElementindx > -1) {
+              return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName, isAlreadyPushed: true };
+            } else {
+              return { text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName, isAlreadyPushed: false };
+            }
           });
         }
       }
