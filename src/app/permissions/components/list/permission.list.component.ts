@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ModalDirective } from 'ngx-bootstrap';
 import { GroupWithAccountsAction } from '../../../services/actions/groupwithaccounts.actions';
-import { ElementViewContainerRef } from '../../../shared/helpers/directives/element.viewchild.directive';
+import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { CompanyActions } from '../../../services/actions/company.actions';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';

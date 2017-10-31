@@ -1,4 +1,3 @@
-import { SharedModule } from './../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -8,15 +7,13 @@ import { MfReportComponent } from './report/mf.report.component';
 import { MfEditComponent } from './edit/mf.edit.component';
 import { ManufacturingRoutingModule } from './manufacturing.routing.module';
 import { DeleteManufacturingConfirmationModelComponent } from './edit/modal/confirmation.model.component';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PopoverModule } from 'ngx-bootstrap/popover';
+import { LaddaModule } from 'angular2-ladda';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+
 @NgModule({
   declarations: [
     ManufacturingComponent,
@@ -36,7 +33,9 @@ import { PopoverModule } from 'ngx-bootstrap/popover';
     DatepickerModule,
     BsDatepickerModule.forRoot(),
     ModalModule,
-    SharedModule
+    LaddaModule,
+    SelectModule,
+    DecimalDigitsModule
   ],
 })
 export class ManufacturingModule {

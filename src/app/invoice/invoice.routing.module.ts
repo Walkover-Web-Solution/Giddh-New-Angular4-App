@@ -2,17 +2,11 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceGenerateComponent } from './generate/invoice.generate.component';
@@ -22,16 +16,11 @@ import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 
-import { FontPickerModule } from 'ngx-font-picker';
-import { FontPickerConfigInterface } from 'ngx-font-picker';
+import { FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
 import { InvoiceUiDataService } from '../services/invoice.ui.data.service';
-
-const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
-  apiKey: 'AIzaSyAPcvNvidnjQL-a_2xW2QYox3hT7DQBWyo'
-};
 import { DeleteInvoiceConfirmationModelComponent } from './preview/models/confirmation/confirmation.model.component';
 import { PerformActionOnInvoiceModelComponent } from './preview/models/perform_action/invoice.action.model.component';
 import { InvoiceGenerateModelComponent } from './generate/model/invoice.generate.model.component';
@@ -41,6 +30,13 @@ import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-c
 import { DeleteTemplateConfirmationModelComponent } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
 import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
+import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.dd.component';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { LaddaModule } from 'angular2-ladda';
+
+const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
+  apiKey: 'AIzaSyAPcvNvidnjQL-a_2xW2QYox3hT7DQBWyo'
+};
 const INVOICE_ROUTES: Routes = [
   {
     path: '',
@@ -74,13 +70,13 @@ const INVOICE_ROUTES: Routes = [
     InvoiceEmailFilterComponent,
     DeleteTemplateConfirmationModelComponent,
     InvoiceTemplatePreviewModelComponent,
-    EsignModalComponent
+    EsignModalComponent,
+    InvoicePageDDComponent
   ],
   imports: [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
-    SharedModule,
     ModalModule,
     TooltipModule,
     PaginationModule,
@@ -88,7 +84,9 @@ const INVOICE_ROUTES: Routes = [
     InvoiceTemplatesModule,
     FontPickerModule.forRoot(FONT_PICKER_CONFIG),
     BsDatepickerModule.forRoot(),
-    NgUploaderModule
+    NgUploaderModule,
+    SelectModule,
+    LaddaModule
   ],
   exports: [
     RouterModule,
