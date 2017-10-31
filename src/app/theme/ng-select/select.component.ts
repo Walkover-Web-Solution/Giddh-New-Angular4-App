@@ -164,7 +164,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   public onSelectContainerClick(event: any) {
-    console.log('Clicked');
     this.selectContainerClicked = true;
     if (!this.focused) {
       this.processMyLogic();
