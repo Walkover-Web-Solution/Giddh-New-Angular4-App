@@ -1,24 +1,18 @@
 import { Store } from '@ngrx/store';
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SettingsProfileActions } from '../../services/actions/settings/profile/settings.profile.action';
-import { CompanyService } from '../../services/companyService.service';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import { Observable } from 'rxjs';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
-import { CompanyActions } from '../../services/actions/company.actions';
-import { TaxResponse } from '../../models/api-models/Company';
-import { SettingsTaxesActions } from '../../services/actions/settings/taxes/settings.taxes.action';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
 import { SettingsLinkedAccountsActions } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.action';
-import { IGetAllEbankAccountResponse, IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
+import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
-import { DomSanitizer, SafeUrl, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'setting-linked-accounts',
@@ -31,14 +25,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 
   public iframeSource: string;
   public ebankAccounts: BankAccountsResponse[] = [];
-  public accounts$: Select2OptionData[];
+  public accounts$: IOption[];
   public confirmationMessage: string;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -69,9 +57,9 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
     // get flatternaccounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
+          accounts.push({ label: `${d.name} (${d.uniqueName})`, value : d.uniqueName });
         });
         this.accounts$ = accounts;
       }

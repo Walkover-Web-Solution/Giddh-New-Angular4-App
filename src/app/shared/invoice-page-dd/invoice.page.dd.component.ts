@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
 import { Location } from '@angular/common';
 import { Ng2BootstrapModule } from 'ngx-bootstrap';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 
 const INV_PAGE = [

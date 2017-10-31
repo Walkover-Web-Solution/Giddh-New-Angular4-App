@@ -106,9 +106,8 @@
         </div>
         <div class="form-group mrB col-xs-5">
           <label>State</label>
-          <select2 [data]="statesSource$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                   (valueChanged)="stateSelected($event)"
-                   formControlName="state"></select2>
+          <ng-select [placeholder]="'Select'" [multiple]="false" [options]="statesSource$ | async"
+                     formControlName="state"></ng-select>
 
           <input type="text" class="form-control mrT1" name="stateCode" formControlName="stateCode"
                  placeholder="State Code" readonly="readonly">
@@ -147,9 +146,8 @@
 
               <span class="col-xs-12 pd0" formGroupName="addressList">
               <label class="w100">State</label>
-                <select2 [data]="statesSource$ | async"
-                         [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
-                         formControlName="stateCode"></select2>
+                <ng-select [placeholder]="'Select'" [multiple]="false" [options]="statesSource$ | async"
+                           formControlName="stateCode"></ng-select>
               </span>
             </div>
             <div class="col-xs-7 pd0">

@@ -1,3 +1,6 @@
+import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
+import { Select2OptionData } from '../../theme/select2';
+
 const filter1 = [
   { name: 'Greater', uniqueName: 'greaterThan' },
   { name: 'Less Than', uniqueName: 'lessThan' },
@@ -13,15 +16,14 @@ const filter2 = [
 ];
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { Component, OnInit } from '@angular/core';
 import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { Router } from '@angular/router';
@@ -42,6 +44,8 @@ export class MfReportComponent implements OnInit {
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
   public moment = moment;
+  public startDate: Date;
+  public endDate: Date;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
@@ -51,6 +55,14 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.product = '';
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
+
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate(this.startDate.getDate() - 30);
+    this.endDate.setDate(this.endDate.getDate());
+    this.mfStockSearchRequest.dateRange = [this.startDate, this.endDate];
+    this.mfStockSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
+    this.mfStockSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
   }
 
   public ngOnInit() {
@@ -90,9 +102,11 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
 
-    let d = moment().subtract(30, 'days');
+    let f = moment().subtract(30, 'days');
+    let t = moment();
 
-    this.mfStockSearchRequest.from = String(d);
+    this.mfStockSearchRequest.from = String(f);
+    this.mfStockSearchRequest.to = String(t);
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
@@ -102,8 +116,6 @@ export class MfReportComponent implements OnInit {
   }
 
   public getReports() {
-    this.mfStockSearchRequest.from = moment(this.mfStockSearchRequest.from).format('DD-MM-YYYY');
-    this.mfStockSearchRequest.to = moment(this.mfStockSearchRequest.to).format('DD-MM-YYYY');
     this.store.dispatch(this.manufacturingActions.GetMfReport(this.mfStockSearchRequest));
     this.mfStockSearchRequest = new MfStockSearchRequestClass();
     this.initializeSearchReqObj();
@@ -111,8 +123,12 @@ export class MfReportComponent implements OnInit {
 
   public pageChanged(event: any): void {
     let data = _.cloneDeep(this.mfStockSearchRequest);
-    data.from = moment(data.from).format('DD-MM-YYYY');
-    data.to = moment(data.to).format('DD-MM-YYYY');
+    let from = moment(data.from).format(GIDDH_DATE_FORMAT);
+    let to = moment(data.to).format(GIDDH_DATE_FORMAT);
+    if (from !== 'Invalid date' && to !== 'Invalid date') {
+      data.from = from;
+      data.to = to;
+    }
     data.page = event.page;
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
@@ -145,6 +161,13 @@ export class MfReportComponent implements OnInit {
         let char = val.charAt(val.length - 1);
         val = val.replace(new RegExp(char, 'g'), '');
         this.mfStockSearchRequest['searchValue'] = val;
+    }
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.mfStockSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
+      this.mfStockSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
     }
   }
 }

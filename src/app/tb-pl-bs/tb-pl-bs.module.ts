@@ -22,6 +22,9 @@ import { TbExportCsvComponent } from './components/export/tb-export-csv.componen
 import { TbExportPdfComponent } from './components/export/tb-export-pdf.component';
 import { TbExportXlsComponent } from './components/export/tb-export-xls.component';
 import { BsExportXlsComponent } from './components/export/bs-export-xls.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,7 @@ import { BsExportXlsComponent } from './components/export/bs-export-xls.componen
     BsComponent,
     BsGridComponent,
     BsGridRowComponent,
-    TrialAccordionDirective
+    TrialAccordionDirective,
   ],
   exports: [
     TbPlBsComponent
@@ -53,6 +56,9 @@ import { BsExportXlsComponent } from './components/export/bs-export-xls.componen
     ReactiveFormsModule,
     TbPlBsRoutingModule,
     SharedModule,
+    TabsModule,
+    DatePickerCustomModule,
+    SelectModule
   ],
 })
 export class TBPlBsModule {

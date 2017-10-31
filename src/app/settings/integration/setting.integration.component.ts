@@ -2,15 +2,15 @@ import { Store } from '@ngrx/store';
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { SettingsIntegrationActions } from '../../services/actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as _ from 'lodash';
-import { SmsKeyClass, EmailKeyClass, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
+import * as _ from '../../lodash-optimized';
+import { EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../services/account.service';
 import { ToasterService } from '../../services/toaster.service';
+import { IOption } from '../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'setting-integration',
@@ -32,13 +32,7 @@ export class SettingIntegrationComponent implements OnInit {
   public smsFormObj: SmsKeyClass = new SmsKeyClass();
   public emailFormObj: EmailKeyClass = new EmailKeyClass();
   public razorPayObj: RazorPayClass = new RazorPayClass();
-  public accounts$: Observable<Select2OptionData[]>;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
+  public accounts$: Observable<IOption[]>;
   public updateRazor: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -78,9 +72,9 @@ export class SettingIntegrationComponent implements OnInit {
     // get accounts
     this.accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         _.forEach(data.body.results, (item) => {
-          accounts.push({ text: item.name, id: item.uniqueName });
+          accounts.push({ label: item.name, value: item.uniqueName });
         });
         this.accounts$ = Observable.of(accounts);
       }
@@ -110,10 +104,10 @@ export class SettingIntegrationComponent implements OnInit {
     return this.razorPayObj.autoCapturePayment = !this.razorPayObj.autoCapturePayment;
   }
 
-  public selectAccount(event) {
+  public selectAccount(event: IOption) {
     if (event.value) {
-      this.accounts$.subscribe((arr: Select2OptionData[]) => {
-        let res = _.find(arr, (o) => o.id === event.value);
+      this.accounts$.subscribe((arr: IOption[]) => {
+        let res = _.find(arr, (o) => o.value === event.value);
         if (res) {
           this.razorPayObj.account.name = res.text;
         }

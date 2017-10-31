@@ -14,9 +14,6 @@
                     </td>
                     <td *ngIf="currentTxn.unitRate">
                       <label>Unit</label>
-                      <!-- <select2 class="form-control" [data]="currentTxn.selectedAccount.stock.accountStockDetails.unitRates"
-                        [options]="options" [(ngModel)]="currentTxn.inventory.unit"></select2> -->
-                      <!-- <ng-select [options]="countrySource" formControlName="countryCode"></ng-select> -->
                       <select class="form-control" style="width: 60px;" (change)="unitChanged($event.target.value)">
                         <option *ngFor="let item of currentTxn.unitRate"
                           [value]="item.stockUnitCode" >{{item.stockUnitCode}}</option>
@@ -137,7 +134,7 @@
               <label class="default_clr pull-left">Voucher type</label>
             </td>
             <td colspan="4" class="select2-parent">
-              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
+              <ng-select [options]="voucherTypeList | async" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"></ng-select>
             </td>
             <td class="pdL1">
               <span>{{""}}</span>
