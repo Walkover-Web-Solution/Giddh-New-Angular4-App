@@ -4,7 +4,7 @@ import * as jsPDF from 'jspdf';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
+import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';

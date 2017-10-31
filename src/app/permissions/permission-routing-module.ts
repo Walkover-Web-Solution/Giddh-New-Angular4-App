@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PermissionComponent } from './permission.component';
@@ -11,9 +10,10 @@ import { PermissionModelComponent } from './components/model/permission.model.co
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { SortByPipe } from './sort.pipe';
 import { CapitalizePipe } from './capitalize.pipe';
+import { LaddaModule } from 'angular2-ladda';
 
 const PERMISSION_ROUTES: Routes = [
-  { path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication] },
+  {path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication]},
   {
     path: '',
     component: PermissionComponent,
@@ -33,7 +33,7 @@ const PERMISSION_ROUTES: Routes = [
       //   component: PermissionDetailsComponent,
       //   canActivate: [NeedsAuthentication]
       // },
-      { path: '*', redirectTo: 'list' }
+      {path: '*', redirectTo: 'list'}
     ]
   }
 ];
@@ -52,12 +52,12 @@ const PERMISSION_ROUTES: Routes = [
     CommonModule,
     FormsModule,
     RouterModule.forChild(PERMISSION_ROUTES),
-    Ng2BootstrapModule.forRoot()
+    LaddaModule
   ],
   exports: [
     RouterModule
   ],
-  providers: [
-  ]
+  providers: []
 })
-export class PermissionRoutingModule { }
+export class PermissionRoutingModule {
+}

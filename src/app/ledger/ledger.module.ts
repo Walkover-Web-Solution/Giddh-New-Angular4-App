@@ -1,4 +1,3 @@
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -21,6 +20,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { LaddaModule } from 'angular2-ladda';
 
 @NgModule({
   declarations: [
@@ -45,13 +45,13 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
     ReactiveFormsModule,
     TaxControlModule.forRoot(),
     LedgerRoutingModule,
-    SharedModule,
     ModalModule,
     TooltipModule,
     PaginationModule,
     NgUploaderModule,
     ClipboardModule,
-    Daterangepicker
+    Daterangepicker,
+    LaddaModule
   ],
 })
 export class LedgerModule {

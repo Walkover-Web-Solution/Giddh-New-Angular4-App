@@ -22,7 +22,7 @@ import { CompanyActions } from '../services/actions/company.actions';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
-import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
+import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { Select2OptionData } from '../theme/select2';
 import { IOption } from '../theme/ng-select/option.interface';
