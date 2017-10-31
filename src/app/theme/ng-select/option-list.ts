@@ -105,7 +105,7 @@ export class OptionList {
   }
 
   public select(option: Option, multiple: boolean, isTypeheadMode: boolean) {
-    if (!multiple || isTypeheadMode) {
+    if (!multiple) {
       this.clearSelection();
     }
     option.selected = true;

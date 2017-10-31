@@ -1,7 +1,7 @@
 <label *ngIf="label !== ''">
   {{label}}
 </label>
-<div #selection [attr.tabindex]="disabled || isTypeAheadMode ? null : 0" [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
+<div #selection [attr.tabindex]="disabled ? null : 0" [ngClass]="{'open': isOpen, 'focus': hasFocus, 'below': isBelow, 'disabled': disabled}"
   (click)="onSelectContainerClick($event)" (focus)="onSelectContainerFocus()" (keydown)="onSelectContainerKeydown($event)">
 
   <div class="single" *ngIf="!multiple && !isTypeAheadMode">
@@ -39,7 +39,7 @@
   </div>
   <div class="single" *ngIf="isTypeAheadMode">
     <div class="option" style="width:100%;">
-      <input  #filterInput autocomplete="off" tabindex="0"
+      <input  #filterInput autocomplete="off" tabindex="-1"
         [placeholder]="placeholderView"
         [value]="optionList.hasSelected ? optionList.selection[0].label : ''"
         (input)="onFilterInput($event.target.value)"

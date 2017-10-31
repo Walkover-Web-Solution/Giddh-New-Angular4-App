@@ -202,7 +202,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public onDropdownOptionClicked(option: Option) {
     this.optionClicked = true;
-    this.multiple || this.isTypeAheadMode ? this.toggleSelectOption(option) : this.selectOption(option);
+    this.multiple ? this.toggleSelectOption(option) : this.selectOption(option);
   }
 
   public onSingleFilterClick() {
