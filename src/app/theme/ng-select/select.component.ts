@@ -97,6 +97,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   private clearClicked: boolean = false;
   // private showTypeAheadInput: boolean = false;
   private selectContainerClicked: boolean = false;
+  private focused: boolean = false;
   private optionListClicked: boolean = false;
   private optionClicked: boolean = false;
 
@@ -163,7 +164,20 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   public onSelectContainerClick(event: any) {
+    console.log('Clicked');
     this.selectContainerClicked = true;
+    if (!this.focused) {
+      this.processMyLogic();
+    }
+    this.focused = false;
+  }
+
+  public onSelectContainerFocus() {
+      this._focus();
+      this.processMyLogic();
+      this.focused = true;
+  }
+  public processMyLogic() {
     if (this.isTypeAheadMode) {
       if (this.optionList.hasSelected) {
         this.isOpen = false;
@@ -171,14 +185,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       }
     } else {
       if (!this.clearClicked) {
-        this.toggleDropdown();
+          this.toggleDropdown();
       }
-    }
-  }
-
-  public onSelectContainerFocus() {
-    if (!this.isTypeAheadMode) {
-      this._focus();
     }
   }
 
@@ -300,7 +308,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public _focus() {
     if (!this.hasFocus) {
       this.hasFocus = true;
-      this.openDropdown();
       this.focus.emit(null);
     }
   }
