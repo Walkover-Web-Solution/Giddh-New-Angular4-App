@@ -1,6 +1,6 @@
 import * as _ from '../../lodash-optimized';
-import * as moment from 'moment/moment';
 import { IInvoiceTax } from './Invoice';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 export interface IStockUnit {
   text: string;
@@ -23,8 +23,8 @@ class SignatureClass {
 
 class InvoiceDetailsClass {
   public invoiceNumber: string;
-  public invoiceDate: string;
-  public dueDate: string;
+  public invoiceDate: any;
+  public dueDate: any;
 }
 
 class GstDetailsClass {
@@ -73,7 +73,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public quantity: number;
   public stockUnit: string;
   public rate: number;
-  public date: string;
+  public date: any;
   public taxableValue: number;
   public total?: number;
   public fakeAccForSelect2?: string;
@@ -84,7 +84,6 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public taxRenderData: string[] = [];
   constructor() {
     super();
-    this.date = moment().format('DD-MM-YYYY');
     this.amount = 0;
     this.total = 0;
     this.isStockTxn = false;
@@ -217,16 +216,13 @@ class CountryClass {
 }
 
 class OtherSalesItemClass {
-  public shippingDate: string;
+  public shippingDate: any;
   public shippedVia: string;
   public trackingNumber: string;
   public customField1: string;
   public customField2: string;
   public customField3: string;
   public message2: string;
-  constructor() {
-    this.shippingDate = moment().format('DD-MM-YYYY');
-  }
 }
 
 export class InvoiceFormClass {
@@ -278,5 +274,5 @@ interface IPaymentAction {
 export interface GenerateSalesRequest {
   invoice: InvoiceFormClass;
   updateAccountDetails: boolean;
-  paymentAction: IPaymentAction;
+  paymentAction?: IPaymentAction;
 }
