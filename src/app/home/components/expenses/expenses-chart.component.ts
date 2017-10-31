@@ -7,7 +7,7 @@ import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { ICbAccount, IChildGroups, IExpensesChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { AccountChartDataLastCurrentYear } from '../../../models/view-models/AccountChartDataLastCurrentYear';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';

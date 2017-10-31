@@ -1,5 +1,4 @@
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/Rx';
@@ -13,6 +12,7 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>
@@ -20,17 +20,11 @@ import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFu
 })
 export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewInit {
   public sub: Subscription;
-  public groupsData$: Observable<Select2OptionData[]>;
-  public options: Select2Options = {
-    multiple: false,
-    width: '200px',
-    placeholder: 'Select Parent Group',
-    allowClear: true
-  };
+  public groupsData$: Observable<IOption[]>;
   public parentStockSearchString: string;
   public groupUniqueName: string;
   public addGroupForm: FormGroup;
-  public selectedGroup: Select2OptionData;
+  public selectedGroup: IOption;
   public fetchingGrpUniqueName$: Observable<boolean>;
   public isGroupNameAvailable$: Observable<boolean>;
   public activeGroup$: Observable<StockGroupResponse>;
@@ -103,7 +97,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
         updGroupObj.uniqueName = a.uniqueName;
 
         if (a.parentStockGroup) {
-          this.selectedGroup = { text: a.parentStockGroup.name, id: a.parentStockGroup.uniqueName };
+          this.selectedGroup = { label: a.parentStockGroup.name, value: a.parentStockGroup.uniqueName };
           updGroupObj.parentStockGroupUniqueName = a.parentStockGroup.uniqueName;
           this.parentStockSearchString = a.parentStockGroup.uniqueName;
           updGroupObj.isSelfParent = false;
@@ -144,19 +138,19 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     // parentgroup data
     this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let flattenData: Select2OptionData[] = [];
+        let flattenData: IOption[] = [];
         this.flattenDATA(data.body.results, flattenData);
         this.groupsData$ = Observable.of(flattenData);
       }
     });
   }
 
-  public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: Select2OptionData[] = []) {
+  public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []) {
     rawList.map(p => {
       if (p) {
-        let newOption: Select2OptionData = { text: '', id: '' };
-        newOption.text = p.name;
-        newOption.id = p.uniqueName;
+        let newOption: IOption = { label: '', value: '' };
+        newOption.label = p.name;
+        newOption.value = p.uniqueName;
         parents.push(newOption);
         if (p.childStockGroups && p.childStockGroups.length > 0) {
           this.flattenDATA(p.childStockGroups, parents);
@@ -166,16 +160,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
   }
 
   public ngOnDestroy() {
-    this.store.dispatch(this.inventoryActions.resetActiveGroup());
+    // this.store.dispatch(this.inventoryActions.resetActiveGroup());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
 
   // group selected
-  public groupSelected(event: any) {
+  public groupSelected(event: IOption) {
     let selected;
     this.groupsData$.subscribe(p => {
-      selected = p.find(q => q.id = event.value);
+      selected = p.find(q => q.value === event.value);
     });
     this.selectedGroup = selected;
     this.addGroupForm.updateValueAndValidity();
@@ -222,7 +216,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     uniqueNameField.patchValue(uniqueNameField.value.replace(/ /g, '').toLowerCase());
     stockRequest = this.addGroupForm.value as StockGroupRequest;
     if (!this.addGroupForm.value.isSelfParent && this.selectedGroup) {
-      stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
+      stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
     this.store.dispatch(this.inventoryActions.addNewGroup(stockRequest));
   }
@@ -237,7 +231,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
 
     stockRequest = this.addGroupForm.value as StockGroupRequest;
     if (!this.addGroupForm.value.isSelfParent) {
-      stockRequest.parentStockGroupUniqueName = this.selectedGroup.id;
+      stockRequest.parentStockGroupUniqueName = this.selectedGroup.value;
     }
     this.store.dispatch(this.inventoryActions.updateGroup(stockRequest, activeGroup.uniqueName));
     this.store.select(p => p.inventory.isUpdateGroupInProcess).takeUntil(this.destroyed$).distinctUntilChanged().filter(p => !p).subscribe((a) => {

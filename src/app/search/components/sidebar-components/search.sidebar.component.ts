@@ -1,5 +1,5 @@
 import { AppState } from '../../../store/roots';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { Store } from '@ngrx/store';
 
 import { Component, OnDestroy, OnInit } from '@angular/core';

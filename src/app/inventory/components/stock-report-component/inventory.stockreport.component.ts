@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs/Rx';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 

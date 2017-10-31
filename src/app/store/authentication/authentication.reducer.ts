@@ -1,18 +1,10 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import {
-  VerifyEmailModel,
-  VerifyEmailResponseModel,
-  VerifyMobileModel,
-  VerifyMobileResponseModel,
-  LinkedInRequestModel,
-  SignupWithMobile,
-  UserDetails
-} from '../../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsRequest, StateDetailsResponse, CompanyResponse, CompanyRequest } from '../../models/api-models/Company';
-import * as _ from 'lodash';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
+import * as _ from '../../lodash-optimized';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -109,6 +101,13 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithEmailInProcess: true
       });
 
+    case LoginActions.ResetSignupWithEmailState:
+      return {
+        ...state,
+        isLoginWithEmailSubmited: false,
+        isLoginWithEmailInProcess: false
+      };
+
     case LoginActions.VerifyEmailRequest:
       return Object.assign({}, state, {
         isVerifyEmailInProcess: true
@@ -144,6 +143,13 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       return Object.assign({}, state, {
         isLoginWithMobileInProcess: true
       });
+
+      case LoginActions.ResetSignupWithMobileState:
+      return {
+        ...state,
+        isLoginWithMobileSubmited: false,
+        isLoginWithMobileInProcess: false
+      };
 
     case LoginActions.VerifyMobileRequest:
       return Object.assign({}, state, {

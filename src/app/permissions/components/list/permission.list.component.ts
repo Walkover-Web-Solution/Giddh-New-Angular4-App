@@ -1,22 +1,14 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  AfterViewInit,
-  ViewChild
-} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ModalDirective, Ng2BootstrapModule } from 'ngx-bootstrap';
+import { ModalDirective } from 'ngx-bootstrap';
 import { GroupWithAccountsAction } from '../../../services/actions/groupwithaccounts.actions';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/element.viewchild.directive';
 import { CompanyActions } from '../../../services/actions/company.actions';
-import { Router } from '@angular/router';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as _ from 'lodash';
 import { NewRoleClass } from '../../permission.utility';
 import { CapitalizePipe } from './capitalize.pipe';
 import { Observable } from 'rxjs/Observable';
@@ -61,7 +53,7 @@ export class PermissionListComponent implements OnInit, OnDestroy {
             return cmp.uniqueName === session.companyUniqueName;
           });
           if (selectedCompany && selectedCompany.uniqueName === session.companyUniqueName) {
-            if (selectedCompany.userEntityRoles[0].role.uniqueName !== 'super_admin') {
+            if (selectedCompany.role.uniqueName !== 'super_admin') {
               this.redirectToDashboard();
             }
           } else {

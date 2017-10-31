@@ -3,9 +3,8 @@ import { UserDetails } from '../../../models/api-models/loginModels';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../../services/account.service';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
@@ -15,8 +14,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { IOption } from '../../../theme/ng-select/option.interface';
 
 @Component({
   selector: 'audit-logs-sidebar',
@@ -27,6 +28,7 @@ import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-log
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
     private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
@@ -47,9 +49,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }).takeUntil(this.destroyed$);
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ text: d.name, id: d.uniqueName });
+          accounts.push({ label: d.name, value: d.uniqueName });
         });
         this.vm.accounts$ = Observable.of(accounts);
       }
@@ -57,9 +59,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accountList = this.flattenGroup(data.body, []);
-        let groups: Select2OptionData[] = [];
+        let groups: IOption[] = [];
         accountList.map((d: any) => {
-          groups.push({ text: d.name, id: d.uniqueName });
+          groups.push({ label: d.name, value: d.uniqueName });
         });
         this.vm.groups$ = Observable.of(groups);
       }
@@ -70,9 +72,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.vm.user$.take(1).subscribe((c) => loginUser = c);
     this._companyService.getComapnyUsers().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let users: Select2OptionData[] = [];
+        let users: IOption[] = [];
         data.body.map((d) => {
-          users.push({ text: d.userName, id: d.userUniqueName });
+          users.push({ label: d.userName, value: d.userUniqueName });
         });
         this.vm.canManageCompany = true;
         this.vm.users$ = Observable.of(users);
@@ -143,7 +145,6 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public getLogfilters() {
-    //
     let reqBody: LogsRequest = new LogsRequest();
     reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
     reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';

@@ -21,7 +21,7 @@ const ENV = JSON.stringify(process.env.NODE_ENV = process.env.ENV = PROD ? 'prod
 const HOST = JSON.stringify(process.env.HOST || 'localhost');
 const PORT = process.env.PORT || 3000;
 const AppUrl = 'localhost';
-const ApiUrl = 'http://apidev.giddh.com/';
+const ApiUrl = 'http://apitest.giddh.com/';
 module.exports = function (options) {
 
   DEV_SERVER = options && options['live'] || false;

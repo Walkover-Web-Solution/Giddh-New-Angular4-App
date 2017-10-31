@@ -1,21 +1,9 @@
 import { GroupsWithStocksHierarchyMin } from '../../models/api-models/GroupsWithStocks';
-import {
-  CreateStockRequest,
-  StockDetailResponse,
-  StockGroupRequest,
-  StockGroupResponse,
-  StockReportResponse,
-  StocksResponse,
-  StockUnitRequest
-} from '../../models/api-models/Inventory';
+import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportResponse, StocksResponse, StockUnitRequest } from '../../models/api-models/Inventory';
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
-import * as _ from 'lodash';
-import {
-  CUSTOM_STOCK_UNIT_ACTIONS,
-  InventoryActionsConst,
-  STOCKS_REPORT_ACTIONS
-} from '../../services/actions/inventory/inventory.const';
+import * as _ from '../../lodash-optimized';
+import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../services/actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 

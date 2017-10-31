@@ -14,6 +14,14 @@ import { ExportLedgerComponent } from './components/exportLedger/exportLedger.co
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
 // import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
+import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
+import { ClipboardModule } from 'ngx-clipboard';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TaxControlModule } from '../theme/tax-control/tax-control.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -24,8 +32,7 @@ import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount
     ShareLedgerComponent,
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
-    UpdateLedgerDiscountComponent,
-    // ElementViewContainerRef
+    UpdateLedgerDiscountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -36,8 +43,15 @@ import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    TaxControlModule.forRoot(),
     LedgerRoutingModule,
-    SharedModule
+    SharedModule,
+    ModalModule,
+    TooltipModule,
+    PaginationModule,
+    NgUploaderModule,
+    ClipboardModule,
+    Daterangepicker
   ],
 })
 export class LedgerModule {

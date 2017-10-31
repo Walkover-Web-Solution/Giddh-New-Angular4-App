@@ -4,13 +4,13 @@ import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
-import { Select2OptionData } from '../shared/theme/select2/select2.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as uuid from 'uuid';
-import { cloneDeep } from 'lodash';
-import { createAutoCorrectedDatePipe } from '../shared/helpers/autoCorrectedDatePipe';
+import { cloneDeep } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
+import { Select2OptionData } from '../theme/select2';
+import { IOption } from '../theme/ng-select/option.interface';
 
 export class LedgerVM {
   public groupsArray: Observable<GroupsWithAccountsResponse[]>;
@@ -20,7 +20,7 @@ export class LedgerVM {
   public currentTxn: ITransactionItem;
   public currentBlankTxn: TransactionVM;
   public currentPage: number;
-  public flatternAccountList: Observable<Select2OptionData[]>;
+  public flatternAccountList: Observable<IOption[]>;
   public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;

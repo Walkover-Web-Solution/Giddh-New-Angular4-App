@@ -10,11 +10,11 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { digitsOnly } from '../../../helpers/index';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { SelectComponent } from '../../../../theme/ng-select/select.component';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 
 @Component({
@@ -93,9 +93,11 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // bind state sources
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
-      data.body.map(d => {
-        states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(states);
     });
     // bind countries
@@ -113,7 +115,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: ['CREDIT', [Validators.required]],
+      openingBalanceType: ['', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
@@ -189,10 +191,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value) {
+      if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
         this.addAccountForm.get('openingBalanceType').patchValue('');
-      } else if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value !== '') {
+      } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+      } else if (!a) {
+        this.addAccountForm.get('openingBalanceType').patchValue('');
       }
     });
 

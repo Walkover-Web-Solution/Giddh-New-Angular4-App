@@ -1,7 +1,7 @@
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store } from '@ngrx/store';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
