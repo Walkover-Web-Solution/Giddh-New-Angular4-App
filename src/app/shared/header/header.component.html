@@ -162,7 +162,7 @@
 
         <!-- books search -->
         <li>
-          <div class="ledger_search form-inline" *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)">
+          <div class="ledger_search form-inline">
             <div class="form-group">
               <div class="input-group">
                 <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
