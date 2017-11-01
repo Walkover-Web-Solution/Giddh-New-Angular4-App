@@ -104,6 +104,7 @@
     "rxjs": "^5.4.3"
   },
   "devDependencies": {
+    "is-cidr": "^1.0.0",
     "@angular-devkit/build-optimizer": "~0.0.31",
     "@angular/animations": "^4.3.6",
     "@angular/common": "^4.3.6",
