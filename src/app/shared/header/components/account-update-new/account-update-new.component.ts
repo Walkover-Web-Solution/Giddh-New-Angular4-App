@@ -119,7 +119,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
-      email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
+      email: ['', Validators.compose([Validators.email])],
       companyName: [''],
       attentionTo: [''],
       description: [''],
