@@ -1,4 +1,4 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
@@ -6,6 +6,7 @@ import { IFlattenGroupsAccountsDetail } from '../../../../models/interfaces/flat
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { FlyAccountsActions } from '../../../../services/actions/fly-accounts.actions';
 import * as _ from '../../../../lodash-optimized';
+
 @Component({
   selector: 'accounts-side-bar',
   templateUrl: './accounts-side-bar.component.html',
@@ -17,6 +18,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
   public isFlyAccountInProcess$: Observable<boolean>;
   public companyList$: Observable<any>;
   public showAccountList: boolean = true;
+  @Output() public openAddAndManage: EventEmitter<boolean> = new EventEmitter();
 
   @Input()
   public set noGroups(val: boolean) {
@@ -55,6 +57,10 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
         p.isOpen = noGroups;
       }
     );
+  }
+
+  public goToManageGroups() {
+    this.openAddAndManage.emit(true);
   }
 
   public ngOnDestroy() {
