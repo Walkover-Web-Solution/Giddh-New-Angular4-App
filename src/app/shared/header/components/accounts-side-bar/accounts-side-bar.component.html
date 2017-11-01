@@ -31,7 +31,7 @@
                                     <li class="inrPrnt cp" *ngFor="let accDtl of account.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top">
                                         <a ng-click="setLedgerData(value, accDtl);" ng-class="{'active': accDtl.uniqueName === selectedAccountUniqueName}" ui-sref="company.content.ledgerContent({unqName:accDtl.uniqueName})">
                                             <div class="clearfix">
-                                                <strong><span class="ellp max250" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span></strong>
+                                                <strong><span class="ellp max250" (click)="flyAccounts = false" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span></strong>
                                                 <!-- <span class="ng-hide">{{accDtl.uniqueName}}</span> -->
                                             </div>
                                         </a>
