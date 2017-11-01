@@ -1,3 +1,4 @@
+import { LedgerActions } from './../../../../services/actions/ledger/ledger.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { TaxResponse } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../services/actions/company.actions';
@@ -120,7 +121,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
+              private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
               private accountService: AccountService) {
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
@@ -364,7 +365,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     accObject.role = 'view_only';
     accObject.user = this.shareAccountForm.controls['userEmail'].value;
     console.log ('need to add new shared entity');
-    // this.store.dispatch(this.accountsAction.shareAccount(accObject, activeAcc.uniqueName));
+    this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
     this.shareAccountForm.reset();
   }
 
