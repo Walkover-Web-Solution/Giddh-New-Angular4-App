@@ -11,6 +11,7 @@ import { NeedsAuthentication } from '../services/decorators/needsAuthentication'
 import { SortByPipe } from './sort.pipe';
 import { CapitalizePipe } from './capitalize.pipe';
 import { LaddaModule } from 'angular2-ladda';
+import { ModalModule } from 'ngx-bootstrap';
 
 const PERMISSION_ROUTES: Routes = [
   {path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication]},
@@ -52,7 +53,8 @@ const PERMISSION_ROUTES: Routes = [
     CommonModule,
     FormsModule,
     RouterModule.forChild(PERMISSION_ROUTES),
-    LaddaModule
+    LaddaModule,
+    ModalModule
   ],
   exports: [
     RouterModule

@@ -15,26 +15,20 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 
 import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateComponent, AccountUpdateNewComponent, CompanyAddComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
-import { UniqueNameDirective } from './helpers/directives/uniqueName/uniqueName.directive';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { ElementViewContainerRef } from './helpers/directives/elementViewChild/element.viewchild.directive';
 import { GroupAddComponent } from './header/components/group-add/group-add.component';
 import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
 import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
 import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
-import { CheckscrollDirective } from './helpers/directives/checkscroll/checkscroll';
-import { TextMaskModule } from 'angular2-text-mask';
-import { NumberToWordsPipe } from './helpers/pipes/numberToWords/numberToWords.pipe';
-import { FullPageHeight } from './helpers/directives/pageHeight/pageHeight.directive';
-import { SafePipe } from './helpers/pipes/safePipe/safe.pipe';
 // social login injection
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
-import { DisableFormFieldDirective } from './helpers/directives/disableFormField/disableFormField.directive';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { Select2Module } from '../theme/select2';
 import { LaddaModule } from 'angular2-ladda';
+import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
+import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -58,9 +52,8 @@ export function provideConfig() {
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
-    ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, ElementViewContainerRef, GroupsAccountSidebarComponent, UniqueNameDirective,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, CheckscrollDirective,
-    NumberToWordsPipe, SafePipe, FullPageHeight, DisableFormFieldDirective],
+    ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -77,17 +70,16 @@ export function provideConfig() {
     // SelectModule,
     Select2Module,
     ClickOutsideModule,
-    TextMaskModule,
     SelectModule,
     ConfirmModalModule,
-    LaddaModule
+    LaddaModule,
+    ElementViewChildModule,
+    DisableFormFieldModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, UniqueNameDirective, AccountAddNewComponent,
-    CheckscrollDirective, TextMaskModule,
-    NumberToWordsPipe, FullPageHeight, DisableFormFieldDirective,
-    ElementViewContainerRef, ConfirmModalModule
+    AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
+    ConfirmModalModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],
