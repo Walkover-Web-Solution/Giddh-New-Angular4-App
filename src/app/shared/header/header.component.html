@@ -168,7 +168,7 @@
                 <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
                   [formControl]="accountSearchControl" [value]="accountSearchValue">
                 <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-                  <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+                  <span id="toggleAccounts" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                 </div>
               </div>
             </div>
