@@ -49,7 +49,7 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
                     let uniqueName = response.body[0].entryUniqueName;
                     let indx = newState.purchaseInvoices.items.findIndex((obj) => obj.entryUniqueName === uniqueName);
                     newState.invoiceGenerateSuccess = true;
-                    if (indx) {
+                    if (indx > -1) {
                         newState.purchaseInvoices.items[indx] = response.body[0];
                     }
                     return Object.assign({}, state, newState);
@@ -87,8 +87,10 @@ export function InvoicePurchaseReducer(state = initialState, action: Action): In
                     let newState = _.cloneDeep(state);
                     let uniqueName = response.body.uniqueName;
                     let indx = newState.purchaseInvoices.items.findIndex((obj) => obj.entryUniqueName === uniqueName);
-                    if (indx) {
+                    if (indx > -1) {
                         newState.purchaseInvoices.items[indx].invoiceNumber = response.body.invoiceNumberAgainstVoucher;
+                        newState.purchaseInvoices.items[indx].sendToGstr2 = response.body.sendToGstr2;
+                        newState.purchaseInvoices.items[indx].availItc = response.body.availItc;
                     }
                     console.log(response.body);
                     return Object.assign({}, state, newState);
