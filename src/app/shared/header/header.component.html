@@ -243,7 +243,8 @@
   </nav>
 
   <accounts-side-bar *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)"
-    (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+    (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups"
+                     [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
