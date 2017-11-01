@@ -126,7 +126,7 @@
                                     {{acc.name}}
                                 </p>
                             </td>
-                            <td *ngIf="tax.accounts[0] && taxToEdit[i]"> 
+                            <td *ngIf="tax.accounts[0] && taxToEdit[i]">
                                 <p *ngFor="let acc of availableTaxes[i].accounts; let ind = index">
                                     <input [disabled]="true" class="form-control" type="text" [(ngModel)]="acc.name" name="acc_0_name{{i}}_{{ind}}">
                                 </p>

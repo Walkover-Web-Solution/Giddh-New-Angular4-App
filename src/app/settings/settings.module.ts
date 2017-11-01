@@ -1,6 +1,8 @@
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { TabsModule, DatepickerModule, ModalModule } from 'ngx-bootstrap';
 import { SettingsComponent } from './settings.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
 import { SettingProfileComponent } from './profile/setting.profile.component';
@@ -14,16 +16,7 @@ import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/
 import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
-import { TooltipModule } from 'ngx-bootstrap/tooltip';
-import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { CollapseModule } from 'ngx-bootstrap/collapse';
-import { ModalModule } from 'ngx-bootstrap/modal';
-import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
-import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
-import { PopoverModule } from 'ngx-bootstrap/popover';
-import { SettingPermissionComponent } from './permissions/setting.permission.component';
+
 @NgModule({
   declarations: [
     // components here
@@ -38,18 +31,18 @@ import { SettingPermissionComponent } from './permissions/setting.permission.com
     SettingLinkedAccountsConfirmationModalComponent,
     FinancialYearComponent,
     SettingPermissionComponent,
-    SettingPermissionFormComponent,
-    FinancialYearComponent
+    SettingPermissionFormComponent
   ],
   imports: [
     SharedModule,
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SettingRountingModule,
-    TabsModule,
-    SharedModule,
+    TabsModule.forRoot(),
     DatepickerModule,
     ModalModule
   ]
 })
+
 export class SettingsModule { }

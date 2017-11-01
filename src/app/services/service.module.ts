@@ -63,6 +63,8 @@ import { PurchaseInvoiceService } from './purchase-invoice.service';
 import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
 import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
 import { SettingsFinancialYearService } from './settings.financial-year.service';
+import { SettingsPermissionActions } from './actions/settings/permissions/settings.permissions.action';
+import { SettingsPermissionService } from './settings.permission.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -96,7 +98,8 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
     EffectsModule.run(SalesActions),
     EffectsModule.run(SettingsLinkedAccountsActions),
     EffectsModule.run(InvoicePurchaseActions),
-    EffectsModule.run(SettingsFinancialYearActions)
+    EffectsModule.run(SettingsFinancialYearActions),
+    EffectsModule.run(SettingsPermissionActions)
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })
@@ -133,7 +136,8 @@ export class ServiceModule {
         SettingsTaxesService,
         SettingsLinkedAccountsService,
         PurchaseInvoiceService,
-        SettingsFinancialYearService
+        SettingsFinancialYearService,
+        SettingsPermissionService
       ]
     };
   }
