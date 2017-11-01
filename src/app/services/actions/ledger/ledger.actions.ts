@@ -107,30 +107,30 @@ export class LedgerActions {
         type: ''
       };
     });
-  // @Effect()
-  // public shareAccount$: Observable<Action> = this.action$
-  //   .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
-  //   .switchMap(action =>
-  //     this._accountService.AccountShare( action.payload.body, action.payload.accountUniqueName)
-  //   )
-  //   .map(response => {
-  //     return this.shareAccountResponse(response);
-  //   });
-  // @Effect()
-  // public shareAccountResponse$: Observable<Action> = this.action$
-  //   .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE)
-  //   .map(action => {
-  //     if (action.payload.status === 'error') {
-  //       this._toasty.errorToast(action.payload.message, action.payload.code);
-  //       return {
-  //         type: ''
-  //       };
-  //     } else {
-  //       let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-  //       this._toasty.successToast(action.payload.body, '');
-  //       return this.sharedAccountWith(data.queryString.accountUniqueName);
-  //     }
-  //   });
+  @Effect()
+  public shareAccount$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
+    .switchMap(action =>
+      this._accountService.AccountShare( action.payload.body, action.payload.accountUniqueName)
+    )
+    .map(response => {
+      return this.shareAccountResponse(response);
+    });
+  @Effect()
+  public shareAccountResponse$: Observable<Action> = this.action$
+    .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        this._toasty.successToast(action.payload.body, '');
+        return this.sharedAccountWith(data.queryString.accountUniqueName);
+      }
+    });
 
   @Effect()
   public unShareAccount$: Observable<Action> = this.action$
@@ -266,23 +266,23 @@ export class LedgerActions {
     };
   }
 
-  // public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
-  //   return {
-  //     type: LEDGER.LEDGER_SHARE_ACCOUNT,
-  //     payload: Object.assign({}, {
-  //       body: value
-  //     }, {
-  //         accountUniqueName
-  //       })
-  //   };
-  // }
+  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
+    return {
+      type: LEDGER.LEDGER_SHARE_ACCOUNT,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
 
-  // public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
-  //   return {
-  //     type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
-  //     payload: value
-  //   };
-  // }
+  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
+    return {
+      type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
 
   public unShareAccount(value: string, accountUniqueName: string): Action {
     return {
