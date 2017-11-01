@@ -57,18 +57,18 @@ export class MfReportComponent implements OnInit {
   public ngOnInit() {
     this.initializeSearchReqObj();
     // Refresh the stock list
-    this.store.dispatch(this.inventoryAction.GetStock());
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.stocksList) {
-        if (o.stocksList.results) {
+      if (o.manufacturingStockList) {
+        if (o.manufacturingStockList.results) {
           this.stockListDropDown = [];
-          _.forEach(o.stocksList.results, (unit: any) => {
+          _.forEach(o.manufacturingStockList.results, (unit: any) => {
             this.stockListDropDown.push({ text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName });
           });
         }
       } else {
-        this.store.dispatch(this.inventoryAction.GetStock());
+        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
       }
     });
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
@@ -82,7 +82,7 @@ export class MfReportComponent implements OnInit {
     // Refresh stock list on company change
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).distinct((val) => val === 'companyUniqueName').subscribe((value: any) => {
       this.isReportLoading = true;
-      this.store.dispatch(this.inventoryAction.GetStock());
+      this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     });
   }
 
