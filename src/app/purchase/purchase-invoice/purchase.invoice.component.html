@@ -96,13 +96,15 @@
     <!-- Top filter end  -->
 
     <!-- page Title  -->
-    <div class="col-xs-12" [hidden]="!selectedGstrType.name || selectedGstrType.name =='GSTR1' || selectedGstrType.name">
+
+    <!--!selectedGstrType.name || selectedGstrType.name == 'GSTR1' || selectedGstrType.name  -->
+    <div class="col-xs-12" [hidden]="true">
         <div class="row">
             <h1 class="section_title"><strong>Purchase Report </strong> <small>(To file your GST return, all missing data needs to be filled properly)</small></h1>
         </div>
     </div>
 
-    <div class="box clearfix" [hidden]="!selectedGstrType.name || selectedGstrType.name =='GSTR1' || selectedGstrType.name">
+    <div class="box clearfix" [hidden]="true">
         <!-- filter -->
         <div class="col-xs-12">
             <div class="row">
