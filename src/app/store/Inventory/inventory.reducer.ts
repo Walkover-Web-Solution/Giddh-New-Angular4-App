@@ -13,6 +13,7 @@ import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interfac
 export interface InventoryState {
   groupsWithStocks?: IGroupsWithStocksHierarchyMinItem[];
   stocksList: StocksResponse;
+  manufacturingStockList: StocksResponse;
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
   activeGroupUniqueName?: string;
@@ -56,6 +57,7 @@ const prepare = (mockData: IGroupsWithStocksHierarchyMinItem[]): IGroupsWithStoc
 const initialState: InventoryState = {
   groupsWithStocks: null,
   stocksList: null,
+  manufacturingStockList: null,
   stockUnits: [],
   activeGroup: null,
   fetchingGrpUniqueName: false,
@@ -344,6 +346,12 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       let stockResponse: BaseResponse<StocksResponse, string> = action.payload;
       if (stockResponse.status === 'success') {
         return Object.assign({}, state, { stocksList: stockResponse.body });
+      }
+      return state;
+    case InventoryActionsConst.GetManufacturingStockResponse:
+      let res: BaseResponse<StocksResponse, string> = action.payload;
+      if (res.status === 'success') {
+        return Object.assign({}, state, { manufacturingStockList: res.body });
       }
       return state;
     case InventoryActionsConst.CreateStock:
