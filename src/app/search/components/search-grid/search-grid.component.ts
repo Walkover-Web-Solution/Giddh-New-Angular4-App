@@ -7,7 +7,7 @@ import { AccountFlat, BulkEmailRequest, SearchDataSet, SearchRequest } from '../
 import { AppState } from '../../../store/roots';
 import { isNullOrUndefined } from 'util';
 import { saveAs } from 'file-saver';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';
 import { CompanyService } from '../../../services/companyService.service';
 import { ToasterService } from '../../../services/toaster.service';

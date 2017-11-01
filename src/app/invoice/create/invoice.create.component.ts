@@ -1,22 +1,10 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import * as _ from 'lodash';
-import { NgForm } from '@angular/forms';
+import * as _ from '../../lodash-optimized';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import {
-  GenerateInvoiceRequestClass,
-  GstEntry,
-  ICommonItemOfTransaction,
-  IContent,
-  IInvoiceTax,
-  IInvoiceTransaction,
-  InvoiceTemplateDetailsResponse,
-  ISection,
-  PreviewInvoiceResponseClass,
-  OtherDetailsClass
-} from '../../models/api-models/Invoice';
+import { GenerateInvoiceRequestClass, GstEntry, ICommonItemOfTransaction, IContent, IInvoiceTax, IInvoiceTransaction, InvoiceTemplateDetailsResponse, ISection, OtherDetailsClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';

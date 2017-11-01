@@ -4,7 +4,7 @@ import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
 import { ChildGroup } from '../../../models/api-models/Search';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { saveAs } from 'file-saver';
 import { DataFormatter, IFormatable } from './data-formatter.class';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -27,7 +27,7 @@ class FormatCsv implements IFormatable {
   }
 
   public csv = () => `${this.header}\r\n\r\n${this.title}\r\n${this.body}\r\n${this.footer}\r\n`;
-  public setHeader(selectedCompany: ComapnyResponse) {
+  public setHeader(selectedCompany: CompanyResponse) {
     this.header = `${selectedCompany.name}\r\n"${selectedCompany.address}"\r\n${selectedCompany.city}-${selectedCompany.pincode}\r\nTrial Balance: ${this.request.from} to ${this.request.to}\r\n`;
   }
 
@@ -69,7 +69,7 @@ class FormatCsv implements IFormatable {
 })
 export class TbExportCsvComponent implements OnInit, OnDestroy {
   @Input() public trialBalanceRequest: TrialBalanceRequest;
-  @Input() public selectedCompany: ComapnyResponse;
+  @Input() public selectedCompany: CompanyResponse;
   @Output() public tbExportCsvEvent = new EventEmitter<string>();
 
   public showCsvDownloadOptions: boolean;

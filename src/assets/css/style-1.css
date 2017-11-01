@@ -90,6 +90,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
 }
+body.fixed{
+  overflow: hidden !important;
+}
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -323,7 +326,13 @@ header .navbar-nav>li.active {
     top: 0;
     left: 0;
     right: 0;
-    z-index: 1040;
+    z-index: 3;
+}
+
+/* aside menu component */
+aside-menu-account .container-fluid{
+  padding-left: 0;
+  padding-right: 0;
 }
 
 
@@ -374,6 +383,12 @@ header .navbar-nav>li.active {
 
 
 /*dashboard panel*/
+
+
+/* override bootstrap */
+.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
+  z-index: 1;
+}
 
 
 /*Dashboard*/
@@ -693,6 +708,7 @@ header .navbar-nav>li.active {
 .mrB1 {
     margin-bottom: 10px;
 }
+.mrB15{margin-bottom: 15px;}
 
 .mrL1 {
     margin-left: 10px;

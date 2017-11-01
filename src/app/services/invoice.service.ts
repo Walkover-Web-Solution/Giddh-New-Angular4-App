@@ -7,10 +7,10 @@ import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { INVOICE_API, INVOICE_API_2 } from './apiurls/invoice.api';
-import { CommonPaginatedRequest, IGetAllInvoicesResponse, GetAllLedgersForInvoiceResponse, InvoiceFilterClass, GenerateBulkInvoiceRequest, PreviewInvoiceRequest, ActionOnInvoiceRequest, GetInvoiceTemplateDetailsResponse, InvoiceTemplateDetailsResponse, GenerateInvoiceRequestClass, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
+import { CommonPaginatedRequest, GenerateBulkInvoiceRequest, GenerateInvoiceRequestClass, GetAllLedgersForInvoiceResponse, IGetAllInvoicesResponse, InvoiceFilterClass, InvoiceTemplateDetailsResponse, PreviewInvoiceRequest, PreviewInvoiceResponseClass } from '../models/api-models/Invoice';
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { RazorPayDetailsResponse } from '../models/api-models/SettingsIntegraion';
-import * as _ from 'lodash';
+import * as _ from '../lodash-optimized';
 
 @Injectable()
 export class InvoiceService {
@@ -476,7 +476,7 @@ export class InvoiceService {
     });
     return this._http.post(INVOICE_API_2.DOWNLOAD_INVOICE.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
-      data.queryString =  { accountUniqueName, dataToSend };
+      data.queryString = { accountUniqueName, dataToSend };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
@@ -486,7 +486,7 @@ export class InvoiceService {
   * API: 'accounts/:accountUniqueName/invoices/mail'
   * Method: POST
   */
-  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[]} ): Observable<BaseResponse<string, string>> {
+  public SendInvoiceOnMail(accountUniqueName: string, dataToSend: { emailId: string[], invoiceNumber: string[] }): Observable<BaseResponse<string, string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -495,7 +495,7 @@ export class InvoiceService {
     });
     return this._http.post(INVOICE_API_2.SEND_INVOICE_ON_MAIL.replace(':companyUniqueName', this.companyUniqueName).replace(':accountUniqueName', accountUniqueName), dataToSend).map((res) => {
       let data: BaseResponse<string, string> = res.json();
-      data.queryString =  { accountUniqueName, dataToSend };
+      data.queryString = { accountUniqueName, dataToSend };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }

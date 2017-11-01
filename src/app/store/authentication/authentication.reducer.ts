@@ -1,18 +1,10 @@
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import {
-  VerifyEmailModel,
-  VerifyEmailResponseModel,
-  VerifyMobileModel,
-  VerifyMobileResponseModel,
-  LinkedInRequestModel,
-  SignupWithMobile,
-  UserDetails
-} from '../../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { StateDetailsRequest, StateDetailsResponse, ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
-import * as _ from 'lodash';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
+import * as _ from '../../lodash-optimized';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -45,7 +37,7 @@ export interface SessionState {
   lastState: string;
   companyUniqueName: string;                   // current user | null
   userLoginState: userLoginStateEnum;
-  companies: ComapnyResponse[];
+  companies: CompanyResponse[];
   isRefreshing: boolean;
   isCompanyCreationInProcess: boolean;
   isCompanyCreationSuccess: boolean;
@@ -109,6 +101,13 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithEmailInProcess: true
       });
 
+    case LoginActions.ResetSignupWithEmailState:
+      return {
+        ...state,
+        isLoginWithEmailSubmited: false,
+        isLoginWithEmailInProcess: false
+      };
+
     case LoginActions.VerifyEmailRequest:
       return Object.assign({}, state, {
         isVerifyEmailInProcess: true
@@ -144,6 +143,13 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
       return Object.assign({}, state, {
         isLoginWithMobileInProcess: true
       });
+
+      case LoginActions.ResetSignupWithMobileState:
+      return {
+        ...state,
+        isLoginWithMobileSubmited: false,
+        isLoginWithMobileInProcess: false
+      };
 
     case LoginActions.VerifyMobileRequest:
       return Object.assign({}, state, {
@@ -318,7 +324,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
       return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
-      let companyResp: BaseResponse<ComapnyResponse, CompanyRequest> = action.payload;
+      let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
         let newState = _.cloneDeep(state);
         newState.isCompanyCreationInProcess = false;
@@ -335,7 +341,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         // isCompanyCreated: state.isCompanyCreated
       });
     case CompanyActions.REFRESH_COMPANIES_RESPONSE:
-      let companies: BaseResponse<ComapnyResponse[], string> = action.payload;
+      let companies: BaseResponse<CompanyResponse[], string> = action.payload;
       if (companies.status === 'success') {
         return Object.assign({}, state, {
           isRefreshing: false,

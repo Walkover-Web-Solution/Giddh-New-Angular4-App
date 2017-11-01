@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Ng2BootstrapModule } from 'ngx-bootstrap';
-import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import * as _ from 'lodash';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { StateDetailsRequest } from '../models/api-models/Company';
@@ -22,9 +19,7 @@ export class SalesComponent implements OnInit {
     private router: Router,
     private store: Store<AppState>,
     private companyActions: CompanyActions
-  ) {
-    console.log('hello from SalesComponent');
-  }
+  ) {}
 
   public ngOnInit() {
     let companyUniqueName = null;

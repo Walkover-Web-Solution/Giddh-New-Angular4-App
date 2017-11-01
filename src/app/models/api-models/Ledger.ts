@@ -24,7 +24,7 @@ export class LedgerRequest implements ILedger {
   public transactions: ILedgerTransactionItem[];
   public unconfirmedEntry?: boolean;
   public voucher: IVoucherItem;
-  public voucherType: string;
+  public voucherType?: string;
 }
 
 /*
@@ -54,9 +54,9 @@ export class LedgerResponse {
   public chequeClearanceDate?: string;
   public chequeNumber?: string;
   public description?: string;
-  public entryDate?: string;
+  public entryDate: string;
   public invoiceGenerated: boolean;
-  public invoiceNumber?: string;
+  public invoiceNumber: string;
   public tag?: string;
   public taxes: string[];
   public total: IClosingBalance;
@@ -64,7 +64,8 @@ export class LedgerResponse {
   public unconfirmedEntry: boolean;
   public uniqueName: string;
   public voucher: IVoucherItem = { name: '', shortCode: '' };
-  public voucherNo: number;
+  public voucherNo: string;
+  public voucherType?: string;
 }
 
 /*

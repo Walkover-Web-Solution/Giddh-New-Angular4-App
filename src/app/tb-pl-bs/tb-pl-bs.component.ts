@@ -1,7 +1,7 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { ComapnyResponse, StateDetailsRequest } from '../models/api-models/Company';
+import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
 
 @Component({
@@ -10,7 +10,7 @@ import { CompanyActions } from '../services/actions/company.actions';
 })
 export class TbPlBsComponent implements OnInit, AfterViewInit {
 
-  public selectedCompany: ComapnyResponse;
+  public selectedCompany: CompanyResponse;
 
   constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
     this.store.select(p => p.session.companies && p.session.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {

@@ -8,7 +8,7 @@ import { AppState } from '../store/roots';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import {
-  ComapnyResponse,
+  CompanyResponse,
   CompanyRequest,
   StateDetailsRequest,
   StateDetailsResponse,
@@ -31,20 +31,20 @@ export class CompanyService {
   /**
    * CreateCompany
    */
-  public CreateCompany(company: CompanyRequest): Observable<BaseResponse<ComapnyResponse, CompanyRequest>> {
+  public CreateCompany(company: CompanyRequest): Observable<BaseResponse<CompanyResponse, CompanyRequest>> {
     return this._http.post(COMPANY_API.CREATE_COMPANY, company)
       .map((res) => {
-        let data: BaseResponse<ComapnyResponse, CompanyRequest> = res.json();
+        let data: BaseResponse<CompanyResponse, CompanyRequest> = res.json();
         data.request = company;
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<ComapnyResponse, CompanyRequest>(e, company));
+      .catch((e) => this.errorHandler.HandleCatch<CompanyResponse, CompanyRequest>(e, company));
   }
 
   /**
    * CompanyList
    */
-  public CompanyList(): Observable<BaseResponse<ComapnyResponse[], string>> {
+  public CompanyList(): Observable<BaseResponse<CompanyResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -52,10 +52,10 @@ export class CompanyService {
     });
     return this._http.get(COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName))
       .map((res) => {
-        let data: BaseResponse<ComapnyResponse[], string> = res.json();
+        let data: BaseResponse<CompanyResponse[], string> = res.json();
         return data;
       })
-      .catch((e) => this.errorHandler.HandleCatch<ComapnyResponse[], string>(e, ''));
+      .catch((e) => this.errorHandler.HandleCatch<CompanyResponse[], string>(e, ''));
   }
 
   /**

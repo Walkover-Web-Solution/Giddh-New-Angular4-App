@@ -53,13 +53,17 @@
                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
 
                             <input class="form-control mrT1" formControlName="email" type="email" placeholder="Enter your email address" required>
-                            <button [disabled]="!emailVerifyForm.controls['email'].valid" [ladda]="isLoginWithEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit</button>
+                            <button [disabled]="!emailVerifyForm.controls['email'].valid"
+                            [ladda]="isLoginWithEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1"
+                            (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit</button>
 
                         </div>
                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
 
                             <input class="form-control mrT1" formControlName="token" type="text" placeholder="Enter verification code here" required>
-                            <button [disabled]="!emailVerifyForm.controls['token'].valid" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isVerifyEmailInProcess$ | async" (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">Last step to go</button>
+                            <button [disabled]="!emailVerifyForm.controls['token'].valid" class="btn sharp btn-block btn-success btn-lg mrT1"
+                            [ladda]="isVerifyEmailInProcess$ | async"
+                            (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">Last step to go</button>
                             <a class="btn btn-link cp pull-right" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend code</a>
                         </div>
                     </form>
@@ -84,8 +88,7 @@
                     <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
                         <div class="input-group phoneNum clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <span class="input-group-addon select2-parent">
-                                <!-- <select2 [data]="countryCodeList" [options]="options" formControlName="country" (valueChanged)="setCountryCode($event)" ></select2> -->
-                                <ng-select [options]="countryCodeList" class="form-inline" (selected)="setCountryCode($event)" formControlName="country"></ng-select>
+                              <ng-select [options]="countryCodeList" class="form-inline" (selected)="setCountryCode($event)" formControlName="country"></ng-select>
                             </span>
                             <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required />
                         </div>

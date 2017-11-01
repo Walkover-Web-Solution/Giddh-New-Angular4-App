@@ -1,10 +1,10 @@
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
 
 export interface IFormatable {
-  setHeader(selectedCompany: ComapnyResponse);
+  setHeader(selectedCompany: CompanyResponse);
 
   setRowData(data: any[], padding: number);
 
@@ -16,7 +16,7 @@ export class DataFormatter {
   public groups: ChildGroup[] = [];
 
   constructor(private exportData: ChildGroup[],
-              private selectedCompany: ComapnyResponse,
+              private selectedCompany: CompanyResponse,
               private recType: RecTypePipe) {
 
   }

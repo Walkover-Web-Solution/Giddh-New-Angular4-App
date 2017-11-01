@@ -9,7 +9,7 @@ import { GroupWithAccountsAction } from '../../../../services/actions/groupwitha
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from './VM';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 

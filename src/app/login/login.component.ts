@@ -18,7 +18,7 @@ import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
 import { IContriesWithCodes, contriesWithCodes } from '../shared/helpers/countryWithCodes';
-import { IOption } from '../shared/theme/index';
+import { IOption } from '../theme/ng-select/option.interface';
 
 @Component({
   selector: 'login',
@@ -164,6 +164,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   public hideEmailModal() {
     this.emailVerifyModal.hide();
+    this.store.dispatch(this.loginAction.ResetSignupWithEmailState());
+    this.emailVerifyForm.reset();
   }
 
   public showMobileModal() {
@@ -172,6 +174,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public hideMobileModal() {
     this.mobileVerifyModal.hide();
+    this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
+    this.mobileVerifyForm.get('mobileNumber').reset();
   }
 
   // tslint:disable-next-line:no-empty

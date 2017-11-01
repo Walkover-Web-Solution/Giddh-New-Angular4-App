@@ -2,6 +2,7 @@
  * @author: @AngularClass
  */
 
+const ERRLYTICS_KEY_TEST = 'LK8M8Y6_xYwT0VrYE0rnV-MVLlN_li-MUPfy2R29kS8';
 const helpers = require('./helpers');
 /**
  * Used to merge webpack configs
@@ -21,7 +22,11 @@ const HashedModuleIdsPlugin = require('webpack/lib/HashedModuleIdsPlugin')
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
+var StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 
 /**
  * Webpack Constants
@@ -39,6 +44,8 @@ const METADATA = webpackMerge(commonConfig({
     ENV: ENV,
     HMR: false,
     isElectron: false,
+    errlyticsNeeded: true,
+    errlyticsKey: ERRLYTICS_KEY_TEST,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
   });
@@ -123,6 +130,13 @@ module.exports = function (env) {
             }),
             include: [helpers.root('src', 'styles')]
           },
+          {
+            test: /\.js$/,
+            loader: '@angular-devkit/build-optimizer/webpack-loader',
+            options: {
+              sourceMap: false
+            }
+          }
 
         ]
 
@@ -169,13 +183,22 @@ module.exports = function (env) {
           'isElectron': false,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'errlyticsNeeded': true,
+          'errlyticsKey': ERRLYTICS_KEY_TEST,
           'process.env': {
             'ENV': JSON.stringify(METADATA.ENV),
             'NODE_ENV': JSON.stringify(METADATA.ENV),
             'HMR': METADATA.HMR
           }
         }),
-
+        new HtmlWebpackPlugin({
+          template: 'src/index.html',
+          title: METADATA.title,
+          chunksSortMode: 'dependency',
+          metadata: METADATA,
+          inject: 'body'
+        }),
+        // new IgnorePlugin(/^\.\/locale$/, /moment$/),
         /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.
@@ -185,7 +208,7 @@ module.exports = function (env) {
          *
          * NOTE: To debug prod builds uncomment //debug lines and comment //prod lines
          */
-        // new UglifyJsPlugin({
+        new UglifyJsPlugin({
         //   // beautify: true, //debug
         //   // mangle: false, //debug
         //   // dead_code: false, //debug
@@ -201,27 +224,27 @@ module.exports = function (env) {
         //   // comments: true, //debug
 
 
-        //   beautify: false, //prod
-        //   output: {
-        //     comments: false
-        //   }, //prod
-        //   mangle: {
-        //     screw_ie8: true
-        //   }, //prod
-        //   compress: {
-        //     screw_ie8: true,
-        //     warnings: false,
-        //     conditionals: true,
-        //     unused: true,
-        //     comparisons: true,
-        //     sequences: true,
-        //     dead_code: true,
-        //     evaluate: true,
-        //     if_return: true,
-        //     join_vars: true,
-        //     negate_iife: false // we need this for lazy v8
-        //   },
-        // }),
+          beautify: false, //prod
+          output: {
+            comments: false
+          }, //prod
+          mangle: {
+            screw_ie8: true
+          }, //prod
+          compress: {
+            screw_ie8: true,
+            warnings: false,
+            conditionals: true,
+            unused: true,
+            comparisons: true,
+            sequences: true,
+            dead_code: true,
+            evaluate: true,
+            if_return: true,
+            join_vars: true,
+            negate_iife: false // we need this for lazy v8
+          },
+        }),
 
         /**
          * Plugin: NormalModuleReplacementPlugin
@@ -240,7 +263,13 @@ module.exports = function (env) {
         ),
 
         new HashedModuleIdsPlugin(),
-
+        new PurifyPlugin(),
+        new StatsWriterPlugin({
+          transform: function(data, opts) {
+            let stats = opts.compiler.getStats().toJson({chunkModules: true});
+            return JSON.stringify(stats, null, 2);
+          }
+        }),
         /**
          * AoT
          */

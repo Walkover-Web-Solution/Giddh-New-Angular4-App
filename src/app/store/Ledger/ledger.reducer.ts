@@ -3,7 +3,8 @@ import {
   DownloadLedgerRequest,
   LedgerResponse,
   TransactionsRequest,
-  TransactionsResponse
+  TransactionsResponse,
+  LedgerUpdateRequest
 } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
@@ -25,6 +26,8 @@ export interface LedgerState {
   selectedTxnForEditUniqueName: string;
   isDeleteTrxEntrySuccessfull: boolean;
   activeAccountSharedWith?: AccountSharedWithResponse[];
+  isTxnUpdateInProcess: boolean;
+  isTxnUpdateSuccess: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -33,6 +36,8 @@ export const initialState: LedgerState = {
   selectedTxnForEditUniqueName: '',
   isDeleteTrxEntrySuccessfull: false,
   activeAccountSharedWith: null,
+  isTxnUpdateInProcess: false,
+  isTxnUpdateSuccess: false
 };
 
 export function ledgerReducer(state = initialState, action: Action): LedgerState {
@@ -137,6 +142,32 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         };
       }
       return state;
+    case LEDGER.UPDATE_TXN_ENTRY:
+      return {
+        ...state,
+        isTxnUpdateInProcess: true,
+        isTxnUpdateSuccess: false
+      };
+    case LEDGER.RESET_UPDATE_TXN_ENTRY:
+      return {
+        ...state,
+        isTxnUpdateInProcess: false,
+        isTxnUpdateSuccess: false
+      };
+    case LEDGER.UPDATE_TXN_ENTRY_RESPONSE:
+      let updateResponse: BaseResponse<LedgerResponse, LedgerUpdateRequest> = action.payload;
+      if (updateResponse.status === 'success') {
+        return {
+          ...state,
+          isTxnUpdateInProcess: false,
+          isTxnUpdateSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isTxnUpdateInProcess: false,
+        isTxnUpdateSuccess: false
+      };
     case LEDGER.RESET_LEDGER:
       return {
         ...state,
@@ -151,7 +182,9 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         isDeleteTrxEntrySuccessfull: false,
         ledgerCreateInProcess: false,
         selectedTxnForEditUniqueName: '',
-        activeAccountSharedWith: null
+        activeAccountSharedWith: null,
+        isTxnUpdateInProcess: false,
+        isTxnUpdateSuccess: false
       };
     default: {
       return state;

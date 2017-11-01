@@ -1,21 +1,21 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, PreviewInvoiceResponseClass, GetAllLedgersForInvoiceResponse, GenerateBulkInvoiceRequest } from '../../models/api-models/Invoice';
+import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
-import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISION_FILTER = [
@@ -33,13 +33,7 @@ const COMPARISION_FILTER = [
 export class InvoiceGenerateComponent implements OnInit {
   @ViewChild(ElementViewContainerRef) public elementViewContainerRef: ElementViewContainerRef;
   @ViewChild('invoiceGenerateModel') public invoiceGenerateModel: ModalDirective;
-  public accounts$: Observable<Select2OptionData[]>;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
+  public accounts$: Observable<IOption[]>;
   public moment = moment;
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
@@ -58,6 +52,8 @@ export class InvoiceGenerateComponent implements OnInit {
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public startDate: Date;
+  public endDate: Date;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -65,23 +61,28 @@ export class InvoiceGenerateComponent implements OnInit {
     private store: Store<AppState>,
     private invoiceActions: InvoiceActions,
     private _accountService: AccountService
-  ) { }
-
-  public ngOnInit() {
+  ) {
     // set initial values
-    this.ledgerSearchRequest.from = String(moment().subtract(30, 'days'));
-    this.ledgerSearchRequest.to = String(moment());
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate(this.startDate.getDate() - 30);
+    this.endDate.setDate(this.endDate.getDate());
+    this.ledgerSearchRequest.dateRange = [this.startDate, this.endDate];
+    this.ledgerSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
+    this.ledgerSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
+  }
 
+  public ngOnInit() {
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
           // Select only sundry debtors account
           if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ text: d.name, id: d.uniqueName });
+            accounts.push({ label: d.name, value: d.uniqueName });
           }
         });
         this.accounts$ = Observable.of(accounts);
@@ -253,11 +254,18 @@ export class InvoiceGenerateComponent implements OnInit {
   public prepareQueryParamsForLedgerApi() {
     let o = _.cloneDeep(this.ledgerSearchRequest);
     return {
-      from: moment(o.from).format('DD-MM-YYYY'),
-      to: moment(o.to).format('DD-MM-YYYY'),
+      from: o.from,
+      to: o.to,
       count: o.count,
       page: o.page
     };
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.ledgerSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
+      this.ledgerSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+    }
   }
 
   public countAndToggleVar() {

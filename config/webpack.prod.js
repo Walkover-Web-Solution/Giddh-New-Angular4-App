@@ -1,7 +1,7 @@
 /**
  * @author: @AngularClass
  */
-
+const ERRLYTICS_KEY_PROD = 'eTrTpSiedQC4tLUYVDup3RJpc_wFL2QhCaIc0vzpsQA';
 const helpers = require('./helpers');
 /**
  * Used to merge webpack configs
@@ -22,6 +22,8 @@ const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
 const NormalModuleReplacementPlugin = require('webpack/lib/NormalModuleReplacementPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const OptimizeJsPlugin = require('optimize-js-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const PurifyPlugin = require('@angular-devkit/build-optimizer').PurifyPlugin;
 
 /**
  * Webpack Constants
@@ -39,6 +41,8 @@ const METADATA = webpackMerge(commonConfig({
     ENV: ENV,
     HMR: false,
     isElectron: false,
+    errlyticsNeeded: true,
+    errlyticsKey: ERRLYTICS_KEY_PROD,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
   });
@@ -123,6 +127,13 @@ module.exports = function (env) {
             }),
             include: [helpers.root('src', 'styles')]
           },
+          {
+            test: /\.js$/,
+            loader: '@angular-devkit/build-optimizer/webpack-loader',
+            options: {
+              sourceMap: false
+            }
+          }
 
         ]
 
@@ -167,6 +178,8 @@ module.exports = function (env) {
           'ENV': JSON.stringify(METADATA.ENV),
           'HMR': METADATA.HMR,
           'isElectron': false,
+          'errlyticsNeeded': true,
+          'errlyticsKey': ERRLYTICS_KEY_PROD,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
           'process.env': {
@@ -175,7 +188,13 @@ module.exports = function (env) {
             'HMR': METADATA.HMR
           }
         }),
-
+        new HtmlWebpackPlugin({
+          template: 'src/index.html',
+          title: METADATA.title,
+          chunksSortMode: 'dependency',
+          metadata: METADATA,
+          inject: 'body'
+        }),
         /**
          * Plugin: UglifyJsPlugin
          * Description: Minimize all JavaScript output of chunks.
@@ -240,7 +259,7 @@ module.exports = function (env) {
         ),
 
         new HashedModuleIdsPlugin(),
-
+        new PurifyPlugin(),
         /**
          * AoT
          */

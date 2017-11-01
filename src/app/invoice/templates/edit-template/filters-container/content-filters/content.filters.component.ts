@@ -1,18 +1,7 @@
-import {
-  Component, Input, EventEmitter, Output, OnInit, OnChanges,
-  SimpleChanges,
-  OnDestroy
-} from '@angular/core';
-import { Store } from '@ngrx/store';
-import { CollapseModule } from 'ngx-bootstrap';
-import { AppState } from '../../../../../store/roots';
-import { InvoiceActions } from '../../../../../services/actions/invoice/invoice.actions';
-import { UploadOutput, UploadInput, UploadFile, humanizeBytes } from 'ngx-uploader';
-import { Observable } from 'rxjs/Observable';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../../../../services/invoice.ui.data.service';
-import { InvoiceTemplatesService } from '../../../../../services/invoice.templates.service';
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
-import * as _ from 'lodash';
+import * as _ from '../../../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/Rx';
 
 @Component({

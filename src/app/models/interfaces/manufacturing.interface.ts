@@ -99,6 +99,7 @@ export class ManufacturingItemRequest {
   public linkedStocks: ILinkedStockForCreate[];
   public otherExpenses: IOtherExpensesForCreate[];
   public voucherNumber?: string;
+  public manufacturingMultipleOf?: number;
 }
 
 /*

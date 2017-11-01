@@ -10,11 +10,11 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { digitsOnly } from '../../../helpers/index';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { SelectComponent } from '../../../../theme/ng-select/select.component';
+import { IOption } from '../../../../theme/ng-select/option.interface';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 
 @Component({
@@ -83,6 +83,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
+  public countryPhoneCode: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
@@ -93,19 +94,24 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // bind state sources
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
-      data.body.map(d => {
-        states.push({ label: `${d.code} - ${d.name}`, value: d.code });
-      });
+      if (data) {
+        data.body.map(d => {
+          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+        });
+      }
       this.statesSource$ = Observable.of(states);
-    }, (err) => {
-      // console.log(err);
     });
     // bind countries
     contriesWithCodes.map(c => {
       this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
     });
 
-    this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
+    // Country phone Code
+    contriesWithCodes.map(c => {
+      this.countryPhoneCode.push({ value: c.value, label: c.value });
+    });
+
+    this.store.select(s => s.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((profile) => {
       this.store.dispatch(this.companyActions.RefreshCompanies());
     });
 
@@ -118,6 +124,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       openingBalanceType: ['CREDIT', [Validators.required]],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
+      // MobileCode: [''],
       mobileNo: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
@@ -156,6 +163,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
         this.openingBalanceTypeChnaged(accountDetails.openingBalanceType);
         this.addAccountForm.patchValue(accountDetails);
+        if (!accountDetails.mobileNo) {
+          this.addAccountForm.get('mobileNo').patchValue('');
+        }
       }
     });
     // get hsn and sac value changes
@@ -183,6 +193,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         this.addBlankGstForm();
       }
     });
+
     // get active company
     // this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
     //   if (a) {
@@ -191,9 +202,9 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     // });
     // get openingblance value changes
     this.addAccountForm.get('openingBalance').valueChanges.subscribe(a => {
-      if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value) {
-        this.addAccountForm.get('openingBalanceType').patchValue('');
-      } else if (a && (a === 0 || a < 0) && this.addAccountForm.get('openingBalanceType').value !== '') {
+      if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType').value) {
+        this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
+      } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
       }
     });

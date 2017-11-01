@@ -7,6 +7,7 @@ const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge'); // used to merge webpack configs
 // const webpackMergeDll = webpackMerge.strategy({plugins: 'replace'});
 const commonConfig = require('./webpack.common.js'); // the settings that are common to prod and dev
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 /**
  * Webpack Plugins
@@ -15,7 +16,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
-
+const ERRLYTICS_KEY_DEV = '';
 /**
  * Webpack Constants
  */
@@ -31,6 +32,8 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
     ENV: ENV,
     HMR: HMR,
     isElectron: false,
+    errlyticsNeeded: false,
+    errlyticsKey: ERRLYTICS_KEY_DEV,
     AppUrl: AppUrl,
     ApiUrl: ApiUrl
 });
@@ -141,6 +144,8 @@ module.exports = function(options) {
                 'ENV': JSON.stringify(METADATA.ENV),
                 'HMR': METADATA.HMR,
                 'isElectron': false,
+                'errlyticsNeeded': false,
+                'errlyticsKey': ERRLYTICS_KEY_DEV,
                 'AppUrl': JSON.stringify(METADATA.AppUrl),
                 'ApiUrl': JSON.stringify(METADATA.ApiUrl),
                 'process.env': {
@@ -149,7 +154,13 @@ module.exports = function(options) {
                     'HMR': METADATA.HMR
                 }
             }),
-
+            new HtmlWebpackPlugin({
+              template: 'src/index.html',
+              title: METADATA.title,
+              chunksSortMode: 'dependency',
+              metadata: METADATA,
+              inject: 'body'
+            }),
             // new DllBundlesPlugin({
             //   bundles: {
             //     polyfills: [

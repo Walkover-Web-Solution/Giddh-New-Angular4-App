@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 @Pipe({
   // tslint:disable-next-line:pipe-naming
   name: 'grpsrch',
