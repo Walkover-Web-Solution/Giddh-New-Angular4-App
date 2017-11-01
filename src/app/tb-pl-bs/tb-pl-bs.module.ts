@@ -25,9 +25,9 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { TbsearchPipe } from '../shared/header/pipe/tbsearch.pipe';
-import { HighlightPipe } from '../shared/header/pipe/highlight.pipe';
-import { RecTypePipe } from '../shared/helpers/pipes/recType/recType.pipe';
 import { LaddaModule } from 'angular2-ladda';
+import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
+import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 
 @NgModule({
   declarations: [
@@ -49,8 +49,6 @@ import { LaddaModule } from 'angular2-ladda';
     BsGridRowComponent,
     TrialAccordionDirective,
     TbsearchPipe,
-    HighlightPipe,
-    RecTypePipe
   ],
   exports: [
     TbPlBsComponent
@@ -64,7 +62,9 @@ import { LaddaModule } from 'angular2-ladda';
     TabsModule,
     DatePickerCustomModule,
     SelectModule,
-    LaddaModule
+    LaddaModule,
+    HighlightModule,
+    RecTypeModule
   ],
 })
 export class TBPlBsModule {

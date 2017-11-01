@@ -7,6 +7,7 @@ import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { LaddaModule } from 'angular2-ladda';
+import { SelectModule } from '../theme/ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { LaddaModule } from 'angular2-ladda';
     AuditLogsRoutingModule,
     DatepickerModule,
     BsDatepickerModule,
-    LaddaModule
+    LaddaModule,
+    SelectModule
   ],
 })
 export class AuditLogsModule {

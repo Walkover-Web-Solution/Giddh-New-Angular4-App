@@ -24,7 +24,6 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
-import { Select2OptionData } from '../theme/select2';
 import { IOption } from '../theme/ng-select/option.interface';
 
 @Component({
@@ -72,42 +71,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     endDate: moment()
   };
   public trxRequest: TransactionsRequest;
-  public accountsOptions: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true,
-    // maximumSelectionLength: 1,
-    templateSelection: (data: any) => {
-      if (data.text === 'Select Accounts') {
-        return;
-      }
-      if (!data.additional.stock) {
-        return data.text;
-      } else {
-        return `${data.text} (${data.additional.stock.name})`;
-      }
-    },
-    templateResult: (data: any) => {
-      if (data.text === 'Searching…') {
-        return;
-      }
-      if (!data.additional.stock) {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
-                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
-                      </a>`);
-      } else {
-        return $(`<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
-                        <span class="account-list-item" style="display: block;font-size:14px">${data.text}</span>
-                        <span class="account-list-item" style="display: block;font-size:12px">${data.additional.uniqueName}</span>
-                        <span class="account-list-item" style="display: block;font-size:11px">
-                            Stock: ${data.additional.stock.name}
-                        </span>
-                      </a>`);
-      }
-    }
-  };
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;

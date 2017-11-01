@@ -21,6 +21,11 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { TextMaskModule } from 'angular2-text-mask';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
+import { ConfirmModalModule } from '../theme/confirm-modal';
 
 @NgModule({
   declarations: [
@@ -51,7 +56,12 @@ import { LaddaModule } from 'angular2-ladda';
     NgUploaderModule,
     ClipboardModule,
     Daterangepicker,
-    LaddaModule
+    LaddaModule,
+    ElementViewChildModule,
+    TextMaskModule,
+    SelectModule,
+    NumberToWordsModule,
+    ConfirmModalModule
   ],
 })
 export class LedgerModule {
