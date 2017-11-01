@@ -297,7 +297,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public closeSidebar(targetId) {
-    if (targetId === 'accountSearch' || targetId === 'expandAllGroups') {
+    if (targetId === 'accountSearch' || targetId === 'expandAllGroups' || targetId === 'toggleAccounts') {
       return;
     }
     this.flyAccounts.next(false);
