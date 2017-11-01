@@ -7,6 +7,7 @@ import { UiSwitchModule } from 'angular2-ui-switch';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { LaddaModule } from 'angular2-ladda';
+import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { LaddaModule } from 'angular2-ladda';
     TabsModule,
     AlertModule,
     UiSwitchModule,
-    LaddaModule
+    LaddaModule,
+    PerfectScrollbarModule.forChild()
   ],
 })
 export class UserDetailsModule {

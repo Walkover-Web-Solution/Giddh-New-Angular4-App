@@ -49,7 +49,7 @@
                   </td>
                   <td class="col-xs-6">
                     <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect (click)="addBlankTrx('DEBIT', txn, $event)"
-                      (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"
+                      (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"
                       (deselected)="deSelectAccount($event, txn)">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
@@ -116,7 +116,7 @@
                   </td>
                   <td class="col-xs-6">
                     <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #crdSelect (click)="addBlankTrx('CREDIT', txn, $event)"
-                      (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName" [options]="accountsOptions"
+                      (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"
                       (deselected)="deSelectAccount($event, txn)">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">

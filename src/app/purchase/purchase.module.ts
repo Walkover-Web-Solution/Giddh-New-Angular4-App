@@ -9,6 +9,7 @@ import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { LaddaModule } from 'angular2-ladda';
+import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 
 /**
  * Created by kunalsaxena on 9/1/17.
@@ -23,7 +24,8 @@ import { LaddaModule } from 'angular2-ladda';
     DatepickerModule,
     BsDropdownModule,
     Daterangepicker,
-    LaddaModule
+    LaddaModule,
+    HighlightModule
   ]
 })
 export class PurchaseModule { }
