@@ -1,16 +1,10 @@
-import { AppState } from '../store/roots';
 import { Injectable } from '@angular/core';
-import { StorageService } from './storage.service';
-import { AuthenticationService } from './authentication.service';
-import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { Domain } from '../models/domain';
-import { Store } from '@ngrx/store';
 import { Http } from '@angular/http';
 import { GeoLocationSearch } from '../models/other-models/GeoLocationSearch';
-import * as _ from 'lodash';
+import * as _ from '../lodash-optimized';
 
 @Injectable()
 export class LocationService {

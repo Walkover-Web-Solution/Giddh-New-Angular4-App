@@ -16,7 +16,9 @@
         <div class="row groupStockFormRow">
           <div class="form-group col-xs-6">
             <label>Name<span class="required">*</span></label>
-            <input type="text" name="name" (change)="generateUniqueName()" class="form-control" formControlName="name" required="" style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
+            <input type="text" name="name" (change)="generateUniqueName()" class="form-control" formControlName="name"
+                   required=""
+                   style="background-image: url(data:image/png;base64:iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGP6zwAAAgcBApocMXEAAAAASUVORK5CYII=);">
           </div>
 
           <div class="form-group col-xs-6">
@@ -32,10 +34,10 @@
             </div>
             <div class="form-group mrB">
 
-              <select2 [data]="groupsData$ | async" [options]="options" formControlName="parentStockGroupUniqueName"
-                       [disabled]="addGroupForm.get('isSelfParent').value" required
-                       [value]="addGroupForm.get('parentStockGroupUniqueName').value"
-                       (valueChanged)="groupSelected($event)"></select2>
+              <ng-select [options]="groupsData$ | async" formControlName="parentStockGroupUniqueName"
+                         [disabled]="addGroupForm.get('isSelfParent').value" required
+                         [placeholder]="'Select Parent Group'" [multiple]="false"
+                          (selected)="groupSelected($event)"></ng-select>
             </div>
           </div>
           <div class="col-xs-12">
@@ -44,21 +46,28 @@
             </div>
             <div class="checkbox">
               <label for="isSelfParentUpdt">
-							<input type="checkbox" formControlName="isSelfParent" id="isSelfParentUpdt" name="parentStockGroup">Assign as a Parent Group</label>
+                <input type="checkbox" formControlName="isSelfParent" id="isSelfParentUpdt" name="parentStockGroup">Assign
+                as a Parent Group</label>
             </div>
           </div>
         </div>
 
         <div class="clearfix">
           <div *ngIf="!(activeGroup$ | async);">
-            <button type="submit" class="btn btn-md btn-success mrR1" [ladda]="isAddNewGroupInProcess$ | async" (click)="addNewGroup()"
-              [disabled]="addGroupForm.invalid">Save</button>
+            <button type="submit" class="btn btn-md btn-success mrR1" [ladda]="isAddNewGroupInProcess$ | async"
+                    (click)="addNewGroup()"
+                    [disabled]="addGroupForm.invalid">Save
+            </button>
             <button type="reset" class="btn btn-md btn-primary">Cancel</button>
           </div>
           <div *ngIf="activeGroup$ | async;">
-            <button type="submit" [disabled]="addGroupForm.invalid" [ladda]="isUpdateGroupInProcess$ | async" class="btn btn-md btn-success mrR1"
-              (click)="updateGroup()">Update</button>
-            <button type="submit" class="btn btn-md btn-danger" [ladda]="isDeleteGroupInProcess$ | async" (click)="removeGroup()">Delete</button>
+            <button type="submit" [disabled]="addGroupForm.invalid" [ladda]="isUpdateGroupInProcess$ | async"
+                    class="btn btn-md btn-success mrR1"
+                    (click)="updateGroup()">Update
+            </button>
+            <button type="submit" class="btn btn-md btn-danger" [ladda]="isDeleteGroupInProcess$ | async"
+                    (click)="removeGroup()">Delete
+            </button>
           </div>
         </div>
       </form>

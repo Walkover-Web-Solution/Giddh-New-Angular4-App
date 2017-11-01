@@ -1,8 +1,7 @@
 import { Action } from '@ngrx/store';
-import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest } from '../../../models/interfaces/manufacturing.interface';
-import { MANUFACTURING_ACTIONS } from '../../services/actions/manufacturing/manufacturing.const';
+import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
 import { INVOICE } from '../../services/actions/invoice/invoice.const';
 
@@ -411,7 +410,6 @@ export function InvoiceTemplateReducer(state = initialState, action: Action): Cu
 // //   IsDivVisible,
 // //   IsFieldVisible
 // // } from '../../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
-// import * as _ from 'lodash';
 // import { BaseResponse } from '../../models/api-models/BaseResponse';
 
 // export interface InvoiceTemplateState {

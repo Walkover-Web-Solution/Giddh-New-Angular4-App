@@ -8,7 +8,7 @@ import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { NewRoleClass, NewRoleFormClass, IPageStr, IPage, INewRoleFormObj } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 
 @Component({
     selector: 'permission-model',

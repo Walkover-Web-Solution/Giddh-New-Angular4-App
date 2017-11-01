@@ -1,11 +1,10 @@
 import { LogsRequest } from '../../../models/api-models/Logs';
 import { UserDetails } from '../../../models/api-models/loginModels';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { CompanyService } from '../../../services/companyService.service';
 import { GroupService } from '../../../services/group.service';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AccountService } from '../../../services/account.service';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
@@ -15,8 +14,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { Select2OptionData } from '../../../theme/select2';
 
 @Component({
   selector: 'audit-logs-sidebar',
@@ -27,6 +28,7 @@ import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-log
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
     private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
@@ -64,7 +66,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         this.vm.groups$ = Observable.of(groups);
       }
     });
-    let selectedCompany: ComapnyResponse = null;
+    let selectedCompany: CompanyResponse = null;
     let loginUser: UserDetails = null;
     this.vm.selectedCompany.take(1).subscribe((c) => selectedCompany = c);
     this.vm.user$.take(1).subscribe((c) => loginUser = c);
@@ -143,7 +145,6 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public getLogfilters() {
-    //
     let reqBody: LogsRequest = new LogsRequest();
     reqBody.fromDate = this.vm.selectedFromDate ? moment(this.vm.selectedFromDate).format('DD-MM-YYYY') : '';
     reqBody.toDate = this.vm.selectedToDate ? moment(this.vm.selectedToDate).format('DD-MM-YYYY') : '';

@@ -13,7 +13,8 @@
 
                     <div class="form-group col-xs-3">
                         <label>Parent Stock Unit</label>
-                        <select2 [data]="stockUnitsDropDown$ | async" [options]="options" [value]="customUnitObj?.parentStockUnit?.code" (valueChanged)="change($event)"></select2>
+                        <ng-select [options]="stockUnitsDropDown$ | async" (selected)="change($event)"></ng-select>
+                        <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="options" [value]="customUnitObj?.parentStockUnit?.code" (valueChanged)="change($event)"></select2>-->
                     </div>
 
                     <div class="form-group col-xs-3 cstuWrp">

@@ -1,6 +1,15 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { TooltipModule, PaginationModule } from 'ngx-bootstrap';
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
+import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { CollapseModule } from 'ngx-bootstrap/collapse';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { TabsModule } from 'ngx-bootstrap/tabs';
+import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { PopoverModule } from 'ngx-bootstrap/popover';
+
 import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { SharedModule } from '../shared/shared.module';
@@ -31,7 +40,7 @@ import { InvoiceTemplateModalComponent } from './templates/edit-template/modals/
 import { InvoiceEmailFilterComponent } from './templates/edit-template/filters-container/email-filter/email-filter.component';
 import { DeleteTemplateConfirmationModelComponent } from './templates/edit-template/modals/confirmation-modal/confirmation.modal.component';
 import { InvoiceTemplatePreviewModelComponent } from './templates/edit-template/modals/template-preview-modal/template-preview.modal.component';
-
+import { EsignModalComponent } from './preview/models/e-Sign/e-Sign.component';
 const INVOICE_ROUTES: Routes = [
   {
     path: '',
@@ -39,9 +48,9 @@ const INVOICE_ROUTES: Routes = [
     component: InvoiceComponent,
     children: [
       { path: '', redirectTo: 'preview', pathMatch: 'full' },
-      { path: 'preview',  component: InvoicePreviewComponent  },
-      { path: 'generate',  component: InvoiceGenerateComponent },
-      { path: 'templates',  component: EditInvoiceComponent },
+      { path: 'preview', component: InvoicePreviewComponent },
+      { path: 'generate', component: InvoiceGenerateComponent },
+      { path: 'templates', component: EditInvoiceComponent },
       { path: 'settings', component: InvoiceSettingComponent },
     ]
   }
@@ -64,18 +73,21 @@ const INVOICE_ROUTES: Routes = [
     InvoiceTemplateModalComponent,
     InvoiceEmailFilterComponent,
     DeleteTemplateConfirmationModelComponent,
-    InvoiceTemplatePreviewModelComponent
+    InvoiceTemplatePreviewModelComponent,
+    EsignModalComponent
   ],
   imports: [
     FormsModule,
     CommonModule,
     ReactiveFormsModule,
     SharedModule,
+    ModalModule,
+    TooltipModule,
+    PaginationModule,
     RouterModule.forChild(INVOICE_ROUTES),
-    TooltipModule.forRoot(),
-    PaginationModule.forRoot(),
     InvoiceTemplatesModule,
     FontPickerModule.forRoot(FONT_PICKER_CONFIG),
+    BsDatepickerModule.forRoot(),
     NgUploaderModule
   ],
   exports: [

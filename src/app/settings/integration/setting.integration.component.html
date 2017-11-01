@@ -65,8 +65,20 @@
             <div class="form-group col-xs-4">
                 <label>Link Account</label>
                 <div class="input-group">
-                    <select2 required *ngIf="razorPayObj.account" class="select2-parent" name="razorPayObj.account" [data]="accounts$ | async" [(ngModel)]="razorPayObj.account.uniqueName" [options]="select2Options" (valueChanged)="selectAccount($event)"></select2>
-                    <div class="input-group-addon cp"><span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span></div>
+                  <ng-select
+                    *ngIf="razorPayObj.account"
+                    placeholder="Link Account"
+                    name="razorPayObj.account"
+                    [(ngModel)]="razorPayObj.account.uniqueName"
+                    [options]="accounts$ | async"
+                    (selected)="selectAccount($event)"
+                    >
+                    <ng-template #optionTemplate let-option="option">
+                      <div class="account-list-item">{{option?.label}}</div>
+                      <div class="account-list-item fs12">{{option?.value}}</div>
+                    </ng-template>
+                  </ng-select>
+                  <div class="input-group-addon cp"><span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span></div>
                 </div>
             </div>
             <div class="form-group col-xs-4 mrT1" id="inlnImg">

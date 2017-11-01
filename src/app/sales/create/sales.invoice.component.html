@@ -28,7 +28,7 @@
             <div class="form-group noMarg">
               <label>Add Entry Against</label>
               <select class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
-                <option [ngValue]="select">Select Bank</option>
+                <option [ngValue]="select">Select Bank/Cash</option>
                 <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async" >{{ bank.name }}</option>
               </select>
             </div>
@@ -36,7 +36,7 @@
         </div>
       </div>
       <div class="col-xs-6 text-right">
-        <p class="lead b">Balance Due: Rs.00.00</p>
+        <p class="lead b">Balance Due: {{invFormData.balanceDue | number:'1.2-2'}}</p>
       </div>
     </div>
     <div class="col-xs-12"><div class="bdrB"></div></div>
@@ -59,21 +59,22 @@
           <input type="text" name="attention" class="form-control" [(ngModel)]="invFormData.account.attentionTo" />
         </div>
         <div class="form-group">
-          <label>Invoice Date</label>
-          <input type="text" name="invoiceDate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
+          <label>Country</label>
+          <ng-select class="splSales" name="country" [options]="countrySource" [(ngModel)]="invFormData.country.countryName"></ng-select>
         </div>
         <div class="form-group">
+          <label>Invoice Date</label>
+          <input type="text" placeholder="DD-MM-YYYY" name="invoiceDate" class="form-control"  [(ngModel)]="invFormData.invoiceDetails.invoiceDate" />
+        </div>
+        <!-- <div class="form-group">
           <label>Invoice Number</label>
           <input type="text" name="invoiceNumber" class="form-control" [(ngModel)]="invFormData.invoiceDetails.invoiceNumber" />
-        </div>
+        </div> -->
         <div class="form-group">
           <label>Due Date</label>
           <input type="text" name="dueDate" class="form-control" [(ngModel)]="invFormData.invoiceDetails.dueDate" />
         </div>
-        <div class="form-group">
-          <label>Country</label>
-          <input type="text" name="country" class="form-control" [(ngModel)]="invFormData.country.countryName" />
-        </div>
+
       </div>
     </div>
     <!-- end general details collapse pane -->
@@ -85,39 +86,39 @@
             <span [ngClass]="isMlngAddrCollapsed ? 'icon-add' : 'icon-minus'" aria-hidden="true"></span>
           </div>
         </div>
-        <div class="ico-head">Mailing Address</div>
+        <div class="ico-head">Address</div>
       </div>
       <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3">
         <div class="flex-row wid90p">
           <div class="flex-row-child">
             <div class="form-group size_340">
               <label>Billing Address</label>
-              <textarea name="billingDetails.address" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"></textarea>
+              <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
               <div>
                 <label>State</label>
-                <input type="text" name="billingDetails.stateCode" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.stateCode" />
+                <ng-select #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.billingDetails.stateCode"></ng-select>
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <input type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" />
+                <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
               </div>
             </div>
           </div>
           <div class="flex-row-child">
             <div class="form-group size_340">
-              <label>Shipping Address</label>
-              <textarea name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
+              <label style="width:340px;"><input type="checkbox" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+              <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
             </div>
-            <div class="form-group">
+            <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
               <div>
                 <label>State</label>
-                <input type="text" name="shippingDetails.stateCode" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.stateCode" />
+                <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>
               </div>
               <div class="mrT27">
                 <label>GSTIN</label>
-                <input type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" />
+                <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
               </div>
             </div>
           </div>
@@ -201,7 +202,7 @@
                 [(ngModel)]="transaction.fakeAccForSelect2"
                 [options]="salesAccounts$ | async"
                 (selected)="onSelectSalesAccount($event, transaction)"
-                (noResultsClicked)="onNoResultsClicked()"
+                (noResultsClicked)="onNoResultsClicked(entryIdx)"
                 >
                 <ng-template #optionTemplate let-option="option">
                   <div class="account-list-item">{{option?.label}}</div>
@@ -215,8 +216,10 @@
             <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
           </td>
           <td>
-            <input type="text" placeholder="HSN" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
-            <input type="text" placeholder="SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
+            <div class="">
+              <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly  maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
+              <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly  maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
+            </div>
           </td>
 
           <!-- show/hide fields -->
@@ -229,7 +232,7 @@
                       <tbody>
                         <tr>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
+                            <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
                           </td>
                           <td width="25%">
                             <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
@@ -237,9 +240,9 @@
                             </select>
                           </td>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
                           </td>
-                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
+                          <td width="25%"><input type="text" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" /></td>
                         </tr>
                       </tbody>
                     </table>
@@ -252,7 +255,7 @@
                           <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%">
-                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
+                            <input type="text" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
                           </td>
                         </tr>
                       </tbody>
@@ -265,19 +268,23 @@
           <td>
             <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
           </td>
-          <td><input type="text" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue" /></td>
+          <td>
+            <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue" />
+          </td>
           <td class="tax-list-dd-wrap" *ngIf="showTaxBox">
             <tax-control
               [taxes]="companyTaxesList$ | async"
-              [applicableTaxes]="[]"
-              [taxRenderData]="[]"
+              [applicableTaxes]="transaction.applicableTaxes"
+              [taxRenderData]="transaction.taxRenderData"
               [showTaxPopup]="false"
               [showHeading]="false"
               (selectedTaxEvent)="selectedTaxEvent($event, entry)"
               (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
             </tax-control>
           </td>
-          <td><input type="text" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" /></td>
+          <td>
+            <input type="number" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" />
+          </td>
           <td class="action-panel-td">
             <span class="cp" (click)="addBlankRow(transaction)"><i class="icon-add" aria-hidden="true"></i></span>
             <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)"><i class="icon-cross" aria-hidden="true"></i></span>
@@ -285,6 +292,55 @@
         </tr>
       </tbody>
     </table>
+
+    <!-- sub total and total calc -->
+    <table class="table">
+      <tbody>
+        <tr>
+          <td width="50%">
+            <div class="col-xs-8 pdT2">
+              <label class="mrB1">Message</label>
+              <textarea style="height:140px" class="form-control" name="message2" [(ngModel)]="invFormData.other.message2"></textarea>
+            </div>
+          </td>
+          <td width="50%">
+            <section class="tableSec">
+              <div class="tableRow">
+                <div class="tableCell">Total Amount</div>
+                <div class="tableCell figureCell">{{invFormData.subTotal | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Discount</div>
+                <div class="tableCell figureCell">-{{invFormData.totalDiscount | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Taxable Value</div>
+                <div class="tableCell figureCell">{{invFormData.totalTaxableValue | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Tax</div>
+                <div class="tableCell figureCell">{{invFormData.totalTax | number:'1.2-2'}}</div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell"><strong>Total</strong></div>
+                <div class="tableCell figureCell"><strong>{{invFormData.grandTotal | number:'1.2-2'}}</strong></div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell">Deposit</div>
+                <div class="tableCell figureCell">
+                  <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount" />
+                </div>
+              </div>
+              <div class="tableRow">
+                <div class="tableCell"><strong>Balance Due</strong></div>
+                <div class="tableCell figureCell"><strong>{{invFormData.balanceDue | number:'1.2-2'}}</strong></div>
+              </div>
+            </section>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- end -->
   </section>
 
   <section class="row">
@@ -292,6 +348,7 @@
       <div class="col-xs-12">
         <div class="pull-right pr">
           <button type="button" (click)="resetInvoiceForm(invoiceForm)" class="btn btn-default mrR1">Clear</button>
+          <button type="button" (click)="triggerSubmitInvoiceForm(invoiceForm)" class="btn btn-default mrR1">Generate Invoice &amp; Update A/c</button>
           <button type="submit" class="btn btn-default">Generate Invoice</button>
         </div>
       </div>
@@ -300,5 +357,39 @@
 </form>
 
 <!-- open account aside -->
-<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in'"></div>
-<aside-menu-account [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+<div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
+<aside-menu-account
+[class]="accountAsideMenuState"
+[@slideInOut]="accountAsideMenuState"
+(closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+
+<!-- open product service aside -->
+<aside-menu-product-service
+  [class]="asideMenuStateForProductService"
+  [@slideInOut]="asideMenuStateForProductService"
+  (closeAsideEvent)="onNoResultsClicked()"
+  (animatePAside)="getActionFromAside($event)"
+></aside-menu-product-service>
+
+
+<!-- create Group modal -->
+<section *ngIf="showCreateGroupModal">
+  <div bsModal #createGroupModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <sales-add-group-modal (actionFired)="closeCreateGroupModal($event)"></sales-add-group-modal>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- create Ac modal -->
+<section *ngIf="showCreateAcModal">
+  <div bsModal #createAcModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
+    <div class="modal-dialog modal-md">
+      <div class="modal-content">
+        <create-account-modal [gType]="createAcCategory" (actionFired)="closeCreateAcModal()"></create-account-modal>
+      </div>
+    </div>
+  </div>
+</section>

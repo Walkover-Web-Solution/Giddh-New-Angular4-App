@@ -1,9 +1,9 @@
 import { Action } from '@ngrx/store';
-import { IManufacturingUnqItemObj, ICommonResponseOfManufactureItem, IManufacturingItemRequest } from '../../../models/interfaces/manufacturing.interface';
+import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj } from '../../../models/interfaces/manufacturing.interface';
 import { MANUFACTURING_ACTIONS } from '../../services/actions/manufacturing/manufacturing.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import * as _ from 'lodash';
-import { StocksResponse, StockDetailResponse } from '../../models/api-models/Inventory';
+import * as _ from '../../lodash-optimized';
+import { StockDetailResponse, StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { IStocksItem } from '../../models/interfaces/stocksItem.interface';
 

@@ -10,8 +10,17 @@ import { RevenueChartComponent } from './components/revenue/revenue-chart.compon
 import { ComparisionChartComponent } from './components/comparision/comparision-chart.component';
 import { HistoryChartComponent } from './components/history/history-chart.component';
 import { NetworthChartComponent } from './components/networth/networth-chart.component';
+import { ModalModule } from 'ngx-bootstrap/modal';
+import { ChartModule } from 'angular2-highcharts';
+import { HighchartsStatic } from 'angular2-highcharts/dist/HighchartsService';
 
-// console.log('`Home` bundle loaded asynchronously');
+export function highchartsFactory() {
+  const hc = require('highcharts');
+  const dd = require('highcharts/modules/drilldown');
+  dd(hc);
+
+  return hc;
+}
 
 @NgModule({
   declarations: [
@@ -25,12 +34,19 @@ import { NetworthChartComponent } from './components/networth/networth-chart.com
     NetworthChartComponent
   ],
   exports: [HomeComponent],
-  providers: [],
+  providers: [
+    {
+      provide: HighchartsStatic,
+      useFactory: highchartsFactory
+    },
+  ],
   imports: [
     CommonModule,
     FormsModule,
     HomeRoutingModule,
     SharedModule,
+    ModalModule,
+    ChartModule,
   ],
 })
 export class HomeModule {

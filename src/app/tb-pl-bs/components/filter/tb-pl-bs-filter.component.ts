@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output, ChangeDetectorRef, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -45,7 +45,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
 
   // init form and other properties from input commpany
   @Input()
-  public set selectedCompany(value: ComapnyResponse) {
+  public set selectedCompany(value: CompanyResponse) {
     if (!value) {
       return;
     }
@@ -67,7 +67,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   @Output() public onPropertyChanged = new EventEmitter<TrialBalanceRequest>();
-  private _selectedCompany: ComapnyResponse;
+  private _selectedCompany: CompanyResponse;
 
   constructor(private fb: FormBuilder, private cd: ChangeDetectorRef) {
     this.filterForm = this.fb.group({

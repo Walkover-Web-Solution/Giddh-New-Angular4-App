@@ -1,4 +1,4 @@
-import { StockDetailResponse, StockGroupResponse } from '../../../models/api-models/Inventory';
+import { StockGroupResponse } from '../../../models/api-models/Inventory';
 import { AppState } from '../../../store/roots';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -7,7 +7,6 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import * as _ from 'lodash';
 
 @Component({
   selector: 'stock-list',

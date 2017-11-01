@@ -1,13 +1,10 @@
-import { Component, EventEmitter, Output, OnInit, trigger, state, style, animate, transition } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { FIXED_CATEGORY_OF_GROUPS } from '../sales.module';
-import { Observable } from 'rxjs/Observable';
-import * as _ from 'lodash';
 import { AccountRequest } from '../../models/api-models/Account';
 import { AccountsAction } from '../../services/actions/accounts.actions';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
 import { AppState } from '../../../store/roots';
 
 @Component({

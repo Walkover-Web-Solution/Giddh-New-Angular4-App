@@ -89,8 +89,20 @@
                         <div class="col-xs-2">
                             <div class="row">
                                 <label>Link Account</label>
-                                <select2 [(ngModel)]="razorpayObj.account" name="linkedaccount" [data]="linkAccountDropDown$ | async" [options]="options" [ngModelOptions]="{standalone: true}" (valueChanged)="selectLinkAccount($event)">
-                                </select2>
+                                <div class="ng-select-wrap">
+                                  <ng-select
+                                    placeholder="Link Account"
+                                    filterPlaceholder="Type to search..."
+                                    name="linkedaccount"
+                                    [(ngModel)]="razorpayObj.account"
+                                    [options]="linkAccountDropDown$ | async"
+                                    >
+                                    <ng-template #optionTemplate let-option="option">
+                                      <div class="account-list-item">{{option?.label}}</div>
+                                      <div class="account-list-item fs12">{{option?.value}}</div>
+                                    </ng-template>
+                                  </ng-select>
+                                </div>
                             </div>
                         </div>
                         <button class=" btn btn-danger mrT1 pull-right " *ngIf="updateRazor" (click)="deleteRazorPay() ">Delete</button>

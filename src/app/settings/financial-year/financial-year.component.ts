@@ -3,10 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { CompanyService } from '../../services/companyService.service';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
-import { Observable } from 'rxjs';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ToasterService } from '../../services/toaster.service';
 import { SettingsFinancialYearActions } from '../../services/actions/settings/financial-year/financial-year.action';
@@ -76,7 +73,7 @@ export class FinancialYearComponent implements OnInit {
           this.currentCompanyName = comp.name;
           this.currentCompanyFinancialYearUN = comp.activeFinancialYear.uniqueName;
           this.financialOptions = comp.financialYears.map(q => {
-            return { text: q.uniqueName, id: q.uniqueName };
+            return { label: q.uniqueName, value: q.uniqueName };
           });
         }
       }
@@ -84,10 +81,10 @@ export class FinancialYearComponent implements OnInit {
 
     let endYear = moment().year();
     let startYear = moment().subtract(7, 'year').year();
-    let yearArray = _.range(startYear, endYear + 1);
+    let yearArray = _.range(startYear, endYear);
 
     this.yearOptions = yearArray.map(q => {
-      return { text: q, id: q };
+      return { label: q, value: q };
     });
   }
 

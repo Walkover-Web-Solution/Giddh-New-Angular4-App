@@ -1,7 +1,7 @@
 import { Store } from '@ngrx/store';
 import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import * as _ from 'lodash';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import * as _ from '../../../lodash-optimized';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
 import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
@@ -51,13 +51,13 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   public data$: Observable<AccountDetails>;
   public request: TrialBalanceRequest;
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
-  public get selectedCompany(): ComapnyResponse {
+  public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
   }
 
   // set company and fetch data...
   @Input()
-  public set selectedCompany(value: ComapnyResponse) {
+  public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
     if (value) {
       this.request = {
@@ -69,7 +69,7 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private _selectedCompany: ComapnyResponse;
+  private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private cd: ChangeDetectorRef, public tlPlActions: TBPlBsActions) {
