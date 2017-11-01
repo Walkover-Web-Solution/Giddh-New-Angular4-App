@@ -43,6 +43,9 @@ export class InventoryActionsConst {
   public static GetStock = 'GetStock';
   public static GetStockResponse = 'GetStockResponse';
 
+  public static GetManufacturingStock = 'GetManufacturingStock';
+  public static GetManufacturingStockResponse = 'GetManufacturingStockResponse';
+
   public static ResetActiveStock = 'ResetActiveStock';
 
   public static ResetInventoryState = 'ResetInventoryState';
