@@ -224,6 +224,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
 
     this.activeGroup$.subscribe((a) => {
       if (a) {
+        this.groupsList = _.filter(this.groupsList, (l => l.uniqueName !== a.uniqueName));
         let showAddForm: boolean = null;
         this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
         if (!showAddForm) {
@@ -338,11 +339,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           this.accountService.GetFlattenAccounts().subscribe(a => {
             let accounts: IOption[] = [];
             if (a.status === 'success') {
-              a.body.results.filter(ac => {
-                return ac.uniqueName !== activeAccount.uniqueName;
-              }).map(acc => {
+              a.body.results.map(acc => {
                 accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
               });
+              accounts = _.filter(accounts, c => c.value !== activeAccount.uniqueName);
             }
             this.accounts$ = Observable.of(accounts);
           });
@@ -352,10 +352,11 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       this.accountService.GetFlattenAccounts().subscribe(a => {
         let accounts: IOption[] = [];
         if (a.status === 'success') {
-          a.body.results.filter(ac => {
-            return ac.uniqueName !== activeAccount.uniqueName;
-          }).map(acc => {
+          a.body.results.map(acc => {
             accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+          });
+          accounts = _.filter(accounts, c => {
+            return c.value !== activeAccount.uniqueName;
           });
         }
         this.accounts$ = Observable.of(accounts);
