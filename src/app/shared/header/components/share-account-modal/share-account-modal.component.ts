@@ -34,7 +34,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     let accObject = new ShareAccountRequest();
     accObject.role = 'view_only';
     accObject.user = this.email;
-    this.store.dispatch(this.accountActions.shareAccount(accObject, activeAccount.uniqueName));
+    console.log ('need to add new shared entity');
+    // this.store.dispatch(this.accountActions.shareAccount(accObject, activeAccount.uniqueName));
     this.email = '';
   }
 
