@@ -76,7 +76,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   public gstDetailsLength: number = 3;
   public isMultipleCurrency: boolean = false;
   public companyCurrency: string;
-  public phoneCode: string;
   public countryPhoneCode: IOption[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -140,8 +139,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
         this.addAccountForm.get('openingBalanceType').patchValue('');
       } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType').value === '') {
         this.addAccountForm.get('openingBalanceType').patchValue('CREDIT');
-      } else if (!a) {
-        this.addAccountForm.get('openingBalanceType').patchValue('');
       }
     });
     this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
@@ -179,6 +176,8 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     let result: IContriesWithCodes = contriesWithCodes.find((c) => c.countryName === company.country);
     if (result) {
       this.addAccountForm.get('country').get('countryCode').patchValue(result.countryflag);
+    } else {
+      this.addAccountForm.get('country').get('countryCode').patchValue('IN');
     }
   }
 
@@ -186,13 +185,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.addAccountForm = this._fb.group({
       name: ['', Validators.compose([Validators.required, Validators.maxLength(100)])],
       uniqueName: ['', [Validators.required]],
-      openingBalanceType: [''],
+      openingBalanceType: ['CREDIT'],
       foreignOpeningBalance: [0, Validators.compose([digitsOnly])],
       openingBalance: [0, Validators.compose([digitsOnly])],
       mobileNo: [''],
-      phone: this._fb.group({
-        phoneCode: ['']
-      }),
+      // mobileCode: [''],
       email: ['', Validators.pattern(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)],
       companyName: [''],
       attentionTo: [''],
@@ -319,7 +316,6 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   }
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
-
     if (this.isHsnSacEnabledAcc) {
       delete accountRequest['country'];
       delete accountRequest['addresses'];
@@ -344,13 +340,4 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.destroyed$.complete();
   }
 
-  /**
-   * set Phone Code
-   */
-  public setPhoneCode(code) {
-    console.log(code);
-    if (code.value) {
-      let country = this.countrySource.filter((obj) => obj.value === code.value);
-    }
-  }
 }
