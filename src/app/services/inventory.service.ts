@@ -162,6 +162,24 @@ export class InventoryService {
   }
 
   /**
+   * GetManufacturingStocks
+   */
+  public GetManufacturingStocks(): Observable<BaseResponse<StocksResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVENTORY_API.MANUFACTURING_STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<StocksResponse, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {}));
+  }
+
+  /**
    * get Stocks with hierarchy
    */
   public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count: string = ''): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
