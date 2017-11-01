@@ -11,11 +11,11 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { ComapnyResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
 import { Router, ActivatedRoute } from '@angular/router';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
   @ViewChild('companyadd') public companyadd: ElementViewContainerRef;
-  @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
+  // @ViewChildren(ElementViewContainerRef) public test: ElementViewContainerRef;
 
   @ViewChild('addmanage') public addmanage: ElementViewContainerRef;
   @ViewChild('manageGroupsAccountsModal') public manageGroupsAccountsModal: ModalDirective;
@@ -55,10 +55,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
-  public companies$: Observable<ComapnyResponse[]>;
-  public selectedCompany: Observable<ComapnyResponse>;
+  public companies$: Observable<CompanyResponse[]>;
+  public selectedCompany: Observable<CompanyResponse>;
   public selectedCompanyCountry: string;
-  public markForDeleteCompany: ComapnyResponse;
+  public markForDeleteCompany: CompanyResponse;
   public deleteCompanyBody: string;
   public user$: Observable<UserDetails>;
   public userName: string;
@@ -224,7 +224,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.hideDeleteCompanyModal(e);
   }
 
-  public showDeleteCompanyModal(company: ComapnyResponse, e: Event) {
+  public showDeleteCompanyModal(company: CompanyResponse, e: Event) {
     this.markForDeleteCompany = company;
     this.deleteCompanyBody = `Are You Sure You Want To Delete ${company.name} ? `;
     this.deleteCompanyModal.show();

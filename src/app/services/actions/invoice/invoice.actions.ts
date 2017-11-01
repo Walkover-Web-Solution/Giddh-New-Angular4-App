@@ -453,7 +453,7 @@ export class InvoiceActions {
       } else {
         this._toasty.successToast('Template successfully marked as default.');
       }
-      return { type : ''};
+      return { type: '' };
     });
 
   // DELETE TEMPLATE
@@ -531,7 +531,7 @@ export class InvoiceActions {
   public VisitToInvoiceFromPreview(): Action {
     return {
       type: INVOICE_ACTIONS.VISIT_FROM_PREVIEW,
-      payload: { }
+      payload: {}
     };
   }
 

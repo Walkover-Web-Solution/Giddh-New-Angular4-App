@@ -5,8 +5,8 @@
     <form (ngSubmit)="updateProfile(companyProfileObj)">
         <div class="row">
             <div class="form-group col-xs-3">
-                <label>Name</label><br>
-                <input type="text" placeholder="Name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" />
+                <label>Company name</label><br>
+                <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" />
             </div>
             <div class="form-group col-xs-3">
                 <label>Unique Name</label><br>
@@ -85,14 +85,28 @@
                         <div class="form-group select2-parent">
                             <label>State</label><br>
                             <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="companyProfileObj.state" name="state"/>-->
-                            <select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
-                            </select2>
+                            <!--<select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" *ngIf="countryIsIndia" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
+                            </select2>-->
+                            <ng-select placeholder="Select"
+                                filterPlaceholder="Type to search..."
+                                name="state"
+                                [(ngModel)]="companyProfileObj.state"
+                                [options]="statesSource$ | async"
+                                *ngIf="countryIsIndia"
+                                #stateList
+                                >
+                                <ng-template #optionTemplate let-option="option">
+                                    <div class="account-list-item">{{option?.label}}</div>
+                                    <div class="account-list-item fs12">{{option?.value}}</div>
+                                </ng-template>
+                            </ng-select>
+                            <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
                         </div>
                     </div>
                     <div class="col-xs-6">
                         <div class="form-group">
                             <label>Country</label><br>
-                            <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" name="country" />
+                            <input type="text" placeholder="Country" class="form-control" [(ngModel)]="companyProfileObj.country" (ngModelChange)="checkCountry($event)" name="country" />
                         </div>
                     </div>
                 </div>
@@ -118,8 +132,22 @@
                                     <div class="form-group select2-parent">
                                         <label>State</label><br>
                                         <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="gst.addressList[0].stateCode" name="newstateCode+{{i}}" />-->
-                                        <select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [disabled]="gst.addressList[0].stateCode" [(ngModel)]="gst.addressList[0].stateCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event, i)">
-                                        </select2>
+                                        <!--<select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [disabled]="gst.addressList[0].stateCode" [(ngModel)]="gst.addressList[0].stateCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event, i)">
+                                        </select2>-->
+                                        <ng-select placeholder="Select"
+                                            filterPlaceholder="Type to search..."
+                                            name="newstateCode+{{i}}"
+                                            [options]="statesSource$ | async"
+                                            #stateList
+                                            [disabled]="gst.addressList[0].stateCode != ''" 
+                                            [(ngModel)]="gst.addressList[0].stateCode"
+                                            (selected)="stateSelected($event, i)"
+                                            >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <div class="account-list-item">{{option?.label}}</div>
+                                                <div class="account-list-item fs12">{{option?.value}}</div>
+                                            </ng-template>
+                                        </ng-select>
                                     </div>
                                 </div>
                             </div>

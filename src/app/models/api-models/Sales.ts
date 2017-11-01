@@ -1,4 +1,4 @@
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { IInvoiceTax } from './Invoice';
 
@@ -66,6 +66,7 @@ export class FakeDiscountItem {
 
 export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public discount: any[];
+  public hsnOrSac: string;
   public hsnNumber: string;
   public sacNumber: string;
   public description: string;
@@ -79,12 +80,15 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public isStockTxn?: boolean;
   public stockDetails?: any;
   public stockList?: IStockUnit[] = [];
+  public applicableTaxes: string[] = [];
+  public taxRenderData: string[] = [];
   constructor() {
     super();
     this.date = moment().format('DD-MM-YYYY');
     this.amount = 0;
     this.total = 0;
     this.isStockTxn = false;
+    this.hsnOrSac = 'sac';
   }
 
   // basic check for valid transaction
@@ -102,9 +106,6 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
     }
     return r;
   }
-
-  // public throwCustomErrMsg() {
-  // }
 
   public setAmount(entry: SalesEntryClass) {
     // delaying due to ngModel change
@@ -153,6 +154,7 @@ export class SalesTransactionItemClass extends ICommonItemOfTransaction {
   public getTaxableValue(entry: SalesEntryClass): number {
     let count: number = 0;
     if (this.quantity && this.rate) {
+      this.amount = this.rate * this.quantity;
       count = this.checkForInfinity((this.rate * this.quantity) - this.getTotalDiscount(entry.discounts));
     } else {
       count = this.checkForInfinity(this.amount - this.getTotalDiscount(entry.discounts));
@@ -221,6 +223,7 @@ class OtherSalesItemClass {
   public customField1: string;
   public customField2: string;
   public customField3: string;
+  public message2: string;
   constructor() {
     this.shippingDate = moment().format('DD-MM-YYYY');
   }
@@ -240,6 +243,7 @@ export class InvoiceFormClass {
   public entries: SalesEntryClass[];
   public totalTaxableValue: number;
   public grandTotal: number;
+  public balanceDue: number;
   public totalInWords?: any;
   public subTotal: number;
   public totalDiscount: number;
@@ -264,3 +268,15 @@ export class InvoiceFormClass {
 /**
  * end draw invoice on ui and api model related class and interface
 */
+
+// generate sales interface
+
+interface IPaymentAction {
+  action: string;
+  amount: number;
+}
+export interface GenerateSalesRequest {
+  invoice: InvoiceFormClass;
+  updateAccountDetails: boolean;
+  paymentAction: IPaymentAction;
+}

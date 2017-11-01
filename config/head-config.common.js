@@ -32,6 +32,7 @@ module.exports = {
          * <link> tags for css.
          */
         { rel: 'stylesheet', href: 'assets/css/bootstrap.css' },
+        { rel: 'stylesheet', href: 'assets/css/ngx-bootstrap/bs-datepicker.css' },
         { rel: 'stylesheet', href: 'assets/css/font-awesome.css' },
         { rel: 'stylesheet', href: 'assets/css/style-1.css' },
         { rel: 'stylesheet', href: 'assets/css/style-2.css' },
@@ -71,6 +72,7 @@ module.exports = {
     ],
     script: [
         { type: 'text/javascript', src: 'assets/js/jquery-1.11.3.min.js' },
+        { type: 'text/javascript', src: 'assets/js/lodash.min.js' },
         { type: 'text/javascript', src: 'assets/js/plugins/select2/js/select2.full.min.js' },
         { type: 'text/javascript', src: 'assets/js/plugins/tagmanager/tagmanager.js' },
         {type: 'text/javascript', src: 'https://checkout.razorpay.com/v1/checkout.js'}

@@ -1,15 +1,15 @@
 import { AppState } from '../../../store/roots';
 import { HomeActions } from '../../../services/actions/home/home.actions';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
-import { ComapnyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
-import { Component, OnInit, Input } from '@angular/core';
+import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
+import { Component, Input, OnInit } from '@angular/core';
 import { Options } from 'highcharts';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
 import { Observable } from 'rxjs/Observable';
 import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -54,7 +54,7 @@ export class NetworthChartComponent implements OnInit {
   };
   public activeFinancialYear: ActiveFinancialYear;
   public lastFinancialYear: ActiveFinancialYear;
-  public companies$: Observable<ComapnyResponse[]>;
+  public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   @Input() public comparisionChartData: Observable<IComparisionChartResponse>;
   public requestInFlight = true;
@@ -103,7 +103,7 @@ export class NetworthChartComponent implements OnInit {
   public ngOnInit() {
     this.companies$.subscribe(c => {
       if (c) {
-        let activeCompany: ComapnyResponse;
+        let activeCompany: CompanyResponse;
         let activeCmpUniqueName = '';
         let financialYears = [];
         this.activeCompanyUniqueName$.take(1).subscribe(a => {

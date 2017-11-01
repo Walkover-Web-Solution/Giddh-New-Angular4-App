@@ -11,6 +11,7 @@ import { map } from 'rxjs/operator/map';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
+import { INVOICE_API_2 } from './apiurls/invoice.api';
 // import { IsDivVisible } from '../invoice/templates/edit-template/filters-container/content-filters/content.filters.component';
 
 @Injectable()
@@ -21,7 +22,7 @@ export class InvoiceTemplatesService {
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
   }
 
-  public getTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>>  {
+  public getTemplates(): Observable<BaseResponse<CustomTemplateResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;

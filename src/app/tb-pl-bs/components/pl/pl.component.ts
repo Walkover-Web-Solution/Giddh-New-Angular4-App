@@ -1,10 +1,10 @@
 import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { ComapnyResponse } from '../../../models/api-models/Company';
+import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
 import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
-import * as _ from 'lodash';
+import * as _ from '../../../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
@@ -47,13 +47,13 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
   @ViewChild('plGrid') public plGrid: PlGridComponent;
-  public get selectedCompany(): ComapnyResponse {
+  public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
   }
 
   // set company and fetch data...
   @Input()
-  public set selectedCompany(value: ComapnyResponse) {
+  public set selectedCompany(value: CompanyResponse) {
     this._selectedCompany = value;
     if (value) {
       let index = this.findIndex(value.activeFinancialYear, value.financialYears);
@@ -67,7 +67,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  private _selectedCompany: ComapnyResponse;
+  private _selectedCompany: CompanyResponse;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef) {

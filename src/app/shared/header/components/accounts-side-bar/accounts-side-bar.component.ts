@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { IFlattenGroupsAccountsDetail } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { FlyAccountsActions } from '../../../../services/actions/fly-accounts.actions';
-import * as _ from 'lodash';
+import * as _ from '../../../../lodash-optimized';
 @Component({
   selector: 'accounts-side-bar',
   templateUrl: './accounts-side-bar.component.html',

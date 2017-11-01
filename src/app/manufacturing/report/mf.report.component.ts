@@ -1,3 +1,5 @@
+import { Select2OptionData } from '../../theme/select2';
+
 const filter1 = [
   { name: 'Greater', uniqueName: 'greaterThan' },
   { name: 'Less Than', uniqueName: 'lessThan' },
@@ -13,15 +15,14 @@ const filter2 = [
 ];
 
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { Component, OnInit } from '@angular/core';
 import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { Router } from '@angular/router';
@@ -56,18 +57,18 @@ export class MfReportComponent implements OnInit {
   public ngOnInit() {
     this.initializeSearchReqObj();
     // Refresh the stock list
-    this.store.dispatch(this.inventoryAction.GetStock());
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (o.stocksList) {
-        if (o.stocksList.results) {
+      if (o.manufacturingStockList) {
+        if (o.manufacturingStockList.results) {
           this.stockListDropDown = [];
-          _.forEach(o.stocksList.results, (unit: any) => {
+          _.forEach(o.manufacturingStockList.results, (unit: any) => {
             this.stockListDropDown.push({ text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName });
           });
         }
       } else {
-        this.store.dispatch(this.inventoryAction.GetStock());
+        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
       }
     });
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
@@ -81,7 +82,7 @@ export class MfReportComponent implements OnInit {
     // Refresh stock list on company change
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).distinct((val) => val === 'companyUniqueName').subscribe((value: any) => {
       this.isReportLoading = true;
-      this.store.dispatch(this.inventoryAction.GetStock());
+      this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     });
   }
 

@@ -18,7 +18,7 @@ import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
 import { go, replace, search, show, back, forward } from '@ngrx/router-store';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
-import { StateDetailsResponse, ComapnyResponse } from '../../models/api-models/Company';
+import { StateDetailsResponse, CompanyResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
 import { Configuration } from '../../app.constant';
 import { ROUTES } from '../../app.routes';
@@ -35,9 +35,11 @@ export class LoginActions {
 
   public static SignupWithEmailRequest = 'SignupWithEmailRequest';
   public static SignupWithEmailResponce = 'SignupWithEmailResponce';
+  public static ResetSignupWithEmailState = 'ResetSignupWithEmailState';
   public static SignupWithMobileRequest = 'SignupWithMobileRequest';
   public static SignupWithMobileResponce = 'SignupWithMobileResponce';
 
+  public static ResetSignupWithMobileState = 'ResetSignupWithMobileState';
   public static VerifyEmailRequest = 'VerifyEmailRequest';
   public static VerifyEmailResponce = 'VerifyEmailResponce';
 
@@ -159,7 +161,7 @@ export class LoginActions {
     }).map((results: any[]) => {
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
-      let companies = results[1] as BaseResponse<ComapnyResponse[], string>;
+      let companies = results[1] as BaseResponse<CompanyResponse[], string>;
       if (companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         return go(['/pages/new-user']);
@@ -363,6 +365,12 @@ export class LoginActions {
     };
   }
 
+  public ResetSignupWithEmailState(): Action {
+    return {
+      type: LoginActions.ResetSignupWithEmailState
+    };
+  }
+
   public SignupWithMobileRequest(value: SignupWithMobile): Action {
     return {
       type: LoginActions.SignupWithMobileRequest,
@@ -373,6 +381,12 @@ export class LoginActions {
     return {
       type: LoginActions.SignupWithMobileResponce,
       payload: value
+    };
+  }
+
+  public ResetSignupWithMobileState(): Action {
+    return {
+      type: LoginActions.ResetSignupWithMobileState
     };
   }
 

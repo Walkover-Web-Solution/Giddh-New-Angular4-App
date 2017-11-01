@@ -1,9 +1,10 @@
 import { UserDetails } from '../../../models/api-models/loginModels';
-import { ComapnyResponse } from '../../../models/api-models/Company';
-import { Select2OptionData } from '../../../shared/theme/select2/select2.interface';
+import { CompanyResponse } from '../../../models/api-models/Company';
 
 import * as moment from 'moment/moment';
 import { Observable } from 'rxjs/Observable';
+import { Select2OptionData } from '../../../theme/select2';
+
 export class AuditLogsSidebarVM {
   public user$: Observable<UserDetails>;
   public accounts$: Observable<Select2OptionData[]>;
@@ -40,11 +41,9 @@ export class AuditLogsSidebarVM {
     { text: 'ledger', id: 'ledger' },
     { text: 'voucher', id: 'voucher' },
     { text: 'logs', id: 'logs' }];
-  public selectedCompany: Observable<ComapnyResponse>;
+  public selectedCompany: Observable<CompanyResponse>;
   public getLogsInprocess$: Observable<boolean>;
   public dateOptions: any[] = [{ text: 'Date Range', id: 1 }, { text: 'Entry/Log Date', id: 0 }];
-  public showFromDatePicker: boolean = false;
-  public showToDatePicker: boolean = false;
   public showLogDatePicker: boolean = false;
   public canManageCompany: boolean = false;
   public selectedOperation: string = '';
@@ -59,8 +58,6 @@ export class AuditLogsSidebarVM {
   public logOrEntry: string = 'entryDate';
   public selectedDateOption: string = '0';
   public reset() {
-    this.showFromDatePicker = false;
-    this.showToDatePicker = false;
     this.showLogDatePicker = false;
     this.canManageCompany = false;
     this.selectedOperation = '';

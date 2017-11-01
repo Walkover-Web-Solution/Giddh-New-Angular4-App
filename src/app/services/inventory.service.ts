@@ -1,4 +1,4 @@
-import { StockReportResponse } from '../models/api-models/Inventory';
+import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupResponse, StockReportRequest, StockReportResponse, StocksResponse, StockUnitRequest, StockUnitResponse } from '../models/api-models/Inventory';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -6,22 +6,13 @@ import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { INVENTORY_API } from './apiurls/inventory.api';
-
-import {
-  CreateStockRequest,
-  StockDetailResponse,
-  StockGroupRequest,
-  StockGroupResponse,
-  StockReportRequest,
-  StocksResponse,
-  StockUnitRequest,
-  StockUnitResponse
-} from '../models/api-models/Inventory';
-import { GroupsWithStocksFlatten, GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
+import * as  _ from '../lodash-optimized';
+import { GroupsWithStocksHierarchyMin } from '../models/api-models/GroupsWithStocks';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
+import { IGroupsWithStocksHierarchyMinItem } from '../models/interfaces/groupsWithStocks.interface';
 
 @Injectable()
 export class InventoryService {
@@ -29,6 +20,31 @@ export class InventoryService {
   private user: UserDetails;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  }
+
+  /**
+   * return flatten group list
+   * @param rawList array of IGroupsWithStocksHierarchyMinItem
+   * @param parents an empty []
+   */
+  public makeStockGroupsFlatten(rawList: IGroupsWithStocksHierarchyMinItem[], parents) {
+    let a = _.map(rawList, (item) => {
+      let result;
+      if (item.childStockGroups && item.childStockGroups.length > 0) {
+        result = this.makeStockGroupsFlatten(item.childStockGroups, []);
+        result.push({
+          label: item.name,
+          value: item.uniqueName
+        });
+      } else {
+        result = {
+          label: item.name,
+          value: item.uniqueName
+        };
+      }
+      return result;
+    });
+    return _.flatten(a);
   }
 
   public CreateStockGroup(model: StockGroupRequest): Observable<BaseResponse<StockGroupResponse, StockGroupRequest>> {
@@ -146,6 +162,24 @@ export class InventoryService {
   }
 
   /**
+   * GetManufacturingStocks
+   */
+  public GetManufacturingStocks(): Observable<BaseResponse<StocksResponse, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(INVENTORY_API.MANUFACTURING_STOCKS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+      let data: BaseResponse<StocksResponse, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StocksResponse, string>(e, '', {}));
+  }
+
+  /**
    * get Stocks with hierarchy
    */
   public GetGroupsWithStocksHierarchyMin(q: string = '', page: number = 1, count: string = ''): Observable<BaseResponse<GroupsWithStocksHierarchyMin, string>> {
@@ -242,7 +276,7 @@ export class InventoryService {
       if (s.session.user) {
         this.user = s.session.user.user;
       }
-      this.companyUniqueName = s.session.companyUniqueName;
+      this.companyUniqueName = encodeURIComponent(s.session.companyUniqueName);
     });
     return this._http.post(INVENTORY_API.CREATE_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockGroupUniqueName', encodeURIComponent(stockGroupUniqueName)), model).map((res) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = res.json();
@@ -304,6 +338,24 @@ export class InventoryService {
       data.queryString = { stockGroupUniqueName, stockUniqueName };
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', { stockGroupUniqueName, stockUniqueName }));
+  }
+
+  /**
+   * get Get-Rate-For-Stoke
+   */
+  public GetRateForStoke(stockUniqueName: string, model: any): Observable<BaseResponse<any, string>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.post(INVENTORY_API.GET_RATE_FOR_STOCK.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':stockUniqueName', encodeURIComponent(stockUniqueName)), model).map((res) => {
+      let data: BaseResponse<any, string> = res.json();
+      data.request = '';
+      data.queryString = { stockUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<StockDetailResponse, string>(e, '', { stockUniqueName }));
   }
 
   /**

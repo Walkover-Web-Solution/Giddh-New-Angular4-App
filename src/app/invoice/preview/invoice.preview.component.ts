@@ -1,21 +1,23 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
-import * as _ from 'lodash';
+import { AppState } from '../../store';
+import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceFilterClass, GetAllLedgersOfInvoicesResponse, GenBulkInvoiceGroupByObj, GenBulkInvoiceFinalObj, IInvoiceResult, IGetAllInvoicesResponse, GetAllInvoicesPaginatedResponse, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
+import { GetAllInvoicesPaginatedResponse, IInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
 import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
-import { Select2OptionData } from '../../shared/theme/select2/select2.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceService } from '../../services/invoice.service';
+import { IOption } from '../../theme/ng-select/option.interface';
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
+import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
 const COUNTS = [12, 25, 50, 100];
 const COMPARISON_FILTER = [
@@ -43,23 +45,18 @@ export class InvoicePreviewComponent implements OnInit {
   public invoiceData: GetAllInvoicesPaginatedResponse;
   public filtersForEntryTotal: INameUniqueName[] = COMPARISON_FILTER;
   public counts: number[] = COUNTS;
-  public accounts$: Observable<Select2OptionData[]>;
+  public accounts$: Observable<IOption[]>;
   public moment = moment;
-  public showFromDatePicker: boolean  = false;
-  public showToDatePicker: boolean = false;
-  public select2Options: Select2Options = {
-    multiple: false,
-    width: '100%',
-    placeholder: 'Select Accounts',
-    allowClear: true
-  };
   public modalRef: BsModalRef;
+  public bsConfig: Partial<BsDatepickerConfig>;
   public modalConfig = {
     animated: true,
     keyboard: false,
     backdrop: 'static',
     ignoreBackdropClick: true
   };
+  public startDate: Date;
+  public endDate: Date;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -69,24 +66,27 @@ export class InvoicePreviewComponent implements OnInit {
     private _accountService: AccountService,
     private _invoiceService: InvoiceService,
   ) {
+    this.startDate = new Date();
+    this.endDate = new Date();
+    this.startDate.setDate(this.startDate.getDate() - 30);
+    this.endDate.setDate(this.endDate.getDate());
+    this.invoiceSearchRequest.dateRange = [this.startDate, this.endDate];
+    this.invoiceSearchRequest.page = 1;
+    this.invoiceSearchRequest.count = 25;
+    this.invoiceSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
+    this.invoiceSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.invoiceSearchRequest.entryTotalBy = '';
   }
 
   public ngOnInit() {
-    // set initial values
-    this.invoiceSearchRequest.from = String(moment().subtract(30, 'days'));
-    this.invoiceSearchRequest.to = String(moment());
-    this.invoiceSearchRequest.page = 1;
-    this.invoiceSearchRequest.count = 25;
-
     // Get accounts
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
           // Select only sundry debtors account
           if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ text: d.name, id: d.uniqueName });
+            accounts.push({ label: d.name, value: d.uniqueName });
           }
         });
         this.accounts$ = Observable.of(accounts);
@@ -104,6 +104,10 @@ export class InvoicePreviewComponent implements OnInit {
         this.getInvoices();
       }
     });
+
+    // this.store.select(p => p.invoice.isLoadingInvoices).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o: boolean) => {
+    //    this.isLoadingInvoices = _.cloneDeep(o);
+    // });
 
     this.store.select(p => p.invoice.invoiceData)
     .takeUntil(this.destroyed$)
@@ -285,10 +289,17 @@ export class InvoicePreviewComponent implements OnInit {
   public prepareQueryParamsForInvoiceApi() {
     let o = _.cloneDeep(this.invoiceSearchRequest);
     return {
-      from: moment(o.from).format('DD-MM-YYYY'),
-      to: moment(o.to).format('DD-MM-YYYY'),
+      from: o.from,
+      to: o.to,
       count: o.count,
       page: o.page
     };
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.invoiceSearchRequest.from = moment(event[0]).format(GIDDH_DATE_FORMAT);
+      this.invoiceSearchRequest.to = moment(event[1]).format(GIDDH_DATE_FORMAT);
+    }
   }
 }

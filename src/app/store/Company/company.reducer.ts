@@ -2,9 +2,8 @@ import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { TaxResponse } from './../../models/api-models/Company';
 import { CompanyActions } from './../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { ComapnyResponse, CompanyRequest } from '../../models/api-models/Company';
 import { SETTINGS_TAXES_ACTIONS } from '../../services/actions/settings/taxes/settings.taxes.const';
-import * as _ from 'lodash';
+import * as _ from '../../lodash-optimized';
 
 /**
  * Keeping Track of the CompanyState

@@ -8,12 +8,12 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { StateDetailsRequest, ComapnyResponse, ActiveFinancialYear } from '../models/api-models/Company';
+import { StateDetailsRequest, CompanyResponse, ActiveFinancialYear } from '../models/api-models/Company';
 import { CompanyActions } from '../services/actions/company.actions';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
-import * as _ from 'lodash';
+import * as _ from '../lodash-optimized';
 import { CHART_CALLED_FROM, API_TO_CALL } from '../services/actions/home/home.const';
 import { HomeActions } from '../services/actions/home/home.actions';
 @Component({
@@ -22,7 +22,7 @@ import { HomeActions } from '../services/actions/home/home.actions';
   templateUrl: './home.component.html'
 })
 export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
-  public companies$: Observable<ComapnyResponse[]>;
+  public companies$: Observable<CompanyResponse[]>;
   public activeCompanyUniqueName$: Observable<string>;
   public revenueChartData$: Observable<IRevenueChartClosingBalanceResponse>;
   public networthComparisionChartData$: Observable<IComparisionChartResponse>;
