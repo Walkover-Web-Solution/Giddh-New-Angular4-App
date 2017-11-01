@@ -161,26 +161,26 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         if (state.groupwithaccounts.activeAccount) {
           if (state.groupwithaccounts.activeAccountTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
+              return {label: p.name, value: p.uniqueName};
             }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { label: p.name, value: p.uniqueName };
+              return {label: p.name, value: p.uniqueName};
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
+              return {label: p.name, value: p.uniqueName};
             });
           }
 
         } else {
           if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
             return _.differenceBy(state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
+              return {label: p.name, value: p.uniqueName};
             }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { label: p.name, value: p.uniqueName };
+              return {label: p.name, value: p.uniqueName};
             }), 'id');
           } else {
             return state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
+              return {label: p.name, value: p.uniqueName};
             });
           }
         }
@@ -330,13 +330,17 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public loadAccountData() {
+    let activeAccount: AccountResponseV2 = null;
+    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
     if (this.accounts$) {
       this.accounts$.isEmpty().subscribe(bool => {
         if (bool) {
           this.accountService.GetFlattenAccounts().subscribe(a => {
             let accounts: IOption[] = [];
             if (a.status === 'success') {
-              a.body.results.map(acc => {
+              a.body.results.filter(ac => {
+                return ac.uniqueName !== activeAccount.uniqueName;
+              }).map(acc => {
                 accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
               });
             }
@@ -348,7 +352,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       this.accountService.GetFlattenAccounts().subscribe(a => {
         let accounts: IOption[] = [];
         if (a.status === 'success') {
-          a.body.results.map(acc => {
+          a.body.results.filter(ac => {
+            return ac.uniqueName !== activeAccount.uniqueName;
+          }).map(acc => {
             accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
           });
         }
