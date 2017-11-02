@@ -82,8 +82,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
+              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -109,12 +109,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name,
-                additional: Object.assign({}, acc, { stock: as })
+                additional: Object.assign({}, acc, {stock: as})
               });
             });
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
           } else {
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
           }
         });
         this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'label'));
@@ -411,6 +411,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public hideExportLedgerModal() {
     this.exportLedgerModal.hide();
   }
+
   public saveBlankTransaction() {
     let blankTransactionObj: BlankLedgerVM = this.lc.prepareBlankLedgerRequestObject();
     if (blankTransactionObj.transactions.length > 0) {
@@ -420,12 +421,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
+  public blankLedgerAmountClick() {
+    if (this.lc.currentBlankTxn.amount && Number(this.lc.currentBlankTxn.amount) === 0) {
+      this.lc.currentBlankTxn.amount = undefined;
+    }
+  }
+
   public entryManipulated() {
     this.hideUpdateLedgerModal();
     this.trxRequest = new TransactionsRequest();
     this.trxRequest.accountUniqueName = this.lc.accountUnq;
     this.getTransactionData();
   }
+
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];
     let flatternAccountList;
@@ -437,11 +445,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
     return false;
   }
+
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerActions.ResetLedger());
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public loadUpdateLedgerComponent() {
     let componentFactory = this.componentFactoryResolver.resolveComponentFactory(UpdateLedgerEntryPanelComponent);
     let viewContainerRef = this.updateledgercomponent.viewContainerRef;
