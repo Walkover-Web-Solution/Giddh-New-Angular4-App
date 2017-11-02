@@ -35,6 +35,9 @@ export class EsignModalComponent implements OnInit {
         this.eSignModel.ReferenceNumber = o.uniqueName;
         this.eSignModel.Name = o.company.name;
         this.eSignModel.File = o.dataPreview;
+        this.eSignModel.SUrl = this.eSignModel.SUrl + o.uniqueName;
+        this.eSignModel.CUrl = this.eSignModel.CUrl + o.uniqueName;
+        this.eSignModel.FUrl = this.eSignModel.FUrl + o.uniqueName;
       }
     });
   }
@@ -60,7 +63,7 @@ export class EsignModalComponent implements OnInit {
   }
 
   /**
-   * appendInForm
+   * formOperation
    */
   public formOperation(eSignForm, action) {
     _.forIn(this.eSignModel, (val, key) => {
