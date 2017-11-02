@@ -26,6 +26,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
+import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
     ShareLedgerComponent,
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
-    UpdateLedgerDiscountComponent
+    UpdateLedgerDiscountComponent,
+    QuickAccountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
