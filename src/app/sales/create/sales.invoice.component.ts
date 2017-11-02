@@ -374,7 +374,7 @@ export class SalesInvoiceComponent implements OnInit {
     }
 
     // replace /n to br in case of message
-    if (data.other.message2.length > 0) {
+    if (data.other.message2 && data.other.message2.length > 0) {
       data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
     }
 
