@@ -105,6 +105,10 @@ export class InvoicePreviewComponent implements OnInit {
       }
     });
 
+    // this.store.select(p => p.invoice.isLoadingInvoices).takeUntil(this.destroyed$).distinctUntilChanged().subscribe((o: boolean) => {
+    //    this.isLoadingInvoices = _.cloneDeep(o);
+    // });
+
     this.store.select(p => p.invoice.invoiceData)
     .takeUntil(this.destroyed$)
     .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {

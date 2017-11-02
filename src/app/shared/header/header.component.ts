@@ -103,7 +103,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
 
       let selectedCmp = state.session.companies.find(cmp => {
-        return cmp.uniqueName === state.session.companyUniqueName;
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === state.session.companyUniqueName;
+        } else {
+          return false;
+        }
       });
       if (!selectedCmp) {
         return;
