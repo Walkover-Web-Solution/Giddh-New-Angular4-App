@@ -461,7 +461,7 @@ export class Esignature {
   public SelectFontOption: boolean = true;
   public DrawSignatureOption: boolean = true;
   public eSignaturePadOption: boolean = true;
-  public SUrl: string = 'https://sokt.io/Fu59xHxuPsQFWEy4zhwB/giddh-e-signature?authkey=xYgjNVbbu4seGCunYKnp';
-  public FUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
-  public CUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
+  public SUrl: string = 'https://esign.giddh.com/Fu59xHxuPsQFWEy4zhwB/';
+  public FUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
+  public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
 }
