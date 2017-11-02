@@ -40,7 +40,7 @@
               <input type="text" decimalDigitsDirective name="" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()"
               />
             </td>
-            <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
+            <td class="pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
               <label>&nbsp;</label>
               <label class="pdR pdL default_clr">-</label>
             </td>
@@ -50,7 +50,7 @@
               <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts" (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
               </ledger-discount>
             </td>
-            <td class="pItem" ng-if="ledgerCtrl.taxList.length > 0 && ledgerCtrl.discountAccount != undefined && ledgerCtrl.discountAccount.accountDetails.length > 0">
+            <td class="pItem" *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails.length">
               <label>&nbsp;</label>
               <label class="pdR pdL default_clr">+</label>
             </td>
