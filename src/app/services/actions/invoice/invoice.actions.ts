@@ -40,7 +40,7 @@ export class InvoiceActions {
   @Effect()
   public GetAllInvoices$: Observable<Action> = this.action$
     .ofType(INVOICE_ACTIONS.GET_ALL_INVOICES)
-    .switchMap(action => this._invoiceService.GetAllInvoices(action.payload))
+    .switchMap(action => this._invoiceService.GetAllInvoices(action.payload.model, action.payload.body))
     .map(response => {
       return this.GetAllInvoicesResponse(response);
     });
@@ -486,10 +486,10 @@ export class InvoiceActions {
     private _router: Router
   ) { }
 
-  public GetAllInvoices(model: CommonPaginatedRequest): Action {
+  public GetAllInvoices(model: CommonPaginatedRequest, body): Action {
     return {
       type: INVOICE_ACTIONS.GET_ALL_INVOICES,
-      payload: model
+      payload: { model, body }
     };
   }
 
