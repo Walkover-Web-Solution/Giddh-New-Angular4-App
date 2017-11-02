@@ -19,56 +19,59 @@ export class EsignModalComponent implements OnInit {
   @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
 
   public eSignModel: Esignature = new Esignature();
+  public actionUrl: string = 'https://gateway.emsigner.com/eMsecure/SignerGateway/Index';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
     private _toasty: ToasterService, private sanitizer: DomSanitizer,
     private store: Store<AppState>, private invoiceActions: InvoiceActions,
   ) {
-    this.eSignModel.authToken = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
+    // this.eSignModel.authToken = '3Ru6iWp1qoWpjkz90fvRzheO8M0KpLxP0TEEk08jKfXL/4NdJUisPtWFw7A0gIja';
   }
 
   public ngOnInit() {
     this.store.select(p => p.invoice.invoiceData).takeUntil(this.destroyed$).subscribe((o: PreviewInvoiceResponseClass) => {
       if (o && o.dataPreview) {
-        this.eSignModel.referenceNumber = o.uniqueName;
-        this.eSignModel.companyName = o.company.name;
-        this.eSignModel.file = o.dataPreview;
+        this.eSignModel.ReferenceNumber = o.uniqueName;
+        this.eSignModel.Name = o.company.name;
+        this.eSignModel.File = o.dataPreview;
       }
     });
   }
 
   public onConfirmation(eSignForm) {
-    // console.log(this.aadharNum);
+    $(eSignForm).attr('action', this.actionUrl);
+    eSignForm = this.formOperation(eSignForm, 'add');
     let validateAdadhar = new RegExp(/^\d{4}\d{4}\d{4}$/g);
-    if (this.eSignModel.aadharNo) {
-      let isValidate = validateAdadhar.test(this.eSignModel.aadharNo);
+    if (this.eSignModel.AadhaarNumber) {
+      let isValidate = validateAdadhar.test(this.eSignModel.AadhaarNumber);
       if (isValidate) {
         eSignForm.submit();
         this.closeModelEvent.emit(true);
       } else {
-        this._toasty.errorToast('Invalid Aadhar No:' + this.eSignModel.aadharNo);
-        return false;
+        this._toasty.errorToast('Invalid Aadhar No:' + this.eSignModel.AadhaarNumber);
       }
     } else {
       eSignForm.submit();
       this.closeModelEvent.emit(true);
     }
+    eSignForm = this.formOperation(eSignForm, 'remove');
+    $(eSignForm).attr('action', '');
   }
 
   /**
-   * generateReferenceNumber
+   * appendInForm
    */
-  public generateReferenceNumber() {
-
-    let text = '';
-    let randomStr = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-    for (let i = 0; i <= 20; i++) {
-      text += randomStr.charAt(Math.floor(Math.random() * randomStr.length));
-    }
-    return text;
-
+  public formOperation(eSignForm, action) {
+    _.forIn(this.eSignModel, (val, key) => {
+      if (key !== 'AadhaarNumber' && action === 'add') {
+        $(eSignForm).append('<input type="hidden" id=' + key + ' name=' + key + ' value=' + val + ' />');
+      } else if (key !== 'AadhaarNumber' && action === 'remove') {
+        console.log(key, this.eSignModel);
+        $('#eSignForm #' + key).remove();
+      }
+    });
+    return eSignForm;
   }
 
 }
