@@ -28,8 +28,8 @@ const otherFiltersOptions = [
 ];
 
 const gstrOptions = [
-  { name: 'GSTR1', uniqueName: 'GSTR1' },
-  { name: 'GSTR2', uniqueName: 'GSTR2' }
+  { name: 'GSTR1', uniqueName: 'gstr1-excel-export' },
+  { name: 'GSTR2', uniqueName: 'gstr2-excel-export' }
 ];
 
 const purchaseReportOptions = [
@@ -64,10 +64,10 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public allPurchaseInvoicesBackup: IInvoicePurchaseResponse;
   public allPurchaseInvoices: IInvoicePurchaseResponse = new IInvoicePurchaseResponse();
   public allTaxes: ITaxResponse[] = [];
-  public selectedDateForGSTR1: string = '';
+  public selectedDateForGSTR1 = {};
   public selectedEntryTypeValue: string = '';
   public moment = moment;
-  public selectedGstrType: string;
+  public selectedGstrType = { name: '', uniqueName: '' };
   public showGSTR1DatePicker: boolean = false;
   public accountAsideMenuState: string = 'out';
   public dropdownHeading: string = 'Select taxes';
@@ -146,7 +146,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     this.purchaseInvoiceObject.TaxList = [];
     this.purchaseInvoiceRequestObject.entryUniqueName = [];
     this.purchaseInvoiceRequestObject.taxes = [];
-    this.selectedDateForGSTR1 = String(moment());
+    this.selectedDateForGSTR1 = moment();
     this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$).subscribe((c) => {
       if (c) {
         this.activeCompanyUniqueName = _.cloneDeep(c);
@@ -295,17 +295,17 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * onDownloadSheetGSTR1
+   * onDownloadSheetGSTR
    */
-  public onDownloadSheetGSTR1(typeOfSheet: string) {
+  public onDownloadSheetGSTR(typeOfSheet: string) {
     if (this.selectedDateForGSTR1) {
       let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
       let monthToSend = check.format('MM') + '-' + check.format('YYYY');
       if (this.activeCompanyGstNumber) {
-        if (typeOfSheet === 'gstr1') {
-          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(monthToSend, this.activeCompanyGstNumber));
-        } else if (typeOfSheet === 'gstr1_error') {
-          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1ErrorSheet(monthToSend, this.activeCompanyGstNumber));
+        if (typeOfSheet === 'gstr1-excel-export' || 'gstr2-excel-export') {
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1Sheet(monthToSend, this.activeCompanyGstNumber, typeOfSheet));
+        } else if (typeOfSheet === 'gstr1-error-export' || 'gstr2-error-export') {
+          this.store.dispatch(this.invoicePurchaseActions.DownloadGSTR1ErrorSheet(monthToSend, this.activeCompanyGstNumber, typeOfSheet));
         }
       } else {
         this.toasty.errorToast('GST number not found.');
@@ -316,11 +316,11 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   }
 
   public setCurrentMonth() {
-    this.selectedDateForGSTR1 = String(moment());
+    this.selectedDateForGSTR1 = moment();
   }
 
   public clearDate() {
-    this.selectedDateForGSTR1 = '';
+    this.selectedDateForGSTR1 = {};
   }
 
   /**
@@ -556,14 +556,14 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public updateEntry(invoiceObj) {
     // console.log(invoiceObj);
     let invoice = _.cloneDeep(invoiceObj);
-    if (invoice.invoiceNumber) {
-      let dataToSave = {
-        accountUniqueName: invoice.account.uniqueName,
-        voucherNo: invoice.invoiceNumber,
-        ledgerUniqname: invoice.entryUniqueName
-      };
-      this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseEntry(dataToSave));
-    }
+    let dataToSave = {
+      accountUniqueName: invoice.account.uniqueName,
+      voucherNo: invoice.invoiceNumber,
+      ledgerUniqname: invoice.entryUniqueName,
+      sendToGstr2: invoice.sendToGstr2,
+      availItc: invoice.availItc
+    };
+    this.store.dispatch(this.invoicePurchaseActions.UpdatePurchaseEntry(dataToSave));
     this.editMode = false;
     this.selectedRowIndex = null;
   }
@@ -609,12 +609,15 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   /**
    * updateOncheck
    */
-  public updateOncheck(invoiceObj, event) {
+  public updateOncheck(invoiceObj, key, value) {
     let invoice = _.cloneDeep(invoiceObj) || {};
+    invoice[key] = value;
+    console.log(invoice);
     if (invoice.entryUniqueName) {
       this.updateEntry(invoice);
-    } else if (invoice.invoiceUniqueName) {
-      this.updateEntry(invoice);
+      /* commented for later use
+      this.store.dispatch(this.invoicePurchaseActions.UpdateInvoice(invoiceObj));
+      */
     }
   }
 
