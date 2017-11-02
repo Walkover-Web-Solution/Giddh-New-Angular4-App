@@ -35,7 +35,7 @@ export class InvoiceService {
     // create url conditionally
     let url = this.createQueryString(INVOICE_API.GET_ALL_INVOICES, model);
 
-    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), { body })
+    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), body)
       .map((res) => {
         let data: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest> = res.json();
         data.request = model;
