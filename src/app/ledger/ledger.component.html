@@ -130,7 +130,7 @@
                   <td class="col-xs-7 select2-parent select2-ledger">
                     <ng-select [options]="lc.flatternAccountList | async" [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                               [isTypeAheadMode]="true">
+                               [isTypeAheadMode]="true" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -266,7 +266,7 @@
 
                     <ng-select [options]="lc.flatternAccountList | async" [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                               [isTypeAheadMode]="true">
+                               [isTypeAheadMode]="true" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -469,4 +469,12 @@
   </div>
 </div>
 
+<!--quick account popup -->
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm" style="width:90%">
+    <div class="modal-content">
+      <quickAccount (closeQuickAccountModal)="hideQuickAccountModal()"></quickAccount>
+    </div>
+  </div>
+</div>
 <!-- modal sections -->
