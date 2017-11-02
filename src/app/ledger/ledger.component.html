@@ -166,7 +166,7 @@
 
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount"
-                           (keyup)="needToReCalculate.next(true)">
+                           (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
                   </td>
 
                 </tr>
@@ -302,7 +302,7 @@
 
                   <td class="col-xs-3 pos-rel">
                     <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount"
-                           (input)="needToReCalculate.next(true)">
+                           (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
                   </td>
 
                 </tr>
