@@ -76,6 +76,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
   @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
   @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
+  @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
 
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   public showUpdateLedgerForm: boolean = false;
@@ -432,6 +433,14 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.trxRequest = new TransactionsRequest();
     this.trxRequest.accountUniqueName = this.lc.accountUnq;
     this.getTransactionData();
+  }
+
+  public showQuickAccountModal() {
+    this.quickAccountModal.show();
+  }
+
+  public hideQuickAccountModal() {
+    this.quickAccountModal.hide();
   }
 
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
