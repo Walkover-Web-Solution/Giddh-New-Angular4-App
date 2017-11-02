@@ -154,7 +154,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.getTransactionData();
   }
 
-  public selectAccount(e: any, txn: TransactionVM) {
+  public selectAccount(e: IOption, txn: TransactionVM) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;

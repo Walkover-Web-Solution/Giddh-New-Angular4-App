@@ -1,20 +1,16 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
@@ -46,12 +42,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public userMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public userMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -71,16 +67,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-    private socialAuthService: AuthService,
-    private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router,
-    private flyAccountActions: FlyAccountsActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef,
-    private zone: NgZone,
-    private route: ActivatedRoute) {
+              private socialAuthService: AuthService,
+              private store: Store<AppState>,
+              private companyActions: CompanyActions,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private router: Router,
+              private flyAccountActions: FlyAccountsActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cdRef: ChangeDetectorRef,
+              private zone: NgZone,
+              private route: ActivatedRoute) {
 
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
@@ -158,6 +154,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.isCompanyCreationSuccess$.subscribe(created => {
       if (created) {
         this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
+      }
+    });
+    window.addEventListener('keyup', (e: KeyboardEvent) => {
+      if (e.keyCode === 27) {
+        if (this.sideMenu.isopen) {
+          this.sideMenu.isopen = false;
+        }
+        if (this.manageGroupsAccountsModal.isShown) {
+          this.hideManageGroupsModal();
+        }
       }
     });
   }

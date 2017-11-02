@@ -129,7 +129,7 @@
                   </td>
                   <td class="col-xs-7 select2-parent select2-ledger">
                     <ng-select [options]="lc.flatternAccountList | async" [(ngModel)]="txn.particular"
-                               (valueChanged)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
+                               (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                [isTypeAheadMode]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
@@ -265,7 +265,7 @@
                   <td class="col-xs-7 select2-parent select2-ledger">
 
                     <ng-select [options]="lc.flatternAccountList | async" [(ngModel)]="txn.particular"
-                               (valueChanged)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
+                               (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                [isTypeAheadMode]="true">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
