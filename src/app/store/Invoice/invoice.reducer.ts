@@ -15,6 +15,7 @@ export interface InvoiceState {
   isInvoiceGenerated: boolean;
   visitedFromPreview: boolean;
   settings: InvoiceSetting;
+  isLoadingInvoices: boolean;
 }
 
 export const initialState: InvoiceState = {
@@ -25,11 +26,17 @@ export const initialState: InvoiceState = {
   invoiceTemplateConditions: null,
   isInvoiceGenerated: false,
   visitedFromPreview: false,
-  settings: null
+  settings: null,
+  isLoadingInvoices: false,
 };
 
 export function InvoiceReducer(state = initialState, action: Action): InvoiceState {
     switch (action.type) {
+        case INVOICE_ACTIONS.GET_ALL_INVOICES: {
+            // let newState = _.cloneDeep(state);
+            // newState.isLoadingInvoices = true;
+            // return Object.assign({}, state, newState);
+        }
         case INVOICE_ACTIONS.GET_ALL_INVOICES_RESPONSE: {
           let newState = _.cloneDeep(state);
           let res: BaseResponse<GetAllInvoicesPaginatedResponse, CommonPaginatedRequest> = action.payload;
