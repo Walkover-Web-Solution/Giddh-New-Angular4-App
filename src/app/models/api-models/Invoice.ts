@@ -444,24 +444,24 @@ export class CustomTemplateResponse {
 }
 
 export class Esignature {
-  public file: string;
-  public companyName: string = 'companyName';
-  public selectPage: string = 'LAST';
-  public referenceNumber: string = '';
-  public aadharNo: string = '';
-  public signatureType: string = '1';
-  public signaturePosition: string = 'Customize';
-  public authToken: string = '';
-  public pageNumber: string = '';
-  public fileType: string = 'PDF';
-  public previewRequired: boolean = true;
-  public customizeCoordinates: string = '420,200,540,150';
-  public pagelevelCoordinates: string = '';
-  public uploadSignatureOption: boolean = true;
-  public selectFontOption: boolean = true;
-  public drawSignatureOption: boolean = true;
+  public File: string;
+  public Name: string = 'companyName';
+  public SelectPage: string = 'LAST';
+  public ReferenceNumber: string = '';
+  public AadhaarNumber: string = '';
+  public SignatureType: string = '1';
+  public SignaturePosition: string = 'Customize';
+  public authToken: string = 'YkvC7sGkgLDNT67ZvxCXg7t2Cy0FjUI8QTSh44QWo+Y=';
+  public PageNumber: string = '';
+  public FileType: string = 'PDF';
+  public PreviewRequired: boolean = true;
+  public CustomizeCoordinates: string = '420,200,540,150';
+  public PagelevelCoordinates: string = '';
+  public UploadSignatureOption: boolean = true;
+  public SelectFontOption: boolean = true;
+  public DrawSignatureOption: boolean = true;
   public eSignaturePadOption: boolean = true;
-  public sUrl: string = 'https://sokt.io/Fu59xHxuPsQFWEy4zhwB/giddh-e-signature?authkey=xYgjNVbbu4seGCunYKnp';
-  public fUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
-  public cUrl: string = 'https://sokt.io/fxaLuXqhG9GhvCezvqMp/giddh-e-signature-error?authkey=xYgjNVbbu4seGCunYKnp';
+  public SUrl: string = 'https://esign.giddh.com/Fu59xHxuPsQFWEy4zhwB/';
+  public FUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
+  public CUrl: string = 'https://esign.giddh.com/fxaLuXqhG9GhvCezvqMp/';
 }
