@@ -184,6 +184,7 @@ export class AccountRequestV2 {
   public hsnNumber: string;
   public country: { countryCode: string };
   public sacNumber: string;
+  public mobileCode?: string;
 }
 export class AccountResponseV2 {
   public name: string;

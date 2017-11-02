@@ -75,7 +75,7 @@ export class InvoicePurchaseActions {
   private DownloadGSTR1Sheet$: Observable<Action> = this.action$
     .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET)
     .switchMap(action => {
-      return this.purchaseInvoiceService.DownloadGSTR1Sheet(action.payload.month, action.payload.gstNumber)
+      return this.purchaseInvoiceService.DownloadGSTR1Sheet(action.payload)
         .map(response => this.DownloadGSTR1SheetResponse(response));
     });
 
@@ -87,8 +87,8 @@ export class InvoicePurchaseActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.downloadFile(data.body, data.queryString.month, data.queryString.gstNumber, 'gstr1_sheet');
-        this.toasty.successToast('GSTR1 Sheet Downloaded Successfully.');
+        this.downloadFile(data.body, data.queryString.reqObj.month, data.queryString.reqObj.gstNumber, data.queryString.reqObj.type);
+        this.toasty.successToast('Sheet Downloaded Successfully.');
       }
       return { type: '' };
     });
@@ -97,7 +97,7 @@ export class InvoicePurchaseActions {
   private DownloadGSTR1ErrorSheet$: Observable<Action> = this.action$
     .ofType(PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET)
     .switchMap(action => {
-      return this.purchaseInvoiceService.DownloadGSTR1ErrorSheet(action.payload.month, action.payload.gstNumber)
+      return this.purchaseInvoiceService.DownloadGSTR1ErrorSheet(action.payload)
         .map(response => this.DownloadGSTR1ErrorSheetResponse(response));
     });
 
@@ -109,8 +109,8 @@ export class InvoicePurchaseActions {
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
-        this.downloadFile(data.body, data.queryString.month, data.queryString.gstNumber, 'error_sheet');
-        this.toasty.successToast('GSTR1 Error Sheet Downloaded Successfully.');
+        this.downloadFile(data.body, data.queryString.reqObj.month, data.queryString.reqObj.gstNumber, data.queryString.reqObj.gstNumber);
+        this.toasty.successToast('Error Sheet Downloaded Successfully.');
       }
       return { type: '' };
     });
@@ -132,6 +132,33 @@ export class InvoicePurchaseActions {
   @Effect()
   private UpdatePurchaseEntryResponse$: Observable<Action> = this.action$
     .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE)
+    .map(response => {
+      let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast('Entry Updated Successfully.');
+      }
+      return { type: '' };
+    });
+
+  /**
+   * UPDATE INVOICE
+   */
+  @Effect()
+  private UpdateInvoice$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE)
+    .switchMap(action => {
+      return this.purchaseInvoiceService.UpdateInvoice(action.payload)
+        .map(response => this.UpdateInvoiceResponse(response));
+    });
+
+  /**
+   * UPDATE PURCHASE ENTRY RESPONSE
+   */
+  @Effect()
+  private UpdateInvoiceResponse$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE)
     .map(response => {
       let data: BaseResponse<IInvoicePurchaseResponse, string> = response.payload;
       if (data.status === 'error') {
@@ -172,11 +199,12 @@ export class InvoicePurchaseActions {
 
   public downloadFile(data: Response, month: string, gstNumber: string, type: string) {
     let blob = this.base64ToBlob(data, 'application/xls', 512);
-    if (type === 'gstr1_sheet') {
-      return saveAs(blob, `GSTR1-Sheet-${month}-${gstNumber}.xlsx`);
-    } else if (type === 'error_sheet') {
-      return saveAs(blob, `GSTR1-Error-Sheet-${month}-${gstNumber}.xlsx`);
-    }
+    return saveAs(blob, `${type}-${month}-${gstNumber}.xlsx`);
+    // if (type === 'gstr1_sheet') {
+    //   return saveAs(blob, `${type}-${month}-${gstNumber}.xlsx`);
+    // } else if (type === 'error_sheet') {
+    //   return saveAs(blob, `${type}-${month}-${gstNumber}.xlsx`);
+    // }
   }
 
   public GetPurchaseInvoices(model: CommonPaginatedRequest): Action {
@@ -213,10 +241,10 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public DownloadGSTR1Sheet(month: string, gstNumber: string): Action {
+  public DownloadGSTR1Sheet(month: string, gstNumber: string, type: string): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_SHEET,
-      payload: { month, gstNumber }
+      payload: { month, gstNumber, type }
     };
   }
 
@@ -227,10 +255,10 @@ export class InvoicePurchaseActions {
     };
   }
 
-  public DownloadGSTR1ErrorSheet(month: string, gstNumber: string): Action {
+  public DownloadGSTR1ErrorSheet(month: string, gstNumber: string, type: string): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET,
-      payload: { month, gstNumber }
+      payload: { month, gstNumber, type }
     };
   }
 
@@ -251,6 +279,20 @@ export class InvoicePurchaseActions {
   public UpdatePurchaseEntryResponse(response): Action {
     return {
       type: PURCHASE_INVOICE_ACTIONS.UPDATE_ENTRY_RESPONSE,
+      payload: response
+    };
+  }
+
+  public UpdateInvoice(model): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE,
+      payload: model
+    };
+  }
+
+  public UpdateInvoiceResponse(response): Action {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.UPDATE_INVOICE_RESPONSE,
       payload: response
     };
   }

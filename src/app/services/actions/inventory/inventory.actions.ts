@@ -101,6 +101,22 @@ export class InventoryAction {
       return { type: '' };
     });
 
+  // Get manufacturing stock
+  @Effect()
+  public GetManufacturingStock$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetManufacturingStock)
+    .switchMap(action => this._inventoryService.GetManufacturingStocks())
+    .map(response => {
+      return this.GetManufacturingStockResponse(response);
+    });
+
+  @Effect()
+  public GetManufacturingStockResponse$: Observable<Action> = this.action$
+    .ofType(InventoryActionsConst.GetManufacturingStockResponse)
+    .map(action => {
+      return { type: '' };
+    });
+
   @Effect()
   public createStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.CreateStock)
@@ -282,6 +298,20 @@ export class InventoryAction {
   public GetStockResponse(value: BaseResponse<StocksResponse, string>): Action {
     return {
       type: InventoryActionsConst.GetStockResponse,
+      payload: value
+    };
+  }
+
+  // Get Stock for manufacturing
+  public GetManufacturingStock(): Action {
+    return {
+      type: InventoryActionsConst.GetManufacturingStock
+    };
+  }
+
+  public GetManufacturingStockResponse(value: BaseResponse<StocksResponse, string>): Action {
+    return {
+      type: InventoryActionsConst.GetManufacturingStockResponse,
       payload: value
     };
   }

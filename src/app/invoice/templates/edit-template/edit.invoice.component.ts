@@ -196,7 +196,6 @@ export class EditInvoiceComponent implements OnInit {
    * onCloseConfirmationModal
    */
   public onCloseConfirmationModal(userResponse: any) {
-    console.log('THe user res is :', userResponse);
     if (userResponse.response && userResponse.close === 'deleteConfirmation') {
       this.store.dispatch(this.invoiceActions.deleteTemplate(this.selectedTemplateUniqueName));
     } else if (userResponse.response && userResponse.close === 'closeConfirmation') {
