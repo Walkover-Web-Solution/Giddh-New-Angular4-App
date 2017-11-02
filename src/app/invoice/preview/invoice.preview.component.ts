@@ -255,7 +255,7 @@ export class InvoicePreviewComponent implements OnInit {
   }
 
   public getInvoices() {
-    this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi()));
+    this.store.dispatch(this.invoiceActions.GetAllInvoices(this.prepareQueryParamsForInvoiceApi(), this.prepareModelForInvoiceApi()));
   }
 
   public prepareModelForInvoiceApi() {
