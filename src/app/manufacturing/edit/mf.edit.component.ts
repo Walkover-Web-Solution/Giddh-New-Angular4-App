@@ -299,7 +299,12 @@ export class MfEditComponent implements OnInit {
 
   public getCostPerProduct() {
     let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
-    let quantity = manufacturingDetails.manufacturingMultipleOf;
+    let quantity;
+    if (manufacturingDetails.multipleOf) {
+      quantity = manufacturingDetails.manufacturingMultipleOf * manufacturingDetails.multipleOf;
+    } else {
+      quantity = manufacturingDetails.manufacturingMultipleOf;
+    }
     quantity = (quantity && quantity > 0) ? quantity : 1;
     let amount = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     let cost = (amount / quantity);
