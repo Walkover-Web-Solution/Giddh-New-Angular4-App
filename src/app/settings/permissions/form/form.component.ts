@@ -278,7 +278,6 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       this.onSubmitForm.emit(obj);
     }else if (obj.action === 'update') {
       this._settingsPermissionService.UpdatePermission(form).subscribe((res) => {
-        console.log (res);
         if (res.status === 'success') {
           this._toasty.successToast('Permission Updated Successfully!');
         }else {
