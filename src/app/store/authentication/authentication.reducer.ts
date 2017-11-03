@@ -90,12 +90,12 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
           isLoginWithEmailInProcess: false
         });
       }
-      if (action.payload.status === 'error') {
-        return Object.assign({}, state, {
-          isLoginWithEmailSubmited: false,
-          isLoginWithEmailInProcess: false
-        });
-      }
+
+      return Object.assign({}, state, {
+        isLoginWithEmailSubmited: false,
+        isLoginWithEmailInProcess: false
+      });
+
     case LoginActions.SignupWithEmailRequest:
       return Object.assign({}, state, {
         isLoginWithEmailInProcess: true
@@ -133,18 +133,16 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
           isLoginWithMobileInProcess: false
         });
       }
-      if (action.payload.status === 'error') {
-        return Object.assign({}, state, {
-          isLoginWithMobileSubmited: false,
-          isLoginWithMobileInProcess: false
-        });
-      }
+      return Object.assign({}, state, {
+        isLoginWithMobileSubmited: false,
+        isLoginWithMobileInProcess: false
+      });
     case LoginActions.SignupWithMobileRequest:
       return Object.assign({}, state, {
         isLoginWithMobileInProcess: true
       });
 
-      case LoginActions.ResetSignupWithMobileState:
+    case LoginActions.ResetSignupWithMobileState:
       return {
         ...state,
         isLoginWithMobileSubmited: false,
@@ -247,19 +245,18 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
     }
-    case LoginActions.VerifyEmailResponce:
-      {
-        let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
-        if (data.status === 'success') {
-          return Object.assign({}, state, {
-            user: data.body
-          });
-        } else {
-          return Object.assign({}, state, {
-            user: null
-          });
-        }
+    case LoginActions.VerifyEmailResponce: {
+      let data: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+      if (data.status === 'success') {
+        return Object.assign({}, state, {
+          user: data.body
+        });
+      } else {
+        return Object.assign({}, state, {
+          user: null
+        });
       }
+    }
     case LoginActions.VerifyMobileResponce:
       let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (data1.status === 'success') {
@@ -283,28 +280,26 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         isCompanyCreationInProcess: false,
         isRefreshing: false
       });
-    case CompanyActions.GET_STATE_DETAILS_RESPONSE:
-      {
-        let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
-        if (stateData.status === 'success') {
-          return Object.assign({}, state, {
-            lastState: stateData.body.lastState,
-            companyUniqueName: stateData.body.companyUniqueName
-          });
-        }
-        return state;
+    case CompanyActions.GET_STATE_DETAILS_RESPONSE: {
+      let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
+      if (stateData.status === 'success') {
+        return Object.assign({}, state, {
+          lastState: stateData.body.lastState,
+          companyUniqueName: stateData.body.companyUniqueName
+        });
       }
-    case CompanyActions.CHANGE_COMPANY_RESPONSE:
-      {
-        let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
-        if (stateData.status === 'success') {
-          return Object.assign({}, state, {
-            lastState: stateData.body.lastState,
-            companyUniqueName: stateData.body.companyUniqueName
-          });
-        }
-        return state;
+      return state;
+    }
+    case CompanyActions.CHANGE_COMPANY_RESPONSE: {
+      let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
+      if (stateData.status === 'success') {
+        return Object.assign({}, state, {
+          lastState: stateData.body.lastState,
+          companyUniqueName: stateData.body.companyUniqueName
+        });
       }
+      return state;
+    }
     case CompanyActions.SET_STATE_DETAILS_RESPONSE:
       let setStateData: BaseResponse<string, StateDetailsRequest> = action.payload;
       if (setStateData.status === 'success') {
@@ -320,9 +315,9 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return newState;
     }
     case CompanyActions.CREATE_COMPANY:
-      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
+      return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
+      return Object.assign({}, state, {isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false});
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {

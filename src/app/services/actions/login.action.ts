@@ -1,27 +1,22 @@
-import { VerifyMobileResponseModel, VerifyMobileModel, SignupWithMobileResponse, SignupWithMobile } from '../../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { ToasterService } from '../toaster.service';
 import { AuthenticationService } from '../authentication.service';
 import { Injectable } from '@angular/core';
-import { Response, RequestOptionsArgs, Http } from '@angular/http';
+import { Http, RequestOptionsArgs } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import {
-  VerifyEmailResponseModel,
-  VerifyEmailModel,
-  LinkedInRequestModel,
-  UserDetails
-} from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';
 import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
-import { go, replace, search, show, back, forward } from '@ngrx/router-store';
+import { go } from '@ngrx/router-store';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
-import { StateDetailsResponse, CompanyResponse } from '../../models/api-models/Company';
+import { CompanyResponse, StateDetailsResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
 import { Configuration } from '../../app.constant';
 import { ROUTES } from '../../app.routes';
+
 @Injectable()
 export class LoginActions {
 
@@ -74,7 +69,7 @@ export class LoginActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       return this.LoginSuccess();
     });
@@ -93,7 +88,7 @@ export class LoginActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       return this.LoginSuccess();
     });
@@ -113,7 +108,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -130,7 +125,7 @@ export class LoginActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       return this.LoginSuccess();
     });
@@ -150,7 +145,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -225,7 +220,7 @@ export class LoginActions {
     .map(action => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       return this.LoginSuccess();
     });
@@ -239,7 +234,7 @@ export class LoginActions {
     .map(data => {
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return { type: '' };
+        return {type: ''};
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -254,7 +249,7 @@ export class LoginActions {
     .map(data => {
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return { type: '' };
+        return {type: ''};
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -301,7 +296,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -317,7 +312,7 @@ export class LoginActions {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -339,25 +334,26 @@ export class LoginActions {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return {type: ''};
     });
 
-  constructor(
-    public _router: Router,
-    private actions$: Actions,
-    private auth: AuthenticationService,
-    public _toaster: ToasterService,
-    private store: Store<AppState>,
-    private comapnyActions: CompanyActions,
-    private _companyService: CompanyService,
-    private http: Http
-  ) { }
+  constructor(public _router: Router,
+              private actions$: Actions,
+              private auth: AuthenticationService,
+              public _toaster: ToasterService,
+              private store: Store<AppState>,
+              private comapnyActions: CompanyActions,
+              private _companyService: CompanyService,
+              private http: Http) {
+  }
+
   public SignupWithEmailRequest(value: string): Action {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value
     };
   }
+
   public SignupWithEmailResponce(value: BaseResponse<string, string>): Action {
     return {
       type: LoginActions.SignupWithEmailResponce,
@@ -377,6 +373,7 @@ export class LoginActions {
       payload: value
     };
   }
+
   public SignupWithMobileResponce(value: BaseResponse<string, SignupWithMobile>): Action {
     return {
       type: LoginActions.SignupWithMobileResponce,
@@ -396,6 +393,7 @@ export class LoginActions {
       payload: value
     };
   }
+
   public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): Action {
     return {
       type: LoginActions.VerifyEmailResponce,
@@ -409,6 +407,7 @@ export class LoginActions {
       payload: value
     };
   }
+
   public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): Action {
     return {
       type: LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE,
@@ -422,39 +421,46 @@ export class LoginActions {
       payload: value
     };
   }
+
   public signupWithLinkedinResponse(value: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>): Action {
     return {
       type: LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE,
       payload: value
     };
   }
+
   public resetSocialLogoutAttempt(): Action {
     return {
       type: LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT
     };
   }
+
   public socialLogoutAttempt(): Action {
     return {
       type: LoginActions.SOCIAL_LOGOUT_ATTEMPT
     };
   }
+
   public VerifyMobileRequest(value: VerifyMobileModel): Action {
     return {
       type: LoginActions.VerifyMobileRequest,
       payload: value
     };
   }
+
   public VerifyMobileResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): Action {
     return {
       type: LoginActions.VerifyMobileResponce,
       payload: value
     };
   }
+
   public LoginSuccess(): Action {
     return {
       type: LoginActions.LoginSuccess
     };
   }
+
   public LogOut(): Action {
     return {
       type: LoginActions.LogOut
@@ -487,6 +493,7 @@ export class LoginActions {
       type: LoginActions.ClearSession
     };
   }
+
   public ChangeCompany(cmpUniqueName: string): Action {
     return {
       type: CompanyActions.CHANGE_COMPANY,
@@ -507,6 +514,7 @@ export class LoginActions {
       payload: value
     };
   }
+
   public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): Action {
     return {
       type: LoginActions.AddNewMobileNoResponse,
