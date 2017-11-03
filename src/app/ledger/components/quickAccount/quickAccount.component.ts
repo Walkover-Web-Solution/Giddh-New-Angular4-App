@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from '../../../services/group.service';
 import { IOption } from '../../../theme/ng-select/option.interface';
@@ -6,33 +6,39 @@ import { Observable } from 'rxjs/Observable';
 import { CompanyService } from '../../../services/companyService.service';
 import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { ToasterService } from '../../../services/toaster.service';
-import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AccountsAction } from '../../../services/actions/accounts.actions';
 import { AccountRequestV2 } from '../../../models/api-models/Account';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
+import * as _ from '../../../lodash-optimized';
 
 @Component({
   selector: 'quickAccount',
   templateUrl: 'quickAccount.component.html'
 })
 
-export class QuickAccountComponent implements OnInit {
+export class QuickAccountComponent implements OnInit, OnDestroy {
   @Output() public closeQuickAccountModal: EventEmitter<any> = new EventEmitter();
-  public groupsArrayStream$: Observable<IFlattenGroupsAccountsDetail[]>;
-  public groupsArray: IOption[] = [];
+  public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
+  public flattenGroupsArray: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public newAccountForm: FormGroup;
 
+  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private _fb: FormBuilder, private _groupService: GroupService,
               private _companyService: CompanyService, private _toaster: ToasterService,
-              private accountsAction: AccountsAction) {
+              private accountsAction: AccountsAction, private store: Store<AppState>) {
+    this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
     this._groupService.GetFlattenGroupsAccounts().subscribe(result => {
       if (result.status === 'success') {
-        this.groupsArrayStream$ = Observable.of(result.body.results);
         let groupsListArray: IOption[] = [];
         result.body.results.forEach(a => {
           groupsListArray.push({label: a.groupName, value: a.groupUniqueName});
         });
-        this.groupsArray = groupsListArray;
+        this.flattenGroupsArray = groupsListArray;
       }
     });
     this._companyService.getAllStates().subscribe((data) => {
@@ -101,17 +107,46 @@ export class QuickAccountComponent implements OnInit {
     }
   }
 
-  public checkSelectedGroup(grpUniqueName: string) {
-    // let groups: IFlattenGroupsAccountsDetail[] = null;
-    // this.groupsArrayStream$.take(1).subscribe(g => groups = g);
-    // if (groups && groups.length) {
-    //   let findedGroups: IFlattenGroupsAccountsDetail = groups.find(f => f.uniqueName === grpUniqueName);
-    //   if (findedGroups && findedGroups)
-    // }
+  public checkSelectedGroup(options: IOption) {
+    this.groupsArrayStream$.subscribe(data => {
+      if (data.length) {
+        let accountList = this.flattenGroup(data, []);
+        let group = accountList.find(f => f.uniqueName === options.value);
+        // this.vm.groups$ = Observable.of(groups);
+      }
+    });
+  }
+
+  public flattenGroup(rawList: any[], parents: any[] = []) {
+    let listofUN;
+    listofUN = _.map(rawList, (listItem) => {
+      let newParents;
+      let result;
+      newParents = _.union([], parents);
+      newParents.push({
+        name: listItem.name,
+        uniqueName: listItem.uniqueName
+      });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
+      // listItem.parentGroups = newParents;
+      if (listItem.groups.length > 0) {
+        result = this.flattenGroup(listItem.groups, newParents);
+        result.push(_.omit(listItem, ['accounts', 'parentGroups']));
+      } else {
+        result = _.omit(listItem, ['accounts', 'parentGroups']);
+      }
+      return result;
+    });
+    return _.flatten(listofUN);
   }
 
   public submit() {
     let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
     this.accountsAction.createAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest);
+  }
+
+  public ngOnDestroy() {
+    this.destroyed$.next(true);
+    this.destroyed$.complete();
   }
 }

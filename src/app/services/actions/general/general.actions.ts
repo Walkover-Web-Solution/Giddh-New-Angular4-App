@@ -24,7 +24,6 @@ export class GeneralActions {
   }
 
   public getGroupWithAccounts(value?: string): Action {
-    console.error('general action called');
     return {
       type: GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS,
       payload: value
