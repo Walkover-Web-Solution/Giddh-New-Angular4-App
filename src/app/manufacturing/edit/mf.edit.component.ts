@@ -329,7 +329,8 @@ export class MfEditComponent implements OnInit {
     return 0;
   }
 
-  public onQuantityChange(value: number) {
+  public onQuantityChange(val: any) {
+    let value  = val;
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
     if (!this.initialQuantityObj.length) {
@@ -339,11 +340,8 @@ export class MfEditComponent implements OnInit {
       });
     }
 
-    if (_.isNumber(value)) {
-      value = value;
-    } else if (_.isEmpty(value)) {
-      // alert('now');
-      value = 1;
+    if (value && !isNaN(value)) {
+      value = parseFloat(value);
     } else {
       value = 1;
     }
