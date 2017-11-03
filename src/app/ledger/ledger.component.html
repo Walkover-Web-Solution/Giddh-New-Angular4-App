@@ -473,7 +473,7 @@
 <div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-sm" style="width:90%">
     <div class="modal-content">
-      <quickAccount (closeQuickAccountModal)="hideQuickAccountModal()"></quickAccount>
+      <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
     </div>
   </div>
 </div>
