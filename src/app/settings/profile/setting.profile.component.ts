@@ -88,7 +88,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           profileObj.gstDetails = profileObj.gstDetails.slice(0, 3);
         }
         this.companyProfileObj = profileObj;
-        this.checkCountry(event);
+        this.checkCountry(false);
       }
     });
     this.store.take(1).subscribe(s => {
@@ -290,16 +290,14 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
    * checkCountry
    */
   public checkCountry(event) {
-    let country: any = _.cloneDeep(this.companyProfileObj.country || '');
-    country = country.toLocaleLowerCase();
-    if (country === 'india') {
-      this.countryIsIndia = true;
-      if (_.isString(event)) {
+    if (event) {
+      let country: any = _.cloneDeep(this.companyProfileObj.country || '');
+      country = country.toLocaleLowerCase();
+      if (country === 'india') {
+        this.countryIsIndia = true;
         this.companyProfileObj.state = '';
-      }
-    } else {
-      this.countryIsIndia = false;
-      if (_.isString(event)) {
+      } else {
+        this.countryIsIndia = false;
         this.companyProfileObj.state = '';
       }
     }

@@ -1,3 +1,4 @@
+import { ToasterService } from './../../services/toaster.service';
 import { validateEmail } from './../../shared/helpers/helperFunctions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
@@ -54,7 +55,8 @@ export class MfEditComponent implements OnInit {
     private _groupService: GroupService,
     private _location: Location,
     private _inventoryService: InventoryService,
-    private _accountService: AccountService) {
+    private _accountService: AccountService,
+    private _toasty: ToasterService) {
     this.manufacturingDetails = new ManufacturingItemRequest();
     this.initializeOtherExpenseObj();
     // Update/Delete condition
@@ -116,7 +118,7 @@ export class MfEditComponent implements OnInit {
     // dispatch stockList request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (!o.stocksList) {
-        this.store.dispatch(this.inventoryAction.GetStock());
+        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
       }
       if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
@@ -126,12 +128,19 @@ export class MfEditComponent implements OnInit {
     });
     // get all stocks
     this.stockListDropDown$ = this.store.select(p => {
-      if (p.inventory.stocksList) {
-        if (p.inventory.stocksList.results) {
-          let units = p.inventory.stocksList.results;
+      let data = _.cloneDeep(p);
+      let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+      if (data.inventory.manufacturingStockList) {
+        if (data.inventory.manufacturingStockList.results) {
+          let units = data.inventory.manufacturingStockList.results;
 
           return units.map(unit => {
-            return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
+            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+            if (alreadyPushedElementindx > -1) {
+              return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+            } else {
+              return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+            }
           });
         }
       }
@@ -175,7 +184,8 @@ export class MfEditComponent implements OnInit {
   }
 
   public addConsumption(data) {
-    let val: any = {
+    if (data.amount > 0) {
+      let val: any = {
       amount: data.amount,
       rate: data.rate,
       stockName: data.stockUniqueName,
@@ -201,6 +211,9 @@ export class MfEditComponent implements OnInit {
     // manufacturingObj.stockUniqueName = this.selectedProduct;
     this.manufacturingDetails = manufacturingObj;
     this.linkedStocks = new IStockItemDetail();
+    } else {
+      this._toasty.errorToast('Can not add raw material, amount is 0');
+    }
   }
 
   public removeConsumptionItem(indx) {
