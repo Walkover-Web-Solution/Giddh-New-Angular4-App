@@ -61,6 +61,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
           arr.push({ name: key, rows: value });
         });
         this.usersList = _.sortBy(arr, ['name']);
+        console.log (this.usersList);
       }
     });
 
