@@ -6,6 +6,9 @@
  * used to create new role
  */
 
+import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
+import { ICommonItem } from './Company';
+
 export interface Permission {
   code: string;
   isSelected?: boolean;
@@ -61,8 +64,28 @@ export class ShareRequestForm {
   public userUniqueName?: string;
   public roleName?: string;
   public roleUniqueName?: string;
+  public uniqueName?: string;
 }
 
 export interface ISharedWithResponseForUI {
   [key: string]: ShareRequestForm[];
+}
+
+export interface IUpdatePermissionResponse extends INameUniqueName {
+  name: string;
+  uniqueName: string;
+  allowedCidrs: any[];
+  allowedIps: any[];
+  period?: any;
+  from?: any;
+  to?: any;
+  sharedBy: ICommonItem;
+  sharedWith: ICommonItem;
+  duration?: any;
+  entity: Entity;
+  role: any;
+}
+
+export interface Entity extends INameUniqueName {
+  entity: string;
 }

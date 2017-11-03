@@ -10,6 +10,7 @@ import { ShareRequestForm } from '../../../models/api-models/Permission';
 import { ToasterService } from '../../../services/toaster.service';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { AccountsAction } from '../../../services/actions/accounts.actions';
+import { SettingsPermissionService } from '../../../services/settings.permission.service';
 
 // some local const
 const DATE_RANGE = 'daterange';
@@ -41,6 +42,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
+    private _settingsPermissionService: SettingsPermissionService,
     private _permissionActions: PermissionActions,
     private _accountsAction: AccountsAction,
     private _toasty: ToasterService,
@@ -139,6 +141,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
   public initAcForm(data?: ShareRequestForm): void {
     if (data) {
       this.permissionForm = this._fb.group({
+        uniqueName: [data.uniqueName],
         emailId: [data.emailId, Validators.compose([Validators.required, Validators.maxLength(150)])],
         entity: ['company'],
         roleUniqueName: [data.roleUniqueName, [Validators.required]],
@@ -146,7 +149,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         from: [data.from],
         to: [data.to],
         duration: [data.duration],
-        period: [data.period],
+        period: ['DAY'],
         ipOptions: this.getIPOptsFromData(data),
         allowedIps: this._fb.array([]),
         allowedCidrs: this._fb.array([])
@@ -272,10 +275,18 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     obj.data = form;
     if (obj.action === 'create') {
       this.store.dispatch(this._accountsAction.shareEntity(form, form.roleUniqueName));
+      this.onSubmitForm.emit(obj);
     }else if (obj.action === 'update') {
-      //
+      this._settingsPermissionService.UpdatePermission(form).subscribe((res) => {
+        console.log (res);
+        if (res.status === 'success') {
+          this._toasty.successToast('Permission Updated Successfully!');
+        }else {
+          this._toasty.warningToast(res.message, res.code);
+        }
+        this.onSubmitForm.emit(obj);
+      });
     }
-    this.onSubmitForm.emit(obj);
   }
 
   public methodForToggleSection(id: string) {
