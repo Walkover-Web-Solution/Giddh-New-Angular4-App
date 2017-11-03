@@ -25,6 +25,7 @@ import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { IOption } from '../theme/ng-select/option.interface';
+import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 
 @Component({
   selector: 'ledger',
@@ -33,6 +34,7 @@ import { IOption } from '../theme/ng-select/option.interface';
 })
 export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
+  @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
@@ -436,6 +438,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showQuickAccountModal() {
+    this.loadQuickAccountComponent();
     this.quickAccountModal.show();
   }
 
@@ -472,5 +475,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     (componentRef.instance as UpdateLedgerEntryPanelComponent).entryManipulated.subscribe((a) => {
       this.entryManipulated();
     });
+  }
+
+  public loadQuickAccountComponent() {
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(QuickAccountComponent);
+    let viewContainerRef = this.quickAccountComponent.viewContainerRef;
+    viewContainerRef.remove();
+    let componentRef = viewContainerRef.createComponent(componentFactory);
+    let componentInstance = componentRef.instance as QuickAccountComponent;
+    componentInstance.closeQuickAccountModal.subscribe((a) => {
+      this.hideQuickAccountModal();
+      componentInstance.newAccountForm.reset();
+    });
+
   }
 }
