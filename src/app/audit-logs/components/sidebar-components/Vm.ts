@@ -4,10 +4,12 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import * as moment from 'moment/moment';
 import { Observable } from 'rxjs/Observable';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 
 export class AuditLogsSidebarVM {
   public user$: Observable<UserDetails>;
   public accounts$: Observable<IOption[]>;
+  public groupsList$: Observable<GroupsWithAccountsResponse[]>;
   public groups$: Observable<IOption[]>;
   public users$: Observable<IOption[]>;
   public options: Select2Options = {

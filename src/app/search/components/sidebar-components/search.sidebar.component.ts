@@ -9,6 +9,8 @@ import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../services/actions/search.actions';
 import { GroupService } from '../../../services/group.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
+import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'search-sidebar',  // <home></home>
@@ -24,6 +26,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   public groupName: string;
   public groupUniqueName: string;
   public dataSource = [];
+  public groupsList$: Observable<GroupsWithAccountsResponse[]>;
   public typeaheadNoResults: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -31,14 +34,15 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, public searchActions: SearchActions, private _groupService: GroupService) {
+    this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     //
     // Get source for Group Name Input selection
-    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accountList = this.flattenGroup(data.body, []);
+    this.groupsList$.subscribe(data => {
+      if (data.length) {
+        let accountList = this.flattenGroup(data, []);
         let groups = [];
         accountList.map((d: any) => {
           groups.push({name: d.name, id: d.uniqueName});

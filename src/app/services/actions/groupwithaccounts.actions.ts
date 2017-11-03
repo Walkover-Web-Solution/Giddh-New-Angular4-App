@@ -11,6 +11,7 @@ import { ToasterService } from '../toaster.service';
 import { AccountService } from '../account.service';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
+import { GeneralActions } from './general/general.actions';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -106,6 +107,8 @@ export class GroupWithAccountsAction {
     .map(response => {
       if (response.request.length > 0) {
         this.store.dispatch(this.resetAddAndMangePopup());
+      } else {
+        this.store.dispatch(this._generalActions.getGroupWithAccountsResponse(response));
       }
       return this.getGroupWithAccountsResponse(response);
     });
@@ -390,7 +393,8 @@ export class GroupWithAccountsAction {
               private _groupService: GroupService,
               private _accountService: AccountService,
               private _toasty: ToasterService,
-              private store: Store<AppState>) {
+              private store: Store<AppState>,
+              private _generalActions: GeneralActions) {
     //
   }
 

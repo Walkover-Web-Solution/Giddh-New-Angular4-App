@@ -13,7 +13,7 @@ import { Select2OptionData } from '../theme/select2';
 import { IOption } from '../theme/ng-select/option.interface';
 
 export class LedgerVM {
-  public groupsArray: Observable<GroupsWithAccountsResponse[]>;
+  public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
   public activeAccount$: Observable<AccountResponse>;
   public transactionData$: Observable<TransactionsResponse>;
   public selectedTxnUniqueName: string;

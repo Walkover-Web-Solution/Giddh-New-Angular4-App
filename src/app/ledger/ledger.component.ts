@@ -93,15 +93,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.accountInprogress$ = this.store.select(p => p.ledger.accountInprogress).takeUntil(this.destroyed$);
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
+    this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
 
-    // get groups with accounts
-    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        this.lc.groupsArray = Observable.of(data.body);
-      } else {
-        this.lc.groupsArray = Observable.of([]);
-      }
-    });
     // get flatten_accounts list
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
@@ -448,8 +441,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
     let groupWithAccountsList: GroupsWithAccountsResponse[];
-    let flatternAccountList;
-    this.lc.groupsArray.take(1).subscribe(a => groupWithAccountsList = a);
+    this.lc.groupsArray$.take(1).subscribe(a => groupWithAccountsList = a);
     if (txn.selectedAccount) {
       const parent = txn.selectedAccount.parentGroups[0].uniqueName;
       const parentGroup: GroupsWithAccountsResponse = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
