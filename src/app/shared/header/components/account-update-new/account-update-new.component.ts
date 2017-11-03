@@ -284,7 +284,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
-        statesEle.disabled = true;
+        gstForm.get('stateCode').disable();
+        // statesEle.disabled = true;
         if (s) {
           gstForm.get('stateCode').patchValue(s.value);
         } else {
@@ -294,7 +295,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      statesEle.disabled = false;
+      gstForm.get('stateCode').enable();
       gstForm.get('stateCode').patchValue(null);
     }
   }
