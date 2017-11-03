@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { digitsOnly } from '../../../helpers/customValidationHelper';
+import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { AppState } from '../../../../store/roots';
+import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { Observable } from 'rxjs/Observable';
@@ -23,30 +23,34 @@ import * as _ from '../../../../lodash-optimized';
   selector: 'account-add-new',
   templateUrl: 'account-add-new.component.html',
   styles: [`
-  .hsn-sac{
-    left: 51px;
+    .hsn-sac {
+      left: 51px;
       position: relative;
-  }
-  .hsn-sac-radio{
-    top: 34px;
+    }
+
+    .hsn-sac-radio {
+      top: 34px;
       position: relative;
       left: -10px;
-  }
-  .hsn-sac-w-m-input{
-    width: 144px;
+    }
+
+    .hsn-sac-w-m-input {
+      width: 144px;
       margin-left: 50px;
-  }
-  .hsn-sac-group{
-    position: relative;
+    }
+
+    .hsn-sac-group {
+      position: relative;
       top: -75px;
       left: 197px;
-  }
-  .save-btn{
-    font-weight: 600;
-    color: #0aa50a;
-    letter-spacing: 1px;
-    background-color: #dcdde4;
-  }
+    }
+
+    .save-btn {
+      font-weight: 600;
+      color: #0aa50a;
+      letter-spacing: 1px;
+      background-color: #dcdde4;
+    }
   `]
 })
 
@@ -63,10 +67,10 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
 
   public showOtherDetails: boolean = false;
   public partyTypeSource: IOption[] = [
-    { value: 'NOT APPLICABLE', label: 'NOT APPLICABLE' },
-    { value: 'DEEMED EXPORT', label: 'DEEMED EXPORT' },
-    { value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY' },
-    { value: 'SEZ', label: 'SEZ' }
+    {value: 'NOT APPLICABLE', label: 'NOT APPLICABLE'},
+    {value: 'DEEMED EXPORT', label: 'DEEMED EXPORT'},
+    {value: 'GOVERNMENT ENTITY', label: 'GOVERNMENT ENTITY'},
+    {value: 'SEZ', label: 'SEZ'}
   ];
   public countrySource: IOption[] = [];
   public statesSource$: Observable<IOption[]> = Observable.of([]);
@@ -80,13 +84,13 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-    private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
+              private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this._companyService.getAllStates().subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
         data.body.map(d => {
-          states.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
       this.statesSource$ = Observable.of(states);
@@ -95,12 +99,12 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
 
     contriesWithCodes.map(c => {
-      this.countrySource.push({ value: c.countryflag, label: `${c.countryflag} - ${c.countryName}` });
+      this.countrySource.push({value: c.countryflag, label: `${c.countryflag} - ${c.countryName}`});
     });
 
     // Country phone Code
     contriesWithCodes.map(c => {
-      this.countryPhoneCode.push({ value: c.value, label: c.value });
+      this.countryPhoneCode.push({value: c.value, label: c.value});
     });
 
     this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
@@ -200,15 +204,16 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       }),
       hsnOrSac: [''],
       currency: [''],
-      hsnNumber: [{ value: '', disabled: false }],
-      sacNumber: [{ value: '', disabled: false }]
+      hsnNumber: [{value: '', disabled: false}],
+      sacNumber: [{value: '', disabled: false}]
     });
   }
+
   public initialGstDetailsForm(): FormGroup {
     let gstFields = this._fb.group({
       gstNumber: ['', Validators.compose([Validators.maxLength(15)])],
       address: ['', Validators.maxLength(120)],
-      stateCode: [{ value: '', disabled: false }],
+      stateCode: [{value: '', disabled: false}],
       isDefault: [false],
       isComposite: [false],
       partyType: ['NOT APPLICABLE']
@@ -225,15 +230,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       this.isAccountNameAvailable$.subscribe(a => {
         if (a !== null && a !== undefined) {
           if (a) {
-            this.addAccountForm.patchValue({ uniqueName: val });
+            this.addAccountForm.patchValue({uniqueName: val});
           } else {
             let num = 1;
-            this.addAccountForm.patchValue({ uniqueName: val + num });
+            this.addAccountForm.patchValue({uniqueName: val + num});
           }
         }
       });
     } else {
-      this.addAccountForm.patchValue({ uniqueName: '' });
+      this.addAccountForm.patchValue({uniqueName: ''});
     }
   }
 
@@ -247,6 +252,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
     return;
   }
+
   public removeGstDetailsForm(i: number) {
     const addresses = this.addAccountForm.get('addresses') as FormArray;
     addresses.removeAt(i);
@@ -258,6 +264,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       addresses.push(this.initialGstDetailsForm());
     }
   }
+
   public isDefaultAddressSelected(val: boolean, i: number) {
     if (val) {
       let addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -293,15 +300,18 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.gstDetailsLength = addresses.controls.length;
     this.moreGstDetailsVisible = true;
   }
+
   public openingBalanceTypeChnaged(type: string) {
     if (this.addAccountForm.get('openingBalance').value > 0) {
       this.addAccountForm.get('openingBalanceType').patchValue(type);
     }
   }
+
   public showLessGst() {
     this.gstDetailsLength = 3;
     this.moreGstDetailsVisible = false;
   }
+
   public resetAddAccountForm() {
     this.addAccountForm.reset();
     // const addresses = this.addAccountForm.get('addresses') as FormArray;
@@ -314,6 +324,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     // this.addAccountForm.reset();
     // // this.addBlankGstForm();
   }
+
   public submit() {
     let accountRequest: AccountRequestV2 = this.addAccountForm.value as AccountRequestV2;
     if (this.isHsnSacEnabledAcc) {
@@ -334,6 +345,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
       accountRequest: this.addAccountForm.value
     });
   }
+
   public ngOnDestroy() {
     this.resetAddAccountForm();
     this.destroyed$.next(true);
