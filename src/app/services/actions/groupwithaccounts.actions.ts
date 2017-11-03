@@ -1,8 +1,7 @@
-import { AccountResponse, AccountRequest } from '../../models/api-models/Account';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { GroupResponse, FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, ShareGroupRequest, GroupSharedWithResponse, MoveGroupRequest, MoveGroupResponse, GroupsTaxHierarchyResponse, GroupUpateRequest } from '../../models/api-models/Group';
-import { Effect, Actions, toPayload } from '@ngrx/effects';
+import { FlattenGroupsAccountsRequest, FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse, ShareGroupRequest } from '../../models/api-models/Group';
+import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { Injectable } from '@angular/core';
 import { Action, Store } from '@ngrx/store';
@@ -347,9 +346,9 @@ export class GroupWithAccountsAction {
     .map(response => {
       let activeGrp: IGroupsWithAccounts;
       this.store.select(s => s.groupwithaccounts.groupswithaccounts).take(1).subscribe(a => {
-        activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null );
+        activeGrp = this.findMyParent(a, response.queryString.groupUniqueName, null);
       });
-      response.queryString = {groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName };
+      response.queryString = {groupUniqueName: response.queryString.groupUniqueName, parentUniqueName: activeGrp.uniqueName};
       return this.deleteGroupResponse(response);
     });
 
@@ -688,7 +687,7 @@ export class GroupWithAccountsAction {
           return Object.assign({}, parent);
         }
         if (grp.groups) {
-          let result = this.findMyParent(grp.groups, uniqueName,  grp);
+          let result = this.findMyParent(grp.groups, uniqueName, grp);
           if (result) {
             return Object.assign({}, result);
           }

@@ -62,6 +62,7 @@ import { PurchaseInvoiceService } from './purchase-invoice.service';
 import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
 import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
 import { SettingsFinancialYearService } from './settings.financial-year.service';
+import { GeneralActions } from './actions/general/general.actions';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -70,6 +71,7 @@ import { SettingsFinancialYearService } from './settings.financial-year.service'
 @NgModule({
   imports: [CommonModule, RouterModule,
     EffectsModule.run(HomeActions),
+    EffectsModule.run(GeneralActions),
     EffectsModule.run(CompanyActions),
     EffectsModule.run(LoginActions),
     EffectsModule.run(GroupWithAccountsAction),

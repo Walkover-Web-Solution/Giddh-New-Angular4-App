@@ -19,6 +19,7 @@ import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions'
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
+import { GeneralActions } from '../../services/actions/general/general.actions';
 
 @Component({
   selector: 'app-header',
@@ -76,7 +77,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
               private componentFactoryResolver: ComponentFactoryResolver,
               private cdRef: ChangeDetectorRef,
               private zone: NgZone,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private _generalActions: GeneralActions) {
 
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
@@ -180,6 +182,9 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
         this.router.navigate(['/new-user']);
         // });
+      } else {
+        // get groups with accounts for general use
+        this.store.dispatch(this._generalActions.getGroupWithAccounts());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -225,6 +230,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public changeCompany(selectedCompanyUniqueName: string) {
     this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    // get groups with accounts for general use
+    this.store.dispatch(this._generalActions.getGroupWithAccounts());
     // }
   }
 
