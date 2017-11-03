@@ -5,7 +5,7 @@
   <div class="modal-body">
     <div class="clearfix">
       <label>Select Group</label>
-      <ng-select [options]="groupsArray" [placeholder]="'Select Group'"></ng-select>
+      <ng-select [options]="flattenGroupsArray" (selected)="checkSelectedGroup($event)" [placeholder]="'Select Group'"></ng-select>
 
     </div>
     <div class="clearfix mrT1">
