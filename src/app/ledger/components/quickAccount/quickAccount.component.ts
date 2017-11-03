@@ -7,6 +7,8 @@ import { CompanyService } from '../../../services/companyService.service';
 import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { ToasterService } from '../../../services/toaster.service';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
+import { AccountsAction } from '../../../services/actions/accounts.actions';
+import { AccountRequestV2 } from '../../../models/api-models/Account';
 
 @Component({
   selector: 'quickAccount',
@@ -21,7 +23,8 @@ export class QuickAccountComponent implements OnInit {
   public newAccountForm: FormGroup;
 
   constructor(private _fb: FormBuilder, private _groupService: GroupService,
-              private _companyService: CompanyService, private _toaster: ToasterService) {
+              private _companyService: CompanyService, private _toaster: ToasterService,
+              private accountsAction: AccountsAction) {
     this._groupService.GetFlattenGroupsAccounts().subscribe(result => {
       if (result.status === 'success') {
         this.groupsArrayStream$ = Observable.of(result.body.results);
@@ -108,7 +111,7 @@ export class QuickAccountComponent implements OnInit {
   }
 
   public submit() {
-    let createAccountResponse = _.cloneDeep(this.newAccountForm.value);
-    console.log(createAccountResponse);
+    let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
+    this.accountsAction.createAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest);
   }
 }
