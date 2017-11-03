@@ -101,7 +101,6 @@ export class LedgerVM {
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount > 0);
-      bl.inventory = bl.inventory;
       // delete local id
       delete bl['id'];
     });

@@ -44,7 +44,7 @@ import { QuickAccountComponent } from './components/quickAccount/quickAccount.co
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
   ],
-  entryComponents: [UpdateLedgerEntryPanelComponent],
+  entryComponents: [UpdateLedgerEntryPanelComponent, QuickAccountComponent],
   providers: [],
   imports: [
     CommonModule,
