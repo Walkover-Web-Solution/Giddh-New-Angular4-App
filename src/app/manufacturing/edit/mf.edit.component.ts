@@ -57,6 +57,9 @@ export class MfEditComponent implements OnInit {
     private _inventoryService: InventoryService,
     private _accountService: AccountService,
     private _toasty: ToasterService) {
+
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+
     this.manufacturingDetails = new ManufacturingItemRequest();
     this.initializeOtherExpenseObj();
     // Update/Delete condition
@@ -117,9 +120,6 @@ export class MfEditComponent implements OnInit {
     }
     // dispatch stockList request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (!o.stocksList) {
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
-      }
       if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
         manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
