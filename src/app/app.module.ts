@@ -1,3 +1,4 @@
+import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -81,6 +82,7 @@ if (ENV === 'development') {
     PageComponent,
     NoContentComponent,
     DummyComponent,
+    SuccessComponent,
     NewUserComponent,
     SocialLoginCallbackComponent
   ],
