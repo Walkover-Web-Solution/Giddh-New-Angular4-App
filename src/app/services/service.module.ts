@@ -65,6 +65,7 @@ import { SettingsFinancialYearActions } from './actions/settings/financial-year/
 import { SettingsFinancialYearService } from './settings.financial-year.service';
 import { SettingsPermissionActions } from './actions/settings/permissions/settings.permissions.action';
 import { SettingsPermissionService } from './settings.permission.service';
+import { LoaderService } from '../loader/loader.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -108,6 +109,7 @@ export class ServiceModule {
     return {
       ngModule: ServiceModule,
       providers: [
+        LoaderService,
         StorageService,
         ErrorHandler,
         HttpWrapperService,
