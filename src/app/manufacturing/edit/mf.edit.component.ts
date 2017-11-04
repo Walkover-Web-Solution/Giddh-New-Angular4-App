@@ -38,6 +38,7 @@ export class MfEditComponent implements OnInit {
   public expenseGroupAccounts: any = [];
   public liabilityGroupAccounts: any = [];
   public selectedProduct: string;
+  public selectedProductName: string;
   public showFromDatePicker: boolean = false;
   public moment = moment;
   public initialQuantityObj: any = [];
@@ -164,6 +165,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public getStocksWithRate(data) {
+    this.selectedProductName = data.label;
     if (data.value) {
       let selectedValue = _.cloneDeep(data.value);
       this.selectedProduct = selectedValue;
