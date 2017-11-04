@@ -57,6 +57,9 @@ export class MfEditComponent implements OnInit {
     private _inventoryService: InventoryService,
     private _accountService: AccountService,
     private _toasty: ToasterService) {
+
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+
     this.manufacturingDetails = new ManufacturingItemRequest();
     this.initializeOtherExpenseObj();
     // Update/Delete condition
@@ -117,9 +120,6 @@ export class MfEditComponent implements OnInit {
     }
     // dispatch stockList request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (!o.stocksList) {
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
-      }
       if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
         manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
@@ -299,7 +299,12 @@ export class MfEditComponent implements OnInit {
 
   public getCostPerProduct() {
     let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
-    let quantity = manufacturingDetails.manufacturingMultipleOf;
+    let quantity;
+    if (manufacturingDetails.multipleOf) {
+      quantity = manufacturingDetails.manufacturingMultipleOf * manufacturingDetails.multipleOf;
+    } else {
+      quantity = manufacturingDetails.manufacturingMultipleOf;
+    }
     quantity = (quantity && quantity > 0) ? quantity : 1;
     let amount = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     let cost = (amount / quantity);
@@ -329,7 +334,8 @@ export class MfEditComponent implements OnInit {
     return 0;
   }
 
-  public onQuantityChange(value: number) {
+  public onQuantityChange(val: any) {
+    let value  = val;
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
     if (!this.initialQuantityObj.length) {
@@ -339,11 +345,8 @@ export class MfEditComponent implements OnInit {
       });
     }
 
-    if (_.isNumber(value)) {
-      value = value;
-    } else if (_.isEmpty(value)) {
-      // alert('now');
-      value = 1;
+    if (value && !isNaN(value)) {
+      value = parseFloat(value);
     } else {
       value = 1;
     }
