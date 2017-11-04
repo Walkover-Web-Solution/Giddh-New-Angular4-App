@@ -11,6 +11,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   selector: 'page',
   template: `
     <div id="main">
+      <giddh-loader></giddh-loader>
       <app-header></app-header>
       <layout-main>
         <router-outlet></router-outlet>
