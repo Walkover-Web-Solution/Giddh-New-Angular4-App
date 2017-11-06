@@ -95,7 +95,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     contriesWithCodes.map(c => {
       this.countryCodeList.push({value: c.countryName, label: c.value});
     });
-    this.userLoginState$ = this.store.select(p => p.session.userLoginState);
+    this.userLoginState$ = this.store.select(p => p.login.userLoginState);
     this.userDetails$ = this.store.select(p => p.session.user);
     this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
     this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
