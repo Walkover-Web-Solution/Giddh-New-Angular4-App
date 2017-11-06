@@ -26,6 +26,7 @@ import { ElementViewContainerRef } from '../shared/helpers/directives/elementVie
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { IOption } from '../theme/ng-select/option.interface';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
+import { GeneralActions } from '../services/actions/general/general.actions';
 
 @Component({
   selector: 'ledger',
@@ -86,7 +87,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
               private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions, private componentFactoryResolver: ComponentFactoryResolver) {
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -94,37 +96,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.transactionData$ = this.store.select(p => p.ledger.transactionsResponse).takeUntil(this.destroyed$).shareReplay();
     this.isLedgerCreateSuccess$ = this.store.select(p => p.ledger.ledgerCreateSuccess).takeUntil(this.destroyed$);
     this.lc.groupsArray$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
+    this.lc.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
 
-    // get flatten_accounts list
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accountsArray: IOption[] = [];
-        data.body.results.map(acc => {
-          if (acc.stocks) {
-            acc.stocks.map(as => {
-              accountsArray.push({
-                value: uuid.v4(),
-                label: acc.name,
-                additional: Object.assign({}, acc, {stock: as})
-              });
-            });
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-          } else {
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-          }
-        });
-        this.lc.flatternAccountList = Observable.of(orderBy(accountsArray, 'label'));
-      }
-    });
-
-    // get discount accounts list
-    // this._groupService.GetFlattenGroupsAccounts('discount').subscribe(data => {
-    //   if (data.status === 'success') {
-    //     this.lc.discountAccountsList = data.body.results;
-    //   } else {
-    //     this.lc.discountAccountsList = [];
-    //   }
-    // });
+    this.store.dispatch(this._generalActions.getFlattenAccount());
     this.store.dispatch(this._ledgerActions.GetDiscountAccounts());
     // get company taxes
     this.store.dispatch(this._companyActions.getTax());
@@ -162,7 +136,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.discounts = [];
       return;
     }
-    this.lc.flatternAccountList.take(1).subscribe(data => {
+    this.lc.flattenAccountList.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
         if (fa.value === e.value) {
@@ -278,6 +252,27 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.accountUniqueName = this.lc.accountUnq;
         this.getTransactionData();
         this.resetBlankTransaction();
+      }
+    });
+    // get flatten_accounts list
+    this.lc.flattenAccountListStream$.subscribe(data => {
+      if (data) {
+        let accountsArray: IOption[] = [];
+        data.map(acc => {
+          if (acc.stocks) {
+            acc.stocks.map(as => {
+              accountsArray.push({
+                value: uuid.v4(),
+                label: acc.name,
+                additional: Object.assign({}, acc, {stock: as})
+              });
+            });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+          } else {
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+          }
+        });
+        this.lc.flattenAccountList = Observable.of(orderBy(accountsArray, 'label'));
       }
     });
 
