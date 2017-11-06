@@ -123,7 +123,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       return selectedCmp;
 
     }).takeUntil(this.destroyed$);
-    this.session$ = this.store.select(p => p.session.userLoginState).distinctUntilChanged().takeUntil(this.destroyed$);
+    this.session$ = this.store.select(p => p.login.userLoginState).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
