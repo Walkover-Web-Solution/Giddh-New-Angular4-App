@@ -1,5 +1,4 @@
 import { LinkedAccountsState, SettingsState } from './Settings.reducer';
-import { state } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';

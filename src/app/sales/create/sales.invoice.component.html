@@ -12,6 +12,7 @@
             <div class="form-group noMarg size_380">
               <label>Customer Name or <a href (click)="toggleAccountAsidePane($event)">+ Add Customer</a></label>
               <input
+              #custname
               autocomplete="off"
               name="customerName"
               [(ngModel)]="invFormData.customerName"
@@ -27,7 +28,7 @@
           <div class="flex-row-child" *ngIf="typeaheadNoResultsOfCustomer">
             <div class="form-group noMarg">
               <label>Add Entry Against</label>
-              <select class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
+              <select (ngModelChange)="onSelectBankCash($event, custname)" class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
                 <option [ngValue]="select">Select Bank/Cash</option>
                 <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async" >{{ bank.name }}</option>
               </select>
