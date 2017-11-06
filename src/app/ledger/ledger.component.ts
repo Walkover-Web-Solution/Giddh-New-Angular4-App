@@ -478,6 +478,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     componentInstance.closeQuickAccountModal.subscribe((a) => {
       this.hideQuickAccountModal();
       componentInstance.newAccountForm.reset();
+      componentInstance.destroyed$.next(true);
+      componentInstance.destroyed$.complete();
     });
 
   }
