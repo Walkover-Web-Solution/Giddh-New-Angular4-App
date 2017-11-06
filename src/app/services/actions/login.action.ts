@@ -7,7 +7,7 @@ import { Action, Store } from '@ngrx/store';
 import { Actions, Effect } from '@ngrx/effects';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
 import { go } from '@ngrx/router-store';
@@ -40,6 +40,8 @@ export class LoginActions {
 
   public static VerifyMobileRequest = 'VerifyMobileRequest';
   public static VerifyMobileResponce = 'VerifyMobileResponce';
+  public static VerifyTwoWayAuthRequest = 'VerifyTwoWayAuthRequest';
+  public static VerifyTwoWayAuthResponse = 'VerifyTwoWayAuthResponse';
   public static LoginSuccess = 'LoginSuccess';
   public static LogOut = 'LoginOut';
   public static ClearSession = 'ClearSession';
@@ -54,6 +56,7 @@ export class LoginActions {
   public static SubscribedCompaniesResponse = 'SubscribedCompaniesResponse';
   public static AddBalance = 'AddBalance';
   public static AddBalanceResponse = 'AddBalanceResponse';
+  public static ResetTwoWayAuthModal = 'ResetTwoWayAuthModal';
 
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
@@ -61,17 +64,28 @@ export class LoginActions {
     .switchMap(action =>
       this.auth.LoginWithGoogle(action.payload)
     )
-    .map(response => this.signupWithGoogleResponse(response));
+    .map(response => {
+      return this.signupWithGoogleResponse(response);
+    });
 
   @Effect()
   public signupWithGoogleResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
     .map(action => {
-      if (action.payload.status === 'error') {
+      let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+      debugger;
+      if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
       }
-      return this.LoginSuccess();
+      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+        return {
+          type: ''
+        };
+      } else {
+        return this.LoginSuccess();
+      }
     });
 
   @Effect()
@@ -86,11 +100,20 @@ export class LoginActions {
   public signupWithLinkedinResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
     .map(action => {
-      if (action.payload.status === 'error') {
+      let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
+      debugger;
+      if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
       }
-      return this.LoginSuccess();
+      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+        return {
+          type: ''
+        };
+      } else {
+        return this.LoginSuccess();
+      }
     });
 
   @Effect()
@@ -123,11 +146,20 @@ export class LoginActions {
   public verifyEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailResponce)
     .map(action => {
-      if (action.payload.status === 'error') {
+      let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
+      debugger
+      if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
       }
-      return this.LoginSuccess();
+      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+        return {
+          type: ''
+        };
+      } else {
+        return this.LoginSuccess();
+      }
     });
 
   @Effect()
@@ -157,7 +189,7 @@ export class LoginActions {
       let cmpUniqueName = '';
       let stateDetail = results[0] as BaseResponse<StateDetailsResponse, string>;
       let companies = results[1] as BaseResponse<CompanyResponse[], string>;
-      if (companies.body.length === 0) {
+      if (companies.body && companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         return go(['/pages/new-user']);
       } else {
@@ -218,6 +250,35 @@ export class LoginActions {
   public verifyMobileResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyMobileResponce)
     .map(action => {
+      let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+      debugger
+      if (response.status === 'error') {
+        this._toaster.errorToast(action.payload.message, action.payload.code);
+        return {type: ''};
+      }
+      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
+        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
+        return {
+          type: ''
+        };
+      } else {
+        return this.LoginSuccess();
+      }
+    });
+
+  @Effect()
+  public verifyTwoWayAuth$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyTwoWayAuthRequest)
+    .switchMap(action =>
+      this.auth.VerifyOTP(action.payload as VerifyMobileModel)
+    )
+    .map(response => this.VerifyTwoWayAuthResponse(response));
+
+  @Effect()
+  public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
+    .ofType(LoginActions.VerifyTwoWayAuthResponse)
+    .map(action => {
+      debugger
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
@@ -452,6 +513,26 @@ export class LoginActions {
     return {
       type: LoginActions.VerifyMobileResponce,
       payload: value
+    };
+  }
+
+  public VerifyTwoWayAuthRequest(value: VerifyMobileModel): Action {
+    return {
+      type: LoginActions.VerifyTwoWayAuthRequest,
+      payload: value
+    };
+  }
+
+  public VerifyTwoWayAuthResponse(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): Action {
+    return {
+      type: LoginActions.VerifyTwoWayAuthResponse,
+      payload: value
+    };
+  }
+
+  public resetTwoWayAuthModal(): Action {
+    return {
+      type: LoginActions.ResetTwoWayAuthModal
     };
   }
 

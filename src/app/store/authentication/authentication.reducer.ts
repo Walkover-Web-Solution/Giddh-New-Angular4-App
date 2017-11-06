@@ -24,12 +24,15 @@ export interface AuthenticationState {
   user?: VerifyEmailResponseModel;   // current user | null
   isSocialLogoutAttempted: boolean;
   isLoggedInWithSocialAccount: boolean;
+  isTwoWayAuthInProcess: boolean;
+  isTwoWayAuthSuccess: boolean;
 }
 
 export enum userLoginStateEnum {
   notLoggedIn,
   userLoggedIn,
-  newUserLoggedIn
+  newUserLoggedIn,
+  needTwoWayAuth
 }
 
 export interface SessionState {
@@ -63,7 +66,9 @@ const initialState = {
   isVerifyEmailSuccess: false,
   user: null,
   isSocialLogoutAttempted: false,
-  isLoggedInWithSocialAccount: false
+  isLoggedInWithSocialAccount: false,
+  isTwoWayAuthInProcess: false,
+  isTwoWayAuthSuccess: false
 };
 
 const sessionInitialState: SessionState = {
@@ -181,7 +186,8 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isLoginWithMobileSubmited: false,
         isVerifyEmailSuccess: false,
         user: null,
-        isSocialLogoutAttempted: true
+        isSocialLogoutAttempted: true,
+        isTwoWayAuthInProcess: false
       });
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
       let newState = _.cloneDeep(state);
@@ -213,6 +219,33 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         newState.isLoggedInWithSocialAccount = false;
       }
       return newState;
+    }
+    case LoginActions.VerifyTwoWayAuthRequest: {
+      return {
+        ...state,
+        isTwoWayAuthInProcess: true
+      };
+    }
+    case LoginActions.VerifyTwoWayAuthResponse: {
+      if (action.payload.status === 'success') {
+        return {
+          ...state,
+          isTwoWayAuthInProcess: false,
+          isTwoWayAuthSuccess: true
+        };
+      }
+      return {
+        ...state,
+        isTwoWayAuthInProcess: false,
+        isTwoWayAuthSuccess: false
+      };
+    }
+    case LoginActions.ResetTwoWayAuthModal: {
+      return {
+        ...state,
+        isTwoWayAuthInProcess: false,
+        isTwoWayAuthSuccess: false
+      };
     }
     default:
       return state;
@@ -257,7 +290,7 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         });
       }
     }
-    case LoginActions.VerifyMobileResponce:
+    case LoginActions.VerifyMobileResponce: {
       let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (data1.status === 'success') {
         return Object.assign({}, state, {
@@ -268,6 +301,18 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
           user: null
         });
       }
+    }
+    case LoginActions.VerifyTwoWayAuthResponse: {
+      let data1: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+      if (data1.status === 'success') {
+        return Object.assign({}, state, {
+          user: data1.body
+        });
+      }
+      return {
+        ...state, user: null
+      };
+    }
     case LoginActions.LogOut:
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT:
       return Object.assign({}, state, {
