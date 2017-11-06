@@ -1,6 +1,5 @@
 import { SETTINGS_PERMISSION_ACTIONS } from './../../services/actions/settings/permissions/settings.permissions.const';
 import { LinkedAccountsState, SettingsState } from './Settings.reducer';
-import { state } from '@angular/core';
 import * as _ from '../../lodash-optimized';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
