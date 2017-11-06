@@ -184,6 +184,12 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         isQuickAccountInProcess: false,
         isQuickAccountCreatedSuccessfully: false
       };
+    case LEDGER.RESET_QUICK_ACCOUNT_MODAL:
+      return {
+        ...state,
+        isQuickAccountInProcess: false,
+        isQuickAccountCreatedSuccessfully: false
+      };
     case LEDGER.RESET_LEDGER:
       return {
         ...state,

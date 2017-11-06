@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from '../../../services/group.service';
 import { IOption } from '../../../theme/ng-select/option.interface';
@@ -13,13 +13,14 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import * as _ from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
+import { GeneralActions } from '../../../services/actions/general/general.actions';
 
 @Component({
   selector: 'quickAccount',
   templateUrl: 'quickAccount.component.html'
 })
 
-export class QuickAccountComponent implements OnInit, OnDestroy {
+export class QuickAccountComponent implements OnInit {
   @Output() public closeQuickAccountModal: EventEmitter<any> = new EventEmitter();
   public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
   public flattenGroupsArray: IOption[] = [];
@@ -29,11 +30,11 @@ export class QuickAccountComponent implements OnInit, OnDestroy {
   public showGstBox: boolean = false;
   public newAccountForm: FormGroup;
 
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private _groupService: GroupService,
               private _companyService: CompanyService, private _toaster: ToasterService,
-              private ledgerAction: LedgerActions, private store: Store<AppState>) {
+              private ledgerAction: LedgerActions, private store: Store<AppState>, private _generalActions: GeneralActions) {
     this.isQuickAccountInProcess$ = this.store.select(p => p.ledger.isQuickAccountInProcess).takeUntil(this.destroyed$);
     this.isQuickAccountCreatedSuccessfully$ = this.store.select(p => p.ledger.isQuickAccountCreatedSuccessfully).takeUntil(this.destroyed$);
     this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
@@ -75,6 +76,7 @@ export class QuickAccountComponent implements OnInit, OnDestroy {
     this.isQuickAccountCreatedSuccessfully$.subscribe(a => {
       if (a) {
         this.closeQuickAccountModal.emit(true);
+        this.store.dispatch(this.ledgerAction.resetQuickAccountModal());
       }
     });
   }
@@ -148,10 +150,5 @@ export class QuickAccountComponent implements OnInit, OnDestroy {
   public submit() {
     let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
     this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest));
-  }
-
-  public ngOnDestroy() {
-    this.destroyed$.next(true);
-    this.destroyed$.complete();
   }
 }

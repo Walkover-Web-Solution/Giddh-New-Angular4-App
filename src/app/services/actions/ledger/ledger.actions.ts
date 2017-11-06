@@ -379,6 +379,12 @@ export class LedgerActions {
     };
   }
 
+  public resetQuickAccountModal(): Action {
+    return {
+      type: LEDGER.RESET_QUICK_ACCOUNT_MODAL
+    };
+  }
+
   private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {
