@@ -73,7 +73,6 @@ export class LoginActions {
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
     .map(action => {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-      debugger;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
@@ -101,7 +100,6 @@ export class LoginActions {
     .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
     .map(action => {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
-      debugger;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
@@ -147,19 +145,11 @@ export class LoginActions {
     .ofType(LoginActions.VerifyEmailResponce)
     .map(action => {
       let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
-      debugger
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
       }
-      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
-        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
-        return {
-          type: ''
-        };
-      } else {
-        return this.LoginSuccess();
-      }
+      return this.LoginSuccess();
     });
 
   @Effect()
@@ -251,19 +241,11 @@ export class LoginActions {
     .ofType(LoginActions.VerifyMobileResponce)
     .map(action => {
       let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
-      debugger
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
       }
-      if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
-        this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
-        return {
-          type: ''
-        };
-      } else {
-        return this.LoginSuccess();
-      }
+      return this.LoginSuccess();
     });
 
   @Effect()
@@ -278,7 +260,6 @@ export class LoginActions {
   public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyTwoWayAuthResponse)
     .map(action => {
-      debugger
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
         return {type: ''};
