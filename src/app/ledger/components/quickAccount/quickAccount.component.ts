@@ -76,6 +76,7 @@ export class QuickAccountComponent implements OnInit {
     this.isQuickAccountCreatedSuccessfully$.subscribe(a => {
       if (a) {
         this.closeQuickAccountModal.emit(true);
+        this.store.dispatch(this._generalActions.getFlattenAccount());
         this.store.dispatch(this.ledgerAction.resetQuickAccountModal());
       }
     });

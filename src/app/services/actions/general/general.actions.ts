@@ -6,6 +6,8 @@ import { Action } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import { GENERAL_ACTIONS } from './general.const';
 import { Observable } from 'rxjs/Observable';
+import { FlattenAccountsResponse } from '../../../models/api-models/Account';
+import { AccountService } from '../../account.service';
 
 @Injectable()
 export class GeneralActions {
@@ -19,7 +21,17 @@ export class GeneralActions {
       return this.getGroupWithAccountsResponse(response);
     });
 
-  constructor(private action$: Actions, private _groupService: GroupService) {
+  @Effect()
+  public GetFlattenAccounts$: Observable<Action> = this.action$
+    .ofType(GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS)
+    .switchMap(action =>
+      this._accountService.GetFlattenAccounts(action.payload)
+    )
+    .map(response => {
+      return this.getFlattenAccountResponse(response);
+    });
+
+  constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService,) {
     //
   }
 
@@ -33,6 +45,20 @@ export class GeneralActions {
   public getGroupWithAccountsResponse(value: BaseResponse<GroupsWithAccountsResponse[], string>): Action {
     return {
       type: GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE,
+      payload: value
+    };
+  }
+
+  public getFlattenAccount(value?: string): Action {
+    return {
+      type: GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS,
+      payload: value
+    };
+  }
+
+  public getFlattenAccountResponse(value: BaseResponse<FlattenAccountsResponse, string>): Action {
+    return {
+      type: GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE,
       payload: value
     };
   }
