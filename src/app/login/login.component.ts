@@ -7,7 +7,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
 import { Headers, RequestOptionsArgs } from '@angular/http';
@@ -218,6 +218,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   public hideTowWayAuthModal() {
     this.twoWayAuthModal.hide();
+  }
+
+  public resetTwoWayAuthModal() {
+    this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.notLoggedIn));
+    this.hideTowWayAuthModal();
   }
 
   // tslint:disable-next-line:no-empty
