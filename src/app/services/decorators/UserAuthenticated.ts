@@ -11,20 +11,18 @@ export class UserAuthenticated implements CanActivate {
   }
 
   public canActivate() {
-    return this.store.select(p => p).distinctUntilChanged((x: AppState, y: AppState) => {
-      return x.session.companyUniqueName !== y.session.companyUniqueName;
-    }).map(p => {
-      if (p.login.userLoginState === userLoginStateEnum.userLoggedIn) {
-        if (ROUTES.findIndex(q => q.path.split('/')[0] === p.session.lastState.split('/')[0]) > -1) {
-          this._router.navigate([p.session.lastState]);
+    return this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').map(p => {
+      if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
+        if (ROUTES.findIndex(q => q.path.split('/')[0] === p.lastState.split('/')[0]) > -1) {
+          this._router.navigate([p.lastState]);
         } else {
           this._router.navigate(['home']);
         }
       }
-      if (p.login.userLoginState === userLoginStateEnum.newUserLoggedIn) {
+      if (p.userLoginState === userLoginStateEnum.newUserLoggedIn) {
         this._router.navigate(['/new-user']);
       }
-      return !(p.login.userLoginState === userLoginStateEnum.userLoggedIn || p.login.userLoginState === userLoginStateEnum.newUserLoggedIn);
+      return !(p.userLoginState === userLoginStateEnum.userLoggedIn || p.userLoginState === userLoginStateEnum.newUserLoggedIn);
     });
   }
 }

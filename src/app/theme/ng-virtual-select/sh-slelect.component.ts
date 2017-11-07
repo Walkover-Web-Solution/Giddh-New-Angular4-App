@@ -1,11 +1,12 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { filter } from 'rxjs/operator/filter';
 import { IOption } from './sh-options.interface';
 
+// noinspection TsLint
 @ Component({
   selector: 'sh-select',
   template: `
@@ -138,9 +139,6 @@ import { IOption } from './sh-options.interface';
   }
 
   `],
-  host: {
-    '(window:mouseup)': 'onDocumentClick($event)'
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -204,6 +202,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
    * on click outside the view close the menu
    * @param event
    */
+  @HostListener('window:mouseup', ['$event'])
   public onDocumentClick(event) {
     if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
       this.hide(event);

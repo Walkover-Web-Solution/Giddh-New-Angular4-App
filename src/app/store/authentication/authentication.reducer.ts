@@ -26,7 +26,6 @@ export interface AuthenticationState {
   isLoggedInWithSocialAccount: boolean;
   isTwoWayAuthInProcess: boolean;
   isTwoWayAuthSuccess: boolean;
-  userLoginState: userLoginStateEnum;
 }
 
 export enum userLoginStateEnum {
@@ -47,6 +46,7 @@ export interface SessionState {
   isCompanyCreated: boolean;
   isAddNewMobileNoInProcess: boolean;
   isMobileNoVerifiedSuccess: boolean;
+  userLoginState: userLoginStateEnum;
 }
 
 /**
@@ -69,7 +69,6 @@ const initialState = {
   isLoggedInWithSocialAccount: false,
   isTwoWayAuthInProcess: false,
   isTwoWayAuthSuccess: false,
-  userLoginState: userLoginStateEnum.notLoggedIn
 };
 
 const sessionInitialState: SessionState = {
@@ -82,7 +81,8 @@ const sessionInitialState: SessionState = {
   isCompanyCreationSuccess: false,
   isRefreshing: false,
   isAddNewMobileNoInProcess: false,
-  isMobileNoVerifiedSuccess: false
+  isMobileNoVerifiedSuccess: false,
+  userLoginState: userLoginStateEnum.notLoggedIn
 };
 
 export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
@@ -192,7 +192,6 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT: {
       let newState = _.cloneDeep(state);
       newState.isSocialLogoutAttempted = true;
-      newState.userLoginState = 0;
       return newState;
     }
     case LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT: {
@@ -247,11 +246,6 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
         isTwoWayAuthInProcess: false,
         isTwoWayAuthSuccess: false
       };
-    }
-    case LoginActions.SetLoginStatus: {
-      return Object.assign({}, state, {
-        userLoginState: action.payload
-      });
     }
     default:
       return state;
@@ -328,7 +322,8 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         companies: [],
         isCompanyCreated: false,
         isCompanyCreationInProcess: false,
-        isRefreshing: false
+        isRefreshing: false,
+        userLoginState: 0
       });
     case CompanyActions.GET_STATE_DETAILS_RESPONSE: {
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;
@@ -441,6 +436,11 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       } else {
         return state;
       }
+    case LoginActions.SetLoginStatus: {
+      return Object.assign({}, state, {
+        userLoginState: action.payload
+      });
+    }
     default:
       return state;
   }
