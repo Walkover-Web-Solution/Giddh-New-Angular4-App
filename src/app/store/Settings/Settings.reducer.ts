@@ -1,5 +1,6 @@
 import { SETTINGS_PERMISSION_ACTIONS } from './../../services/actions/settings/permissions/settings.permissions.const';
-import * as _ from 'lodash';
+import { LinkedAccountsState, SettingsState } from './Settings.reducer';
+import * as _ from '../../lodash-optimized';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
@@ -16,6 +17,8 @@ export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
   isBankAccountsInProcess?: boolean;
   isDeleteBankAccountIsInProcess?: boolean;
+  needReloadingLinkedAccounts?: boolean;
+  iframeSource?: string;
 }
 export interface SettingsState {
   integration: IntegrationPage;
@@ -139,54 +142,54 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE: {
-        // let response: BaseResponse<IGetAllEbankAccountResponse[], string> = action.payload;
-        // if (response.status === 'success') {
-        //   newState.linkedAccounts = response.body;
-        //   return Object.assign({}, state, newState);
-        // }
-        // return state;
-        let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
-        if (response.status === 'success') {
-          newState.linkedAccounts.isBankAccountsInProcess = false;
-          newState.linkedAccounts.bankAccounts = _.orderBy(response.body, ['siteName'], ['asc']);
-        } else {
-          newState.linkedAccounts.isBankAccountsInProcess = false;
-        }
-        return Object.assign({}, state, newState);
+      // let response: BaseResponse<IGetAllEbankAccountResponse[], string> = action.payload;
+      // if (response.status === 'success') {
+      //   newState.linkedAccounts = response.body;
+      //   return Object.assign({}, state, newState);
+      // }
+      // return state;
+      let response: BaseResponse<BankAccountsResponse[], string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts.isBankAccountsInProcess = false;
+        newState.linkedAccounts.bankAccounts = _.orderBy(response.body, ['siteName'], ['asc']);
+      } else {
+        newState.linkedAccounts.isBankAccountsInProcess = false;
+      }
+      return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE: {
-        let response: BaseResponse<LinkedAccountsState[], string> = action.payload;
-        if (response.status === 'success') {
-          newState.linkedAccounts = response.body as LinkedAccountsState;
-          return Object.assign({}, state, newState);
-        }
-        return state;
+      let response: BaseResponse<LinkedAccountsState[], string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts = response.body as LinkedAccountsState;
+        return Object.assign({}, state, newState);
+      }
+      return state;
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT: {
       newState.linkedAccounts.isDeleteBankAccountIsInProcess = true;
       return Object.assign({}, state, newState);
     }
     case SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE: {
-        // let response: BaseResponse<string, string> = action.payload;
-        // if (response.status === 'success') {
-        //   let indx = newState.linkedAccounts.bankAccounts.findIndex((acc: any) => acc.siteId === response.queryString.loginId);
-        //   if (indx > -1) {
-        //     newState.linkedAccounts.bankAccounts.splice(indx, 1);
-        //     return Object.assign({}, state, newState);
-        //   }
-        // }
-        // return state;
-        let response: BaseResponse<string, string> = action.payload;
-          if (response.status === 'success') {
-            newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
-            _.map(newState.linkedAccounts.bankAccounts, (ac) => {
-              _.filter(ac.accounts, (account) => account.loginId !== response.request);
-            });
-          } else {
-            newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
-          }
-          return Object.assign({}, state, newState);
-        }
+      // let response: BaseResponse<string, string> = action.payload;
+      // if (response.status === 'success') {
+      //   let indx = newState.linkedAccounts.bankAccounts.findIndex((acc: any) => acc.siteId === response.queryString.loginId);
+      //   if (indx > -1) {
+      //     newState.linkedAccounts.bankAccounts.splice(indx, 1);
+      //     return Object.assign({}, state, newState);
+      //   }
+      // }
+      // return state;
+      let response: BaseResponse<string, string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
+        _.map(newState.linkedAccounts.bankAccounts, (ac) => {
+          _.filter(ac.accounts, (account) => account.loginId !== response.request);
+        });
+      } else {
+        newState.linkedAccounts.isDeleteBankAccountIsInProcess = false;
+      }
+      return Object.assign({}, state, newState);
+    }
     case SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE: {
       let response: BaseResponse<IFinancialYearResponse, string> = action.payload;
       if (response.status === 'success') {
@@ -232,9 +235,25 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
       if (response.status === 'success') {
         newState.financialYears = null;
         newState.usersWithCompanyPermissions = response.body;
+      }
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts.iframeSource = response.body.connectUrl;
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE:
+    {
+      newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE:
+    {
+      newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
     }
     default: {
       return state;
