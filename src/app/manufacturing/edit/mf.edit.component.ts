@@ -38,6 +38,7 @@ export class MfEditComponent implements OnInit {
   public expenseGroupAccounts: any = [];
   public liabilityGroupAccounts: any = [];
   public selectedProduct: string;
+  public selectedProductName: string;
   public showFromDatePicker: boolean = false;
   public moment = moment;
   public initialQuantityObj: any = [];
@@ -68,6 +69,7 @@ export class MfEditComponent implements OnInit {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
         if (manufacturingObj) {
+          this.selectedProductName = manufacturingObj.stockName;
           manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
           manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
           manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
@@ -164,6 +166,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public getStocksWithRate(data) {
+    this.selectedProductName = data.label;
     if (data.value) {
       let selectedValue = _.cloneDeep(data.value);
       this.selectedProduct = selectedValue;
