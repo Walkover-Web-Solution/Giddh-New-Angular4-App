@@ -30,9 +30,11 @@ export class SettingTaxesComponent implements OnInit {
   public records = []; // This array is just for generating dynamic ngModel
   public taxToEdit = []; // It is for edit toogle
   public showFromDatePicker: boolean = false;
-  public selectedTaxForDelete: string;
+  public selectedTax: string;
   public accounts$: Select2OptionData[];
   public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
+  public confirmationMessage: string;
+  public confirmationFor: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -96,25 +98,34 @@ export class SettingTaxesComponent implements OnInit {
     this.store.dispatch(this._settingsTaxesActions.CreateTax(dataToSave));
   }
 
-  public deleteTax(taxUniqueName) {
-    this.newTaxObj.uniqueName = taxUniqueName;
-    this.selectedTaxForDelete = this.availableTaxes.find((tax) => tax.uniqueName === taxUniqueName).name;
+  public deleteTax(taxToDelete) {
+    this.newTaxObj = taxToDelete;
+    this.selectedTax = this.availableTaxes.find((tax) => tax.uniqueName === taxToDelete.uniqueName).name;
+    this.confirmationMessage = `Are you sure want to delete ${this.selectedTax}?`;
+    this.confirmationFor = 'delete';
     this.taxConfirmationModel.show();
   }
 
   public updateTax(taxIndex: number) {
-    let taxToUpdate = _.cloneDeep(this.availableTaxes[taxIndex]);
-    this.store.dispatch(this._settingsTaxesActions.UpdateTax(taxToUpdate));
+    let selectedTax = _.cloneDeep(this.availableTaxes[taxIndex]);
+    this.newTaxObj = selectedTax;
+    this.confirmationMessage = `Are you sure want to update ${selectedTax.name}?`;
+    this.confirmationFor = 'edit';
+    this.taxConfirmationModel.show();
   }
 
   public onCancel() {
     this.newTaxObj = new TaxResponse();
   }
 
-  public deleteConfirmedTax(userResponse: boolean) {
+  public userConfirmation(userResponse: boolean) {
     this.taxConfirmationModel.hide();
     if (userResponse) {
-      this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
+      if (this.confirmationFor === 'delete') {
+        this.store.dispatch(this._settingsTaxesActions.DeleteTax(this.newTaxObj.uniqueName));
+      } else if (this.confirmationFor === 'edit') {
+        this.store.dispatch(this._settingsTaxesActions.UpdateTax(this.newTaxObj));
+      }
     }
   }
 

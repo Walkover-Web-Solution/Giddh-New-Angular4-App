@@ -8,14 +8,14 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 
 export class DeleteTaxConfirmationModelComponent {
 
-  @Input() public selectedTaxForDelete: string;
-  @Output() public confirmDeleteEvent: EventEmitter<boolean> = new EventEmitter(false);
+  @Input() public message: string;
+  @Output() public userConfirmationEvent: EventEmitter<boolean> = new EventEmitter(false);
 
   public onConfirmation() {
-    this.confirmDeleteEvent.emit(true);
+    this.userConfirmationEvent.emit(true);
   }
 
   public onCancel() {
-    this.confirmDeleteEvent.emit(false);
+    this.userConfirmationEvent.emit(false);
   }
 }
