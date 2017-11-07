@@ -41,6 +41,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
+import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -108,6 +109,7 @@ if (ENV === 'development') {
     DatepickerModule.forRoot(),
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
+    ShSelectModule.forRoot(),
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
