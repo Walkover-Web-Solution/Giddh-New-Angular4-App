@@ -265,10 +265,36 @@
                   </td>
                   <td class="col-xs-7 select2-parent select2-ledger">
 
-                    <ng-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
+                    <!--<ng-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"-->
+                               <!--(selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"-->
+                               <!--[isTypeAheadMode]="true" [notFoundLink]="true"-->
+                               <!--(noResultsClicked)="showQuickAccountModal()">-->
+                      <!--<ng-template #optionTemplate let-option="option">-->
+                        <!--<ng-container *ngIf="!option.additional?.stock">-->
+                          <!--<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">-->
+                            <!--<span class="account-list-item"-->
+                                  <!--style="display: block;font-size:14px">{{ option.label }}</span>-->
+                            <!--<span class="account-list-item" style="display: block;font-size:12px">-->
+                              <!--{{ option.additional?.uniqueName }}</span>-->
+                          <!--</a>-->
+                        <!--</ng-container>-->
+                        <!--<ng-container *ngIf="option.additional?.stock">-->
+                          <!--<a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">-->
+                            <!--<span class="account-list-item"-->
+                                  <!--style="display: block;font-size:14px">{{ option.label }}</span>-->
+                            <!--<span class="account-list-item" style="display: block;font-size:12px">-->
+                              <!--{{ option.additional.uniqueName }}</span>-->
+                            <!--<span class="account-list-item" style="display: block;font-size:11px">-->
+                              <!--Stock: {{ option.additional?.stock.name }}-->
+                            <!--</span>-->
+                          <!--</a>-->
+                        <!--</ng-container>-->
+                      <!--</ng-template>-->
+                    <!--</ng-select>-->
+
+                    <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
-                               [isTypeAheadMode]="true" [notFoundLink]="true"
-                               (noResultsClicked)="showQuickAccountModal()">
+                    >
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -283,16 +309,14 @@
                             <span class="account-list-item"
                                   style="display: block;font-size:14px">{{ option.label }}</span>
                             <span class="account-list-item" style="display: block;font-size:12px">
-                              {{ option.additional.uniqueName }}</span>
+                              {{ option.additional?.uniqueName }}</span>
                             <span class="account-list-item" style="display: block;font-size:11px">
                               Stock: {{ option.additional?.stock.name }}
                             </span>
                           </a>
                         </ng-container>
                       </ng-template>
-                    </ng-select>
-
-                    <!--<sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"></sh-select>-->
+                    </sh-select>
                     <!--<select2 [data]="lc.flattenAccountList | async" (valueChanged)="selectAccount($event,txn)"-->
                     <!--[(ngModel)]="txn.particular"-->
                     <!--[options]="accountsOptions"></select2>-->

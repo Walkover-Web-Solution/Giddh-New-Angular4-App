@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, Component, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, Renderer, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { filter } from 'rxjs/operator/filter';
 import { IOption } from './sh-options.interface';
@@ -35,6 +35,7 @@ import { IOption } from './sh-options.interface';
     <sh-select-menu [isOpen]="isOpen"
                     [rows]="rows"
                     [selectedValues]="selectedValues"
+                    [optionTemplate]="optionTemplate"
                     (noToggleClick)="toggleSelected($event)"></sh-select-menu>`,
   styles: [`:host {
     display: block;
@@ -155,6 +156,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public showClear: boolean = true;
   @Input() public disabled: boolean;
   @ViewChild('inputFilter') public inputFilter: ElementRef;
+  @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
 
   @Input() set options(val: IOption[]) {
     this._options = val;
