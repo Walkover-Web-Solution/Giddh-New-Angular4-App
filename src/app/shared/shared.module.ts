@@ -29,6 +29,7 @@ import { Select2Module } from '../theme/select2';
 import { LaddaModule } from 'angular2-ladda';
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -74,7 +75,8 @@ export function provideConfig() {
     ConfirmModalModule,
     LaddaModule,
     ElementViewChildModule,
-    DisableFormFieldModule
+    DisableFormFieldModule,
+    ShSelectModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
