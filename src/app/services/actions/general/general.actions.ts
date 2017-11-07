@@ -31,7 +31,7 @@ export class GeneralActions {
       return this.getFlattenAccountResponse(response);
     });
 
-  constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService,) {
+  constructor(private action$: Actions, private _groupService: GroupService, private _accountService: AccountService) {
     //
   }
 

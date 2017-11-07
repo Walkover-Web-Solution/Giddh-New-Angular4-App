@@ -15,7 +15,7 @@ export class NeedsAuthentication implements CanActivate {
   constructor(public _router: Router, private store: Store<AppState>, private _companyService: CompanyService, private companyActions: CompanyActions) {
   }
   public canActivate() {
-    return this.store.select(p => p.login.userLoginState).map(p => {
+    return this.store.select(p => p.session.userLoginState).map(p => {
       if (p === userLoginStateEnum.newUserLoggedIn) {
         this._router.navigate(['/new-user']);
       }
