@@ -304,6 +304,12 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
+  public onSelectBankCash(val: any, model: any) {
+    if (model.value) {
+      this.invFormData.account.name = model.value;
+    }
+  }
+
   public assignValuesInForm(data: AccountResponseV2) {
     // toggle all collapse
     this.isGenDtlCollapsed = false;

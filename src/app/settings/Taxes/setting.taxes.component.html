@@ -192,7 +192,7 @@
                                 </div>
 
                             </td>
-                            <td *ngIf="!taxToEdit[i]">{{tax.taxType}}</td>
+                            <td *ngIf="!taxToEdit[i]">{{tax.taxType ? tax.taxType : 'Others'}}</td>
                             <td *ngIf="taxToEdit[i]">
 
                                 <div class="custom-select pos-rel">
@@ -207,7 +207,7 @@
                             </td>
                             <td class="text-center icon-btn">
                                 <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="taxToEdit[i] = true"><i class="fa fa-pencil" aria-hidden="true" tooltip="Edit"></i></button>
-                                <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax.uniqueName);"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
+                                <button *ngIf="!taxToEdit[i]" type="button" class="btn btn-xs" (click)="deleteTax(tax);"><i class="fa fa-trash" aria-hidden="true" tooltip="Delete"></i></button>
                                 <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="updateTax(i); taxToEdit[i] = false"><i class="fa fa-check" aria-hidden="true" tooltip="Save"></i></button>
                                 <button *ngIf="taxToEdit[i]" type="button" class="btn btn-xs" (click)="reloadTaxList(); taxToEdit[i] = false"><i class="fa fa-times" aria-hidden="true" tooltip="Reset"></i></button>
                             </td>
@@ -230,7 +230,7 @@
     <div class="modal-dialog modal-md">
         <!-- modal-liq90 class is removed for now-->
         <div class="modal-content">
-            <delete-tax-confirmation-model [selectedTaxForDelete]="selectedTaxForDelete" (confirmDeleteEvent)="deleteConfirmedTax($event)"></delete-tax-confirmation-model>
+            <delete-tax-confirmation-model [message]="confirmationMessage" (userConfirmationEvent)="userConfirmation($event)"></delete-tax-confirmation-model>
         </div>
     </div>
 </div>
