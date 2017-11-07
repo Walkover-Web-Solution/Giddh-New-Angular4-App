@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
 import { VirtualScrollComponent } from './virtual-scroll';
 import { IOption } from './sh-options.interface';
 
@@ -11,11 +11,15 @@ import { IOption } from './sh-options.interface';
       <virtual-scroll [items]="_rows" (update)="viewPortItems = $event"
                       [style.height]="math.min(290,38 * _rows.length) + 'px'"
                       style="display: block">
+
         <div class="item"
              *ngFor="let row of viewPortItems"
              [class.selected]="selectedValues?.indexOf(row) !== -1"
              (click)="toggleSelected(row)">
-          {{row.label}}
+          <ng-template [ngOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
+          <ng-container *ngIf="!optionTemplate">
+            {{row.label}}
+          </ng-container>
         </div>
       </virtual-scroll>
     </div>`,
@@ -54,6 +58,7 @@ import { IOption } from './sh-options.interface';
 export class ShSelectMenuComponent {
   @Input() public selectedValues: any[];
   @Input() public isOpen: boolean;
+  @Input() public optionTemplate: TemplateRef<any>;
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
   @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
   public math: any = Math;
