@@ -4,9 +4,11 @@
 import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
+import { ShSelectMenuComponent } from "./sh-select-menu.component";
+
 
 // noinspection TsLint
-@ Component({
+@Component({
   selector: 'sh-select',
   templateUrl: './sh-select.component.html',
   styleUrls: [`./sh-select.component.css`],
@@ -27,6 +29,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLink: boolean = false;
   @ViewChild('inputFilter') public inputFilter: ElementRef;
+  @ViewChild('menuEle') public menuEle: ShSelectMenuComponent;
   @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
 
   @Input() set options(val: IOption[]) {
@@ -67,9 +70,18 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     this._selectedValues = val;
   }
+  /** Keys. **/
 
-  constructor(private element: ElementRef,
-              private renderer: Renderer) {
+  private KEYS: any = {
+    BACKSPACE: 8,
+    TAB: 9,
+    ENTER: 13,
+    ESC: 27,
+    SPACE: 32,
+    UP: 38,
+    DOWN: 40
+  };
+  constructor(private element: ElementRef, private renderer: Renderer) {
   }
 
   /**
@@ -149,8 +161,58 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.isOpen = true;
     this.focusFilter();
     this.onShow.emit();
+    // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+    //   let item = this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0] : null);
+    //   if (item !== null) {
+    //     this.menuEle.virtualScrollElm.scrollInto(item);
+    //   }
+    // }
   }
-
+  public keydownUp(event) {
+    let key = event.which;
+    if (this.isOpen) {
+      if (key === this.KEYS.ESC || (key === this.KEYS.UP && event.altKey)) {
+        this.hide();
+      } else if (key === this.KEYS.ENTER) {
+        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+          let item = this.menuEle.virtualScrollElm.getHighlightedOption();
+          if (item !== null) {
+            this.toggleSelected(item);
+          }
+        }
+        // this.selectHighlightedOption();
+      } else if (key === this.KEYS.UP) {
+        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+          let item = this.menuEle.virtualScrollElm.getPreviousHilightledOption();
+          if (item !== null) {
+            // this.toggleSelected(item);
+            this.menuEle.virtualScrollElm.scrollInto(item);
+            event.preventDefault();
+          }
+        }
+        // this.optionList.highlightPreviousOption();
+        // this.dropdown.moveHighlightedIntoView();
+        // if (!this.filterEnabled) {
+        //   event.preventDefault();
+        // }
+      } else if (key === this.KEYS.DOWN) {
+        if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+          let item = this.menuEle.virtualScrollElm.getNextHilightledOption();
+          if (item !== null) {
+            // this.toggleSelected(item);
+            this.menuEle.virtualScrollElm.scrollInto(item);
+            event.preventDefault();
+          }
+        }
+        // ----
+        // this.optionList.highlightNextOption();
+        // this.dropdown.moveHighlightedIntoView();
+        // if (!this.filterEnabled) {
+        //   event.preventDefault();
+        // }
+      }
+    }
+  }
   public hide(event?) {
     if (event && event.relatedTarget) {
       if ((event.relatedTarget !== this.inputFilter.nativeElement)) {
