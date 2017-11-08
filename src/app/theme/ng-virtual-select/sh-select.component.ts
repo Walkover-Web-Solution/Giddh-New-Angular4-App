@@ -130,8 +130,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.selectSingle(item);
     }
 
-    this.propagateChange(this._selectedValues);
-    this.selected.emit(this._selectedValues);
+    this.onChange();
   }
 
   public selectSingle(item) {
@@ -234,8 +233,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     this.selectedValues = [];
-    this.propagateChange(this._selectedValues);
-    this.selected.emit(this._selectedValues);
+    this.onChange();
     this.onClear.emit();
   }
 
@@ -263,6 +261,27 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public registerOnTouched() {
     //
+  }
+
+  public onChange() {
+    if (this.isMultiselect) {
+      this.propagateChange(this._selectedValues);
+      this.selected.emit(this._selectedValues);
+    } else {
+      let newValue: IOption;
+      if (this.selectedValues.length > 0) {
+        newValue = this.selectedValues[0];
+      }
+      if (!newValue) {
+        newValue = {
+          value: null,
+          label: null,
+          additional: null
+        };
+      }
+      this.propagateChange(newValue.value);
+      this.selected.emit(newValue);
+    }
   }
 }
 
