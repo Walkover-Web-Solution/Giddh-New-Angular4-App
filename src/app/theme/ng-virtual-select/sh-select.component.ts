@@ -24,6 +24,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public mode: 'default' | 'inline' = 'default';
   @Input() public showClear: boolean = true;
   @Input() public disabled: boolean;
+  @Input() public notFoundMsg: string = 'No results found';
+  @Input() public notFoundLink: boolean = false;
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
 
