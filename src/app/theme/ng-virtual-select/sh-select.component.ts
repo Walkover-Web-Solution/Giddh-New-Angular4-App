@@ -4,8 +4,7 @@
 import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
-import { ShSelectMenuComponent } from "./sh-select-menu.component";
-
+import { ShSelectMenuComponent } from './sh-select-menu.component';
 
 // noinspection TsLint
 @Component({
@@ -22,7 +21,7 @@ import { ShSelectMenuComponent } from "./sh-select-menu.component";
 })
 export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit {
   @Input() public placeholder: string = 'Type to filter';
-  @Input() public isMultiselect: boolean = false;
+  @Input() public multiple: boolean = false;
   @Input() public mode: 'default' | 'inline' = 'default';
   @Input() public showClear: boolean = true;
   @Input() public disabled: boolean;
@@ -67,9 +66,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     if (!Array.isArray(val)) {
       val = [val];
     }
-
-    this._selectedValues = val;
+    if (val.length > 0) {
+      this._selectedValues = this.rows.filter(f => val.findIndex(p => p === f.value) !== -1);
+    } else {
+      this._selectedValues = val;
+    }
   }
+
   /** Keys. **/
 
   private KEYS: any = {
@@ -81,6 +84,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     UP: 38,
     DOWN: 40
   };
+
   constructor(private element: ElementRef, private renderer: Renderer) {
   }
 
@@ -124,7 +128,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
     this.clearFilter();
 
-    if (this.isMultiselect) {
+    if (this.multiple) {
       this.selectMultiple(item);
     } else {
       this.selectSingle(item);
@@ -168,6 +172,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     //   }
     // }
   }
+
   public keydownUp(event) {
     let key = event.which;
     if (this.isOpen) {
@@ -213,6 +218,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       }
     }
   }
+
   public hide(event?) {
     if (event && event.relatedTarget) {
       if ((event.relatedTarget !== this.inputFilter.nativeElement)) {
@@ -264,8 +270,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public onChange() {
-    if (this.isMultiselect) {
-      this.propagateChange(this._selectedValues);
+    if (this.multiple) {
+      let newValues: string[];
+      newValues = this._selectedValues.map(p => p.value);
+      this.propagateChange(newValues);
       this.selected.emit(this._selectedValues);
     } else {
       let newValue: IOption;
