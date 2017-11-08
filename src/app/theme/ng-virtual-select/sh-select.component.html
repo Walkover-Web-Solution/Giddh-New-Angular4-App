@@ -1,5 +1,5 @@
 <div class="header" [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
-     (click)="show()" [class.open]="isOpen" tabindex="0" (focus)="show()" (blur)="hide($event)">
+     (click)="show()" [class.open]="isOpen" tabindex="0" (focus)="show()" (blur)="hide($event)" (keydown)="keydownUp($event)">
   <input type="text"
          #inputFilter
          tabindex="0"
@@ -21,7 +21,7 @@
      *ngIf="showClear && selectedValues.length > 0"
      (click)="clear(); $event.stopPropagation()"></i>
 </div>
-<sh-select-menu [isOpen]="isOpen"
+<sh-select-menu #menuEle [isOpen]="isOpen"
                 [rows]="rows"
                 [selectedValues]="selectedValues"
                 [optionTemplate]="optionTemplate"
