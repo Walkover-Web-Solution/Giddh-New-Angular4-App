@@ -1,0 +1,17 @@
+<div class="menu" *ngIf="isOpen && _rows" style="min-height: 35px;background-color: white">
+  <!--virtual-->
+  <virtual-scroll [items]="_rows" (update)="viewPortItems = $event"
+                  [style.height]="math.min(290,38 * _rows.length) + 'px'"
+                  style="display: block">
+
+    <div class="item"
+         *ngFor="let row of viewPortItems"
+         [class.selected]="selectedValues?.indexOf(row) !== -1"
+         (click)="toggleSelected(row)">
+      <ng-template [ngOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
+      <ng-container *ngIf="!optionTemplate">
+        {{row.label}}
+      </ng-container>
+    </div>
+  </virtual-scroll>
+</div>

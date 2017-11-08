@@ -5,55 +5,8 @@ import { IOption } from './sh-options.interface';
 @Component({
   selector: 'sh-select-menu',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <div class="menu" *ngIf="isOpen && _rows" style="min-height: 35px;background-color: white">
-      <!--virtual-->
-      <virtual-scroll [items]="_rows" (update)="viewPortItems = $event"
-                      [style.height]="math.min(290,38 * _rows.length) + 'px'"
-                      style="display: block">
-
-        <div class="item"
-             *ngFor="let row of viewPortItems"
-             [class.selected]="selectedValues?.indexOf(row) !== -1"
-             (click)="toggleSelected(row)">
-          <ng-template [ngOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
-          <ng-container *ngIf="!optionTemplate">
-            {{row.label}}
-          </ng-container>
-        </div>
-      </virtual-scroll>
-    </div>`,
-  styles: [`.menu {
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    background-color: white;
-    width: 100%;
-    max-height: 300px;
-    overflow: auto;
-    box-sizing: border-box;
-    z-index: 999;
-    box-shadow: 0 2px 3px 0 rgba(34, 36, 38, .15);
-    border-bottom: 1px solid rgba(34, 36, 38, .15);
-    border-left: 1px solid rgba(34, 36, 38, .15);
-    border-right: 1px solid rgba(34, 36, 38, .15);
-    border-radius: 0 0 2px 2px;
-    min-width: max-content;
-  }
-
-  .item {
-    padding: 4px;
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .item:hover {
-    background-color: #efefef;
-  }
-
-  .item.selected {
-    font-weight: 900;
-  }`]
+  templateUrl: './sh-select-menu.component.html',
+  styleUrls: [`./sh-select-menu.component.css`]
 })
 export class ShSelectMenuComponent {
   @Input() public selectedValues: any[];
