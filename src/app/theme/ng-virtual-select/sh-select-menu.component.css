@@ -23,9 +23,13 @@
 }
 
 .item:hover {
-  background-color: #337ab7;
+  background-color: #d25f29;
 }
 
 .item.selected {
   background-color: #d25f29;
+}
+
+.item.hilighted {
+  background-color: #f57235;
 }
