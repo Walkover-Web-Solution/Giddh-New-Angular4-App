@@ -14,6 +14,20 @@ import { SettingsTaxesActions } from '../../services/actions/settings/taxes/sett
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Select2OptionData } from '../../theme/select2';
+import { IOption } from '../../theme/ng-select/ng-select';
+
+const taxesType = [
+  { label: 'GST', value: 'GST' },
+  { label: 'InputGST', value: 'InputGST' },
+  { label: 'Others', value: 'others' }
+];
+
+const taxDuration = [
+  { label: 'Monthly', value: 'MONTHLY' },
+  { label: 'Quarterly', value: 'QUARTERLY' },
+  { label: 'Half-Yearly', value: 'HALFYEARLY' },
+  { label: 'Yearly', value: 'YEARLY' }
+];
 
 @Component({
   selector: 'setting-taxes',
@@ -26,15 +40,17 @@ export class SettingTaxesComponent implements OnInit {
   public availableTaxes: TaxResponse[] = [];
   public newTaxObj: TaxResponse = new TaxResponse();
   public moment = moment;
-  public days: number[] = [];
+  public days: IOption[] = [];
   public records = []; // This array is just for generating dynamic ngModel
   public taxToEdit = []; // It is for edit toogle
   public showFromDatePicker: boolean = false;
   public selectedTax: string;
-  public accounts$: Select2OptionData[];
-  public statesSource$: Observable<Select2OptionData[]> = Observable.of([]);
   public confirmationMessage: string;
   public confirmationFor: string;
+  public selectedTaxForDelete: string;
+  public accounts$: IOption[];
+  public taxList: IOption[] = taxesType;
+  public duration: IOption[] = taxDuration;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(
@@ -45,7 +61,8 @@ export class SettingTaxesComponent implements OnInit {
     private _settingsTaxesActions: SettingsTaxesActions,
   ) {
     for (let i = 1; i <= 31; i++) {
-      this.days.push(i);
+      let day = i.toString();
+      this.days.push({ label: day, value: day });
     }
 
     this.store.dispatch(this._companyActions.getTax());
@@ -58,19 +75,8 @@ export class SettingTaxesComponent implements OnInit {
         this.availableTaxes = _.cloneDeep(o.taxes);
       }
     });
+    this.getFlattenAccounts('');
     // console.log('hello from SettingTaxesComponent');
-
-    // get flatternaccounts
-    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
-        data.body.results.map(d => {
-          accounts.push({ text: `${d.name} (${d.uniqueName})`, id: d.uniqueName });
-        });
-        this.accounts$ = accounts;
-      }
-    });
-
   }
 
   public onSubmit(data) {
@@ -85,8 +91,10 @@ export class SettingTaxesComponent implements OnInit {
         dataToSave.accounts = [];
       }
       this.accounts$.forEach((obj) => {
-        if (obj.id === dataToSave.account) {
-          dataToSave.accounts.push({ name: obj.text, uniqueName: obj.id });
+        if (obj.value === dataToSave.account) {
+          let accountObj = obj.label.split(' - ');
+          // console.log(accountObj);
+          dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj.value });
         }
       });
     }
@@ -146,6 +154,24 @@ export class SettingTaxesComponent implements OnInit {
       if (o.taxes) {
         this.onCancel();
         this.availableTaxes = _.cloneDeep(o.taxes);
+      }
+    });
+  }
+  /**
+   *
+   */
+  public getFlattenAccounts(value) {
+    let count = '5';
+    let query = value || '';
+    // get flatternaccounts
+    this._accountService.GetFlattenAccounts(query, '', count).debounceTime(100).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let accounts: IOption[] = [];
+        data.body.results.map(d => {
+          accounts.push({ label: `${d.name} - (${d.uniqueName})`, value: d.uniqueName });
+          // `${d.name} (${d.uniqueName})`
+        });
+        this.accounts$ = accounts;
       }
     });
   }
