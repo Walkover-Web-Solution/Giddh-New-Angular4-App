@@ -25,4 +25,7 @@
                 [rows]="rows"
                 [selectedValues]="selectedValues"
                 [optionTemplate]="optionTemplate"
-                (noToggleClick)="toggleSelected($event)"></sh-select-menu>
+                (noToggleClick)="toggleSelected($event)"
+                (noResultClicked)="noResultsClicked.emit()"
+                [noResultLinkEnabled]="notFoundLink"
+                [notFoundMsg]="notFoundMsg"></sh-select-menu>

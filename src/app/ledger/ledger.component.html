@@ -294,12 +294,13 @@
 
                     <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
+                               [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
                     >
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
                             <span class="account-list-item"
-                                  style="display: block;font-size:14px">{{ option.label }}</span>
+                                  style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
                             <span class="account-list-item" style="display: block;font-size:12px">
                               {{ option.additional?.uniqueName }}</span>
                           </a>
@@ -307,8 +308,8 @@
                         <ng-container *ngIf="option.additional?.stock">
                           <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
                             <span class="account-list-item"
-                                  style="display: block;font-size:14px">{{ option.label }}</span>
-                            <span class="account-list-item" style="display: block;font-size:12px">
+                                  style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                            <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
                               {{ option.additional?.uniqueName }}</span>
                             <span class="account-list-item" style="display: block;font-size:11px">
                               Stock: {{ option.additional?.stock.name }}
