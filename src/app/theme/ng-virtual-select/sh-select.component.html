@@ -9,13 +9,26 @@
          [(ngModel)]="filter"
          (ngModelChange)="updateFilter($event)">
   <div (click)="show(); $event.stopPropagation()"
-
        *ngIf="!isOpen">
-    {{selectedValues?.length ?
-    (isMultiselect ?
-    selectedValues?.length + ' Selected'
-    : (selectedValues[0].label))
-    : placeholder}}
+    <ng-container *ngIf="selectedValues?.length">
+      <div *ngIf="isMultiselect">
+          <span class="chip" *ngFor="let sl of selectedValues">
+            {{ sl.label }}
+            <span class="chipClosebtn">&times;</span>
+          </span>
+      </div>
+      <div *ngIf="!isMultiselect">
+        {{ selectedValues[0].label }}
+      </div>
+    </ng-container>
+    <ng-container *ngIf="!selectedValues?.length">
+      {{ placeholder }}
+    </ng-container>
+    <!--{{selectedValues?.length ?-->
+    <!--(isMultiselect ?-->
+    <!--selectedValues?.length + ' Selected'-->
+    <!--: (selectedValues[0].label))-->
+    <!--: placeholder}}-->
   </div>
   <i class="close icon clear"
      *ngIf="showClear && selectedValues.length > 0"
