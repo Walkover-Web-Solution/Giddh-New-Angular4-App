@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { VirtualScrollComponent } from './virtual-scroll';
 import { IOption } from './sh-options.interface';
 
@@ -8,7 +8,7 @@ import { IOption } from './sh-options.interface';
   templateUrl: './sh-select-menu.component.html',
   styleUrls: [`./sh-select-menu.component.css`]
 })
-export class ShSelectMenuComponent {
+export class ShSelectMenuComponent implements OnChanges {
   @Input() public selectedValues: any[];
   @Input() public isOpen: boolean;
   @Input() public optionTemplate: TemplateRef<any>;
@@ -33,7 +33,12 @@ export class ShSelectMenuComponent {
       this.virtualScrollElm.refresh();
     }
   }
-
+  public ngOnChanges(changes: SimpleChanges) {
+    // this.previousStart = undefined;
+    // this.previousEnd = undefined;
+    // this.refresh();
+    // debugger;
+  }
   public toggleSelected(row) {
     this.noToggleClick.emit(row);
   }
