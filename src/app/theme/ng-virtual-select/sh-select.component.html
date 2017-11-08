@@ -1,0 +1,28 @@
+<div class="header" [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'"
+     (click)="show()" [class.open]="isOpen" tabindex="0" (focus)="show()" (blur)="hide($event)">
+  <input type="text"
+         #inputFilter
+         tabindex="0"
+         [hidden]="!isOpen"
+         (click)="show()"
+         [placeholder]="placeholder"
+         [(ngModel)]="filter"
+         (ngModelChange)="updateFilter($event)">
+  <div (click)="show(); $event.stopPropagation()"
+
+       *ngIf="!isOpen">
+    {{selectedValues?.length ?
+    (isMultiselect ?
+    selectedValues?.length + ' Selected'
+    : (selectedValues[0].label))
+    : placeholder}}
+  </div>
+  <i class="close icon clear"
+     *ngIf="showClear && selectedValues.length > 0"
+     (click)="clear(); $event.stopPropagation()"></i>
+</div>
+<sh-select-menu [isOpen]="isOpen"
+                [rows]="rows"
+                [selectedValues]="selectedValues"
+                [optionTemplate]="optionTemplate"
+                (noToggleClick)="toggleSelected($event)"></sh-select-menu>
