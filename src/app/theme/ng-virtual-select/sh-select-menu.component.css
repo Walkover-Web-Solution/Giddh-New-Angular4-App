@@ -23,9 +23,9 @@
 }
 
 .item:hover {
-  background-color: #efefef;
+  background-color: #337ab7;
 }
 
 .item.selected {
-  font-weight: 900;
+  background-color: #d25f29;
 }

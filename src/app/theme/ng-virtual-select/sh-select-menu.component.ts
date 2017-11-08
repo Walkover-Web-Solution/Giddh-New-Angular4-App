@@ -12,7 +12,11 @@ export class ShSelectMenuComponent {
   @Input() public selectedValues: any[];
   @Input() public isOpen: boolean;
   @Input() public optionTemplate: TemplateRef<any>;
+  @Input() public notFoundMsg: string;
+  @Input() public noResultLinkEnabled: boolean;
+
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
+  @Output() public noResultClicked = new EventEmitter<null>();
   @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
   public math: any = Math;
   public _rows: IOption[];
