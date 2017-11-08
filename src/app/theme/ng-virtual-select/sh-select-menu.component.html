@@ -1,13 +1,10 @@
 <div class="menu" *ngIf="isOpen && _rows" style="min-height: 35px;background-color: white">
   <!--virtual-->
-  <virtual-scroll [items]="_rows" (update)="viewPortItems = $event"
-                  [style.height]="math.min(290,40 * (_rows.length ? _rows.length : 2)) + 'px'"
-                  style="display: block">
+  <virtual-scroll [items]="_rows" (update)="viewPortItems = $event" [style.height]="math.min(290,81 * (_rows.length ? _rows.length : 2)) + 'px'"
+    style="display: block">
 
-    <div class="item"
-         *ngFor="let row of viewPortItems"
-         [class.selected]="selectedValues?.indexOf(row) !== -1"
-         (click)="toggleSelected(row)" style="border-bottom: 1px solid #e0e0e0">
+    <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1" [class.hilighted]="row.isHilighted"
+      (click)="toggleSelected(row)" style="border-bottom: 1px solid #e0e0e0">
       <ng-template [ngOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
       <ng-container *ngIf="!optionTemplate">
         {{row.label}}
@@ -16,8 +13,8 @@
     <div id="noresult" *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled">
       {{notFoundMsg}}
       <br>
-      <a class="noResultLink" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">Create
-        New</a>
+      <a class="noResultLink" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">Create New
+      </a>
     </div>
   </virtual-scroll>
 </div>
