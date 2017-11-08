@@ -42,6 +42,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
+import { LoaderComponent } from './loader/loader.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -84,6 +85,7 @@ if (ENV === 'development') {
     DummyComponent,
     SuccessComponent,
     NewUserComponent,
+    LoaderComponent,
     SocialLoginCallbackComponent
   ],
   /**

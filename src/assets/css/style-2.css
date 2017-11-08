@@ -2682,10 +2682,6 @@ label {
     color: #808080;
 }
 
-.load-bar-wrap {
-    z-index: 99999 !important;
-}
-
 .fa-times {
     cursor: pointer;
 }
