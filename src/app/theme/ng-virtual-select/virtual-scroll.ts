@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, AfterViewInit, } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { IOption } from './sh-options.interface';
@@ -67,7 +67,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   @Output()
   public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
 
-  @ViewChild('content', { read: ElementRef })
+  @ViewChild('content', {read: ElementRef})
   public contentElementRef: ElementRef;
 
   public onScrollListener: any;
@@ -101,9 +101,11 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       this.onScrollListener();
     }
   }
+
   public ngAfterViewInit() {
-    debugger;
+    // debugger;
   }
+
   public refresh() {
     requestAnimationFrame(this.calculateItems.bind(this));
   }
@@ -121,6 +123,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     item.isHilighted = true;
     this.refresh();
   }
+
   public getHighlightedOption(): IOption {
     let index = this.items.findIndex(p => p.isHilighted);
     if (index > -1) {
@@ -128,6 +131,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
     return null;
   }
+
   public getPreviousHilightledOption(): IOption {
     let index = this.items.findIndex(p => p.isHilighted);
     if (index > 0) {
@@ -136,6 +140,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       return this.items[0];
     }
   }
+
   public getNextHilightledOption(): IOption {
     let index = this.items.findIndex(p => p.isHilighted);
     if (index < this.items.length) {
@@ -144,6 +149,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       return this.items[0];
     }
   }
+
   private countItemsPerRow() {
     let offsetTop;
     let itemsPerRow;
@@ -224,12 +230,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
       // emit 'start' event
       if (start !== this.previousStart && this.startupLoop === false) {
-        this.start.emit({ start, end });
+        this.start.emit({start, end});
       }
 
       // emit 'end' event
       if (end !== this.previousEnd && this.startupLoop === false) {
-        this.end.emit({ start, end });
+        this.end.emit({start, end});
       }
 
       this.previousStart = start;
@@ -238,7 +244,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       if (this.startupLoop === true) {
         this.refresh();
       } else {
-        this.change.emit({ start, end });
+        this.change.emit({start, end});
       }
 
     } else if (this.startupLoop === true) {

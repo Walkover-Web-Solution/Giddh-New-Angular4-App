@@ -11,28 +11,24 @@
   <div (click)="show(); $event.stopPropagation()"
        *ngIf="!isOpen">
     <ng-container *ngIf="selectedValues?.length">
-      <div *ngIf="isMultiselect">
+      <div *ngIf="multiple" style="display: flex;flex-wrap: wrap">
           <span class="chip" *ngFor="let sl of selectedValues">
             {{ sl.label }}
             <span class="chipClosebtn">&times;</span>
           </span>
       </div>
-      <div *ngIf="!isMultiselect">
+      <div *ngIf="!multiple">
         {{ selectedValues[0].label }}
       </div>
     </ng-container>
     <ng-container *ngIf="!selectedValues?.length">
       {{ placeholder }}
     </ng-container>
-    <!--{{selectedValues?.length ?-->
-    <!--(isMultiselect ?-->
-    <!--selectedValues?.length + ' Selected'-->
-    <!--: (selectedValues[0].label))-->
-    <!--: placeholder}}-->
+
   </div>
-  <i class="close icon clear"
+  <i class="clear"
      *ngIf="showClear && selectedValues.length > 0"
-     (click)="clear(); $event.stopPropagation()"></i>
+     (click)="clear(); $event.stopPropagation()">&times;</i>
 </div>
 <sh-select-menu #menuEle [isOpen]="isOpen"
                 [rows]="rows"

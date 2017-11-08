@@ -414,7 +414,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public blankLedgerAmountClick() {
-    if (this.lc.currentBlankTxn.amount && Number(this.lc.currentBlankTxn.amount) === 0) {
+    if (this.lc.currentBlankTxn && this.lc.currentBlankTxn.amount && Number(this.lc.currentBlankTxn.amount) === 0) {
       this.lc.currentBlankTxn.amount = undefined;
     }
   }

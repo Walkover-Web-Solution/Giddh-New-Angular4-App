@@ -90,6 +90,16 @@ i.close.icon.clear:hover::after {
   padding-right: 2px;
   top: 3px;
   cursor: pointer;
+  font-size: 25px;
+  font-weight: 500;
+  line-height: 1;
+  opacity: .2;
+}
+
+.clear:hover {
+  font-weight: 700;
+  opacity: .5;
+  color: black;
 }
 
 .sh-select-disabled {
@@ -104,19 +114,24 @@ i.close.icon.clear:hover::after {
   height: 30px;
   font-size: 14px;
   line-height: 30px;
-  border-radius: 25px;
-  background-color: #f1f1f1;
+  border-radius: 4px;
+  background-color: #d25f29;
+  margin-bottom: 4px;
+  margin-left: 4px;
+  color: white;
 }
 
 .chipClosebtn {
   padding-left: 10px;
-  color: #888;
-  font-weight: bold;
+  font-weight: 500;
   float: right;
   font-size: 20px;
   cursor: pointer;
+  opacity: .2;
 }
 
 .chipClosebtn:hover {
-  color: #000;
+  font-weight: 700;
+  opacity: .5;
+  color: black;
 }

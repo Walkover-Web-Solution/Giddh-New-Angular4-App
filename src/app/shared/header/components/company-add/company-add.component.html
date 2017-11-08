@@ -34,8 +34,8 @@
                 <form #addForm="ngForm" class="mrT mrB1" name="mobileForm" novalidate>
                   <div class="input-group phoneNum">
                                         <span class="input-group-addon select2-parent">
-                                            <ng-select [options]="countryCodeList" name="country"
-                                                       [(ngModel)]="country" (selected)="setCountryCode($event)"></ng-select>
+                                            <sh-select [options]="countryCodeList" name="country"
+                                                       [(ngModel)]="country" (selected)="setCountryCode($event)"></sh-select>
                                         </span>
                     <input class="form-control max350 pull-left mrR1" required="true" placeholder="9998899988"
                            [(ngModel)]="phoneNumber" name="phoneNumber"/>
