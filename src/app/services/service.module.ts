@@ -63,6 +63,7 @@ import { PurchaseInvoiceService } from './purchase-invoice.service';
 import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
 import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
 import { SettingsFinancialYearService } from './settings.financial-year.service';
+import { LoaderService } from '../loader/loader.service';
 
 /**
  * Do not specify providers for modules that might be imported by a lazy loaded module.
@@ -105,6 +106,7 @@ export class ServiceModule {
     return {
       ngModule: ServiceModule,
       providers: [
+        LoaderService,
         StorageService,
         ErrorHandler,
         HttpWrapperService,
