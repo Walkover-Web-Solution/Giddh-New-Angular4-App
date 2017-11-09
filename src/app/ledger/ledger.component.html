@@ -132,7 +132,7 @@
                     <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
                                (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
                                [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                               [multiple]="false"
+                               [multiple]="false" [isFilterEnabled]="true"
                     >
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
