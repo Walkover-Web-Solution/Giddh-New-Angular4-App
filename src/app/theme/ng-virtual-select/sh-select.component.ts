@@ -175,12 +175,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.isOpen = true;
     this.focusFilter();
     this.onShow.emit();
-    // if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
-    //   let item = this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0] : null);
-    //   if (item !== null) {
-    //     this.menuEle.virtualScrollElm.scrollInto(item);
-    //   }
-    // }
+    if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
+      let item = this.rows.find(p => p.value === (this._selectedValues.length > 0 ? this._selectedValues[0] : (this.rows.length > 0 ? this.rows[0].value : null)));
+      if (item !== null) {
+        this.menuEle.virtualScrollElm.scrollInto(item);
+      }
+    }
   }
 
   public keydownUp(event) {
@@ -294,6 +294,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public registerOnTouched() {
     //
+  }
+
+  public clearSingleSelection(event, option: IOption) {
+    event.stopPropagation();
+    this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
+    this.onChange();
   }
 
   public onChange() {
