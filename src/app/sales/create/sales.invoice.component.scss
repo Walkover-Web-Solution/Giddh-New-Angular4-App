@@ -155,8 +155,10 @@ $themeClr: #fe5f00;
 }
 
 #actionPane {
-    width: 100%;
+    width: calc(100% + 10px);
     height: 80px;
+    left: -5px;
+    position: relative;
     @include padBth(20px, 0);
     @include bgClr(#7d7d7d);
 }
@@ -235,9 +237,10 @@ $themeClr: #fe5f00;
         display: table-row;
         vertical-align: top;
         .tableCell {
-            line-height: 40px;
+            // line-height: 40px;
             vertical-align: middle;
             text-align: right;
+            padding-bottom: 7px;
             display: table-cell;
         }
         .figureCell {
@@ -249,5 +252,11 @@ $themeClr: #fe5f00;
                 text-align: right;
             }
         }
+    }
+}
+
+.table {
+    tbody+tbody {
+        border: 0;
     }
 }
