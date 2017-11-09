@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { IOption } from './sh-options.interface';
@@ -38,15 +38,17 @@ export interface ChangeEvent {
     }
   `]
 })
-export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
+export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterContentInit {
 
   get width(): any {
     let el = this.element.nativeElement;
     let viewWidth = el.clientWidth - this.scrollbarWidth;
     return viewWidth;
   }
+
   @Input()
   public items: IOption[] = [];
+  @Input() public selectedValues: any[];
 
   @Input()
   public scrollbarWidth: number;
@@ -107,8 +109,15 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
   }
 
-  public ngAfterViewInit() {
+  public ngAfterContentInit() {
+    // let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
     // debugger;
+    // this.scrollInto(item);
+  }
+
+  public ngAfterViewInit() {
+    let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
+    this.scrollInto(item);
   }
 
   public refresh() {
@@ -167,6 +176,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
     return itemsPerRow;
   }
+
   private calculateDimensions() {
     let el = this.element.nativeElement;
     let content = this.contentElementRef.nativeElement;

@@ -3,6 +3,7 @@
   <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event"
                   [style.max-height.px]="290"
                   [childHeight]="viewPortItems?.length === 0?32:undefined"
+                  [selectedValues]="selectedValues"
                   style="display: block">
 
     <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"

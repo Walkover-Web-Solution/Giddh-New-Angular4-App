@@ -23,7 +23,6 @@ import { TbExportXlsComponent } from './components/export/tb-export-xls.componen
 import { BsExportXlsComponent } from './components/export/bs-export-xls.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { TbsearchPipe } from '../shared/header/pipe/tbsearch.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
@@ -62,7 +61,6 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     TbPlBsRoutingModule,
     TabsModule,
     DatePickerCustomModule,
-    SelectModule,
     LaddaModule,
     HighlightModule,
     RecTypeModule,
