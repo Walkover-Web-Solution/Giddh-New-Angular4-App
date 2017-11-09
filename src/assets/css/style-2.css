@@ -3157,7 +3157,7 @@ label {
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #d35f29 !important;
+    background-color: #f4f5f8 !important;
 }
 
 .select2-results__option[aria-selected] {
@@ -3345,7 +3345,7 @@ label {
 }
 
 .ledger-row td .select2-container--default .select2-results__option--highlighted[aria-selected] a {
-    color: #fff !important;
+    color: #d25f2a !important;
 }
 
 .ledger-row td .select2-results ul li a {
@@ -4014,4 +4014,12 @@ ng-select>div>div.single>div.clear {
 
 ng-select>div>div.single>div.clear:hover {
     background: none;
+}
+
+ng-select .select_drop {
+    position: initial;
+}
+
+ng-select .select_drop i {
+    right: 9px;
 }
