@@ -1,7 +1,8 @@
 <div class="menu" *ngIf="isOpen && _rows" style="min-height: 35px;background-color: white">
   <!--virtual-->
-  <virtual-scroll [items]="_rows" (update)="viewPortItems = $event"
-                  [style.height]="math.min(290,40 * (_rows.length ? _rows.length : 2)) + 'px'"
+  <virtual-scroll #v [items]="_rows" (update)="viewPortItems = $event"
+                  [style.max-height.px]="290"
+                  [childHeight]="viewPortItems?.length === 0?32:undefined"
                   style="display: block">
 
     <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1"
@@ -11,12 +12,15 @@
         {{row.label}}
       </ng-container>
     </div>
-    <div id="noresult" *ngIf="viewPortItems?.length === 0 && noResultLinkEnabled">
+
+    <div id="noresult" *ngIf="viewPortItems?.length === 0">
       {{notFoundMsg}}
       <br>
-      <a class="noResultLink" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">Create
+      <a class="noResultLink" *ngIf="noResultLinkEnabled" href="javascript:void(0)"
+         (click)="$event.stopPropagation();noResultClicked.emit()">Create
         New
       </a>
     </div>
   </virtual-scroll>
+
 </div>

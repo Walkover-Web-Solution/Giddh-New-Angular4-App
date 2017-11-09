@@ -28,6 +28,7 @@ import { TbsearchPipe } from '../shared/header/pipe/tbsearch.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
     SelectModule,
     LaddaModule,
     HighlightModule,
-    RecTypeModule
+    RecTypeModule,
+    ShSelectModule
   ],
 })
 export class TBPlBsModule {
