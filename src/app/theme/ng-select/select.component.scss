@@ -118,15 +118,15 @@ ng-select {
 
 ng-select.splSales {
     width: 190px;
-    height: 42px;
+    // height: 42px;
     >div {
         border-color: #d6d6d6;
-        height: 41px;
+        // height: 41px;
         >.single {
-            height: 39px;
+            // height: 39px;
             .placeholder,
             .value {
-                line-height: 39px;
+                // line-height: 39px;
             }
         }
     }
