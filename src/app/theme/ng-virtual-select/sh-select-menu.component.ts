@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, TemplateRef, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { VirtualScrollComponent } from './virtual-scroll';
 import { IOption } from './sh-options.interface';
 
@@ -18,6 +18,7 @@ export class ShSelectMenuComponent implements OnChanges {
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
   @Output() public noResultClicked = new EventEmitter<null>();
   @ViewChild(VirtualScrollComponent) public virtualScrollElm: VirtualScrollComponent;
+  @ViewChild('listContainer') public listContainer: ElementRef;
   public math: any = Math;
   public _rows: IOption[];
   public viewPortItems: IOption[];
@@ -33,12 +34,13 @@ export class ShSelectMenuComponent implements OnChanges {
       this.virtualScrollElm.refresh();
     }
   }
+
   public ngOnChanges(changes: SimpleChanges) {
-    // this.previousStart = undefined;
-    // this.previousEnd = undefined;
-    // this.refresh();
-    // debugger;
+    // if (changes['isOpen'] && changes['isOpen'].currentValue) {
+    //   this.dyHeight = Number(window.getComputedStyle(this.listContainer.nativeElement).height);
+    // }
   }
+
   public toggleSelected(row) {
     this.noToggleClick.emit(row);
   }

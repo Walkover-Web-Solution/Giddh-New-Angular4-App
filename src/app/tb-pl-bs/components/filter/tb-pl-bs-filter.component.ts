@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
@@ -94,13 +94,21 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public selectFinancialYearOption(v: IOption) {
-    let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
-    let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
-    this.filterForm.patchValue({
-      to: financialYear.financialYearEnds,
-      from: financialYear.financialYearStarts,
-      fy: index === 0 ? 0 : index * -1
-    });
+    if (v.value) {
+      let financialYear = this._selectedCompany.financialYears.find(p => p.uniqueName === v.value);
+      let index = this._selectedCompany.financialYears.findIndex(p => p.uniqueName === v.value);
+      this.filterForm.patchValue({
+        to: financialYear.financialYearEnds,
+        from: financialYear.financialYearStarts,
+        fy: index === 0 ? 0 : index * -1
+      });
+    } else {
+      this.filterForm.patchValue({
+        to: '',
+        from: '',
+        fy: ''
+      });
+    }
   }
 
   public filterData() {
