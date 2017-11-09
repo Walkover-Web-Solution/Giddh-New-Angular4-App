@@ -17,7 +17,7 @@
         <div *ngIf="multiple" style="display: flex;flex-wrap: wrap">
           <span class="chip" *ngFor="let sl of selectedValues">
             {{ sl.label }}
-            <span class="chipClosebtn">&times;</span>
+            <span class="chipClosebtn" (click)="clearSingleSelection($event, sl)">&times;</span>
           </span>
         </div>
         <div *ngIf="!multiple">
