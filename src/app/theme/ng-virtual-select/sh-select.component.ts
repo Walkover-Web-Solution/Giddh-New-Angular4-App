@@ -27,9 +27,14 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLink: boolean = false;
+  @Input() public isFilterEnabled: boolean = false;
+  @Input() public width: string = 'inherit';
+
   @ViewChild('inputFilter') public inputFilter: ElementRef;
+  @ViewChild('mainContainer') public mainContainer: ElementRef;
   @ViewChild('menuEle') public menuEle: ShSelectMenuComponent;
   @ContentChild('optionTemplate') public optionTemplate: TemplateRef<any>;
+  @ViewChild('dd') public ele: ElementRef;
 
   @Input() set options(val: IOption[]) {
     this._options = val;
@@ -119,7 +124,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }
 
     this.filter = '';
-    this.updateFilter(this.filter);
+    if (this.isFilterEnabled) {
+      this.updateFilter(this.filter);
+    }
   }
 
   public toggleSelected(item) {
@@ -152,6 +159,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public focusFilter() {
+    if (this.isFilterEnabled && this.filter && this.filter !== '') {
+      this.updateFilter(this.filter);
+    }
     setTimeout(() => {
       this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
     }, 0);
@@ -220,16 +230,33 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public hide(event?) {
-    if (event && event.relatedTarget) {
-      if ((event.relatedTarget !== this.inputFilter.nativeElement)) {
+    if (event) {
+      if (event.relatedTarget && (!this.ele.nativeElement.contains(event.relatedTarget))) {
         this.isOpen = false;
-        this.clearFilter();
+        if (this.selectedValues && this.selectedValues.length === 1) {
+          this.filter = this.selectedValues[0].label;
+        } else {
+          this.clearFilter();
+        }
         this.onHide.emit();
       }
     } else {
       this.isOpen = false;
-      this.clearFilter();
+      if (this.selectedValues && this.selectedValues.length === 1) {
+        this.filter = this.selectedValues[0].label;
+      } else {
+        this.clearFilter();
+      }
       this.onHide.emit();
+    }
+  }
+
+  public filterInputBlur(event) {
+    if (event.relatedTarget && this.ele.nativeElement) {
+      if (!this.ele.nativeElement.contains(event.relatedTarget)) {
+        this.hide();
+      }
+      // this.hide();
     }
   }
 
@@ -287,6 +314,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
           additional: null
         };
       }
+      this.filter = newValue.label;
       this.propagateChange(newValue.value);
       this.selected.emit(newValue);
     }

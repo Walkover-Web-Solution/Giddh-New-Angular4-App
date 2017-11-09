@@ -40,6 +40,11 @@ export interface ChangeEvent {
 })
 export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
+  get width(): any {
+    let el = this.element.nativeElement;
+    let viewWidth = el.clientWidth - this.scrollbarWidth;
+    return viewWidth;
+  }
   @Input()
   public items: IOption[] = [];
 
@@ -162,13 +167,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
     return itemsPerRow;
   }
-
   private calculateDimensions() {
     let el = this.element.nativeElement;
     let content = this.contentElementRef.nativeElement;
 
     let items = this.items || [];
-    let itemCount = items.length;
+    let itemCount = items.length === 0 ? 2 : this.items.length;
     let viewWidth = el.clientWidth - this.scrollbarWidth;
     let viewHeight = el.clientHeight - this.scrollbarHeight;
 
