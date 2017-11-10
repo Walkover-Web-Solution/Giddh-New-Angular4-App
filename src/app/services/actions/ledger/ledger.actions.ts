@@ -10,7 +10,7 @@ import { ToasterService } from '../../toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../ledger.service';
 import { GroupService } from '../../group.service';
@@ -344,6 +344,12 @@ export class LedgerActions {
     return {
       type: LEDGER.DELETE_TRX_ENTRY_RESPONSE,
       payload: res
+    };
+  }
+
+  public resetDeleteTrxEntryModal() {
+    return {
+      type: LEDGER.RESET_DELETE_TRX_ENTRY_MODAL
     };
   }
 

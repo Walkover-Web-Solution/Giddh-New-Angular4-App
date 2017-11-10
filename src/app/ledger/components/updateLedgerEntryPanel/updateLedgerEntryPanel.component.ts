@@ -31,7 +31,6 @@ import { AccountResponse } from '../../../models/api-models/Account';
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
-  @Output() public entryManipulated: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
@@ -47,7 +46,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
   public activeAccount$: Observable<AccountResponse>;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
@@ -60,6 +59,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
+    this.closeUpdateLedgerModal.takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -141,14 +141,16 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
       if (del) {
         this.hideDeleteEntryModal();
-        this.entryManipulated.emit(true);
+        this.store.dispatch(this._ledgerAction.resetDeleteTrxEntryModal());
+        this.closeUpdateLedgerModal.emit(true);
       }
     });
 
     // chek if update entry is success
     this.isTxnUpdateSuccess$.subscribe(upd => {
       if (upd) {
-        this.entryManipulated.emit(true);
+        this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
+        this.closeUpdateLedgerModal.emit(true);
       }
     });
 
@@ -362,7 +364,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public ngOnDestroy(): void {
-    this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
     this.vm.resetVM();
     this.destroyed$.next(true);
     this.destroyed$.complete();
