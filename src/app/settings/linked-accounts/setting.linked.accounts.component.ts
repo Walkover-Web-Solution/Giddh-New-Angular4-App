@@ -49,8 +49,17 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
       if (o.linkedAccounts && o.linkedAccounts.bankAccounts) {
         // console.log('Found');
         this.ebankAccounts = _.cloneDeep(o.linkedAccounts.bankAccounts);
-      } else {
-        // console.log('Not found');
+      }
+    });
+
+    this.store.select(p => p.settings.linkedAccounts.needReloadingLinkedAccounts).takeUntil(this.destroyed$).subscribe((o) => {
+      this.store.dispatch(this.settingsLinkedAccountsActions.GetAllAccounts());
+    });
+
+    this.store.select(p => p.settings.linkedAccounts.iframeSource).takeUntil(this.destroyed$).subscribe((source) => {
+      if (source) {
+        this.iframeSource = _.clone(source);
+        this.connectBankModel.show();
       }
     });
 

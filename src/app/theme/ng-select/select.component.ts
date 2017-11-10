@@ -50,8 +50,8 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   @Input() public isTypeAheadMode: boolean = false;
 
   // Style settings.
-  @Input() public highlightColor: string = '#d25f29';
-  @Input() public highlightTextColor: string = '#ffffff';
+  @Input() public highlightColor: string = '#f4f5f8';
+  @Input() public highlightTextColor: string = '#d25f2a';
 
   // Text settings.
   @Input() public notFoundMsg: string = 'No results found';

@@ -1130,7 +1130,7 @@ input[type="checkbox"]:after {
 }
 
 .download-invoice-ledger {
-    padding-right: 19px;
+    padding-right: 6px;
     padding-left: 0;
 }
 
@@ -4018,4 +4018,12 @@ ng-select>div>div.single>div.clear {
 
 ng-select>div>div.single>div.clear:hover {
     background: none;
+}
+
+ng-select .select_drop {
+    position: initial;
+}
+
+ng-select .select_drop i {
+    right: 9px;
 }
