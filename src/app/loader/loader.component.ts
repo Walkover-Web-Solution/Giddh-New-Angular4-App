@@ -28,7 +28,7 @@ export class LoaderComponent implements OnInit {
       }else {
         this.showLoader = false;
       }
-      this.cdref.detectChanges();
+      this.cdref.markForCheck();
     });
   }
 
