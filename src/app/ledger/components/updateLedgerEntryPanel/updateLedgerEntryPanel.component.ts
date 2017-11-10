@@ -21,6 +21,7 @@ import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { AccountResponse } from '../../../models/api-models/Account';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -45,11 +46,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
+  public activeAccount$: Observable<AccountResponse>;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
-    private _ledgerAction: LedgerActions) {
+              private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+              private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -57,6 +59,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -88,12 +91,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
                       label: `${acc.name} (${as.uniqueName})`,
-                      additional: Object.assign({}, acc, { stock: as })
+                      additional: Object.assign({}, acc, {stock: as})
                     });
                   });
-                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                 } else {
-                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                 }
               });
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
@@ -148,11 +151,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.entryManipulated.emit(true);
       }
     });
+
+    // set understanding text
+    this.activeAccount$.subscribe(a => {
+      if (a) {
+        this.vm.getUnderstandingText(a.accountType);
+      }
+    });
   }
 
   public ngAfterViewInit() {
     this.vm.discountComponent = this.discountComponent;
   }
+
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
@@ -171,8 +182,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
         concurrency: 0
       };
       this.uploadInput.emit(event);
@@ -290,6 +301,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.onTxnAmountChange(txn);
     }
   }
+
   public deSelectAccount(e: IOption, txn: ITransactionItem) {
     // set deselected transaction = undefined for manually cleanup
     this.vm.selectedLedger.transactions.map(t => {
@@ -306,6 +318,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.reInitilizeDiscount();
     }
   }
+
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }
@@ -347,6 +360,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
     this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
   }
+
   public ngOnDestroy(): void {
     this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
     this.vm.resetVM();
