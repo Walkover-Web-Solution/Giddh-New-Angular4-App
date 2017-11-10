@@ -31,7 +31,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public width: string = 'inherit';
   @Input() public ItemHeight: number = 41;
 
-
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
   @ViewChild('menuEle') public menuEle: ShSelectMenuComponent;
