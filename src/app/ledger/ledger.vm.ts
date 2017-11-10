@@ -10,6 +10,7 @@ import { cloneDeep } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../theme/ng-select/option.interface';
+import { underStandingTextData } from './underStandingTextData';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -36,6 +37,17 @@ export class LedgerVM {
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   public showTaxationDiscountBox: boolean = false;
+  public ledgerUnderStandingObj = {
+    accountType: '',
+    text: {
+      cr: '',
+      dr: ''
+    },
+    balanceText: {
+      cr: '',
+      dr: ''
+    }
+  };
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -127,6 +139,18 @@ export class LedgerVM {
       applyApplicableTaxes: true,
       isInclusiveTax: true
     };
+  }
+
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    let data = underStandingTextData.find(p => p.accountType === selectedLedgerAccountType);
+    if (data) {
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
+      this.ledgerUnderStandingObj = data;
+    }
   }
 }
 
