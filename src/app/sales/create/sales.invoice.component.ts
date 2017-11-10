@@ -304,6 +304,12 @@ export class SalesInvoiceComponent implements OnInit {
     });
   }
 
+  public onSelectBankCash(val: any, model: any) {
+    if (model.value) {
+      this.invFormData.account.name = model.value;
+    }
+  }
+
   public assignValuesInForm(data: AccountResponseV2) {
     // toggle all collapse
     this.isGenDtlCollapsed = false;
@@ -718,8 +724,11 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   public removeTransaction(entryIdx: number) {
-    if (entryIdx > 0) {
-      this.invFormData.entries.splice(entryIdx, 1);
+    if (this.invFormData.entries.length > 0 ) {
+      // lodash remove method
+      let invFormData = _.cloneDeep(this.invFormData);
+      invFormData.entries.splice(entryIdx, 1);
+      this.invFormData = invFormData;
     }else {
       this._toasty.warningToast('Unable to delete a single transaction');
     }
@@ -738,8 +747,8 @@ export class SalesInvoiceComponent implements OnInit {
     if (this.selectedTaxes.length > 0) {
       entry.taxes = [];
       this.companyTaxesList$.take(1).subscribe(data => {
-        data.map(item => {
-          if ( _.indexOf(arr, item.uniqueName) !== -1 ) {
+        data.map((item: any) => {
+          if ( _.indexOf(arr, item.uniqueName) !== -1 && item.accounts.length > 0 ) {
             let o: IInvoiceTax = {
               accountName: item.accounts[0].name,
               accountUniqueName: item.accounts[0].uniqueName,
