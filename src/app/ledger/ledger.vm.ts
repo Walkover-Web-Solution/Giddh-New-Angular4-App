@@ -1,4 +1,4 @@
-import { TransactionsResponse } from '../models/api-models/Ledger';
+import { TransactionsResponse, IELedgerResponse, IELedgerTransaction } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -6,7 +6,7 @@ import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as uuid from 'uuid';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, groupBy, forEach, remove } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../theme/ng-select/option.interface';
@@ -48,6 +48,9 @@ export class LedgerVM {
       dr: ''
     }
   };
+  // bank transaction related
+  public showEledger: boolean = false;
+  public bankTransactionsData: BlankLedgerVM[] = [];
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -152,6 +155,47 @@ export class LedgerVM {
       this.ledgerUnderStandingObj = data;
     }
   }
+
+  /**
+   * prepare bank transactions
+   * @param {IELedgerResponse[]} array
+   * @returns {bankTransactionsData} array
+   */
+  public getReadyBankTransactionsForUI(data: IELedgerResponse[]) {
+    this.showEledger = true;
+    // console.log ('groupBy data', data);
+    // console.log ('blankLedger', this.blankLedger);
+    forEach(data, (txn: IELedgerResponse) => {
+      let item: BlankLedgerVM;
+      item = cloneDeep(this.blankLedger);
+      item.entryDate = txn.date;
+      item.transactionId = txn.transactionId;
+      item.isBankTransaction = true;
+      forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
+        item.description = bankTxn.remarks.description;
+        if (bankTxn.type === 'DEBIT') {
+          item.voucherType = 'rcpt';
+        }else {
+          item.voucherType = 'pay';
+        }
+        if (bankTxn.remarks.chequeNumber) {
+          item.chequeNumber = bankTxn.remarks.chequeNumber;
+        }
+        // push transaction
+        item.transactions.map(transaction => {
+          if (transaction.type === bankTxn.type) {
+            transaction.amount = bankTxn.amount;
+            transaction.id = item.transactionId;
+          }
+        });
+        item.transactions = remove(item.transactions, (n: any) => {
+          return n.type === bankTxn.type;
+        });
+      });
+      this.bankTransactionsData.push(item);
+    });
+    console.log ('finally', this.bankTransactionsData);
+  }
 }
 
 export class BlankLedgerVM {
@@ -166,6 +210,8 @@ export class BlankLedgerVM {
   public generateInvoice: boolean;
   public chequeNumber: string;
   public chequeClearanceDate: string;
+  public isBankTransaction?: boolean;
+  public transactionId?: string;
 }
 
 export class TransactionVM {

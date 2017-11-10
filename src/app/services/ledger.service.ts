@@ -16,7 +16,8 @@ import {
   MagicLinkResponse,
   ExportLedgerRequest,
   MailLedgerRequest,
-  LedgerUpdateRequest
+  LedgerUpdateRequest,
+  IELedgerResponse
 } from '../models/api-models/Ledger';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 
@@ -26,6 +27,24 @@ export class LedgerService {
   private user: UserDetails;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  }
+
+  /**
+   * get bank transactions for a account
+  */
+  public GetBankTranscationsForLedger(accountUniqueName: string, from: string = '') {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(LEDGER_API.GET_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from)).map((res) => {
+      let data: BaseResponse<IELedgerResponse[], string> = res.json();
+      data.request = accountUniqueName;
+      data.queryString = { accountUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<IELedgerResponse[], string>(e, { accountUniqueName }));
   }
 
   /**

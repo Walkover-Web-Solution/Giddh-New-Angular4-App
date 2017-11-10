@@ -5,7 +5,7 @@ import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, IELedgerResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -27,6 +27,8 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { IOption } from '../theme/ng-select/option.interface';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { GeneralActions } from '../services/actions/general/general.actions';
+import { AccountResponse } from '../models/api-models/Account';
+import { BaseResponse } from '../models/api-models/BaseResponse';
 
 @Component({
   selector: 'ledger',
@@ -293,6 +295,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.page = 0;
         this.getTransactionData();
       });
+
+    // get A/c details
+    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+      if (data && data.yodleeAdded) {
+        this.getBankTransactions();
+      }
+    });
+  }
+
+  public getBankTransactions() {
+    if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
+      this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string> ) => {
+        if (res.status === 'success' && res.body.length > 0) {
+          this.lc.getReadyBankTransactionsForUI(res.body);
+        }
+      });
+    }
   }
 
   public getTransactionData() {
