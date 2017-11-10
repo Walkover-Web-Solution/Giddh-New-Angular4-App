@@ -4,7 +4,6 @@
   position: absolute;
   background-color: white;
   width: 100%;
-  max-height: 300px;
   overflow: auto;
   box-sizing: border-box;
   z-index: 999;
