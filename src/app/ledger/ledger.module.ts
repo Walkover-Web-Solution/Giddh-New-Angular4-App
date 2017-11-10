@@ -12,7 +12,7 @@ import { ShareLedgerComponent } from './components/shareLedger/shareLedger.compo
 import { ExportLedgerComponent } from './components/exportLedger/exportLedger.component';
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
-// import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
+// import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
 import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -40,7 +40,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
-    QuickAccountComponent
+    QuickAccountComponent,
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
