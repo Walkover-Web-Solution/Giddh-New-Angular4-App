@@ -305,14 +305,14 @@ export class UpdateLedgerVm {
     }
   }
 
-  public getUnderstandingText(selectedLedgerAccountType) {
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
     let data = underStandingTextData.find(p => p.accountType === selectedLedgerAccountType);
     if (data) {
-      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', this.selectedLedger.uniqueName);
-      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', this.selectedLedger.uniqueName);
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
 
-      data.text.dr = data.text.dr.replace('<accountName>', this.selectedLedger.uniqueName);
-      data.text.dr = data.text.dr.replace('<accountName>', this.selectedLedger.uniqueName);
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
       this.ledgerUnderStandingObj = data;
     }
   }

@@ -95,7 +95,7 @@ export class LedgerActions {
       if (res.status === 'success') {
         this._toasty.successToast('Entry deleted successfully', 'Success');
       } else {
-        this._toasty.errorToast(res.body);
+        this._toasty.errorToast(res.message, res.code);
       }
       return {
         type: ''

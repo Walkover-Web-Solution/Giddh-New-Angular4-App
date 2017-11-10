@@ -277,6 +277,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.lc.activeAccount$.subscribe(acc => {
+      if (acc) {
+        this.lc.getUnderstandingText(acc.accountType, acc.uniqueName);
+      }
+    });
+
     // search
     Observable.fromEvent(this.ledgerSearchTerms.nativeElement, 'input')
       .debounceTime(700)

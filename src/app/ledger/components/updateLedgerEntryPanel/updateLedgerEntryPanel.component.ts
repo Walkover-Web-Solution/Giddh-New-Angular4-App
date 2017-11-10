@@ -155,7 +155,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     // set understanding text
     this.activeAccount$.subscribe(a => {
       if (a) {
-        this.vm.getUnderstandingText(a.accountType);
+        this.vm.getUnderstandingText(a.accountType, a.uniqueName);
       }
     });
   }
