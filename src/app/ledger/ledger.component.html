@@ -120,7 +120,30 @@
                       </td>
                       <td class="col-xs-7 select2-parent select2-ledger">
 
-                        <select2 [data]="lc.flatternAccountList | async" [(ngModel)]="txn.particular" [options]="accountsOptions" (valueChanged)="selectAccount($event,txn)"></select2>
+                        <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
+                          [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="95">
+                          <ng-template #optionTemplate let-option="option">
+                            <ng-container *ngIf="!option.additional?.stock">
+                              <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                <span class="account-list-item" style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
+                                  {{ option.additional?.uniqueName }}</span>
+                                <span class="account-list-item" style="visibility: hidden;font-size:11px">&nbsp;</span>
+                              </a>
+                            </ng-container>
+                            <ng-container *ngIf="option.additional?.stock">
+                              <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                <span class="account-list-item" style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
+                                  {{ option.additional?.uniqueName }}</span>
+                                <span class="account-list-item" style="display: block;font-size:11px">
+                                  Stock: {{ option.additional?.stock.name }}
+                                </span>
+                              </a>
+                            </ng-container>
+                          </ng-template>
+                        </sh-select>
 
                         <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                           <li>Create New Account</li>
@@ -130,7 +153,8 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (keyup)="needToReCalculate.next(true)">
+                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                          (click)="blankLedgerAmountClick()">
                       </td>
 
                     </tr>
@@ -216,8 +240,31 @@
                       </td>
                       <td class="col-xs-7 select2-parent select2-ledger">
 
-                        <select2 [data]="lc.flatternAccountList | async" (valueChanged)="selectAccount($event,txn)" [(ngModel)]="txn.particular"
-                          [options]="accountsOptions"></select2>
+                        <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
+                          [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="95">
+                          <ng-template #optionTemplate let-option="option">
+                            <ng-container *ngIf="!option.additional?.stock">
+                              <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                <span class="account-list-item" style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
+                                  {{ option.additional?.uniqueName }}</span>
+                                <span class="account-list-item" style="visibility: hidden;font-size:11px">&nbsp;</span>
+                              </a>
+                            </ng-container>
+                            <ng-container *ngIf="option.additional?.stock">
+                              <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                <span class="account-list-item" style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
+                                  {{ option.additional?.uniqueName }}</span>
+                                <span class="account-list-item" style="display: block;font-size:11px">
+                                  Stock: {{ option.additional?.stock.name }}
+                                </span>
+                              </a>
+                            </ng-container>
+                          </ng-template>
+                        </sh-select>
+
 
                         <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
                           <li>Create New Account</li>
@@ -227,7 +274,8 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)">
+                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                          (click)="blankLedgerAmountClick()">
                       </td>
 
                     </tr>
@@ -379,4 +427,12 @@
   </div>
 </div>
 
+<!--quick account popup -->
+<div bsModal #quickAccountModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-sm" style="width:90%">
+    <div class="modal-content">
+      <div element-view-container-ref #quickAccountComponent="elementviewcontainerref"></div>
+    </div>
+  </div>
+</div>
 <!-- modal sections -->
