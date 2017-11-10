@@ -1,4 +1,3 @@
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -24,6 +23,11 @@ import { TbExportXlsComponent } from './components/export/tb-export-xls.componen
 import { BsExportXlsComponent } from './components/export/bs-export-xls.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
+import { TbsearchPipe } from '../shared/header/pipe/tbsearch.pipe';
+import { LaddaModule } from 'angular2-ladda';
+import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
+import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
   declarations: [
@@ -43,7 +47,8 @@ import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
     BsComponent,
     BsGridComponent,
     BsGridRowComponent,
-    TrialAccordionDirective
+    TrialAccordionDirective,
+    TbsearchPipe,
   ],
   exports: [
     TbPlBsComponent
@@ -54,9 +59,12 @@ import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
     FormsModule,
     ReactiveFormsModule,
     TbPlBsRoutingModule,
-    SharedModule,
     TabsModule,
-    DatePickerCustomModule
+    DatePickerCustomModule,
+    LaddaModule,
+    HighlightModule,
+    RecTypeModule,
+    ShSelectModule
   ],
 })
 export class TBPlBsModule {

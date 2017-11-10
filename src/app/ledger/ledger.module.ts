@@ -1,4 +1,3 @@
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -21,6 +20,14 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { LaddaModule } from 'angular2-ladda';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { TextMaskModule } from 'angular2-text-mask';
+import { SelectModule } from '../theme/ng-select/ng-select';
+import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
+import { ConfirmModalModule } from '../theme/confirm-modal';
+import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
   declarations: [
@@ -32,12 +39,13 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
     ShareLedgerComponent,
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
-    UpdateLedgerDiscountComponent
+    UpdateLedgerDiscountComponent,
+    QuickAccountComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
   ],
-  entryComponents: [UpdateLedgerEntryPanelComponent],
+  entryComponents: [UpdateLedgerEntryPanelComponent, QuickAccountComponent],
   providers: [],
   imports: [
     CommonModule,
@@ -45,13 +53,19 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
     ReactiveFormsModule,
     TaxControlModule.forRoot(),
     LedgerRoutingModule,
-    SharedModule,
     ModalModule,
     TooltipModule,
     PaginationModule,
     NgUploaderModule,
     ClipboardModule,
-    Daterangepicker
+    Daterangepicker,
+    LaddaModule,
+    ElementViewChildModule,
+    TextMaskModule,
+    SelectModule,
+    NumberToWordsModule,
+    ConfirmModalModule,
+    ShSelectModule
   ],
 })
 export class LedgerModule {
