@@ -10,39 +10,35 @@
         <div class="flex-row">
           <div class="flex-row-child">
             <div class="form-group noMarg size_380">
-              <label>Customer Name or <a href (click)="toggleAccountAsidePane($event)">+ Add Customer</a></label>
-              <input
-              autocomplete="off"
-              name="customerName"
-              [(ngModel)]="invFormData.customerName"
-              [typeahead]="accounts$ | async"
-              typeaheadOptionField="name"
-              placeholder="Search from accounts"
-              typeaheadOptionsLimit="10"
-              (typeaheadNoResults)="noResultsForCustomer($event)"
-              (typeaheadOnSelect)="onSelectCustomer($event)"
-              class="form-control">
+              <label>Customer Name or
+                <a href (click)="toggleAccountAsidePane($event)">+ Add Customer</a>
+              </label>
+              <input #custname autocomplete="off" name="customerName" [(ngModel)]="invFormData.customerName" [typeahead]="accounts$ | async"
+                typeaheadOptionField="name" placeholder="Search from accounts" typeaheadOptionsLimit="10" (typeaheadNoResults)="noResultsForCustomer($event)"
+                (typeaheadOnSelect)="onSelectCustomer($event)" class="form-control">
             </div>
           </div>
           <div class="flex-row-child" *ngIf="typeaheadNoResultsOfCustomer">
             <div class="form-group noMarg">
               <label>Add Entry Against</label>
-              <select class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
+              <select (ngModelChange)="onSelectBankCash($event, custname)" class="form-control" name="account.uniqueName" [(ngModel)]="invFormData.account.uniqueName">
                 <option [ngValue]="select">Select Bank/Cash</option>
-                <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async" >{{ bank.name }}</option>
+                <option [ngValue]="bank.uniqueName" *ngFor="let bank of bankAccounts$ | async">{{ bank.name }}</option>
               </select>
             </div>
           </div>
         </div>
       </div>
       <div class="col-xs-6 text-right">
-        <p class="lead b">Balance Due: {{invFormData.balanceDue | number:'1.2-2'}}</p>
+        <p class="fs20 b">Balance Due: Rs {{invFormData.balanceDue | number:'1.2-2'}}</p>
       </div>
     </div>
-    <div class="col-xs-12"><div class="bdrB"></div></div>
+    <div class="col-xs-12">
+      <div class="bdrB"></div>
+    </div>
   </div>
 
-  <section class="form-inline col-xs-12">
+  <section class="form-inline col-xs-12 mrB1">
 
     <div class="collapse-pane">
       <div class="collapse-pane-heading" (click)="isGenDtlCollapsed = !isGenDtlCollapsed">
@@ -64,11 +60,14 @@
         </div>
         <div class="form-group">
           <label>Invoice Date</label>
-          <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.invoiceDetails.invoiceDate" class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}" />
+          <input type="text" [placeholder]="giddhDateFormat" name="invoiceDate" [(ngModel)]="invFormData.invoiceDetails.invoiceDate"
+            class="form-control" bsDatepicker value="{{ invFormData.invoiceDetails.invoiceDate | date: giddhDateFormatUI }}"
+          />
         </div>
         <div class="form-group">
           <label>Due Date</label>
-          <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.invoiceDetails.dueDate" value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
+          <input type="text" [placeholder]="giddhDateFormat" name="dueDate" class="form-control" bsDatepicker [(ngModel)]="invFormData.invoiceDetails.dueDate"
+            value="{{ invFormData.invoiceDetails.dueDate | date: giddhDateFormatUI }}" />
         </div>
 
       </div>
@@ -85,36 +84,42 @@
         <div class="ico-head">Address</div>
       </div>
       <div [collapse]="isMlngAddrCollapsed" class="clearfix pdL3 pdR3">
-        <div class="flex-row wid90p">
-          <div class="flex-row-child">
+        <div class="flex-row">
+          <div class="flex-row-child mrR4">
             <div class="form-group size_340">
               <label>Billing Address</label>
-              <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"></textarea>
+              <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]"
+                rows="5"></textarea>
             </div>
             <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
               <div>
                 <label>State</label>
                 <ng-select #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.billingDetails.stateCode"></ng-select>
               </div>
-              <div class="mrT27">
+              <div class="mrT2">
                 <label>GSTIN</label>
-                <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.billingDetails.gstNumber" (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
+                <input maxLength="15" type="text" name="billingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.account.billingDetails.gstNumber"
+                  (keyup)="getStateCode('billingDetails', statesBilling); autoFillShippingDetails()" />
               </div>
             </div>
           </div>
           <div class="flex-row-child">
             <div class="form-group size_340">
-              <label style="width:340px;"><input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
-              <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"></textarea>
+              <label style="width:340px;">
+                <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
+              <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]"
+                rows="5"></textarea>
             </div>
             <div class="form-group" *ngIf="invFormData.country.countryName === 'India'">
               <div>
                 <label>State</label>
-                <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>
+                <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async"
+                  [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>
               </div>
-              <div class="mrT27">
+              <div class="mrT2">
                 <label>GSTIN</label>
-                <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control"  [(ngModel)]="invFormData.account.shippingDetails.gstNumber" (keyup)="getStateCode('shippingDetails', statesShipping)" />
+                <input [readonly]="autoFillShipping" maxLength="15" type="text" name="shippingDetails.gstNumber" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.gstNumber"
+                  (keyup)="getStateCode('shippingDetails', statesShipping)" />
               </div>
             </div>
           </div>
@@ -136,7 +141,8 @@
       <div [collapse]="isOthrDtlCollapsed" class="clearfix pdL3 pdR3">
         <div class="form-group size_175">
           <label>Ship Date</label>
-          <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.other.shippingDate" class="form-control" value="{{ invFormData.other.shippingDate | date: giddhDateFormatUI }}" />
+          <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="shippingDate" [(ngModel)]="invFormData.other.shippingDate"
+            class="form-control" value="{{ invFormData.other.shippingDate | date: giddhDateFormatUI }}" />
         </div>
         <div class="form-group size_175">
           <label>Ship Via</label>
@@ -164,8 +170,8 @@
 
   </section>
 
-  <section class="clearfix pdT2 pdB2 mrB2 whiteBg">
-   <table class="table">
+  <section class="clearfix pd1 pdB2 mrB2 whiteBg">
+    <table class="table">
       <thead>
         <tr>
           <th *ngFor="let item of theadArr;" [hidden]="!item.display">{{item.label}}</th>
@@ -184,22 +190,16 @@
       <tbody *ngFor="let entry of invFormData.entries; let entryIdx = index; let first = first; let last = last">
         <tr *ngFor="let transaction of entry.transactions;">
           <td>{{ entryIdx+1 }}</td>
-          <td><input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.date" value="{{ transaction.date | date: giddhDateFormatUI }}" /></td>
+          <td>
+            <input type="text" [placeholder]="giddhDateFormat" bsDatepicker name="transaction.date_{{entryIdx}}" class="form-control"
+              [(ngModel)]="transaction.date" value="{{ transaction.date | date: giddhDateFormatUI }}" />
+          </td>
           <td>
             <div class="ng-select-wrap">
-              <ng-select
-                class="form-inline"
-                name="transaction.fakeAccForSelect2_{{entryIdx}}"
-                placeholder="Select A/c"
-                filterPlaceholder="Type to search..."
-                notFoundMsg="No A/c found"
-                notFoundLink="true"
-                [allowClear]="true"
-                [(ngModel)]="transaction.fakeAccForSelect2"
-                [options]="salesAccounts$ | async"
-                (selected)="onSelectSalesAccount($event, transaction)"
-                (noResultsClicked)="onNoResultsClicked(entryIdx)"
-                >
+              <ng-select class="form-inline" name="transaction.fakeAccForSelect2_{{entryIdx}}" placeholder="Select A/c" filterPlaceholder="Type to search..."
+                notFoundMsg="No A/c found" notFoundLink="true" [allowClear]="true" [(ngModel)]="transaction.fakeAccForSelect2"
+                [options]="salesAccounts$ | async" (selected)="onSelectSalesAccount($event, transaction)" (noResultsClicked)="onNoResultsClicked(entryIdx)"
+                style="width: 250px;">
                 <ng-template #optionTemplate let-option="option">
                   <div class="account-list-item">{{option?.label}}</div>
                   <div class="account-list-item fs12">{{option?.value}}</div>
@@ -209,12 +209,15 @@
                 </ng-template>
               </ng-select>
             </div>
-            <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.description" />
+            <input type="text" placeholder="Description" name="transaction.description_{{entryIdx}}" class="form-control mrT1" [(ngModel)]="transaction.description"
+            />
           </td>
           <td>
             <div class="">
-              <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly  maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.hsnNumber" />
-              <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly  maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.sacNumber" />
+              <input type="text" [hidden]="transaction.hsnOrSac !== 'hsn'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.hsnNumber_{{entryIdx}}"
+                class="form-control" [(ngModel)]="transaction.hsnNumber" />
+              <input type="text" [hidden]="transaction.hsnOrSac !== 'sac'" readonly maxLength="10" placeholder="HSN/SAC" name="transaction.sacNumber_{{entryIdx}}"
+                class="form-control" [(ngModel)]="transaction.sacNumber" />
             </div>
           </td>
 
@@ -228,7 +231,9 @@
                       <tbody>
                         <tr>
                           <td width="25%">
-                            <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity" name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity" />
+                            <input type="number" (keyup)="txnChangeOccurred()" (ngModelChange)="transaction.setAmount(entry)" placeholder="Quantity"
+                              name="transaction.quantity_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.quantity"
+                            />
                           </td>
                           <td width="25%">
                             <select class="form-control" name="transaction.stockUnit_{{entryIdx}}" [(ngModel)]="transaction.stockUnit">
@@ -236,9 +241,13 @@
                             </select>
                           </td>
                           <td width="25%">
-                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.rate" />
+                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Rate" name="transaction.rate_{{entryIdx}}"
+                              class="form-control" [(ngModel)]="transaction.rate" />
                           </td>
-                          <td width="25%"><input type="number" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" /></td>
+                          <td width="25%">
+                            <input type="number" disabled="true" name="transaction.amount_{{entryIdx}}" class="form-control"
+                              [(ngModel)]="transaction.amount" />
+                          </td>
                         </tr>
                       </tbody>
                     </table>
@@ -247,11 +256,18 @@
                     <table class="nested-table" width="100%" cellspacing="0" cellspadding="0">
                       <tbody>
                         <tr>
-                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
-                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
-                          <td width="25%"><input type="text" disabled="true" class="form-control" /></td>
                           <td width="25%">
-                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}" class="form-control" [(ngModel)]="transaction.amount" />
+                            <input type="text" disabled="true" class="form-control" />
+                          </td>
+                          <td width="25%">
+                            <input type="text" disabled="true" class="form-control" />
+                          </td>
+                          <td width="25%">
+                            <input type="text" disabled="true" class="form-control" />
+                          </td>
+                          <td width="25%">
+                            <input type="number" (ngModelChange)="transaction.setAmount(entry)" (keyup)="txnChangeOccurred()" placeholder="Amount" name="transaction.amount_{{entryIdx}}"
+                              class="form-control" [(ngModel)]="transaction.amount" />
                           </td>
                         </tr>
                       </tbody>
@@ -265,25 +281,25 @@
             <discount-list (selectedDiscountItems)="selectedDiscountEvent($event, transaction, entry)"></discount-list>
           </td>
           <td>
-            <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue" />
+            <input type="number" name="transaction.taxableValue_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.taxableValue"
+            />
           </td>
           <td class="tax-list-dd-wrap" *ngIf="showTaxBox">
-            <tax-control
-              [taxes]="companyTaxesList$ | async"
-              [applicableTaxes]="transaction.applicableTaxes"
-              [taxRenderData]="transaction.taxRenderData"
-              [showTaxPopup]="false"
-              [showHeading]="false"
-              (selectedTaxEvent)="selectedTaxEvent($event, entry)"
-              (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
+            <tax-control [taxes]="companyTaxesList$ | async" [applicableTaxes]="transaction.applicableTaxes" [taxRenderData]="transaction.taxRenderData"
+              [showTaxPopup]="false" [showHeading]="false" (selectedTaxEvent)="selectedTaxEvent($event, entry)" (taxAmountSumEvent)="taxAmountEvent($event, transaction, entry)">
             </tax-control>
           </td>
           <td>
-            <input type="number" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total" />
+            <input type="number" name="transaction.total_{{entryIdx}}" class="form-control" readonly [(ngModel)]="transaction.total"
+            />
           </td>
-          <td class="action-panel-td">
-            <span class="cp" (click)="addBlankRow(transaction)"><i class="icon-add" aria-hidden="true"></i></span>
-            <span class="cp" *ngIf="!first" (click)="removeTransaction(entryIdx)"><i class="icon-cross" aria-hidden="true"></i></span>
+          <td class="action-panel-td text-center">
+            <span class="cp" *ngIf="last" (click)="addBlankRow(transaction)">
+              <i class="icon-add" aria-hidden="true"></i>
+            </span>
+            <span class="cp" *ngIf="!last" (click)="removeTransaction(entryIdx)">
+              <i class="icon-cross" aria-hidden="true"></i>
+            </span>
           </td>
         </tr>
       </tbody>
@@ -294,7 +310,7 @@
       <tbody>
         <tr>
           <td width="50%">
-            <div class="col-xs-8 pdT2">
+            <div class="col-xs-8 pdT1">
               <label class="mrB1">Message</label>
               <textarea style="height:140px" class="form-control" name="message2" [(ngModel)]="invFormData.other.message2"></textarea>
             </div>
@@ -318,18 +334,27 @@
                 <div class="tableCell figureCell">{{invFormData.totalTax | number:'1.2-2'}}</div>
               </div>
               <div class="tableRow">
-                <div class="tableCell"><strong>Total</strong></div>
-                <div class="tableCell figureCell"><strong>{{invFormData.grandTotal | number:'1.2-2'}}</strong></div>
+                <div class="tableCell">
+                  <strong>Total</strong>
+                </div>
+                <div class="tableCell figureCell">
+                  <strong>{{invFormData.grandTotal | number:'1.2-2'}}</strong>
+                </div>
               </div>
               <div class="tableRow">
                 <div class="tableCell">Deposit</div>
                 <div class="tableCell figureCell">
-                  <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount" />
+                  <input type="number" (blur)="txnChangeOccurred()" placeholder="Amount" name="dueAmount" class="form-control" [(ngModel)]="dueAmount"
+                  />
                 </div>
               </div>
               <div class="tableRow">
-                <div class="tableCell"><strong>Balance Due</strong></div>
-                <div class="tableCell figureCell"><strong>{{invFormData.balanceDue | number:'1.2-2'}}</strong></div>
+                <div class="tableCell">
+                  <strong>Balance Due</strong>
+                </div>
+                <div class="tableCell figureCell">
+                  <strong>{{invFormData.balanceDue | number:'1.2-2'}}</strong>
+                </div>
               </div>
             </section>
           </td>
@@ -354,18 +379,11 @@
 
 <!-- open account aside -->
 <div class="aside-overlay" *ngIf="accountAsideMenuState === 'in' || asideMenuStateForProductService === 'in'"></div>
-<aside-menu-account
-[class]="accountAsideMenuState"
-[@slideInOut]="accountAsideMenuState"
-(closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
+<aside-menu-account [class]="accountAsideMenuState" [@slideInOut]="accountAsideMenuState" (closeAsideEvent)="toggleAccountAsidePane($event)"></aside-menu-account>
 
 <!-- open product service aside -->
-<aside-menu-product-service
-  [class]="asideMenuStateForProductService"
-  [@slideInOut]="asideMenuStateForProductService"
-  (closeAsideEvent)="onNoResultsClicked()"
-  (animatePAside)="getActionFromAside($event)"
-></aside-menu-product-service>
+<aside-menu-product-service [class]="asideMenuStateForProductService" [@slideInOut]="asideMenuStateForProductService" (closeAsideEvent)="onNoResultsClicked()"
+  (animatePAside)="getActionFromAside($event)"></aside-menu-product-service>
 
 
 <!-- create Group modal -->

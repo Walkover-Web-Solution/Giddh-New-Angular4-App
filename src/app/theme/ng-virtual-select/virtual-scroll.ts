@@ -74,7 +74,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   @Output()
   public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
 
-  @ViewChild('content', {read: ElementRef})
+  @ViewChild('content', { read: ElementRef })
   public contentElementRef: ElementRef;
 
   public onScrollListener: any;
@@ -117,7 +117,9 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
   public ngAfterViewInit() {
     let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
-    this.scrollInto(item);
+    setTimeout(() => {
+      this.scrollInto(item);
+    }, 50);
   }
 
   public refresh() {
@@ -204,10 +206,15 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     return {
+      // Total Items
       itemCount,
+      // Virtual Scroller width -- visible part only
       viewWidth,
+      // Virtual Scroller height -- visible part only
       viewHeight,
+      // Single Item Width
       childWidth,
+      // Signle item height
       childHeight,
       itemsPerRow,
       itemsPerCol,
@@ -244,12 +251,12 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
       // emit 'start' event
       if (start !== this.previousStart && this.startupLoop === false) {
-        this.start.emit({start, end});
+        this.start.emit({ start, end });
       }
 
       // emit 'end' event
       if (end !== this.previousEnd && this.startupLoop === false) {
-        this.end.emit({start, end});
+        this.end.emit({ start, end });
       }
 
       this.previousStart = start;
@@ -258,12 +265,15 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       if (this.startupLoop === true) {
         this.refresh();
       } else {
-        this.change.emit({start, end});
+        this.change.emit({ start, end });
       }
 
     } else if (this.startupLoop === true) {
+      this.update.emit(items.slice(start, end));
       this.startupLoop = false;
       this.refresh();
+    } else {
+      this.update.emit(items.slice(start, end));
     }
   }
 }

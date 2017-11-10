@@ -37,6 +37,7 @@ export class MfEditComponent implements OnInit {
   public expenseGroupAccounts: any = [];
   public liabilityGroupAccounts: any = [];
   public selectedProduct: string;
+  public selectedProductName: string;
   public showFromDatePicker: boolean = false;
   public moment = moment;
   public initialQuantityObj: any = [];
@@ -49,14 +50,16 @@ export class MfEditComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private manufacturingActions: ManufacturingActions,
-              private inventoryAction: InventoryAction,
-              private _groupService: GroupService,
-              private _location: Location,
-              private _inventoryService: InventoryService,
-              private _accountService: AccountService,
-              private _toasty: ToasterService) {
-    this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
+    private manufacturingActions: ManufacturingActions,
+    private inventoryAction: InventoryAction,
+    private _groupService: GroupService,
+    private _location: Location,
+    private _inventoryService: InventoryService,
+    private _accountService: AccountService,
+    private _toasty: ToasterService) {
+
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+
     this.manufacturingDetails = new ManufacturingItemRequest();
     this.initializeOtherExpenseObj();
     // Update/Delete condition
@@ -65,6 +68,7 @@ export class MfEditComponent implements OnInit {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
         if (manufacturingObj) {
+          this.selectedProductName = manufacturingObj.stockName;
           manufacturingObj.quantity = manufacturingObj.manufacturingQuantity;
           manufacturingObj.date = moment(manufacturingObj.date, 'DD-MM-YYYY').toDate();
           manufacturingObj.multipleOf = (manufacturingObj.manufacturingQuantity / manufacturingObj.manufacturingMultipleOf);
@@ -118,9 +122,6 @@ export class MfEditComponent implements OnInit {
     }
     // dispatch stockList request
     this.store.select(p => p.inventory).takeUntil(this.destroyed$).subscribe((o: any) => {
-      if (!o.stocksList) {
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
-      }
       if (this.isUpdateCase && o.activeStock && o.activeStock.manufacturingDetails) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
         manufacturingDetailsObj.multipleOf = o.activeStock.manufacturingDetails.manufacturingMultipleOf;
@@ -165,6 +166,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public getStocksWithRate(data) {
+    this.selectedProductName = data.label;
     if (data.value) {
       let selectedValue = _.cloneDeep(data.value);
       this.selectedProduct = selectedValue;
@@ -300,7 +302,12 @@ export class MfEditComponent implements OnInit {
 
   public getCostPerProduct() {
     let manufacturingDetails = _.cloneDeep(this.manufacturingDetails);
-    let quantity = manufacturingDetails.manufacturingMultipleOf;
+    let quantity;
+    if (manufacturingDetails.multipleOf) {
+      quantity = manufacturingDetails.manufacturingMultipleOf * manufacturingDetails.multipleOf;
+    } else {
+      quantity = manufacturingDetails.manufacturingMultipleOf;
+    }
     quantity = (quantity && quantity > 0) ? quantity : 1;
     let amount = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     let cost = (amount / quantity);
@@ -330,7 +337,8 @@ export class MfEditComponent implements OnInit {
     return 0;
   }
 
-  public onQuantityChange(value: number) {
+  public onQuantityChange(val: any) {
+    let value  = val;
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
     if (!this.initialQuantityObj.length) {
@@ -340,11 +348,8 @@ export class MfEditComponent implements OnInit {
       });
     }
 
-    if (_.isNumber(value)) {
-      value = value;
-    } else if (_.isEmpty(value)) {
-      // alert('now');
-      value = 1;
+    if (value && !isNaN(value)) {
+      value = parseFloat(value);
     } else {
       value = 1;
     }
