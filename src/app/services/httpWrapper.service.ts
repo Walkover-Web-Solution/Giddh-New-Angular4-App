@@ -4,41 +4,63 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable()
 export class HttpWrapperService {
   private user: VerifyEmailResponseModel;
-  constructor(private _http: Http, private store: Store<AppState>) {
+  constructor(private _http: Http, private store: Store<AppState>, private _loaderService: LoaderService) {
   }
 
   public get = (url: string, params?: any, options?: RequestOptionsArgs): Observable<Response> => {
     options = this.prepareOptions(options);
     options.params = params;
-    return this._http.get(url, options);
+    return this._http.get(url, options).do((res) => {
+      //
+    }).finally(() => {
+      this.hideLoader();
+    });
   }
 
   public post = (url: string, body: any, options?: RequestOptionsArgs): Observable<Response> => {
     options = this.prepareOptions(options);
-    return this._http.post(url, body, options);
+    return this._http.post(url, body, options).do((res) => {
+      //
+    }).finally(() => {
+      this.hideLoader();
+    });
   }
 
   public put = (url: string, body: any, options?: RequestOptionsArgs): Observable<Response> => {
     options = this.prepareOptions(options);
-    return this._http.put(url, body, options);
+    return this._http.put(url, body, options).do((res) => {
+      //
+    }).finally(() => {
+      this.hideLoader();
+    });
   }
 
   public delete = (url: string, params?: any, options?: RequestOptionsArgs): Observable<Response> => {
     options = this.prepareOptions(options);
     options.search = this.objectToParams(params);
-    return this._http.delete(url, options);
+    return this._http.delete(url, options).do((res) => {
+      //
+    }).finally(() => {
+      this.hideLoader();
+    });
   }
 
   public patch = (url: string, body: any, options?: RequestOptionsArgs): Observable<Response> => {
     options = this.prepareOptions(options);
-    return this._http.patch(url, body, options);
+    return this._http.patch(url, body, options).do((res) => {
+      //
+    }).finally(() => {
+      this.hideLoader();
+    });
   }
 
   public prepareOptions(options: RequestOptionsArgs): RequestOptionsArgs {
+    this.showLoader();
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user;
@@ -70,5 +92,13 @@ export class HttpWrapperService {
       let objectValue = this.isPrimitive(object[value]) ? object[value] : JSON.stringify(object[value]);
       return `${value}=${objectValue}`;
     }).join('&');
+  }
+
+  private showLoader(): void {
+    this._loaderService.show();
+  }
+
+  private hideLoader(): void {
+    this._loaderService.hide();
   }
 }
