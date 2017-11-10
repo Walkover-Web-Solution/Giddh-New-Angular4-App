@@ -25,7 +25,7 @@ export class InvoiceService {
    * get INVOICES
    * URL:: company/:companyUniqueName/invoices?from=&to=
    */
-  public GetAllInvoices(model: CommonPaginatedRequest): Observable<BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest>> {
+  public GetAllInvoices(model: CommonPaginatedRequest, body): Observable<BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -35,7 +35,7 @@ export class InvoiceService {
     // create url conditionally
     let url = this.createQueryString(INVOICE_API.GET_ALL_INVOICES, model);
 
-    return this._http.get(url.replace(':companyUniqueName', this.companyUniqueName))
+    return this._http.post(url.replace(':companyUniqueName', this.companyUniqueName), body)
       .map((res) => {
         let data: BaseResponse<IGetAllInvoicesResponse, CommonPaginatedRequest> = res.json();
         data.request = model;

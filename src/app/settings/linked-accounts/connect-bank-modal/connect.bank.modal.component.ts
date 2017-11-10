@@ -18,6 +18,9 @@ export class ConnectBankModalComponent implements OnChanges {
 
   @Input() public sourceOfIframe: string;
   @Output() public modalCloseEvent: EventEmitter<boolean> = new EventEmitter(false);
+
+  public url: SafeResourceUrl = null;
+
   public iframeSrc: string = '';
   public isIframeLoading: boolean = false;
   constructor(public sanitizer: DomSanitizer) {
@@ -28,10 +31,13 @@ export class ConnectBankModalComponent implements OnChanges {
     if (changes.sourceOfIframe.currentValue) {
       this.iframeSrc = this.sourceOfIframe;
       this.isIframeLoading = false;
+      this.getIframeUrl(this.iframeSrc);
     }
   }
-  public getIframeUrl(url) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+  public getIframeUrl(path) {
+    if (!this.url) {
+      this.url =  this.sanitizer.bypassSecurityTrustResourceUrl(path);
+    }
   }
   public onCancel() {
     this.modalCloseEvent.emit(true);
