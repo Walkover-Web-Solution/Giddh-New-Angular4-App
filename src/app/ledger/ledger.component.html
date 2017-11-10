@@ -46,7 +46,199 @@
     <!-- ledger header end -->
 
     <!--bank ledgers-->
-    <!-- ngIf: ledgerCtrl.eLedgerData.length > 0 && ledgerCtrl.showEledger -->
+    <div class="clearfix"></div>
+    <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
+      <div class="alert alert-danger fade in pr" style="padding-right:15px">
+        <button type="button" class="close" >
+          <span style="font-size:12px;font-weight:normal" trigger-resize>Close</span>
+        </button>
+
+        <table class="table ledgerTable" style="margin-bottom:0">
+          <thead>
+            <th class="nopad" colspan="6">
+              <div class="clearfix ldgTheadL">
+                <h3 class="ledgerHead">
+                  <span>Transactions from mapped account</span>
+                </h3>
+              </div>
+            </th>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="nopad bdrL bdrR" style="width:50%" colspan="3">
+                <table class="table">
+                  <thead>
+                    <tr class="splBg">
+                      <th colspan="100%">Debit (Dr)</th>
+                    </tr>
+                    <tr class="dgreyBg">
+                      <th width="28%">Date <span class="small">(DD-MM-YYYY)</span></th>
+                      <th width="44%">Particular</th>
+                      <th width="28%" class="alR">Amount</th>
+                    </tr>
+                  </thead>
+                </table>
+              </td>
+              <!-- main left td end here -->
+              <td class="nopad bdrL bdrR" style="width:50%" colspan="3">
+                <table class="table">
+                  <thead>
+                    <tr class="splBg">
+                      <th colspan="100%">Credit (Cr)</th>
+                    </tr>
+                    <tr class="">
+                      <th width="28%">Date <span class="small">(DD-MM-YYYY)</span></th>
+                      <th width="44%">Particular</th>
+                      <th width="28%" class="alR">Amount</th>
+                    </tr>
+                  </thead>
+                </table>
+              </td>
+              <!-- main right td end here -->
+            </tr>
+            <tr>
+              <td class="nopad bdrL bdrR" colspan="3">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;">
+                  <tbody>
+                    <tr *ngFor="let txn of item.transactions;">
+                      <td class="width100" *ngIf="txn.type === 'DEBIT'">
+                        <table class="width100">
+                          <tbody class="ledger-main">
+                            <tr class="ledger-row">
+                              <td class="col-xs-2">
+                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                              </td>
+                              <td class="col-xs-7 select2-parent select2-ledger">
+                                <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
+                                          (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
+                                          [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                                          [multiple]="false" [isFilterEnabled]="true">
+                                  <ng-template #optionTemplate let-option="option">
+                                    <ng-container *ngIf="!option.additional?.stock">
+                                      <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                        <span class="account-list-item"
+                                              style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                        <span class="account-list-item" style="display: block;font-size:12px;">
+                                          {{ option.additional?.uniqueName }}
+                                        </span>
+                                      </a>
+                                    </ng-container>
+                                    <ng-container *ngIf="option.additional?.stock">
+                                      <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                        <span class="account-list-item"
+                                              style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                        <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
+                                          {{ option.additional?.uniqueName }}</span>
+                                        <span class="account-list-item" style="display: block;font-size:11px">
+                                          Stock: {{ option.additional?.stock.name }}
+                                        </span>
+                                      </a>
+                                    </ng-container>
+                                  </ng-template>
+                                </sh-select>
+                                <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
+                                  <li>Create New Account</li>
+                                </ul>
+                              </td>
+
+                              <td class="col-xs-3 pos-rel">
+                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!--new ledge popup-->
+                        <!-- end  -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td colspan="3" class="nopad bdrL bdrR">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;">
+                  <tbody>
+                    <tr *ngFor="let txn of item.transactions;">
+                      <td class="width100" *ngIf="txn.type === 'CREDIT'">
+                        <table class="width100">
+                          <tbody class="ledger-main">
+                            <tr class="ledger-row">
+                              <td class="col-xs-2">
+                                <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                              </td>
+                              <td class="col-xs-7 select2-parent select2-ledger">
+                                <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular"
+                                          (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'"
+                                          [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
+                                          [multiple]="false" [isFilterEnabled]="true">
+                                  <ng-template #optionTemplate let-option="option">
+                                    <ng-container *ngIf="!option.additional?.stock">
+                                      <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                        <span class="account-list-item"
+                                              style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                        <span class="account-list-item" style="display: block;font-size:12px;">
+                                          {{ option.additional?.uniqueName }}
+                                        </span>
+                                      </a>
+                                    </ng-container>
+                                    <ng-container *ngIf="option.additional?.stock">
+                                      <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
+                                        <span class="account-list-item"
+                                              style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                        <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
+                                          {{ option.additional?.uniqueName }}</span>
+                                        <span class="account-list-item" style="display: block;font-size:11px">
+                                          Stock: {{ option.additional?.stock.name }}
+                                        </span>
+                                      </a>
+                                    </ng-container>
+                                  </ng-template>
+                                </sh-select>
+                                <ul class="no-result-template" *ngIf="lc.noAccountChosenForNewEntry">
+                                  <li>Create New Account</li>
+                                </ul>
+                              </td>
+
+                              <td class="col-xs-3 pos-rel">
+                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                        <!--new ledge popup-->
+                        <!-- end  -->
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+          </tbody>
+          <!-- end main tbody -->
+          <tfoot>
+            <tr class="fw600 dgreyBg">
+              <td colspan="2" class="bdrL" style="width:36%">
+                <div class="pull-right" *ngIf="eLedgType == 'CREDIT'">
+                  C/F Balance
+                </div>
+              </td>
+              <td style="width:14%" class="bdrR alR">
+                <span *ngIf="eLedgType == 'CREDIT'">{{eDrBalAmnt | number:2}}</span>
+              </td>
+              <td colspan="2" style="width:36%" class="bdrL">
+                <div class="pull-right" *ngIf="eLedgType == 'DEBIT'">
+                  C/F Balance
+                </div>
+              </td>
+              <td style="width:14%" class="bdrR alR">
+                <span *ngIf="eLedgType == 'DEBIT'">{{eCrBalAmnt | number:2}}</span>
+              </td>
+            </tr>
+
+          </tfoot>
+          <!-- end main tfoot -->
+        </table>
+      </div>
+    </section>
     <!--/bank ledger-->
 
     <!--account table-->
