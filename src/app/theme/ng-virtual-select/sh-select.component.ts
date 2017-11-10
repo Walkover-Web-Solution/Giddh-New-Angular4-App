@@ -29,6 +29,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public notFoundLink: boolean = false;
   @Input() public isFilterEnabled: boolean = false;
   @Input() public width: string = 'inherit';
+  @Input() public ItemHeight: number = 41;
+
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -125,7 +127,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     this.filter = '';
     if (this.isFilterEnabled) {
-      this.updateFilter(this.filter);
+      // this.updateFilter(this.filter);
     }
   }
 
@@ -160,7 +162,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public focusFilter() {
     if (this.isFilterEnabled && this.filter && this.filter !== '') {
-      this.updateFilter(this.filter);
+      // this.updateFilter(this.filter);
     }
     setTimeout(() => {
       this.renderer.invokeElementMethod(this.inputFilter.nativeElement, 'focus');
