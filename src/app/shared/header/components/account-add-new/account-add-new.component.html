@@ -5,14 +5,12 @@
     <div class="row">
       <div class="form-group" [ngClass]="{'col-xs-6': isGstEnabledAcc, 'col-xs-12': !isGstEnabledAcc}">
         <label for="">Account Name</label>
-        <input type="text" class="form-control" (change)="generateUniqueName()" formControlName="name"
-               name="accountName"/>
+        <input type="text" class="form-control" (change)="generateUniqueName()" formControlName="name" name="accountName" />
       </div>
 
       <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
         <label for="">Country</label>
-        <sh-select [options]="countrySource" formControlName="countryCode"></sh-select>
-        <!--<ng-select [options]="countrySource" formControlName="countryCode"></ng-select>-->
+        <ng-select [options]="countrySource" formControlName="countryCode" style="width:100%"></ng-select>
       </div>
 
     </div>
@@ -21,21 +19,18 @@
     (addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')">
       <!-- gst details -->
       <div formArrayName="addresses">
-        <div
-          *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
+        <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last"
           [formGroupName]="i">
 
           <div class="row">
             <div class="form-group col-xs-6">
               <label for="" class="d-block">GSTIN</label>
               <div class="input-group">
-                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber"
-                       (keyup)="getStateCode(gst, states)"
-                       name="gst_{{i}}" placeholder="">
+                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)"
+                  name="gst_{{i}}" placeholder="" />
                 <div class="input-group-addon">
-                  <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault"
-                         (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
-                         tooltip="DEFAULT GST" placement="bottom">
+                  <input type="checkbox" name="defaultGst_{{i}}" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)"
+                    tooltip="DEFAULT GST" placement="bottom">
                 </div>
               </div>
             </div>
@@ -43,11 +38,11 @@
               <label class="d-block">&nbsp;</label>
               <div class="mrT1">
                 <label>
-                  <input class="" type="checkbox"
-                         [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)"
-                         formControlName="isComposite"> Is Composite?</label>
+                  <input class="" type="checkbox" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)"
+                    formControlName="isComposite" /> Is Composite? </label>
                 <a href="javascript:void(0);" *ngIf="!f" (click)="removeGstDetailsForm(i)" class="grey_clr mrL3">
-                  <i class="fa fa-times"></i> Remove</a>
+                  <i class="fa fa-times"> </i> Remove
+                </a>
               </div>
             </div>
           </div>
@@ -55,44 +50,39 @@
           <div class="row">
             <div class="form-group col-xs-6">
               <label for="">Address</label>
-              <textarea name="gstAddr_{{i}}" formControlName="address" rows="5" maxlength="120"
-                        class="form-control"></textarea>
+              <textarea name="gstAddr_{{i}}" formControlName="address" rows="5" maxlength="120" class="form-control"></textarea>
             </div>
 
             <div class="col-xs-6">
               <div class="form-group">
                 <label for="">Party Type *</label>
                 <div class="custom-select pos-rel">
-                  <sh-select [options]="partyTypeSource"
-                             [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)"
-                             formControlName="partyType"></sh-select>
+                  <ng-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)"
+                    formControlName="partyType" style="width:100%"></ng-select>
                 </div>
               </div>
               <div class="form-group">
                 <label for="">State *</label>
                 <div class="custom-select pos-rel">
-                  <sh-select #states [options]="statesSource$ | async" formControlName="stateCode"></sh-select>
+                  <ng-select #states [options]="statesSource$ | async" formControlName="stateCode" style="width:100%"></ng-select>
                 </div>
               </div>
-              <div class="row"
-                   *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
-                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">Show all
-                  ({{addAccountForm.get('addresses')['controls'].length}})</a>
-                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">Show
-                  Less </a>
+              <div class="row" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && !(moreGstDetailsVisible)">
+                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showMoreGst()">Show all ({{addAccountForm.get('addresses')['controls'].length}})</a>
+                <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">Show Less </a>
               </div>
               <div class="row" *ngIf="l">
-                <a class="text-right col-xs-12" href="javascript:void(0);"
-                   (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                <a class="text-right col-xs-12" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
                   <i class="fa fa-plus"></i> Add More GSTIN
                 </a>
               </div>
             </div>
           </div>
+
         </div>
       </div>
+      <!-- </div> -->
       <!-- gst details -->
-
     </ng-container>
     <!-- hsn/sac container -->
     <ng-container *ngIf="isHsnSacEnabledAcc">
@@ -102,22 +92,20 @@
         <div class="col-xs-6 form-group">
           <label class="d-block">HSN</label>
           <div class="input-group">
-                        <span class="input-group-addon">
-                            <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
-                        </span>
-            <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control"
-                   name="hsnNumber"
-                   maxLength="10">
+            <span class="input-group-addon">
+              <input type="radio" class="" formControlName="hsnOrSac" value='hsn' name="hsnOrSac">
+            </span>
+            <input type="text" class="form-control" digitsOnlyDirective formControlName="hsnNumber" class="form-control" name="hsnNumber"
+              maxLength="10">
           </div>
         </div>
         <div class="col-xs-6 form-group">
           <label class="d-block">SAC</label>
           <div class="input-group">
-                        <span class="input-group-addon">
-                            <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac"/>
-                        </span>
-            <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber"
-                   maxLength="10">
+            <span class="input-group-addon">
+              <input type="radio" class="" formControlName="hsnOrSac" value='sac' name="hsnOrSac" />
+            </span>
+            <input type="text" digitsOnlyDirective formControlName="sacNumber" class="form-control " name="sacNumber" maxLength="10">
           </div>
         </div>
       </div>
@@ -128,9 +116,7 @@
       <div class="col-xs-12">
         <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
           <label class="cp">
-            <i class="fa cp" aria-hidden="true"
-               [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other
-            Details
+            <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other Details
           </label>
         </div>
       </div>
@@ -142,7 +128,7 @@
       <div class="row" *ngIf="isGstEnabledAcc">
         <div class="form-group col-xs-12">
           <label for="">Attention to (will be used in Invoice)</label>
-          <input type="text" class="form-control" formControlName="attentionTo" name="attention"/>
+          <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
         </div>
       </div>
 
@@ -151,8 +137,7 @@
         <div class="form-group col-xs-5">
           <label for="">Opening Balance</label>
           <div class="input-group">
-            <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id=""
-                   placeholder="00.00">
+            <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
@@ -167,15 +152,14 @@
           <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
-          <label class="d-block" *ngIf="!isMultipleCurrency"
-                 tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile."
-                 placement="left">
+          <label class="d-block" *ngIf="!isMultipleCurrency" tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile."
+            placement="left">
             <i class="fa fa-info-circle" aria-hidden="true"></i> Currency</label>
-          <input type="text" class="form-control" [value]="companyCurrency" disabled name="baseCurrency"/>
+          <input type="text" class="form-control" [value]="companyCurrency" disabled name="baseCurrency" />
         </div>
         <div class="form-group col-xs-4">
           <label for="">Unique Name</label>
-          <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname"/>
+          <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
         </div>
       </div>
 
@@ -183,8 +167,7 @@
         <div class="form-group col-xs-5">
           <label for="">Opening Balance</label>
           <div class="input-group">
-            <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id=""
-                   placeholder="00.00">
+            <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id="" placeholder="00.00">
             <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
@@ -199,7 +182,7 @@
           <label for="">Currency
             <small *ngIf="isMultipleCurrency">(Account)</small>
           </label>
-          <input type="text" class="form-control" formControlName="currency" name="currency"/>
+          <input type="text" class="form-control" formControlName="currency" name="currency" />
         </div>
         <div class="form-group col-xs-6">
         </div>
@@ -221,14 +204,13 @@
           <label for="">Mobile Number</label>
           <div class="input-group">
             <div class="input-group-addon">+91</div>
-            <input type="text" class="form-control" formControlName="mobileNo" digitsOnlyDirective name="mobileno."
-                   placeholder="9198XXXXXXXX">
-            <input type="hidden" name="phoneCode" value=""/>
+            <input type="text" class="form-control" formControlName="mobileNo" digitsOnlyDirective name="mobileno." placeholder="9198XXXXXXXX">
+            <input type="hidden" name="phoneCode" value="" />
           </div>
         </div>
         <div class="form-group col-xs-6">
           <label for="">Email Id</label>
-          <input type="email" class="form-control" formControlName="email" name="emailId"/>
+          <input type="email" class="form-control" formControlName="email" name="emailId" />
           <span class="error-msg" *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">*Invalid Email address</span>
         </div>
       </div>
@@ -246,8 +228,7 @@
     <div class="row mrT3">
       <div class="form-group col-xs-12 text-right">
         <!-- <button class="btn btn-default" type="button" (click)="addAccountForm.reset()">Cancel</button> -->
-        <button type="submit" class="btn save-btn" [ladda]="createAccountInProcess$ | async"
-                [disabled]="addAccountForm.invalid">Save
+        <button type="submit" class="btn save-btn" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Save
         </button>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import { LinkedAccountsState, SettingsState } from './Settings.reducer';
 import * as _ from '../../lodash-optimized';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
@@ -14,6 +15,8 @@ export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
   isBankAccountsInProcess?: boolean;
   isDeleteBankAccountIsInProcess?: boolean;
+  needReloadingLinkedAccounts?: boolean;
+  iframeSource?: string;
 }
 export interface SettingsState {
   integration: IntegrationPage;
@@ -224,6 +227,24 @@ export function SettingsReducer(state = initialState, action: Action): SettingsS
         return Object.assign({}, state, newState);
       }
       return state;
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE: {
+      let response: BaseResponse<any, string> = action.payload;
+      if (response.status === 'success') {
+        newState.linkedAccounts.iframeSource = response.body.connectUrl;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE:
+    {
+      newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
+    }
+    case SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE:
+    {
+      newState.linkedAccounts.needReloadingLinkedAccounts = !newState.linkedAccounts.needReloadingLinkedAccounts;
+      return Object.assign({}, state, newState);
     }
     default: {
       return state;
