@@ -114,13 +114,18 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
     case LEDGER.DELETE_TRX_ENTRY:
       return {
         ...state,
-        isDeleteTrxEntrySuccessfull: true
+        isDeleteTrxEntrySuccessfull: false
       };
     case LEDGER.DELETE_TRX_ENTRY_RESPONSE:
       let delResp = action.payload as BaseResponse<string, string>;
       return {
         ...state,
         isDeleteTrxEntrySuccessfull: delResp.status === 'success'
+      };
+    case LEDGER.RESET_DELETE_TRX_ENTRY_MODAL:
+      return {
+        ...state,
+        isDeleteTrxEntrySuccessfull: false
       };
     case LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE:
       let sharedAccountData: BaseResponse<AccountSharedWithResponse[], string> = action.payload;

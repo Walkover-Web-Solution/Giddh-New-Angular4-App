@@ -426,7 +426,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    this.hideUpdateLedgerModal();
     this.trxRequest = new TransactionsRequest();
     this.trxRequest.accountUniqueName = this.lc.accountUnq;
     this.getTransactionData();
@@ -466,8 +465,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
     componentInstance.closeUpdateLedgerModal.subscribe((a) => {
       this.hideUpdateLedgerModal();
-    });
-    componentInstance.entryManipulated.subscribe((a) => {
+      // componentInstance.vm.resetVM();
+      // componentInstance.destroyed$.next(true);
+      // componentInstance.destroyed$.complete();
+      componentRef.destroy();
       this.entryManipulated();
     });
   }
