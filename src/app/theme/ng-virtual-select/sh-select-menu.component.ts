@@ -14,6 +14,7 @@ export class ShSelectMenuComponent implements OnChanges {
   @Input() public optionTemplate: TemplateRef<any>;
   @Input() public notFoundMsg: string;
   @Input() public noResultLinkEnabled: boolean;
+  @Input() public ItemHeight: number;
 
   @Output() public noToggleClick: EventEmitter<any> = new EventEmitter<any>();
   @Output() public noResultClicked = new EventEmitter<null>();
