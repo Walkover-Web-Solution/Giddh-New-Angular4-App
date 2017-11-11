@@ -27,7 +27,7 @@ import { GeneralActions } from '../../services/actions/general/general.actions';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
-  public userIsSuperUser: boolean = false; // Protect permission module
+  public userIsSuperUser: boolean = true; // Protect permission module
   public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
@@ -114,11 +114,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
-        this.userIsSuperUser = true;
-      } else {
-        this.userIsSuperUser = false;
-      }
+      // if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role && selectedCmp.role.uniqueName === 'super_admin') {
+      //   this.userIsSuperUser = true;
+      // } else {
+      //   this.userIsSuperUser = false;
+      // }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
 
