@@ -127,7 +127,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.unit.rate) {
-          this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+          // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
         }
       }
     }
@@ -138,8 +138,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public amountChanged() {
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
-        if (this.currentTxn.inventory.unit.rate) {
-          this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
+        if (this.currentTxn.inventory.quantity) {
+          this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
         }
       }
     }
@@ -153,7 +153,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public changePrice(val: string) {
-    this.currentTxn.inventory.unit.rate = Number(val);
+    this.currentTxn.inventory.unit.rate = Number(_.cloneDeep(val));
     this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
     // this.amountChanged();
     this.calculateTotal();
@@ -161,7 +161,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public changeQuantity(val: string) {
     this.currentTxn.inventory.quantity = Number(val);
-    this.currentTxn.amount = (this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity);
+    this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
     // this.amountChanged();
     this.calculateTotal();
   }
@@ -173,7 +173,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
-        this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
+        // this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
       }
     }
 
