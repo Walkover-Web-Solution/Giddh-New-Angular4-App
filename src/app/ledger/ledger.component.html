@@ -305,7 +305,7 @@
               <td class="width100" *ngIf="txn.type === 'DEBIT'">
                 <table class="width100">
                   <tbody class="ledger-main">
-                    <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
+                    <tr class="ledger-row compoundEntry">
 
                       <td class="col-xs-2">
                         <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
@@ -425,7 +425,7 @@
               <td class="width100" *ngIf="txn.type === 'CREDIT'">
                 <table class="width100">
                   <tbody class="ledger-main">
-                    <tr class="ledger-row" [ngClass]="{compoundEntry: txn.id === lc.selectedTxnUniqueName}">
+                    <tr class="ledger-row compoundEntry">
 
                       <td class="col-xs-2">
                         <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
