@@ -45,9 +45,9 @@ export class CompanyResponse {
   public pincode: string;
   public country: string;
   public updatedAt: string;
-  public updatedBy: UpdatedBy;
+  public updatedBy: ICommonItem;
   public createdAt: string;
-  public createdBy: UpdatedBy;
+  public createdBy: ICommonItem;
   public uniqueName: string;
   public baseCurrency: string;
   public contactNo: string;
@@ -63,6 +63,21 @@ export class CompanyResponse {
   public gstDetails: GstDetail[];
   public panNumber?: string;
   public isMultipleCurrency?: boolean;
+  public userEntityRoles?: UserEntityRole[];
+}
+
+export interface UserEntityRole {
+  sharedWith: ICommonItem;
+  uniqueName: string;
+  allowedCidrs: any[];
+  allowedIps: any[];
+  period?: any;
+  from?: any;
+  to?: any;
+  sharedBy: ICommonItem;
+  duration?: any;
+  entity: ICommonItem;
+  role: Role;
 }
 
 export interface Role {
@@ -83,7 +98,7 @@ export interface CompanySubscription {
   billAmount: number;
   primaryBiller?: any;
   createdAt: string;
-  createdBy: UpdatedBy;
+  createdBy: ICommonItem;
 }
 
 export interface ServicePlan {
@@ -92,10 +107,8 @@ export interface ServicePlan {
   amount: number;
 }
 
-export interface UpdatedBy {
-  name: string;
+export interface ICommonItem extends INameUniqueName {
   email: string;
-  uniqueName: string;
   mobileNo: string;
 }
 
