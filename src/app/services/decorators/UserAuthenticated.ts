@@ -9,6 +9,7 @@ import { ROUTES } from '../../app.routes';
 export class UserAuthenticated implements CanActivate {
   constructor(public _router: Router, private store: Store<AppState>) {
   }
+
   public canActivate() {
     return this.store.select(p => p.session).distinctUntilKeyChanged('companyUniqueName').map(p => {
       if (p.userLoginState === userLoginStateEnum.userLoggedIn) {

@@ -1,16 +1,5 @@
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
-import {
-  AccountMergeRequest,
-  AccountMoveRequest,
-  AccountRequest,
-  AccountRequestV2,
-  AccountResponse,
-  AccountResponseV2,
-  AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse,
-  AccountUnMergeRequest,
-  ShareAccountRequest
-} from '../../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from './../account.service';
 import { AppState } from './../../store/roots';
 import { ToasterService } from './../toaster.service';
@@ -22,6 +11,7 @@ import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { GroupResponse } from '../../models/api-models/Group';
+import { GeneralActions } from './general/general.actions';
 
 @Injectable()
 export class AccountsAction {
@@ -73,7 +63,7 @@ export class AccountsAction {
       let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       this._toasty.successToast(action.payload.body, action.payload.status);
       let accName = null;
@@ -114,7 +104,7 @@ export class AccountsAction {
       } else {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -149,7 +139,7 @@ export class AccountsAction {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
       setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -216,7 +206,7 @@ export class AccountsAction {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -252,7 +242,7 @@ export class AccountsAction {
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
         this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
       }
-      return { type: '' };
+      return {type: ''};
     });
   @Effect()
   public getGroupTaxHierarchy$: Observable<Action> = this.action$
@@ -465,10 +455,11 @@ export class AccountsAction {
     });
 
   constructor(private action$: Actions,
-    private _accountService: AccountService,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private groupWithAccountsAction: GroupWithAccountsAction) {
+              private _accountService: AccountService,
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private _generalActions: GeneralActions) {
   }
 
   public createAccount(value: string, account: AccountRequest): Action {
@@ -477,8 +468,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
 
@@ -495,8 +486,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
 
@@ -513,8 +504,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
 
@@ -528,7 +519,7 @@ export class AccountsAction {
   public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): Action {
     return {
       type: AccountsAction.UPDATE_ACCOUNTV2,
-      payload: { account, value }
+      payload: {account, value}
     };
   }
 
@@ -573,8 +564,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
 
@@ -591,8 +582,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
 
@@ -609,8 +600,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
 
@@ -686,7 +677,7 @@ export class AccountsAction {
   public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): Action {
     return {
       type: AccountsAction.MERGE_ACCOUNT,
-      payload: { accountUniqueName, data }
+      payload: {accountUniqueName, data}
     };
   }
 
@@ -700,7 +691,7 @@ export class AccountsAction {
   public unmergeAccount(accountUniqueName: string, data: AccountUnMergeRequest): Action {
     return {
       type: AccountsAction.UNMERGE_ACCOUNT,
-      payload: { accountUniqueName, data }
+      payload: {accountUniqueName, data}
     };
   }
 

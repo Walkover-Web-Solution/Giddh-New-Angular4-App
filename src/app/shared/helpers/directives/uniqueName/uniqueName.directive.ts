@@ -1,6 +1,6 @@
 import { Directive, ElementRef, HostListener, OnInit } from '@angular/core';
-import { ToasterService } from '../../../services/toaster.service';
-import { uniqueNameInvalidStringReplace } from '../helperFunctions';
+import { ToasterService } from '../../../../services/toaster.service';
+import { uniqueNameInvalidStringReplace } from '../../helperFunctions';
 
 @Directive({
   selector: '[UniqueNameDirective]'

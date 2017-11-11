@@ -107,8 +107,8 @@
         </label>
         <div class="clearfix">
           <div class="form-group col-xs-11 row" #accountSelect2>
-            <ng-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="true"
-                       [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></ng-select>
+            <sh-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="true"
+                       [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
             <small class="clearfix">This option is risky and can not be undone</small>
           </div>
           <div class="form-group pull-right">
@@ -132,8 +132,8 @@
     <div class="col-xs-12 horizontal-form" *ngIf="showDeleteMove">
       <label class="d-block">Move to other A/c</label>
       <div class="form-group col-xs-11 row">
-        <ng-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false"
-                   [(ngModel)]="selectedAccountForMove" [placeholder]="'Select Accounts'"></ng-select>
+        <sh-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false"
+                   [(ngModel)]="selectedAccountForMove" [placeholder]="'Select Accounts'"></sh-select>
       </div>
       <button class="btn btn-default pull-right" (click)="showMoveMergedAccountModal()">Move</button>
     </div>
@@ -184,9 +184,9 @@
               </div>
               <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="clearfix mrT1">
-                  <ng-select [options]="companyTaxDropDown | async" [placeholder]="'Select Taxes'"
+                  <sh-select [options]="companyTaxDropDown | async" [placeholder]="'Select Taxes'"
                              [multiple]="true" formControlName="taxes">
-                  </ng-select>
+                  </sh-select>
                 </div>
                 <button type="submit" class="btn btn-default pull-right mrT1">Save</button>
               </form>
