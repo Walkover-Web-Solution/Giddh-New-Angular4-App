@@ -445,8 +445,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    this.trxRequest = new TransactionsRequest();
-    this.trxRequest.accountUniqueName = this.lc.accountUnq;
+    // this.trxRequest = new TransactionsRequest();
+    // this.trxRequest.accountUniqueName = this.lc.accountUnq;
     this.getTransactionData();
   }
 
