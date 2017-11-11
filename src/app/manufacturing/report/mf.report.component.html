@@ -19,17 +19,21 @@
                             <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                         </div>
                     </div>
-                    <div class="form-group" (clickOutside)="showFromDatePicker=false;">
-                        <label class="d-block">From Date</label>
+                    <div class="form-group">
+                        <label class="d-block">From - To</label>
                         <div class="input-group">
-                            <input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+                            <input name="dateRange" placeholder="Date range picker" type="text" class="form-control"
+                                [ngModel]="mfStockSearchRequest.dateRange"
+                                (bsValueChange)="bsValueChange($event)"
+                                bsDaterangepicker required >
+                            <!--<input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
                             <span class="input-group-btn">
                                 <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                                     <i class="glyphicon glyphicon-calendar"></i>
                                 </button>
-                            </span>
+                            </span>-->
                         </div>
-                        <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;" placement="right">
+                        <!--<div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;" placement="right">
                             <ul class="my-dropdown-menu calendar-dropdown">
                                 <li>
                                     <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="mfStockSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
@@ -42,9 +46,9 @@
                                     <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate('from');showFromDatePicker = false;">Clear</button>
                                 </li>
                             </ul>
-                        </div>
+                        </div>-->
                     </div>
-                    <div class="form-group" (clickOutside)="showToDatePicker=false;">
+                    <!--<div class="form-group" (clickOutside)="showToDatePicker=false;">
                         <label class="d-block">To Date</label>
                         <div class="input-group">
                             <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;" class="form-control" required/>
@@ -68,7 +72,7 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group">
                         <label class="d-block">Search By</label>
                         <div class="custom-select pos-rel">

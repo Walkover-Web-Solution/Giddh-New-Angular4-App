@@ -40,7 +40,7 @@
               <input type="text" decimalDigitsDirective name="" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()"
               />
             </td>
-            <td class="pItem" ng-if="ledgerCtrl.discountAccount != undefined">
+            <td class="pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
               <label>&nbsp;</label>
               <label class="pdR pdL default_clr">-</label>
             </td>
@@ -50,7 +50,7 @@
               <ledger-discount #discount [discountAccountsDetails]="currentTxn.discounts" (discountTotalUpdated)="currentTxn.discount = $event;calculateTotal();">
               </ledger-discount>
             </td>
-            <td class="pItem" ng-if="ledgerCtrl.taxList.length > 0 && ledgerCtrl.discountAccount != undefined && ledgerCtrl.discountAccount.accountDetails.length > 0">
+            <td class="pItem" *ngIf="(companyTaxesList$ | async)?.length && (discountAccountsList$ | async)?.accountDetails.length">
               <label>&nbsp;</label>
               <label class="pdR pdL default_clr">+</label>
             </td>
@@ -134,7 +134,7 @@
               <label class="default_clr pull-left">Voucher type</label>
             </td>
             <td colspan="4" class="select2-parent">
-              <select2 [(ngModel)]="blankLedger.voucherType" [data]="voucherTypeList | async" [options]="voucherDropDownOptions"></select2>
+              <ng-select [options]="voucherTypeList | async" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"></ng-select>
             </td>
             <td class="pdL1">
               <span>{{""}}</span>

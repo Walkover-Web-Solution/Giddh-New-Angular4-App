@@ -1,24 +1,21 @@
 import { LoginActions } from '../services/actions/login.action';
-import { AppState } from '../store/roots';
+import { AppState } from '../store';
 import { Router } from '@angular/router';
-import { Component, OnDestroy, OnInit, ViewChild, NgZone } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
-import { VerifyMobileModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, LinkedInRequestModel } from '../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel } from '../models/api-models/loginModels';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
-
-import { HttpWrapperService } from '../services/httpWrapper.service';
-import { Headers } from '@angular/http';
-import { RequestOptionsArgs } from '@angular/http';
+import { Headers, RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
-import { BaseResponse } from '../models/api-models/BaseResponse';
-import { GoogleLoginElectronConfig, AdditionalGoogleLoginParams, LinkedinLoginElectronConfig, AdditionalLinkedinLoginParams } from '../../mainprocess/main-auth.config';
-import { IContriesWithCodes, contriesWithCodes } from '../shared/helpers/countryWithCodes';
+import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
+import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { IOption } from '../theme/ng-select/option.interface';
+import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
 @Component({
   selector: 'login',
@@ -30,33 +27,36 @@ export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('emailVerifyModal') public emailVerifyModal: ModalDirective;
   public isLoginWithEmailSubmited$: Observable<boolean>;
   @ViewChild('mobileVerifyModal') public mobileVerifyModal: ModalDirective;
+  @ViewChild('twoWayAuthModal') public twoWayAuthModal: ModalDirective;
   public isSubmited: boolean = false;
   public mobileVerifyForm: FormGroup;
   public emailVerifyForm: FormGroup;
+  public twoWayOthForm: FormGroup;
   public isVerifyMobileInProcess$: Observable<boolean>;
   public isLoginWithMobileInProcess$: Observable<boolean>;
   public isVerifyEmailInProcess$: Observable<boolean>;
   public isLoginWithEmailInProcess$: Observable<boolean>;
   public isSocialLogoutAttempted$: Observable<boolean>;
+  public userLoginState$: Observable<userLoginStateEnum>;
+  public userDetails$: Observable<VerifyEmailResponseModel>;
+  public isTwoWayAuthInProcess$: Observable<boolean>;
+  public isTwoWayAuthInSuccess$: Observable<boolean>;
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
   private imageURL: string;
   private email: string;
   private name: string;
   private token: string;
-  private socialLoginKeys: any;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   // tslint:disable-next-line:no-empty
-  constructor(
-    private _fb: FormBuilder,
-    private store: Store<AppState>,
-    private router: Router,
-    private loginAction: LoginActions,
-    private authService: AuthService,
-    private _toaster: ToasterService,
-    private zone: NgZone
-  ) {
+  constructor(private _fb: FormBuilder,
+              private store: Store<AppState>,
+              private router: Router,
+              private loginAction: LoginActions,
+              private authService: AuthService,
+              private _toaster: ToasterService,
+              private zone: NgZone) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).takeUntil(this.destroyed$);
@@ -93,8 +93,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.isSocialLogoutAttempted$ = this.store.select(p => p.login.isSocialLogoutAttempted).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({ value: c.countryName, label: c.value });
+      this.countryCodeList.push({value: c.countryName, label: c.value});
     });
+    this.userLoginState$ = this.store.select(p => p.session.userLoginState);
+    this.userDetails$ = this.store.select(p => p.session.user);
+    this.isTwoWayAuthInProcess$ = this.store.select(p => p.login.isTwoWayAuthInProcess);
+    this.isTwoWayAuthInSuccess$ = this.store.select(p => p.login.isTwoWayAuthSuccess);
   }
 
   // tslint:disable-next-line:no-empty
@@ -109,7 +113,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       email: ['', [Validators.required, Validators.email]],
       token: ['', Validators.required]
     });
-    this.setCountryCode({ value: 'India' });
+    this.twoWayOthForm = this._fb.group({
+      otp: ['', [Validators.required]]
+    });
+    this.setCountryCode({value: 'India'});
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -137,6 +144,20 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
       });
     }
+
+    //  get login state and check if twoWayAuth is needed
+    this.userLoginState$.subscribe(status => {
+      if (status === userLoginStateEnum.needTwoWayAuth) {
+        this.showTwoWayAuthModal();
+      }
+    });
+    // check if two way auth is successfully done
+    this.isTwoWayAuthInSuccess$.subscribe(a => {
+      if (a) {
+        this.hideTowWayAuthModal();
+        this.store.dispatch(this.loginAction.resetTwoWayAuthModal());
+      }
+    });
   }
 
   public showEmailModal() {
@@ -149,12 +170,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   public LoginWithEmail(email: string) {
     this.store.dispatch(this.loginAction.SignupWithEmailRequest(email));
   }
+
   public VerifyEmail(email: string, code: string) {
     let data = new VerifyEmailModel();
     data.email = email;
     data.verificationCode = code;
     this.store.dispatch(this.loginAction.VerifyEmailRequest(data));
   }
+
   public VerifyCode(mobile: string, code: string) {
     let data = new VerifyMobileModel();
     data.countryCode = Number(this.selectedCountry);
@@ -162,6 +185,17 @@ export class LoginComponent implements OnInit, OnDestroy {
     data.oneTimePassword = code;
     this.store.dispatch(this.loginAction.VerifyMobileRequest(data));
   }
+
+  public verifyTwoWayCode() {
+    let user: VerifyEmailResponseModel;
+    this.userDetails$.take(1).subscribe(p => user = p);
+    let data = new VerifyMobileModel();
+    data.countryCode = Number(user.countryCode);
+    data.mobileNumber = user.contactNumber;
+    data.oneTimePassword = this.twoWayOthForm.value.otp;
+    this.store.dispatch(this.loginAction.VerifyTwoWayAuthRequest(data));
+  }
+
   public hideEmailModal() {
     this.emailVerifyModal.hide();
     this.store.dispatch(this.loginAction.ResetSignupWithEmailState());
@@ -176,6 +210,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.mobileVerifyModal.hide();
     this.store.dispatch(this.loginAction.ResetSignupWithMobileState());
     this.mobileVerifyForm.get('mobileNumber').reset();
+  }
+
+  public showTwoWayAuthModal() {
+    this.twoWayAuthModal.show();
+  }
+
+  public hideTowWayAuthModal() {
+    this.twoWayAuthModal.hide();
+  }
+
+  public resetTwoWayAuthModal() {
+    this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.notLoggedIn));
+    this.hideTowWayAuthModal();
   }
 
   // tslint:disable-next-line:no-empty

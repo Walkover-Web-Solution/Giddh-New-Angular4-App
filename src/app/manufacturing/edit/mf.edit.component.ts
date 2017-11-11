@@ -1,5 +1,4 @@
 import { ToasterService } from './../../services/toaster.service';
-import { validateEmail } from './../../shared/helpers/helperFunctions';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
@@ -15,10 +14,9 @@ import * as moment from 'moment/moment';
 import { GroupService } from '../../services/group.service';
 import { ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { ModalDirective } from 'ngx-bootstrap';
-import { CustomStockUnitAction } from '../../services/actions/inventory/customStockUnit.actions';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
-import { Select2OptionData } from '../../theme/select2';
+import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -28,6 +26,7 @@ export class MfEditComponent implements OnInit {
   @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
 
   public stockListDropDown$: Observable<IOption[]>;
+  public groupsList$: Observable<GroupsWithAccountsResponse[]>;
   public consumptionDetail = [];
   public isUpdateCase: boolean = false;
   public manufacturingDetails: ManufacturingItemRequest;
@@ -84,9 +83,9 @@ export class MfEditComponent implements OnInit {
     });
 
     // Get group with accounts
-    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let GroupWithAccResponse = _.cloneDeep(data.body);
+    this.groupsList$.subscribe(data => {
+      if (data.length) {
+        let GroupWithAccResponse = _.cloneDeep(data);
         this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(response => {
           if (response.status === 'success') {
             let flattenGroupResponse = _.cloneDeep(response.body.results);
@@ -97,10 +96,10 @@ export class MfEditComponent implements OnInit {
                   let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
                   if (matchedAccIndex > -1) {
                     if (d.category === 'expenses') {
-                      this.expenseGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
+                      this.expenseGroupAccounts.push({label: acc.name, value: acc.uniqueName});
                     }
                     if (d.category === 'liabilities' || d.category === 'assets') {
-                      this.liabilityGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
+                      this.liabilityGroupAccounts.push({label: acc.name, value: acc.uniqueName});
                     }
                   }
                 }
@@ -115,6 +114,7 @@ export class MfEditComponent implements OnInit {
 
     this.manufacturingDetails.quantity = 1;
   }
+
   public ngOnInit() {
     if (this.isUpdateCase) {
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
@@ -139,9 +139,9 @@ export class MfEditComponent implements OnInit {
           return units.map(unit => {
             let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
             if (alreadyPushedElementindx > -1) {
-              return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+              return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true};
             } else {
-              return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+              return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false};
             }
           });
         }
@@ -189,31 +189,31 @@ export class MfEditComponent implements OnInit {
   public addConsumption(data) {
     if (data.amount > 0) {
       let val: any = {
-      amount: data.amount,
-      rate: data.rate,
-      stockName: data.stockUniqueName,
-      stockUniqueName: data.stockUniqueName,
-      quantity: data.quantity
-      // stockUnitCode: 'm' // TODO: Remove hardcoded value
-    };
+        amount: data.amount,
+        rate: data.rate,
+        stockName: data.stockUniqueName,
+        stockUniqueName: data.stockUniqueName,
+        quantity: data.quantity
+        // stockUnitCode: 'm' // TODO: Remove hardcoded value
+      };
 
-    if (this.isUpdateCase) {
-      val.stockUnitCode = data.manufacturingUnit;
-    } else {
-      val.stockUnitCode = data.stockUnitCode;
-    }
+      if (this.isUpdateCase) {
+        val.stockUnitCode = data.manufacturingUnit;
+      } else {
+        val.stockUnitCode = data.stockUnitCode;
+      }
 
-    let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
+      let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
-    if (manufacturingObj.linkedStocks) {
-      manufacturingObj.linkedStocks.push(val);
-    } else {
-      manufacturingObj.linkedStocks = [val];
-    }
+      if (manufacturingObj.linkedStocks) {
+        manufacturingObj.linkedStocks.push(val);
+      } else {
+        manufacturingObj.linkedStocks = [val];
+      }
 
-    // manufacturingObj.stockUniqueName = this.selectedProduct;
-    this.manufacturingDetails = manufacturingObj;
-    this.linkedStocks = new IStockItemDetail();
+      // manufacturingObj.stockUniqueName = this.selectedProduct;
+      this.manufacturingDetails = manufacturingObj;
+      this.linkedStocks = new IStockItemDetail();
     } else {
       this._toasty.errorToast('Can not add raw material, amount is 0');
     }
