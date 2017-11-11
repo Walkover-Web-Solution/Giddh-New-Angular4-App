@@ -1,8 +1,7 @@
-import { Component, OnInit, Input, EventEmitter, Output, OnDestroy, ViewChild } from '@angular/core';
-import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
-import { FormGroup, FormBuilder, Validators, AbstractControl, FormArray } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
-import { AccountRequestV2, AccountResponseV2, AccountResponse, IAccountAddress } from '../../../../models/api-models/Account';
+import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
@@ -12,7 +11,6 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { digitsOnly } from '../../../helpers/index';
 import { SelectComponent } from '../../../../theme/ng-select/select.component';
 import { IOption } from '../../../../theme/ng-select/option.interface';
-import { GroupResponse } from '../../../../models/api-models/Group';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
 import { CompanyActions } from '../../../../services/actions/company.actions';
@@ -284,7 +282,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
-        statesEle.disabled = true;
+        gstForm.get('stateCode').disable();
+        // statesEle.disabled = true;
         if (s) {
           gstForm.get('stateCode').patchValue(s.value);
         } else {
@@ -294,7 +293,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      statesEle.disabled = false;
+      gstForm.get('stateCode').enable();
       gstForm.get('stateCode').patchValue(null);
     }
   }

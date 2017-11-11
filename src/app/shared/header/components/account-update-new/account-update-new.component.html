@@ -10,7 +10,7 @@
 
             <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
                 <label for="">Country</label>
-                <ng-select [options]="countrySource" formControlName="countryCode"></ng-select>
+                <sh-select [options]="countrySource" formControlName="countryCode"></sh-select>
             </div>
 
         </div>
@@ -51,13 +51,13 @@
                             <div class="form-group">
                                 <label for="">Party Type *</label>
                                 <div class="custom-select pos-rel">
-                                    <ng-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="partyType"></ng-select>
+                                    <sh-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="partyType"></sh-select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="">State *</label>
                                 <div class="custom-select pos-rel">
-                                    <ng-select #states [options]="statesSource$ | async" formControlName="stateCode"></ng-select>
+                                    <sh-select #states [options]="statesSource$ | async" formControlName="stateCode"></sh-select>
                                 </div>
                             </div>
                             <div class="row">
@@ -183,7 +183,7 @@
                     <label for="">Mobile Number</label>
                     <!-- <small class="clearfix" *ngIf="addAccountForm.get('mobileNo').value && !addAccountForm.get('mobileCode').value">Phone code required</small> -->
                     <div class="input-group">
-                        <!-- commented by mustafa due to unavailability of key for mobileCode  
+                        <!-- commented by mustafa due to unavailability of key for mobileCode
                             <div class="input-group-addon">
                             <ng-select [allowClear]="true" [options]="countryPhoneCode" [required]="addAccountForm.get('mobileNo').value.length > 0" class="form-inline" formControlName="mobileCode"></ng-select>
                         </div> -->
@@ -194,6 +194,7 @@
                 <div class="form-group col-xs-6">
                     <label for="">Email Id</label>
                     <input type="email" class="form-control" formControlName="email" name="emailId" />
+                    <span class="error-msg" *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors">*Invalid Email address</span>
                 </div>
             </div>
 
