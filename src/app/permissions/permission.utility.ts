@@ -1,4 +1,3 @@
-
 import { Scope, Permission } from '../models/api-models/Permission';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 
@@ -26,6 +25,14 @@ export interface IPageStr {
 export interface IPage {
     name: string;
     isSelected: boolean;
+}
+
+export interface GetAllPermissionResponse {
+    name: string;
+    scopes: Scope[];
+    isFixed?: boolean;
+    uniqueName?: string;
+    isUpdateCase?: boolean;
 }
 
 export interface Pages {
