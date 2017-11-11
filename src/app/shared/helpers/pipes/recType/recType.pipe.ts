@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ClosingBalance } from '../../../models/api-models/Search';
+import { ClosingBalance } from '../../../../models/api-models/Search';
 
 @Pipe({
   // tslint:disable-next-line:pipe-naming

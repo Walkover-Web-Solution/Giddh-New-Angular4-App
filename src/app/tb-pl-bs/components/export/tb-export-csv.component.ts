@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
+import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { ChildGroup } from '../../../models/api-models/Search';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';

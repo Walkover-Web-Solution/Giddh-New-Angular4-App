@@ -102,10 +102,10 @@
               <div class="tax-label"><label>All Applicable Taxes</label></div>
               <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
                 <div class="clearfix max350 mrT1">
-                  <ng-select formControlName="taxes" [placeholder]="'Select Taxes'"
+                  <sh-select formControlName="taxes" [placeholder]="'Select Taxes'"
                              [options]="companyTaxDropDown | async"
                              [multiple]="true">
-                  </ng-select>
+                  </sh-select>
                 </div>
                 <button type="submit" class="btn btn-success mrT1"> Save</button>
               </form>
