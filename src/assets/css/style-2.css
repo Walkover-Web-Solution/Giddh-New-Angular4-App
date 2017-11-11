@@ -4023,3 +4023,8 @@ ng-select .select_drop {
 ng-select .select_drop i {
     right: 9px;
 }
+
+#expandAllGroups [class^="icon-"],
+#expandAllGroups [class*=" icon-"] {
+    pointer-events: none;
+}
