@@ -1,14 +1,13 @@
-import { CompanyActions } from './../../../../services/actions/company.actions';
-import { LocationService } from './../../../../services/location.service';
-import { CompanyRequest } from './../../../../models/api-models/Company';
-import { SignupWithMobile, VerifyMobileModel } from './../../../../models/api-models/loginModels';
+import { CompanyActions } from '../../../../services/actions/company.actions';
+import { LocationService } from '../../../../services/location.service';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
 import { Observable, ReplaySubject } from 'rxjs';
-import { VerifyMobileActions } from './../../../../services/actions/verifyMobile.actions';
-import { AppState } from './../../../../store/roots';
+import { VerifyMobileActions } from '../../../../services/actions/verifyMobile.actions';
+import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { WizardComponent } from '../../../../theme/ng2-wizard/wizard.component';
-import { CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
@@ -17,6 +16,7 @@ import { AuthenticationService } from '../../../../services/authentication.servi
 import * as _ from '../../../../lodash-optimized';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { IOption } from '../../../../theme/ng-select/option.interface';
+import { GeneralActions } from '../../../../services/actions/general/general.actions';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
@@ -51,15 +51,14 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private socialAuthService: AuthService,
-    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-    private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-    private _aunthenticationServer: AuthenticationService) {
+  constructor(private socialAuthService: AuthService,
+              private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+              private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
+              private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions) {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({ value: c.countryName, label: c.value });
+      this.countryCodeList.push({value: c.countryName, label: c.value});
     });
   }
 
@@ -68,7 +67,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
-    this.setCountryCode({ value: 'India' });
+    this.setCountryCode({value: 'India'});
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         if (s.session.user.user.mobileNo) {
@@ -177,6 +176,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$.take(1).subscribe(c => companies = c);
     if (companies) {
       if (companies.length > 0) {
+        this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.closeCompanyModal.emit();
       } else {
         this.showLogoutModal();

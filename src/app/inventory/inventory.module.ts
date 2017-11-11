@@ -1,4 +1,3 @@
-import { SharedModule } from '../shared/shared.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -17,6 +16,8 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
 import { SelectModule } from '../theme/ng-select/ng-select';
+import { LaddaModule } from 'angular2-ladda';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
 // import { CollapseModule } from 'ngx-bootstrap/collapse';
 // import { ModalModule } from 'ngx-bootstrap/modal';
@@ -36,7 +37,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     InventoryCustomStockComponent,
     InventoryStockReportComponent,
     StockgrpListComponent,
-    StockListComponent
+    StockListComponent,
   ],
   exports: [
     InventoryComponent,
@@ -55,11 +56,12 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     FormsModule,
     ReactiveFormsModule,
     InventoryRoutingModule,
-    SharedModule,
     TooltipModule,
     DatepickerModule,
     DatePickerCustomModule,
-    SelectModule
+    SelectModule,
+    LaddaModule,
+    DecimalDigitsModule
   ],
 })
 export class InventoryModule {

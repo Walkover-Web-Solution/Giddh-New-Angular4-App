@@ -1,11 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import {
-  DownloadLedgerRequest,
-  LedgerResponse,
-  TransactionsRequest,
-  TransactionsResponse,
-  LedgerUpdateRequest
-} from '../../models/api-models/Ledger';
+import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
 import { LEDGER } from '../../services/actions/ledger/ledger.const';
@@ -28,6 +22,8 @@ export interface LedgerState {
   activeAccountSharedWith?: AccountSharedWithResponse[];
   isTxnUpdateInProcess: boolean;
   isTxnUpdateSuccess: boolean;
+  isQuickAccountInProcess: boolean;
+  isQuickAccountCreatedSuccessfully: boolean;
 }
 
 export const initialState: LedgerState = {
@@ -37,7 +33,9 @@ export const initialState: LedgerState = {
   isDeleteTrxEntrySuccessfull: false,
   activeAccountSharedWith: null,
   isTxnUpdateInProcess: false,
-  isTxnUpdateSuccess: false
+  isTxnUpdateSuccess: false,
+  isQuickAccountInProcess: false,
+  isQuickAccountCreatedSuccessfully: false
 };
 
 export function ledgerReducer(state = initialState, action: Action): LedgerState {
@@ -76,13 +74,13 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         transactionInprogress: false
       });
     case LEDGER.DOWNLOAD_LEDGER_INVOICE:
-      return Object.assign({}, state, { downloadInvoiceInProcess: true });
+      return Object.assign({}, state, {downloadInvoiceInProcess: true});
     case LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE:
       let downloadData = action.payload as BaseResponse<string, DownloadLedgerRequest>;
       if (downloadData.status === 'success') {
-        return Object.assign({}, state, { downloadInvoiceInProcess: false });
+        return Object.assign({}, state, {downloadInvoiceInProcess: false});
       }
-      return Object.assign({}, state, { downloadInvoiceInProcess: false });
+      return Object.assign({}, state, {downloadInvoiceInProcess: false});
     case LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE:
       let discountData: BaseResponse<FlattenGroupsAccountsResponse, string> = action.payload;
       if (discountData.status === 'success') {
@@ -168,6 +166,30 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         isTxnUpdateInProcess: false,
         isTxnUpdateSuccess: false
       };
+    case LEDGER.CREATE_QUICK_ACCOUNT:
+      return {
+        ...state,
+        isQuickAccountInProcess: true
+      };
+    case LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE:
+      if (action.payload.status === 'success') {
+        return {
+          ...state,
+          isQuickAccountInProcess: false,
+          isQuickAccountCreatedSuccessfully: true
+        };
+      }
+      return {
+        ...state,
+        isQuickAccountInProcess: false,
+        isQuickAccountCreatedSuccessfully: false
+      };
+    case LEDGER.RESET_QUICK_ACCOUNT_MODAL:
+      return {
+        ...state,
+        isQuickAccountInProcess: false,
+        isQuickAccountCreatedSuccessfully: false
+      };
     case LEDGER.RESET_LEDGER:
       return {
         ...state,
@@ -184,7 +206,9 @@ export function ledgerReducer(state = initialState, action: Action): LedgerState
         selectedTxnForEditUniqueName: '',
         activeAccountSharedWith: null,
         isTxnUpdateInProcess: false,
-        isTxnUpdateSuccess: false
+        isTxnUpdateSuccess: false,
+        isQuickAccountInProcess: false,
+        isQuickAccountCreatedSuccessfully: false
       };
     default: {
       return state;
