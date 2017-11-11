@@ -277,7 +277,7 @@
               <td class="col-xs-2"></td>
               <td class="col-xs-7">B/F Balance</td>
               <td class="col-xs-3">
-                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount }}</span>
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'" class="">{{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.1-2' }}</span>
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
               </td>
             </tr>
@@ -288,7 +288,7 @@
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
               <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                {{ txn.amount }}
+                {{ txn.amount | number: '1.1-2' }}
                 <span class="download-invoice-ledger ng-scope" *ngIf="txn.isInvoiceGenerated" (click)="downloadInvoice(txn.invoiceNumber, $event)"
                   container="body" tooltip="Download Invoice : {{txn.invoiceNumber}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -391,7 +391,8 @@
               <td class="col-xs-2"></td>
               <td class="col-xs-7">B/F Balance</td>
               <td class="col-xs-3">
-                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">{{ (lc.transactionData$ | async)?.forwardedBalance.amount }}</span>
+                <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'">
+                  {{ (lc.transactionData$ | async)?.forwardedBalance.amount | number: '1.1-2'}}</span>
                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT'">0</span>
               </td>
             </tr>
@@ -402,8 +403,9 @@
               <td class="col-xs-7">
                 {{ txn.inventory ? txn.particular.name + ' ('+txn.inventory.stock.name+')' : txn.particular.name }}
               </td>
-              <td class="col-xs-3 pos-rel text-right" [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
-                {{txn.amount}}
+              <td class="col-xs-3 pos-rel text-right"
+                  [ngClass]="{pdR25imp: txn.attachedFileUniqueName.length > 0 || txn.isInvoiceGenerated }">
+                {{txn.amount | number: '1.1-2'}}
                 <span class="download-invoice-ledger" *ngIf="txn.attachedFileUniqueName.length > 0" (click)="downloadInvoice(txn.attachedFileUniqueName, $event)"
                   container="body" tooltip="Download file : {{txn.attachedFileName}}" [placement]="'top'">
                   <i class="glyphicon glyphicon-download pull-left" style="font-size:15px;"></i>
@@ -519,7 +521,7 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'DEBIT'" tooltip="" [placement]="'top'">
                   C/F: Dr
-                  <span class="primary_color">{{(lc.transactionData$ | async)?.closingBalance.amount}}
+                  <span class="primary_color">{{(lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2'}}
                   </span>
                 </span>
               </td>
