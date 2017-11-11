@@ -97,6 +97,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   private clearClicked: boolean = false;
   // private showTypeAheadInput: boolean = false;
   private selectContainerClicked: boolean = false;
+  private focused: boolean = false;
   private optionListClicked: boolean = false;
   private optionClicked: boolean = false;
 
@@ -164,6 +165,21 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public onSelectContainerClick(event: any) {
     this.selectContainerClicked = true;
+    if (!this.focused) {
+      this.processMyLogic();
+    }
+    this.focused = false;
+  }
+
+  public onSelectContainerFocus() {
+    let initialFocusValue = this.hasFocus;
+    this._focus();
+    if (!initialFocusValue) {
+      this.processMyLogic();
+      this.focused = true;
+    }
+  }
+  public processMyLogic() {
     if (this.isTypeAheadMode) {
       if (this.optionList.hasSelected) {
         this.isOpen = false;
@@ -173,12 +189,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
       if (!this.clearClicked) {
         this.toggleDropdown();
       }
-    }
-  }
-
-  public onSelectContainerFocus() {
-    if (!this.isTypeAheadMode) {
-      this._focus();
     }
   }
 
@@ -192,7 +202,7 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
 
   public onDropdownOptionClicked(option: Option) {
     this.optionClicked = true;
-    this.multiple || this.isTypeAheadMode ? this.toggleSelectOption(option) : this.selectOption(option);
+    this.multiple ? this.toggleSelectOption(option) : this.selectOption(option);
   }
 
   public onSingleFilterClick() {
@@ -224,7 +234,13 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   }
 
   public onTypeAheadFilterFocus() {
+    let initialFocusValue = this.hasFocus;
     this._focus();
+    if (!initialFocusValue) {
+      this.processMyLogic();
+      this.focused = true;
+    }
+    // this._focus();
   }
 
   public onTypeAheadFilterKeydown(event: any) {
@@ -300,7 +316,6 @@ export class SelectComponent implements ControlValueAccessor, OnChanges, OnInit,
   public _focus() {
     if (!this.hasFocus) {
       this.hasFocus = true;
-      this.openDropdown();
       this.focus.emit(null);
     }
   }
