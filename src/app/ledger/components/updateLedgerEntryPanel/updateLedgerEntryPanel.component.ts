@@ -110,11 +110,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
                   if (findStocks) {
                     let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
-                    if (findUnitRates) {
+                    if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
                       let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
                       tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
                       t.unitRate = tempUnitRates;
+                    } else {
+                      t.unitRate = [{
+                        code: t.inventory.unit.code,
+                        rate: t.inventory.rate,
+                        stockUnitCode: t.inventory.unit.code
+                      }];
                     }
+                  } else {
+                    t.unitRate = [{
+                      code: t.inventory.unit.code,
+                      rate: t.inventory.rate,
+                      stockUnitCode: t.inventory.unit.code
+                    }];
                   }
                   t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
                 }
