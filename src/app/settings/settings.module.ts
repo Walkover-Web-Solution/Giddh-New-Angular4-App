@@ -1,5 +1,6 @@
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { SettingsComponent } from './settings.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
@@ -17,6 +18,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
+import { SettingPermissionFormComponent } from './permissions/form/form.component';
 
 @NgModule({
   declarations: [
@@ -30,11 +32,14 @@ import { LaddaModule } from 'angular2-ladda';
     SettingLinkedAccountsComponent,
     ConnectBankModalComponent,
     SettingLinkedAccountsConfirmationModalComponent,
-    FinancialYearComponent
+    FinancialYearComponent,
+    SettingPermissionComponent,
+    SettingPermissionFormComponent
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SettingRountingModule,
     TabsModule,
     DatepickerModule,
@@ -43,4 +48,5 @@ import { LaddaModule } from 'angular2-ladda';
     LaddaModule
   ]
 })
+
 export class SettingsModule { }
