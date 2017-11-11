@@ -500,13 +500,13 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'"
                   class="">
-                  C/F: {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '3.1-5' }}
+                  C/F: {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
                 </span>
               </td>
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.creditTotal | number: '3.1-5' }}</span>
+                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.creditTotal | number: '1.1-2' }}</span>
               </td>
             </tr>
           </tbody>
@@ -526,7 +526,7 @@
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{(lc.transactionData$ | async)?.creditTotal | number: '3.1-5' }}</span>
+                <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{(lc.transactionData$ | async)?.creditTotal | number: '1.1-2' }}</span>
               </td>
             </tr>
           </tbody>
@@ -567,11 +567,11 @@
     </div>
     <div class="col-xs-3">
       <h1>Debit Total</h1>
-      <h3>{{(lc.transactionData$ | async)?.debitTotal | number:'3.1-5'}}</h3>
+      <h3>{{(lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
     </div>
     <div class="col-xs-3">
       <h1>Credit Total</h1>
-      <h3>{{(lc.transactionData$ | async)?.creditTotal | number:'3.1-5'}}</h3>
+      <h3>{{(lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
     </div>
     <div class="col-xs-3">
       <h1 class=" primary_color">Net Total
@@ -579,9 +579,9 @@
         <span *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">Debit</span>
       </h1>
       <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">
-        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'3.1-5'}}</h3>
+        {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
       <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">
-        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'3.1-5'}}</h3>
+        {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
     </div>
   </div>
 
