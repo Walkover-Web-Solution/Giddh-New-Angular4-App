@@ -243,9 +243,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
       }
     });
-    this.lc.transactionData$.subscribe(lc => {
-      if (lc) {
-        this.lc.currentPage = lc.page;
+    this.lc.transactionData$.subscribe(lt => {
+      if (lt) {
+        this.lc.currentPage = lt.page;
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
@@ -306,7 +306,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
-      this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string> ) => {
+      this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
         if (res.status === 'success' && res.body.length > 0) {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
