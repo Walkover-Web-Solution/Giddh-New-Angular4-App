@@ -150,7 +150,7 @@
         </button>
       </div>
       <div class="col-xs-6 text-right">
-        <span class="primary_color">Compound Total: {{ currentTxn?.total }}</span>
+        <span class="primary_color">Compound Total: {{ currentTxn?.total | number: '1.1-2' }}</span>
       </div>
     </div>
     <div class="row">

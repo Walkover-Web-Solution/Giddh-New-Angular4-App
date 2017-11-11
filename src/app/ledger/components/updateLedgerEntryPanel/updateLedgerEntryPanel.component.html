@@ -181,7 +181,7 @@
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                 <span *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr"
                       [placement]="'top'">
-                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.2-2'}}</span>
+                  C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.1-2'}}</span>
               <ng-template #understandingTextCr>
                 {{ vm.ledgerUnderStandingObj.balanceText.cr }}
               </ng-template>
@@ -191,7 +191,7 @@
             <!-- reckoning -->
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal }}
+                  {{ vm.entryTotal.drTotal > vm.entryTotal.crTotal ? vm.entryTotal.drTotal : vm.entryTotal.crTotal | number: '1.1-2'}}
                 </span>
             </td>
           </tr>
@@ -205,7 +205,7 @@
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important">
                 <span *ngIf="vm.entryTotal.drTotal > vm.entryTotal.crTotal">C/F: Dr
                   <span class="primary_color" [tooltip]="understandingTextDr" [placement]="'top'">
-                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.2-2'}}</span>
+                    {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.1-2'}}</span>
                   <ng-template #understandingTextDr>
                     {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                   </ng-template>
@@ -216,7 +216,7 @@
             <!-- reckoning -->
             <td colspan="12" class="col-xs-12 text-right h32" style="padding-right:10px !important;">
                 <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">
-                  {{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal }}
+                  {{ vm.entryTotal.crTotal > vm.entryTotal.drTotal ? vm.entryTotal.crTotal : vm.entryTotal.drTotal | number: '1.1-2' }}
                 </span>
             </td>
           </tr>
@@ -400,7 +400,7 @@
           </div>
         </div>
         <div class="col-xs-12 pd0 text-right mrT">
-          <span class="primary_color">Compound Total: {{vm.compoundTotal}}</span>
+          <span class="primary_color">Compound Total: {{vm.compoundTotal | number: '1.1-2'}}</span>
         </div>
         <div class="col-xs-12 pdT1">
           <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
