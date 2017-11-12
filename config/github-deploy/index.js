@@ -13,6 +13,8 @@ function getWebpackConfigModule(options) {
     return require('../webpack.dev.js');
   } else if (options.githubProd) {
     return require('../webpack.prod.js');
+  } else if (options.githubTest) {
+    return require('../webpack.test-build.js');
   } else {
     throw new Error('Invalid compile option.');
   }

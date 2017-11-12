@@ -105,10 +105,7 @@ export class LedgerActions {
   public shareAccount$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
     .switchMap(action =>
-      this._accountService.AccountShare(
-        action.payload.body,
-        action.payload.accountUniqueName
-      )
+      this._accountService.AccountShare( action.payload.body, action.payload.accountUniqueName)
     )
     .map(response => {
       return this.shareAccountResponse(response);
