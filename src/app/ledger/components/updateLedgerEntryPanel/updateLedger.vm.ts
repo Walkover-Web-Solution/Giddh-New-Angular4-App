@@ -9,7 +9,6 @@ import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../upda
 import { IOption } from '../../../theme/ng-select/option.interface';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { underStandingTextData } from '../../underStandingTextData';
-import { AccountResponse } from '../../../models/api-models/Account';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];

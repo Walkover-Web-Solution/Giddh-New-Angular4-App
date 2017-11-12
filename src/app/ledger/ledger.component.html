@@ -299,7 +299,7 @@
         </table>
 
         <!--blank ledger-->
-        <table class="width100" (click)="$event.stopPropagation();" (clickOutside)="hideNewLedgerEntryPopup()">
+        <table class="width100" (click)="$event.stopPropagation();" id="blankLedgerContainer" (clickOutside)="hideNewLedgerEntryPopup()">
           <tbody>
             <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
               <td class="width100" *ngIf="txn.type === 'DEBIT'">
@@ -326,7 +326,7 @@
                             </ng-container>
                             <ng-container *ngIf="option.additional?.stock">
                               <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
-                                <span class="account-list-item" style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }}</span>
+                                <span class="account-list-item" style="display: block;font-size:14px;margin-bottom: -12px">{{ option.label }} </span>
                                 <span class="account-list-item" style="display: block;font-size:12px;margin-bottom: -12px">
                                   {{ option.additional?.uniqueName }}</span>
                                 <span class="account-list-item" style="display: block;font-size:11px">
@@ -357,7 +357,7 @@
                 <div class="pos-abs" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                   <new-ledger-entry-panel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
+                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
                   </new-ledger-entry-panel>
                 </div>
 
@@ -480,7 +480,7 @@
                 <div class="pos-abs" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                   <new-ledger-entry-panel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
-                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()">
+                    (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
                   </new-ledger-entry-panel>
                 </div>
 

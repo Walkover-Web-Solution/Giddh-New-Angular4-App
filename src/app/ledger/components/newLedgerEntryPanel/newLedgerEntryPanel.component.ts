@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -33,6 +33,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
+  @Output() public clickedOutsideEvent: EventEmitter<boolean> = new EventEmitter();
+  @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
@@ -272,6 +274,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public hideTax(): void {
     if (this.taxControll) {
       this.taxControll.showTaxPopup = false;
+    }
+  }
+
+  @HostListener('window:click', ['$event'])
+  public clickedOutsideOfComponent(e) {
+    if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
+      this.clickedOutsideEvent.emit(true);
     }
   }
 }
