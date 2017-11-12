@@ -114,7 +114,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       if (!selectedCmp) {
         return;
       }
-      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
+      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.userEntityRoles[0].role.uniqueName === 'super_admin') {
         this.userIsSuperUser = true;
       } else {
         this.userIsSuperUser = false;
