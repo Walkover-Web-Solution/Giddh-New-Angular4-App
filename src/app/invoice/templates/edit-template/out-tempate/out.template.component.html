@@ -1,5 +1,5 @@
 <!DOCTYPE html>
- <!--*ngIf="templateId == 'common_template_a'"-->
+<!--*ngIf="templateId == 'common_template_a'"-->
 <html id="default">
 
 <head>
@@ -300,13 +300,13 @@
             z-index: 0;
             left: 0;
         }
-
+        
         #default .docTitle h2.no-content:after {
             content: '';
             background: transparent;
         }
         
-        #default p { 
+        #default p {
             margin: 0;
         }
         
@@ -375,7 +375,7 @@
     </style>
 </head>
 
-<body *ngIf="inputTemplate.sections && inputTemplate.sections.length" [ngStyle]="{ 'padding': inputTemplate.topMargin+'px'+' '+inputTemplate.rightMargin+'px'+' '+inputTemplate.bottomMargin+'px'+' '+inputTemplate.leftMargin+'px', 'font-family': inputTemplate.font}">
+<body *ngIf="inputTemplate.sections && inputTemplate.sections.length" [ngStyle]="{ 'font-family': inputTemplate.font}" style="padding: 20px;">
     <!--class="disabled-area"-->
     <div>
         <div id="Template-header" [ngClass]="{false: 'disabled-area', true: ' ' }[templateUISectionVisibility.header]" (click)="onClickSection('header')">
