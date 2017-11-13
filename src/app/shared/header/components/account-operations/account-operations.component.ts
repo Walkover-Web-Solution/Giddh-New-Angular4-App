@@ -334,35 +334,20 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public loadAccountData() {
     let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
-    if (this.accounts$) {
-      this.accounts$.isEmpty().subscribe(bool => {
-        if (bool) {
-          this.accountService.GetFlattenAccounts().subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-              a.body.results.map(acc => {
-                accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
-              });
-              accounts = _.filter(accounts, c => c.value !== activeAccount.uniqueName);
-            }
-            this.accounts$ = Observable.of(accounts);
-          });
+
+    this.accountService.GetFlattenAccounts().subscribe(a => {
+      let accounts: IOption[] = [];
+      if (a.status === 'success') {
+        a.body.results.map(acc => {
+          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+        });
+        let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
+        if (accountIndex > -1) {
+          accounts.splice(accountIndex, 1);
         }
-      });
-    } else {
-      this.accountService.GetFlattenAccounts().subscribe(a => {
-        let accounts: IOption[] = [];
-        if (a.status === 'success') {
-          a.body.results.map(acc => {
-            accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
-          });
-          accounts = _.filter(accounts, c => {
-            return c.value !== activeAccount.uniqueName;
-          });
-        }
-        this.accounts$ = Observable.of(accounts);
-      });
-    }
+      }
+      this.accounts$ = Observable.of(accounts);
+    });
   }
 
   public shareAccount() {
@@ -371,7 +356,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let accObject = new ShareAccountRequest();
     accObject.role = 'view_only';
     accObject.user = this.shareAccountForm.controls['userEmail'].value;
-    console.log ('need to add new shared entity');
+    console.log('need to add new shared entity');
     this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
     this.shareAccountForm.reset();
   }
