@@ -267,12 +267,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public hideDiscount(): void {
     if (this.discountControl) {
+      this.discountControl.change();
       this.discountControl.discountMenu = false;
     }
   }
 
   public hideTax(): void {
     if (this.taxControll) {
+      this.taxControll.change();
       this.taxControll.showTaxPopup = false;
     }
   }
