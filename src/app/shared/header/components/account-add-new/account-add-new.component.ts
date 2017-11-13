@@ -108,7 +108,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
-      this.store.dispatch(this.companyActions.RefreshCompanies());
+      // this.store.dispatch(this.companyActions.RefreshCompanies());
     });
   }
 
