@@ -8,7 +8,7 @@ import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 
 export class UpdateLedgerDiscountData {
-  public particular: INameUniqueName = { name: '', uniqueName: '' };
+  public particular: INameUniqueName = {name: '', uniqueName: ''};
   public amount: number = 0;
 }
 
@@ -61,24 +61,24 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = this.generateTotal();
+    this.discountTotal = Number(this.generateTotal().toFixed(2));
     this.appliedDiscount = this.generateAppliedDiscounts();
     this.discountTotalUpdated.emit(this.discountTotal);
     this.appliedDiscountEvent.emit(this.appliedDiscount);
   }
 
   public genTotal() {
-    this.discountTotal = this.generateTotal();
+    this.discountTotal = Number(this.generateTotal().toFixed(2));
   }
 
   /**
    * generate total of discount amount
    * @returns {number}
    */
-  public generateTotal() {
+  public generateTotal(): number {
     return this.discountAccountsDetails.reduce((pv, cv) => {
       return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
-    }, 0);
+    }, 0) || 0;
   }
 
   public generateAppliedDiscounts(): UpdateLedgerDiscountData[] {

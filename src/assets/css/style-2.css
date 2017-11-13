@@ -2682,6 +2682,10 @@ label {
     color: #808080;
 }
 
+.load-bar-wrap {
+    z-index: 99999 !important;
+}
+
 .fa-times {
     cursor: pointer;
 }
@@ -3157,7 +3161,7 @@ label {
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #f4f5f8 !important;
+    background-color: #d35f29 !important;
 }
 
 .select2-results__option[aria-selected] {
@@ -3345,7 +3349,7 @@ label {
 }
 
 .ledger-row td .select2-container--default .select2-results__option--highlighted[aria-selected] a {
-    color: #d25f2a !important;
+    color: #fff !important;
 }
 
 .ledger-row td .select2-results ul li a {
