@@ -14,5 +14,7 @@ export const LEDGER_API = {
   UPLOAD_FILE: Configuration.ApiUrl + 'company/:companyUniqueName/ledger/upload',
   MAGIC_LINK: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/magic-link?from=:from&to=:to',
   EXPORT_LEDGER: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
-  GET_BANK_TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers?from=:from'
+  GET_BANK_TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers?from=:from',
+  // put call to map transaction
+  MAP_BANK_TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId'
 };
