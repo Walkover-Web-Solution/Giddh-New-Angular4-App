@@ -28,6 +28,7 @@ import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numbe
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
   declarations: [
@@ -65,7 +66,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     SelectModule,
     NumberToWordsModule,
     ConfirmModalModule,
-    ShSelectModule
+    ShSelectModule,
+    DecimalDigitsModule
   ],
 })
 export class LedgerModule {
