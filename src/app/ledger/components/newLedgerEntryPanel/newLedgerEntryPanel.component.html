@@ -37,7 +37,7 @@
             </td>
             <td class="pItem">
               <label class="primary_color">Amount</label>
-              <input type="text" decimalDigitsDirective name="" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()"
+              <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()"
               />
             </td>
             <td class="pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
