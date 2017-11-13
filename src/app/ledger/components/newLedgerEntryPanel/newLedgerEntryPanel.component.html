@@ -10,7 +10,7 @@
                   <tr>
                     <td ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
                       <label>Quantity</label>
-                      <input type="text" name="" class="form-control" (change)="changeQuantity($event.target.value)"
+                      <input type="text" name="" class="form-control" (keyup)="changeQuantity($event.target.value)"
                              [(ngModel)]="currentTxn.inventory.quantity" decimalDigitsDirective [DecimalPlaces]="2"/>
                     </td>
                     <td *ngIf="currentTxn.unitRate">
@@ -30,7 +30,7 @@
             </td>
             <td style="max-width:150px" class="pItem" *ngIf="currentTxn.selectedAccount.stock">
               <label>Price</label>
-              <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="2" (change)="changePrice($event.target.value)" name="" class="form-control" />
+              <input type="text" [value]="currentTxn?.inventory?.unit?.rate" decimalDigitsDirective [DecimalPlaces]="2" (keyup)="changePrice($event.target.value)" name="" class="form-control" />
             </td>
             <td class="pItem" *ngIf="currentTxn.selectedAccount.stock">
               <label>&nbsp;</label>
@@ -38,7 +38,7 @@
             </td>
             <td class="pItem">
               <label class="primary_color">Amount</label>
-              <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="calculateTotal()"
+              <input type="text" decimalDigitsDirective name="" [DecimalPlaces]="2" class="form-control" [(ngModel)]="currentTxn.amount" (keyup)="amountChanged();calculateTotal()"
               />
             </td>
             <td class="pItem" *ngIf="(discountAccountsList$ | async)?.accountDetails.length">
@@ -73,7 +73,7 @@
           </tr>
         </tbody>
       </table>
-    </div>
+    </div>`
     <div class="pdB1 inWords" *ngIf="currentTxn.total">
       {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
     </div>
