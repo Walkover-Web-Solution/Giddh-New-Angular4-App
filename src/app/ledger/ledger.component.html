@@ -301,16 +301,16 @@
         <!--blank ledger-->
         <table class="width100" (click)="$event.stopPropagation();" id="blankLedgerContainer" (clickOutside)="hideNewLedgerEntryPopup()">
           <tbody>
-            <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
+            <tr *ngFor="let txn of lc.blankLedger.transactions;">
               <td class="width100" *ngIf="txn.type === 'DEBIT'">
                 <table class="width100">
                   <tbody class="ledger-main">
                     <tr class="ledger-row compoundEntry">
 
-                      <td class="col-xs-2">
-                        <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
+                      <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
+                        <input class="form-control" type="text"  (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                       </td>
-                      <td class="col-xs-7 select2-parent select2-ledger">
+                      <td class="col-xs-7 select2-parent select2-ledger" (click)="showNewLedgerEntryPopup(txn);">
 
                         <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                           [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
@@ -345,8 +345,8 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
-                          (click)="blankLedgerAmountClick()">
+                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                          (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                       </td>
 
                     </tr>
@@ -423,16 +423,16 @@
         <!--blank ladger-->
         <table class="width100" (clickOutside)="hideNewLedgerEntryPopup()" (click)="$event.stopPropagation()">
           <tbody>
-            <tr *ngFor="let txn of lc.blankLedger.transactions;" (click)="showNewLedgerEntryPopup(txn);">
+            <tr *ngFor="let txn of lc.blankLedger.transactions;">
               <td class="width100" *ngIf="txn.type === 'CREDIT'">
                 <table class="width100">
                   <tbody class="ledger-main">
                     <tr class="ledger-row compoundEntry">
 
-                      <td class="col-xs-2">
+                      <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                         <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                       </td>
-                      <td class="col-xs-7 select2-parent select2-ledger">
+                      <td class="col-xs-7 select2-parent select2-ledger" (click)="showNewLedgerEntryPopup(txn);">
 
                         <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                           [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
@@ -467,8 +467,8 @@
                       </td>
 
                       <td class="col-xs-3 pos-rel">
-                        <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
-                          (click)="blankLedgerAmountClick()">
+                        <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                          (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                       </td>
 
                     </tr>
