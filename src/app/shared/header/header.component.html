@@ -3,7 +3,7 @@
     <nav class="navbar navbar-inverse">
         <div class="container-fluid pdL0">
             <ul class="nav navbar-nav">
-                <li class="hamburger_menu cp" dropdown [isOpen]="sideMenu.isopen">
+                <li class="hamburger_menu cp" dropdown (isOpenChange)="sideMenu.isopen = $event" [isOpen]="sideMenu.isopen">
                     <a dropdownToggle id="page-dropdown" (click)="false">
                         <i class="glyphicon glyphicon-menu-hamburger"></i>
                     </a>
