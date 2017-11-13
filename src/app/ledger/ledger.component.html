@@ -100,13 +100,13 @@
             </tr>
             <tr>
               <td class="nopad bdrL bdrR" colspan="3">
-                <table class="width100" *ngFor="let item of lc.bankTransactionsData;">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup()" (click)="$event.stopPropagation()">
                   <tbody>
-                    <tr *ngFor="let txn of item.transactions;">
-                      <td class="width100" *ngIf="txn.type === 'DEBIT'">
+                    <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
+                      <td class="width100 pr" *ngIf="txn.type === 'DEBIT'">
                         <table class="width100">
                           <tbody class="ledger-main">
-                            <tr class="ledger-row">
+                            <tr class="ledger-row" (click)="selectBankTxn(txn)" [ngClass]="{compoundEntry: txn.id === lc.selectedBankTxnUniqueName}">
                               <td class="col-xs-2">
                                 <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="item.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                               </td>
@@ -148,6 +148,11 @@
                           </tbody>
                         </table>
                         <!--new ledge popup-->
+                        <div class="pos-abs wthPos" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
+                          <new-ledger-entry-panel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                            (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"(saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                          </new-ledger-entry-panel>
+                        </div>
                         <!-- end  -->
                       </td>
                     </tr>
@@ -158,7 +163,7 @@
                 <table class="width100" *ngFor="let item of lc.bankTransactionsData;">
                   <tbody>
                     <tr *ngFor="let txn of item.transactions;">
-                      <td class="width100" *ngIf="txn.type === 'CREDIT'">
+                      <td class="width100 pr" *ngIf="txn.type === 'CREDIT'">
                         <table class="width100">
                           <tbody class="ledger-main">
                             <tr class="ledger-row">
@@ -354,7 +359,7 @@
                   </tbody>
                 </table>
                 <!--new ledge popup-->
-                <div class="pos-abs" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                <div class="pos-abs wthPos" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                   <new-ledger-entry-panel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                     (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
@@ -477,7 +482,7 @@
                 </table>
 
                 <!--new ledge popup-->
-                <div class="pos-abs" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                <div class="pos-abs wthPos" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                   <new-ledger-entry-panel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
                     (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                     (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">

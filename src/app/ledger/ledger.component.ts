@@ -5,7 +5,7 @@ import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, TransactionsRequest, IELedgerResponse } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, IELedgerResponse, ReconcileRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -82,7 +82,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
   @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
-
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   public showUpdateLedgerForm: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -223,10 +222,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       if (params['accountUniqueName']) {
-        this.trxRequest.page = 0;
-        this.trxRequest.accountUniqueName = params['accountUniqueName'];
-        this.trxRequest.count = 15;
-
         this.lc.accountUnq = params['accountUniqueName'];
         // set state details
         let companyUniqueName = null;
@@ -237,10 +232,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
 
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
-        // set trxRequest.from and trxRequest.to from start and end date for initial request
-        this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
-        this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
-        this.getTransactionData();
+        // init transaction request and call for transaction data
+        this.initTrxRequest(params['accountUniqueName']);
       }
     });
     this.lc.transactionData$.subscribe(lt => {
@@ -251,10 +244,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
-        this.trxRequest = new TransactionsRequest();
-        this.trxRequest.accountUniqueName = this.lc.accountUnq;
-        this.getTransactionData();
+        this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
+
+        // Después del éxito de la entrada. llamar para transacciones bancarias
+        this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+          if (data && data.yodleeAdded) {
+            this.getBankTransactions();
+          }
+        });
       }
     });
     // get flatten_accounts list
@@ -266,7 +264,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             acc.stocks.map(as => {
               accountsArray.push({
                 value: uuid.v4(),
-                label: `${acc.name} (${as.uniqueName})`,
+                label: acc.name + '(' + as.uniqueName + ')',
                 additional: Object.assign({}, acc, {stock: as})
               });
             });
@@ -304,6 +302,16 @@ export class LedgerComponent implements OnInit, OnDestroy {
     });
   }
 
+  public initTrxRequest(accountUnq: string) {
+    this.trxRequest = new TransactionsRequest();
+    this.trxRequest.page = 0;
+    this.trxRequest.count = 15;
+    this.trxRequest.accountUniqueName = accountUnq;
+    this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
+    this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
+    this.getTransactionData();
+  }
+
   public getBankTransactions() {
     if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
       this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
@@ -311,6 +319,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
+    }else {
+      this._toaster.warningToast('Something went wrong please reload page');
+    }
+  }
+
+  public selectBankTxn(txn: TransactionVM) {
+    this.lc.currentTxn = null;
+    this.lc.currentBlankTxn = txn;
+    this.lc.selectedBankTxnUniqueName = txn.id;
+  }
+
+  public showBankLedgerPopup(txn: TransactionVM, item: BlankLedgerVM) {
+    this.selectBankTxn(txn);
+    this.lc.currentBankEntry = item;
+    this.lc.showBankLedgerPanel = true;
+  }
+
+  public hideBankLedgerPopup(e?: boolean) {
+    // cuando se emita falso en caso de éxito del mapa de cuenta
+    if (!e) {
+      this.getBankTransactions();
+      this.getTransactionData();
+    }
+    this.lc.showBankLedgerPanel = false;
+    this.lc.currentBlankTxn = null;
+    this.lc.selectedBankTxnUniqueName = null;
+  }
+
+  public saveBankTransaction() {
+    // Api llama para mover la transacción bancaria al libro mayor
+    let blankTransactionObj: BlankLedgerVM = this.lc.prepareBankLedgerRequestObject();
+    if (blankTransactionObj.transactions.length > 0) {
+      this.store.dispatch(this._ledgerActions.CreateBlankLedger(cloneDeep(blankTransactionObj), this.lc.accountUnq));
+    } else {
+      this._toaster.errorToast('There must be at least a transaction to make an entry.', 'Error');
     }
   }
 
@@ -341,8 +384,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
       let blob = base64ToBlob(d.body, 'application/pdf', 512);
       return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
-    }, error => {
-      // console.log(error);
     });
   }
 
