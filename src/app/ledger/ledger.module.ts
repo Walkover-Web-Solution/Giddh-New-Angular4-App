@@ -12,7 +12,7 @@ import { ShareLedgerComponent } from './components/shareLedger/shareLedger.compo
 import { ExportLedgerComponent } from './components/exportLedger/exportLedger.component';
 import { UpdateLedgerTaxControlComponent } from './components/updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from './components/updateLedgerDiscount/updateLedgerDiscount.component';
-// import { ElementViewContainerRef } from '../shared/helpers/directives/element.viewchild.directive';
+// import { ElementViewContainerRef } from '../shared/helpers/pipes/element.viewchild.directive';
 import { NgUploaderModule } from 'ngx-uploader/src/ngx-uploader/module/ngx-uploader.module';
 import { ClipboardModule } from 'ngx-clipboard';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -28,6 +28,7 @@ import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numbe
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     ExportLedgerComponent,
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
-    QuickAccountComponent
+    QuickAccountComponent,
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -65,7 +66,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     SelectModule,
     NumberToWordsModule,
     ConfirmModalModule,
-    ShSelectModule
+    ShSelectModule,
+    DecimalDigitsModule
   ],
 })
 export class LedgerModule {

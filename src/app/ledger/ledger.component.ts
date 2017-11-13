@@ -5,7 +5,7 @@ import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, TransactionsRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, TransactionsRequest, IELedgerResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -27,6 +27,8 @@ import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryP
 import { IOption } from '../theme/ng-select/option.interface';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { GeneralActions } from '../services/actions/general/general.actions';
+import { AccountResponse } from '../models/api-models/Account';
+import { BaseResponse } from '../models/api-models/BaseResponse';
 
 @Component({
   selector: 'ledger',
@@ -241,9 +243,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.getTransactionData();
       }
     });
-    this.lc.transactionData$.subscribe(lc => {
-      if (lc) {
-        this.lc.currentPage = lc.page;
+    this.lc.transactionData$.subscribe(lt => {
+      if (lt) {
+        this.lc.currentPage = lt.page;
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
@@ -264,7 +266,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             acc.stocks.map(as => {
               accountsArray.push({
                 value: uuid.v4(),
-                label: acc.name,
+                label: `${acc.name} (${as.uniqueName})`,
                 additional: Object.assign({}, acc, {stock: as})
               });
             });
@@ -274,6 +276,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
           }
         });
         this.lc.flattenAccountList = Observable.of(orderBy(accountsArray, 'label'));
+      }
+    });
+
+    this.lc.activeAccount$.subscribe(acc => {
+      if (acc) {
+        this.lc.getUnderstandingText(acc.accountType, acc.uniqueName);
       }
     });
 
@@ -287,6 +295,23 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.trxRequest.page = 0;
         this.getTransactionData();
       });
+
+    // get A/c details
+    this.lc.activeAccount$.subscribe((data: AccountResponse) => {
+      if (data && data.yodleeAdded) {
+        this.getBankTransactions();
+      }
+    });
+  }
+
+  public getBankTransactions() {
+    if (this.trxRequest.accountUniqueName && this.trxRequest.from) {
+      this._ledgerService.GetBankTranscationsForLedger(this.trxRequest.accountUniqueName, this.trxRequest.from).subscribe((res: BaseResponse<IELedgerResponse[], string>) => {
+        if (res.status === 'success' && res.body.length > 0) {
+          this.lc.getReadyBankTransactionsForUI(res.body);
+        }
+      });
+    }
   }
 
   public getTransactionData() {
@@ -420,9 +445,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public entryManipulated() {
-    this.hideUpdateLedgerModal();
-    this.trxRequest = new TransactionsRequest();
-    this.trxRequest.accountUniqueName = this.lc.accountUnq;
+    // this.trxRequest = new TransactionsRequest();
+    // this.trxRequest.accountUniqueName = this.lc.accountUnq;
     this.getTransactionData();
   }
 
@@ -457,10 +481,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     let viewContainerRef = this.updateledgercomponent.viewContainerRef;
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
-    (componentRef.instance as UpdateLedgerEntryPanelComponent).closeUpdateLedgerModal.subscribe((a) => {
+    let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
+    componentInstance.closeUpdateLedgerModal.subscribe((a) => {
       this.hideUpdateLedgerModal();
-    });
-    (componentRef.instance as UpdateLedgerEntryPanelComponent).entryManipulated.subscribe((a) => {
+      // componentInstance.vm.resetVM();
+      // componentInstance.destroyed$.next(true);
+      // componentInstance.destroyed$.complete();
+      componentRef.destroy();
       this.entryManipulated();
     });
   }
