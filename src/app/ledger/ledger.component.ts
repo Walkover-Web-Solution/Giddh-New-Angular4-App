@@ -223,6 +223,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
+        this.resetBlankTransaction();
         // set state details
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -319,7 +320,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
-    }else {
+    } else {
       this._toaster.warningToast('Something went wrong please reload page');
     }
   }
@@ -501,12 +502,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
+    let activeAccount: AccountResponse;
     let groupWithAccountsList: GroupsWithAccountsResponse[];
+    this.lc.activeAccount$.take(1).subscribe(a => activeAccount = a);
     this.lc.groupsArray$.take(1).subscribe(a => groupWithAccountsList = a);
-    if (txn.selectedAccount) {
-      const parent = txn.selectedAccount.parentGroups[0].uniqueName;
-      const parentGroup: GroupsWithAccountsResponse = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-      return parentGroup.category === 'income' || parentGroup.category === 'expenses';
+
+    let parent;
+    let parentGroup: GroupsWithAccountsResponse;
+
+    parent = activeAccount.parentGroups[0].uniqueName;
+    parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+    if (parentGroup.category === 'income' || parentGroup.category === 'expenses') {
+      return true;
+    } else {
+      if (txn.selectedAccount) {
+        parent = txn.selectedAccount.parentGroups[0].uniqueName;
+        parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+        return parentGroup.category === 'income' || parentGroup.category === 'expenses';
+      }
     }
     return false;
   }
