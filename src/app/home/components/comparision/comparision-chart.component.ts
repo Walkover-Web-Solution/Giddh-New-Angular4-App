@@ -224,7 +224,7 @@ export class ComparisionChartComponent implements OnInit {
     this.options = {
       chart: {
         height: '320px',
-        width: '900',
+        width: 900,
         zoomType: 'x'
       },
       title: {
