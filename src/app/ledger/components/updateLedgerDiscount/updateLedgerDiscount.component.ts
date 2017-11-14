@@ -76,7 +76,10 @@ export class UpdateLedgerDiscountComponent implements OnInit, OnDestroy {
    * @returns {number}
    */
   public generateTotal(): number {
-    return this.discountAccountsDetails.reduce((pv, cv) => {
+    return this.discountAccountsDetails.map(ds => {
+      ds.amount = Number(ds.amount);
+      return ds;
+    }).reduce((pv, cv) => {
       return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
     }, 0) || 0;
   }
