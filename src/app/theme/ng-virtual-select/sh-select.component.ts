@@ -126,7 +126,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     this.filter = '';
     if (this.isFilterEnabled) {
-      // this.updateFilter(this.filter);
+      this.updateFilter(this.filter);
     }
   }
 
@@ -268,6 +268,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
     this.selectedValues = [];
     this.onChange();
+    this.clearFilter();
     this.onClear.emit();
   }
 
