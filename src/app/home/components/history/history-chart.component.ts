@@ -130,6 +130,7 @@ export class HistoryChartComponent implements OnInit {
     this.options = {
       chart: {
         height: '320px',
+        width: '900',
       },
       title: {
         text: ''
@@ -147,6 +148,9 @@ export class HistoryChartComponent implements OnInit {
         align: 'center',
         verticalAlign: 'bottom',
         itemStyle: { color: '#333333', cursor: 'pointer', fontSize: '10px', fontWeight: 'bold' }
+      },
+      credits: {
+        enabled: false
       },
       series: this.AllSeries.filter(p => p.visible)
     };
