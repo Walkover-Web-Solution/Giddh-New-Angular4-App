@@ -222,6 +222,11 @@ export class LedgerVM {
     });
     return requestObj;
   }
+
+  /** ledger custom filter **/
+  public ledgerCustomFilter(term: string, item: IOption): boolean {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
+  }
 }
 
 export class BlankLedgerVM {
