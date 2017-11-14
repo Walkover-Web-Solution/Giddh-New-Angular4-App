@@ -319,7 +319,7 @@
 
                         <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                           [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="95" >
+                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="95" [customFilter]="lc.ledgerCustomFilter">
                           <ng-template #optionTemplate let-option="option">
                             <ng-container *ngIf="!option.additional?.stock">
                               <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -441,7 +441,7 @@
 
                         <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)"
                           [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()"
-                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="95">
+                          [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="95" [customFilter]="lc.ledgerCustomFilter">
                           <ng-template #optionTemplate let-option="option">
                             <ng-container *ngIf="!option.additional?.stock">
                               <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
