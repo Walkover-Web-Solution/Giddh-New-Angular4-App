@@ -34,8 +34,8 @@ const StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
 const ENV = process.env.NODE_ENV = process.env.ENV = 'staging';
 const HOST = process.env.HOST || 'giddh.com';
 const PORT = process.env.PORT || 80;
-const AppUrl = 'http://test.giddh.com/electron/';
-const ApiUrl = 'http://apitest.giddh.com/';
+const AppUrl = 'http://stage.giddh.com/electron/';
+const ApiUrl = 'http://spi.giddh.com/';
 const METADATA = webpackMerge(commonConfig({
   env: ENV
 }).metadata, {

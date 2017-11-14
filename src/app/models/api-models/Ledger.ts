@@ -164,3 +164,27 @@ export class ExportLedgerRequest {
   public to: string = '';
   public type: string = '';
 }
+
+/**
+ * model for eledger response
+ */
+
+export interface IELedgerResponse {
+  transactions: IELedgerTransaction[];
+  transactionId: string;
+  date: string;
+}
+
+export interface IELedgerTransaction {
+  remarks: IELedgerRemarks;
+  amount: number;
+  type: string;
+}
+
+export interface IELedgerRemarks {
+  description: string;
+  method: string;
+  email?: any;
+  name?: any;
+  chequeNumber?: any;
+}
