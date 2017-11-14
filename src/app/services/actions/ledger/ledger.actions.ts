@@ -10,7 +10,7 @@ import { ToasterService } from '../../toaster.service';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { LEDGER } from './ledger.const';
 import { LedgerService } from '../../ledger.service';
 import { GroupService } from '../../group.service';
@@ -95,7 +95,7 @@ export class LedgerActions {
       if (res.status === 'success') {
         this._toasty.successToast('Entry deleted successfully', 'Success');
       } else {
-        this._toasty.errorToast(res.body);
+        this._toasty.errorToast(res.message, res.code);
       }
       return {
         type: ''
@@ -105,10 +105,7 @@ export class LedgerActions {
   public shareAccount$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
     .switchMap(action =>
-      this._accountService.AccountShare(
-        action.payload.body,
-        action.payload.accountUniqueName
-      )
+      this._accountService.AccountShare( action.payload.body, action.payload.accountUniqueName)
     )
     .map(response => {
       return this.shareAccountResponse(response);
@@ -344,6 +341,12 @@ export class LedgerActions {
     return {
       type: LEDGER.DELETE_TRX_ENTRY_RESPONSE,
       payload: res
+    };
+  }
+
+  public resetDeleteTrxEntryModal() {
+    return {
+      type: LEDGER.RESET_DELETE_TRX_ENTRY_MODAL
     };
   }
 

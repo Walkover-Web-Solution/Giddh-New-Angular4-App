@@ -6,7 +6,7 @@
            #inputFilter
            tabindex="0"
            [hidden]="!isOpen || !isFilterEnabled"
-           (click)="show()"
+           (click)="show();"
            (blur)="filterInputBlur($event)"
            [placeholder]="placeholder"
            [(ngModel)]="filter"

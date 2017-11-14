@@ -24,7 +24,7 @@ const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
 const HOST = process.env.HOST || 'localapp.giddh.com';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
-const AppUrl = 'http://localapp.giddh.com/';
+const AppUrl = 'http://test.giddh.com/electron';
 const ApiUrl = 'http://apitest.giddh.com/';
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
     host: HOST,

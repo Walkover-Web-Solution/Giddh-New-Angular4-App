@@ -11,7 +11,7 @@ import { RouterStoreModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 /*
- * Platform and Environment providers/directives/pipes
+ * Platform and Environment providers/pipes/pipes
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
