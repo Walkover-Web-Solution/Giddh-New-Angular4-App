@@ -51,6 +51,9 @@ export class LedgerVM {
   // bank transaction related
   public showEledger: boolean = false;
   public bankTransactionsData: BlankLedgerVM[] = [];
+  public selectedBankTxnUniqueName: string;
+  public showBankLedgerPanel: boolean = false;
+  public currentBankEntry: BlankLedgerVM;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -162,9 +165,8 @@ export class LedgerVM {
    * @returns {bankTransactionsData} array
    */
   public getReadyBankTransactionsForUI(data: IELedgerResponse[]) {
+    this.bankTransactionsData = [];
     this.showEledger = true;
-    // console.log ('groupBy data', data);
-    // console.log ('blankLedger', this.blankLedger);
     forEach(data, (txn: IELedgerResponse) => {
       let item: BlankLedgerVM;
       item = cloneDeep(this.blankLedger);
@@ -194,7 +196,31 @@ export class LedgerVM {
       });
       this.bankTransactionsData.push(item);
     });
-    console.log ('finally', this.bankTransactionsData);
+  }
+
+  /**
+   * prepare bankLedger request object from vm for API
+   * @returns {BlankLedgerVM}
+   */
+  public prepareBankLedgerRequestObject(): BlankLedgerVM {
+    let requestObj: BlankLedgerVM;
+    requestObj = cloneDeep(this.currentBankEntry);
+
+    // filter transactions which have selected account
+    requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
+
+    // map over transactions array
+    requestObj.transactions.map((bl: any) => {
+      // set transaction.particular to selectedAccount uniqueName
+      bl.particular = bl.selectedAccount.uniqueName;
+      // filter taxes uniqueNames
+      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
+      // filter discount
+      bl.discounts = bl.discounts.filter(p => p.amount > 0);
+      // delete local id
+      delete bl['id'];
+    });
+    return requestObj;
   }
 }
 
