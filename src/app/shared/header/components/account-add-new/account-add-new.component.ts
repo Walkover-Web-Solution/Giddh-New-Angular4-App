@@ -280,17 +280,20 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
-        gstForm.get('stateCode').disable();
+        statesEle.setDisabledState(false);
+        // gstForm.get('stateCode').disable();
         if (s) {
           gstForm.get('stateCode').patchValue(s.value);
+          statesEle.setDisabledState(true);
         } else {
           gstForm.get('stateCode').patchValue(null);
+          statesEle.setDisabledState(false);
           this._toaster.clearAllToaster();
           this._toaster.warningToast('Invalid GSTIN.');
         }
       });
     } else {
-      gstForm.get('stateCode').enable();
+      statesEle.setDisabledState(false);
       gstForm.get('stateCode').patchValue(null);
     }
   }
