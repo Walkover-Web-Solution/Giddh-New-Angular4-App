@@ -10,6 +10,8 @@ import { DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { LaddaModule } from 'angular2-ladda';
+import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,8 @@ import { LaddaModule } from 'angular2-ladda';
     DatepickerModule,
     TypeaheadModule,
     ModalModule,
-    LaddaModule
+    LaddaModule,
+    DecimalDigitsModule
   ],
 })
 export class SearchModule {

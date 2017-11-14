@@ -16,6 +16,11 @@ import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.compon
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { LedgerService } from '../../../services/ledger.service';
+import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
+import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { cloneDeep, forEach, isEmpty } from '../../../lodash-optimized';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -28,6 +33,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Input() public currentTxn: TransactionVM = null;
   @Input() public needToReCalculate: BehaviorSubject<boolean>;
   @Input() public showTaxationDiscountBox: boolean = true;
+  @Input() public isBankTransaction: boolean = false;
+  @Input() public trxRequest: TransactionsRequest;
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
@@ -43,19 +50,28 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public companyTaxesList$: Observable<TaxResponse[]>;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
-
   public voucherTypeList: Observable<IOption[]>;
   public showAdvanced: boolean;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public isFileUploading: boolean = false;
   public isLedgerCreateInProcess$: Observable<boolean>;
+  // bank map eledger related
+  @ViewChild('confirmBankTxnMapModal') public confirmBankTxnMapModal: ModalDirective;
+  public matchingEntriesData: ReconcileResponse[] = [];
+  public showMatchingEntries: boolean = false;
+  public mapBodyContent: string;
+  public selectedItemToMap: ReconcileResponse;
+
+  // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>,
-              private _ledgerActions: LedgerActions,
-              private _companyActions: CompanyActions,
-              private cdRef: ChangeDetectorRef,
-              private _toasty: ToasterService) {
+  constructor(
+    private store: Store<AppState>,
+    private _ledgerService: LedgerService,
+    private _ledgerActions: LedgerActions,
+    private _companyActions: CompanyActions,
+    private cdRef: ChangeDetectorRef,
+    private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -155,7 +171,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public changePrice(val: string) {
-    this.currentTxn.inventory.unit.rate = Number(_.cloneDeep(val));
+    this.currentTxn.inventory.unit.rate = Number(cloneDeep(val));
     this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
     // this.amountChanged();
     this.calculateTotal();
@@ -175,7 +191,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     if (this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock) {
-        // this.currentTxn.inventory.unit.rate = this.currentTxn.amount;
+        this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
       }
     }
 
@@ -195,8 +211,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    * reset panel form
    */
   public resetPanel() {
-    this.currentTxn = null;
     this.resetBlankLedger.emit(true);
+    setTimeout(() => {
+      this.currentTxn = null;
+    }, 1000);
   }
 
   public onUploadOutput(output: UploadOutput): void {
@@ -256,6 +274,81 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.destroyed$.complete();
   }
 
+  public getReconciledEntries() {
+    this.matchingEntriesData = [];
+    let o: ReconcileRequest = {};
+    o.chequeNumber = (this.blankLedger.chequeNumber) ? this.blankLedger.chequeNumber : '';
+    o.accountUniqueName = this.trxRequest.accountUniqueName;
+    o.from = this.trxRequest.from;
+    o.to = this.trxRequest.to;
+    this._ledgerService.GetReconcile(o.accountUniqueName, o.from, o.to, o.chequeNumber).subscribe((res) => {
+      let data: BaseResponse<ReconcileResponse[], string> = res;
+      if (data.status === 'success') {
+        if (data.body.length) {
+          forEach(data.body, (entry: ReconcileResponse) => {
+            forEach(entry.transactions, (txn: ILedgerTransactionItem) => {
+              if (txn.amount === this.currentTxn.amount) {
+                this.matchingEntriesData.push(entry);
+              }
+            });
+          });
+          if (this.matchingEntriesData.length === 1) {
+            this.confirmBankTransactionMap(this.matchingEntriesData[0]);
+          }else if (this.matchingEntriesData.length > 1) {
+            this.showMatchingEntries = true;
+          }else {
+            this.showErrMsgOnUI();
+          }
+        }else {
+          this.showErrMsgOnUI();
+        }
+      }else {
+        this._toasty.errorToast(data.message, data.code);
+      }
+    });
+  }
+
+  public showErrMsgOnUI() {
+    this._toasty.warningToast('no entry with matching amount found, please create a new entry with same amount as this transaction.');
+  }
+
+  public confirmBankTransactionMap(item: ReconcileResponse) {
+    this.selectedItemToMap = item;
+    this.mapBodyContent = `Selected bank transaction will be mapped with cheque number ${item.chequeNumber} Click yes to accept.`;
+    this.confirmBankTxnMapModal.show();
+  }
+
+  public hideConfirmBankTxnMapModal() {
+    this.confirmBankTxnMapModal.hide();
+  }
+
+  public mapBankTransaction() {
+    if (this.blankLedger.transactionId && this.selectedItemToMap.uniqueName) {
+      let model = {
+        uniqueName: this.selectedItemToMap.uniqueName
+      };
+      let unqObj = {
+        accountUniqueName: this.trxRequest.accountUniqueName,
+        transactionId: this.blankLedger.transactionId
+      };
+      this._ledgerService.MapBankTransactions(model, unqObj).subscribe((res) => {
+        if (res.status === 'success') {
+          if (typeof(res.body) === 'string') {
+            this._toasty.successToast(res.body);
+          }else {
+            this._toasty.successToast('Entry Mapped Successfully!');
+          }
+          this.hideConfirmBankTxnMapModal();
+          this.clickedOutsideEvent.emit(false);
+        }else {
+          this._toasty.errorToast(res.message, res.code);
+        }
+      });
+    }else {
+      // err
+    }
+  }
+
   public hideDiscountTax(): void {
     if (this.discountControl) {
       this.discountControl.discountMenu = false;
@@ -267,12 +360,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public hideDiscount(): void {
     if (this.discountControl) {
+      this.discountControl.change();
       this.discountControl.discountMenu = false;
     }
   }
 
   public hideTax(): void {
     if (this.taxControll) {
+      this.taxControll.change();
       this.taxControll.showTaxPopup = false;
     }
   }

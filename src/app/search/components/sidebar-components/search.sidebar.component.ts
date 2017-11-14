@@ -38,10 +38,11 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.fromDate = moment().subtract(1, 'month').toDate();
     //
     // Get source for Group Name Input selection
     this.groupsList$.subscribe(data => {
-      if (data.length) {
+      if (data && data.length) {
         let accountList = this.flattenGroup(data, []);
         let groups = [];
         accountList.map((d: any) => {
