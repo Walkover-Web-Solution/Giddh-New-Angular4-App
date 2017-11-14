@@ -116,7 +116,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       if (this.customFilter) {
         return this.customFilter(lowercaseFilter, item);
       }
-     return !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1;
+      return !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1;
     });
     if (this.filteredData.length === 0) {
       this.noOptionsFound.emit(true);
@@ -133,6 +133,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     if (this.isFilterEnabled) {
       this.updateFilter(this.filter);
     }
+  }
+
+  public setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
   }
 
   public toggleSelected(item) {
