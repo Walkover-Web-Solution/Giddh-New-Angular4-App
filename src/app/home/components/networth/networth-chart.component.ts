@@ -23,7 +23,7 @@ export class NetworthChartComponent implements OnInit {
   public monthlyOption = {
     colors: ['#c45022'],
     chart: {
-      type: 'column', height: '320px',width: '900'
+      type: 'column', height: '320px',width: 900
     },
     title: {
       text: ''

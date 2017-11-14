@@ -130,7 +130,7 @@ export class HistoryChartComponent implements OnInit {
     this.options = {
       chart: {
         height: '320px',
-        width: '900',
+        width: 900,
       },
       title: {
         text: ''
