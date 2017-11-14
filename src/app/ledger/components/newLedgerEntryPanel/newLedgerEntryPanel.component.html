@@ -10,8 +10,7 @@
                   <tr>
                     <td ng-class="{width55: ledgerCtrl.selectedTxn.panel.unit != undefined}">
                       <label>Quantity</label>
-                      <input type="text" name="" class="form-control" (keyup)="changeQuantity($event.target.value)"
-                             [(ngModel)]="currentTxn.inventory.quantity" decimalDigitsDirective [DecimalPlaces]="2"/>
+                      <input type="text" name="" class="form-control" (keyup)="changeQuantity($event.target.value)" [(ngModel)]="currentTxn.inventory.quantity" decimalDigitsDirective [DecimalPlaces]="2"/>
                     </td>
                     <td *ngIf="currentTxn.unitRate">
                       <label>Unit</label>
@@ -73,9 +72,9 @@
           </tr>
         </tbody>
       </table>
-    </div>`
+    </div>
     <div class="pdB1 inWords" *ngIf="currentTxn.total">
-      {{ currentTxn.total | myNumberToWordsPipe | lowercase }}
+      {{ currentTxn?.total | myNumberToWordsPipe | lowercase }}
     </div>
     <div class="row">
       <div class="col-xs-12">
@@ -107,19 +106,18 @@
     </div>
     <!--map bank transactions-->
     <div class="row">
-      <div class="col-xs-7 form-group pr" *ngIf="false" ng-if="ledgerCtrl.selectedLedger.isBankTransaction">
-        <a href="javascript:void(0)">Map Transaction
-          <span ng-if="ledgerCtrl.showMatchingEntries">with</span>
-        </a>
-        <ul class="list-unstyled map-txn-container" ng-if="ledgerCtrl.showMatchingEntries">
-          <li class="cp" ng-repeat="entry in ledgerCtrl.matchingEntries">
+      <div class="col-xs-12 form-group pr" *ngIf="isBankTransaction">
+        <a href="javascript:void(0)" (click)="getReconciledEntries()">Map Transaction</a>
+        <span *ngIf="showMatchingEntries">with</span>
+        <ul class="list-unstyled map-txn-container" *ngIf="showMatchingEntries">
+          <li class="cp" *ngFor="let entry of matchingEntriesData;" (click)="confirmBankTransactionMap(entry)">
             <table class="table table-bordered mr0">
               <tbody>
-                <tr ng-repeat="txn in entry.transactions">
-                  <td>{{""}}</td>
-                  <td>{{""}}</td>
-                  <td>{{""}}</td>
-                  <td>{{""}}</td>
+                <tr *ngFor="let txn of entry.transactions;">
+                  <td>{{entry.entryDate}}</td>
+                  <td>{{txn.particular.name}}</td>
+                  <td>{{txn.amount}}</td>
+                  <td>{{entry.chequeNumber}}</td>
                 </tr>
               </tbody>
             </table>
@@ -176,13 +174,13 @@
         </div>
       </div>
       <div class="col-xs-12 pdT1">
-        <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
+        <button [hidden]="isBankTransaction" class="btn btn-danger pull-left btn-sm" (click)="resetPanel()">
           Reset
         </button>
         <div class="pull-right">
-          <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('DEBIT',$event)">Add to DR
+          <button [hidden]="isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('DEBIT',$event)">Add to DR
           </button>
-          <button ng-hide="ledgerCtrl.selectedLedger.isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('CREDIT',$event)">Add to CR
+          <button [hidden]="isBankTransaction" class="btn btn-default btn-sm" (click)="addToDrOrCr('CREDIT',$event)">Add to CR
           </button>
           <button id="saveLedger" class="btn btn-success btn-sm" [disabled]="isFileUploading" [ladda]="isLedgerCreateInProcess$ | async"
             (click)="saveLedger()">Save
@@ -198,6 +196,18 @@
     <div class="modal-content">
       <confirm-modal [title]="'Delete'" [body]="'Are you sure you want to delete the attached file?'" (cancelCallBack)="hideDeleteAttachedFileModal()"
         (successCallBack)="deleteAttachedFile()">
+      </confirm-modal>
+    </div>
+  </div>
+</div>
+
+
+<!--confirm map transaction with bank transaction -->
+<div bsModal #confirmBankTxnMapModal="bs-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <confirm-modal [title]="'Map Bank Entry'" [body]="mapBodyContent" (cancelCallBack)="hideConfirmBankTxnMapModal()"
+        (successCallBack)="mapBankTransaction()">
       </confirm-modal>
     </div>
   </div>
