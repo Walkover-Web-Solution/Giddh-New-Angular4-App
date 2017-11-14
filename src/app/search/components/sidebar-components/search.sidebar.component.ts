@@ -41,7 +41,7 @@ export class SearchSidebarComponent implements OnInit, OnDestroy {
     //
     // Get source for Group Name Input selection
     this.groupsList$.subscribe(data => {
-      if (data.length) {
+      if (data && data.length) {
         let accountList = this.flattenGroup(data, []);
         let groups = [];
         accountList.map((d: any) => {
