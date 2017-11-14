@@ -10,7 +10,7 @@
 
       <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
         <label for="">Country</label>
-        <ng-select [options]="countrySource" formControlName="countryCode" style="width:100%"></ng-select>
+        <sh-select [options]="countrySource"  [isFilterEnabled]="true" formControlName="countryCode" style="width:100%"></sh-select>
       </div>
 
     </div>
