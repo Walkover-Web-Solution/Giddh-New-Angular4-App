@@ -245,9 +245,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       partyType: ['NOT APPLICABLE']
     });
     if (val) {
-      // setTimeout(() => {
         gstFields.patchValue(val);
-      // }, 300);
     }
     return gstFields;
   }
