@@ -4,15 +4,18 @@ import { GENERAL_ACTIONS } from '../../services/actions/general/general.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { FlattenAccountsResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
+import { States } from '../../models/api-models/Company';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
   flattenAccounts: IFlattenAccountsResultItem[];
+  states: States[];
 }
 
 const initialState: GeneralState = {
   groupswithaccounts: null,
-  flattenAccounts: null
+  flattenAccounts: null,
+  states: null
 };
 
 export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState = initialState, action: Action) => {
@@ -36,6 +39,15 @@ export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState 
         };
       }
       return state;
+    }
+    case GENERAL_ACTIONS.GENERAL_GET_ALL_STATES_RESPONSE: {
+      let result: BaseResponse<States[], string> = action.payload;
+      if (result.status === 'success') {
+        return {
+          ...state,
+          states: result.body
+        };
+      }
     }
     default :
       return state;
