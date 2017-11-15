@@ -8,16 +8,14 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 import { Observable } from 'rxjs/Observable';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
-import { Select2OptionData } from '../../../theme/select2/index';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { Select2Component } from '../../../theme/select2/select2.component';
 import { CompanyResponse, States } from '../../../../models/api-models/Company';
-import { SelectComponent } from '../../../../theme/ng-select/select.component';
-import { IOption } from '../../../../theme/ng-select/option.interface';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'account-add-new',
@@ -277,7 +275,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
+  public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
