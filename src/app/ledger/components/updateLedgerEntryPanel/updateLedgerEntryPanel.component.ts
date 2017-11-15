@@ -222,8 +222,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
+      txn.inventory = null;
+      txn.particular.name = undefined;
+      // check if need to showEntryPanel
       this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
-      this.vm.reInitilizeDiscount();
+      // set discount amount to 0 when deselected account is type of discount category
+      if (this.discountComponent) {
+        this.vm.reInitilizeDiscount();
+      }
       return;
     } else {
       // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
