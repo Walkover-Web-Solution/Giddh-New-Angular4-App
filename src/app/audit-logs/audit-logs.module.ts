@@ -7,7 +7,7 @@ import { AuditLogsComponent } from './audit-logs.component';
 import { AuditLogsRoutingModule } from './audit-logs.routing.module';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { LaddaModule } from 'angular2-ladda';
-import { SelectModule } from '../theme/ng-select/ng-select';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
   declarations: [
@@ -29,7 +29,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     DatepickerModule,
     BsDatepickerModule,
     LaddaModule,
-    SelectModule
+    ShSelectModule
   ],
 })
 export class AuditLogsModule {
