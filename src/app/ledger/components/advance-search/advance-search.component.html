@@ -1,0 +1,86 @@
+<div id="" class="">
+  <div class="modal-header themeBg pd2 pdL2 pdR2 clearfix">
+    <h3 class="modal-title bg" id="modal-title">Advance Filter </h3>
+    <i class="fa fa-times text-right close_modal" aria-hidden="true" (click)="onCancel()"></i>
+  </div>
+  <div class="modal-body pdT5 pdB5 pdL2 pdR2 clearfix" id="export-body">
+    <form action="">
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="col-xs-5">
+            <label for="">Date Range</label>
+          </div>
+          <div class="col-xs-7">
+            <div class="form-group input-group">
+              <input name="dateRange" placeholder="Date range picker" type="text" class="form-control" bsDaterangepicker required>
+              <span class="input-group-addon">
+                <i class="fa fa-calendar" aria-hidden="true"></i>
+              </span>
+              <!-- [ngModel]="mfStockSearchRequest.dateRange"
+                        (bsValueChange)="bsValueChange($event)" -->
+            </div>
+          </div>
+          <div class="col-xs-5">
+            <label for="">Merge Accounts</label>
+            <p>
+              <small>you can merge multiple accounts; furtherfilters will depend on this.</small>
+            </p>
+          </div>
+          <div class="col-xs-7">
+            <div class="form-group">
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 mrT2 pdT2 bdrT">
+          <div class="col-xs-5">
+            <label for="">Particulars</label>
+            <p>
+              <small>By default all accounts are selected</small>
+            </p>
+          </div>
+          <div class="col-xs-7">
+            <div class="btn-group">
+              <label class="btn btn-success" [(ngModel)]="checkModel" name="left" btnRadio="all">All</label>
+              <label class="btn btn-success" [(ngModel)]="checkModel" name="middle" btnRadio="include">Include</label>
+              <label class="btn btn-success" [(ngModel)]="checkModel" name="right" btnRadio="exclude">Exclude</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-xs-12 mrT2">
+          <div class="col-xs-5">
+            <label for="">Voucher Type</label>
+            <p>
+              <small>By default all vouchers are selected</small>
+            </p>
+          </div>
+          <div class="col-xs-7">
+            <div class="btn-group">
+              <label class="btn btn-success" [(ngModel)]="checkModel" name="left" btnRadio="all">All</label>
+              <label class="btn btn-success" [(ngModel)]="checkModel" name="middle" btnRadio="include">Include</label>
+              <label class="btn btn-success" [(ngModel)]="checkModel" name="right" btnRadio="exclude">Exclude</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 mrT2">
+          <div class="col-xs-5">
+            <label for="">Amount</label>
+          </div>
+          <div class="col-xs-7">
+            <div class="form-group">
+              <input type="text" class="form-control">
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="pull-right mrT2">
+              <button class="btn btn-success">Search</button>
+              <button class="btn btn-primary">Search & Export</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
