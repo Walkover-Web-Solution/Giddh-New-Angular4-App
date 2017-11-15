@@ -24,11 +24,11 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
-import { IOption } from '../theme/ng-select/option.interface';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { GeneralActions } from '../services/actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'ledger',

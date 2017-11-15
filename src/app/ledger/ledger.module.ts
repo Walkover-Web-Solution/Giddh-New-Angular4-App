@@ -23,7 +23,6 @@ import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.mo
 import { LaddaModule } from 'angular2-ladda';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { TextMaskModule } from 'angular2-text-mask';
-import { SelectModule } from '../theme/ng-select/ng-select';
 import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
@@ -63,11 +62,10 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     LaddaModule,
     ElementViewChildModule,
     TextMaskModule,
-    SelectModule,
     NumberToWordsModule,
     ConfirmModalModule,
     ShSelectModule,
-    DecimalDigitsModule
+    DecimalDigitsModule,
   ],
 })
 export class LedgerModule {
