@@ -48,7 +48,7 @@
     <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
       <div class="alert alert-danger fade in pr" style="padding-right:15px">
         <button type="button" class="close">
-          <span style="font-size:12px;font-weight:normal" trigger-resize>Close</span>
+          <span style="font-size:12px;font-weight:normal" (click)="lc.showEledger != lc.showEledger">Close</span>
         </button>
 
         <table class="table ledgerTable" style="margin-bottom:0">
@@ -160,9 +160,9 @@
                 </table>
               </td>
               <td colspan="3" class="nopad bdrL bdrR">
-                <table class="width100" *ngFor="let item of lc.bankTransactionsData;">
+                <table class="width100" *ngFor="let item of lc.bankTransactionsData;" (clickOutside)="hideBankLedgerPopup()" (click)="$event.stopPropagation()">
                   <tbody>
-                    <tr *ngFor="let txn of item.transactions;">
+                    <tr *ngFor="let txn of item.transactions;" (click)="showBankLedgerPopup(txn, item);">
                       <td class="width100 pr" *ngIf="txn.type === 'CREDIT'">
                         <table class="width100">
                           <tbody class="ledger-main">
@@ -208,6 +208,11 @@
                           </tbody>
                         </table>
                         <!--new ledge popup-->
+                        <div class="pos-abs wthPos" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
+                          <new-ledger-entry-panel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate"
+                            (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"(saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
+                          </new-ledger-entry-panel>
+                        </div>
                         <!-- end  -->
                       </td>
                     </tr>
