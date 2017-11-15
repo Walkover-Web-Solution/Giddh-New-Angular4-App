@@ -14,7 +14,7 @@ import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'group-update',
