@@ -24,7 +24,7 @@
                         <div class="form-group col-xs-6">
                             <label for="" class="d-block">GSTIN</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst" placeholder="">
+                                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (change)="getStateCode(gst, states)" name="gst" placeholder="">
                                 <div class="input-group-addon">
                                     <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="bottom">
                                 </div>
@@ -57,7 +57,7 @@
                             <div class="form-group">
                                 <label for="">State *</label>
                                 <div class="custom-select pos-rel">
-                                    <sh-select #states [options]="statesSource$ | async" formControlName="stateCode"></sh-select>
+                                    <sh-select #states [options]="statesSource$ | async" [disabled]="gst.get('gstNumber').value" formControlName="stateCode"></sh-select>
                                 </div>
                             </div>
                             <div class="row">

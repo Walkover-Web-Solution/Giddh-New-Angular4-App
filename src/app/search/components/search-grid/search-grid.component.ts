@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
@@ -73,6 +73,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     },
   ];
   @ViewChild('mailModal') public mailModal: ModalDirective;
+  @ViewChild('messageBox') public messageBox: ElementRef;
   public searchRequest$: Observable<SearchRequest>;
 
   public get sortType(): string {
@@ -200,7 +201,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     data = Number(data);
     data = data.toFixed(places);
     return data;
-  }
+  };
 
   // Save CSV File with data from Table...
   public createCSV() {
@@ -233,7 +234,21 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
   // Add Selected Value to Message Body
   public addValueToMsg(val: any) {
-    this.messageBody.msg += ` ${val.value} `;
+    this.typeInTextarea(val.value);
+    // this.messageBody.msg += ` ${val.value} `;
+  }
+
+  public typeInTextarea(newText) {
+    let el: HTMLInputElement = this.messageBox.nativeElement;
+    let start = el.selectionStart;
+    let end = el.selectionEnd;
+    let text = el.value;
+    let before = text.substring(0, start);
+    let after = text.substring(end, text.length);
+    el.value = (before + newText + after);
+    el.selectionStart = el.selectionEnd = start + newText.length;
+    el.focus();
+    this.messageBody.msg = el.value;
   }
 
   // Open Modal for Email

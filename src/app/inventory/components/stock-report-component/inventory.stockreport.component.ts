@@ -1,7 +1,7 @@
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
 import { StockReportActions } from '../../../services/actions/inventory/stocks-report.actions';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
@@ -23,7 +23,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterViewInit {
   public today: Date = new Date();
   public activeStock$: string;
-  public stockReport$: Observable<StockReportResponse>;
+  public  stockReport$: Observable<StockReportResponse>;
   public sub: Subscription;
   public groupUniqueName: string;
   public stockUniqueName: string;
@@ -39,7 +39,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
    * TypeScript public modifiers
    */
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
-    private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
+              private stockReportActions: StockReportActions, private router: Router, private fb: FormBuilder, private inventoryAction: InventoryAction) {
     this.stockReport$ = this.store.select(p => p.inventory.stockReport).takeUntil(this.destroyed$);
     // this.activeStock$ = this.store.select(p => {
     //   return this.findStockNameFromId(p.inventory.groupsWithStocks, this.stockUniqueName);
@@ -49,6 +49,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     //   this.stockReport$ = this.store.select(p => p.inventory.stockReport);
     this.stockReportRequest = new StockReportRequest();
   }
+
   public findStockNameFromId(grps: IGroupsWithStocksHierarchyMinItem[], stockUniqueName: string): string {
     if (grps && grps.length > 0) {
       for (let key of grps) {
@@ -78,6 +79,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
     return '';
   }
+
   public ngOnInit() {
     this.sub = this.route.params.subscribe(params => {
       this.groupUniqueName = params['groupUniqueName'];
@@ -112,6 +114,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     }
     this.store.dispatch(this.stockReportActions.GetStocksReport(_.cloneDeep(this.stockReportRequest)));
   }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -124,6 +127,7 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
       }
     });
   }
+
   public goToManageStock() {
     if (this.groupUniqueName && this.stockUniqueName) {
       this.store.dispatch(this.inventoryAction.showLoaderForStock());
@@ -141,11 +145,13 @@ export class InventoryStockReportComponent implements OnInit, OnDestroy, AfterVi
     this.stockReportRequest.page--;
     this.getStockReport(false);
   }
+
   public closeFromDate(e: any) {
     if (this.showFromDatePicker) {
       this.showFromDatePicker = false;
     }
   }
+
   public closeToDate(e: any) {
     if (this.showToDatePicker) {
       this.showToDatePicker = false;
