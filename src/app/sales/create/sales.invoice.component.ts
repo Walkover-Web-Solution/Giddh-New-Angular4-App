@@ -190,14 +190,14 @@ export class SalesInvoiceComponent implements OnInit {
     });
 
     // bind state sources
-    this._companyService.getAllStates().subscribe((data) => {
+   this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
       let arr: IOption[] = [];
-      if (data) {
-        data.body.map(d => {
-          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource$ = Observable.of(arr);
+        if (states) {
+          states.map(d => {
+            arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          });
+        }
+        this.statesSource$ = Observable.of(arr);
     });
   }
 
