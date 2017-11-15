@@ -21,7 +21,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'account-operations',
@@ -92,27 +92,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     </ul>
   </div>
   `;
-  public options: Select2Options = {
-    minimumResultsForSearch: 9001,
-    multiple: true,
-    width: '100%',
-    placeholder: 'Select Taxes',
-    templateResult: (data) => {
-      if (!data.id) {
-        return data.text;
-      }
-      // let text = this._translate.instant(data.text);
-      return $('<span>' + data.text + '</span>');
-    },
-    templateSelection: (data) => {
-
-      if (!data.id) {
-        return data.text;
-      }
-      // let text = this._translate.instant(data.text);
-      return $('<span>' + data.text + '</span>');
-    }
-  };
   public moveAccountSuccess$: Observable<boolean>;
   public showDeleteMove: boolean = false;
   public isGstEnabledAcc: boolean = false;
