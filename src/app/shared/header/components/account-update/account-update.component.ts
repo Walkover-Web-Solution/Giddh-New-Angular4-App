@@ -15,6 +15,7 @@ import { Subject } from 'rxjs/Subject';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
 import { IGstDetailListItem } from '../../../../models/interfaces/gstDetailListItem.interface';
 import { IOption } from '../../../../theme/ng-select/option.interface';
+import { States } from '../../../../models/api-models/Company';
 
 @Component({
   selector: 'account-update',
@@ -35,6 +36,7 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
   public isAccountNameAvailable$: Observable<boolean>;
   public updateAccountInProcess$: Observable<boolean>;
   public updateAccountIsSuccess$: Observable<boolean>;
+  public stateStream$: Observable<States[]>;
   public statesSource$: Subject<IOption[]> = new Subject<IOption[]>();
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -46,11 +48,11 @@ export class AccountUpdateComponent implements OnInit, OnDestroy {
     this.isAccountNameAvailable$ = this.store.select(state => state.groupwithaccounts.isAccountNameAvailable).takeUntil(this.destroyed$);
     this.updateAccountInProcess$ = this.store.select(state => state.groupwithaccounts.updateAccountInProcess).takeUntil(this.destroyed$);
     this.updateAccountIsSuccess$ = this.store.select(state => state.groupwithaccounts.updateAccountIsSuccess).takeUntil(this.destroyed$);
-
-    this._companyService.getAllStates().subscribe((data) => {
+    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$.subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
-        data.body.map(d => {
+        data.map(d => {
           states.push({label: d.name, value: d.code});
         });
       }

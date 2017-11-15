@@ -3,17 +3,18 @@ import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/roots';
+import { AppState } from '../../../../store';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
-import { digitsOnly } from '../../../helpers/index';
+import { digitsOnly } from '../../../helpers';
 import { SelectComponent } from '../../../../theme/ng-select/select.component';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
 import { CompanyActions } from '../../../../services/actions/company.actions';
+import { States } from '../../../../models/api-models/Company';
 
 @Component({
   selector: 'account-update-new',
@@ -80,6 +81,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     {value: 'SEZ', label: 'SEZ'}
   ];
   public countrySource: IOption[] = [];
+  public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public moreGstDetailsVisible: boolean = false;
   public gstDetailsLength: number = 3;
@@ -91,13 +93,14 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
               private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
+    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
 
     // bind state sources
-    this._companyService.getAllStates().subscribe((data) => {
+    this.stateStream$.subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
-        data.body.map(d => {
+        data.map(d => {
           states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
@@ -114,7 +117,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(s => s.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((profile) => {
-      this.store.dispatch(this.companyActions.RefreshCompanies());
+      // this.store.dispatch(this.companyActions.RefreshCompanies());
     });
 
   }
