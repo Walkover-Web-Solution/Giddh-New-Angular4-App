@@ -73,7 +73,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     {value: 'SEZ', label: 'SEZ'}
   ];
   public countrySource: IOption[] = [];
-  public stateStream$: Observable<States[]>
+  public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
