@@ -34,10 +34,10 @@
             </div>
             <div class="form-group mrB">
 
-              <ng-select [options]="groupsData$ | async" formControlName="parentStockGroupUniqueName"
+              <sh-select [options]="groupsData$ | async" formControlName="parentStockGroupUniqueName"
                          [disabled]="addGroupForm.get('isSelfParent').value" required
                          [placeholder]="'Select Parent Group'" [multiple]="false"
-                          (selected)="groupSelected($event)"></ng-select>
+                          (selected)="groupSelected($event)"></sh-select>
             </div>
           </div>
           <div class="col-xs-12">
