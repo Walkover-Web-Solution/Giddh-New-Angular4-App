@@ -320,7 +320,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
-    } else {
+    }else {
       this._toaster.warningToast('Something went wrong please reload page');
     }
   }
