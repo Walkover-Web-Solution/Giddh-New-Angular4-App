@@ -49,10 +49,14 @@
                          [textMask]="{mask: vm.dateMask, guide: true}">
                 </td>
                 <td class="col-xs-6">
-                  <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect
+                  <!--<ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect-->
+                             <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
+                             <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
+                             <!--(deselected)="deSelectAccount($event, txn)">-->
+                  <sh-select [options]="vm.flatternAccountList4Select | async" [isFilterEnabled]="true" #dbtSelect
                              (click)="addBlankTrx('DEBIT', txn, $event)"
                              (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"
-                             (deselected)="deSelectAccount($event, txn)">
+                             [ItemHeight]="95" [customFilter]="vm.ledgerCustomFilter">
                     <ng-template #optionTemplate let-option="option">
                       <ng-container *ngIf="!option.additional?.stock">
                         <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -74,7 +78,7 @@
                         </a>
                       </ng-container>
                     </ng-template>
-                  </ng-select>
+                  </sh-select>
                 </td>
                 <td class="col-xs-3 pos-rel">
                   <input type="text" [(ngModel)]="txn.amount" class="form-control"
@@ -123,10 +127,14 @@
                          [textMask]="{mask: vm.dateMask, guide: true}">
                 </td>
                 <td class="col-xs-6">
-                  <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #crdSelect
+                  <!--<ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #crdSelect-->
+                             <!--(click)="addBlankTrx('CREDIT', txn, $event)"-->
+                             <!--(selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"-->
+                             <!--(deselected)="deSelectAccount($event, txn)">-->
+                  <sh-select [options]="vm.flatternAccountList4Select | async" [isFilterEnabled]="true" #crdSelect
                              (click)="addBlankTrx('CREDIT', txn, $event)"
                              (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"
-                             (deselected)="deSelectAccount($event, txn)">
+                             [ItemHeight]="95" [customFilter]="vm.ledgerCustomFilter">
                     <ng-template #optionTemplate let-option="option">
                       <ng-container *ngIf="!option.additional?.stock">
                         <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -148,7 +156,7 @@
                         </a>
                       </ng-container>
                     </ng-template>
-                  </ng-select>
+                  </sh-select>
                 </td>
                 <td class="col-xs-3 pos-rel">
                   <input class="form-control" type="text" [(ngModel)]="txn.amount"
@@ -380,8 +388,8 @@
                   <label class="default_clr pull-left">Voucher type</label>
                 </td>
                 <td colspan="4">
-                  <ng-select [options]="vm.voucherTypeList"
-                             [(ngModel)]="vm.selectedLedger.voucher.shortCode"></ng-select>
+                  <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                             [(ngModel)]="vm.selectedLedger.voucher.shortCode"></sh-select>
                 </td>
 
                 <td class="pdL1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note'

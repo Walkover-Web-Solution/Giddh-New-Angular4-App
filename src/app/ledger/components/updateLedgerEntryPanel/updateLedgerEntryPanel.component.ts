@@ -17,11 +17,11 @@ import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { AccountResponse } from '../../../models/api-models/Account';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -218,7 +218,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
+  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;

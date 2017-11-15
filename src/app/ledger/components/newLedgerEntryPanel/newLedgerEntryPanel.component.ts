@@ -15,12 +15,12 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach, isEmpty } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'new-ledger-entry-panel',
