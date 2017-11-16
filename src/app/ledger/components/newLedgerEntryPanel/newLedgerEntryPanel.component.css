@@ -9,3 +9,7 @@
 .ledger-panel table tbody tr td a {
     color: #333;
 }
+
+.pItem {
+    padding-right: 4px;
+}
