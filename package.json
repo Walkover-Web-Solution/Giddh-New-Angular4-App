@@ -100,6 +100,7 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
     "angular2-ui-switch": "git+https://github.com/daominhsangvn/angular2-ui-switch",
     "electron-oauth": "2.4.3",
     "jquery": "^3.2.1",
