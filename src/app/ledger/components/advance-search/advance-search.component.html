@@ -46,6 +46,7 @@
               <label class="btn btn-success" [(ngModel)]="checkModel" name="middle" btnRadio="include">Include</label>
               <label class="btn btn-success" [(ngModel)]="checkModel" name="right" btnRadio="exclude">Exclude</label>
             </div>
+            <input *ngIf="checkModel!=='all'" type="text" class="form-control mrT1">
           </div>
         </div>
 
@@ -62,6 +63,7 @@
               <label class="btn btn-success" [(ngModel)]="checkModel" name="middle" btnRadio="include">Include</label>
               <label class="btn btn-success" [(ngModel)]="checkModel" name="right" btnRadio="exclude">Exclude</label>
             </div>
+            <input *ngIf="checkModel!=='all'" type="text" class="form-control mrT1">
           </div>
         </div>
         <div class="col-xs-12 mrT2">
@@ -69,15 +71,44 @@
             <label for="">Amount</label>
           </div>
           <div class="col-xs-7">
-            <div class="form-group">
-              <input type="text" class="form-control">
+            <div class="input-group">
+              <div class="input-group-btn">
+                <div class="btn-group" dropdown>
+                  <button dropdownToggle type="button" class="btn btn-default dropdown-toggle">
+                    Select Range
+                    <span class="caret"></span>
+                  </button>
+                  <ul *dropdownMenu class="dropdown-menu pdL1" role="menu">
+                    <li>Equales</li>
+                    <li>Greater than</li>
+                    <li>Greater than equals to</li>
+                    <li>Less than</li>
+                    <li>Less than equals to</li>
+                    <li>Exclude</li>
+                  </ul>
+                </div>
+              </div>
+              <input type="text" class="form-control" aria-label="Text input with dropdown button">
             </div>
           </div>
         </div>
+        
+        <div class="col-xs-12">
+          <div class="form-group toggle-btn mrB" (click)="showOtherDetails = !showOtherDetails">
+            <label class="cp">
+              <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other Details
+            </label>
+          </div>
+        </div>
+
+        <!-- other details container -->
+        <ng-container *ngIf="showOtherDetails">
+          Hello
+        </ng-container>
         <div class="col-xs-12">
           <div class="pull-right mrT2">
-              <button class="btn btn-success">Search</button>
-              <button class="btn btn-primary">Search & Export</button>
+            <button class="btn btn-success">Search</button>
+            <button class="btn btn-primary">Search & Export</button>
           </div>
         </div>
       </div>
