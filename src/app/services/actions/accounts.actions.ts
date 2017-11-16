@@ -1,16 +1,7 @@
+import { GroupSharedWithResponse } from './../../models/api-models/Group';
+import { ShareEntityRequest } from './../../models/api-models/Account';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
-import {
-  AccountMergeRequest,
-  AccountMoveRequest,
-  AccountRequest,
-  AccountRequestV2,
-  AccountResponse,
-  AccountResponseV2,
-  AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse,
-  AccountUnMergeRequest,
-  ShareAccountRequest
-} from '../../models/api-models/Account';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../../models/api-models/Account';
 import { AccountService } from './../account.service';
 import { AppState } from './../../store/roots';
 import { ToasterService } from './../toaster.service';
@@ -22,6 +13,7 @@ import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { GroupResponse } from '../../models/api-models/Group';
+import { GeneralActions } from './general/general.actions';
 
 @Injectable()
 export class AccountsAction {
@@ -29,6 +21,14 @@ export class AccountsAction {
   public static CREATE_ACCOUNT_RESPONSE = 'CreateAccountResponse';
   public static CREATE_ACCOUNTV2 = 'CreateAccountV2';
   public static CREATE_ACCOUNT_RESPONSEV2 = 'CreateAccountResponseV2';
+  public static SHARE_ENTITY = 'EntityShare';
+  public static SHARE_ENTITY_RESPONSE = 'EntityShareResponse';
+  public static UPDATE_SHARED_ENTITY = 'UpdateSharedEntity';
+  public static UPDATE_SHARED_ENTITY_RESPONSE = 'UpdateSharedEntityResponse';
+  public static UN_SHARE_ENTITY = 'EntityUnShare';
+  public static UN_SHARE_ENTITY_RESPONSE = 'EntityUnShareResponse';
+  public static UPDATE_ENTITY_PERMISSION = 'UpdateEntityPermission';
+  public static UPDATE_ENTITY_PERMISSION_RESPONSE = 'UpdateEntityPermissionResponse';
   public static SHARE_ACCOUNT = 'AccountShare';
   public static SHARE_ACCOUNT_RESPONSE = 'AccountShareResponse';
   public static UNSHARE_ACCOUNT = 'AccountUnShare';
@@ -73,7 +73,7 @@ export class AccountsAction {
       let data: BaseResponse<string, ApplyTaxRequest> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return {type: ''};
       }
       this._toasty.successToast(action.payload.body, action.payload.status);
       let accName = null;
@@ -114,7 +114,7 @@ export class AccountsAction {
       } else {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -149,7 +149,7 @@ export class AccountsAction {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
       setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -216,7 +216,7 @@ export class AccountsAction {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
       }
-      return { type: '' };
+      return {type: ''};
     });
 
   @Effect()
@@ -252,7 +252,7 @@ export class AccountsAction {
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
         this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
       }
-      return { type: '' };
+      return {type: ''};
     });
   @Effect()
   public getGroupTaxHierarchy$: Observable<Action> = this.action$
@@ -275,20 +275,57 @@ export class AccountsAction {
     });
 
   @Effect()
-  public shareAccount$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARE_ACCOUNT)
+  public shareEntity$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARE_ENTITY)
     .switchMap(action =>
-      this._accountService.AccountShare(
+      this._accountService.Share(
         action.payload.body,
         action.payload.accountUniqueName
       )
     )
     .map(response => {
-      return this.shareAccountResponse(response);
+      return this.shareEntityResponse(response);
     });
   @Effect()
-  public shareAccountResponse$: Observable<Action> = this.action$
-    .ofType(AccountsAction.SHARE_ACCOUNT_RESPONSE)
+  public shareEntityResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.SHARE_ENTITY_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        this._toasty.successToast('Shared successfully', '');
+        if (data.queryString.entity === 'account') {
+          return this.sharedAccountWith(data.queryString.entityUniqueName);
+        } else if (data.queryString.entity === 'group') {
+          return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
+        } else {
+          return {
+            type: ''
+          };
+        }
+      }
+    });
+
+  @Effect()
+  public unShareEntity$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UN_SHARE_ENTITY)
+    .switchMap(action =>
+      this._accountService.UnShare(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.UnShareEntityResponse(response);
+    });
+
+  @Effect()
+  public unShareEntityResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE)
     .map(action => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -298,7 +335,47 @@ export class AccountsAction {
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
         this._toasty.successToast(action.payload.body, '');
-        return this.sharedAccountWith(data.queryString.accountUniqueName);
+        if (data.queryString.entity === 'account') {
+          return this.sharedAccountWith(data.queryString.entityUniqueName);
+        } else if (data.queryString.entity === 'group') {
+          return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
+        } else {
+          return {
+            type: ''
+          };
+        }
+      }
+    });
+
+  // Update entity permission
+  @Effect()
+  public updateEntityPermission$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION)
+    .switchMap(action =>
+      this._accountService.UnShare(
+        action.payload.body,
+        action.payload.accountUniqueName
+      )
+    )
+    .map(response => {
+      return this.updateEntityPermissionResponse(response);
+    });
+
+  @Effect()
+  public updateEntityPermissionResponse$: Observable<Action> = this.action$
+    .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE)
+    .map(action => {
+      if (action.payload.status === 'error') {
+        this._toasty.errorToast(action.payload.message, action.payload.code);
+        return {
+          type: ''
+        };
+      } else {
+        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+        // this._toasty.successToast(action.payload.body, '');
+        if (data.queryString.model.updateInBackground) {
+          return this.shareEntity(data.queryString.model, data.queryString.model.newPermission);
+        }
       }
     });
 
@@ -465,10 +542,11 @@ export class AccountsAction {
     });
 
   constructor(private action$: Actions,
-    private _accountService: AccountService,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private groupWithAccountsAction: GroupWithAccountsAction) {
+              private _accountService: AccountService,
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private _generalActions: GeneralActions) {
   }
 
   public createAccount(value: string, account: AccountRequest): Action {
@@ -477,8 +555,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
 
@@ -495,8 +573,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
 
@@ -513,8 +591,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         accountUniqueName: value
       }, {
-          account
-        })
+        account
+      })
     };
   }
 
@@ -528,7 +606,7 @@ export class AccountsAction {
   public updateAccountV2(value: { groupUniqueName: string, accountUniqueName: string }, account: AccountRequestV2): Action {
     return {
       type: AccountsAction.UPDATE_ACCOUNTV2,
-      payload: { account, value }
+      payload: {account, value}
     };
   }
 
@@ -567,9 +645,10 @@ export class AccountsAction {
     };
   }
 
-  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
+  // SHARE
+  public shareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
     return {
-      type: AccountsAction.SHARE_ACCOUNT,
+      type: AccountsAction.SHARE_ENTITY,
       payload: Object.assign({}, {
         body: value
       }, {
@@ -578,9 +657,47 @@ export class AccountsAction {
     };
   }
 
-  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
+  public shareEntityResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
     return {
-      type: AccountsAction.SHARE_ACCOUNT_RESPONSE,
+      type: AccountsAction.SHARE_ENTITY_RESPONSE,
+      payload: value
+    };
+  }
+
+  // UNSHARE
+  public unShareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.UN_SHARE_ENTITY,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public UnShareEntityResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
+    return {
+      type: AccountsAction.UN_SHARE_ENTITY_RESPONSE,
+      payload: value
+    };
+  }
+
+  // updateEntityPermission
+  public updateEntityPermission(value: ShareEntityRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.UPDATE_ENTITY_PERMISSION,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+        accountUniqueName
+      })
+    };
+  }
+
+  public updateEntityPermissionResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
+    return {
+      type: AccountsAction.UPDATE_ENTITY_PERMISSION_RESPONSE,
       payload: value
     };
   }
@@ -591,8 +708,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         user: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
 
@@ -609,8 +726,8 @@ export class AccountsAction {
       payload: Object.assign({}, {
         body: value
       }, {
-          accountUniqueName
-        })
+        accountUniqueName
+      })
     };
   }
 
@@ -686,7 +803,7 @@ export class AccountsAction {
   public mergeAccount(accountUniqueName: string, data: AccountMergeRequest[]): Action {
     return {
       type: AccountsAction.MERGE_ACCOUNT,
-      payload: { accountUniqueName, data }
+      payload: {accountUniqueName, data}
     };
   }
 
@@ -700,7 +817,7 @@ export class AccountsAction {
   public unmergeAccount(accountUniqueName: string, data: AccountUnMergeRequest): Action {
     return {
       type: AccountsAction.UNMERGE_ACCOUNT,
-      payload: { accountUniqueName, data }
+      payload: {accountUniqueName, data}
     };
   }
 

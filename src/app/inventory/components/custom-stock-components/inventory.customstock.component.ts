@@ -11,7 +11,7 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
 import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
 import { SettingsProfileActions } from '../../../services/actions/settings/profile/settings.profile.action';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'inventory-custom-stock',  // <home></home>

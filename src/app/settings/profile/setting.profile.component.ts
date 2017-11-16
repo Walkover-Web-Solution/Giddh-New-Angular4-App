@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { Select2OptionData } from '../../theme/select2';
+import { States } from '../../models/api-models/Company';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -34,6 +35,7 @@ export interface IGstObj {
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public companyProfileObj: any = null;
+  public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
@@ -54,15 +56,16 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private _companyService: CompanyService,
     private _toasty: ToasterService
   ) {
-    this._companyService.getAllStates().subscribe((data) => {
+    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$.subscribe((data) => {
       if (data) {
-        data.body.map(d => {
-          this.states.push({ label: d.name, value: d.code });
+        data.map(d => {
+          this.states.push({ label: `${d.code} - ${d.name}`, value: `${d.code} - ${d.name}` });
         });
       }
       this.statesSource$ = Observable.of(this.states);
     }, (err) => {
-      console.log(err);
+      // console.log(err);
     });
   }
 
@@ -88,6 +91,12 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           profileObj.gstDetails = profileObj.gstDetails.slice(0, 3);
         }
         this.companyProfileObj = profileObj;
+        if (profileObj && profileObj.country) {
+          let countryName = profileObj.country.toLocaleLowerCase();
+          if (countryName === 'india') {
+            this.countryIsIndia = true;
+          }
+        }
         this.checkCountry(false);
       }
     });
@@ -96,7 +105,6 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         this.countryCode = s.session.user.countryCode ? s.session.user.countryCode : '91';
       }
     });
-    console.log('hello from SettingProfileComponent');
   }
 
   public addGst() {
@@ -138,7 +146,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
       profileObj.gstDetails[indx].addressList[0].stateName = selectedState.label;
       this.companyProfileObj = profileObj;
     }
-    console.log('The selected state is :', selectedState);
+    // console.log('The selected state is :', selectedState);
   }
 
   public updateProfile(data) {
@@ -160,7 +168,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     if (this.gstDetailsBackup) {
       dataToSave.gstDetails = _.cloneDeep(this.gstDetailsBackup);
     }
-    console.log('THe data is :', dataToSave);
+    // console.log('THe data is :', dataToSave);
     this.store.dispatch(this.settingsProfileActions.UpdateProfile(dataToSave));
 
   }
@@ -194,7 +202,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
           defaultGstObjIndx = indx;
         }
       });
-      console.log('defaultGstObjIndx is :', defaultGstObjIndx);
+      // console.log('defaultGstObjIndx is :', defaultGstObjIndx);
       return '';
     }
     return '';

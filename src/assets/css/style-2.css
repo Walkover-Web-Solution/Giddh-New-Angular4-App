@@ -4019,3 +4019,16 @@ ng-select>div>div.single>div.clear {
 ng-select>div>div.single>div.clear:hover {
     background: none;
 }
+
+ng-select .select_drop {
+    position: initial;
+}
+
+ng-select .select_drop i {
+    right: 9px;
+}
+
+#expandAllGroups [class^="icon-"],
+#expandAllGroups [class*=" icon-"] {
+    pointer-events: none;
+}

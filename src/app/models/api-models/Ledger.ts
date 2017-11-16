@@ -138,9 +138,27 @@ export class TransactionsRequest {
   public sort: string = 'asc';
   public reversePage: boolean = false;
 }
+
+export interface ReconcileRequest {
+  accountUniqueName?: string;
+  from?: string;
+  to?: string;
+  chequeNumber?: string;
+}
+
+export interface IReconcileTotal {
+  amount: number;
+  type: string;
+}
+
+export interface IReconcileVoucher {
+  name: string;
+  shortCode: string;
+}
+
 export class ReconcileResponse {
   public transactions: ILedgerTransactionItem[];
-  public total: object;
+  public total: IReconcileTotal;
   public attachedFile: string;
   public invoiceGenerated: boolean;
   public attachedFileName?: string;
@@ -148,6 +166,18 @@ export class ReconcileResponse {
   public invoiceNumber: string;
   public entryDate: string;
   public taxes: string[];
+  public uniqueName: string;
+  public unconfirmedEntry: boolean;
+  public purchaseInvoiceNumber: string;
+  public sendToGstr2: boolean;
+  public availItc: boolean;
+  public invoiceNumberAgainstVoucher?: any;
+  public warning?: any;
+  public voucher: IReconcileVoucher;
+  public voucherNo: number;
+  public chequeClearanceDate: string;
+  public tag?: any;
+  public description: string;
 }
 
 export class MagicLinkRequest {
@@ -163,4 +193,28 @@ export class ExportLedgerRequest {
   public from: string = '';
   public to: string = '';
   public type: string = '';
+}
+
+/**
+ * model for eledger response
+ */
+
+export interface IELedgerResponse {
+  transactions: IELedgerTransaction[];
+  transactionId: string;
+  date: string;
+}
+
+export interface IELedgerTransaction {
+  remarks: IELedgerRemarks;
+  amount: number;
+  type: string;
+}
+
+export interface IELedgerRemarks {
+  description: string;
+  method: string;
+  email?: any;
+  name?: any;
+  chequeNumber?: any;
 }
