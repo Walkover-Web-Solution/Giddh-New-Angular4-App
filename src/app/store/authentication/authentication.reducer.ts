@@ -399,6 +399,22 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
       return state;
 
+    case CompanyActions.SET_MULTIPLE_CURRENCY_FIELD:
+      let companyInfo: { companyUniqueName: string, isMultipleCurrency: boolean } = action.payload;
+
+      let newState = _.cloneDeep(state);
+
+      let companiesList = _.cloneDeep(newState.companies);
+
+      let selectedCompanyIndex = companiesList.findIndex((company) => company.uniqueName === companyInfo.companyUniqueName);
+
+      if (selectedCompanyIndex > -1) {
+        companiesList[selectedCompanyIndex].isMultipleCurrency = companyInfo.isMultipleCurrency;
+        newState.companies = companiesList;
+        return Object.assign({}, state, newState);
+      }
+      return state;
+
     case LoginActions.AddNewMobileNo:
       return {
         ...state,

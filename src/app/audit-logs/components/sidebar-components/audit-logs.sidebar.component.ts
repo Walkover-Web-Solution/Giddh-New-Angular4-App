@@ -17,7 +17,7 @@ import { AuditLogsSidebarVM } from './Vm';
 import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'audit-logs-sidebar',
@@ -80,7 +80,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
 
   public ngOnInit() {
     this.vm.groupsList$.subscribe(data => {
-      if (data.length) {
+      if (data && data.length) {
         let accountList = this.flattenGroup(data, []);
         let groups: IOption[] = [];
         accountList.map((d: any) => {

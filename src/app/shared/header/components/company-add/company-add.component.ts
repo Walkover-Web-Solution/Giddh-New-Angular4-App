@@ -15,8 +15,8 @@ import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import * as _ from '../../../../lodash-optimized';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
-import { IOption } from '../../../../theme/ng-select/option.interface';
 import { GeneralActions } from '../../../../services/actions/general/general.actions';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
@@ -43,12 +43,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public country: string;
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
-  public options: Select2Options = {
-    multiple: false,
-    width: '80px',
-    allowClear: false,
-    dropdownCssClass: 'text-right'
-  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,

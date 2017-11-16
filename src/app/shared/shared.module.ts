@@ -24,8 +24,6 @@ import { ShareAccountModalComponent } from './header/components/share-account-mo
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
-import { SelectModule } from '../theme/ng-select/ng-select';
-import { Select2Module } from '../theme/select2';
 import { LaddaModule } from 'angular2-ladda';
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
@@ -69,9 +67,7 @@ export function provideConfig() {
     SocialLoginModule,
     FormWizardModule,
     // SelectModule,
-    Select2Module,
     ClickOutsideModule,
-    SelectModule,
     ConfirmModalModule,
     LaddaModule,
     ElementViewChildModule,
@@ -80,7 +76,7 @@ export function provideConfig() {
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
+    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
     ConfirmModalModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,

@@ -2,7 +2,7 @@
     Apply Log Filters</h1>
 <div class="clearfix mrT2">
     <label>Filter By:</label>
-    <ng-select [options]="vm.dateOptions" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedDateOption"></ng-select>
+    <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedDateOption"></sh-select>
     <!--<select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>-->
 </div>
 
@@ -115,32 +115,32 @@
 <div class="clearfix mrT2">
     <label>Select Operation</label>
     <!-- <input type="text" class="form-control" /> -->
-    <ng-select [options]="vm.filters" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedOperation"></ng-select>
+    <sh-select [options]="vm.filters" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedOperation"></sh-select>
     <!--<select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Entity</label>
-    <ng-select [options]="vm.entities" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedEntity"></ng-select>
+    <sh-select [options]="vm.entities" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedEntity"></sh-select>
     <!--<select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Account</label>
-    <ng-select [options]="vm.accounts$ | async" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedAccountUnq"></ng-select>
+    <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
     <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Group</label>
-    <ng-select [options]="vm.groups$ | async" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedGroupUnq"></ng-select>
+    <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
     <!--<select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
 </div>
 
 
 <div class="clearfix mrT2">
     <label>Select User</label>
-    <ng-select [options]="vm.users$ | async" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></ng-select>
+    <sh-select [options]="vm.users$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
     <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
 </div>
 
