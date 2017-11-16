@@ -9,12 +9,12 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { digitsOnly } from '../../../helpers';
-import { SelectComponent } from '../../../../theme/ng-select/select.component';
-import { IOption } from '../../../../theme/ng-select/option.interface';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import { States } from '../../../../models/api-models/Company';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'account-update-new',
@@ -286,7 +286,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
+  public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {

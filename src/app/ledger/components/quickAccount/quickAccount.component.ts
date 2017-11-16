@@ -1,10 +1,8 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from '../../../services/group.service';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from '../../../services/companyService.service';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { ToasterService } from '../../../services/toaster.service';
 import { AccountRequestV2 } from '../../../models/api-models/Account';
 import { Store, State } from '@ngrx/store';
@@ -15,6 +13,8 @@ import * as _ from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { GeneralActions } from '../../../services/actions/general/general.actions';
 import { States } from '../../../models/api-models/Company';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'quickAccount',
@@ -107,7 +107,7 @@ export class QuickAccountComponent implements OnInit {
     }
   }
 
-  public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
+  public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {

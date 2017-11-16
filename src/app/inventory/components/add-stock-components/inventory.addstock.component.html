@@ -27,8 +27,8 @@
 
                         <div class="form-group col-xs-3 pdL0 pdR">
                             <label>Stock Unit<span class="required">*</span></label>
-                            <ng-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
-                              [placeholder]="'Choose a parent unit'" [multiple]="false"></ng-select>
+                            <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
+                              [placeholder]="'Choose a parent unit'" [multiple]="false"></sh-select>
                             <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="options" formControlName="stockUnitCode"></select2>-->
                         </div>
 
@@ -52,8 +52,8 @@
                     <div class="row mr0 col-xs-6 pdL0 pdR">
                         <div class="form-group col-xs-12 pdL0 pdR">
                             <label class="boldHead">Purchase Acc</label>
-                          <ng-select [options]="purchaseAccountsDropDown$ | async" formControlName="purchaseAccountUniqueName"
-                                     [placeholder]="'select purchase account'" [multiple]="false"></ng-select>
+                          <sh-select [options]="purchaseAccountsDropDown$ | async" formControlName="purchaseAccountUniqueName"
+                                     [placeholder]="'select purchase account'" [multiple]="false"></sh-select>
                             <!--<select2 [data]="purchaseAccountsDropDown$ | async" [options]="PurchaseDropDownOptions" formControlName="purchaseAccountUniqueName"></select2>-->
                         </div>
 
@@ -70,8 +70,8 @@
                             <div class="row mrB1" *ngFor="let item of addStockForm.get('purchaseUnitRates')['controls']; let i=index;let f = first; let l = last">
                                 <div [formGroupName]="i">
                                     <div class="col-xs-5">
-                                      <ng-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
-                                                 [multiple]="false"></ng-select>
+                                      <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
+                                                 [multiple]="false"></sh-select>
                                         <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="UnitDropDownOptions" formControlName="stockUnitCode"></select2>-->
                                     </div>
                                     <div class="col-xs-5">
@@ -90,8 +90,8 @@
                     <div class="row mr0 col-xs-6 pdL pdR0">
                         <div class="form-group col-xs-12 pdL0 pdR">
                             <label class="boldHead">Sales Acc</label>
-                          <ng-select [options]="salesAccountsDropDown$ | async" formControlName="salesAccountUniqueName"
-                                     [multiple]="false" [placeholder]="'select sales account'"></ng-select>
+                          <sh-select [options]="salesAccountsDropDown$ | async" formControlName="salesAccountUniqueName"
+                                     [multiple]="false" [placeholder]="'select sales account'"></sh-select>
                             <!--<select2 [data]="salesAccountsDropDown$ | async" [options]="SalesDropDownOptions" formControlName="salesAccountUniqueName" [value]="addStockForm.controls['salesAccountUniqueName'].value"></select2>-->
                         </div>
 
@@ -110,8 +110,8 @@
                             <div class="row mrB1" *ngFor="let item of addStockForm.get('saleUnitRates')['controls']; let i=index; let f = first; let l = last">
                                 <div [formGroupName]="i">
                                     <div class="col-xs-5">
-                                      <ng-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
-                                                 [multiple]="false"></ng-select>
+                                      <sh-select [options]="stockUnitsDropDown$ | async" formControlName="stockUnitCode"
+                                                 [multiple]="false"></sh-select>
                                         <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="UnitDropDownOptions" formControlName="stockUnitCode"></select2>-->
                                     </div>
                                     <div class="col-xs-5">
@@ -161,16 +161,16 @@
                             <td class="col-xs-8">
                                 <div class="clearfix pdTBth15">
                                     <div class="form-group col-xs-4">
-                                      <ng-select [options]="stockListDropDown$ | async" formControlName="linkedStockUniqueName"
-                                                 [multiple]="false" [placeholder]="'Select'" (selected)="checkIfLinkedStockIsUnique($event)"></ng-select>
+                                      <sh-select [options]="stockListDropDown$ | async" formControlName="linkedStockUniqueName"
+                                                 [multiple]="false" [placeholder]="'Select'" (selected)="checkIfLinkedStockIsUnique($event)"></sh-select>
                                         <!--<select2 [data]="stockListDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }"
                                         formControlName="linkedStockUniqueName" -->
                                                  <!--(valueChanged)="checkIfLinkedStockIsUnique($event)"></select2>-->
                                     </div>
 
                                     <div class="form-group col-xs-3">
-                                      <ng-select [options]="stockUnitsDropDown$ | async" formControlName="linkedStockUnitCode"
-                                                 [multiple]="false" [placeholder]="'Select'"></ng-select>
+                                      <sh-select [options]="stockUnitsDropDown$ | async" formControlName="linkedStockUnitCode"
+                                                 [multiple]="false" [placeholder]="'Select'"></sh-select>
                                         <!--<select2 [data]="stockUnitsDropDown$ | async"  formControlName="linkedStockUnitCode"></select2>-->
                                     </div>
 
@@ -235,8 +235,8 @@
                                         <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" name="manufacturingQuantity" placeholder="Quantity" formControlName="manufacturingQuantity" />
                                     </div>
                                     <div class="form-group col-md-5 col-lg-5 col-xs-12">
-                                      <ng-select [options]="stockUnitsDropDown$ | async" formControlName="manufacturingUnitCode"
-                                                 [placeholder]="'Select'" [multiple]="false"></ng-select>
+                                      <sh-select [options]="stockUnitsDropDown$ | async" formControlName="manufacturingUnitCode"
+                                                 [placeholder]="'Select'" [multiple]="false"></sh-select>
                                         <!--<select2 [data]="stockUnitsDropDown$ | async" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" formControlName="manufacturingUnitCode"></select2>-->
                                     </div>
                                 </section>
