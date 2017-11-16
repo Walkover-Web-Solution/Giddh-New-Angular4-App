@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -52,7 +52,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
    * on change of discount amount
    */
   public change() {
-    this.discountTotal = this.generateTotal();
+    this.discountTotal = Number(this.generateTotal().toFixed(2));
     this.discountTotalUpdated.emit(this.discountTotal);
   }
 
@@ -60,10 +60,13 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
    * generate total of discount amount
    * @returns {number}
    */
-  public generateTotal() {
-    return this.discountAccountsDetails.reduce((pv, cv) => {
-      return cv.amount ? pv + cv.amount : pv;
-    }, 0);
+  public generateTotal(): number {
+    return this.discountAccountsDetails.map(ds => {
+      ds.amount = Number(ds.amount);
+      return ds;
+    }).reduce((pv, cv) => {
+      return Number(cv.amount) ? Number(pv) + Number(cv.amount) : Number(pv);
+    }, 0) || 0;
   }
 
   public trackByFn(index) {

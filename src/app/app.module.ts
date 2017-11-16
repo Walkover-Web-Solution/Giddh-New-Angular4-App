@@ -1,3 +1,4 @@
+import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { AppState } from './store/roots';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -5,12 +6,12 @@ import { HttpModule } from '@angular/http';
 import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
-import { PreloadAllModules, RouterModule } from '@angular/router';
-import { routerReducer, RouterStoreModule } from '@ngrx/router-store';
+import { RouterModule } from '@angular/router';
+import { RouterStoreModule } from '@ngrx/router-store';
 import { Store, StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 /*
- * Platform and Environment providers/directives/pipes
+ * Platform and Environment providers/pipes/pipes
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
@@ -31,7 +32,7 @@ import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 import 'rxjs/add/operator/take';
-import { DatepickerModule, BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
@@ -41,16 +42,16 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
+import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
+import { LoaderComponent } from './loader/loader.component';
 
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' }
+  {provide: APP_BASE_HREF, useValue: '/'}
 ];
 
-const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
-
-};
+const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
 
 interface InternalStateType {
   [key: string]: any;
@@ -81,7 +82,9 @@ if (ENV === 'development') {
     PageComponent,
     NoContentComponent,
     DummyComponent,
+    SuccessComponent,
     NewUserComponent,
+    LoaderComponent,
     SocialLoginCallbackComponent
   ],
   /**
@@ -110,11 +113,12 @@ if (ENV === 'development') {
     DatepickerModule.forRoot(),
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+    ShSelectModule.forRoot(),
+    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
     StoreModule.provideStore(rootReducer),
     RouterStoreModule.connectRouter(),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, {useHash: true}),
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS
   ],
@@ -130,10 +134,8 @@ if (ENV === 'development') {
 })
 export class AppModule {
 
-  constructor(
-    public appRef: ApplicationRef,
-    public _store: Store<AppState>
-  ) {
+  constructor(public appRef: ApplicationRef,
+              public _store: Store<AppState>) {
   }
 
   public hmrOnInit(store: StoreType) {

@@ -6,15 +6,16 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
+import { underStandingTextData } from '../../underStandingTextData';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
   public flatternAccountList4Select: Observable<IOption[]>;
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
-  public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
+  public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
   public grandTotal: number = 0;
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
@@ -24,9 +25,22 @@ export class UpdateLedgerVm {
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
   public taxRenderData: TaxControlData[] = [];
+  public ledgerUnderStandingObj = {
+    accountType: '',
+    text: {
+      cr: '',
+      dr: ''
+    },
+    balanceText: {
+      cr: '',
+      dr: ''
+    }
+  };
+
   public get stockTrxEntry(): ILedgerTransactionItem {
     return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
   }
+
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public discountComponent: UpdateLedgerDiscountComponent;
 
@@ -220,6 +234,7 @@ export class UpdateLedgerVm {
       this.compoundTotal = Number((this.entryTotal.drTotal - this.entryTotal.crTotal).toFixed());
     }
   }
+
   public getUniqueName(txn: ILedgerTransactionItem) {
     if ((txn.selectedAccount && txn.selectedAccount.stock)) {
       return txn.particular.uniqueName.split('#')[0];
@@ -237,6 +252,7 @@ export class UpdateLedgerVm {
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }
+
   public inventoryPriceChanged(val: number) {
     this.stockTrxEntry.amount = Number(val * this.stockTrxEntry.inventory.quantity);
     this.getEntryTotal();
@@ -244,6 +260,7 @@ export class UpdateLedgerVm {
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }
+
   public inventoryAmountChanged(val: string) {
     if (this.stockTrxEntry) {
       this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
@@ -260,6 +277,7 @@ export class UpdateLedgerVm {
     this.generateGrandTotal();
     this.generateCompoundTotal();
   }
+
   public unitChanged(stockUnitCode: string) {
     this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
@@ -285,11 +303,29 @@ export class UpdateLedgerVm {
       this.discountComponent.genTotal();
     }
   }
+
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    let data = underStandingTextData.find(p => p.accountType === selectedLedgerAccountType);
+    if (data) {
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
+      this.ledgerUnderStandingObj = data;
+    }
+  }
+
   public resetVM() {
     this.selectedLedger = null;
     this.selectedLedgerBackup = null;
     this.taxRenderData = [];
     this.selectedTaxes = [];
     this.discountArray = [];
+  }
+
+  /** ledger custom filter **/
+  public ledgerCustomFilter(term: string, item: IOption): boolean {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
   }
 }

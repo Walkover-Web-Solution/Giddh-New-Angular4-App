@@ -17,23 +17,27 @@ import { AuditLogsSidebarVM } from './Vm';
 import * as _ from '../../../lodash-optimized';
 import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
-import { Select2OptionData } from '../../../theme/select2';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'audit-logs-sidebar',
   templateUrl: './audit-logs.sidebar.component.html',
   styles: [`
-  .ps{overflow:visible !important}
+    .ps {
+      overflow: visible !important
+    }
   `]
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
-  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-    private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
+              private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
     this.vm = new AuditLogsSidebarVM();
     this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
+    this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.vm.selectedCompany = this.store.select(state => {
       if (!state.session.companies) {
         return;
@@ -49,21 +53,11 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }).takeUntil(this.destroyed$);
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let accounts: Select2OptionData[] = [];
+        let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({ text: d.name, id: d.uniqueName });
+          accounts.push({label: d.name, value: d.uniqueName});
         });
         this.vm.accounts$ = Observable.of(accounts);
-      }
-    });
-    this._groupService.GetGroupsWithAccounts('').takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        let accountList = this.flattenGroup(data.body, []);
-        let groups: Select2OptionData[] = [];
-        accountList.map((d: any) => {
-          groups.push({ text: d.name, id: d.uniqueName });
-        });
-        this.vm.groups$ = Observable.of(groups);
       }
     });
     let selectedCompany: CompanyResponse = null;
@@ -72,9 +66,9 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.vm.user$.take(1).subscribe((c) => loginUser = c);
     this._companyService.getComapnyUsers().takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
-        let users: Select2OptionData[] = [];
+        let users: IOption[] = [];
         data.body.map((d) => {
-          users.push({ text: d.userName, id: d.userUniqueName });
+          users.push({label: d.userName, value: d.userUniqueName});
         });
         this.vm.canManageCompany = true;
         this.vm.users$ = Observable.of(users);
@@ -85,8 +79,19 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   }
 
   public ngOnInit() {
+    this.vm.groupsList$.subscribe(data => {
+      if (data && data.length) {
+        let accountList = this.flattenGroup(data, []);
+        let groups: IOption[] = [];
+        accountList.map((d: any) => {
+          groups.push({label: d.name, value: d.uniqueName});
+        });
+        this.vm.groups$ = Observable.of(groups);
+      }
+    });
     this.vm.reset();
   }
+
   public flattenGroup(rawList: any[], parents: any[] = []) {
     let listofUN;
     listofUN = _.map(rawList, (listItem) => {
@@ -97,7 +102,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, { parentGroups: [] });
+      listItem = Object.assign({}, listItem, {parentGroups: []});
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
@@ -116,15 +121,19 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public selectDateOption(v) {
     this.vm.selectedDateOption = v.value || '';
   }
+
   public selectEntityOption(v) {
     this.vm.selectedEntity = v.value || '';
   }
+
   public selectOperationOption(v) {
     this.vm.selectedOperation = v.value || '';
   }
+
   public selectAccount(v) {
     this.vm.selectedAccountUnq = v.value || '';
   }
@@ -140,6 +149,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public selectGroup(v) {
     this.vm.selectedGroupUnq = v.value || '';
   }
+
   public selectUser(v) {
     this.vm.selectedUserUnq = v.value || '';
   }
@@ -175,6 +185,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     }
     this.store.dispatch(this._auditLogsActions.GetLogs(reqBody, 1));
   }
+
   public resetFilters() {
     this.vm.reset();
     this.store.dispatch(this._auditLogsActions.ResetLogs());

@@ -35,7 +35,7 @@
                                     </div>
                                     <div class="col-xs-6">
                                         <label [hidden]="i !== 0">Webhook URL <i class="glyphicon glyphicon-exclamation-sign" tooltip="Add a webhook URL & specify due days to send all your Invoice details"></i></label>
-                                        <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName'/>
+                                        <input type="text" class="form-control" name='webhookUrl_+{{i}}' [(ngModel)]='webhook.url' [disabled]='webhook.uniqueName' />
                                     </div>
                                     <label class="mrL1 cp" [hidden]="i == invoiceWebhook.length-1"> <i class="fa fa-trash-o delete-ico" (click)="deleteWebhook(webhook, i)"></i></label>
                                     <label class="mrL1 cp" *ngIf="i == invoiceWebhook.length-1" (click)="addNewWebhook(webhook)"> <i class="fa fa-plus"></i> Add webhook URL</label>
@@ -90,18 +90,12 @@
                             <div class="row">
                                 <label>Link Account</label>
                                 <div class="ng-select-wrap">
-                                  <ng-select
-                                    placeholder="Link Account"
-                                    filterPlaceholder="Type to search..."
-                                    name="linkedaccount"
-                                    [(ngModel)]="razorpayObj.account"
-                                    [options]="linkAccountDropDown$ | async"
-                                    >
-                                    <ng-template #optionTemplate let-option="option">
-                                      <div class="account-list-item">{{option?.label}}</div>
-                                      <div class="account-list-item fs12">{{option?.value}}</div>
-                                    </ng-template>
-                                  </ng-select>
+                                    <ng-select placeholder="Link Account" filterPlaceholder="Type to search..." name="linkedaccount" [(ngModel)]="razorpayObj.account" [options]="linkAccountDropDown$ | async" style="width: 100%">
+                                        <ng-template #optionTemplate let-option="option">
+                                            <div class="account-list-item">{{option?.label}}</div>
+                                            <div class="account-list-item fs12">{{option?.value}}</div>
+                                        </ng-template>
+                                    </ng-select>
                                 </div>
                             </div>
                         </div>

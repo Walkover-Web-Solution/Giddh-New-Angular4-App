@@ -1,28 +1,25 @@
 import { CompanyAddComponent } from './components/company-add/company-add.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store/roots';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
+import { GeneralActions } from '../../services/actions/general/general.actions';
 
 @Component({
   selector: 'app-header',
@@ -30,7 +27,7 @@ import { userLoginStateEnum } from '../../store/authentication/authentication.re
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
-  public userIsSuperUser: boolean = false; // Protect permission module
+  public userIsSuperUser: boolean = true; // Protect permission module
   public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
@@ -46,12 +43,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public flyAccounts: ReplaySubject<boolean> = new ReplaySubject<boolean>();
   public noGroups: boolean;
   public languages: any[] = [
-    { name: 'ENGLISH', value: 'en' },
-    { name: 'DUTCH', value: 'nl' }
+    {name: 'ENGLISH', value: 'en'},
+    {name: 'DUTCH', value: 'nl'}
   ];
-  public sideMenu: { isopen: boolean } = { isopen: false };
-  public userMenu: { isopen: boolean } = { isopen: false };
-  public companyMenu: { isopen: boolean } = { isopen: false };
+  public sideMenu: { isopen: boolean } = {isopen: false};
+  public userMenu: { isopen: boolean } = {isopen: false};
+  public companyMenu: { isopen: boolean } = {isopen: false};
   public isCompanyRefreshInProcess$: Observable<boolean>;
   public isCompanyCreationSuccess$: Observable<boolean>;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
@@ -71,16 +68,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
    */
   // tslint:disable-next-line:no-empty
   constructor(private loginAction: LoginActions,
-    private socialAuthService: AuthService,
-    private store: Store<AppState>,
-    private companyActions: CompanyActions,
-    private groupWithAccountsAction: GroupWithAccountsAction,
-    private router: Router,
-    private flyAccountActions: FlyAccountsActions,
-    private componentFactoryResolver: ComponentFactoryResolver,
-    private cdRef: ChangeDetectorRef,
-    private zone: NgZone,
-    private route: ActivatedRoute) {
+              private socialAuthService: AuthService,
+              private store: Store<AppState>,
+              private companyActions: CompanyActions,
+              private groupWithAccountsAction: GroupWithAccountsAction,
+              private router: Router,
+              private flyAccountActions: FlyAccountsActions,
+              private componentFactoryResolver: ComponentFactoryResolver,
+              private cdRef: ChangeDetectorRef,
+              private zone: NgZone,
+              private route: ActivatedRoute,
+              private _generalActions: GeneralActions) {
 
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
@@ -107,16 +105,20 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       }
 
       let selectedCmp = state.session.companies.find(cmp => {
-        return cmp.uniqueName === state.session.companyUniqueName;
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === state.session.companyUniqueName;
+        } else {
+          return false;
+        }
       });
       if (!selectedCmp) {
         return;
       }
-      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
-        this.userIsSuperUser = true;
-      } else {
-        this.userIsSuperUser = false;
-      }
+      // if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role && selectedCmp.role.uniqueName === 'super_admin') {
+      //   this.userIsSuperUser = true;
+      // } else {
+      //   this.userIsSuperUser = false;
+      // }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
 
@@ -160,6 +162,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
       }
     });
+    window.addEventListener('keyup', (e: KeyboardEvent) => {
+      if (e.keyCode === 27) {
+        if (this.sideMenu.isopen) {
+          this.sideMenu.isopen = false;
+        }
+        if (this.manageGroupsAccountsModal.isShown) {
+          this.hideManageGroupsModal();
+        }
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -170,6 +182,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
         this.router.navigate(['/new-user']);
         // });
+      } else {
+        // get groups with accounts for general use
+        this.store.dispatch(this._generalActions.getGroupWithAccounts());
+        this.store.dispatch(this._generalActions.getAllState());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -215,6 +231,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public changeCompany(selectedCompanyUniqueName: string) {
     this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    // get groups with accounts for general use
+    this.store.dispatch(this._generalActions.getGroupWithAccounts());
     // }
   }
 
@@ -296,8 +314,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
   }
 
+  public sideBarStateChange(event: boolean) {
+    this.sideMenu.isopen = event;
+  }
+
   public closeSidebar(targetId) {
-    if (targetId === 'accountSearch' || targetId === 'expandAllGroups') {
+    if (targetId === 'accountSearch' || targetId === 'expandAllGroups' || targetId === 'toggleAccounts') {
       return;
     }
     this.flyAccounts.next(false);

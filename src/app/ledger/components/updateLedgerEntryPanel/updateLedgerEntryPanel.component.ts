@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
@@ -17,10 +17,11 @@ import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { AccountResponse } from '../../../models/api-models/Account';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -30,7 +31,6 @@ import { IOption } from '../../../theme/ng-select/option.interface';
 export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, OnDestroy {
   public vm: UpdateLedgerVm;
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
-  @Output() public entryManipulated: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
@@ -45,11 +45,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
-  private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public activeAccount$: Observable<AccountResponse>;
+  public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
-    private _ledgerAction: LedgerActions) {
+              private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+              private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -57,6 +58,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
+    this.closeUpdateLedgerModal.takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
@@ -88,12 +91,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
                       label: `${acc.name} (${as.uniqueName})`,
-                      additional: Object.assign({}, acc, { stock: as })
+                      additional: Object.assign({}, acc, {stock: as})
                     });
                   });
-                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                 } else {
-                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                 }
               });
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
@@ -107,11 +110,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
                   if (findStocks) {
                     let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
-                    if (findUnitRates) {
+                    if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
                       let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
                       tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
                       t.unitRate = tempUnitRates;
+                    } else {
+                      t.unitRate = [{
+                        code: t.inventory.unit.code,
+                        rate: t.inventory.rate,
+                        stockUnitCode: t.inventory.unit.code
+                      }];
                     }
+                  } else {
+                    t.unitRate = [{
+                      code: t.inventory.unit.code,
+                      rate: t.inventory.rate,
+                      stockUnitCode: t.inventory.unit.code
+                    }];
                   }
                   t.particular.uniqueName = `${t.particular.uniqueName}#${t.inventory.stock.uniqueName}`;
                 }
@@ -138,14 +153,23 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
       if (del) {
         this.hideDeleteEntryModal();
-        this.entryManipulated.emit(true);
+        this.store.dispatch(this._ledgerAction.resetDeleteTrxEntryModal());
+        this.closeUpdateLedgerModal.emit(true);
       }
     });
 
     // chek if update entry is success
     this.isTxnUpdateSuccess$.subscribe(upd => {
       if (upd) {
-        this.entryManipulated.emit(true);
+        this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
+        this.closeUpdateLedgerModal.emit(true);
+      }
+    });
+
+    // set understanding text
+    this.activeAccount$.subscribe(a => {
+      if (a) {
+        this.vm.getUnderstandingText(a.accountType, a.uniqueName);
       }
     });
   }
@@ -153,6 +177,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public ngAfterViewInit() {
     this.vm.discountComponent = this.discountComponent;
   }
+
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
@@ -171,8 +196,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
         concurrency: 0
       };
       this.uploadInput.emit(event);
@@ -193,10 +218,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
+  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
+      txn.inventory = null;
+      txn.particular.name = undefined;
+      // check if need to showEntryPanel
+      this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
+      // set discount amount to 0 when deselected account is type of discount category
+      if (this.discountComponent) {
+        this.vm.reInitilizeDiscount();
+      }
       return;
     } else {
       // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
@@ -290,6 +323,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.onTxnAmountChange(txn);
     }
   }
+
   public deSelectAccount(e: IOption, txn: ITransactionItem) {
     // set deselected transaction = undefined for manually cleanup
     this.vm.selectedLedger.transactions.map(t => {
@@ -306,6 +340,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.reInitilizeDiscount();
     }
   }
+
   public showDeleteAttachedFileModal() {
     this.deleteAttachedFileModal.show();
   }
@@ -347,8 +382,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
     this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
   }
+
   public ngOnDestroy(): void {
-    this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
     this.vm.resetVM();
     this.destroyed$.next(true);
     this.destroyed$.complete();
