@@ -23,6 +23,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   public accounts$: Observable<IOption[]>;
   public selectedaccountForMerge: any = [];
   public checkModel: string = 'all';
+  public showOtherDetails: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>) {
