@@ -3,6 +3,7 @@ import { AdvanceSearchModelComponent } from './components/advance-search/advance
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
@@ -71,7 +72,8 @@ import { ButtonsModule } from 'ngx-bootstrap';
     ShSelectModule,
     DecimalDigitsModule,
     BsDatepickerModule,
-    ButtonsModule
+    ButtonsModule,
+    BsDropdownModule
   ],
 })
 export class LedgerModule {
