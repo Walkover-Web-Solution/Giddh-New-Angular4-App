@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { AppState } from '../../../store/roots';
+import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
@@ -17,11 +17,11 @@ import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { AccountResponse } from '../../../models/api-models/Account';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -218,10 +218,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   }
 
-  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: SelectComponent) {
+  public selectAccount(e: IOption, txn: ILedgerTransactionItem, selectCmp: ShSelectComponent) {
     if (!e.value) {
       // if there's no selected account set selectedAccount to null
       txn.selectedAccount = null;
+      txn.inventory = null;
+      txn.particular.name = undefined;
+      // check if need to showEntryPanel
+      this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
+      // set discount amount to 0 when deselected account is type of discount category
+      if (this.discountComponent) {
+        this.vm.reInitilizeDiscount();
+      }
       return;
     } else {
       // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event

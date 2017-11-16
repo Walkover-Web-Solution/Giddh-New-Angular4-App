@@ -133,7 +133,7 @@
               <label class="default_clr pull-left">Voucher type</label>
             </td>
             <td colspan="4" class="select2-parent">
-              <ng-select [options]="voucherTypeList | async" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"></ng-select>
+              <sh-select [options]="voucherTypeList | async" [isFilterEnabled]="true" [placeholder]="'Select Vouchers'" [(ngModel)]="blankLedger.voucherType"></sh-select>
             </td>
             <td class="pdL1">
               <span>{{""}}</span>

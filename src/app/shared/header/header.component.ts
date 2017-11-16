@@ -314,6 +314,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
   }
 
+  public sideBarStateChange(event: boolean) {
+    this.sideMenu.isopen = event;
+  }
+
   public closeSidebar(targetId) {
     if (targetId === 'accountSearch' || targetId === 'expandAllGroups' || targetId === 'toggleAccounts') {
       return;

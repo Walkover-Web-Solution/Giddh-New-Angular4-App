@@ -14,8 +14,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { Subject } from 'rxjs/Subject';
 import { ColumnGroupsAccountVM } from '../new-group-account-sidebar/VM';
 import { IGstDetailListItem } from '../../../../models/interfaces/gstDetailListItem.interface';
-import { IOption } from '../../../../theme/ng-select/option.interface';
 import { States } from '../../../../models/api-models/Company';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'account-update',

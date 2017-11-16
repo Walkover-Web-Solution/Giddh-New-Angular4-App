@@ -3,8 +3,8 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 
 import * as moment from 'moment/moment';
 import { Observable } from 'rxjs/Observable';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 export class AuditLogsSidebarVM {
   public user$: Observable<UserDetails>;
