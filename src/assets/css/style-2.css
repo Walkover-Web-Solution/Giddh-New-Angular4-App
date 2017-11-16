@@ -306,6 +306,7 @@ header .navbar {
 .compoundEntry td,
 .compoundEntry td .form-control {
     background: #fff0bc !important;
+    border: 0;
 }
 
 .ledger-table-body table tbody.ledger-main tr td {
@@ -1742,6 +1743,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .inWords {
     color: rgba(0, 0, 0, 0.8);
     text-align: right;
+    text-transform: capitalize;
 }
 
 .bdrT {
@@ -4031,4 +4033,21 @@ ng-select .select_drop i {
 #expandAllGroups [class^="icon-"],
 #expandAllGroups [class*=" icon-"] {
     pointer-events: none;
+}
+
+virtual-scroll .scrollable-content .item>a {
+    color: #333;
+    padding: 6px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+}
+
+virtual-scroll .scrollable-content .item:hover .item,
+.item.hilighted>a>.item {
+    color: rgb(210, 95, 42);
+}
+
+sh-select .header {
+    line-height: 34px;
 }
