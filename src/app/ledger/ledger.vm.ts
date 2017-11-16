@@ -1,4 +1,4 @@
-import { TransactionsResponse } from '../models/api-models/Ledger';
+import { TransactionsResponse, IELedgerResponse, IELedgerTransaction } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { AccountResponse } from '../models/api-models/Account';
 import { ILedgerDiscount, ITransactionItem } from '../models/interfaces/ledger.interface';
@@ -6,20 +6,22 @@ import * as moment from 'moment/moment';
 import { IFlattenAccountsResultItem } from '../models/interfaces/flattenAccountsResultItem.interface';
 import { IFlattenGroupsAccountsDetail } from '../models/interfaces/flattenGroupsAccountsDetail.interface';
 import * as uuid from 'uuid';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, groupBy, forEach, remove } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import { Select2OptionData } from '../theme/select2';
+import { underStandingTextData } from './underStandingTextData';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 export class LedgerVM {
-  public groupsArray: Observable<GroupsWithAccountsResponse[]>;
+  public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
   public activeAccount$: Observable<AccountResponse>;
   public transactionData$: Observable<TransactionsResponse>;
+  public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public selectedTxnUniqueName: string;
   public currentTxn: ITransactionItem;
   public currentBlankTxn: TransactionVM;
   public currentPage: number;
-  public flatternAccountList: Observable<Select2OptionData[]>;
+  public flattenAccountList: Observable<IOption[]>;
   public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
@@ -35,6 +37,23 @@ export class LedgerVM {
   public isAmountFirst: boolean = false;
   public isTotalFirts: boolean = false;
   public showTaxationDiscountBox: boolean = false;
+  public ledgerUnderStandingObj = {
+    accountType: '',
+    text: {
+      cr: '',
+      dr: ''
+    },
+    balanceText: {
+      cr: '',
+      dr: ''
+    }
+  };
+  // bank transaction related
+  public showEledger: boolean = false;
+  public bankTransactionsData: BlankLedgerVM[] = [];
+  public selectedBankTxnUniqueName: string;
+  public showBankLedgerPanel: boolean = false;
+  public currentBankEntry: BlankLedgerVM;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -100,7 +119,6 @@ export class LedgerVM {
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
       bl.discounts = bl.discounts.filter(p => p.amount > 0);
-      bl.inventory = bl.inventory;
       // delete local id
       delete bl['id'];
     });
@@ -128,6 +146,87 @@ export class LedgerVM {
       isInclusiveTax: true
     };
   }
+
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    let data = underStandingTextData.find(p => p.accountType === selectedLedgerAccountType);
+    if (data) {
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
+      this.ledgerUnderStandingObj = data;
+    }
+  }
+
+  /**
+   * prepare bank transactions
+   * @param {IELedgerResponse[]} array
+   * @returns {bankTransactionsData} array
+   */
+  public getReadyBankTransactionsForUI(data: IELedgerResponse[]) {
+    this.bankTransactionsData = [];
+    this.showEledger = true;
+    forEach(data, (txn: IELedgerResponse) => {
+      let item: BlankLedgerVM;
+      item = cloneDeep(this.blankLedger);
+      item.entryDate = txn.date;
+      item.transactionId = txn.transactionId;
+      item.isBankTransaction = true;
+      forEach(txn.transactions, (bankTxn: IELedgerTransaction) => {
+        item.description = bankTxn.remarks.description;
+        if (bankTxn.type === 'DEBIT') {
+          item.voucherType = 'rcpt';
+        }else {
+          item.voucherType = 'pay';
+        }
+        if (bankTxn.remarks.chequeNumber) {
+          item.chequeNumber = bankTxn.remarks.chequeNumber;
+        }
+        // push transaction
+        item.transactions.map(transaction => {
+          if (transaction.type === bankTxn.type) {
+            transaction.amount = bankTxn.amount;
+            transaction.id = item.transactionId;
+          }
+        });
+        item.transactions = remove(item.transactions, (n: any) => {
+          return n.type === bankTxn.type;
+        });
+      });
+      this.bankTransactionsData.push(item);
+    });
+  }
+
+  /**
+   * prepare bankLedger request object from vm for API
+   * @returns {BlankLedgerVM}
+   */
+  public prepareBankLedgerRequestObject(): BlankLedgerVM {
+    let requestObj: BlankLedgerVM;
+    requestObj = cloneDeep(this.currentBankEntry);
+
+    // filter transactions which have selected account
+    requestObj.transactions = requestObj.transactions.filter((bl: TransactionVM) => bl.particular);
+
+    // map over transactions array
+    requestObj.transactions.map((bl: any) => {
+      // set transaction.particular to selectedAccount uniqueName
+      bl.particular = bl.selectedAccount.uniqueName;
+      // filter taxes uniqueNames
+      bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
+      // filter discount
+      bl.discounts = bl.discounts.filter(p => p.amount > 0);
+      // delete local id
+      delete bl['id'];
+    });
+    return requestObj;
+  }
+
+  /** ledger custom filter **/
+  public ledgerCustomFilter(term: string, item: IOption): boolean {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
+  }
 }
 
 export class BlankLedgerVM {
@@ -142,6 +241,8 @@ export class BlankLedgerVM {
   public generateInvoice: boolean;
   public chequeNumber: string;
   public chequeClearanceDate: string;
+  public isBankTransaction?: boolean;
+  public transactionId?: string;
 }
 
 export class TransactionVM {
@@ -167,6 +268,7 @@ export interface IInventory {
   quantity: number;
   stock: INameUniqueName;
 }
+
 export interface IInventoryUnit {
   stockUnitCode: string;
   code: string;

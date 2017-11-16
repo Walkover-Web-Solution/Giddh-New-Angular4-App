@@ -1,5 +1,5 @@
 import { CompanyResponse } from '../../../models/api-models/Company';
-import { RecTypePipe } from '../../../shared/helpers/pipes/recType.pipe';
+import { RecTypePipe } from '../../../shared/helpers/pipes/recType/recType.pipe';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { Total } from './tb-export-csv.component';
 
