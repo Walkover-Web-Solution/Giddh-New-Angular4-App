@@ -568,13 +568,11 @@
       <span class="mrT1 mrR2">Cr {{(lc.transactionData$ | async)?.creditTransactionsCount}}</span>
     </div>
     <div class="col-xs-3">
-      <h1>Debit Total</h1>
-      <h3>{{(lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
+      <h1>Opening Balance</h1>
+      <h3>{{(lc.transactionData$ | async)?.forwardedBalance.amount | number:'1.1-2'}}
+        {{ (lc.transactionData$ | async)?.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
     </div>
-    <div class="col-xs-3">
-      <h1>Credit Total</h1>
-      <h3>{{(lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
-    </div>
+
     <div class="col-xs-3">
       <h1 class=" primary_color">Net Total
         <span *ngIf="(lc.transactionData$ | async)?.creditTotal > (lc.transactionData$ | async)?.debitTotal">Credit</span>
@@ -584,7 +582,22 @@
         {{(lc.transactionData$ | async)?.creditTotal - (lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
       <h3 class=" primary_color" *ngIf="(lc.transactionData$ | async)?.creditTotal < (lc.transactionData$ | async)?.debitTotal">
         {{(lc.transactionData$ | async)?.debitTotal - (lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
+      <h3>Dr Total {{(lc.transactionData$ | async)?.debitTotal | number:'1.1-2'}}</h3>
+      <h3>Cr Total {{(lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>
     </div>
+
+    <!--<div class="col-xs-3">-->
+      <!--<h1>Credit Total</h1>-->
+      <!--<h3>{{(lc.transactionData$ | async)?.creditTotal | number:'1.1-2'}}</h3>-->
+    <!--</div>-->
+
+    <div class="col-xs-3">
+    <h1>Closing Balance</h1>
+    <h3>{{(lc.transactionData$ | async)?.closingBalance.amount | number:'1.1-2'}}
+      {{ (lc.transactionData$ | async)?.closingBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
+    </div>
+
+
   </div>
 
 </section>
