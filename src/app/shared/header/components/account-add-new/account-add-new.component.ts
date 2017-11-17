@@ -132,10 +132,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
-      if (a !== 'IN') {
-        this.addAccountForm.controls['addresses'] = this._fb.array([]);
-      } else {
-        this.addBlankGstForm();
+      if (a) {
+        if (a !== 'IN') {
+          this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        } else {
+          const addresses = this.addAccountForm.get('addresses') as FormArray;
+          if (addresses.controls.length === 0) {
+            this.addBlankGstForm();
+          }
+        }
       }
     });
     // get openingblance value changes
