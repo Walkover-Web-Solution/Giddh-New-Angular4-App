@@ -22,7 +22,11 @@ export class LocationService {
     } else if (location.AdministratorLevel !== undefined) {
       query += `address=${location.QueryString}&components=administrative_area:${location.QueryString}`;
     } else if (location.OnlyCity) {
-      query += `address=${location.QueryString}`;
+      if (location.QueryString && location.QueryString !== '') {
+        query += `address=${location.QueryString}`;
+      } else {
+        query += `address=''`;
+      }
     } else {
       query += `components=country:${location.QueryString}`;
     }
@@ -31,7 +35,6 @@ export class LocationService {
         let r = res.json();
         let data = r.results.filter((i) => _.includes(i.types, 'locality'));
         return data;
-      })
-      .catch((e) => e);
+      });
   }
 }

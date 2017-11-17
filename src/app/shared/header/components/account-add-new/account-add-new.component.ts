@@ -87,6 +87,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.stateStream$.subscribe((data) => {
+      // console.log('state Called');
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
