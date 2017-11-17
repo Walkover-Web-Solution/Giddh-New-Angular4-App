@@ -247,6 +247,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     if (start !== this.previousStart || end !== this.previousEnd) {
 
       // update the scroll list
+      // debugger;
       this.update.emit(items.slice(start, end));
 
       // emit 'start' event
@@ -269,10 +270,22 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       }
 
     } else if (this.startupLoop === true) {
+      // debugger;
       this.update.emit(items.slice(start, end));
       this.startupLoop = false;
       this.refresh();
     } else {
+      // debugger;
+      // if (this.items.length - start > 3 && start > 5) {
+      //   if (this.items.length - start > 3) {
+      //     end = end + 3;
+      //   }
+      //   start = start + 3;
+      //   if (this.items.length < end) {
+      //     start = start - 3;
+      //     end = end - 3;
+      //   }
+      // }
       this.update.emit(items.slice(start, end));
     }
   }
