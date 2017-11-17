@@ -252,6 +252,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
+          }else {
+            this.lc.showEledger = false;
           }
         });
       }
@@ -299,6 +301,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
       if (data && data.yodleeAdded) {
         this.getBankTransactions();
+      }else {
+        this.lc.showEledger = false;
       }
     });
   }
