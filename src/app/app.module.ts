@@ -38,12 +38,13 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
+// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { LoaderComponent } from './loader/loader.component';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 // Application wide providers
 const APP_PROVIDERS = [
@@ -106,7 +107,7 @@ if (ENV === 'development') {
     BsDatepickerModule.forRoot(),
     ModalModule.forRoot(),
     PopoverModule.forRoot(),
-    TypeaheadModule.forRoot(),
+    NgbTypeaheadModule.forRoot(),
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     TooltipModule.forRoot(),
