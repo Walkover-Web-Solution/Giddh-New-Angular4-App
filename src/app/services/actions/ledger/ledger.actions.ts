@@ -1,3 +1,4 @@
+import { ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse } from './../../../models/api-models/Ledger';
 import { AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, ShareAccountRequest } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../../models/api-models/Ledger';
@@ -219,6 +220,30 @@ export class LedgerActions {
       return {type: ''};
     });
 
+    @Effect()
+    public AdvanceSearch$: Observable<Action> = this.action$
+      .ofType(LEDGER.ADVANCE_SEARCH)
+      .switchMap(action => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from, action.payload.to, '', '', ''))
+      .map(response => {
+        return this.advanceSearchResponse(response);
+      });
+
+    @Effect()
+    public AdvanceSearchResponse$: Observable<Action> = this.action$
+      .ofType(LEDGER.ADVANCE_SEARCH_RESPONSE)
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: ''
+          };
+        } else {
+          this._toasty.successToast('Data filtered successfully');
+        }
+        return {type: ''};
+      });
+
   constructor(private action$: Actions,
               private _toasty: ToasterService,
               private store: Store<AppState>,
@@ -385,6 +410,20 @@ export class LedgerActions {
   public resetQuickAccountModal(): Action {
     return {
       type: LEDGER.RESET_QUICK_ACCOUNT_MODAL
+    };
+  }
+
+  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string): Action {
+    return {
+      type: LEDGER.ADVANCE_SEARCH,
+      payload: { model, accountUniqueName, from, to }
+    };
+  }
+
+  public advanceSearchResponse(value: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>): Action {
+    return {
+      type: LEDGER.ADVANCE_SEARCH_RESPONSE,
+      payload: value
     };
   }
 
