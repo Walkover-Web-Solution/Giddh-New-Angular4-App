@@ -18,7 +18,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
-// import { SettingPermissionFormComponent } from './permissions/form/form.component';
+import { SettingPermissionFormComponent } from './permissions/form/form.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +34,7 @@ import { LaddaModule } from 'angular2-ladda';
     SettingLinkedAccountsConfirmationModalComponent,
     FinancialYearComponent,
     SettingPermissionComponent,
-    // SettingPermissionFormComponent
+    SettingPermissionFormComponent
   ],
   imports: [
     CommonModule,
