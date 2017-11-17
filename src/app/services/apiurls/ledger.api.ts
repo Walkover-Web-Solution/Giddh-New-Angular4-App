@@ -16,5 +16,7 @@ export const LEDGER_API = {
   EXPORT_LEDGER: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
   GET_BANK_TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers?from=:from',
   // put call to map transaction
-  MAP_BANK_TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId'
+  MAP_BANK_TRANSACTIONS: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/eledgers/:transactionId',
+
+  ADVANCE_SEARCH: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/merge?from=:fromDate&to=:toDate&sort=:sortingOrder&page=:page&count=:count',
 };
