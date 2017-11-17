@@ -644,7 +644,7 @@
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <advance-search-model [selectedRoleForDelete]="selectedRoleForDelete" (confirmDeleteEvent)="deleteConfirmedRole()" (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
+      <advance-search-model (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
     </div>
   </div>
 </div>
