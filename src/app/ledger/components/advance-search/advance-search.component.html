@@ -12,7 +12,7 @@
           </div>
           <div class="col-xs-7">
             <div class="form-group input-group">
-              <input name="dateRange" placeholder="Date range picker" type="text" class="form-control" bsDaterangepicker required>
+              <input name="dateRange" placeholder="Date range picker" type="text" class="form-control" (bsValueChange)="onDateRangeSelected($event)" bsDaterangepicker required>
               <span class="input-group-addon">
                 <i class="fa fa-calendar" aria-hidden="true"></i>
               </span>
@@ -42,9 +42,9 @@
           </div>
           <div class="col-xs-7">
             <div class="btn-group">
-              <label class="btn btn-success" formControlName="isInvoiceGenerated" name="left" btnRadio="all">All</label>
-              <label class="btn btn-success" formControlName="isInvoiceGenerated" name="middle" btnRadio="include">Include</label>
-              <label class="btn btn-success" formControlName="isInvoiceGenerated" name="right" btnRadio="exclude">Exclude</label>
+              <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="true">All</label>
+              <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="true">Include</label>
+              <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="false">Exclude</label>
             </div>
             <input *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" type="text" class="form-control mrT1">
           </div>
