@@ -21,7 +21,8 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
-  templateUrl: './company-add.component.html'
+  templateUrl: './company-add.component.html',
+  styleUrls: ['./company-add.component.css']
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
   @ViewChild('wizard') public wizard: WizardComponent;
@@ -38,7 +39,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public companies$: Observable<CompanyResponse[]>;
   public showMobileVarifyMsg: boolean = false;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
-  public dataSource: Observable<any>;
+  public dataSource: any;
   public dataSourceBackup: any;
   public country: string;
   public countryCodeList: IOption[] = [];
@@ -46,13 +47,13 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private socialAuthService: AuthService,
-              private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
-              private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-              private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions) {
+    private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
+    private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
+    private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions) {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
-      this.countryCodeList.push({value: c.countryName, label: c.value});
+      this.countryCodeList.push({ value: c.countryName, label: c.value });
     });
   }
 
@@ -61,7 +62,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.showVerificationBox = this.store.select(s => s.verifyMobile.showVerificationBox).takeUntil(this.destroyed$);
     this.isCompanyCreationInProcess$ = this.store.select(s => s.session.isCompanyCreationInProcess).takeUntil(this.destroyed$);
-    this.setCountryCode({value: 'India'});
+    this.setCountryCode({ value: 'India' });
     this.isMobileVerified = this.store.select(s => {
       if (s.session.user) {
         if (s.session.user.user.mobileNo) {
@@ -72,19 +73,29 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       }
     }).takeUntil(this.destroyed$);
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
-    this.dataSource = Observable
-      .create((observer: any) => {
-        this._location.GetCity({
-          QueryString: this.company.city,
-          AdministratorLevel: undefined,
-          Country: undefined,
-          OnlyCity: true
-        }).subscribe((res) => {
+    this.dataSource = (text$: Observable<any>): Observable<any> => {
+      return text$
+        .debounceTime(300)
+        .distinctUntilChanged()
+        .switchMap((term: string) => {
+          if (term.startsWith(' ', 0)) {
+            return [];
+          }
+          return this._location.GetCity({
+            QueryString: this.company.city,
+            AdministratorLevel: undefined,
+            Country: undefined,
+            OnlyCity: true
+          }).catch(e => {
+            return [];
+          });
+        })
+        .map((res) => {
           let data = res.map(item => item.address_components[0].long_name);
           this.dataSourceBackup = res;
-          observer.next(data);
+          return data;
         });
-      }).takeUntil(this.destroyed$);
+    };
 
     this.isMobileVerified.subscribe(p => {
       if (p) {
