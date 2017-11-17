@@ -18,7 +18,6 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { GeneralActions } from '../../../../services/actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
-
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
@@ -78,7 +77,10 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       return text$
         .debounceTime(300)
         .distinctUntilChanged()
-        .switchMap(term => {
+        .switchMap((term: string) => {
+          if (term.startsWith(' ', 0)) {
+            return [];
+          }
           return this._location.GetCity({
             QueryString: this.company.city,
             AdministratorLevel: undefined,
