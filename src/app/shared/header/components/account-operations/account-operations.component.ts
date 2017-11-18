@@ -21,7 +21,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'account-operations',
@@ -92,27 +92,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     </ul>
   </div>
   `;
-  public options: Select2Options = {
-    minimumResultsForSearch: 9001,
-    multiple: true,
-    width: '100%',
-    placeholder: 'Select Taxes',
-    templateResult: (data) => {
-      if (!data.id) {
-        return data.text;
-      }
-      // let text = this._translate.instant(data.text);
-      return $('<span>' + data.text + '</span>');
-    },
-    templateSelection: (data) => {
-
-      if (!data.id) {
-        return data.text;
-      }
-      // let text = this._translate.instant(data.text);
-      return $('<span>' + data.text + '</span>');
-    }
-  };
   public moveAccountSuccess$: Observable<boolean>;
   public showDeleteMove: boolean = false;
   public isGstEnabledAcc: boolean = false;
@@ -334,35 +313,20 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public loadAccountData() {
     let activeAccount: AccountResponseV2 = null;
     this.activeAccount$.take(1).subscribe(p => activeAccount = p);
-    if (this.accounts$) {
-      this.accounts$.isEmpty().subscribe(bool => {
-        if (bool) {
-          this.accountService.GetFlattenAccounts().subscribe(a => {
-            let accounts: IOption[] = [];
-            if (a.status === 'success') {
-              a.body.results.map(acc => {
-                accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
-              });
-              accounts = _.filter(accounts, c => c.value !== activeAccount.uniqueName);
-            }
-            this.accounts$ = Observable.of(accounts);
-          });
+
+    this.accountService.GetFlattenAccounts().subscribe(a => {
+      let accounts: IOption[] = [];
+      if (a.status === 'success') {
+        a.body.results.map(acc => {
+          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+        });
+        let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
+        if (accountIndex > -1) {
+          accounts.splice(accountIndex, 1);
         }
-      });
-    } else {
-      this.accountService.GetFlattenAccounts().subscribe(a => {
-        let accounts: IOption[] = [];
-        if (a.status === 'success') {
-          a.body.results.map(acc => {
-            accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
-          });
-          accounts = _.filter(accounts, c => {
-            return c.value !== activeAccount.uniqueName;
-          });
-        }
-        this.accounts$ = Observable.of(accounts);
-      });
-    }
+      }
+      this.accounts$ = Observable.of(accounts);
+    });
   }
 
   public shareAccount() {
@@ -371,7 +335,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     let accObject = new ShareAccountRequest();
     accObject.role = 'view_only';
     accObject.user = this.shareAccountForm.controls['userEmail'].value;
-    console.log ('need to add new shared entity');
+    console.log('need to add new shared entity');
     this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
     this.shareAccountForm.reset();
   }

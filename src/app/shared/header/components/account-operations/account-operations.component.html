@@ -107,7 +107,7 @@
         </label>
         <div class="clearfix">
           <div class="form-group col-xs-11 row" #accountSelect2>
-            <sh-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="true"
+            <sh-select [options]="accounts$ | async" [isFilterEnabled]="true" (viewInitEvent)="loadAccountData()" [multiple]="true"
                        [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
             <small class="clearfix">This option is risky and can not be undone</small>
           </div>

@@ -63,6 +63,11 @@ div {
 
 input[type="text"] {
     outline: none;
+    padding-right: 22px !important;
+}
+
+.selected {
+    background: #fff !important;
 }
 
 [hidden] {

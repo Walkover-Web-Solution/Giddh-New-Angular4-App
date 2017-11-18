@@ -70,7 +70,7 @@
         <tr *ngFor="let txn of (stockReport$ | async)?.transactions">
           <td>{{txn.entryDate}}</td>
           <td>{{txn.voucherType}}</td>
-          <td>{{txn.account.name}}</td>
+          <td>{{txn.account?.name}}</td>
           <td>
             <span *ngIf="txn.type == 'dr'">
 							{{txn.quantity}}&nbsp;{{txn.stockUnit}}
