@@ -6,9 +6,9 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { underStandingTextData } from '../../underStandingTextData';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -322,5 +322,10 @@ export class UpdateLedgerVm {
     this.taxRenderData = [];
     this.selectedTaxes = [];
     this.discountArray = [];
+  }
+
+  /** ledger custom filter **/
+  public ledgerCustomFilter(term: string, item: IOption): boolean {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
   }
 }

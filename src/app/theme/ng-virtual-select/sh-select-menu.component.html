@@ -5,7 +5,9 @@
         <div class="item" *ngFor="let row of viewPortItems" [class.selected]="selectedValues?.indexOf(row) !== -1" [class.hilighted]="row.isHilighted" (click)="toggleSelected(row)" [style.height.px]="ItemHeight">
             <ng-template [ngOutletContext]="{option: row}" [ngTemplateOutlet]="optionTemplate"></ng-template>
             <ng-container *ngIf="!optionTemplate">
-                {{row.label}}
+                <a href="javascript:void(0)" class="list-item">
+                    <div class="item">{{row.label}}</div>
+                </a>
             </ng-container>
         </div>
 

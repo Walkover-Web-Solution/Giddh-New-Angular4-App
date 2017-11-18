@@ -8,16 +8,14 @@ import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions
 import { Observable } from 'rxjs/Observable';
 import { AccountRequestV2 } from '../../../../models/api-models/Account';
 import { ReplaySubject } from 'rxjs/Rx';
-import { Select2OptionData } from '../../../theme/select2/index';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes, IContriesWithCodes } from '../../../helpers/countryWithCodes';
 import { ToasterService } from '../../../../services/toaster.service';
-import { Select2Component } from '../../../theme/select2/select2.component';
-import { CompanyResponse } from '../../../../models/api-models/Company';
-import { SelectComponent } from '../../../../theme/ng-select/select.component';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { CompanyResponse, States } from '../../../../models/api-models/Company';
 import { CompanyActions } from '../../../../services/actions/company.actions';
 import * as _ from '../../../../lodash-optimized';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'account-add-new',
@@ -73,6 +71,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     {value: 'SEZ', label: 'SEZ'}
   ];
   public countrySource: IOption[] = [];
+  public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public companiesList$: Observable<CompanyResponse[]>;
   public activeCompany: CompanyResponse;
@@ -86,10 +85,11 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
               private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
-    this._companyService.getAllStates().subscribe((data) => {
+    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$.subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
-        data.body.map(d => {
+        data.map(d => {
           states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
@@ -108,7 +108,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
 
     this.store.select(s => s.settings.profile).takeUntil(this.destroyed$).subscribe((profile) => {
-      this.store.dispatch(this.companyActions.RefreshCompanies());
+      // this.store.dispatch(this.companyActions.RefreshCompanies());
     });
   }
 
@@ -275,22 +275,25 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
+  public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {
         let s = state.find(st => st.value === gstVal.substr(0, 2));
-        gstForm.get('stateCode').disable();
+        statesEle.setDisabledState(false);
+        // gstForm.get('stateCode').disable();
         if (s) {
           gstForm.get('stateCode').patchValue(s.value);
+          statesEle.setDisabledState(true);
         } else {
           gstForm.get('stateCode').patchValue(null);
+          statesEle.setDisabledState(false);
           this._toaster.clearAllToaster();
           this._toaster.warningToast('Invalid GSTIN.');
         }
       });
     } else {
-      gstForm.get('stateCode').enable();
+      statesEle.setDisabledState(false);
       gstForm.get('stateCode').patchValue(null);
     }
   }

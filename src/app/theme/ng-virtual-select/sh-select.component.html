@@ -9,8 +9,8 @@
             <span class="chipClosebtn" (click)="clearSingleSelection($event, sl)">&times;</span>
                     </span>
                 </div>
-                <div style="padding: 0 8px;" *ngIf="!multiple">
-                    {{ selectedValues[0].label }}
+                <div *ngIf="!multiple">
+                    <input readonly type="text" class="form-control selected cp" value="{{ selectedValues[0].label }}" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">

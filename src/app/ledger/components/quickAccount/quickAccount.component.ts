@@ -1,19 +1,20 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { GroupService } from '../../../services/group.service';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from '../../../services/companyService.service';
-import { SelectComponent } from '../../../theme/ng-select/select.component';
 import { ToasterService } from '../../../services/toaster.service';
 import { AccountRequestV2 } from '../../../models/api-models/Account';
-import { Store } from '@ngrx/store';
+import { Store, State } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
 import * as _ from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { GeneralActions } from '../../../services/actions/general/general.actions';
+import { States } from '../../../models/api-models/Company';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'quickAccount',
@@ -24,6 +25,7 @@ export class QuickAccountComponent implements OnInit {
   @Output() public closeQuickAccountModal: EventEmitter<any> = new EventEmitter();
   public groupsArrayStream$: Observable<GroupsWithAccountsResponse[]>;
   public flattenGroupsArray: IOption[] = [];
+  public statesStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public isQuickAccountInProcess$: Observable<boolean>;
   public isQuickAccountCreatedSuccessfully$: Observable<boolean>;
@@ -38,6 +40,7 @@ export class QuickAccountComponent implements OnInit {
     this.isQuickAccountInProcess$ = this.store.select(p => p.ledger.isQuickAccountInProcess).takeUntil(this.destroyed$);
     this.isQuickAccountCreatedSuccessfully$ = this.store.select(p => p.ledger.isQuickAccountCreatedSuccessfully).takeUntil(this.destroyed$);
     this.groupsArrayStream$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
+    this.statesStream$ = this.store.select(p => p.general.states).takeUntil(this.destroyed$);
     this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').subscribe(result => {
       if (result.status === 'success') {
         let groupsListArray: IOption[] = [];
@@ -47,10 +50,10 @@ export class QuickAccountComponent implements OnInit {
         this.flattenGroupsArray = groupsListArray;
       }
     });
-    this._companyService.getAllStates().subscribe((data) => {
+    this.statesStream$.subscribe((data) => {
       let states: IOption[] = [];
       if (data) {
-        data.body.map(d => {
+        data.map(d => {
           states.push({label: `${d.code} - ${d.name}`, value: d.code});
         });
       }
@@ -104,7 +107,7 @@ export class QuickAccountComponent implements OnInit {
     }
   }
 
-  public getStateCode(gstForm: FormGroup, statesEle: SelectComponent) {
+  public getStateCode(gstForm: FormGroup, statesEle: ShSelectComponent) {
     let gstVal: string = gstForm.get('gstNumber').value;
     if (gstVal.length >= 2) {
       this.statesSource$.take(1).subscribe(state => {

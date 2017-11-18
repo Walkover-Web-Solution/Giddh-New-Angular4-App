@@ -1,3 +1,5 @@
+import { CompanyResponse } from './../../../../models/api-models/Company';
+import { CompanyActions } from './../../company.actions';
 import { Injectable } from '@angular/core';
 import { Actions, Effect } from '@ngrx/effects';
 import { ToasterService } from '../../../toaster.service';
@@ -43,7 +45,7 @@ export class SettingsProfileActions {
       } else {
         this.toasty.successToast('Profile Updated Successfully.');
       }
-      return { type: '' };
+      return this.SetMultipleCurrency(data.request, data.request.isMultipleCurrency);
     });
 
   constructor(private action$: Actions,
@@ -73,6 +75,12 @@ export class SettingsProfileActions {
     };
   }
 
+  public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean ): Action {
+    return {
+      type: CompanyActions.SET_MULTIPLE_CURRENCY_FIELD,
+      payload: { companyUniqueName: response.uniqueName, isMultipleCurrency }
+    };
+  }
   public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {
