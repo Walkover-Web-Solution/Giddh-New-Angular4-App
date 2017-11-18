@@ -30,6 +30,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public isFilterEnabled: boolean = false;
   @Input() public width: string = 'inherit';
   @Input() public ItemHeight: number = 41;
+  @Input() public customFilter: (term: string, options: IOption) => boolean;
 
   @ViewChild('inputFilter') public inputFilter: ElementRef;
   @ViewChild('mainContainer') public mainContainer: ElementRef;
@@ -111,8 +112,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public updateFilter(filterProp) {
     const lowercaseFilter = filterProp.toLocaleLowerCase();
-    this.filteredData = this._options.filter(item =>
-      !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1);
+    this.filteredData = this._options.filter(item => {
+      if (this.customFilter) {
+        return this.customFilter(lowercaseFilter, item);
+      }
+      return !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1;
+    });
     if (this.filteredData.length === 0) {
       this.noOptionsFound.emit(true);
     }
@@ -128,6 +133,10 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     if (this.isFilterEnabled) {
       this.updateFilter(this.filter);
     }
+  }
+
+  public setDisabledState(isDisabled: boolean) {
+    this.disabled = isDisabled;
   }
 
   public toggleSelected(item) {

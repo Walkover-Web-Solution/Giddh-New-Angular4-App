@@ -355,9 +355,9 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       }
       return state;
     case CompanyActions.SET_CONTACT_NO: {
-      let newState = _.cloneDeep(state);
-      newState.user.user.mobileNo = action.payload;
-      return newState;
+      let s = _.cloneDeep(state);
+      s.user.user.mobileNo = action.payload;
+      return s;
     }
     case CompanyActions.CREATE_COMPANY:
       return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
@@ -366,12 +366,12 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
-        let newState = _.cloneDeep(state);
-        newState.isCompanyCreationInProcess = false;
-        newState.isCompanyCreationSuccess = true;
-        newState.isCompanyCreated = true;
-        newState.companies.push(companyResp.body);
-        return Object.assign({}, state, newState);
+        let d = _.cloneDeep(state);
+        d.isCompanyCreationInProcess = false;
+        d.isCompanyCreationSuccess = true;
+        d.isCompanyCreated = true;
+        d.companies.push(companyResp.body);
+        return Object.assign({}, state, d);
       }
       return state;
     }
@@ -396,6 +396,22 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
         return Object.assign({}, state, {
           companies: array
         });
+      }
+      return state;
+
+    case CompanyActions.SET_MULTIPLE_CURRENCY_FIELD:
+      let companyInfo: { companyUniqueName: string, isMultipleCurrency: boolean } = action.payload;
+
+      let newState = _.cloneDeep(state);
+
+      let companiesList = _.cloneDeep(newState.companies);
+
+      let selectedCompanyIndex = companiesList.findIndex((company) => company.uniqueName === companyInfo.companyUniqueName);
+
+      if (selectedCompanyIndex > -1) {
+        companiesList[selectedCompanyIndex].isMultipleCurrency = companyInfo.isMultipleCurrency;
+        newState.companies = companiesList;
+        return Object.assign({}, state, newState);
       }
       return state;
 
