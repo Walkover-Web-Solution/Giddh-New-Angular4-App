@@ -17,11 +17,11 @@ import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -45,20 +45,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
+  public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public activeAccount$: Observable<AccountResponse>;
+  public ledgerUnderStandingObj = {
+    accountType: '',
+    text: {
+      cr: '',
+      dr: ''
+    },
+    balanceText: {
+      cr: '',
+      dr: ''
+    }
+  };
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
+    this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
     this.isTxnUpdateInProcess$ = this.store.select(p => p.ledger.isTxnUpdateInProcess).takeUntil(this.destroyed$);
     this.isTxnUpdateSuccess$ = this.store.select(p => p.ledger.isTxnUpdateSuccess).takeUntil(this.destroyed$);
-    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.closeUpdateLedgerModal.takeUntil(this.destroyed$);
   }
 
@@ -79,26 +92,48 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.entryUniqueName = entryName;
       if (entryName) {
         // get flatten_accounts list && get transactions list
-        Observable.zip(this._accountService.GetFlattenAccounts('', ''), this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName))
-          .subscribe((resp: Array<BaseResponse<any, any>>) => {
+        Observable.combineLatest(this.flattenAccountListStream$, this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName), this.activeAccount$)
+          .subscribe((resp: any[]) => {
+            if (resp[0] && resp[1].status === 'success' && resp[2]) {
             //#region flattern group list assign process
-            if (resp[0].status === 'success' && resp[1].status === 'success') {
+              this.vm.flatternAccountList = _.cloneDeep(resp[0]);
+              let accountDetails: AccountResponse = resp[2];
+              let parentOfAccount = accountDetails.parentGroups[0];
+              // check if account is stockable
+              let isStockableAccount = parentOfAccount ?
+                (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+                  parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
               let accountsArray: IOption[] = [];
-              this.vm.flatternAccountList = resp[0].body.results;
-              resp[0].body.results.map(acc => {
-                if (acc.stocks) {
-                  acc.stocks.map(as => {
+              if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+                // stocks from ledger account
+                resp[0].map(acc => {
+                  // normal entry
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                  accountDetails.stocks.map(as => {
+                    // stock entry
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
-                      label: `${acc.name} (${as.uniqueName})`,
+                      label: acc.name + '(' + as.uniqueName + ')',
                       additional: Object.assign({}, acc, {stock: as})
                     });
                   });
-                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
-                } else {
-                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
-                }
-              });
+                });
+              } else {
+                resp[0].map(acc => {
+                  if (acc.stocks) {
+                    acc.stocks.map(as => {
+                      accountsArray.push({
+                        value: `${acc.uniqueName}#${as.uniqueName}`,
+                        label: `${acc.name} (${as.uniqueName})`,
+                        additional: Object.assign({}, acc, {stock: as})
+                      });
+                    });
+                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                  } else {
+                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                  }
+                });
+              }
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
               //#endregion
               //#region transaction assignment process
@@ -158,18 +193,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
     });
 
-    // chek if update entry is success
+    // check if update entry is success
     this.isTxnUpdateSuccess$.subscribe(upd => {
       if (upd) {
         this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
         this.closeUpdateLedgerModal.emit(true);
-      }
-    });
-
-    // set understanding text
-    this.activeAccount$.subscribe(a => {
-      if (a) {
-        this.vm.getUnderstandingText(a.accountType, a.uniqueName);
       }
     });
   }
@@ -321,23 +349,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
       this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
-    }
-  }
-
-  public deSelectAccount(e: IOption, txn: ITransactionItem) {
-    // set deselected transaction = undefined for manually cleanup
-    this.vm.selectedLedger.transactions.map(t => {
-      if (t.particular.uniqueName === e.value) {
-        t.inventory = null;
-        t.particular.name = undefined;
-        t.particular.uniqueName = undefined;
-      }
-    });
-    // check if need to showEntryPanel
-    this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
-    // set discount amount to 0 when deselected account is type of discount category
-    if (this.discountComponent) {
-      this.vm.reInitilizeDiscount();
     }
   }
 
