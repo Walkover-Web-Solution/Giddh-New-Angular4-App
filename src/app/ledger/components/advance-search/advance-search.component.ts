@@ -1,6 +1,7 @@
+import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
 import { LedgerActions } from './../../../services/actions/ledger/ledger.actions';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ILedgerAdvanceSearchRequest, Inventory } from './../../../models/api-models/Ledger';
 import { CompanyActions } from './../../../services/actions/company.actions';
 import { AppState } from './../../../store/roots';
@@ -27,6 +28,9 @@ export class AdvanceSearchModelComponent implements OnInit {
   public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
+  public showChequeDatePicker: boolean  = false;
+  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
+  public accounts$: Observable<IOption[]>;
 
   // public activeAccount$: Observable<AccountResponseV2>;
   // public accounts$: Observable<IOption[]>;
@@ -38,7 +42,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   private toDate: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions) {
+  constructor(private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
     this.advanceSearchForm = this.fb.group({
       uniqueNames: this.fb.array([]),
       isInvoiceGenerated: [false],
@@ -54,12 +58,22 @@ export class AdvanceSearchModelComponent implements OnInit {
       chequeNumber: ['', Validators.required],
       dateOnCheque: ['', Validators.required],
       tags: this.fb.array([]),
-      particulars: this.fb.array([]),
+      particulars: this.fb.array(null),
       inventory: this.fb.array([])
     });
   }
 
   public ngOnInit() {
+    this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let accounts: IOption[] = [];
+        data.body.results.map(d => {
+          accounts.push({label: d.name, value: d.uniqueName});
+        });
+        this.accounts$ = Observable.of(accounts);
+      }
+    });
+
     // this.advanceSearchForm.controls['isInvoiceGenerated'].valueChanges.takeUntil(this.destroyed$).subscribe((value: boolean) => {
     //   this.advanceSearchForm.controls90;
     // });
@@ -112,7 +126,21 @@ export class AdvanceSearchModelComponent implements OnInit {
         includeItemGreaterThan: false
       }
     };
-    console.log('advanceSearchForm is :', this.advanceSearchForm.value);
-    this.store.dispatch(this._ledgerActions.doAdvanceSearch(obj, this.accountUniqueName, this.fromDate, this.toDate));
+    let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
+    if (dataToSend.dateOnCheque) {
+      dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
+    }
+    console.log('advanceSearchForm is :', dataToSend);
+    this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
+  }
+
+  /**
+   * onParticularSelect
+   */
+  public onParticularSelect(data) {
+    // let particulars = this.advanceSearchForm.get('particulars');
+    let particulars = this.advanceSearchForm.get('particulars');
+    particulars.patchValue(['1', '2', '3']);
+    console.log('after patching value :', this.advanceSearchForm.value);
   }
 }
