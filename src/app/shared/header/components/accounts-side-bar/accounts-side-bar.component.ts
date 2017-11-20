@@ -54,8 +54,8 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy {
 
   public toggleAccounts(noGroups: boolean) {
     this.flatAccountWGroupsList.forEach(p => {
-        p.isOpen = noGroups;
-      }
+      p.isOpen = noGroups;
+    }
     );
   }
 
