@@ -294,6 +294,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
       this.hideManageGroupsModal();
+      viewContainerRef.remove();
     });
     this.manageGroupsAccountsModal.onShown.subscribe((a => {
       (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
