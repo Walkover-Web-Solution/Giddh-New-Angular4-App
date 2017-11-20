@@ -109,4 +109,54 @@ export class PermissionService {
             return data;
         }).catch((e) => this.errorHandler.HandleCatch<IPageStr[], string>(e));
     }
+
+    /**
+    * Share Company
+    */
+    public ShareCompany(model: { role: string, user: string }): Observable<BaseResponse<any, any>> {
+        this.store.take(1).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+        return this._http.put(PERMISSION_API.SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+            let data: BaseResponse<any, any> = res.json();
+            data.request = model;
+            return data;
+        }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }
+
+    /**
+    * Share Company
+    */
+    public UnShareCompany(model: { user: string }): Observable<BaseResponse<any, any>> {
+        this.store.take(1).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+        return this._http.put(PERMISSION_API.UN_SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+            let data: BaseResponse<any, any> = res.json();
+            data.request = model;
+            return data;
+        }).catch((e) => this.errorHandler.HandleCatch<any, any>(e, model));
+    }
+
+    /**
+    * Share Company
+    */
+    public GetCompanySharedWith(): Observable<BaseResponse<any, any>> {
+        this.store.take(1).subscribe(s => {
+            if (s.session.user) {
+                this.user = s.session.user.user;
+            }
+            this.companyUniqueName = s.session.companyUniqueName;
+        });
+        return this._http.get(PERMISSION_API.COMPANY_SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+            let data: BaseResponse<any, any> = res.json();
+            return data;
+        }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));
+    }
 }
