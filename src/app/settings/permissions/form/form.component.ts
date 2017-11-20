@@ -126,17 +126,17 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     return [DATE_RANGE];
   }
 
-  public getIPOptsFromData(data: ShareRequestForm) {
-    if (data.allowedIps.length > 0) {
-      this.toggleIpOptVal(IP_ADDR);
-      return [IP_ADDR];
-    }
-    if (data.allowedCidrs.length > 0) {
-      this.toggleIpOptVal(CIDR_RANGE);
-      return [CIDR_RANGE];
-    }
-    return [IP_ADDR];
-  }
+  // public getIPOptsFromData(data: ShareRequestForm) {
+  //   if (data.allowedIps.length > 0) {
+  //     this.toggleIpOptVal(IP_ADDR);
+  //     return [IP_ADDR];
+  //   }
+  //   if (data.allowedCidrs.length > 0) {
+  //     this.toggleIpOptVal(CIDR_RANGE);
+  //     return [CIDR_RANGE];
+  //   }
+  //   return [IP_ADDR];
+  // }
 
   public initAcForm(data?: ShareRequestForm): void {
     if (data) {
