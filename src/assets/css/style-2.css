@@ -2209,11 +2209,13 @@ select.form-control {
     padding-bottom: 60px;
 }
 
-.grp_list li {
+.grp_list li,
+.new_btn_ul li {
     list-style: none;
 }
 
-.grp_list li a {
+.grp_list li a,
+.new_btn_ul li a {
     padding: 4px 15px !important;
     display: block;
     font-size: 14px;
