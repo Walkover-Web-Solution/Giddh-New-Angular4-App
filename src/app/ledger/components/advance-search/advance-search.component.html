@@ -46,7 +46,11 @@
               <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="true">Include</label>
               <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="false">Exclude</label>
             </div>
-            <input *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" type="text" class="form-control mrT1">
+            <!-- <input *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" type="text"> -->
+            <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT1">
+                <sh-select [options]="accounts$ | async" name="particulars" (selected)="onParticularSelect($event)" [isFilterEnabled]="true" [multiple]="true"
+                [placeholder]="'Select Accounts'"></sh-select>
+            </div>
           </div>
         </div>
 
@@ -166,7 +170,8 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="form-group">
-                    <input type="text" placeholder="Date on Cheque" formControlName="dateOnCheque" class="form-control">
+                      <input type="text" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
+                      <!-- <input type="text" placeholder="Date on Cheque" formControlName="dateOnCheque" class="form-control"> -->
                   </div>
                 </div>
               </div>
