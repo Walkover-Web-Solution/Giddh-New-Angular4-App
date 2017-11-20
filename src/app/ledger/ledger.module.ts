@@ -1,4 +1,4 @@
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -74,6 +74,7 @@ import { ButtonsModule } from 'ngx-bootstrap';
     ShSelectModule,
     DecimalDigitsModule,
     BsDatepickerModule,
+    DatepickerModule,
     ButtonsModule,
     BsDropdownModule
   ],
