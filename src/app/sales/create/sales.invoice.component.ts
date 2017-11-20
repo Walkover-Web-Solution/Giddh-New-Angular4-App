@@ -644,6 +644,11 @@ export class SalesInvoiceComponent implements OnInit {
             txn.stockUnit = null;
             txn.stockDetails = null;
             txn.stockList = [];
+            // reset fields
+            txn.rate = null;
+            txn.quantity = null;
+            txn.amount = 0;
+            txn.taxableValue = 0;
           }
           // toggle stock related fields
           this.toggleStockFields(txn);
