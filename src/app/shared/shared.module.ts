@@ -29,6 +29,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -46,14 +47,14 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
 ]);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG || {id: null, providers: []};
+  return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent],
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective],
   imports: [
     CommonModule,
     RouterModule,
