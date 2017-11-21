@@ -29,6 +29,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
   @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
   public breadcrumbPath: string[] = [];
+  public breadcrumbUniquePath: string[] = [];
   public myModelRect: any;
   public searchLoad: Observable<boolean>;
 
@@ -70,12 +71,14 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
     this.groupSearchTerms.next(term);
     this.breadcrumbPath = [];
+    this.breadcrumbUniquePath = [];
   }
 
   public resetGroupSearchString() {
     // this.store.dispatch(this.groupWithAccountsAction.resetGroupAndAccountsSearchString());
     this.groupSearchTerms.next('');
     this.breadcrumbPath = [];
+    this.breadcrumbUniquePath = [];
     this.renderer.setProperty(this.groupSrch.nativeElement, 'value', '');
     this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
@@ -98,7 +101,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     //
   }
 
-  public breadcrumbPathChanged(breadcrumbPath: string[]) {
-    this.breadcrumbPath = breadcrumbPath;
+  public breadcrumbPathChanged(obj) {
+    // breadcrumbUniquePath
+    this.breadcrumbUniquePath = obj.breadcrumbUniqueNamePath;
+    this.breadcrumbPath = obj.breadcrumbPath;
   }
 }
