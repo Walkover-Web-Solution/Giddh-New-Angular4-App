@@ -31,6 +31,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   public showChequeDatePicker: boolean  = false;
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
   public accounts$: Observable<IOption[]>;
+  public voucherTypeList: Observable<IOption[]>;
 
   // public activeAccount$: Observable<AccountResponseV2>;
   // public accounts$: Observable<IOption[]>;
@@ -43,8 +44,9 @@ export class AdvanceSearchModelComponent implements OnInit {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
+
     this.advanceSearchForm = this.fb.group({
-      uniqueNames: this.fb.array([]),
+      uniqueNames: [[]],
       isInvoiceGenerated: [false],
       amountLessThan: [false],
       includeAmount: [false],
@@ -55,12 +57,29 @@ export class AdvanceSearchModelComponent implements OnInit {
       description: ['', Validators.required],
       includeTag: ['', Validators.required],
       includeParticulars: ['', Validators.required],
+      includeVouchers: ['', Validators.required],
       chequeNumber: ['', Validators.required],
       dateOnCheque: ['', Validators.required],
       tags: this.fb.array([]),
-      particulars: this.fb.array(null),
-      inventory: this.fb.array([])
+      particulars: [[]],
+      vouchers: [[]],
+      inventory: [{
+        includeInventory: true,
+        inventories: ['BLUEPEN1'],
+        quantity: 1,
+        includeQuantity: true,
+        quantityLessThan: false,
+        quantityEqualTo: true,
+        quantityGreaterThan: true,
+        includeItemValue: true,
+        itemValue: 20,
+        includeItemLessThan: true,
+        includeItemEqualTo: true,
+        includeItemGreaterThan: false
+      }],
     });
+
+    this.setVoucherTypes();
   }
 
   public ngOnInit() {
@@ -79,6 +98,34 @@ export class AdvanceSearchModelComponent implements OnInit {
     // });
   }
 
+  public setVoucherTypes() {
+    this.voucherTypeList = Observable.of([{
+      label: 'Sales',
+      value: 'sal'
+    }, {
+      label: 'Purchases',
+      value: 'pur'
+    }, {
+      label: 'Receipt',
+      value: 'rcpt'
+    }, {
+      label: 'Payment',
+      value: 'pay'
+    }, {
+      label: 'Journal',
+      value: 'jr'
+    }, {
+      label: 'Contra',
+      value: 'cntr'
+    }, {
+      label: 'Debit Note',
+      value: 'debit note'
+    }, {
+      label: 'Credit Note',
+      value: 'credit note'
+    }]);
+  }
+
   public onCancel() {
     this.closeModelEvent.emit(true);
   }
@@ -95,37 +142,37 @@ export class AdvanceSearchModelComponent implements OnInit {
    * onSearch
    */
   public onSearch() {
-    let obj = {
-      uniqueNames: [],
-      includeAmount: null,
-      amount: null,
-      amountLessThan: null,
-      amountEqualTo: null,
-      amountGreaterThan: null,
-      includeDescription: null,
-      description: null,
-      isInvoiceGenerated: false,
-      includeTag: null,
-      tags: [],
-      includeParticulars: false,
-      particulars: [],
-      chequeNumber: '',
-      dateOnCheque: '',
-      inventory: {
-        includeInventory: true,
-        inventories: ['BLUEPEN1'],
-        quantity: 1,
-        includeQuantity: true,
-        quantityLessThan: false,
-        quantityEqualTo: true,
-        quantityGreaterThan: true,
-        includeItemValue: true,
-        itemValue: 20,
-        includeItemLessThan: true,
-        includeItemEqualTo: true,
-        includeItemGreaterThan: false
-      }
-    };
+    // let obj = {
+    //   uniqueNames: [],
+    //   includeAmount: null,
+    //   amount: null,
+    //   amountLessThan: null,
+    //   amountEqualTo: null,
+    //   amountGreaterThan: null,
+    //   includeDescription: null,
+    //   description: null,
+    //   isInvoiceGenerated: false,
+    //   includeTag: null,
+    //   tags: [],
+    //   includeParticulars: false,
+    //   particulars: [],
+    //   chequeNumber: '',
+    //   dateOnCheque: '',
+    //   inventory: {
+    //     includeInventory: true,
+    //     inventories: ['BLUEPEN1'],
+    //     quantity: 1,
+    //     includeQuantity: true,
+    //     quantityLessThan: false,
+    //     quantityEqualTo: true,
+    //     quantityGreaterThan: true,
+    //     includeItemValue: true,
+    //     itemValue: 20,
+    //     includeItemLessThan: true,
+    //     includeItemEqualTo: true,
+    //     includeItemGreaterThan: false
+    //   }
+    // };
     let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
@@ -135,12 +182,24 @@ export class AdvanceSearchModelComponent implements OnInit {
   }
 
   /**
-   * onParticularSelect
+   * onDDElementSelect
    */
-  public onParticularSelect(data) {
-    // let particulars = this.advanceSearchForm.get('particulars');
-    let particulars = this.advanceSearchForm.get('particulars');
-    particulars.patchValue(['1', '2', '3']);
-    console.log('after patching value :', this.advanceSearchForm.value);
+  public onDDElementSelect(type: string, data: any[]) {
+    let values = [];
+    data.forEach(element => {
+      values.push(element.value);
+    });
+    switch (type) {
+      case 'particulars':
+      this.advanceSearchForm.get('particulars').patchValue(values);
+      break;
+      case 'uniqueNames':
+      this.advanceSearchForm.get('uniqueNames').patchValue(values);
+      break;
+      case 'vouchers':
+      this.advanceSearchForm.get('vouchers').patchValue(values);
+      break;
+
+    }
   }
 }
