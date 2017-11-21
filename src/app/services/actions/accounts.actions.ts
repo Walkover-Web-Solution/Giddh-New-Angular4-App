@@ -150,7 +150,7 @@ export class AccountsAction {
       if (groupSearchString) {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
       } else {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
       setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
       return { type: '' };
@@ -251,7 +251,7 @@ export class AccountsAction {
         if (groupSearchString) {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
         } else {
-          this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+          // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
         this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));

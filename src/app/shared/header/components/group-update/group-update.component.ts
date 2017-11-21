@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, Input, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
@@ -22,7 +22,7 @@ import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interfac
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
-
+  @Input() public companyTaxDropDown: Observable<IOption[]>;
   public groupDetailForm: FormGroup;
   public moveGroupForm: FormGroup;
   public taxGroupForm: FormGroup;
@@ -35,7 +35,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public activeGroupSelected$: Observable<string[]>;
   public activeGroupTaxHierarchy$: Observable<GroupsTaxHierarchyResponse>;
-  public companyTaxDropDown: Observable<IOption[]>;
   public isUpdateGroupInProcess$: Observable<boolean>;
   public isUpdateGroupSuccess$: Observable<boolean>;
   public taxPopOverTemplate: string = `
@@ -76,38 +75,6 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).takeUntil(this.destroyed$);
     this.isUpdateGroupInProcess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupInProcess).takeUntil(this.destroyed$);
     this.isUpdateGroupSuccess$ = this.store.select(state => state.groupwithaccounts.isUpdateGroupSuccess).takeUntil(this.destroyed$);
-    this.companyTaxDropDown = this.store.select(state => {
-      let arr: IOption[] = [];
-      if (state.company.taxes) {
-        if (state.groupwithaccounts.activeAccount) {
-          if (state.groupwithaccounts.activeAccountTaxHierarchy) {
-            return _.differenceBy(state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
-            }), _.flattenDeep(state.groupwithaccounts.activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { label: p.name, value: p.uniqueName };
-            }), 'id');
-          } else {
-            return state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
-            });
-          }
-
-        } else {
-          if (state.groupwithaccounts.activeGroup && state.company.taxes && state.groupwithaccounts.activeGroupTaxHierarchy) {
-            return _.differenceBy(state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
-            }), _.flattenDeep(state.groupwithaccounts.activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-              return { label: p.name, value: p.uniqueName };
-            }), 'id');
-          } else {
-            return state.company.taxes.map(p => {
-              return { label: p.name, value: p.uniqueName };
-            });
-          }
-        }
-      }
-      return arr;
-    }).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
