@@ -28,7 +28,7 @@
           </div>
           <div class="col-xs-7">
             <div class="form-group">
-              <sh-select [options]="accounts$ | async" name="particulars" (selected)="onDDElementSelect('uniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true"
+              <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('uniqueNames')" (selected)="onDDElementSelect('uniqueNames', $event)" [isFilterEnabled]="true" [multiple]="true"
               [placeholder]="'Select Accounts'"></sh-select>
             </div>
           </div>
@@ -48,7 +48,7 @@
               <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="false">Exclude</label>
             </div>
             <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT1">
-                <sh-select [options]="accounts$ | async" name="particulars" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true"
+                <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true"
                 [placeholder]="'Select Accounts'"></sh-select>
             </div>
           </div>
@@ -68,7 +68,7 @@
               <label class="btn btn-success" formControlName="isInvoiceGenerated" name="right" btnRadio="exclude">Exclude</label>
             </div>
             <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT1">
-              <sh-select [options]="voucherTypeList | async" name="particulars" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true"
+              <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true"
               [placeholder]="'Select Accounts'"></sh-select>
             </div>
           </div>
@@ -80,7 +80,7 @@
           <div class="col-xs-7">
             <div class="input-group">
               <div class="input-group-btn">
-                <div class="btn-group" dropdown>
+                <!-- <div class="btn-group" dropdown>
                   <button dropdownToggle type="button" class="btn btn-default dropdown-toggle">
                     Select Range
                     <span class="caret"></span>
@@ -93,7 +93,9 @@
                     <li>Less than equals to</li>
                     <li>Exclude</li>
                   </ul>
-                </div>
+                </div> -->
+                <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
+                [placeholder]="'Select Range'"></sh-select>
               </div>
               <input type="text" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
             </div>
@@ -114,16 +116,19 @@
             <div class="col-xs-5">
               <label for="">Inventory</label>
             </div>
-            <div class="col-xs-7">
+            <div class="col-xs-7" formGroupName="inventory">
               <div class="btn-group">
-                <label class="btn btn-success" formControlName="isInvoiceGenerated" name="left" btnRadio="all">All</label>
-                <label class="btn btn-success" formControlName="isInvoiceGenerated" name="middle" btnRadio="include">Include</label>
-                <label class="btn btn-success" formControlName="isInvoiceGenerated" name="right" btnRadio="exclude">Exclude</label>
+                <label class="btn btn-success" formControlName="includeInventory" name="left" btnRadio="true">All</label>
+                <label class="btn btn-success" formControlName="includeInventory" name="middle" btnRadio="true">Include</label>
+                <label class="btn btn-success" formControlName="includeInventory" name="right" btnRadio="false">Exclude</label>
               </div>
-              <input *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" type="text" class="form-control mrT1">
+              <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT2">
+                  <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true"
+                  [placeholder]="'Select Accounts'"></sh-select>
+              </div>
               <div class="input-group mrT2">
                 <div class="input-group-btn">
-                  <div class="btn-group" dropdown>
+                  <!-- <div class="btn-group" dropdown>
                     <button dropdownToggle type="button" class="btn btn-default dropdown-toggle">
                       Select Range
                       <span class="caret"></span>
@@ -136,13 +141,15 @@
                       <li>Less than equals to</li>
                       <li>Exclude</li>
                     </ul>
-                  </div>
+                  </div> -->
+                  <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
+                  [placeholder]="'Select Range'"></sh-select>
                 </div>
                 <input type="text" class="form-control" aria-label="Text input with dropdown button">
               </div>
               <div class="input-group mrT2">
                 <div class="input-group-btn">
-                  <div class="btn-group" dropdown>
+                  <!-- <div class="btn-group" dropdown>
                     <button dropdownToggle type="button" class="btn btn-default dropdown-toggle">
                       Select Range
                       <span class="caret"></span>
@@ -155,7 +162,9 @@
                       <li>Less than equals to</li>
                       <li>Exclude</li>
                     </ul>
-                  </div>
+                  </div> -->
+                  <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
+                  [placeholder]="'Select Range'"></sh-select>
                 </div>
                 <input type="text" class="form-control" aria-label="Text input with dropdown button">
               </div>
@@ -173,7 +182,7 @@
                 </div>
                 <div class="col-xs-6">
                   <div class="form-group">
-                      <input type="text" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
+                      <input type="text" placeholder="Date on Cheque" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
                       <!-- <input type="text" placeholder="Date on Cheque" formControlName="dateOnCheque" class="form-control"> -->
                   </div>
                 </div>

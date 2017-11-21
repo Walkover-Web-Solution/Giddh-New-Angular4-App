@@ -1,3 +1,4 @@
+import { InventoryAction } from './../../../services/actions/inventory/inventory.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
 import { LedgerActions } from './../../../services/actions/ledger/ledger.actions';
@@ -15,6 +16,13 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 
+const COMPARISON_FILTER = [
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
+];
 @Component({
   selector: 'advance-search-model',
   templateUrl: './advance-search.component.html'
@@ -32,6 +40,8 @@ export class AdvanceSearchModelComponent implements OnInit {
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
   public accounts$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
+  public stockListDropDown$: Observable<IOption[]>;
+  public comparisonFilterDropDown$: Observable<IOption[]>;
 
   // public activeAccount$: Observable<AccountResponseV2>;
   // public accounts$: Observable<IOption[]>;
@@ -43,7 +53,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   private toDate: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
+  constructor(private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
 
     this.advanceSearchForm = this.fb.group({
       uniqueNames: [[]],
@@ -56,14 +66,14 @@ export class AdvanceSearchModelComponent implements OnInit {
       includeDescription: ['', Validators.required],
       description: ['', Validators.required],
       includeTag: ['', Validators.required],
-      includeParticulars: ['', Validators.required],
+      includeParticulars: [false, Validators.required],
       includeVouchers: ['', Validators.required],
       chequeNumber: ['', Validators.required],
       dateOnCheque: ['', Validators.required],
       tags: this.fb.array([]),
       particulars: [[]],
       vouchers: [[]],
-      inventory: [{
+      inventory: this.fb.group({
         includeInventory: true,
         inventories: ['BLUEPEN1'],
         quantity: 1,
@@ -76,10 +86,13 @@ export class AdvanceSearchModelComponent implements OnInit {
         includeItemLessThan: true,
         includeItemEqualTo: true,
         includeItemGreaterThan: false
-      }],
+      }),
     });
 
     this.setVoucherTypes();
+    this.comparisonFilterDropDown$ = Observable.of(COMPARISON_FILTER);
+    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+
   }
 
   public ngOnInit() {
@@ -93,9 +106,18 @@ export class AdvanceSearchModelComponent implements OnInit {
       }
     });
 
-    // this.advanceSearchForm.controls['isInvoiceGenerated'].valueChanges.takeUntil(this.destroyed$).subscribe((value: boolean) => {
-    //   this.advanceSearchForm.controls90;
-    // });
+    this.stockListDropDown$ = this.store.select(p => {
+      let data = _.cloneDeep(p);
+      if (data.inventory.manufacturingStockList) {
+        if (data.inventory.manufacturingStockList.results) {
+          let units = data.inventory.manufacturingStockList.results;
+
+          return units.map(unit => {
+            return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+          });
+        }
+      }
+    }).takeUntil(this.destroyed$);
   }
 
   public setVoucherTypes() {
@@ -142,37 +164,6 @@ export class AdvanceSearchModelComponent implements OnInit {
    * onSearch
    */
   public onSearch() {
-    // let obj = {
-    //   uniqueNames: [],
-    //   includeAmount: null,
-    //   amount: null,
-    //   amountLessThan: null,
-    //   amountEqualTo: null,
-    //   amountGreaterThan: null,
-    //   includeDescription: null,
-    //   description: null,
-    //   isInvoiceGenerated: false,
-    //   includeTag: null,
-    //   tags: [],
-    //   includeParticulars: false,
-    //   particulars: [],
-    //   chequeNumber: '',
-    //   dateOnCheque: '',
-    //   inventory: {
-    //     includeInventory: true,
-    //     inventories: ['BLUEPEN1'],
-    //     quantity: 1,
-    //     includeQuantity: true,
-    //     quantityLessThan: false,
-    //     quantityEqualTo: true,
-    //     quantityGreaterThan: true,
-    //     includeItemValue: true,
-    //     itemValue: 20,
-    //     includeItemLessThan: true,
-    //     includeItemEqualTo: true,
-    //     includeItemGreaterThan: false
-    //   }
-    // };
     let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
@@ -191,15 +182,24 @@ export class AdvanceSearchModelComponent implements OnInit {
     });
     switch (type) {
       case 'particulars':
-      this.advanceSearchForm.get('particulars').patchValue(values);
+        this.advanceSearchForm.get('particulars').patchValue(values);
       break;
       case 'uniqueNames':
-      this.advanceSearchForm.get('uniqueNames').patchValue(values);
+        this.advanceSearchForm.get('uniqueNames').patchValue(values);
       break;
       case 'vouchers':
-      this.advanceSearchForm.get('vouchers').patchValue(values);
+        this.advanceSearchForm.get('vouchers').patchValue(values);
       break;
-
+      case 'inventory':
+        this.advanceSearchForm.get('inventory.inventories').patchValue(values);
+      break;
     }
+  }
+
+  /**
+   * onDDClear
+   */
+  public onDDClear(type: string) {
+    this.onDDElementSelect(type, []);
   }
 }
