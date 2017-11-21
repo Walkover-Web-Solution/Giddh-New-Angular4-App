@@ -149,12 +149,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
-        if (accountDetails.addresses.length > 0) {
+        if (accountDetails.addresses.length > 0 && accountDetails.country.countryCode === 'IN') {
           accountDetails.addresses.map(a => {
             this.renderGstDetails(a);
           });
         } else {
-          this.addBlankGstForm();
+          // this.addBlankGstForm();
         }
         // hsn/sac enable disable
         if (acc.hsnNumber) {
@@ -192,10 +192,16 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     });
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
-      if (a !== 'IN') {
-        this.addAccountForm.controls['addresses'] = this._fb.array([]);
-      } else {
-        this.addBlankGstForm();
+      if (a) {
+        if (a !== 'IN') {
+          this.addAccountForm.controls['addresses'] = this._fb.array([]);
+          // this.addBlankGstForm();
+        } else {
+          const addresses = this.addAccountForm.get('addresses') as FormArray;
+          if (addresses.controls.length === 0) {
+            this.addBlankGstForm();
+          }
+        }
       }
     });
 
@@ -245,7 +251,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       partyType: ['NOT APPLICABLE']
     });
     if (val) {
-        gstFields.patchValue(val);
+      gstFields.patchValue(val);
     }
     return gstFields;
   }

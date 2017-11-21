@@ -1,5 +1,6 @@
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
+import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 export class GroupAccountSidebarVM {
   public columns: ColumnGroupsAccountVM[];
   public parentIndex: number;
@@ -25,7 +26,7 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
   public isVisible: boolean = true;
   public groups: IGroupsWithAccounts[];
   public hLevel: number;
-
+  public Items: IGroupOrAccount[];
   // tslint:disable-next-line:no-empty
   constructor(grp: IGroupsWithAccounts) {
     if (grp) {
@@ -38,7 +39,29 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
       this.isOpen = grp.isOpen;
       this.isVisible = grp.isVisible;
       this.groups = grp.groups;
+      let grps = this.groups || [];
+      let accs = this.accounts || [];
+      // debugger;
+      let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+      let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+
+      this.Items = [...grps2, ...accs2] as IGroupOrAccount[];
     }
   }
 
+}
+
+export interface IGroupOrAccount extends INameUniqueName {
+  isGroup: boolean;
+  // Groups prop
+  synonyms?: string;
+  accounts?: IAccountsInfo[];
+  category?: string;
+  groups?: IGroupsWithAccounts[];
+  isActive?: boolean;
+  isOpen?: boolean;
+  isVisible?: boolean;
+  // accounts prop
+  stocks?: any[];
+  mergedAccounts?: string;
 }
