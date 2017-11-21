@@ -7,7 +7,6 @@ import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
-import { underStandingTextData } from '../../underStandingTextData';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 export class UpdateLedgerVm {
@@ -25,17 +24,6 @@ export class UpdateLedgerVm {
   public showNewEntryPanel: boolean = true;
   public selectedTaxes: UpdateLedgerTaxData[] = [];
   public taxRenderData: TaxControlData[] = [];
-  public ledgerUnderStandingObj = {
-    accountType: '',
-    text: {
-      cr: '',
-      dr: ''
-    },
-    balanceText: {
-      cr: '',
-      dr: ''
-    }
-  };
 
   public get stockTrxEntry(): ILedgerTransactionItem {
     return find(this.selectedLedger.transactions, (t => !!(t.inventory && t.inventory.stock))) || null;
@@ -301,18 +289,6 @@ export class UpdateLedgerVm {
     });
     if (this.discountComponent) {
       this.discountComponent.genTotal();
-    }
-  }
-
-  public getUnderstandingText(selectedLedgerAccountType, accountName) {
-    let data = underStandingTextData.find(p => p.accountType === selectedLedgerAccountType);
-    if (data) {
-      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
-      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
-
-      data.text.dr = data.text.dr.replace('<accountName>', accountName);
-      data.text.cr = data.text.cr.replace('<accountName>', accountName);
-      this.ledgerUnderStandingObj = data;
     }
   }
 
