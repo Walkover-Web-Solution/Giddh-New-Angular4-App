@@ -260,12 +260,14 @@ header .navbar {
 /*btn*/
 
 .btn-primary {
-    background: #525252;
+    background: #e5e5e5;
+    color: #ff5f00;
 }
 
 .btn-primary:hover,
 .btn-primary:focus {
-    background-color: #d35f29;
+    background: #ff5f00;
+    color: #fff;
 }
 
 .btn {
@@ -283,8 +285,13 @@ header .navbar {
 }
 
 .btn-default {
-    background: #f8f7f2;
-    border: 1px solid #949494;
+    background: #e5e5e5;
+    color: #333333;
+}
+
+.btn-default:hover {
+    background: #d9d9d9;
+    color: #333333;
 }
 
 
@@ -724,20 +731,29 @@ input[type="checkbox"]:after {
 }
 
 .btn-success {
-    background: #3fab63;
+    background: #e5e5e5;
+    color: #28ab00;
 }
 
 .btn-success:hover {
-    background: #57C17A;
+    background: #28ab00;
+    color: #fff;
+}
+
+.btn-success:disabled,
+.btn-default:disabled,
+.btn-danger:disabled {
+    opacity: 0.5;
 }
 
 .btn-danger {
-    background: #EF5350 !important;
-    color: #fff !important;
+    background: #e5e5e5 !important;
+    color: #ce0000 !important;
 }
 
 .btn-danger:hover {
-    background: #F44336;
+    background: #ce0000;
+    color: #fff;
 }
 
 .sm-btn {
@@ -1144,16 +1160,6 @@ input[type="checkbox"]:after {
     border-left: 15px solid transparent;
     left: -15px;
     z-index: 9;
-}
-
-.ledger-panel .btn-success {
-    border: 1px solid #349655;
-}
-
-.ledger-panel .btn-success:hover {
-    background: #57C17A;
-    color: #fff;
-    border-color: #349655;
 }
 
 .btn-row {
@@ -3796,10 +3802,6 @@ input[type='checkbox'][disabled] {
     padding-right: 0;
 } */
 
-.ledger-panel .btn-danger {
-    border: 1px solid red;
-}
-
 datepicker-inner .well table tbody tr td .btn-default {
     padding: 0 4px;
     border: 0;
@@ -4052,4 +4054,12 @@ virtual-scroll .scrollable-content .item:hover .item,
 
 sh-select .header {
     line-height: 34px;
+}
+
+input[type="number"] {
+    text-align: right
+}
+
+.taxInput {
+    padding-right: 25px !important;
 }

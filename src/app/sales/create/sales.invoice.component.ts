@@ -206,8 +206,8 @@ export class SalesInvoiceComponent implements OnInit {
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
       this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
         this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
-        if (this.activeCompany) {
-          this.invFormData.country.countryName = this.activeCompany.country;
+        if (this.activeCompany && this.activeCompany.country) {
+          this.invFormData.country.countryName = this.activeCompany.country.toLocaleLowerCase();
         }
       });
     });
