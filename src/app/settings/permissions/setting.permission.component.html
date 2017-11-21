@@ -20,7 +20,7 @@
   <div class="row box">
     <div class="row mrT2 bdrB" *ngFor="let usrGrp of usersList; let i = index">
       <div class="col-xs-4">
-        <div class="lead mrB1">{{usrGrp.name}}</div>
+        <div class="lead mrB1">{{usrGrp.rows[0].userName}}</div>
         <div class="mrB1"><i class="fa fa-user"></i> {{usrGrp.rows[0].userUniqueName}}</div>
       </div>
       <div class="col-xs-4">
