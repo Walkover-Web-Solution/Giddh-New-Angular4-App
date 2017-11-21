@@ -136,12 +136,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     });
   }
 
-  public textOnly(e) {
-    if (this.company && this.company.city) {
-      this.company.city = this.company.city.replace(/[^a-zA-Z\s]/g, '');
-    }
-  }
-
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
@@ -189,10 +183,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     } else {
       this.showLogoutModal();
     }
-  }
-
-  public closeModalAndShowAddMangeModal() {
-    this.closeCompanyModalAndShowAddManege.emit();
   }
 
   public showLogoutModal() {
