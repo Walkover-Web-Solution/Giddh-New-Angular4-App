@@ -265,7 +265,8 @@ header .navbar {
 }
 
 .btn-primary:hover,
-.btn-primary:focus {
+.btn-primary:focus,
+.btn-primary:disabled {
     background: #ff5f00;
     color: #fff;
 }
@@ -289,7 +290,8 @@ header .navbar {
     color: #333333;
 }
 
-.btn-default:hover {
+.btn-default:hover,
+.btn-default:disabled {
     background: #d9d9d9;
     color: #333333;
 }
@@ -346,12 +348,6 @@ header .navbar {
   border: 1px solid #949494;
   .ledger-panel .btn:hover,
 }*/
-
-.ledger-panel .btn-primary {
-    background: #f3f0e6;
-    border-color: #ff782d;
-    color: #616161;
-}
 
 .tax-list {
     padding: 10px 0;
@@ -735,7 +731,8 @@ input[type="checkbox"]:after {
     color: #28ab00;
 }
 
-.btn-success:hover {
+.btn-success:hover,
+.btn-success:disabled {
     background: #28ab00;
     color: #fff;
 }
@@ -747,11 +744,12 @@ input[type="checkbox"]:after {
 }
 
 .btn-danger {
-    background: #e5e5e5 !important;
-    color: #ce0000 !important;
+    background: #e5e5e5;
+    color: #ce0000;
 }
 
-.btn-danger:hover {
+.btn-danger:hover,
+.btn-danger:disabled {
     background: #ce0000;
     color: #fff;
 }
