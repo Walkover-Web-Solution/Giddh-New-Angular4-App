@@ -27,7 +27,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLink: boolean = false;
-  @Input() public isFilterEnabled: boolean = false;
+  @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'inherit';
   @Input() public ItemHeight: number = 41;
   @Input() public customFilter: (term: string, options: IOption) => boolean;

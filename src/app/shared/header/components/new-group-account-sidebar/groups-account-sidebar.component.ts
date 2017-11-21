@@ -7,7 +7,7 @@ import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
 import { AccountsAction } from '../../../../services/actions/accounts.actions';
-import { ColumnGroupsAccountVM, GroupAccountSidebarVM } from './VM';
+import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import * as _ from '../../../../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../../../../models/api-models/Account';
@@ -18,10 +18,12 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
   templateUrl: './groups-account-sidebar.component.html'
 })
 export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestroy {
+  public viewPortItems: IGroupOrAccount[];
   public mc: GroupAccountSidebarVM;
   @Output() public ScrollToRight: EventEmitter<boolean> = new EventEmitter(true);
   @Output() public columnsChanged: EventEmitter<GroupAccountSidebarVM> = new EventEmitter();
   @Input() public groups: GroupsWithAccountsResponse[];
+  @Input() public height: number;
   public _groups: GroupsWithAccountsResponse[];
   @Input() public activeGroup: Observable<GroupResponse>;
   public isUpdateGroupSuccess$: Observable<boolean>;
@@ -99,6 +101,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         key.isOpen = false;
         this.mc.columns[0].groups.push(key);
       }
+      let grps = this.mc.columns[0].groups || [];
+      let accs = this.mc.columns[0].accounts || [];
+      let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+      let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+      this.mc.columns[0].Items = [...grps2, ...accs2] as IGroupOrAccount[];
       let col = this.polulateColms(this.mc.columns[0].groups);
       if (col) {
         for (let key of this.mc.columns[0].groups) {
@@ -138,6 +145,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         for (let key of allAccount) {
           newCOL.accounts.push(key);
         }
+        let grps1 = newCOL.groups || [];
+        let accs = newCOL.accounts || [];
+        let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+        let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+        newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
         let col = this.polulateColms(allGrps);
         this.mc.columns.splice(1, 0, newCOL);
         if (col) {
@@ -155,6 +167,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
               // key.isOpen = true;
               newCOL.groups.push(key);
             }
+            let grps1 = newCOL.groups || [];
+            let accs = newCOL.accounts || [];
+            let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+            let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+            newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
           }
           this.mc.columns.splice(1, 0, newCOL);
           return newCOL;
@@ -173,6 +190,11 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
                 }
                 newCOL.groups.push(key);
               }
+              let grps1 = newCOL.groups || [];
+              let accs = newCOL.accounts || [];
+              let grps2 = grps1.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
+              let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
+              newCOL.Items = [...grps2, ...accs2] as IGroupOrAccount[];
               this.mc.columns.splice(1, 0, newCOL);
               return newCOL;
             }
