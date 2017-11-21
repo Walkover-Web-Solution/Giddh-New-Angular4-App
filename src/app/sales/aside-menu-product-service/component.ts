@@ -24,7 +24,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     :host.in #close{
       display: block;
       position: fixed;
-      left: -42px;
+      left: -41px;
       top: 0;
       z-index: 5;
       border: 0;
