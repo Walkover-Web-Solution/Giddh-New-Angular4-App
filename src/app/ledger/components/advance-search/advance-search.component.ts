@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import { IOption } from './../../../theme/ng-select/option.interface';
 import { AccountService } from './../../../services/account.service';
 import { AccountResponseV2 } from './../../../models/api-models/Account';
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -42,6 +42,8 @@ export class AdvanceSearchModelComponent implements OnInit {
   public voucherTypeList: Observable<IOption[]>;
   public stockListDropDown$: Observable<IOption[]>;
   public comparisonFilterDropDown$: Observable<IOption[]>;
+
+  public includeParticularsState: string = 'all';
 
   // public activeAccount$: Observable<AccountResponseV2>;
   // public accounts$: Observable<IOption[]>;
@@ -201,5 +203,31 @@ export class AdvanceSearchModelComponent implements OnInit {
    */
   public onDDClear(type: string) {
     this.onDDElementSelect(type, []);
+  }
+
+  /**
+   * onButtonGroupClick
+   */
+  public onButtonGroupClick(groupName: string, value: string) {
+    switch (groupName + '-' + value) {
+      case 'particulars-all':
+        this.includeParticularsState = 'all';
+        this.accounts$.subscribe(data => {
+          if (data && data.length) {
+            this.onDDElementSelect('particulars', data);
+          }
+        });
+        this.advanceSearchForm.get('includeParticulars').patchValue(true);
+      break;
+      case 'particulars-include':
+        this.includeParticularsState = 'include';
+        this.advanceSearchForm.get('includeParticulars').patchValue(true);
+      break;
+      case 'particulars-exclude':
+      this.includeParticularsState = 'exclude';
+      this.advanceSearchForm.get('particulars').patchValue([]);
+      this.advanceSearchForm.get('includeParticulars').patchValue(false);
+      break;
+    }
   }
 }
