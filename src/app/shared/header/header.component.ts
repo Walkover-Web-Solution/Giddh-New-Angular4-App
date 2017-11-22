@@ -1,10 +1,9 @@
-import { CompanyAddComponent } from './components/company-add/company-add.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyAddComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
 import { CompanyResponse } from '../../models/api-models/Company';
@@ -14,13 +13,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
-import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
+import { ManageGroupsAccountsComponent } from './components';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { GeneralActions } from '../../services/actions/general/general.actions';
 import { createSelector } from 'reselect';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
