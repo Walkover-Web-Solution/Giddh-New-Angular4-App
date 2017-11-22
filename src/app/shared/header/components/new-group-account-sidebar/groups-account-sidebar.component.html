@@ -10,7 +10,7 @@
         </li>
       </ul>
       <ng-container *ngIf="col.Items">
-        <ul class="grp_list" *vsFor="col.Items; tagName:'li'; scrollParent:'.grp_list'; let _items = vsCollection">
+        <ul class="grp_list" *vsFor="col.Items; tagName:'li'; scrollParent:'.grp_list', let _items = vsCollection">
 
           <ng-container *ngFor="let item of _items">
             <!-- {{item.name}} -->
