@@ -103,7 +103,7 @@ $themeClr: #fe5f00;
     input:not([type='checkbox']),
     select,
     textarea {
-        width: 190px;
+        // width: 190px;
     }
     textarea.form-control {
         // height: 140px;
@@ -149,8 +149,11 @@ $themeClr: #fe5f00;
 
 .form-inline {
     .form-group {
-        @include marg(R, 20px);
+        // @include marg(R, 20px);
         vertical-align: top;
+    }
+    .form-control {
+        width: 100%;
     }
 }
 
@@ -259,4 +262,32 @@ $themeClr: #fe5f00;
     tbody+tbody {
         border: 0;
     }
+}
+
+ng-select.splSales {
+    width: 100%;
+}
+
+[data-field="HSN/SAC"],
+[data-field="Qty."],
+[data-field="Unit"],
+[data-field="Rate"],
+[data-field="Amount"],
+[data-field="Discount"],
+[data-field="Taxable."],
+[data-field="Tax"],
+[data-field="Total"] {
+    text-align: right;
+}
+
+.table>thead>tr th {
+    font-weight: 100;
+}
+
+[data-field="Amount"] {
+    text-align: center;
+}
+
+.salesTax .taxInput {
+    text-align: right;
 }
