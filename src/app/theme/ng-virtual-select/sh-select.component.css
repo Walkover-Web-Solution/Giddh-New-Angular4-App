@@ -127,3 +127,11 @@ i.close.icon.clear:hover::after {
     opacity: .5;
     color: black;
 }
+
+.selectedVal {
+    background: #fff !important;
+}
+
+.sh-select-disabled .selectedVal {
+    background: #eee !important;
+}

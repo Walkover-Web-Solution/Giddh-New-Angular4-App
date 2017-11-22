@@ -10,7 +10,7 @@
                     </span>
                 </div>
                 <div *ngIf="!multiple">
-                    <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control" />
+                    <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
                 </div>
             </ng-container>
             <ng-container *ngIf="!selectedValues?.length">
