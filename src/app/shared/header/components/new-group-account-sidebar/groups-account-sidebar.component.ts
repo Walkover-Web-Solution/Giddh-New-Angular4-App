@@ -32,7 +32,8 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
   @Input() public padLeft: number = 30;
   @Input() public isSearchingGroups: boolean = false;
   public breadcrumbPath: string[] = [];
-  @Output() public breadcrumbPathChanged: EventEmitter<string[]> = new EventEmitter();
+  public breadcrumbUniqueNamePath: string[] = [];
+  @Output() public breadcrumbPathChanged = new EventEmitter();
   public activeAccount: Observable<AccountResponseV2>;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -66,8 +67,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         this.store.select(p => p.groupwithaccounts.groupswithaccounts).take(1).subscribe(grp => groups = grp);
         if (activeGroup && groups) {
           this.breadcrumbPath = [];
-          this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true);
-          this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+          this.breadcrumbUniqueNamePath = [];
+          this.getBreadCrumbPathFromGroup(groups, activeGroup.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+          this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
         }
       }
     });
@@ -83,8 +85,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
           this.store.select(p => p.groupwithaccounts.groupswithaccounts).take(1).subscribe(grp => groups = grp);
           if (activeAccount && groups) {
             this.breadcrumbPath = [];
-            this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false);
-            this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+            this.breadcrumbUniqueNamePath = [];
+            this.getBreadCrumbPathFromGroup(groups, activeAccount.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+            this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
           }
         }
       }
@@ -207,8 +210,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   public onGroupClick(item: IGroupsWithAccounts, currentIndex: number) {
     this.breadcrumbPath = [];
-    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true);
-    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+    this.breadcrumbUniqueNamePath = [];
+    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     this.store.dispatch(this.groupWithAccountsAction.hideAddNewForm());
     this.store.dispatch(this.groupWithAccountsAction.getGroupDetails(item.uniqueName));
     this.store.dispatch(this.accountsAction.resetActiveAccount());
@@ -219,8 +223,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   public onAccountClick(item: any, currentIndex: number) {
     this.breadcrumbPath = [];
-    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false);
-    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+    this.breadcrumbUniqueNamePath = [];
+    let parentGrp = this.getBreadCrumbPathFromGroup(this._groups, item.uniqueName, null, this.breadcrumbPath, false, this.breadcrumbUniqueNamePath);
+    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     if (parentGrp) {
       if (this.mc.columns[currentIndex - 1] && this.mc.columns[currentIndex - 1].uniqueName !== parentGrp.uniqueName) {
         this.mc.columns.splice(currentIndex + 1, 1);
@@ -234,8 +239,9 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
 
   public ShowAddNewForm(col: ColumnGroupsAccountVM) {
     this.breadcrumbPath = [];
-    this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true);
-    this.breadcrumbPathChanged.emit(this.breadcrumbPath);
+    this.breadcrumbUniqueNamePath = [];
+    this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
+    this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
     this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
@@ -269,14 +275,19 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
     return orderedGroups;
   }
 
-  public getBreadCrumbPathFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts, parentPath: string[], isGroup: boolean) {
+  public getBreadCrumbPathFromGroup(groupList: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts, parentPath: string[], isGroup: boolean, parentUniquenamePath: string[]) {
+    if (result !== null) {
+      return result;
+    }
     for (let el of groupList) {
+      parentUniquenamePath.push(el.uniqueName);
       parentPath.push(el.name);
       if (!isGroup) {
         if (el.accounts) {
           for (let key of el.accounts) {
             if (key.uniqueName === uniqueName) {
               parentPath.push(key.name);
+              parentUniquenamePath.push(key.uniqueName);
               result = el;
               return result;
             }
@@ -289,11 +300,12 @@ export class GroupsAccountSidebarComponent implements OnInit, OnChanges, OnDestr
         }
       }
       if (el.groups) {
-        result = this.getBreadCrumbPathFromGroup(el.groups, uniqueName, result, parentPath, isGroup);
-        if (result) {
+        result = this.getBreadCrumbPathFromGroup(el.groups, uniqueName, result, parentPath, isGroup, parentUniquenamePath);
+        if (result !== null) {
           return result;
         }
       }
+      parentUniquenamePath.pop();
       parentPath.pop();
     }
     return result;

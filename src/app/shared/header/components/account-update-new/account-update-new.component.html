@@ -133,7 +133,7 @@
                 <div class="form-group col-xs-5">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
-                        <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
+                        <input type="text" decimalDigitsDirective [DecimalPlaces]="2"  min="0" (click)="openingBalanceClick()" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
