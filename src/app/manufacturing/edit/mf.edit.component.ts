@@ -58,7 +58,9 @@ export class MfEditComponent implements OnInit {
     private _accountService: AccountService,
     private _toasty: ToasterService) {
 
-    this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+    this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
+
+    this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
 
     this.manufacturingDetails = new ManufacturingItemRequest();
     this.initializeOtherExpenseObj();
@@ -132,9 +134,9 @@ export class MfEditComponent implements OnInit {
     this.stockListDropDown$ = this.store.select(p => {
       let data = _.cloneDeep(p);
       let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-      if (data.inventory.manufacturingStockList) {
-        if (data.inventory.manufacturingStockList.results) {
-          let units = data.inventory.manufacturingStockList.results;
+      if (data.inventory.manufacturingStockListForCreateMF) {
+        if (data.inventory.manufacturingStockListForCreateMF.results) {
+          let units = data.inventory.manufacturingStockListForCreateMF.results;
 
           return units.map(unit => {
             let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
