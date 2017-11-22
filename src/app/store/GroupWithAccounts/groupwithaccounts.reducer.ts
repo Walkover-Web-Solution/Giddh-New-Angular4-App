@@ -762,6 +762,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
   for (let grp of groups) {
     if (grp.uniqueName === grpUniqueName) {
       grp.isOpen = true;
+      debugger;
       grp.accounts.push(
         {
           uniqueName: aData.uniqueName,
@@ -775,7 +776,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
       return result;
     }
     if (grp.groups) {
-      result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result);
+      result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
       if (result) {
         return result;
       }
