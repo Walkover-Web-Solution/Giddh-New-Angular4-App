@@ -179,7 +179,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public show(e: Event) {
 
-    debugger;
     if (this.isOpen || this.disabled) {
       return;
     }

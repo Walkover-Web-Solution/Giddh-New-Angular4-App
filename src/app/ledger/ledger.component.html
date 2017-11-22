@@ -134,7 +134,7 @@
                                                             </td>
 
                                                             <td class="col-xs-3 pos-rel">
-                                                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
+                                                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -188,7 +188,7 @@
                                                             </td>
 
                                                             <td class="col-xs-3 pos-rel">
-                                                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
+                                                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="blankLedgerAmountClick()">
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -332,7 +332,7 @@
                                             </td>
 
                                             <td class="col-xs-3 pos-rel">
-                                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
+                                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)" (click)="showNewLedgerEntryPopup(txn);blankLedgerAmountClick()">
                                             </td>
 
                                         </tr>
