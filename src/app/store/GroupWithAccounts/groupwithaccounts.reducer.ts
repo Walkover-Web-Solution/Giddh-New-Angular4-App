@@ -681,9 +681,6 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
   return result;
 };
 const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
-  if (result !== null) {
-    return result;
-  }
   for (let i = 0; i < groups.length; i++) {
     if (groups[i].uniqueName === uniqueName) {
       result = groups[i];
