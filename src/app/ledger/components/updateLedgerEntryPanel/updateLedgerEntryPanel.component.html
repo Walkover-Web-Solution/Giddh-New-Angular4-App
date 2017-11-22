@@ -82,6 +82,7 @@
                 </td>
                 <td class="col-xs-3 pos-rel">
                   <input type="text" [(ngModel)]="txn.amount" class="form-control"
+                         decimalDigitsDirective [DecimalPlaces]="2"
                          (click)="addBlankTrx('DEBIT', txn, $event)" (input)="vm.onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                         tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
@@ -157,6 +158,7 @@
                 <td class="col-xs-3 pos-rel">
                   <input class="form-control" type="text" [(ngModel)]="txn.amount"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
+                         decimalDigitsDirective [DecimalPlaces]="2"
                          (input)="vm.onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                         tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
@@ -251,6 +253,7 @@
                             <label>Quantity</label>
                             <input type="number" name="" class="form-control"
                                    [(ngModel)]="vm.stockTrxEntry.inventory.quantity"
+                                   decimalDigitsDirective [DecimalPlaces]="2"
                                    (input)="vm.inventoryQuantityChanged($event.target.value)"/>
                           </td>
                           <td>
@@ -275,7 +278,8 @@
                   <ng-template [ngIf]="vm.stockTrxEntry">
                     <td>
                       <label>Price</label>
-                      <input type="number" name="" (input)="vm.inventoryPriceChanged($event.target.value)"
+                      <input type="text" name="" (input)="vm.inventoryPriceChanged($event.target.value)"
+                             decimalDigitsDirective [DecimalPlaces]="2"
                              [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control"/>
                     </td>
                   </ng-template>
@@ -286,6 +290,7 @@
                   <td>
                     <label class="primary_color">Amount</label>
                     <input type="text" name="" class="form-control"
+                           decimalDigitsDirective [DecimalPlaces]="2"
                            (input)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"
                     />
                   </td>

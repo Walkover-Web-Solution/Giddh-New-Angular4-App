@@ -95,7 +95,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         Observable.combineLatest(this.flattenAccountListStream$, this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName), this.activeAccount$)
           .subscribe((resp: any[]) => {
             if (resp[0] && resp[1].status === 'success' && resp[2]) {
-            //#region flattern group list assign process
+              //#region flattern group list assign process
               this.vm.flatternAccountList = _.cloneDeep(resp[0]);
               let accountDetails: AccountResponse = resp[2];
               let parentOfAccount = accountDetails.parentGroups[0];
@@ -207,6 +207,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public addBlankTrx(type: string = 'DEBIT', txn: ILedgerTransactionItem, event: Event) {
+    if (Number(txn.amount) === 0) {
+      txn.amount = undefined;
+    }
     let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
     if (txn.particular.uniqueName && lastTxn.particular.uniqueName) {
       this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem(type));
