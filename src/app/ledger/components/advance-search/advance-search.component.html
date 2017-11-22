@@ -43,11 +43,11 @@
           </div>
           <div class="col-xs-7">
             <div class="btn-group">
-              <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="true">All</label>
-              <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="true">Include</label>
-              <label class="btn btn-success" formControlName="includeParticulars" name="includeParticulars" btnRadio="false">Exclude</label>
+              <label class="btn btn-success" [class.active]="includeParticularsState == 'all'" (click)="onButtonGroupClick('particulars', 'all')">All</label>
+              <label class="btn btn-success" [class.active]="includeParticularsState == 'include'" (click)="onButtonGroupClick('particulars', 'include')">Include</label>
+              <label class="btn btn-success" [class.active]="includeParticularsState == 'exclude'" (click)="onButtonGroupClick('particulars', 'exclude')">Exclude</label>
             </div>
-            <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT1">
+            <div *ngIf="includeParticularsState!=='all'" class="mrT1">
                 <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true"
                 [placeholder]="'Select Accounts'"></sh-select>
             </div>
