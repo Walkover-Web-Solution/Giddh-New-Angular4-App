@@ -22,6 +22,11 @@ export class TaxControlData {
 @Component({
   selector: 'tax-control',
   templateUrl: 'tax-control.component.html',
+  styles: [`
+    .form-control[readonly] {
+      background: inherit !important;
+    }
+  `],
   providers: [TAX_CONTROL_VALUE_ACCESSOR]
 })
 export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
