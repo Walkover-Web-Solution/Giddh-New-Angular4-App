@@ -32,7 +32,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public selectedUser: ShareRequestForm;
   public allRoles = [
     { name: 'Admin', uniqueName: 'admin' },
-    { name: 'view', uniqueName: 'view_only' },
+    { name: 'View only', uniqueName: 'view_only' },
     { name: 'Super Admin', uniqueName: 'super_admin' },
     { name: 'Edit', uniqueName: 'edit' }
   ];
@@ -62,7 +62,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
-        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userName');
+        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userUniqueName');
         let arr = [];
         _.forIn(sortedArr, (value, key) => {
           arr.push({ name: key, rows: value });
@@ -137,7 +137,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         this._permissionService.GetCompanySharedWith().subscribe(sharedWith => {
           if (sharedWith.status === 'success') {
             let sharedWithData = _.cloneDeep(sharedWith.body);
-            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userName');
+            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userUniqueName');
             let arr = [];
             _.forIn(sortedArr, (value, key) => {
               arr.push({ name: key, rows: value });
@@ -160,7 +160,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         this._permissionService.GetCompanySharedWith().subscribe(sharedWith => {
           if (sharedWith.status === 'success') {
             let sharedWithData = _.cloneDeep(sharedWith.body);
-            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userName');
+            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userUniqueName');
             let arr = [];
             _.forIn(sortedArr, (value, key) => {
               arr.push({ name: key, rows: value });
