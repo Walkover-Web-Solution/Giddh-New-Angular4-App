@@ -133,8 +133,14 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     }
 
     let d = this.calculateDimensions();
-    this.element.nativeElement.scrollTop = Math.floor(index / d.itemsPerRow) *
-      d.childHeight - Math.max(0, (d.itemsPerCol - 1)) * d.childHeight;
+    if ((index + 1) < d.itemsPerCol) {
+      this.element.nativeElement.scrollTop = 0;
+    } else if (((this.items || []).length - d.itemsPerCol) > 0 && ((this.items || []).length - d.itemsPerCol) < index) {
+      this.element.nativeElement.scrollTop = Math.floor(((this.items || []).length - d.itemsPerCol) / d.itemsPerRow) * d.childHeight;
+    } else {
+      this.element.nativeElement.scrollTop = Math.floor(index / d.itemsPerRow) * d.childHeight;
+    }
+
     this.items.forEach(p => p.isHilighted = false);
     item.isHilighted = true;
     this.refresh();
@@ -231,18 +237,23 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     if (this.element.nativeElement.scrollTop > this.scrollHeight) {
       this.element.nativeElement.scrollTop = this.scrollHeight;
     }
-
+    // (8 / 1) * 10 = 80
     let indexByScrollTop = el.scrollTop / this.scrollHeight * d.itemCount / d.itemsPerRow;
+    // Math.min(1000,Math.ceil(85)
+    // so end is 85
     let end = Math.min(d.itemCount, Math.ceil(indexByScrollTop) * d.itemsPerRow + d.itemsPerRow * (d.itemsPerCol + 1));
 
     let maxStartEnd = end;
+    // modEnd = 0
     const modEnd = end % d.itemsPerRow;
     if (modEnd) {
       maxStartEnd = end + d.itemsPerRow - modEnd;
     }
+    // maxStart = Math.max(0,85 - 5) = 80
     let maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
+    // start = Math.min(80,Math.floor(80)) = 80
     let start = Math.min(maxStart, Math.floor(indexByScrollTop) * d.itemsPerRow);
-
+    // 10 * Math.ceil(80) = 800
     this.topPadding = d.childHeight * Math.ceil(start / d.itemsPerRow);
     if (start !== this.previousStart || end !== this.previousEnd) {
 
@@ -274,19 +285,6 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       this.update.emit(items.slice(start, end));
       this.startupLoop = false;
       this.refresh();
-    } else {
-      // debugger;
-      if (this.items.length - start > 3 && start > 5) {
-        if (this.items.length - start > 3) {
-          end = end + 3;
-        }
-        start = start + 3;
-        if (this.items.length < end) {
-          start = start - 3;
-          end = end - 3;
-        }
-      }
-      this.update.emit(items.slice(start, end));
     }
   }
 }
