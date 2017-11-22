@@ -51,8 +51,7 @@
                             <div class="form-group">
                                 <label for="">Party Type *</label>
                                 <div class="custom-select pos-rel">
-                                    <sh-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)"
-                                               formControlName="partyType" [isFilterEnabled]="true"></sh-select>
+                                    <sh-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -209,10 +208,10 @@
         </ng-container>
 
         <!-- submit and clear buttons -->
-        <div class="row mrT3">
+        <div class="row mrT">
             <div class="form-group col-xs-12 text-right">
-                <button type="button" class="btn del-btn" (click)="deleteClicked.emit(true)">Delete</button>
-                <button type="submit" class="btn upd-btn" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update</button>
+                <button type="button" class="btn btn-danger" (click)="deleteClicked.emit(true)">Delete</button>
+                <button type="submit" class="btn btn-primary" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update</button>
             </div>
         </div>
     </form>
