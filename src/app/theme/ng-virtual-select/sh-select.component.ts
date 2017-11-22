@@ -177,7 +177,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }, 0);
   }
 
-  public show() {
+  public show(e: Event) {
+
     if (this.isOpen || this.disabled) {
       return;
     }
@@ -308,6 +309,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public clearSingleSelection(event, option: IOption) {
+    // debugger;
     event.stopPropagation();
     this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
     this.onChange();

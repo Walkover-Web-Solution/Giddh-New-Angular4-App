@@ -4062,3 +4062,30 @@ input[type="number"] {
 .taxInput {
     padding-right: 25px !important;
 }
+
+.btn-link {
+    color: #10aae0;
+}
+
+typeahead-container .dropdown-menu li.active>a,
+typeahead-container .dropdown-menu li:hover>a,
+typeahead-container .dropdown-menu>.active>a:hover,
+typeahead-container .dropdown-menu li.active>a>a:hover {
+    background-color: rgb(244, 245, 248);
+    color: rgb(210, 95, 42);
+}
+
+typeahead-container .dropdown-menu li.active>a>a {
+    color: rgb(210, 95, 42);
+}
+
+
+/* .item.selected {
+    background-color: rgb(244, 245, 248);
+    color: rgb(210, 95, 42);
+}
+
+.item.hilighted {
+    background-color: rgb(244, 245, 248);
+    color: rgb(210, 95, 42);
+} */
