@@ -11,7 +11,7 @@
     </div>
     <div class="clearfix mrT1">
       <label>Account Name</label>
-      <input class="form-control" required name="account" type="text" formControlName="name"
+      <input class="form-control" required name="account" (blur)="generateUniqueName();" type="text" formControlName="name"
              placeholder="Enter Account Name">
     </div>
     <div class="clearfix mrT1 pdR2 pos-rel">
