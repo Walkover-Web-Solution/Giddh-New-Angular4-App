@@ -321,6 +321,12 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
     this.moreGstDetailsVisible = true;
   }
 
+  public openingBalanceClick() {
+    if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
+      this.addAccountForm.get('openingBalance').setValue(undefined);
+    }
+  }
+
   public openingBalanceTypeChnaged(type: string) {
     if (this.addAccountForm.get('openingBalance').value > 0) {
       this.addAccountForm.get('openingBalanceType').patchValue(type);

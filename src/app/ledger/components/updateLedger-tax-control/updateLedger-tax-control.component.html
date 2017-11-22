@@ -2,7 +2,7 @@
   <label *ngIf="showHeading">Tax %</label>
   <a id="tax" (click)="showTaxPopup = !showTaxPopup" class="clearfix">
     <div class="multi-select adjust">
-      <input type="number" readonly name="" class="form-control cursor-pointer" [(ngModel)]="sum" disabled/>
+      <input type="text" decimalDigitsDirective [DecimalPlaces]="2" readonly name="" class="form-control cursor-pointer" [(ngModel)]="sum" disabled/>
       <span class="caret"></span>
     </div>
   </a>
