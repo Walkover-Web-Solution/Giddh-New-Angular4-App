@@ -68,7 +68,7 @@
                                 <a href="javascript:void(0);" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">Show Less </a>
                             </div>
                             <div class="row" *ngIf="l">
-                                <a class="text-right col-xs-12" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                                <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
                                     <i class="fa fa-plus"></i> Add More GSTIN
                                 </a>
                             </div>
@@ -117,6 +117,7 @@
             </div>
         </div>
 
+
         <!-- other details container -->
         <ng-container *ngIf="showOtherDetails">
             <!-- attention to -->
@@ -132,7 +133,7 @@
                 <div class="form-group col-xs-5">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
-                        <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
+                        <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00">
                         <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
