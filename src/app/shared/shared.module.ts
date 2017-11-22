@@ -30,6 +30,7 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
+import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -75,7 +76,8 @@ export function provideConfig() {
     LaddaModule,
     ElementViewChildModule,
     DisableFormFieldModule,
-    ShSelectModule
+    ShSelectModule,
+    DecimalDigitsModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
