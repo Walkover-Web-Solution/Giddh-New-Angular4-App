@@ -150,6 +150,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           let stockUniqueName = '';
           let unitArray = [];
 
+          //#region unit rates logic
           if (fa.additional && fa.additional.stock) {
             let defaultUnit = {
               stockUnitCode: fa.additional.stock.stockUnit.name,
@@ -199,7 +200,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           if (rate > 0 && txn.amount === 0) {
             txn.amount = rate;
           }
-
+          //#endregion
           // reset taxes and discount on selected account change
           txn.tax = 0;
           txn.taxes = [];
