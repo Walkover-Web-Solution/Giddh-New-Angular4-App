@@ -117,33 +117,41 @@
             </div>
         </div>
 
-    <!-- other details container -->
-    <ng-container *ngIf="showOtherDetails">
-      <!-- attention to -->
-      <div class="row" *ngIf="isGstEnabledAcc">
-        <div class="form-group col-xs-12">
-          <label for="">Attention to (will be used in Invoice)</label>
-          <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
-        </div>
-      </div>
 
-      <!-- opening Balance -->
-      <div class="row">
-        <div class="form-group col-xs-5">
-          <label for="">Opening Balance</label>
-          <div class="input-group">
-            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00">
-            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+        <!-- other details container -->
+        <ng-container *ngIf="showOtherDetails">
+            <!-- attention to -->
+            <div class="row" *ngIf="isGstEnabledAcc">
+                <div class="form-group col-xs-12">
+                    <label for="">Attention to (will be used in Invoice)</label>
+                    <input type="text" class="form-control" formControlName="attentionTo" name="attention" />
+                </div>
+            </div>
+
+            <!-- opening Balance -->
+            <div class="row">
+                <div class="form-group" [ngClass]="{'col-xs-4':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
+                    <label for="">Unique Name</label>
+                    <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
+                </div>
+                <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
+                    <div class="" [ngClass]="{'row':!isMultipleCurrency}">
+                        <label for="">Opening Balance</label>
+                        <div class="input-group">
+                            <input type="number" min="0" class="form-control text-right" (click)="openingBalanceClick()" decimalDigitsDirective [DecimalPlaces]="2" formControlName="openingBalance" placeholder="00.00">
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
-                        </div>
-                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                            </div>
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT' && addAccountForm.get('openingBalance').value > 0,
                   'cp': addAccountForm.get('openingBalance').value > 0}">CR.
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-xs-3 pdL0">
+                <div class="form-group" [ngClass]="{'col-xs-3':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
+
                     <label class="d-block" *ngIf="isMultipleCurrency">Currency
             <small *ngIf="isMultipleCurrency">(Company)</small>
           </label>
@@ -151,14 +159,10 @@
             <i class="fa fa-info-circle" aria-hidden="true"></i> Currency</label>
                     <input type="text" class="form-control" [value]="companyCurrency" disabled name="baseCurrency" />
                 </div>
-                <div class="form-group col-xs-4">
-                    <label for="">Unique Name</label>
-                    <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
-                </div>
             </div>
 
             <div class="row" *ngIf="isMultipleCurrency">
-                <div class="form-group col-xs-5">
+                <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
                         <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id="" placeholder="00.00">
@@ -172,13 +176,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-xs-3 pdL0">
+                <div class="form-group col-xs-6">
                     <label for="">Currency
             <small *ngIf="isMultipleCurrency">(Account)</small>
           </label>
                     <input type="text" class="form-control" formControlName="currency" name="currency" />
-                </div>
-                <div class="form-group col-xs-6">
                 </div>
             </div>
 
