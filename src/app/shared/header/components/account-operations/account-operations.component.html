@@ -144,12 +144,12 @@
 
         <div class="col-xs-12 form-group" *ngIf="showDeleteMove">
             <label class="d-block">Move to other A/c</label>
-            <div class="input-group">
-                <sh-select [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false" [(ngModel)]="selectedAccountForMove" [placeholder]="'Select Accounts'" style="width: calc(100% - 26px);"></sh-select>
-                <span class="input-group-btn">
-                  <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
-                </span>
-            </div>
+            <span>
+                <sh-select class="pull-left" [options]="accounts$ | async" (viewInitEvent)="loadAccountData()" [multiple]="false" [(ngModel)]="selectedAccountForMove" [placeholder]="'Select Accounts'" style="width: calc(100% - 93px);"></sh-select>
+            </span>
+            <span class="pull-right">
+                <button class="btn btn-primary" (click)="showMoveMergedAccountModal()">Move</button>
+              </span>
         </div>
 
 
@@ -280,7 +280,6 @@
         </div>
     </div>
 </div>
-
 <!--moveMergedAccount account modal  -->
 <div bsModal #moveMergedAccountModal="bs-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -293,12 +292,11 @@
 
 <!--delete Account modal  -->
 <div bsModal #deleteAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Account'" [body]="'Are you sure you want to delete this Account?'" (cancelCallBack)="hideDeleteAccountModal()" (successCallBack)="deleteAccount()">
             </confirm-modal>
         </div>
     </div>
 </div>
-
 <!-- modals -->
