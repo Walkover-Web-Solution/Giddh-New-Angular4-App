@@ -90,8 +90,9 @@ body {
     -moz-osx-font-smoothing: grayscale;
     font-size: 14px;
 }
-body.fixed{
-  overflow: hidden !important;
+
+body.fixed {
+    overflow: hidden !important;
 }
 
 input[type=number]::-webkit-inner-spin-button,
@@ -179,14 +180,23 @@ a {
     font-size: 100%;
 }
 
+
 /*.h1,h1{font-size:36px}.h2,h2{font-size:30px}.h3,h3{font-size:24px}.h4,h4{font-size:18px}.h5,h5{font-size:14px}.h6,h6{font-size:12px}*/
+
+
 /*typography*/
+
+
 /*.bold,.cName,.fw600,.dshUl li .title, .dGryHead, .page-title, .total, .stock-grp-list>li>a, label.boldHead, .table-l tr:last-child, .table-container > section > div.row > div:first-child,.account-card > .balances > span.title, .gTblHead, .gTblFoot, .table.invGenTbl > tfoot > tr > th.bold,.widget-text h1, .widget-text h2,.widget-text h3,.widget-text h4,.widget-text h5,.widget-text h6, .a4-section span.bold,.a4-section span.bold span,.ledger-container table th,.midlight_info,.tcount,.subAccBox li a, .load-more, .company-name, .basic>thead>tr>th {
   font-family: Roboto-Bold;
 } */
+
+
 /*.angular-ui-tree-handle p, .select-accounts > label, .move-account > label, .stock-items>li>a,.total-ico, #inventory-sidebar, #inventory-sidebar input,.no-data h1,.email-type li label {
   font-family: Roboto-Light;
 }*/
+
+
 /*.tcount {
   font-family: Roboto-Thin;
 }*/
@@ -264,10 +274,12 @@ header .navbar-nav>li.active {
     z-index: 3;
 }
 
+
 /* aside menu component */
-aside-menu-account .container-fluid{
-  padding-left: 0;
-  padding-right: 0;
+
+aside-menu-account .container-fluid {
+    padding-left: 0;
+    padding-right: 0;
 }
 
 
@@ -321,8 +333,14 @@ aside-menu-account .container-fluid{
 
 
 /* override bootstrap */
-.pagination>.active>a, .pagination>.active>a:focus, .pagination>.active>a:hover, .pagination>.active>span, .pagination>.active>span:focus, .pagination>.active>span:hover{
-  z-index: 1;
+
+.pagination>.active>a,
+.pagination>.active>a:focus,
+.pagination>.active>a:hover,
+.pagination>.active>span,
+.pagination>.active>span:focus,
+.pagination>.active>span:hover {
+    z-index: 1;
 }
 
 
@@ -643,7 +661,10 @@ aside-menu-account .container-fluid{
 .mrB1 {
     margin-bottom: 10px;
 }
-.mrB15{margin-bottom: 15px;}
+
+.mrB15 {
+    margin-bottom: 15px;
+}
 
 .mrL1 {
     margin-left: 10px;
@@ -3484,18 +3505,6 @@ ul.pills li {
 
 /* tax section on manage groups and accounts*/
 
-.tax-bullet {
-    display: block;
-    float: left;
-    background: #444;
-    padding: 2px 5px;
-    margin-right: 5px;
-    margin-top: 10px;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .tax-list-wrap {
     display: block;
     clear: both;
@@ -3512,8 +3521,7 @@ ul.pills li {
 }
 
 .tax-label {
-    border-bottom: 1px solid #e0e0e0;
-    padding-bottom: 5px;
+    color: #666666;
 }
 
 .download-invoice-ledger {
@@ -3549,12 +3557,12 @@ ul.pills li {
 }
 
 .pos-abs {
-  position: absolute;
+    position: absolute;
 }
 
 .wthPos {
-  left: 10px;
-  right: 20px;
+    left: 10px;
+    right: 20px;
 }
 
 .verified {
@@ -4498,6 +4506,7 @@ table.proforma-particulars {
     width: 8.5in;
 }
 
+
 /* #intercom-container .intercom-launcher-frame {
     left: 20px !important;
 }
@@ -4851,15 +4860,15 @@ table.proforma-particulars {
 }
 
 .map-txn-container {
-  position: absolute;
-  z-index: 99;
-  background: #fff;
-  left: 160px;
-  right: 18px;
-  top: -6px;
-  max-height: 100px;
-  overflow-y: auto;
-  box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.5);
+    position: absolute;
+    z-index: 99;
+    background: #fff;
+    left: 160px;
+    right: 18px;
+    top: -6px;
+    max-height: 100px;
+    overflow-y: auto;
+    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .rotate180 {
@@ -5108,3 +5117,4 @@ strong {
 bs-daterangepicker-container, bs-datepicker-container {
     z-index: 1600;
 }
+
