@@ -438,7 +438,6 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
         let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
         if (updatedAccount.status === 'success') {
           let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-          let result = false;
           UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
           return Object.assign({}, state, {
             activeAccount: action.payload.body,
@@ -479,17 +478,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       let d: BaseResponse<string, string> = action.payload;
       if (d.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        // debugger;
         removeAccountFunc(groupArray, state.activeGroup.uniqueName, d.request, null);
-        // for (let grp of groupArray) {
-        //   if (grp.uniqueName === state.activeGroup.uniqueName) {
-        //     let index = grp.accounts.findIndex(a => a.uniqueName === d.request);
-        //     grp.accounts.splice(index, 1);
-        //     break;
-        //   } else {
-
-        //   }
-        // }
         return Object.assign({}, state, {
           groupswithaccounts: groupArray
         });
@@ -696,9 +685,6 @@ const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, resu
   }
 };
 const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
-  if (result !== null) {
-    return result;
-  }
   for (let grp of groups) {
     if (grp.uniqueName === uniqueName) {
       let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
@@ -762,7 +748,6 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
   for (let grp of groups) {
     if (grp.uniqueName === grpUniqueName) {
       grp.isOpen = true;
-      debugger;
       grp.accounts.push(
         {
           uniqueName: aData.uniqueName,
