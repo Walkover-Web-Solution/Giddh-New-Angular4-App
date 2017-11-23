@@ -125,7 +125,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       this.togglePeriodOptionsVal(PAST_PERIOD);
       return [PAST_PERIOD];
     }
-    return [DATE_RANGE];
+    return [null];
   }
 
   public getIPOptsFromData(data: ShareRequestForm) {
