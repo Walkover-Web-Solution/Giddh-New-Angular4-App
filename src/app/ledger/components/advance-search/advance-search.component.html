@@ -40,14 +40,18 @@
             </p>
           </div>
           <div class="col-xs-7">
-            <div class="btn-group">
-              <label class="btn btn-success" [class.active]="includeParticularsState == 'all'" (click)="onButtonGroupClick('particulars', 'all')">All</label>
-              <label class="btn btn-success" [class.active]="includeParticularsState == 'include'" (click)="onButtonGroupClick('particulars', 'include')">Include</label>
-              <label class="btn btn-success" [class.active]="includeParticularsState == 'exclude'" (click)="onButtonGroupClick('particulars', 'exclude')">Exclude</label>
-            </div>
-            <div *ngIf="includeParticularsState!=='all'" class="mrT1">
-                <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true"
-                [placeholder]="'Select Accounts'"></sh-select>
+            <div class="row">
+              <div class="col-xs-3">
+                  <div class="checkbox">
+                      <label>
+                          <input type="checkbox" formControlName="includeParticulars"> <span *ngIf="advanceSearchForm.get('includeParticulars').value">Include</span> <span *ngIf="!advanceSearchForm.get('includeParticulars').value">Exclude</span>
+                      </label>
+                  </div>
+              </div>
+              <div class="col-xs-9">
+                  <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('particulars')" (selected)="onDDElementSelect('particulars', $event)" [isFilterEnabled]="true" [multiple]="true"
+                  [placeholder]="'Select Accounts'"></sh-select>
+              </div>
             </div>
           </div>
         </div>
@@ -60,14 +64,18 @@
             </p>
           </div>
           <div class="col-xs-7">
-            <div class="btn-group">
-              <label class="btn btn-success" formControlName="isInvoiceGenerated" name="left" btnRadio="all">All</label>
-              <label class="btn btn-success" formControlName="isInvoiceGenerated" name="middle" btnRadio="include">Include</label>
-              <label class="btn btn-success" formControlName="isInvoiceGenerated" name="right" btnRadio="exclude">Exclude</label>
-            </div>
-            <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT1">
-              <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true"
-              [placeholder]="'Select Accounts'"></sh-select>
+            <div class="row">
+              <div class="col-xs-3">
+                  <div class="checkbox">
+                      <label>
+                          <input type="checkbox" formControlName="includeVouchers"> <span *ngIf="advanceSearchForm.get('includeVouchers').value">Include</span> <span *ngIf="!advanceSearchForm.get('includeVouchers').value">Exclude</span>
+                      </label>
+                  </div>
+              </div>
+              <div class="col-xs-9">
+                  <sh-select [options]="voucherTypeList | async" name="particulars" (onClear)="onDDClear('vouchers')" (selected)="onDDElementSelect('vouchers', $event)" [isFilterEnabled]="true" [multiple]="true"
+                  [placeholder]="'Select Accounts'"></sh-select>
+              </div>
             </div>
           </div>
         </div>
@@ -78,65 +86,60 @@
           <div class="col-xs-7">
             <div class="row">
               <div class="col-xs-6">
-                <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
+                <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('amount', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars"
                 [placeholder]="'Select Range'"></sh-select>
               </div>
               <div class="col-xs-6">
-                <input type="text" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
+                <input type="text" decimalDigitsDirective [DecimalPlaces]="2" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
               </div>
             </div>
           </div>
-          <!-- <div class="col-xs-7">
-            <div class="input-group">
-              <div class="input-group-btn">
-                <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
-                [placeholder]="'Select Range'"></sh-select>
-              </div>
-              <input type="text" formControlName="amount" class="form-control" aria-label="Text input with dropdown button">
-            </div>
-          </div> -->
         </div>
 
         <div class="col-xs-12 mrT2">
           <div class="form-group toggle-btn mrB">
-            <label class="cp" (click)="showOtherDetails = !showOtherDetails">
+            <label class="cp" (click)="toggleOtherDetails()">
               <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showOtherDetails, 'fa-plus-square-o': !showOtherDetails}"></i>Other Details
             </label>
           </div>
         </div>
 
         <!-- other details container -->
-        <ng-container *ngIf="showOtherDetails">
+        <ng-container *ngIf="advanceSearchForm.get('includeDescription').value">
           <div class="col-xs-12 mrT2">
             <div class="col-xs-5">
               <label for="">Inventory</label>
             </div>
             <div class="col-xs-7" formGroupName="inventory">
-              <div class="btn-group">
-                <label class="btn btn-success" formControlName="includeInventory" name="left" btnRadio="true">All</label>
-                <label class="btn btn-success" formControlName="includeInventory" name="middle" btnRadio="true">Include</label>
-                <label class="btn btn-success" formControlName="includeInventory" name="right" btnRadio="false">Exclude</label>
-              </div>
-              <div *ngIf="advanceSearchForm.get('isInvoiceGenerated').value!=='all'" class="mrT2">
-                  <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true"
-                  [placeholder]="'Select Accounts'"></sh-select>
-              </div>
-              <div class="row mrT2">
-                <div class="col-xs-6">
-                  <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
-                  [placeholder]="'Select Range'"></sh-select>
+              <div class="row">
+                <div class="col-xs-3">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" formControlName="includeInventory"> <span *ngIf="advanceSearchForm.get('inventory.includeInventory').value">Include</span> <span *ngIf="!advanceSearchForm.get('inventory.includeInventory').value">Exclude</span>
+                        </label>
+                    </div>
                 </div>
-                <div class="col-xs-6">
-                  <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                <div class="col-xs-9">
+                    <sh-select [options]="stockListDropDown$ | async" name="inventory" (onClear)="onDDClear('inventory')" (selected)="onDDElementSelect('inventory', $event)" [isFilterEnabled]="true" [multiple]="true"
+                    [placeholder]="'Select Accounts'"></sh-select>
                 </div>
               </div>
               <div class="row mrT2">
                 <div class="col-xs-6">
-                  <sh-select [showClear]="false" [width]="'100%'" [options]="comparisonFilterDropDown$ | async" name="particulars"
+                  <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryQty', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars"
                   [placeholder]="'Select Range'"></sh-select>
                 </div>
                 <div class="col-xs-6">
-                  <input type="text" class="form-control" aria-label="Text input with dropdown button">
+                  <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" formControlName="quantity" placeholder="Quantity">
+                </div>
+              </div>
+              <div class="row mrT2">
+                <div class="col-xs-6">
+                  <sh-select [showClear]="false" [width]="'100%'" (selected)="onRangeSelect('inventoryVal', $event)" [options]="comparisonFilterDropDown$ | async" name="particulars"
+                  [placeholder]="'Select Range'"></sh-select>
+                </div>
+                <div class="col-xs-6">
+                  <input type="text" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" formControlName="itemValue" placeholder="Value">
                 </div>
               </div>
             </div>
@@ -150,19 +153,19 @@
                   <input type="text" placeholder="Cheque Number" formControlName="chequeNumber" class="form-control">
                 </div>
                 <div class="col-xs-6">
-                  <input type="text" placeholder="Date on Cheque" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
+                  <input type="text" placeholder="Clearance Date" name="from" formControlName="dateOnCheque" bsDatepicker class="form-control" [bsConfig]="bsConfig" />
                 </div>
               </div>
             </div>
 
-            <div class="col-xs-5 mrT2">
+            <!-- <div class="col-xs-5 mrT2">
               <label for="">Tag</label>
             </div>
             <div class="col-xs-7 mrT2">
               <div class="form-group">
                 <input type="text" placeholder="Tag" class="form-control">
               </div>
-            </div>
+            </div> -->
 
             <div class="col-xs-5 mrT2">
               <label for="">Description</label>
@@ -179,7 +182,7 @@
           <div class="col-xs-8"></div>
           <div class="col-xs-4 text-right">
             <button class="btn btn-success" type="button" (click)="onSearch()">Search</button>
-            <button class="btn isActive" type="button" >Search & Export</button>
+            <!-- <button class="btn isActive" type="button" >Search & Export</button> -->
           </div>
         </div>
       </div>
