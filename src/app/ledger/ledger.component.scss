@@ -12,7 +12,7 @@ input {
     color: #4d4d4d;
     max-width: 0;
     text-overflow: ellipsis;
-    overflow: hidden;
+    // overflow: hidden;
     white-space: nowrap;
 }
 
@@ -29,7 +29,7 @@ input {
     color: #4d4d4d;
     max-width: 0;
     text-overflow: ellipsis;
-    overflow: hidden;
+    // overflow: hidden;
     white-space: nowrap;
 }
 
@@ -65,7 +65,7 @@ table td[class*=col-]:last-child {
 
 .ledger-stat {
     padding: 50px 0;
-    background: #f7f7f7;
+    background: #fff;
     color: #808080;
     font-size: 18px;
     margin: 100px 0;
@@ -177,9 +177,11 @@ table td[class*=col-]:last-child {
 .ledger_book {
     border: 1px solid #ccc;
     clear: both;
-    overflow: hidden;
+    // overflow: hidden;
     position: relative;
     background: #fff;
+    float: left;
+    width: 100%;
 }
 
 .Width600 {

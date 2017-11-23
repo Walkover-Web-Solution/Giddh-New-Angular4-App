@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
@@ -15,6 +15,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
+  @Input() public path: string[] = [];
   public activeGroupUniqueName$: Observable<string>;
   public groupDetailForm: FormGroup;
   public fetchingGrpUniqueName$: Observable<boolean>;
@@ -80,7 +81,8 @@ export class GroupAddComponent implements OnInit, OnDestroy {
     grpObject = this.groupDetailForm.value as GroupCreateRequest;
     grpObject.uniqueName = grpObject.uniqueName;
     grpObject.parentGroupUniqueName = activeGrpUniqueName;
-
+    grpObject.path = this.path;
+    // add bredcrum to payload
     this.store.dispatch(this.groupWithAccountsAction.createGroup(grpObject));
   }
 

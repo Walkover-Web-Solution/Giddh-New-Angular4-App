@@ -1,28 +1,25 @@
-import { CompanyAddComponent } from './components/company-add/company-add.component';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import {
-  AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit,
-  ViewChild,
-  ViewChildren
-} from '@angular/core';
+import { CompanyAddComponent } from './components';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 import { LoginActions } from '../../services/actions/login.action';
 import { CompanyActions } from '../../services/actions/company.actions';
-import { CompanyResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
 import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { ElementViewContainerRef } from '../helpers/directives/element.viewchild.directive';
-import { ManageGroupsAccountsComponent } from './components/new-manage-groups-accounts/manage-groups-accounts.component';
+import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
+import { ManageGroupsAccountsComponent } from './components';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
+import { GeneralActions } from '../../services/actions/general/general.actions';
+import { createSelector } from 'reselect';
 
 @Component({
   selector: 'app-header',
@@ -30,7 +27,7 @@ import { userLoginStateEnum } from '../../store/authentication/authentication.re
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
-  public userIsSuperUser: boolean = false; // Protect permission module
+  public userIsSuperUser: boolean = true; // Protect permission module
   public session$: Observable<userLoginStateEnum>;
   public accountSearchValue: string = '';
   public accountSearchControl: FormControl = new FormControl();
@@ -80,47 +77,43 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private componentFactoryResolver: ComponentFactoryResolver,
     private cdRef: ChangeDetectorRef,
     private zone: NgZone,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private _generalActions: GeneralActions) {
 
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
-    this.user$ = this.store.select(state => {
-      if (state.session.user) {
-        return state.session.user.user;
+    this.user$ = this.store.select(createSelector([(state: AppState) => state.session.user], (user) => {
+      if (user) {
+        return user.user;
       }
-    }).takeUntil(this.destroyed$);
+    })).takeUntil(this.destroyed$);
 
-    this.isCompanyRefreshInProcess$ = this.store.select(state => {
-      return state.session.isRefreshing;
-    }).takeUntil(this.destroyed$);
+    this.isCompanyRefreshInProcess$ = this.store.select(state => state.session.isRefreshing).takeUntil(this.destroyed$);
 
     this.isCompanyCreationSuccess$ = this.store.select(p => p.session.isCompanyCreationSuccess).takeUntil(this.destroyed$);
-    this.companies$ = this.store.select(state => {
-      if (state.session.companies && state.session.companies.length) {
-        return _.orderBy(state.session.companies, 'name');
+    this.companies$ = this.store.select(createSelector([(state: AppState) => state.session.companies], (companies) => {
+      if (companies && companies.length) {
+        return _.orderBy(companies, 'name');
       }
-    }).takeUntil(this.destroyed$);
-
-    this.selectedCompany = this.store.select(state => {
-      if (!state.session.companies) {
+    })).takeUntil(this.destroyed$);
+    this.selectedCompany = this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
+      if (!companies) {
         return;
       }
 
-      let selectedCmp = state.session.companies.find(cmp => {
-        return cmp.uniqueName === state.session.companyUniqueName;
+      let selectedCmp = companies.find(cmp => {
+        if (cmp && cmp.uniqueName) {
+          return cmp.uniqueName === uniqueName;
+        } else {
+          return false;
+        }
       });
       if (!selectedCmp) {
         return;
       }
-      if (selectedCmp.uniqueName === state.session.companyUniqueName && selectedCmp.role.uniqueName === 'super_admin') {
-        this.userIsSuperUser = true;
-      } else {
-        this.userIsSuperUser = false;
-      }
       this.selectedCompanyCountry = selectedCmp.country;
       return selectedCmp;
-
-    }).takeUntil(this.destroyed$);
+    })).takeUntil(this.destroyed$);
     this.session$ = this.store.select(p => p.session.userLoginState).distinctUntilChanged().takeUntil(this.destroyed$);
   }
 
@@ -160,6 +153,16 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.dispatch(this.loginAction.SetLoginStatus(userLoginStateEnum.userLoggedIn));
       }
     });
+    window.addEventListener('keyup', (e: KeyboardEvent) => {
+      if (e.keyCode === 27) {
+        if (this.sideMenu.isopen) {
+          this.sideMenu.isopen = false;
+        }
+        if (this.manageGroupsAccountsModal.isShown) {
+          this.hideManageGroupsModal();
+        }
+      }
+    });
   }
 
   public ngAfterViewInit() {
@@ -170,6 +173,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // this.router.navigate(['/pages/dummy'], { skipLocationChange: true }).then(() => {
         this.router.navigate(['/new-user']);
         // });
+      } else {
+        // get groups with accounts for general use
+        this.store.dispatch(this._generalActions.getGroupWithAccounts());
+        this.store.dispatch(this._generalActions.getAllState());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -215,6 +222,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
   public changeCompany(selectedCompanyUniqueName: string) {
     this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
+    // get groups with accounts for general use
+    this.store.dispatch(this._generalActions.getGroupWithAccounts());
     // }
   }
 
@@ -285,6 +294,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     let componentRef = viewContainerRef.createComponent(componentFactory);
     (componentRef.instance as ManageGroupsAccountsComponent).closeEvent.subscribe((a) => {
       this.hideManageGroupsModal();
+      viewContainerRef.remove();
     });
     this.manageGroupsAccountsModal.onShown.subscribe((a => {
       (componentRef.instance as ManageGroupsAccountsComponent).headerRect = (componentRef.instance as ManageGroupsAccountsComponent).header.nativeElement.getBoundingClientRect();
@@ -296,8 +306,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.dispatch(this.flyAccountActions.GetflatAccountWGroups(q));
   }
 
+  public sideBarStateChange(event: boolean) {
+    this.sideMenu.isopen = event;
+  }
+
   public closeSidebar(targetId) {
-    if (targetId === 'accountSearch' || targetId === 'expandAllGroups') {
+    if (targetId === 'accountSearch' || targetId === 'expandAllGroups' || targetId === 'toggleAccounts') {
       return;
     }
     this.flyAccounts.next(false);

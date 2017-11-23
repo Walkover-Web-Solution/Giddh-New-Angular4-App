@@ -34,8 +34,8 @@
                 <form #addForm="ngForm" class="mrT mrB1" name="mobileForm" novalidate>
                   <div class="input-group phoneNum">
                                         <span class="input-group-addon select2-parent">
-                                            <ng-select [options]="countryCodeList" name="country"
-                                                       [(ngModel)]="country" (selected)="setCountryCode($event)"></ng-select>
+                                            <sh-select [options]="countryCodeList" name="country"
+                                                       [(ngModel)]="country" (selected)="setCountryCode($event)"></sh-select>
                                         </span>
                     <input class="form-control max350 pull-left mrR1" required="true" placeholder="9998899988"
                            [(ngModel)]="phoneNumber" name="phoneNumber"/>
@@ -76,10 +76,14 @@
                          pattern="[a-zA-Z0-9^ ]{5,100}">
                 </div>
                 <div class="form-group">
-                  <input #city="ngModel" (typeaheadOnSelect)="typeaheadOnSelect($event)" [typeahead]="dataSource"
-                         type="text" [ngClass]="{'hasError': city.invalid, 'has-success':city.valid}"
+                  <input [ngbTypeahead]="dataSource"
+                         type="text" [resultTemplate]="rt" (selectItem)="typeaheadOnSelect($event)"
                          [(ngModel)]="company.city" class="form-control" name="city" autocomplete="off"
                          required maxlength="50" placeholder="Company City" pattern="^[^\s]+(\s+[^\s]+)*$">
+
+                         <ng-template #rt let-r="result" let-t="term">
+                            <span>{{ r }}</span>
+                          </ng-template>
                 </div>
                 <div class="modal-footer">
                   <button class="btn btn-success" type="submit" [ladda]="isCompanyCreationInProcess$ | async"
