@@ -1,30 +1,29 @@
 <form class="horizontal-form ng-pristine ng-valid ng-valid-required" id="groupDetailForm" name="groupDetailForm" novalidate [formGroup]="groupDetailForm" (submit)="updateGroup()">
-    <div class="form_bg pd2">
-        <div class="form-group clearfix">
-            <div class="col-xs-7">
-                <div class="row">
-                    <label>Group Name</label>
-                    <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
-                </div>
+    <div class="container-fluid mrT1">
+        <div class="row">
+            <div class="form-group col-xs-6">
+                <label>Group Name</label>
+                <input type="text" class="form-control" placeholder="Enter Group Name" formControlName="name">
+            </div>
+            <div class="form-group col-xs-6">
+                <label>Unique Name</label>
+                <input type="text" class="form-control" UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
             </div>
         </div>
-        <div class="form-group clearfix">
-            <div class="col-xs-5">
-                <div class="row">
-                    <label>Unique Name</label>
-                    <input type="text" class="form-control" UniqueNameDirective placeholder="Enter Unique Name" formControlName="uniqueName">
-                </div>
-            </div>
-        </div>
+
+
         <div class="form-group clearfix">
             <label>Description</label>
             <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
         </div>
 
-        <a href="javascript:void(0);" class="btn isActive" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE {{
-   (activeGroup$ | async)?.name }}</a>
+        <div class="form-group">
+            <a href="javascript:void(0);" class="btn btn-danger" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE {{
+                (activeGroup$ | async)?.name }}</a>
 
-        <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update</button>
+            <button class="btn btn-primary pull-right" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update</button>
+
+        </div>
 
     </div>
 
@@ -34,15 +33,42 @@
   </div> -->
 </form>
 
+
+<!--move group-->
+<!-- <div class="col-xs-12 form-group m" *ngIf="(activeGroup$ | async)">
+    <form name="moveGroupForm" class="horizontal-form" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
+        <label class="d-block">Move to group</label>
+        <div class="input-group">
+            template for move group typeahead 
+            <ng-template #moveGroupTemplate let-model="item">
+                <a href="javascript:void(0)" class="account-list-item" style="border-bottom:1px solid #ccc;">
+                    <span class="account-list-item" style="display: block;font-size:14px">
+                <p>{{ model.name }}</p>
+              </span>
+                    <span class="account-list-item" style="display: block;font-size:12px">
+                <p>{{ model.uniqueName }}</p>
+              </span>
+                </a>
+            </ng-template>
+            <input formControlName="moveto" (typeaheadOnSelect)="moveToGroupSelected($event)" [typeahead]="accountList" typeaheadOptionField="name" [typeaheadItemTemplate]="moveGroupTemplate" placeholder="Group name" class="form-control" style="width: calc(100% - 26px);">
+            <span class="input-group-btn">
+            <button type="submit" class="btn btn-primary" [disabled]="moveGroupForm.invalid">Move</button>
+          </span>
+        </div>
+    </form>
+</div> -->
+<!--move group-->
+
+
+
 <!--move group-->
 <div class="pd2 clearfix ng-scope" *ngIf="!(activeGroup$ | async)?.fixed">
-    <form name="moveGroupForm" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
+    <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="horizontal-form" [formGroup]="moveGroupForm">
         <div>
             <label class="mrR">Move to group</label>
         </div>
         <div class="form-group col-xs-5 pdL0 mr0">
 
-            <!--template for move group typeahead-->
             <ng-template #moveGroupTemplate let-model="item">
                 <a href="javascript:void(0)" class="account-list-item" style="border-bottom:1px solid #e0e0e0;">
                     <span class="account-list-item" style="display: block;font-size:12px">
@@ -57,13 +83,62 @@
             <input formControlName="moveto" placeholder="Group name" (typeaheadOnSelect)="moveToGroupSelected($event)" [typeahead]="accountList" typeaheadOptionField="name" class="form-control" [typeaheadItemTemplate]="moveGroupTemplate">
         </div>
         <div class="form-group mr0">
-            <button class="btn isActive" [disabled]="!moveGroupForm.valid">Move</button>
+            <button class="btn btn-primary" [disabled]="!moveGroupForm.valid">Move</button>
         </div>
     </form>
 </div>
 
 <!--taxes  -->
-<div class="clearfix bdrB" *ngIf="isTaxableGroup$ | async">
+
+<!-- Taxes collapse -->
+<div class="clearfix tax-operation horizontal-form" *ngIf="isTaxableGroup$ | async">
+    <div class="col-xs-12">
+        <div class="form-group toggle-btn mrB">
+            <label class="cp" (click)="showTaxes = !showTaxes; taxHierarchy()">
+            <i class="fa cp" aria-hidden="true" [ngClass]="{'fa-minus-square-o': showTaxes, 'fa-plus-square-o': !showTaxes}"></i>Taxes
+          </label>
+        </div>
+    </div>
+    <!-- taxes container -->
+    <ng-container *ngIf="showTaxes">
+        <div class="col-xs-12">
+
+            <form name="taxGroupForm" novalidate [formGroup]="taxGroupForm" (submit)="applyTax()">
+                <div class="tax-label">
+                    <label>All Applicable Taxes</label>
+                </div>
+                <div class="form-group">
+                    <div class="input-group">
+                        <sh-select formControlName="taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true">
+                        </sh-select>
+                        <span class="input-group-btn pdL2"> <button type="submit" class="btn btn-success">Save</button></span>
+                    </div>
+                </div>
+            </form>
+            <!-- *ngIf="showEditTaxSection" -->
+            <div class="edit-tax-section">
+                <div class="form-group">
+                    <div class="tax-label">
+                        <label>All Inherited Taxes</label>
+                    </div>
+                    <div *ngFor="let inTax of (activeGroupTaxHierarchy$ | async)?.inheritedTaxes">
+                        <ng-template #popTemplate>
+                            <div [innerHtml]="taxPopOverTemplate.replace('@inTax.name', inTax.name)"></div>
+                        </ng-template>
+                        <span class="tax-bullet" *ngFor="let inAppTax of inTax.applicableTaxes" [popover]="popTemplate" placement="right" triggers="mouseenter:mouseleave">{{ inAppTax.name }}
+                </span>
+                    </div>
+                    <p *ngIf="!(activeGroupTaxHierarchy$ | async)?.inheritedTaxes.length">No Inherited Taxes</p>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <!-- taxes container -->
+</div>
+
+
+
+<!-- <div class="clearfix bdrB" *ngIf="isTaxableGroup$ | async">
     <div class="mrT1">
         <div class="dGryHead">
             Taxes
@@ -105,7 +180,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
 <!--delete Group modal  -->
 <div bsModal #deleteGroupModal="bs-modal" class="modal fade" role="dialog">
