@@ -2,14 +2,14 @@
     <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)" [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
 
 
-        <div *ngIf="multiple" style="background: white;">
+        <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
             <ng-container *ngIf="selectedValues?.length">
                 <span class="chip" *ngFor="let sl of selectedValues">
                     {{ sl.label }}
                     <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
                 </span>
             </ng-container>
-            <input type="text" class="form-control" #inputFilter tabindex="0" (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
+            <input type="text" class="pdL1" [ngClass]="{'hasValue':filter?.length}" #inputFilter tabindex="0" (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? ' ' : placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
         </div>
 
 
