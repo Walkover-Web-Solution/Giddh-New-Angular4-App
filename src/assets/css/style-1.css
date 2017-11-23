@@ -5104,3 +5104,8 @@ strong {
 #main {
     padding-top: 54px;
 }
+
+/* important donot remove */
+.bs-datepicker{
+  z-index: 9999999 !important;
+}

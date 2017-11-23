@@ -19,6 +19,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
+import { ClickOutsideModule } from 'ng-click-outside';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   declarations: [
@@ -45,7 +47,9 @@ import { SettingPermissionFormComponent } from './permissions/form/form.componen
     DatepickerModule,
     ModalModule,
     SelectModule,
-    LaddaModule
+    LaddaModule,
+    ClickOutsideModule,
+    BsDatepickerModule.forRoot()
   ]
 })
 
