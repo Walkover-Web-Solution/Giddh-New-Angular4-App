@@ -4,7 +4,6 @@
         <!-- level 1 -->
         <div class="col_wrapper" *ngFor="let col of mc.columns;let i=index" [style.height.px]="height">
             <!-- <div class="grp_list" style="height:700px"> -->
-            <!-- {{ col.Items | json}} -->
             <ul class="new_btn_ul" *ngIf="i !== 0">
                 <li class="new_btn">
                     <a href="javascript:void(0)" class="btn-add" *ngIf="!isSearchingGroups" (click)="ShowAddNewForm(col)">Create new</a>
