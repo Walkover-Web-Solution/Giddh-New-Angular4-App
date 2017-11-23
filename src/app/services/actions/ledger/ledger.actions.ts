@@ -1,3 +1,4 @@
+import { AccountRequestV2, AccountResponseV2 } from './../../../models/api-models/Account';
 import { AccountResponse, ShareAccountRequest, AccountSharedWithResponse } from '../../../models/api-models/Account';
 import { AccountService } from '../../account.service';
 import {
@@ -203,6 +204,31 @@ export class LedgerActions {
       this._toasty.successToast('entry updated successfully');
       return { type: '' };
     });
+
+    @Effect()
+    public CreateQuickAccountV2$: Observable<Action> = this.action$
+      .ofType(LEDGER.CREATE_QUICK_ACCOUNT)
+      .switchMap(action => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
+      .map(response => {
+        return this.createQuickAccountResponseV2(response);
+      });
+
+    @Effect()
+    public CreateQuickAccountResponseV2$: Observable<Action> = this.action$
+      .ofType(LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE)
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toasty.clearAllToaster();
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: ''
+          };
+        } else {
+          this._toasty.successToast('Account Created Successfully');
+        }
+        return {type: ''};
+      });
+
   constructor(private action$: Actions,
     private _toasty: ToasterService,
     private store: Store<AppState>,
@@ -337,6 +363,36 @@ export class LedgerActions {
     return {
       type: LEDGER.UPDATE_TXN_ENTRY_RESPONSE,
       payload
+    };
+  }
+
+  public resetQuickAccountModal(): Action {
+    return {
+      type: LEDGER.RESET_QUICK_ACCOUNT_MODAL
+    };
+  }
+
+  public createQuickAccountV2(value: string, account: AccountRequestV2): Action {
+    return {
+      type: LEDGER.CREATE_QUICK_ACCOUNT,
+      payload: Object.assign({}, {
+        accountUniqueName: value
+      }, {
+        account
+      })
+    };
+  }
+
+  public createQuickAccountResponseV2(value: BaseResponse<AccountResponseV2, AccountRequestV2>): Action {
+    return {
+      type: LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public resetDeleteTrxEntryModal() {
+    return {
+      type: LEDGER.RESET_DELETE_TRX_ENTRY_MODAL
     };
   }
 

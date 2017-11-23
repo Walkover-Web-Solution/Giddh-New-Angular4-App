@@ -39,6 +39,8 @@ export class CompanyActions {
   public static GET_TAX = 'GroupTax';
   public static GET_TAX_RESPONSE = 'GroupTaxResponse';
 
+  public static SET_MULTIPLE_CURRENCY_FIELD = 'SET_MULTIPLE_CURRENCY_FIELD';
+
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)

@@ -15,10 +15,15 @@ export class CustomStockUnitAction {
     .ofType(CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT)
     .switchMap(action => {
       return this._inventoryService.CreateStockUnit(action.payload)
-        .map((r) => this.validateResponse(r, {
-          type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE,
-          payload: action.payload
-        }, true));
+        .map((r) => {
+          return this.validateResponse(r, {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE,
+            payload: r
+          }, true, '', {
+            type: CUSTOM_STOCK_UNIT_ACTIONS.CREATE_STOCK_UNIT_RESPONSE,
+            payload: r
+          });
+        });
     });
 
   @Effect() private GetStockUnit$: Observable<Action> = this.action$
@@ -49,15 +54,15 @@ export class CustomStockUnitAction {
           type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
           payload: r
         }, true, r.body, {
-            type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
-            payload: r
-          }));
+          type: CUSTOM_STOCK_UNIT_ACTIONS.DELETE_STOCK_UNIT_RESPONSE,
+          payload: r
+        }));
     });
 
   constructor(private action$: Actions,
-    private _toasty: ToasterService,
-    private store: Store<AppState>,
-    private _inventoryService: InventoryService) {
+              private _toasty: ToasterService,
+              private store: Store<AppState>,
+              private _inventoryService: InventoryService) {
   }
 
   public CreateStockUnit(unit: StockUnitRequest): Action {
@@ -70,7 +75,7 @@ export class CustomStockUnitAction {
   public UpdateStockUnit(unit: StockUnitRequest, code: string): Action {
     return {
       type: CUSTOM_STOCK_UNIT_ACTIONS.UPDATE_STOCK_UNIT,
-      payload: { unit, code }
+      payload: {unit, code}
     };
   }
 
@@ -87,7 +92,7 @@ export class CustomStockUnitAction {
     };
   }
 
-  private validateResponse(response: BaseResponse<any, any>, successAction: Action, showToast: boolean = false, ShowMessage: string = '', errorAction: Action = { type: '' }): Action {
+  private validateResponse(response: BaseResponse<any, any>, successAction: Action, showToast: boolean = false, ShowMessage: string = '', errorAction: Action = {type: ''}): Action {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

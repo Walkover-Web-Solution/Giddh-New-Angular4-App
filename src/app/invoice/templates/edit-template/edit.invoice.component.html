@@ -8,7 +8,7 @@
         <button class="btn btn-small isActive mrT2" (click)="onOpenTemplateModal()">Add New</button>
     </div>
     <div class="template-grid" *ngFor="let template of customCreatedTemplates; let i = index">
-        <h3 class="primary_clr">{{template.name}} <div *ngIf="template.isDefault" class="corner-ribbon top-left sticky green shadow">Default</div></h3>
+        <h3 class="primary_clr"><div class="ellp"> {{template.name}} </div><div *ngIf="template.isDefault" class="corner-ribbon top-left sticky green shadow">Default</div></h3>
         <div style="min-height:100px;">
 
         </div>

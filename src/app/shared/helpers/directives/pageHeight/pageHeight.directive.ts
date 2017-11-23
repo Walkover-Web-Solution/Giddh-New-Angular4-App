@@ -1,5 +1,5 @@
 import { Directive, HostListener, ElementRef, Renderer2 } from '@angular/core';
-import { WindowRef } from '../window.object';
+import { WindowRef } from '../../window.object';
 
 @Directive({
   selector: '[PageHeight]'

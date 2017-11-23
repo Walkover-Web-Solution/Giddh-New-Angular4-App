@@ -9,7 +9,7 @@ import { ApplicationRef, enableProdMode } from '@angular/core';
  */
 let PROVIDERS: any[] = [
   /**
-   * Common env directives
+   * Common env pipes
    */
 ];
 

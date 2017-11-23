@@ -199,71 +199,6 @@ a {
 
 /*end typo*/
 
-
-/*start super loader*/
-
-.load-bar-wrap {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    /*  z-index: 99;*/
-    height: 6px;
-}
-
-.load-bar {
-    position: relative;
-    width: 100%;
-    height: 6px;
-    background-color: #fdba2c;
-}
-
-.bar {
-    content: "";
-    display: inline;
-    position: absolute;
-    width: 0;
-    height: 100%;
-    left: 50%;
-    text-align: center;
-}
-
-.bar:nth-child(1) {
-    background-color: #000;
-    animation: loading 3s linear infinite;
-}
-
-.bar:nth-child(2) {
-    background-color: #3b78e7;
-    animation: loading 3s linear 1s infinite;
-}
-
-.bar:nth-child(3) {
-    background-color: #fdba2c;
-    animation: loading 3s linear 2s infinite;
-}
-
-@keyframes loading {
-    from {
-        left: 50%;
-        width: 0;
-        z-index: 100;
-    }
-    33.3333% {
-        left: 0;
-        width: 100%;
-        z-index: 10;
-    }
-    to {
-        left: 0;
-        width: 100%;
-    }
-}
-
-
-/*end of super loader*/
-
 div>input.date-picker {
     width: 90%;
     float: left;
@@ -3614,7 +3549,12 @@ ul.pills li {
 }
 
 .pos-abs {
-    position: absolute;
+  position: absolute;
+}
+
+.wthPos {
+  left: 10px;
+  right: 20px;
 }
 
 .verified {
@@ -4558,7 +4498,7 @@ table.proforma-particulars {
     width: 8.5in;
 }
 
-#intercom-container .intercom-launcher-frame {
+/* #intercom-container .intercom-launcher-frame {
     left: 20px !important;
 }
 
@@ -4572,7 +4512,7 @@ table.proforma-particulars {
 
 #intercom-container .intercom-launcher-badge-frame {
     left: 16px !important;
-}
+} */
 
 .marginTop {
     margin-top: -54px;
@@ -4911,15 +4851,15 @@ table.proforma-particulars {
 }
 
 .map-txn-container {
-    position: absolute;
-    z-index: 99;
-    background: #fff;
-    left: 155px;
-    top: -6px;
-    max-height: 100px;
-    overflow-y: auto;
-    box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.5);
-    min-width: 380px;
+  position: absolute;
+  z-index: 99;
+  background: #fff;
+  left: 160px;
+  right: 18px;
+  top: -6px;
+  max-height: 100px;
+  overflow-y: auto;
+  box-shadow: 0px 1px 1px 1px rgba(0, 0, 0, 0.5);
 }
 
 .rotate180 {
