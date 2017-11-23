@@ -212,11 +212,7 @@ export class AdvanceSearchModelComponent implements OnInit {
     switch (groupName + '-' + value) {
       case 'particulars-all':
         this.includeParticularsState = 'all';
-        this.accounts$.subscribe(data => {
-          if (data && data.length) {
-            this.onDDElementSelect('particulars', data);
-          }
-        });
+        this.onDDElementSelect('particulars', []);
         this.advanceSearchForm.get('includeParticulars').patchValue(true);
       break;
       case 'particulars-include':
