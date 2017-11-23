@@ -1,14 +1,13 @@
-import { CompanyActions } from './../../../../services/actions/company.actions';
-import { LocationService } from './../../../../services/location.service';
-import { CompanyRequest } from './../../../../models/api-models/Company';
-import { SignupWithMobile, VerifyMobileModel } from './../../../../models/api-models/loginModels';
+import { CompanyActions } from '../../../../services/actions/company.actions';
+import { LocationService } from '../../../../services/location.service';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
 import { Observable, ReplaySubject } from 'rxjs';
-import { VerifyMobileActions } from './../../../../services/actions/verifyMobile.actions';
-import { AppState } from './../../../../store/roots';
+import { VerifyMobileActions } from '../../../../services/actions/verifyMobile.actions';
+import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
-import { WizardComponent } from '../../../../theme/ng2-wizard/wizard.component';
-import { CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
+import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
 import { LoginActions } from '../../../../services/actions/login.action';
@@ -16,12 +15,14 @@ import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import * as _ from '../../../../lodash-optimized';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
-import { IOption } from '../../../../theme/ng-select/option.interface';
+import { GeneralActions } from '../../../../services/actions/general/general.actions';
+import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
 @Component({
   selector: 'company-add',
-  templateUrl: './company-add.component.html'
+  templateUrl: './company-add.component.html',
+  styleUrls: ['./company-add.component.css']
 })
 export class CompanyAddComponent implements OnInit, OnDestroy {
   @ViewChild('wizard') public wizard: WizardComponent;
@@ -38,24 +39,17 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
   public companies$: Observable<CompanyResponse[]>;
   public showMobileVarifyMsg: boolean = false;
   public isLoggedInWithSocialAccount$: Observable<boolean>;
-  public dataSource: Observable<any>;
+  public dataSource: any;
   public dataSourceBackup: any;
   public country: string;
   public countryCodeList: IOption[] = [];
   public selectedCountry: string;
-  public options: Select2Options = {
-    multiple: false,
-    width: '80px',
-    allowClear: false,
-    dropdownCssClass: 'text-right'
-  };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private socialAuthService: AuthService,
+  constructor(private socialAuthService: AuthService,
     private store: Store<AppState>, private verifyActions: VerifyMobileActions, private companyActions: CompanyActions,
     private _location: LocationService, private _route: Router, private _loginAction: LoginActions,
-    private _aunthenticationServer: AuthenticationService) {
+    private _aunthenticationServer: AuthenticationService, private _generalActions: GeneralActions) {
     this.isLoggedInWithSocialAccount$ = this.store.select(p => p.login.isLoggedInWithSocialAccount).takeUntil(this.destroyed$);
 
     contriesWithCodes.map(c => {
@@ -79,19 +73,29 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
       }
     }).takeUntil(this.destroyed$);
     this.isCompanyCreated$ = this.store.select(s => s.session.isCompanyCreated).takeUntil(this.destroyed$);
-    this.dataSource = Observable
-      .create((observer: any) => {
-        this._location.GetCity({
-          QueryString: this.company.city,
-          AdministratorLevel: undefined,
-          Country: undefined,
-          OnlyCity: true
-        }).subscribe((res) => {
+    this.dataSource = (text$: Observable<any>): Observable<any> => {
+      return text$
+        .debounceTime(300)
+        .distinctUntilChanged()
+        .switchMap((term: string) => {
+          if (term.startsWith(' ', 0)) {
+            return [];
+          }
+          return this._location.GetCity({
+            QueryString: this.company.city,
+            AdministratorLevel: undefined,
+            Country: undefined,
+            OnlyCity: true
+          }).catch(e => {
+            return [];
+          });
+        })
+        .map((res) => {
           let data = res.map(item => item.address_components[0].long_name);
           this.dataSourceBackup = res;
-          observer.next(data);
+          return data;
         });
-      }).takeUntil(this.destroyed$);
+    };
 
     this.isMobileVerified.subscribe(p => {
       if (p) {
@@ -130,12 +134,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
         }
       }
     });
-  }
-
-  public textOnly(e) {
-    if (this.company && this.company.city) {
-      this.company.city = this.company.city.replace(/[^a-zA-Z\s]/g, '');
-    }
   }
 
   public ngOnDestroy() {
@@ -177,6 +175,7 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     this.companies$.take(1).subscribe(c => companies = c);
     if (companies) {
       if (companies.length > 0) {
+        this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.closeCompanyModal.emit();
       } else {
         this.showLogoutModal();
@@ -184,10 +183,6 @@ export class CompanyAddComponent implements OnInit, OnDestroy {
     } else {
       this.showLogoutModal();
     }
-  }
-
-  public closeModalAndShowAddMangeModal() {
-    this.closeCompanyModalAndShowAddManege.emit();
   }
 
   public showLogoutModal() {

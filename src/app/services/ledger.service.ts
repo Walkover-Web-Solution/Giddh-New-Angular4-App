@@ -16,7 +16,8 @@ import {
   MagicLinkResponse,
   ExportLedgerRequest,
   MailLedgerRequest,
-  LedgerUpdateRequest
+  LedgerUpdateRequest,
+  IELedgerResponse
 } from '../models/api-models/Ledger';
 import { BlankLedgerVM } from '../ledger/ledger.vm';
 
@@ -26,6 +27,44 @@ export class LedgerService {
   private user: UserDetails;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  }
+
+  /**
+   * get bank transactions for a account
+  */
+  public GetBankTranscationsForLedger(accountUniqueName: string, from: string = '') {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+      }
+      this.companyUniqueName = s.session.companyUniqueName;
+    });
+    return this._http.get(LEDGER_API.GET_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from)).map((res) => {
+      let data: BaseResponse<IELedgerResponse[], string> = res.json();
+      data.request = accountUniqueName;
+      data.queryString = { accountUniqueName };
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<IELedgerResponse[], string>(e, { accountUniqueName }));
+  }
+
+  /*
+  * Map Bank transaction
+  */
+  public MapBankTransactions(model: {uniqueName: string}, unqObj: {accountUniqueName: string, transactionId: string}): Observable<BaseResponse<string, any>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.put(LEDGER_API.MAP_BANK_TRANSACTIONS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(unqObj.accountUniqueName)).replace(':transactionId', unqObj.transactionId), model)
+      .map((res) => {
+        let data: BaseResponse<string, any> = res.json();
+        data.request = model;
+        data.queryString = unqObj;
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, any>(e, model, unqObj));
   }
 
   /**
@@ -136,7 +175,7 @@ export class LedgerService {
    * Note in response user only get check number entries
    * /ledgers/reconcile?from=24-06-2017&to=24-07-2017
    */
-  public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = '', ): Observable<BaseResponse<ReconcileResponse, string>> {
+  public GetReconcile(accountUniqueName: string = '', from: string = '', to: string = '', chequeNumber: string = '', ): Observable<BaseResponse<ReconcileResponse[], string>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
@@ -144,10 +183,10 @@ export class LedgerService {
       this.companyUniqueName = s.session.companyUniqueName;
     });
     return this._http.get(LEDGER_API.RECONCILE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':from', from).replace(':to', to).replace(':chequeNumber', chequeNumber)).map((res) => {
-      let data: BaseResponse<ReconcileResponse, string> = res.json();
+      let data: BaseResponse<ReconcileResponse[], string> = res.json();
       data.queryString = { accountUniqueName, from, to, chequeNumber };
       return data;
-    }).catch((e) => this.errorHandler.HandleCatch<ReconcileResponse, string>(e, '', { accountUniqueName, from, to, chequeNumber }));
+    }).catch((e) => this.errorHandler.HandleCatch<ReconcileResponse[], string>(e, '', { accountUniqueName, from, to, chequeNumber }));
   }
 
   public DownloadInvoice(model: DownloadLedgerRequest, accountUniqueName: string): Observable<BaseResponse<string, DownloadLedgerRequest>> {

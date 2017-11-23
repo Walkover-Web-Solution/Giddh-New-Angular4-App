@@ -1,6 +1,6 @@
 {
   "name": "giddh-app",
-  "version": "6.2.5",
+  "version": "6.2.7",
   "description": "Accounting Software from Giddh.",
   "keywords": [
     "angular",
@@ -20,12 +20,15 @@
     "build:dev:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.dev.js --progress --profile",
     "build:docker": "npm run build:prod && docker build -t angular2-webpack-start:latest .",
     "build:prod": "npm run clean:dist && npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
+    "build:test": "npm run clean:dist && npm run webpack -- --config config/webpack.test-build.js  --progress --profile --bail",
+    "build:test:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.test-build.js  --progress --profile --bail",
     "build:prod:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
     "build:aot:prod": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.prod.js  --progress --profile --bail",
     "build:aot:test": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.test-build.js  --progress --profile --bail",
     "build:aot:dev": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.dev.js  --progress --profile --bail",
     "build:aot:stage": "npm run clean:dist &&  npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
     "build:aot:prod:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.prod.js  --progress --profile --bail",
+    "build:aot:test:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.test-build.js  --progress --profile --bail",
     "build:stage": "npm run clean:dist && npm run webpack -- --config config/webpack.stage.js  --progress --profile --bail",
     "build:stage:renderer": "npm run clean:dist && npm run clean:build && npm run prep:dist && npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
     "build:aot:stage:renderer": "npm run clean:build && npm run clean:dist && npm run prep:dist && npm run clean:aot && cross-env BUILD_AOT=1 npm run webpack -- --config config/webpack.renderer.stage.js  --progress --profile --bail",
@@ -52,6 +55,7 @@
     "e2e": "npm-run-all -p -r server:prod:ci protractor",
     "github-deploy:dev": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubDev",
     "github-deploy:prod": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubProd",
+    "github-deploy:test": "npm run webpack -- --config config/webpack.github-deploy.js --progress --profile --env.githubTest",
     "github-deploy": "npm run github-deploy:dev",
     "lint": "npm run tslint --fix \"src/**/*.ts\"",
     "lint-app-only": "npm run tslint --fix \"src/app/*.ts\" \"src/app/**/*.ts\"",
@@ -96,6 +100,7 @@
     "webpack": "node --max_old_space_size=4096 node_modules/webpack/bin/webpack.js"
   },
   "dependencies": {
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-beta.5",
     "angular2-ui-switch": "git+https://github.com/daominhsangvn/angular2-ui-switch",
     "electron-oauth": "2.4.3",
     "jquery": "^3.2.1",
@@ -103,6 +108,7 @@
     "jspdf-autotable": "^2.3.2",
     "ng4-social-login": "^1.3.3",
     "razorpay": "^1.4.0",
+    "reselect": "^3.0.1",
     "rxjs": "^5.4.3"
   },
   "devDependencies": {
@@ -174,6 +180,7 @@
     "ie-shim": "^0.1.0",
     "imports-loader": "^0.7.1",
     "inline-manifest-webpack-plugin": "^3.0.1",
+    "is-cidr": "^1.0.0",
     "istanbul-instrumenter-loader": "2.0.0",
     "jasmine-core": "^2.6.3",
     "json-loader": "^0.5.4",

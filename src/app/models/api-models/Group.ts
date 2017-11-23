@@ -40,6 +40,7 @@ export class GroupCreateRequest implements IGroup {
   public name: string;
   public uniqueName: string;
   public parentGroupUniqueName: string;
+  public path?: string[];
 
 }
 

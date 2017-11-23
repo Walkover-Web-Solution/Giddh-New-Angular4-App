@@ -12,7 +12,7 @@ import { InventoryAction } from '../../../services/actions/inventory/inventory.a
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
-import { IOption } from '../../../theme/ng-select/option.interface';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'inventory-add-group',  // <home></home>

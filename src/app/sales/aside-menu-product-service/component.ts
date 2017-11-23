@@ -12,7 +12,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
       top: 0;
       right: 0;
       bottom: 0;
-      width: 500px;
+      width: 480px;
       z-index: 1045;
     }
     :host.shifted{
@@ -24,9 +24,11 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     :host.in #close{
       display: block;
       position: fixed;
-      left: -42px;
+      left: -41px;
       top: 0;
       z-index: 5;
+      border: 0;
+      border-radius: 0;
     }
     .aside-pane{
       display: flex;
@@ -40,6 +42,9 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
     }
     .flexy-child-1{
       flex-grow: 1;
+    }
+    :host .aside-pane {
+      width: 480px;
     }
   `],
   templateUrl: './component.html'

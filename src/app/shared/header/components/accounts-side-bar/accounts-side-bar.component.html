@@ -4,13 +4,13 @@
             Loading Accounts Please Wait
         </div>
         <!-- searchbar end -->
-        <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !noGroups && !(isFlyAccountInProcess$ | async)">
-            <h4 class="list-group-item-heading">Oops, there are no accounts in <strong>selected company</strong> <a href="" ng-click="goToManageGroups()">+
-        add new</a></h4>
+        <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !(isFlyAccountInProcess$ | async)">
+            <h4 class="list-group-item-heading">Oops, there is no accounts in <strong>selected company</strong>
+              <a (click)="goToManageGroups()">+ add new</a></h4>
         </div>
-        <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">
-            <h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>
-        </div>
+        <!--<div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">-->
+            <!--<h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>-->
+        <!--</div>-->
         <perfect-scrollbar id="accountList" class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height additional-height="80">
             <div class="menu acList">
                 <div class="loader" *ngIf="!showAccountList && ( companyList$ | async ).length > 0">
@@ -31,7 +31,7 @@
                                     <li class="inrPrnt cp" *ngFor="let accDtl of account.accountDetails" id="ac_{{accDtl.uniqueName}}" tooltip-placement="top">
                                         <a ng-click="setLedgerData(value, accDtl);" ng-class="{'active': accDtl.uniqueName === selectedAccountUniqueName}" ui-sref="company.content.ledgerContent({unqName:accDtl.uniqueName})">
                                             <div class="clearfix">
-                                                <strong><span class="ellp max250" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span></strong>
+                                                <strong><span class="ellp max250" (click)="flyAccounts = false" [routerLink]="['/ledger',accDtl.uniqueName]">{{accDtl.name}}</span></strong>
                                                 <!-- <span class="ng-hide">{{accDtl.uniqueName}}</span> -->
                                             </div>
                                         </a>

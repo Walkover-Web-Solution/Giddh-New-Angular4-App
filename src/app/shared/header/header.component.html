@@ -1,19 +1,9 @@
-<!-- super loader -->
-<div class="load-bar-wrap" style="display: none">
-  <div class="load-bar">
-    <div class="bar"></div>
-    <div class="bar"></div>
-    <div class="bar"></div>
-  </div>
-</div>
-<!-- end of super loader -->
-
 <header class="clearfix header-container">
 
   <nav class="navbar navbar-inverse">
     <div class="container-fluid pdL0">
       <ul class="nav navbar-nav">
-        <li class="hamburger_menu cp" dropdown [isOpen]="sideMenu.isopen">
+        <li class="hamburger_menu cp" dropdown (isOpenChange)="sideBarStateChange($event)" [isOpen]="sideMenu.isopen">
           <a dropdownToggle id="page-dropdown" (click)="false">
             <i class="glyphicon glyphicon-menu-hamburger"></i>
           </a>
@@ -68,7 +58,7 @@
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Invoice</div>
-                            <div class="subTitle">Generate and Download Invoice/Proforma</div>
+                            <div class="subTitle">Generate & Download Invoice</div>
                           </div>
                         </div>
                       </a>
@@ -143,7 +133,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi" *ngIf="userIsSuperUser">
+                    <!-- <li class="dmLi" *ngIf="userIsSuperUser">
                       <a [routerLink]="['permissions']">
                         <div class="media">
                           <div class="media-body">
@@ -152,7 +142,7 @@
                           </div>
                         </div>
                       </a>
-                    </li>
+                    </li> -->
                   </ul>
                 </perfect-scrollbar>
               </div>
@@ -167,8 +157,8 @@
               <div class="input-group">
                 <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
                   [formControl]="accountSearchControl" [value]="accountSearchValue">
-                <div (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
-                  <span [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
+                <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
+                  <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                 </div>
               </div>
             </div>
@@ -243,11 +233,12 @@
   </nav>
 
   <!-- *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)" -->
-  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" class="modal fade fullScreenMy" role="dialog" (onShown)="onShown()">
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog"
+  (onShown)="onShown()">
   <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
     <div class="modal-content fullScreenMy">
       <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -256,7 +247,6 @@
     </div>
   </div>
 </div>
-
 <!--add company modal  -->
 <div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog"
   (onHidden)="onHide()">

@@ -2,7 +2,8 @@
     Apply Log Filters</h1>
 <div class="clearfix mrT2">
     <label>Filter By:</label>
-    <select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>
+    <sh-select [options]="vm.dateOptions" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedDateOption"></sh-select>
+    <!--<select2 [data]="vm.dateOptions" [options]="vm.options" [value]="vm.selectedDateOption" (valueChanged)="selectDateOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2" *ngIf="vm.selectedDateOption == '1'">
@@ -23,7 +24,7 @@
                     <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="vm.selectedFromDate" (selectionDone)="vm.showFromDatePicker=!vm.showFromDatePicker"
                     ></datepicker>
                 <input type="text"  #dp="bsDatepicker" bsDatepicker  />
-            </li> 
+            </li>
             <li style="padding:10px 9px 2px" class="ng-scope">
                 <span class="btn-group pull-left">
                     <button type="button" class="btn btn-sm btn-info" (click)="setToday('selectedFromDate');vm.showFromDatePicker = false;">Today</button>
@@ -114,28 +115,33 @@
 <div class="clearfix mrT2">
     <label>Select Operation</label>
     <!-- <input type="text" class="form-control" /> -->
-    <select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>
+    <sh-select [options]="vm.filters" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedOperation"></sh-select>
+    <!--<select2 [data]="vm.filters" [options]="vm.options" [value]="vm.selectedOperation" (valueChanged)="selectOperationOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Entity</label>
-    <select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>
+    <sh-select [options]="vm.entities" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedEntity"></sh-select>
+    <!--<select2 [data]="vm.entities" [options]="vm.options" [value]="vm.selectedEntity" (valueChanged)="selectEntityOption($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Account</label>
-    <select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>
+    <sh-select [options]="vm.accounts$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedAccountUnq"></sh-select>
+    <!--<select2 [data]="vm.accounts$ | async" [options]="vm.options" [value]="vm.selectedAccountUnq" (valueChanged)="selectAccount($event)"></select2>-->
 </div>
 
 <div class="clearfix mrT2">
     <label>Select Group</label>
-    <select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>
+    <sh-select [options]="vm.groups$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedGroupUnq"></sh-select>
+    <!--<select2 [data]="vm.groups$ | async" [options]="vm.options" [value]="vm.selectedGroupUnq" (valueChanged)="selectGroup($event)"></select2>-->
 </div>
 
 
 <div class="clearfix mrT2">
     <label>Select User</label>
-    <select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>
+    <sh-select [options]="vm.users$ | async" [isFilterEnabled]="true" [placeholder]="'Select Option'" [(ngModel)]="vm.selectedUserUnq"></sh-select>
+    <!--<select2 [data]="vm.users$ | async" [options]="vm.options" [value]="vm.selectedUserUnq" (valueChanged)="selectUser($event)"></select2>-->
 </div>
 
 <button class='btn btn-success pull-left mrT2' [ladda]="vm.getLogsInprocess$ | async" (click)='getLogfilters()'>Get Logs

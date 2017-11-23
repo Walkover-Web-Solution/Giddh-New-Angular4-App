@@ -1,3 +1,4 @@
+import { ShareEntityRequest } from './../../models/api-models/Account';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
 import {
   AccountMergeRequest,
@@ -18,7 +19,7 @@ import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { Actions, Effect } from '@ngrx/effects';
-import { Injectable } from '@angular/core';
+import { Injectable, state } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
 import { GroupResponse } from '../../models/api-models/Group';
@@ -54,7 +55,10 @@ export class AccountsAction {
   public static DELETE_ACCOUNT_RESPONSE = 'AccountDeleteResponse';
   public static MERGE_ACCOUNT = 'AccountMerge';
   public static MERGE_ACCOUNT_RESPONSE = 'AccountMergeResponse';
-
+  public static SHARE_ENTITY = 'SHARE_ENTITY';
+  public static SHARE_ENTITY_RESPONSE = 'SHARE_ENTITY_RESPONSE';
+  public static UN_SHARE_ENTITY = 'UN_SHARE_ENTITY';
+  public static UN_SHARE_ENTITY_RESPONSE = 'UN_SHARE_ENTITY_RESPONSE';
   public static UNMERGE_ACCOUNT = 'AccountUnMerge';
   public static UNMERGE_ACCOUNT_RESPONSE = 'AccountUnMergeResponse';
 
@@ -146,7 +150,7 @@ export class AccountsAction {
       if (groupSearchString) {
         this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
       } else {
-        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+        // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
       }
       setTimeout(() => this.store.dispatch(this.groupWithAccountsAction.showAddAccountForm()), 1000);
       return { type: '' };
@@ -247,7 +251,7 @@ export class AccountsAction {
         if (groupSearchString) {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
         } else {
-          this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+          // this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
         this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
@@ -463,6 +467,79 @@ export class AccountsAction {
         type: ''
       };
     });
+
+    @Effect()
+    public shareEntity$: Observable<Action> = this.action$
+      .ofType(AccountsAction.SHARE_ENTITY)
+      .switchMap(action =>
+        this._accountService.AccountShare(
+          action.payload.body,
+          action.payload.accountUniqueName
+        )
+      )
+      .map(response => {
+        return this.shareAccountResponse(response);
+      });
+    @Effect()
+    public shareEntityResponse$: Observable<Action> = this.action$
+      .ofType(AccountsAction.SHARE_ENTITY_RESPONSE)
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: ''
+          };
+        } else {
+          let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+          this._toasty.successToast('Shared successfully', '');
+          if (data.queryString.entity === 'account') {
+            return this.sharedAccountWith(data.queryString.entityUniqueName);
+          } else if (data.queryString.entity === 'group') {
+            return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
+          } else {
+            return {
+              type: ''
+            };
+          }
+        }
+      });
+
+    @Effect()
+    public unShareEntity$: Observable<Action> = this.action$
+      .ofType(AccountsAction.UN_SHARE_ENTITY)
+      .switchMap(action =>
+        this._accountService.AccountUnshare(
+          action.payload.body,
+          action.payload.accountUniqueName
+        )
+      )
+      .map(response => {
+        return this.UnShareEntityResponse(response);
+      });
+
+    @Effect()
+    public unShareEntityResponse$: Observable<Action> = this.action$
+      .ofType(AccountsAction.UN_SHARE_ENTITY_RESPONSE)
+      .map(action => {
+        if (action.payload.status === 'error') {
+          this._toasty.errorToast(action.payload.message, action.payload.code);
+          return {
+            type: ''
+          };
+        } else {
+          let data: BaseResponse<string, ShareAccountRequest> = action.payload;
+          this._toasty.successToast(action.payload.body, '');
+          if (data.queryString.entity === 'account') {
+            return this.sharedAccountWith(data.queryString.entityUniqueName);
+          } else if (data.queryString.entity === 'group') {
+            return this.groupWithAccountsAction.sharedGroupWith(data.queryString.entityUniqueName);
+          } else {
+            return {
+              type: ''
+            };
+          }
+        }
+      });
 
   constructor(private action$: Actions,
     private _accountService: AccountService,
@@ -707,6 +784,42 @@ export class AccountsAction {
   public unmergeAccountResponse(value: BaseResponse<string, AccountUnMergeRequest>): Action {
     return {
       type: AccountsAction.UNMERGE_ACCOUNT_RESPONSE,
+      payload: value
+    };
+  }
+
+  public shareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.SHARE_ENTITY,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public shareEntityResponse(value: BaseResponse<string, ShareEntityRequest>): Action {
+    return {
+      type: AccountsAction.SHARE_ENTITY_RESPONSE,
+      payload: value
+    };
+  }
+
+  public unShareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
+    return {
+      type: AccountsAction.UN_SHARE_ENTITY,
+      payload: Object.assign({}, {
+        body: value
+      }, {
+          accountUniqueName
+        })
+    };
+  }
+
+  public UnShareEntityResponse(value: any): Action {
+    return {
+      type: AccountsAction.UN_SHARE_ENTITY_RESPONSE,
       payload: value
     };
   }
