@@ -86,7 +86,8 @@ function nextElementSibling(el: any) {
 }
 
 @Directive({
-  selector: '[vsFor]'
+  selector: '[vsFor]',
+  exportAs: 'vsFor'
 })
 
 export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
@@ -490,7 +491,29 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
 
     return digestRequired;
   }
-
+  public scrollToElement(itemIndex: number) {
+    this.sizes = this.originalCollection.map((item, index) => {
+      if (typeof this.vsForSize === 'function') {
+        return this.vsForSize(item, index);
+      } else if (this.vsForSize) {
+        return +this.vsForSize; // number or string
+      } else {
+        return +this.elementSize;
+      }
+    });
+    let sum = 0;
+    this.sizesCumulative = this.sizes.map((size) => {
+      const res = sum;
+      sum += size;
+      return res;
+    });
+    this.sizesCumulative.push(sum);
+    let size1 = this.sizesCumulative[itemIndex];
+    this.parent.scrollTop = size1;
+    this.updateInnerCollection();
+    // this.refresh();
+    debugger;
+  }
   public _getOffset(index: number) {
     if (typeof this.vsForSize !== 'undefined') {
       return this.sizesCumulative[index + this.startIndex] + this.vsForOffsetBefore;
