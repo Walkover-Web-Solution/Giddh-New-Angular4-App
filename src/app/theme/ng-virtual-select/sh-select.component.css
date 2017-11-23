@@ -135,3 +135,12 @@ i.close.icon.clear:hover::after {
 .sh-select-disabled .selectedVal {
     background: #eee !important;
 }
+
+.selectedVal {
+    border: 1px solid #d6d6d6 !important;
+    padding-right: 22px !important;
+}
+
+.header.open>input[type="text"] {
+    border: 1px solid #d6d6d6 !important;
+}

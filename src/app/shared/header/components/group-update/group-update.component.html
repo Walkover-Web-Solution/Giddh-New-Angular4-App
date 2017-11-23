@@ -38,24 +38,19 @@
 <div class="col-xs-12 form-group m" *ngIf="(activeGroup$ | async)">
     <form name="moveGroupForm" class="horizontal-form" novalidate (submit)="moveGroup()" [formGroup]="moveGroupForm">
         <label class="d-block">Move to group</label>
-        <div class="input-group">
-            <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [customFilter]="customMoveGroupFilter">
-                <!--template for move group typeahead-->
-                <ng-template #optionTemplate let-option="option">
-                    <a href="javascript:void(0)" class="account-list-item" style="border-bottom:1px solid #e0e0e0;">
-                        <span class="account-list-item" style="display: block;font-size:12px">
-            <p>{{ option.label }}</p>
-          </span>
-                        <span class="account-list-item" style="display: block;font-size:10px">
-            <p>{{ option.value }}</p>
-          </span>
-                    </a>
-                </ng-template>
-            </sh-select>
-            <span class="input-group-btn">
-            <button type="submit" class="btn btn-primary" [disabled]="moveGroupForm.invalid">Move</button>
-          </span>
-        </div>
+        <span>
+        <sh-select formControlName="moveto" [placeholder]="'Group name'" [options]="groupsList" [customFilter]="customMoveGroupFilter" class="pull-left" style="width: calc(100% - 92px);">
+            <!--template for move group typeahead-->
+            <ng-template #optionTemplate let-option="option">
+                <a href="javascript:void(0)" class="list-item" style="border-bottom:1px solid #e0e0e0;">
+                    <div class="item">{{ option.label }}</div>
+                    <div class="item_unq">{{ option.value }}</div>
+                </a>
+            </ng-template>
+        </sh-select>
+      </span>
+        <span class="pull-right"><button type="submit" class="btn btn-primary" [disabled]="moveGroupForm.invalid">Move</button></span>
+
     </form>
 </div>
 <!--move group-->
@@ -110,7 +105,7 @@
                 </div>
                 <div class="form-group">
                     <div class="input-group">
-                        <sh-select formControlName="taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true">
+                        <sh-select formControlName="taxes" [placeholder]="'Select Tax'" [options]="companyTaxDropDown | async" [multiple]="true" style="width: calc(100% - 12px);">
                         </sh-select>
                         <span class="input-group-btn pdL2"> <button type="submit" class="btn btn-success">Save</button></span>
                     </div>
