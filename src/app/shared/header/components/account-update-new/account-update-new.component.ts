@@ -11,8 +11,7 @@ import { contriesWithCodes } from '../../../helpers/countryWithCodes';
 import { digitsOnly } from '../../../helpers';
 import { ModalDirective } from 'ngx-bootstrap';
 import * as _ from '../../../../lodash-optimized';
-import { CompanyActions } from '../../../../services/actions/company.actions';
-import { States } from '../../../../models/api-models/Company';
+import { CompanyResponse, States } from '../../../../models/api-models/Company';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../../theme/ng-virtual-select/sh-select.component';
 
@@ -68,6 +67,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   @Input() public isHsnSacEnabledAcc: boolean = false;
   @Input() public updateAccountInProcess$: Observable<boolean>;
   @Input() public updateAccountIsSuccess$: Observable<boolean>;
+  public companiesList$: Observable<CompanyResponse[]>;
+  public activeCompany: CompanyResponse;
   @Output() public submitClicked: EventEmitter<{ value: { groupUniqueName: string, accountUniqueName: string }, accountRequest: AccountRequestV2 }>
     = new EventEmitter();
   @Output() public deleteClicked: EventEmitter<any> = new EventEmitter();
@@ -91,7 +92,8 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private accountsAction: AccountsAction,
-              private _companyService: CompanyService, private _toaster: ToasterService, private companyActions: CompanyActions) {
+              private _companyService: CompanyService, private _toaster: ToasterService) {
+    this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(state => state.groupwithaccounts.activeAccount).takeUntil(this.destroyed$);
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.fetchingAccUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingAccUniqueName).takeUntil(this.destroyed$);
@@ -118,6 +120,13 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
 
     this.store.select(s => s.settings.profile).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((profile) => {
       // this.store.dispatch(this.companyActions.RefreshCompanies());
+    });
+    this.store.select(p => p.session.companyUniqueName).distinctUntilChanged().subscribe(a => {
+      if (a) {
+        this.companiesList$.take(1).subscribe(companies => {
+          this.activeCompany = companies.find(cmp => cmp.uniqueName === a);
+        });
+      }
     });
 
   }
@@ -149,7 +158,7 @@ export class AccountUpdateNewComponent implements OnInit, OnDestroy {
       if (acc) {
         let accountDetails: AccountRequestV2 = acc as AccountRequestV2;
         // render gst details if there's no details add one automatically
-        if (accountDetails.addresses.length > 0 && accountDetails.country.countryCode === 'IN') {
+        if (accountDetails.addresses.length > 0 && accountDetails.country.countryCode === 'IN' && this.activeCompany.country === 'India') {
           accountDetails.addresses.map(a => {
             this.renderGstDetails(a);
           });

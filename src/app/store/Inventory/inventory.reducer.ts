@@ -14,6 +14,7 @@ export interface InventoryState {
   groupsWithStocks?: IGroupsWithStocksHierarchyMinItem[];
   stocksList: StocksResponse;
   manufacturingStockList: StocksResponse;
+  manufacturingStockListForCreateMF: StocksResponse;
   stockUnits?: StockUnitRequest[];
   activeGroup?: StockGroupResponse;
   activeGroupUniqueName?: string;
@@ -58,6 +59,7 @@ const initialState: InventoryState = {
   groupsWithStocks: null,
   stocksList: null,
   manufacturingStockList: null,
+  manufacturingStockListForCreateMF: null,
   stockUnits: [],
   activeGroup: null,
   fetchingGrpUniqueName: false,
@@ -352,6 +354,12 @@ export const InventoryReducer: ActionReducer<InventoryState> = (state: Inventory
       let res: BaseResponse<StocksResponse, string> = action.payload;
       if (res.status === 'success') {
         return Object.assign({}, state, {manufacturingStockList: res.body});
+      }
+      return state;
+    case InventoryActionsConst.GetManufacturingStockForCreateResponse:
+      let mfResponse: BaseResponse<StocksResponse, string> = action.payload;
+      if (mfResponse.status === 'success') {
+        return Object.assign({}, state, {manufacturingStockListForCreateMF: mfResponse.body});
       }
       return state;
     case InventoryActionsConst.CreateStock:

@@ -681,9 +681,6 @@ const setActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, r
   return result;
 };
 const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: IGroupsWithAccounts) => {
-  if (result !== null) {
-    return result;
-  }
   for (let i = 0; i < groups.length; i++) {
     if (groups[i].uniqueName === uniqueName) {
       result = groups[i];
@@ -765,6 +762,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
   for (let grp of groups) {
     if (grp.uniqueName === grpUniqueName) {
       grp.isOpen = true;
+      debugger;
       grp.accounts.push(
         {
           uniqueName: aData.uniqueName,
@@ -778,7 +776,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
       return result;
     }
     if (grp.groups) {
-      result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result);
+      result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
       if (result) {
         return result;
       }
