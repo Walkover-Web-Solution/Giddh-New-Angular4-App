@@ -2379,7 +2379,7 @@ label {
 
 .col_wrapper:nth-child(1) li a {
     text-transform: uppercase;
-    padding: 8px 9px !important;
+    padding: 8px 15px !important;
 }
 
 .col_wrapper:nth-child(1) .isParent {
