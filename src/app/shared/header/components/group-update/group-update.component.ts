@@ -46,6 +46,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   </div>
   `;
   public showEditTaxSection: boolean = false;
+  public showTaxes: boolean = false;
   public groupsList: IOption[] = [];
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
 

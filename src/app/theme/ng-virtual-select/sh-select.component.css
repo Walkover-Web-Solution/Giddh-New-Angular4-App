@@ -63,6 +63,7 @@ div {
 
 input[type="text"] {
     outline: none;
+    border: 0;
 }
 
 [hidden] {
@@ -102,15 +103,14 @@ i.close.icon.clear:hover::after {
 
 .chip {
     display: inline-block;
-    padding: 0 10px;
+    padding: 0 7px;
     height: 30px;
     font-size: 14px;
     line-height: 30px;
     border-radius: 4px;
-    background-color: #d25f29;
-    margin-bottom: 4px;
-    margin-left: 4px;
-    color: white;
+    background-color: #f4f5f8;
+    margin: 0px 0 4px 4px;
+    /* color: white; */
 }
 
 .chipClosebtn {
@@ -119,11 +119,28 @@ i.close.icon.clear:hover::after {
     float: right;
     font-size: 20px;
     cursor: pointer;
-    opacity: .2;
+    opacity: .6;
 }
 
 .chipClosebtn:hover {
     font-weight: 700;
     opacity: .5;
     color: black;
+}
+
+.selectedVal {
+    background: #fff !important;
+}
+
+.sh-select-disabled .selectedVal {
+    background: #eee !important;
+}
+
+.selectedVal {
+    border: 1px solid #d6d6d6 !important;
+    padding-right: 22px !important;
+}
+
+.header.open>input[type="text"] {
+    border: 1px solid #d6d6d6 !important;
 }
