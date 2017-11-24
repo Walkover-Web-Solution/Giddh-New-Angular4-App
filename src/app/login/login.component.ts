@@ -14,8 +14,8 @@ import { Headers, RequestOptionsArgs } from '@angular/http';
 import { ToasterService } from '../services/toaster.service';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
-import { IOption } from '../theme/ng-select/option.interface';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'login',
@@ -116,7 +116,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.twoWayOthForm = this._fb.group({
       otp: ['', [Validators.required]]
     });
-    this.setCountryCode({value: 'India'});
+    this.setCountryCode({value: 'India', label: 'India'});
 
     // get user object when google auth is complete
     if (!Configuration.isElectron) {
@@ -305,7 +305,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   /**
    * setCountryCode
    */
-  public setCountryCode(event) {
+  public setCountryCode(event: IOption) {
     if (event.value) {
       let country = this.countryCodeList.filter((obj) => obj.value === event.value);
       this.selectedCountry = country[0].label;

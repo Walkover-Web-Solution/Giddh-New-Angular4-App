@@ -190,14 +190,14 @@ export class SalesInvoiceComponent implements OnInit {
     });
 
     // bind state sources
-    this._companyService.getAllStates().subscribe((data) => {
+   this.store.select(p => p.general.states).takeUntil(this.destroyed$).subscribe((states) => {
       let arr: IOption[] = [];
-      if (data) {
-        data.body.map(d => {
-          arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
-        });
-      }
-      this.statesSource$ = Observable.of(arr);
+        if (states) {
+          states.map(d => {
+            arr.push({ label: `${d.code} - ${d.name}`, value: d.code });
+          });
+        }
+        this.statesSource$ = Observable.of(arr);
     });
   }
 
@@ -206,8 +206,8 @@ export class SalesInvoiceComponent implements OnInit {
     this.companyUniqueName$.takeUntil(this.destroyed$).distinctUntilChanged().subscribe((company) => {
       this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
         this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
-        if (this.activeCompany) {
-          this.invFormData.country.countryName = this.activeCompany.country;
+        if (this.activeCompany && this.activeCompany.country) {
+          this.invFormData.country.countryName = this.activeCompany.country.toLocaleLowerCase();
         }
       });
     });

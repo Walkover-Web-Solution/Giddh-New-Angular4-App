@@ -25,11 +25,11 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
-import { IOption } from '../theme/ng-select/option.interface';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { GeneralActions } from '../services/actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'ledger',
@@ -152,6 +152,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           let stockUniqueName = '';
           let unitArray = [];
 
+          //#region unit rates logic
           if (fa.additional && fa.additional.stock) {
             let defaultUnit = {
               stockUnitCode: fa.additional.stock.stockUnit.name,
@@ -201,7 +202,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           if (rate > 0 && txn.amount === 0) {
             txn.amount = rate;
           }
-
+          //#endregion
           // reset taxes and discount on selected account change
           txn.tax = 0;
           txn.taxes = [];
@@ -215,9 +216,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
   }
 
+  public hideEledgerWrap() {
+    this.lc.showEledger = false;
+  }
+
   public pageChanged(event: any): void {
     this.trxRequest.page = event.page;
-
     this.getTransactionData();
   }
 
@@ -225,6 +229,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.route.params.takeUntil(this.destroyed$).subscribe(params => {
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
+        this.resetBlankTransaction();
         // set state details
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -253,28 +258,56 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
+          }else {
+            this.hideEledgerWrap();
           }
         });
       }
     });
-    // get flatten_accounts list
-    this.lc.flattenAccountListStream$.subscribe(data => {
-      if (data) {
+
+    Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
+      if (data[0] && data[1]) {
+        let accountDetails: AccountResponse = data[0];
+        let parentOfAccount = accountDetails.parentGroups[0];
+        // check if account is stockable
+        let isStockableAccount = parentOfAccount ?
+          (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+            parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
         let accountsArray: IOption[] = [];
-        data.map(acc => {
-          if (acc.stocks) {
-            acc.stocks.map(as => {
+        if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+          // stocks from ledger account
+          data[1].map(acc => {
+            // normal entry
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            accountDetails.stocks.map(as => {
+              // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
                 additional: Object.assign({}, acc, {stock: as})
               });
             });
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-          } else {
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-          }
-        });
+          });
+        } else {
+          // stocks from account itself
+          data[1].map(acc => {
+            if (acc.stocks) {
+              // normal entry
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+
+              // stock entry
+              acc.stocks.map(as => {
+                accountsArray.push({
+                  value: uuid.v4(),
+                  label: acc.name + '(' + as.uniqueName + ')',
+                  additional: Object.assign({}, acc, {stock: as})
+                });
+              });
+            } else {
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            }
+          });
+        }
         this.lc.flattenAccountList = Observable.of(orderBy(accountsArray, 'label'));
       }
     });
@@ -300,6 +333,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
       if (data && data.yodleeAdded) {
         this.getBankTransactions();
+      }else {
+        this.hideEledgerWrap();
       }
     });
   }
@@ -321,7 +356,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
-    }else {
+    } else {
       this._toaster.warningToast('Something went wrong please reload page');
     }
   }
@@ -503,12 +538,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public getCategoryNameFromAccountUniqueName(txn: TransactionVM): boolean {
+    let activeAccount: AccountResponse;
     let groupWithAccountsList: GroupsWithAccountsResponse[];
+    this.lc.activeAccount$.take(1).subscribe(a => activeAccount = a);
     this.lc.groupsArray$.take(1).subscribe(a => groupWithAccountsList = a);
-    if (txn.selectedAccount) {
-      const parent = txn.selectedAccount.parentGroups[0].uniqueName;
-      const parentGroup: GroupsWithAccountsResponse = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
-      return parentGroup.category === 'income' || parentGroup.category === 'expenses';
+
+    let parent;
+    let parentGroup: GroupsWithAccountsResponse;
+
+    parent = activeAccount.parentGroups[0].uniqueName;
+    parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+    if (parentGroup.category === 'income' || parentGroup.category === 'expenses') {
+      return true;
+    } else {
+      if (txn.selectedAccount) {
+        parent = txn.selectedAccount.parentGroups[0].uniqueName;
+        parentGroup = find(groupWithAccountsList, (p: any) => p.uniqueName === parent);
+        return parentGroup.category === 'income' || parentGroup.category === 'expenses';
+      }
     }
     return false;
   }
@@ -525,7 +572,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
-    componentInstance.closeUpdateLedgerModal.subscribe((a) => {
+    componentInstance.ledgerUnderStandingObj = this.lc.ledgerUnderStandingObj;
+    componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
       // componentInstance.vm.resetVM();
       // componentInstance.destroyed$.next(true);

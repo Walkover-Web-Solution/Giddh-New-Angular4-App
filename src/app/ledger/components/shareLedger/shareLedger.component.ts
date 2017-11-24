@@ -57,8 +57,7 @@ export class ShareLedgerComponent implements OnInit {
     let accObject = new ShareAccountRequest();
     accObject.role = 'view_only';
     accObject.user = this.email;
-    console.log ('implement new method');
-    // this.store.dispatch(this._ledgerActions.shareAccount(accObject, this.accountUniqueName));
+    this.store.dispatch(this._ledgerActions.shareAccount(accObject, this.accountUniqueName));
     this.email = '';
   }
 

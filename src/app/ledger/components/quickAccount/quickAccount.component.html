@@ -5,13 +5,13 @@
   <div class="modal-body">
     <div class="clearfix">
       <label>Select Group</label>
-      <ng-select [options]="flattenGroupsArray" formControlName="groupUniqueName"
-                 (selected)="checkSelectedGroup($event)" [placeholder]="'Select Group'"></ng-select>
+      <sh-select [options]="flattenGroupsArray" [isFilterEnabled]="true" formControlName="groupUniqueName"
+                 (selected)="checkSelectedGroup($event)" [placeholder]="'Select Group'"></sh-select>
 
     </div>
     <div class="clearfix mrT1">
       <label>Account Name</label>
-      <input class="form-control" required name="account" type="text" formControlName="name"
+      <input class="form-control" required name="account" (blur)="generateUniqueName();" type="text" formControlName="name"
              placeholder="Enter Account Name">
     </div>
     <div class="clearfix mrT1 pdR2 pos-rel">
@@ -35,8 +35,8 @@
         <div class="row mrT1">
           <div class="col-xs-12">
             <label>State code</label>
-            <ng-select #states [options]="statesSource$ | async" [placeholder]="'Select State'"
-                       formControlName="stateCode"></ng-select>
+            <sh-select #states [isFilterEnabled]="true" [options]="statesSource$ | async" [placeholder]="'Select State'"
+                       formControlName="stateCode"></sh-select>
           </div>
         </div>
       </div>

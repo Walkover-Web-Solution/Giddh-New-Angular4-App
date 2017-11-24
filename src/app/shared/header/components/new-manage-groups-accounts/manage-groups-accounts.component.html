@@ -1,67 +1,72 @@
 <div id="getGroupModal" class="fullScreenMy" #myModel>
 
-    <!-- start header -->
-    <div class="modal-header" #header>
-        <i class="fa fa-times text-right close_modal" data-dismiss="modal" (click)="closePopupEvent()" aria-label="Close" aria-hidden="true"></i>
-        <span class="col-xs-6 row">
-        <h3 class="modal-title bg pdT">Manage Groups &amp; Accounts</h3>
-      </span>
-        <div class="pull-right mrR2">
-            <div class="form-inline">
-                <div class="form-group">
+  <!-- start header -->
+  <div class="modal-header" #header>
+    <i class="fa fa-times text-right close_modal" data-dismiss="modal" (click)="closePopupEvent()" aria-label="Close" aria-hidden="true"></i>
+    <span class="col-xs-6 row">
+      <h3 class="modal-title bg pdT">Manage Groups &amp; Accounts</h3>
+    </span>
+    <div class="pull-right mrR2">
+      <div class="form-inline">
+        <div class="form-group">
 
-                    <div class="input-group searchBar">
+          <div class="input-group searchBar">
 
-                        <div class="input-group-addon">
-                            <i class="glyphicon glyphicon-search"></i>
-                        </div>
-
-                        <input type="text" name="grpSrch" #grpSrch id="grpSrch" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts" trial-accordion="search" /> <a href="javascript:void(0);" class="pos-abs btn-link"
-                            (click)="resetGroupSearchString()" *ngIf="grpSrch.value">Clear</a>
-
-
-                    </div>
-                </div>
+            <div class="input-group-addon">
+              <i class="glyphicon glyphicon-search"></i>
             </div>
-            <!-- form-inline -->
+
+            <input type="text" name="grpSrch" #grpSrch id="grpSrch" (keyup)="searchGroups(grpSrch.value)" class="form-control" placeholder="Search accounts"
+              trial-accordion="search" />
+            <a href="javascript:void(0);" class="pos-abs btn-link" (click)="resetGroupSearchString()" *ngIf="grpSrch.value">Clear</a>
+
+
+          </div>
         </div>
+      </div>
+      <!-- form-inline -->
     </div>
-    <!-- end header -->
+  </div>
+  <!-- end header -->
 
-    <div class="modal-body pd0">
-        <div class="clearfix height100">
+  <div class="modal-body pd0">
+    <div class="clearfix height100">
 
-            <div class="grp_col pd0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}" #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
-                <div class="search-loading" *ngIf="(searchLoad | async)">
-                    <div class="vcenter">
-                        <span class="spinner small"></span> Loading…
-                    </div>
-                </div>
-                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
-                    <div class="vcenter">
-                        <h1>No Result Found</h1>
-                    </div>
-                </div>
-                <div>
-                    <!-- ngIf: showListGroupsNow -->
-                    <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
-                        <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}" [groups]="(groupList$ | async)" (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
-                            (ScrollToRight)="ScrollToRight()" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
-                    </div>
-                    <!-- end ngIf: showListGroupsNow -->
-                </div>
-
-            </div>
-            <!-- middle body -->
-            <div class="form_box form-bg height100">
-                <account-operations [columnsRef]="currentColumns" [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))" [breadcrumbPath]="breadcrumbPath" (ShowForm)="ShowRightForm($event)" #form></account-operations>
-            </div>
-
-
+      <div class="grp_col pd0 " style="max-width:58.333%;" [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
+        #perfectdirective=ngxPerfectScrollbar [perfect-scrollbar]="config">
+        <div class="search-loading" *ngIf="(searchLoad | async)">
+          <div class="vcenter">
+            <span class="spinner small"></span> Loading…
+          </div>
+        </div>
+        <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !(groupList$ | async)?.length">
+          <div class="vcenter">
+            <h1>No Result Found</h1>
+          </div>
+        </div>
+        <div>
+          <!-- ngIf: showListGroupsNow -->
+          <div *ngIf="!(searchLoad | async)" [ngStyle]="{'width':groupsidebar?.mc?.columns?.length * 255 + 'px'}">
+            <groups-account-sidebar (columnsChanged)="currentColumns = $event" #groupsidebar [ngStyle]="{'height':((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))+'px'}"
+              [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))" [groups]="(groupList$ | async)"
+              (breadcrumbPathChanged)="breadcrumbPathChanged($event)" (ScrollToRight)="ScrollToRight()" [isSearchingGroups]="!(grpSrch.value === '')"></groups-account-sidebar>
+          </div>
+          <!-- end ngIf: showListGroupsNow -->
         </div>
 
+      </div>
+      <!-- middle body -->
+      <div class="form_box form-bg height100">
+        <account-operations [columnsRef]="currentColumns" [height]="((myModelRect? myModelRect.height:0)-(headerRect?(headerRect.height):0))"
+          [breadcrumbPath]="breadcrumbPath" [breadcrumbUniquePath]="breadcrumbUniquePath" (ShowForm)="ShowRightForm($event)"
+          #form></account-operations>
+      </div>
+
+
     </div>
-    <!-- end modal body -->
+
+  </div>
+  <!-- end modal body -->
 
 
 </div>

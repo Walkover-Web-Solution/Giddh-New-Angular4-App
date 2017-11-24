@@ -9,8 +9,8 @@ import * as uuid from 'uuid';
 import { cloneDeep, groupBy, forEach, remove } from '../lodash-optimized';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { INameUniqueName } from '../models/interfaces/nameUniqueName.interface';
-import { IOption } from '../theme/ng-select/option.interface';
 import { underStandingTextData } from './underStandingTextData';
+import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 
 export class LedgerVM {
   public groupsArray$: Observable<GroupsWithAccountsResponse[]>;
@@ -22,7 +22,6 @@ export class LedgerVM {
   public currentBlankTxn: TransactionVM;
   public currentPage: number;
   public flattenAccountList: Observable<IOption[]>;
-  public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
   public selectedAccount: IFlattenAccountsResultItem = null;
@@ -34,8 +33,6 @@ export class LedgerVM {
   public blankLedger: BlankLedgerVM;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
-  public isAmountFirst: boolean = false;
-  public isTotalFirts: boolean = false;
   public showTaxationDiscountBox: boolean = false;
   public ledgerUnderStandingObj = {
     accountType: '',
@@ -221,6 +218,11 @@ export class LedgerVM {
       delete bl['id'];
     });
     return requestObj;
+  }
+
+  /** ledger custom filter **/
+  public ledgerCustomFilter(term: string, item: IOption): boolean {
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
   }
 }
 

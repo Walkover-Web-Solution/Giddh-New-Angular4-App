@@ -5,8 +5,8 @@
         </div>
         <!-- searchbar end -->
         <div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && !(isFlyAccountInProcess$ | async)">
-            <h4 class="list-group-item-heading">Oops, there are no accounts in <strong>selected company</strong> <a (click)="goToManageGroups()">+
-        add new</a></h4>
+            <h4 class="list-group-item-heading">Oops, there is no accounts in <strong>selected company</strong>
+              <a (click)="goToManageGroups()">+ add new</a></h4>
         </div>
         <!--<div class="pdL1 pdR1 mrB1" *ngIf="(flatAccountWGroupsList)?.length === 0 && showAccountList && noGroups && !(isFlyAccountInProcess$ | async)">-->
             <!--<h4 class="list-group-item-heading">Oops, No Accounts Found :(</h4>-->

@@ -26,7 +26,7 @@ export class ShSelectMenuComponent implements OnChanges {
 
   @Input() set rows(val: IOption[]) {
     if (this.virtualScrollElm) {
-      this.virtualScrollElm.scrollInto(this._rows[0]);
+      // this.virtualScrollElm.scrollInto(this._rows[0]);
     }
 
     this._rows = val;
