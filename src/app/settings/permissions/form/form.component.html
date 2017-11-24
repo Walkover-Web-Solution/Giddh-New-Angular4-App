@@ -33,13 +33,15 @@
 
         <section class="periods container-fluid" *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
           <div class="row">
-            <div class="col-xs-6">
-              <label>From</label>
-              <input class="form-control " name="from" formControlName="from" type="text" placeholder="DD-MM-YYYY" />
-            </div>
-            <div class="col-xs-6">
-              <label>To</label>
-              <input class="form-control " name="to" formControlName="to" type="text" placeholder="DD-MM-YYYY" />
+            <div class="col-xs-12">
+              <label>From - To</label>
+              <input
+              name="dateRange"
+              placeholder="Daterangepicker"
+              type="text" class="form-control"
+              formControlName="dateRange"
+              (bsValueChange)="bsValueChange($event)"
+              bsDaterangepicker required >
             </div>
           </div>
         </section>
@@ -52,10 +54,6 @@
             </div>
             <div class="col-xs-6 lh34">
               in Days
-              <!-- <select name="period" formControlName="period" class="form-control pull-right ">
-                <option value="null">Select</option>
-                <option value="DAY"></option>
-              </select> -->
             </div>
           </div>
         </section>
