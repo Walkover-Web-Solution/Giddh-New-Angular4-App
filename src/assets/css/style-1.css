@@ -5113,3 +5113,7 @@ strong {
 #main {
     padding-top: 54px;
 }
+
+bs-daterangepicker-container, bs-datepicker-container {
+    z-index: 1600;
+}
