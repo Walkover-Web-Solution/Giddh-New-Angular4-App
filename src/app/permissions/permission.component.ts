@@ -22,7 +22,6 @@ export class PermissionComponent implements OnInit {
     let stateDetailsRequest = new StateDetailsRequest();
     stateDetailsRequest.companyUniqueName = companyUniqueName;
     stateDetailsRequest.lastState = 'permissions';
-
     this.store.dispatch(this.companyActions.SetStateDetails(stateDetailsRequest));
   }
 }
