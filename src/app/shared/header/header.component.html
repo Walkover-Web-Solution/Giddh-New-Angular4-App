@@ -199,7 +199,7 @@
             </li>
           </ul>
         </li>
-        <li dropdown [isOpen]="userMenu.isopen" tooltip-placement="left">
+        <li dropdown [isOpen]="userMenu.isopen" [tooltip]="(user$ | async)?.email" [placement]="'left'">
           <a href (click)="false" id="user-dropdown" dropdownToggle>
             {{userName | uppercase}}
           </a>
