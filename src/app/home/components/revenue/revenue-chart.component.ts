@@ -188,7 +188,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
         name: `Last Year`,
         data: this.lastYearAccountsRanks
 
-      }]
+      }],
+      credits: {
+        enabled: false
+      }
     };
   }
 
