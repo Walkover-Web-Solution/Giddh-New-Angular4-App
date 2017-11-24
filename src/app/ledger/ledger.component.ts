@@ -214,9 +214,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
   }
 
+  public hideEledgerWrap() {
+    this.lc.showEledger = false;
+  }
+
   public pageChanged(event: any): void {
     this.trxRequest.page = event.page;
-
     this.getTransactionData();
   }
 
@@ -253,6 +256,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
+          }else {
+            this.hideEledgerWrap();
           }
         });
       }
@@ -326,6 +331,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
       if (data && data.yodleeAdded) {
         this.getBankTransactions();
+      }else {
+        this.hideEledgerWrap();
       }
     });
   }
