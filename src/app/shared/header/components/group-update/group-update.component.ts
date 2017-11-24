@@ -54,7 +54,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private accountsAction: AccountsAction) {
-    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
+    this.groupList$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);

@@ -181,7 +181,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroupInProgress$ = this.store.select(state => state.groupwithaccounts.activeGroupInProgress).takeUntil(this.destroyed$);
     this.activeGroupSharedWith$ = this.store.select(state => state.groupwithaccounts.activeGroupSharedWith).takeUntil(this.destroyed$);
     this.activeAccountSharedWith$ = this.store.select(state => state.groupwithaccounts.activeAccountSharedWith).takeUntil(this.destroyed$);
-    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
+    this.groupList$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.activeGroupTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeGroupTaxHierarchy).takeUntil(this.destroyed$);
     this.activeAccountTaxHierarchy$ = this.store.select(state => state.groupwithaccounts.activeAccountTaxHierarchy).takeUntil(this.destroyed$);
     this.companyTaxes$ = this.store.select(state => state.company.taxes).takeUntil(this.destroyed$);
