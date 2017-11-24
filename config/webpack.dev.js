@@ -25,7 +25,7 @@ const HOST = process.env.HOST || 'localapp.giddh.com';
 const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const AppUrl = 'http://dev.giddh.com/electron';
-const ApiUrl = 'http://spi.giddh.com/';
+const ApiUrl = 'http://apidev.giddh.com/';
 const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
     host: HOST,
     port: PORT,
@@ -155,11 +155,11 @@ module.exports = function(options) {
                 }
             }),
             new HtmlWebpackPlugin({
-              template: 'src/index.html',
-              title: METADATA.title,
-              chunksSortMode: 'dependency',
-              metadata: METADATA,
-              inject: 'body'
+                template: 'src/index.html',
+                title: METADATA.title,
+                chunksSortMode: 'dependency',
+                metadata: METADATA,
+                inject: 'body'
             }),
             // new DllBundlesPlugin({
             //   bundles: {
