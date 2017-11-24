@@ -66,7 +66,6 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroup$: Observable<GroupResponse>;
   public activeGroupUniqueName$: Observable<string>;
   public activeGroupInProgress$: Observable<boolean>;
-  public isTaxableGroup$: Observable<boolean>;
   public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public isRootLevelGroup: boolean = false;
@@ -266,6 +265,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
           this.ShowForm.emit(true);
           this.showEditTaxSection = false;
           this.groupDetailForm.patchValue({ name: a.name, uniqueName: a.uniqueName, description: a.description });
+
+          let taxes = a.applicableTaxes.map(acc => acc.uniqueName);
+          this.taxGroupForm.get('taxes').setValue(taxes);
           this.store.dispatch(this.groupWithAccountsAction.showEditGroupForm());
         }
         if (this.columnsRef) {
@@ -323,9 +325,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         }
         return result;
       }));
-    this.activeGroupSelected$.subscribe((p) => {
-      this.taxGroupForm.patchValue({ taxes: p });
-    });
+    // this.activeGroupSelected$.subscribe((p) => {
+    //   this.taxGroupForm.patchValue({ taxes: p });
+    // });
     this.activeAccountTaxHierarchy$.subscribe((a) => {
       let activeAccount: AccountResponseV2 = null;
       this.store.take(1).subscribe(s => {
