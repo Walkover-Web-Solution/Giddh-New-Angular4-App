@@ -201,7 +201,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     data = Number(data);
     data = data.toFixed(places);
     return data;
-  };
+  }
 
   // Save CSV File with data from Table...
   public createCSV() {

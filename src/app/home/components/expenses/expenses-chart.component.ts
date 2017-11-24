@@ -187,7 +187,10 @@ export class ExpensesChartComponent implements OnInit, OnDestroy {
         name: `Last Year`,
         data: this.lastYearAccountsRanks
 
-      }]
+      }],
+      credits: {
+        enabled: false
+      }
     };
   }
 

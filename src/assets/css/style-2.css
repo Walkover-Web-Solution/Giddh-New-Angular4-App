@@ -3265,14 +3265,14 @@ label {
 
 #dashboard .panel-default {
     color: #4d4d4d;
-    border-color: #949494;
+    border-color: #d6d6d6;
     -webkit-box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     box-shadow: 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 #dashboard .panel-default>.panel-heading {
     background-color: transparent;
-    border-color: #949494;
+    border-color: #d6d6d6;
 }
 
 #dashboard .panel-heading i {

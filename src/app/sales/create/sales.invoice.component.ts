@@ -395,7 +395,11 @@ export class SalesInvoiceComponent implements OnInit {
     // before submit request making some validation rules
     // check for account uniquename
     if (data.account && !data.account.uniqueName) {
-      this._toasty.warningToast('Customer Name can\'t be empty');
+      if (this.typeaheadNoResultsOfCustomer) {
+        this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+      }else {
+        this._toasty.warningToast('Customer Name can\'t be empty');
+      }
       return;
     }
 
@@ -640,6 +644,11 @@ export class SalesInvoiceComponent implements OnInit {
             txn.stockUnit = null;
             txn.stockDetails = null;
             txn.stockList = [];
+            // reset fields
+            txn.rate = null;
+            txn.quantity = null;
+            txn.amount = 0;
+            txn.taxableValue = 0;
           }
           // toggle stock related fields
           this.toggleStockFields(txn);
