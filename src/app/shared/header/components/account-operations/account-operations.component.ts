@@ -266,6 +266,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.groupsList = _.filter(this.groupsList, (l => l.value !== a.uniqueName));
+        this.taxGroupForm.get('taxes').reset();
         let showAddForm: boolean = null;
         this.showAddNewGroup$.take(1).subscribe((d) => showAddForm = d);
         if (!showAddForm) {
