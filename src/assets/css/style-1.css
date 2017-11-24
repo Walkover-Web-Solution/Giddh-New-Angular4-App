@@ -4794,10 +4794,10 @@ table.table-bordered.head thead th{
   }
   
   #settingTab .nav-tabs>li.active>a {
-      color: #d36029;
+      color: #ff5f00;
       background: transparent;
       border: 0;
-      border-bottom: 1px solid #d36029;
+      border-bottom: 1px solid #ff5f00;
   }
   
   .select2-parent .select2-container--default .select2-selection--single {
@@ -4830,7 +4830,7 @@ table.table-bordered.head thead th{
   /*}*/
   /*.active, .active .account-list-item {*/
   /*color:white;*/
-  /*background-color: #d36029;*/
+  /*background-color: #ff5f00;*/
   /*}*/
   
   .dropdown-menu>.active>a,
@@ -4840,7 +4840,7 @@ table.table-bordered.head thead th{
   .dropdown-menu>.active>a>a:focus,
   .dropdown-menu>.active>a>a:hover {
       color: white;
-      background-color: #d36029;
+      background-color: #ff5f00;
   }
   
   .dropdown-menu>li>a,
