@@ -70,7 +70,7 @@ let CONDITIONAL_IMPORTS = [];
 
 if (ENV === 'development') {
   // console.log('loading react devtools');
-  // CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrumentOnlyWithExtension());
+  CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrumentOnlyWithExtension());
 }
 
 /**
