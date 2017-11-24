@@ -412,7 +412,7 @@
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
-                                            <td class="col-xs-7 select2-parent select2-ledger">
+                                            <td class="col-xs-7 select2-parent select2-ledger" (click)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [isFilterEnabled]="true"
                                                     [ItemHeight]="67">
@@ -474,13 +474,13 @@
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'" class="">
-                  C/F: {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
+                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
                 </span>
                             </td>
                         </tr>
                         <tr class="total_col">
                             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.creditTotal | number: '1.1-2' }}</span>
+                                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.debitTotal | number: '1.1-2' }}</span>
                             </td>
                         </tr>
                     </tbody>
