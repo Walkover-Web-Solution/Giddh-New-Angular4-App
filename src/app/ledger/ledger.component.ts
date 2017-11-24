@@ -150,6 +150,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           let stockUniqueName = '';
           let unitArray = [];
 
+          //#region unit rates logic
           if (fa.additional && fa.additional.stock) {
             let defaultUnit = {
               stockUnitCode: fa.additional.stock.stockUnit.name,
@@ -199,7 +200,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           if (rate > 0 && txn.amount === 0) {
             txn.amount = rate;
           }
-
+          //#endregion
           // reset taxes and discount on selected account change
           txn.tax = 0;
           txn.taxes = [];
@@ -256,24 +257,50 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
       }
     });
-    // get flatten_accounts list
-    this.lc.flattenAccountListStream$.subscribe(data => {
-      if (data) {
+
+    Observable.combineLatest(this.lc.activeAccount$, this.lc.flattenAccountListStream$).subscribe(data => {
+      if (data[0] && data[1]) {
+        let accountDetails: AccountResponse = data[0];
+        let parentOfAccount = accountDetails.parentGroups[0];
+        // check if account is stockable
+        let isStockableAccount = parentOfAccount ?
+          (parentOfAccount.uniqueName === 'revenuefromoperations' || parentOfAccount.uniqueName === 'otherincome' ||
+            parentOfAccount.uniqueName === 'operatingcost' || parentOfAccount.uniqueName === 'indirectexpenses') : false;
         let accountsArray: IOption[] = [];
-        data.map(acc => {
-          if (acc.stocks) {
-            acc.stocks.map(as => {
+        if (isStockableAccount && accountDetails.stocks && accountDetails.stocks.length > 0) {
+          // stocks from ledger account
+          data[1].map(acc => {
+            // normal entry
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            accountDetails.stocks.map(as => {
+              // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
                 additional: Object.assign({}, acc, {stock: as})
               });
             });
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-          } else {
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
-          }
-        });
+          });
+        } else {
+          // stocks from account itself
+          data[1].map(acc => {
+            if (acc.stocks) {
+              // normal entry
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+
+              // stock entry
+              acc.stocks.map(as => {
+                accountsArray.push({
+                  value: uuid.v4(),
+                  label: acc.name + '(' + as.uniqueName + ')',
+                  additional: Object.assign({}, acc, {stock: as})
+                });
+              });
+            } else {
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            }
+          });
+        }
         this.lc.flattenAccountList = Observable.of(orderBy(accountsArray, 'label'));
       }
     });
@@ -320,7 +347,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
           this.lc.getReadyBankTransactionsForUI(res.body);
         }
       });
-    }else {
+    } else {
       this._toaster.warningToast('Something went wrong please reload page');
     }
   }
@@ -536,7 +563,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
-    componentInstance.closeUpdateLedgerModal.subscribe((a) => {
+    componentInstance.ledgerUnderStandingObj = this.lc.ledgerUnderStandingObj;
+    componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
       // componentInstance.vm.resetVM();
       // componentInstance.destroyed$.next(true);

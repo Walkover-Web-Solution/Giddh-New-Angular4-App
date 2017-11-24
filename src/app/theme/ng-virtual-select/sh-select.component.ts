@@ -27,7 +27,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public disabled: boolean;
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLink: boolean = false;
-  @Input() public isFilterEnabled: boolean = false;
+  @Input() public isFilterEnabled: boolean = true;
   @Input() public width: string = 'inherit';
   @Input() public ItemHeight: number = 41;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
@@ -112,12 +112,12 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public updateFilter(filterProp) {
     const lowercaseFilter = filterProp.toLocaleLowerCase();
-    this.filteredData = this._options.filter(item => {
+    this.filteredData = this._options ? this._options.filter(item => {
       if (this.customFilter) {
         return this.customFilter(lowercaseFilter, item);
       }
       return !lowercaseFilter || (item.label).toLowerCase().indexOf(lowercaseFilter) !== -1;
-    });
+    }) : [];
     if (this.filteredData.length === 0) {
       this.noOptionsFound.emit(true);
     }
@@ -177,7 +177,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }, 0);
   }
 
-  public show() {
+  public show(e: Event) {
+
     if (this.isOpen || this.disabled) {
       return;
     }
@@ -308,6 +309,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public clearSingleSelection(event, option: IOption) {
+    debugger;
     event.stopPropagation();
     this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
     this.onChange();

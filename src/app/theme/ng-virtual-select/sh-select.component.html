@@ -1,25 +1,42 @@
 <div #dd [style.width]="width" (clickOutside)="isOpen = false">
-    <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show()" [class.open]="isOpen" tabindex="0" (focus)="show()" (blur)="hide($event)" (keydown)="keydownUp($event)">
-        <input type="text" class="form-control" #inputFilter tabindex="0" [hidden]="!isOpen || !isFilterEnabled" (click)="show();" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
-        <div (click)="show(); $event.stopPropagation()" *ngIf="!isOpen || !isFilterEnabled">
-            <ng-container *ngIf="selectedValues?.length">
-                <div *ngIf="multiple" style="display: flex;flex-wrap: wrap">
-                    <span class="chip" *ngFor="let sl of selectedValues">
-            {{ sl.label }}
-            <span class="chipClosebtn" (click)="clearSingleSelection($event, sl)">&times;</span>
-                    </span>
-                </div>
-                <div *ngIf="!multiple">
-                    <input readonly type="text" class="form-control selected cp" value="{{ selectedValues[0].label }}" />
-                </div>
-            </ng-container>
-            <ng-container *ngIf="!selectedValues?.length">
-                <span class="form-control">{{ placeholder }}</span>
-            </ng-container>
+  <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)"
+    [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
 
-        </div>
+
+    <div *ngIf="multiple" style="display: flex;flex-wrap: wrap;background: white;">
+      <ng-container *ngIf="selectedValues?.length">
+        <span class="chip" *ngFor="let sl of selectedValues">
+          {{ sl.label }}
+          <span class="chipClosebtn" (mousedown)="clearSingleSelection($event, sl)" (click)="clearSingleSelection($event, sl)">&times;</span>
+        </span>
+      </ng-container>
+      <input type="text" class="form-control" style="border:none;width:auto;" #inputFilter tabindex="0" (click)="show($event);"
+        (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
     </div>
-    <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span>
-    <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues" [optionTemplate]="optionTemplate" (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit()" [noResultLinkEnabled]="notFoundLink" [notFoundMsg]="notFoundMsg"
-        [ItemHeight]="ItemHeight"></sh-select-menu>
+
+
+    <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))"
+      (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
+    <div (click)="show($event); $event.stopPropagation()" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+      <ng-container *ngIf="selectedValues?.length">
+        <!-- <div *ngIf="multiple" style="display:flex; flex-wrap:wrap;" >
+                    <span class="chip" *ngFor="let sl of selectedValues">
+                        {{ sl.label }}
+                        <span class="chipClosebtn" (click)="clearSingleSelection($event, sl)">&times;</span>
+                    </span>
+                </div> -->
+        <div style="padding: 0 8px;" *ngIf="!multiple">
+          {{ selectedValues[0].label }}
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!selectedValues?.length">
+        <span class="form-control">{{ placeholder }}</span>
+      </ng-container>
+
+    </div>
+  </div>
+  <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span>
+  <sh-select-menu #menuEle [isOpen]="isOpen" [rows]="rows" [selectedValues]="selectedValues" [optionTemplate]="optionTemplate"
+    (noToggleClick)="toggleSelected($event)" (noResultClicked)="noResultsClicked.emit()" [noResultLinkEnabled]="notFoundLink"
+    [notFoundMsg]="notFoundMsg" [ItemHeight]="ItemHeight"></sh-select-menu>
 </div>
