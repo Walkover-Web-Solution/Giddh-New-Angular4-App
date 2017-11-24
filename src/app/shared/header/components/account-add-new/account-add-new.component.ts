@@ -87,6 +87,7 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.companiesList$ = this.store.select(s => s.session.companies).takeUntil(this.destroyed$);
     this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
     this.stateStream$.subscribe((data) => {
+      // console.log('state Called');
       let states: IOption[] = [];
       if (data) {
         data.map(d => {
@@ -131,10 +132,15 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     });
     // get country code value change
     this.addAccountForm.get('country').get('countryCode').valueChanges.subscribe(a => {
-      if (a !== 'IN') {
-        this.addAccountForm.controls['addresses'] = this._fb.array([]);
-      } else {
-        this.addBlankGstForm();
+      if (a) {
+        if (a !== 'IN') {
+          this.addAccountForm.controls['addresses'] = this._fb.array([]);
+        } else {
+          const addresses = this.addAccountForm.get('addresses') as FormArray;
+          if (addresses.controls.length === 0) {
+            this.addBlankGstForm();
+          }
+        }
       }
     });
     // get openingblance value changes
@@ -304,8 +310,14 @@ export class AccountAddNewComponent implements OnInit, OnDestroy {
     this.moreGstDetailsVisible = true;
   }
 
+  public openingBalanceClick() {
+    if (Number(this.addAccountForm.get('openingBalance').value) === 0) {
+      this.addAccountForm.get('openingBalance').setValue(undefined);
+    }
+  }
+
   public openingBalanceTypeChnaged(type: string) {
-    if (this.addAccountForm.get('openingBalance').value > 0) {
+    if (Number(this.addAccountForm.get('openingBalance').value) > 0) {
       this.addAccountForm.get('openingBalanceType').patchValue(type);
     }
   }

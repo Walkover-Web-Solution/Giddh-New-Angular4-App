@@ -15,6 +15,7 @@ import { GeneralActions } from '../../../services/actions/general/general.action
 import { States } from '../../../models/api-models/Company';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 
 @Component({
   selector: 'quickAccount',
@@ -44,6 +45,7 @@ export class QuickAccountComponent implements OnInit {
     this._groupService.GetFlattenGroupsAccounts('', 1, 5000, 'true').subscribe(result => {
       if (result.status === 'success') {
         let groupsListArray: IOption[] = [];
+        result.body.results = this.removeFixedGroupsFromArr(result.body.results);
         result.body.results.forEach(a => {
           groupsListArray.push({label: a.groupName, value: a.groupUniqueName});
         });
@@ -151,6 +153,13 @@ export class QuickAccountComponent implements OnInit {
     }
   }
 
+  public removeFixedGroupsFromArr(data: IFlattenGroupsAccountsDetail[]) {
+    const fixedArr = ['currentassets', 'fixedassets', 'noncurrentassets', 'indirectexpenses', 'operatingcost',
+      'otherincome', 'revenuefromoperations', 'shareholdersfunds', 'currentliabilities', 'noncurrentliabilities'];
+    return data.filter(da => {
+      return !(fixedArr.indexOf(da.groupUniqueName) > -1);
+    });
+  }
   public submit() {
     let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
     this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest));

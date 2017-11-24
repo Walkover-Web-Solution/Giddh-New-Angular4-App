@@ -30,11 +30,11 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 })
 export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
   public vm: AuditLogsSidebarVM;
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _fb: FormBuilder, private _accountService: AccountService,
-              private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
+    private _groupService: GroupService, private _companyService: CompanyService, private _auditLogsActions: AuditLogsActions) {
     this.vm = new AuditLogsSidebarVM();
     this.vm.getLogsInprocess$ = this.store.select(p => p.auditlog.getLogInProcess).takeUntil(this.destroyed$);
     this.vm.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
@@ -55,7 +55,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({label: d.name, value: d.uniqueName});
+          accounts.push({ label: d.name, value: d.uniqueName });
         });
         this.vm.accounts$ = Observable.of(accounts);
       }
@@ -68,7 +68,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
       if (data.status === 'success') {
         let users: IOption[] = [];
         data.body.map((d) => {
-          users.push({label: d.userName, value: d.userUniqueName});
+          users.push({ label: d.userName, value: d.userUniqueName });
         });
         this.vm.canManageCompany = true;
         this.vm.users$ = Observable.of(users);
@@ -84,7 +84,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         let accountList = this.flattenGroup(data, []);
         let groups: IOption[] = [];
         accountList.map((d: any) => {
-          groups.push({label: d.name, value: d.uniqueName});
+          groups.push({ label: d.name, value: d.uniqueName });
         });
         this.vm.groups$ = Observable.of(groups);
       }
@@ -102,7 +102,7 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
