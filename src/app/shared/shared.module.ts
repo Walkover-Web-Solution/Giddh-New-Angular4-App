@@ -13,6 +13,7 @@ import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
+import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AccountAddNewComponent, AccountOperationsComponent, AccountsSideBarComponent, AccountUpdateComponent, AccountUpdateNewComponent, CompanyAddComponent, GroupsAccountSidebarComponent, ManageGroupsAccountsComponent } from './header/components';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -24,12 +25,12 @@ import { ShareAccountModalComponent } from './header/components/share-account-mo
 import { AuthServiceConfig, GoogleLoginProvider, LinkedinLoginProvider, SocialLoginModule } from 'ng4-social-login';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { FormWizardModule } from '../theme/ng2-wizard';
-import { SelectModule } from '../theme/ng-select/ng-select';
-import { Select2Module } from '../theme/select2';
 import { LaddaModule } from 'angular2-ladda';
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { DisableFormFieldModule } from './helpers/directives/disableFormField/disableFormField.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
+import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -47,14 +48,14 @@ const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
 ]);
 
 export function provideConfig() {
-  return SOCIAL_CONFIG || {id: null, providers: []};
+  return SOCIAL_CONFIG || { id: null, providers: [] };
 }
 
 @NgModule({
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent],
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -62,6 +63,7 @@ export function provideConfig() {
     ReactiveFormsModule,
     ModalModule,
     TypeaheadModule,
+    NgbTypeaheadModule,
     TooltipModule,
     BsDropdownModule,
     PopoverModule,
@@ -69,19 +71,18 @@ export function provideConfig() {
     SocialLoginModule,
     FormWizardModule,
     // SelectModule,
-    Select2Module,
     ClickOutsideModule,
-    SelectModule,
     ConfirmModalModule,
     LaddaModule,
     ElementViewChildModule,
     DisableFormFieldModule,
-    ShSelectModule
+    ShSelectModule,
+    DecimalDigitsModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
-    AccountFilterPipe, SelectModule, Select2Module, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
-    ConfirmModalModule
+    AccountFilterPipe, ClickOutsideModule, PerfectScrollbarModule, AccountAddNewComponent,
+    ConfirmModalModule, NgbTypeaheadModule
   ],
   entryComponents: [ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountAddNewComponent, GroupsAccountSidebarComponent,
     AccountAddNewComponent],

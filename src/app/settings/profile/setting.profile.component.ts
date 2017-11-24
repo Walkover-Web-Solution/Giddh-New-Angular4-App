@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { Select2OptionData } from '../../theme/select2';
+import { States } from '../../models/api-models/Company';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -34,6 +35,7 @@ export interface IGstObj {
 export class SettingProfileComponent implements OnInit, OnDestroy {
 
   public companyProfileObj: any = null;
+  public stateStream$: Observable<States[]>;
   public statesSource$: Observable<IOption[]> = Observable.of([]);
   public addNewGstEntry: boolean = false;
   public newGstObj: any = {};
@@ -54,9 +56,10 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     private _companyService: CompanyService,
     private _toasty: ToasterService
   ) {
-    this._companyService.getAllStates().subscribe((data) => {
+    this.stateStream$ = this.store.select(s => s.general.states).takeUntil(this.destroyed$);
+    this.stateStream$.subscribe((data) => {
       if (data) {
-        data.body.map(d => {
+        data.map(d => {
           this.states.push({ label: `${d.code} - ${d.name}`, value: `${d.code} - ${d.name}` });
         });
       }

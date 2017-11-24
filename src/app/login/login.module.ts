@@ -5,7 +5,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRoutingModule } from './login.routing.module';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { LaddaModule } from 'angular2-ladda';
-import { SelectModule } from '../theme/ng-select/ng-select';
+import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 
 @NgModule({
   imports: [
@@ -15,7 +15,7 @@ import { SelectModule } from '../theme/ng-select/ng-select';
     LoginRoutingModule,
     ModalModule,
     LaddaModule,
-    SelectModule
+    ShSelectModule
   ],
   declarations: [LoginComponent]
 })

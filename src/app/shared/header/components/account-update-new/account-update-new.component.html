@@ -10,12 +10,13 @@
 
             <div class="form-group col-xs-6" formGroupName="country" *ngIf="isGstEnabledAcc">
                 <label for="">Country</label>
-                <sh-select [options]="countrySource" formControlName="countryCode"></sh-select>
+                <sh-select [options]="countrySource" [isFilterEnabled]="true" formControlName="countryCode"></sh-select>
             </div>
 
         </div>
         <!-- gst container -->
-        <ng-container *ngIf="isGstEnabledAcc && addAccountForm.get('country').value.countryCode === 'IN'">
+        <ng-container *ngIf="isGstEnabledAcc &&
+        (addAccountForm.get('country').value.countryCode === 'IN' && activeCompany?.country === 'India')">
             <!-- gst details -->
             <div formArrayName="addresses">
                 <div *ngFor="let gst of addAccountForm.get('addresses')['controls'] | slice: 0:gstDetailsLength;let i = index;let f = first; let l = last" [formGroupName]="i">
@@ -24,7 +25,7 @@
                         <div class="form-group col-xs-6">
                             <label for="" class="d-block">GSTIN</label>
                             <div class="input-group">
-                                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (keyup)="getStateCode(gst, states)" name="gst" placeholder="">
+                                <input type="text" class="form-control" autocomplete="false" maxlength="15" formControlName="gstNumber" (change)="getStateCode(gst, states)" name="gst" placeholder="">
                                 <div class="input-group-addon">
                                     <input type="checkbox" name="defaultGst" formControlName="isDefault" (change)="isDefaultAddressSelected(gst.get('isDefault').value, i)" tooltip="DEFAULT GST" placement="bottom">
                                 </div>
@@ -51,13 +52,13 @@
                             <div class="form-group">
                                 <label for="">Party Type *</label>
                                 <div class="custom-select pos-rel">
-                                    <sh-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="partyType"></sh-select>
+                                    <sh-select [options]="partyTypeSource" [disableControl]="!gst.get('gstNumber').value || (gst.get('gstNumber').value && gst.get('gstNumber').value.length !== 15)" formControlName="partyType" [isFilterEnabled]="true"></sh-select>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label for="">State *</label>
                                 <div class="custom-select pos-rel">
-                                    <sh-select #states [options]="statesSource$ | async" formControlName="stateCode"></sh-select>
+                                    <sh-select #states [options]="statesSource$ | async" [isFilterEnabled]="true" [disabled]="gst.get('gstNumber').value" formControlName="stateCode"></sh-select>
                                 </div>
                             </div>
                             <div class="row">
@@ -68,7 +69,7 @@
                                 <a href="javascript:void(0);" *ngIf="l && (addAccountForm.get('addresses')['controls'].length > 3) && moreGstDetailsVisible" class="text-left col-xs-6 cursor-pointer" (click)="showLessGst()">
                   Show Less </a>
 
-                                <a class="text-right col-xs-12" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
+                                <a class="text-right col-xs-12 btn-link" href="javascript:void(0);" *ngIf="l" (click)="addGstDetailsForm(gst.get('gstNumber').value)">
                                     <i class="fa fa-plus"></i> Add More GSTIN
                                 </a>
 
@@ -129,33 +130,36 @@
 
             <!-- opening Balance -->
             <div class="row">
-                <div class="form-group col-xs-5">
-                    <label for="">Opening Balance</label>
-                    <div class="input-group">
-                        <input type="number" min="0" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
-                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
+                <div class="form-group" [ngClass]="{'col-xs-4':!isMultipleCurrency, 'col-xs-12':isMultipleCurrency}">
+                    <label for="">Unique Name</label>
+                    <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
+                </div>
+                <div class="form-group" [ngClass]="{'col-xs-5':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
+                    <div class="" [ngClass]="{'row':!isMultipleCurrency}">
+                        <label for="">Opening Balance</label>
+                        <div class="input-group">
+                            <input type="text" decimalDigitsDirective [DecimalPlaces]="2" min="0" (click)="openingBalanceClick()" class="form-control text-right" formControlName="openingBalance" id="" placeholder="00.00">
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('DEBIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'DEBIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">DR.
-                        </div>
-                        <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
+                            </div>
+                            <div class="input-group-addon" (click)="openingBalanceTypeChnaged('CREDIT')" [ngClass]="
                  {'active-toggle-btn': addAccountForm.get('openingBalanceType').value === 'CREDIT',
                   'cp': addAccountForm.get('openingBalance').value > 0}">CR.
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-xs-3 pdL0">
+                <div class="form-group" [ngClass]="{'col-xs-3':!isMultipleCurrency, 'col-xs-6':isMultipleCurrency}">
                     <label class="d-block" *ngIf="isMultipleCurrency">Currency <small *ngIf="isMultipleCurrency">(Company)</small></label>
                     <label class="d-block" *ngIf="!isMultipleCurrency" tooltip="To edit Currency, enable Multi-currency feature from Company’s Profile." placement="left"><i class="fa fa-info-circle" aria-hidden="true"></i> Currency</label>
                     <input type="text" class="form-control" [value]="companyCurrency" disabled name="baseCurrency" />
                 </div>
-                <div class="form-group col-xs-4">
-                    <label for="">Unique Name</label>
-                    <input type="text" class="form-control" UniqueNameDirective formControlName="uniqueName" name="accUnqname" />
-                </div>
+
             </div>
 
             <div class="row" *ngIf="isMultipleCurrency">
-                <div class="form-group col-xs-5">
+                <div class="form-group col-xs-6">
                     <label for="">Opening Balance</label>
                     <div class="input-group">
                         <input type="number" min="0" class="form-control text-right" formControlName="foreignOpeningBalance" id="" placeholder="00.00">
@@ -169,12 +173,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group col-xs-3 pdL0">
-                    <label for="">Currency <small *ngIf="isMultipleCurrency">(Account)</small></label>
-                    <input type="text" class="form-control" formControlName="currency" name="currency" />
-                </div>
                 <div class="form-group col-xs-6">
+                    <div class="">
+                        <label for="">Currency <small *ngIf="isMultipleCurrency">(Account)</small></label>
+                        <input type="text" class="form-control" formControlName="currency" name="currency" />
+                    </div>
                 </div>
+
             </div>
 
             <!-- mobile no and email -->
@@ -208,10 +213,10 @@
         </ng-container>
 
         <!-- submit and clear buttons -->
-        <div class="row mrT3">
+        <div class="row mrT">
             <div class="form-group col-xs-12 text-right">
-                <button type="button" class="btn del-btn" (click)="deleteClicked.emit(true)">Delete</button>
-                <button type="submit" class="btn upd-btn" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update</button>
+                <button type="button" class="btn btn-danger" (click)="deleteClicked.emit(true)">Delete</button>
+                <button type="submit" class="btn btn-primary" [ladda]="createAccountInProcess$ | async" [disabled]="addAccountForm.invalid">Update</button>
             </div>
         </div>
     </form>
