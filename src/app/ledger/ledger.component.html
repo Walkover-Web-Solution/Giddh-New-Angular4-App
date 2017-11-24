@@ -48,7 +48,7 @@
     <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
       <div class="alert alert-danger fade in pr" style="padding-right:15px">
         <button type="button" class="close">
-          <span style="font-size:12px;font-weight:normal" (click)="lc.showEledger != lc.showEledger">Close</span>
+          <span style="font-size:12px;font-weight:normal" (click)="hideEledgerWrap()">Close</span>
         </button>
 
         <table class="table ledgerTable" style="margin-bottom:0">
@@ -136,7 +136,7 @@
                               </td>
 
                               <td class="col-xs-3 pos-rel">
-                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                                   (click)="blankLedgerAmountClick()">
                               </td>
                             </tr>
@@ -194,7 +194,7 @@
                               </td>
 
                               <td class="col-xs-3 pos-rel">
-                                <input class="form-control alR" type="text" decimalDigitsDirective [DecimalPlaces]="2" [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
+                                <input class="form-control alR" type="text" decimalDigitsDirective [(ngModel)]="txn.amount" (input)="needToReCalculate.next(true)"
                                   (click)="blankLedgerAmountClick()">
                               </td>
                             </tr>
@@ -238,6 +238,8 @@
             </tr>
 
           </tfoot>
+          <!-- end main tfoot -->
+
           <!-- end main tfoot -->
         </table>
       </div>
