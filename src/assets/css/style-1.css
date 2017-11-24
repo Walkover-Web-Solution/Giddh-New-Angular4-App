@@ -685,10 +685,6 @@ aside-menu-account .container-fluid{
     margin-right: 30px;
 }
 
-.mrT2 {
-    margin-top: 20px;
-}
-
 .mrT4 {
     margin-top: 40px;
 }
@@ -5103,4 +5099,9 @@ strong {
 
 #main {
     padding-top: 54px;
+}
+
+/* important donot remove */
+.bs-datepicker{
+  z-index: 9999999 !important;
 }
