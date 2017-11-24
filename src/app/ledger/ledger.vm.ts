@@ -22,7 +22,6 @@ export class LedgerVM {
   public currentBlankTxn: TransactionVM;
   public currentPage: number;
   public flattenAccountList: Observable<IOption[]>;
-  public discountAccountsList: IFlattenGroupsAccountsDetail[] = [];
   public showNewLedgerPanel: boolean = false;
   public noAccountChosenForNewEntry: boolean;
   public selectedAccount: IFlattenAccountsResultItem = null;
@@ -34,8 +33,6 @@ export class LedgerVM {
   public blankLedger: BlankLedgerVM;
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   // public datePipe = createAutoCorrectedDatePipe('dd-mm-yyyy');
-  public isAmountFirst: boolean = false;
-  public isTotalFirts: boolean = false;
   public showTaxationDiscountBox: boolean = false;
   public ledgerUnderStandingObj = {
     accountType: '',
