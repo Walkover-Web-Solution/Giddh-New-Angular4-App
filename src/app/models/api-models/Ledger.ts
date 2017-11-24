@@ -1,3 +1,4 @@
+import { ILedgerAdvanceSearchRequest } from './Ledger';
 import { ILedger, ILedgerTransactionItem, IInvoiceRequest, ITransactions, IClosingBalance, IForwardBalance, ITransactionItem, IVoucherItem, ITotalItem } from '../interfaces/ledger.interface';
 
 /*
@@ -217,4 +218,95 @@ export interface IELedgerRemarks {
   email?: any;
   name?: any;
   chequeNumber?: any;
+}
+
+/**
+ * Ledger Advance Search Request and Response
+ */
+
+export interface ILedgerAdvanceSearchRequest {
+  uniqueNames: string[];
+  includeAmount: boolean;
+  amount?: any;
+  amountLessThan: boolean;
+  amountEqualTo: boolean;
+  amountGreaterThan: boolean;
+  includeDescription?: any;
+  description: string;
+  isInvoiceGenerated: boolean;
+  includeTag?: any;
+  tags: string[];
+  includeParticulars?: any;
+  particulars: string[];
+  chequeNumber: string;
+  dateOnCheque: string;
+  inventory: Inventory;
+}
+
+export interface ILedgerAdvanceSearchResponse {
+  page: number;
+  count: number;
+  totalPages: number;
+  totalItems: number;
+  debitTransactionsCount: number;
+  creditTransactionsCount: number;
+  forwardedBalance: IForwardedBalance;
+  closingBalance: IClosingBalance;
+  debitTotal: number;
+  creditTotal: number;
+  debitTransactions: DebitTransaction[];
+  creditTransactions: any[];
+}
+export interface Inventory {
+  includeInventory?: any;
+  inventories: string[];
+  quantity?: any;
+  includeQuantity: boolean;
+  quantityLessThan: boolean;
+  quantityEqualTo: boolean;
+  quantityGreaterThan: boolean;
+  includeItemValue: boolean;
+  itemValue: number;
+  includeItemLessThan: boolean;
+  includeItemEqualTo: boolean;
+  includeItemGreaterThan: boolean;
+}
+
+export interface IForwardedBalance {
+  amount: number;
+  type: string;
+  description: string;
+}
+
+export interface IClosingBalance {
+  amount: number;
+  type: string;
+}
+
+export interface IParticular {
+  name: string;
+  uniqueName: string;
+}
+
+export interface DebitTransaction {
+  particular: IParticular;
+  amount: number;
+  type: string;
+  inventory?: any;
+  isTax: boolean;
+  entryUniqueName: string;
+  entryDate: string;
+  isInvoiceGenerated: boolean;
+  invoiceNumber: string;
+  unconfirmedEntry: boolean;
+  attachedFileName: string;
+  attachedFileUniqueName: string;
+  chequeNumber: string;
+  chequeClearanceDate: string;
+  entryCreatedAt: string;
+  isBaseAccount: boolean;
+  isCompoundEntry: boolean;
+  description: string;
+  voucherName: string;
+  tag: string;
 }
