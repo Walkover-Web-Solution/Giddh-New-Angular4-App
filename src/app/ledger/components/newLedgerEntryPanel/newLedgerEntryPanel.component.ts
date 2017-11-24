@@ -15,12 +15,12 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { LedgerDiscountComponent } from '../ledgerDiscount/ledgerDiscount.component';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
-import { IOption } from '../../../theme/ng-select/option.interface';
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach, isEmpty } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
+import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -65,13 +65,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(
-    private store: Store<AppState>,
-    private _ledgerService: LedgerService,
-    private _ledgerActions: LedgerActions,
-    private _companyActions: CompanyActions,
-    private cdRef: ChangeDetectorRef,
-    private _toasty: ToasterService) {
+  constructor(private store: Store<AppState>,
+              private _ledgerService: LedgerService,
+              private _ledgerActions: LedgerActions,
+              private _companyActions: CompanyActions,
+              private cdRef: ChangeDetectorRef,
+              private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -260,7 +259,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
   public unitChanged(stockUnitCode: string) {
     this.currentTxn.inventory.unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
-    this.changePrice(this.currentTxn.inventory.unit.rate.toString());
+    if (this.currentTxn.inventory.unit) {
+      this.changePrice(this.currentTxn.inventory.unit.rate.toString());
+    }
   }
 
   public deleteAttachedFile() {
@@ -294,15 +295,15 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
           });
           if (this.matchingEntriesData.length === 1) {
             this.confirmBankTransactionMap(this.matchingEntriesData[0]);
-          }else if (this.matchingEntriesData.length > 1) {
+          } else if (this.matchingEntriesData.length > 1) {
             this.showMatchingEntries = true;
-          }else {
+          } else {
             this.showErrMsgOnUI();
           }
-        }else {
+        } else {
           this.showErrMsgOnUI();
         }
-      }else {
+      } else {
         this._toasty.errorToast(data.message, data.code);
       }
     });
@@ -335,16 +336,16 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (res.status === 'success') {
           if (typeof(res.body) === 'string') {
             this._toasty.successToast(res.body);
-          }else {
+          } else {
             this._toasty.successToast('Entry Mapped Successfully!');
           }
           this.hideConfirmBankTxnMapModal();
           this.clickedOutsideEvent.emit(false);
-        }else {
+        } else {
           this._toasty.errorToast(res.message, res.code);
         }
       });
-    }else {
+    } else {
       // err
     }
   }

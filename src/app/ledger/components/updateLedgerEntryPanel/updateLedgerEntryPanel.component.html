@@ -15,8 +15,8 @@
       <table class="col-xs-12 ledger-head">
         <thead>
         <tr>
-          <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.dr}}</th>
-          <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.cr}}</th>
+          <th class="col-xs-6" style="font-weight: 400">{{ledgerUnderStandingObj.text.dr}}</th>
+          <th class="col-xs-6" style="font-weight: 400">{{ledgerUnderStandingObj.text.cr}}</th>
         </tr>
         </thead>
       </table>
@@ -49,10 +49,14 @@
                          [textMask]="{mask: vm.dateMask, guide: true}">
                 </td>
                 <td class="col-xs-6">
-                  <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect
+                  <!--<ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect-->
+                             <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
+                             <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
+                             <!--(deselected)="deSelectAccount($event, txn)">-->
+                  <sh-select [options]="vm.flatternAccountList4Select | async" [isFilterEnabled]="true" #dbtSelect
                              (click)="addBlankTrx('DEBIT', txn, $event)"
                              (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"
-                             (deselected)="deSelectAccount($event, txn)">
+                             [ItemHeight]="95" [customFilter]="vm.ledgerCustomFilter">
                     <ng-template #optionTemplate let-option="option">
                       <ng-container *ngIf="!option.additional?.stock">
                         <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -74,10 +78,11 @@
                         </a>
                       </ng-container>
                     </ng-template>
-                  </ng-select>
+                  </sh-select>
                 </td>
                 <td class="col-xs-3 pos-rel">
                   <input type="text" [(ngModel)]="txn.amount" class="form-control"
+                         decimalDigitsDirective [DecimalPlaces]="2"
                          (click)="addBlankTrx('DEBIT', txn, $event)" (input)="vm.onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                         tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
@@ -123,10 +128,10 @@
                          [textMask]="{mask: vm.dateMask, guide: true}">
                 </td>
                 <td class="col-xs-6">
-                  <ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #crdSelect
+                  <sh-select [options]="vm.flatternAccountList4Select | async" [isFilterEnabled]="true" #crdSelect
                              (click)="addBlankTrx('CREDIT', txn, $event)"
                              (selected)="selectAccount($event,txn, crdSelect)" [(ngModel)]="txn.particular.uniqueName"
-                             (deselected)="deSelectAccount($event, txn)">
+                             [ItemHeight]="95" [customFilter]="vm.ledgerCustomFilter">
                     <ng-template #optionTemplate let-option="option">
                       <ng-container *ngIf="!option.additional?.stock">
                         <a href="javascript:void(0)" class="account-list-item" style="border-bottom: 1px solid #000;">
@@ -148,11 +153,12 @@
                         </a>
                       </ng-container>
                     </ng-template>
-                  </ng-select>
+                  </sh-select>
                 </td>
                 <td class="col-xs-3 pos-rel">
                   <input class="form-control" type="text" [(ngModel)]="txn.amount"
                          (click)="addBlankTrx('CREDIT', txn, $event)"
+                         decimalDigitsDirective [DecimalPlaces]="2"
                          (input)="vm.onTxnAmountChange(txn)">
                   <span class="download-invoice-ledger" *ngIf="vm.selectedLedger.attachedFile.length > 0"
                         tooltip-append-to-body="true" tooltip="Download file : {{vm.selectedLedger.attachedFileName}}"
@@ -183,7 +189,7 @@
                       [placement]="'top'">
                   C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.1-2'}}</span>
               <ng-template #understandingTextCr>
-                {{ vm.ledgerUnderStandingObj.balanceText.cr }}
+                {{ ledgerUnderStandingObj.balanceText.cr }}
               </ng-template>
             </td>
           </tr>
@@ -207,7 +213,7 @@
                   <span class="primary_color" [tooltip]="understandingTextDr" [placement]="'top'">
                     {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.1-2'}}</span>
                   <ng-template #understandingTextDr>
-                    {{ vm.ledgerUnderStandingObj.balanceText.dr }}
+                    {{ ledgerUnderStandingObj.balanceText.dr }}
                   </ng-template>
                 </span>
             </td>
@@ -247,6 +253,7 @@
                             <label>Quantity</label>
                             <input type="number" name="" class="form-control"
                                    [(ngModel)]="vm.stockTrxEntry.inventory.quantity"
+                                   decimalDigitsDirective [DecimalPlaces]="2"
                                    (input)="vm.inventoryQuantityChanged($event.target.value)"/>
                           </td>
                           <td>
@@ -271,7 +278,8 @@
                   <ng-template [ngIf]="vm.stockTrxEntry">
                     <td>
                       <label>Price</label>
-                      <input type="number" name="" (input)="vm.inventoryPriceChanged($event.target.value)"
+                      <input type="text" name="" (input)="vm.inventoryPriceChanged($event.target.value)"
+                             decimalDigitsDirective [DecimalPlaces]="2"
                              [(ngModel)]="vm.stockTrxEntry.inventory.rate" class="form-control"/>
                     </td>
                   </ng-template>
@@ -282,6 +290,7 @@
                   <td>
                     <label class="primary_color">Amount</label>
                     <input type="text" name="" class="form-control"
+                           decimalDigitsDirective [DecimalPlaces]="2"
                            (input)="vm.inventoryAmountChanged($event.target.value)" [(ngModel)]="vm.totalAmount"
                     />
                   </td>
@@ -380,8 +389,8 @@
                   <label class="default_clr pull-left">Voucher type</label>
                 </td>
                 <td colspan="4">
-                  <ng-select [options]="vm.voucherTypeList"
-                             [(ngModel)]="vm.selectedLedger.voucher.shortCode"></ng-select>
+                  <sh-select [options]="vm.voucherTypeList" [isFilterEnabled]="true"
+                             [(ngModel)]="vm.selectedLedger.voucher.shortCode"></sh-select>
                 </td>
 
                 <td class="pdL1" *ngIf="(vm.selectedLedger.voucher.shortCode === 'pur' || vm.selectedLedger.voucher.shortCode == 'debit note'

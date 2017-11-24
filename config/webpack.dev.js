@@ -155,11 +155,11 @@ module.exports = function(options) {
                 }
             }),
             new HtmlWebpackPlugin({
-              template: 'src/index.html',
-              title: METADATA.title,
-              chunksSortMode: 'dependency',
-              metadata: METADATA,
-              inject: 'body'
+                template: 'src/index.html',
+                title: METADATA.title,
+                chunksSortMode: 'dependency',
+                metadata: METADATA,
+                inject: 'body'
             }),
             // new DllBundlesPlugin({
             //   bundles: {

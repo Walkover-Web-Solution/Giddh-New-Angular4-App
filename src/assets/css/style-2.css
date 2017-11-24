@@ -260,12 +260,15 @@ header .navbar {
 /*btn*/
 
 .btn-primary {
-    background: #525252;
+    background: #e5e5e5;
+    color: #ff5f00;
 }
 
 .btn-primary:hover,
-.btn-primary:focus {
-    background-color: #d35f29;
+.btn-primary:focus,
+.btn-primary:disabled {
+    background: #ff5f00;
+    color: #fff;
 }
 
 .btn {
@@ -283,8 +286,14 @@ header .navbar {
 }
 
 .btn-default {
-    background: #f8f7f2;
-    border: 1px solid #949494;
+    background: #e5e5e5;
+    color: #333333;
+}
+
+.btn-default:hover,
+.btn-default:disabled {
+    background: #d9d9d9;
+    color: #333333;
 }
 
 
@@ -306,6 +315,7 @@ header .navbar {
 .compoundEntry td,
 .compoundEntry td .form-control {
     background: #fff0bc !important;
+    border: 0;
 }
 
 .ledger-table-body table tbody.ledger-main tr td {
@@ -338,12 +348,6 @@ header .navbar {
   border: 1px solid #949494;
   .ledger-panel .btn:hover,
 }*/
-
-.ledger-panel .btn-primary {
-    background: #f3f0e6;
-    border-color: #ff782d;
-    color: #616161;
-}
 
 .tax-list {
     padding: 10px 0;
@@ -723,20 +727,31 @@ input[type="checkbox"]:after {
 }
 
 .btn-success {
-    background: #3fab63;
+    background: #e5e5e5;
+    color: #28ab00;
 }
 
-.btn-success:hover {
-    background: #57C17A;
+.btn-success:hover,
+.btn-success:disabled {
+    background: #28ab00;
+    color: #fff;
+}
+
+.btn-success:disabled,
+.btn-default:disabled,
+.btn-danger:disabled {
+    opacity: 0.5;
 }
 
 .btn-danger {
-    background: #EF5350 !important;
-    color: #fff !important;
+    background: #e5e5e5;
+    color: #ce0000;
 }
 
-.btn-danger:hover {
-    background: #F44336;
+.btn-danger:hover,
+.btn-danger:disabled {
+    background: #ce0000;
+    color: #fff;
 }
 
 .sm-btn {
@@ -1143,16 +1158,6 @@ input[type="checkbox"]:after {
     border-left: 15px solid transparent;
     left: -15px;
     z-index: 9;
-}
-
-.ledger-panel .btn-success {
-    border: 1px solid #349655;
-}
-
-.ledger-panel .btn-success:hover {
-    background: #57C17A;
-    color: #fff;
-    border-color: #349655;
 }
 
 .btn-row {
@@ -1742,6 +1747,7 @@ a.btn.btn-xs.btn-link.pull-right {
 .inWords {
     color: rgba(0, 0, 0, 0.8);
     text-align: right;
+    text-transform: capitalize;
 }
 
 .bdrT {
@@ -1827,10 +1833,11 @@ a.btn.btn-xs.btn-link.pull-right {
     border-bottom: 0;
 }
 
-#shareModal h3 {
-    font-size: 14px;
-    color: #666666;
-}
+
+/* #shareModalh3 {
+    font-size: 18px;
+    color: #fff;
+} */
 
 .emailInput {
     min-width: 200px;
@@ -1870,7 +1877,7 @@ a.btn.btn-xs.btn-link.pull-right {
     color: #666;
     font-size: 16px;
     padding: 10px 0;
-    border-bottom: 1px solid #949494;
+    border-bottom: 1px solid #d6d6d6;
 }
 
 .shared_list select {
@@ -1886,7 +1893,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .Useremail {
-    padding: 0 15px;
+    padding: 0 15px 0 0;
 }
 
 .delIcon {
@@ -2165,8 +2172,9 @@ select.form-control {
     transform: rotate(180deg);
 }
 
-.modal-header h3 {
+.modal-header>h3 {
     color: #fff;
+    font-size: 18px;
 }
 
 .width55 {
@@ -2207,11 +2215,13 @@ select.form-control {
     padding-bottom: 60px;
 }
 
-.grp_list li {
+.grp_list li,
+.new_btn_ul li {
     list-style: none;
 }
 
-.grp_list li a {
+.grp_list li a,
+.new_btn_ul li a {
     padding: 4px 15px !important;
     display: block;
     font-size: 14px;
@@ -2249,10 +2259,6 @@ select.form-control {
     min-height: calc(100% - 56px);
     height: calc(100% - 56px);
     font-size: 14px;
-}
-
-.form_bg {
-    background: #f4f5f5;
 }
 
 .searchBar {
@@ -2358,20 +2364,6 @@ label {
     border: 1px solid #cccccc;
 }
 
-.tax-bullet {
-    display: inline-block;
-    margin: 4px 2px 5px 0;
-    color: #6b6a6a;
-    border-radius: 3px;
-    background: #e0e0e0;
-    padding: 2px 7px;
-}
-
-.tax_group small {
-    color: #afa9a9;
-    font-size: 14px;
-}
-
 .col_wrapper:nth-child(1) {
     background: #f4f5f5;
     position: fixed;
@@ -2387,7 +2379,7 @@ label {
 
 .col_wrapper:nth-child(1) li a {
     text-transform: uppercase;
-    padding: 8px 9px !important;
+    padding: 8px 15px !important;
 }
 
 .col_wrapper:nth-child(1) .isParent {
@@ -2440,6 +2432,7 @@ label {
     overflow-y: scroll;
     height: 100%;
     min-height: 550px;
+    padding-bottom: 80px;
 }
 
 .breadcrumbs {
@@ -2559,11 +2552,11 @@ label {
 
 .tax-bullet {
     display: inline-block;
-    margin: 4px 2px 5px 0;
-    color: #6b6a6a;
+    padding: 4px 8px;
+    color: #808080;
     border-radius: 3px;
-    background: #e0e0e0;
-    padding: 2px 7px;
+    background: #e5e5e5;
+    margin: 0px 0 4px 4px;
 }
 
 .tax_group small {
@@ -2612,24 +2605,21 @@ label {
 .accmerge {
     padding: 0;
     display: block;
-    clear: both;
-    width: 100%;
 }
 
 .accmerge li {
     list-style: none;
     display: inline-block;
-    margin-right: 4px;
-}
-
-.accmerge li:nth-child(1) {
-    margin-left: 0;
+    /* margin-right: 4px; */
+    margin: 0px 0 4px 4px;
 }
 
 .accmerge li a {
     padding: 4px 8px;
     color: #808080;
     background: #e5e5e5;
+    float: left;
+    border-radius: 2px;
 }
 
 .accmerge li a.isActive {
@@ -2637,17 +2627,18 @@ label {
     color: #808080;
 }
 
-.accmerge li .fa {
+.accmerge li>a>span {
     color: #949494;
-    margin: 0 8px;
-    font-size: 12px;
-    top: -1px;
-    /* right: 1px; */
-    position: relative;
+    padding-left: 20px;
+    font-weight: 500;
+    float: right;
+    font-size: 20px;
     cursor: pointer;
+    line-height: 19px;
+    opacity: .6;
 }
 
-.accmerge li a.isActive .fa {
+.accmerge li>a.isActive>span {
     color: #fff;
 }
 
@@ -3792,10 +3783,6 @@ input[type='checkbox'][disabled] {
     padding-right: 0;
 } */
 
-.ledger-panel .btn-danger {
-    border: 1px solid red;
-}
-
 datepicker-inner .well table tbody tr td .btn-default {
     padding: 0 4px;
     border: 0;
@@ -4031,4 +4018,61 @@ ng-select .select_drop i {
 #expandAllGroups [class^="icon-"],
 #expandAllGroups [class*=" icon-"] {
     pointer-events: none;
+}
+
+virtual-scroll .scrollable-content .item>a {
+    color: #333;
+    padding: 6px;
+    display: table-cell;
+    vertical-align: middle;
+    height: 100%;
+}
+
+virtual-scroll .scrollable-content .item:hover .item,
+.item.hilighted>a>.item {
+    color: rgb(210, 95, 42);
+}
+
+sh-select .header {
+    line-height: 34px;
+}
+
+input[type="number"] {
+    text-align: right
+}
+
+.taxInput {
+    padding-right: 25px !important;
+}
+
+.btn-link {
+    color: #10aae0;
+}
+
+typeahead-container .dropdown-menu li.active>a,
+typeahead-container .dropdown-menu li:hover>a,
+typeahead-container .dropdown-menu>.active>a:hover,
+typeahead-container .dropdown-menu li.active>a>a:hover {
+    background-color: rgb(244, 245, 248);
+    color: rgb(210, 95, 42);
+}
+
+typeahead-container .dropdown-menu li.active>a>a {
+    color: rgb(210, 95, 42);
+}
+
+.has-item {
+    padding-right: 24px;
+}
+
+.modal-header>.close {
+    position: absolute;
+    right: 20px;
+    top: 2px;
+    line-height: 48px;
+    color: #db7f53;
+    opacity: 1;
+    font-weight: 100;
+    text-shadow: none;
+    font-size: 25px;
 }

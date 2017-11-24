@@ -16,6 +16,7 @@ import { digitsOnly } from '../../shared/helpers/customValidationHelper';
 import isCidr from 'is-cidr';
 import { ShareRequestForm, ISharedWithResponseForUI } from '../../models/api-models/Permission';
 import { ModalDirective } from 'ngx-bootstrap';
+import { PermissionService } from '../../services/permission.service';
 
 @Component({
   selector: 'setting-permission',
@@ -29,6 +30,12 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public usersList: any;
   public selectedCompanyUniqueName: string;
   public selectedUser: ShareRequestForm;
+  public allRoles = [
+    { name: 'Admin', uniqueName: 'admin' },
+    { name: 'View only', uniqueName: 'view_only' },
+    { name: 'Super Admin', uniqueName: 'super_admin' },
+    { name: 'Edit', uniqueName: 'edit' }
+  ];
 
   // modals related
   public showEditUserModal: boolean = false;
@@ -46,16 +53,16 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     private _accountsAction: AccountsAction,
     private store: Store<AppState>,
     private _fb: FormBuilder,
-    private _toasty: ToasterService
+    private _toasty: ToasterService,
+    private _permissionService: PermissionService
   ) {}
 
   public ngOnInit() {
-    this.store.dispatch(this._permissionActions.GetRoles());
 
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
-        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userName');
+        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userUniqueName');
         let arr = [];
         _.forIn(sortedArr, (value, key) => {
           arr.push({ name: key, rows: value });
@@ -122,6 +129,52 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public shareCurrentCompany(user: string, role: string) {
+    this._permissionService.ShareCompany({role, user}).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this._permissionService.GetCompanySharedWith().subscribe(sharedWith => {
+          if (sharedWith.status === 'success') {
+            let sharedWithData = _.cloneDeep(sharedWith.body);
+            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userUniqueName');
+            let arr = [];
+            _.forIn(sortedArr, (value, key) => {
+              arr.push({ name: key, rows: value });
+            });
+            this.usersList = _.sortBy(arr, ['name']);
+          }
+        });
+        this._toasty.clearAllToaster();
+        this._toasty.successToast(data.body);
+      } else {
+        this._toasty.clearAllToaster();
+        this._toasty.errorToast(data.message);
+      }
+    });
+  }
+
+  public unShareCurrentCompany(user) {
+    this._permissionService.UnShareCompany({user}).takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        this._permissionService.GetCompanySharedWith().subscribe(sharedWith => {
+          if (sharedWith.status === 'success') {
+            let sharedWithData = _.cloneDeep(sharedWith.body);
+            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userUniqueName');
+            let arr = [];
+            _.forIn(sortedArr, (value, key) => {
+              arr.push({ name: key, rows: value });
+            });
+            this.usersList = _.sortBy(arr, ['name']);
+          }
+        });
+        this._toasty.clearAllToaster();
+        this._toasty.successToast(data.body);
+      } else {
+        this._toasty.clearAllToaster();
+        this._toasty.errorToast(data.message);
+      }
+    });
   }
 
 }
