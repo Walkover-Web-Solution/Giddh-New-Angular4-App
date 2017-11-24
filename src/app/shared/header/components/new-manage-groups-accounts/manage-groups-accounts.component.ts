@@ -1,7 +1,7 @@
 import { GroupsAccountSidebarComponent } from '../new-group-account-sidebar/groups-account-sidebar.component';
 import {
   Component, EventEmitter, OnDestroy, OnInit, Output, ElementRef, ViewChild, AfterViewInit, AfterContentInit,
-  ChangeDetectorRef, AfterViewChecked, Renderer2
+  ChangeDetectorRef, AfterViewChecked, Renderer2, HostListener
 } from '@angular/core';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
 import { AppState } from '../../../../store/roots';
@@ -26,8 +26,9 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public showForm: boolean = false;
   @ViewChild('myModel') public myModel: ElementRef;
   @ViewChild('groupsidebar') public groupsidebar: GroupsAccountSidebarComponent;
-  public config: PerfectScrollbarConfigInterface = { suppressScrollX: false, suppressScrollY: false };
+  public config: PerfectScrollbarConfigInterface = {suppressScrollX: false, suppressScrollY: false};
   @ViewChild('perfectdirective') public directiveScroll: PerfectScrollbarDirective;
+
   public breadcrumbPath: string[] = [];
   public breadcrumbUniquePath: string[] = [];
   public myModelRect: any;
@@ -37,13 +38,21 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public currentColumns: GroupAccountSidebarVM;
   public psConfig: PerfectScrollbarConfigInterface;
   private groupSearchTerms = new Subject<string>();
+
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   // tslint:disable-next-line:no-empty
   constructor(private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction, private cdRef: ChangeDetectorRef,
-    private renderer: Renderer2) {
+              private renderer: Renderer2) {
     this.searchLoad = this.store.select(state => state.groupwithaccounts.isGroupWithAccountsLoading).takeUntil(this.destroyed$);
     this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
-    this.psConfig = { maxScrollbarLength: 80 };
+    this.psConfig = {maxScrollbarLength: 80};
+  }
+
+  @HostListener('window:resize', ['$event'])
+  public resizeEvent(e) {
+    this.headerRect = this.header.nativeElement.getBoundingClientRect();
+    this.myModelRect = this.myModel.nativeElement.getBoundingClientRect();
   }
 
   // tslint:disable-next-line:no-empty
@@ -60,6 +69,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public ngAfterViewInit() {
     //
   }
+
   public ngAfterViewChecked() {
     this.cdRef.detectChanges();
   }
@@ -67,6 +77,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
   public ngAfterContentInit() {
     //
   }
+
   public searchGroups(term: string): void {
     this.store.dispatch(this.groupWithAccountsAction.setGroupAndAccountsSearchString(term));
     this.groupSearchTerms.next(term);
@@ -92,11 +103,13 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public ScrollToRight() {
     if (this.directiveScroll) {
       this.directiveScroll.scrollToRight();
     }
   }
+
   public ShowRightForm(e) {
     //
   }
