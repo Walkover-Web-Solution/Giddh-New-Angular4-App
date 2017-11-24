@@ -2492,7 +2492,7 @@ i.cls-alert {
 }
 
 .account-card .account-date>label {
-    color: #d25f29;
+    color: #ff5f00;
 }
 
 .account-card .account-date>a {
@@ -3520,7 +3520,7 @@ ul.pills li {
     bottom: 0px;
 }
 
-.tax-label {
+.edit-tax-section p {
     color: #666666;
 }
 
