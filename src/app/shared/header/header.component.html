@@ -10,8 +10,7 @@
           <ul id="topMenusBar" role="menu" class="dropdown-menu">
             <li>
               <div>
-                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20"
-                                   auto-height>
+                <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
                   <ul class="dshUl clearfix list-inline ddMaxHeight">
                     <li class="dmLi trialB">
                       <a [routerLink]="['home']">
@@ -19,8 +18,7 @@
                           <div class="media-body">
                             <div class="title">Dashboard</div>
                             <div class="subTitle">Your
-                              <b>Company Summary</b> at one place.
-                            </div>
+                              <b>Company Summary</b> at one place.</div>
                           </div>
                         </div>
                       </a>
@@ -157,13 +155,10 @@
           <div class="ledger_search form-inline">
             <div class="form-group">
               <div class="input-group">
-                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts"
-                       (focus)="flyAccounts.next(true)" [formControl]="accountSearchControl"
-                       [value]="accountSearchValue">
-                <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups"
-                     class="input-group-addon cp" placement="right">
-                  <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }"
-                        aria-hidden="false"></span>
+                <input #accountSearch id="accountSearch" type="text" name="searchGroup" placeholder="Search accounts" (focus)="flyAccounts.next(true)"
+                  [formControl]="accountSearchControl" [value]="accountSearchValue">
+                <div *ngIf="flyAccounts | async" (click)="noGroups = !noGroups" id="expandAllGroups" class="input-group-addon cp" placement="right">
+                  <span (click)="flyAccounts.next(true)" [ngClass]="{'icon-plus':!noGroups,'icon-minus': noGroups }" aria-hidden="false"></span>
                 </div>
               </div>
             </div>
@@ -171,9 +166,7 @@
         </li>
         <li>
           <div class="pd1">
-            <button id="AddManage" type="button" class="btn isActive btn-sm" (click)="showManageGroupsModal()">Manage
-              Groups & A/c
-            </button>
+            <button id="AddManage" type="button" class="btn isActive btn-sm" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
           </div>
         </li>
       </ul>
@@ -189,24 +182,18 @@
           </a>
           <ul id="companyList" class="company-list dropdown-menu" aria-labelledby="cmpWrp">
             <li class="create-company" style="border-bottom: 1px solid rgba(148, 148, 148, 0.58);">
-              <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">
-                Create Company
-              </button>
+              <button id="createCompanyBtn" class="btn btn-primary btn-sm pull-left" (click)="showAddCompanyModal()">Create Company</button>
               <button id="refreshCompanyBtn" class="btn btn-link btn-sm pdR0" (click)="refreshCompanies($event)">
-                <i class="glyphicon glyphicon-refresh"
-                   [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh
-              </button>
+                <i class="glyphicon glyphicon-refresh" [ngClass]="{'glyphicon-spin': (isCompanyRefreshInProcess$ | async)}"></i> Refresh</button>
 
             </li>
             <li style="padding:0px;">
               <ul style="max-height: 260px; overflow:auto;" *ngIf="companies$ | async">
-                <li id="cmp" *ngFor="let cmp of companies$ | async"
-                    [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
-                    (click)="changeCompany(cmp.uniqueName)">
+                <li id="cmp" *ngFor="let cmp of companies$ | async" [ngClass]="{'selected-company': cmp.uniqueName === (selectedCompany | async)?.uniqueName}"
+                  (click)="changeCompany(cmp.uniqueName)">
                   <span tooltip-placement="right">{{ cmp.name }}</span>
-                  <i id="deleteCmp"
-                     *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
-                     class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
+                  <i id="deleteCmp" *ngIf="cmp.createdBy.email === (user$ | async)?.email && cmp.uniqueName !== (selectedCompany | async)?.uniqueName"
+                    class="glyphicon glyphicon-trash" (click)="showDeleteCompanyModal(cmp, $event)"></i>
                 </li>
               </ul>
             </li>
@@ -245,15 +232,13 @@
     </div>
   </nav>
 
-  <accounts-side-bar
-    *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)"
-    (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"
-    (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+  <!-- *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)" -->
+  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
-<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy"
-     role="dialog" (onShown)="onShown()">
+<div bsModal #manageGroupsAccountsModal="bs-modal" [config]="{ keyboard: true }" class="modal fade fullScreenMy" role="dialog"
+  (onShown)="onShown()">
   <div class="modal-dialog modal-lg modal-liq90 mr0 width100" style="height: 100%;">
     <div class="modal-content fullScreenMy">
       <ng-template element-view-container-ref #addmanage=elementviewcontainerref>
@@ -262,16 +247,15 @@
     </div>
   </div>
 </div>
-
 <!--add company modal  -->
-<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade"
-     role="dialog" (onHidden)="onHide()">
+<div bsModal #addCompanyModal="bs-modal" [config]="{backdrop: 'static', keyboard: false}" class="modal fade" role="dialog"
+  (onHidden)="onHide()">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <ng-template element-view-container-ref #companyadd=elementviewcontainerref>
       </ng-template>
       <!-- <company-add (closeCompanyModal)="hideAddCompanyModal()" (closeCompanyModalAndShowAddManege)="hideCompanyModalAndShowAddAndManage()">
-</company-add> -->
+      </company-add> -->
     </div>
   </div>
 </div>
@@ -280,9 +264,7 @@
 <div bsModal #deleteCompanyModal="bs-modal" class="modal fade" role="dialog">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
-      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody"
-                     (cancelCallBack)="hideDeleteCompanyModal($event)"
-                     (successCallBack)="deleteCompany($event)"></confirm-modal>
+      <confirm-modal [title]="'Delete Company'" [body]="deleteCompanyBody" (cancelCallBack)="hideDeleteCompanyModal($event)" (successCallBack)="deleteCompany($event)"></confirm-modal>
     </div>
   </div>
 </div>
