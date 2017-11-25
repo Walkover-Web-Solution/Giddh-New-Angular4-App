@@ -83,11 +83,11 @@
                     <div class="">
                         <div class="col-xs-6">
                             <div class="row">
-                                <div class="form-group" [ngClass]="{'col-xs-8':invFormData.country.countryName === 'india', 'col-xs-12': invFormData.country.countryName !== 'india' }">
+                                <div class="form-group" [ngClass]="{'col-xs-8':invFormData.country.countryName === 'India', 'col-xs-12': invFormData.country.countryName !== 'India' }">
                                     <label>Billing Address</label>
                                     <textarea name="billingDetails.address" (keyup)="autoFillShippingDetails()" class="form-control" [(ngModel)]="invFormData.account.billingDetails.address[0]" rows="5"></textarea>
                                 </div>
-                                <div class="form-group col-xs-4" *ngIf="invFormData.country.countryName === 'india'">
+                                <div class="form-group col-xs-4" *ngIf="invFormData.country.countryName === 'India'">
                                     <div>
                                         <label>State</label>
                                         <ng-select #statesBilling class="splSales" name="billingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.billingDetails.stateCode"></ng-select>
@@ -101,12 +101,12 @@
                         </div>
                         <div class="col-xs-6">
                             <div class="row">
-                                <div class="form-group" [ngClass]="{'col-xs-8':invFormData.country.countryName === 'india', 'col-xs-12': invFormData.country.countryName !== 'india' }">
+                                <div class="form-group" [ngClass]="{'col-xs-8':invFormData.country.countryName === 'India', 'col-xs-12': invFormData.country.countryName !== 'India' }">
                                     <label style="width:340px;">
                 <input type="checkbox" (change)="autoFillShippingDetails()" name="autoFillShipping" [(ngModel)]="autoFillShipping"> Shipping Address Same as Billing Address</label>
                                     <textarea [readonly]="autoFillShipping" name="shippingDetails.address" class="form-control" [(ngModel)]="invFormData.account.shippingDetails.address[0]" rows="5"></textarea>
                                 </div>
-                                <div class="form-group col-xs-4" *ngIf="invFormData.country.countryName === 'india'">
+                                <div class="form-group col-xs-4" *ngIf="invFormData.country.countryName === 'India'">
                                     <div>
                                         <label>State</label>
                                         <ng-select [disabled]="autoFillShipping" #statesShipping class="splSales" name="shippingDetails.stateCode" [options]="statesSource$ | async" [(ngModel)]="invFormData.account.shippingDetails.stateCode"></ng-select>

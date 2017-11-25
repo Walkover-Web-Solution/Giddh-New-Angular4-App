@@ -70,7 +70,7 @@ export class EsignModalComponent implements OnInit {
       if (key !== 'AadhaarNumber' && action === 'add') {
         $(eSignForm).append('<input type="hidden" id=' + key + ' name=' + key + ' value=' + val + ' />');
       } else if (key !== 'AadhaarNumber' && action === 'remove') {
-        console.log(key, this.eSignModel);
+        // console.log(key, this.eSignModel);
         $('#eSignForm #' + key).remove();
       }
     });
