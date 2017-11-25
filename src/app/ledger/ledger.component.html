@@ -1,48 +1,49 @@
 <section class="container nopad">
 
-  <!--ledger table-->
-  <div class="ledgHead transactions-page mrT3 pos-rel">
+    <!--ledger table-->
+    <div class="ledgHead transactions-page mrT3 pos-rel">
 
-    <!-- ledger header -->
-    <div class="col-md-12">
-      <div class="row">
-        <div class="col-xs-2">
-          <div class="row">
-            <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (selected)="selectedDate($event)"
-              class="form-control date-range-picker" />
-            <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
-            <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
-            <!--type="text" ng-model="cDate" options="opts" required="">-->
-          </div>
-        </div>
-        <div class="col-xs-2">
-          <div class="row">
-            <button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>
-          </div>
-        </div>
-        <div class="col-xs-4">
-          <div class="row">
-            <h1 class="text-center account_Name fs20 ng-binding">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>
-          </div>
-        </div>
-        <div class="col-xs-4 pull-right text-right">
-          <div class="row">
+        <!-- ledger header -->
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="row">
+                        <input type="text" name="daterangeInput" daterangepicker [options]="datePickerOptions" (selected)="selectedDate($event)" class="form-control date-range-picker" />
+                        <!--<input date-range-picker="" id="daterange3" name="daterange3"-->
+                        <!--class="form-control date-picker date-range-picker ng-pristine ng-untouched ng-valid ng-isolate-scope ng-valid-required"-->
+                        <!--type="text" ng-model="cDate" options="opts" required="">-->
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="row">
+                      <button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>
+                    </div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="row">
+                        <h1 class="text-center account_Name fs20 ng-binding">{{ (lc.activeAccount$ | async)?.name }} A/c</h1>
+                    </div>
+                </div>
+                <div class="col-xs-4 pull-right text-right">
+                    <div class="row">
 
-            <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" (click)="showExportLedgerModal()">
-              <i class="icon-download"></i>
-            </a>
+                        <a class="icomoon_ico" href="javascript:void(0)" title="" [tooltip]="'Export'" [placement]="'right'" (click)="showExportLedgerModal()">
+                            <i class="icon-download"></i>
+                        </a>
 
-            <a href="javascript:void(0)" id="share" class="icomoon_ico" (click)="showShareLedgerModal()">
-              <i [tooltip]="'Share Ledger'" [placement]="'right'" class="icon-share"></i>
-            </a>
+                        <a href="javascript:void(0)" id="share" class="icomoon_ico" (click)="showShareLedgerModal()">
+                            <i [tooltip]="'Share Ledger'" [placement]="'right'" class="icon-share"></i>
+                        </a>
 
-            <div class="mrL2 col-xs-6 pos-rel pull-right">
-              <div class="row">
-                <input type="search" class="form-control" placeholder="Search ledger" #ledgerSearchTerms>
-                <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
-              </div>
+                        <div class="mrL2 col-xs-6 pos-rel pull-right">
+                            <div class="row">
+                                <input type="search" class="form-control" placeholder="Search ledger" #ledgerSearchTerms>
+                                <i class="icon-search pos-abs" style="right:5px;top:10px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
         </div>
         <!-- ledger header end -->
 
@@ -51,7 +52,7 @@
         <section id="eledgerwrap" class="mrT2" *ngIf="lc.showEledger">
             <div class="alert alert-danger fade in pr" style="padding-right:15px">
                 <button type="button" class="close">
-                  <span style="font-size:12px;font-weight:normal" (click)="lc.showEledger != lc.showEledger">Close</span>
+                  <span style="font-size:12px;font-weight:normal" (click)="lc.showEledger = !lc.showEledger">Close</span>
                 </button>
 
                 <table class="table ledgerTable" style="margin-bottom:0">
@@ -529,8 +530,6 @@
         <!--transaction-->
     </div>
     <!-- ledger table end -->
-      </div>
-      </div>
 
 </section>
 
@@ -624,4 +623,4 @@
     </div>
   </div>
 </div>
-<!-- Advance search popup -->
+<!-- Advance  search popup -->
