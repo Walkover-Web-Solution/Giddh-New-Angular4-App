@@ -1,6 +1,6 @@
-<div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfect-scrollbar]="config" [ngStyle]="{'height':height+'px'}" *ngIf="!(showNewForm$ | async)">
+<div class="bdrR row view_forms" id="middleBody" style="margin:0" [perfect-scrollbar]="config" [ngStyle]="{'min-height':height+'px'}" *ngIf="!(showNewForm$ | async)">
     <!--breadcrumbs-->
-    <div class="breadcrumbs container-fluid top_bar bdrB" *ngIf="breadcrumbPath.length">
+    <div class="breadcrumbs container-fluid top_bar bdrB" *ngIf="breadcrumbPath?.length > 0">
         <div class="col-xs-8">
             <ol class="breadcrumb row">
                 <li *ngFor="let value of breadcrumbPath;let last = last;" [ngClass]="{'active': last}">
@@ -32,8 +32,8 @@
     </div>
     <!--add/edit group form-->
     <div class=" form_box ng-scope" *ngIf="(showEditGroup$ | async) || (showAddNewGroup$ | async)">
-        <group-add *ngIf="(showAddNewGroup$ | async)" [path]="breadcrumbUniquePath"></group-add>
-        <group-update *ngIf="(showEditGroup$ | async)" [companyTaxDropDown]="companyTaxDropDown"></group-update>
+        <group-add *ngIf="(showAddNewGroup$ | async)"></group-add>
+        <group-update *ngIf="(showEditGroup$ | async)"></group-update>
     </div>
     <!--add/edit group form-->
 
@@ -59,11 +59,11 @@
                 <div class="input-group">
                     <!--template for move group typeahead-->
                     <ng-template #moveGroupTemplate let-model="item">
-                        <a href="javascript:void(0)" class="account-list-item" style="border-bottom:1px solid #ccc;">
-                            <span class="account-list-item" style="display: block;font-size:14px">
+                        <a href="javascript:void(0)" class="account-list-item" style="border-bottom:1px solid #e0e0e0;">
+                            <span class="account-list-item" style="display: block;font-size:12px">
                 <p>{{ model.name }}</p>
               </span>
-                            <span class="account-list-item" style="display: block;font-size:12px">
+                            <span class="account-list-item" style="display: block;font-size:10px">
                 <p>{{ model.uniqueName }}</p>
               </span>
                         </a>
@@ -119,7 +119,6 @@
                 <label class="d-block">Select A/c to merge with
           <span class="primary_clr">{{(activeAccount$ | async)?.name}}</span>
         </label>
-
                 <div class="clearfix">
                     <div class="col-xs-11 row" #accountSelect2>
                         <sh-select [options]="accounts$ | async" [isFilterEnabled]="true" (viewInitEvent)="loadAccountData()" [multiple]="true" [(ngModel)]="selectedaccountForMerge" [placeholder]="'Select Accounts'"></sh-select>
@@ -274,7 +273,7 @@
 
 <!--deleteMergedAccount account modal  -->
 <div bsModal #deleteMergedAccountModal="bs-modal" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-md">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <confirm-modal [title]="'Delete Merged Account'" [body]='deleteMergedAccountModalBody' (cancelCallBack)="hideDeleteMergedAccountModal()" (successCallBack)="deleteMergedAccount()">
             </confirm-modal>
