@@ -512,7 +512,7 @@ export class VsForDirective implements OnChanges, AfterViewInit, OnDestroy {
     this.parent.scrollTop = size1;
     this.updateInnerCollection();
     // this.refresh();
-    debugger;
+    // debugger;
   }
   public _getOffset(index: number) {
     if (typeof this.vsForSize !== 'undefined') {
