@@ -36,30 +36,6 @@
       <ng-container *ngIf="!selectedValues?.length">
         <span class="form-control">{{ placeholder }}</span>
       </ng-container>
-
-
-        <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))"
-            (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
-        <div (click)="show($event); $event.stopPropagation()" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
-            <ng-container *ngIf="selectedValues?.length">
-                <!-- <div *ngIf="multiple" style="display:flex; flex-wrap:wrap;" >
-                    <span class="chip" *ngFor="let sl of selectedValues">
-                        {{ sl.label }}
-                        <span class="chipClosebtn" (click)="clearSingleSelection($event, sl)">&times;</span>
-                    </span>
-                </div>
-                <div *ngIf="!multiple">
-                    <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control" />
-                </div> -->
-                <div *ngIf="!multiple">
-                    <input type="text" readonly value="{{selectedValues[0].label}}" class="selectedVal cp form-control" />
-                </div>
-            </ng-container>
-            <ng-container *ngIf="!selectedValues?.length">
-                <span class="form-control">{{ placeholder }}</span>
-            </ng-container>
-
-        </div>
     </div>
     <!-- </ng-container>
       <ng-container *ngIf="!selectedValues?.length">
