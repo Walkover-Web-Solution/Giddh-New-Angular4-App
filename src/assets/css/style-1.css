@@ -4907,14 +4907,9 @@ table.table-bordered.head thead th{
 
   #main {
     padding-top: 54px;
-  }
-  /* important donot remove */
+}
 
-  .bs-datepicker {
-    z-index: 9999999 !important;
-  }
-
-  bs-daterangepicker-container,
-  bs-datepicker-container {
+bs-daterangepicker-container, bs-datepicker-container {
     z-index: 1600;
-  }
+}
+
