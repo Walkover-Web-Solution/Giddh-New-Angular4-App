@@ -13,12 +13,12 @@
       </ng-container>
     </div>
 
-    <div id="noresult" *ngIf="viewPortItems?.length === 0" [style.height.px]="ItemHeight">
-      {{notFoundMsg}}
-      <br>
-      <a class="noResultLink" *ngIf="noResultLinkEnabled" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">Create New
-      </a>
-    </div>
-  </virtual-scroll>
+        <div id="noresult" *ngIf="viewPortItems?.length === 0" [style.height.px]="ItemHeight">
+            {{notFoundMsg}}
+            <br>
+            <a class="noResultLink" *ngIf="noResultLinkEnabled" href="javascript:void(0)" (click)="$event.stopPropagation();noResultClicked.emit()">Create New
+            </a>
+        </div>
+    </virtual-scroll>
 
 </div>
