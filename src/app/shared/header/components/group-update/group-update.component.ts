@@ -46,15 +46,16 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   </div>
   `;
   public showEditTaxSection: boolean = false;
-  public showTaxes: boolean = false;
   public groupsList: IOption[] = [];
+  public accountList: any[];
+  public showTaxes: boolean = false;
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
               private companyActions: CompanyActions, private accountsAction: AccountsAction) {
-    this.groupList$ = this.store.select(state => state.groupwithaccounts.groupswithaccounts).takeUntil(this.destroyed$);
+    this.groupList$ = this.store.select(state => state.general.groupswithaccounts).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(state => state.groupwithaccounts.activeGroup).takeUntil(this.destroyed$);
     this.activeGroupUniqueName$ = this.store.select(state => state.groupwithaccounts.activeGroupUniqueName).takeUntil(this.destroyed$);
     this.fetchingGrpUniqueName$ = this.store.select(state => state.groupwithaccounts.fetchingGrpUniqueName).takeUntil(this.destroyed$);
@@ -94,14 +95,18 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     this.activeGroup$.subscribe((a) => {
       if (a) {
         this.groupDetailForm.patchValue({name: a.name, uniqueName: a.uniqueName, description: a.description});
+        let taxes = a.applicableTaxes.map(at => at.uniqueName);
+        this.taxGroupForm.get('taxes').setValue(taxes);
         if (a.fixed) {
           this.groupDetailForm.get('name').disable();
           this.groupDetailForm.get('uniqueName').disable();
           this.groupDetailForm.get('description').disable();
+          this.taxGroupForm.disable();
         } else {
           this.groupDetailForm.get('name').enable();
           this.groupDetailForm.get('uniqueName').enable();
           this.groupDetailForm.get('description').enable();
+          this.taxGroupForm.enable();
         }
       }
     });
@@ -136,6 +141,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       return result;
     });
+
     this.activeGroupSelected$.subscribe((p) => {
       this.taxGroupForm.patchValue({taxes: p});
     });
