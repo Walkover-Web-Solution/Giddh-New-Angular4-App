@@ -46,8 +46,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
   </div>
   `;
   public showEditTaxSection: boolean = false;
-  public showTaxes: boolean = false;
   public groupsList: IOption[] = [];
+  public accountList: any[];
+  public showTaxes: boolean = false;
   @ViewChild('deleteGroupModal') public deleteGroupModal: ModalDirective;
 
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -141,6 +142,9 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
       return result;
     });
 
+    this.activeGroupSelected$.subscribe((p) => {
+      this.taxGroupForm.patchValue({taxes: p});
+    });
     this.activeGroupTaxHierarchy$.subscribe((a) => {
       let activeAccount: AccountResponseV2 = null;
       let activeGroup: GroupResponse = null;

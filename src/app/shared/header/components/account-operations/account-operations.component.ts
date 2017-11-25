@@ -23,7 +23,6 @@ import { ToasterService } from '../../../../services/toaster.service';
 import { AccountService } from '../../../../services/account.service';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 import { createSelector } from 'reselect';
-
 @Component({
   selector: 'account-operations',
   templateUrl: './account-operations.component.html'
@@ -42,7 +41,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
-  public config: PerfectScrollbarConfigInterface = {suppressScrollX: true, suppressScrollY: false};
+  public config: PerfectScrollbarConfigInterface = { suppressScrollX: true, suppressScrollY: false };
   @ViewChild('shareGroupModal') public shareGroupModal: ModalDirective;
   @ViewChild('shareAccountModal') public shareAccountModal: ModalDirective;
   @ViewChild('deleteMergedAccountModal') public deleteMergedAccountModal: ModalDirective;
@@ -101,8 +100,8 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _fb: FormBuilder, private store: Store<AppState>, private groupWithAccountsAction: GroupWithAccountsAction,
-              private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
-              private accountService: AccountService) {
+    private companyActions: CompanyActions, private _ledgerActions: LedgerActions, private accountsAction: AccountsAction, private _toaster: ToasterService,
+    private accountService: AccountService) {
     this.showNewForm$ = this.store.select(state => state.groupwithaccounts.showAddNew);
     this.showAddNewAccount$ = this.store.select(state => state.groupwithaccounts.showAddNewAccount).takeUntil(this.destroyed$);
     this.showAddNewGroup$ = this.store.select(state => state.groupwithaccounts.showAddNewGroup).takeUntil(this.destroyed$);
@@ -127,36 +126,36 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     //   return [];
     // }).takeUntil(this.destroyed$);
     this.companyTaxDropDown = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.activeAccount,
-        (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-        (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
-        (state: AppState) => state.groupwithaccounts.activeGroup,
-        (state: AppState) => state.company.taxes],
+      (state: AppState) => state.groupwithaccounts.activeAccount,
+      (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+      (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy,
+      (state: AppState) => state.groupwithaccounts.activeGroup,
+      (state: AppState) => state.company.taxes],
       (activeAccount, activeAccountTaxHierarchy, activeGroupTaxHierarchy, activeGroup, taxes) => {
         let arr: IOption[] = [];
         if (taxes) {
           if (activeAccount) {
             if (activeAccountTaxHierarchy) {
               return _.differenceBy(taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), _.flattenDeep(activeAccountTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), 'id');
             } else {
               return taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               });
             }
           } else {
             if (activeGroup && taxes && activeGroupTaxHierarchy) {
               return _.differenceBy(taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), _.flattenDeep(activeGroupTaxHierarchy.inheritedTaxes.map(p => p.applicableTaxes)).map((p: any) => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               }), 'id');
             } else {
               return taxes.map(p => {
-                return {label: p.name, value: p.uniqueName};
+                return { label: p.name, value: p.uniqueName };
               });
             }
           }
@@ -164,9 +163,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         return arr;
       })).takeUntil(this.destroyed$);
     this.activeGroupSelected$ = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.activeAccount,
-        (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
-        (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy],
+      (state: AppState) => state.groupwithaccounts.activeAccount,
+      (state: AppState) => state.groupwithaccounts.activeAccountTaxHierarchy,
+      (state: AppState) => state.groupwithaccounts.activeGroupTaxHierarchy],
       (activeAccount, activeAccountTaxHierarchy, activeGroupTaxHierarchy) => {
         if (activeAccount) {
           if (activeAccountTaxHierarchy) {
@@ -322,9 +321,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public ngAfterViewInit() {
 
     this.isTaxableAccount$ = this.store.select(createSelector([
-        (state: AppState) => state.groupwithaccounts.groupswithaccounts,
-        (state: AppState) => state.groupwithaccounts.activeGroup,
-        (state: AppState) => state.groupwithaccounts.activeAccount],
+      (state: AppState) => state.groupwithaccounts.groupswithaccounts,
+      (state: AppState) => state.groupwithaccounts.activeGroup,
+      (state: AppState) => state.groupwithaccounts.activeAccount],
       (groupswithaccounts, activeGroup, activeAccount) => {
         let result: boolean = false;
         if (groupswithaccounts && activeGroup && activeAccount) {
@@ -376,7 +375,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
       let accounts: IOption[] = [];
       if (a.status === 'success') {
         a.body.results.map(acc => {
-          accounts.push({label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName});
+          accounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
         });
         let accountIndex = accounts.findIndex(acc => acc.value === activeAccount.uniqueName);
         if (accountIndex > -1) {
@@ -396,6 +395,10 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
     console.log('need to add new shared entity');
     this.store.dispatch(this._ledgerActions.shareAccount(accObject, activeAcc.uniqueName));
     this.shareAccountForm.reset();
+  }
+
+  public moveToAccountSelected(event: any) {
+    this.moveAccountForm.patchValue({ moveto: event.item.uniqueName });
   }
 
   public moveAccount() {
@@ -431,7 +434,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
         name: listItem.name,
         uniqueName: listItem.uniqueName
       });
-      listItem = Object.assign({}, listItem, {parentGroups: []});
+      listItem = Object.assign({}, listItem, { parentGroups: [] });
       listItem.parentGroups = newParents;
       if (listItem.groups.length > 0) {
         result = this.flattenGroup(listItem.groups, newParents);
