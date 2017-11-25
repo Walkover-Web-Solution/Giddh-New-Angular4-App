@@ -23,7 +23,7 @@
                         <button dropdownToggle type="button" class="form-control text-left btn-block dropdown-toggle">
                 {{ dropdownHeading}} <span class="select_drop pull-right mrT1"><i class="fa fa-caret-down"></i></span>
             </button>
-                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu" role="menu">
+                        <ul id="pageListDD" *dropdownMenu class="dropdown-menu pdL1 pdR1" role="menu">
                             <li>
                                 <label>
                   <input type="checkbox" [ngModelOptions]="{standalone: true}" (click)="selectAllPages($event)" [(ngModel)]="newRoleObj.isSelectedAllPages"> Select all

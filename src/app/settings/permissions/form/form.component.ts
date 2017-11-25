@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as moment from 'moment/moment';
 import isCidr from 'is-cidr';
 import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild, EventEmitter, Input, Output } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -11,6 +12,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { PermissionActions } from '../../../services/actions/permission/permission.action';
 import { AccountsAction } from '../../../services/actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 
 // some local const
 const DATE_RANGE = 'daterange';
@@ -123,7 +125,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       this.togglePeriodOptionsVal(PAST_PERIOD);
       return [PAST_PERIOD];
     }
-    return [DATE_RANGE];
+    return [null];
   }
 
   public getIPOptsFromData(data: ShareRequestForm) {
@@ -136,6 +138,27 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       return [CIDR_RANGE];
     }
     return [IP_ADDR];
+  }
+
+  public setDateRange(data?: ShareRequestForm) {
+    if (data && data.from && data.to) {
+      let f: any =  moment(data.from, GIDDH_DATE_FORMAT);
+      let t: any =  moment(data.to, GIDDH_DATE_FORMAT);
+      return [f._d, t._d];
+    }else {
+      let startDate = new Date();
+      let endDate = new Date();
+      startDate.setDate(startDate.getDate() - 30);
+      endDate.setDate(endDate.getDate());
+      return [startDate, endDate];
+    }
+  }
+
+  public bsValueChange(event: any) {
+    if (event) {
+      this.permissionForm.get('from').patchValue(moment(event[0]).format(GIDDH_DATE_FORMAT));
+      this.permissionForm.get('to').patchValue(moment(event[1]).format(GIDDH_DATE_FORMAT));
+    }
   }
 
   public initAcForm(data?: ShareRequestForm): void {
@@ -152,7 +175,8 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         period: ['DAY'],
         ipOptions: this.getIPOptsFromData(data),
         allowedIps: this._fb.array([]),
-        allowedCidrs: this._fb.array([])
+        allowedCidrs: this._fb.array([]),
+        dateRange: [this.setDateRange(data)]
       });
       let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
       let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
@@ -178,14 +202,15 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150)])],
         entity: ['company'],
         roleUniqueName: ['admin', [Validators.required]],
-        periodOptions: [DATE_RANGE],
+        periodOptions: [null],
         from: [null],
         to: [null],
         duration: [null],
         period: ['DAY'],
         ipOptions: [CIDR_RANGE],
         allowedIps: this._fb.array([]),
-        allowedCidrs: this._fb.array([])
+        allowedCidrs: this._fb.array([]),
+        dateRange: [this.setDateRange()]
       });
       let allowedIps = this.permissionForm.get('allowedIps') as FormArray;
       let allowedCidrs = this.permissionForm.get('allowedCidrs') as FormArray;
@@ -220,16 +245,22 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
       }
       // match with regex
       if (type === 'allowedIps') {
-        if (!this.validateIPaddress(val)) {
+        if (_.isNull(val) || _.isEmpty(val)) {
           errFound = true;
-          msg = 'Invalid IP Address';
+          msg = 'Field cannot be empty';
+        }else if (!this.validateIPaddress(val)) {
+          errFound = true;
+          msg = 'Please Enter Valid IP Address';
         }
       }
       // match cidr
       if (type === 'allowedCidrs') {
-        if (!isCidr(val)) {
+        if (_.isNull(val) || _.isEmpty(val)) {
           errFound = true;
-          msg = 'Invalid CIDR Range';
+          msg = 'Field cannot be empty';
+        }else if (!isCidr(val)) {
+          errFound = true;
+          msg = 'Please Enter Valid CIDR Range';
         }
       }
     }
@@ -270,6 +301,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
     form.allowedCidrs = CidrArr;
     form.allowedIps = IpArr;
+
+    if ( _.isNull(form.duration) || _.isEmpty(form.duration)) {
+      form.period = null;
+    }
 
     obj.action = (this.isUpdtCase) ? 'update' : 'create';
     obj.data = form;

@@ -181,7 +181,7 @@ export class InvoiceUiDataService {
           }
 
           selectedTemplate = this.BRToNewLine(selectedTemplate);
-          console.log('THe selected template is :', selectedTemplate);
+          // console.log('THe selected template is :', selectedTemplate);
 
           this.customTemplate.next(_.cloneDeep(selectedTemplate));
         }

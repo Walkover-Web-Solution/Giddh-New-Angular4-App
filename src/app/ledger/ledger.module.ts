@@ -1,6 +1,9 @@
+import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
+import { AdvanceSearchModelComponent } from './components/advance-search/advance-search.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
@@ -28,6 +31,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ButtonsModule } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -41,6 +45,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     UpdateLedgerTaxControlComponent,
     UpdateLedgerDiscountComponent,
     QuickAccountComponent,
+    AdvanceSearchModelComponent
   ],
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
@@ -66,6 +71,10 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     ConfirmModalModule,
     ShSelectModule,
     DecimalDigitsModule,
+    BsDatepickerModule,
+    DatepickerModule,
+    ButtonsModule,
+    BsDropdownModule
   ],
 })
 export class LedgerModule {

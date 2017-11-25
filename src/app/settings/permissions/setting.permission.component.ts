@@ -101,11 +101,13 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.waitAndReloadCompany();
   }
 
-  public onRevokePermission(email: string, roleUniquename: string) {
-    if (email && roleUniquename && this.selectedCompanyUniqueName) {
-      let obj = { emailId: email, entity: 'company', entityUniqueName: this.selectedCompanyUniqueName};
-      this.store.dispatch(this._accountsAction.unShareEntity(obj, roleUniquename));
+  public onRevokePermission(user: ShareRequestForm) {
+    if (user.emailId && user.roleUniqueName && this.selectedCompanyUniqueName) {
+      let obj = { emailId: user.emailId, entity: 'company', entityUniqueName: this.selectedCompanyUniqueName};
+      this.store.dispatch(this._accountsAction.unShareEntity(obj, user.roleUniqueName));
       this.waitAndReloadCompany();
+    }else {
+     this._toasty.warningToast(`Unable to delete User. Without user's EmailID and Role`);
     }
   }
 
