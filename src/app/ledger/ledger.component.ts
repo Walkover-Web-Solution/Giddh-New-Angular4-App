@@ -1,3 +1,4 @@
+import { show } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -81,6 +82,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
   @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
   @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
+  @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   @ViewChild('quickAccountModal') public quickAccountModal: ModalDirective;
   @ViewChild('ledgerSearchTerms') public ledgerSearchTerms: ElementRef;
   public showUpdateLedgerForm: boolean = false;
@@ -214,9 +216,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
   }
 
+  public hideEledgerWrap() {
+    this.lc.showEledger = false;
+  }
+
   public pageChanged(event: any): void {
     this.trxRequest.page = event.page;
-
     this.getTransactionData();
   }
 
@@ -253,6 +258,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
+          }else {
+            this.hideEledgerWrap();
           }
         });
       }
@@ -326,6 +333,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
       if (data && data.yodleeAdded) {
         this.getBankTransactions();
+      }else {
+        this.hideEledgerWrap();
       }
     });
   }
@@ -587,5 +596,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
       componentInstance.destroyed$.complete();
     });
 
+  }
+
+  /**
+   * onOpenAdvanceSearch
+   */
+  public onOpenAdvanceSearch() {
+    this.advanceSearchModel.show();
+  }
+
+  /**
+   * closeAdvanceSearchPopup
+   */
+  public closeAdvanceSearchPopup() {
+    this.advanceSearchModel.hide();
   }
 }

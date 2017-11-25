@@ -1,3 +1,4 @@
+import { ILedgerAdvanceSearchRequest, ILedgerAdvanceSearchResponse } from './../models/api-models/Ledger';
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -261,5 +262,25 @@ export class LedgerService {
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, MailLedgerRequest>(e, model, { accountUniqueName }));
+  }
+
+  public AdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string = '', to: string = '', sortingOrder: string = '', page: string = '', count: string = ''): Observable<BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+    return this._http.post(LEDGER_API.ADVANCE_SEARCH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+      .replace(':accountUniqueName', encodeURIComponent(accountUniqueName))
+      .replace(':fromDate', from).replace(':toDate', to).replace(':sortingOrder', sortingOrder).replace(':page', page).replace(':count', encodeURIComponent(count)), model)
+      .map((res) => {
+        let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res.json();
+        console.log('the response is :', data);
+        data.request = model;
+        data.queryString = { accountUniqueName, from, to, count };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>(e, model, { accountUniqueName }));
   }
 }
