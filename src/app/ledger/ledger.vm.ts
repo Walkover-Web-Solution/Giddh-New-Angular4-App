@@ -112,6 +112,7 @@ export class LedgerVM {
     requestObj.transactions.map((bl: any) => {
       // set transaction.particular to selectedAccount uniqueName
       bl.particular = bl.selectedAccount.uniqueName;
+      bl.isInclusiveTax = false;
       // filter taxes uniqueNames
       bl.taxes = bl.taxes.filter(p => p.isChecked).map(p => p.uniqueName);
       // filter discount
