@@ -207,7 +207,7 @@ export class SalesInvoiceComponent implements OnInit {
       this.store.select(p => p.session.companies).takeUntil(this.destroyed$).subscribe((companies: CompanyResponse[]) => {
         this.activeCompany = _.find(companies, (c: CompanyResponse) => c.uniqueName === company);
         if (this.activeCompany && this.activeCompany.country) {
-          this.invFormData.country.countryName = this.activeCompany.country.toLocaleLowerCase();
+          this.invFormData.country.countryName = this.activeCompany.country;
         }
       });
     });
@@ -395,7 +395,11 @@ export class SalesInvoiceComponent implements OnInit {
     // before submit request making some validation rules
     // check for account uniquename
     if (data.account && !data.account.uniqueName) {
-      this._toasty.warningToast('Customer Name can\'t be empty');
+      if (this.typeaheadNoResultsOfCustomer) {
+        this._toasty.warningToast('Need to select Bank/Cash A/c or Customer Name');
+      }else {
+        this._toasty.warningToast('Customer Name can\'t be empty');
+      }
       return;
     }
 
@@ -640,6 +644,11 @@ export class SalesInvoiceComponent implements OnInit {
             txn.stockUnit = null;
             txn.stockDetails = null;
             txn.stockList = [];
+            // reset fields
+            txn.rate = null;
+            txn.quantity = null;
+            txn.amount = 0;
+            txn.taxableValue = 0;
           }
           // toggle stock related fields
           this.toggleStockFields(txn);

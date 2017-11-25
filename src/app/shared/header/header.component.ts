@@ -177,6 +177,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         // get groups with accounts for general use
         this.store.dispatch(this._generalActions.getGroupWithAccounts());
         this.store.dispatch(this._generalActions.getAllState());
+        this.store.dispatch(this._generalActions.getFlattenAccount());
       }
     });
     if (this.route.snapshot.url.toString() === 'new-user') {
@@ -224,6 +225,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.store.dispatch(this.loginAction.ChangeCompany(selectedCompanyUniqueName));
     // get groups with accounts for general use
     this.store.dispatch(this._generalActions.getGroupWithAccounts());
+    this.store.dispatch(this._generalActions.getFlattenAccount());
     // }
   }
 

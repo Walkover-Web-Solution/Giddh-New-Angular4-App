@@ -36,7 +36,7 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
   public prepareDiscountList() {
     let discountAccountsList: IFlattenGroupsAccountsDetail = null;
     this.discountAccountsList$.take(1).subscribe(d => discountAccountsList = d);
-    if (!this.discountAccountsDetails.length) {
+    if (!this.discountAccountsDetails.length && discountAccountsList) {
       discountAccountsList.accountDetails.map(acc => {
         let disObj: ILedgerDiscount = {
           name: acc.name,

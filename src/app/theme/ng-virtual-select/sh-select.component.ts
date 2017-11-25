@@ -28,7 +28,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @Input() public notFoundMsg: string = 'No results found';
   @Input() public notFoundLink: boolean = false;
   @Input() public isFilterEnabled: boolean = true;
-  @Input() public width: string = 'inherit';
+  @Input() public width: string = 'auto';
   @Input() public ItemHeight: number = 41;
   @Input() public customFilter: (term: string, options: IOption) => boolean;
 
@@ -309,7 +309,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public clearSingleSelection(event, option: IOption) {
-    debugger;
+    // debugger;
     event.stopPropagation();
     this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
     this.onChange();
