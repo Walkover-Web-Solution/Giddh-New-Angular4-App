@@ -26,22 +26,7 @@
         </div>
 
     </div>
-    <div class="form-group clearfix">
-      <label>Description</label>
-      <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description"
-                formControlName="description"></textarea>
-    </div>
-  </div>
 
-  <div class="pd2 pdB clearfix">
-    <a href="javascript:void(0);" class="btn isActive"
-       *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE {{
-      (activeGroup$ | async)?.name }}</a>
-    <button class="btn btn-success pull-right" *ngIf="(showEditGroup$ | async)"
-            [ladda]="isUpdateGroupInProcess$ | async"
-            [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update
-    </button>
-  </div>
 </form>
 
 
@@ -66,34 +51,6 @@
 </div>
 <!--move group-->
 
-
-
-<!--move group-->
-<div class="pd2 clearfix ng-scope" *ngIf="!(activeGroup$ | async)?.fixed">
-    <form name="moveGroupForm" novalidate (submit)="moveGroup()" class="horizontal-form" [formGroup]="moveGroupForm">
-        <div>
-            <label class="mrR">Move to group</label>
-        </div>
-        <div class="form-group col-xs-5 pdL0 mr0">
-
-            <ng-template #moveGroupTemplate let-model="item">
-                <a href="javascript:void(0)" class="account-list-item" style="border-bottom:1px solid #e0e0e0;">
-                    <span class="account-list-item" style="display: block;font-size:12px">
-            <p>{{ model.name }}</p>
-          </span>
-            <span class="account-list-item" style="display: block;font-size:10px">
-            <p>{{ option.value }}</p>
-          </span>
-                </a>
-            </ng-template>
-
-            <input formControlName="moveto" placeholder="Group name" (typeaheadOnSelect)="moveToGroupSelected($event)" [typeahead]="accountList" typeaheadOptionField="name" class="form-control" [typeaheadItemTemplate]="moveGroupTemplate">
-        </div>
-        <div class="form-group mr0">
-            <button class="btn btn-primary" [disabled]="!moveGroupForm.valid">Move</button>
-        </div>
-    </form>
-</div>
 
 <!--taxes  -->
 
