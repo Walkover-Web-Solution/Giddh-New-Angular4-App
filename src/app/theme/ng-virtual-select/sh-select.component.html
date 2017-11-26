@@ -18,7 +18,7 @@
 
     <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))"
       (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
-    <div (click)="show($event); $event.stopPropagation()" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+    <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
       <ng-container *ngIf="selectedValues?.length">
         <!-- <div *ngIf="multiple" style="display:flex; flex-wrap:wrap;" >
                     <span class="chip" *ngFor="let sl of selectedValues">
