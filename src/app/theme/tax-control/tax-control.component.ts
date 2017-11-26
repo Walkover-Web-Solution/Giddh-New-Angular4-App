@@ -1,4 +1,4 @@
-import { Component, EventEmitter, forwardRef, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
@@ -54,7 +54,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   public ngOnChanges(changes: SimpleChanges) {
-    // chang
+    // change
     if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
       if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
         this.sum = 0;
