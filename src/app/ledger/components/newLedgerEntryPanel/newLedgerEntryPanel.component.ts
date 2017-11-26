@@ -18,7 +18,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { cloneDeep, forEach, isEmpty } from '../../../lodash-optimized';
+import { cloneDeep, forEach } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
@@ -141,14 +141,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateTotal() {
-    if (this.currentTxn.selectedAccount) {
+    if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.unit.rate) {
           // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
         }
       }
     }
-    let total = this.currentTxn.amount - this.currentTxn.discount;
+    let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
     this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
   }
 
@@ -211,9 +211,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    */
   public resetPanel() {
     this.resetBlankLedger.emit(true);
-    setTimeout(() => {
-      this.currentTxn = null;
-    }, 1000);
+    this.currentTxn = null;
   }
 
   public onUploadOutput(output: UploadOutput): void {

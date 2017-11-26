@@ -1,4 +1,3 @@
-import { show } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
@@ -6,7 +5,7 @@ import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../services/actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, TransactionsRequest, IELedgerResponse, ReconcileRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
