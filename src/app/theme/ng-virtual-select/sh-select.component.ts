@@ -140,10 +140,17 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public toggleSelected(item) {
+    let callChanges: boolean = true;
     if (!item) {
       return;
     }
     this.clearFilter();
+
+    if (!this.multiple) {
+      if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        callChanges = false;
+      }
+    }
 
     if (this.multiple) {
       this.selectMultiple(item);
@@ -151,7 +158,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.selectSingle(item);
     }
 
-    this.onChange();
+    if (callChanges) {
+      this.onChange();
+    }
   }
 
   public selectSingle(item) {
@@ -177,8 +186,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }, 0);
   }
 
-  public show(e: Event) {
-
+  public show(e: any) {
     if (this.isOpen || this.disabled) {
       return;
     }
