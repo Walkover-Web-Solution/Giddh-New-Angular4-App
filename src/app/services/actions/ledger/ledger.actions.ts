@@ -23,13 +23,14 @@ import { LedgerService } from '../../ledger.service';
 import { GroupService } from '../../group.service';
 import { FlattenGroupsAccountsResponse } from '../../../models/api-models/Group';
 import { BlankLedgerVM } from '../../../ledger/ledger.vm';
+import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class LedgerActions {
   @Effect()
   public GetTransactions$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_TRANSACTION)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       let req: TransactionsRequest = action.payload as TransactionsRequest;
       return this._ledgerService.GetLedgerTranscations(req.q, req.page, req.count, req.accountUniqueName, req.from, req.to, req.sort, req.reversePage);
     }).map(res => this.validateResponse<TransactionsResponse, TransactionsRequest>(res, {
@@ -43,7 +44,7 @@ export class LedgerActions {
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_LEDGER_ACCOUNT)
-    .switchMap(action => this._accountService.GetAccountDetails(action.payload))
+    .switchMap((action: CustomActions) =>  this._accountService.GetAccountDetails(action.payload))
     .map(res => this.validateResponse<AccountResponse, string>(res, {
       type: LEDGER.GET_LEDGER_ACCOUNT_RESPONSE,
       payload: res
@@ -55,7 +56,7 @@ export class LedgerActions {
   @Effect()
   public DownloadInvoiceFile$: Observable<Action> = this.action$
     .ofType(LEDGER.DOWNLOAD_LEDGER_INVOICE)
-    .switchMap(action => this._ledgerService.DownloadInvoice(action.payload.body, action.payload.accountUniqueName))
+    .switchMap((action: CustomActions) =>  this._ledgerService.DownloadInvoice(action.payload.body, action.payload.accountUniqueName))
     .map(res => this.validateResponse<string, DownloadLedgerRequest>(res, {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE_RESPONSE,
       payload: res
@@ -67,7 +68,7 @@ export class LedgerActions {
   @Effect()
   public GetDiscountAccounts$: Observable<Action> = this.action$
     .ofType(LEDGER.GET_DISCOUNT_ACCOUNTS_LIST)
-    .switchMap(action => this._groupService.GetFlattenGroupsAccounts('discount'))
+    .switchMap((action: CustomActions) =>  this._groupService.GetFlattenGroupsAccounts('discount'))
     .map(res => this.validateResponse<FlattenGroupsAccountsResponse, string>(res, {
       type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST_RESPONSE,
       payload: res
@@ -79,7 +80,7 @@ export class LedgerActions {
   @Effect()
   public CreateBlankLedger$: Observable<Action> = this.action$
     .ofType(LEDGER.CREATE_BLANK_LEDGER_REQUEST)
-    .switchMap(action => this._ledgerService.CreateLedger(action.payload.model, action.payload.accountUniqueName))
+    .switchMap((action: CustomActions) =>  this._ledgerService.CreateLedger(action.payload.model, action.payload.accountUniqueName))
     .map(res => this.validateResponse<LedgerResponse[], BlankLedgerVM>(res, {
       type: LEDGER.CREATE_BLANK_LEDGER_RESPONSE,
       payload: res
@@ -91,13 +92,13 @@ export class LedgerActions {
   @Effect()
   public DeleteTrxEntry$: Observable<Action> = this.action$
     .ofType(LEDGER.DELETE_TRX_ENTRY)
-    .switchMap(action => this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName))
+    .switchMap((action: CustomActions) =>  this._ledgerService.DeleteLedgerTransaction(action.payload.accountUniqueName, action.payload.entryUniqueName))
     .map(res => this.deleteTrxEntryResponse(res));
 
   @Effect()
   public DeleteTrxEntryResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.DELETE_TRX_ENTRY_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       let res = action.payload as BaseResponse<string, string>;
       if (res.status === 'success') {
         this._toasty.successToast('Entry deleted successfully', 'Success');
@@ -105,13 +106,13 @@ export class LedgerActions {
         this._toasty.errorToast(res.body);
       }
       return {
-        type: ''
+        type: 'EmptyAction'
       };
     });
   @Effect()
   public shareAccount$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARE_ACCOUNT)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this._accountService.AccountShare(
         action.payload.body,
         action.payload.accountUniqueName
@@ -123,11 +124,11 @@ export class LedgerActions {
   @Effect()
   public shareAccountResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
         return {
-          type: ''
+          type: 'EmptyAction'
         };
       } else {
         let data: BaseResponse<string, ShareAccountRequest> = action.payload;
@@ -139,7 +140,7 @@ export class LedgerActions {
   @Effect()
   public unShareAccount$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this._accountService.AccountUnshare(
         action.payload.user,
         action.payload.accountUniqueName
@@ -152,7 +153,7 @@ export class LedgerActions {
   @Effect()
   public unShareAccountResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       let data: BaseResponse<string, string> = action.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
@@ -160,7 +161,7 @@ export class LedgerActions {
         this._toasty.successToast(action.payload.body, '');
       }
       return {
-        type: ''
+        type: 'EmptyAction'
       };
       // return this.sharedAccountWith(data.queryString.accountUniqueName);
     });
@@ -168,26 +169,26 @@ export class LedgerActions {
   @Effect()
   public sharedAccount$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH)
-    .switchMap(action => this._accountService.AccountShareWith(action.payload))
+    .switchMap((action: CustomActions) =>  this._accountService.AccountShareWith(action.payload))
     .map(response => {
       return this.sharedAccountWithResponse(response);
     });
   @Effect()
   public sharedAccountResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
       return {
-        type: ''
+        type: 'EmptyAction'
       };
     });
 
   @Effect()
   public updateTxnEntry$: Observable<Action> = this.action$
     .ofType(LEDGER.UPDATE_TXN_ENTRY)
-    .switchMap(action => this._ledgerService.UpdateLedgerTransactions(action.payload.model,
+    .switchMap((action: CustomActions) =>  this._ledgerService.UpdateLedgerTransactions(action.payload.model,
       action.payload.accountUniqueName, action.payload.entryUniqueName))
     .map(resp => {
       return this.updateTxnEntryResponse(resp);
@@ -196,19 +197,19 @@ export class LedgerActions {
   @Effect()
   public updateTxnEntryResponse$: Observable<Action> = this.action$
     .ofType(LEDGER.UPDATE_TXN_ENTRY_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return { type: 'EmptyAction' };
       }
       this._toasty.successToast('entry updated successfully');
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
     @Effect()
     public CreateQuickAccountV2$: Observable<Action> = this.action$
       .ofType(LEDGER.CREATE_QUICK_ACCOUNT)
-      .switchMap(action => this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
+      .switchMap((action: CustomActions) =>  this._accountService.CreateAccountV2(action.payload.account, action.payload.accountUniqueName))
       .map(response => {
         return this.createQuickAccountResponseV2(response);
       });
@@ -216,23 +217,23 @@ export class LedgerActions {
     @Effect()
     public CreateQuickAccountResponseV2$: Observable<Action> = this.action$
       .ofType(LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE)
-      .map(action => {
+      .map((action: CustomActions) => {
         if (action.payload.status === 'error') {
           this._toasty.clearAllToaster();
           this._toasty.errorToast(action.payload.message, action.payload.code);
           return {
-            type: ''
+            type: 'EmptyAction'
           };
         } else {
           this._toasty.successToast('Account Created Successfully');
         }
-        return {type: ''};
+        return {type: 'EmptyAction'};
       });
 
     @Effect()
     public AdvanceSearch$: Observable<Action> = this.action$
       .ofType(LEDGER.ADVANCE_SEARCH)
-      .switchMap(action => this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from, action.payload.to, '', '', ''))
+      .switchMap((action: CustomActions) =>  this._ledgerService.AdvanceSearch(action.payload.model, action.payload.accountUniqueName, action.payload.from, action.payload.to, '', '', ''))
       .map(response => {
         return this.advanceSearchResponse(response);
       });
@@ -240,17 +241,17 @@ export class LedgerActions {
     @Effect()
     public AdvanceSearchResponse$: Observable<Action> = this.action$
       .ofType(LEDGER.ADVANCE_SEARCH_RESPONSE)
-      .map(action => {
+      .map((action: CustomActions) => {
         if (action.payload.status === 'error') {
           this._toasty.clearAllToaster();
           this._toasty.errorToast(action.payload.message, action.payload.code);
           return {
-            type: ''
+            type: 'EmptyAction'
           };
         } else {
           this._toasty.successToast('Data filtered successfully');
         }
-        return {type: ''};
+        return {type: 'EmptyAction'};
       });
 
   constructor(private action$: Actions,
@@ -261,34 +262,34 @@ export class LedgerActions {
     private _groupService: GroupService) {
   }
 
-  public GetTransactions(request: TransactionsRequest): Action {
+  public GetTransactions(request: TransactionsRequest): CustomActions {
     return {
       type: LEDGER.GET_TRANSACTION,
       payload: request
     };
   }
 
-  public GetLedgerAccount(value: string): Action {
+  public GetLedgerAccount(value: string): CustomActions {
     return {
       type: LEDGER.GET_LEDGER_ACCOUNT,
       payload: value
     };
   }
 
-  public DownloadInvoice(value: DownloadLedgerRequest, accountUniqueName: string): Action {
+  public DownloadInvoice(value: DownloadLedgerRequest, accountUniqueName: string): CustomActions {
     return {
       type: LEDGER.DOWNLOAD_LEDGER_INVOICE,
       payload: { body: value, accountUniqueName }
     };
   }
 
-  public GetDiscountAccounts(): Action {
+  public GetDiscountAccounts(): CustomActions {
     return {
       type: LEDGER.GET_DISCOUNT_ACCOUNTS_LIST
     };
   }
 
-  public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): Action {
+  public CreateBlankLedger(model: BlankLedgerVM, accountUniqueName: string): CustomActions {
     return {
       type: LEDGER.CREATE_BLANK_LEDGER_REQUEST,
       payload: { model, accountUniqueName }
@@ -301,25 +302,25 @@ export class LedgerActions {
       payload: txnUniqueName
     };
   }
-  public ResetLedger(): Action {
+  public ResetLedger(): CustomActions {
     return {
       type: LEDGER.RESET_LEDGER
     };
   }
-  public ResetUpdateLedger(): Action {
+  public ResetUpdateLedger(): CustomActions {
     return {
       type: LEDGER.RESET_UPDATE_TXN_ENTRY
     };
   }
 
-  public deleteTrxEntry(accountUniqueName: string, entryUniqueName: string): Action {
+  public deleteTrxEntry(accountUniqueName: string, entryUniqueName: string): CustomActions {
     return {
       type: LEDGER.DELETE_TRX_ENTRY,
       payload: { accountUniqueName, entryUniqueName }
     };
   }
 
-  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): Action {
+  public shareAccount(value: ShareAccountRequest, accountUniqueName: string): CustomActions {
     return {
       type: LEDGER.LEDGER_SHARE_ACCOUNT,
       payload: Object.assign({}, {
@@ -330,14 +331,14 @@ export class LedgerActions {
     };
   }
 
-  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): Action {
+  public shareAccountResponse(value: BaseResponse<string, ShareAccountRequest>): CustomActions {
     return {
       type: LEDGER.LEDGER_SHARE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
 
-  public unShareAccount(value: string, accountUniqueName: string): Action {
+  public unShareAccount(value: string, accountUniqueName: string): CustomActions {
     return {
       type: LEDGER.LEDGER_UNSHARE_ACCOUNT,
       payload: Object.assign({}, {
@@ -348,55 +349,55 @@ export class LedgerActions {
     };
   }
 
-  public unShareAccountResponse(value: BaseResponse<string, string>): Action {
+  public unShareAccountResponse(value: BaseResponse<string, string>): CustomActions {
     return {
       type: LEDGER.LEDGER_UNSHARE_ACCOUNT_RESPONSE,
       payload: value
     };
   }
 
-  public sharedAccountWith(accountUniqueName: string): Action {
+  public sharedAccountWith(accountUniqueName: string): CustomActions {
     return {
       type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH,
       payload: accountUniqueName
     };
   }
 
-  public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): Action {
+  public sharedAccountWithResponse(value: BaseResponse<AccountSharedWithResponse[], string>): CustomActions {
     return {
       type: LEDGER.LEDGER_SHARED_ACCOUNT_WITH_RESPONSE,
       payload: value
     };
   }
 
-  public deleteTrxEntryResponse(res: BaseResponse<string, string>): Action {
+  public deleteTrxEntryResponse(res: BaseResponse<string, string>): CustomActions {
     return {
       type: LEDGER.DELETE_TRX_ENTRY_RESPONSE,
       payload: res
     };
   }
 
-  public updateTxnEntry(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): Action {
+  public updateTxnEntry(model: LedgerUpdateRequest, accountUniqueName: string, entryUniqueName: string): CustomActions {
     return {
       type: LEDGER.UPDATE_TXN_ENTRY,
       payload: { model, accountUniqueName, entryUniqueName }
     };
   }
 
-  public updateTxnEntryResponse(payload: BaseResponse<LedgerResponse, LedgerUpdateRequest>): Action {
+  public updateTxnEntryResponse(payload: BaseResponse<LedgerResponse, LedgerUpdateRequest>): CustomActions {
     return {
       type: LEDGER.UPDATE_TXN_ENTRY_RESPONSE,
       payload
     };
   }
 
-  public resetQuickAccountModal(): Action {
+  public resetQuickAccountModal(): CustomActions {
     return {
       type: LEDGER.RESET_QUICK_ACCOUNT_MODAL
     };
   }
 
-  public createQuickAccountV2(value: string, account: AccountRequestV2): Action {
+  public createQuickAccountV2(value: string, account: AccountRequestV2): CustomActions {
     return {
       type: LEDGER.CREATE_QUICK_ACCOUNT,
       payload: Object.assign({}, {
@@ -407,7 +408,7 @@ export class LedgerActions {
     };
   }
 
-  public createQuickAccountResponseV2(value: BaseResponse<AccountResponseV2, AccountRequestV2>): Action {
+  public createQuickAccountResponseV2(value: BaseResponse<AccountResponseV2, AccountRequestV2>): CustomActions {
     return {
       type: LEDGER.CREATE_QUICK_ACCOUNT_RESPONSE,
       payload: value
@@ -420,21 +421,21 @@ export class LedgerActions {
     };
   }
 
-  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string): Action {
+  public doAdvanceSearch(model: ILedgerAdvanceSearchRequest, accountUniqueName: string, from: string, to: string): CustomActions {
     return {
       type: LEDGER.ADVANCE_SEARCH,
       payload: { model, accountUniqueName, from, to }
     };
   }
 
-  public advanceSearchResponse(value: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>): Action {
+  public advanceSearchResponse(value: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest>): CustomActions {
     return {
       type: LEDGER.ADVANCE_SEARCH_RESPONSE,
       payload: value
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 import { SETTINGS_PROFILE_ACTIONS } from './settings.profile.const';
 import { SettingsProfileService } from '../../../settings.profile.service';
 import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
+import { CustomActions } from '../../../../store/customActions';
 
 @Injectable()
 export class SettingsProfileActions {
@@ -18,7 +19,7 @@ export class SettingsProfileActions {
  @Effect()
   public GetSMSKey$: Observable<Action> = this.action$
     .ofType(SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO)
-    .switchMap(action => this.settingsProfileService.GetProfileInfo())
+    .switchMap((action: CustomActions) =>  this.settingsProfileService.GetProfileInfo())
     .map(res => this.validateResponse<any, string>(res, {
       type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_RESPONSE,
       payload: res
@@ -30,7 +31,7 @@ export class SettingsProfileActions {
   @Effect()
   public UpdateProfile$: Observable<Action> = this.action$
     .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.settingsProfileService.UpdateProfile(action.payload)
         .map(response => this.UpdateProfileResponse(response));
     });
@@ -38,7 +39,7 @@ export class SettingsProfileActions {
   @Effect()
   private UpdateProfileResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
@@ -55,33 +56,33 @@ export class SettingsProfileActions {
     private settingsProfileService: SettingsProfileService) {
   }
 
-  public GetProfileInfo(): Action {
+  public GetProfileInfo(): CustomActions {
     return {
       type: SETTINGS_PROFILE_ACTIONS.GET_PROFILE_INFO,
     };
   }
 
-  public UpdateProfile(value): Action {
+  public UpdateProfile(value): CustomActions {
     return {
       type: SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE,
       payload: value
     };
   }
 
-  public UpdateProfileResponse(value): Action {
+  public UpdateProfileResponse(value): CustomActions {
     return {
       type: SETTINGS_PROFILE_ACTIONS.UPDATE_PROFILE_RESPONSE,
       payload: value
     };
   }
 
-  public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean ): Action {
+  public SetMultipleCurrency(response: CompanyResponse, isMultipleCurrency: boolean ): CustomActions {
     return {
       type: CompanyActions.SET_MULTIPLE_CURRENCY_FIELD,
       payload: { companyUniqueName: response.uniqueName, isMultipleCurrency }
     };
   }
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

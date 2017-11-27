@@ -6,6 +6,7 @@ import * as _ from '../../lodash-optimized';
 import { StockDetailResponse, StocksResponse } from '../../models/api-models/Inventory';
 import { IMfStockSearchRequest, ManufacturingItemRequest } from '../../models/interfaces/manufacturing.interface';
 import { IStocksItem } from '../../models/interfaces/stocksItem.interface';
+import { CustomActions } from '../customActions';
 
 export interface ManufacturingState {
     reportData: StocksResponse;
@@ -19,7 +20,7 @@ export const initialState: ManufacturingState = {
     stockToUpdate: null
 };
 
-export function ManufacturingReducer(state = initialState, action: Action): ManufacturingState {
+export function ManufacturingReducer(state = initialState, action: CustomActions): ManufacturingState {
     switch (action.type) {
         case MANUFACTURING_ACTIONS.MF_REPORT: {
             return state;

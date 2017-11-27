@@ -11,13 +11,14 @@ import { AppState } from '../../../store/roots';
 import { Observable } from 'rxjs/Rx';
 import { InventoryService } from '../../inventory.service';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
+import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class StockReportActions {
 
   @Effect() private GetStocksReport$: Observable<Action> = this.action$
     .ofType(STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       // let activeGroup: StockGroupResponse = null;
       // let sub = this.store.select(a => a.inventory.activeGroup);
       // sub.take(1).subscribe(a => {
@@ -42,14 +43,14 @@ export class StockReportActions {
     private _inventoryService: InventoryService) {
   }
 
-  public GetStocksReport(stockReportRequest: StockReportRequest): Action {
+  public GetStocksReport(stockReportRequest: StockReportRequest): CustomActions {
     return {
       type: STOCKS_REPORT_ACTIONS.GET_STOCKS_REPORT,
       payload: stockReportRequest
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

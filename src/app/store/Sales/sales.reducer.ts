@@ -4,6 +4,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../../theme/ng-select/option.interface';
+import { CustomActions } from '../customActions';
 
 export interface SalesState {
   invObj: any;
@@ -26,7 +27,7 @@ const initialState = {
   flattenSalesAc: []
 };
 
-export function salesReducer(state = initialState, action: Action): SalesState {
+export function salesReducer(state = initialState, action: CustomActions): SalesState {
   switch (action.type) {
     case SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE : {
       let res: BaseResponse<AccountResponseV2, string> = action.payload;

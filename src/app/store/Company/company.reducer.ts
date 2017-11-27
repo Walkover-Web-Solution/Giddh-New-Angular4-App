@@ -4,6 +4,7 @@ import { CompanyActions } from '../../services/actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { SETTINGS_TAXES_ACTIONS } from '../../services/actions/settings/taxes/settings.taxes.const';
 import * as _ from '../../lodash-optimized';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the CompanyState
@@ -21,7 +22,7 @@ const initialState: CurrentCompanyState = {
   isTaxesLoading: false
 };
 
-export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: Action) => {
+export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: CustomActions) => {
 
   switch (action.type) {
     case 'CATCH_ERROR':

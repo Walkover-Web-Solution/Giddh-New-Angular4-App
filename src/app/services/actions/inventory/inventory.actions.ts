@@ -9,19 +9,20 @@ import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../toaster.service';
 import { InventoryActionsConst } from './inventory.const';
 import { Router } from '@angular/router';
+import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class InventoryAction {
   @Effect()
   public addNewGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.AddNewGroup)
-    .switchMap(action => this._inventoryService.CreateStockGroup(action.payload))
+    .switchMap((action: CustomActions) =>  this._inventoryService.CreateStockGroup(action.payload))
     .map(response => this.addNewGroupResponse(response));
 
   @Effect()
   public addNewGroupResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.AddNewGroupResponse)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
       if (data.status === 'error') {
         this._toasty.clearAllToaster();
@@ -29,19 +30,19 @@ export class InventoryAction {
       } else {
         this._toasty.successToast('Group Created Successfully');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public updateGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateGroup)
-    .switchMap(action => this._inventoryService.UpdateStockGroup(action.payload.body, action.payload.stockGroupUniquename))
+    .switchMap((action: CustomActions) =>  this._inventoryService.UpdateStockGroup(action.payload.body, action.payload.stockGroupUniquename))
     .map(response => this.updateGroupResponse(response));
 
   @Effect()
   public updateGroupResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateGroupResponse)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<StockGroupResponse, StockGroupRequest> = response.payload;
       if (data.status === 'error') {
         this._toasty.clearAllToaster();
@@ -49,32 +50,32 @@ export class InventoryAction {
       } else {
         this._toasty.successToast('Group Updated Successfully');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public removeGroup$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.RemoveGroup)
-    .switchMap(action => this._inventoryService.DeleteStockGroup(action.payload))
+    .switchMap((action: CustomActions) =>  this._inventoryService.DeleteStockGroup(action.payload))
     .map(response => this.removeGroupResponse(response));
 
   @Effect()
   public removeGroupResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.RemoveGroupResponse)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<string, string> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       } else {
         this._toasty.successToast(data.body, '');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public GetStockUniqueName$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetStockUniqueName)
-    .switchMap(action => this._inventoryService.GetStockDetails(action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
+    .switchMap((action: CustomActions) =>  this._inventoryService.GetStockDetails(action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
     .map(response => {
       return this.GetStockUniqueNameResponse(response);
     });
@@ -82,14 +83,14 @@ export class InventoryAction {
   @Effect()
   public GetStockUniqueNameResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetStockUniqueNameResponse)
-    .map(action => {
-      return { type: '' };
+    .map((action: CustomActions) => {
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public GetStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetStock)
-    .switchMap(action => this._inventoryService.GetStocks())
+    .switchMap((action: CustomActions) =>  this._inventoryService.GetStocks())
     .map(response => {
       return this.GetStockResponse(response);
     });
@@ -97,15 +98,15 @@ export class InventoryAction {
   @Effect()
   public GetStockResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetStockResponse)
-    .map(action => {
-      return { type: '' };
+    .map((action: CustomActions) => {
+      return { type: 'EmptyAction' };
     });
 
   // Get manufacturing stock
   @Effect()
   public GetManufacturingStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetManufacturingStock)
-    .switchMap(action => this._inventoryService.GetManufacturingStocks())
+    .switchMap((action: CustomActions) =>  this._inventoryService.GetManufacturingStocks())
     .map(response => {
       return this.GetManufacturingStockResponse(response);
     });
@@ -113,15 +114,15 @@ export class InventoryAction {
   @Effect()
   public GetManufacturingStockResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.GetManufacturingStockResponse)
-    .map(action => {
-      return { type: '' };
+    .map((action: CustomActions) => {
+      return { type: 'EmptyAction' };
     });
 
     // Get manufacturing stock for create manufacturing
     @Effect()
     public GetManufacturingStockForCreate$: Observable<Action> = this.action$
       .ofType(InventoryActionsConst.GetManufacturingStockForCreate)
-      .switchMap(action => this._inventoryService.GetManufacturingStocksForCreateMF())
+      .switchMap((action: CustomActions) =>  this._inventoryService.GetManufacturingStocksForCreateMF())
       .map(response => {
         return this.GetManufacturingCreateStockResponse(response);
       });
@@ -129,20 +130,20 @@ export class InventoryAction {
     @Effect()
     public GetManufacturingStockForCreateResponse$: Observable<Action> = this.action$
       .ofType(InventoryActionsConst.GetManufacturingStockForCreateResponse)
-      .map(action => {
-        return { type: '' };
+      .map((action: CustomActions) => {
+        return { type: 'EmptyAction' };
       });
 
   @Effect()
   public createStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.CreateStock)
-    .switchMap(action => this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName))
+    .switchMap((action: CustomActions) =>  this._inventoryService.CreateStock(action.payload.stock, action.payload.stockGroupUniqueName))
     .map(response => this.createStockResponse(response));
 
   @Effect()
   public createStockResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.CreateStockResponse)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
       if (data.status === 'error') {
         this._toasty.clearAllToaster();
@@ -152,19 +153,19 @@ export class InventoryAction {
         this._toasty.successToast('Stock Created Successfully');
         return this.resetActiveStock();
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public updateStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateStock)
-    .switchMap(action => this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
+    .switchMap((action: CustomActions) =>  this._inventoryService.UpdateStock(action.payload.stock, action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
     .map(response => this.updateStockResponse(response));
 
   @Effect()
   public updateStockResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.UpdateStockResponse)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<StockDetailResponse, CreateStockRequest> = response.payload;
       if (data.status === 'error') {
         this._toasty.clearAllToaster();
@@ -173,19 +174,19 @@ export class InventoryAction {
         this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName, 'add-stock', data.body.uniqueName]);
         this._toasty.successToast('Stock Updated Successfully');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public removeStock$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.RemoveStock)
-    .switchMap(action => this._inventoryService.DeleteStock(action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
+    .switchMap((action: CustomActions) =>  this._inventoryService.DeleteStock(action.payload.stockGroupUniqueName, action.payload.stockUniqueName))
     .map(response => this.removeStockResponse(response));
 
   @Effect()
   public removeStockResponse$: Observable<Action> = this.action$
     .ofType(InventoryActionsConst.RemoveStockResponse)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<string, string> = response.payload;
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
@@ -193,7 +194,7 @@ export class InventoryAction {
         this._toasty.successToast(data.body, '');
         this.router.navigate(['/pages', 'inventory', 'add-group', data.queryString.stockGroupUniqueName]);
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   constructor(private store: Store<AppState>, private _inventoryService: InventoryService, private action$: Actions,
@@ -201,117 +202,117 @@ export class InventoryAction {
 
   }
 
-  public addNewGroup(value: StockGroupRequest): Action {
+  public addNewGroup(value: StockGroupRequest): CustomActions {
     return {
       type: InventoryActionsConst.AddNewGroup,
       payload: value
     };
   }
 
-  public addNewGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): Action {
+  public addNewGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): CustomActions {
     return {
       type: InventoryActionsConst.AddNewGroupResponse,
       payload: value
     };
   }
 
-  public createStock(value: CreateStockRequest, stockGroupUniqueName: string): Action {
+  public createStock(value: CreateStockRequest, stockGroupUniqueName: string): CustomActions {
     return {
       type: InventoryActionsConst.CreateStock,
       payload: { stock: value, stockGroupUniqueName }
     };
   }
 
-  public createStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): Action {
+  public createStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): CustomActions {
     return {
       type: InventoryActionsConst.CreateStockResponse,
       payload: value
     };
   }
 
-  public updateStock(value: CreateStockRequest, stockGroupUniqueName: string, stockUniqueName: string): Action {
+  public updateStock(value: CreateStockRequest, stockGroupUniqueName: string, stockUniqueName: string): CustomActions {
     return {
       type: InventoryActionsConst.UpdateStock,
       payload: { stock: value, stockGroupUniqueName, stockUniqueName }
     };
   }
 
-  public updateStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): Action {
+  public updateStockResponse(value: BaseResponse<StockDetailResponse, CreateStockRequest>): CustomActions {
     return {
       type: InventoryActionsConst.UpdateStockResponse,
       payload: value
     };
   }
 
-  public updateGroup(value: StockGroupRequest, stockGroupUniquename: string): Action {
+  public updateGroup(value: StockGroupRequest, stockGroupUniquename: string): CustomActions {
     return {
       type: InventoryActionsConst.UpdateGroup,
       payload: { body: value, stockGroupUniquename }
     };
   }
 
-  public updateGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): Action {
+  public updateGroupResponse(value: BaseResponse<StockGroupResponse, StockGroupRequest>): CustomActions {
     return {
       type: InventoryActionsConst.UpdateGroupResponse,
       payload: value
     };
   }
 
-  public removeGroup(value: string): Action {
+  public removeGroup(value: string): CustomActions {
     return {
       type: InventoryActionsConst.RemoveGroup,
       payload: value
     };
   }
 
-  public removeGroupResponse(value: BaseResponse<string, string>): Action {
+  public removeGroupResponse(value: BaseResponse<string, string>): CustomActions {
     return {
       type: InventoryActionsConst.RemoveGroupResponse,
       payload: value
     };
   }
 
-  public removeStock(stockGroupUniqueName: string, stockUniqueName: string): Action {
+  public removeStock(stockGroupUniqueName: string, stockUniqueName: string): CustomActions {
     return {
       type: InventoryActionsConst.RemoveStock,
       payload: { stockGroupUniqueName, stockUniqueName }
     };
   }
 
-  public removeStockResponse(value: BaseResponse<string, string>): Action {
+  public removeStockResponse(value: BaseResponse<string, string>): CustomActions {
     return {
       type: InventoryActionsConst.RemoveStockResponse,
       payload: value
     };
   }
 
-  public resetActiveGroup(): Action {
+  public resetActiveGroup(): CustomActions {
     return {
       type: InventoryActionsConst.ResetActiveGroup
     };
   }
 
-  public GetStockUniqueName(stockGroupUniqueName: string, stockUniqueName: string): Action {
+  public GetStockUniqueName(stockGroupUniqueName: string, stockUniqueName: string): CustomActions {
     return {
       type: InventoryActionsConst.GetStockUniqueName,
       payload: { stockGroupUniqueName, stockUniqueName }
     };
   }
 
-  public GetStockUniqueNameResponse(value: BaseResponse<StockDetailResponse, string>): Action {
+  public GetStockUniqueNameResponse(value: BaseResponse<StockDetailResponse, string>): CustomActions {
     return {
       type: InventoryActionsConst.GetStockUniqueNameResponse,
       payload: value
     };
   }
 
-  public GetStock(): Action {
+  public GetStock(): CustomActions {
     return {
       type: InventoryActionsConst.GetStock
     };
   }
 
-  public GetStockResponse(value: BaseResponse<StocksResponse, string>): Action {
+  public GetStockResponse(value: BaseResponse<StocksResponse, string>): CustomActions {
     return {
       type: InventoryActionsConst.GetStockResponse,
       payload: value
@@ -319,13 +320,13 @@ export class InventoryAction {
   }
 
   // Get Stock for manufacturing
-  public GetManufacturingStock(): Action {
+  public GetManufacturingStock(): CustomActions {
     return {
       type: InventoryActionsConst.GetManufacturingStock
     };
   }
 
-  public GetManufacturingStockResponse(value: BaseResponse<StocksResponse, string>): Action {
+  public GetManufacturingStockResponse(value: BaseResponse<StocksResponse, string>): CustomActions {
     return {
       type: InventoryActionsConst.GetManufacturingStockResponse,
       payload: value
@@ -333,37 +334,37 @@ export class InventoryAction {
   }
 
   // Get Stock for create manufacturing
-  public GetManufacturingCreateStock(): Action {
+  public GetManufacturingCreateStock(): CustomActions {
     return {
       type: InventoryActionsConst.GetManufacturingStockForCreate
     };
   }
 
-  public GetManufacturingCreateStockResponse(value: BaseResponse<StocksResponse, string>): Action {
+  public GetManufacturingCreateStockResponse(value: BaseResponse<StocksResponse, string>): CustomActions {
     return {
       type: InventoryActionsConst.GetManufacturingStockForCreateResponse,
       payload: value
     };
   }
 
-  public resetActiveStock(): Action {
+  public resetActiveStock(): CustomActions {
     return {
       type: InventoryActionsConst.ResetActiveStock
     };
   }
-  public showLoaderForStock(): Action {
+  public showLoaderForStock(): CustomActions {
     return {
       type: InventoryActionsConst.ShowLoadingForStockEditInProcess
     };
   }
 
-  public hideLoaderForStock(): Action {
+  public hideLoaderForStock(): CustomActions {
     return {
       type: InventoryActionsConst.HideLoadingForStockEditInProcess
     };
   }
 
-  public ResetInventoryState(): Action {
+  public ResetInventoryState(): CustomActions {
     return {
       type: InventoryActionsConst.ResetInventoryState
     };

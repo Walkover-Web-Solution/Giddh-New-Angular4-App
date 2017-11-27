@@ -10,12 +10,12 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store';
 import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
-import { go } from '@ngrx/router-store';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { CompanyResponse, StateDetailsResponse } from '../../models/api-models/Company';
 import { CompanyService } from '../companyService.service';
 import { Configuration } from '../../app.constant';
 import { ROUTES } from '../../app.routes';
+import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class LoginActions {
@@ -61,7 +61,7 @@ export class LoginActions {
   @Effect()
   public signupWithGoogle$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_REQUEST)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this.auth.LoginWithGoogle(action.payload)
     )
     .map(response => {
@@ -71,16 +71,16 @@ export class LoginActions {
   @Effect()
   public signupWithGoogleResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
         return {
-          type: ''
+          type: 'EmptyAction'
         };
       } else {
         return this.LoginSuccess();
@@ -90,7 +90,7 @@ export class LoginActions {
   @Effect()
   public signupWithLinkedin$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this.auth.LoginWithLinkedin(action.payload)
     )
     .map(response => this.signupWithLinkedinResponse(response));
@@ -98,16 +98,16 @@ export class LoginActions {
   @Effect()
   public signupWithLinkedinResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
         return {
-          type: ''
+          type: 'EmptyAction'
         };
       } else {
         return this.LoginSuccess();
@@ -117,25 +117,25 @@ export class LoginActions {
   @Effect()
   public signupWithEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailRequest)
-    .switchMap(action => this.auth.SignupWithEmail(action.payload))
+    .switchMap((action: CustomActions) => this.auth.SignupWithEmail(action.payload))
     .map(response => this.SignupWithEmailResponce(response));
 
   @Effect()
   public signupWithEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithEmailResponce)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'success') {
         this._toaster.successToast(action.payload.body);
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: ''};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public verifyEmail$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailRequest)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this.auth.VerifyEmail(action.payload as VerifyEmailModel)
     )
     .map(response => this.VerifyEmailResponce(response));
@@ -143,11 +143,11 @@ export class LoginActions {
   @Effect()
   public verifyEmailResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyEmailResponce)
-    .map(action => {
+    .map((action: CustomActions) => {
       let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       return this.LoginSuccess();
     });
@@ -155,19 +155,19 @@ export class LoginActions {
   @Effect()
   public signupWithMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithMobileRequest)
-    .switchMap(action => this.auth.SignupWithMobile(action.payload))
+    .switchMap((action: CustomActions) => this.auth.SignupWithMobile(action.payload))
     .map(response => this.SignupWithMobileResponce(response));
 
   @Effect()
   public signupWithMobileResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.SignupWithMobileResponce)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'success') {
         this._toaster.successToast(action.payload.body);
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: ''};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
@@ -181,7 +181,8 @@ export class LoginActions {
       let companies = results[1] as BaseResponse<CompanyResponse[], string>;
       if (companies.body && companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
-        return go(['/pages/new-user']);
+        this._router.navigate(['/pages/new-user']);
+        return;
       } else {
         if (stateDetail.body && stateDetail.status === 'success') {
           cmpUniqueName = stateDetail.body.companyUniqueName;
@@ -191,7 +192,8 @@ export class LoginActions {
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             // this.store.dispatch(replace(['/pages/home']));
             // if (ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
-            return go([stateDetail.body.lastState]);
+            this._router.navigate([stateDetail.body.lastState]);
+            return { type: 'EmptyAction' };
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -202,8 +204,8 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-            return go([stateDetail.body.lastState]);
-
+            this._router.navigate([stateDetail.body.lastState]);
+            return { type: 'EmptyAction' };
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -215,23 +217,25 @@ export class LoginActions {
           this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(respState));
           this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-          return go(['/pages/home']);
+          this._router.navigate(['/pages/home']);
+          return { type: 'EmptyAction' };
         }
       }
-      // return { type: '' };
+      // return { type: 'EmptyAction' };
     });
 
   @Effect()
   public logoutSuccess$: Observable<Action> = this.actions$
     .ofType(LoginActions.LogOut)
-    .map(action => {
-      return go(['/login']);
+    .map((action: CustomActions) => {
+      this._router.navigate(['/login']);
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public verifyMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyMobileRequest)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this.auth.VerifyOTP(action.payload as VerifyMobileModel)
     )
     .map(response => this.VerifyMobileResponce(response));
@@ -239,11 +243,11 @@ export class LoginActions {
   @Effect()
   public verifyMobileResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyMobileResponce)
-    .map(action => {
+    .map((action: CustomActions) => {
       let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       return this.LoginSuccess();
     });
@@ -251,7 +255,7 @@ export class LoginActions {
   @Effect()
   public verifyTwoWayAuth$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyTwoWayAuthRequest)
-    .switchMap(action =>
+    .switchMap((action: CustomActions) =>
       this.auth.VerifyOTP(action.payload as VerifyMobileModel)
     )
     .map(response => this.VerifyTwoWayAuthResponse(response));
@@ -259,10 +263,10 @@ export class LoginActions {
   @Effect()
   public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyTwoWayAuthResponse)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       return this.LoginSuccess();
     });
@@ -270,13 +274,13 @@ export class LoginActions {
   @Effect()
   public GoogleElectronLogin$: Observable<Action> = this.actions$
     .ofType(LoginActions.GoogleLoginElectron)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.http.get(Configuration.ApiUrl + 'v2/login-with-google', action.payload).map(p => p.json());
     })
     .map(data => {
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -285,13 +289,13 @@ export class LoginActions {
   @Effect()
   public LinkedInElectronLogin$: Observable<Action> = this.actions$
     .ofType(LoginActions.LinkedInLoginElectron)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.http.get(Configuration.ApiUrl + 'v2/login-with-linkedIn', action.payload).map(p => p.json());
     })
     .map(data => {
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return {type: ''};
+        return { type: 'EmptyAction' };
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -300,7 +304,7 @@ export class LoginActions {
   @Effect()
   public ClearSession$: Observable<Action> = this.actions$
     .ofType(LoginActions.ClearSession)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.auth.ClearSession();
     }).map(data => {
       return this.LogOut();
@@ -309,7 +313,7 @@ export class LoginActions {
   @Effect()
   public CHANGE_COMPANY$: Observable<Action> = this.actions$
     .ofType(CompanyActions.CHANGE_COMPANY)
-    .switchMap(action => this._companyService.getStateDetails(action.payload))
+    .switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload))
     .map(response => {
       if (response.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body.lastState.split('/')[0]) === -1) {
         //
@@ -326,297 +330,297 @@ export class LoginActions {
   @Effect()
   public addNewMobile$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddNewMobileNo)
-    .switchMap(action => this.auth.VerifyNumber(action.payload))
+    .switchMap((action: CustomActions) => this.auth.VerifyNumber(action.payload))
     .map(response => this.AddNewMobileNoResponce(response));
 
   @Effect()
   public addNewMobileResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddNewMobileNoResponse)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'success') {
         this._toaster.successToast(action.payload.body);
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: ''};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public FectchUserDetails$: Observable<Action> = this.actions$
     .ofType(LoginActions.FetchUserDetails)
-    .switchMap(action => this.auth.FetchUserDetails())
+    .switchMap((action: CustomActions) => this.auth.FetchUserDetails())
     .map(response => this.FetchUserDetailsResponse(response));
 
   @Effect()
   public FectchUserDetailsResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.FetchUserDetailsResponse)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: ''};
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public SubscribedCompanies$: Observable<Action> = this.actions$
     .ofType(LoginActions.SubscribedCompanies)
-    .switchMap(action => this.auth.GetSubScribedCompanies())
+    .switchMap((action: CustomActions) => this.auth.GetSubScribedCompanies())
     .map(response => this.SubscribedCompaniesResponse(response));
 
   @Effect()
   public AddBalance$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddBalance)
-    .switchMap(action => this.auth.AddBalance(action.payload))
+    .switchMap((action: CustomActions) => this.auth.AddBalance(action.payload))
     .map(response => this.AddBalanceResponse(response));
 
   @Effect()
   public AddBalanceResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.AddBalanceResponse)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return {type: ''};
+      return { type: 'EmptyAction' };
     });
 
   constructor(public _router: Router,
-              private actions$: Actions,
-              private auth: AuthenticationService,
-              public _toaster: ToasterService,
-              private store: Store<AppState>,
-              private comapnyActions: CompanyActions,
-              private _companyService: CompanyService,
-              private http: Http) {
+    private actions$: Actions,
+    private auth: AuthenticationService,
+    public _toaster: ToasterService,
+    private store: Store<AppState>,
+    private comapnyActions: CompanyActions,
+    private _companyService: CompanyService,
+    private http: Http) {
   }
 
-  public SignupWithEmailRequest(value: string): Action {
+  public SignupWithEmailRequest(value: string): CustomActions {
     return {
       type: LoginActions.SignupWithEmailRequest,
       payload: value
     };
   }
 
-  public SignupWithEmailResponce(value: BaseResponse<string, string>): Action {
+  public SignupWithEmailResponce(value: BaseResponse<string, string>): CustomActions {
     return {
       type: LoginActions.SignupWithEmailResponce,
       payload: value
     };
   }
 
-  public ResetSignupWithEmailState(): Action {
+  public ResetSignupWithEmailState(): CustomActions {
     return {
       type: LoginActions.ResetSignupWithEmailState
     };
   }
 
-  public SignupWithMobileRequest(value: SignupWithMobile): Action {
+  public SignupWithMobileRequest(value: SignupWithMobile): CustomActions {
     return {
       type: LoginActions.SignupWithMobileRequest,
       payload: value
     };
   }
 
-  public SignupWithMobileResponce(value: BaseResponse<string, SignupWithMobile>): Action {
+  public SignupWithMobileResponce(value: BaseResponse<string, SignupWithMobile>): CustomActions {
     return {
       type: LoginActions.SignupWithMobileResponce,
       payload: value
     };
   }
 
-  public ResetSignupWithMobileState(): Action {
+  public ResetSignupWithMobileState(): CustomActions {
     return {
       type: LoginActions.ResetSignupWithMobileState
     };
   }
 
-  public VerifyEmailRequest(value: VerifyEmailModel): Action {
+  public VerifyEmailRequest(value: VerifyEmailModel): CustomActions {
     return {
       type: LoginActions.VerifyEmailRequest,
       payload: value
     };
   }
 
-  public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): Action {
+  public VerifyEmailResponce(value: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel>): CustomActions {
     return {
       type: LoginActions.VerifyEmailResponce,
       payload: value
     };
   }
 
-  public signupWithGoogle(value: string): Action {
+  public signupWithGoogle(value: string): CustomActions {
     return {
       type: LoginActions.SIGNUP_WITH_GOOGLE_REQUEST,
       payload: value
     };
   }
 
-  public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): Action {
+  public signupWithGoogleResponse(value: BaseResponse<VerifyEmailResponseModel, string>): CustomActions {
     return {
       type: LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE,
       payload: value
     };
   }
 
-  public signupWithLinkedin(value: LinkedInRequestModel): Action {
+  public signupWithLinkedin(value: LinkedInRequestModel): CustomActions {
     return {
       type: LoginActions.SIGNUP_WITH_LINKEDIN_REQUEST,
       payload: value
     };
   }
 
-  public signupWithLinkedinResponse(value: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>): Action {
+  public signupWithLinkedinResponse(value: BaseResponse<VerifyEmailResponseModel, LinkedInRequestModel>): CustomActions {
     return {
       type: LoginActions.SIGNUP_WITH_LINKEDIN_RESPONSE,
       payload: value
     };
   }
 
-  public resetSocialLogoutAttempt(): Action {
+  public resetSocialLogoutAttempt(): CustomActions {
     return {
       type: LoginActions.RESET_SOCIAL_LOGOUT_ATTEMPT
     };
   }
 
-  public socialLogoutAttempt(): Action {
+  public socialLogoutAttempt(): CustomActions {
     return {
       type: LoginActions.SOCIAL_LOGOUT_ATTEMPT
     };
   }
 
-  public VerifyMobileRequest(value: VerifyMobileModel): Action {
+  public VerifyMobileRequest(value: VerifyMobileModel): CustomActions {
     return {
       type: LoginActions.VerifyMobileRequest,
       payload: value
     };
   }
 
-  public VerifyMobileResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): Action {
+  public VerifyMobileResponce(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): CustomActions {
     return {
       type: LoginActions.VerifyMobileResponce,
       payload: value
     };
   }
 
-  public VerifyTwoWayAuthRequest(value: VerifyMobileModel): Action {
+  public VerifyTwoWayAuthRequest(value: VerifyMobileModel): CustomActions {
     return {
       type: LoginActions.VerifyTwoWayAuthRequest,
       payload: value
     };
   }
 
-  public VerifyTwoWayAuthResponse(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): Action {
+  public VerifyTwoWayAuthResponse(value: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel>): CustomActions {
     return {
       type: LoginActions.VerifyTwoWayAuthResponse,
       payload: value
     };
   }
 
-  public resetTwoWayAuthModal(): Action {
+  public resetTwoWayAuthModal(): CustomActions {
     return {
       type: LoginActions.ResetTwoWayAuthModal
     };
   }
 
-  public LoginSuccess(): Action {
+  public LoginSuccess(): CustomActions {
     return {
       type: LoginActions.LoginSuccess
     };
   }
 
-  public LogOut(): Action {
+  public LogOut(): CustomActions {
     return {
       type: LoginActions.LogOut
     };
   }
 
-  public SetLoginStatus(value: userLoginStateEnum): Action {
+  public SetLoginStatus(value: userLoginStateEnum): CustomActions {
     return {
       type: LoginActions.SetLoginStatus,
       payload: value
     };
   }
 
-  public GoogleElectronLogin(value: RequestOptionsArgs): Action {
+  public GoogleElectronLogin(value: RequestOptionsArgs): CustomActions {
     return {
       type: LoginActions.GoogleLoginElectron,
       payload: value
     };
   }
 
-  public LinkedInElectronLogin(value: RequestOptionsArgs): Action {
+  public LinkedInElectronLogin(value: RequestOptionsArgs): CustomActions {
     return {
       type: LoginActions.LinkedInLoginElectron,
       payload: value
     };
   }
 
-  public ClearSession(): Action {
+  public ClearSession(): CustomActions {
     return {
       type: LoginActions.ClearSession
     };
   }
 
-  public ChangeCompany(cmpUniqueName: string): Action {
+  public ChangeCompany(cmpUniqueName: string): CustomActions {
     return {
       type: CompanyActions.CHANGE_COMPANY,
       payload: cmpUniqueName
     };
   }
 
-  public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): Action {
+  public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): CustomActions {
     return {
       type: CompanyActions.CHANGE_COMPANY_RESPONSE,
       payload: value
     };
   }
 
-  public AddNewMobileNo(value: SignupWithMobile): Action {
+  public AddNewMobileNo(value: SignupWithMobile): CustomActions {
     return {
       type: LoginActions.AddNewMobileNo,
       payload: value
     };
   }
 
-  public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): Action {
+  public AddNewMobileNoResponce(value: BaseResponse<string, SignupWithMobile>): CustomActions {
     return {
       type: LoginActions.AddNewMobileNoResponse,
       payload: value
     };
   }
 
-  public FetchUserDetails(): Action {
+  public FetchUserDetails(): CustomActions {
     return {
       type: LoginActions.FetchUserDetails
     };
   }
 
-  public FetchUserDetailsResponse(resp: BaseResponse<UserDetails, string>): Action {
+  public FetchUserDetailsResponse(resp: BaseResponse<UserDetails, string>): CustomActions {
     return {
       type: LoginActions.FetchUserDetailsResponse,
       payload: resp
     };
   }
 
-  public SubscribedCompanies(): Action {
+  public SubscribedCompanies(): CustomActions {
     return {
       type: LoginActions.SubscribedCompanies
     };
   }
 
-  public SubscribedCompaniesResponse(response): Action {
+  public SubscribedCompaniesResponse(response): CustomActions {
     return {
       type: LoginActions.SubscribedCompaniesResponse,
       payload: {}
     };
   }
 
-  public AddBalance(): Action {
+  public AddBalance(): CustomActions {
     return {
       type: LoginActions.AddBalance
     };
   }
 
-  public AddBalanceResponse(resp: BaseResponse<string, string>): Action {
+  public AddBalanceResponse(resp: BaseResponse<string, string>): CustomActions {
     return {
       type: LoginActions.AddBalanceResponse,
       payload: resp

@@ -3,6 +3,7 @@ import { AccountFlat, SearchResponse } from '../../models/api-models/Search';
 import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
+import { CustomActions } from '../customActions';
 
 export interface FlyAccountsState {
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
@@ -20,7 +21,7 @@ export const initialState: FlyAccountsState = {
   flyAccounts: false
 };
 
-export function FlyAccountsReducer(state = initialState, action: Action): FlyAccountsState {
+export function FlyAccountsReducer(state = initialState, action: CustomActions): FlyAccountsState {
   switch (action.type) {
     case FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST:
       return Object.assign({}, state, { isFlyAccountInProcess: true });

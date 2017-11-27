@@ -10,6 +10,7 @@ import { SETTINGS_TAXES_ACTIONS } from './settings.taxes.const';
 import { SettingsProfileService } from '../../../settings.profile.service';
 import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
 import { SettingsTaxesService } from '../../../settings.taxes.service';
+import { CustomActions } from '../../../../store/customActions';
 
 @Injectable()
 export class SettingsTaxesActions {
@@ -17,7 +18,7 @@ export class SettingsTaxesActions {
   @Effect()
   public CreateTax$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.settingsTaxesService.CreateTax(action.payload)
         .map(response => this.CreateTaxResponse(response));
     });
@@ -25,20 +26,20 @@ export class SettingsTaxesActions {
   @Effect()
   public CreateTaxResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast('Tax Created Successfully.');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public UpdateTax$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.settingsTaxesService.UpdateTax(action.payload, action.payload.uniqueName)
         .map(response => this.UpdateTaxResponse(response));
     });
@@ -46,20 +47,20 @@ export class SettingsTaxesActions {
   @Effect()
   public UpdateTaxResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast('Tax Updated Successfully.');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
    public DeleteTax$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
     return this.settingsTaxesService.DeleteTax(action.payload)
     .map(response => this.DeleteTaxResponse(response));
    });
@@ -67,14 +68,14 @@ export class SettingsTaxesActions {
   @Effect()
   public DeleteTaxResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast('Tax Deleted Successfully.');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   constructor(private action$: Actions,
@@ -84,49 +85,49 @@ export class SettingsTaxesActions {
     private settingsTaxesService: SettingsTaxesService) {
   }
 
-  public CreateTax(value): Action {
+  public CreateTax(value): CustomActions {
     return {
       type: SETTINGS_TAXES_ACTIONS.CREATE_TAX,
       payload: value
     };
   }
 
-   public CreateTaxResponse(value): Action {
+   public CreateTaxResponse(value): CustomActions {
     return {
       type: SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE,
       payload: value
     };
   }
 
-  public UpdateTax(value): Action {
+  public UpdateTax(value): CustomActions {
     return {
       type: SETTINGS_TAXES_ACTIONS.UPDATE_TAX,
       payload: value
     };
   }
 
-   public UpdateTaxResponse(value): Action {
+   public UpdateTaxResponse(value): CustomActions {
     return {
       type: SETTINGS_TAXES_ACTIONS.UPDATE_TAX_RESPONSE,
       payload: value
     };
   }
 
-   public DeleteTax(value: string): Action {
+   public DeleteTax(value: string): CustomActions {
     return {
       type: SETTINGS_TAXES_ACTIONS.DELETE_TAX,
       payload: value
     };
   }
 
-   public DeleteTaxResponse(value): Action {
+   public DeleteTaxResponse(value): CustomActions {
     return {
       type: SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE,
       payload: value
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);
