@@ -94,10 +94,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.waitAndReloadCompany();
   }
 
-  public onRevokePermission(email: string, roleUniquename: string) {
-    if (email && roleUniquename && this.selectedCompanyUniqueName) {
-      let obj = { emailId: email, entity: 'company', entityUniqueName: this.selectedCompanyUniqueName};
-      this.store.dispatch(this._accountsAction.unShareEntity(obj, roleUniquename));
+  public onRevokePermission(assignRoleEntryUniqueName: string) {
+    if (assignRoleEntryUniqueName) {
+      this.store.dispatch(this._accountsAction.unShareEntity(assignRoleEntryUniqueName));
       this.waitAndReloadCompany();
     }
   }
