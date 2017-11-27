@@ -67,6 +67,7 @@
 
               <input class="form-control mrT1" formControlName="token" type="text"
                      placeholder="Enter verification code here" required>
+              <small>We have sent a verification code to your registered email.</small>
               <button [disabled]="!emailVerifyForm.controls['token'].valid"
                       class="btn sharp btn-block btn-success btn-lg mrT1"
                       [ladda]="isVerifyEmailInProcess$ | async"
@@ -142,6 +143,7 @@
             <div class="clearfix form-group form-group-lg">
               <hr class="mrtb10">
               <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
+              <small>We have sent an OTP to your registered mobile number.</small>
               <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
                       [ladda]="isTwoWayAuthInProcess$ | async"
                       (click)="verifyTwoWayCode()"
