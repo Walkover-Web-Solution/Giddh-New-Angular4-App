@@ -1,3 +1,4 @@
+import { ShareRequestForm } from './../../models/api-models/Permission';
 import {
   GroupCreateRequest, GroupUpateRequest, MoveGroupRequest,
   MoveGroupResponse
@@ -45,8 +46,8 @@ export interface CurrentGroupAndAccountState {
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
   activeGroupInProgress: boolean;
-  activeGroupSharedWith?: GroupSharedWithResponse[];
-  activeAccountSharedWith?: AccountSharedWithResponse[];
+  activeGroupSharedWith?: ShareRequestForm[];
+  activeAccountSharedWith?: ShareRequestForm[];
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
   activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
