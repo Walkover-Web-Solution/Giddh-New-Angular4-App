@@ -28,6 +28,7 @@ import { of } from 'rxjs/observable/of';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { debug } from 'util';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -118,7 +119,7 @@ const initialState: CurrentGroupAndAccountState = {
   newlyCreatedAccount: null
 };
 
-export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
+export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: CustomActions) => {
   switch (action.type) {
     case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
       return Object.assign({}, state, {

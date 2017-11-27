@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { SettingsLinkedAccountsService } from '../../../settings.linked.accounts.service';
 import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from './settings.linked.accounts.const';
 import { IGetAllEbankAccountResponse } from '../../../../models/api-models/SettingsLinkedAccounts';
+import { CustomActions } from '../../../../store/customActions';
 
 @Injectable()
 export class SettingsLinkedAccountsActions {
@@ -16,7 +17,7 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public GetEbankAccounts$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS)
-    .switchMap(action => this._settingsLinkedAccountsService.GetAllEbankAccounts())
+    .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.GetAllEbankAccounts())
     .map(res => this.validateResponse<IGetAllEbankAccountResponse[], string>(res, {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.GET_ALL_ACCOUNTS_RESPONSE,
       payload: res
@@ -28,7 +29,7 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public RefreshEbankAccounts$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS)
-    .switchMap(action => this._settingsLinkedAccountsService.RefreshAllEbankAccounts())
+    .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.RefreshAllEbankAccounts())
     .map(res => this.validateResponse<IGetAllEbankAccountResponse[], string>(res, {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_ALL_ACCOUNTS_RESPONSE,
       payload: res
@@ -40,7 +41,7 @@ export class SettingsLinkedAccountsActions {
   @Effect()
   public ReconnectEbankAccount$: Observable<Action> = this.action$
     .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT)
-    .switchMap(action => this._settingsLinkedAccountsService.ReconnectAccount(action.payload))
+    .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.ReconnectAccount(action.payload))
     .map(res => this.validateResponse<any, string>(res, {
       type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.RECONNECT_ACCOUNT_RESPONSE,
       payload: res
@@ -52,7 +53,7 @@ export class SettingsLinkedAccountsActions {
     @Effect()
     public DeleteAccount$: Observable<Action> = this.action$
       .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT)
-      .switchMap(action => this._settingsLinkedAccountsService.DeleteBankAccount(action.payload))
+      .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.DeleteBankAccount(action.payload))
       .map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.DELETE_BANK_ACCOUNT_RESPONSE,
         payload: res
@@ -64,7 +65,7 @@ export class SettingsLinkedAccountsActions {
     @Effect()
     public RefreshAccount$: Observable<Action> = this.action$
       .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT)
-      .switchMap(action => this._settingsLinkedAccountsService.RefreshBankAccount(action.payload))
+      .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.RefreshBankAccount(action.payload))
       .map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.REFRESH_BANK_ACCOUNT_RESPONSE,
         payload: res
@@ -76,7 +77,7 @@ export class SettingsLinkedAccountsActions {
     @Effect()
     public LinkAccount$: Observable<Action> = this.action$
       .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT)
-      .switchMap(action => this._settingsLinkedAccountsService.LinkBankAccount(action.payload.data, action.payload.loginId))
+      .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.LinkBankAccount(action.payload.data, action.payload.loginId))
       .map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.LINK_BANK_ACCOUNT_RESPONSE,
         payload: res
@@ -88,7 +89,7 @@ export class SettingsLinkedAccountsActions {
     @Effect()
     public UnlinkAccount$: Observable<Action> = this.action$
       .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT)
-      .switchMap(action => this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload))
+      .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.UnlinkBankAccount(action.payload))
       .map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UNLINK_BANK_ACCOUNT_RESPONSE,
         payload: res
@@ -100,7 +101,7 @@ export class SettingsLinkedAccountsActions {
       @Effect()
       public UpdateDate$: Observable<Action> = this.action$
       .ofType(SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE)
-      .switchMap(action => this._settingsLinkedAccountsService.UpdateDate(action.payload.date, action.payload.loginId))
+      .switchMap((action: CustomActions) =>  this._settingsLinkedAccountsService.UpdateDate(action.payload.date, action.payload.loginId))
       .map(res => this.validateResponse<any, string>(res, {
         type: SETTINGS_LINKED_ACCOUNTS_ACTIONS.UPDATE_DATE_RESPONSE,
         payload: res
@@ -226,7 +227,7 @@ export class SettingsLinkedAccountsActions {
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

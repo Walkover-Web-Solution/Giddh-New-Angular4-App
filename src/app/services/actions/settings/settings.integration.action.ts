@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import { SETTINGS_INTEGRATION_ACTIONS } from './settings.integration.const';
 import { SettingsIntegrationService } from '../../settings.integraion.service';
 import { SmsKeyClass, EmailKeyClass, RazorPayClass, RazorPayDetailsResponse } from '../../../models/api-models/SettingsIntegraion';
+import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class SettingsIntegrationActions {
@@ -17,7 +18,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public GetSMSKey$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY)
-    .switchMap(action => this.settingsIntegrationService.GetSMSKey())
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.GetSMSKey())
     .map(res => this.validateResponse<SmsKeyClass, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE,
       payload: res
@@ -29,7 +30,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public GetEmailKey$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY)
-    .switchMap(action => this.settingsIntegrationService.GetEmailKey())
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.GetEmailKey())
     .map(res => this.validateResponse<EmailKeyClass, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY_RESPONSE,
       payload: res
@@ -41,7 +42,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public SaveSMSKey$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY)
-    .switchMap(action => this.settingsIntegrationService.SaveSMSKey(action.payload))
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.SaveSMSKey(action.payload))
     .map(res => this.validateResponse<string, SmsKeyClass>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY_RESPONSE,
       payload: res
@@ -53,7 +54,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public SaveEmailKey$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY)
-    .switchMap(action => this.settingsIntegrationService.SaveEmailKey(action.payload))
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.SaveEmailKey(action.payload))
     .map(res => this.validateResponse<string, EmailKeyClass>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY_RESPONSE,
       payload: res
@@ -65,7 +66,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public GetRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS)
-    .switchMap(action => this.settingsIntegrationService.GetRazorPayDetails())
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.GetRazorPayDetails())
     .map(res => this.validateResponse<RazorPayDetailsResponse, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
@@ -77,7 +78,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public SaveRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS)
-    .switchMap(action => this.settingsIntegrationService.SaveRazorPayDetails(action.payload))
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.SaveRazorPayDetails(action.payload))
     .map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
@@ -89,7 +90,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public DeleteRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS)
-    .switchMap(action => this.settingsIntegrationService.DeleteRazorPayDetails())
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.DeleteRazorPayDetails())
     .map(res => this.validateResponse<string, string>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
@@ -101,7 +102,7 @@ export class SettingsIntegrationActions {
   @Effect()
   public UpdateRazorPayDetails$: Observable<Action> = this.action$
     .ofType(SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS)
-    .switchMap(action => this.settingsIntegrationService.UpdateRazorPayDetails(action.payload))
+    .switchMap((action: CustomActions) =>  this.settingsIntegrationService.UpdateRazorPayDetails(action.payload))
     .map(res => this.validateResponse<RazorPayDetailsResponse, RazorPayClass>(res, {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS_RESPONSE,
       payload: res
@@ -117,59 +118,59 @@ export class SettingsIntegrationActions {
     private settingsIntegrationService: SettingsIntegrationService) {
   }
 
-  public GetSMSKey(): Action {
+  public GetSMSKey(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY,
     };
   }
 
-  public GetEmailKey(): Action {
+  public GetEmailKey(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_EMAIL_KEY,
     };
   }
 
-  public SaveSMSKey(value: SmsKeyClass): Action {
+  public SaveSMSKey(value: SmsKeyClass): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_SMS_KEY,
       payload: value
     };
   }
 
-  public SaveEmailKey(value: EmailKeyClass): Action {
+  public SaveEmailKey(value: EmailKeyClass): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.CREATE_EMAIL_KEY,
       payload: value
     };
   }
 
-  public GetRazorPayDetails(): Action {
+  public GetRazorPayDetails(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.GET_RAZOR_PAY_DETAILS,
     };
   }
 
-  public SaveRazorPayDetails(value: RazorPayClass): Action {
+  public SaveRazorPayDetails(value: RazorPayClass): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.SAVE_RAZOR_PAY_DETAILS,
       payload: value
     };
   }
 
-  public DeleteRazorPayDetails(): Action {
+  public DeleteRazorPayDetails(): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.DELETE_RAZOR_PAY_DETAILS,
     };
   }
 
-  public UpdateRazorPayDetails(value: RazorPayClass): Action {
+  public UpdateRazorPayDetails(value: RazorPayClass): CustomActions {
     return {
       type: SETTINGS_INTEGRATION_ACTIONS.UPDATE_RAZOR_PAY_DETAILS,
       payload: value
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

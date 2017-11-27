@@ -14,6 +14,7 @@ import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../toaster.service';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
+import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 
@@ -44,17 +45,17 @@ export class CompanyActions {
   @Effect()
   public createCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY)
-    .switchMap(action => this._companyService.CreateCompany(action.payload))
+    .switchMap((action: CustomActions) =>  this._companyService.CreateCompany(action.payload))
     .map(response => this.CreateCompanyResponse(response));
 
   @Effect()
   public createCompanyResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.CREATE_COMPANY_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: '' };
+        return { type: 'EmptyAction' };
       }
       this._toasty.successToast('Company created successfully', 'Success');
       // set newly created company as active company
@@ -68,11 +69,11 @@ export class CompanyActions {
   @Effect()
   public RefreshCompanies$: Observable<Action> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES)
-    .switchMap(action => this._companyService.CompanyList())
+    .switchMap((action: CustomActions) =>  this._companyService.CompanyList())
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: '' };
+        return { type: 'EmptyAction' };
       }
       return this.RefreshCompaniesResponse(response);
     });
@@ -80,21 +81,21 @@ export class CompanyActions {
   @Effect()
   public RefreshCompaniesResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public GetStateDetails$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_STATE_DETAILS)
-    .switchMap(action => this._companyService.getStateDetails(action.payload))
+    .switchMap((action: CustomActions) =>  this._companyService.getStateDetails(action.payload))
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: '' };
+        return { type: 'EmptyAction' };
       }
       return this.GetStateDetailsResponse(response);
     });
@@ -102,11 +103,11 @@ export class CompanyActions {
   @Effect()
   public SetStateDetails$: Observable<Action> = this.action$
     .ofType(CompanyActions.SET_STATE_DETAILS)
-    .switchMap(action => this._companyService.setStateDetails(action.payload))
+    .switchMap((action: CustomActions) =>  this._companyService.setStateDetails(action.payload))
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: '' };
+        return { type: 'EmptyAction' };
       }
       return this.SetStateDetailsResponse(response);
     });
@@ -114,7 +115,7 @@ export class CompanyActions {
   @Effect()
   public DeleteCompany$: Observable<Action> = this.action$
     .ofType(CompanyActions.DELETE_COMPANY)
-    .switchMap(action => this._companyService.DeleteCompany(action.payload))
+    .switchMap((action: CustomActions) =>  this._companyService.DeleteCompany(action.payload))
     .map(response => {
       return this.DeleteCompanyResponse(response);
     });
@@ -122,21 +123,21 @@ export class CompanyActions {
   @Effect()
   public DeleteCompanyResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.DELETE_COMPANY_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: '' };
+        return { type: 'EmptyAction' };
       } else {
         this._toasty.successToast(action.payload.body, 'success');
       }
       this.store.dispatch(this.RefreshCompanies());
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public CompanyTax$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_TAX)
-    .switchMap(action => this._companyService.getComapnyTaxes())
+    .switchMap((action: CustomActions) =>  this._companyService.getComapnyTaxes())
     .map(response => {
       return this.getTaxResponse(response);
     });
@@ -144,114 +145,114 @@ export class CompanyActions {
   @Effect()
   public CompanyTaxResponse$: Observable<Action> = this.action$
     .ofType(CompanyActions.GET_TAX_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
 
   }
 
-  public CreateCompany(value: CompanyRequest): Action {
+  public CreateCompany(value: CompanyRequest): CustomActions {
     return {
       type: CompanyActions.CREATE_COMPANY,
       payload: value
     };
   }
 
-  public RefreshCompanies(): Action {
+  public RefreshCompanies(): CustomActions {
     return {
       type: CompanyActions.REFRESH_COMPANIES
     };
   }
 
-  public RefreshCompaniesResponse(response: BaseResponse<CompanyResponse[], string>): Action {
+  public RefreshCompaniesResponse(response: BaseResponse<CompanyResponse[], string>): CustomActions {
     return {
       type: CompanyActions.REFRESH_COMPANIES_RESPONSE,
       payload: response
     };
   }
 
-  public SetActiveCompany(value: string): Action {
+  public SetActiveCompany(value: string): CustomActions {
     return {
       type: CompanyActions.SET_ACTIVE_COMPANY,
       payload: value
     };
   }
 
-  public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): Action {
+  public CreateCompanyResponse(value: BaseResponse<CompanyResponse, CompanyRequest>): CustomActions {
     return {
       type: CompanyActions.CREATE_COMPANY_RESPONSE,
       payload: value
     };
   }
 
-  public GetStateDetails(cmpUniqueName?: string): Action {
+  public GetStateDetails(cmpUniqueName?: string): CustomActions {
     return {
       type: CompanyActions.GET_STATE_DETAILS,
       payload: cmpUniqueName
     };
   }
 
-  public GetStateDetailsResponse(value: BaseResponse<StateDetailsResponse, string>): Action {
+  public GetStateDetailsResponse(value: BaseResponse<StateDetailsResponse, string>): CustomActions {
     return {
       type: CompanyActions.GET_STATE_DETAILS_RESPONSE,
       payload: value
     };
   }
 
-  public SetStateDetails(value: StateDetailsRequest): Action {
+  public SetStateDetails(value: StateDetailsRequest): CustomActions {
     return {
       type: CompanyActions.SET_STATE_DETAILS,
       payload: value
     };
   }
 
-  public SetStateDetailsResponse(value: BaseResponse<string, StateDetailsRequest>): Action {
+  public SetStateDetailsResponse(value: BaseResponse<string, StateDetailsRequest>): CustomActions {
     return {
       type: CompanyActions.SET_STATE_DETAILS_RESPONSE,
       payload: value
     };
   }
 
-  public DeleteCompany(value: string): Action {
+  public DeleteCompany(value: string): CustomActions {
     return {
       type: CompanyActions.DELETE_COMPANY,
       payload: value
     };
   }
 
-  public DeleteCompanyResponse(value: BaseResponse<string, string>): Action {
+  public DeleteCompanyResponse(value: BaseResponse<string, string>): CustomActions {
     return {
       type: CompanyActions.DELETE_COMPANY_RESPONSE,
       payload: value
     };
   }
 
-  public getTax(): Action {
+  public getTax(): CustomActions {
     return {
       type: CompanyActions.GET_TAX
     };
   }
 
-  public getTaxResponse(value: BaseResponse<TaxResponse[], string>): Action {
+  public getTaxResponse(value: BaseResponse<TaxResponse[], string>): CustomActions {
     return {
       type: CompanyActions.GET_TAX_RESPONSE,
       payload: value
     };
   }
 
-  public SetContactNumber(value: string): Action {
+  public SetContactNumber(value: string): CustomActions {
     return {
       type: CompanyActions.SET_CONTACT_NO,
       payload: value
     };
   }
 
-  public ResetCompanyPopup(): Action {
+  public ResetCompanyPopup(): CustomActions {
     return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
   }
 

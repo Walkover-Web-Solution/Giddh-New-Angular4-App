@@ -12,6 +12,7 @@ import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/setting
 import { IGetAllEbankAccountResponse } from '../../models/api-models/SettingsLinkedAccounts';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../services/actions/settings/financial-year/financial-year.const';
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
+import { CustomActions } from '../customActions';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -36,7 +37,7 @@ export const initialState: SettingsState = {
   usersWithCompanyPermissions: null
 };
 
-export function SettingsReducer(state = initialState, action: Action): SettingsState {
+export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
   let newState = _.cloneDeep(state);
   switch (action.type) {
     case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:

@@ -20,6 +20,7 @@ import { GroupsWithStocksHierarchyMin } from '../../../models/api-models/GroupsW
 import { InventoryService } from '../../inventory.service';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../../../theme/ng-select/option.interface';
+import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class SalesActions {
@@ -27,7 +28,7 @@ export class SalesActions {
   @Effect()
   public GetAccountDetails$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS)
-    .switchMap(action => this._accountService.GetAccountDetailsV2(action.payload))
+    .switchMap((action: CustomActions) =>  this._accountService.GetAccountDetailsV2(action.payload))
     .map(response => {
       return this.getAccountDetailsForSalesResponse(response);
     });
@@ -35,31 +36,31 @@ export class SalesActions {
   @Effect()
   public GetAccountDetailsResponse$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       let data: BaseResponse<AccountResponseV2, string> = action.payload;
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
       return {
-        type: ''
+        type: 'EmptyAction'
       };
     });
 
   @Effect()
   public GetGroupsListForSales$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS)
-    .switchMap(action => this._inventoryService.GetGroupsWithStocksFlatten())
+    .switchMap((action: CustomActions) =>  this._inventoryService.GetGroupsWithStocksFlatten())
     .map(response => this.getGroupsListForSalesResponse(response));
 
   @Effect()
   public GetGroupsListForSalesResponse$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS_RESPONSE)
-    .map(action => {
+    .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
       return {
-        type: ''
+        type: 'EmptyAction'
       };
     });
 
@@ -67,7 +68,7 @@ export class SalesActions {
   @Effect()
   public getFlattenAcOfPurchase$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_PURCHASE_AC_LIST)
-    .switchMap(action => this._accountService.GetFlatternAccountsOfGroup(action.payload))
+    .switchMap((action: CustomActions) =>  this._accountService.GetFlatternAccountsOfGroup(action.payload))
     .map(res => this.validateResponse<FlattenAccountsResponse, {groupUniqueNames: string[]}>(res, {
       type: SALES_ACTIONS.GET_PURCHASE_AC_LIST_RESPONSE,
       payload: res
@@ -80,7 +81,7 @@ export class SalesActions {
   @Effect()
   public getFlattenAcOfSales$: Observable<Action> = this.action$
     .ofType(SALES_ACTIONS.GET_SALES_AC_LIST)
-    .switchMap(action => this._accountService.GetFlatternAccountsOfGroup(action.payload))
+    .switchMap((action: CustomActions) =>  this._accountService.GetFlatternAccountsOfGroup(action.payload))
     .map(res => this.validateResponse<FlattenAccountsResponse, {groupUniqueNames: string[]}>(res, {
       type: SALES_ACTIONS.GET_SALES_AC_LIST_RESPONSE,
       payload: res
@@ -100,27 +101,27 @@ export class SalesActions {
   ) {
   }
 
-  public getAccountDetailsForSales(value: string): Action {
+  public getAccountDetailsForSales(value: string): CustomActions {
     return {
       type: SALES_ACTIONS.GET_ACCOUNT_DETAILS,
       payload: value
     };
   }
 
-  public getAccountDetailsForSalesResponse(value: BaseResponse<AccountResponseV2, string>): Action {
+  public getAccountDetailsForSalesResponse(value: BaseResponse<AccountResponseV2, string>): CustomActions {
     return {
       type: SALES_ACTIONS.GET_ACCOUNT_DETAILS_RESPONSE,
       payload: value
     };
   }
 
-  public getGroupsListForSales(): Action {
+  public getGroupsListForSales(): CustomActions {
     return {
       type: SALES_ACTIONS.GET_HIERARCHICAL_STOCK_GROUPS
     };
   }
 
-  public getGroupsListForSalesResponse(value: BaseResponse<GroupsWithStocksHierarchyMin, string>): Action {
+  public getGroupsListForSalesResponse(value: BaseResponse<GroupsWithStocksHierarchyMin, string>): CustomActions {
     let res: BaseResponse<GroupsWithStocksHierarchyMin, string> = value;
     if (res.status === 'success') {
       return {
@@ -130,42 +131,42 @@ export class SalesActions {
     }
   }
 
-  public getFlattenAcOfPurchase(value: { groupUniqueNames: string[] }): Action {
+  public getFlattenAcOfPurchase(value: { groupUniqueNames: string[] }): CustomActions {
     return {
       type: SALES_ACTIONS.GET_PURCHASE_AC_LIST,
       payload: value
     };
   }
 
-  public getFlattenAcOfSales(value: { groupUniqueNames: string[] }): Action {
+  public getFlattenAcOfSales(value: { groupUniqueNames: string[] }): CustomActions {
     return {
       type: SALES_ACTIONS.GET_SALES_AC_LIST,
       payload: value
     };
   }
 
-  public createStockGroupSuccess(value: INameUniqueName): Action {
+  public createStockGroupSuccess(value: INameUniqueName): CustomActions {
     return {
       type: SALES_ACTIONS.STOCK_GROUP_SUCCESS,
       payload: value
     };
   }
 
-  public createStockAcSuccess(value: any): Action {
+  public createStockAcSuccess(value: any): CustomActions {
     return {
       type: SALES_ACTIONS.STOCK_AC_SUCCESS,
       payload: value
     };
   }
 
-  public storeSalesFlattenAc(value: IOption[]): Action {
+  public storeSalesFlattenAc(value: IOption[]): CustomActions {
     return {
       type: SALES_ACTIONS.SALES_FLATTEN_AC_STORED,
       payload: value
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

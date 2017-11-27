@@ -10,6 +10,7 @@ import { Observable } from 'rxjs/Rx';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
 import { GroupService } from '../group.service';
+import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class FlyAccountsActions {
@@ -18,7 +19,7 @@ export class FlyAccountsActions {
   public static readonly RESET_FLAT_ACCOUNT_W_GROUP = 'RESET_FLAT_ACCOUNT_W_GROUP';
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._groupService.GetFlattenGroupsAccounts(action.payload.q, action.payload.page, action.payload.count, action.payload.showEmptyGroups)
         .map((r) => this.validateResponse<FlattenGroupsAccountsResponse, string>(r, {
           type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_RESPONSE,
@@ -35,7 +36,7 @@ export class FlyAccountsActions {
     private _groupService: GroupService) {
   }
 
-  public GetflatAccountWGroups(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Action {
+  public GetflatAccountWGroups(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): CustomActions {
     return {
       type: FlyAccountsActions.GET_FLAT_ACCOUNT_W_GROUP_REQUEST,
       payload: {
@@ -44,12 +45,12 @@ export class FlyAccountsActions {
     };
   }
 
-  public ResetflatAccountWGroups(): Action {
+  public ResetflatAccountWGroups(): CustomActions {
     return {
       type: FlyAccountsActions.RESET_FLAT_ACCOUNT_W_GROUP
     };
   }
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

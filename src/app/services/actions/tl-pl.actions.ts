@@ -15,6 +15,7 @@ import {
   TrialBalanceExportExcelRequest,
   TrialBalanceRequest
 } from '../../models/api-models/tb-pl-bs';
+import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class TBPlBsActions {
@@ -36,7 +37,7 @@ export class TBPlBsActions {
 
   @Effect() private GetTrialBalance$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.GET_TRIAL_BALANCE_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._tlPlService.GetTrailBalance(action.payload)
         .map((r) => this.validateResponse<AccountDetails, TrialBalanceRequest>(r, {
           type: TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE,
@@ -49,7 +50,7 @@ export class TBPlBsActions {
 
   @Effect() private GetProfitLoss$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.GET_PROFIT_LOSS_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._tlPlService.GetProfitLoss(action.payload)
         .map((r) => this.validateResponse<AccountDetails, ProfitLossRequest>(r, {
           type: TBPlBsActions.GET_PROFIT_LOSS_RESPONSE,
@@ -62,7 +63,7 @@ export class TBPlBsActions {
 
   @Effect() private GetBalanceSheet$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.GET_BALANCE_SHEET_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._tlPlService.GetBalanceSheet(action.payload)
         .map((r) => this.validateResponse<AccountDetails, BalanceSheetRequest>(r, {
           type: TBPlBsActions.GET_BALANCE_SHEET_RESPONSE,
@@ -75,23 +76,23 @@ export class TBPlBsActions {
 
   @Effect() private DownloadTrailBalanceExcel$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._tlPlService.DownloadTrialBalanceExcel(action.payload)
-        .map((r) => ({ type: '' }));
+        .map((r) => ({ type: 'EmptyAction' }));
     });
 
   @Effect() private DownloadTBalanceSheetExcel$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._tlPlService.DownloadBalanceSheetExcel(action.payload)
-        .map((r) => ({ type: '' }));
+        .map((r) => ({ type: 'EmptyAction' }));
     });
 
   @Effect() private DownloadProfitLossExcel$: Observable<Action> = this.action$
     .ofType(TBPlBsActions.DOWNLOAD_PROFIT_LOSS_EXCEL_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._tlPlService.DownloadProfitLossExcel(action.payload)
-        .map((r) => ({ type: '' }));
+        .map((r) => ({ type: 'EmptyAction' }));
     });
 
   constructor(private action$: Actions,
@@ -99,49 +100,49 @@ export class TBPlBsActions {
               private _tlPlService: TlPlService) {
   }
 
-  public GetTrialBalance(request: TrialBalanceRequest): Action {
+  public GetTrialBalance(request: TrialBalanceRequest): CustomActions {
     return {
       type: TBPlBsActions.GET_TRIAL_BALANCE_REQUEST,
       payload: request
     };
   }
 
-  public DownloadTrialBalanceExcel(request: TrialBalanceExportExcelRequest): Action {
+  public DownloadTrialBalanceExcel(request: TrialBalanceExportExcelRequest): CustomActions {
     return {
       type: TBPlBsActions.DOWNLOAD_TRIAL_BALANCE_EXCEL_REQUEST,
       payload: request
     };
   }
 
-  public DownloadProfitLossExcel(request: ProfitLossRequest): Action {
+  public DownloadProfitLossExcel(request: ProfitLossRequest): CustomActions {
     return {
       type: TBPlBsActions.DOWNLOAD_PROFIT_LOSS_EXCEL_REQUEST,
       payload: request
     };
   }
 
-  public DownloadBalanceSheetExcel(request: ProfitLossRequest): Action {
+  public DownloadBalanceSheetExcel(request: ProfitLossRequest): CustomActions {
     return {
       type: TBPlBsActions.DOWNLOAD_BALANCE_SHEET_EXCEL_REQUEST,
       payload: request
     };
   }
 
-  public GetProfitLoss(request: ProfitLossRequest): Action {
+  public GetProfitLoss(request: ProfitLossRequest): CustomActions {
     return {
       type: TBPlBsActions.GET_PROFIT_LOSS_REQUEST,
       payload: request
     };
   }
 
-  public GetBalanceSheet(request: BalanceSheetRequest): Action {
+  public GetBalanceSheet(request: BalanceSheetRequest): CustomActions {
     return {
       type: TBPlBsActions.GET_BALANCE_SHEET_REQUEST,
       payload: request
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

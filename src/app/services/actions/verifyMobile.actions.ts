@@ -10,6 +10,7 @@ import { BaseResponse } from './../../models/api-models/BaseResponse';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
+import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 
@@ -23,7 +24,7 @@ export class VerifyMobileActions {
 
   @Effect() private verifyNumber$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_REQUEST)
-    .switchMap(action => this._authService.VerifyNumber(action.payload))
+    .switchMap((action: CustomActions) =>  this._authService.VerifyNumber(action.payload))
     .map(response => {
       if (response.status === 'success') {
         this.store.dispatch(this.action(VerifyMobileActions.SET_VERIFIACATION_MOBILENO, response.request.mobileNumber));
@@ -32,11 +33,11 @@ export class VerifyMobileActions {
         this.store.dispatch(this.action(VerifyMobileActions.SHOW_VERIFICATION_BOX, false));
         this._toasty.errorToast(response.message, response.code);
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
   @Effect() private verifyNumberCode$: Observable<Action> = this.action$
     .ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST)
-    .switchMap(action => this._authService.VerifyNumberOTP(action.payload))
+    .switchMap((action: CustomActions) =>  this._authService.VerifyNumberOTP(action.payload))
     .map(response => {
       if (response.status === 'success') {
         this._toasty.successToast(response.body);
@@ -51,7 +52,7 @@ export class VerifyMobileActions {
       } else {
         this._toasty.errorToast(response.message, response.code);
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
   constructor(private action$: Actions,
     private _authService: AuthenticationService,
