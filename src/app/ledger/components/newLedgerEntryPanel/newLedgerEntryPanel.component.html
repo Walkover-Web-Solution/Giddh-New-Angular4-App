@@ -80,7 +80,7 @@
             <tbody>
                 <tr>
                     <td class="primary_color">
-                        <i class="fa cp" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
+                        <i class="fa cp" (click)="showAdvanced = !showAdvanced" [ngClass]="{'fa-minus-square-o':showAdvanced, 'fa-plus-square-o': !showAdvanced}"></i>
                         <button class="no-btn pdL0" (click)="showAdvanced = !showAdvanced">More Details</button>
                     </td>
                     <td class="text-right"> <span class="primary_color">Compound Total: {{ currentTxn?.total | number: '1.1-2' }}</span></td>
