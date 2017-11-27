@@ -1,3 +1,5 @@
+import { ShareRequestForm } from './../../../../models/api-models/Permission';
+
 import { ToasterService } from './../../../../services/toaster.service';
 import { PermissionActions } from './../../../../services/actions/permission/permission.action';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
@@ -20,7 +22,7 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
   public email: string;
   public selectedPermission: string;
   public activeGroup$: Observable<GroupResponse>;
-  public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
+  public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
   public allPermissions$: Observable<GetAllPermissionResponse[]>;
 
   @Output() public closeShareGroupModal: EventEmitter<any> = new EventEmitter();
@@ -50,43 +52,44 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     this.selectedPermission = '';
   }
 
-  public async unShareGroup(entryUniqueName: string) {
-    this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName));
+  public async unShareGroup(entryUniqueName: string, groupUniqueName: string) {
+    this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'group', groupUniqueName));
   }
 
-  public callbackFunction(activeGroup: any, email: string, currentPermission: string, newPermission: string) {
-      let userRole = {
-        emailId: email,
-        entity: 'group',
-        entityUniqueName: activeGroup.uniqueName,
-        updateInBackground: true,
-        newPermission
-      };
+  // public callbackFunction(activeGroup: any, email: string, currentPermission: string, newPermission: string) {
+  //     let userRole = {
+  //       emailId: email,
+  //       entity: 'group',
+  //       entityUniqueName: activeGroup.uniqueName,
+  //       updateInBackground: true,
+  //       newPermission
+  //     };
 
-      this.store.dispatch(this.accountActions.updateEntityPermission(userRole, currentPermission));
-  }
+  //     this.store.dispatch(this.accountActions.updateEntityPermission(userRole, currentPermission));
+  // }
 
-  public async updatePermission(email: string, currentPermission: string, event: any) {
-    let activeAccount = await this.activeGroup$.first().toPromise();
+  public updatePermission(model: ShareRequestForm, event: any) {
+    let data = _.cloneDeep(model);
     let newPermission = event.target.value;
-    this.checkIfUserAlreadyHavingPermission(email, currentPermission, newPermission, activeAccount, event);
+    data.roleUniqueName = newPermission;
+    this.store.dispatch(this.accountActions.updateEntityPermission(data, newPermission, 'group'));
   }
 
-  public checkIfUserAlreadyHavingPermission(email: string, currentPermission: string, permissionUniqueName: string, activeGroup: any, event: any) {
-    this.activeGroupSharedWith$.take(1).subscribe((data) => {
-      if (data) {
-        let roleIndex = data.findIndex((p) => {
-          return p.role.uniqueName === permissionUniqueName;
-        });
-        if (roleIndex > -1) {
-          this._toasty.errorToast(`${email} already have ${permissionUniqueName} permission.`);
-          this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(activeGroup.uniqueName));
-        } else {
-          this.callbackFunction(activeGroup, email, currentPermission, permissionUniqueName);
-        }
-      }
-    });
-  }
+  // public checkIfUserAlreadyHavingPermission(email: string, currentPermission: string, permissionUniqueName: string, activeGroup: any, event: any) {
+  //   this.activeGroupSharedWith$.take(1).subscribe((data) => {
+  //     if (data) {
+  //       let roleIndex = data.findIndex((p) => {
+  //         return p.role.uniqueName === permissionUniqueName;
+  //       });
+  //       if (roleIndex > -1) {
+  //         this._toasty.errorToast(`${email} already have ${permissionUniqueName} permission.`);
+  //         this.store.dispatch(this.groupWithAccountsAction.sharedGroupWith(activeGroup.uniqueName));
+  //       } else {
+  //         this.callbackFunction(activeGroup, email, currentPermission, permissionUniqueName);
+  //       }
+  //     }
+  //   });
+  // }
 
   public closeModal() {
     this.email = '';
