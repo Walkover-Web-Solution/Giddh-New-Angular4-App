@@ -12,7 +12,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
-import { ILedgerTransactionItem, ITransactionItem } from '../../../models/interfaces/ledger.interface';
+import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
@@ -197,7 +197,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.isTxnUpdateSuccess$.subscribe(upd => {
       if (upd) {
         this.store.dispatch(this._ledgerAction.ResetUpdateLedger());
-        this.closeUpdateLedgerModal.emit(true);
+        // this.closeUpdateLedgerModal.emit(true);
       }
     });
   }
