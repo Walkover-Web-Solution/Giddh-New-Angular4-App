@@ -96,7 +96,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
 
   public onRevokePermission(assignRoleEntryUniqueName: string) {
     if (assignRoleEntryUniqueName) {
-      this.store.dispatch(this._accountsAction.unShareEntity(assignRoleEntryUniqueName));
+      this.store.dispatch(this._accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
       this.waitAndReloadCompany();
     }
   }
