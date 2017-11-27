@@ -40,7 +40,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
-  @Output() public clickedOutsideEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
@@ -374,7 +374,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @HostListener('window:click', ['$event'])
   public clickedOutsideOfComponent(e) {
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
-      this.clickedOutsideEvent.emit(true);
+      this.clickedOutsideEvent.emit(e);
     }
   }
 }
