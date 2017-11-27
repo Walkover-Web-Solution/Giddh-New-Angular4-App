@@ -55,7 +55,7 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
 
   public ngOnChanges(changes: SimpleChanges) {
     // change
-    if (changes['date'] && changes['date'].currentValue !== changes['date'].previousValue) {
+    if ('date' in changes && changes.date.currentValue !== changes.date.previousValue) {
       if (moment(changes['date'].currentValue, 'DD-MM-YYYY').isValid()) {
         this.sum = 0;
         this.prepareTaxObject();
