@@ -149,7 +149,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         from: [data.from],
         to: [data.to],
         duration: [data.duration],
-        period: ['DAY'],
+        period: [null],
         ipOptions: this.getIPOptsFromData(data),
         allowedIps: this._fb.array([]),
         allowedCidrs: this._fb.array([])
@@ -182,7 +182,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
         from: [null],
         to: [null],
         duration: [null],
-        period: ['DAY'],
+        period: [null],
         ipOptions: [CIDR_RANGE],
         allowedIps: this._fb.array([]),
         allowedCidrs: this._fb.array([])
