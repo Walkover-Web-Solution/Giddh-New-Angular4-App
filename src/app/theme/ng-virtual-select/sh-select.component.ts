@@ -205,7 +205,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public keydownUp(event) {
     let key = event.which;
     if (this.isOpen) {
-      if (key === this.KEYS.ESC || (key === this.KEYS.UP && event.altKey)) {
+      if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
         this.hide();
       } else if (key === this.KEYS.ENTER) {
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
@@ -288,6 +288,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.onChange();
     this.clearFilter();
     this.onClear.emit();
+    this.hide();
   }
 
   public ngOnInit() {
