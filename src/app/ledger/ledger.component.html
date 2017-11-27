@@ -16,7 +16,7 @@
                 </div>
                 <div class="col-xs-2">
                     <div class="row">
-                      <button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>
+                        <button class="btn btn-link" (click)="onOpenAdvanceSearch()">Advance Search</button>
                     </div>
                 </div>
                 <div class="col-xs-4">
@@ -145,7 +145,7 @@
                                                     </tbody>
                                                 </table>
                                                 <!--new ledge popup-->
-                                                <div class="pos-abs wthPos" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
+                                                <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                                                     <new-ledger-entry-panel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                                                     </new-ledger-entry-panel>
@@ -199,7 +199,7 @@
                                                     </tbody>
                                                 </table>
                                                 <!--new ledge popup-->
-                                                <div class="pos-abs wthPos" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
+                                                <div class="pos-abs wthPos entry-modal" *ngIf="lc.showBankLedgerPanel && lc.currentBlankTxn?.id === txn.id">
                                                     <new-ledger-entry-panel [trxRequest]="trxRequest" [isBankTransaction]="true" [blankLedger]="item" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
                                                         (saveBlankLedger)="saveBankTransaction()" (clickedOutsideEvent)="hideBankLedgerPopup($event)">
                                                     </new-ledger-entry-panel>
@@ -345,7 +345,7 @@
                                     </tbody>
                                 </table>
                                 <!--new ledge popup-->
-                                <div class="pos-abs" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                                <div class="pos-abs entry-modal" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
                                     </new-ledger-entry-panel>
@@ -417,7 +417,7 @@
                                             <td class="col-xs-2" (click)="showNewLedgerEntryPopup(txn);">
                                                 <input class="form-control" type="text" (focus)="$event.target.select()" [(ngModel)]="lc.blankLedger.entryDate" [textMask]="{mask: lc.dateMask, guide: true}">
                                             </td>
-                                            <td class="col-xs-7 select2-parent select2-ledger">
+                                            <td class="col-xs-7 select2-parent select2-ledger" (click)="showNewLedgerEntryPopup(txn);">
 
                                                 <sh-select [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [isFilterEnabled]="true"
                                                     [ItemHeight]="67">
@@ -456,7 +456,7 @@
                                 </table>
 
                                 <!--new ledge popup-->
-                                <div class="pos-abs" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
+                                <div class="pos-abs entry-modal" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
                                     <new-ledger-entry-panel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
                                         (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
                                     </new-ledger-entry-panel>
@@ -617,10 +617,10 @@
 
 <!-- Advance search popup -->
 <div bsModal #advanceSearchModel="bs-modal" class="modal fade" role="dialog" style="z-index : 1045;">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <advance-search-model [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <advance-search-model [accountUniqueName]="lc.accountUnq" (closeModelEvent)="closeAdvanceSearchPopup()"></advance-search-model>
+        </div>
     </div>
-  </div>
 </div>
 <!-- Advance  search popup -->

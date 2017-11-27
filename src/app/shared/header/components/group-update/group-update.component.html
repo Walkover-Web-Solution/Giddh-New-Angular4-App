@@ -17,11 +17,11 @@
             <textarea maxlength="200" rows="5" cols="10" class="form-control" placeholder="Enter description" formControlName="description"></textarea>
         </div>
 
-        <div class="form-group">
-            <a href="javascript:void(0);" class="btn btn-danger" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE {{
-                (activeGroup$ | async)?.name }}</a>
+        <div class="form-group text-right">
 
-            <button class="btn btn-primary pull-right" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update</button>
+            <button class="btn btn-danger" *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed" (click)="showDeleteGroupModal()">DELETE</button>
+
+            <button class="btn btn-primary" type="submit" *ngIf="(showEditGroup$ | async)" [ladda]="isUpdateGroupInProcess$ | async" [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid">Update</button>
 
         </div>
 
