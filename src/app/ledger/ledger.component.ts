@@ -139,6 +139,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.discounts = [];
       return;
     }
+
     this.lc.flattenAccountList.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
