@@ -1,31 +1,13 @@
 <div class="container-fluid pdT2 pdB2">
-  <div class="row">
-    <div class="col-xs-2">
-      <h3 class="mrB1">
-        <strong>Give Permission to:</strong>
-      </h3>
-    </div>
-    <div class="col-xs-2">
-      <input type="text" placeholder="User email" #emailField class="form-control">
-    </div>
-    <div class="col-xs-2">
-      <select class="form-control" #newRole>
-        <option value="{{role.uniqueName}}" *ngFor="let role of allRoles">{{role.name}}</option>
-      </select>
-    </div>
-    <div class="col-xs-2">
-      <input type="button" (click)="shareCurrentCompany(emailField.value, newRole.value)" class="btn btn-success" value="Add">
-    </div>
-  </div>
-  <!-- <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form> -->
+  <h3 class="mrB1"><strong>Give Permission to:</strong></h3>
+  <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true" (onSubmitForm)="submitPermissionForm($event)"></setting-permission-form>
 </div>
 
 <div class="container-fluid">
   <div class="row box">
     <div *ngFor="let usrGrp of usersList">
       <div class="lead mrB1">{{usrGrp.name}}</div>
-      <div class="mrB1">
-        <i class="fa fa-user"></i> {{usrGrp.rows[0].userUniqueName}}</div>
+      <div class="mrB1"><i class="fa fa-user"></i> {{usrGrp.rows[0].userUniqueName}}</div>
       <table width="100%" class="table bdrB">
         <tbody>
           <tr *ngFor="let user of usrGrp.rows; let i = index">
@@ -35,8 +17,7 @@
             </td>
             <td width="22%">
               <input *ngIf="user.from && user.to" class="form-control" value="{{user.from}} - {{user.to}}" />
-              <input *ngIf="user.period && user.duration" class="form-control" value="Past &nbsp;{{user.duration}} &nbsp; {{user.period}}S"
-              />
+              <input *ngIf="user.period && user.duration" class="form-control" value="Past &nbsp;{{user.duration}} &nbsp; {{user.period}}S" />
             </td>
             <td width="22%">
               <input *ngIf="user.ipsStr" class="form-control" [value]="user.ipsStr">
@@ -44,24 +25,18 @@
             </td>
             <td width="10%" class="alC">
               <i class="fa fa-pencil cp mrR1" (click)="showModalForEdit(user)"></i>
-              <i (click)="onRevokePermission(user)" class="fa fa-trash cp"></i>
+              <i (click)="onRevokePermission(user.email, user.roleName)" class="fa fa-trash cp"></i>
             </td>
           </tr>
         </tbody>
       </table>
-      <div class="col-xs-3">
-
       </div>
-      <div class="col-xs-1">
-        <i (click)="unShareCurrentCompany(usrGrp.rows[0].userUniqueName)" class="fa fa-trash cp"></i>
-      </div>
-    </div>
   </div>
 </div>
 
 <!-- create Ac modal -->
 
-<!-- <div bsModal #editUserModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" *ngIf="showEditUserModal">
+<div bsModal #editUserModal="bs-modal" class="modal fade" role="dialog" [config]="modalConfig" *ngIf="showEditUserModal">
   <div class="modal-dialog modal-md">
     <div class="modal-content">
       <div class="modal-header pd2 pdL2 pdR2 clearfix">
@@ -73,4 +48,4 @@
       </div>
     </div>
   </div>
-</div> -->
+</div>
