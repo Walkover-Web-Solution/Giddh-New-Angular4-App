@@ -314,10 +314,7 @@ export class AccountsAction {
   public unShareEntity$: Observable<Action> = this.action$
     .ofType(AccountsAction.UN_SHARE_ENTITY)
     .switchMap(action =>
-      this._accountService.UnShare(
-        action.payload.body,
-        action.payload.accountUniqueName
-      )
+      this._accountService.UnShare(action.payload)
     )
     .map(response => {
       return this.UnShareEntityResponse(response);
@@ -352,10 +349,7 @@ export class AccountsAction {
   public updateEntityPermission$: Observable<Action> = this.action$
     .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION)
     .switchMap(action =>
-      this._accountService.UnShare(
-        action.payload.body,
-        action.payload.accountUniqueName
-      )
+      this._accountService.UnShare(action.payload.entryUniqueName)
     )
     .map(response => {
       return this.updateEntityPermissionResponse(response);
@@ -665,14 +659,10 @@ export class AccountsAction {
   }
 
   // UNSHARE
-  public unShareEntity(value: ShareEntityRequest, accountUniqueName: string): Action {
+  public unShareEntity(entryUniqueName: string): Action {
     return {
       type: AccountsAction.UN_SHARE_ENTITY,
-      payload: Object.assign({}, {
-        body: value
-      }, {
-          accountUniqueName
-        })
+      payload: entryUniqueName
     };
   }
 

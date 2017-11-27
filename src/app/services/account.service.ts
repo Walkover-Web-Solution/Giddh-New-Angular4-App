@@ -196,18 +196,17 @@ export class AccountService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
   }
 
-  public UnShare(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
+  public UnShare(entryUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.UN_SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', encodeURIComponent(roleUniqueName)), model)
+    return this._http.delete(ACCOUNTS_API.UN_SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(entryUniqueName)))
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res.json();
-        data.request = model;
-        data.queryString = { roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName, model };
+        data.queryString = { entryUniqueName };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
@@ -237,6 +236,7 @@ export class AccountService implements OnInit {
     return this._http.get(ACCOUNTS_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)))
       .map((res) => {
         let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
+        console.log('the data in response is :', data);
         data.request = '';
         data.queryString = { accountUniqueName };
         return data;
