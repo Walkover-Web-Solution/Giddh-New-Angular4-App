@@ -25,7 +25,7 @@
             </td>
             <td width="10%" class="alC">
               <i class="fa fa-pencil cp mrR1" (click)="showModalForEdit(user)"></i>
-              <i (click)="onRevokePermission(user.email, user.roleName)" class="fa fa-trash cp"></i>
+              <i (click)="onRevokePermission(usrGrp.rows[0].userUniqueName, user.roleName)" class="fa fa-trash cp"></i>
             </td>
           </tr>
         </tbody>
