@@ -21,6 +21,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -42,6 +43,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
+  @ViewChild('sh') public sh: ShSelectComponent;
+
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
@@ -106,6 +109,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public ngOnInit() {
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
+  }
+
+  @HostListener('click', ['$event'])
+  public clicked(e) {
+    if (this.sh && !this.sh.ele.nativeElement.contains(e.path[3])) {
+      this.sh.hide();
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
