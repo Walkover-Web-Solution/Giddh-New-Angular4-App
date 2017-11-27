@@ -1,3 +1,4 @@
+import { ShareRequestForm } from './../../models/api-models/Permission';
 import { GroupSharedWithResponse } from './../../models/api-models/Group';
 import { ShareEntityRequest } from './../../models/api-models/Account';
 import { ApplyTaxRequest } from '../../models/api-models/ApplyTax';
@@ -314,7 +315,7 @@ export class AccountsAction {
   public unShareEntity$: Observable<Action> = this.action$
     .ofType(AccountsAction.UN_SHARE_ENTITY)
     .switchMap(action =>
-      this._accountService.UnShare(action.payload)
+      this._accountService.UnShare(action.payload.entryUniqueName, action.payload.entity, action.payload.entityUniqueName)
     )
     .map(response => {
       return this.UnShareEntityResponse(response);
@@ -349,7 +350,7 @@ export class AccountsAction {
   public updateEntityPermission$: Observable<Action> = this.action$
     .ofType(AccountsAction.UPDATE_ENTITY_PERMISSION)
     .switchMap(action =>
-      this._accountService.UnShare(action.payload.entryUniqueName)
+      this._accountService.UpdateEntityPermission(action.payload.model, action.payload.entity, action.payload.newRoleUniqueName)
     )
     .map(response => {
       return this.updateEntityPermissionResponse(response);
@@ -365,11 +366,10 @@ export class AccountsAction {
           type: ''
         };
       } else {
-        let data: BaseResponse<string, ShareAccountRequest> = action.payload;
-        // this._toasty.successToast(action.payload.body, '');
-        if (data.queryString.model.updateInBackground) {
-          return this.shareEntity(data.queryString.model, data.queryString.model.newPermission);
-        }
+        this._toasty.successToast('Role updated successfully.', '');
+        return {
+          type: ''
+        };
       }
     });
 
@@ -659,10 +659,10 @@ export class AccountsAction {
   }
 
   // UNSHARE
-  public unShareEntity(entryUniqueName: string): Action {
+  public unShareEntity(entryUniqueName: string, entity: string, entityUniqueName: string): Action {
     return {
       type: AccountsAction.UN_SHARE_ENTITY,
-      payload: entryUniqueName
+      payload: { entryUniqueName, entity, entityUniqueName }
     };
   }
 
@@ -674,14 +674,10 @@ export class AccountsAction {
   }
 
   // updateEntityPermission
-  public updateEntityPermission(value: ShareEntityRequest, accountUniqueName: string): Action {
+  public updateEntityPermission(model: ShareRequestForm, newRoleUniqueName: string, entity: string): Action {
     return {
       type: AccountsAction.UPDATE_ENTITY_PERMISSION,
-      payload: Object.assign({}, {
-        body: value
-      }, {
-        accountUniqueName
-      })
+      payload: { model, newRoleUniqueName, entity }
     };
   }
 
