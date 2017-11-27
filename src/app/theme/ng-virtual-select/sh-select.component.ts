@@ -221,6 +221,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
           if (item !== null) {
             // this.toggleSelected(item);
             this.menuEle.virtualScrollElm.scrollInto(item);
+            this.menuEle.virtualScrollElm.startupLoop = true;
+            this.menuEle.virtualScrollElm.refresh();
             event.preventDefault();
           }
         }
@@ -235,6 +237,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
           if (item !== null) {
             // this.toggleSelected(item);
             this.menuEle.virtualScrollElm.scrollInto(item);
+            this.menuEle.virtualScrollElm.startupLoop = true;
+            this.menuEle.virtualScrollElm.refresh();
             event.preventDefault();
           }
         }
