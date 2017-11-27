@@ -49,15 +49,8 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     this.selectedPermission = '';
   }
 
-  public async unShareAccount(email: string, givenPermission: string) {
-    let activeAccount = await this.activeAccount$.first().toPromise();
-    let userRole = {
-      emailId: email,
-      entity: 'account',
-      entityUniqueName: activeAccount.uniqueName,
-    };
-
-    this.store.dispatch(this.accountActions.unShareEntity(userRole, givenPermission));
+  public async unShareAccount(entryUniqueName: string) {
+    this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName));
   }
 
   public callbackFunction(activeAccount: any, email: string, currentPermission: string, newPermission: string) {
