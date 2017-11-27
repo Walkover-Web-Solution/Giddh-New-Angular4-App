@@ -5,6 +5,7 @@ import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IGroup
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
 import { BankAccountsResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
+import { CustomActions } from '../customActions';
 
 export interface HomeState {
   value?: string;
@@ -186,7 +187,7 @@ export const initialState: HomeState = {
   }
 };
 
-export function homeReducer(state = initialState, action: Action): HomeState {
+export function homeReducer(state = initialState, action: CustomActions): HomeState {
   switch (action.type) {
     case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IExpensesChartClosingBalanceResponse;

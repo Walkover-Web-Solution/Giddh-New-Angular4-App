@@ -10,6 +10,7 @@ import { SearchService } from '../search.service';
 import { SearchRequest, SearchResponse } from '../../models/api-models/Search';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AppState } from '../../store/roots';
+import { CustomActions } from '../../store/customActions';
 
 @Injectable()
 export class SearchActions {
@@ -19,7 +20,7 @@ export class SearchActions {
 
   @Effect() private Search$: Observable<Action> = this.action$
     .ofType(SearchActions.SEARCH_REQUEST)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._searchService.Search(action.payload)
         .map((r) => this.validateResponse<SearchResponse[], SearchRequest>(r, {
           type: SearchActions.SEARCH_RESPONSE,
@@ -36,20 +37,20 @@ export class SearchActions {
     private _searchService: SearchService) {
   }
 
-  public GetStocksReport(request: SearchRequest): Action {
+  public GetStocksReport(request: SearchRequest): CustomActions {
     return {
       type: SearchActions.SEARCH_REQUEST,
       payload: request
     };
   }
 
-  public ResetSearchState(): Action {
+  public ResetSearchState(): CustomActions {
     return {
       type: SearchActions.RESET_SEARCH_STATE
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

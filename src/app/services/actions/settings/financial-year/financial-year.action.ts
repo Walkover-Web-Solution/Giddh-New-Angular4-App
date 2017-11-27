@@ -11,6 +11,7 @@ import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
 import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from './financial-year.const';
 import { SettingsFinancialYearService, ILockFinancialYearRequest, IFinancialYearResponse } from '../../../settings.financial-year.service';
 import { ActiveFinancialYear } from '../../../../models/api-models/Company';
+import { CustomActions } from '../../../../store/customActions';
 
 @Injectable()
 export class SettingsFinancialYearActions {
@@ -18,7 +19,7 @@ export class SettingsFinancialYearActions {
   @Effect()
   public GetAllFinancialYears$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS)
-    .switchMap(action => this._settingsFinancialYearService.GetAllFinancialYears())
+    .switchMap((action: CustomActions) =>  this._settingsFinancialYearService.GetAllFinancialYears())
     .map(res => this.validateResponse<IFinancialYearResponse, string>(res, {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS_RESPONSE,
       payload: res
@@ -30,7 +31,7 @@ export class SettingsFinancialYearActions {
   @Effect()
   public LockFinancialYear$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._settingsFinancialYearService.LockFinancialYear(action.payload)
         .map(response => this.LockFinancialYearResponse(response));
     });
@@ -38,20 +39,20 @@ export class SettingsFinancialYearActions {
   @Effect()
   public LockFinancialYearResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast('Financial Year Locked Successfully.');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public UnlockFinancialYear$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._settingsFinancialYearService.UnlockFinancialYear(action.payload)
         .map(response => this.UnlockFinancialYearResponse(response));
     });
@@ -59,20 +60,20 @@ export class SettingsFinancialYearActions {
   @Effect()
   public UnlockFinancialYearResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast('Financial Year Unlocked Successfully.');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public SwitchFinancialYear$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._settingsFinancialYearService.SwitchFinancialYear(action.payload)
         .map(response => this.SwitchFinancialYearResponse(response));
     });
@@ -80,20 +81,20 @@ export class SettingsFinancialYearActions {
   @Effect()
   public SwitchFinancialYearResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<ActiveFinancialYear, string> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       } else {
         this.toasty.successToast('Financial Year Switched Successfully.');
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   @Effect()
   public AddFinancialYear$: Observable<Action> = this.action$
     .ofType(SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR)
-    .switchMap(action => this._settingsFinancialYearService.AddFinancialYear(action.payload))
+    .switchMap((action: CustomActions) =>  this._settingsFinancialYearService.AddFinancialYear(action.payload))
     .map(res => this.validateResponse<IFinancialYearResponse, string>(res, {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR_RESPONSE,
       payload: res
@@ -109,62 +110,62 @@ export class SettingsFinancialYearActions {
     private _settingsFinancialYearService: SettingsFinancialYearService) {
   }
 
-  public GetAllFinancialYears(): Action {
+  public GetAllFinancialYears(): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.GET_ALL_FINANCIAL_YEARS,
     };
   }
 
-  public LockFinancialYear(reqObj: ILockFinancialYearRequest): Action {
+  public LockFinancialYear(reqObj: ILockFinancialYearRequest): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR,
       payload: reqObj
     };
   }
 
-  public LockFinancialYearResponse(response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>): Action {
+  public LockFinancialYearResponse(response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.LOCK_FINANCIAL_YEAR_RESPONSE,
       payload: response
     };
   }
 
-  public UnlockFinancialYear(reqObj: ILockFinancialYearRequest): Action {
+  public UnlockFinancialYear(reqObj: ILockFinancialYearRequest): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR,
       payload: reqObj
     };
   }
 
-  public UnlockFinancialYearResponse(response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>): Action {
+  public UnlockFinancialYearResponse(response: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.UNLOCK_FINANCIAL_YEAR_RESPONSE,
       payload: response
     };
   }
 
-  public SwitchFinancialYearResponse(response: BaseResponse<ActiveFinancialYear, string>): Action {
+  public SwitchFinancialYearResponse(response: BaseResponse<ActiveFinancialYear, string>): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR_RESPONSE,
       payload: response
     };
   }
 
-  public SwitchFinancialYear(uniqueName: string): Action {
+  public SwitchFinancialYear(uniqueName: string): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.SWITCH_FINANCIAL_YEAR,
       payload: uniqueName
     };
   }
 
-  public AddFinancialYear(fromYear: string): Action {
+  public AddFinancialYear(fromYear: string): CustomActions {
     return {
       type: SETTINGS_FINANCIAL_YEAR_ACTIONS.ADD_FINANCIAL_YEAR,
       payload: fromYear
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

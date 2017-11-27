@@ -3,6 +3,7 @@ import { AccountFlat, SearchDataSet, SearchRequest, SearchResponse } from '../..
 import { SearchActions } from '../../services/actions/search.actions';
 import * as _ from '../../lodash-optimized';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { CustomActions } from '../customActions';
 
 export interface SearchState {
   value?: AccountFlat[];
@@ -25,7 +26,7 @@ export const initialState: SearchState = {
   }]
 };
 
-export function searchReducer(state = initialState, action: Action): SearchState {
+export function searchReducer(state = initialState, action: CustomActions): SearchState {
   switch (action.type) {
 
     case SearchActions.SEARCH_RESPONSE: {

@@ -11,12 +11,13 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { AUDIT_LOGS_ACTIONS } from './audit-logs.const';
+import { CustomActions } from '../../../store/customActions';
 
 @Injectable()
 export class AuditLogsActions {
   @Effect() private GET_LOGS$: Observable<Action> = this.action$
     .ofType(AUDIT_LOGS_ACTIONS.GET_LOGS)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._logService.GetAuditLogs(action.payload.request, action.payload.page)
         .map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
           type: AUDIT_LOGS_ACTIONS.GET_LOGS_RESPONSE,
@@ -29,7 +30,7 @@ export class AuditLogsActions {
 
   @Effect() private LoadMore$: Observable<Action> = this.action$
     .ofType(AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this._logService.GetAuditLogs(action.payload.request, action.payload.page)
         .map((r) => this.validateResponse<LogsResponse, LogsRequest>(r, {
           type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS_RESPONSE,
@@ -46,25 +47,25 @@ export class AuditLogsActions {
     private _logService: LogsService) {
   }
 
-  public GetLogs(request: LogsRequest, page: number): Action {
+  public GetLogs(request: LogsRequest, page: number): CustomActions {
     return {
       type: AUDIT_LOGS_ACTIONS.GET_LOGS,
       payload: { request, page }
     };
   }
-  public LoadMoreLogs(request: LogsRequest, page: number): Action {
+  public LoadMoreLogs(request: LogsRequest, page: number): CustomActions {
     return {
       type: AUDIT_LOGS_ACTIONS.LOAD_MORE_LOGS,
       payload: { request, page }
     };
   }
-  public ResetLogs(): Action {
+  public ResetLogs(): CustomActions {
     return {
       type: AUDIT_LOGS_ACTIONS.AUDIT_LOGS_RESET
     };
   }
 
-  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = { type: '' }): Action {
+  private validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = { type: 'EmptyAction' }): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this._toasty.errorToast(response.message);

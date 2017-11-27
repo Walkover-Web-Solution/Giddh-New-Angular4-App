@@ -3,6 +3,7 @@ import { TBPlBsActions } from '../../services/actions/tl-pl.actions';
 import { AccountDetails, BalanceSheetData, ProfitLossData } from '../../models/api-models/tb-pl-bs';
 import * as _ from '../../lodash-optimized';
 import { ChildGroup } from '../../models/api-models/Search';
+import { CustomActions } from '../customActions';
 
 interface TbState {
   data?: AccountDetails;
@@ -56,7 +57,7 @@ export const initialState: TBPlBsState = {
   }
 };
 
-export function tbPlBsReducer(state = initialState, action: Action): TBPlBsState {
+export function tbPlBsReducer(state = initialState, action: CustomActions): TBPlBsState {
   switch (action.type) {
     case TBPlBsActions.GET_TRIAL_BALANCE_RESPONSE: {
       // no payload means error from server

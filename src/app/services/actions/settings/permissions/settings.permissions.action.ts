@@ -10,6 +10,7 @@ import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { Router } from '@angular/router';
 import { SettingsProfileService } from '../../../settings.profile.service';
 import { SmsKeyClass } from '../../../../models/api-models/SettingsIntegraion';
+import { CustomActions } from '../../../../store/customActions';
 
 @Injectable()
 export class SettingsPermissionActions {
@@ -17,7 +18,7 @@ export class SettingsPermissionActions {
   @Effect()
   public GetUsersWithPermissions$: Observable<Action> = this.action$
     .ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS)
-    .switchMap(action => {
+    .switchMap((action: CustomActions) => {
       return this.settingsPermissionService.GetUsersWithCompanyPermissions(action.payload)
         .map(response => this.GetUsersWithPermissionsResponse(response));
     });
@@ -25,12 +26,12 @@ export class SettingsPermissionActions {
   @Effect()
   private GetUsersWithPermissionsResponse$: Observable<Action> = this.action$
     .ofType(SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE)
-    .map(response => {
+    .map((response: CustomActions) => {
       let data: BaseResponse<any, any> = response.payload;
       if (data.status === 'error') {
         this.toasty.errorToast(data.message, data.code);
       }
-      return { type: '' };
+      return { type: 'EmptyAction' };
     });
 
   constructor(private action$: Actions,
@@ -40,21 +41,21 @@ export class SettingsPermissionActions {
     private settingsPermissionService: SettingsPermissionService) {
   }
 
-  public GetUsersWithPermissions(companyUniqueName: string): Action {
+  public GetUsersWithPermissions(companyUniqueName: string): CustomActions {
     return {
       type: SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS,
       payload: companyUniqueName
     };
   }
 
-  public GetUsersWithPermissionsResponse(response): Action {
+  public GetUsersWithPermissionsResponse(response): CustomActions {
     return {
       type: SETTINGS_PERMISSION_ACTIONS.GET_USERS_WITH_COMPANY_PERMISSIONS_RESPONSE,
       payload: response
     };
   }
 
-  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: Action, showToast: boolean = false, errorAction: Action = {type: ''}): Action {
+  public validateResponse<TResponse, TRequest>(response: BaseResponse<TResponse, TRequest>, successAction: CustomActions, showToast: boolean = false, errorAction: CustomActions = {type: 'EmptyAction'}): CustomActions {
     if (response.status === 'error') {
       if (showToast) {
         this.toasty.errorToast(response.message);

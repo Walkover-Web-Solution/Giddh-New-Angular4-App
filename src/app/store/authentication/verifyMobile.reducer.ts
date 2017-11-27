@@ -5,6 +5,7 @@ import { Action, ActionReducer } from '@ngrx/store';
 import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { StateDetailsResponse, StateDetailsRequest } from '../../models/api-models/Company';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -24,7 +25,7 @@ const initialState = {
   isMobileVerified: false
 };
 
-export const VerifyMobileReducer: ActionReducer<VerifyMobileState> = (state: VerifyMobileState = initialState, action: Action) => {
+export const VerifyMobileReducer: ActionReducer<VerifyMobileState> = (state: VerifyMobileState = initialState, action: CustomActions) => {
 
   switch (action.type) {
     case VerifyMobileActions.SET_VERIFIACATION_MOBILENO:
