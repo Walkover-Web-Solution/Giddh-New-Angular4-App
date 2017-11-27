@@ -50,15 +50,8 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
     this.selectedPermission = '';
   }
 
-  public async unShareGroup(email: string, givenPermission: string) {
-    let activeGrp = await this.activeGroup$.first().toPromise();
-    let userRole = {
-      emailId: email,
-      entity: 'group',
-      entityUniqueName: activeGrp.uniqueName,
-    };
-
-    this.store.dispatch(this.accountActions.unShareEntity(userRole, givenPermission));
+  public async unShareGroup(entryUniqueName: string) {
+    this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName));
   }
 
   public callbackFunction(activeGroup: any, email: string, currentPermission: string, newPermission: string) {

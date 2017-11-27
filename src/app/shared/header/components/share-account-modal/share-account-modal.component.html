@@ -29,6 +29,7 @@
                     <div class="row">
                         <ul class="shared_list">
                             <li *ngFor="let val of (activeAccountSharedWith$ | async); let i = index" class="clearfix">
+                                <p>The val is : {{val | json}}</p>
                                 <span class="pull-left">
                                     <small class="Useremail">{{ val.userEmail }}</small>
                                 </span>
@@ -40,7 +41,7 @@
                                 </div>
                                 <span class="form-inline">
                                   <span class="delIcon pull-right">
-                                  <i (click)="unShareAccount(val.userEmail, val.role.uniqueName)" class="fa fa-trash"
+                                  <i (click)="unShareAccount('uniqueName')" class="fa fa-trash"
                                     aria-hidden="true"></i>
                                   </span>
                                 </span>
