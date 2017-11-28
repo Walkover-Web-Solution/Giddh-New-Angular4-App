@@ -17,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
+import { createSelector } from 'reselect';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -66,6 +67,7 @@ export class MfEditComponent implements OnInit {
     this.initializeOtherExpenseObj();
     // Update/Delete condition
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
+      debugger;
       if (o.stockToUpdate) {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
@@ -98,10 +100,10 @@ export class MfEditComponent implements OnInit {
                   let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
                   if (matchedAccIndex > -1) {
                     if (d.category === 'expenses') {
-                      this.expenseGroupAccounts.push({label: acc.name, value: acc.uniqueName});
+                      this.expenseGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                     if (d.category === 'liabilities' || d.category === 'assets') {
-                      this.liabilityGroupAccounts.push({label: acc.name, value: acc.uniqueName});
+                      this.liabilityGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                   }
                 }
@@ -131,26 +133,28 @@ export class MfEditComponent implements OnInit {
       }
     });
     // get all stocks
-    this.stockListDropDown$ = this.store.select(p => {
-      let data = _.cloneDeep(p);
-      let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-      if (data.inventory.manufacturingStockListForCreateMF) {
-        if (data.inventory.manufacturingStockListForCreateMF.results) {
-          let units = data.inventory.manufacturingStockListForCreateMF.results;
+    this.stockListDropDown$ = this.store.select(
+      createSelector([(state: AppState) => state.inventory.manufacturingStockListForCreateMF], (manufacturingStockListForCreateMF) => {
+        let data = _.cloneDeep(manufacturingStockListForCreateMF);
+        let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+        if (data) {
+          if (data.results) {
+            let units = data.results;
 
-          return units.map(unit => {
-            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
-            if (alreadyPushedElementindx > -1) {
-              return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true};
-            } else {
-              return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false};
-            }
-          });
+            return units.map(unit => {
+              let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+              if (alreadyPushedElementindx > -1) {
+                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+              } else {
+                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+              }
+            });
+          }
         }
-      }
-    }).takeUntil(this.destroyed$);
+      })).takeUntil(this.destroyed$);
     // get stock with rate details
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
+      debugger;
       if (!this.isUpdateCase) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
         if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
@@ -340,7 +344,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public onQuantityChange(val: any) {
-    let value  = val;
+    let value = val;
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
     if (!this.initialQuantityObj.length) {
