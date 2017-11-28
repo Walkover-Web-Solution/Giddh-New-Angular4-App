@@ -16,6 +16,8 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const DefinePlugin = require('webpack/lib/DefinePlugin');
 const NamedModulesPlugin = require('webpack/lib/NamedModulesPlugin');
 const LoaderOptionsPlugin = require('webpack/lib/LoaderOptionsPlugin');
+const HotModuleReplacementPlugin = require('webpack/lib/HotModuleReplacementPlugin');
+
 const ERRLYTICS_KEY_DEV = '';
 /**
  * Webpack Constants
@@ -229,7 +231,8 @@ module.exports = function(options) {
                 options: {
 
                 }
-            })
+            }),
+            new HotModuleReplacementPlugin()
 
         ],
 
