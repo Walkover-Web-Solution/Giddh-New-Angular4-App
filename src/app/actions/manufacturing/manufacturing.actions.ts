@@ -19,7 +19,7 @@ export class ManufacturingActions {
   @Effect()
   private GetMfReport$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.MF_REPORT)
-    .switchMap((action: CustomActions) =>  this._manufacturingService.GetMfReport(action.payload))
+    .switchMap((action: CustomActions) => this._manufacturingService.GetMfReport(action.payload))
     .map(response => {
       return this.GetMfReportResponse(response);
     });
@@ -32,14 +32,14 @@ export class ManufacturingActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type : ''};
+      return { type: 'EmptyAction' };
     });
 
   // GET STOCK WITH RATE
   @Effect()
   private GetStockWithRate$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.GET_STOCK_WITH_RATE)
-    .switchMap((action: CustomActions) =>  this._manufacturingService.GetStockWithRate(action.payload))
+    .switchMap((action: CustomActions) => this._manufacturingService.GetStockWithRate(action.payload))
     .map(response => {
       return this.GetStockWithRateResponse(response);
     });
@@ -52,14 +52,14 @@ export class ManufacturingActions {
       if (data.status === 'error') {
         this._toasty.errorToast(data.message, data.code);
       }
-      return { type : ''};
+      return { type: 'EmptyAction' };
     });
 
   // GET MANUFACTURING ITEM DETAIL
   @Effect()
   private GetMFItemDetail$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS)
-    .switchMap((action: CustomActions) =>  this._manufacturingService.GetManufacturingItem(action.payload))
+    .switchMap((action: CustomActions) => this._manufacturingService.GetManufacturingItem(action.payload))
     .map(response => {
       return this.GetMfItemDetailsResponse(response);
     });
@@ -68,7 +68,7 @@ export class ManufacturingActions {
   private GetMFItemDetailResponse$: Observable<Action> = this.action$
     .ofType(MANUFACTURING_ACTIONS.GET_MF_ITEM_DETAILS_RESPONSE)
     .map(response => {
-      return { type : ''};
+      return { type: 'EmptyAction' };
     });
 
   // CREATE MANUFACTURING ITEM
@@ -145,7 +145,7 @@ export class ManufacturingActions {
     private _manufacturingService: ManufacturingService,
     private _toasty: ToasterService,
     private _router: Router
-) {}
+  ) { }
 
   public GetStockWithRate(value: string): CustomActions {
     return {
