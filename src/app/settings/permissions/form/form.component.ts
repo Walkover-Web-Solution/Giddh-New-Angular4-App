@@ -8,8 +8,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ShareRequestForm } from '../../../models/api-models/Permission';
 import { ToasterService } from '../../../services/toaster.service';
-import { PermissionActions } from '../../../services/actions/permission/permission.action';
-import { AccountsAction } from '../../../services/actions/accounts.actions';
+import { PermissionActions } from '../../../actions/permission/permission.action';
+import { AccountsAction } from '../../../actions/accounts.actions';
 import { SettingsPermissionService } from '../../../services/settings.permission.service';
 
 // some local const

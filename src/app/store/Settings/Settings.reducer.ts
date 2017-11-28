@@ -1,17 +1,18 @@
-import { SETTINGS_PERMISSION_ACTIONS } from './../../services/actions/settings/permissions/settings.permissions.const';
+import { SETTINGS_PERMISSION_ACTIONS } from '../../actions/settings/permissions/settings.permissions.const';
 import { LinkedAccountsState, SettingsState } from './Settings.reducer';
 import * as _ from '../../lodash-optimized';
 import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { SETTINGS_INTEGRATION_ACTIONS } from '../../services/actions/settings/settings.integration.const';
-import { SETTINGS_PROFILE_ACTIONS } from '../../services/actions/settings/profile/settings.profile.const';
+import { SETTINGS_INTEGRATION_ACTIONS } from '../../actions/settings/settings.integration.const';
+import { SETTINGS_PROFILE_ACTIONS } from '../../actions/settings/profile/settings.profile.const';
 import { CompanyResponse, ActiveFinancialYear } from '../../models/api-models/Company';
 import { SmsKeyClass, IntegrationPage, IntegrationPageClass, EmailKeyClass, RazorPayDetailsResponse, RazorPayClass } from '../../models/api-models/SettingsIntegraion';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
-import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.const';
+import { SETTINGS_LINKED_ACCOUNTS_ACTIONS } from '../../actions/settings/linked-accounts/settings.linked.accounts.const';
 import { IGetAllEbankAccountResponse } from '../../models/api-models/SettingsLinkedAccounts';
-import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../services/actions/settings/financial-year/financial-year.const';
+import { SETTINGS_FINANCIAL_YEAR_ACTIONS } from '../../actions/settings/financial-year/financial-year.const';
 import { IFinancialYearResponse, ILockFinancialYearRequest } from '../../services/settings.financial-year.service';
+import { CustomActions } from '../customActions';
 
 export interface LinkedAccountsState {
   bankAccounts?: BankAccountsResponse[];
@@ -36,7 +37,7 @@ export const initialState: SettingsState = {
   usersWithCompanyPermissions: null
 };
 
-export function SettingsReducer(state = initialState, action: Action): SettingsState {
+export function SettingsReducer(state = initialState, action: CustomActions): SettingsState {
   let newState = _.cloneDeep(state);
   switch (action.type) {
     case SETTINGS_INTEGRATION_ACTIONS.GET_SMS_KEY_RESPONSE:

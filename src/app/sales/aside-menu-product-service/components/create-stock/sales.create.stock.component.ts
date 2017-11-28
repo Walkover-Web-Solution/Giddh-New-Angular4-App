@@ -13,16 +13,16 @@ import {
 } from '../../../../shared/helpers/customValidationHelper';
 import { CreateStockRequest, StockDetailResponse, StockGroupResponse, StockUnitResponse } from '../../../../models/api-models/Inventory';
 import { Select2OptionData } from '../../../../shared/theme/select2/select2.interface';
-import { InventoryAction } from '../../../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { AccountService } from '../../../../services/account.service';
-import { CustomStockUnitAction } from '../../../../services/actions/inventory/customStockUnit.actions';
+import { CustomStockUnitAction } from '../../../../actions/inventory/customStockUnit.actions';
 import { IStockItemDetail, IUnitRateItem } from '../../../../models/interfaces/stocksItem.interface';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
 import { InventoryService } from '../../../../services/inventory.service';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../../models/interfaces/groupsWithStocks.interface';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
-import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { SalesActions } from '../../../../actions/sales/sales.action';
 import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 

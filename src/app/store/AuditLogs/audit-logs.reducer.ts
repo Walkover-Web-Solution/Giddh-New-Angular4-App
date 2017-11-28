@@ -3,7 +3,8 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ILogsItem } from '../../models/interfaces/logs.interface';
 import { Action } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
-import { AUDIT_LOGS_ACTIONS } from '../../services/actions/audit-logs/audit-logs.const';
+import { AUDIT_LOGS_ACTIONS } from '../../actions/audit-logs/audit-logs.const';
+import { CustomActions } from '../customActions';
 
 export interface AuditLogsState {
   logs: ILogsItem[];
@@ -27,7 +28,7 @@ export const initialState: AuditLogsState = {
   CurrectPage: 0
 };
 
-export function auditLogsReducer(state = initialState, action: Action): AuditLogsState {
+export function auditLogsReducer(state = initialState, action: CustomActions): AuditLogsState {
   let data: BaseResponse<LogsResponse, LogsRequest> = null;
   let newState: AuditLogsState = null;
   switch (action.type) {

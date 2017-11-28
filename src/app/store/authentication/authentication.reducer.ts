@@ -1,10 +1,11 @@
-import { LoginActions } from '../../services/actions/login.action';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
 import * as _ from '../../lodash-optimized';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -85,7 +86,7 @@ const sessionInitialState: SessionState = {
   userLoginState: userLoginStateEnum.notLoggedIn
 };
 
-export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
+export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: CustomActions) => {
 
   switch (action.type) {
     case LoginActions.SignupWithEmailResponce:
@@ -252,7 +253,7 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
   }
 };
 
-export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
+export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: CustomActions) => {
   switch (action.type) {
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;

@@ -18,11 +18,11 @@ const filter2 = [
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { Component, OnInit } from '@angular/core';
-import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
+import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
 import { MfStockSearchRequestClass } from '../manufacturing.utility';
 import { IMfStockSearchRequest } from '../../models/interfaces/manufacturing.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';

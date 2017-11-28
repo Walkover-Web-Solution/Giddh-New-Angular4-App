@@ -1,14 +1,14 @@
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 
 import { ToasterService } from './../../../../services/toaster.service';
-import { PermissionActions } from './../../../../services/actions/permission/permission.action';
+import { PermissionActions } from '../../../../actions/permission/permission.action';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
-import { AccountsAction } from './../../../../services/actions/accounts.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { GroupResponse, GroupSharedWithResponse, ShareGroupRequest } from '../../../../models/api-models/Group';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from 'lodash';

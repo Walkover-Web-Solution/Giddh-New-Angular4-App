@@ -1,21 +1,21 @@
-import { CompanyActions } from '../../../../services/actions/company.actions';
+import { CompanyActions } from '../../../../actions/company.actions';
 import { LocationService } from '../../../../services/location.service';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest } from '../../../../models/api-models/Company';
 import { SignupWithMobile, VerifyMobileModel } from '../../../../models/api-models/loginModels';
 import { Observable, ReplaySubject } from 'rxjs';
-import { VerifyMobileActions } from '../../../../services/actions/verifyMobile.actions';
+import { VerifyMobileActions } from '../../../../actions/verifyMobile.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { WizardComponent } from '../../../../theme/ng2-wizard';
 import { Router } from '@angular/router';
 import { ModalDirective, TypeaheadMatch } from 'ngx-bootstrap';
-import { LoginActions } from '../../../../services/actions/login.action';
+import { LoginActions } from '../../../../actions/login.action';
 import { AuthService } from 'ng4-social-login';
 import { AuthenticationService } from '../../../../services/authentication.service';
 import * as _ from '../../../../lodash-optimized';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';
-import { GeneralActions } from '../../../../services/actions/general/general.actions';
+import { GeneralActions } from '../../../../actions/general/general.actions';
 import { IOption } from '../../../../theme/ng-virtual-select/sh-options.interface';
 
 // const GOOGLE_CLIENT_ID = '641015054140-3cl9c3kh18vctdjlrt9c8v0vs85dorv2.apps.googleusercontent.com';
