@@ -15,26 +15,14 @@
             <form class="form-inline mrB2" name="manufaturingForm" #manufaturingForm="ngForm">
                 <div class="form-group">
                     <label class="d-block">Product Name</label>
-                    <!--<select2 class="select2-parent" [disabled]="isUpdateCase" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" [data]="stockListDropDown$ | async" [options]="options" (valueChanged)="getStocksWithRate($event)">
-                    </select2>-->
-                    <ng-select placeholder="Search for product"
-                        filterPlaceholder="Type to search..."
-                        name="stockUniqueName"
-                        [(ngModel)]="manufacturingDetails.stockUniqueName"
-                        [options]="stockListDropDown$ | async"
-                        [disabled]="isUpdateCase"
-                        (selected)="getStocksWithRate($event)"
-                        >
-                        <ng-template #optionTemplate let-option="option">
-                            <div class="account-list-item">{{option?.label}}</div>
-                            <!--<div class="account-list-item fs12">{{option?.value}}</div>-->
-                        </ng-template>
-                    </ng-select>
+                    <sh-select [options]="stockListDropDown$ | async" 
+                    [disabled]="isUpdateCase"
+                    (selected)="getStocksWithRate($event)"
+                    [(ngModel)]="manufacturingDetails.stockUniqueName" 
+                    name="stockUniqueName" 
+                    [placeholder]="'- Select product -'">
+                    </sh-select>                    
                 </div>
-                <!--<div class="form-group col-xs-4">
-        <label>Quantity</label>
-        <input type="text" class="form-control" [(ngModel)]="manufacturingDetails.quantity" name="manufaturingQuanity" />
-      </div>-->
                 <div class="form-group pos-rel">
                     <label class="d-block">Quantity</label>
                     <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf"/>
@@ -50,10 +38,6 @@
                 </button>
             </span>
                     </div>
-                    <!--<div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-              <datepicker name="fromDate" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker"
-                [showWeeks]="true"></datepicker>
-            </div>-->
                     <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
                         <ul class="my-dropdown-menu calendar-dropdown">
                             <li>
@@ -117,7 +101,7 @@
                                     <div class="custom-select pos-rel">
                                         <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (change)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)">
                                               <option value="" [selected]="true">-Select-</option>
-                                              <option [ngValue]="stock.value" *ngFor="let stock of stockListDropDown$ | async" >{{ stock.label }}</option>
+                                              <option [ngValue]="stock.value" *ngFor="let stock of allStocksDropDown$ | async" >{{ stock.label }}</option>
                                             </select>
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                                     </div>
@@ -204,36 +188,14 @@
 
                             <tr *ngIf="toggleAddExpenses">
                                 <td colspan="1">
-                                    <!--<select2 class="cp" [data]="liabilityGroupAccounts$ | async" [options]="options" name="transactionAccountUniqueName" [(ngModel)]="otherExpenses.transactionAccountUniqueName"></select2>-->
-                                    <ng-select class="cp" placeholder="Select"
-                                        filterPlaceholder="Type to search..."
-                                        name="transactionAccountUniqueName"
-                                        [(ngModel)]="otherExpenses.transactionAccountUniqueName"
-                                        [options]="liabilityGroupAccounts$ | async"
-                                        >
-                                        <ng-template #optionTemplate let-option="option">
-                                            <div class="account-list-item">{{option?.label}}</div>
-                                            <div class="account-list-item fs12">{{option?.value}}</div>
-                                        </ng-template>
-                                    </ng-select>
+                                    <sh-select [options]="liabilityGroupAccounts$ | async" [(ngModel)]="otherExpenses.transactionAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Liability/Asset A/c'"></sh-select>
                                 </td>
                                 <td class="text-center">
                                     <label class="pd">to</label>
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
-                                    <!--<select2 class="cp" [data]="expenseGroupAccounts$ | async" [options]="options" name="baseAccountUniqueName" [(ngModel)]="otherExpenses.baseAccountUniqueName"></select2>-->
-                                    <ng-select class="cp" placeholder="Select"
-                                        filterPlaceholder="Type to search..."
-                                        name="baseAccountUniqueName"
-                                        [(ngModel)]="otherExpenses.baseAccountUniqueName"
-                                        [options]="expenseGroupAccounts$ | async"
-                                        >
-                                        <ng-template #optionTemplate let-option="option">
-                                            <div class="account-list-item">{{option?.label}}</div>
-                                            <div class="account-list-item fs12">{{option?.value}}</div>
-                                        </ng-template>
-                                    </ng-select>
+                                        <sh-select [options]="expenseGroupAccounts$ | async" [(ngModel)]="otherExpenses.baseAccountUniqueName" name="baseAccountUniqueName" [placeholder]="'Expense A/c'"></sh-select>
                                     </div>
                                 </td>
                                 <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->

@@ -1,3 +1,4 @@
+import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -35,7 +36,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     ModalModule,
     LaddaModule,
     SelectModule,
-    DecimalDigitsModule
+    DecimalDigitsModule,
+    ShSelectModule
   ],
 })
 export class ManufacturingModule {
