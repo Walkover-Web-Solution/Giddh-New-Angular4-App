@@ -1,6 +1,5 @@
 import * as fromVerifyMobileReducer from './authentication/verifyMobile.reducer';
 import * as fromRouter from '@ngrx/router-store';
-import { routerReducer } from '@ngrx/router-store';
 import * as fromGeneral from './General/general.reducer';
 import * as fromHome from './home/home.reducer';
 import * as fromPermission from './Permission/permission.reducer';
@@ -46,7 +45,7 @@ export interface AppState {
 }
 
 export const reducers: ActionReducerMap<AppState> = {
-  router: routerReducer,
+  router: fromRouter.routerReducer,
   general: fromGeneral.GeneRalReducer,
   home: fromHome.homeReducer,
   sales: fromSales.salesReducer,
