@@ -26,7 +26,7 @@ const initialState: GeneralState = {
   states: null
 };
 
-export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState = initialState, action: CustomActions) => {
+export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
   switch (action.type) {
     case 'EmptyAction': {
       return state;
@@ -189,7 +189,7 @@ export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState 
     default:
       return state;
   }
-};
+}
 
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
   // let myChildElementIsOpen = false;
