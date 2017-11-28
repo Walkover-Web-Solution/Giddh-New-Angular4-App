@@ -25,7 +25,7 @@ const initialState = {
   isMobileVerified: false
 };
 
-export const VerifyMobileReducer: ActionReducer<VerifyMobileState> = (state: VerifyMobileState = initialState, action: CustomActions) => {
+export function VerifyMobileReducer(state: VerifyMobileState = initialState, action: CustomActions): VerifyMobileState {
 
   switch (action.type) {
     case VerifyMobileActions.SET_VERIFIACATION_MOBILENO:
@@ -43,4 +43,4 @@ export const VerifyMobileReducer: ActionReducer<VerifyMobileState> = (state: Ver
     default:
       return state;
   }
-};
+}
