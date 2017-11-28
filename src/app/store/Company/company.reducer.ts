@@ -22,7 +22,7 @@ const initialState: CurrentCompanyState = {
   isTaxesLoading: false
 };
 
-export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: CurrentCompanyState = initialState, action: CustomActions) => {
+export function CompanyReducer(state: CurrentCompanyState = initialState, action: CustomActions): CurrentCompanyState {
 
   switch (action.type) {
     case 'CATCH_ERROR':
@@ -82,4 +82,4 @@ export const CompanyReducer: ActionReducer<CurrentCompanyState> = (state: Curren
     default:
       return state;
   }
-};
+}

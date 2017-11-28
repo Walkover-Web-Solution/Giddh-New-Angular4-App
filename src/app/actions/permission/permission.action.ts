@@ -31,7 +31,7 @@ export class PermissionActions {
   private GetAllPagesResponse$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ALL_PAGES_RESPONSE)
     .map(response => {
-      return { type : ''};
+      return { type : 'EmptyAction'};
     });
 
   @Effect()
@@ -46,7 +46,7 @@ export class PermissionActions {
   private GetAllPermissionsResponse$: Observable<Action> = this.action$
     .ofType(PERMISSION_ACTIONS.GET_ALL_PERMISSIONS_RESPONSE)
     .map(response => {
-      return { type : ''};
+      return { type : 'EmptyAction'};
     });
 
   @Effect()
