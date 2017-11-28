@@ -1,4 +1,4 @@
-import { CompanyActions } from '../actions/company.actions';
+import { CompanyActions } from '../../actions/company.actions';
 import { CompanyService } from '../companyService.service';
 import { VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { AppState } from '../../store/roots';

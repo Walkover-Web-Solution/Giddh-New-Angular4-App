@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
-import { SettingsIntegrationActions } from '../../services/actions/settings/settings.integration.action';
+import { SettingsIntegrationActions } from '../../actions/settings/settings.integration.action';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
 import { EmailKeyClass, RazorPayClass, SmsKeyClass } from '../../models/api-models/SettingsIntegraion';

@@ -8,10 +8,10 @@ import { GeneratePurchaseInvoiceRequest, IInvoicePurchaseItem, IInvoicePurchaseR
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoicePurchaseActions } from '../../services/actions/purchase-invoice/purchase-invoice.action';
+import { InvoicePurchaseActions } from '../../actions/purchase-invoice/purchase-invoice.action';
 import { ToasterService } from '../../services/toaster.service';
 import { CompanyResponse } from '../../models/api-models/Company';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { CompanyActions } from '../../actions/company.actions';
 import 'rxjs/add/operator/distinct';
 import 'rxjs/add/operator/takeUntil';
 import 'rxjs/add/operator/map';

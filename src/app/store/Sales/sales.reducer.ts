@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { SALES_ACTIONS } from '../../services/actions/sales/sales.const';
+import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';

@@ -1,5 +1,5 @@
-import { LoginActions } from '../../services/actions/login.action';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';

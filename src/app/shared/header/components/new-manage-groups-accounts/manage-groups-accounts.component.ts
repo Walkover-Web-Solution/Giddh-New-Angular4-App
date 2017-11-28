@@ -8,7 +8,7 @@ import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarDirective } from 'ngx-perfect-scrollbar';
-import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GroupAccountSidebarVM } from '../new-group-account-sidebar/VM';
 import { Subject } from 'rxjs/Subject';

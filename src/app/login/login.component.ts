@@ -1,4 +1,4 @@
-import { LoginActions } from '../services/actions/login.action';
+import { LoginActions } from '../actions/login.action';
 import { AppState } from '../store';
 import { Router } from '@angular/router';
 import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
