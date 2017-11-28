@@ -150,8 +150,8 @@ export class InvoiceUiDataService {
         let selectedTemplate = allTemplates.find((template) => template.uniqueName === uniqueName);
 
         if (selectedTemplate) {
-
-          if (mode === 'create' && selectedTemplate.sections[0].content[9].field !== 'trackingNumber' && data.defaultTemplate) { // this is default(old) template
+          // mode === 'create' &&
+          if ((selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && data.defaultTemplate) { // this is default(old) template
             selectedTemplate.sections = _.cloneDeep(data.defaultTemplate.sections);
           }
 
