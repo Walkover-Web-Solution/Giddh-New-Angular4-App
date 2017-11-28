@@ -1,8 +1,6 @@
-import { PageComponent } from '../page.component';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
-import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-grid.component';
+import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { AuditLogsComponent } from './audit-logs.component';
 
 @NgModule({
