@@ -2,7 +2,8 @@ import { Action } from '@ngrx/store';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { IInvoicePurchaseResponse, ITaxResponse, IInvoicePurchaseItem } from '../../services/purchase-invoice.service';
-import { PURCHASE_INVOICE_ACTIONS } from '../../services/actions/purchase-invoice/purchase-invoice.const';
+import { PURCHASE_INVOICE_ACTIONS } from '../../actions/purchase-invoice/purchase-invoice.const';
+import { CustomActions } from '../customActions';
 
 export interface InvoicePurchaseState {
     purchaseInvoices: IInvoicePurchaseResponse;
@@ -18,7 +19,7 @@ export const initialState: InvoicePurchaseState = {
     invoiceGenerateSuccess: false
 };
 
-export function InvoicePurchaseReducer(state = initialState, action: Action): InvoicePurchaseState {
+export function InvoicePurchaseReducer(state = initialState, action: CustomActions): InvoicePurchaseState {
     switch (action.type) {
         case PURCHASE_INVOICE_ACTIONS.GET_PURCHASE_INVOICES_RESPONSE:
             {

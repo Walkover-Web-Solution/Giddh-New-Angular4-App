@@ -4,7 +4,7 @@ import { InvoiceISetting, InvoiceSetting, InvoiceWebhooks } from '../../models/i
 import { AppState } from '../../store/roots';
 import { Store } from '@ngrx/store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { ToasterService } from '../../services/toaster.service';
 import { RazorPayDetailsResponse } from '../../models/api-models/SettingsIntegraion';
 import { AccountService } from '../../services/account.service';

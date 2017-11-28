@@ -1,8 +1,9 @@
+import { ShareRequestForm } from './../../models/api-models/Permission';
 import {
   GroupCreateRequest, GroupUpateRequest, MoveGroupRequest,
   MoveGroupResponse
 } from '../../models/api-models/Group';
-import { AccountsAction } from '../../services/actions/accounts.actions';
+import { AccountsAction } from '../../actions/accounts.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import {
   FlattenGroupsAccountsResponse,
@@ -22,11 +23,12 @@ import {
   AccountSharedWithResponse,
   AccountsTaxHierarchyResponse
 } from '../../models/api-models/Account';
-import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { of } from 'rxjs/observable/of';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { debug } from 'util';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -45,8 +47,8 @@ export interface CurrentGroupAndAccountState {
   flattenGroupsAccounts: IFlattenGroupsAccountsDetail[];
   isRefreshingFlattenGroupsAccounts: boolean;
   activeGroupInProgress: boolean;
-  activeGroupSharedWith?: GroupSharedWithResponse[];
-  activeAccountSharedWith?: AccountSharedWithResponse[];
+  activeGroupSharedWith?: ShareRequestForm[];
+  activeAccountSharedWith?: ShareRequestForm[];
   activeGroupTaxHierarchy?: GroupsTaxHierarchyResponse;
   activeAccountTaxHierarchy?: AccountsTaxHierarchyResponse;
   addAccountOpen: boolean;
@@ -117,7 +119,7 @@ const initialState: CurrentGroupAndAccountState = {
   newlyCreatedAccount: null
 };
 
-export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
+export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
   switch (action.type) {
     case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
       return Object.assign({}, state, {
@@ -578,7 +580,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       return state;
     }
   }
-};
+}
 
 const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): boolean => {
   let myChildElementIsOpen = false;

@@ -1,7 +1,7 @@
 import { LogsService } from './logs.service';
-import { StockReportActions } from './actions/inventory/stocks-report.actions';
+import { StockReportActions } from '../actions/inventory/stocks-report.actions';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { VerifyMobileActions } from './actions/verifyMobile.actions';
+import { VerifyMobileActions } from '../actions/verifyMobile.actions';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { EffectsModule } from '@ngrx/effects';
 import { CommonModule } from '@angular/common';
@@ -13,57 +13,57 @@ import { GroupService } from './group.service';
 import { StorageService } from './storage.service';
 import { HttpWrapperService } from './httpWrapper.service';
 import { ToasterService } from './toaster.service';
-import { CompanyActions } from './actions/company.actions';
-import { LoginActions } from './actions/login.action';
-import { GroupWithAccountsAction } from './actions/groupwithaccounts.actions';
+import { CompanyActions } from '../actions/company.actions';
+import { LoginActions } from '../actions/login.action';
+import { GroupWithAccountsAction } from '../actions/groupwithaccounts.actions';
 
 import { CompanyService } from './companyService.service';
 import { NeedsAuthentication } from './decorators/needsAuthentication';
 import { LocationService } from './location.service';
 import { UserAuthenticated } from './decorators/UserAuthenticated';
-import { AccountsAction } from './actions/accounts.actions';
+import { AccountsAction } from '../actions/accounts.actions';
 import { AccountService } from './account.service';
-import { SidebarAction } from './actions/inventory/sidebar.actions';
-import { CustomStockUnitAction } from './actions/inventory/customStockUnit.actions';
+import { SidebarAction } from '../actions/inventory/sidebar.actions';
+import { CustomStockUnitAction } from '../actions/inventory/customStockUnit.actions';
 import { InventoryService } from './inventory.service';
 import { PermissionService } from './permission.service';
 import { ManufacturingService } from './manufacturing.service';
-import { PermissionActions } from './actions/permission/permission.action';
+import { PermissionActions } from '../actions/permission/permission.action';
 /**
  * Home Module
  */
-import { InventoryAction } from './actions/inventory/inventory.actions';
-import { SearchActions } from './actions/search.actions';
+import { InventoryAction } from '../actions/inventory/inventory.actions';
+import { SearchActions } from '../actions/search.actions';
 import { SearchService } from './search.service';
-import { AuditLogsActions } from './actions/audit-logs/audit-logs.actions';
-import { FlyAccountsActions } from './actions/fly-accounts.actions';
+import { AuditLogsActions } from '../actions/audit-logs/audit-logs.actions';
+import { FlyAccountsActions } from '../actions/fly-accounts.actions';
 import { TlPlService } from './tl-pl.service';
-import { TBPlBsActions } from './actions/tl-pl.actions';
-import { LedgerActions } from './actions/ledger/ledger.actions';
+import { TBPlBsActions } from '../actions/tl-pl.actions';
+import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LedgerService } from './ledger.service';
-import { HomeActions } from './actions/home/home.actions';
+import { HomeActions } from '../actions/home/home.actions';
 import { DashboardService } from './dashboard.service';
 import { SettingsIntegrationService } from './settings.integraion.service';
-import { SettingsIntegrationActions } from './actions/settings/settings.integration.action';
+import { SettingsIntegrationActions } from '../actions/settings/settings.integration.action';
 import { SettingsProfileService } from './settings.profile.service';
-import { SettingsProfileActions } from './actions/settings/profile/settings.profile.action';
-import { SettingsTaxesActions } from './actions/settings/taxes/settings.taxes.action';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
+import { SettingsTaxesActions } from '../actions/settings/taxes/settings.taxes.action';
 import { SettingsTaxesService } from './settings.taxes.service';
-import { ManufacturingActions } from './actions/manufacturing/manufacturing.actions';
-import { SalesActions } from './actions/sales/sales.action';
+import { ManufacturingActions } from '../actions/manufacturing/manufacturing.actions';
+import { SalesActions } from '../actions/sales/sales.action';
 import { SalesService } from './sales.service';
 import { NewUserAuthGuard } from './decorators/newUserGuard';
-import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { InvoiceActions } from '../actions/invoice/invoice.actions';
 import { InvoiceService } from './invoice.service';
 import { InvoiceTemplatesService } from './invoice.templates.service';
 import { SettingsLinkedAccountsService } from './settings.linked.accounts.service';
-import { SettingsLinkedAccountsActions } from './actions/settings/linked-accounts/settings.linked.accounts.action';
+import { SettingsLinkedAccountsActions } from '../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { PurchaseInvoiceService } from './purchase-invoice.service';
-import { InvoicePurchaseActions } from './actions/purchase-invoice/purchase-invoice.action';
-import { SettingsFinancialYearActions } from './actions/settings/financial-year/financial-year.action';
+import { InvoicePurchaseActions } from '../actions/purchase-invoice/purchase-invoice.action';
+import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
 import { SettingsFinancialYearService } from './settings.financial-year.service';
-import { GeneralActions } from './actions/general/general.actions';
-import { SettingsPermissionActions } from './actions/settings/permissions/settings.permissions.action';
+import { GeneralActions } from '../actions/general/general.actions';
+import { SettingsPermissionActions } from '../actions/settings/permissions/settings.permissions.action';
 import { SettingsPermissionService } from './settings.permission.service';
 import { LoaderService } from '../loader/loader.service';
 
@@ -73,34 +73,36 @@ import { LoaderService } from '../loader/loader.service';
 
 @NgModule({
   imports: [CommonModule, RouterModule,
-    EffectsModule.run(HomeActions),
-    EffectsModule.run(GeneralActions),
-    EffectsModule.run(CompanyActions),
-    EffectsModule.run(LoginActions),
-    EffectsModule.run(GroupWithAccountsAction),
-    EffectsModule.run(VerifyMobileActions),
-    EffectsModule.run(AccountsAction),
-    EffectsModule.run(SidebarAction),
-    EffectsModule.run(InventoryAction),
-    EffectsModule.run(SidebarAction),
-    EffectsModule.run(CustomStockUnitAction),
-    EffectsModule.run(StockReportActions),
-    EffectsModule.run(SearchActions),
-    EffectsModule.run(AuditLogsActions),
-    EffectsModule.run(PermissionActions),
-    EffectsModule.run(ManufacturingActions),
-    EffectsModule.run(FlyAccountsActions),
-    EffectsModule.run(TBPlBsActions),
-    EffectsModule.run(LedgerActions),
-    EffectsModule.run(InvoiceActions),
-    EffectsModule.run(SettingsIntegrationActions),
-    EffectsModule.run(SettingsProfileActions),
-    EffectsModule.run(SettingsTaxesActions),
-    EffectsModule.run(SalesActions),
-    EffectsModule.run(SettingsLinkedAccountsActions),
-    EffectsModule.run(InvoicePurchaseActions),
-    EffectsModule.run(SettingsFinancialYearActions),
-    EffectsModule.run(SettingsPermissionActions)
+    EffectsModule.forRoot([
+      HomeActions,
+      GeneralActions,
+      CompanyActions,
+      LoginActions,
+      GroupWithAccountsAction,
+      VerifyMobileActions,
+      AccountsAction,
+      SidebarAction,
+      InventoryAction,
+      SidebarAction,
+      CustomStockUnitAction,
+      StockReportActions,
+      SearchActions,
+      AuditLogsActions,
+      PermissionActions,
+      ManufacturingActions,
+      FlyAccountsActions,
+      TBPlBsActions,
+      LedgerActions,
+      InvoiceActions,
+      SettingsIntegrationActions,
+      SettingsProfileActions,
+      SettingsTaxesActions,
+      SalesActions,
+      SettingsLinkedAccountsActions,
+      InvoicePurchaseActions,
+      SettingsFinancialYearActions,
+      SettingsPermissionActions
+    ])
   ],
   exports: [CommonModule, FormsModule, RouterModule, EffectsModule]
 })

@@ -1,4 +1,4 @@
-import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
+import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store } from '@ngrx/store';
 import * as _ from '../../../lodash-optimized';
