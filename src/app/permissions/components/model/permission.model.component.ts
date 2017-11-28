@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BsDropdownConfig } from 'ngx-bootstrap/dropdown';
-import { PermissionActions } from '../../../services/actions/permission/permission.action';
+import { PermissionActions } from '../../../actions/permission/permission.action';
 import { NewRoleClass, NewRoleFormClass, IPageStr, IPage, INewRoleFormObj } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/interfaces/nameUniqueName.interface';
 import * as _ from '../../../lodash-optimized';

@@ -1,10 +1,10 @@
 import { GetAllPermissionResponse } from './../../permissions/permission.utility';
 import { Action } from '@ngrx/store';
 import { IRoleCommonResponseAndRequest } from '../../models/api-models/Permission';
-import { PERMISSION_ACTIONS } from '../../services/actions/permission/permission.const';
+import { PERMISSION_ACTIONS } from '../../actions/permission/permission.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from 'lodash';
-import { AccountsAction } from '../../services/actions/accounts.actions';
+import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../customActions';
 
 export interface PermissionState {

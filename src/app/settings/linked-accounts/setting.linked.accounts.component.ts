@@ -9,7 +9,7 @@ import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
-import { SettingsLinkedAccountsActions } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.action';
+import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';

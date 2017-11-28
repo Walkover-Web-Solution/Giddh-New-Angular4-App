@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
 
 @Component({

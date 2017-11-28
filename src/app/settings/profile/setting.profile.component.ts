@@ -4,7 +4,7 @@ import { animate, Component, OnDestroy, OnInit, style, transition, trigger } fro
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { SettingsProfileActions } from '../../services/actions/settings/profile/settings.profile.action';
+import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 import { CompanyService } from '../../services/companyService.service';
 import { Observable } from 'rxjs';
 import * as _ from '../../lodash-optimized';

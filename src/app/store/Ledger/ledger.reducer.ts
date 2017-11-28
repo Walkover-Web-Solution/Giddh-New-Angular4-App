@@ -2,7 +2,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
-import { LEDGER } from '../../services/actions/ledger/ledger.const';
+import { LEDGER } from '../../actions/ledger/ledger.const';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';

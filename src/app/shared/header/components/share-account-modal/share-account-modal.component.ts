@@ -1,14 +1,14 @@
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { ToasterService } from './../../../../services/toaster.service';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
-import { PermissionActions } from './../../../../services/actions/permission/permission.action';
+import { PermissionActions } from '../../../../actions/permission/permission.action';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AccountResponse, AccountSharedWithResponse, ShareAccountRequest, AccountResponseV2 } from '../../../../models/api-models/Account';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import * as _ from 'lodash';
 
 @Component({

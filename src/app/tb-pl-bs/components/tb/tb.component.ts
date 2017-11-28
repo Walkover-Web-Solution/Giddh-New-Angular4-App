@@ -3,7 +3,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, 
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
-import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
+import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

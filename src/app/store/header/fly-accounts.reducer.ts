@@ -2,7 +2,7 @@ import { Action } from '@ngrx/store';
 import { AccountFlat, SearchResponse } from '../../models/api-models/Search';
 import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { CustomActions } from '../customActions';
 
 export interface FlyAccountsState {

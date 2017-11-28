@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationStart } from '@angular/router';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { Store } from '@ngrx/store';

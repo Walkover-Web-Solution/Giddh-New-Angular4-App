@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { GroupCreateRequest, GroupResponse } from '../../../../models/api-models/Group';
