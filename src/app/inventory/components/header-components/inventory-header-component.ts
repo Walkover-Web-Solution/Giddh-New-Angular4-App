@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { StockGroupResponse } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

@@ -1,5 +1,5 @@
 import { RefreshBankAccountResponse, BankAccountsResponse } from '../../../models/api-models/Dashboard';
-import { HomeActions } from '../../../services/actions/home/home.actions';
+import { HomeActions } from '../../../actions/home/home.actions';
 import { AppState } from '../../../store/roots';
 import { Component, OnInit, OnDestroy, ViewChild, Input } from '@angular/core';
 import { Store } from '@ngrx/store';

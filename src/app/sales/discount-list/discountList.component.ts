@@ -5,7 +5,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount } from '../../models/interfaces/ledger.interface';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import { LedgerActions } from '../../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../../actions/ledger/ledger.actions';
 
 @Component({
   selector: 'discount-list',

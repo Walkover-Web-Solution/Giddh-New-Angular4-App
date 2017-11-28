@@ -1,10 +1,11 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { HOME } from '../../services/actions/home/home.const';
+import { HOME } from '../../actions/home/home.const';
 import { Action } from '@ngrx/store';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IGroupHistoryGroups, IRevenueChartClosingBalanceResponse } from '../../models/interfaces/dashboard.interface';
 import * as moment from 'moment/moment';
 import * as _ from '../../lodash-optimized';
 import { BankAccountsResponse, RefreshBankAccountResponse } from '../../models/api-models/Dashboard';
+import { CustomActions } from '../customActions';
 
 export interface HomeState {
   value?: string;
@@ -186,7 +187,7 @@ export const initialState: HomeState = {
   }
 };
 
-export function homeReducer(state = initialState, action: Action): HomeState {
+export function homeReducer(state = initialState, action: CustomActions): HomeState {
   switch (action.type) {
     case HOME.EXPENSES_CHART.GET_EXPENSES_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IExpensesChartClosingBalanceResponse;
