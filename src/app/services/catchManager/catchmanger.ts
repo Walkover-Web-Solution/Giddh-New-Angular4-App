@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
-import { BaseResponse } from './../../models/api-models/BaseResponse';
-import { ToasterService } from './../toaster.service';
-import { AuthenticationService } from './../authentication.service';
+import { BaseResponse } from '../../models/api-models/BaseResponse';
+import { ToasterService } from '../toaster.service';
 import { Observable } from 'rxjs/Observable';
 // import { LoginActions } from '../actions/login.action';
 import { Store } from '@ngrx/store';
-import { AppState } from '../../store/roots';
+import { AppState } from '../../store';
 
 @Injectable()
 export class ErrorHandler {
 
-  constructor(private _toaster: ToasterService, private store: Store<AppState>) { }
+  constructor(private _toaster: ToasterService, private store: Store<AppState>) {
+  }
+
   public HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
     let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
     // logout if invalid session detacted
@@ -34,16 +35,19 @@ export class ErrorHandler {
       } else {
         data = r.json();
         if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
-          this.store.dispatch({ type: 'LoginOut' });
+          this.store.dispatch({type: 'LoginOut'});
         }
       }
       data.request = request;
       data.queryString = queryString;
     }
-    return new Observable<BaseResponse<TResponce, TRequest>>((o) => { o.next(data); });
+    return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
+      o.next(data);
+    });
   }
 
 }
+
 export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
   let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
   // logout if invalid session detacted
@@ -68,11 +72,13 @@ export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryStr
       data = r.json();
       if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
         // this.store.dispatch('LoginOut');
-        this.store.dispatch({ type: 'LoginOut' });
+        this.store.dispatch({type: 'LoginOut'});
       }
     }
     data.request = request;
     data.queryString = queryString;
   }
-  return new Observable<BaseResponse<TResponce, TRequest>>((o) => { o.next(data); });
+  return new Observable<BaseResponse<TResponce, TRequest>>((o) => {
+    o.next(data);
+  });
 }

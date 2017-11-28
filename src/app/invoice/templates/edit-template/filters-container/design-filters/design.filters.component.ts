@@ -55,6 +55,20 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private _invoiceUiDataService: InvoiceUiDataService, private _toasty: ToasterService, private store: Store<AppState>) {
+    let companyUniqueName = null;
+    let companies = null;
+    let defaultTemplate = null;
+
+    this.store.select(s => s.session).take(1).subscribe(ss => {
+      companyUniqueName = ss.companyUniqueName;
+      companies = ss.companies;
+    });
+
+    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+      defaultTemplate = ss.defaultTemplate;
+    });
+    this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
+
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
     this.humanizeBytes = humanizeBytes;
@@ -102,10 +116,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
    * resetPrintSetting
    */
   public resetPrintSetting() {
-     let template = _.cloneDeep(this.customTemplate);
-     template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
-     this.customTemplate = _.cloneDeep(template);
-     this.onValueChange(null, null);
+    let template = _.cloneDeep(this.customTemplate);
+    template.topMargin = template.bottomMargin = template.leftMargin = template.rightMargin = 10;
+    this.customTemplate = _.cloneDeep(template);
+    this.onValueChange(null, null);
   }
 
   /**
@@ -137,10 +151,10 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
   public onUploadMyFileOutput(output: UploadOutput): void {
     if (output.type === 'allAddedToQueue') {
-        this.previewFile(output.file);
+      this.previewFile(output.file);
     } else if (output.type === 'start') {
-        this.isFileUploadInProgress = true;
-        this.removeAllFiles();
+      this.isFileUploadInProgress = true;
+      this.removeAllFiles();
     } else if (output.type === 'done') {
       this.isFileUploadInProgress = false;
       if (output.file.response.status === 'success') {
@@ -162,7 +176,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
       type: 'uploadAll',
       url: INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
       method: 'POST',
-      headers: { 'Session-Id': sessionId },
+      headers: {'Session-Id': sessionId},
       concurrency: 1,
     };
 
@@ -188,16 +202,17 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
       this._invoiceUiDataService.setLogoPath('');
     }
   }
+
   public cancelUpload(id: string): void {
-    this.uploadInput.emit({ type: 'cancel', id });
+    this.uploadInput.emit({type: 'cancel', id});
   }
 
   public removeFile(id: string): void {
-    this.uploadInput.emit({ type: 'remove', id });
+    this.uploadInput.emit({type: 'remove', id});
   }
 
   public removeAllFiles(): void {
-    this.uploadInput.emit({ type: 'removeAll' });
+    this.uploadInput.emit({type: 'removeAll'});
   }
 
   public toogleLogoVisibility(): void {
@@ -220,7 +235,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.removeAllFiles();
   }
 
-   public ngOnDestroy() {
+  public ngOnDestroy() {
     // this._invoiceUiDataService.customTemplate.unsubscribe();
     // this.destroyed$.next(true);
     // this.destroyed$.complete();
