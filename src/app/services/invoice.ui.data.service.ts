@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
-import { EmailSettingObjDefinition } from '../models/interfaces/invoice.setting.interface';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';

@@ -1,15 +1,13 @@
-import { VerifyEmailResponseModel } from '../models/api-models/loginModels';
-import { AppState } from '../store/roots';
 import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
 import { LoaderService } from '../loader/loader.service';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class HttpWrapperService {
-  private user: VerifyEmailResponseModel;
-  constructor(private _http: Http, private store: Store<AppState>, private _loaderService: LoaderService) {
+
+  constructor(private _http: Http, private _loaderService: LoaderService, private _generalService: GeneralService) {
   }
 
   public get = (url: string, params?: any, options?: RequestOptionsArgs): Observable<Response> => {
@@ -61,19 +59,15 @@ export class HttpWrapperService {
 
   public prepareOptions(options: RequestOptionsArgs): RequestOptionsArgs {
     this.showLoader();
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user;
-      }
-    });
+    let sessionId = this._generalService.sessionId;
     options = options || {};
 
     if (!options.headers) {
       options.headers = new Headers();
     }
 
-    if (this.user && this.user.session && this.user.session.id) {
-      options.headers.append('Session-Id', this.user.session.id);
+    if (sessionId) {
+      options.headers.append('Session-Id', sessionId);
     }
     // options.withCredentials = true;
     options.headers.append('cache-control', 'no-cache');
