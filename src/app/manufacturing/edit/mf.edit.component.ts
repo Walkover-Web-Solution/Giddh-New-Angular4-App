@@ -4,8 +4,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import { ManufacturingActions } from '../../services/actions/manufacturing/manufacturing.actions';
-import { InventoryAction } from '../../services/actions/inventory/inventory.actions';
+import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
+import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import { IStockItemDetail } from '../../models/interfaces/stocksItem.interface';
@@ -17,6 +17,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { InventoryService } from '../../services/inventory.service';
 import { AccountService } from '../../services/account.service';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
+import { createSelector } from 'reselect';
 
 @Component({
   templateUrl: './mf.edit.component.html'
@@ -26,6 +27,7 @@ export class MfEditComponent implements OnInit {
   @ViewChild('manufacturingConfirmationModal') public manufacturingConfirmationModal: ModalDirective;
 
   public stockListDropDown$: Observable<IOption[]>;
+  public allStocksDropDown$: Observable<IOption[]>;
   public groupsList$: Observable<GroupsWithAccountsResponse[]>;
   public consumptionDetail = [];
   public isUpdateCase: boolean = false;
@@ -59,6 +61,7 @@ export class MfEditComponent implements OnInit {
     private _toasty: ToasterService) {
 
     this.store.dispatch(this.inventoryAction.GetManufacturingCreateStock());
+    this.store.dispatch(this.inventoryAction.GetStock());
 
     this.groupsList$ = this.store.select(p => p.general.groupswithaccounts).takeUntil(this.destroyed$);
 
@@ -98,10 +101,10 @@ export class MfEditComponent implements OnInit {
                   let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
                   if (matchedAccIndex > -1) {
                     if (d.category === 'expenses') {
-                      this.expenseGroupAccounts.push({label: acc.name, value: acc.uniqueName});
+                      this.expenseGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                     if (d.category === 'liabilities' || d.category === 'assets') {
-                      this.liabilityGroupAccounts.push({label: acc.name, value: acc.uniqueName});
+                      this.liabilityGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
                     }
                   }
                 }
@@ -130,33 +133,59 @@ export class MfEditComponent implements OnInit {
         this.manufacturingDetails = manufacturingDetailsObj;
       }
     });
-    // get all stocks
-    this.stockListDropDown$ = this.store.select(p => {
-      let data = _.cloneDeep(p);
-      let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
-      if (data.inventory.manufacturingStockListForCreateMF) {
-        if (data.inventory.manufacturingStockListForCreateMF.results) {
-          let units = data.inventory.manufacturingStockListForCreateMF.results;
+    // get manufacturing stocks
+    this.stockListDropDown$ = this.store.select(
+      createSelector([(state: AppState) => state.inventory.manufacturingStockListForCreateMF], (manufacturingStockListForCreateMF) => {
+        let data = _.cloneDeep(manufacturingStockListForCreateMF);
+        let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+        if (data) {
+          if (data.results) {
+            let units = data.results;
 
-          return units.map(unit => {
-            let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
-            if (alreadyPushedElementindx > -1) {
-              return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true};
-            } else {
-              return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false};
-            }
-          });
+            return units.map(unit => {
+              let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+              if (alreadyPushedElementindx > -1) {
+                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+              } else {
+                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+              }
+            });
+          }
         }
-      }
-    }).takeUntil(this.destroyed$);
+      })).takeUntil(this.destroyed$);
+      // get All stocks
+    this.allStocksDropDown$ = this.store.select(
+      createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
+        let data = _.cloneDeep(allStocks);
+
+        let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
+        if (data) {
+          if (data.results) {
+            let units = data.results;
+            return units.map(unit => {
+              let alreadyPushedElementindx = manufacturingDetailsObj.linkedStocks.findIndex((obj) => obj.stockUniqueName === unit.uniqueName);
+              if (alreadyPushedElementindx > -1) {
+                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: true };
+              } else {
+                return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName, isAlreadyPushed: false };
+              }
+            });
+          }
+        }
+      })).takeUntil(this.destroyed$);
     // get stock with rate details
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
       if (!this.isUpdateCase) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
         if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
           // In create only
+          let manufacturingDetailsObjData = _.cloneDeep(o.stockWithRate.manufacturingDetails);
           manufacturingDetailsObj.linkedStocks = _.cloneDeep(o.stockWithRate.manufacturingDetails.linkedStocks);
-          manufacturingDetailsObj.multipleOf = _.cloneDeep(o.stockWithRate.manufacturingDetails.manufacturingMultipleOf);
+
+          // manufacturingDetailsObj.multipleOf = _.cloneDeep(o.stockWithRate.manufacturingDetails.manufacturingMultipleOf);
+          manufacturingDetailsObj.multipleOf = (manufacturingDetailsObjData.manufacturingQuantity / manufacturingDetailsObjData.manufacturingMultipleOf);
+          manufacturingDetailsObj.manufacturingQuantity = manufacturingDetailsObjData.manufacturingQuantity;
+          manufacturingDetailsObj.manufacturingMultipleOf = manufacturingDetailsObjData.manufacturingMultipleOf;
         } else {
           manufacturingDetailsObj.linkedStocks = [];
           manufacturingDetailsObj.multipleOf = null;
@@ -273,6 +302,7 @@ export class MfEditComponent implements OnInit {
     });
     // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     // dataToSave.multipleOf = dataToSave.quantity;
+    delete dataToSave.manufacturingMultipleOf;
     this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
   }
 
@@ -340,7 +370,7 @@ export class MfEditComponent implements OnInit {
   }
 
   public onQuantityChange(val: any) {
-    let value  = val;
+    let value = val;
     let manufacturingObj = _.cloneDeep(this.manufacturingDetails);
 
     if (!this.initialQuantityObj.length) {

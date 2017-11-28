@@ -6,7 +6,7 @@ import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 
 @Component({
   selector: 'e-sign-modal-component',

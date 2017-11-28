@@ -14,7 +14,7 @@ import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
-import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';

@@ -2,10 +2,11 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
 import { Action } from '@ngrx/store';
-import { LEDGER } from '../../services/actions/ledger/ledger.const';
+import { LEDGER } from '../../actions/ledger/ledger.const';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
+import { CustomActions } from '../customActions';
 
 export interface LedgerState {
   account?: AccountResponse;
@@ -38,7 +39,7 @@ export const initialState: LedgerState = {
   isQuickAccountCreatedSuccessfully: false
 };
 
-export function ledgerReducer(state = initialState, action: Action): LedgerState {
+export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
   let data: BaseResponse<AccountResponse, string>;
   let transaction: BaseResponse<TransactionsResponse, TransactionsRequest>;
   switch (action.type) {
