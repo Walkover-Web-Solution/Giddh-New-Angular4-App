@@ -1,5 +1,3 @@
-import { CompanyActions } from '../actions/company.actions';
-import { CompanyService } from '../services/companyService.service';
 import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
@@ -8,8 +6,9 @@ import { userLoginStateEnum } from '../store/authentication/authentication.reduc
 
 @Injectable()
 export class NeedsAuthentication implements CanActivate {
-  constructor(public _router: Router, private store: Store<AppState>, private _companyService: CompanyService, private companyActions: CompanyActions) {
+  constructor(public _router: Router, private store: Store<AppState>) {
   }
+
   public canActivate() {
     return this.store.select(p => p.session.userLoginState).map(p => {
       if (p === userLoginStateEnum.newUserLoggedIn) {
