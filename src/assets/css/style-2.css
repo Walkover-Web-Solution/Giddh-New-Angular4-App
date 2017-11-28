@@ -4099,3 +4099,57 @@ typeahead-container .dropdown-menu li.active>a>a {
 .entry-modal {
     width: 100%;
 }
+
+small {
+    color: #b2b2b2;
+}
+
+.square-switch {
+    width: 100%;
+    background: #fff;
+    height: 34px;
+    line-height: 32px;
+    margin: 0;
+    position: relative;
+    border-radius: 2px;
+}
+
+.square-switch>label {
+    position: relative;
+    transition: all 0.3s ease;
+    width: 100%;
+    border: 1px solid #cccccc;
+    border-radius: 1px;
+    color: #666;
+    padding: 0 7px;
+}
+
+.square-switch input[type="checkbox"]:checked~label {
+    background: #28ab00;
+    color: #fff;
+}
+
+.square-switch>input[type="checkbox"] {
+    display: none;
+}
+
+.square-switch input[type="checkbox"]~label::after {
+    content: ' ';
+    background: #ccc;
+    position: absolute;
+    height: 34px;
+    width: 28px;
+    left: 0px;
+    border-radius: 1px;
+    transition: all 0.2s ease;
+    top: -1px;
+}
+
+.square-switch input[type="checkbox"]:checked~label::after {
+    right: -1px;
+    left: inherit;
+}
+
+.form-group {
+    font-size: 14px;
+}
