@@ -2,42 +2,32 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { UserDetails } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { TB_PL_BS_API } from './apiurls/tl-pl.api';
-import {
-  AccountDetails,
-  BalanceSheetRequest,
-  ProfitLossRequest,
-  TrialBalanceExportExcelRequest,
-  TrialBalanceRequest
-} from '../models/api-models/tb-pl-bs';
+import { AccountDetails, BalanceSheetRequest, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { saveAs } from 'file-saver';
+import { GeneralService } from './general.service';
 
 @Injectable()
 export class TlPlService {
   private companyUniqueName: string;
   private user: UserDetails;
 
-  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router, private store: Store<AppState>) {
+  constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
+              private _generalService: GeneralService) {
   }
 
   /**
    * Get Trial Balance
    */
   public GetTrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(TB_PL_BS_API.GET_TRIAL_BALANCE
-      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), { from: request.from, to: request.to, refresh: request.refresh })
+      .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {from: request.from, to: request.to, refresh: request.refresh})
       .map((res) => {
         let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res.json();
         data.request = request;
@@ -50,15 +40,11 @@ export class TlPlService {
    * get Profit/Loss
    */
   public GetProfitLoss(request: ProfitLossRequest): Observable<BaseResponse<AccountDetails, ProfitLossRequest>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let filteredRequest = (Object.keys(request)
       .filter(p => request[p] != null)
-      .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
+      .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
     return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
@@ -74,15 +60,11 @@ export class TlPlService {
    * get BalanceSheet
    */
   public GetBalanceSheet(request: BalanceSheetRequest): Observable<BaseResponse<AccountDetails, BalanceSheetRequest>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let filteredRequest = (Object.keys(request)
       .filter(p => request[p] != null)
-      .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
+      .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
     return this._http.get(TB_PL_BS_API.GET_BALANCE_SHEET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
@@ -95,12 +77,8 @@ export class TlPlService {
   }
 
   public DownloadTrialBalanceExcel(request: TrialBalanceExportExcelRequest): Observable<BaseResponse<any, any>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
 
     return this._http.get(TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
@@ -113,15 +91,11 @@ export class TlPlService {
   }
 
   public DownloadBalanceSheetExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let filteredRequest = (Object.keys(request)
       .filter(p => request[p] != null)
-      .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
+      .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
     return this._http.get(TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
@@ -134,15 +108,11 @@ export class TlPlService {
   }
 
   public DownloadProfitLossExcel(request: ProfitLossRequest): Observable<BaseResponse<any, any>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let filteredRequest = (Object.keys(request)
       .filter(p => request[p] != null)
-      .reduce((r, i) => ({ ...r, [i]: request[i] }), {}));
+      .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
     return this._http.get(TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
