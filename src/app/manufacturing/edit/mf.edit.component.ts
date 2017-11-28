@@ -67,7 +67,6 @@ export class MfEditComponent implements OnInit {
     this.initializeOtherExpenseObj();
     // Update/Delete condition
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      debugger;
       if (o.stockToUpdate) {
         this.isUpdateCase = true;
         let manufacturingObj = _.cloneDeep(o.reportData.results.find((stock) => stock.uniqueName === o.stockToUpdate));
@@ -154,7 +153,6 @@ export class MfEditComponent implements OnInit {
       })).takeUntil(this.destroyed$);
     // get stock with rate details
     this.store.select(p => p.manufacturing).takeUntil(this.destroyed$).subscribe((o: any) => {
-      debugger;
       if (!this.isUpdateCase) {
         let manufacturingDetailsObj = _.cloneDeep(this.manufacturingDetails);
         if (o.stockWithRate && o.stockWithRate.manufacturingDetails) {
