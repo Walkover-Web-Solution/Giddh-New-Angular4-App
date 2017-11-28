@@ -7,8 +7,7 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { RouterModule } from '@angular/router';
-import { Store, StoreModule, ActionReducer, MetaReducer } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ActionReducer, MetaReducer, Store, StoreModule } from '@ngrx/store';
 /*
  * Platform and Environment providers/pipes/pipes
  */
@@ -46,11 +45,12 @@ import { LoaderComponent } from './loader/loader.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { localStorageSync } from 'ngrx-store-localstorage';
-import { storeFreeze } from 'ngrx-store-freeze';
+import { ActionModule } from './actions/action.module';
+import { DecoratorsModule } from './decorators/decorators.module';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
-  { provide: APP_BASE_HREF, useValue: '/' }
+  {provide: APP_BASE_HREF, useValue: '/'}
 ];
 
 const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {};
@@ -68,9 +68,11 @@ interface StoreType {
 
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
+
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({ keys: ['session', 'permission'] })(reducer);
+  return localStorageSync({keys: ['session', 'permission']})(reducer);
 }
+
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (ENV === 'development') {
   // console.log('loading react devtools');
@@ -119,11 +121,13 @@ if (ENV === 'development') {
     DatepickerModule.forRoot(),
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
+    ActionModule.forRoot(),
+    DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
-    ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
-    StoreModule.forRoot(reducers, { metaReducers }),
+    ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
+    StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
-    RouterModule.forRoot(ROUTES, { useHash: true }),
+    RouterModule.forRoot(ROUTES, {useHash: true}),
     StoreRouterConnectingModule,
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS
@@ -141,7 +145,7 @@ if (ENV === 'development') {
 export class AppModule {
 
   constructor(public appRef: ApplicationRef,
-    public _store: Store<AppState>) {
+              public _store: Store<AppState>) {
   }
 
   public hmrOnInit(store: StoreType) {
