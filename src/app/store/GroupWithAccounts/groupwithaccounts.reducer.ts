@@ -119,7 +119,7 @@ const initialState: CurrentGroupAndAccountState = {
   newlyCreatedAccount: null
 };
 
-export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: CustomActions) => {
+export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = initialState, action: CustomActions): CurrentGroupAndAccountState {
   switch (action.type) {
     case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
       return Object.assign({}, state, {
@@ -580,7 +580,7 @@ export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountStat
       return state;
     }
   }
-};
+}
 
 const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): boolean => {
   let myChildElementIsOpen = false;
