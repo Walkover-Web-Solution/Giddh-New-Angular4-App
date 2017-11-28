@@ -4,13 +4,13 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoginActions } from '../services/actions/login.action';
 import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { Observable } from 'rxjs/Observable';
-import { CustomStockUnitAction } from '../../../services/actions/inventory/customStockUnit.actions';
+import { CustomStockUnitAction } from '../../../actions/inventory/customStockUnit.actions';
 import * as  _ from '../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
-import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { StockUnits } from './stock-unit';
-import { SettingsProfileActions } from '../../../services/actions/settings/profile/settings.profile.action';
+import { SettingsProfileActions } from '../../../actions/settings/profile/settings.profile.action';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 
 @Component({

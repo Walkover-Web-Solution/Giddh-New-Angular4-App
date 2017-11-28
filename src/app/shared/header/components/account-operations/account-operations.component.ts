@@ -1,11 +1,11 @@
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
-import { LedgerActions } from './../../../../services/actions/ledger/ledger.actions';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { TaxResponse } from '../../../../models/api-models/Company';
-import { CompanyActions } from '../../../../services/actions/company.actions';
+import { CompanyActions } from '../../../../actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store';

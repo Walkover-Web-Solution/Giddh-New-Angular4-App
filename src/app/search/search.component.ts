@@ -2,9 +2,9 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { SearchRequest } from '../models/api-models/Search';
-import { SearchActions } from '../services/actions/search.actions';
+import { SearchActions } from '../actions/search.actions';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'search',

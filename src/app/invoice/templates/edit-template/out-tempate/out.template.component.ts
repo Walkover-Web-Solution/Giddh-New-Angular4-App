@@ -2,7 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../../../actions/invoice/invoice.actions';
 import * as _ from '../../../../lodash-optimized';
 import { InvoiceTemplatesService } from '../../../../services/invoice.templates.service';
 import { CustomTemplateResponse } from '../../../../models/api-models/Invoice';

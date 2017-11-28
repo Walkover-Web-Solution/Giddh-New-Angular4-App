@@ -6,13 +6,13 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { InventoryService } from '../../../../services/inventory.service';
 import { StockGroupRequest, StockGroupResponse } from '../../../../models/api-models/Inventory';
-import { InventoryAction } from '../../../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../../actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { SidebarAction } from '../../../../services/actions/inventory/sidebar.actions';
+import { SidebarAction } from '../../../../actions/inventory/sidebar.actions';
 import { BaseResponse } from '../../../../models/api-models/BaseResponse';
 import { ToasterService } from '../../../../services/toaster.service';
-import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { SalesActions } from '../../../../actions/sales/sales.action';
 import { INameUniqueName } from '../../../../models/interfaces/nameUniqueName.interface';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 

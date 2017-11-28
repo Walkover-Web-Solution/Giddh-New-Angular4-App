@@ -10,7 +10,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { ISection, GetInvoiceTemplateDetailsResponse, CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';

@@ -6,10 +6,10 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ToasterService } from '../../services/toaster.service';
-import { SettingsFinancialYearActions } from '../../services/actions/settings/financial-year/financial-year.action';
+import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 import { IFinancialYearResponse } from '../../services/settings.financial-year.service';
 import { ActiveFinancialYear } from '../../models/api-models/Company';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { CompanyActions } from '../../actions/company.actions';
 
 export interface IGstObj {
   newGstNumber: string;

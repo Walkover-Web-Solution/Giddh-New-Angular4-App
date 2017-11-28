@@ -3,11 +3,11 @@ import { AppState } from '../../../store/roots';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 @Component({
   selector: 'stockgrp-list',
   styles: [`
