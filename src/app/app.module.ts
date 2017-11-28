@@ -25,7 +25,6 @@ import { ServiceModule } from './services/service.module';
 import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
-// import { SalesModule } from './sales/sales.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
@@ -36,7 +35,6 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
@@ -70,7 +68,7 @@ interface StoreType {
 let CONDITIONAL_IMPORTS = [];
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({keys: ['session', 'permission']})(reducer);
+  return localStorageSync({keys: ['session', 'permission'], rehydrate: true})(reducer);
 }
 
 let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];

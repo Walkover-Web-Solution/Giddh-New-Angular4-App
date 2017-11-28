@@ -49,6 +49,7 @@ export class SignupWithMobile {
   public mobileNumber: string;
   public countryCode: number = 91;
 }
+
 export class SignupWithMobileResponse {
   public code: string;
 }
@@ -67,6 +68,7 @@ export class VerifyMobileResponseModel {
   public countryCode: string;
   public statusCode: string;
   public text: string;
+  public session?: Session;
 }
 
 /**

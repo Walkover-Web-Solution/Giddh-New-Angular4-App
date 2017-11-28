@@ -30,4 +30,10 @@ export class GeneralService {
   set sessionId(sessionId: string) {
     this._sessionId = sessionId;
   }
+
+  public resetGeneralServiceState() {
+    this.user = null;
+    this.sessionId = null;
+    this.companyUniqueName = null;
+  }
 }
