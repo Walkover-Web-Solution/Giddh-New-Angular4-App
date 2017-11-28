@@ -1,8 +1,8 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TaxResponse } from '../../models/api-models/Company';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { CompanyActions } from '../../actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
-import { SETTINGS_TAXES_ACTIONS } from '../../services/actions/settings/taxes/settings.taxes.const';
+import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import * as _ from '../../lodash-optimized';
 import { CustomActions } from '../customActions';
 

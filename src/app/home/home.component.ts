@@ -9,13 +9,13 @@ import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { StateDetailsRequest, CompanyResponse, ActiveFinancialYear } from '../models/api-models/Company';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IRevenueChartClosingBalanceResponse } from '../models/interfaces/dashboard.interface';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
 import * as _ from '../lodash-optimized';
-import { CHART_CALLED_FROM, API_TO_CALL } from '../services/actions/home/home.const';
-import { HomeActions } from '../services/actions/home/home.actions';
+import { CHART_CALLED_FROM, API_TO_CALL } from '../actions/home/home.const';
+import { HomeActions } from '../actions/home/home.actions';
 @Component({
   selector: 'home',  // <home></home>
   styleUrls: ['./home.component.scss'],

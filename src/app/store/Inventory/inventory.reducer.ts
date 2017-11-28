@@ -3,7 +3,7 @@ import { CreateStockRequest, StockDetailResponse, StockGroupRequest, StockGroupR
 import { IGroupsWithStocksHierarchyMinItem } from '../../models/interfaces/groupsWithStocks.interface';
 import { Action, ActionReducer } from '@ngrx/store';
 import * as _ from '../../lodash-optimized';
-import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../services/actions/inventory/inventory.const';
+import { CUSTOM_STOCK_UNIT_ACTIONS, InventoryActionsConst, STOCKS_REPORT_ACTIONS } from '../../actions/inventory/inventory.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { CustomActions } from '../customActions';

@@ -1,5 +1,5 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import { HOME } from '../../services/actions/home/home.const';
+import { HOME } from '../../actions/home/home.const';
 import { Action } from '@ngrx/store';
 import { IComparisionChartResponse, IExpensesChartClosingBalanceResponse, IGroupHistoryGroups, IRevenueChartClosingBalanceResponse } from '../../models/interfaces/dashboard.interface';
 import * as moment from 'moment/moment';

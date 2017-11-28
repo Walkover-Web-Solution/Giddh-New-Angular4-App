@@ -1,6 +1,6 @@
-import { VerifyMobileActions } from './../../services/actions/verifyMobile.actions';
-import { LoginActions } from '../../services/actions/login.action';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { VerifyMobileActions } from '../../actions/verifyMobile.actions';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { Action, ActionReducer } from '@ngrx/store';
 import { UserDetails, VerifyEmailResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
