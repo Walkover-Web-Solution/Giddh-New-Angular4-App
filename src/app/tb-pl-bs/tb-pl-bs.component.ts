@@ -2,7 +2,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'tb-pl-bs',

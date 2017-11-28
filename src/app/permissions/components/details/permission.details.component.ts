@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { PermissionActions } from '../../../services/actions/permission/permission.action';
+import { PermissionActions } from '../../../actions/permission/permission.action';
 import { Scope, IRoleCommonResponseAndRequest, Permission } from '../../../models/api-models/Permission';
 import * as _ from '../../../lodash-optimized';
 import { NewRoleClass, NewPermissionObj, IPage, IPageStr } from '../../permission.utility';

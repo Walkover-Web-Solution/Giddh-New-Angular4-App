@@ -1,17 +1,18 @@
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { Action, ActionReducer } from '@ngrx/store';
-import { GENERAL_ACTIONS } from '../../services/actions/general/general.const';
+import { GENERAL_ACTIONS } from '../../actions/general/general.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountMoveRequest, AccountRequestV2, AccountResponse, AccountResponseV2, FlattenAccountsResponse } from '../../models/api-models/Account';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flattenAccountsResultItem.interface';
 import { States } from '../../models/api-models/Company';
 import { GroupCreateRequest, GroupResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
 import * as _ from '../../lodash-optimized';
-import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
-import { AccountsAction } from '../../services/actions/accounts.actions';
+import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
+import { CustomActions } from '../customActions';
 
 export interface GeneralState {
   groupswithaccounts: GroupsWithAccountsResponse[];
@@ -25,9 +26,12 @@ const initialState: GeneralState = {
   states: null
 };
 
-export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState = initialState, action: Action) => {
+export function GeneRalReducer(state: GeneralState = initialState, action: CustomActions): GeneralState {
   switch (action.type) {
-    case GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE : {
+    case 'EmptyAction': {
+      return state;
+    }
+    case GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS_RESPONSE: {
       let result: BaseResponse<GroupsWithAccountsResponse[], string> = action.payload;
       if (result.status === 'success') {
         return {
@@ -37,7 +41,7 @@ export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState 
       }
       return state;
     }
-    case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE : {
+    case GENERAL_ACTIONS.GENERAL_GET_FLATTEN_ACCOUNTS_RESPONSE: {
       let result: BaseResponse<FlattenAccountsResponse, string> = action.payload;
       if (result.status === 'success') {
         return {
@@ -75,7 +79,7 @@ export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState 
     case GroupWithAccountsAction.UPDATE_GROUP_RESPONSE: {
       let activeGrpData: BaseResponse<GroupResponse, GroupUpateRequest> = action.payload;
       if (activeGrpData.status === 'success') {
-        Object.assign({}, activeGrpData.body, {isOpen: true, isActive: true});
+        Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
         updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, false);
         return {
@@ -182,10 +186,10 @@ export const GeneRalReducer: ActionReducer<GeneralState> = (state: GeneralState 
       }
       return state;
     }
-    default :
+    default:
       return state;
   }
-};
+}
 
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
   // let myChildElementIsOpen = false;
@@ -304,7 +308,7 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
 };
 
 const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
-                           aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
+  aData: AccountResponseV2, grpUniqueName: string, accountUniqueName: string, result: boolean): boolean => {
   if (result) {
     return result;
   }

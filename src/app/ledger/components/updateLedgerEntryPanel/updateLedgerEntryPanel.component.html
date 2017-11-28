@@ -50,9 +50,9 @@
                 </td>
                 <td class="col-xs-6">
                   <!--<ng-select [options]="vm.flatternAccountList4Select | async" [isTypeAheadMode]="true" #dbtSelect-->
-                             <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
-                             <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
-                             <!--(deselected)="deSelectAccount($event, txn)">-->
+                  <!--(click)="addBlankTrx('DEBIT', txn, $event)"-->
+                  <!--(selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"-->
+                  <!--(deselected)="deSelectAccount($event, txn)">-->
                   <sh-select [options]="vm.flatternAccountList4Select | async" [isFilterEnabled]="true" #dbtSelect
                              (click)="addBlankTrx('DEBIT', txn, $event)"
                              (selected)="selectAccount($event,txn, dbtSelect)" [(ngModel)]="txn.particular.uniqueName"
@@ -414,7 +414,7 @@
         <div class="col-xs-12 pdT1">
           <button class="btn btn-danger" (click)="showDeleteEntryModal()">Delete</button>
           <div class="pull-right">
-            <div class="mrR1 pull-left" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
+            <div class="mrR1 pull-left">
               <label class="checkbox oh">
                 <input class="pull-left" style="margin-top:4px;" type="checkbox" name="generateInvoice"
                        [(ngModel)]="vm.selectedLedger.invoiceGenerated"
@@ -425,7 +425,7 @@
 
             <div class="pull-right">
               <label class="upload_div"
-                     [ngClass]="{hide:vm.selectedLedger.invoiceGenerated || vm.selectedLedger.attachedFile}">
+                     [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                 <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
                        (uploadOutput)="onUploadOutput($event)">
                 <label for="invoiceFile" class="cp fs16">

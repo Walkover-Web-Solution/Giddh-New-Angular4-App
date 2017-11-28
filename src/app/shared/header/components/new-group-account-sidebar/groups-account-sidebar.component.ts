@@ -5,8 +5,8 @@ import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAcc
 import { Observable } from 'rxjs/Observable';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
-import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ColumnGroupsAccountVM, GroupAccountSidebarVM, IGroupOrAccount } from './VM';
 import { IAccountsInfo } from '../../../../models/interfaces/accountInfo.interface';
 import * as _ from '../../../../lodash-optimized';

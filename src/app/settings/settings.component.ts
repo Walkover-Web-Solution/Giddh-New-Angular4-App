@@ -1,10 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { TabsetComponent } from 'ngx-bootstrap';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { SettingsProfileActions } from '../services/actions/settings/profile/settings.profile.action';
+import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
 
 @Component({
   templateUrl: './settings.component.html',

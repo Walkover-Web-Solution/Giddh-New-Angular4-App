@@ -2,11 +2,11 @@ import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementR
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { CompanyActions } from '../../../services/actions/company.actions';
+import { CompanyActions } from '../../../actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
@@ -21,6 +21,7 @@ import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { cloneDeep, forEach } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -40,8 +41,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
-  @Output() public clickedOutsideEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
+  @ViewChild('sh') public sh: ShSelectComponent;
+
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
@@ -106,6 +109,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public ngOnInit() {
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
+  }
+
+  @HostListener('click', ['$event'])
+  public clicked(e) {
+    if (this.sh && !this.sh.ele.nativeElement.contains(e.path[3])) {
+      this.sh.hide();
+    }
   }
 
   public ngOnChanges(changes: SimpleChanges): void {
@@ -374,7 +384,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @HostListener('window:click', ['$event'])
   public clickedOutsideOfComponent(e) {
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
-      this.clickedOutsideEvent.emit(true);
+      this.clickedOutsideEvent.emit(e);
     }
   }
 }
