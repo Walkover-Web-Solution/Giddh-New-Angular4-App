@@ -3,7 +3,8 @@ import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufactu
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import * as _ from '../../lodash-optimized';
 import { CustomTemplateResponse } from '../../models/api-models/Invoice';
-import { INVOICE } from '../../services/actions/invoice/invoice.const';
+import { INVOICE } from '../../actions/invoice/invoice.const';
+import { CustomActions } from '../customActions';
 
 export interface CustomTemplateState {
   sampleTemplates: CustomTemplateResponse[];
@@ -350,7 +351,7 @@ export const initialState: CustomTemplateState = {
 
 };
 
-export function InvoiceTemplateReducer(state = initialState, action: Action): CustomTemplateState {
+export function InvoiceTemplateReducer(state = initialState, action: CustomActions): CustomTemplateState {
   switch (action.type) {
     case INVOICE.TEMPLATE.GET_SAMPLE_TEMPLATES_RESPONSE: {
       let nextState = _.cloneDeep(state);
@@ -510,7 +511,7 @@ export function InvoiceTemplateReducer(state = initialState, action: Action): Cu
 //   isLoadingCustomCreatedTemplates: false,
 // };
 
-// export function invoiceTableReducer(state = initialTableState, action: Action): InvoiceTableState {
+// export function invoiceTableReducer(state = initialTableState, action: CustomActions): InvoiceTableState {
 //   switch (action.type) {
 
 //     case INVOICE.CONTENT.SET_COLUMN_WIDTH:
@@ -576,7 +577,7 @@ export function InvoiceTemplateReducer(state = initialState, action: Action): Cu
 // export const initialState: InvoiceTemplateState = {
 // };
 
-// export function invoiceTemplateReducer(state = initialState, action: Action): InvoiceTemplateState {
+// export function invoiceTemplateReducer(state = initialState, action: CustomActions): InvoiceTemplateState {
 //   switch (action.type) {
 
 //     case INVOICE.TEMPLATE.SET_TEMPLATE_STATE:
@@ -683,7 +684,7 @@ export function InvoiceTemplateReducer(state = initialState, action: Action): Cu
 //   setFieldDisplay: null,
 // };
 
-// export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: Action): InvoiceTemplateMetaState {
+// export function invoiceTemplateMetaReducer(state = initialStateTempMeta, action: CustomActions): InvoiceTemplateMetaState {
 //   switch (action.type) {
 //     case INVOICE.TEMPLATE.SELECT_TEMPLATE:
 //       // console.log(action.payload.id);

@@ -1,19 +1,19 @@
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groupsWithStocks.interface';
 import { StockReportRequest, StockReportResponse } from '../../../models/api-models/Inventory';
-import { StockReportActions } from '../../../services/actions/inventory/stocks-report.actions';
+import { StockReportActions } from '../../../actions/inventory/stocks-report.actions';
 import { AppState } from '../../../store';
 
 import { Store } from '@ngrx/store';
 
 import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { SidebarAction } from '../../../services/actions/inventory/sidebar.actions';
+import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Rx';
 import { FormBuilder } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
-import { InventoryAction } from '../../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 @Component({

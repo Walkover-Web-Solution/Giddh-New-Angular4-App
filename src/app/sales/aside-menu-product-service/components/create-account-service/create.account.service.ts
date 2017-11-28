@@ -1,14 +1,14 @@
 import * as _ from '../../../../lodash-optimized';
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { SalesActions } from '../../../../actions/sales/sales.action';
 import { GroupService } from '../../../../services/group.service';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { AccountService } from '../../../../services/account.service';

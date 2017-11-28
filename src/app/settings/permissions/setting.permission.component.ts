@@ -1,6 +1,6 @@
-import { AccountsAction } from './../../services/actions/accounts.actions';
-import { PermissionActions } from './../../services/actions/permission/permission.action';
-import { SettingsPermissionActions } from './../../services/actions/settings/permissions/settings.permissions.action';
+import { AccountsAction } from '../../actions/accounts.actions';
+import { PermissionActions } from '../../actions/permission/permission.action';
+import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -94,10 +94,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.waitAndReloadCompany();
   }
 
-  public onRevokePermission(email: string, roleUniquename: string) {
-    if (email && roleUniquename && this.selectedCompanyUniqueName) {
-      let obj = { emailId: email, entity: 'company', entityUniqueName: this.selectedCompanyUniqueName};
-      this.store.dispatch(this._accountsAction.unShareEntity(obj, roleUniquename));
+  public onRevokePermission(assignRoleEntryUniqueName: string) {
+    if (assignRoleEntryUniqueName) {
+      this.store.dispatch(this._accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
       this.waitAndReloadCompany();
     }
   }

@@ -6,7 +6,7 @@ import { ActivatedRoute } from '@angular/router';
 import { StateDetailsRequest } from '../models/api-models/Company';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'about',

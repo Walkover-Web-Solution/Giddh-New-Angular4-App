@@ -1,10 +1,10 @@
-import { InventoryAction } from './../../../services/actions/inventory/inventory.actions';
+import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
-import { LedgerActions } from './../../../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { ILedgerAdvanceSearchRequest, Inventory } from './../../../models/api-models/Ledger';
-import { CompanyActions } from './../../../services/actions/company.actions';
+import { CompanyActions } from '../../../actions/company.actions';
 import { AppState } from './../../../store/roots';
 import { Store } from '@ngrx/store';
 import { IOption } from './../../../theme/ng-select/option.interface';
