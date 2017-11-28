@@ -15,7 +15,7 @@ import * as moment from 'moment/moment';
 import { FormBuilder } from '@angular/forms';
 import { AuditLogsSidebarVM } from './Vm';
 import * as _ from '../../../lodash-optimized';
-import { AuditLogsActions } from '../../../services/actions/audit-logs/audit-logs.actions';
+import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 

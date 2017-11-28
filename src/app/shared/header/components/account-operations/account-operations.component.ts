@@ -1,10 +1,11 @@
-import { LedgerActions } from './../../../../services/actions/ledger/ledger.actions';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { ShareRequestForm } from './../../../../models/api-models/Permission';
+import { LedgerActions } from '../../../../actions/ledger/ledger.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { TaxResponse } from '../../../../models/api-models/Company';
-import { CompanyActions } from '../../../../services/actions/company.actions';
+import { CompanyActions } from '../../../../actions/company.actions';
 import { Observable } from 'rxjs/Observable';
 import { GroupsWithAccountsResponse } from '../../../../models/api-models/GroupsWithAccounts';
-import { GroupWithAccountsAction } from '../../../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse } from '../../../../models/api-models/Group';
 import { IGroupsWithAccounts } from '../../../../models/interfaces/groupsWithAccounts.interface';
 import { AppState } from '../../../../store';
@@ -37,7 +38,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   @Input() public height: number;
   public activeAccount$: Observable<AccountResponseV2>;
   public isTaxableAccount$: Observable<boolean>;
-  public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
+  public activeAccountSharedWith$: Observable<ShareRequestForm[]>;
   public shareAccountForm: FormGroup;
   public moveAccountForm: FormGroup;
   public activeGroupSelected$: Observable<string[]>;
@@ -66,7 +67,7 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
   public activeGroup$: Observable<GroupResponse>;
   public activeGroupUniqueName$: Observable<string>;
   public activeGroupInProgress$: Observable<boolean>;
-  public activeGroupSharedWith$: Observable<GroupSharedWithResponse[]>;
+  public activeGroupSharedWith$: Observable<ShareRequestForm[]>;
   public groupList$: Observable<GroupsWithAccountsResponse[]>;
   public isRootLevelGroup: boolean = false;
   public companyTaxes$: Observable<TaxResponse[]>;

@@ -1,3 +1,4 @@
+import { ShareRequestForm } from './../models/api-models/Permission';
 import { ShareEntityRequest } from './../models/api-models/Account';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
@@ -196,18 +197,34 @@ export class AccountService implements OnInit {
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
   }
 
-  public UnShare(model: ShareEntityRequest, roleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
+  public UnShare(entryUniqueName: string, entity: string, entityUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
     this.store.take(1).subscribe(s => {
       if (s.session.user) {
         this.user = s.session.user.user;
         this.companyUniqueName = s.session.companyUniqueName;
       }
     });
-    return this._http.post(ACCOUNTS_API.UN_SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', encodeURIComponent(roleUniqueName)), model)
+    return this._http.delete(ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(entryUniqueName)))
       .map((res) => {
         let data: BaseResponse<string, ShareEntityRequest> = res.json();
-        data.request = model;
-        data.queryString = { roleUniqueName, entity: model.entity, entityUniqueName: model.entityUniqueName, model };
+        data.queryString = { entryUniqueName, entityUniqueName, entity };
+        return data;
+      })
+      .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
+  }
+
+  public UpdateEntityPermission(model: ShareRequestForm, entity: string, newRoleUniqueName: string): Observable<BaseResponse<string, ShareEntityRequest>> {
+    this.store.take(1).subscribe(s => {
+      if (s.session.user) {
+        this.user = s.session.user.user;
+        this.companyUniqueName = s.session.companyUniqueName;
+      }
+    });
+
+    return this._http.put(ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':assignRoleEntryUniqueName', encodeURIComponent(model.uniqueName)), model)
+      .map((res) => {
+        let data: BaseResponse<string, ShareEntityRequest> = res.json();
+        data.queryString = { model, newRoleUniqueName, entity };
         return data;
       })
       .catch((e) => this.errorHandler.HandleCatch<string, ShareEntityRequest>(e));
@@ -220,7 +237,7 @@ export class AccountService implements OnInit {
       this.companyUniqueName = s.session.companyUniqueName;
     });
 
-    return this._http.put(ACCOUNTS_API.UN_SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).map((res) => {
+    return this._http.put(ACCOUNTS_API.CHANGE_PERMISSION.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)), { user: userEmail }).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = userEmail;
       data.queryString = { accountUniqueName };

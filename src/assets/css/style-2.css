@@ -1984,7 +1984,7 @@ a.btn.btn-xs.btn-link.pull-right {
     background: #f7f8f8;
     left: -3px;
     top: -2px;
-    border: 1px solid #d36029;
+    border: 1px solid #ff5f00;
     border-radius: 50%;
 }
 input[type=radio]:checked:after {
@@ -2306,12 +2306,12 @@ label {
 
 .btn-add {
     display: inline-block !important;
-    color: #d25f29 !important;
+    color: #ff5f00 !important;
 }
 
 .btn-add:hover,
 .btn-add:focus {
-    background: #d25f29;
+    background: #ff5f00;
     color: #fff !important;
 }
 
@@ -2384,7 +2384,7 @@ label {
 
 .col_wrapper:nth-child(1) .isParent {
     background: #e1ebf0 !important;
-    color: #d25f29 !important;
+    color: #ff5f00 !important;
 }
 
 .col_wrapper:last-child ul li a.isParent {
@@ -2405,25 +2405,26 @@ label {
 }
 
 .isSelectedgrp {
-    background: #e1ebf0;
+    background: #f0f0f0;
 }
 
 .isParent {
-    background: #e5e5e5;
+    color: #ff5f00 !important;
+    background: #f0f0f0;
 }
 
 .isActive {
     color: #fff !important;
-    background: #d25f29;
+    background: #ff5f00;
 }
 
 .isParent.isActive {
     color: #fff !important;
-    background: #d25f29 !important;
+    background: #ff5f00 !important;
 }
 
 .primary_clr {
-    color: #d25f29 !important;
+    color: #ff5f00 !important;
 }
 
 .view_forms {
@@ -2492,12 +2493,12 @@ label {
 
 .btn-add {
     display: inline-block !important;
-    color: #d25f29 !important;
+    color: #ff5f00 !important;
 }
 
 .btn-add:hover,
 .btn-add:focus {
-    background: #d25f29;
+    background: #ff5f00;
     color: #fff !important;
 }
 
@@ -2623,7 +2624,7 @@ label {
 }
 
 .accmerge li a.isActive {
-    background: #d25f29;
+    background: #ff5f00;
     color: #808080;
 }
 
@@ -2666,7 +2667,7 @@ label {
 }
 
 .breadcrumb>.active>a {
-    color: #d25f29;
+    color: #ff5f00;
 }
 
 .breadcrumb a {
@@ -2755,7 +2756,7 @@ label {
 }
 
 .gst_row .fa-plus {
-    color: #d25f29;
+    color: #ff5f00;
 }
 
 .manageModal .modal-dialog {
@@ -3425,6 +3426,7 @@ label {
 
 #customInvoice {
     background: #f4f5f8;
+    margin-bottom: 70px;
 }
 
 #customInvoice h2 {
@@ -3805,12 +3807,12 @@ datepicker-inner .well table thead tr th button {
 
 datepicker-inner .well table tbody .btn.active,
 datepicker-inner .well table tbody .btn:active {
-    background: #d25f29 !important;
+    background: #ff5f00 !important;
     box-shadow: none;
 }
 
 datepicker-inner .well table tbody .btn-default .text-info {
-    color: #d25f29;
+    color: #ff5f00;
 }
 
 datepicker-inner .well table tbody .btn.active .text-info,
@@ -3919,7 +3921,7 @@ input[type='checkbox'][disabled]:after {
 
 .active-toggle-btn {
     color: white;
-    background-color: #d25f29;
+    background-color: #ff5f00;
 }
 
 .input-group-addon input[type="radio"] {
@@ -4075,4 +4077,25 @@ typeahead-container .dropdown-menu li.active>a>a {
     font-weight: 100;
     text-shadow: none;
     font-size: 25px;
+}
+
+.col_wrapper .btn-link {
+    color: #10aae0 !important;
+}
+
+.form-group sup {
+    font-size: 19px;
+    top: 0;
+    color: red;
+}
+
+.btn-share,
+.btn-share:hover,
+.btn-share:focus {
+    background: #28ab00;
+    color: #fff;
+}
+
+.entry-modal {
+    width: 100%;
 }
