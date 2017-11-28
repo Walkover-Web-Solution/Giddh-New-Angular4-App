@@ -11,14 +11,16 @@
     "noEmitHelpers": true,
     "importHelpers": true,
     "strictNullChecks": false,
-    "isolatedModules": false,
     "lib": [
       "dom",
       "es6"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"]
+    },
     "typeRoots": [
-      "node_modules/@types",
-      "src/customTypes"
+      "node_modules/@types"
     ],
     "types": [
       "hammerjs",
@@ -26,7 +28,6 @@
       "node",
       "source-map",
       "uglify-js",
-      "webdriverio",
       "webpack"
     ]
   },

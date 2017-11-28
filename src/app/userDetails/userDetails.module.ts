@@ -7,8 +7,11 @@ import { UiSwitchModule } from 'angular2-ui-switch';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { AlertModule } from 'ngx-bootstrap/alert';
 import { LaddaModule } from 'angular2-ladda';
-import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
-
+import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+  suppressScrollX: true
+};
 @NgModule({
   declarations: [
     // Components / Directives/ Pipes
@@ -16,7 +19,6 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
   ],
   exports: [
   ],
-  providers: [],
   imports: [
     CommonModule,
     FormsModule,
@@ -26,8 +28,14 @@ import { PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
     AlertModule,
     UiSwitchModule,
     LaddaModule,
-    PerfectScrollbarModule.forChild()
+    PerfectScrollbarModule
   ],
+  providers: [
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    }
+  ]
 })
 export class UserDetailsModule {
 }

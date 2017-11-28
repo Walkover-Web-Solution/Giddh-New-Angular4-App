@@ -1,24 +1,25 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "module": "commonjs",
+    "module": "es2015",
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
-    "noEmit": true,
     "noEmitHelpers": true,
     "importHelpers": true,
     "strictNullChecks": false,
-    "isolatedModules": false,
     "lib": [
       "es2015",
       "dom"
     ],
+    "baseUrl": "./src",
+    "paths": {
+      "@angular/*": ["node_modules/@angular/*"]
+    },
     "typeRoots": [
-      "node_modules/@types",
-      "src/customTypes"
+      "node_modules/@types"
     ],
     "types": [
       "hammerjs",
@@ -34,12 +35,7 @@
     "packages",
     "dev"
   ],
-  "awesomeTypescriptLoaderOptions": {
-    "forkChecker": true,
-    "useWebpackText": true
-  },
   "angularCompilerOptions": {
-    "genDir": "./compiled",
     "skipMetadataEmit": true
   },
   "compileOnSave": false,

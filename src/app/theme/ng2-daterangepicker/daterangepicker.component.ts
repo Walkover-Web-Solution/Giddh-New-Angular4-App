@@ -34,8 +34,8 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
     private config: DaterangepickerConfig,
     private differs: KeyValueDiffers
   ) {
-    this._differ['options'] = differs.find(this.options).create(null);
-    this._differ['settings'] = differs.find(this.config.settings).create(null);
+    this._differ['options'] = differs.find(this.options).create();
+    this._differ['settings'] = differs.find(this.config.settings).create();
   }
 
   public ngAfterViewInit() {
