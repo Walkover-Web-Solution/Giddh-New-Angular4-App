@@ -4,21 +4,21 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AppState } from '../../store';
-import { LoginActions } from '../../services/actions/login.action';
-import { CompanyActions } from '../../services/actions/company.actions';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { CompanyResponse } from '../../models/api-models/Company';
 import { UserDetails } from '../../models/api-models/loginModels';
-import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as _ from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ElementViewContainerRef } from '../helpers/directives/elementViewChild/element.viewchild.directive';
 import { ManageGroupsAccountsComponent } from './components';
-import { FlyAccountsActions } from '../../services/actions/fly-accounts.actions';
+import { FlyAccountsActions } from '../../actions/fly-accounts.actions';
 import { FormControl } from '@angular/forms';
 import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
-import { GeneralActions } from '../../services/actions/general/general.actions';
+import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
 
 @Component({

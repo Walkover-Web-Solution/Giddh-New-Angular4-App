@@ -5,7 +5,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Observable } from 'rxjs/Observable';
 import * as _ from '../../lodash-optimized';
 import { AccountRequestV2 } from '../../models/api-models/Account';
-import { AccountsAction } from '../../services/actions/accounts.actions';
+import { AccountsAction } from '../../actions/accounts.actions';
 import { GroupService } from '../../services/group.service';
 import { GroupResponse } from '../../models/api-models/Group';
 import { IOption } from '../../theme/ng-select/option.interface';

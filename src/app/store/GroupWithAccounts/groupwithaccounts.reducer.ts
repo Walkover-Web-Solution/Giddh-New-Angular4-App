@@ -3,7 +3,7 @@ import {
   GroupCreateRequest, GroupUpateRequest, MoveGroupRequest,
   MoveGroupResponse
 } from '../../models/api-models/Group';
-import { AccountsAction } from '../../services/actions/accounts.actions';
+import { AccountsAction } from '../../actions/accounts.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import {
   FlattenGroupsAccountsResponse,
@@ -23,11 +23,12 @@ import {
   AccountSharedWithResponse,
   AccountsTaxHierarchyResponse
 } from '../../models/api-models/Account';
-import { GroupWithAccountsAction } from '../../services/actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { of } from 'rxjs/observable/of';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { debug } from 'util';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the GroupAndAccountStates
@@ -118,7 +119,7 @@ const initialState: CurrentGroupAndAccountState = {
   newlyCreatedAccount: null
 };
 
-export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: Action) => {
+export const GroupsWithAccountsReducer: ActionReducer<CurrentGroupAndAccountState> = (state: CurrentGroupAndAccountState = initialState, action: CustomActions) => {
   switch (action.type) {
     case GroupWithAccountsAction.SHOW_ADD_NEW_FORM:
       return Object.assign({}, state, {

@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/index';
-import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 
 @Component({
   selector: 'share-ledger',

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
-import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
+import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 

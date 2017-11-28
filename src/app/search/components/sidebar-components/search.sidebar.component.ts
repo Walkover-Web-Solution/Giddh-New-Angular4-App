@@ -6,7 +6,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment/moment';
 import { SearchRequest } from '../../../models/api-models/Search';
-import { SearchActions } from '../../../services/actions/search.actions';
+import { SearchActions } from '../../../actions/search.actions';
 import { GroupService } from '../../../services/group.service';
 import { TypeaheadMatch } from 'ngx-bootstrap';
 import { GroupsWithAccountsResponse } from '../../../models/api-models/GroupsWithAccounts';
