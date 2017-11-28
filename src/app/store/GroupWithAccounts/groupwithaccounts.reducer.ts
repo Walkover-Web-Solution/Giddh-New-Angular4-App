@@ -584,20 +584,22 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
 
 const toggleActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string): boolean => {
   let myChildElementIsOpen = false;
-  for (let grp of groups) {
-    if (grp.uniqueName === uniqueName) {
-      grp.isActive = true;
-      grp.isOpen = !grp.isOpen;
-      myChildElementIsOpen = !grp.isOpen;
-      break;
-    } else {
-      grp.isActive = false;
-    }
-    if (grp.groups) {
-      myChildElementIsOpen = toggleActiveGroupFunc(grp.groups, uniqueName);
-      // grp.isOpen = myChildElementIsOpen;
-      if (grp.isOpen) {
-        return myChildElementIsOpen;
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === uniqueName) {
+        grp.isActive = true;
+        grp.isOpen = !grp.isOpen;
+        myChildElementIsOpen = !grp.isOpen;
+        break;
+      } else {
+        grp.isActive = false;
+      }
+      if (grp.groups) {
+        myChildElementIsOpen = toggleActiveGroupFunc(grp.groups, uniqueName);
+        // grp.isOpen = myChildElementIsOpen;
+        if (grp.isOpen) {
+          return myChildElementIsOpen;
+        }
       }
     }
   }
@@ -607,19 +609,21 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
   if (result) {
     return result;
   }
-  for (let grp of groups) {
-    if (grp.uniqueName === uniqueName) {
-      grp.name = updatedGroup.name;
-      grp.uniqueName = updatedGroup.uniqueName;
-      grp.isActive = true;
-      grp.isOpen = false;
-      result = true;
-      break;
-    }
-    if (grp.groups) {
-      result = updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup, result);
-      if (result) {
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === uniqueName) {
+        grp.name = updatedGroup.name;
+        grp.uniqueName = updatedGroup.uniqueName;
+        grp.isActive = true;
+        grp.isOpen = false;
+        result = true;
         break;
+      }
+      if (grp.groups) {
+        result = updateActiveGroupFunc(grp.groups, uniqueName, updatedGroup, result);
+        if (result) {
+          break;
+        }
       }
     }
   }
@@ -627,25 +631,27 @@ const updateActiveGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string
 };
 const AddAndActiveGroupFunc = (groups: IGroupsWithAccounts[], gData: BaseResponse<GroupResponse, GroupCreateRequest>, myChildElementIsOpen: boolean): boolean => {
   // let myChildElementIsOpen = false;
-  for (let grp of groups) {
-    if (grp.uniqueName === gData.request.parentGroupUniqueName) {
-      let newData = new GroupsWithAccountsResponse();
-      newData.accounts = [];
-      newData.category = grp.category;
-      newData.groups = [];
-      newData.isActive = false;
-      newData.name = gData.body.name;
-      newData.synonyms = gData.body.synonyms;
-      newData.uniqueName = gData.body.uniqueName;
-      grp.isOpen = true;
-      grp.groups.push(newData);
-      myChildElementIsOpen = true;
-      return myChildElementIsOpen;
-    }
-    if (grp.groups) {
-      myChildElementIsOpen = AddAndActiveGroupFunc(grp.groups, gData, myChildElementIsOpen);
-      if (myChildElementIsOpen) {
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === gData.request.parentGroupUniqueName) {
+        let newData = new GroupsWithAccountsResponse();
+        newData.accounts = [];
+        newData.category = grp.category;
+        newData.groups = [];
+        newData.isActive = false;
+        newData.name = gData.body.name;
+        newData.synonyms = gData.body.synonyms;
+        newData.uniqueName = gData.body.uniqueName;
+        grp.isOpen = true;
+        grp.groups.push(newData);
+        myChildElementIsOpen = true;
         return myChildElementIsOpen;
+      }
+      if (grp.groups) {
+        myChildElementIsOpen = AddAndActiveGroupFunc(grp.groups, gData, myChildElementIsOpen);
+        if (myChildElementIsOpen) {
+          return myChildElementIsOpen;
+        }
       }
     }
   }
@@ -687,17 +693,19 @@ const removeGroupFunc = (groups: IGroupsWithAccounts[], uniqueName: string, resu
   }
 };
 const removeAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, accountUniqueName: string, result: IAccountsInfo): IAccountsInfo => {
-  for (let grp of groups) {
-    if (grp.uniqueName === uniqueName) {
-      let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
-      result = grp.accounts[index];
-      grp.accounts.splice(index, 1);
-      return result;
-    }
-    if (grp.groups) {
-      result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
-      if (result) {
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === uniqueName) {
+        let index = grp.accounts.findIndex(a => a.uniqueName === accountUniqueName);
+        result = grp.accounts[index];
+        grp.accounts.splice(index, 1);
         return result;
+      }
+      if (grp.groups) {
+        result = removeAccountFunc(grp.groups, uniqueName, accountUniqueName, result);
+        if (result) {
+          return result;
+        }
       }
     }
   }
@@ -726,17 +734,19 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
   if (result) {
     return result;
   }
-  for (let grp of groups) {
-    if (grp.uniqueName === grpUniqueName) {
-      grp.isOpen = true;
-      grp.accounts.push(aData);
-      result = true;
-      return result;
-    }
-    if (grp.groups) {
-      result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result);
-      if (result) {
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === grpUniqueName) {
+        grp.isOpen = true;
+        grp.accounts.push(aData);
+        result = true;
         return result;
+      }
+      if (grp.groups) {
+        result = addNewAccountFunc(grp.groups, aData, grpUniqueName, result);
+        if (result) {
+          return result;
+        }
       }
     }
   }
@@ -747,25 +757,27 @@ const addCreatedAccountFunc = (groups: IGroupsWithAccounts[], aData: AccountResp
   if (result) {
     return result;
   }
-  for (let grp of groups) {
-    if (grp.uniqueName === grpUniqueName) {
-      grp.isOpen = true;
-      grp.accounts.push(
-        {
-          uniqueName: aData.uniqueName,
-          name: aData.name,
-          isActive: true,
-          stocks: aData.stocks,
-          mergedAccounts: aData.mergedAccounts,
-        }
-      );
-      result = true;
-      return result;
-    }
-    if (grp.groups) {
-      result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
-      if (result) {
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === grpUniqueName) {
+        grp.isOpen = true;
+        grp.accounts.push(
+          {
+            uniqueName: aData.uniqueName,
+            name: aData.name,
+            isActive: true,
+            stocks: aData.stocks,
+            mergedAccounts: aData.mergedAccounts,
+          }
+        );
+        result = true;
         return result;
+      }
+      if (grp.groups) {
+        result = addCreatedAccountFunc(grp.groups, aData, grpUniqueName, result);
+        if (result) {
+          return result;
+        }
       }
     }
   }
@@ -777,22 +789,24 @@ const UpdateAccountFunc = (groups: IGroupsWithAccounts[],
   if (result) {
     return result;
   }
-  for (let grp of groups) {
-    if (grp.uniqueName === grpUniqueName) {
-      grp.isOpen = true;
-      let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
-      grp.accounts[index].uniqueName = aData.uniqueName;
-      grp.accounts[index].name = aData.name;
-      grp.accounts[index].isActive = true;
-      grp.accounts[index].stocks = aData.stocks;
-      grp.accounts[index].mergedAccounts = aData.mergedAccounts;
-      result = true;
-      return result;
-    }
-    if (grp.groups) {
-      result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);
-      if (result) {
+  if (groups) {
+    for (let grp of groups) {
+      if (grp.uniqueName === grpUniqueName) {
+        grp.isOpen = true;
+        let index = grp.accounts.findIndex(p => p.uniqueName === accountUniqueName);
+        grp.accounts[index].uniqueName = aData.uniqueName;
+        grp.accounts[index].name = aData.name;
+        grp.accounts[index].isActive = true;
+        grp.accounts[index].stocks = aData.stocks;
+        grp.accounts[index].mergedAccounts = aData.mergedAccounts;
+        result = true;
         return result;
+      }
+      if (grp.groups) {
+        result = UpdateAccountFunc(grp.groups, aData, grpUniqueName, accountUniqueName, result);
+        if (result) {
+          return result;
+        }
       }
     }
   }
