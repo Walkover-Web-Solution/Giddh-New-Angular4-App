@@ -7,36 +7,24 @@ import { HttpWrapperService } from './httpWrapper.service';
 import { LoaderService } from './loader.service';
 import { LOGIN_API } from './apiurls/login.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import {
-  SignupWithMobile,
-  VerifyEmailModel,
-  VerifyEmailResponseModel,
-  VerifyMobileModel,
-  VerifyMobileResponseModel,
-  LinkedInRequestModel,
-  UserDetails,
-  AuthKeyResponse
-} from '../models/api-models/loginModels';
+import { AuthKeyResponse, LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { Headers, Http, RequestOptionsArgs, Response } from '@angular/http';
-import { AppState } from '../store/roots';
-import { Store } from '@ngrx/store';
+import { Headers, Http } from '@angular/http';
+import { GeneralService } from './general.service';
 
-// import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
 export class AuthenticationService {
 
   constructor(private errorHandler: ErrorHandler,
-    public _Http: Http,
-    public _http: HttpWrapperService,
-    public _router: Router,
-    private store: Store<AppState>
-  ) {
+              public _Http: Http,
+              public _http: HttpWrapperService,
+              public _router: Router,
+              private _generalService: GeneralService) {
 
   }
 
   public SignupWithEmail(email: string): Observable<BaseResponse<string, string>> {
-    return this._http.post(LOGIN_API.SignupWithEmail, { email }).map((res) => {
+    return this._http.post(LOGIN_API.SignupWithEmail, {email}).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, email));
@@ -85,17 +73,13 @@ export class AuthenticationService {
   }
 
   public ClearSession(): Observable<BaseResponse<string, string>> {
-    let userName = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        userName = s.session.user.user.uniqueName;
-      }
-    });
+    let userName = this._generalService.user.uniqueName;
     return this._http.delete(LOGIN_API.CLEAR_SESSION.replace(':userUniqueName', encodeURIComponent(userName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<string, string>(e));
   }
+
   public LoginWithGoogle(token: string) {
     let args: any = {};
     args.headers = new Headers();
@@ -125,110 +109,80 @@ export class AuthenticationService {
   }
 
   public SetSettings(model): Observable<BaseResponse<string, string>> {
-    let uniqueName = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        uniqueName = s.session.user.user.uniqueName;
-      }
-    });
+    let uniqueName = this._generalService.user.uniqueName;
 
     return this._http.put(LOGIN_API.SET_SETTINGS
       .replace(':userUniqueName', encodeURIComponent(uniqueName)), model).map((res) => {
-        let data: BaseResponse<string, string> = res.json();
-        data.request = '';
-        data.queryString = { };
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      let data: BaseResponse<string, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      // data.response.results.forEach(p => p.isOpen = false);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
   }
 
   public FetchUserDetails(): Observable<BaseResponse<UserDetails, string>> {
-    let sessionId = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        sessionId = s.session.user.user.uniqueName;
-      }
-    });
+    let sessionId = this._generalService.user.uniqueName;
 
     return this._http.get(LOGIN_API.FETCH_DETAILS
       .replace(':sessionId', sessionId)).map((res) => {
-        let data: BaseResponse<UserDetails, string> = res.json();
-        data.request = '';
-        data.queryString = { };
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, ''));
+      let data: BaseResponse<UserDetails, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      // data.response.results.forEach(p => p.isOpen = false);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<UserDetails, string>(e, ''));
   }
 
   public GetSubScribedCompanies(): Observable<BaseResponse<string, string>> {
-    let userUniqueName = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        userUniqueName = s.session.user.user.uniqueName;
-      }
-    });
+    let userUniqueName = this._generalService.user.uniqueName;
 
     return this._http.get(LOGIN_API.SUBSCRIBED_COMPANIES
       .replace(':userUniqueName', userUniqueName)).map((res) => {
-        let data: BaseResponse<string, string> = res.json();
-        data.request = '';
-        data.queryString = { };
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      let data: BaseResponse<string, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      // data.response.results.forEach(p => p.isOpen = false);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
   }
 
   public AddBalance(model): Observable<BaseResponse<string, string>> {
-    let uniqueName = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        uniqueName = s.session.user.user.uniqueName;
-      }
-    });
+    let uniqueName = this._generalService.user.uniqueName;
 
     return this._http.get(LOGIN_API.ADD_BALANCE
       .replace(':uniqueName', uniqueName)).map((res) => {
-        let data: BaseResponse<string, string> = res.json();
-        data.request = '';
-        data.queryString = { };
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
+      let data: BaseResponse<string, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      // data.response.results.forEach(p => p.isOpen = false);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<string, string>(e, ''));
   }
 
   public GetAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-    let uniqueName = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        uniqueName = s.session.user.user.uniqueName;
-      }
-    });
+    let uniqueName = this._generalService.user.uniqueName;
 
     return this._http.get(LOGIN_API.GET_AUTH_KEY
       .replace(':uniqueName', uniqueName)).map((res) => {
-        let data: BaseResponse<AuthKeyResponse, string> = res.json();
-        data.request = '';
-        data.queryString = { };
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+      let data: BaseResponse<AuthKeyResponse, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      // data.response.results.forEach(p => p.isOpen = false);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
 
   public RegenerateAuthKey(): Observable<BaseResponse<AuthKeyResponse, string>> {
-    let userEmail = null;
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        userEmail = s.session.user.user.email;
-      }
-    });
+    let userEmail = this._generalService.user.email;
 
     return this._http.put(LOGIN_API.REGENERATE_AUTH_KEY
       .replace(':userEmail', userEmail), {}).map((res) => {
-        let data: BaseResponse<AuthKeyResponse, string> = res.json();
-        data.request = '';
-        data.queryString = { };
-        // data.response.results.forEach(p => p.isOpen = false);
-        return data;
-      }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
+      let data: BaseResponse<AuthKeyResponse, string> = res.json();
+      data.request = '';
+      data.queryString = {};
+      // data.response.results.forEach(p => p.isOpen = false);
+      return data;
+    }).catch((e) => this.errorHandler.HandleCatch<AuthKeyResponse, string>(e, ''));
   }
 }
