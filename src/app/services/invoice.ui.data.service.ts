@@ -125,15 +125,14 @@ export class InvoiceUiDataService {
   /**
    * setTemplateUniqueName
    */
-  public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[],
-                               defaultTemplate: CustomTemplateResponse) {
+  public setTemplateUniqueName(uniqueName: string, mode: string, customCreatedTemplates: CustomTemplateResponse[] = [], defaultTemplate: CustomTemplateResponse) {
     if (customCreatedTemplates && customCreatedTemplates.length) {
       let allTemplates = _.cloneDeep(customCreatedTemplates);
       let selectedTemplate = allTemplates.find((template) => template.uniqueName === uniqueName);
 
       if (selectedTemplate) {
-
-        if (mode === 'create' && selectedTemplate.sections[0].content[9].field !== 'trackingNumber' && defaultTemplate) { // this is default(old) template
+        // mode === 'create' &&
+        if ((selectedTemplate.sections[0].content[9].field !== 'trackingNumber' || selectedTemplate.sections[1].content[4].field !== 'description') && defaultTemplate) { // this is default(old) template
           selectedTemplate.sections = _.cloneDeep(defaultTemplate.sections);
         }
 
@@ -167,6 +166,20 @@ export class InvoiceUiDataService {
 
         this.customTemplate.next(_.cloneDeep(selectedTemplate));
       }
+
+      if (selectedTemplate.sections[0].content.length === 24) {
+        selectedTemplate.sections[0].content[24] = {
+          display: true,
+          label: 'Attention To',
+          field: 'attentionTo',
+          width: null
+        };
+      }
+
+      selectedTemplate = this.BRToNewLine(selectedTemplate);
+      // console.log('THe selected template is :', selectedTemplate);
+
+      this.customTemplate.next(_.cloneDeep(selectedTemplate));
     }
   }
 }
