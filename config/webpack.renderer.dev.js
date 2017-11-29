@@ -27,7 +27,9 @@ const PORT = process.env.PORT || 3000;
 const HMR = helpers.hasProcessFlag('hot');
 const AppUrl = 'localhost';
 const ApiUrl = 'http://apidev.giddh.com/';
-const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
+const METADATA = webpackMerge(commonConfig({
+  env: ENV
+}).metadata, {
   host: HOST,
   port: PORT,
   ENV: ENV,
@@ -48,7 +50,9 @@ const METADATA = webpackMerge(commonConfig({ env: ENV }).metadata, {
  * See: http://webpack.github.io/docs/configuration.html#cli
  */
 module.exports = function (options) {
-  return webpackMerge(commonConfig({ env: ENV }), {
+  return webpackMerge(commonConfig({
+    env: ENV
+  }), {
 
     /**
      * Developer tool to enhance debugging
@@ -253,10 +257,10 @@ module.exports = function (options) {
         ignored: /node_modules/
       },
       /**
-      * Here you can access the Express app object and add your own custom middleware to it.
-      *
-      * See: https://webpack.github.io/docs/webpack-dev-server.html
-      */
+       * Here you can access the Express app object and add your own custom middleware to it.
+       *
+       * See: https://webpack.github.io/docs/webpack-dev-server.html
+       */
       setup: function (app) {
         // For example, to define custom handlers for some paths:
         // app.get('/some/path', function(req, res) {
