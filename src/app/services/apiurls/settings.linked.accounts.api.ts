@@ -11,5 +11,5 @@ export const EBANKS = {
   REFREST_ACCOUNT: COMMON_URL + 'login/:loginId/token/refresh', // GET
   ADD_GIDDH_ACCOUNT: COMMON_URL + '/ebanks/:itemAccountId', // PUT
   REMOVE_GIDDH_ACCOUNT: COMMON_URL + 'ebanks/:ItemAccountId/unlink', // DELETE
-  UPDATE_DATE: COMMON_URL + 'ebanks/:accountId/eledgers/:date', // PUT
+  UPDATE_DATE: COMMON_URL + 'ebanks/:accountId/eledgers?from=:date', // PUT
 };
