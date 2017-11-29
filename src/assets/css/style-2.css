@@ -4153,3 +4153,13 @@ small {
 .form-group {
     font-size: 14px;
 }
+
+.user_list {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+}
+
+.permission_list .permission:last-child .form-group {
+    margin-bottom: 0 !important;
+}
