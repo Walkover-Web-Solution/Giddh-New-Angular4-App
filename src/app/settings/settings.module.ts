@@ -1,3 +1,4 @@
+import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
 import { SettingPermissionComponent } from './permissions/setting.permission.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -49,7 +50,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     SelectModule,
     LaddaModule,
     ClickOutsideModule,
-    BsDatepickerModule.forRoot()
+    BsDatepickerModule.forRoot(),
+    ShSelectModule
   ]
 })
 
