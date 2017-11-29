@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { AppState } from '../../../../store/roots';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/Rx';
 import { digitsOnly } from '../../../../shared/helpers/customValidationHelper';
 import { uniqueNameInvalidStringReplace } from '../../../../shared/helpers/helperFunctions';
-import { SalesActions } from '../../../../services/actions/sales/sales.action';
+import { SalesActions } from '../../../../actions/sales/sales.action';
 import { IOption } from '../../../../theme/ng-select/option.interface';
 
 export const PURCHASE_GROUPS = ['operatingcost']; // purchases

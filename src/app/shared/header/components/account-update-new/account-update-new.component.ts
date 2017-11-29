@@ -4,7 +4,7 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
 import { AccountRequestV2, AccountResponseV2, IAccountAddress } from '../../../../models/api-models/Account';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
-import { AccountsAction } from '../../../../services/actions/accounts.actions';
+import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ToasterService } from '../../../../services/toaster.service';
 import { CompanyService } from '../../../../services/companyService.service';
 import { contriesWithCodes } from '../../../helpers/countryWithCodes';

@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
@@ -92,7 +92,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef, ) {
   }
 
   /**
@@ -140,10 +140,17 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public toggleSelected(item) {
+    let callChanges: boolean = true;
     if (!item) {
       return;
     }
     this.clearFilter();
+
+    if (!this.multiple) {
+      if (this._selectedValues[0] && this._selectedValues[0].value === item.value) {
+        callChanges = false;
+      }
+    }
 
     if (this.multiple) {
       this.selectMultiple(item);
@@ -151,7 +158,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       this.selectSingle(item);
     }
 
-    this.onChange();
+    if (callChanges) {
+      this.onChange();
+    }
   }
 
   public selectSingle(item) {
@@ -177,8 +186,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     }, 0);
   }
 
-  public show(e: Event) {
-
+  public show(e: any) {
     if (this.isOpen || this.disabled) {
       return;
     }
@@ -192,12 +200,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.menuEle.virtualScrollElm.scrollInto(item);
       }
     }
+    this.cdRef.markForCheck();
   }
 
   public keydownUp(event) {
     let key = event.which;
     if (this.isOpen) {
-      if (key === this.KEYS.ESC || (key === this.KEYS.UP && event.altKey)) {
+      if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
         this.hide();
       } else if (key === this.KEYS.ENTER) {
         if (this.menuEle && this.menuEle.virtualScrollElm && this.menuEle.virtualScrollElm) {
@@ -213,6 +222,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
           if (item !== null) {
             // this.toggleSelected(item);
             this.menuEle.virtualScrollElm.scrollInto(item);
+            this.menuEle.virtualScrollElm.startupLoop = true;
+            this.menuEle.virtualScrollElm.refresh();
             event.preventDefault();
           }
         }
@@ -227,6 +238,8 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
           if (item !== null) {
             // this.toggleSelected(item);
             this.menuEle.virtualScrollElm.scrollInto(item);
+            this.menuEle.virtualScrollElm.startupLoop = true;
+            this.menuEle.virtualScrollElm.refresh();
             event.preventDefault();
           }
         }
@@ -260,6 +273,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       }
       this.onHide.emit();
     }
+    this.cdRef.markForCheck();
   }
 
   public filterInputBlur(event) {
@@ -280,6 +294,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     this.onChange();
     this.clearFilter();
     this.onClear.emit();
+    this.hide();
   }
 
   public ngOnInit() {

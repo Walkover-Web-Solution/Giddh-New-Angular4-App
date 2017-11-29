@@ -7,15 +7,13 @@ import { ApplicationRef, NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { createInputTransfer, createNewHosts, removeNgStyles } from '@angularclass/hmr';
 import { RouterModule } from '@angular/router';
-import { RouterStoreModule } from '@ngrx/router-store';
-import { Store, StoreModule } from '@ngrx/store';
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { ActionReducer, MetaReducer, Store, StoreModule } from '@ngrx/store';
 /*
  * Platform and Environment providers/pipes/pipes
  */
 import { ENV_PROVIDERS } from './environment';
 import { ROUTES } from './app.routes';
-import { rootReducer } from './store';
+import { reducers } from './store';
 // App is our top level component
 import { AppComponent } from './app.component';
 import { APP_BASE_HREF } from '@angular/common';
@@ -27,7 +25,6 @@ import { ServiceModule } from './services/service.module';
 import { ToastrModule } from 'ngx-toastr';
 import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
 import { DummyComponent } from './dummy.component';
-// import { SalesModule } from './sales/sales.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { NewUserComponent } from './newUser.component';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
@@ -38,14 +35,16 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { CollapseModule } from 'ngx-bootstrap/collapse';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { TabsModule } from 'ngx-bootstrap/tabs';
-// import { TypeaheadModule } from 'ngx-bootstrap/typeahead';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PopoverModule } from 'ngx-bootstrap/popover';
 import { LaddaModule } from 'angular2-ladda/module/module';
 import { ShSelectModule } from './theme/ng-virtual-select/sh-select.module';
 import { LoaderComponent } from './loader/loader.component';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { localStorageSync } from 'ngrx-store-localstorage';
+import { ActionModule } from './actions/action.module';
+import { DecoratorsModule } from './decorators/decorators.module';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -68,9 +67,15 @@ interface StoreType {
 // tslint:disable-next-line:prefer-const
 let CONDITIONAL_IMPORTS = [];
 
+export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+  return localStorageSync({keys: ['session', 'permission'], rehydrate: true})(reducer);
+}
+
+let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (ENV === 'development') {
   // console.log('loading react devtools');
-  // CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrumentOnlyWithExtension());
+  // metaReducers.push(storeFreeze);
+  // CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 
 /**
@@ -114,12 +119,14 @@ if (ENV === 'development') {
     DatepickerModule.forRoot(),
     SharedModule.forRoot(),
     ServiceModule.forRoot(),
+    ActionModule.forRoot(),
+    DecoratorsModule.forRoot(),
     ShSelectModule.forRoot(),
     ToastrModule.forRoot({preventDuplicates: true, maxOpened: 3}),
-    StoreModule.provideStore(rootReducer),
-    RouterStoreModule.connectRouter(),
+    StoreModule.forRoot(reducers, {metaReducers}),
     PerfectScrollbarModule.forRoot(PERFECT_SCROLLBAR_CONFIG),
     RouterModule.forRoot(ROUTES, {useHash: true}),
+    StoreRouterConnectingModule,
     ...CONDITIONAL_IMPORTS,
     ...CONDITIONAL_IMPORTS
   ],

@@ -1,5 +1,5 @@
 import { AppState } from '../../../store/roots';
-import { HomeActions } from '../../../services/actions/home/home.actions';
+import { HomeActions } from '../../../actions/home/home.actions';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Component, Input, OnInit } from '@angular/core';
@@ -23,7 +23,7 @@ export class NetworthChartComponent implements OnInit {
   public monthlyOption = {
     colors: ['#c45022'],
     chart: {
-      type: 'column', height: '320px',width: 900
+      type: 'column', height: '320px', width: 900
     },
     title: {
       text: ''
