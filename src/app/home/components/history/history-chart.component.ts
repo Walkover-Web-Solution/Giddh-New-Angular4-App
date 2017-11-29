@@ -4,14 +4,14 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { Observable } from 'rxjs/Observable';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
-import { HomeActions } from '../../../services/actions/home/home.actions';
+import { HomeActions } from '../../../actions/home/home.actions';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
 import { isNullOrUndefined } from 'util';
 import * as  moment from 'moment/moment';
 import * as _ from '../../../lodash-optimized';
 import { IndividualSeriesOptionsExtension } from './IndividualSeriesOptionsExtention';
-import { API_TO_CALL, CHART_CALLED_FROM } from '../../../services/actions/home/home.const';
+import { API_TO_CALL, CHART_CALLED_FROM } from '../../../actions/home/home.const';
 
 @Component({
   selector: 'history-chart',

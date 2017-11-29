@@ -1,12 +1,11 @@
-import { show } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
 import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
-import { LedgerActions } from '../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, TransactionsRequest, IELedgerResponse, ReconcileRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -19,14 +18,14 @@ import { GroupService } from '../services/group.service';
 import { ToasterService } from '../services/toaster.service';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { ModalDirective } from 'ngx-bootstrap';
 import { base64ToBlob } from '../shared/helpers/helperFunctions';
 import { ElementViewContainerRef } from '../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { UpdateLedgerEntryPanelComponent } from './components/updateLedgerEntryPanel/updateLedgerEntryPanel.component';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
-import { GeneralActions } from '../services/actions/general/general.actions';
+import { GeneralActions } from '../actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
@@ -89,9 +88,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
+    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -140,6 +139,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       txn.discounts = [];
       return;
     }
+
     this.lc.flattenAccountList.take(1).subscribe(data => {
       data.map(fa => {
         // change (e.value[0]) to e.value to use in single select for ledger transaction entry
@@ -230,6 +230,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
         this.resetBlankTransaction();
+        this.datePickerOptions = {
+          locale: {
+            applyClass: 'btn-green',
+            applyLabel: 'Go',
+            fromLabel: 'From',
+            format: 'D-MMM-YY',
+            toLabel: 'To',
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+          },
+          ranges: {
+            'Last 1 Day': [
+              moment().subtract(1, 'days'),
+              moment()
+            ],
+            'Last 7 Days': [
+              moment().subtract(6, 'days'),
+              moment()
+            ],
+            'Last 30 Days': [
+              moment().subtract(29, 'days'),
+              moment()
+            ],
+            'Last 6 Months': [
+              moment().subtract(6, 'months'),
+              moment()
+            ],
+            'Last 1 Year': [
+              moment().subtract(12, 'months'),
+              moment()
+            ]
+          },
+          startDate: moment().subtract(30, 'days'),
+          endDate: moment()
+        };
         // set state details
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -237,7 +272,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         // init transaction request and call for transaction data
         this.initTrxRequest(params['accountUniqueName']);
@@ -251,6 +285,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
+        this.lc.showNewLedgerPanel = false;
+        this.lc.showTaxationDiscountBox = false;
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
@@ -258,7 +294,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
-          }else {
+          } else {
             this.hideEledgerWrap();
           }
         });
@@ -278,13 +314,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             accountDetails.stocks.map(as => {
               // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, {stock: as})
+                additional: Object.assign({}, acc, { stock: as })
               });
             });
           });
@@ -293,18 +329,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, {stock: as})
+                  additional: Object.assign({}, acc, { stock: as })
                 });
               });
             } else {
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             }
           });
         }
@@ -333,7 +369,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
       if (data && data.yodleeAdded) {
         this.getBankTransactions();
-      }else {
+      } else {
         this.hideEledgerWrap();
       }
     });

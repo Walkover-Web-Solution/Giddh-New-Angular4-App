@@ -1,5 +1,5 @@
 import * as fromVerifyMobileReducer from './authentication/verifyMobile.reducer';
-import { routerReducer, RouterState } from '@ngrx/router-store';
+import * as fromRouter from '@ngrx/router-store';
 import * as fromGeneral from './General/general.reducer';
 import * as fromHome from './home/home.reducer';
 import * as fromPermission from './Permission/permission.reducer';
@@ -18,9 +18,10 @@ import * as fromLedger from './Ledger/ledger.reducer';
 import * as fromSettings from './Settings/Settings.reducer';
 import * as fromSales from './Sales/sales.reducer';
 import * as fromInvoicePurchase from './invoice-purchase/invoice-purchase.reducer';
+import { ActionReducerMap } from '@ngrx/store';
 
 export interface AppState {
-  router: RouterState;
+  router: fromRouter.RouterReducerState;
   general: fromGeneral.GeneralState;
   home: fromHome.HomeState;
   login: fromLogin.AuthenticationState;
@@ -43,8 +44,8 @@ export interface AppState {
   invoicePurchase: fromInvoicePurchase.InvoicePurchaseState;
 }
 
-export const reducers = {
-  router: routerReducer,
+export const reducers: ActionReducerMap<AppState> = {
+  router: fromRouter.routerReducer,
   general: fromGeneral.GeneRalReducer,
   home: fromHome.homeReducer,
   sales: fromSales.salesReducer,

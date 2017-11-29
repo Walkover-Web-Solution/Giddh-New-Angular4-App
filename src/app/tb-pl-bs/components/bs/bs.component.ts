@@ -2,7 +2,7 @@ import { Store } from '@ngrx/store';
 import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
-import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
+import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { ProfitLossData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 import * as _ from '../../../lodash-optimized';
 import { Observable } from 'rxjs/Observable';

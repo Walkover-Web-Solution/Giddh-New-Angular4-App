@@ -86,11 +86,11 @@ i.close.icon.clear:hover::after {
     right: 2px;
     padding-left: 2px;
     padding-right: 2px;
-    top: 3px;
+    top: 2px;
     cursor: pointer;
     font-size: 25px;
     font-weight: 500;
-    line-height: 1;
+    line-height: 32px;
     opacity: .5;
     color: black;
 }

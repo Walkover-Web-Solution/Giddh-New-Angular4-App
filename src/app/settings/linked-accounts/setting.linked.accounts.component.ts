@@ -9,7 +9,7 @@ import * as moment from 'moment/moment';
 import { AccountService } from '../../services/account.service';
 import { ModalDirective } from 'ngx-bootstrap';
 import { SettingsLinkedAccountsService } from '../../services/settings.linked.accounts.service';
-import { SettingsLinkedAccountsActions } from '../../services/actions/settings/linked-accounts/settings.linked.accounts.action';
+import { SettingsLinkedAccountsActions } from '../../actions/settings/linked-accounts/settings.linked.accounts.action';
 import { IEbankAccount } from '../../models/api-models/SettingsLinkedAccounts';
 import { BankAccountsResponse } from '../../models/api-models/Dashboard';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -27,6 +27,7 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   public ebankAccounts: BankAccountsResponse[] = [];
   public accounts$: IOption[];
   public confirmationMessage: string;
+  public dateToUpdate: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   private selectedAccount: IEbankAccount;
   private actionToPerform: string;
@@ -100,8 +101,8 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
           this.store.dispatch(this.settingsLinkedAccountsActions.DeleteBankAccount(this.selectedAccount.loginId));
           break;
         case 'UpdateDate':
-          let dateToUpdate = moment(this.selectedAccount.transactionDate).format('DD-MM-YYYY');
-          this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(dateToUpdate, accountId));
+          // let dateToUpdate = moment(this.selectedAccount.transactionDate).format('DD-MM-YYYY');
+          this.store.dispatch(this.settingsLinkedAccountsActions.UpdateDate(this.dateToUpdate, accountId));
           break;
         case 'LinkAccount':
           this.store.dispatch(this.settingsLinkedAccountsActions.LinkBankAccount(this.dataToUpdate, accountId));
@@ -126,10 +127,14 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onDeleteAddedBank(bankName, account) {
-    this.selectedAccount = _.cloneDeep(account);
-    this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
-    this.actionToPerform = 'DeleteAddedBank';
-    this.confirmationModal.show();
+    if (bankName && account && account.accountId) {
+      this.selectedAccount = _.cloneDeep(account);
+      this.confirmationMessage = `Are you sure you want to delete ${bankName} ? All accounts linked with the same bank will be deleted.`;
+      this.actionToPerform = 'DeleteAddedBank';
+      this.confirmationModal.show();
+    } else {
+      console.log('No account found');
+    }
   }
 
   public onRefreshToken(account) {
@@ -137,16 +142,18 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onAccountSelect(account, data) {
-    // Link bank account
-    this.dataToUpdate = {
-      itemAccountId: account.accountId,
-      uniqueName: data.value
-    };
+    if (data && data.value) {
+      // Link bank account
+      this.dataToUpdate = {
+        itemAccountId: account.accountId,
+        uniqueName: data.value
+      };
 
-    this.selectedAccount = _.cloneDeep(account);
-    this.confirmationMessage = `Are you sure you want to link ${data.value} ?`;
-    this.actionToPerform = 'LinkAccount';
-    this.confirmationModal.show();
+      this.selectedAccount = _.cloneDeep(account);
+      this.confirmationMessage = `Are you sure you want to link ${data.value} ?`;
+      this.actionToPerform = 'LinkAccount';
+      this.confirmationModal.show();
+    }
   }
 
   public onUnlinkBankAccount(account) {
@@ -157,10 +164,10 @@ export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
   }
 
   public onUpdateDate(date, account) {
-    let dateToUpdate = moment(date).format('DD-MM-YYYY');
+    this.dateToUpdate = moment(date).format('DD-MM-YYYY');
 
     this.selectedAccount = _.cloneDeep(account);
-    this.confirmationMessage = `Do you want to get ledger entries for this account from ${dateToUpdate} ?`;
+    this.confirmationMessage = `Do you want to get ledger entries for this account from ${this.dateToUpdate} ?`;
     this.actionToPerform = 'UpdateDate';
     this.confirmationModal.show();
   }

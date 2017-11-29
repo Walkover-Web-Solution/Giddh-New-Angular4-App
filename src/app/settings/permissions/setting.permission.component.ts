@@ -1,6 +1,6 @@
-import { AccountsAction } from './../../services/actions/accounts.actions';
-import { PermissionActions } from './../../services/actions/permission/permission.action';
-import { SettingsPermissionActions } from './../../services/actions/settings/permissions/settings.permissions.action';
+import { AccountsAction } from '../../actions/accounts.actions';
+import { PermissionActions } from '../../actions/permission/permission.action';
+import { SettingsPermissionActions } from '../../actions/settings/permissions/settings.permissions.action';
 import { Store } from '@ngrx/store';
 import { Component, OnInit, OnDestroy, trigger, transition, style, animate, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
@@ -16,7 +16,6 @@ import { digitsOnly } from '../../shared/helpers/customValidationHelper';
 import isCidr from 'is-cidr';
 import { ShareRequestForm, ISharedWithResponseForUI } from '../../models/api-models/Permission';
 import { ModalDirective } from 'ngx-bootstrap';
-import { PermissionService } from '../../services/permission.service';
 
 @Component({
   selector: 'setting-permission',
@@ -30,12 +29,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public usersList: any;
   public selectedCompanyUniqueName: string;
   public selectedUser: ShareRequestForm;
-  public allRoles = [
-    { name: 'Admin', uniqueName: 'admin' },
-    { name: 'View only', uniqueName: 'view_only' },
-    { name: 'Super Admin', uniqueName: 'super_admin' },
-    { name: 'Edit', uniqueName: 'edit' }
-  ];
 
   // modals related
   public showEditUserModal: boolean = false;
@@ -53,16 +46,16 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     private _accountsAction: AccountsAction,
     private store: Store<AppState>,
     private _fb: FormBuilder,
-    private _toasty: ToasterService,
-    private _permissionService: PermissionService
+    private _toasty: ToasterService
   ) {}
 
   public ngOnInit() {
+    this.store.dispatch(this._permissionActions.GetRoles());
 
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
-        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userUniqueName');
+        let sortedArr = _.groupBy(this.prepareDataForUI(data), 'userName');
         let arr = [];
         _.forIn(sortedArr, (value, key) => {
           arr.push({ name: key, rows: value });
@@ -101,13 +94,10 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     this.waitAndReloadCompany();
   }
 
-  public onRevokePermission(user: ShareRequestForm) {
-    if (user.emailId && user.roleUniqueName && this.selectedCompanyUniqueName) {
-      let obj = { emailId: user.emailId, entity: 'company', entityUniqueName: this.selectedCompanyUniqueName};
-      this.store.dispatch(this._accountsAction.unShareEntity(obj, user.roleUniqueName));
+  public onRevokePermission(assignRoleEntryUniqueName: string) {
+    if (assignRoleEntryUniqueName) {
+      this.store.dispatch(this._accountsAction.unShareEntity(assignRoleEntryUniqueName, 'company', this.selectedCompanyUniqueName));
       this.waitAndReloadCompany();
-    }else {
-     this._toasty.warningToast(`Unable to delete User. Without user's EmailID and Role`);
     }
   }
 
@@ -131,52 +121,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();
-  }
-
-  public shareCurrentCompany(user: string, role: string) {
-    this._permissionService.ShareCompany({role, user}).takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        this._permissionService.GetCompanySharedWith().subscribe(sharedWith => {
-          if (sharedWith.status === 'success') {
-            let sharedWithData = _.cloneDeep(sharedWith.body);
-            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userUniqueName');
-            let arr = [];
-            _.forIn(sortedArr, (value, key) => {
-              arr.push({ name: key, rows: value });
-            });
-            this.usersList = _.sortBy(arr, ['name']);
-          }
-        });
-        this._toasty.clearAllToaster();
-        this._toasty.successToast(data.body);
-      } else {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message);
-      }
-    });
-  }
-
-  public unShareCurrentCompany(user) {
-    this._permissionService.UnShareCompany({user}).takeUntil(this.destroyed$).subscribe(data => {
-      if (data.status === 'success') {
-        this._permissionService.GetCompanySharedWith().subscribe(sharedWith => {
-          if (sharedWith.status === 'success') {
-            let sharedWithData = _.cloneDeep(sharedWith.body);
-            let sortedArr = _.groupBy(this.prepareDataForUI(sharedWithData), 'userUniqueName');
-            let arr = [];
-            _.forIn(sortedArr, (value, key) => {
-              arr.push({ name: key, rows: value });
-            });
-            this.usersList = _.sortBy(arr, ['name']);
-          }
-        });
-        this._toasty.clearAllToaster();
-        this._toasty.successToast(data.body);
-      } else {
-        this._toasty.clearAllToaster();
-        this._toasty.errorToast(data.message);
-      }
-    });
   }
 
 }

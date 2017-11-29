@@ -3,6 +3,8 @@ import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../
 import { CustomTemplateResponse } from '../../../../../models/api-models/Invoice';
 import * as _ from '../../../../../lodash-optimized';
 import { ReplaySubject } from 'rxjs/Rx';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../../../store/roots';
 
 @Component({
   selector: 'content-selector',
@@ -20,8 +22,20 @@ export class ContentFilterComponent implements OnInit, OnDestroy {
   public showCompanyName: boolean;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _invoiceUiDataService: InvoiceUiDataService) {
-    // Init sections and fields
+  constructor(private store: Store<AppState>, private _invoiceUiDataService: InvoiceUiDataService) {
+    let companyUniqueName = null;
+    let companies = null;
+    let defaultTemplate = null;
+
+    this.store.select(s => s.session).take(1).subscribe(ss => {
+      companyUniqueName = ss.companyUniqueName;
+      companies = ss.companies;
+    });
+
+    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+      defaultTemplate = ss.defaultTemplate;
+    });
+    this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
   }
 
   public ngOnInit() {

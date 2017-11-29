@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs/Subject';
 
 import { Domain } from '../models/domain';
 import { Http } from '@angular/http';
@@ -8,8 +7,6 @@ import * as _ from '../lodash-optimized';
 
 @Injectable()
 export class LocationService {
-  public appTitle = new Subject<string>();
-  public authKey: string;
   private GoogleApiURL: string = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyCaphDTQJXyr1lhnaXP_nm7a5dqgr5KVJU';
 
   constructor(private _http: Http) {

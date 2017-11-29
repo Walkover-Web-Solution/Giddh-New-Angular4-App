@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -11,7 +11,7 @@ import { ILedgerDiscount } from '../../../models/interfaces/ledger.interface';
   templateUrl: 'ledgerDiscount.component.html'
 })
 
-export class LedgerDiscountComponent implements OnInit, OnDestroy {
+export class LedgerDiscountComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public discountAccountsDetails: ILedgerDiscount[];
   @Output() public discountTotalUpdated: EventEmitter<number> = new EventEmitter();
   public discountTotal: number;
@@ -28,6 +28,13 @@ export class LedgerDiscountComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.prepareDiscountList();
     this.change();
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if ('discountAccountsDetails' in changes && changes.discountAccountsDetails.currentValue !== changes.discountAccountsDetails.previousValue) {
+      this.prepareDiscountList();
+      this.change();
+    }
   }
 
   /**

@@ -1,10 +1,10 @@
-import { LoginActions } from '../../services/actions/login.action';
-import { CompanyActions } from '../../services/actions/company.actions';
-import { Action, ActionReducer } from '@ngrx/store';
+import { LoginActions } from '../../actions/login.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../../models/api-models/loginModels';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse } from '../../models/api-models/Company';
 import * as _ from '../../lodash-optimized';
+import { CustomActions } from '../customActions';
 
 /**
  * Keeping Track of the AuthenticationState
@@ -85,7 +85,7 @@ const sessionInitialState: SessionState = {
   userLoginState: userLoginStateEnum.notLoggedIn
 };
 
-export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state: AuthenticationState = initialState, action: Action) => {
+export function AuthenticationReducer(state: AuthenticationState = initialState, action: CustomActions): AuthenticationState {
 
   switch (action.type) {
     case LoginActions.SignupWithEmailResponce:
@@ -250,9 +250,9 @@ export const AuthenticationReducer: ActionReducer<AuthenticationState> = (state:
     default:
       return state;
   }
-};
+}
 
-export const SessionReducer: ActionReducer<SessionState> = (state: SessionState = sessionInitialState, action: Action) => {
+export function SessionReducer(state: SessionState = sessionInitialState, action: CustomActions): SessionState {
   switch (action.type) {
     case LoginActions.SIGNUP_WITH_GOOGLE_RESPONSE: {
       let data: BaseResponse<VerifyEmailResponseModel, string> = action.payload as BaseResponse<VerifyEmailResponseModel, string>;
@@ -360,9 +360,9 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
       return s;
     }
     case CompanyActions.CREATE_COMPANY:
-      return Object.assign({}, state, {isCompanyCreationInProcess: true, isCompanyCreationSuccess: false});
+      return Object.assign({}, state, { isCompanyCreationInProcess: true, isCompanyCreationSuccess: false });
     case CompanyActions.RESET_CREATE_COMPANY_FLAG:
-      return Object.assign({}, state, {isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false});
+      return Object.assign({}, state, { isCompanyCreated: false, isCompanyCreationInProcess: false, isCompanyCreationSuccess: false });
     case CompanyActions.CREATE_COMPANY_RESPONSE: {
       let companyResp: BaseResponse<CompanyResponse, CompanyRequest> = action.payload;
       if (companyResp.status === 'success') {
@@ -460,4 +460,4 @@ export const SessionReducer: ActionReducer<SessionState> = (state: SessionState 
     default:
       return state;
   }
-};
+}

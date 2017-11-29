@@ -5,12 +5,12 @@ import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
 import { SignupWithMobile, UserDetails } from '../models/api-models/loginModels';
-import { LoginActions } from '../services/actions/login.action';
+import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
 import { CompanyService } from '../services/companyService.service';
 import { CompanyResponse, GetCouponResp, StateDetailsRequest } from '../models/api-models/Company';
 import { cloneDeep } from '../lodash-optimized';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'user-details',

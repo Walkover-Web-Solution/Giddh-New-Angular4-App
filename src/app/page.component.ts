@@ -1,5 +1,5 @@
-import { CompanyActions } from './services/actions/company.actions';
-import { LoginActions } from './services/actions/login.action';
+import { CompanyActions } from './actions/company.actions';
+import { LoginActions } from './actions/login.action';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { AppState } from './store/roots';
 import { Store } from '@ngrx/store';
