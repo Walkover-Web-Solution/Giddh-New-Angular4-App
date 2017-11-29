@@ -34,7 +34,7 @@
                                 <input [(ngModel)]="card.transactionDate" name="transactionDate" id="date_{{i}}" />
                             </a>
                             <div style="position: absolute; z-index:10; min-height:290px;">
-                                <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (activeDateChange)="onUpdateDate(card.transactionDate, card)" [showWeeks]="true">
+                                <datepicker *ngIf="card.isDatePickerOpen" name="fromDate" [(ngModel)]="card.transactionDate" (selectionDone)="onUpdateDate($event, card)" [showWeeks]="true">
                                 </datepicker>
                             </div>
                         </div>
@@ -45,19 +45,11 @@
                             Linked with: {{card.linkedAccount.name}} ({{card.linkedAccount.uniqueName}})
                         </div>
                         <div class="select-account select2-parent" *ngIf="card.showAccList">
-                            <!--<select2 [data]="accounts$" [options]="select2Options" (valueChanged)="onAccountSelect(card, $event)"></select2>-->
                             <div class="ng-select-wrap">
-                                <ng-select
-                                placeholder="Select"
-                                filterPlaceholder="Type to search..."
-                                [options]="accounts$"
+                                <sh-select [options]="accounts$" 
                                 (selected)="onAccountSelect(card, $event)"
-                                >
-                                <ng-template #optionTemplate let-option="option">
-                                    <div class="account-list-item">{{option?.label}}</div>
-                                    <div class="account-list-item fs12">{{option?.value}}</div>
-                                </ng-template>
-                                </ng-select>
+                                [placeholder]="'--Select--'">
+                                </sh-select>       
                             </div>
                         </div>
                         <button class="btn btn-warning pull-right" *ngIf="card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = false" style="margin-top:5px">Not Now</button>
