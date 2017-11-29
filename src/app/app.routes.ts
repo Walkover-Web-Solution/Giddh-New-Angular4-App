@@ -1,12 +1,11 @@
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
-import { NeedsAuthentication } from './services/decorators/needsAuthentication';
-import { UserAuthenticated } from './services/decorators/UserAuthenticated';
+import { NeedsAuthentication } from './decorators/needsAuthentication';
+import { UserAuthenticated } from './decorators/UserAuthenticated';
 import { DummyComponent } from './dummy.component';
-import { SalesComponent } from './sales/sales.component';
 import { NewUserComponent } from './newUser.component';
-import { NewUserAuthGuard } from './services/decorators/newUserGuard';
+import { NewUserAuthGuard } from './decorators/newUserGuard';
 import { SocialLoginCallbackComponent } from './social-login-callback.component';
 
 export const ROUTES: Routes = [

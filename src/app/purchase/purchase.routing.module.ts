@@ -1,5 +1,5 @@
 import { RouterModule, Routes } from '@angular/router';
-import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
+import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, Location } from '@angular/common';
 import { NgModule } from '@angular/core';
