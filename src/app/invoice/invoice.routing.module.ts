@@ -5,7 +5,7 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
-import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
+import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { InvoiceComponent } from './invoice.component';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';

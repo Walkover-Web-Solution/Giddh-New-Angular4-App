@@ -7,11 +7,11 @@ import { PermissionListComponent } from './components/list/permission.list.compo
 import { PermissionDetailsComponent } from './components/details/permission.details.component';
 import { DeleteRoleConfirmationModelComponent } from './components/confirmation/confirmation.model.component';
 import { PermissionModelComponent } from './components/model/permission.model.component';
-import { NeedsAuthentication } from '../services/decorators/needsAuthentication';
+import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { SortByPipe } from './sort.pipe';
 import { CapitalizePipe } from './capitalize.pipe';
 import { LaddaModule } from 'angular2-ladda';
-import { ModalModule, BsDropdownModule } from 'ngx-bootstrap';
+import { BsDropdownModule, ModalModule } from 'ngx-bootstrap';
 
 const PERMISSION_ROUTES: Routes = [
   {path: '', redirectTo: 'pages/permissions/list', pathMatch: 'full', canActivate: [NeedsAuthentication]},
