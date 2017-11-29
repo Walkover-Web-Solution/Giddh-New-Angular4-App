@@ -1,4 +1,3 @@
-
 import { Injectable } from '@angular/core';
 import { Http, RequestOptionsArgs } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
@@ -8,15 +7,16 @@ import { CompanyActions } from './company.actions';
 import { Router } from '@angular/router';
 import { CustomActions } from '../store/customActions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
-import { VerifyEmailResponseModel, VerifyEmailModel, VerifyMobileModel, VerifyMobileResponseModel, SignupWithMobile, LinkedInRequestModel, UserDetails } from '../models/api-models/loginModels';
+import { LinkedInRequestModel, SignupWithMobile, UserDetails, VerifyEmailModel, VerifyEmailResponseModel, VerifyMobileModel, VerifyMobileResponseModel } from '../models/api-models/loginModels';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
-import { StateDetailsResponse, CompanyResponse } from '../models/api-models/Company';
+import { CompanyResponse, StateDetailsResponse } from '../models/api-models/Company';
 import { ROUTES } from '../app.routes';
 import { Configuration } from '../app.constant';
 import { AuthenticationService } from '../services/authentication.service';
 import { ToasterService } from '../services/toaster.service';
 import { AppState } from '../store/index';
 import { CompanyService } from '../services/companyService.service';
+import { GeneralService } from '../services/general.service';
 
 @Injectable()
 export class LoginActions {
@@ -76,7 +76,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
@@ -103,7 +103,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyEmailResponseModel, string> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       if (response.body.statusCode === 'AUTHENTICATE_TWO_WAY') {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.needTwoWayAuth));
@@ -130,7 +130,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -148,7 +148,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyEmailResponseModel, VerifyEmailModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       return this.LoginSuccess();
     });
@@ -168,7 +168,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -186,6 +186,7 @@ export class LoginActions {
         return;
       } else {
         if (stateDetail.body && stateDetail.status === 'success') {
+          this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
           cmpUniqueName = stateDetail.body.companyUniqueName;
           if (companies.body.findIndex(p => p.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
             this.store.dispatch(this.comapnyActions.GetStateDetailsResponse(stateDetail));
@@ -194,7 +195,7 @@ export class LoginActions {
             // this.store.dispatch(replace(['/pages/home']));
             // if (ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
             this._router.navigate([stateDetail.body.lastState]);
-            return { type: 'EmptyAction' };
+            return {type: 'EmptyAction'};
           } else {
             let respState = new BaseResponse<StateDetailsResponse, string>();
             respState.body = new StateDetailsResponse();
@@ -206,7 +207,7 @@ export class LoginActions {
             this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
             this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
             this._router.navigate([stateDetail.body.lastState]);
-            return { type: 'EmptyAction' };
+            return {type: 'EmptyAction'};
           }
         } else {
           let respState = new BaseResponse<StateDetailsResponse, string>();
@@ -219,7 +220,7 @@ export class LoginActions {
           this.store.dispatch(this.comapnyActions.RefreshCompaniesResponse(companies));
           this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
           this._router.navigate(['/pages/home']);
-          return { type: 'EmptyAction' };
+          return {type: 'EmptyAction'};
         }
       }
       // return { type: 'EmptyAction' };
@@ -230,7 +231,7 @@ export class LoginActions {
     .ofType(LoginActions.LogOut)
     .map((action: CustomActions) => {
       this._router.navigate(['/login']);
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -248,7 +249,7 @@ export class LoginActions {
       let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
       if (response.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       return this.LoginSuccess();
     });
@@ -265,9 +266,10 @@ export class LoginActions {
   public verifyTwoWayAuthResponse$: Observable<Action> = this.actions$
     .ofType(LoginActions.VerifyTwoWayAuthResponse)
     .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toaster.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
+      let response: BaseResponse<VerifyMobileResponseModel, VerifyMobileModel> = action.payload;
+      if (response.status === 'error') {
+        this._toaster.errorToast(response.message, response.code);
+        return {type: 'EmptyAction'};
       }
       return this.LoginSuccess();
     });
@@ -281,7 +283,7 @@ export class LoginActions {
     .map(data => {
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -296,7 +298,7 @@ export class LoginActions {
     .map(data => {
       if (data.status === 'error') {
         this._toaster.errorToast(data.message, data.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       // return this.LoginSuccess();
       return this.signupWithGoogleResponse(data);
@@ -343,7 +345,7 @@ export class LoginActions {
       } else {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -359,7 +361,7 @@ export class LoginActions {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -381,17 +383,18 @@ export class LoginActions {
       if (action.payload.status === 'error') {
         this._toaster.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   constructor(public _router: Router,
-    private actions$: Actions,
-    private auth: AuthenticationService,
-    public _toaster: ToasterService,
-    private store: Store<AppState>,
-    private comapnyActions: CompanyActions,
-    private _companyService: CompanyService,
-    private http: Http) {
+              private actions$: Actions,
+              private auth: AuthenticationService,
+              public _toaster: ToasterService,
+              private store: Store<AppState>,
+              private comapnyActions: CompanyActions,
+              private _companyService: CompanyService,
+              private http: Http,
+              private _generalService: GeneralService) {
   }
 
   public SignupWithEmailRequest(value: string): CustomActions {

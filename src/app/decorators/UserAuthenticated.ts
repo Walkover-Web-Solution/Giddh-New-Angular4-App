@@ -1,9 +1,9 @@
-import { AppState } from '../../store/roots';
+import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
-import { ROUTES } from '../../app.routes';
+import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
+import { ROUTES } from '../app.routes';
 
 @Injectable()
 export class UserAuthenticated implements CanActivate {
