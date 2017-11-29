@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { FormBuilder } from '@angular/forms';
 import { AppState } from '../../../store/roots';
 import { Store } from '@ngrx/store';
-import { TBPlBsActions } from '../../../services/actions/tl-pl.actions';
+import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
 
 @Component({

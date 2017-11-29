@@ -3,7 +3,7 @@ import { Options } from 'highcharts';
 import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { HomeActions } from '../../../services/actions/home/home.actions';
+import { HomeActions } from '../../../actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';
@@ -11,7 +11,7 @@ import * as _ from '../../../lodash-optimized';
 import { IComparisionChartResponse } from '../../../models/interfaces/dashboard.interface';
 import { isNullOrUndefined } from 'util';
 import { IndividualSeriesOptionsExtension } from '../history/IndividualSeriesOptionsExtention';
-import { CHART_CALLED_FROM, API_TO_CALL } from '../../../services/actions/home/home.const';
+import { CHART_CALLED_FROM, API_TO_CALL } from '../../../actions/home/home.const';
 
 @Component({
   selector: 'compare-chart',

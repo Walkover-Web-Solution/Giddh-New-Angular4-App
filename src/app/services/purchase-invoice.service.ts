@@ -1,16 +1,12 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable, OnInit } from '@angular/core';
-import { Response } from '@angular/http';
-import { Store } from '@ngrx/store';
-import { AppState } from '../store/roots';
+import { Injectable } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
-import { SmsKeyClass, EmailKeyClass } from '../models/api-models/SettingsIntegraion';
-import { ActiveFinancialYear } from '../models/api-models/Company';
 import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
+import { GeneralService } from './general.service';
 
 export interface Account {
   name: string;
@@ -39,6 +35,7 @@ export class IInvoicePurchaseItem {
   public sendToGstr2: boolean;
   public availItc: boolean;
 }
+
 export class IInvoicePurchaseResponse {
   public count: number;
   public page: number;
@@ -102,9 +99,10 @@ export class PurchaseInvoiceService {
 
   private user: UserDetails;
   private companyUniqueName: string;
-  private roleUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private store: Store<AppState>) { }
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
+              private _generalService: GeneralService) {
+  }
 
   /*
   * Get Purchase Invoice
@@ -112,12 +110,8 @@ export class PurchaseInvoiceService {
   * Method: GET
   */
   public GetPurchaseInvoice(model: CommonPaginatedRequest): Observable<BaseResponse<IInvoicePurchaseResponse, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let req = model;
     return this._http.get(PURCHASE_INVOICE_API.INVOICE_API.replace(':companyUniqueName', this.companyUniqueName), req).map((res) => {
       let data: BaseResponse<IInvoicePurchaseResponse, string> = res.json();
@@ -132,12 +126,8 @@ export class PurchaseInvoiceService {
   * Method: GET
   */
   public GetTaxesForThisCompany(): Observable<BaseResponse<ITaxResponse[], string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(PURCHASE_INVOICE_API.GET_TAXES.replace(':companyUniqueName', this.companyUniqueName)).map((res) => {
       let data: BaseResponse<ITaxResponse[], string> = res.json();
       data.queryString = {};
@@ -151,12 +141,8 @@ export class PurchaseInvoiceService {
   * Method: PUT
   */
   public GeneratePurchaseInvoice(model: IInvoicePurchaseItem): Observable<BaseResponse<IInvoicePurchaseItem, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let dataToSend = {
       uniqueNames: [model.entryUniqueName],
       taxes: model.taxes
@@ -174,15 +160,11 @@ export class PurchaseInvoiceService {
   * Method: GET
   */
   public DownloadGSTR1Sheet(reqObj: { month: string, gstNumber: string, type: string }): Observable<BaseResponse<any, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':month', reqObj.month).replace(':report_sheet_Type', reqObj.type).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
-      data.queryString = { reqObj };
+      data.queryString = {reqObj};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -193,15 +175,11 @@ export class PurchaseInvoiceService {
   * Method: GET
   */
   public DownloadGSTR1ErrorSheet(reqObj: { month: string, gstNumber: string, type: string }): Observable<BaseResponse<any, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     return this._http.get(PURCHASE_INVOICE_API.DOWNLOAD_GSTR1_ERROR_SHEET.replace(':companyUniqueName', this.companyUniqueName).replace(':error_sheet_Type', reqObj.type).replace(':month', reqObj.month).replace(':company_gstin', reqObj.gstNumber)).map((res) => {
       let data: BaseResponse<any, string> = res.json();
-      data.queryString = { reqObj };
+      data.queryString = {reqObj};
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, string>(e));
   }
@@ -209,12 +187,8 @@ export class PurchaseInvoiceService {
   public UpdatePurchaseInvoice(entryUniqueName: string[], taxUniqueName: string[], accountUniqueName: string): Observable<BaseResponse<any, string>> {
     console.log('ENTRY', entryUniqueName);
     console.log('TAX', taxUniqueName);
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let req = {
       uniqueNames: entryUniqueName,
       taxes: taxUniqueName
@@ -227,12 +201,8 @@ export class PurchaseInvoiceService {
   }
 
   public UpdatePurchaseEntry(model): Observable<BaseResponse<any, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let accountUniqueName = model.accountUniqueName;
     let ledgerUniqname = model.ledgerUniqname;
     let req = {
@@ -249,12 +219,8 @@ export class PurchaseInvoiceService {
   }
 
   public UpdateInvoice(model): Observable<BaseResponse<any, string>> {
-    this.store.take(1).subscribe(s => {
-      if (s.session.user) {
-        this.user = s.session.user.user;
-      }
-      this.companyUniqueName = s.session.companyUniqueName;
-    });
+    this.user = this._generalService.user;
+    this.companyUniqueName = this._generalService.companyUniqueName;
     let accountUniqueName = model.accountUniqueName;
     let ledgerUniqname = model.ledgerUniqname;
     let req = {

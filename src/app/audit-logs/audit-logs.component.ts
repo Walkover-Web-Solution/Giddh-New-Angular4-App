@@ -6,7 +6,7 @@ import {
   OnInit
 } from '@angular/core';
 import { StateDetailsRequest } from '../models/api-models/Company';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'audit-logs',

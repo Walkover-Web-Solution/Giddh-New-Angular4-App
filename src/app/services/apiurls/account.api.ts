@@ -18,7 +18,8 @@ export const ACCOUNTS_API = {
   MOVE: COMMON_URL_FOR_ACCOUNT + '/move',
   // SHARE: COMMON_URL_FOR_ACCOUNT + '/share',
   SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/role/:roleUniqueName/assign',
-  UN_SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/role/:roleUniqueName/revoke',
+  // UN_SHARE: Configuration.ApiUrl + 'company/:companyUniqueName/role/:roleUniqueName/revoke',
+  CHANGE_PERMISSION: Configuration.ApiUrl + 'company/:companyUniqueName/uer/:assignRoleEntryUniqueName',
   // UNSHARE: COMMON_URL_FOR_ACCOUNT + '/unshare',
   SHARED_WITH: COMMON_URL_FOR_ACCOUNT + '/shared-with',
   TAX_HIERARCHY: COMMON_URL_FOR_ACCOUNT + '/tax-hierarchy', // get call

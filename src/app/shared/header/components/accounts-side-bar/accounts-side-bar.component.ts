@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Observable';
 import { IFlattenGroupsAccountsDetail } from '../../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { FlyAccountsActions } from '../../../../services/actions/fly-accounts.actions';
+import { FlyAccountsActions } from '../../../../actions/fly-accounts.actions';
 import * as _ from '../../../../lodash-optimized';
 
 @Component({

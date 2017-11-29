@@ -4,7 +4,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { CompanyActions } from '../services/actions/company.actions';
+import { CompanyActions } from '../actions/company.actions';
 import { AppState } from '../store/roots';
 import { Store } from '@ngrx/store';
 import { StateDetailsRequest } from '../models/api-models/Company';

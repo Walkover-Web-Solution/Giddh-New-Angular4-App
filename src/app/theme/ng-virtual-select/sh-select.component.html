@@ -1,8 +1,9 @@
-<div #dd [style.width]="width" (clickOutside)="isOpen = false">
+<div #dd [style.width]="width" (clickOutside)="hide($event)">
   <div class="header" #mainContainer [class.sh-select-disabled]="disabled" [class.inline]="mode==='inline'" (click)="show($event)"
     [class.open]="isOpen" tabindex="0" (focus)="show($event)" (blur)="hide($event)" (keydown)="keydownUp($event)">
 
 
+    <!--region multiple-->
     <div *ngIf="multiple" [ngClass]="{'has-item':selectedValues?.length}" style="background: white;" class="bdr">
       <ng-container *ngIf="selectedValues?.length">
         <span class="chip" *ngFor="let sl of selectedValues">
@@ -14,21 +15,14 @@
         (blur)="filterInputBlur($event)" [placeholder]="selectedValues?.length > 0 ? ' ' : placeholder" [(ngModel)]="filter"
         (ngModelChange)="updateFilter($event)">
     </div>
+    <!--endregion-->
 
-
+    <!--region single-->
     <input type="text" class="form-control" #inputFilter tabindex="0" *ngIf="!multiple" [hidden]="((!isOpen || !isFilterEnabled))"
       (click)="show($event);" (blur)="filterInputBlur($event)" [placeholder]="placeholder" [(ngModel)]="filter" (ngModelChange)="updateFilter($event)">
-    <div (click)="show($event); $event.stopPropagation()" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
+    <div (click)="show($event);" *ngIf="((!isOpen || !isFilterEnabled) && !multiple)">
       <ng-container *ngIf="selectedValues?.length">
-        <!-- <div *ngIf="multiple" style="display:flex; flex-wrap:wrap;" >
-                    <span class="chip" *ngFor="let sl of selectedValues">
-                        {{ sl.label }}
-                        <span class="chipClosebtn" (click)="clearSingleSelection($event, sl)">&times;</span>
-                    </span>
-                </div>
-                <div *ngIf="!multiple">
 
-                </div> -->
         <div *ngIf="!multiple">
           <input type="text" readonly value="{{selectedValues[0].label}}" class="form-control selectedVal cp" />
         </div>
@@ -37,10 +31,7 @@
         <span class="form-control">{{ placeholder }}</span>
       </ng-container>
     </div>
-    <!-- </ng-container>
-      <ng-container *ngIf="!selectedValues?.length">
-        <span class="form-control">{{ placeholder }}</span>
-      </ng-container> -->
+    <!--endregion-->
 
   </div>
   <span class="clear" *ngIf="showClear && selectedValues.length > 0" (click)="$event.stopPropagation();clear();">&times;</span>

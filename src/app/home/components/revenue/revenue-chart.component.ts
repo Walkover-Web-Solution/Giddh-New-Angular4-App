@@ -5,7 +5,7 @@ import { ActiveFinancialYear, CompanyResponse } from '../../../models/api-models
 import { Observable } from 'rxjs/Observable';
 import { IChildGroups, IRevenueChartClosingBalanceResponse } from '../../../models/interfaces/dashboard.interface';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { HomeActions } from '../../../services/actions/home/home.actions';
+import { HomeActions } from '../../../actions/home/home.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as moment from 'moment/moment';

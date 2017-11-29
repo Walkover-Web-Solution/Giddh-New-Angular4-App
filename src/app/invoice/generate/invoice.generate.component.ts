@@ -8,7 +8,7 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { GenBulkInvoiceFinalObj, GenBulkInvoiceGroupByObj, GenerateBulkInvoiceRequest, GetAllLedgersForInvoiceResponse, GetAllLedgersOfInvoicesResponse, ILedgersInvoiceResult, InvoiceFilterClass, PreviewInvoiceResponseClass } from '../../models/api-models/Invoice';
-import { InvoiceActions } from '../../services/actions/invoice/invoice.actions';
+import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
@@ -93,7 +93,11 @@ export class InvoiceGenerateComponent implements OnInit {
       .takeUntil(this.destroyed$)
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
-          this.ledgersData = _.cloneDeep(o);
+          let a = _.cloneDeep(o);
+          a.results = _.orderBy(a.results, (item: ILedgersInvoiceResult) => {
+            return moment(item.entryDate, 'DD-MM-YYYY');
+          }, 'desc');
+          this.ledgersData = a;
         }
       });
 
@@ -136,6 +140,7 @@ export class InvoiceGenerateComponent implements OnInit {
   public pageChanged(event: any): void {
     this.ledgerSearchRequest.page = event.page;
     this.selectedLedgerItems = [];
+    this.togglePrevGenBtn = false;
     this.getLedgersOfInvoice();
   }
 

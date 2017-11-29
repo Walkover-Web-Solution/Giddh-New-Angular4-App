@@ -1,12 +1,12 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { LedgerActions } from '../../../services/actions/ledger/ledger.actions';
+import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { BlankLedgerVM, TransactionVM } from '../../ledger.vm';
-import { CompanyActions } from '../../../services/actions/company.actions';
+import { CompanyActions } from '../../../actions/company.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { UploadInput, UploadOutput } from 'ngx-uploader';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
@@ -18,14 +18,16 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { cloneDeep, forEach, isEmpty } from '../../../lodash-optimized';
+import { cloneDeep, forEach } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 
 @Component({
   selector: 'new-ledger-entry-panel',
   templateUrl: 'newLedgerEntryPanel.component.html',
-  styleUrls: ['./newLedgerEntryPanel.component.css']
+  styleUrls: ['./newLedgerEntryPanel.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
@@ -40,8 +42,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @Output() public changeTransactionType: EventEmitter<string> = new EventEmitter();
   @Output() public resetBlankLedger: EventEmitter<boolean> = new EventEmitter();
   @Output() public saveBlankLedger: EventEmitter<boolean> = new EventEmitter();
-  @Output() public clickedOutsideEvent: EventEmitter<boolean> = new EventEmitter();
+  @Output() public clickedOutsideEvent: EventEmitter<any> = new EventEmitter();
   @ViewChild('entryContent') public entryContent: ElementRef;
+  @ViewChild('sh') public sh: ShSelectComponent;
+
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
@@ -66,11 +70,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private _ledgerService: LedgerService,
-              private _ledgerActions: LedgerActions,
-              private _companyActions: CompanyActions,
-              private cdRef: ChangeDetectorRef,
-              private _toasty: ToasterService) {
+    private _ledgerService: LedgerService,
+    private _ledgerActions: LedgerActions,
+    private _companyActions: CompanyActions,
+    private cdRef: ChangeDetectorRef,
+    private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -108,6 +112,13 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.uploadInput = new EventEmitter<UploadInput>();
   }
 
+  @HostListener('click', ['$event'])
+  public clicked(e) {
+    if (this.sh && !this.sh.ele.nativeElement.contains(e.path[3])) {
+      this.sh.hide();
+    }
+  }
+
   public ngOnChanges(changes: SimpleChanges): void {
     // if (changes['blankLedger'] && (changes['blankLedger'].currentValue ? changes['blankLedger'].currentValue.entryDate : '') !== (changes['blankLedger'].previousValue ? changes['blankLedger'].previousValue.entryDate : '')) {
     //   // this.amountChanged();
@@ -124,10 +135,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
       }
     });
+    this.cdRef.markForCheck();
   }
 
   public ngAfterViewChecked() {
-    this.cdRef.detectChanges();
+    // this.cdRef.markForCheck();
   }
 
   /**
@@ -141,14 +153,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public calculateTotal() {
-    if (this.currentTxn.selectedAccount) {
+    if (this.currentTxn && this.currentTxn.selectedAccount) {
       if (this.currentTxn.selectedAccount.stock && this.currentTxn.amount > 0) {
         if (this.currentTxn.inventory.unit.rate) {
           // this.currentTxn.inventory.quantity = Number((this.currentTxn.amount / this.currentTxn.inventory.unit.rate).toFixed(2));
         }
       }
     }
-    let total = this.currentTxn.amount - this.currentTxn.discount;
+    let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
     this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
   }
 
@@ -211,9 +223,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
    */
   public resetPanel() {
     this.resetBlankLedger.emit(true);
-    setTimeout(() => {
-      this.currentTxn = null;
-    }, 1000);
+    this.currentTxn = null;
   }
 
   public onUploadOutput(output: UploadOutput): void {
@@ -227,8 +237,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
         concurrency: 0
       };
       this.uploadInput.emit(event);
@@ -258,7 +268,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public unitChanged(stockUnitCode: string) {
-    this.currentTxn.inventory.unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
+    let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
+    this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
     if (this.currentTxn.inventory.unit) {
       this.changePrice(this.currentTxn.inventory.unit.rate.toString());
     }
@@ -334,7 +345,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       };
       this._ledgerService.MapBankTransactions(model, unqObj).subscribe((res) => {
         if (res.status === 'success') {
-          if (typeof(res.body) === 'string') {
+          if (typeof (res.body) === 'string') {
             this._toasty.successToast(res.body);
           } else {
             this._toasty.successToast('Entry Mapped Successfully!');
@@ -376,7 +387,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @HostListener('window:click', ['$event'])
   public clickedOutsideOfComponent(e) {
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
-      this.clickedOutsideEvent.emit(true);
+      this.clickedOutsideEvent.emit(e);
     }
   }
 }

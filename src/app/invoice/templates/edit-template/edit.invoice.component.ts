@@ -2,16 +2,12 @@
  * Created by kunalsaxena on 6/29/17.
  */
 
-import {
-  Input, EventEmitter, Output, OnInit, OnChanges,
-  SimpleChanges, Component, ViewChild
-} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
-import { InvoiceActions } from '../../../services/actions/invoice/invoice.actions';
-import { ISection, GetInvoiceTemplateDetailsResponse, CustomTemplateResponse } from '../../../models/api-models/Invoice';
+import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
+import { CustomTemplateResponse, GetInvoiceTemplateDetailsResponse, ISection } from '../../../models/api-models/Invoice';
 import * as _ from '../../../lodash-optimized';
 import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
@@ -45,11 +41,13 @@ export class EditInvoiceComponent implements OnInit {
   public selectedTemplateUniqueName: string;
   public templateMeta: any;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+
   constructor(private _toasty: ToasterService, private store: Store<AppState>, private invoiceActions: InvoiceActions, private _invoiceTemplatesService: InvoiceTemplatesService, private _invoiceUiDataService: InvoiceUiDataService) {
 
     this.store.dispatch(this.invoiceActions.getTemplateState());
     this.store.dispatch(this.invoiceActions.getAllCreatedTemplates());
   }
+
   public ngOnInit() {
 
     // Get custom created templates
@@ -65,7 +63,20 @@ export class EditInvoiceComponent implements OnInit {
    */
   public onOpenTemplateModal() {
     this.transactionMode = 'create';
-    this._invoiceUiDataService.reloadCustomTemplate();
+    let companyUniqueName = null;
+    let companies = null;
+    let defaultTemplate = null;
+
+    this.store.select(s => s.session).take(1).subscribe(ss => {
+      companyUniqueName = ss.companyUniqueName;
+      companies = ss.companies;
+    });
+
+    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+      defaultTemplate = ss.defaultTemplate;
+    });
+    this._invoiceUiDataService.initCustomTemplate(companyUniqueName, companies, defaultTemplate);
+
     this.templateModal.show();
   }
 
@@ -154,8 +165,16 @@ export class EditInvoiceComponent implements OnInit {
    * onPreview
    */
   public onPreview(template) {
-    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview');
-    let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
+    let customCreatedTemplates = null;
+    let defaultTemplate = null;
+
+    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+      customCreatedTemplates = ss.customCreatedTemplates;
+      defaultTemplate = ss.defaultTemplate;
+    });
+
+    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'preview', customCreatedTemplates, defaultTemplate);
+    // let data = _.cloneDeep(this._invoiceUiDataService.customTemplate.getValue());
     this.invoiceTemplatePreviewModal.show();
   }
 
@@ -163,8 +182,16 @@ export class EditInvoiceComponent implements OnInit {
    * onUpdateTemplate
    */
   public onUpdateTemplate(template) {
+    let customCreatedTemplates = null;
+    let defaultTemplate = null;
+
+    this.store.select(s => s.invoiceTemplate).take(1).subscribe(ss => {
+      customCreatedTemplates = ss.customCreatedTemplates;
+      defaultTemplate = ss.defaultTemplate;
+    });
+
     this.transactionMode = 'update';
-    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'update');
+    this._invoiceUiDataService.setTemplateUniqueName(template.uniqueName, 'update', customCreatedTemplates, defaultTemplate);
     this.templateModal.show();
   }
 
