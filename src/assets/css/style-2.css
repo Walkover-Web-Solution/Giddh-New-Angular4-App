@@ -3299,7 +3299,7 @@ label {
     width: 18px;
     height: 18px;
     background: #fff;
-    top: 0;
+    top: -2px;
     right: -2px;
     border: 2px solid #969696;
     border-radius: 50%;
@@ -3311,10 +3311,10 @@ label {
     width: 6px;
     height: 6px;
     background: #ff5f00;
-    left: 4px;
-    top: 6px;
+    left: 2px;
+    bottom: 3px;
     border-radius: 50%;
-    right: 0;
+    /* right: 0; */
     text-align: center;
 }
 
@@ -4162,4 +4162,22 @@ small {
 
 .permission_list .permission:last-child .form-group {
     margin-bottom: 0 !important;
+}
+
+.option_box {
+    background: #eee;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.dashboard-filter input[type=radio] {
+    top: -1px;
+}
+
+.dashboard-filter .radio_theme:before {
+    top: 0;
+}
+
+.dashboard-filter .radio_theme:after {
+    left: 4px;
 }
