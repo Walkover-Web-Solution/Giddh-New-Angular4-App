@@ -11,7 +11,7 @@ import { TbComponent } from './components/tb/tb.component';
 import { PlComponent } from './components/pl/pl.component';
 import { PlGridComponent } from './components/pl/pl-grid/pl-grid.component';
 import { PlGridRowComponent } from './components/pl/pl-grid/pl-grid-row.component';
-
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { BsComponent } from './components/bs/bs.component';
 import { BsGridComponent } from './components/bs/bs-grid/bs-grid.component';
 import { BsGridRowComponent } from './components/bs/bs-grid/bs-grid-row.component';
@@ -58,6 +58,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
+    Daterangepicker,
     TbPlBsRoutingModule,
     TabsModule,
     DatePickerCustomModule,
