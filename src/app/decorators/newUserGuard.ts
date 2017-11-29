@@ -1,5 +1,5 @@
-import { VerifyEmailResponseModel } from '../../models/api-models/loginModels';
-import { AppState } from '../../store/roots';
+import { VerifyEmailResponseModel } from '../models/api-models/loginModels';
+import { AppState } from '../store';
 import { CanActivate, Router } from '@angular/router';
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
