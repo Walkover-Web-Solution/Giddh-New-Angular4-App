@@ -61,8 +61,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-              private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
-              private _ledgerAction: LedgerActions) {
+    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+    private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
@@ -108,13 +108,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // stocks from ledger account
                 resp[0].map(acc => {
                   // normal entry
-                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                   accountDetails.stocks.map(as => {
                     // stock entry
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
                       label: acc.name + '(' + as.uniqueName + ')',
-                      additional: Object.assign({}, acc, {stock: as})
+                      additional: Object.assign({}, acc, { stock: as })
                     });
                   });
                 });
@@ -125,12 +125,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                       accountsArray.push({
                         value: `${acc.uniqueName}#${as.uniqueName}`,
                         label: `${acc.name} (${as.uniqueName})`,
-                        additional: Object.assign({}, acc, {stock: as})
+                        additional: Object.assign({}, acc, { stock: as })
                       });
                     });
-                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                   } else {
-                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
                   }
                 });
               }
@@ -142,9 +142,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
               this.vm.selectedLedger.transactions.map(t => {
                 if (t.inventory) {
-                  let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
+                  let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
                   if (findStocks) {
-                    let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
+                    let findUnitRates = findStocks.additional.stock;
                     if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
                       let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
                       tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
@@ -227,8 +227,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
         concurrency: 0
       };
       this.uploadInput.emit(event);
