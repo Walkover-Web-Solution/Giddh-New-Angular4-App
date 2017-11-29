@@ -119,8 +119,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    this.trxRequest.from = moment(value.start).format('DD-MM-YYYY');
-    this.trxRequest.to = moment(value.end).format('DD-MM-YYYY');
+    debugger;
+    this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.trxRequest.page = 0;
 
     this.getTransactionData();
@@ -376,12 +377,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public initTrxRequest(accountUnq: string) {
-    this.trxRequest = new TransactionsRequest();
+    this.trxRequest = this.trxRequest || new TransactionsRequest();
     this.trxRequest.page = 0;
     this.trxRequest.count = 15;
     this.trxRequest.accountUniqueName = accountUnq;
-    this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
-    this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
+    this.trxRequest.from = this.trxRequest.from || this.datePickerOptions.startDate.format('DD-MM-YYYY');
+    this.trxRequest.to = this.trxRequest.to || this.datePickerOptions.endDate.format('DD-MM-YYYY');
     this.getTransactionData();
   }
 
