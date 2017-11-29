@@ -390,6 +390,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let taxes: UpdateLedgerTaxData[] = cloneDeep(this.vm.selectedTaxes);
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
+    requestObj.generateInvoice = this.vm.selectedLedger.generateInvoice;
     requestObj.transactions.map(trx => {
       if (trx.inventory && trx.inventory.stock) {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
