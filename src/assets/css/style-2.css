@@ -182,9 +182,10 @@ header .navbar {
     color: #fff;
 }
 
-.fyear {
+
+/* .fyear {
     font-size: 14px;
-}
+} */
 
 .t-h-bg1 th {
     background: #fff;
@@ -587,6 +588,7 @@ header {
 #cmpWrp .cText {
     margin: 5px 0 5px 0px;
     width: 100%;
+    font-size: 9px;
 }
 
 #companyList {
@@ -3667,9 +3669,10 @@ input[type='checkbox'][disabled] {
 }
 
 .basic>thead>tr>th {
-    background: #525252;
-    color: #fff;
+    background: #e5e5e5;
+    color: #262626;
     border: 0;
+    font-family: 'LatoWebbold';
     text-transform: capitalize;
 }
 
