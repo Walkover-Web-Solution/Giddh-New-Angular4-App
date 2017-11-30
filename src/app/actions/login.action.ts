@@ -183,7 +183,7 @@ export class LoginActions {
       if (companies.body && companies.body.length === 0) {
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.newUserLoggedIn));
         this._router.navigate(['/pages/new-user']);
-        return;
+        return {type: 'EmptyAction'};
       } else {
         if (stateDetail.body && stateDetail.status === 'success') {
           this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
