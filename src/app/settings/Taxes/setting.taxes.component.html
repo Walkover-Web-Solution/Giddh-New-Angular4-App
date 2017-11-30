@@ -1,6 +1,7 @@
 <div class="box clearfix mrT2">
     <h1 class="section_head pdT0">Create New Tax</h1>
-    <form (ngSubmit)="onSubmit(newTaxObj)">
+
+    <form (ngSubmit)="onSubmit(newTaxObj)" class="col-xs-10 row">
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Select Tax</label><br>
@@ -61,7 +62,7 @@
 
             </div>
             <div class="form-group col-xs-3">
-                <label>Tax File Date</label>
+                <label>Tax Filing Date</label>
                 <ng-select placeholder="Select Date" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" style="width: 100%;">
                     <ng-template #optionTemplate let-option="option">
                         <div class="fs12">{{option?.label}}</div>
@@ -86,7 +87,7 @@
                 <table class="table table-bordered basic mrB">
                     <thead>
                         <tr>
-                            <th>Sr. No.</th>
+                            <th>S. No.</th>
                             <th>Tax#</th>
                             <th>Name</th>
                             <th>Linked Account</th>
