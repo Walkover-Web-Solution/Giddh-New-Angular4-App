@@ -119,7 +119,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    debugger;
     this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.trxRequest.page = 0;
@@ -275,6 +274,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         // init transaction request and call for transaction data
+        this.trxRequest = new TransactionsRequest();
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
