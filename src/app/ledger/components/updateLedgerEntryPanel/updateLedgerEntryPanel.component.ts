@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
-import { LedgerResponse } from '../../../models/api-models/Ledger';
+import { LedgerResponse, DownloadLedgerRequest } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
@@ -22,6 +22,8 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -388,6 +390,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let taxes: UpdateLedgerTaxData[] = cloneDeep(this.vm.selectedTaxes);
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
+    requestObj.generateInvoice = this.vm.selectedLedger.generateInvoice;
     requestObj.transactions.map(trx => {
       if (trx.inventory && trx.inventory.stock) {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
@@ -401,5 +404,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.vm.resetVM();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+  public downloadInvoice(invoiceName: string, e: Event) {
+    e.stopPropagation();
+    let activeAccount = null;
+    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    let downloadRequest = new DownloadLedgerRequest();
+    downloadRequest.invoiceNumber = [invoiceName];
+
+    this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
+      let blob = base64ToBlob(d.body, 'application/pdf', 512);
+      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+    });
   }
 }
