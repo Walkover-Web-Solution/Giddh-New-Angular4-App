@@ -1,7 +1,7 @@
 import { LoginActions } from '../actions/login.action';
 import { AppState } from '../store';
 import { Router } from '@angular/router';
-import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ModalDirective } from 'ngx-bootstrap';
 import { Configuration } from '../app.constant';
@@ -11,7 +11,6 @@ import { LinkedInRequestModel, SignupWithMobile, VerifyEmailModel, VerifyEmailRe
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { AuthService, GoogleLoginProvider, LinkedinLoginProvider, SocialUser } from 'ng4-social-login';
 import { Headers, RequestOptionsArgs } from '@angular/http';
-import { ToasterService } from '../services/toaster.service';
 import { AdditionalGoogleLoginParams, AdditionalLinkedinLoginParams, GoogleLoginElectronConfig, LinkedinLoginElectronConfig } from '../../mainprocess/main-auth.config';
 import { contriesWithCodes } from '../shared/helpers/countryWithCodes';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
@@ -54,9 +53,7 @@ export class LoginComponent implements OnInit, OnDestroy {
               private store: Store<AppState>,
               private router: Router,
               private loginAction: LoginActions,
-              private authService: AuthService,
-              private _toaster: ToasterService,
-              private zone: NgZone) {
+              private authService: AuthService) {
     this.isLoginWithEmailInProcess$ = store.select(state => {
       return state.login.isLoginWithEmailInProcess;
     }).takeUntil(this.destroyed$);
