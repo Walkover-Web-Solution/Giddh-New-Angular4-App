@@ -44,7 +44,7 @@ export class AccountsSideBarComponent implements OnInit, OnDestroy, OnChanges {
           let accs = _.map(g.accountDetails, (a: IFlattenGroupsAccountsDetailItem): IFlattenGroupsAccountItem => {
             return {
               Name: a.name,
-              UniqueName: g.uniqueName,
+              UniqueName: a.uniqueName,
               isGroup: false,
               isOpen: false,
               groupUniqueName: g.groupUniqueName
