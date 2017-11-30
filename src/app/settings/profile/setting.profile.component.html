@@ -5,7 +5,7 @@
     <form (ngSubmit)="updateProfile(companyProfileObj)">
         <div class="row">
             <div class="form-group col-xs-3">
-                <label>Company name</label><br>
+                <label>Company Name</label><br>
                 <input type="text" placeholder="Company name" class="form-control" [(ngModel)]="companyProfileObj.name" name="name" />
             </div>
             <div class="form-group col-xs-3">
@@ -106,18 +106,27 @@
         </div>
         <div class="row mrB4" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
             <div class="col-xs-12">
-                <hr><br>
-                <h3 class="subHead"> Add More GST Number (Note: Check to set to default)</h3>
+                <hr><br />
+                <h3 class="mrB"> Add More GST Number (Note: Check to set to default)</h3>
                 <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
                 <div [@fadeInAndSlide]="''" *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
                     <div class="row">
                         <div class="col-xs-3">
                             <div class="row">
                                 <div class="col-xs-12">
+
                                     <div class="form-group">
-                                        <label>GST No.</label><br>
-                                        <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)" #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
-                                        />
+                                        <label for="" class="d-block">GSTIN</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <input type="checkbox" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}" tooltip="DEFAULT GST" placement="bottom" />
+                                            </div>
+                                            <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)" #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
+                                            />
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;"></i>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-xs-12">
@@ -142,7 +151,7 @@
                                 <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.addressList[0].address" name="newaddress+{{i}}"></textarea>
                             </div>
                         </div>
-                        <div class="col-xs-3 pdT2">
+                        <!-- <div class="col-xs-3 pdT2">
                             <div class="row">
                                 <div class="col-xs-12 mrB1">
                                     <div class="row">
@@ -159,7 +168,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="col-xs-12 text-center" *ngIf="gstDetailsBackup">
@@ -171,7 +180,7 @@
             </div>
         </div>
         <div class="clearfix mrT2">
-            <button type="submit" class="btn btn-success mrR1" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">Update</button>
+            <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">Update</button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
         </div>
     </form>
