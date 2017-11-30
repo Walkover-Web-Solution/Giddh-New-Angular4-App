@@ -309,9 +309,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           user: data1.body
         });
       }
-      return {
-        ...state, user: null
-      };
+      return state;
     }
     case LoginActions.LogOut:
     case LoginActions.SOCIAL_LOGOUT_ATTEMPT:

@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { IFlattenGroupsAccountsDetail } from '../../../models/interfaces/flattenGroupsAccountsDetail.interface';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -26,7 +26,8 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 @Component({
   selector: 'new-ledger-entry-panel',
   templateUrl: 'newLedgerEntryPanel.component.html',
-  styleUrls: ['./newLedgerEntryPanel.component.css']
+  styleUrls: ['./newLedgerEntryPanel.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewChecked, AfterViewInit {
@@ -69,11 +70,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-              private _ledgerService: LedgerService,
-              private _ledgerActions: LedgerActions,
-              private _companyActions: CompanyActions,
-              private cdRef: ChangeDetectorRef,
-              private _toasty: ToasterService) {
+    private _ledgerService: LedgerService,
+    private _ledgerActions: LedgerActions,
+    private _companyActions: CompanyActions,
+    private cdRef: ChangeDetectorRef,
+    private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -134,10 +135,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.calculateTotal();
       }
     });
+    this.cdRef.markForCheck();
   }
 
   public ngAfterViewChecked() {
-    this.cdRef.detectChanges();
+    // this.cdRef.markForCheck();
   }
 
   /**
@@ -235,8 +237,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
         concurrency: 0
       };
       this.uploadInput.emit(event);
@@ -266,7 +268,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   }
 
   public unitChanged(stockUnitCode: string) {
-    this.currentTxn.inventory.unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
+    let unit = this.currentTxn.selectedAccount.stock.accountStockDetails.unitRates.find(p => p.stockUnitCode === stockUnitCode);
+    this.currentTxn.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
     if (this.currentTxn.inventory.unit) {
       this.changePrice(this.currentTxn.inventory.unit.rate.toString());
     }
@@ -342,7 +345,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       };
       this._ledgerService.MapBankTransactions(model, unqObj).subscribe((res) => {
         if (res.status === 'success') {
-          if (typeof(res.body) === 'string') {
+          if (typeof (res.body) === 'string') {
             this._toasty.successToast(res.body);
           } else {
             this._toasty.successToast('Entry Mapped Successfully!');
