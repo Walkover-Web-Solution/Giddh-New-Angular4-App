@@ -20,15 +20,15 @@
           {{selectedTimeSpan}}
           <span class="pull-right"><span class="fa fa-caret-down"></span></span>
         </button>
-            <section class="dropdown-menu custom_dropdown mrB1">
+            <section class="dropdown-menu custom_dropdown mrB1" [ngClass]="{'open': showTimeSpan}">
 
-                <div class="clearfix lh34 mrB">
-                    <label class="radio-inline">
-              <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange"> Date Range
-            </label>
-                    <label class="radio-inline">
-              <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod"> Past Period
-            </label>
+                <div class="clearfix pd1 option_box">
+                    <label class="radio-inline pd0">
+                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="daterange" class="radio_theme"> Date Range
+                    </label>
+                    <label class="radio-inline pd0">
+                        <input type="radio" name="periodOptions" formControlName="periodOptions" value="pastperiod" class="radio_theme"> Past Period
+                    </label>
                 </div>
 
                 <section class="periods container-fluid mrB1" *ngIf="permissionForm.get('periodOptions').value === 'daterange'">
@@ -50,12 +50,8 @@
                         <div class="col-xs-6">
                             <input class="form-control " name="duration" digitsOnlyDirective formControlName="duration" type="number" placeholder="Number" />
                         </div>
-                        <div class="col-xs-6 lh34">
-                            in Days
-                            <!-- <select name="period" formControlName="period" class="form-control pull-right ">
-                  <option value="null">Select</option>
-                  <option value="DAY"></option>
-                </select> -->
+                        <div class="col-xs-6 pdL0 lh34">
+                            Days
                         </div>
                     </div>
                 </section>
@@ -72,22 +68,22 @@
           {{selectedIPRange}}
           <span class="pull-right"><span class="fa fa-caret-down"></span></span>
         </button>
-            <section class="dropdown-menu custom_dropdown" role="menu">
-                <div class="clearfix lh34 mrB">
-                    <label class="radio-inline">
-              <input type="radio" name="ipOptions" formControlName="ipOptions" value="cidr_range"> CIDR Range
+            <section class="dropdown-menu custom_dropdown" role="menu" [ngClass]="{'open': showIPWrap}">
+                <div class="clearfix option_box pd1">
+                    <label class="radio-inline pd0">
+              <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions" value="cidr_range"> CIDR Range
             </label>
-                    <label class="radio-inline">
-              <input type="radio" name="ipOptions" formControlName="ipOptions" value="ip_address"> IP Address
+                    <label class="radio-inline pd0">
+              <input type="radio" class="radio_theme" name="ipOptions" formControlName="ipOptions" value="ip_address"> IP Address
             </label>
                 </div>
 
                 <section formArrayName="allowedCidrs" class="iprange container-fluid" *ngIf="permissionForm.get('ipOptions').value === 'cidr_range'">
                     <div class="row mrB1" *ngFor="let item of permissionForm.get('allowedCidrs')['controls']; let i = index; let l = last" [formGroupName]="i">
-                        <div class="col-xs-10">
+                        <div class="col-xs-11">
                             <input class="form-control " name="item_{{i}}" formControlName="range" type="text" placeholder="192.168.1.0/24" />
                         </div>
-                        <div class="col-xs-2 lh34">
+                        <div class="pull-left lh34">
                             <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
                             <i *ngIf="l" (click)="addNewRow('allowedCidrs', item, $event)" class="fa fa-plus cursor-pointer"></i>
                         </div>
@@ -96,10 +92,10 @@
 
                 <section formArrayName="allowedIps" class="iprange container-fluid" *ngIf="permissionForm.get('ipOptions').value === 'ip_address'">
                     <div class="row mrB1" *ngFor="let item of permissionForm.get('allowedIps')['controls']; let i = index; let l = last" [formGroupName]="i">
-                        <div class="col-xs-10">
+                        <div class="col-xs-11">
                             <input class="form-control " decimalDigitsDirective name="item_{{i}}" formControlName="range" type="text" placeholder="192.168.1.0" />
                         </div>
-                        <div class="col-xs-2 lh34">
+                        <div class="pull-left lh34">
                             <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)" class="fa fa-trash-o cursor-pointer"></i>
                             <i *ngIf="l" (click)="addNewRow('allowedIps', item, $event)" class="fa fa-plus cursor-pointer"></i>
                         </div>
