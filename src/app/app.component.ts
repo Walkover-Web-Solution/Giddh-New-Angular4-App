@@ -33,7 +33,9 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.store.select(s => s.session).subscribe(ss => {
       if (ss.user) {
         this._generalService.user = ss.user.user;
-        this._generalService.sessionId = ss.user.session.id;
+        if (ss.user.statusCode !== 'AUTHENTICATE_TWO_WAY') {
+          this._generalService.sessionId = ss.user.session.id;
+        }
       } else {
         this._generalService.user = null;
         this._generalService.sessionId = null;
