@@ -92,7 +92,8 @@ export class LedgerVM {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: ''
+      chequeClearanceDate: '',
+      invoiceNumberAgainstVoucher: ''
     };
   }
 
@@ -174,7 +175,7 @@ export class LedgerVM {
         item.description = bankTxn.remarks.description;
         if (bankTxn.type === 'DEBIT') {
           item.voucherType = 'rcpt';
-        }else {
+        } else {
           item.voucherType = 'pay';
         }
         if (bankTxn.remarks.chequeNumber) {
@@ -240,6 +241,7 @@ export class BlankLedgerVM {
   public chequeClearanceDate: string;
   public isBankTransaction?: boolean;
   public transactionId?: string;
+  public invoiceNumberAgainstVoucher: string;
 }
 
 export class TransactionVM {
