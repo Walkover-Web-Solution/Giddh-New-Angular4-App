@@ -16,3 +16,5 @@ cache:
     - HOME/.yarn
 tests:
   - npm run build
+  - rm -rf dist
+  - npm run build:aot:dev
