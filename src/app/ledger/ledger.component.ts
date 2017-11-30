@@ -119,8 +119,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    this.trxRequest.from = moment(value.start).format('DD-MM-YYYY');
-    this.trxRequest.to = moment(value.end).format('DD-MM-YYYY');
+    this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
+    this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.trxRequest.page = 0;
 
     this.getTransactionData();
@@ -230,6 +230,41 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (params['accountUniqueName']) {
         this.lc.accountUnq = params['accountUniqueName'];
         this.resetBlankTransaction();
+        this.datePickerOptions = {
+          locale: {
+            applyClass: 'btn-green',
+            applyLabel: 'Go',
+            fromLabel: 'From',
+            format: 'D-MMM-YY',
+            toLabel: 'To',
+            cancelLabel: 'Cancel',
+            customRangeLabel: 'Custom range'
+          },
+          ranges: {
+            'Last 1 Day': [
+              moment().subtract(1, 'days'),
+              moment()
+            ],
+            'Last 7 Days': [
+              moment().subtract(6, 'days'),
+              moment()
+            ],
+            'Last 30 Days': [
+              moment().subtract(29, 'days'),
+              moment()
+            ],
+            'Last 6 Months': [
+              moment().subtract(6, 'months'),
+              moment()
+            ],
+            'Last 1 Year': [
+              moment().subtract(12, 'months'),
+              moment()
+            ]
+          },
+          startDate: moment().subtract(30, 'days'),
+          endDate: moment()
+        };
         // set state details
         let companyUniqueName = null;
         this.store.select(c => c.session.companyUniqueName).take(1).subscribe(s => companyUniqueName = s);
@@ -237,9 +272,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         stateDetailsRequest.companyUniqueName = companyUniqueName;
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
-
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         // init transaction request and call for transaction data
+        this.trxRequest = new TransactionsRequest();
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
@@ -251,6 +286,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.isLedgerCreateSuccess$.subscribe(s => {
       if (s) {
         this._toaster.successToast('Entry created successfully', 'Success');
+        this.lc.showNewLedgerPanel = false;
+        this.lc.showTaxationDiscountBox = false;
         this.initTrxRequest(this.lc.accountUnq);
         this.resetBlankTransaction();
 
@@ -258,7 +295,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.lc.activeAccount$.subscribe((data: AccountResponse) => {
           if (data && data.yodleeAdded) {
             this.getBankTransactions();
-          }else {
+          } else {
             this.hideEledgerWrap();
           }
         });
@@ -314,7 +351,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
-        this.lc.getUnderstandingText(acc.accountType, acc.uniqueName);
+        this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
 
@@ -333,19 +370,19 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.activeAccount$.subscribe((data: AccountResponse) => {
       if (data && data.yodleeAdded) {
         this.getBankTransactions();
-      }else {
+      } else {
         this.hideEledgerWrap();
       }
     });
   }
 
   public initTrxRequest(accountUnq: string) {
-    this.trxRequest = new TransactionsRequest();
+    this.trxRequest = this.trxRequest || new TransactionsRequest();
     this.trxRequest.page = 0;
     this.trxRequest.count = 15;
     this.trxRequest.accountUniqueName = accountUnq;
-    this.trxRequest.from = this.datePickerOptions.startDate.format('DD-MM-YYYY');
-    this.trxRequest.to = this.datePickerOptions.endDate.format('DD-MM-YYYY');
+    this.trxRequest.from = this.trxRequest.from || this.datePickerOptions.startDate.format('DD-MM-YYYY');
+    this.trxRequest.to = this.trxRequest.to || this.datePickerOptions.endDate.format('DD-MM-YYYY');
     this.getTransactionData();
   }
 

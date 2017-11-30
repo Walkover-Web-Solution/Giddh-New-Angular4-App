@@ -214,7 +214,6 @@ export class LedgerService {
       .replace(':fromDate', from).replace(':toDate', to).replace(':sortingOrder', sortingOrder).replace(':page', page).replace(':count', encodeURIComponent(count)), model)
       .map((res) => {
         let data: BaseResponse<ILedgerAdvanceSearchResponse, ILedgerAdvanceSearchRequest> = res.json();
-        console.log('the response is :', data);
         data.request = model;
         data.queryString = {accountUniqueName, from, to, count};
         return data;

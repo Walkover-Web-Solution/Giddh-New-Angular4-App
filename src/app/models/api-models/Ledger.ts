@@ -56,6 +56,7 @@ export class LedgerResponse {
   public chequeNumber?: string;
   public description?: string;
   public entryDate: string;
+  public generateInvoice: boolean;
   public invoiceGenerated: boolean;
   public invoiceNumber: string;
   public tag?: string;
