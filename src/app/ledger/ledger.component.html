@@ -504,13 +504,13 @@
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important">
                 <span *ngIf="(lc.transactionData$ | async)?.closingBalance.type === 'CREDIT'" [tooltip]="'(-) Asset ( ohh no!)'" [placement]="'top'"
                   class="">
-                  C/F: {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
+                  C/F: Cr {{ (lc.transactionData$ | async)?.closingBalance.amount | number: '1.1-2' }}
                 </span>
               </td>
             </tr>
             <tr class="total_col">
               <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.creditTotal | number: '1.1-2' }}</span>
+                <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.debitTotal | number: '1.1-2' }}</span>
               </td>
             </tr>
           </tbody>
