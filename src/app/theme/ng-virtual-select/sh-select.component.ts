@@ -103,7 +103,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @HostListener('window:mouseup', ['$event'])
   public onDocumentClick(event) {
     if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
-      this.hide(event);
+      this.isOpen = false;
+      if (this.selectedValues && this.selectedValues.length === 1) {
+        this.filter = this.selectedValues[0].label;
+      } else {
+        this.clearFilter();
+      }
+      this.onHide.emit();
     }
   }
 
