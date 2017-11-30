@@ -1,0 +1,18 @@
+nodejs:
+  version: '8.5.0'
+hooks:
+  pre_setup: |
+    yarn install
+    yarn --version
+    yarn
+  post_setup: |
+    npm run build
+    rm -rf dist
+    npm run build:aot:dev
+  post_build: "echo 'deploy to master'"
+cache:
+  key_paths:
+    - package.json
+  save_paths:
+    - REPO/node_modules
+    - HOME/.yarn
