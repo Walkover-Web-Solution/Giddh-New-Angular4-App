@@ -37,7 +37,8 @@ export class ErrorHandler {
         if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
           this.store.dispatch({type: 'LoginOut'});
         } else if (data.code === '') {
-          this.store.dispatch({type: 'CompanyRefresh'});
+          // handle unshared company response
+          // this.store.dispatch({type: 'CompanyRefresh'});
         }
       }
       data.request = request;
