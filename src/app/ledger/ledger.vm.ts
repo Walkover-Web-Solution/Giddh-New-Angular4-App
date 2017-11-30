@@ -223,7 +223,9 @@ export class LedgerVM {
 
   /** ledger custom filter **/
   public ledgerCustomFilter(term: string, item: IOption): boolean {
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
+    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1)
+      || mergedAccounts.indexOf(term) > -1;
   }
 }
 
