@@ -54,7 +54,7 @@ export class AdvanceSearchModelComponent implements OnInit {
 
     this.advanceSearchForm = this.fb.group({
       uniqueNames: [[]],
-      isInvoiceGenerated: [false],
+      isInvoiceGenerated: [null],
       amountLessThan: [false],
       includeAmount: [false],
       amountEqualTo: [false],
@@ -121,22 +121,22 @@ export class AdvanceSearchModelComponent implements OnInit {
   public setVoucherTypes() {
     this.voucherTypeList = Observable.of([{
       label: 'Sales',
-      value: 'sal'
+      value: 'sales'
     }, {
       label: 'Purchases',
-      value: 'pur'
+      value: 'purchase'
     }, {
       label: 'Receipt',
-      value: 'rcpt'
+      value: 'receipt'
     }, {
       label: 'Payment',
-      value: 'pay'
+      value: 'payment'
     }, {
       label: 'Journal',
-      value: 'jr'
+      value: 'journal'
     }, {
       label: 'Contra',
-      value: 'cntr'
+      value: 'contra'
     }, {
       label: 'Debit Note',
       value: 'debit note'
