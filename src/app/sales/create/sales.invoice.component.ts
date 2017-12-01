@@ -33,7 +33,7 @@ const STOCK_OPT_FIELDS = ['Qty.', 'Unit', 'Rate'];
 const THEAD_ARR_1 = [
   {
     display: true,
-    label: 'Sno'
+    label: 'S.No'
   },
   {
     display: true,
@@ -73,7 +73,7 @@ const THEAD_ARR_READONLY = [
   },
   {
     display: true,
-    label: 'Taxable.'
+    label: 'Taxable'
   },
   {
     display: false,

@@ -36,6 +36,9 @@ export class ErrorHandler {
         data = r.json();
         if (data.code === 'SESSION_EXPIRED_OR_INVALID') {
           this.store.dispatch({type: 'LoginOut'});
+        } else if (data.code === '') {
+          // handle unshared company response
+          // this.store.dispatch({type: 'CompanyRefresh'});
         }
       }
       data.request = request;
