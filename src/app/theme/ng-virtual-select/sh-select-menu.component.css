@@ -41,3 +41,11 @@
 .item>a {
     padding: 6px;
 }
+
+.no-result-link>a {
+    color: #10aae0 !important;
+}
+
+#noresult:hover {
+    background: transparent;
+}
