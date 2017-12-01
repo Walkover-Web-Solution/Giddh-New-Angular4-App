@@ -4713,14 +4713,12 @@ table.table-bordered.head thead th{
   }
   
   #entryModal .modal-body {
-      padding: 0 20px 100px;
+      padding: 15px 20px 100px;
       overflow: hidden;
   }
   
-  .entrypanel label {
-      font-weight: 400;
+  .advanced label {
       font-size: 14px;
-      color: #ccc;
   }
   
   .cstuWrp {
