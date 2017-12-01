@@ -501,7 +501,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: ''
+      chequeClearanceDate: '',
+      invoiceNumberAgainstVoucher: ''
     };
     this.hideNewLedgerEntryPopup();
   }
