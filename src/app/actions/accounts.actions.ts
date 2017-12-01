@@ -1,8 +1,7 @@
 import { ShareRequestForm } from '../models/api-models/Permission';
-import { GroupSharedWithResponse } from '../models/api-models/Group';
-import { ShareEntityRequest } from '../models/api-models/Account';
+import { GroupResponse } from '../models/api-models/Group';
+import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest, ShareEntityRequest } from '../models/api-models/Account';
 import { ApplyTaxRequest } from '../models/api-models/ApplyTax';
-import { AccountMergeRequest, AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse, AccountUnMergeRequest, ShareAccountRequest } from '../models/api-models/Account';
 import { AccountService } from '../services/account.service';
 import { AppState } from '../store/roots';
 import { ToasterService } from '../services/toaster.service';
@@ -13,7 +12,6 @@ import { Actions, Effect } from '@ngrx/effects';
 import { Injectable } from '@angular/core';
 
 import { GroupWithAccountsAction } from './groupwithaccounts.actions';
-import { GroupResponse } from '../models/api-models/Group';
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/customActions';
 
@@ -240,6 +238,7 @@ export class AccountsAction {
       if (action.payload.status === 'error') {
         this._toasty.clearAllToaster();
         this._toasty.errorToast(action.payload.message, action.payload.code);
+        return { type: 'EmptyAction' };
       } else {
         this._toasty.successToast('Account Updated Successfully');
         let groupSearchString: string;
@@ -252,7 +251,7 @@ export class AccountsAction {
           this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
         }
         this.store.dispatch(this.groupWithAccountsAction.showEditAccountForm());
-        this.store.dispatch(this.getAccountDetails(resData.queryString.accountUniqueName));
+        this.store.dispatch(this.getAccountDetails(resData.request.uniqueName));
       }
       return { type: 'EmptyAction' };
     });
