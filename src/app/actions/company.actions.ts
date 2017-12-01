@@ -1,20 +1,15 @@
 import { Observable } from 'rxjs/Observable';
 import { CompanyService } from '../services/companyService.service';
 import { Actions, Effect } from '@ngrx/effects';
-import {
-  CompanyResponse,
-  CompanyRequest,
-  StateDetailsRequest,
-  StateDetailsResponse,
-  TaxResponse
-} from '../models/api-models/Company';
+import { CompanyRequest, CompanyResponse, StateDetailsRequest, StateDetailsResponse, TaxResponse } from '../models/api-models/Company';
 import { Injectable } from '@angular/core';
-import { Response } from '@angular/http';
 import { Action, Store } from '@ngrx/store';
 import { ToasterService } from '../services/toaster.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { AppState } from '../store/roots';
 import { CustomActions } from '../store/customActions';
+
+// import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
 @Injectable()
 
@@ -55,7 +50,7 @@ export class CompanyActions {
       let response = action.payload as BaseResponse<CompanyResponse, CompanyRequest>;
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       this._toasty.successToast('Company created successfully', 'Success');
       // set newly created company as active company
@@ -73,19 +68,51 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       return this.RefreshCompaniesResponse(response);
     });
 
   @Effect()
-  public RefreshCompaniesResponse$: Observable<Action> = this.action$
+  public RefreshCompaniesResponse$: Observable<CustomActions> = this.action$
     .ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE)
     .map((action: CustomActions) => {
-      if (action.payload.status === 'error') {
-        this._toasty.errorToast(action.payload.message, action.payload.code);
+      let response: BaseResponse<CompanyResponse[], string> = action.payload;
+      if (response.status === 'error') {
+        this._toasty.errorToast(response.message, response.code);
+        return {type: 'EmptyAction'};
       }
-      return { type: 'EmptyAction' };
+      // check if user have companies
+      if (response.body.length) {
+        let activeCompanyName = null;
+        this.store.select(s => s.session.companyUniqueName).take(1).subscribe(a => activeCompanyName = a);
+
+        if (activeCompanyName) {
+          let companyIndex = response.body.findIndex(cmp => cmp.uniqueName === activeCompanyName);
+          if (companyIndex > -1) {
+            // if active company find no action needed
+            return {type: 'EmptyAction'};
+          } else {
+            // if no active company active next company from companies list
+            return {
+              type: 'CHANGE_COMPANY',
+              payload: response.body[0].uniqueName
+            };
+          }
+        } else {
+          // if no active company active next company from companies list
+          return {
+            type: 'CHANGE_COMPANY',
+            payload: response.body[0].uniqueName
+          };
+        }
+      } else {
+        //  if no companies available open create new company popup
+        return {
+          type: 'SetLoginStatus',
+          payload: 2
+        } as CustomActions;
+      }
     });
 
   @Effect()
@@ -95,7 +122,7 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       return this.GetStateDetailsResponse(response);
     });
@@ -107,7 +134,7 @@ export class CompanyActions {
     .map(response => {
       if (response.status === 'error') {
         this._toasty.errorToast(response.message, response.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       }
       return this.SetStateDetailsResponse(response);
     });
@@ -126,12 +153,12 @@ export class CompanyActions {
     .map((action: CustomActions) => {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
-        return { type: 'EmptyAction' };
+        return {type: 'EmptyAction'};
       } else {
         this._toasty.successToast(action.payload.body, 'success');
       }
       this.store.dispatch(this.RefreshCompanies());
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
@@ -149,7 +176,7 @@ export class CompanyActions {
       if (action.payload.status === 'error') {
         this._toasty.errorToast(action.payload.message, action.payload.code);
       }
-      return { type: 'EmptyAction' };
+      return {type: 'EmptyAction'};
     });
 
   constructor(private action$: Actions, private _companyService: CompanyService, private _toasty: ToasterService, private store: Store<AppState>) {
@@ -253,7 +280,7 @@ export class CompanyActions {
   }
 
   public ResetCompanyPopup(): CustomActions {
-    return { type: CompanyActions.RESET_CREATE_COMPANY_FLAG };
+    return {type: CompanyActions.RESET_CREATE_COMPANY_FLAG};
   }
 
 }
