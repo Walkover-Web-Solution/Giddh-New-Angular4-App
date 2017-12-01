@@ -93,7 +93,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef ) {
   }
 
   /**
