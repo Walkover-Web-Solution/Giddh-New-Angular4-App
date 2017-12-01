@@ -163,8 +163,8 @@ export interface Company {
 
 export interface InvoiceDetails {
   invoiceNumber: string;
-  invoiceDate: string;
-  dueDate: string;
+  invoiceDate: any;
+  dueDate: any;
 }
 
 export interface Logo {

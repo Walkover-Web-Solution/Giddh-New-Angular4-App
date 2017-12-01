@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from '../../lodash-optimized';
+import * as moment from 'moment/moment';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import { InvoiceActions } from '../../actions/invoice/invoice.actions';
@@ -9,6 +10,7 @@ import { InvoiceService } from '../../services/invoice.service';
 import { Observable } from 'rxjs/Observable';
 import { ToasterService } from '../../services/toaster.service';
 import { OtherSalesItemClass } from '../../models/api-models/Sales';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 
 const THEAD = [
   {
@@ -93,6 +95,8 @@ export class InvoiceCreateComponent implements OnInit {
   public invoiceDataFound: boolean = false;
   public isInvoiceGenerated$: Observable<boolean>;
   public updateMode: boolean;
+  public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+  public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
   // public methods above
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -112,6 +116,22 @@ export class InvoiceCreateComponent implements OnInit {
       .subscribe((o: PreviewInvoiceResponseClass) => {
         if (o) {
           this.invFormData = _.cloneDeep(o);
+          if (o.invoiceDetails.invoiceDate) {
+            let d = o.invoiceDetails.invoiceDate.split('-');
+            if (d.length === 3) {
+              this.invFormData.invoiceDetails.invoiceDate = new Date(d[2], d[1] - 1, d[0]);
+            } else {
+              this.invFormData.invoiceDetails.invoiceDate = '';
+            }
+          }
+          if (o.invoiceDetails.dueDate) {
+            let d = o.invoiceDetails.dueDate.split('-');
+            if (d.length === 3) {
+              this.invFormData.invoiceDetails.dueDate = new Date(d[2], d[1] - 1, d[0]);
+            } else {
+              this.invFormData.invoiceDetails.dueDate = '';
+            }
+          }
           // if address found prepare local var due to array and string issue
           this.prepareAddressForUI('billingDetails');
           this.prepareAddressForUI('shippingDetails');
@@ -214,6 +234,18 @@ export class InvoiceCreateComponent implements OnInit {
     this.onSubmitInvoiceForm();
   }
 
+  public convertDateForAPI(val: any): string {
+    if (val) {
+      try {
+        return moment(val).format(GIDDH_DATE_FORMAT);
+      } catch (error) {
+        return '';
+      }
+    }else {
+      return '';
+    }
+  }
+
   public onSubmitInvoiceForm() {
     let model: GenerateInvoiceRequestClass = new GenerateInvoiceRequestClass();
     let data: PreviewInvoiceResponseClass = _.cloneDeep(this.invFormData);
@@ -222,6 +254,11 @@ export class InvoiceCreateComponent implements OnInit {
     if (data.other.message2 && data.other.message2.length > 0) {
       data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
     }
+
+    // convert date object
+    data.invoiceDetails.invoiceDate = this.convertDateForAPI(data.invoiceDetails.invoiceDate);
+    data.invoiceDetails.dueDate = this.convertDateForAPI(data.invoiceDetails.dueDate);
+    data.other.shippingDate = this.convertDateForAPI(data.other.shippingDate);
 
     let accountUniqueName = this.invFormData.account.uniqueName;
     if (accountUniqueName) {
