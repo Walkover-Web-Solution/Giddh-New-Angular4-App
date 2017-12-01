@@ -12,9 +12,9 @@
                     <div class="col-xs-2 user">
                         <!-- hide due to unavailibility of API 
                         <span class="pull-left"><input type="checkbox" /></span> -->
-                        <div class="">
+                        <div class="ellp">
                             <div class="ellp"><i class="fa fa-user pdR1"></i>{{usrGrp.name}}</div>
-                            <small class="mrL2 ellp">{{usrGrp.rows[0].userUniqueName}}</small>
+                            <small class="mrL2">{{usrGrp.rows[0].userUniqueName}}</small>
                         </div>
                     </div>
                     <div class="col-xs-10">
@@ -41,8 +41,8 @@
                                     </div>
 
                                     <div class="icon-btn pull-left col-xs-2 mrT">
-                                        <button class="btn btn-xs" type="button"><i aria-hidden="true" class="fa fa-pencil" (click)="showModalForEdit(user)"></i></button>
-                                        <button class="btn btn-xs" type="button"><i aria-hidden="true" class="fa fa-trash-o" (click)="onRevokePermission(user.uniqueName)"></i></button>
+                                        <button class="btn btn-xs" type="button" (click)="showModalForEdit(user)"><i aria-hidden="true" class="fa fa-pencil"></i></button>
+                                        <button class="btn btn-xs" type="button" (click)="onRevokePermission(user.uniqueName)"><i aria-hidden="true" class="fa fa-trash-o"></i></button>
                                     </div>
                                 </div>
                             </div>
