@@ -263,16 +263,16 @@ export class LedgerActions {
     .switchMap((action: CustomActions) => this._invoiceServices.GenerateBulkInvoice({combined: false}, action.payload))
     .map(response => {
       if (response.status === 'success') {
-        this.store.dispatch(this.setTxnForEdit(''));
-        this.store.dispatch(this.setTxnForEdit(response.request[0].entries[0]));
+        if (typeof response.body === 'string') {
+          this.store.dispatch(this.setTxnForEdit(''));
+          return this.setTxnForEdit(response.request[0].entries[0]);
+        } else if (Array.isArray(response.body) && 'reason' in response.body[0]) {
+          this._toasty.errorToast(response.body[0].reason);
+        }
+      } else {
+        this._toasty.errorToast(response.message, response.code);
       }
-      return this.validateResponse(response, {
-        type: LEDGER.GENERATE_UPDATED_LEDGER_INVOICE_RESPONSE,
-        payload: response
-      }, true, {
-        type: LEDGER.GENERATE_UPDATED_LEDGER_INVOICE_RESPONSE,
-        payload: response
-      });
+      return {type: 'EmptyAction'};
     });
 
   @Effect()
