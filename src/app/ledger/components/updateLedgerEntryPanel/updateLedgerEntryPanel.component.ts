@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
-import { LedgerResponse, DownloadLedgerRequest } from '../../../models/api-models/Ledger';
+import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
@@ -64,8 +64,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public showAdvanced: boolean;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
-    private _ledgerAction: LedgerActions) {
+              private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+              private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
@@ -80,7 +80,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   public ngOnInit() {
     this.showAdvanced = false;
-    this.vm = new UpdateLedgerVm(this._toasty);
+    this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
@@ -112,13 +112,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // stocks from ledger account
                 resp[0].map(acc => {
                   // normal entry
-                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   accountDetails.stocks.map(as => {
                     // stock entry
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
                       label: acc.name + '(' + as.uniqueName + ')',
-                      additional: Object.assign({}, acc, { stock: as })
+                      additional: Object.assign({}, acc, {stock: as})
                     });
                   });
                 });
@@ -129,12 +129,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                       accountsArray.push({
                         value: `${acc.uniqueName}#${as.uniqueName}`,
                         label: `${acc.name} (${as.uniqueName})`,
-                        additional: Object.assign({}, acc, { stock: as })
+                        additional: Object.assign({}, acc, {stock: as})
                       });
                     });
-                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   } else {
-                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   }
                 });
               }
@@ -231,8 +231,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
         concurrency: 0
       };
       this.uploadInput.emit(event);
@@ -407,6 +407,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.destroyed$.next(true);
     this.destroyed$.complete();
   }
+
   public downloadInvoice(invoiceName: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;

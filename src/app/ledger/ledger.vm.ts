@@ -92,7 +92,8 @@ export class LedgerVM {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: ''
+      chequeClearanceDate: '',
+      invoiceNumberAgainstVoucher: ''
     };
   }
 
@@ -174,7 +175,7 @@ export class LedgerVM {
         item.description = bankTxn.remarks.description;
         if (bankTxn.type === 'DEBIT') {
           item.voucherType = 'rcpt';
-        }else {
+        } else {
           item.voucherType = 'pay';
         }
         if (bankTxn.remarks.chequeNumber) {
@@ -222,7 +223,9 @@ export class LedgerVM {
 
   /** ledger custom filter **/
   public ledgerCustomFilter(term: string, item: IOption): boolean {
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
+    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1)
+      || mergedAccounts.indexOf(term) > -1;
   }
 }
 
@@ -240,6 +243,7 @@ export class BlankLedgerVM {
   public chequeClearanceDate: string;
   public isBankTransaction?: boolean;
   public transactionId?: string;
+  public invoiceNumberAgainstVoucher: string;
 }
 
 export class TransactionVM {
