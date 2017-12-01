@@ -88,9 +88,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
+              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -119,7 +119,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public selectedDate(value: any) {
-    debugger;
     this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
     this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     this.trxRequest.page = 0;
@@ -275,6 +274,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
         // init transaction request and call for transaction data
+        this.trxRequest = new TransactionsRequest();
         this.initTrxRequest(params['accountUniqueName']);
       }
     });
@@ -315,13 +315,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             accountDetails.stocks.map(as => {
               // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, { stock: as })
+                additional: Object.assign({}, acc, {stock: as})
               });
             });
           });
@@ -330,18 +330,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, { stock: as })
+                  additional: Object.assign({}, acc, {stock: as})
                 });
               });
             } else {
-              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
+              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
             }
           });
         }
@@ -351,7 +351,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     this.lc.activeAccount$.subscribe(acc => {
       if (acc) {
-        this.lc.getUnderstandingText(acc.accountType, acc.uniqueName);
+        this.lc.getUnderstandingText(acc.accountType, acc.name);
       }
     });
 
@@ -501,7 +501,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       description: '',
       generateInvoice: false,
       chequeNumber: '',
-      chequeClearanceDate: ''
+      chequeClearanceDate: '',
+      invoiceNumberAgainstVoucher: ''
     };
     this.hideNewLedgerEntryPopup();
   }

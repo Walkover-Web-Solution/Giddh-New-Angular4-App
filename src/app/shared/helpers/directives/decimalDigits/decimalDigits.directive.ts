@@ -18,11 +18,13 @@ export class DecimalDigitsDirective {
     if (this.OnlyNumber) {
       if ([46, 8, 9, 27, 13, 110, 190].indexOf(e.keyCode) !== -1 ||
         // Allow: Ctrl+A
-        (e.keyCode === 65 && e.ctrlKey === true) ||
+        (e.keyCode === 65 && (e.ctrlKey || e.metaKey)) ||
         // Allow: Ctrl+C
-        (e.keyCode === 67 && e.ctrlKey === true) ||
+        (e.keyCode === 67 && (e.ctrlKey || e.metaKey)) ||
+        // Allow: Ctrl+V
+        (e.keyCode === 86 && (e.ctrlKey || e.metaKey)) ||
         // Allow: Ctrl+X
-        (e.keyCode === 88 && e.ctrlKey === true) ||
+        (e.keyCode === 88 && (e.ctrlKey || e.metaKey)) ||
         // Allow: home, end, left, right
         (e.keyCode >= 35 && e.keyCode <= 39)) {
         // let it happen, don't do anything
@@ -73,7 +75,7 @@ export class DecimalDigitsDirective {
       // Checking Backspace etc.. keys because firefox doesn't pressing them while chrome does by default
       // tslint:disable-next-line:radix
       if (dotLength > 1 || (dotLength === 1 && e.key === '.') || (decimalLength > (parseInt(this.DecimalPlaces) - 1) &&
-          currentCursorPos > e.target.value.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) {
+        currentCursorPos > e.target.value.indexOf('.')) && ['Backspace', 'ArrowLeft', 'ArrowRight'].indexOf(e.key) === -1) {
         e.preventDefault();
       }
     }
