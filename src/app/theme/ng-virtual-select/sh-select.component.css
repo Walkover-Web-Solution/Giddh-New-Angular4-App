@@ -141,6 +141,6 @@ i.close.icon.clear:hover::after {
     border-color: #d6d6d6;
 }
 
-.header.open>bdr>input[type="text"] {
+.header .bdr>input[type="text"] {
     border: 0;
 }
