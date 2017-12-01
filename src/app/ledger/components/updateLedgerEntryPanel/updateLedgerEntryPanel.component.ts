@@ -409,6 +409,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.destroyed$.complete();
   }
 
+  public downloadAttachedFile(fileName: string, e: Event) {
+    e.stopPropagation();
+    this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+        return saveAs(blob, d.body.name);
+      } else {
+        this._toasty.errorToast(d.message);
+      }
+    });
+  }
+
   public downloadInvoice(invoiceName: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
@@ -417,8 +429,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
-      let blob = base64ToBlob(d.body, 'application/pdf', 512);
-      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      } else {
+        this._toasty.errorToast(d.message);
+      }
     });
   }
 }
