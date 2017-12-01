@@ -231,9 +231,7 @@
       </ul>
     </div>
   </nav>
-
-  <!-- *ngIf="(isProd === 'development' || isProd === 'staging' || isElectron) && (selectedCompany | async)" -->
-  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [flyAccounts]="flyAccounts | async"></accounts-side-bar>
+  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->

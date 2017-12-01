@@ -16,3 +16,13 @@ export interface IFlattenGroupsAccountsDetailItem {
 export interface IFlattenGroupsAccountsDetail extends IFlattenGroupsAccountsDetailItem {
   accountDetails: IFlattenGroupsAccountsDetailItem[];
 }
+
+export interface IFlattenGroupsAccountItem {
+  Name: string;
+  UniqueName: string;
+  isGroup: boolean;
+  isOpen: boolean;
+  groupUniqueName?: string;
+  accounts?: IFlattenGroupsAccountItem[];
+
+}

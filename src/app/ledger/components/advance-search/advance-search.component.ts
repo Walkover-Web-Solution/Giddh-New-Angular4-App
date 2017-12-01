@@ -15,6 +15,7 @@ import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permis
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
+import { createSelector } from 'reselect';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
@@ -92,6 +93,9 @@ export class AdvanceSearchModelComponent implements OnInit {
   }
 
   public ngOnInit() {
+
+    this.store.dispatch(this.inventoryAction.GetStock());
+
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
@@ -102,18 +106,16 @@ export class AdvanceSearchModelComponent implements OnInit {
       }
     });
 
-    this.stockListDropDown$ = this.store.select(p => {
-      let data = _.cloneDeep(p);
-      if (data.inventory.manufacturingStockList) {
-        if (data.inventory.manufacturingStockList.results) {
-          let units = data.inventory.manufacturingStockList.results;
+    this.stockListDropDown$ = this.store.select(createSelector([(state: AppState) => state.inventory.stocksList], (allStocks) => {
+      let data = _.cloneDeep(allStocks);
+      if (data && data.results) {
+        let units = data.results;
 
-          return units.map(unit => {
-            return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
-          });
-        }
+        return units.map(unit => {
+          return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+        });
       }
-    }).takeUntil(this.destroyed$);
+    })).takeUntil(this.destroyed$);
   }
 
   public setVoucherTypes() {
