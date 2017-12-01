@@ -1,7 +1,9 @@
 <div class="box clearfix mrT2">
     <h1 class="section_head pdT0">Add Bank Account</h1>
     <button (click)="connectBank()" class="btn btn-primary">Connect Bank</button>
-    <div class="mrT1"><small class="alert alert-warning pd1 inline mrB"> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again after some time.</small> </div>
+    <div class="mrT1">
+        <p> NOTE: In case you do not see your bank listed in Added Accounts even after getting a success message, please check again after some time.</p>
+    </div>
 </div>
 
 <div class="box clearfix mrT2" *ngIf='ebankAccounts && ebankAccounts.length'>
@@ -41,18 +43,16 @@
                         <div class="balance text-left">
                             {{card.currencyCode}} {{card.amount}}
                         </div>
-                        <div class="with" *ngIf="card.linkedAccount">
+                        <small class="with" *ngIf="card.linkedAccount">
                             Linked with: {{card.linkedAccount.name}} ({{card.linkedAccount.uniqueName}})
-                        </div>
+                        </small>
                         <div class="select-account select2-parent" *ngIf="card.showAccList">
                             <div class="ng-select-wrap">
-                                <sh-select [options]="accounts$" 
-                                (selected)="onAccountSelect(card, $event)"
-                                [placeholder]="'--Select--'">
-                                </sh-select>       
+                                <sh-select [options]="accounts$" (selected)="onAccountSelect(card, $event)" [placeholder]="'--Select--'">
+                                </sh-select>
                             </div>
                         </div>
-                        <button class="btn btn-warning pull-right" *ngIf="card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = false" style="margin-top:5px">Not Now</button>
+                        <button class="btn btn-default pull-right" *ngIf="card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = false" style="margin-top:5px">Not Now</button>
                         <button class="btn btn-primary" *ngIf="card.linkedAccount == null && !card.showAccList" [disabled]="card.reconnect" (click)="card.showAccList = true;">Link Account</button>
                         <button class="btn btn-danger mrT1" *ngIf="card.linkedAccount && card.linkedAccount.name.length > 0" [disabled]="card.reconnect" (click)="onUnlinkBankAccount(card)">Unlink Account</button>
                         <!--<button class="delete-bank" [disabled]="card.reconnect" (click)="onDeleteAddedBank(card)" uib-tooltip="Delete Bank" tooltip-placement="left"><i class="glyphicon glyphicon-trash"></i></button>                -->

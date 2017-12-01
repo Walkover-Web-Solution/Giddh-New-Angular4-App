@@ -1,0 +1,11 @@
+.ul_0 {
+  height: 550px;
+  overflow: scroll;
+}
+
+.accountli {
+  margin-left: 33px;
+  margin-top: 15px;
+  list-style: none;
+}
+

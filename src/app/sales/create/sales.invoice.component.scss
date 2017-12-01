@@ -274,18 +274,15 @@ ng-select.splSales {
 [data-field="Rate"],
 [data-field="Amount"],
 [data-field="Discount"],
-[data-field="Taxable."],
+[data-field="Taxable"],
 [data-field="Tax"],
-[data-field="Total"] {
+[data-field="Total"],
+[data-field="S.No"] {
     text-align: right;
 }
 
 .table>thead>tr th {
     font-weight: 100;
-}
-
-[data-field="Amount"] {
-    text-align: center;
 }
 
 .salesTax .taxInput {
