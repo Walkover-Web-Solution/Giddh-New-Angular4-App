@@ -135,9 +135,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
       this.store.dispatch(this.groupWithAccountsAction.resetAddAndMangePopup());
     });
     this.accountSearchControl.valueChanges
-      .debounceTime(1000)
+      .debounceTime(300)
       .subscribe((newValue) => {
         this.accountSearchValue = newValue;
+        if (newValue.length > 0) {
+          this.noGroups = true;
+        }
         this.filterAccounts(newValue);
       });
 
