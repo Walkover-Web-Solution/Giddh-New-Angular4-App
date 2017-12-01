@@ -45,6 +45,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { ActionModule } from './actions/action.module';
 import { DecoratorsModule } from './decorators/decorators.module';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -75,7 +76,7 @@ let metaReducers: Array<MetaReducer<any, any>> = [localStorageSyncReducer];
 if (ENV === 'development') {
   // console.log('loading react devtools');
   // metaReducers.push(storeFreeze);
-  // CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
+  CONDITIONAL_IMPORTS.push(StoreDevtoolsModule.instrument({ maxAge: 50 }));
 }
 
 /**

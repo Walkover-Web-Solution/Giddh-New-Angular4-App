@@ -613,9 +613,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     componentInstance.ledgerUnderStandingObj = this.lc.ledgerUnderStandingObj;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
-      // componentInstance.vm.resetVM();
-      // componentInstance.destroyed$.next(true);
-      // componentInstance.destroyed$.complete();
+      this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
     });

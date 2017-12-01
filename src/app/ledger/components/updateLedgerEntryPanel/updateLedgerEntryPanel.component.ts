@@ -48,6 +48,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public selectedLedgerStream$: Observable<LedgerResponse>;
   public activeAccount$: Observable<AccountResponse>;
   public ledgerUnderStandingObj = {
     accountType: '',
@@ -66,6 +67,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
+    this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -93,10 +95,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.entryUniqueName$.subscribe(entryName => {
       this.entryUniqueName = entryName;
       if (entryName) {
+        this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, entryName));
         // get flatten_accounts list && get transactions list
-        Observable.combineLatest(this.flattenAccountListStream$, this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName), this.activeAccount$)
+        Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this.activeAccount$)
           .subscribe((resp: any[]) => {
-            if (resp[0] && resp[1].status === 'success' && resp[2]) {
+            if (resp[0] && resp[1] && resp[2]) {
               //#region flattern group list assign process
               this.vm.flatternAccountList = _.cloneDeep(resp[0]);
               let accountDetails: AccountResponse = resp[2];
@@ -139,8 +142,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
               //#endregion
               //#region transaction assignment process
-              this.vm.selectedLedger = resp[1].body;
-              this.vm.selectedLedgerBackup = resp[1].body;
+              this.vm.selectedLedger = resp[1];
+              this.vm.selectedLedgerBackup = resp[1];
 
               this.vm.selectedLedger.transactions.map(t => {
                 if (t.inventory) {
