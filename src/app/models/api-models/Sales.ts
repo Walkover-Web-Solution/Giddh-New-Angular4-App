@@ -215,7 +215,7 @@ class CountryClass {
   public countryCode: string;
 }
 
-class OtherSalesItemClass {
+export class OtherSalesItemClass {
   public shippingDate: any;
   public shippedVia: string;
   public trackingNumber: string;
