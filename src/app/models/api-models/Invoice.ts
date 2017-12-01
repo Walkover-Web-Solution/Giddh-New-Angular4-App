@@ -8,6 +8,7 @@
 import { INameUniqueName } from '../interfaces/nameUniqueName.interface';
 import { ILedgerTransactionItem, ITotalItem } from '../interfaces/ledger.interface';
 import { IPagination } from '../interfaces/paginatedResponse.interface';
+import { OtherSalesItemClass } from './Sales';
 
 export interface IInvoiceResult {
   companyName: string;
@@ -166,15 +167,6 @@ export interface InvoiceDetails {
   dueDate: string;
 }
 
-export class OtherDetailsClass {
-  public shippingDate: string;
-  public shippedVia: string;
-  public trackingNumber: string;
-  public customField1: string;
-  public customField2: string;
-  public customField3: string;
-}
-
 export interface Logo {
   path: string;
 }
@@ -232,7 +224,7 @@ export class PreviewInvoiceResponseClass {
   public totaltaxBreakdown: TotaltaxBreakdown[];
   public totalTax?: any;
   public invoiceDetails: InvoiceDetails;
-  public other?: any;
+  public other?: OtherSalesItemClass;
   public dataPreview?: string;
   public uniqueName?: string;
 }
