@@ -61,6 +61,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   };
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public showAdvanced: boolean;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
@@ -78,6 +79,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public ngOnInit() {
+    this.showAdvanced = false;
     this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
