@@ -93,7 +93,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef ) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef) {
   }
 
   /**
@@ -317,7 +317,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public writeValue(value: any) {
     this.selectedValues = value;
-    this.cdRef.detectChanges();
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
   public propagateChange(_: any) {
