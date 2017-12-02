@@ -1,13 +1,14 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, OnInit, OnChanges, SimpleChanges, ChangeDetectorRef, NgZone } from '@angular/core';
 import { BalanceSheetData } from '../../../../models/api-models/tb-pl-bs';
-import { ChildGroup } from '../../../../models/api-models/Search';
+import { ChildGroup, Account } from '../../../../models/api-models/Search';
 import * as _ from '../../../../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
 import * as moment from 'moment/moment';
 
 @Component({
   selector: 'bs-grid',  // <home></home>
-  templateUrl: './bs-grid.component.html'
+  templateUrl: './bs-grid.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   public noData: boolean;
@@ -16,37 +17,53 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() public bsData: BalanceSheetData;
   @Input() public padding: string;
   public moment = moment;
-
-  @Input()
-  public set expandAll(value: boolean) {
-    if (this.bsData) {
-      if (this.bsData.assets) { this.toggleVisibility(this.bsData.assets, value); }
-      if (this.bsData.liabilities) { this.toggleVisibility(this.bsData.liabilities, value); }
-      if (!this.search) {
-        if (this.bsData.liabilities) {
-          this.bsData.liabilities.forEach(p => p.isVisible = true);
-        }
-        if (this.bsData.assets) {
-          this.bsData.assets.forEach(p => p.isVisible = true);
-        }
-      } else if (this.search && this.search.length < 3) {
-        if (this.bsData.liabilities) {
-          this.bsData.liabilities.forEach(p => p.isVisible = true);
-        }
-        if (this.bsData.assets) {
-          this.bsData.assets.forEach(p => p.isVisible = true);
-        }
-      }
-      this.bsData = _.cloneDeep(this.bsData);
-    }
-  }
-
-  constructor(private cd: ChangeDetectorRef) {
+  @Input() public expandAll: boolean;
+  constructor(private cd: ChangeDetectorRef, private zone: NgZone) {
     //
   }
   public ngOnChanges(changes: SimpleChanges) {
-    if (changes['expandAll']) {
-      // debugger;
+    if (changes.expandAll && !changes.expandAll.firstChange && changes.expandAll.currentValue !== changes.expandAll.previousValue) {
+      //
+      if (this.bsData) {
+        // this.cd.detach();
+        this.zone.run(() => {
+          this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
+          this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
+          // if (!this.search) {
+          if (this.bsData) {
+            // always make first level visible ....
+            if (this.bsData.liabilities) {
+              _.each(this.bsData.liabilities, (grp: any) => {
+                grp.isVisible = true;
+                _.each(grp.accounts, (acc: any) => {
+                  acc.isVisible = true;
+                });
+              });
+            }
+            if (this.bsData.assets) {
+              _.each(this.bsData.assets, (grp: any) => {
+                grp.isVisible = true;
+                _.each(grp.accounts, (acc: any) => {
+                  acc.isVisible = true;
+                });
+              });
+            }
+
+          }
+          // } else if (this.search && this.search.length < 3) {
+          //   if (this.plData.liabilities) {
+          //     this.plData.liabilities.forEach(p => p.isVisible = true);
+          //   }
+          //   if (this.plData.assets) {
+          //     this.plData.assets.forEach(p => p.isVisible = true);
+          //   }
+          // }
+
+        });
+
+        // this.plData = _.cloneDeep(this.plData);
+        // this.cd.detectChanges();
+      }
     }
   }
   public ngOnInit() {
@@ -58,13 +75,14 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
-    // debugger;
-    return _.each(data, (grp) => {
+    _.each(data, (grp: ChildGroup) => {
+      grp.isCreated = true;
       grp.isVisible = isVisible;
-      _.each(grp.accounts, (acc) => {
-        return acc.isVisible = isVisible;
+      _.each(grp.accounts, (acc: Account) => {
+        acc.isCreated = true;
+        acc.isVisible = isVisible;
       });
-      return this.toggleVisibility(grp.childGroups, isVisible);
+      this.toggleVisibility(grp.childGroups, isVisible);
     });
   }
 }

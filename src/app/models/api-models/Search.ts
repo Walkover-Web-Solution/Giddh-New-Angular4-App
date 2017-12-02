@@ -17,14 +17,16 @@ export interface OpeningBalance {
   type: string;
 }
 
-export interface Account {
-  creditTotal: number;
-  debitTotal: number;
-  closingBalance: ClosingBalance;
-  openingBalance: OpeningBalance;
-  uniqueName: string;
-  name: string;
-  isVisible: boolean;
+export class Account {
+  public creditTotal: number;
+  public debitTotal: number;
+  public closingBalance: ClosingBalance;
+  public openingBalance: OpeningBalance;
+  public uniqueName: string;
+  public name: string;
+  public isVisible: boolean = false;
+  public isIncludedInSearch: boolean = true;
+  public isCreated: boolean = false;
 }
 
 export interface AccountFlat {
@@ -61,6 +63,8 @@ export class ChildGroup {
   public uniqueName: string;
   public category?: any;
   public groupName: string;
+  public isIncludedInSearch: boolean = true;
+  public isCreated: boolean = false;
   public isVisible: boolean = false;
 }
 
