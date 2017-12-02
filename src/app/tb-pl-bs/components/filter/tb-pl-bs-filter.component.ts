@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
@@ -13,8 +13,9 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   public today: Date = new Date();
   public selectedDateOption: string = '1';
   public filterForm: FormGroup;
-  public search: string;
+  public search: string = '';
   public financialOptions: IOption[] = [];
+  public accountSearchControl: FormControl = new FormControl();
   public datePickerOptions: any = {
     locale: {
       applyClass: 'btn-green',
@@ -118,6 +119,12 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     if (!this.showLabels) {
       this.filterForm.patchValue({ selectedDateOption: '0' });
     }
+    this.accountSearchControl.valueChanges
+      .debounceTime(700)
+      .subscribe((newValue) => {
+        this.search = newValue;
+      });
+
   }
 
   public ngOnDestroy() {
