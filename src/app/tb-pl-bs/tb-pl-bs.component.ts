@@ -35,9 +35,4 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   public ngAfterViewInit() {
     //
   }
-  // public SHOWBS() {
-  //   this.CanBSLoad = true;
-  //   this.cd.detectChanges();
-  //   debugger;
-  // }
 }
