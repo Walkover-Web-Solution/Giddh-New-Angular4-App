@@ -70,11 +70,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>,
-    private _ledgerService: LedgerService,
-    private _ledgerActions: LedgerActions,
-    private _companyActions: CompanyActions,
-    private cdRef: ChangeDetectorRef,
-    private _toasty: ToasterService) {
+              private _ledgerService: LedgerService,
+              private _ledgerActions: LedgerActions,
+              private _companyActions: CompanyActions,
+              private cdRef: ChangeDetectorRef,
+              private _toasty: ToasterService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -237,8 +237,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
         concurrency: 0
       };
       this.uploadInput.emit(event);
