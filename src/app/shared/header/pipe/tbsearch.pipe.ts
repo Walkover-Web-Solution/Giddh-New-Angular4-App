@@ -115,8 +115,8 @@ export class TbsearchPipe implements PipeTransform {
     }
     return input;
   }
-  public checkIndex(src, str) {
-    if (src.indexOf(str) !== -1) {
+  public checkIndex(src: string, str: string) {
+    if (src.replace(' ', '').toLowerCase().indexOf(str.replace(' ', '').toLowerCase()) !== -1) {
       return true;
     } else {
       return false;
