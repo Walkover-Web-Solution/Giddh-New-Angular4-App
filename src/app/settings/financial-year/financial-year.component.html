@@ -43,28 +43,25 @@
                 <hr>
                 <div class="form-group mrT1">
                     <label>Switch Financial Year</label>
-                    <div class="select2-parent">
-                        <!--<select2 [data]="financialOptions" [options]="options" [value]="currentCompanyFinancialYearUN" (valueChanged)="selectFinancialYearOption($event)"></select2>-->
-                        <ng-select placeholder="Select" filterPlaceholder="Type to search..." name="currentCompanyFinancialYearUN" [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions" (selected)="selectFinancialYearOption($event)" style="width: 300px;">
-                            <ng-template #optionTemplate let-option="option">
-                                <div class="account-list-item">{{option?.label}}</div>
-                            </ng-template>
-                        </ng-select>
-                        <button class="btn btn-success btn-sm mrL1" (click)="switchFY()">Save</button>
+                    <div>
+                        <span class="pull-left">
+                            <sh-select style="width:300px;" placeholder="Select Financial Year" name="currentCompanyFinancialYearUN" [ngModel]="currentCompanyFinancialYearUN" [options]="financialOptions" (selected)="selectFinancialYearOption($event)"></sh-select>                        
+                        </span>
+                        <span>
+                            <button class="btn btn-success btn-sm mrL1" (click)="switchFY()">Save</button>                        
+                        </span>
                     </div>
-
                 </div>
                 <hr>
                 <div class="form-group mrT1 mrB">
                     <label>Add Financial Year</label>
-                    <div class="select2-parent">
-                        <!--<select2 [data]="yearOptions" [options]="options" (valueChanged)="selectYear($event)"></select2>-->
-                        <ng-select placeholder="Select" filterPlaceholder="Type to search..." [options]="yearOptions" (selected)="selectYear($event)" style="width: 300px">
-                            <ng-template #optionTemplate let-option="option">
-                                <div class="account-list-item">{{option?.label}}</div>
-                            </ng-template>
-                        </ng-select>
-                        <button class="btn btn-success btn-sm mrL1" (click)="addFY()">Save</button>
+                    <div>
+                        <span class="pull-left">
+                            <sh-select style="width:300px;" placeholder="Select Financial Year" [options]="yearOptions" (selected)="selectYear($event)"></sh-select>                     
+                        </span>
+                        <div>
+                            <button class="btn btn-success btn-sm mrL1" (click)="addFY()">Save</button>                       
+                        </div>
                     </div>
                 </div>
             </div>

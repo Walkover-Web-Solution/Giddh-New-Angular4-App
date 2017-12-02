@@ -11,6 +11,7 @@ import * as _ from '../../lodash-optimized';
 import { ToasterService } from '../../services/toaster.service';
 import { Select2OptionData } from '../../theme/select2';
 import { States } from '../../models/api-models/Company';
+import { setTimeout } from 'timers';
 
 export interface IGstObj {
   newGstNumber: string;
@@ -60,7 +61,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     this.stateStream$.subscribe((data) => {
       if (data) {
         data.map(d => {
-          this.states.push({ label: `${d.code} - ${d.name}`, value: `${d.code} - ${d.name}` });
+          this.states.push({ label: `${d.code} - ${d.name}`, value: `${d.code}` });
         });
       }
       this.statesSource$ = Observable.of(this.states);
@@ -142,11 +143,11 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
     let profileObj = _.cloneDeep(this.companyProfileObj);
     let selectedStateCode = v.value;
     let selectedState = this.states.find((state) => state.value === selectedStateCode);
-    if (selectedState && selectedState.label) {
-      profileObj.gstDetails[indx].addressList[0].stateName = selectedState.label;
+    if (selectedState && selectedState.value) {
+      profileObj.gstDetails[indx].addressList[0].stateName = selectedState.value;
       this.companyProfileObj = profileObj;
     }
-    // console.log('The selected state is :', selectedState);
+    console.log('The selected state is :', selectedState);
   }
 
   public updateProfile(data) {
