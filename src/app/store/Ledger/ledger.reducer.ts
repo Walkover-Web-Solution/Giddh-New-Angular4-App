@@ -166,7 +166,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         return {
           ...state,
           isTxnUpdateInProcess: false,
-          isTxnUpdateSuccess: true
+          isTxnUpdateSuccess: true,
+          transactionDetails: updateResponse.body
         };
       }
       return {
