@@ -57,6 +57,7 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
   @Input() public plBsExportXLS: boolean = false;
   @Input() public BsExportXLS: boolean = false;
 
+  @Output() public seachChange = new EventEmitter<string>();
   @Output() public tbExportPdfEvent = new EventEmitter<string>();
   @Output() public tbExportXLSEvent = new EventEmitter<string>();
   @Output() public tbExportCsvEvent = new EventEmitter<string>();
@@ -123,6 +124,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
       .debounceTime(700)
       .subscribe((newValue) => {
         this.search = newValue;
+        this.seachChange.emit(this.search);
+        this.cd.detectChanges();
       });
 
   }
