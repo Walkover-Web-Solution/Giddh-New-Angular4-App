@@ -221,7 +221,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
       let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
       if (gData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        // debugger;
         let myChildElementIsOpen = false;
         AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
         return Object.assign({}, state, {
@@ -408,7 +407,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
           let newObj = Object.assign({}, activeGrpData.body, { isOpen: true, isActive: true });
           let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
           let result = false;
-          // debugger;
           updateActiveGroupFunc(groupArray, activeGrpData.queryString.groupUniqueName, activeGrpData.body, result);
           return Object.assign({}, state, {
             activeGroup: newObj,

@@ -67,7 +67,6 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
       let gData: BaseResponse<GroupResponse, GroupCreateRequest> = action.payload;
       if (gData.status === 'success') {
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        // debugger;
         let myChildElementIsOpen = false;
         AddAndActiveGroupFunc(groupArray, gData, myChildElementIsOpen);
         return {
