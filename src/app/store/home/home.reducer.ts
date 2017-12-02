@@ -482,12 +482,7 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
     }
     case HOME.COMPARISION_CHART.GET_NETWORTH_CHART_DATA_ACTIVE_YEAR_RESPONSE: {
       let data = action.payload as IComparisionChartResponse;
-      // let revenueActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueActiveYear && (state.comparisionChart.revenueActiveYear.length === 0))) ? processDataForGroupHistory(data.revenueActiveYear) : _.cloneDeep(state.comparisionChart.revenueActiveYear);
-      // let ExpensesActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesActiveYear && (state.comparisionChart.ExpensesActiveYear.length === 0))) ? processDataForGroupHistory(data.ExpensesActiveYear) : _.cloneDeep(state.comparisionChart.ExpensesActiveYear);
-      // let ProfitLossActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ProfitLossActiveYear && (state.comparisionChart.ProfitLossActiveYear.monthlyBalances.length === 0))) ? processDataForProfitLoss(data.ProfitLossActiveYear) : _.cloneDeep(state.comparisionChart.ProfitLossActiveYear);
       let NetworthActiveYear = (data.refresh || (state.comparisionChart && state.comparisionChart.NetworthActiveYear && (state.comparisionChart.NetworthActiveYear.monthlyBalances.length === 0))) ? processDataForNetworth(data.NetworthActiveYear) : _.cloneDeep(state.comparisionChart.NetworthActiveYear);
-      // debugger;
-      // let ProfitLossActiveYear = processDataForProfitLoss(data.Net);
       return Object.assign({}, state, {
         networth_comparisionChart: {
           ...state.networth_comparisionChart,
@@ -501,9 +496,6 @@ export function homeReducer(state = initialState, action: CustomActions): HomeSt
       let data = action.payload as IComparisionChartResponse;
       let revenueLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.revenueLastYear && (state.comparisionChart.revenueLastYear.length === 0))) ? processDataForGroupHistory(data.revenueLastYear) : _.cloneDeep(state.comparisionChart.revenueLastYear);
       let ExpensesLastYear = (data.refresh || (state.comparisionChart && state.comparisionChart.ExpensesLastYear && (state.comparisionChart.ExpensesLastYear.length === 0))) ? processDataForGroupHistory(data.ExpensesLastYear) : _.cloneDeep(state.comparisionChart.ExpensesLastYear);
-
-      // debugger;
-      // let ProfitLossLastYear = processDataForProfitLoss(data.NetworthLastYear);
       let NetworthLastYear = processDataForNetworth(data.NetworthLastYear);
       return Object.assign({}, state, {
         networth_comparisionChart: {

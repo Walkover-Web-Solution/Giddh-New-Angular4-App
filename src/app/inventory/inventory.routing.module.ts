@@ -12,9 +12,10 @@ import { InventoryStockReportComponent } from './components/stock-report-compone
       {
         path: '', component: InventoryComponent,
         children: [
+          { path: '', pathMatch: 'full' },
           { path: 'add-group', pathMatch: 'full', component: InventoryAddGroupComponent },
-          { path: 'add-group/:groupUniqueName', component: InventoryAddGroupComponent, },
-          { path: 'add-group/:groupUniqueName/add-stock', component: InventoryAddStockComponent },
+          { path: 'add-group/:groupUniqueName', pathMatch: 'full', component: InventoryAddGroupComponent, },
+          { path: 'add-group/:groupUniqueName/add-stock', pathMatch: 'full', component: InventoryAddStockComponent },
           { path: 'add-group/:groupUniqueName/add-stock/:stockUniqueName', component: InventoryAddStockComponent },
           { path: 'add-group/:groupUniqueName/stock-report/:stockUniqueName', component: InventoryStockReportComponent },
           { path: 'custom-stock', component: InventoryCustomStockComponent },
