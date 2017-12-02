@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform, NgZone } from '@angular/core';
 
 import * as _ from '../../../lodash-optimized';
+import { ChildGroup, Account } from '../../../models/api-models/Search';
 
 @Pipe({
   // tslint:disable-next-line:pipe-naming
@@ -42,181 +43,80 @@ export class TbsearchPipe implements PipeTransform {
     return input;
   }
 
-  public performSearch(input) {
-    _.each(input, (grp: any) => {
-      let grpName;
-      let grpUnq;
-      grpName = grp.groupName.toLowerCase();
-      grpUnq = grp.uniqueName.toLowerCase();
-      if (!this.checkIndex(grpName, this.srch) && !this.checkIndex(grpUnq, this.srch)) {
-        grp.isVisible = false;
-        if (grp.childGroups.length > 0) {
-          _.each(grp.childGroups, (sub: any) => {
-            let subName;
-            let subUnq;
-            subName = sub.groupName.toLowerCase();
-            subUnq = sub.uniqueName.toLowerCase();
-            if (!this.checkIndex(subName, this.srch) && !this.checkIndex(subUnq, this.srch)) {
-              sub.isVisible = false;
-              if (sub.childGroups.length) {
-                _.each(sub.childGroups, (child: any) => {
-                  let childName;
-                  let childUnq;
-                  childName = child.groupName.toLowerCase();
-                  childUnq = child.uniqueName.toLowerCase();
-                  if (!this.checkIndex(childName, this.srch) && !this.checkIndex(childUnq, this.srch)) {
-                    child.isVisible = false;
-                    if (child.childGroups.length > 0) {
-                      _.each(child.childGroups, (subChild: any) => {
-                        let subChildName;
-                        let subChildUnq;
-                        subChildName = subChild.groupName.toLowerCase();
-                        subChildUnq = subChild.uniqueName.toLowerCase();
-                        if (!this.checkIndex(subChildName, this.srch) && !this.checkIndex(subChildUnq, this.srch)) {
-                          subChild.isVisible = false;
-                          if (subChild.childGroups.length > 0) {
-                            _.each(subChild.childGroups, (subChild2: any) => {
-                              let subChild2Name;
-                              let subChild2Unq;
-                              subChild2Name = subChild2.groupName.toLowerCase();
-                              subChild2Unq = subChild2.uniqueName.toLowerCase();
-                              if (!this.checkIndex(subChild2Name, this.srch) && !this.checkIndex(subChild2Unq, this.srch)) {
-                                subChild2.isVisible = false;
-                                if (subChild2.childGroups.length > 0) {
-                                  this.performSearch(subChild2.childGroups);
-                                }
-                                if (subChild2.accounts.length > 0) {
-                                  _.each(subChild2.accounts, (acc: any) => {
-                                    let accName;
-                                    let accUnq;
-                                    accName = acc.name.toLowerCase();
-                                    accUnq = acc.uniqueName.toLowerCase();
-                                    if (!this.checkIndex(accName, this.srch) && !this.checkIndex(accUnq, this.srch)) {
-                                      acc.isVisible = false;
-                                    } else if (this.checkIndex(accName, this.srch) || this.checkIndex(accUnq, this.srch)) {
-                                      subChild2.isVisible = true;
-                                      subChild.isVisible = true;
-                                      child.isVisible = true;
-                                      sub.isVisible = true;
-                                      grp.isVisible = true;
-                                      acc.isVisible = true;
-                                    }
-                                  });
-                                }
-                              } else if (this.checkIndex(subChild2Name, this.srch) || this.checkIndex(subChild2Unq, this.srch)) {
-                                subChild2.isVisible = true;
-                                subChild.isVisible = true;
-                                child.isVisible = true;
-                                sub.isVisible = true;
-                                grp.isVisible = true;
-                              }
-                            });
-                          }
-                          if (subChild.accounts.length > 0) {
-                            _.each(subChild.accounts, (acc: any) => {
-                              let accName;
-                              let accUnq;
-                              accName = acc.name.toLowerCase();
-                              accUnq = acc.uniqueName.toLowerCase();
-                              if (!this.checkIndex(accName, this.srch) && !this.checkIndex(accUnq, this.srch)) {
-                                acc.isVisible = false;
-                              } else if (this.checkIndex(accName, this.srch) || this.checkIndex(accUnq, this.srch)) {
-                                subChild.isVisible = true;
-                                child.isVisible = true;
-                                sub.isVisible = true;
-                                grp.isVisible = true;
-                                acc.isVisible = true;
-                              }
-                            });
-                          }
-                        } else if (this.checkIndex(subChildName, this.srch) || this.checkIndex(subChildUnq, this.srch)) {
-                          subChild.isVisible = true;
-                          subChild.isVisible = true;
-                          child.isVisible = true;
-                          sub.isVisible = true;
-                          grp.isVisible = true;
-                        }
-                      });
-                    }
-                    if (child.accounts.length > 0) {
-                      _.each(child.accounts, (acc: any) => {
-                        let accName;
-                        let accUnq;
-                        accName = acc.name.toLowerCase();
-                        accUnq = acc.uniqueName.toLowerCase();
-                        if (!this.checkIndex(accName, this.srch) && !this.checkIndex(accUnq, this.srch)) {
-                          acc.isVisible = false;
-                        } else if (this.checkIndex(accName, this.srch) || this.checkIndex(accUnq, this.srch)) {
-                          child.isVisible = true;
-                          sub.isVisible = true;
-                          grp.isVisible = true;
-                          acc.isVisible = true;
-                        }
-                      });
-                    }
-                  } else if (this.checkIndex(childName, this.srch) || this.checkIndex(childUnq, this.srch)) {
-                    child.isVisible = true;
-                    sub.isVisible = true;
-                    grp.isVisible = true;
-                    sub.isVisible = true;
-                  }
-                });
-              }
-              if (sub.accounts.length > 0) {
-                _.each(sub.accounts, (acc: any) => {
-                  let accName;
-                  let accUnq;
-                  accName = acc.name.toLowerCase();
-                  accUnq = acc.uniqueName.toLowerCase();
-                  if (!this.checkIndex(accName, this.srch) && !this.checkIndex(accUnq, this.srch)) {
-                    acc.isVisible = false;
-                  } else if (this.checkIndex(accName, this.srch) || this.checkIndex(accUnq, this.srch)) {
-                    sub.isVisible = true;
-                    grp.isVisible = true;
-                    acc.isVisible = true;
-                  }
-                });
-              }
-            } else if (this.checkIndex(subName, this.srch) || this.checkIndex(subUnq, this.srch)) {
-              sub.isVisible = true;
-              grp.isVisible = true;
-              sub.isVisible = true;
-            }
-          });
+  public performSearch(input: ChildGroup[]) {
+    if (input) {
+      for (let grp of input) {
+        grp = this.search(grp, this.srch);
+        if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1) {
+          grp.isVisible = true;
+          grp.isIncludedInSearch = true;
+        } else {
+          grp.isVisible = false;
+          grp.isIncludedInSearch = false;
         }
-        if (grp.accounts.length > 0) {
-          _.each(grp.accounts, (acc: any) => {
-            let accName;
-            let accUnq;
-            accName = acc.name.toLowerCase();
-            accUnq = acc.uniqueName.toLowerCase();
-            if (!this.checkIndex(accName, this.srch) && !this.checkIndex(accUnq, this.srch)) {
-              acc.isVisible = false;
-            } else if (this.checkIndex(accName, this.srch) || this.checkIndex(accUnq, this.srch)) {
-              grp.isVisible = true;
-              acc.isVisible = true;
-            }
-          });
-        }
-      } else if (this.checkIndex(grpName, this.srch) || this.checkIndex(grpUnq, this.srch)) {
-        grp.isVisible = true;
       }
-    });
+    }
   }
-  public resetSearch(input) {
-    _.each(input, (grp: any) => {
-      // grp = Object.assign(grp, { isVisible: false });
-      grp.isVisible = true;
-      if (grp.childGroups.length > 0) {
-        _.each(grp.childGroups, (sub: any) => {
-          // sub = Object.assign(sub, { isVisible: false });
-          sub.isVisible = false;
-          if (sub.childGroups.length > 0) {
-            this.resetSearch(sub.childGroups);
-          }
-        });
+  public search(input: ChildGroup, s: string) {
+    if (input) {
+      let hasAnyVisible = false;
+      for (let grp of input.childGroups) {
+        grp = this.search(grp, s);
+        if (grp.accounts.findIndex(p => p.isIncludedInSearch) > -1 || grp.childGroups.findIndex(p => p.isIncludedInSearch) > -1 ||
+          this.checkIndex(grp.groupName.toLowerCase(), s.toLowerCase()) && this.checkIndex(grp.uniqueName.toLowerCase(), s.toLowerCase())
+        ) {
+          grp.isVisible = true;
+          grp.isIncludedInSearch = true;
+          hasAnyVisible = true;
+        } else {
+          grp.isVisible = false;
+          grp.isIncludedInSearch = false;
+        }
       }
-    });
+      for (const acc of input.accounts) {
+        if (this.checkIndex(acc.name.toLowerCase(), s.toLowerCase()) && this.checkIndex(acc.uniqueName.toLowerCase(), s.toLowerCase())) {
+          acc.isIncludedInSearch = true;
+          acc.isVisible = true;
+          hasAnyVisible = true;
+        } else {
+          acc.isIncludedInSearch = false;
+          acc.isVisible = false;
+        }
+      }
+      if (hasAnyVisible) {
+        input.isIncludedInSearch = false;
+        input.isVisible = false;
+      } else {
+        input.isIncludedInSearch = true;
+        input.isVisible = true;
+      }
+    }
+    return input;
+  }
+  public resetSearch(input: ChildGroup[]) {
+    if (input) {
+      for (let grp of input) {
+        grp = this.resetGroup(grp);
+        grp.isVisible = true;
+        grp.isIncludedInSearch = true;
+      }
+    }
+  }
+  public resetGroup(input: ChildGroup) {
+    if (input) {
+      for (let grp of input.childGroups) {
+        grp = this.resetGroup(grp);
+        grp.isVisible = false;
+        grp.isIncludedInSearch = true;
+      }
+      for (const acc of input.accounts) {
+        acc.isIncludedInSearch = true;
+        acc.isVisible = false;
+      }
+      input.isIncludedInSearch = true;
+      input.isVisible = false;
+    }
+    return input;
   }
   public checkIndex(src, str) {
     if (src.indexOf(str) !== -1) {
