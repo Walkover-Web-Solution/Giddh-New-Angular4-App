@@ -90,12 +90,7 @@
                             <div class="row">
                                 <label>Link Account</label>
                                 <div class="ng-select-wrap">
-                                    <ng-select placeholder="Link Account" filterPlaceholder="Type to search..." name="linkedaccount" [(ngModel)]="razorpayObj.account" [options]="linkAccountDropDown$ | async" style="width: 100%">
-                                        <ng-template #optionTemplate let-option="option">
-                                            <div class="account-list-item">{{option?.label}}</div>
-                                            <div class="account-list-item fs12">{{option?.value}}</div>
-                                        </ng-template>
-                                    </ng-select>
+                                    <sh-select placeholder="Select Account" name="linkedaccount" [(ngModel)]="razorpayObj.account" [options]="linkAccountDropDown$ | async"></sh-select>                                    
                                 </div>
                             </div>
                         </div>
