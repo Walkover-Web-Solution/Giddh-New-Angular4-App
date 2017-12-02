@@ -69,12 +69,7 @@
                     <div class="row">
                         <label>Link Account</label>
                         <div class="input-group">
-                            <ng-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)" style="width: 100%;">
-                                <ng-template #optionTemplate let-option="option">
-                                    <div class="account-list-item">{{option?.label}}</div>
-                                    <div class="account-list-item fs12">{{option?.value}}</div>
-                                </ng-template>
-                            </ng-select>
+                            <sh-select *ngIf="razorPayObj.account" placeholder="Link Account" name="razorPayObj.account" [(ngModel)]="razorPayObj.account.uniqueName" [options]="accounts$ | async" (selected)="selectAccount($event)"></sh-select>                            
                             <div class="input-group-addon cp"><span (click)="unlinkAccountFromRazorPay()" class="glyphicon glyphicon-trash"></span></div>
                         </div>
                     </div>

@@ -2,7 +2,7 @@
     <div class="form-group">
         <label>Account</label>
         <div class="ng-select-wrap">
-          <ng-select
+          <!-- <ng-select
             placeholder="Sales Account"
             filterPlaceholder="Type to search..."
             name="accountUniqueName"
@@ -13,7 +13,13 @@
               <div class="account-list-item">{{option?.label}}</div>
               <div class="account-list-item fs12">{{option?.value}}</div>
             </ng-template>
-          </ng-select>
+          </ng-select> -->
+          <sh-select 
+            placeholder="Select Account"
+            name="accountUniqueName"
+            [(ngModel)]="ledgerSearchRequest.accountUniqueName"
+            [options]="accounts$ | async"
+          ></sh-select>
         </div>
     </div>
     <div class="form-group">
@@ -22,17 +28,19 @@
     </div>
     <div class="form-group">
         <label>Count</label>
-        <select class="form-control col-xs-2" name="count" [(ngModel)]="ledgerSearchRequest.count">
-      <option [ngValue]="'select'">Select</option>
-      <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
-    </select>
+        <!-- <select class="form-control col-xs-2" name="count" [(ngModel)]="ledgerSearchRequest.count">
+          <option [ngValue]="'select'">Select</option>
+          <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
+        </select> -->
+        <sh-select placeholder="Select" name="count" [(ngModel)]="ledgerSearchRequest.count" [options]="counts"></sh-select>        
     </div>
     <div class="form-group">
       <label>Amount</label>
-      <select class="form-control" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy">
+      <!-- <select class="form-control" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy">
         <option [ngValue]="'select'">Please Select</option>
         <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-      </select>
+      </select> -->
+      <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="ledgerSearchRequest.entryTotalBy" [options]="filtersForEntryTotal"></sh-select>
     </div>
     <div class="form-group">
       <label>&nbsp;</label>
