@@ -11,9 +11,9 @@ const filter1 = [
 ];
 
 const filter2 = [
-  { name: 'Quantity Inward', uniqueName: 'quantityInward' },
+  { label: 'Quantity Inward', value: 'quantityInward' },
   // { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
-  { name: 'Voucher Number', uniqueName: 'voucherNumber' }
+  { label: 'Voucher Number', value: 'voucherNumber' }
 ];
 
 import { Store } from '@ngrx/store';
@@ -37,7 +37,7 @@ import { Router } from '@angular/router';
 export class MfReportComponent implements OnInit {
 
   public mfStockSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
-  public filtersForSearchBy: any[] = filter2;
+  public filtersForSearchBy: IOption[] = filter2;
   public filtersForSearchOperation: IOption[] = filter1;
   public stockListDropDown: IOption[] = [];
   public reportData: StocksResponse = null;

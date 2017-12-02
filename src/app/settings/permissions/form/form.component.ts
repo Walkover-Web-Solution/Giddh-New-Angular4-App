@@ -89,7 +89,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     });
 
     // utitlity
-    this.permissionForm.get('periodOptions').valueChanges.subscribe( val => {
+    this.permissionForm.get('periodOptions').valueChanges.debounceTime(100).subscribe( val => {
       this.togglePeriodOptionsVal(val);
     });
 
@@ -270,6 +270,15 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     }
     form.allowedCidrs = CidrArr;
     form.allowedIps = IpArr;
+
+    if (this.selectedTimeSpan === 'Past Period') {
+      form.period = 'day';
+      form.from = null;
+      form.to = null;
+    } else {
+      form.period = null;
+      form.duration = null;
+    }
 
     obj.action = (this.isUpdtCase) ? 'update' : 'create';
     obj.data = form;
