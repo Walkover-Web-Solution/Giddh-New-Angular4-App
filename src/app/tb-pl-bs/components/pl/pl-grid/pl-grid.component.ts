@@ -30,11 +30,9 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
       if (this.plData) {
         // this.cd.detach();
         this.zone.run(() => {
-          this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
-          this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
-          // if (!this.search) {
           if (this.plData) {
-            // always make first level visible ....
+            this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
+            this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
             if (this.plData.incArr) {
               _.each(this.plData.incArr, (grp: any) => {
                 if (grp.isIncludedInSearch) {
@@ -61,19 +59,9 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
             }
 
           }
-          // } else if (this.search && this.search.length < 3) {
-          //   if (this.plData.incArr) {
-          //     this.plData.incArr.forEach(p => p.isVisible = true);
-          //   }
-          //   if (this.plData.expArr) {
-          //     this.plData.expArr.forEach(p => p.isVisible = true);
-          //   }
-          // }
+          this.cd.detectChanges();
 
         });
-
-        // this.plData = _.cloneDeep(this.plData);
-        this.cd.detectChanges();
       }
     }
   }

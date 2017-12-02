@@ -19,8 +19,6 @@ export class TbsearchPipe implements PipeTransform {
     //
   }
   public transform(input: any, search: string): any {
-    // input = _.cloneDeep(input);
-    console.time('t1');
     if (!_.isUndefined(search)) {
       this.srch = search.toLowerCase();
     }
@@ -39,7 +37,6 @@ export class TbsearchPipe implements PipeTransform {
         }
       }
     }
-    console.timeEnd('t1');
     return input;
   }
 
