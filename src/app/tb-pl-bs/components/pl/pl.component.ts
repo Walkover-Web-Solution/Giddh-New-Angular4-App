@@ -85,11 +85,11 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
       let data = _.cloneDeep(p) as ProfitLossData;
       if (data.expArr) {
         this.InitData(data.expArr);
-        data.expArr.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.expArr.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       if (data.incArr) {
         this.InitData(data.incArr);
-        data.incArr.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.incArr.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       return data;
     })
