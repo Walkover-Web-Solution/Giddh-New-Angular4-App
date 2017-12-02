@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild, AfterViewChecked } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnChanges, Input, OnDestroy, OnInit, ViewChild, AfterViewChecked, SimpleChanges } from '@angular/core';
 import * as _ from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
@@ -19,8 +19,9 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
       [selectedCompany]="selectedCompany"
       [showLoader]="showLoader | async"
       [showLabels]="true"
+      (seachChange)="searchChanged($event)"
       (onPropertyChanged)="filterData($event)"
-      (expandAll)="expandAll = $event"
+      (expandAll)="expandAllEvent($event)"
       (tbExportCsvEvent)="exportCsv($event)"
       (tbExportPdfEvent)="exportPdf($event)"
       (tbExportXLSEvent)="exportXLS($event)"
@@ -41,18 +42,19 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
     </div>
     <div *ngIf="(data$ | async) && !(showLoader | async)">
       <tb-grid #tbGrid
-      [search]="filter.search"
+      [search]="search"
         [expandAll]="expandAll"
         [data$]="data$  | async"
       ></tb-grid>
     </div>
   `
 })
-export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TbComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public showLoader: Observable<boolean>;
   public data$: Observable<AccountDetails>;
   public request: TrialBalanceRequest;
   public expandAll: boolean;
+  public search: string;
   @ViewChild('tbGrid') public tbGrid: TbGridComponent;
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -109,7 +111,11 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   public ngAfterViewInit() {
     this.cd.detectChanges();
   }
-
+  public ngOnChanges(changes: SimpleChanges) {
+    // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+    //   this.cd.detectChanges();
+    // }
+  }
   public filterData(request: TrialBalanceRequest) {
     this.store.dispatch(this.tlPlActions.GetTrialBalance(_.cloneDeep(request)));
   }
@@ -126,5 +132,21 @@ export class TbComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public exportXLS($event) {
     //
+  }
+  public expandAllEvent(event: boolean) {
+    this.cd.checkNoChanges();
+    this.expandAll = !this.expandAll;
+    setTimeout(() => {
+      this.expandAll = event;
+      this.cd.detectChanges();
+    }, 1);
+  }
+  public searchChanged(event: string) {
+    // this.cd.checkNoChanges();
+    this.search = event;
+    this.cd.detectChanges();
+    // setTimeout(() => {
+    //   this.search = event;
+    // }, 1);
   }
 }
