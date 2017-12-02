@@ -18,7 +18,8 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
       [selectedCompany]="selectedCompany"
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
-      (expandAll)="expandAll = $event"
+      (seachChange)="searchChanged($event)"
+      (expandAll)="expandAllEvent($event)"
       [tbExportCsv]="false"
       [tbExportPdf]="false"
       [tbExportXLS]="false"
@@ -37,7 +38,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
     </div>
     <div *ngIf="!(showLoader | async)">
       <pl-grid #plGrid
-      [search]="filter.search"
+      [search]="search"
       [expandAll]="expandAll"
         [plData]="data$ | async"
       ></pl-grid>
@@ -49,6 +50,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
   public expandAll: boolean;
+  public search: string;
   @ViewChild('plGrid') public plGrid: PlGridComponent;
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -79,15 +81,15 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public ngOnInit() {
     // console.log('hello Tb Component');
-     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
+    this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
       let data = _.cloneDeep(p) as ProfitLossData;
       if (data.expArr) {
         this.InitData(data.expArr);
-        data.expArr.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.expArr.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       if (data.incArr) {
         this.InitData(data.incArr);
-        data.incArr.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.incArr.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       return data;
     })
@@ -142,5 +144,21 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     return tempFYIndex;
+  }
+  public expandAllEvent(event: boolean) {
+    this.cd.checkNoChanges();
+    this.expandAll = !this.expandAll;
+    setTimeout(() => {
+      this.expandAll = event;
+      this.cd.detectChanges();
+    }, 1);
+  }
+  public searchChanged(event: string) {
+    // this.cd.checkNoChanges();
+    this.search = event;
+    this.cd.detectChanges();
+    // setTimeout(() => {
+    //   this.search = event;
+    // }, 1);
   }
 }

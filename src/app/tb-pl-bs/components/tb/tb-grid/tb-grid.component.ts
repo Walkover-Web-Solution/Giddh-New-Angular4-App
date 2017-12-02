@@ -36,17 +36,21 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
           this.toggleVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
           if (this.data$) {
             // always make first level visible ....
-            _.each(this.data$.groupDetails, (grp: any) => {
-              grp.isVisible = true;
-              _.each(grp.accounts, (acc: any) => {
-                acc.isVisible = false;
-              });
+            _.each(this.data$.groupDetails, (grp: ChildGroup) => {
+              if (grp.isIncludedInSearch) {
+                grp.isVisible = true;
+                _.each(grp.accounts, (acc: Account) => {
+                  if (acc.isIncludedInSearch) {
+                    acc.isVisible = false;
+                  }
+                });
+              }
             });
           }
         });
 
         // this.data$ = _.cloneDeep(this.data$);
-        // this.cd.detectChanges();
+        this.cd.detectChanges();
       }
     }
   }
@@ -64,13 +68,17 @@ export class TbGridComponent implements OnInit, AfterViewInit, OnChanges {
   }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     _.each(data, (grp: ChildGroup) => {
-      grp.isCreated = true;
-      grp.isVisible = isVisible;
-      _.each(grp.accounts, (acc: Account) => {
-        acc.isCreated = true;
-        acc.isVisible = isVisible;
-      });
-      this.toggleVisibility(grp.childGroups, isVisible);
+      if (grp.isIncludedInSearch) {
+        grp.isCreated = true;
+        grp.isVisible = isVisible;
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
     });
   }
 }

@@ -1,5 +1,5 @@
 import { Store } from '@ngrx/store';
-import { AfterViewInit, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { AfterViewInit, OnChanges, Component, Input, OnDestroy, OnInit, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, SimpleChanges } from '@angular/core';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { AppState } from '../../../store/roots';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
@@ -19,7 +19,8 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
       [selectedCompany]="selectedCompany"
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
-      (expandAll)="expandAll = $event"
+      (seachChange)="searchChanged($event)"
+      (expandAll)="expandAllEvent($event)"
       [BsExportXLS]="true"
       (plBsExportXLSEvent)="exportXLS($event)"
     ></tb-pl-bs-filter>
@@ -36,7 +37,7 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
     </div>
     <div *ngIf="!(showLoader | async)">
       <bs-grid #bsGrid
-      [search]="filter.search"
+      [search]="search"
       [expandAll]="expandAll"
         [bsData]="data$ | async"
       ></bs-grid>
@@ -44,11 +45,12 @@ import { ChildGroup, Account } from '../../../models/api-models/Search';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   public showLoader: Observable<boolean>;
   public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
   public expandAll: boolean;
+  public search: string;
   @ViewChild('bsGrid') public bsGrid: BsGridComponent;
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -78,18 +80,12 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.bs.data, (p: BalanceSheetData) => {
       let data = _.cloneDeep(p) as BalanceSheetData;
       if (data.liabilities) {
-        data.liabilities.forEach(q => { q.isVisible = true; });
-      }
-      if (data.assets) {
-        data.assets.forEach(q => { q.isVisible = true; });
-      }
-      if (data.liabilities) {
         this.InitData(data.liabilities);
-        data.liabilities.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.liabilities.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       if (data.assets) {
         this.InitData(data.assets);
-        data.assets.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.assets.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       return data;
     })).takeUntil(this.destroyed$);
@@ -115,6 +111,11 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
   public ngAfterViewInit() {
     this.cd.detectChanges();
+  }
+  public ngOnChanges(changes: SimpleChanges) {
+    // if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+    //   this.cd.detectChanges();
+    // }
   }
   public filterData(request: ProfitLossRequest) {
     request.from = request.from;
@@ -142,5 +143,21 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy {
       }
     });
     return tempFYIndex;
+  }
+  public expandAllEvent(event: boolean) {
+    this.cd.checkNoChanges();
+    this.expandAll = !this.expandAll;
+    setTimeout(() => {
+      this.expandAll = event;
+      this.cd.detectChanges();
+    }, 1);
+  }
+  public searchChanged(event: string) {
+    // this.cd.checkNoChanges();
+    this.search = event;
+    this.cd.detectChanges();
+    // setTimeout(() => {
+    //   this.search = event;
+    // }, 1);
   }
 }

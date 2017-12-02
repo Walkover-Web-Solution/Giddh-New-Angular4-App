@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, SimpleChanges, Component, Input, OnInit, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, SimpleChanges, Component, Input, OnInit, OnChanges, ChangeDetectorRef } from '@angular/core';
 import { ChildGroup, Account } from '../../models/api-models/Search';
 
 @Component({
@@ -29,22 +29,23 @@ import { ChildGroup, Account } from '../../models/api-models/Search';
 </ng-container>
 
 <ng-content></ng-content>
-
-
-`,
-  changeDetection: ChangeDetectionStrategy.OnPush
+`
 })
 export class TlPlGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
   @Input() public padding: string;
-  public visible: boolean = true;
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
     //
   }
   public ngOnChanges(changes: SimpleChanges) {
-    // debugger;
+    if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+      this.cd.detectChanges();
+    }
+    if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
+      this.cd.detectChanges();
+    }
   }
   public ngOnInit() {
     //
