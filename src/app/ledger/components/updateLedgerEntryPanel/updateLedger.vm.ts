@@ -83,7 +83,7 @@ export class UpdateLedgerVm {
             }
           } else {
             if (dx.amount > 0) {
-              let trx: ILedgerTransactionItem = this.blankTransactionItem('DEBIT');
+              let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
               let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
               let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
               let index = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '' || undefined || null);
