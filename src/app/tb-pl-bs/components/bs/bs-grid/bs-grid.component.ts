@@ -27,10 +27,10 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
       if (this.bsData) {
         // this.cd.detach();
         this.zone.run(() => {
-          this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
-          this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
           // if (!this.search) {
           if (this.bsData) {
+            this.toggleVisibility(this.bsData.assets, changes.expandAll.currentValue);
+            this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
             // always make first level visible ....
             if (this.bsData.liabilities) {
               _.each(this.bsData.liabilities, (grp: any) => {
@@ -58,6 +58,7 @@ export class BsGridComponent implements OnInit, AfterViewInit, OnChanges {
             }
 
           }
+          this.cd.detectChanges();
           // } else if (this.search && this.search.length < 3) {
           //   if (this.plData.liabilities) {
           //     this.plData.liabilities.forEach(p => p.isVisible = true);

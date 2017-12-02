@@ -80,18 +80,12 @@ export class BsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges 
     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.bs.data, (p: BalanceSheetData) => {
       let data = _.cloneDeep(p) as BalanceSheetData;
       if (data.liabilities) {
-        data.liabilities.forEach(q => { q.isVisible = true; });
-      }
-      if (data.assets) {
-        data.assets.forEach(q => { q.isVisible = true; });
-      }
-      if (data.liabilities) {
         this.InitData(data.liabilities);
-        data.liabilities.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.liabilities.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       if (data.assets) {
         this.InitData(data.assets);
-        data.assets.forEach(g => { g.isVisible = true; g.isCreated = true; });
+        data.assets.forEach(g => { g.isVisible = true; g.isCreated = true; g.isIncludedInSearch = true; });
       }
       return data;
     })).takeUntil(this.destroyed$);
