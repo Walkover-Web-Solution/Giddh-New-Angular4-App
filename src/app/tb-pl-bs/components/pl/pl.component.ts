@@ -8,7 +8,8 @@ import * as _ from '../../../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { PlGridComponent } from './pl-grid/pl-grid.component';
-
+import { createSelector } from 'reselect';
+import { ChildGroup, Account } from '../../../models/api-models/Search';
 @Component({
   selector: 'pl',
   template: `
@@ -17,7 +18,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
       [selectedCompany]="selectedCompany"
       (onPropertyChanged)="filterData($event)"
       [showLoader]="showLoader | async"
-      (expandAll)="expandAllEmit($event)"
+      (expandAll)="expandAll = $event"
       [tbExportCsv]="false"
       [tbExportPdf]="false"
       [tbExportXLS]="false"
@@ -37,6 +38,7 @@ import { PlGridComponent } from './pl-grid/pl-grid.component';
     <div *ngIf="!(showLoader | async)">
       <pl-grid #plGrid
       [search]="filter.search"
+      [expandAll]="expandAll"
         [plData]="data$ | async"
       ></pl-grid>
     </div>
@@ -46,6 +48,7 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
   public showLoader: Observable<boolean>;
   public data$: Observable<ProfitLossData>;
   public request: ProfitLossRequest;
+  public expandAll: boolean;
   @ViewChild('plGrid') public plGrid: PlGridComponent;
   public get selectedCompany(): CompanyResponse {
     return this._selectedCompany;
@@ -72,29 +75,41 @@ export class PlComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private store: Store<AppState>, public tlPlActions: TBPlBsActions, private cd: ChangeDetectorRef) {
     this.showLoader = this.store.select(p => p.tlPl.pl.showLoader).takeUntil(this.destroyed$);
-    this.data$ = this.store.select(p => {
-      let data = _.cloneDeep(p.tlPl.pl.data);
-      if (data.expArr) {
-        data.expArr.forEach(q => { q.isVisible = true; });
-      }
-      if (data.incArr) {
-        data.incArr.forEach(q => { q.isVisible = true; });
-      }
-      return data;
-    }
-    ).takeUntil(this.destroyed$);
   }
 
   public ngOnInit() {
     // console.log('hello Tb Component');
+     this.data$ = this.store.select(createSelector((p: AppState) => p.tlPl.pl.data, (p: ProfitLossData) => {
+      let data = _.cloneDeep(p) as ProfitLossData;
+      if (data.expArr) {
+        this.InitData(data.expArr);
+        data.expArr.forEach(g => { g.isVisible = true; g.isCreated = true; });
+      }
+      if (data.incArr) {
+        this.InitData(data.incArr);
+        data.incArr.forEach(g => { g.isVisible = true; g.isCreated = true; });
+      }
+      return data;
+    })
+    ).takeUntil(this.destroyed$);
     this.data$.subscribe(p => {
       this.cd.detectChanges();
     });
   }
-  public expandAllEmit(v) {
-    if (this.plGrid) {
-      this.plGrid.expandAll = v;
-    }
+  public InitData(d: ChildGroup[]) {
+    _.each(d, (grp: ChildGroup) => {
+      grp.isVisible = false;
+      grp.isCreated = false;
+      grp.isIncludedInSearch = true;
+      _.each(grp.accounts, (acc: Account) => {
+        acc.isIncludedInSearch = true;
+        acc.isCreated = false;
+        acc.isVisible = false;
+      });
+      if (grp.childGroups) {
+        this.InitData(grp.childGroups);
+      }
+    });
   }
   public ngAfterViewInit() {
     //

@@ -1,18 +1,22 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store/roots';
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CompanyResponse, StateDetailsRequest } from '../models/api-models/Company';
 import { CompanyActions } from '../actions/company.actions';
 
 @Component({
   selector: 'tb-pl-bs',
-  templateUrl: './tb-pl-bs.component.html'
+  templateUrl: './tb-pl-bs.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TbPlBsComponent implements OnInit, AfterViewInit {
 
   public selectedCompany: CompanyResponse;
+  public CanTBLoad: boolean = true;
+  public CanPLLoad: boolean = false;
+  public CanBSLoad: boolean = false;
 
-  constructor(private store: Store<AppState>, private companyActions: CompanyActions) {
+  constructor(private store: Store<AppState>, private companyActions: CompanyActions, private cd: ChangeDetectorRef) {
     this.store.select(p => p.session.companies && p.session.companies.find(q => q.uniqueName === p.session.companyUniqueName)).subscribe(p => {
       this.selectedCompany = p;
     });
@@ -31,4 +35,9 @@ export class TbPlBsComponent implements OnInit, AfterViewInit {
   public ngAfterViewInit() {
     //
   }
+  // public SHOWBS() {
+  //   this.CanBSLoad = true;
+  //   this.cd.detectChanges();
+  //   debugger;
+  // }
 }
