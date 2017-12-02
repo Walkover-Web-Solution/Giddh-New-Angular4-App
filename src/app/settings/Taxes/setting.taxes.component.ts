@@ -175,4 +175,8 @@ export class SettingTaxesComponent implements OnInit {
       }
     });
   }
+
+  public sayHello() {
+    alert('ok');
+  }
 }
