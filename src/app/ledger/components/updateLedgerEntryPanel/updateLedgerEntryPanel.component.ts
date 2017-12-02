@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
-import { LedgerResponse } from '../../../models/api-models/Ledger';
+import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { ActivatedRoute } from '@angular/router';
@@ -22,6 +22,8 @@ import { AccountResponse } from '../../../models/api-models/Account';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
+import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -59,6 +61,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     }
   };
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+  public showAdvanced: boolean;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
@@ -76,7 +79,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public ngOnInit() {
-    this.vm = new UpdateLedgerVm(this._toasty);
+    this.showAdvanced = false;
+    this.vm = new UpdateLedgerVm();
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
@@ -142,9 +146,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
               this.vm.selectedLedger.transactions.map(t => {
                 if (t.inventory) {
-                  let findStocks = this.vm.flatternAccountList.find(f => f.uniqueName === t.particular.uniqueName);
+                  let findStocks = accountsArray.find(f => f.value === t.particular.uniqueName + '#' + t.inventory.stock.uniqueName);
                   if (findStocks) {
-                    let findUnitRates = findStocks.stocks.find(s => s.uniqueName === t.inventory.stock.uniqueName);
+                    let findUnitRates = findStocks.additional.stock;
                     if (findUnitRates && findUnitRates.accountStockDetails && findUnitRates.accountStockDetails.unitRates.length) {
                       let tempUnitRates = findUnitRates.accountStockDetails.unitRates;
                       tempUnitRates.map(tmp => tmp.code = tmp.stockUnitCode);
@@ -388,6 +392,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let taxes: UpdateLedgerTaxData[] = cloneDeep(this.vm.selectedTaxes);
     requestObj.voucherType = requestObj.voucher.shortCode;
     requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
+    requestObj.generateInvoice = this.vm.selectedLedger.generateInvoice;
     requestObj.transactions.map(trx => {
       if (trx.inventory && trx.inventory.stock) {
         trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
@@ -401,5 +406,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.vm.resetVM();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public downloadInvoice(invoiceName: string, e: Event) {
+    e.stopPropagation();
+    let activeAccount = null;
+    this.activeAccount$.take(1).subscribe(p => activeAccount = p);
+    let downloadRequest = new DownloadLedgerRequest();
+    downloadRequest.invoiceNumber = [invoiceName];
+
+    this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
+      let blob = base64ToBlob(d.body, 'application/pdf', 512);
+      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+    });
   }
 }

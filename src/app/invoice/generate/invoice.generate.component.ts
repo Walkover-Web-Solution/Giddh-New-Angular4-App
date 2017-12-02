@@ -93,7 +93,11 @@ export class InvoiceGenerateComponent implements OnInit {
       .takeUntil(this.destroyed$)
       .subscribe((o: GetAllLedgersForInvoiceResponse) => {
         if (o && o.results) {
-          this.ledgersData = _.cloneDeep(o);
+          let a = _.cloneDeep(o);
+          a.results = _.orderBy(a.results, (item: ILedgersInvoiceResult) => {
+            return moment(item.entryDate, 'DD-MM-YYYY');
+          }, 'desc');
+          this.ledgersData = a;
         }
       });
 
@@ -136,6 +140,7 @@ export class InvoiceGenerateComponent implements OnInit {
   public pageChanged(event: any): void {
     this.ledgerSearchRequest.page = event.page;
     this.selectedLedgerItems = [];
+    this.togglePrevGenBtn = false;
     this.getLedgersOfInvoice();
   }
 

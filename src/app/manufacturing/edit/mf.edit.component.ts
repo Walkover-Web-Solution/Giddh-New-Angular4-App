@@ -133,7 +133,7 @@ export class MfEditComponent implements OnInit {
         this.manufacturingDetails = manufacturingDetailsObj;
       }
     });
-    // get all stocks
+
     // get manufacturing stocks
     this.stockListDropDown$ = this.store.select(
       createSelector([(state: AppState) => state.inventory.manufacturingStockListForCreateMF], (manufacturingStockListForCreateMF) => {

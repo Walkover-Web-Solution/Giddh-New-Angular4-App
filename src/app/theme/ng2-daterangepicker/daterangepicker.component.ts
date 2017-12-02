@@ -8,7 +8,7 @@ import * as moment from 'moment/moment';
 import 'bootstrap-daterangepicker';
 
 @Directive({
-  selector: '[daterangepicker]',
+  selector: '[daterangepicker]'
 })
 export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoCheck {
 
@@ -48,7 +48,7 @@ export class DaterangePickerComponent implements AfterViewInit, OnDestroy, DoChe
     this.targetOptions = Object.assign({}, this.config.settings, this.options);
 
     // cast $ to any to avoid jquery type checking
-    ($(this.input.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this));
+    ($(this.input.nativeElement) as any).daterangepicker(this.targetOptions, this.callback.bind(this, this.options.startDate, this.options.endDate));
 
     this.datePicker = ($(this.input.nativeElement) as any).data('daterangepicker');
   }

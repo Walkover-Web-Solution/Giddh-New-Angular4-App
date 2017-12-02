@@ -1,7 +1,7 @@
 /**
  * Created by yonifarin on 12/3/16.
  */
-import { AfterViewInit, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, Renderer, TemplateRef, ViewChild } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { IOption } from './sh-options.interface';
 import { ShSelectMenuComponent } from './sh-select-menu.component';
@@ -11,6 +11,7 @@ import { ShSelectMenuComponent } from './sh-select-menu.component';
   selector: 'sh-select',
   templateUrl: './sh-select.component.html',
   styleUrls: [`./sh-select.component.css`],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -92,7 +93,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
     DOWN: 40
   };
 
-  constructor(private element: ElementRef, private renderer: Renderer) {
+  constructor(private element: ElementRef, private renderer: Renderer, private cdRef: ChangeDetectorRef ) {
   }
 
   /**
@@ -102,7 +103,13 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   @HostListener('window:mouseup', ['$event'])
   public onDocumentClick(event) {
     if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
-      this.hide(event);
+      this.isOpen = false;
+      if (this.selectedValues && this.selectedValues.length === 1) {
+        this.filter = this.selectedValues[0].label;
+      } else {
+        this.clearFilter();
+      }
+      this.onHide.emit();
     }
   }
 
@@ -200,6 +207,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         this.menuEle.virtualScrollElm.scrollInto(item);
       }
     }
+    this.cdRef.markForCheck();
   }
 
   public keydownUp(event) {
@@ -250,6 +258,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
         // }
       }
     }
+    this.cdRef.detectChanges();
   }
 
   public hide(event?) {
@@ -272,6 +281,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
       }
       this.onHide.emit();
     }
+    this.cdRef.markForCheck();
   }
 
   public filterInputBlur(event) {
@@ -307,6 +317,9 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
 
   public writeValue(value: any) {
     this.selectedValues = value;
+    if (!this.cdRef['destroyed']) {
+      this.cdRef.detectChanges();
+    }
   }
 
   public propagateChange(_: any) {

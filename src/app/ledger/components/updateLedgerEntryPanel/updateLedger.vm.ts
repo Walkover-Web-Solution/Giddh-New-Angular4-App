@@ -3,7 +3,6 @@ import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfa
 import { LedgerResponse } from '../../../models/api-models/Ledger';
 import { filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
-import { ToasterService } from '../../../services/toaster.service';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
@@ -32,7 +31,7 @@ export class UpdateLedgerVm {
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public discountComponent: UpdateLedgerDiscountComponent;
 
-  constructor(private _toasty: ToasterService) {
+  constructor() {
     this.voucherTypeList = [{
       label: 'Sales',
       value: 'sal'
@@ -156,10 +155,10 @@ export class UpdateLedgerVm {
   }
 
   public isThereIncomeOrExpenseEntry(): number {
-    return filter(this.selectedLedger.transactions, (trx) => {
+    return filter(this.selectedLedger.transactions, (trx: ILedgerTransactionItem) => {
       if (trx.particular.uniqueName) {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(trx));
-        return category === 'income' || category === 'expenses';
+        return (category === 'income' || category === 'expenses') || trx.inventory;
       }
     }).length;
   }
@@ -267,7 +266,8 @@ export class UpdateLedgerVm {
   }
 
   public unitChanged(stockUnitCode: string) {
-    this.stockTrxEntry.inventory.unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
+    let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
+    this.stockTrxEntry.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
   }
@@ -302,6 +302,8 @@ export class UpdateLedgerVm {
 
   /** ledger custom filter **/
   public ledgerCustomFilter(term: string, item: IOption): boolean {
-    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1);
+    let mergedAccounts = _.cloneDeep(item.additional.mergedAccounts.split(',').map(a => a.trim().toLocaleLowerCase()));
+    return (item.label.toLocaleLowerCase().indexOf(term) > -1 || item.additional.uniqueName.toLocaleLowerCase().indexOf(term) > -1)
+      || mergedAccounts.indexOf(term) > -1;
   }
 }

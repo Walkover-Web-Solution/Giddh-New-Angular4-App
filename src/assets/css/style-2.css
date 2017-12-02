@@ -182,9 +182,10 @@ header .navbar {
     color: #fff;
 }
 
-.fyear {
+
+/* .fyear {
     font-size: 14px;
-}
+} */
 
 .t-h-bg1 th {
     background: #fff;
@@ -328,8 +329,8 @@ header .navbar {
 }
 
 .highlight_info {
-    color: #ff782d/* 95756E*/
-    ;
+    color: #ff782d;
+    /* 95756E*/
 }
 
 .midlight_info {
@@ -421,7 +422,7 @@ header .navbar {
     padding: 8px 10px;
     display: block;
     background: #f5f5f5;
-    color: #d35f29 !important;
+    color: #ff5e01 !important;
     margin: 20px 0px;
 }
 
@@ -459,7 +460,7 @@ header .navbar {
 }
 
 .icon-options {
-    color: #d35f29;
+    color: #ff5e01;
     /*    background: #f3f0e6;*/
     padding: 0 4px;
     /*    border: 1px solid #ccc;
@@ -518,11 +519,11 @@ header {
 .childTab>.nav-tabs>li.active>a,
 .childTab>.nav-tabs>li.active>a:focus,
 .childTab>.nav-tabs>li.active>a:hover {
-    color: #d35f29;
+    color: #ff5e01;
     border: 0;
     cursor: pointer;
     background: none;
-    border-bottom: 2px solid #d35f29;
+    border-bottom: 2px solid #ff5e01;
 }
 
 
@@ -555,7 +556,7 @@ header {
 .childTab .nav-tabs>li.active>a, .childTab .nav-tabs>li.active>a:focus, .childTab .nav-tabs>li.active>a:hover {
     padding: 13px 18px;
     background: white;
-    color: #d35f29;
+    color: #ff5e01;
     border: 1px solid #ddd;
     border-bottom-color: transparent;
 }*/
@@ -566,7 +567,7 @@ header {
 }
 
 .danger-btn {
-    background-color: #d35f29;
+    background-color: #ff5e01;
     color: #fff;
     text-shadow: none;
     background-image: none;
@@ -587,6 +588,7 @@ header {
 #cmpWrp .cText {
     margin: 5px 0 5px 0px;
     width: 100%;
+    font-size: 9px;
 }
 
 #companyList {
@@ -604,7 +606,7 @@ header {
 
 #companyList li.selected-company,
 #companyList li.selected-company:hover {
-    background: #d35f29;
+    background: #ff5e01;
     color: #fff;
 }
 
@@ -638,7 +640,7 @@ header {
 }
 
 .basic>tbody>tr>td a {
-    color: #d35f29;
+    color: #ff5e01;
 }
 
 .delt {
@@ -768,7 +770,7 @@ input[type="checkbox"]:after {
 .thumbnail.active {
     background: #ffffff;
     box-shadow: 0 5px 34px 0 rgba(211, 95, 41, 0.18);
-    border-color: #d35f29 !important;
+    border-color: #ff5e01 !important;
 }
 
 .thumbnail {
@@ -995,7 +997,7 @@ input[type="checkbox"]:after {
 }
 
 #companyList .glyphicon-trash {
-    color: #d35f29;
+    color: #ff5e01;
 }
 
 .proforma-list>.filters>div {
@@ -1045,7 +1047,7 @@ input[type="checkbox"]:after {
     height: 49px;
     border: 0;
     width: 200px;
-    color: #d35f29;
+    color: #ff5e01;
     background: #dddddd;
     left: 0;
     padding-left: 16px;
@@ -1090,7 +1092,7 @@ input[type="checkbox"]:after {
 
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-    background-color: #d35f29 !important;
+    background-color: #ff5e01 !important;
     border-color: transparent;
     color: #fff;
 }
@@ -1139,8 +1141,8 @@ input[type="checkbox"]:after {
 
 .ranges li.active,
 .ranges li:hover {
-    background: #d35f29 !important;
-    border: 1px solid #d35f29 !important;
+    background: #ff5e01 !important;
+    border: 1px solid #ff5e01 !important;
     color: #fff !important;
 }
 
@@ -1251,7 +1253,7 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border-color: #d35f29 !important;
+    border-color: #ff5e01 !important;
 }
 
 .uncfr .form-control {
@@ -1260,7 +1262,7 @@ input[type=number]::-webkit-inner-spin-button {
 
 .active.end-date.in-range.available,
 .daterangepicker td.start-date {
-    background: #d35f29 !important;
+    background: #ff5e01 !important;
     color: #fff;
     border-radius: 2px;
 }
@@ -1401,7 +1403,7 @@ footer small a {
 }
 
 .required {
-    color: #d35f29;
+    color: #ff5e01;
 }
 
 .form-theme {
@@ -1524,7 +1526,7 @@ a.btn.btn-xs.btn-link.pull-right {
 }
 
 .action a:hover {
-    color: #d35f29;
+    color: #ff5e01;
 }
 
 .action .btn {
@@ -1599,7 +1601,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 
 /*.stock-grp-list >li:hover {
-    background: #d35f29;
+    background: #ff5e01;
     border-radius: 3px;
     color: #fff;
 }
@@ -2037,7 +2039,8 @@ input[type=radio]:checked:after {
     top: 0;
 }
 
-.entrypanel .upload_div {
+
+/* .entrypanel .upload_div {
     padding: 6px 8px;
     float: left;
     margin-right: 10px;
@@ -2054,7 +2057,7 @@ input[type=radio]:checked:after {
 
 .entrypanel .upload_div label {
     color: #4d4d4d;
-}
+} */
 
 #inventory-sidebar,
 #inventory-sidebar input {
@@ -3114,8 +3117,8 @@ label {
 .pagination>.active>span,
 .pagination>.active>span:focus,
 .pagination>.active>span:hover {
-    background: #d35f29;
-    border-color: #d35f29;
+    background: #ff5e01;
+    border-color: #ff5e01;
     color: #fff;
 }
 
@@ -3125,7 +3128,7 @@ label {
 .pagination>li>span:hover {
     background-color: #eee;
     border-color: #ddd;
-    color: #d35f29;
+    color: #ff5e01;
 }
 
 #manufacture .section_title {
@@ -3153,7 +3156,7 @@ label {
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #d35f29 !important;
+    background-color: #ff5e01 !important;
 }
 
 .select2-results__option[aria-selected] {
@@ -3299,7 +3302,7 @@ label {
     width: 18px;
     height: 18px;
     background: #fff;
-    top: 0;
+    top: -2px;
     right: -2px;
     border: 2px solid #969696;
     border-radius: 50%;
@@ -3311,10 +3314,10 @@ label {
     width: 6px;
     height: 6px;
     background: #ff5f00;
-    left: 4px;
-    top: 6px;
+    left: 2px;
+    bottom: 3px;
     border-radius: 50%;
-    right: 0;
+    /* right: 0; */
     text-align: center;
 }
 
@@ -3667,9 +3670,10 @@ input[type='checkbox'][disabled] {
 }
 
 .basic>thead>tr>th {
-    background: #525252;
-    color: #fff;
+    background: #e5e5e5;
+    color: #262626;
     border: 0;
+    font-family: 'LatoWebbold';
     text-transform: capitalize;
 }
 
@@ -4099,3 +4103,277 @@ typeahead-container .dropdown-menu li.active>a>a {
 .entry-modal {
     width: 100%;
 }
+
+small {
+    color: #b2b2b2;
+}
+
+.square-switch {
+    width: 100%;
+    background: #fff;
+    height: 34px;
+    line-height: 32px;
+    margin: 0;
+    position: relative;
+    border-radius: 2px;
+}
+
+.square-switch>label {
+    position: relative;
+    transition: all 0.3s ease;
+    width: 100%;
+    border: 1px solid #cccccc;
+    border-radius: 1px;
+    color: #666;
+    padding: 0 7px;
+}
+
+.square-switch input[type="checkbox"]:checked~label {
+    background: #28ab00;
+    color: #fff;
+}
+
+.square-switch>input[type="checkbox"] {
+    display: none;
+}
+
+.square-switch input[type="checkbox"]~label::after {
+    content: ' ';
+    background: #ccc;
+    position: absolute;
+    height: 34px;
+    width: 28px;
+    left: 0px;
+    border-radius: 1px;
+    transition: all 0.2s ease;
+    top: -1px;
+}
+
+.square-switch input[type="checkbox"]:checked~label::after {
+    right: -1px;
+    left: inherit;
+}
+
+.form-group {
+    font-size: 14px;
+}
+
+.user_list {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    overflow: hidden;
+}
+
+.permission_list .permission:last-child .form-group {
+    margin-bottom: 0 !important;
+}
+
+.option_box {
+    background: #eee;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 10px;
+}
+
+.dashboard-filter input[type=radio] {
+    top: -1px;
+}
+
+.dashboard-filter .radio_theme:before {
+    top: 0;
+}
+
+.dashboard-filter .radio_theme:after {
+    left: 4px;
+}
+
+
+/* =========================== LEDGER CSS ============================ */
+
+.ledgHead table td[class*=col-],
+.ledgHead table td .select2-container {
+    padding: 8px !important;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    font-size: 13px;
+    color: #4d4d4d;
+    max-width: 0;
+    text-overflow: ellipsis;
+    /* // overflow: hidden; */
+    white-space: nowrap;
+}
+
+.ledgHead table td.pdR25imp {
+    padding-right: 25px !important;
+}
+
+.ledgHead.entry-popup table td[class*=col-] {
+    padding: 0px !important;
+    padding-bottom: 1px !important;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    font-size: 13px;
+    color: #4d4d4d;
+    max-width: 0;
+    text-overflow: ellipsis;
+    /* overflow: hidden; */
+    white-space: nowrap;
+}
+
+.ledgHead.entry-popup table td.pdR25imp {
+    padding-right: 25px !important;
+}
+
+.ledgHead .ledger-main td[class*=col-] {
+    padding: 0px !important;
+}
+
+table th[class*=col-]:last-child,
+.ledger-main tr td:last-child,
+table td[class*=col-]:last-child {
+    border-right: 0 !important;
+}
+
+.total_col td {
+    border: 0 !important;
+}
+
+.ledger-main .form-control {
+    border: 0;
+}
+
+.t-h-bg1 th {
+    border-left: 0;
+}
+
+.ledgHead input[type=search] {
+    min-width: auto;
+}
+
+.ledger-stat {
+    padding: 50px 0;
+    background: #fff;
+    color: #808080;
+    font-size: 18px;
+    margin: 100px 0;
+}
+
+.ledger-stat h3 {
+    font-size: 24px;
+    margin-top: 10px;
+}
+
+.icomoon_ico {
+    margin-left: 8px;
+}
+
+.account_Name {
+    color: rgba(0, 0, 0, 0.8);
+    font-family: 'LatoWebBold';
+    text-transform: capitalize;
+}
+
+.ledger-footer-1 {
+    position: absolute;
+    bottom: 0;
+}
+
+.ledger-head th {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+.total_col td {
+    border: 0;
+}
+
+.ledger-stat span {
+    display: inline-block;
+}
+
+.pageCount {
+    overflow: hidden;
+    width: 50%;
+    left: 25%;
+    bottom: 100px;
+    background: #fff;
+    padding: 5px;
+    font-size: 12px;
+}
+
+#pagination {
+    margin: 0 auto;
+    overflow: hidden;
+    width: 100%;
+    text-align: center;
+}
+
+.pagination>li>a {
+    color: #4d4d4d;
+}
+
+.grey {
+    color: #4d4d4d;
+}
+
+.ledger-panel label {
+    font-weight: 400;
+}
+
+.pdR25imp {
+    padding-right: 25px !important;
+}
+
+.t-h-bg1 th {
+    background: #f3f0e6;
+    color: #4d4d4d;
+    border-right: 1px solid #c4c6c7;
+    padding: 11px!important;
+    font-weight: 400;
+    border-bottom: 1px solid #c4c6c7;
+}
+
+.ledger_book {
+    border: 1px solid #ccc;
+    clear: both;
+    /* // overflow: hidden; */
+    position: relative;
+    background: #fff;
+    float: left;
+    width: 100%;
+}
+
+.Width600 {
+    position: absolute;
+    width: 600px;
+}
+
+.entrypanel {
+    position: relative;
+}
+
+.entrypanel:before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 1px;
+    height: 100%;
+    background: #ccc;
+    right: 1px;
+    margin: 0 auto;
+}
+
+.ledger-main sh-select .header.open>input[type="text"] {
+    border: 0 !important;
+}
+
+.select2-ledger sh-select .selectedVal {
+    border: 0 !important;
+}
+
+.ledgHead.entry-popup table td.select2-ledger>sh-select {
+    margin-top: 1px;
+}
+
+
+/* =========================== LEDGER CSS ============================ */

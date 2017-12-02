@@ -63,7 +63,6 @@ div {
 
 input[type="text"] {
     outline: none;
-    border: 0;
 }
 
 [hidden] {
@@ -86,11 +85,11 @@ i.close.icon.clear:hover::after {
     right: 2px;
     padding-left: 2px;
     padding-right: 2px;
-    top: 3px;
+    top: 0;
     cursor: pointer;
     font-size: 25px;
     font-weight: 500;
-    line-height: 1;
+    line-height: 34px;
     opacity: .5;
     color: black;
 }
@@ -128,10 +127,6 @@ i.close.icon.clear:hover::after {
     color: black;
 }
 
-.selectedVal {
-    background: #fff !important;
-}
-
 .sh-select-disabled .selectedVal {
     background: #eee !important;
 }
@@ -139,8 +134,13 @@ i.close.icon.clear:hover::after {
 .selectedVal {
     border: 1px solid #d6d6d6 !important;
     padding-right: 22px !important;
+    background: #fff !important;
 }
 
 .header.open>input[type="text"] {
-    border: 1px solid #d6d6d6 !important;
+    border-color: #d6d6d6;
+}
+
+.header .bdr>input[type="text"] {
+    border: 0;
 }
