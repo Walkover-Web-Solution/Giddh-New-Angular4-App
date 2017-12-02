@@ -20,7 +20,7 @@
                     (selected)="getStocksWithRate($event)"
                     [(ngModel)]="manufacturingDetails.stockUniqueName" 
                     name="stockUniqueName" 
-                    [placeholder]="'- Select product -'">
+                    placeholder="--Select product--">
                     </sh-select>                    
                 </div>
                 <div class="form-group pos-rel">
@@ -98,13 +98,14 @@
                             <tr *ngIf="toggleAddLinkedStocks" class="new-row">
                                 <td colspan="2">
                                     <span class="hr"></span>
-                                    <div class="custom-select pos-rel">
-                                        <select class="form-control" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (change)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)">
-                                              <option value="" [selected]="true">-Select-</option>
-                                              <option [ngValue]="stock.value" *ngFor="let stock of allStocksDropDown$ | async" >{{ stock.label }}</option>
-                                            </select>
-                                        <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                                    </div>
+                                    <!-- <div class="custom-select pos-rel"> -->
+                                        <!-- <select class="form-control" >
+                                            <option value="" [selected]="true">-Select-</option>
+                                            <option [ngValue]="stock.value" *ngFor="let stock of allStocksDropDown$ | async" >{{ stock.label }}</option>
+                                        </select>
+                                        <span class="select_drop"><i class="fa fa-caret-down"></i></span> -->
+                                    <!-- </div> -->
+                                    <sh-select placeholder="--Select--" [options]="allStocksDropDown$ | async" name="linkedStocks.stockUniqueName" [(ngModel)]="linkedStocks.stockUniqueName" required #linkedStockList="ngModel" (selected)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)"></sh-select>                                    
                                 </td>
                                 <td>
                                     <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control" (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
