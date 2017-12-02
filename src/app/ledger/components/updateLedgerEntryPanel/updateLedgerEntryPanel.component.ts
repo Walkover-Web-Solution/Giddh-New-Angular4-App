@@ -48,6 +48,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public selectedLedgerStream$: Observable<LedgerResponse>;
   public activeAccount$: Observable<AccountResponse>;
   public ledgerUnderStandingObj = {
     accountType: '',
@@ -64,9 +65,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public showAdvanced: boolean;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-    private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
-    private _ledgerAction: LedgerActions) {
+              private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+              private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
+    this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -95,10 +97,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.entryUniqueName$.subscribe(entryName => {
       this.entryUniqueName = entryName;
       if (entryName) {
+        this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, entryName));
         // get flatten_accounts list && get transactions list
-        Observable.combineLatest(this.flattenAccountListStream$, this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName), this.activeAccount$)
+        Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this.activeAccount$)
           .subscribe((resp: any[]) => {
-            if (resp[0] && resp[1].status === 'success' && resp[2]) {
+            if (resp[0] && resp[1] && resp[2]) {
               //#region flattern group list assign process
               this.vm.flatternAccountList = _.cloneDeep(resp[0]);
               let accountDetails: AccountResponse = resp[2];
@@ -112,13 +115,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 // stocks from ledger account
                 resp[0].map(acc => {
                   // normal entry
-                  accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                  accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   accountDetails.stocks.map(as => {
                     // stock entry
                     accountsArray.push({
                       value: `${acc.uniqueName}#${as.uniqueName}`,
                       label: acc.name + '(' + as.uniqueName + ')',
-                      additional: Object.assign({}, acc, { stock: as })
+                      additional: Object.assign({}, acc, {stock: as})
                     });
                   });
                 });
@@ -129,20 +132,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                       accountsArray.push({
                         value: `${acc.uniqueName}#${as.uniqueName}`,
                         label: `${acc.name} (${as.uniqueName})`,
-                        additional: Object.assign({}, acc, { stock: as })
+                        additional: Object.assign({}, acc, {stock: as})
                       });
                     });
-                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   } else {
-                    accountsArray.push({ value: acc.uniqueName, label: acc.name, additional: acc });
+                    accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   }
                 });
               }
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
               //#endregion
               //#region transaction assignment process
-              this.vm.selectedLedger = resp[1].body;
-              this.vm.selectedLedgerBackup = resp[1].body;
+              this.vm.selectedLedger = resp[1];
+              this.vm.selectedLedgerBackup = resp[1];
 
               this.vm.selectedLedger.transactions.map(t => {
                 if (t.inventory) {
@@ -231,8 +234,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: { company: companyUniqueName },
-        headers: { 'Session-Id': sessionKey },
+        data: {company: companyUniqueName},
+        headers: {'Session-Id': sessionKey},
         concurrency: 0
       };
       this.uploadInput.emit(event);
@@ -408,6 +411,18 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.destroyed$.complete();
   }
 
+  public downloadAttachedFile(fileName: string, e: Event) {
+    e.stopPropagation();
+    this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+        return saveAs(blob, d.body.name);
+      } else {
+        this._toasty.errorToast(d.message);
+      }
+    });
+  }
+
   public downloadInvoice(invoiceName: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
@@ -416,8 +431,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
-      let blob = base64ToBlob(d.body, 'application/pdf', 512);
-      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      } else {
+        this._toasty.errorToast(d.message);
+      }
     });
   }
 }

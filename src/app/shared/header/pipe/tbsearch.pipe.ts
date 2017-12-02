@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, PipeTransform, NgZone } from '@angular/core';
 
 import * as _ from '../../../lodash-optimized';
 
@@ -13,25 +13,32 @@ export class TbsearchPipe implements PipeTransform {
    *
    */
   public srch: string;
-  constructor() {
+  constructor(private zone: NgZone
+  ) {
     //
   }
   public transform(input: any, search: string): any {
-    input = _.cloneDeep(input);
+    // input = _.cloneDeep(input);
+    console.time('t1');
     if (!_.isUndefined(search)) {
       this.srch = search.toLowerCase();
     }
     let initial = input;
 
     if (!_.isUndefined(this.srch) && this.srch.length > 2) {
-      this.performSearch(input);
+      this.zone.run(() => {
+        this.performSearch(input);
+      });
     } else {
       if (!_.isUndefined(this.srch)) {
         if (this.srch.length < 3) {
-          this.resetSearch(input);
+          this.zone.run(() => {
+            this.resetSearch(input);
+          });
         }
       }
     }
+    console.timeEnd('t1');
     return input;
   }
 
