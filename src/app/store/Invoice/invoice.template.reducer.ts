@@ -313,12 +313,12 @@ export const initialState: CustomTemplateState = {
             field: 'message1',
             width: null
           },
-          {
-            display: true,
-            label: 'NOTE 2',
-            field: 'message2',
-            width: null
-          },
+          // {
+          //   display: true,
+          //   label: 'NOTE 2',
+          //   field: 'message2',
+          //   width: null
+          // },
           {
             display: true,
             label: 'Thank You for your business.',
