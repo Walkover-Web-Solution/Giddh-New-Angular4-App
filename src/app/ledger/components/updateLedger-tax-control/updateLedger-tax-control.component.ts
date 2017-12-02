@@ -107,11 +107,6 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
     this.isApplicableTaxesEvent.unsubscribe();
     this.selectedTaxEvent.unsubscribe();
   }
-
-  public clicked(e) {
-    // debugger;
-  }
-
   /**
    * select/deselect tax checkbox
    */
