@@ -335,7 +335,6 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   }
 
   public clearSingleSelection(event, option: IOption) {
-    // debugger;
     event.stopPropagation();
     this.selectedValues = this.selectedValues.filter(f => f.value !== option.value).map(p => p.value);
     this.onChange();
