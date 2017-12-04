@@ -503,7 +503,8 @@
                                (selected)="selectAccount($event,txn)"
                                [placeholder]="'Select Accounts'" [notFoundLink]="true"
                                (noResultsClicked)="showQuickAccountModal()"
-                               [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67">
+                               [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67"
+                               [customFilter]="lc.ledgerCustomFilter">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
