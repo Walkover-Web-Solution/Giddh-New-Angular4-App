@@ -503,7 +503,8 @@
                                (selected)="selectAccount($event,txn)"
                                [placeholder]="'Select Accounts'" [notFoundLink]="true"
                                (noResultsClicked)="showQuickAccountModal()"
-                               [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67">
+                               [multiple]="false" [isFilterEnabled]="true" [ItemHeight]="67"
+                               [customFilter]="lc.ledgerCustomFilter">
                       <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">
                           <a href="javascript:void(0)" class="list-item" style="border-bottom: 1px solid #ccc;">
@@ -578,7 +579,7 @@
           </tr>
           <tr class="total_col">
             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-              <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ (lc.transactionData$ | async)?.debitTotal | number: '1.1-2' }}</span>
+              <span class="bdrT ng-binding" style="width: 150px;display: block;float: right;padding: 10px 0;">{{ lc.reckoningDebitTotal | number: '1.1-2' }}</span>
             </td>
           </tr>
           </tbody>
@@ -599,7 +600,7 @@
           </tr>
           <tr class="total_col">
             <td colspan="12" class="col-xs-12 text-right white h32" style="padding-right:10px !important;">
-              <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{(lc.transactionData$ | async)?.creditTotal | number: '1.1-2' }}</span>
+              <span class="bdrT" style="width: 150px;display: block;float: right;padding: 10px 0;">{{lc.reckoningCreditTotal | number: '1.1-2' }}</span>
             </td>
           </tr>
           </tbody>
