@@ -128,7 +128,7 @@ export class LedgerVM {
         }
       }
     }
-  };
+  }
 
   /**
    * prepare blankLedger request object from vm
