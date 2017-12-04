@@ -13,11 +13,10 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
+import { filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -35,6 +34,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
+  @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
@@ -48,6 +48,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
+  public selectedLedgerStream$: Observable<LedgerResponse>;
   public activeAccount$: Observable<AccountResponse>;
   public ledgerUnderStandingObj = {
     accountType: '',
@@ -67,6 +68,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
+    this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -95,10 +97,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.entryUniqueName$.subscribe(entryName => {
       this.entryUniqueName = entryName;
       if (entryName) {
+        this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, entryName));
         // get flatten_accounts list && get transactions list
-        Observable.combineLatest(this.flattenAccountListStream$, this._ledgerService.GetLedgerTransactionDetails(this.accountUniqueName, entryName), this.activeAccount$)
+        Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this.activeAccount$)
           .subscribe((resp: any[]) => {
-            if (resp[0] && resp[1].status === 'success' && resp[2]) {
+            if (resp[0] && resp[1] && resp[2]) {
               //#region flattern group list assign process
               this.vm.flatternAccountList = _.cloneDeep(resp[0]);
               let accountDetails: AccountResponse = resp[2];
@@ -141,8 +144,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
               //#endregion
               //#region transaction assignment process
-              this.vm.selectedLedger = resp[1].body;
-              this.vm.selectedLedgerBackup = resp[1].body;
+              this.vm.selectedLedger = resp[1];
+              this.vm.selectedLedgerBackup = resp[1];
 
               this.vm.selectedLedger.transactions.map(t => {
                 if (t.inventory) {
@@ -267,6 +270,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
       return;
     } else {
+      if (!txn.isUpdated) {
+        if (this.vm.selectedLedger.taxes.length && !txn.isTax) {
+          txn.isUpdated = true;
+        }
+      }
       // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
       if (txn.selectedAccount) {
         // check if discount is added and update component as needed
@@ -375,6 +383,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.deleteEntryModal.hide();
   }
 
+  public showUpdateTaxModal() {
+    this.updateTaxModal.show();
+  }
+
+  public updateTaxes() {
+    this.updateTaxModal.hide();
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+  }
+
+  public hideUpdateTaxModal() {
+    this.updateTaxModal.hide();
+
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    requestObj.taxes = [];
+    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+  }
+
   public deleteTrxEntry() {
     let entryName: string = null;
     this.entryUniqueName$.take(1).subscribe(en => entryName = en);
@@ -388,24 +415,33 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public saveLedgerTransaction() {
-    let requestObj: LedgerResponse = cloneDeep(this.vm.selectedLedger);
-    let taxes: UpdateLedgerTaxData[] = cloneDeep(this.vm.selectedTaxes);
-    requestObj.voucherType = requestObj.voucher.shortCode;
-    requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
-    requestObj.generateInvoice = this.vm.selectedLedger.generateInvoice;
-    requestObj.transactions.map(trx => {
-      if (trx.inventory && trx.inventory.stock) {
-        trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
-      }
-    });
-    requestObj.taxes = taxes.map(t => t.particular.uniqueName);
-    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
+    // if their's any changes
+    if (isThereUpdatedEntry) {
+      this.showUpdateTaxModal();
+    } else {
+      // if their's no change fire action straightaway
+      this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+    }
   }
 
   public ngOnDestroy(): void {
     this.vm.resetVM();
     this.destroyed$.next(true);
     this.destroyed$.complete();
+  }
+
+  public downloadAttachedFile(fileName: string, e: Event) {
+    e.stopPropagation();
+    this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+        return saveAs(blob, d.body.name);
+      } else {
+        this._toasty.errorToast(d.message);
+      }
+    });
   }
 
   public downloadInvoice(invoiceName: string, e: Event) {
@@ -416,8 +452,12 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, activeAccount.uniqueName).subscribe(d => {
-      let blob = base64ToBlob(d.body, 'application/pdf', 512);
-      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      } else {
+        this._toasty.errorToast(d.message);
+      }
     });
   }
 }

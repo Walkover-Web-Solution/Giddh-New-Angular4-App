@@ -1,4 +1,5 @@
 import { Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { ChildGroup, Account } from '../../models/api-models/Search';
 
 @Directive({
   selector: '[trial-accordion]'
@@ -6,7 +7,7 @@ import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 export class TrialAccordionDirective {
   // @HostBinding('trial-accordion') public type = '';
   // tslint:disable-next-line:no-input-rename
-  @Input('trial-accordion') public data;
+  @Input('trial-accordion') public data: ChildGroup;
   // tslint:disable-next-line:no-input-rename
   constructor(private el: ElementRef) {
     //
@@ -16,16 +17,20 @@ export class TrialAccordionDirective {
   @HostListener('click')
   public onClick() {
     if (this.data.accounts) {
-      this.data.accounts = this.data.accounts.map(p => ({ ...p, isVisible: !p.isVisible }));
+      this.data.accounts.forEach((p: Account) => {
+        if (p.isIncludedInSearch) {
+          p.isVisible = !p.isVisible;
+        }
+      });
     }
     if (this.data.childGroups) {
-      this.data.childGroups = this.data.childGroups.map(p => ({ ...p, isVisible: !p.isVisible }));
+      this.data.childGroups.forEach((p: ChildGroup) => {
+        if (p.isIncludedInSearch) {
+          p.isVisible = !p.isVisible;
+        }
+      });
     }
     this.data.isVisible = true;
-    // }
-    if (this.el.nativeElement.nextElementSibling) {
-      // this.toggleClass(this.el.nativeElement);
-    }
   }
 
   private toggleClass(ele) {

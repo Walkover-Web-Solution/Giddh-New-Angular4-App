@@ -235,6 +235,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     this.createStockSuccess$.subscribe(s => {
       if (s) {
         this.resetStockForm();
+        this.store.dispatch(this.inventoryAction.GetStock());
       }
     });
   }

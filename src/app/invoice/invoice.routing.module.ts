@@ -1,3 +1,4 @@
+import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TooltipModule } from 'ngx-bootstrap/tooltip';
@@ -87,7 +88,8 @@ const INVOICE_ROUTES: Routes = [
     BsDatepickerModule.forRoot(),
     NgUploaderModule,
     SelectModule,
-    LaddaModule
+    LaddaModule,
+    ShSelectModule
   ],
   exports: [
     RouterModule,

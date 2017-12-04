@@ -1,3 +1,5 @@
+import { ShSelectComponent } from './../../theme/ng-virtual-select/sh-select.component';
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -14,18 +16,30 @@ import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { InvoiceService } from '../../services/invoice.service';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ModalDirective } from 'ngx-bootstrap';
 
-const COUNTS = [12, 25, 50, 100];
+const COUNTS = [
+  { label: '12', value: '12' },
+  { label: '25', value: '25' },
+  { label: '50', value: '50' },
+  { label: '100', value: '100' }
+];
+
 const COMPARISON_FILTER = [
-  { name: 'Greater Than', uniqueName: 'greaterThan' },
-  { name: 'Less Than', uniqueName: 'lessThan' },
-  { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
-  { name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals' },
-  { name: 'Equals', uniqueName: 'equals' }
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
+];
+
+const PREVIEW_OPTIONS = [
+  { label: 'Paid', value: 'paid'},
+  { label: 'Unpaid', value: 'unpaid'},
+  { label: 'Hold', value: 'hold'},
+  { label: 'Cancel', value: 'cancel'},
 ];
 
 @Component({
@@ -43,8 +57,9 @@ export class InvoicePreviewComponent implements OnInit {
   public selectedInvoice: IInvoiceResult;
   public invoiceSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
   public invoiceData: GetAllInvoicesPaginatedResponse;
-  public filtersForEntryTotal: INameUniqueName[] = COMPARISON_FILTER;
-  public counts: number[] = COUNTS;
+  public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
+  public previewDropdownOptions: IOption[] = PREVIEW_OPTIONS;
+  public counts: IOption[] = COUNTS;
   public accounts$: Observable<IOption[]>;
   public moment = moment;
   public modalRef: BsModalRef;
@@ -148,8 +163,8 @@ export class InvoicePreviewComponent implements OnInit {
     }
   }
 
-  public onPerformAction(item, ele: HTMLInputElement) {
-    let actionToPerform = ele.value;
+  public onPerformAction(item, ele: ShSelectComponent) {
+    let actionToPerform = ele._selectedValues[0].value;
     if (actionToPerform === 'paid') {
       this.selectedInvoice = item;
       this.performActionOnInvoiceModel.show();
@@ -270,17 +285,17 @@ export class InvoicePreviewComponent implements OnInit {
     if (o.description) {
       model.description = o.description;
     }
-    if (o.entryTotalBy === COMPARISON_FILTER[0].uniqueName) {
+    if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
       model.totalIsMore = true;
-    } else if (o.entryTotalBy === COMPARISON_FILTER[1].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
       model.totalIsLess = true;
-    } else if (o.entryTotalBy === COMPARISON_FILTER[2].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
       model.totalIsMore = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISON_FILTER[3].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
       model.totalIsLess = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISON_FILTER[4].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
       model.totalIsEqual = true;
     }
     return model;

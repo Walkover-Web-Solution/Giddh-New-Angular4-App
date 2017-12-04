@@ -91,6 +91,13 @@ export class DownloadLedgerRequest {
   public invoiceNumber: string[];
 }
 
+export interface DownloadLedgerAttachmentResponse {
+  fileType: string;
+  name: string;
+  uniqueName: string;
+  uploadedFile: any;
+}
+
 /*
  * Model for Export Ledger api request
  * GET call
