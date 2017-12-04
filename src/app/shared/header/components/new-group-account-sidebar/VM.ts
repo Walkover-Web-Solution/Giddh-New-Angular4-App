@@ -42,7 +42,6 @@ export class ColumnGroupsAccountVM implements IGroupsWithAccounts {
       this.groups = grp.groups;
       let grps = this.groups || [];
       let accs = this.accounts || [];
-      // debugger;
       let grps2 = grps.map(p => ({ ...p, isGroup: true } as IGroupOrAccount));
       let accs2 = accs.map(p => ({ ...p, isGroup: false } as IGroupOrAccount));
 

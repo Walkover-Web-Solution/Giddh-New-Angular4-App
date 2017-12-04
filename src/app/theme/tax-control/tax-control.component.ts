@@ -114,10 +114,6 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedTaxEvent.unsubscribe();
   }
 
-  public clicked(e) {
-    // debugger;
-  }
-
   /**
    * select/deselect tax checkbox
    */

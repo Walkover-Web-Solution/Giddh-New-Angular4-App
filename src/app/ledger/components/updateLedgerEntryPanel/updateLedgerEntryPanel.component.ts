@@ -13,11 +13,10 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { cloneDeep, filter, last, orderBy } from '../../../lodash-optimized';
+import { filter, last, orderBy } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
-import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -35,6 +34,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   @Output() public closeUpdateLedgerModal: EventEmitter<boolean> = new EventEmitter();
   @ViewChild('deleteAttachedFileModal') public deleteAttachedFileModal: ModalDirective;
   @ViewChild('deleteEntryModal') public deleteEntryModal: ModalDirective;
+  @ViewChild('updateTaxModal') public updateTaxModal: ModalDirective;
   @ViewChild('discount') public discountComponent: UpdateLedgerDiscountComponent;
   public sessionKey$: Observable<string>;
   public companyName$: Observable<string>;
@@ -270,6 +270,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
       return;
     } else {
+      if (!txn.isUpdated) {
+        if (this.vm.selectedLedger.taxes.length && !txn.isTax) {
+          txn.isUpdated = true;
+        }
+      }
       // check if txn.selectedAccount is aleready set so it means account name is changed without firing deselect event
       if (txn.selectedAccount) {
         // check if discount is added and update component as needed
@@ -378,6 +383,25 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.deleteEntryModal.hide();
   }
 
+  public showUpdateTaxModal() {
+    this.updateTaxModal.show();
+  }
+
+  public updateTaxes() {
+    this.updateTaxModal.hide();
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    requestObj.transactions = requestObj.transactions.filter(tx => !tx.isTax);
+    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+  }
+
+  public hideUpdateTaxModal() {
+    this.updateTaxModal.hide();
+
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    requestObj.taxes = [];
+    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+  }
+
   public deleteTrxEntry() {
     let entryName: string = null;
     this.entryUniqueName$.take(1).subscribe(en => entryName = en);
@@ -391,18 +415,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   }
 
   public saveLedgerTransaction() {
-    let requestObj: LedgerResponse = cloneDeep(this.vm.selectedLedger);
-    let taxes: UpdateLedgerTaxData[] = cloneDeep(this.vm.selectedTaxes);
-    requestObj.voucherType = requestObj.voucher.shortCode;
-    requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
-    requestObj.generateInvoice = this.vm.selectedLedger.generateInvoice;
-    requestObj.transactions.map(trx => {
-      if (trx.inventory && trx.inventory.stock) {
-        trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
-      }
-    });
-    requestObj.taxes = taxes.map(t => t.particular.uniqueName);
-    this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+    let requestObj: LedgerResponse = this.vm.prepare4Submit();
+    let isThereUpdatedEntry = requestObj.transactions.find(t => t.isUpdated);
+    // if their's any changes
+    if (isThereUpdatedEntry) {
+      this.showUpdateTaxModal();
+    } else {
+      // if their's no change fire action straightaway
+      this.store.dispatch(this._ledgerAction.updateTxnEntry(requestObj, this.accountUniqueName, this.entryUniqueName));
+    }
   }
 
   public ngOnDestroy(): void {
