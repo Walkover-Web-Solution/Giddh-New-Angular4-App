@@ -224,7 +224,6 @@ export class HomeActions {
         ((o) => { o.next({ status: 'success', body: { groups: [] } }); });
       let PlResp: Observable<BaseResponse<DashboardResponse, string>> = new Observable<BaseResponse<DashboardResponse, string>>((o) => { o.next({ status: 'success', body: { networth: [], profitLoss: [] } }); });
       let a: Observable<Action> = new Observable<Action>((o) => { o.next(action); });
-      // debugger;
       (action.payload.ApiToCall as API_TO_CALL[]).forEach(element => {
         if (element === API_TO_CALL.EXPENCE) {
           ExpenceResp = this._dashboardService.GetGroupHistory(expenseModel, action.payload.fromDate, action.payload.toDate, 'monthly', action.payload.refresh);
@@ -240,7 +239,6 @@ export class HomeActions {
         RevenueResp, ExpenceResp, PlResp, a
       );
     }).map((res) => {
-      // debugger;
       if ((res[3] as CustomActions).payload.CalledFrom === CHART_CALLED_FROM.PAGEINIT) {
         if ((res[0] === null || res[0].status === 'success') && (res[1] === null || res[1].status === 'success') && (res[2] === null || res[2].status === 'success')) {
           let obj: IComparisionChartResponse = {

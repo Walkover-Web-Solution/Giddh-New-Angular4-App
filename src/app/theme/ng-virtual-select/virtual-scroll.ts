@@ -38,7 +38,7 @@ export interface ChangeEvent {
     }
   `]
 })
-export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit, AfterContentInit {
+export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
 
   get width(): any {
     let el = this.element.nativeElement;
@@ -107,12 +107,6 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       // this removes the listener
       this.onScrollListener();
     }
-  }
-
-  public ngAfterContentInit() {
-    // let item = this.items.find(p => p.value === (this.selectedValues.length > 0 ? this.selectedValues[0].value : (this.items.length > 0 ? this.items[0].value : null)));
-    // debugger;
-    // this.scrollInto(item);
   }
 
   public ngAfterViewInit() {
@@ -237,36 +231,23 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
     if (this.element.nativeElement.scrollTop > this.scrollHeight) {
       this.element.nativeElement.scrollTop = this.scrollHeight;
     }
-    // (8 / 1) * 10 = 80
     let indexByScrollTop = el.scrollTop / this.scrollHeight * d.itemCount / d.itemsPerRow;
-    // Math.min(1000,Math.ceil(85)
-    // so end is 85
     let end = Math.min(d.itemCount, Math.ceil(indexByScrollTop) * d.itemsPerRow + d.itemsPerRow * (d.itemsPerCol + 1));
 
     let maxStartEnd = end;
-    // modEnd = 0
     const modEnd = end % d.itemsPerRow;
     if (modEnd) {
       maxStartEnd = end + d.itemsPerRow - modEnd;
     }
-    // maxStart = Math.max(0,85 - 5) = 80
     let maxStart = Math.max(0, maxStartEnd - d.itemsPerCol * d.itemsPerRow - d.itemsPerRow);
-    // start = Math.min(80,Math.floor(80)) = 80
     let start = Math.min(maxStart, Math.floor(indexByScrollTop) * d.itemsPerRow);
-    // 10 * Math.ceil(80) = 800
     this.topPadding = d.childHeight * Math.ceil(start / d.itemsPerRow);
     if (start !== this.previousStart || end !== this.previousEnd) {
 
-      // update the scroll list
-      // debugger;
       this.update.emit(items.slice(start, end));
-
-      // emit 'start' event
       if (start !== this.previousStart && this.startupLoop === false) {
         this.start.emit({ start, end });
       }
-
-      // emit 'end' event
       if (end !== this.previousEnd && this.startupLoop === false) {
         this.end.emit({ start, end });
       }
@@ -281,7 +262,6 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       }
 
     } else if (this.startupLoop === true) {
-      // debugger;
       this.update.emit(items.slice(start, end));
       this.startupLoop = false;
       this.refresh();
