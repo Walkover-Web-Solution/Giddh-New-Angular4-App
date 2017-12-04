@@ -60,7 +60,6 @@ export class AppComponent implements OnInit, AfterViewInit {
             }
           });
         } else {
-          // debugger;
           if (this.activatedRoute.children && this.activatedRoute.children.length > 0) {
             if (this.activatedRoute.firstChild.children && this.activatedRoute.firstChild.children.length > 0) {
               let path = [];
