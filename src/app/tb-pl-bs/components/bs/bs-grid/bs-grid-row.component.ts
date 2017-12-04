@@ -28,18 +28,23 @@ import { ChildGroup } from '../../../../models/api-models/Search';
     </ng-container>
     <ng-content></ng-content>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BsGridRowComponent implements OnInit, OnChanges {
   @Input() public groupDetail: ChildGroup;
   @Input() public search: string;
   @Input() public padding: string;
 
-  constructor() {
+  constructor(private cd: ChangeDetectorRef) {
     //
   }
+
   public ngOnChanges(changes: SimpleChanges) {
-    //
+    if (changes.groupDetail && !changes.groupDetail.firstChange && changes.groupDetail.currentValue !== changes.groupDetail.previousValue) {
+      this.cd.detectChanges();
+    }
+    if (changes.search && !changes.search.firstChange && changes.search.currentValue !== changes.search.previousValue) {
+      this.cd.detectChanges();
+    }
   }
   public ngOnInit() {
     //

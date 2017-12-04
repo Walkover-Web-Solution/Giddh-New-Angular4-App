@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { filter, find, findIndex, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
@@ -83,7 +83,7 @@ export class UpdateLedgerVm {
             }
           } else {
             if (dx.amount > 0) {
-              let trx: ILedgerTransactionItem = this.blankTransactionItem('DEBIT');
+              let trx: ILedgerTransactionItem = this.blankTransactionItem('CREDIT');
               let filterdDebitTrx = this.selectedLedger.transactions.filter(p => p.type === 'DEBIT');
               let filterdCrditTrx = this.selectedLedger.transactions.filter(p => p.type === 'CREDIT');
               let index = filterdDebitTrx.findIndex(p => p.particular.uniqueName === '' || undefined || null);
@@ -179,6 +179,11 @@ export class UpdateLedgerVm {
   }
 
   public onTxnAmountChange(txn: ILedgerTransactionItem) {
+    if (!txn.isUpdated) {
+      if (this.selectedLedger.taxes.length && !txn.isTax) {
+        txn.isUpdated = true;
+      }
+    }
     this.reInitilizeDiscount();
     this.getEntryTotal();
     this.generatePanelAmount();
@@ -290,6 +295,21 @@ export class UpdateLedgerVm {
     if (this.discountComponent) {
       this.discountComponent.genTotal();
     }
+  }
+
+  public prepare4Submit(): LedgerResponse {
+    let requestObj: LedgerResponse = cloneDeep(this.selectedLedger);
+    let taxes: UpdateLedgerTaxData[] = cloneDeep(this.selectedTaxes);
+    requestObj.voucherType = requestObj.voucher.shortCode;
+    requestObj.transactions = requestObj.transactions.filter(p => p.particular.uniqueName);
+    requestObj.generateInvoice = this.selectedLedger.generateInvoice;
+    requestObj.transactions.map(trx => {
+      if (trx.inventory && trx.inventory.stock) {
+        trx.particular.uniqueName = trx.particular.uniqueName.split('#')[0];
+      }
+    });
+    requestObj.taxes = taxes.map(t => t.particular.uniqueName);
+    return requestObj;
   }
 
   public resetVM() {

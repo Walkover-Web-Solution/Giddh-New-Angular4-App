@@ -30,42 +30,38 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
       if (this.plData) {
         // this.cd.detach();
         this.zone.run(() => {
-          this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
-          this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
-          // if (!this.search) {
           if (this.plData) {
-            // always make first level visible ....
+            this.toggleVisibility(this.plData.expArr, changes.expandAll.currentValue);
+            this.toggleVisibility(this.plData.incArr, changes.expandAll.currentValue);
             if (this.plData.incArr) {
               _.each(this.plData.incArr, (grp: any) => {
-                grp.isVisible = true;
-                _.each(grp.accounts, (acc: any) => {
-                  acc.isVisible = true;
-                });
+                if (grp.isIncludedInSearch) {
+                  grp.isVisible = true;
+                  _.each(grp.accounts, (acc: any) => {
+                    if (acc.isIncludedInSearch) {
+                      acc.isVisible = true;
+                    }
+                  });
+                }
               });
             }
             if (this.plData.expArr) {
               _.each(this.plData.expArr, (grp: any) => {
-                grp.isVisible = true;
-                _.each(grp.accounts, (acc: any) => {
-                  acc.isVisible = true;
-                });
+                if (grp.isIncludedInSearch) {
+                  grp.isVisible = true;
+                  _.each(grp.accounts, (acc: any) => {
+                    if (acc.isIncludedInSearch) {
+                      acc.isVisible = true;
+                    }
+                  });
+                }
               });
             }
 
           }
-          // } else if (this.search && this.search.length < 3) {
-          //   if (this.plData.incArr) {
-          //     this.plData.incArr.forEach(p => p.isVisible = true);
-          //   }
-          //   if (this.plData.expArr) {
-          //     this.plData.expArr.forEach(p => p.isVisible = true);
-          //   }
-          // }
+          this.cd.detectChanges();
 
         });
-
-        // this.plData = _.cloneDeep(this.plData);
-        // this.cd.detectChanges();
       }
     }
   }
@@ -84,13 +80,17 @@ export class PlGridComponent implements OnInit, AfterViewInit, OnChanges {
   // }
   private toggleVisibility = (data: ChildGroup[], isVisible: boolean) => {
     _.each(data, (grp: ChildGroup) => {
-      grp.isCreated = true;
-      grp.isVisible = isVisible;
-      _.each(grp.accounts, (acc: Account) => {
-        acc.isCreated = true;
-        acc.isVisible = isVisible;
-      });
-      this.toggleVisibility(grp.childGroups, isVisible);
+      if (grp.isIncludedInSearch) {
+        grp.isCreated = true;
+        grp.isVisible = isVisible;
+        _.each(grp.accounts, (acc: Account) => {
+          if (acc.isIncludedInSearch) {
+            acc.isCreated = true;
+            acc.isVisible = isVisible;
+          }
+        });
+        this.toggleVisibility(grp.childGroups, isVisible);
+      }
     });
   }
 }
