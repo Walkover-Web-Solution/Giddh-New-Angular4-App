@@ -408,6 +408,14 @@ export class SalesInvoiceComponent implements OnInit {
       data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
     }
 
+    // replace /n to br for (shipping and billing)
+    if (data.account.shippingDetails.address && data.account.shippingDetails.address.length && data.account.shippingDetails.address[0].length > 0) {
+      data.account.shippingDetails.address[0] = data.account.shippingDetails.address[0].replace(/\n/g, '<br />');
+    }
+    if (data.account.billingDetails.address && data.account.billingDetails.address.length && data.account.billingDetails.address[0].length > 0) {
+      data.account.billingDetails.address[0] = data.account.billingDetails.address[0].replace(/\n/g, '<br />');
+    }
+
     // convert date object
     data.invoiceDetails.invoiceDate = this.convertDateForAPI(data.invoiceDetails.invoiceDate);
     data.invoiceDetails.dueDate = this.convertDateForAPI(data.invoiceDetails.dueDate);
