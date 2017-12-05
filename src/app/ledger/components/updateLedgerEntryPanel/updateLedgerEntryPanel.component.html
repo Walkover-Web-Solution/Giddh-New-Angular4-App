@@ -8,7 +8,7 @@
 
     <!-- transactions -->
     <div class="row">
-      <h1 class="text-center lead">{{accountUniqueName}} A/c</h1>
+      <h1 class="text-center lead">{{(activeAccount$ | async)?.name}} A/c</h1>
     </div>
     <div class="ledgHead entry-popup mrT1">
       <table class="col-xs-12 ledger-head">
