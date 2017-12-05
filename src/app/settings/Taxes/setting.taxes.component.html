@@ -5,7 +5,7 @@
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Select Tax</label><br>
-                <sh-select [options]="taxList" [isFilterEnabled]="false" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'"></sh-select>
+                <sh-select [options]="taxList" [isFilterEnabled]="false" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'" [ItemHeight]="auto"></sh-select>
             </div>
             <div class="form-group col-xs-3">
                 <label>Unique No.</label><br>
@@ -17,7 +17,7 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Linked Account</label><br>
-                <sh-select [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>                
+                <sh-select [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>
             </div>
         </div>
         <div class="row">
@@ -45,17 +45,17 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Duration</label><br>
-                <sh-select placeholder="Select Duration" name="duration" [(ngModel)]="newTaxObj.duration" [options]="duration"></sh-select>
+                <sh-select placeholder="Select Duration" name="duration" [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="auto"></sh-select>
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Filing Date</label>
-                <sh-select placeholder="Select Date" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days"></sh-select>
+                <sh-select placeholder="Select Date" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" [ItemHeight]="33"></sh-select>
             </div>
         </div>
         <div class="row">
             <div class=col-xs-12>
                 <button type="submit" class="btn btn-success">Add</button>
-                <button type="button" (click)="onCancel()" class="btn btn-primary">Cancel</button>
+                <button type="button" (click)="onCancel()" class="btn btn-danger">Cancel</button>
             </div>
         </div>
     </form>
