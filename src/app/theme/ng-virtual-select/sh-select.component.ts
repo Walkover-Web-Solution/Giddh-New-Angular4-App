@@ -10,7 +10,7 @@ import { ShSelectMenuComponent } from './sh-select-menu.component';
 @Component({
   selector: 'sh-select',
   templateUrl: './sh-select.component.html',
-  styleUrls: [`./sh-select.component.css`],
+  styleUrls: ['./sh-select.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {

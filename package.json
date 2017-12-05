@@ -208,7 +208,7 @@
         "ngx-font-picker": "5.1.1",
         "ngx-perfect-scrollbar": "5.0.5",
         "ngx-toastr": "^6.1.2",
-        "ngx-uploader": "^3.3.6",
+        "ngx-uploader": "4.2.1",
         "node-sass": "^4.5.3",
         "npm-run-all": "^4.0.2",
         "optimize-js-plugin": "0.0.4",

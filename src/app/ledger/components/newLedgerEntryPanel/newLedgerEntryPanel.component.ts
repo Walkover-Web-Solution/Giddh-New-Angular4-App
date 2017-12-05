@@ -22,6 +22,7 @@ import { cloneDeep, forEach } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { UploaderOptions } from 'ngx-uploader/index';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -50,6 +51,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('discount') public discountControl: LedgerDiscountComponent;
   @ViewChild('tax') public taxControll: TaxControlComponent;
   public uploadInput: EventEmitter<UploadInput>;
+  public fileUploadOptions: UploaderOptions;
   public discountAccountsList$: Observable<IFlattenGroupsAccountsDetail>;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public sessionKey$: Observable<string>;
@@ -110,6 +112,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public ngOnInit() {
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
+    this.fileUploadOptions = {concurrency: 0};
   }
 
   @HostListener('click', ['$event'])
@@ -177,7 +180,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       return;
     } else {
       this.isAmountFirst = true;
-      this.currentTxn.isInclusiveTax = false;
+      // this.currentTxn.isInclusiveTax = false;
     }
   }
 
@@ -239,7 +242,6 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         fieldName: 'file',
         data: {company: companyUniqueName},
         headers: {'Session-Id': sessionKey},
-        concurrency: 0
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
