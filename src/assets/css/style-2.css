@@ -703,10 +703,6 @@ input[type="checkbox"]:after {
     padding-left: 0;
 }
 
-.tab-pane input[type=search] {
-    /* min-width: 220px; */
-}
-
 .tab-pane input[type=search]:after {
     font-family: icomoon !important;
     content: "\e906";
@@ -3043,10 +3039,6 @@ label {
     margin-left: 255px;
 }
 
-.col_wrapper:last-child {
-    /* border: 0; */
-}
-
 .height100 {
     height: 100%;
     min-height: 100%;
@@ -3055,10 +3047,6 @@ label {
 .height98 {
     height: 97%;
     min-height: 97%;
-}
-
-.grp_col div {
-    /* height: 100%; */
 }
 
 .tooltip.bottom .tooltip-arrow {
