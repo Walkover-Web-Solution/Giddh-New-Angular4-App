@@ -1577,11 +1577,11 @@ ______\////////////________
   
   .tb-head th:nth-child(3) th {
       border: none;
-      border-top: 1px solid #fff;
+      border-top: 1px solid #3d3d3d;
   }
   
   .tb-head th:nth-child(3) th:first-child {
-      border-right: 1px solid #fff;
+      border-right: 1px solid #3d3d3d;
   }
   
   .fl-none {
