@@ -1,7 +1,6 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { DownloadLedgerRequest, LedgerResponse, LedgerUpdateRequest, TransactionsRequest, TransactionsResponse } from '../../models/api-models/Ledger';
 import { AccountResponse, AccountSharedWithResponse } from '../../models/api-models/Account';
-import { Action } from '@ngrx/store';
 import { LEDGER } from '../../actions/ledger/ledger.const';
 import { FlattenGroupsAccountsResponse } from '../../models/api-models/Group';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
@@ -25,6 +24,7 @@ export interface LedgerState {
   isTxnUpdateSuccess: boolean;
   isQuickAccountInProcess: boolean;
   isQuickAccountCreatedSuccessfully: boolean;
+  transactionDetails: LedgerResponse;
 }
 
 export const initialState: LedgerState = {
@@ -36,7 +36,8 @@ export const initialState: LedgerState = {
   isTxnUpdateInProcess: false,
   isTxnUpdateSuccess: false,
   isQuickAccountInProcess: false,
-  isQuickAccountCreatedSuccessfully: false
+  isQuickAccountCreatedSuccessfully: false,
+  transactionDetails: null
 };
 
 export function ledgerReducer(state = initialState, action: CustomActions): LedgerState {
@@ -165,7 +166,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         return {
           ...state,
           isTxnUpdateInProcess: false,
-          isTxnUpdateSuccess: true
+          isTxnUpdateSuccess: true,
+          transactionDetails: updateResponse.body
         };
       }
       return {
@@ -191,6 +193,20 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         isQuickAccountInProcess: false,
         isQuickAccountCreatedSuccessfully: false
       };
+    case LEDGER.GET_LEDGER_TRX_DETAILS_RESPONSE: {
+      let response: BaseResponse<LedgerResponse, string> = action.payload;
+      if (response.status === 'success') {
+        return {
+          ...state,
+          transactionDetails: response.body
+        };
+      }
+      return state;
+    }
+    case LEDGER.RESET_LEGER_TRX_DETAILS:
+      return {
+        ...state, transactionDetails: null
+      };
     case LEDGER.RESET_QUICK_ACCOUNT_MODAL:
       return {
         ...state,
@@ -215,7 +231,8 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         isTxnUpdateInProcess: false,
         isTxnUpdateSuccess: false,
         isQuickAccountInProcess: false,
-        isQuickAccountCreatedSuccessfully: false
+        isQuickAccountCreatedSuccessfully: false,
+        transactionDetails: null
       };
     default: {
       return state;

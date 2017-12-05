@@ -281,6 +281,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
         this.lc.currentPage = lt.page;
+        this.lc.calculateReckonging(lt);
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
@@ -448,6 +449,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
   }
 
+  public downloadAttachedFile(fileName: string, e: Event) {
+    e.stopPropagation();
+    this._ledgerService.DownloadAttachement(fileName).subscribe(d => {
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body.uploadedFile, `image/${d.body.fileType}`, 512);
+        return saveAs(blob, d.body.name);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
+    });
+  }
+
   public downloadInvoice(invoiceName: string, e: Event) {
     e.stopPropagation();
     let activeAccount = null;
@@ -456,8 +469,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
     downloadRequest.invoiceNumber = [invoiceName];
 
     this._ledgerService.DownloadInvoice(downloadRequest, this.lc.accountUnq).subscribe(d => {
-      let blob = base64ToBlob(d.body, 'application/pdf', 512);
-      return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      if (d.status === 'success') {
+        let blob = base64ToBlob(d.body, 'application/pdf', 512);
+        return saveAs(blob, `${activeAccount.name} - ${invoiceName}.pdf`);
+      } else {
+        this._toaster.errorToast(d.message);
+      }
     });
   }
 
@@ -613,9 +630,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     componentInstance.ledgerUnderStandingObj = this.lc.ledgerUnderStandingObj;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
-      // componentInstance.vm.resetVM();
-      // componentInstance.destroyed$.next(true);
-      // componentInstance.destroyed$.complete();
+      this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
       componentRef.destroy();
       this.entryManipulated();
     });
