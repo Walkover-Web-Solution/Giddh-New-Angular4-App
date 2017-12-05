@@ -2261,19 +2261,17 @@ select.form-control {
 }
 
 .searchBar {
-    background: #f8f7f2;
-    border: 0;
     position: relative;
 }
 
-.searchBar .input-group-addon,
-.searchBar .form-control {
-    background: none;
-    border: 0;
-}
+
+/* .searchBar .form-control {
+    background: #6b6a6a !important;
+    color: #fff;
+} */
 
 .searchBar .form-control {
-    min-width: 260px;
+    padding-right: 40px !important;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3728,7 +3726,6 @@ input[type='checkbox'][disabled] {
 }
 
 .bank-account .subHead button {
-    color: #333;
     padding: 0 0;
 }
 
@@ -3896,7 +3893,7 @@ input[type='checkbox'][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid #525252;
+    border-left: 6px solid #e5e5e5;
 }
 
 .table-container .account {
@@ -4031,7 +4028,7 @@ sh-select .header {
     line-height: 34px;
 }
 
-input[type="number"] {
+table input[type="number"] {
     text-align: right
 }
 
@@ -4365,3 +4362,7 @@ table td[class*=col-]:last-child {
 
 
 /* =========================== LEDGER CSS ============================ */
+
+.input-group sh-select .menu {
+    top: 34px;
+}
