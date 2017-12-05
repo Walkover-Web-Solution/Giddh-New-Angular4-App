@@ -315,7 +315,7 @@ header .navbar {
 
 .compoundEntry td,
 .compoundEntry td .form-control {
-    background: #fff0bc !important;
+    /* background: #fff0bc !important; */
     border: 0;
 }
 
@@ -1249,7 +1249,8 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border-color: #ff5e01 !important;
+    border: 1px solid #ff5e01 !important;
+    border-radius: 0 !important;
 }
 
 .uncfr .form-control {
@@ -4348,9 +4349,10 @@ table td[class*=col-]:last-child {
     margin: 0 auto;
 }
 
-.ledger-main sh-select .header.open>input[type="text"] {
+
+/* .ledger-main sh-select .header.open>input[type="text"] {
     border: 0 !important;
-}
+} */
 
 .select2-ledger sh-select .selectedVal {
     border: 0 !important;
@@ -4364,5 +4366,5 @@ table td[class*=col-]:last-child {
 /* =========================== LEDGER CSS ============================ */
 
 .input-group sh-select .menu {
-    top: 34px;
+    top: 33px;
 }
