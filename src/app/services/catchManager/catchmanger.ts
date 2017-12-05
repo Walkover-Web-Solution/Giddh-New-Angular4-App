@@ -15,7 +15,6 @@ export class ErrorHandler {
   public HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
     let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
     // logout if invalid session detacted
-    // debugger;
     if (r.status === 0) {
       data = {
         body: null,
@@ -54,7 +53,6 @@ export class ErrorHandler {
 export function HandleCatch<TResponce, TRequest>(r: any, request?: any, queryString?: any): Observable<BaseResponse<TResponce, TRequest>> {
   let data: BaseResponse<TResponce, TRequest> = new BaseResponse<TResponce, TRequest>();
   // logout if invalid session detacted
-  // debugger;
   if (r.status === 0) {
     data = {
       body: null,

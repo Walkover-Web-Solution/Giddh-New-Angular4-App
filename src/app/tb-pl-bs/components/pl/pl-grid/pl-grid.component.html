@@ -90,10 +90,12 @@
               </section>
             </section> -->
             <ng-template #groupDetails let-list let-padding="padding">
-              <section class="row row-1" *ngFor="let grp of list" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp" [padding]="padding"
-                [search]="search" [padding]="padding">
-                <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
-              </section>
+              <ng-container *ngFor="let grp of list">
+                <section class="row row-1" *ngIf="grp.isVisible || grp.isCreated" [hidden]="!grp.isVisible" pl-grid-row [groupDetail]="grp" [padding]="padding"
+                  [search]="search" [padding]="padding">
+                  <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: grp.childGroups,padding: padding + 20  }"></ng-container>
+                </section>
+              </ng-container>
             </ng-template>
             <ng-container *ngTemplateOutlet="groupDetails; context:{ $implicit: plData.expArr | tbsearch: search, padding: 10 }"></ng-container>
             <!--/Grid-->

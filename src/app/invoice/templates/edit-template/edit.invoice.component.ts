@@ -157,7 +157,7 @@ export class EditInvoiceComponent implements OnInit {
   public newLineToBR(template) {
     template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    template.sections[2].content[10].label = template.sections[2].content[10].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
+    template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
     return template;
   }
 
