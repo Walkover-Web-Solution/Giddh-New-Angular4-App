@@ -361,4 +361,4 @@ module.exports = function (options) {
     // }
     target: 'electron-renderer'
   };
-}
+};

@@ -6,11 +6,11 @@ const helpers = require('./helpers');
 const buildUtils = require('./build-utils');
 /**
  * Used to merge webpack configs
- */
+*/
 const webpackMerge = require('webpack-merge');
 /**
  * The settings that are common to prod and dev
- */
+*/
 const commonConfig = require('./webpack.common.js');
 
 /**
@@ -29,24 +29,24 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 /**
  * Webpack Constants
  */
-// const ENV = process.env.NODE_ENV = process.env.ENV = 'staging';
+// const ENV = process.env.NODE_ENV = process.env.ENV = 'production';
 // const HOST = process.env.HOST || 'giddh.com';
 // const PORT = process.env.PORT || 80;
-// const AppUrl = 'http://stage.giddh.com/electron/';
-// const ApiUrl = 'http://spi.giddh.com/';
+// const AppUrl = 'https://giddh.com/new/';
+// const ApiUrl = 'https://api.giddh.com/';
 // const METADATA = webpackMerge(commonConfig({
 //   env: ENV
 // }).metadata, {
-//   host: HOST,
-//   port: PORT,
-//   ENV: ENV,
-//   HMR: false,
-//   isElectron: false,
-//   errlyticsNeeded: true,
-//   errlyticsKey: ERRLYTICS_KEY_TEST,
-//   AppUrl: AppUrl,
-//   ApiUrl: ApiUrl
-// });
+//     host: HOST,
+//     port: PORT,
+//     ENV: ENV,
+//     HMR: false,
+//     isElectron: false,
+//     errlyticsNeeded: true,
+//     errlyticsKey: ERRLYTICS_KEY_PROD,
+//     AppUrl: AppUrl,
+//     ApiUrl: ApiUrl
+//   });
 
 
 function getUglifyOptions(supportES2015) {
@@ -72,8 +72,8 @@ function getUglifyOptions(supportES2015) {
 module.exports = function (env) {
   const ENV = process.env.NODE_ENV = process.env.ENV = 'staging';
   const supportES2015 = buildUtils.supportES2015(buildUtils.DEFAULT_METADATA.tsConfigPath);
-  const AppUrl = 'http://stage.giddh.com/electron/';
-const ApiUrl = 'http://spi.giddh.com/';
+  const AppUrl = 'https://stage.giddh.com/new/';
+  const ApiUrl = 'https://spi.giddh.com/';
   const METADATA = Object.assign({}, buildUtils.DEFAULT_METADATA, {
     host: process.env.HOST || 'giddh.com',
     port: process.env.PORT || 80,
@@ -195,29 +195,29 @@ const ApiUrl = 'http://spi.giddh.com/';
       new HashedModuleIdsPlugin(),
       new ModuleConcatenationPlugin(),
       /**
-       * Plugin: DefinePlugin
-       * Description: Define free variables.
-       * Useful for having development builds with debug logging or adding global constants.
-       *
-       * Environment helpers
-       *
-       * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
-       */
-      // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
-      new DefinePlugin({
-        'ENV': JSON.stringify(METADATA.ENV),
-        'HMR': METADATA.HMR,
-        'isElectron': false,
-        'errlyticsNeeded': true,
-        'errlyticsKey': ERRLYTICS_KEY_TEST,
-        'AppUrl': JSON.stringify(METADATA.AppUrl),
-        'ApiUrl': JSON.stringify(METADATA.ApiUrl),
-        'process.env': {
+         * Plugin: DefinePlugin
+         * Description: Define free variables.
+         * Useful for having development builds with debug logging or adding global constants.
+         *
+         * Environment helpers
+         *
+         * See: https://webpack.github.io/docs/list-of-plugins.html#defineplugin
+         */
+        // NOTE: when adding more properties make sure you include them in custom-typings.d.ts
+        new DefinePlugin({
           'ENV': JSON.stringify(METADATA.ENV),
-          'NODE_ENV': JSON.stringify(METADATA.ENV),
-          'HMR': METADATA.HMR
-        }
-      }),
+          'HMR': METADATA.HMR,
+          'isElectron': false,
+          'errlyticsNeeded': false,
+          'errlyticsKey': ERRLYTICS_KEY_TEST,
+          'AppUrl': JSON.stringify(METADATA.AppUrl),
+          'ApiUrl': JSON.stringify(METADATA.ApiUrl),
+          'process.env': {
+            'ENV': JSON.stringify(METADATA.ENV),
+            'NODE_ENV': JSON.stringify(METADATA.ENV),
+            'HMR': METADATA.HMR
+          }
+        }),
       new HtmlWebpackPlugin({
         template: 'src/index.html',
         title: METADATA.title,
