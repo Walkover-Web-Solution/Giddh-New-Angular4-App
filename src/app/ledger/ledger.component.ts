@@ -281,6 +281,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     this.lc.transactionData$.subscribe(lt => {
       if (lt) {
         this.lc.currentPage = lt.page;
+        this.lc.calculateReckonging(lt);
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
