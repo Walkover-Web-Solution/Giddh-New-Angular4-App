@@ -18,6 +18,7 @@ export interface LedgerState {
   ledgerCreateSuccess?: boolean;
   ledgerCreateInProcess?: boolean;
   selectedTxnForEditUniqueName: string;
+  selectedAccForEditUniqueName: string;
   isDeleteTrxEntrySuccessfull: boolean;
   activeAccountSharedWith?: AccountSharedWithResponse[];
   isTxnUpdateInProcess: boolean;
@@ -31,6 +32,7 @@ export const initialState: LedgerState = {
   transactionInprogress: false,
   accountInprogress: false,
   selectedTxnForEditUniqueName: '',
+  selectedAccForEditUniqueName: '',
   isDeleteTrxEntrySuccessfull: false,
   activeAccountSharedWith: null,
   isTxnUpdateInProcess: false,
@@ -113,6 +115,11 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
       return {
         ...state,
         selectedTxnForEditUniqueName: action.payload
+      };
+    case LEDGER.SET_SELECTED_ACCOUNT_FOR_EDIT:
+      return {
+        ...state,
+        selectedAccForEditUniqueName: action.payload
       };
     case LEDGER.DELETE_TRX_ENTRY:
       return {
@@ -227,6 +234,7 @@ export function ledgerReducer(state = initialState, action: CustomActions): Ledg
         isDeleteTrxEntrySuccessfull: false,
         ledgerCreateInProcess: false,
         selectedTxnForEditUniqueName: '',
+        selectedAccForEditUniqueName: '',
         activeAccountSharedWith: null,
         isTxnUpdateInProcess: false,
         isTxnUpdateSuccess: false,

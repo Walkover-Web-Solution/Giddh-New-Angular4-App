@@ -5,7 +5,7 @@ import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest } from '../models/api-models/Ledger';
+import { DownloadLedgerRequest, IELedgerResponse, TransactionsRequest, TransactionsResponse } from '../models/api-models/Ledger';
 import { Observable } from 'rxjs/Observable';
 import { ITransactionItem } from '../models/interfaces/ledger.interface';
 import * as moment from 'moment/moment';
@@ -273,6 +273,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         stateDetailsRequest.lastState = 'ledger/' + this.lc.accountUnq;
         this.store.dispatch(this._companyActions.SetStateDetails(stateDetailsRequest));
         this.store.dispatch(this._ledgerActions.GetLedgerAccount(this.lc.accountUnq));
+        this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         // init transaction request and call for transaction data
         this.trxRequest = new TransactionsRequest();
         this.initTrxRequest(params['accountUniqueName']);
@@ -534,6 +535,24 @@ export class LedgerComponent implements OnInit, OnDestroy {
   }
 
   public showUpdateLedgerModal(txn: ITransactionItem) {
+    let transactions: TransactionsResponse = null;
+    this.store.select(t => t.ledger.transactionsResponse).take(1).subscribe(trx => transactions = trx);
+
+    if (transactions) {
+      if (txn.isBaseAccount) {
+        // store the trx values in store
+        this.store.dispatch(this._ledgerActions.setAccountForEdit(txn.particular.uniqueName));
+      } else {
+        // find trx from transactions array and store it in store
+        let debitTrx: ITransactionItem[] = transactions.debitTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+        let creditTrx: ITransactionItem[] = transactions.creditTransactions.filter(f => f.entryUniqueName === txn.entryUniqueName);
+        let finalTrx: ITransactionItem[] = [...debitTrx, ...creditTrx];
+        let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
+        if (baseAccount) {
+          this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
+        }
+      }
+    }
     this.showUpdateLedgerForm = true;
     this.store.dispatch(this._ledgerActions.setTxnForEdit(txn.entryUniqueName));
     this.lc.selectedTxnUniqueName = txn.entryUniqueName;
