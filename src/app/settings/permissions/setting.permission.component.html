@@ -6,15 +6,13 @@
 <div class="container-fluid">
     <h3 class="mrB1"><strong>Users</strong></h3>
     <div class="box">
-        <div class="" *ngFor="let usrGrp of usersList">
+        <div *ngFor="let usrGrp of usersList">
             <div class="user_list">
                 <div class="row">
                     <div class="col-xs-2 user">
-                        <!-- hide due to unavailibility of API 
-                        <span class="pull-left"><input type="checkbox" /></span> -->
                         <div class="ellp">
                             <div class="ellp"><i class="fa fa-user pdR1"></i>{{usrGrp.name}}</div>
-                            <small class="mrL2">{{usrGrp.rows[0].userUniqueName}}</small>
+                            <small class="mrL2">{{usrGrp.rows[0].emailId}}</small>
                         </div>
                     </div>
                     <div class="col-xs-10">
