@@ -5,8 +5,9 @@
 
 <div class="container-fluid">
     <h3 class="mrB1"><strong>Users</strong></h3>
-    <div class="box">
-        <div *ngFor="let usrGrp of usersList">
+
+    <div class="box" *ngIf="currentUser">
+        <div *ngFor="let usrGrp of (usersList | OmitByKeyPipe:'name':currentUser.name)">
             <div class="user_list">
                 <div class="row">
                     <div class="col-xs-2 user">
