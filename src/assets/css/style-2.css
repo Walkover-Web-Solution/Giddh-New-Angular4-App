@@ -315,7 +315,7 @@ header .navbar {
 
 .compoundEntry td,
 .compoundEntry td .form-control {
-    background: #fff0bc !important;
+    /* background: #fff0bc !important; */
     border: 0;
 }
 
@@ -404,7 +404,7 @@ header .navbar {
 }
 
 .parent-Group {
-    padding-left: 15px;
+    padding-left: 20px;
     line-height: normal;
 }
 
@@ -701,10 +701,6 @@ input[type="checkbox"]:after {
 
 .tab-pane .list-inline>li {
     padding-left: 0;
-}
-
-.tab-pane input[type=search] {
-    /* min-width: 220px; */
 }
 
 .tab-pane input[type=search]:after {
@@ -1253,7 +1249,8 @@ input[type=number]::-webkit-inner-spin-button {
 }
 
 .ledger-main .form-control:focus {
-    border-color: #ff5e01 !important;
+    border: 1px solid #ff5e01 !important;
+    border-radius: 0 !important;
 }
 
 .uncfr .form-control {
@@ -2265,19 +2262,17 @@ select.form-control {
 }
 
 .searchBar {
-    background: #f8f7f2;
-    border: 0;
     position: relative;
 }
 
-.searchBar .input-group-addon,
-.searchBar .form-control {
-    background: none;
-    border: 0;
-}
+
+/* .searchBar .form-control {
+    background: #6b6a6a !important;
+    color: #fff;
+} */
 
 .searchBar .form-control {
-    min-width: 260px;
+    padding-right: 40px !important;
 }
 
 #Addaccount .form-inline select.form-control {
@@ -3043,10 +3038,6 @@ label {
     margin-left: 255px;
 }
 
-.col_wrapper:last-child {
-    /* border: 0; */
-}
-
 .height100 {
     height: 100%;
     min-height: 100%;
@@ -3055,10 +3046,6 @@ label {
 .height98 {
     height: 97%;
     min-height: 97%;
-}
-
-.grp_col div {
-    /* height: 100%; */
 }
 
 .tooltip.bottom .tooltip-arrow {
@@ -3740,7 +3727,6 @@ input[type='checkbox'][disabled] {
 }
 
 .bank-account .subHead button {
-    color: #333;
     padding: 0 0;
 }
 
@@ -3908,7 +3894,7 @@ input[type='checkbox'][disabled]:after {
 }
 
 .table-container thead tr th:first-child {
-    border-left: 6px solid #525252;
+    border-left: 6px solid #e5e5e5;
 }
 
 .table-container .account {
@@ -4043,7 +4029,7 @@ sh-select .header {
     line-height: 34px;
 }
 
-input[type="number"] {
+table input[type="number"] {
     text-align: right
 }
 
@@ -4363,9 +4349,10 @@ table td[class*=col-]:last-child {
     margin: 0 auto;
 }
 
-.ledger-main sh-select .header.open>input[type="text"] {
+
+/* .ledger-main sh-select .header.open>input[type="text"] {
     border: 0 !important;
-}
+} */
 
 .select2-ledger sh-select .selectedVal {
     border: 0 !important;
@@ -4377,3 +4364,7 @@ table td[class*=col-]:last-child {
 
 
 /* =========================== LEDGER CSS ============================ */
+
+.input-group sh-select .menu {
+    top: 33px;
+}

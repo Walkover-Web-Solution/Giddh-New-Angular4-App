@@ -98,7 +98,7 @@ export class LedgerActions {
       if (res.status === 'success') {
         this._toasty.successToast('Entry deleted successfully', 'Success');
       } else {
-        this._toasty.errorToast(res.body);
+        this._toasty.errorToast(res.message);
       }
       return {
         type: 'EmptyAction'
@@ -336,6 +336,13 @@ export class LedgerActions {
     return {
       type: LEDGER.SET_SELECTED_TXN_FOR_EDIT,
       payload: txnUniqueName
+    };
+  }
+
+  public setAccountForEdit(accountUniqueName: string) {
+    return {
+      type: LEDGER.SET_SELECTED_ACCOUNT_FOR_EDIT,
+      payload: accountUniqueName
     };
   }
 
