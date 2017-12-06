@@ -3,7 +3,6 @@ import { LedgerService } from '../../../services/ledger.service';
 import { DownloadLedgerRequest, LedgerResponse } from '../../../models/api-models/Ledger';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
-import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { TaxResponse } from '../../../models/api-models/Company';
@@ -41,6 +40,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public isFileUploading: boolean = false;
   public accountUniqueName: string;
   public entryUniqueName$: Observable<string>;
+  public editAccUniqueName$: Observable<string>;
   public entryUniqueName: string;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public uploadInput: EventEmitter<UploadInput>;
@@ -65,13 +65,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public showAdvanced: boolean;
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
-              private route: ActivatedRoute, private _toasty: ToasterService, private _accountService: AccountService,
+              private _toasty: ToasterService, private _accountService: AccountService,
               private _ledgerAction: LedgerActions) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
+    this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).takeUntil(this.destroyed$);
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
     this.flattenAccountListStream$ = this.store.select(p => p.general.flattenAccounts).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
-    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
     this.isDeleteTrxEntrySuccess$ = this.store.select(p => p.ledger.isDeleteTrxEntrySuccessfull).takeUntil(this.destroyed$);
@@ -86,8 +86,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     this.vm.selectedLedger = new LedgerResponse();
     // TODO: save backup of response for future use
     // get Account name from url
-    this.route.params.takeUntil(this.destroyed$).subscribe(params => {
-      this.accountUniqueName = params['accountUniqueName'];
+    this.editAccUniqueName$.subscribe(uniqueName => {
+      if (uniqueName) {
+        this.accountUniqueName = uniqueName;
+      }
     });
 
     // emit upload event
@@ -99,12 +101,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       if (entryName) {
         this.store.dispatch(this._ledgerAction.getLedgerTrxDetails(this.accountUniqueName, entryName));
         // get flatten_accounts list && get transactions list
-        Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this.activeAccount$)
+        Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
           .subscribe((resp: any[]) => {
-            if (resp[0] && resp[1] && resp[2]) {
+            if (resp[0] && resp[1] && resp[2].status === 'success') {
               //#region flattern group list assign process
               this.vm.flatternAccountList = _.cloneDeep(resp[0]);
-              let accountDetails: AccountResponse = resp[2];
+              this.activeAccount$ = Observable.of(resp[2].body);
+              let accountDetails: AccountResponse = resp[2].body;
               let parentOfAccount = accountDetails.parentGroups[0];
               // check if account is stockable
               let isStockableAccount = parentOfAccount ?
@@ -179,7 +182,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               } else {
                 this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
               }
-              this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
+              let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+              this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
               this.vm.getEntryTotal();
               this.vm.reInitilizeDiscount();
               this.vm.generatePanelAmount();
@@ -194,7 +198,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     // check if delete entry is success
     this.isDeleteTrxEntrySuccess$.subscribe(del => {
       if (del) {
-        this.hideDeleteEntryModal();
         this.store.dispatch(this._ledgerAction.resetDeleteTrxEntryModal());
         this.closeUpdateLedgerModal.emit(true);
       }
@@ -263,7 +266,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       txn.inventory = null;
       txn.particular.name = undefined;
       // check if need to showEntryPanel
-      this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
+      let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+      this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
       // set discount amount to 0 when deselected account is type of discount category
       if (this.discountComponent) {
         this.vm.reInitilizeDiscount();
@@ -361,7 +365,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         txn.selectedAccount = e.additional;
       }
       // check if need to showEntryPanel
-      this.vm.showNewEntryPanel = (this.vm.isThereIncomeOrExpenseEntry() > 0 && this.vm.isThereIncomeOrExpenseEntry() < 2);
+      let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
+      this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
       this.vm.reInitilizeDiscount();
       this.vm.onTxnAmountChange(txn);
     }
@@ -406,6 +411,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     let entryName: string = null;
     this.entryUniqueName$.take(1).subscribe(en => entryName = en);
     this.store.dispatch(this._ledgerAction.deleteTrxEntry(this.accountUniqueName, entryName));
+    this.hideDeleteEntryModal();
   }
 
   public deleteAttachedFile() {
