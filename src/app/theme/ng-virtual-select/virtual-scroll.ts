@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, NgModule, OnChanges, OnDestroy, OnInit, Output, Renderer, SimpleChanges, ViewChild, } from '@angular/core';
 
 import { CommonModule } from '@angular/common';
 import { IOption } from './sh-options.interface';
@@ -11,7 +11,7 @@ export interface ChangeEvent {
 @Component({
   selector: 'virtual-scroll',
   template: `
-    <div class="total-padding" [style.height]="scrollHeight + 'px'"></div>
+    <div class="total-padding" [style.height]="(items.length === 0 ? noResultLinkEnabled ? NoFoundMsgHeight + NoFoundLinkHeight : NoFoundMsgHeight : scrollHeight) + 'px'"></div>
     <div class="scrollable-content" #content [style.transform]="'translateY(' + topPadding + 'px)'">
       <ng-content></ng-content>
     </div>
@@ -61,6 +61,9 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
   @Input()
   public childHeight: number;
+  @Input() public NoFoundMsgHeight: number;
+  @Input() public NoFoundLinkHeight: number;
+  @Input() public noResultLinkEnabled: boolean;
 
   @Output()
   public update: EventEmitter<any[]> = new EventEmitter<any[]>();
@@ -74,7 +77,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
   @Output()
   public end: EventEmitter<ChangeEvent> = new EventEmitter<ChangeEvent>();
 
-  @ViewChild('content', { read: ElementRef })
+  @ViewChild('content', {read: ElementRef})
   public contentElementRef: ElementRef;
 
   public onScrollListener: any;
@@ -246,10 +249,10 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
 
       this.update.emit(items.slice(start, end));
       if (start !== this.previousStart && this.startupLoop === false) {
-        this.start.emit({ start, end });
+        this.start.emit({start, end});
       }
       if (end !== this.previousEnd && this.startupLoop === false) {
-        this.end.emit({ start, end });
+        this.end.emit({start, end});
       }
 
       this.previousStart = start;
@@ -258,7 +261,7 @@ export class VirtualScrollComponent implements OnInit, OnDestroy, OnChanges, Aft
       if (this.startupLoop === true) {
         this.refresh();
       } else {
-        this.change.emit({ start, end });
+        this.change.emit({start, end});
       }
 
     } else if (this.startupLoop === true) {

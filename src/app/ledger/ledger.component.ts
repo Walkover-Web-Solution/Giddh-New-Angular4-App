@@ -550,6 +550,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let baseAccount: ITransactionItem = finalTrx.find(f => f.isBaseAccount);
         if (baseAccount) {
           this.store.dispatch(this._ledgerActions.setAccountForEdit(baseAccount.particular.uniqueName));
+        } else {
+          // re activate account from url params
+          this.store.dispatch(this._ledgerActions.setAccountForEdit(this.lc.accountUnq));
         }
       }
     }
