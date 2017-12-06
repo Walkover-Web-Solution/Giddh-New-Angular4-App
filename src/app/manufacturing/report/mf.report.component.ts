@@ -103,11 +103,11 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
 
-    let f = moment().subtract(30, 'days');
-    let t = moment();
+    let f = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    let t = moment().format(GIDDH_DATE_FORMAT);
 
-    this.mfStockSearchRequest.from = String(f);
-    this.mfStockSearchRequest.to = String(t);
+    this.mfStockSearchRequest.from = f;
+    this.mfStockSearchRequest.to = t;
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
@@ -143,8 +143,8 @@ export class MfReportComponent implements OnInit {
 
   public getReportDataOnFresh() {
     let data = _.cloneDeep(this.mfStockSearchRequest);
-    data.from = null;
-    data.to = null;
+    data.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    data.to =  moment().format(GIDDH_DATE_FORMAT);
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
 
