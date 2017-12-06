@@ -50,7 +50,7 @@ const ERRLYTICS_KEY_DEV = '';
  */
 module.exports = function (options) {
     const ENV = process.env.ENV = process.env.NODE_ENV = 'development';
-    const HOST = process.env.HOST || 'localhost';
+    const HOST = process.env.HOST || 'localapp.giddh.com';
     const PORT = process.env.PORT || 3000;
     const AppUrl = 'http://dev.giddh.com/electron';
     const ApiUrl = 'http://apidev.giddh.com/';
@@ -140,7 +140,7 @@ module.exports = function (options) {
 
         },
         plugins: [
-            
+
             /**
              * Plugin: DefinePlugin
              * Description: Define free variables.
