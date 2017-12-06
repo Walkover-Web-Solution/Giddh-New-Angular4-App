@@ -29,6 +29,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public usersList: any;
   public selectedCompanyUniqueName: string;
   public selectedUser: ShareRequestForm;
+  public currentUser: any;
 
   // modals related
   public showEditUserModal: boolean = false;
@@ -52,6 +53,14 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
   public ngOnInit() {
     this.store.dispatch(this._permissionActions.GetRoles());
 
+    this.store.take(1).subscribe(s => {
+      this.selectedCompanyUniqueName = s.session.companyUniqueName;
+      this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
+      if (s.session.user) {
+        this.currentUser = s.session.user.user;
+      }
+    });
+
     this.store.select(s => s.settings.usersWithCompanyPermissions).takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         let data = _.cloneDeep(s);
@@ -62,11 +71,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         });
         this.usersList = _.sortBy(arr, ['name']);
       }
-    });
-
-    this.store.take(1).subscribe(s => {
-      this.selectedCompanyUniqueName = s.session.companyUniqueName;
-      this.store.dispatch(this._settingsPermissionActions.GetUsersWithPermissions(this.selectedCompanyUniqueName));
     });
 
   }
