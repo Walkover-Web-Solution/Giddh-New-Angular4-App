@@ -22,6 +22,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
+import { LoaderService } from '../../../loader/loader.service';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -66,7 +67,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
-              private _ledgerAction: LedgerActions) {
+              private _ledgerAction: LedgerActions, private _loaderService: LoaderService) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).takeUntil(this.destroyed$);
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
@@ -283,7 +284,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
       this.isFileUploading = true;
+      this._loaderService.show();
     } else if (output.type === 'done') {
+      this._loaderService.hide();
       if (output.file.response.status === 'success') {
         // this.isFileUploading = false;
         this.vm.selectedLedger.attachedFile = output.file.response.body.uniqueName;
