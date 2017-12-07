@@ -22,6 +22,7 @@ import { cloneDeep, forEach } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
+import { LoaderService } from '../../../loader/loader.service';
 import { UploaderOptions } from 'ngx-uploader/index';
 
 @Component({
@@ -76,7 +77,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
               private _ledgerActions: LedgerActions,
               private _companyActions: CompanyActions,
               private cdRef: ChangeDetectorRef,
-              private _toasty: ToasterService) {
+              private _toasty: ToasterService,
+              private _loaderService: LoaderService) {
     this.discountAccountsList$ = this.store.select(p => p.ledger.discountAccountsList).takeUntil(this.destroyed$);
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
@@ -144,6 +146,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public ngAfterViewChecked() {
     // this.cdRef.markForCheck();
   }
+
 
   /**
    *
@@ -246,7 +249,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
       this.isFileUploading = true;
+      this._loaderService.show();
     } else if (output.type === 'done') {
+      this._loaderService.hide();
       if (output.file.response.status === 'success') {
         this.isFileUploading = false;
         this.blankLedger.attachedFile = output.file.response.body.uniqueName;
