@@ -162,6 +162,9 @@ export class QuickAccountComponent implements OnInit {
   }
   public submit() {
     let createAccountRequest: AccountRequestV2 = _.cloneDeep(this.newAccountForm.value);
+    if (!this.showGstBox) {
+      delete createAccountRequest.addresses;
+    }
     this.store.dispatch(this.ledgerAction.createQuickAccountV2(this.newAccountForm.value.groupUniqueName, createAccountRequest));
   }
 }
