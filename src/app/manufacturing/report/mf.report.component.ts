@@ -1,18 +1,19 @@
+import { IOption } from './../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { Select2OptionData } from '../../theme/select2';
 
 const filter1 = [
-  { name: 'Greater', uniqueName: 'greaterThan' },
-  { name: 'Less Than', uniqueName: 'lessThan' },
-  { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
-  { name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals' },
-  { name: 'Equals', uniqueName: 'equals' }
+  { label: 'Greater', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
 ];
 
 const filter2 = [
-  { name: 'Quantity Inward', uniqueName: 'quantityInward' },
+  { label: 'Quantity Inward', value: 'quantityInward' },
   // { name: 'Quantity Outward', uniqueName: 'quantityOutward' },
-  { name: 'Voucher Number', uniqueName: 'voucherNumber' }
+  { label: 'Voucher Number', value: 'voucherNumber' }
 ];
 
 import { Store } from '@ngrx/store';
@@ -36,9 +37,9 @@ import { Router } from '@angular/router';
 export class MfReportComponent implements OnInit {
 
   public mfStockSearchRequest: IMfStockSearchRequest = new MfStockSearchRequestClass();
-  public filtersForSearchBy: any[] = filter2;
-  public filtersForSearchOperation: any[] = filter1;
-  public stockListDropDown: Select2OptionData[] = [];
+  public filtersForSearchBy: IOption[] = filter2;
+  public filtersForSearchOperation: IOption[] = filter1;
+  public stockListDropDown: IOption[] = [];
   public reportData: StocksResponse = null;
   public isReportLoading: boolean = true;
   public showFromDatePicker: boolean = false;
@@ -75,7 +76,7 @@ export class MfReportComponent implements OnInit {
         if (o.manufacturingStockList.results) {
           this.stockListDropDown = [];
           _.forEach(o.manufacturingStockList.results, (unit: any) => {
-            this.stockListDropDown.push({ text: ` ${unit.name} (${unit.uniqueName})`, id: unit.uniqueName });
+            this.stockListDropDown.push({ label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName });
           });
         }
       } else {
@@ -102,11 +103,11 @@ export class MfReportComponent implements OnInit {
     this.mfStockSearchRequest.searchBy = '';
     this.mfStockSearchRequest.searchOperation = '';
 
-    let f = moment().subtract(30, 'days');
-    let t = moment();
+    let f = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    let t = moment().format(GIDDH_DATE_FORMAT);
 
-    this.mfStockSearchRequest.from = String(f);
-    this.mfStockSearchRequest.to = String(t);
+    this.mfStockSearchRequest.from = f;
+    this.mfStockSearchRequest.to = t;
     this.mfStockSearchRequest.page = 1;
     this.mfStockSearchRequest.count = 10;
   }
@@ -142,8 +143,8 @@ export class MfReportComponent implements OnInit {
 
   public getReportDataOnFresh() {
     let data = _.cloneDeep(this.mfStockSearchRequest);
-    data.from = null;
-    data.to = null;
+    data.from = moment().subtract(30, 'days').format(GIDDH_DATE_FORMAT);
+    data.to =  moment().format(GIDDH_DATE_FORMAT);
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
 

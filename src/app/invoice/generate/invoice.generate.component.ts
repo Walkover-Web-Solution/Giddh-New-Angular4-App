@@ -1,3 +1,4 @@
+import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
@@ -14,16 +15,21 @@ import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
 import { ElementViewContainerRef } from '../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { ModalDirective } from 'ngx-bootstrap';
-import { IOption } from '../../theme/ng-select/option.interface';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 
-const COUNTS = [12, 25, 50, 100];
-const COMPARISION_FILTER = [
-  { name: 'Greater Than', uniqueName: 'greaterThan' },
-  { name: 'Less Than', uniqueName: 'lessThan' },
-  { name: 'Greater Than or Equals', uniqueName: 'greaterThanOrEquals' },
-  { name: 'Less Than or Equals', uniqueName: 'lessThanOrEquals' },
-  { name: 'Equals', uniqueName: 'equals' }
+const COUNTS = [
+  { label: '12', value: '12' },
+  { label: '25', value: '25' },
+  { label: '50', value: '50' },
+  { label: '100', value: '100' }
+];
+
+const COMPARISON_FILTER = [
+  { label: 'Greater Than', value: 'greaterThan' },
+  { label: 'Less Than', value: 'lessThan' },
+  { label: 'Greater Than or Equals', value: 'greaterThanOrEquals' },
+  { label: 'Less Than or Equals', value: 'lessThanOrEquals' },
+  { label: 'Equals', value: 'equals' }
 ];
 
 @Component({
@@ -38,9 +44,9 @@ export class InvoiceGenerateComponent implements OnInit {
   public showFromDatePicker: boolean = false;
   public showToDatePicker: boolean = false;
   public togglePrevGenBtn: boolean = false;
-  public counts: number[] = COUNTS;
+  public counts: IOption[] = COUNTS;
   public ledgerSearchRequest: InvoiceFilterClass = new InvoiceFilterClass();
-  public filtersForEntryTotal: INameUniqueName[] = COMPARISION_FILTER;
+  public filtersForEntryTotal: IOption[] = COMPARISON_FILTER;
   public ledgersData: GetAllLedgersOfInvoicesResponse;
   public selectedLedgerItems: string[] = [];
   public selectedCountOfAccounts: string[] = [];
@@ -240,17 +246,17 @@ export class InvoiceGenerateComponent implements OnInit {
     if (o.description) {
       model.description = o.description;
     }
-    if (o.entryTotalBy === COMPARISION_FILTER[0].uniqueName) {
+    if (o.entryTotalBy === COMPARISON_FILTER[0].value) {
       model.totalIsMore = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[1].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[1].value) {
       model.totalIsLess = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[2].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[2].value) {
       model.totalIsMore = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[3].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[3].value) {
       model.totalIsLess = true;
       model.totalIsEqual = true;
-    } else if (o.entryTotalBy === COMPARISION_FILTER[4].uniqueName) {
+    } else if (o.entryTotalBy === COMPARISON_FILTER[4].value) {
       model.totalIsEqual = true;
     }
     return model;
