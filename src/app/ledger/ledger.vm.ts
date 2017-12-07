@@ -50,6 +50,8 @@ export class LedgerVM {
   public selectedBankTxnUniqueName: string;
   public showBankLedgerPanel: boolean = false;
   public currentBankEntry: BlankLedgerVM;
+  public reckoningDebitTotal: number = 0;
+  public reckoningCreditTotal: number = 0;
 
   constructor() {
     this.noAccountChosenForNewEntry = false;
@@ -95,6 +97,37 @@ export class LedgerVM {
       chequeClearanceDate: '',
       invoiceNumberAgainstVoucher: ''
     };
+  }
+
+  public calculateReckonging(transactions: TransactionsResponse) {
+    if (transactions.forwardedBalance.amount === 0) {
+      let recTotal = 0;
+      if (transactions.creditTotal > transactions.debitTotal) {
+        recTotal = transactions.creditTotal;
+      } else {
+        recTotal = transactions.debitTotal;
+      }
+      this.reckoningCreditTotal = recTotal;
+      return this.reckoningDebitTotal = recTotal;
+    } else {
+      if (transactions.forwardedBalance.type === 'DEBIT') {
+        if ((transactions.forwardedBalance.amount + transactions.debitTotal) <= transactions.creditTotal) {
+          this.reckoningCreditTotal = transactions.creditTotal;
+          return this.reckoningDebitTotal = transactions.creditTotal;
+        } else {
+          this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
+          return this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.debitTotal;
+        }
+      } else {
+        if ((transactions.forwardedBalance.amount + transactions.creditTotal) <= transactions.debitTotal) {
+          this.reckoningCreditTotal = transactions.debitTotal;
+          return this.reckoningDebitTotal = transactions.debitTotal;
+        } else {
+          this.reckoningCreditTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
+          return this.reckoningDebitTotal = transactions.forwardedBalance.amount + transactions.creditTotal;
+        }
+      }
+    }
   }
 
   /**
