@@ -388,6 +388,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     }
   }
 
+  public detactChanges() {
+    this.cdRef.detectChanges();
+  }
+
   @HostListener('window:click', ['$event'])
   public clickedOutsideOfComponent(e) {
     if (!e.relatedTarget || !this.entryContent.nativeElement.contains(e.relatedTarget)) {
