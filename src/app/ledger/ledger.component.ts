@@ -29,6 +29,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
+import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 
 @Component({
   selector: 'ledger',
@@ -78,6 +79,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   public trxRequest: TransactionsRequest;
   public isLedgerCreateSuccess$: Observable<boolean>;
   public needToReCalculate: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  @ViewChild('newLedPanel') public newLedPanelCtrl: NewLedgerEntryPanelComponent;
   @ViewChild('updateLedgerModal') public updateLedgerModal: ModalDirective;
   @ViewChild('exportLedgerModal') public exportLedgerModal: ModalDirective;
   @ViewChild('shareLedgerModal') public shareLedgerModal: ModalDirective;
@@ -204,16 +206,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
           }
           //#endregion
           // reset taxes and discount on selected account change
-          txn.tax = 0;
-          txn.taxes = [];
-          txn.discount = 0;
-          txn.discounts = [];
+          // txn.tax = 0;
+          // txn.taxes = [];
+          // txn.discount = 0;
+          // txn.discounts = [];
           return;
         }
       });
     });
     // check if selected account category allows to show taxationDiscountBox in newEntry popup
     this.lc.showTaxationDiscountBox = this.getCategoryNameFromAccountUniqueName(txn);
+    this.newLedPanelCtrl.detactChanges();
   }
 
   public hideEledgerWrap() {
