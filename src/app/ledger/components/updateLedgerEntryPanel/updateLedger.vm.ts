@@ -13,7 +13,7 @@ export class UpdateLedgerVm {
   public flatternAccountList4Select: Observable<IOption[]>;
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
-  public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
+  public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
   public grandTotal: number = 0;
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
@@ -273,7 +273,7 @@ export class UpdateLedgerVm {
 
   public unitChanged(stockUnitCode: string) {
     let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
-    this.stockTrxEntry.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
+    this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
   }
