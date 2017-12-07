@@ -17,6 +17,7 @@ export interface ILedgerTransactionItem {
   type: string;
   selectedAccount?: IFlattenAccountsResultItem | any;
   unitRate?: IInventoryUnit[];
+  isUpdated?: boolean;
 }
 
 export interface IInventory {

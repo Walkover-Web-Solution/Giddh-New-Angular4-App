@@ -10,7 +10,7 @@
                 <div class="flex-row">
                     <div class="flex-row-child">
                         <div class="form-group noMarg">
-                            <label>Customer Name or <a class="mrR4" href (click)="toggleAccountAsidePane($event)">+ Add Customer</a></label>
+                            <label>Customer Name or <a class="mrR4 pdR4" href (click)="toggleAccountAsidePane($event)">+ Add Customer</a></label>
                             <input #custname autocomplete="off" name="customerName" [(ngModel)]="invFormData.customerName" [typeahead]="accounts$ | async" typeaheadOptionField="name" placeholder="Search from accounts" typeaheadOptionsLimit="10" (typeaheadNoResults)="noResultsForCustomer($event)"
                                 (typeaheadOnSelect)="onSelectCustomer($event)" class="form-control">
                         </div>

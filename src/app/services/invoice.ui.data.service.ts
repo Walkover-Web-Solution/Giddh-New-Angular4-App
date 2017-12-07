@@ -52,10 +52,10 @@ export class InvoiceUiDataService {
     if (defaultTemplate) {
       if (this.companyName) {
         defaultTemplate.sections[0].content[0].label = this.companyName;
-        defaultTemplate.sections[2].content[10].label = this.companyName;
+        defaultTemplate.sections[2].content[9].label = this.companyName;
       }
       if (this.companyAddress) {
-        defaultTemplate.sections[2].content[8].label = this.companyAddress;
+        defaultTemplate.sections[2].content[7].label = this.companyAddress;
       }
       this.customTemplate.next(_.cloneDeep(defaultTemplate));
     }
@@ -118,7 +118,7 @@ export class InvoiceUiDataService {
   public BRToNewLine(template) {
     template.sections[2].content[5].label = template.sections[2].content[5].label.replace(/<br\s*[\/]?>/gi, '\n');
     template.sections[2].content[6].label = template.sections[2].content[6].label.replace(/<br\s*[\/]?>/gi, '\n');
-    template.sections[2].content[10].label = template.sections[2].content[10].label.replace(/<br\s*[\/]?>/gi, '\n');
+    template.sections[2].content[9].label = template.sections[2].content[9].label.replace(/<br\s*[\/]?>/gi, '\n');
     return template;
   }
 
@@ -140,10 +140,10 @@ export class InvoiceUiDataService {
           this.isCompanyNameVisible.next(true);
         }
         if (this.companyName && mode === 'create') {
-          selectedTemplate.sections[2].content[10].label = this.companyName;
+          selectedTemplate.sections[2].content[9].label = this.companyName;
         }
         if (this.companyAddress && mode === 'create') {
-          selectedTemplate.sections[2].content[8].label = this.companyAddress;
+          selectedTemplate.sections[2].content[7].label = this.companyAddress;
         }
         selectedTemplate.sections[0].content[0].label = this.companyName;
         if (!selectedTemplate.logoUniqueName) {

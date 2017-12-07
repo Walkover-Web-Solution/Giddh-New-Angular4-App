@@ -311,7 +311,7 @@ export class MfEditComponent implements OnInit {
     });
     // dataToSave.grandTotal = this.getTotal('otherExpenses', 'amount') + this.getTotal('linkedStocks', 'amount');
     // dataToSave.multipleOf = dataToSave.quantity;
-    delete dataToSave.manufacturingMultipleOf;
+    // delete dataToSave.manufacturingMultipleOf;
     this.store.dispatch(this.manufacturingActions.CreateMfItem(dataToSave));
   }
 

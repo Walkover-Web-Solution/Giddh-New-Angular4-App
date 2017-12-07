@@ -5,11 +5,7 @@
         <div class="row">
             <div class="form-group col-xs-3">
                 <label>Select Tax</label><br>
-                <ng-select placeholder="Select Tax" name="taxType" [(ngModel)]="newTaxObj.taxType" [options]="taxList" style="width: 100%;">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="fs12">{{option?.label}}</div>
-                    </ng-template>
-                </ng-select>
+                <sh-select [options]="taxList" [isFilterEnabled]="false" name="taxType" [(ngModel)]="newTaxObj.taxType" [placeholder]="'Select Tax'" [ItemHeight]="33"></sh-select>
             </div>
             <div class="form-group col-xs-3">
                 <label>Unique No.</label><br>
@@ -21,12 +17,7 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Linked Account</label><br>
-                <ng-select [disabled]="newTaxObj.taxType != 'others'" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)" style="width: 100%;">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="fs12">{{option?.label}}</div>
-                    </ng-template>
-                </ng-select>
-
+                <sh-select [disabled]="newTaxObj.taxType != 'others'" [isFilterEnabled]="false" placeholder="Select Account" name="account" [(ngModel)]="newTaxObj.account" [options]="accounts$" (input)="getFlattenAccounts($event.target.value)"></sh-select>
             </div>
         </div>
         <div class="row">
@@ -54,27 +45,17 @@
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Duration</label><br>
-                <ng-select placeholder="Select Duration" name="duration" [(ngModel)]="newTaxObj.duration" [options]="duration" style="width: 100%;">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="fs12">{{option?.label}}</div>
-                    </ng-template>
-                </ng-select>
-
+                <sh-select placeholder="Select Duration" name="duration" [(ngModel)]="newTaxObj.duration" [options]="duration" [ItemHeight]="33"></sh-select>
             </div>
             <div class="form-group col-xs-3">
                 <label>Tax Filing Date</label>
-                <ng-select placeholder="Select Date" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" style="width: 100%;">
-                    <ng-template #optionTemplate let-option="option">
-                        <div class="fs12">{{option?.label}}</div>
-                    </ng-template>
-                </ng-select>
-
+                <sh-select placeholder="Select Date" name="duration" [(ngModel)]="newTaxObj.taxFileDate" [options]="days" [ItemHeight]="33"></sh-select>
             </div>
         </div>
         <div class="row">
             <div class=col-xs-12>
                 <button type="submit" class="btn btn-success">Add</button>
-                <button type="button" (click)="onCancel()" class="btn btn-primary">Cancel</button>
+                <button type="button" (click)="onCancel()" class="btn btn-danger">Cancel</button>
             </div>
         </div>
     </form>
@@ -162,8 +143,8 @@
                             <td *ngIf="taxToEdit[i]">
                                 <div class="custom-select pos-rel">
                                     <select class="form-control" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}">
-                              <option (value)="num" *ngFor="let num of days">{{num}}</option>
-                              </select>
+                                        <option (value)="num.value" *ngFor="let num of days">{{num.label}}</option>
+                                    </select>
                                     <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                                 </div>
                                 <!--<input type="text" [(ngModel)]="availableTaxes[i].taxFileDate" name="tfd{{i}}">-->
