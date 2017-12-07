@@ -1,33 +1,15 @@
 import { ShareRequestForm } from './../../models/api-models/Permission';
-import {
-  GroupCreateRequest, GroupUpateRequest, MoveGroupRequest,
-  MoveGroupResponse
-} from '../../models/api-models/Group';
+import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, GroupSharedWithResponse, GroupsTaxHierarchyResponse, GroupUpateRequest, MoveGroupRequest, MoveGroupResponse } from '../../models/api-models/Group';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
-import {
-  FlattenGroupsAccountsResponse,
-  GroupResponse,
-  GroupSharedWithResponse,
-  GroupsTaxHierarchyResponse
-} from '../../models/api-models/Group';
-import { Action, ActionReducer } from '@ngrx/store';
 import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAccounts';
 import { IGroupsWithAccounts } from '../../models/interfaces/groupsWithAccounts.interface';
 import * as _ from '../../lodash-optimized';
 import { IFlattenGroupsAccountsDetail } from '../../models/interfaces/flattenGroupsAccountsDetail.interface';
-import {
-  AccountMoveRequest,
-  AccountRequest, AccountRequestV2,
-  AccountResponse, AccountResponseV2,
-  AccountSharedWithResponse,
-  AccountsTaxHierarchyResponse
-} from '../../models/api-models/Account';
+import { AccountMoveRequest, AccountRequest, AccountRequestV2, AccountResponse, AccountResponseV2, AccountSharedWithResponse, AccountsTaxHierarchyResponse } from '../../models/api-models/Account';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { of } from 'rxjs/observable/of';
 import { IAccountsInfo } from '../../models/interfaces/accountInfo.interface';
 import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interface';
-import { debug } from 'util';
 import { CustomActions } from '../customActions';
 
 /**
@@ -541,7 +523,6 @@ export function GroupsWithAccountsReducer(state: CurrentGroupAndAccountState = i
           uniqueName: accountData.body.uniqueName
         };
         let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
-        let result = false;
         addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString.groupUniqueName, false);
         return Object.assign({}, state, {
           createAccountInProcess: false,

@@ -1,4 +1,5 @@
 import { Configuration } from '../../app.constant';
+
 const UNIVERSAL_URI_LEDGER = Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/ledgers/';
 
 export const LEDGER_API = {
@@ -11,6 +12,7 @@ export const LEDGER_API = {
   // get call
   RECONCILE: UNIVERSAL_URI_LEDGER + 'reconcile?from=:from&to=:to&chequeNumber=:chequeNumber',
   DOWNLOAD_INVOICE: Configuration.ApiUrl + 'v2/company/:companyUniqueName/accounts/:accountUniqueName/invoices/download', // post call
+  DOWNLOAD_ATTACHMENT: Configuration.ApiUrl + 'company/:companyUniqueName/ledger/upload/:fileName', // post call
   UPLOAD_FILE: Configuration.ApiUrl + 'company/:companyUniqueName/ledger/upload',
   MAGIC_LINK: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/magic-link?from=:from&to=:to',
   EXPORT_LEDGER: Configuration.ApiUrl + 'company/:companyUniqueName/accounts/:accountUniqueName/v2/export-ledger?from=:from&to=:to&type=:type',
