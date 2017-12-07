@@ -12,7 +12,7 @@ import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
 import { AccountService } from '../../../services/account.service';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
-import { filter, last, orderBy } from '../../../lodash-optimized';
+import { filter, last, orderBy, some } from '../../../lodash-optimized';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { UpdateLedgerVm } from './updateLedger.vm';
 import { UpdateLedgerDiscountComponent } from '../updateLedgerDiscount/updateLedgerDiscount.component';
@@ -22,6 +22,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
+import { LoaderService } from '../../../loader/loader.service';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -66,7 +67,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
               private _toasty: ToasterService, private _accountService: AccountService,
-              private _ledgerAction: LedgerActions) {
+              private _ledgerAction: LedgerActions, private _loaderService: LoaderService) {
     this.entryUniqueName$ = this.store.select(p => p.ledger.selectedTxnForEditUniqueName).takeUntil(this.destroyed$);
     this.editAccUniqueName$ = this.store.select(p => p.ledger.selectedAccForEditUniqueName).takeUntil(this.destroyed$);
     this.selectedLedgerStream$ = this.store.select(p => p.ledger.transactionDetails).takeUntil(this.destroyed$);
@@ -119,6 +120,17 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                 resp[0].map(acc => {
                   // normal entry
                   accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
+                  // normal merge account entry
+                  if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    let mergeAccs = acc.mergedAccounts.split(',');
+                    mergeAccs.map(m => m.trim()).forEach(ma => {
+                      accountsArray.push({
+                        value: ma,
+                        label: ma,
+                        additional: acc
+                      });
+                    });
+                  }
                   accountDetails.stocks.map(as => {
                     // stock entry
                     accountsArray.push({
@@ -126,8 +138,20 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                       label: acc.name + '(' + as.uniqueName + ')',
                       additional: Object.assign({}, acc, {stock: as})
                     });
+                    // normal merge account entry
+                    if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                      let mergeAccs = acc.mergedAccounts.split(',');
+                      mergeAccs.map(m => m.trim()).forEach(ma => {
+                        accountsArray.push({
+                          value: `${ma}#${as.uniqueName}`,
+                          label: ma + '(' + as.uniqueName + ')',
+                          additional: Object.assign({}, acc, {stock: as})
+                        });
+                      });
+                    }
                   });
                 });
+                // accountsArray = uniqBy(accountsArray, 'value');
               } else {
                 resp[0].map(acc => {
                   if (acc.stocks) {
@@ -142,7 +166,19 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                   } else {
                     accountsArray.push({value: acc.uniqueName, label: acc.name, additional: acc});
                   }
+                  // normal merge account entry
+                  if (acc.mergedAccounts && acc.mergedAccounts !== '') {
+                    let mergeAccs = acc.mergedAccounts.split(',');
+                    mergeAccs.map(m => m.trim()).forEach(ma => {
+                      accountsArray.push({
+                        value: ma,
+                        label: ma,
+                        additional: acc
+                      });
+                    });
+                  }
                 });
+                // accountsArray = uniqBy(accountsArray, 'value');
               }
               this.vm.flatternAccountList4Select = Observable.of(orderBy(accountsArray, 'text'));
               //#endregion
@@ -178,9 +214,13 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
               });
               this.vm.isInvoiceGeneratedAlready = this.vm.selectedLedger.invoiceGenerated;
               if (this.vm.selectedLedger.total.type === 'DEBIT') {
-                this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+                if (!(some(this.vm.selectedLedger.transactions, {type: 'CREDIT'}))) {
+                  this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('CREDIT'));
+                }
               } else {
-                this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+                if (!(some(this.vm.selectedLedger.transactions, {type: 'DEBIT'}))) {
+                  this.vm.selectedLedger.transactions.push(this.vm.blankTransactionItem('DEBIT'));
+                }
               }
               let incomeExpenseEntryLength = this.vm.isThereIncomeOrExpenseEntry();
               this.vm.showNewEntryPanel = (incomeExpenseEntryLength > 0 && incomeExpenseEntryLength < 2);
@@ -244,7 +284,9 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
       this.isFileUploading = true;
+      this._loaderService.show();
     } else if (output.type === 'done') {
+      this._loaderService.hide();
       if (output.file.response.status === 'success') {
         // this.isFileUploading = false;
         this.vm.selectedLedger.attachedFile = output.file.response.body.uniqueName;
