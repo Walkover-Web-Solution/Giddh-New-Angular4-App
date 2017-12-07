@@ -7,9 +7,10 @@
 
     <div class="form-group">
         <label *ngIf="isLblShow">Role Name</label>
-        <select name="roleUniqueName" formControlName="roleUniqueName" class="form-control ">
-        <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
-      </select>
+        <!-- <select name="roleUniqueName" formControlName="roleUniqueName" class="form-control ">
+            <option [value]="role.uniqueName" *ngFor="let role of allRoles">{{role.name}}</option>
+        </select> -->
+        <sh-select placeholder="Select role" formControlName="roleUniqueName" [options]="allRoles"></sh-select>
     </div>
 
     <!-- time span -->

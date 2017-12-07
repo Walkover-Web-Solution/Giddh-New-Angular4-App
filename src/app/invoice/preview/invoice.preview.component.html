@@ -1,75 +1,51 @@
 <form #invoiceForm="ngForm" (ngSubmit)="getInvoicesByFilters(invoiceForm)" novalidate class="form-inline input-grp-dateRangePicker pr">
 
-  <div class="form-group">
-    <label class="d-block">Account</label>
-    <div class="ng-select-wrap">
-      <ng-select
-        placeholder="Select Account"
-        filterPlaceholder="Type to search..."
-        name="accountUniqueName"
-        [(ngModel)]="invoiceSearchRequest.accountUniqueName"
-        [options]="accounts$ | async"
-        >
-        <ng-template #optionTemplate let-option="option">
-          <div class="account-list-item">{{option?.label}}</div>
-          <div class="account-list-item fs12">{{option?.value}}</div>
-        </ng-template>
-      </ng-select>
+    <div class="form-group mrR1">
+        <label class="d-block">Account</label>
+        <div class="ng-select-wrap">
+            <sh-select placeholder="Select Account" name="accountUniqueName" [(ngModel)]="invoiceSearchRequest.accountUniqueName" [options]="accounts$ | async" [ItemHeight]="33"></sh-select>
+        </div>
     </div>
-  </div>
 
-  <div class="form-group">
-      <label class="d-block">Description</label>
-      <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
-  </div>
-  <div class="form-group">
-      <label class="d-block">Count</label>
-      <div class="custom-select pos-rel">
-          <select class="form-control cp" name="count" [(ngModel)]="invoiceSearchRequest.count">
-    <option value="select">Select</option>
-    <option *ngFor="let num of counts;" [ngValue]="num">{{num}}</option>
-    </select>
-          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-      </div>
-  </div>
-  <div class="form-group">
-      <label class="d-block">Amount</label>
-      <div class="custom-select pos-rel">
-          <select class="form-control cp" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy">
-    <option value="">Please Select</option>
-    <option *ngFor="let item of filtersForEntryTotal" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-    </select>
-          <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-      </div>
-  </div>
-  <div class="form-group">
-      <label class="d-block">&nbsp;</label>
-      <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.entryTotal" placeholder="By amount">
-  </div>
-  <div class="form-group">
-    <label class="d-block">From - To</label>
-    <div class="input-group">
-      <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control"
-      [ngModel]="invoiceSearchRequest.dateRange"
-      (bsValueChange)="bsValueChange($event)"
-      bsDaterangepicker required >
+    <div class="form-group mrR1">
+        <label class="d-block">Description</label>
+        <input type="text" class="form-control" name="description" placeholder="By description" [(ngModel)]="invoiceSearchRequest.description">
     </div>
-  </div>
-  <div class="form-group">
-    <label class="d-block">&nbsp;</label>
-    <button class="btn btn-success btn-sm">GO</button>
-  </div>
+    <div class="form-group mrR1">
+        <label class="d-block">Count</label>
+        <sh-select placeholder="Select" name="count" [(ngModel)]="invoiceSearchRequest.count" [options]="counts" [ItemHeight]="33"></sh-select>
+    </div>
+    <div class="form-group mrR1">
+        <label class="d-block">Amount</label>
+        <div class="custom-select pos-rel">
+            <sh-select placeholder="Select" name="entryTotalBy" [(ngModel)]="invoiceSearchRequest.entryTotalBy" [options]="filtersForEntryTotal" [ItemHeight]="33"></sh-select>
+        </div>
+    </div>
+    <div class="form-group mrR1">
+        <label class="d-block">&nbsp;</label>
+        <input type="text" class="form-control col-xs-2" name="entryTotal" [(ngModel)]="invoiceSearchRequest.entryTotal" placeholder="By amount">
+    </div>
+    <div class="form-group mrR1">
+        <label class="d-block">From - To</label>
+        <div class="input-group">
+            <input name="dateRange" placeholder="Daterangepicker" type="text" class="form-control" [ngModel]="invoiceSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required>
+        </div>
+    </div>
+    <div class="form-group mrR1">
+        <label class="d-block">&nbsp;</label>
+        <button class="btn btn-success btn-sm">GO</button>
+    </div>
 </form>
 <!--list of data  -->
 <div class="no-data mrT2" *ngIf="!invoiceData">
-  <h1>No Entry found in sales!</h1>
-  <h1>Have to do some sales before creating invoice</h1>
-  <!-- <a class="btn btn-primary">Go to Sales</a> -->
+    <h1>No Entry found in sales!</h1>
+    <h1>Have to do some sales before creating invoice</h1>
+    <!-- <a class="btn btn-primary">Go to Sales</a> -->
 </div>
 
 <div class="no-data" *ngIf="invoiceData && invoiceData.results.length === 0">
-  <h1>No entries found within given criteria.</h1>
-  <h1>Do search with some other dates</h1>
+    <h1>No entries found within given criteria.</h1>
+    <h1>Do search with some other dates</h1>
 </div>
 
 <table class="table basic table-bordered mrT2" *ngIf="invoiceData && invoiceData.results.length > 0">
@@ -87,13 +63,13 @@
         </tr>
     </thead>
     <tfoot>
-      <tr>
-        <td colspan="100%">
-          <div class="alC">
-            <pagination [totalItems]="invoiceData.totalPages" [(ngModel)]="invoiceData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
-          </div>
-        </td>
-      </tr>
+        <tr>
+            <td colspan="100%">
+                <div class="alC">
+                    <pagination [totalItems]="invoiceData.totalPages" [(ngModel)]="invoiceData.page" [maxSize]="5" class="pagination-sm" [boundaryLinks]="true" [itemsPerPage]="1" [rotate]="false" (pageChanged)="pageChanged($event)"></pagination>
+                </div>
+            </td>
+        </tr>
     </tfoot>
     <tbody>
         <tr *ngFor="let item of invoiceData.results; let i = index">
@@ -104,19 +80,10 @@
             <td>{{item.grandTotal}}</td>
             <td>{{item.balanceDue}}</td>
             <td>
-                <div class="custom-select pos-rel">
-                    <select #invoiceAction class="form-control cp" (change)="onPerformAction(item, invoiceAction)">
-                        <option value="">--Select--</option>
-                        <option value="paid">Paid</option>
-                        <option value="unpaid">Unpaid</option>
-                        <option value="hold">Hold</option>
-                        <option value="cancel">Cancel</option>
-                    </select>
-                    <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                </div>
+                <sh-select #invoiceAction placeholder="Select Action" (selected)="onPerformAction(item, invoiceAction)" [options]="previewDropdownOptions" [ItemHeight]="33"></sh-select>
             </td>
             <td>{{item.balanceStatus}}</td>
-            <td class="text-center"> <i (click)="onDeleteBtnClick(item.uniqueName)" class="fa fa-trash cp"></i> </td>
+            <td class="text-center"> <i (click)="onDeleteBtnClick(item.uniqueName)" class="glyphicon glyphicon-trash cp"></i> </td>
         </tr>
     </tbody>
 </table>
@@ -140,19 +107,19 @@
 </div>
 <!-- Download or Send Invoice on mail -->
 <div bsModal #downloadOrSendMailModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-  <div class="modal-dialog modal-lg">
-    <!-- modal-liq90 class is removed for now-->
-    <div class="modal-content">
-      <download-or-send-mail-invoice (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)" (closeModelEvent)="closeDownloadOrSendMailPopup($event)"></download-or-send-mail-invoice>
+    <div class="modal-dialog modal-lg">
+        <!-- modal-liq90 class is removed for now-->
+        <div class="modal-content">
+            <download-or-send-mail-invoice (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)" (closeModelEvent)="closeDownloadOrSendMailPopup($event)"></download-or-send-mail-invoice>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- modal dialog -->
 <div bsModal #invoiceGenerateModel="bs-modal" class="modal fade" role="dialog" [config]="modalConfig">
-  <div class="modal-dialog gray modal-liquid">
-    <div class="modal-content">
-      <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+    <div class="modal-dialog gray modal-liquid">
+        <div class="modal-content">
+            <invoice-generate-model (closeEvent)="closeInvoiceModel($event)"></invoice-generate-model>
+        </div>
     </div>
-  </div>
 </div>

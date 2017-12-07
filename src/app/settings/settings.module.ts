@@ -22,6 +22,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { SettingPermissionFormComponent } from './permissions/form/form.component';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { OmitByKeyPipeModule } from '../shared/helpers/pipes/omitBy/omitBy.module';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     LaddaModule,
     ClickOutsideModule,
     BsDatepickerModule.forRoot(),
-    ShSelectModule
+    ShSelectModule,
+    OmitByKeyPipeModule
   ]
 })
 
