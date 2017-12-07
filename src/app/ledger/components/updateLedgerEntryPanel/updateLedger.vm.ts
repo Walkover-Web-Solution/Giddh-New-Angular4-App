@@ -258,11 +258,12 @@ export class UpdateLedgerVm {
       this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
     } else {
       // find account that's from category income || expenses
-      let trx = find(this.selectedLedger.transactions, (t) => {
+      let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
       trx.amount = Number(Number(val).toFixed(2));
+      trx.isUpdated = true;
     }
     this.getEntryTotal();
     this.generatePanelAmount();
