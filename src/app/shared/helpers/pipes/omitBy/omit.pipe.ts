@@ -1,10 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Flyer } from './heroes';
-
-@Pipe({ name: 'OmitByKeyPipe', pure: false })
+@Pipe({ name: 'OmitByKeyPipe', pure: true })
 export class OmitByKeyPipe implements PipeTransform {
-  public transform(arr: any[]) {
-    return arr.filter(o => o.name !== 'Sarfaraz Ansari');
+  public transform(data: any[], key: string, val: string ): any[] {
+    if (data && data.length) {
+      if (key && val) {
+        return data.filter(o => o[key] !== val);
+      }else {
+        return data;
+      }
+    }
   }
 }
