@@ -87,11 +87,12 @@
                             <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="companyProfileObj.state" name="state"/>-->
                             <!--<select2 #stateList [data]="statesSource$ | async" name="state" [(ngModel)]="companyProfileObj.state" *ngIf="countryIsIndia" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }">
                             </select2>-->
-                            <ng-select placeholder="Select" filterPlaceholder="Type to search..." name="state" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia" #stateList style="width:100%;">
+                            <!-- <ng-select  #stateList style="width:100%;">
                                 <ng-template #optionTemplate let-option="option">
                                     <div class="account-list-item">{{option?.label}}</div>
                                 </ng-template>
-                            </ng-select>
+                            </ng-select> -->
+                            <sh-select placeholder="Select state" name="state_dd" [(ngModel)]="companyProfileObj.state" [options]="statesSource$ | async" *ngIf="countryIsIndia" [ItemHeight]="33"></sh-select>
                             <input type="text" placeholder="State" class="form-control" [(ngModel)]="companyProfileObj.state" *ngIf="!countryIsIndia" name="state" />
                         </div>
                     </div>
@@ -104,12 +105,12 @@
                 </div>
             </div>
         </div>
-        <div class="row mrB4" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
+        <div class="row mrB1" *ngIf="companyProfileObj.country && companyProfileObj.country.toLowerCase() === 'india'">
             <div class="col-xs-12">
                 <hr><br />
                 <h3 class="mrB"> Add More GST Number (Note: Check to set to default)</h3>
                 <button type="button" (click)="addGst()" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Add</button>
-                <div [@fadeInAndSlide]="''" *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
+                <div *ngFor="let gst of companyProfileObj.gstDetails; let i = index" class="mrT1 company_gst" [ngClass]="{'mrT2': i != gst.length-1, 'bdrB': i != gst.length-1}">
                     <div class="row">
                         <div class="col-xs-3">
                             <div class="row">
@@ -119,12 +120,12 @@
                                         <label for="" class="d-block">GSTIN</label>
                                         <div class="input-group">
                                             <div class="input-group-addon">
-                                                <input type="checkbox" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}" tooltip="DEFAULT GST" placement="bottom" />
+                                                <input type="checkbox" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}" tooltip="Default GST" placement="bottom" />
                                             </div>
                                             <input type="text" placeholder="GST No." minlength="15" maxlength="15" class="form-control" (keyup)="setChildState(gstNumberField, i)" #gstNumberField (blur)="checkGstNumValidation(gstNumberField)" [(ngModel)]="gst.gstNumber" name="newgstNumber+{{i}}"
                                             />
                                             <div class="input-group-addon">
-                                                <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;"></i>
+                                                <i class="fa fa-trash-o cp" (click)="removeGstEntry(i)" aria-hidden="true" style="font-size:18px;" tooltip="Delete GST" placement="right"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -132,15 +133,7 @@
                                 <div class="col-xs-12">
                                     <div class="form-group select2-parent">
                                         <label>State</label><br>
-                                        <!--<input type="text" placeholder="enter sender Id" class="form-control" [(ngModel)]="gst.addressList[0].stateCode" name="newstateCode+{{i}}" />-->
-                                        <!--<select2 #stateList [data]="statesSource$ | async" name="newstateCode+{{i}}" [disabled]="gst.addressList[0].stateCode" [(ngModel)]="gst.addressList[0].stateCode" [options]="{ width:'100%', multiple: false, placeholder: 'Select' }" (valueChanged)="stateSelected($event, i)">
-                                        </select2>-->
-                                        <ng-select placeholder="Select" filterPlaceholder="Type to search..." name="newstateCode+{{i}}" [options]="statesSource$ | async" #stateList [disabled]="gst.addressList[0].stateCode != ''" [(ngModel)]="gst.addressList[0].stateCode" (selected)="stateSelected($event, i)"
-                                            style="width:100%;">
-                                            <ng-template #optionTemplate let-option="option">
-                                                <div class="account-list-item">{{option?.label}}</div>
-                                            </ng-template>
-                                        </ng-select>
+                                        <sh-select [disabled]="gst.gstNumber != ''" (selected)="stateSelected($event, i)" placeholder="Select state" name="newstateCode+{{i}}" [options]="statesSource$ | async" [(ngModel)]="gst.addressList[0].stateCode"></sh-select>
                                     </div>
                                 </div>
                             </div>
@@ -151,24 +144,6 @@
                                 <textarea rows="4" type="text" placeholder="Address" class="form-control" [(ngModel)]="gst.addressList[0].address" name="newaddress+{{i}}"></textarea>
                             </div>
                         </div>
-                        <!-- <div class="col-xs-3 pdT2">
-                            <div class="row">
-                                <div class="col-xs-12 mrB1">
-                                    <div class="row">
-                                        <label>
-                    <input type="checkbox" (click)="setGstAsDefault(i, $event)" [(ngModel)]="gst.addressList[0].isDefault" name="isDefault+{{i}}">Set as Default
-                  </label>
-                                    </div>
-                                </div>
-                                <div class="col-xs-12">
-                                    <div class="row">
-                                        <label class="cp" (click)="removeGstEntry(i)">
-                    <i class="fa fa-trash-o" aria-hidden="true" style="font-size:22px;"></i> Remove
-                  </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
                 <div class="col-xs-12 text-center" *ngIf="gstDetailsBackup">
@@ -179,7 +154,7 @@
                 </div>
             </div>
         </div>
-        <div class="clearfix mrT2">
+        <div class="clearfix">
             <button type="submit" class="btn btn-success" [disabled]="!isGstValid || !isPANValid || !isMobileNumberValid">Update</button>
             <button type="button" class="btn btn-primary" (click)="onReset()">Cancel</button>
         </div>
