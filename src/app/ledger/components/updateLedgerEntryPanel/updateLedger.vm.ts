@@ -13,7 +13,7 @@ export class UpdateLedgerVm {
   public flatternAccountList4Select: Observable<IOption[]>;
   public selectedLedger: LedgerResponse;
   public selectedLedgerBackup: LedgerResponse;
-  public entryTotal: { crTotal: number, drTotal: number } = {drTotal: 0, crTotal: 0};
+  public entryTotal: { crTotal: number, drTotal: number } = { drTotal: 0, crTotal: 0 };
   public grandTotal: number = 0;
   public totalAmount: number = 0;
   public compoundTotal: number = 0;
@@ -258,11 +258,12 @@ export class UpdateLedgerVm {
       this.stockTrxEntry.amount = Number(Number(val).toFixed(2));
     } else {
       // find account that's from category income || expenses
-      let trx = find(this.selectedLedger.transactions, (t) => {
+      let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
         let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
         return category === 'income' || category === 'expenses';
       });
       trx.amount = Number(Number(val).toFixed(2));
+      trx.isUpdated = true;
     }
     this.getEntryTotal();
     this.generatePanelAmount();
@@ -272,7 +273,7 @@ export class UpdateLedgerVm {
 
   public unitChanged(stockUnitCode: string) {
     let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
-    this.stockTrxEntry.inventory.unit = {code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode};
+    this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
     this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
   }

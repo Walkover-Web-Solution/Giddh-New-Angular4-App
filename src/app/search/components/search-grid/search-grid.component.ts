@@ -218,7 +218,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     title = title.replace(/.$/, '');
     title += '\r\n';
     row = '';
-    this.searchResponse$.take(1).subscribe(p => p.forEach((data) => {
+    this.searchResponseFiltered$.take(1).subscribe(p => p.forEach((data) => {
       if (data.name.indexOf(',')) {
         data.name.replace(',', '');
       }

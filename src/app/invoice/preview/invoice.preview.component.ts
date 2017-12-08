@@ -3,7 +3,7 @@ import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { BsModalRef } from 'ngx-bootstrap/modal'
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
@@ -15,10 +15,10 @@ import { INameUniqueName } from '../../models/interfaces/nameUniqueName.interfac
 import { InvoiceState } from '../../store/Invoice/invoice.reducer';
 import { AccountService } from '../../services/account.service';
 import { Observable } from 'rxjs/Observable';
-import { ModalDirective } from 'ngx-bootstrap';
 import { InvoiceService } from '../../services/invoice.service';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
+import { ModalDirective } from 'ngx-bootstrap';
 
 const COUNTS = [
   { label: '12', value: '12' },
@@ -125,20 +125,20 @@ export class InvoicePreviewComponent implements OnInit {
     // });
 
     this.store.select(p => p.invoice.invoiceData)
-    .takeUntil(this.destroyed$)
-    .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
-      if (p && q) {
-        return (p.templateUniqueName === q.templateUniqueName);
-      }
-      if ((p && !q) || (!p && q)) {
-        return false;
-      }
-      return true;
-    }).subscribe((o: PreviewInvoiceResponseClass) => {
-      if (o) {
-        this.getInvoiceTemplateDetails(o.templateUniqueName);
-      }
-    });
+      .takeUntil(this.destroyed$)
+      .distinctUntilChanged((p: PreviewInvoiceResponseClass, q: PreviewInvoiceResponseClass) => {
+        if (p && q) {
+          return (p.templateUniqueName === q.templateUniqueName);
+        }
+        if ((p && !q) || (!p && q)) {
+          return false;
+        }
+        return true;
+      }).subscribe((o: PreviewInvoiceResponseClass) => {
+        if (o) {
+          this.getInvoiceTemplateDetails(o.templateUniqueName);
+        }
+      });
 
     this.getInvoices();
   }
@@ -146,8 +146,8 @@ export class InvoicePreviewComponent implements OnInit {
   public getInvoiceTemplateDetails(templateUniqueName: string) {
     if (templateUniqueName) {
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice(templateUniqueName));
-    }else {
-      console.log ('error hardcoded: templateUniqueName');
+    } else {
+      console.log('error hardcoded: templateUniqueName');
       this.store.dispatch(this.invoiceActions.GetTemplateDetailsOfInvoice('j8bzr0k3lh0khbcje8bh'));
     }
   }
@@ -202,12 +202,12 @@ export class InvoicePreviewComponent implements OnInit {
     this.downloadOrSendMailModel.show();
   }
 
-  public closeDownloadOrSendMailPopup(userResponse: {action: string}) {
+  public closeDownloadOrSendMailPopup(userResponse: { action: string }) {
     this.downloadOrSendMailModel.hide();
     if (userResponse.action === 'update') {
       this.store.dispatch(this.invoiceActions.VisitToInvoiceFromPreview());
       this.invoiceGenerateModel.show();
-    }else if (userResponse.action === 'closed') {
+    } else if (userResponse.action === 'closed') {
       this.store.dispatch(this.invoiceActions.ResetInvoiceData());
     }
   }

@@ -62,6 +62,12 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
         this.change();
       }
     }
+
+    // if ('taxes' in changes && changes.taxes.currentValue !== changes.taxes.previousValue) {
+    //   this.sum = 0;
+    //   this.prepareTaxObject();
+    //   this.change();
+    // }
   }
   /**
    * prepare taxObject as per needed
