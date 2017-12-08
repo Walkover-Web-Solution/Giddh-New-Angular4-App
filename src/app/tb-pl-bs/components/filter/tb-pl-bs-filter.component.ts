@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import * as moment from 'moment/moment';
+
 @Component({
   selector: 'tb-pl-bs-filter',  // <home></home>
   templateUrl: './tb-pl-bs-filter.component.html',
@@ -138,8 +139,8 @@ export class TbPlBsFilterComponent implements OnInit, OnDestroy, OnChanges {
     // this.selectedDateOption = v.value || '';
   }
   public selectedDate(value: any) {
-    this.filterForm.controls['from'].setValue(moment(value.start).format('DD-MM-YYYY'));
-    this.filterForm.controls['to'].setValue(moment(value.end).format('DD-MM-YYYY'));
+    this.filterForm.controls['from'].setValue(moment(value.picker.startDate).format('DD-MM-YYYY'));
+    this.filterForm.controls['to'].setValue(moment(value.picker.endDate).format('DD-MM-YYYY'));
   }
   public selectFinancialYearOption(v: IOption) {
     if (v.value) {

@@ -264,6 +264,7 @@ export class LedgerActions {
     .map(response => {
       if (response.status === 'success') {
         if (typeof response.body === 'string') {
+          this._toasty.successToast(response.body);
           this.store.dispatch(this.setTxnForEdit(''));
           return this.setTxnForEdit(response.request[0].entries[0]);
         } else if (Array.isArray(response.body) && 'reason' in response.body[0]) {
