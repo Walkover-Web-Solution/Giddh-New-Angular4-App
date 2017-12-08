@@ -162,7 +162,7 @@
                 </div>
                 <div class="pull-right">
                     <label class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
-            <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
             <label for="invoiceFile" class="cp fs16">
               <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                     </label>
