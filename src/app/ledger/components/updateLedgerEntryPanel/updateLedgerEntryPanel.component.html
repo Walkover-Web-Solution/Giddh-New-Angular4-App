@@ -189,8 +189,17 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- credit -->
-                <!-- totals -->
+
+              </div>
+              <div class="col-xs-12 pd1 text-right">
+                <span class="inWords">{{vm.grandTotal | myNumberToWordsPipe | lowercase}}</span>
+              </div>
+            </ng-container>
+            <div class="" [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
+              <div class="row">
+                <textarea rows="3" cols="" [(ngModel)]="vm.selectedLedger.description" class="form-control"
+                          placeholder="Description"></textarea>
+              </div>
             </div>
         </div>
         <!-- transactions -->
