@@ -10,6 +10,7 @@ import { ReplaySubject } from 'rxjs/Rx';
 import { ToasterService } from '../../../../../services/toaster.service';
 import { INVOICE_API } from '../../../../../services/apiurls/invoice';
 import { Observable } from 'rxjs/Observable';
+import { UploaderOptions } from 'ngx-uploader/index';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -45,6 +46,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   public formData: FormData;
   public files: UploadFile[] = [];
   public uploadInput: EventEmitter<UploadInput>;
+  public fileUploadOptions: UploaderOptions;
   public humanizeBytes: any;
   public dragOver: boolean;
   public imagePreview: any;
@@ -71,6 +73,7 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
 
     this.files = []; // local uploading files array
     this.uploadInput = new EventEmitter<UploadInput>(); // input events, we use this to emit data to ngx-uploader
+    this.fileUploadOptions = { concurrency: 1 };
     this.humanizeBytes = humanizeBytes;
     this.sessionId$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyUniqueName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
@@ -177,7 +180,6 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
       url: INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
       method: 'POST',
       headers: {'Session-Id': sessionId},
-      concurrency: 1,
     };
 
     this.uploadInput.emit(event);

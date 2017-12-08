@@ -6,7 +6,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs/Rx';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { TaxResponse } from '../../../models/api-models/Company';
-import { UploadInput, UploadOutput } from 'ngx-uploader';
+import { UploaderOptions, UploadInput, UploadOutput } from 'ngx-uploader';
 import { ToasterService } from '../../../services/toaster.service';
 import { LEDGER_API } from '../../../services/apiurls/ledger.api';
 import { ModalDirective } from 'ngx-bootstrap';
@@ -45,6 +45,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public entryUniqueName: string;
   public companyTaxesList$: Observable<TaxResponse[]>;
   public uploadInput: EventEmitter<UploadInput>;
+  public fileUploadOptions: UploaderOptions;
   public isDeleteTrxEntrySuccess$: Observable<boolean>;
   public isTxnUpdateInProcess$: Observable<boolean>;
   public isTxnUpdateSuccess$: Observable<boolean>;
@@ -95,6 +96,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     // emit upload event
     this.uploadInput = new EventEmitter<UploadInput>();
+    // set file upload options
+    this.fileUploadOptions = {concurrency: 0};
 
     //  get entry from server
     this.entryUniqueName$.subscribe(entryName => {
@@ -279,7 +282,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         fieldName: 'file',
         data: {company: companyUniqueName},
         headers: {'Session-Id': sessionKey},
-        concurrency: 0
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {
