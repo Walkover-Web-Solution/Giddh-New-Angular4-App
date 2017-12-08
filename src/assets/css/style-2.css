@@ -1844,7 +1844,7 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #shareModal .btn {
     padding: 7px 16px;
-    border-radius: 0;
+    /* border-radius: 0; */
 }
 
 #shareModal select {
@@ -1860,7 +1860,6 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #shareModal .input-group .input-group-btn:last-child>.btn {
     margin-left: 8px;
-    border-radius: 0;
 }
 
 .input-group-btn.sticky:last-child>.btn {
@@ -1875,7 +1874,7 @@ a.btn.btn-xs.btn-link.pull-right {
     list-style: none;
     color: #666;
     font-size: 16px;
-    padding: 10px 0;
+    padding: 5px 0 2px 0;
     border-bottom: 1px solid #d6d6d6;
 }
 
@@ -3281,6 +3280,7 @@ label {
 .radio_theme {
     position: relative;
     margin: 0px 5px !important;
+    top: 1px;
 }
 
 .radio_theme:before {
@@ -3289,8 +3289,10 @@ label {
     width: 18px;
     height: 18px;
     background: #fff;
-    top: -2px;
-    right: -2px;
+    /* top: -2px;
+    right: -2px; */
+    top: 0;
+    right: 0;
     border: 2px solid #969696;
     border-radius: 50%;
 }
@@ -3301,8 +3303,8 @@ label {
     width: 6px;
     height: 6px;
     background: #ff5f00;
-    left: 2px;
-    bottom: 3px;
+    left: 6px;
+    bottom: 6px;
     border-radius: 50%;
     /* right: 0; */
     text-align: center;
@@ -3312,6 +3314,7 @@ label {
     display: block;
     height: 200px;
     overflow: auto;
+    padding: 0 0 40px 0;
 }
 
 .dropdown-container .dropdown-menu li label {
@@ -3319,6 +3322,8 @@ label {
     margin: 0;
     width: 100%;
     float: left;
+    padding: 6px;
+    text-transform: capitalize;
 }
 
 
@@ -3348,17 +3353,18 @@ label {
     background: #f3f0e6 !important
 }
 
-.ledger-panel .dropdown-container .dropdown-menu li {
+
+/* .ledger-panel .dropdown-container .dropdown-menu li {
     clear: both;
     float: left;
     padding: 3px 2px;
-}
+} */
 
-.ledger-panel .dropdown-container .dropdown-menu li label span {
+.dropdown-container .dropdown-menu li label span {
     max-width: calc(100% - 22px);
 }
 
-.ledger-panel .dropdown-menu {
+.dropdown-container .dropdown-menu {
     border-radius: 0;
     margin: 0;
 }
@@ -4359,7 +4365,7 @@ table td[class*=col-]:last-child {
 }
 
 .ledgHead.entry-popup table td.select2-ledger>sh-select {
-    margin-top: 1px;
+    top: 1px;
 }
 
 
@@ -4367,4 +4373,13 @@ table td[class*=col-]:last-child {
 
 .input-group sh-select .menu {
     top: 33px;
+}
+
+.radio_theme {
+    height: 18px;
+    width: 18px;
+}
+
+.dropdown-container .dropdown-menu li:last-child label {
+    border-bottom: 0;
 }
