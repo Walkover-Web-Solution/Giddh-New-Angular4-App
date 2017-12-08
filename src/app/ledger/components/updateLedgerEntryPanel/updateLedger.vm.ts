@@ -271,6 +271,34 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
+  public inventoryTotalChanged() {
+    let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
+      return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
+    }) || 0;
+    let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+    let total = ((this.grandTotal * 100) + (100 + taxTotal)
+      * discountTrxTotal);
+    let finalTotal = Number((total / (100 + taxTotal)).toFixed(2));
+
+    if (this.stockTrxEntry) {
+      this.stockTrxEntry.amount = Number(Number(finalTotal).toFixed(2));
+      this.stockTrxEntry.inventory.rate = this.stockTrxEntry.amount;
+      this.stockTrxEntry.isUpdated = true;
+    } else {
+      // find account that's from category income || expenses
+      let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
+        let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
+        return category === 'income' || category === 'expenses';
+      });
+      trx.amount = Number(Number(finalTotal).toFixed(2));
+      trx.isUpdated = true;
+    }
+    this.getEntryTotal();
+    this.generatePanelAmount();
+    // this.generateGrandTotal();
+    this.generateCompoundTotal();
+  }
+
   public unitChanged(stockUnitCode: string) {
     let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
     this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };

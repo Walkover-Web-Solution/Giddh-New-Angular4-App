@@ -275,14 +275,15 @@
                                           </td>
                                           <td class="text-right pItem">
                                               <label class="primary_clr">Total</label>
-                                              <input type="text" name="" class="form-control" [(ngModel)]="vm.grandTotal" />
+                                              <input type="text" name="" decimalDigitsDirective [DecimalPlaces]="2" class="form-control" [(ngModel)]="vm.grandTotal"
+                                              (input)="vm.inventoryTotalChanged()" />
                                           </td>
                                       </tr>
                                   </tbody>
                               </table>
                           </div>
                           <div class="col-xs-12 pd1 text-right">
-                              <span class="inWords">{{vm.totalAmount | myNumberToWordsPipe | lowercase}}</span>
+                              <span class="inWords">{{vm.grandTotal | myNumberToWordsPipe | lowercase}}</span>
                           </div>
                       </ng-container>
                       <div class="" [ngClass]="{'col-xs-12': vm.showNewEntryPanel, 'col-xs-8': !vm.showNewEntryPanel}">
