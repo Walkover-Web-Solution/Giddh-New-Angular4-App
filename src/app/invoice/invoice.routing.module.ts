@@ -17,7 +17,7 @@ import { InvoiceTemplatesModule } from './templates/invoice.templates.module';
 import { EditInvoiceComponent } from './templates/edit-template/edit.invoice.component';
 import { InvoiceSettingComponent } from './settings/invoice.settings.component';
 
-import { FontPickerConfigInterface, FontPickerModule } from 'ngx-font-picker';
+import { FontPickerModule, FONT_PICKER_CONFIG, FontPickerConfigInterface } from 'ngx-font-picker';
 import { NgUploaderModule } from 'ngx-uploader';
 import { DesignFiltersContainerComponent } from './templates/edit-template/filters-container/design-filters/design.filters.component';
 import { EditFiltersContainersComponent } from './templates/edit-template/filters-container/edit.filters.component';
@@ -35,8 +35,9 @@ import { InvoicePageDDComponent } from '../shared/invoice-page-dd/invoice.page.d
 import { SelectModule } from '../theme/ng-select/ng-select';
 import { LaddaModule } from 'angular2-ladda';
 
-const FONT_PICKER_CONFIG: FontPickerConfigInterface = {
-  apiKey: 'AIzaSyAPcvNvidnjQL-a_2xW2QYox3hT7DQBWyo'
+const DEFAULT_FONT_PICKER_CONFIG: FontPickerConfigInterface = {
+  // Change this to your Google API key
+  apiKey: 'AIzaSyA9S7DY0khhn9JYcfyRWb1F6Rd2rwtF_mA'
 };
 const INVOICE_ROUTES: Routes = [
   {
@@ -83,7 +84,7 @@ const INVOICE_ROUTES: Routes = [
     PaginationModule,
     RouterModule.forChild(INVOICE_ROUTES),
     InvoiceTemplatesModule,
-    FontPickerModule.forRoot(FONT_PICKER_CONFIG),
+    FontPickerModule,
     BsDatepickerModule.forRoot(),
     NgUploaderModule,
     SelectModule,
@@ -94,6 +95,10 @@ const INVOICE_ROUTES: Routes = [
     RouterModule,
     TooltipModule
   ],
-  providers: [InvoiceUiDataService]
+  providers: [InvoiceUiDataService, {
+    provide: FONT_PICKER_CONFIG,
+    useValue: DEFAULT_FONT_PICKER_CONFIG
+  }
+]
 })
 export class InvoiceRoutingModule { }
