@@ -9,7 +9,7 @@
     <ul (wheel)="onOptionsWheel($event)">
       <li *ngFor="let option of optionList.filtered" [ngClass]="{'highlighted': option.highlighted, 'selected': option.selected, 'disabled': option.disabled}"
         [ngStyle]="getOptionStyle(option)" (click)="onOptionClick(option)" (mouseover)="onOptionMouseover(option)">
-        <ng-template [ngOutletContext]="{option: option.wrappedOption}" [ngTemplateOutlet]="optionTemplate"></ng-template>
+        <ng-template [ngTemplateOutletContext]="{option: option.wrappedOption}" [ngTemplateOutlet]="optionTemplate"></ng-template>
         <span *ngIf="!optionTemplate">{{option.label}}</span>
       </li>
       <li *ngIf="!optionList.hasShown" class="message">
