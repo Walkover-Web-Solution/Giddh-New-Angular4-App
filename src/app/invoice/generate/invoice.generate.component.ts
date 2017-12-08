@@ -2,7 +2,7 @@ import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+import { BsModalRef } from 'ngx-bootstrap/modal'
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/roots';
 import * as _ from '../../lodash-optimized';
