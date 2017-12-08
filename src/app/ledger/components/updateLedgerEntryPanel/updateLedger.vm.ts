@@ -7,6 +7,7 @@ import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-ta
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { underStandingTextData } from 'app/ledger/underStandingTextData';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -30,6 +31,17 @@ export class UpdateLedgerVm {
 
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public discountComponent: UpdateLedgerDiscountComponent;
+  public ledgerUnderStandingObj = {
+    accountType: '',
+    text: {
+      cr: '',
+      dr: ''
+    },
+    balanceText: {
+      cr: '',
+      dr: ''
+    }
+  };
 
   constructor() {
     this.voucherTypeList = [{
@@ -339,6 +351,18 @@ export class UpdateLedgerVm {
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
     return requestObj;
+  }
+
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+    if (data) {
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
+      this.ledgerUnderStandingObj = _.cloneDeep(data);
+    }
   }
 
   public resetVM() {

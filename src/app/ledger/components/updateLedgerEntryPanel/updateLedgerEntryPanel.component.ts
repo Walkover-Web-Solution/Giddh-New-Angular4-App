@@ -52,17 +52,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public flattenAccountListStream$: Observable<IFlattenAccountsResultItem[]>;
   public selectedLedgerStream$: Observable<LedgerResponse>;
   public activeAccount$: Observable<AccountResponse>;
-  public ledgerUnderStandingObj = {
-    accountType: '',
-    text: {
-      cr: '',
-      dr: ''
-    },
-    balanceText: {
-      cr: '',
-      dr: ''
-    }
-  };
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
 
@@ -109,6 +98,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
           this.vm.flatternAccountList = _.cloneDeep(resp[0]);
           this.activeAccount$ = Observable.of(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
+          this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
           let parentOfAccount = accountDetails.parentGroups[0];
           // check if account is stockable
           let isStockableAccount = parentOfAccount ?
