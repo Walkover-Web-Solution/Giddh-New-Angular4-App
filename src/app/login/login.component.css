@@ -190,9 +190,14 @@ button.close {
     opacity: 1;
 }
 
+
 /* .modal-body {
     overflow: hidden;
 } */
+
+.email {
+    background: #10aae0;
+}
 
 
 /************* end login page *************/
