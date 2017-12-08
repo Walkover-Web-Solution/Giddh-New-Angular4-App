@@ -31,7 +31,7 @@ import { ConfirmModalModule } from '../theme/confirm-modal';
 import { QuickAccountComponent } from './components/quickAccount/quickAccount.component';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { ButtonsModule } from 'ngx-bootstrap';
+import { ButtonsModule, PaginationComponent } from 'ngx-bootstrap';
 
 @NgModule({
   declarations: [
@@ -50,7 +50,7 @@ import { ButtonsModule } from 'ngx-bootstrap';
   exports: [
     LedgerComponent, UpdateLedgerEntryPanelComponent
   ],
-  entryComponents: [UpdateLedgerEntryPanelComponent, QuickAccountComponent],
+  entryComponents: [UpdateLedgerEntryPanelComponent, QuickAccountComponent, PaginationComponent],
   providers: [],
   imports: [
     CommonModule,
