@@ -106,7 +106,7 @@ export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterVie
   public onDocumentClick(event) {
     if (this.isOpen && !this.element.nativeElement.contains(event.target)) {
       this.isOpen = false;
-      if (this.selectedValues && this.selectedValues.length === 1) {
+      if (this.selectedValues && this.selectedValues.length === 1 && !this.multiple) {
         this.filter = this.selectedValues[0].label;
       } else {
         this.clearFilter();
