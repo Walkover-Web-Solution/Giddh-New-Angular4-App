@@ -1,5 +1,3 @@
-/// <reference types="select2" />
-
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
