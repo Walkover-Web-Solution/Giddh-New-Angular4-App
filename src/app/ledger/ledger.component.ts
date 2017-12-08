@@ -30,6 +30,7 @@ import { AccountResponse } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
+import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
 
 @Component({
   selector: 'ledger',
@@ -39,6 +40,7 @@ import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/n
 export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
+  @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
@@ -90,9 +92,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private _ledgerActions: LedgerActions, private route: ActivatedRoute,
-              private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
-              private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
-              private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
+    private _ledgerService: LedgerService, private _accountService: AccountService, private _groupService: GroupService,
+    private _router: Router, private _toaster: ToasterService, private _companyActions: CompanyActions,
+    private componentFactoryResolver: ComponentFactoryResolver, private _generalActions: GeneralActions) {
     this.lc = new LedgerVM();
     this.trxRequest = new TransactionsRequest();
     this.lc.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
@@ -225,6 +227,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
   public pageChanged(event: any): void {
     this.trxRequest.page = event.page;
+    // this.lc.currentPage = event.page;
     this.getTransactionData();
   }
 
@@ -286,6 +289,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
       if (lt) {
         this.lc.currentPage = lt.page;
         this.lc.calculateReckonging(lt);
+        this.loadPaginationComponent(lt);
       }
     });
     this.isLedgerCreateSuccess$.subscribe(s => {
@@ -320,13 +324,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
           // stocks from ledger account
           data[1].map(acc => {
             // normal entry
-            accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+            accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             accountDetails.stocks.map(as => {
               // stock entry
               accountsArray.push({
                 value: uuid.v4(),
                 label: acc.name + '(' + as.uniqueName + ')',
-                additional: Object.assign({}, acc, {stock: as})
+                additional: Object.assign({}, acc, { stock: as })
               });
             });
           });
@@ -335,18 +339,18 @@ export class LedgerComponent implements OnInit, OnDestroy {
           data[1].map(acc => {
             if (acc.stocks) {
               // normal entry
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
 
               // stock entry
               acc.stocks.map(as => {
                 accountsArray.push({
                   value: uuid.v4(),
                   label: acc.name + '(' + as.uniqueName + ')',
-                  additional: Object.assign({}, acc, {stock: as})
+                  additional: Object.assign({}, acc, { stock: as })
                 });
               });
             } else {
-              accountsArray.push({value: uuid.v4(), label: acc.name, additional: acc});
+              accountsArray.push({ value: uuid.v4(), label: acc.name, additional: acc });
             }
           });
         }
@@ -674,6 +678,26 @@ export class LedgerComponent implements OnInit, OnDestroy {
       componentInstance.destroyed$.complete();
     });
 
+  }
+
+  public loadPaginationComponent(s) {
+    let transactionData = null;
+    let componentFactory = this.componentFactoryResolver.resolveComponentFactory(PaginationComponent);
+    let viewContainerRef = this.paginationChild.viewContainerRef;
+    viewContainerRef.remove();
+
+    let componentInstanceView = componentFactory.create(viewContainerRef.parentInjector);
+    viewContainerRef.insert(componentInstanceView.hostView);
+
+    let componentInstance = componentInstanceView.instance as PaginationComponent;
+    componentInstance.totalItems = s.count * s.totalPages;
+    componentInstance.itemsPerPage = s.count;
+    componentInstance.maxSize = 5;
+    componentInstance.writeValue(s.page);
+    componentInstance.boundaryLinks = true;
+    componentInstance.pageChanged.subscribe(e => {
+      this.pageChanged(e);
+    });
   }
 
   /**
