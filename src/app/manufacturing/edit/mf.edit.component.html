@@ -11,42 +11,51 @@
 
     <!-- form -->
     <div class="col-xs-12 mrT2">
-        <div class="">
-            <form class="form-inline mrB2" name="manufaturingForm" #manufaturingForm="ngForm">
-                <div class="form-group mrR1">
-                    <label class="d-block">Product Name</label>
-                    <sh-select [options]="stockListDropDown$ | async" [disabled]="isUpdateCase" (selected)="getStocksWithRate($event)" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" placeholder="--Select product--" [ItemHeight]="33">
-                    </sh-select>
-                </div>
-                <div class="form-group pos-rel mrR1">
-                    <label class="d-block">Quantity</label>
-                    <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
-                    <small class="pos-abs" style="right:0;">Multiple of <span *ngIf="manufacturingDetails.multipleOf">{{manufacturingDetails.multipleOf | json}}</span></small>
-                </div>
-                <div class="form-group mrR1" (clickOutside)="showFromDatePicker=false;">
-                    <label class="d-block">Date</label>
-                    <div class="input-group">
-                        <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
-                        <span class="input-group-btn">
+        <div class="row">
+            <form class="mrB2 container pull-left" name="manufaturingForm" #manufaturingForm="ngForm">
+                <div class="row">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label class="d-block">Product Name</label>
+                            <sh-select [options]="stockListDropDown$ | async" [disabled]="isUpdateCase" (selected)="getStocksWithRate($event)" [(ngModel)]="manufacturingDetails.stockUniqueName" name="stockUniqueName" placeholder="--Select product--" [ItemHeight]="33">
+                            </sh-select>
+                        </div>
+                    </div>
+                    <div class="col-xs-3 row">
+                        <div class="form-group pos-rel">
+                            <label class="d-block">Quantity</label>
+                            <input type="text" class="form-control" decimalDigitsDirective [DecimalPlaces]="4" (keyup)="onQuantityChange(manufacturingDetails.manufacturingMultipleOf)" [(ngModel)]="manufacturingDetails.manufacturingMultipleOf" name="manufacturingMultipleOf" />
+                            <small class="pos-abs" style="right:0;">Multiple of <span *ngIf="manufacturingDetails.multipleOf">{{manufacturingDetails.multipleOf | json}}</span></small>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+
+                        <div class="form-group mrR1" (clickOutside)="showFromDatePicker=false;">
+                            <label class="d-block">Date</label>
+                            <div class="input-group">
+                                <input type="text" name="from" [ngModel]="moment(manufacturingDetails.date).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+                                <span class="input-group-btn">
                 <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
                 <i class="glyphicon glyphicon-calendar"></i>
                 </button>
             </span>
-                    </div>
-                    <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                        <ul class="my-dropdown-menu calendar-dropdown">
-                            <li>
-                                <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-                            </li>
-                            <li class="pd1 clearfix pdT pdB">
-                                <span class="btn-group pull-left">
+                            </div>
+                            <div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;">
+                                <ul class="my-dropdown-menu calendar-dropdown">
+                                    <li>
+                                        <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="manufacturingDetails.date" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
+                                    </li>
+                                    <li class="pd1 clearfix pdT pdB">
+                                        <span class="btn-group pull-left">
                                         <button type="button" class="btn btn-xs btn-primary mrR" (click)="setToday();showFromDatePicker = false;">Today</button>
                                         <button type="button" class="btn btn-xs btn-success" (click)="showFromDatePicker = false">Done</button>
                                     </span>
-                                <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showFromDatePicker = false;">Clear</button>
-                            </li>
+                                        <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate();showFromDatePicker = false;">Clear</button>
+                                    </li>
 
-                        </ul>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>
@@ -56,7 +65,7 @@
     <!-- form end -->
 
     <!--  -->
-    <div class="col-xs-12 clearfix pdT2" *ngIf="manufacturingDetails.stockUniqueName">
+    <div class="col-xs-12 clearfix" *ngIf="manufacturingDetails.stockUniqueName">
 
         <div class="box clearfix">
             <!-- right column / add more resources -->
@@ -104,13 +113,13 @@
                                         [ItemHeight]="33"></sh-select>
                                 </td>
                                 <td>
-                                    <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control" (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
+                                    <input type="text" decimalDigitsDirective [DecimalPlaces]="4" required class="form-control text-right" (blur)="getStockUnit(linkedStocks.stockUniqueName, linkedStocks.quantity)" [(ngModel)]="linkedStocks.quantity" #linkedStockQuantity="ngModel">
                                 </td>
-                                <td><input type="text" class="form-control" [(ngModel)]="linkedStocks.manufacturingUnit" [disabled]="true"></td>
+                                <td><input type="text" class="form-control text-right" [(ngModel)]="linkedStocks.manufacturingUnit" [disabled]="true"></td>
                                 <!--<td *ngIf="!isUpdateCase">{{linkedStocks.stockUnitCode }}</td>
                                 <td *ngIf="isUpdateCase">{{linkedStocks.manufacturingUnit || linkedStocks.stockUnitCode}}</td>-->
 
-                                <td><input type="number" [disabled]="true" required class="form-control" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
+                                <td><input type="number" [disabled]="true" required class="form-control text-right" [(ngModel)]="linkedStocks.rate" #linkedStockRate="ngModel"></td>
                                 <td> {{ getCalculatedAmount(linkedStockQuantity, linkedStockRate) | number:'1.0-2' }} </td>
                                 <!--<td><input type="number" required class="form-control" [(ngModel)]="linkedStocks.amount" #linkedStockAmount="ngModel"></td>-->
 
@@ -120,7 +129,7 @@
                             </tr>
 
                             <tr>
-                                <td><a href="javascript:void(0);" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</a>
+                                <td colspan="7"><button class="btn-link" (click)="toggleAddLinkedStocks = !toggleAddLinkedStocks">Add New</button>
                                 </td>
                             </tr>
                         </tbody>
@@ -152,7 +161,7 @@
                     <table class="width100">
                         <thead class="tcaption">
                             <tr>
-                                <td class="cp" tooltip="Add A/C where expense entries will be done." placement="top" colspan="5">Add Expense <i class="fa fa-plus cursor-pointer" (click)="toggleAddExpenses = !toggleAddExpenses" aria-hidden="true"></i>
+                                <td class="cp btn-link" (click)="toggleAddExpenses = !toggleAddExpenses" tooltip="Add A/C where expense entries will be done." placement="top" colspan="5"><i class="fa fa-plus" aria-hidden="true"></i> Add Expense
                                 </td>
                             </tr>
                         </thead>
@@ -168,7 +177,7 @@
                                     </div>
                                 </td>
                                 <td class="text-center">
-                                    <label class="pd">to</label>
+                                    <label class="pdR">to</label>
                                 </td>
                                 <td>
                                     <div class="custom-select pos-rel">
@@ -179,7 +188,9 @@
                                         <span class="select_drop"><i class="fa fa-caret-down"></i></span>
                                     </div>
                                 </td>
-                                <td class="text-right"><label class="pd">{{ expense.transactions[0].amount }}</label></td>
+                                <td class="text-right">
+                                    <div class="pd">{{ expense.transactions[0].amount }}</div>
+                                </td>
                                 <td class="text-center"><i class="fa fa-times" aria-hidden="true" (click)="removeExpenseItem(i)"></i></td>
                             </tr>
 
@@ -196,7 +207,9 @@
                                     </div>
                                 </td>
                                 <!--|| transactionAccountUniqueName.invalid  || baseAccountUniqueName.invalid-->
-                                <td class="text-right"><label class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control text-right" #transactionAmount="ngModel"></label></td>
+                                <td class="text-right w100">
+                                    <div class="pd"><input type="text" decimalDigitsDirective [DecimalPlaces]="2" required placeholder="Amount" [(ngModel)]="otherExpenses.transactionAmount" name="transactionAmount" class="form-control text-right" #transactionAmount="ngModel"></div>
+                                </td>
                                 <td><button [disabled]="transactionAmount.invalid" (click)="addExpense(otherExpenses)" style="margin-top: 12px;" class="ico-btn pd0"><i class="fa fa-plus text-danger" aria-hidden="true"></i></button></td>
                             </tr>
                         </tbody>
