@@ -22,7 +22,7 @@
             </li>-->
             <!--<li [hidden]="!templateUISectionVisibility.templates">
                 <i class="ico-template"></i> <label>Change up to template</label>
-                
+
                 <div class="clearfix">
                     <ul class="templateView">
 
@@ -46,7 +46,7 @@
                         </li>
                     </ul>
                 </div>
-        
+
             </li>-->
             <!--<li [hidden]="templateUISectionVisibility.logo" (click)="onChangeVisibility('logo')">
                 <i class="ico-edit"></i> <label>Make logo edit</label>
@@ -57,7 +57,7 @@
                     <div class="logoTool">
                         <span class="logo-preview">
                             <label class="upload-button" for="logo-edit" [hidden]="logoAttached">
-                                <input type="file" id="logo-edit" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
+                                <input type="file" id="logo-edit" [options]="fileUploadOptions" ngFileSelect (uploadOutput)="onUploadMyFileOutput($event)" [uploadInput]="uploadInput">
                                 <small>Upload Your Logo</small>
                             </label>
                             <label for="logo-edit">
@@ -137,7 +137,7 @@
             </li>
             <li [hidden]="!templateUISectionVisibility.print">
                 <i class="ico-print"></i> <label>Edit print setting</label>
-                
+
                 <div class="clearfix mrT1">
                     <div class="printTool pos-rel">
                         <p>Page margins</p>
@@ -160,10 +160,10 @@
                                 </tr>
                             </tbody>
                         </table>
-                        
+
                     </div>
                 </div>
-                
+
             </li>-->
         </ul>
     </div>
