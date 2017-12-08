@@ -443,7 +443,7 @@
               <div class="pull-right">
                 <label class="upload_div" [ngClass]="{hide:vm.selectedLedger.attachedFile}">
                   <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput"
-                         (uploadOutput)="onUploadOutput($event)">
+                         (uploadOutput)="onUploadOutput($event)" [options]="fileUploadOptions">
                   <label for="invoiceFile" class="cp fs16">
                     <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                 </label>
