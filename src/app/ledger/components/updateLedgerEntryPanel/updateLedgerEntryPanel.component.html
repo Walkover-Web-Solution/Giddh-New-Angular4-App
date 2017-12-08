@@ -12,8 +12,8 @@
           <table class="col-xs-12 ledger-head">
               <thead>
                   <tr>
-                      <th class="col-xs-6" style="font-weight: 400">{{ledgerUnderStandingObj.text.dr}}</th>
-                      <th class="col-xs-6" style="font-weight: 400">{{ledgerUnderStandingObj.text.cr}}</th>
+                      <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.dr}}</th>
+                      <th class="col-xs-6" style="font-weight: 400">{{vm.ledgerUnderStandingObj.text.cr}}</th>
                   </tr>
               </thead>
           </table>
@@ -149,7 +149,7 @@
                               <span *ngIf="vm.entryTotal.drTotal < vm.entryTotal.crTotal" [tooltip]="understandingTextCr" [placement]="'top'">
                        C/F: CR {{vm.entryTotal.crTotal - vm.entryTotal.drTotal | number: '1.1-2'}}</span>
                               <ng-template #understandingTextCr>
-                                  {{ ledgerUnderStandingObj.balanceText.cr }}
+                                  {{ vm.ledgerUnderStandingObj.balanceText.cr }}
                               </ng-template>
                           </td>
                       </tr>
@@ -174,7 +174,7 @@
                        <span class="primary_clr" [tooltip]="understandingTextDr" [placement]="'top'">
                        {{vm.entryTotal.drTotal - vm.entryTotal.crTotal | number:'1.1-2'}}</span>
                               <ng-template #understandingTextDr>
-                                  {{ ledgerUnderStandingObj.balanceText.dr }}
+                                  {{ vm.ledgerUnderStandingObj.balanceText.dr }}
                               </ng-template>
                               </span>
                           </td>
