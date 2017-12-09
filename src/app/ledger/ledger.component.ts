@@ -656,7 +656,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     viewContainerRef.remove();
     let componentRef = viewContainerRef.createComponent(componentFactory);
     let componentInstance = componentRef.instance as UpdateLedgerEntryPanelComponent;
-    componentInstance.ledgerUnderStandingObj = this.lc.ledgerUnderStandingObj;
     componentInstance.closeUpdateLedgerModal.subscribe(() => {
       this.hideUpdateLedgerModal();
       this.store.dispatch(this._ledgerActions.resetLedgerTrxDetails());
