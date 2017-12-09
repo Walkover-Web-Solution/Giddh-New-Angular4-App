@@ -45,7 +45,7 @@ export class NeedsAuthorization implements CanActivate {
       case '/pages/sales':
         requestedScope = 'INVOICE';
         break;
-      case '/pages/purchase/invoice':
+      case '/pages/purchase':
         requestedScope = 'TAXES';
         break;
       case '/pages/inventory':
