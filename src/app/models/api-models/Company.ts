@@ -83,6 +83,7 @@ export interface UserEntityRole {
 export interface Role {
   uniqueName: string;
   name: string;
+  scopes?: any[];
 }
 
 export interface CompanySubscription {
