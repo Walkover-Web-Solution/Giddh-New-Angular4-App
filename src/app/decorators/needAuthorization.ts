@@ -30,6 +30,10 @@ export class NeedsAuthorization implements CanActivate {
 
   private mapUIRouteWithAPIScope(path: string): string {
     console.log('the url is: ', path);
+    if ((path.split('/').length) === 4) {
+        path = path.substring(0, path.lastIndexOf('/'));
+    }
+    console.log('after modification the path is: ', path);
     let requestedScope = null;
     switch (path) {
       case '/pages/home':
@@ -64,6 +68,9 @@ export class NeedsAuthorization implements CanActivate {
         break;
       case '/pages/manufacturing':
         requestedScope = 'INVENTORY';
+        break;
+      case '/pages/ledger':
+        requestedScope = 'LEDGER12';
         break;
       default:
         requestedScope = null;
