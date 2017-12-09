@@ -1,3 +1,4 @@
+import { NeedsAuthorization } from './decorators/needAuthorization';
 import { SuccessComponent } from './settings/linked-accounts/success.component';
 import { PageComponent } from './page.component';
 import { Routes } from '@angular/router';
@@ -32,17 +33,17 @@ export const ROUTES: Routes = [
   {
     path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
     children: [
-      { path: 'home', loadChildren: './home/home.module#HomeModule' },
+      { path: 'home', loadChildren: './home/home.module#HomeModule', canActivate: [NeedsAuthorization] },
       { path: 'invoice', loadChildren: './invoice/invoice.module#InvoiceModule' },
       { path: 'sales', loadChildren: './sales/sales.module#SalesModule' },
-      { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule' },
+      { path: 'purchase', loadChildren: './purchase/purchase.module#PurchaseModule', canActivate: [NeedsAuthorization] },
       { path: 'about', loadChildren: './about/about.module#AboutModule' },
       { path: 'inventory', loadChildren: './inventory/inventory.module#InventoryModule' },
       { path: 'search', loadChildren: './search/search.module#SearchModule' },
       {
         path: 'trial-balance-and-profit-loss',
         loadChildren: './tb-pl-bs/tb-pl-bs.module#TBPlBsModule',
-        canActivate: [NeedsAuthentication]
+        canActivate: [NeedsAuthentication, NeedsAuthorization]
       },
       { path: 'audit-logs', loadChildren: './audit-logs/audit-logs.module#AuditLogsModule' },
       { path: 'ledger/:accountUniqueName', loadChildren: './ledger/ledger.module#LedgerModule' },
