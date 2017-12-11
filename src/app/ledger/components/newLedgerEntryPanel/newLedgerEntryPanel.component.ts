@@ -24,6 +24,7 @@ import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
 import { LoaderService } from '../../../loader/loader.service';
 import { UploaderOptions } from 'ngx-uploader/index';
+import { AccountResponse } from 'app/models/api-models/Account';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -69,6 +70,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
   public mapBodyContent: string;
   public selectedItemToMap: ReconcileResponse;
 
+  public activeAccount$: Observable<AccountResponse>;
+
+  public currentAccountApplicableTaxes: string[] = [];
+
   // private below
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
@@ -83,6 +88,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.companyTaxesList$ = this.store.select(p => p.company.taxes).takeUntil(this.destroyed$);
     this.sessionKey$ = this.store.select(p => p.session.user.session.id).takeUntil(this.destroyed$);
     this.companyName$ = this.store.select(p => p.session.companyUniqueName).takeUntil(this.destroyed$);
+    this.activeAccount$ = this.store.select(p => p.ledger.account).takeUntil(this.destroyed$);
     this.isLedgerCreateInProcess$ = this.store.select(p => p.ledger.ledgerCreateInProcess).takeUntil(this.destroyed$);
     this.voucherTypeList = Observable.of([{
       label: 'Sales',
@@ -115,6 +121,20 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.showAdvanced = false;
     this.uploadInput = new EventEmitter<UploadInput>();
     this.fileUploadOptions = { concurrency: 0 };
+
+    this.activeAccount$.subscribe(acc => {
+      if (acc) {
+        let parentAcc = acc.parentGroups[0].uniqueName;
+        let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+        let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+        let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+        if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+          let appTaxes = [];
+          acc.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+          this.currentAccountApplicableTaxes = appTaxes;
+        }
+      }
+    });
   }
 
   @HostListener('click', ['$event'])
