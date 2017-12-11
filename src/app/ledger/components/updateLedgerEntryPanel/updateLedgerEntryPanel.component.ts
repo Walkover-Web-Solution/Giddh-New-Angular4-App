@@ -85,7 +85,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       }
     });
 
-
     // emit upload event
     this.uploadInput = new EventEmitter<UploadInput>();
     // set file upload options
