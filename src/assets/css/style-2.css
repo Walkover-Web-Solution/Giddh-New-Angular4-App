@@ -1607,8 +1607,8 @@ a.btn.btn-xs.btn-link.pull-right {
 }*/
 
 .linkstock {
-    height: 200px;
-    overflow-y: scroll;
+    min-height: 200px;
+    /* overflow-y: scroll; */
     width: 100%;
     padding-left: 2px;
 }
