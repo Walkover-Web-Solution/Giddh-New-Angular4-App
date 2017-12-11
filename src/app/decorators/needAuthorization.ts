@@ -7,54 +7,55 @@ import { Store } from '@ngrx/store';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
 export const SCOPE_TO_ROUTE_MAPPING = [
-{
-  key: '/pages/home',
-  value: 'DASHBOARD'
-},
-{
-  key: '/pages/invoice',
-  value: 'INVOICE'
-},
-{
-  key: '/pages/sales',
-  value: 'INVOICE'
-},
-{
-  key: '/pages/purchase',
-  value: 'TAXES'
-},
-{
-  key: '/pages/inventory',
-  value: 'INVENTORY'
-},
-{
-  key: '/pages/search',
-  value: 'SEARCH'
-},
-{
-  key: '/pages/trial-balance-and-profit-loss',
-  value: 'TB_PL'
-},
-{
-  key: '/pages/audit-logs',
-  value: 'AUDIT_LOGS'
-},
-{
-  key: '/pages/permissions',
-  value: 'MANAGE'
-},
-{
-  key: '/pages/settings',
-  value: 'SETTINGS'
-},
-{
-  key: '/pages/manufacturing',
-  value: 'INVENTORY'
-},
-{
-  key: '/pages/ledger',
-  value: 'LEDGER'
-}];
+  {
+    key: '/pages/home',
+    value: 'DASHBOARD'
+  },
+  {
+    key: '/pages/invoice',
+    value: 'INVOICE'
+  },
+  {
+    key: '/pages/sales',
+    value: 'INVOICE'
+  },
+  {
+    key: '/pages/purchase',
+    value: 'INVOICE'
+  },
+  {
+    key: '/pages/inventory',
+    value: 'INVENTORY'
+  },
+  {
+    key: '/pages/search',
+    value: 'SEARCH'
+  },
+  {
+    key: '/pages/trial-balance-and-profit-loss',
+    value: 'REPORT'
+  },
+  {
+    key: '/pages/audit-logs',
+    value: 'AUDIT_LOGS'
+  },
+  {
+    key: '/pages/permissions',
+    value: 'MANAGE'
+  },
+  {
+    key: '/pages/settings',
+    value: 'SETTINGS'
+  },
+  {
+    key: '/pages/manufacturing',
+    value: 'INVENTORY'
+  },
+  {
+    key: '/pages/ledger',
+    value: 'LEDGER'
+  }
+];
 
 @Injectable()
 export class NeedsAuthorization implements CanActivate {
@@ -89,9 +90,9 @@ export class NeedsAuthorization implements CanActivate {
   private mapUIRouteWithAPIScope(path: string): string {
     console.log('the url is: ', path);
     if ((path.split('/').length) === 4) {
-        path = path.substring(0, path.lastIndexOf('/'));
+      path = path.substring(0, path.lastIndexOf('/'));
     }
-    let requestedScope =  SCOPE_TO_ROUTE_MAPPING.find((obj) => obj.key === path);
+    let requestedScope = SCOPE_TO_ROUTE_MAPPING.find((obj) => obj.key === path);
     if (requestedScope) {
       return requestedScope.value;
     }
