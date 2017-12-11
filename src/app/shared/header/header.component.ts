@@ -1,3 +1,4 @@
+import { GIDDH_DATE_FORMAT } from './../helpers/defaultDateFormat';
 import { CompanyAddComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
@@ -20,6 +21,7 @@ import { AuthService } from 'ng4-social-login';
 import { userLoginStateEnum } from '../../store/authentication/authentication.reducer';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { createSelector } from 'reselect';
+import * as moment from 'moment/moment';
 
 @Component({
   selector: 'app-header',
@@ -328,8 +330,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public setApplicationDate(ev) {
-    console.log('the event is : ', ev);
-    // this.store.dispatch(this.companyActions.SetApplicationDate());
+    let dates = {
+      from: moment(ev[0]).format(GIDDH_DATE_FORMAT),
+      to: moment(ev[1]).format(GIDDH_DATE_FORMAT)
+    };
+    this.store.dispatch(this.companyActions.SetApplicationDate(dates));
   }
 
   public ngOnDestroy() {
