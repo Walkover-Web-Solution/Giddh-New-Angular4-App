@@ -64,7 +64,7 @@ export class NeedsAuthorization implements CanActivate {
   constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope (state.url);
+    let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope(state.url);
     if (requestedScopeNeedAuth) {
       let permissions = this._permissionDataService.getData;
       if (permissions.length && permissions.indexOf(requestedScopeNeedAuth) !== -1) {
