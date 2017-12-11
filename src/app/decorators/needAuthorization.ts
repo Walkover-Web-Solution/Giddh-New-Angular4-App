@@ -6,6 +6,57 @@ import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { userLoginStateEnum } from '../store/authentication/authentication.reducer';
 
+export const SCOPE_TO_ROUTE_MAPPING = [
+  {
+    key: '/pages/home',
+    value: 'DASHBOARD'
+  },
+  {
+    key: '/pages/invoice',
+    value: 'INVOICE'
+  },
+  {
+    key: '/pages/sales',
+    value: 'INVOICE'
+  },
+  {
+    key: '/pages/purchase',
+    value: 'INVOICE'
+  },
+  {
+    key: '/pages/inventory',
+    value: 'INVENTORY'
+  },
+  {
+    key: '/pages/search',
+    value: 'SEARCH'
+  },
+  {
+    key: '/pages/trial-balance-and-profit-loss',
+    value: 'REPORT'
+  },
+  {
+    key: '/pages/audit-logs',
+    value: 'AUDIT_LOGS'
+  },
+  {
+    key: '/pages/permissions',
+    value: 'MANAGE'
+  },
+  {
+    key: '/pages/settings',
+    value: 'SETTINGS'
+  },
+  {
+    key: '/pages/manufacturing',
+    value: 'INVENTORY'
+  },
+  {
+    key: '/pages/ledger',
+    value: 'LEDGER'
+  }
+];
+
 @Injectable()
 export class NeedsAuthorization implements CanActivate {
 
@@ -14,14 +65,21 @@ export class NeedsAuthorization implements CanActivate {
   constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-    let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope (state.url);
+    let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope(state.url);
     if (requestedScopeNeedAuth) {
       let permissions = this._permissionDataService.getData;
       if (permissions.length && permissions.indexOf(requestedScopeNeedAuth) !== -1) {
         return true;
       } else {
         this._toasty.errorToast('You do not have permission to access this page.');
-        this._router.navigate(['/pages/home']);
+        let indexOfHome = permissions.indexOf('DASHBOARD');
+        if (indexOfHome !== -1) {
+          this._router.navigate(['/pages/home']);
+        } else {
+          let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0]);
+          this._router.navigate([firstPermittedScope.key]);
+        }
+
         return false;
       }
     } else {
@@ -32,50 +90,12 @@ export class NeedsAuthorization implements CanActivate {
   private mapUIRouteWithAPIScope(path: string): string {
     console.log('the url is: ', path);
     if ((path.split('/').length) === 4) {
-        path = path.substring(0, path.lastIndexOf('/'));
+      path = path.substring(0, path.lastIndexOf('/'));
     }
-    console.log('after modification the path is: ', path);
-    let requestedScope = null;
-    switch (path) {
-      case '/pages/home':
-        requestedScope = 'DASHBOARD';
-        break;
-      case '/pages/invoice':
-        requestedScope = 'INVOICE';
-        break;
-      case '/pages/sales':
-        requestedScope = 'INVOICE';
-        break;
-      case '/pages/purchase':
-        requestedScope = 'TAXES';
-        break;
-      case '/pages/inventory':
-        requestedScope = 'INVENTORY';
-        break;
-      case '/pages/search':
-        requestedScope = 'SEARCH';
-        break;
-      case '/pages/trial-balance-and-profit-loss':
-        requestedScope = 'TB_PL';
-        break;
-      case '/pages/audit-logs':
-        requestedScope = 'AUDIT_LOGS';
-        break;
-      case '/pages/permissions':
-        requestedScope = 'MANAGE';
-        break;
-      case '/pages/settings':
-        requestedScope = 'SETTINGS';
-        break;
-      case '/pages/manufacturing':
-        requestedScope = 'INVENTORY';
-        break;
-      case '/pages/ledger':
-        requestedScope = 'LEDGER';
-        break;
-      default:
-        requestedScope = null;
+    let requestedScope = SCOPE_TO_ROUTE_MAPPING.find((obj) => obj.key === path);
+    if (requestedScope) {
+      return requestedScope.value;
     }
-    return requestedScope;
+    return null;
   }
 }
