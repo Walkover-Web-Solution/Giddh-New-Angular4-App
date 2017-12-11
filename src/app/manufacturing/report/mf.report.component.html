@@ -2,104 +2,51 @@
     <!-- page Title -->
     <div class="top_bar col-xs-12 clearfix bdrB">
         <h1 class="section_title d-inline-block"><strong>Mfg. Journal Register</strong></h1>
-        <button class="btn btn-default pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
+        <button class="btn isActive pull-right" (click)="goToCreateNewPage()" type="button">Create Manufacture</button>
     </div>
     <!-- form -->
     <div class="col-xs-12">
         <div class="mfStockSearchRequestForm clearfix">
-            <form #mfStockSearchRequestForm="ngForm" class="form-inline mrT2 mrB2" (submit)="getReports()" autocomplete="off">
-                <div class="">
-                    <div class="form-group mrR1">
-                        <label class="d-block">Final Product</label>
-                        <!-- <div class="custom-select pos-rel">
-                            <select class="form-control cp" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product">
-                                <option value="">--Select Product--</option>
-                                <option *ngFor="let product of stockListDropDown" [ngValue]="product.id"> {{ product.text }} </option>
-                            </select>
-                            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                        </div> -->
-                        <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown" [ItemHeight]="33"></sh-select>
+            <form #mfStockSearchRequestForm="ngForm" class="col-xs-10 mrT2 mrB" (submit)="getReports()" autocomplete="off">
+                <div class="row">
+                    <div class="form-group col-xs-3">
+                        <div class="row">
+                            <label class="d-block">Final Product</label>
+                            <sh-select placeholder="--Select Product--" name="product" #productList="ngModel" required [(ngModel)]="mfStockSearchRequest.product" [options]="stockListDropDown" [ItemHeight]="33"></sh-select>
+                        </div>
                     </div>
-                    <div class="form-group mrR1">
+                    <div class="form-group col-xs-3">
                         <label class="d-block">From - To</label>
                         <div class="input-group">
                             <input name="dateRange" placeholder="Date range picker" type="text" class="form-control" [ngModel]="mfStockSearchRequest.dateRange" (bsValueChange)="bsValueChange($event)" bsDaterangepicker required>
-                            <!--<input type="text" name="from" [ngModel]="moment(mfStockSearchRequest.from).format('DD-MM-YYYY')" (focus)="showFromDatePicker = true;" class="form-control" required/>
+
                             <span class="input-group-btn">
-                                <button type="button" class="btn btn-default" (click)="showFromDatePicker = !showFromDatePicker">
-                                    <i class="glyphicon glyphicon-calendar"></i>
-                                </button>
-                            </span>-->
+                                <button type="button" class="btn btn-default"><i class="glyphicon glyphicon-calendar"></i></button>
+                            </span>
                         </div>
-                        <!--<div *ngIf="showFromDatePicker" style="position: absolute; z-index:10; min-height:290px;" placement="right">
-                            <ul class="my-dropdown-menu calendar-dropdown">
-                                <li>
-                                    <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="mfStockSearchRequest.from" (selectionDone)="showFromDatePicker=!showFromDatePicker" [showWeeks]="false"></datepicker>
-                                </li>
-                                <li class="pd1 clearfix pdT pdB">
-                                    <span class="btn-group pull-left">
-                                        <button type="button" class="btn btn-xs btn-primary mrR" (click)="setToday('from');showFromDatePicker = false;">Today</button>
-                                        <button type="button" class="btn btn-xs btn-success" (click)="showFromDatePicker = false">Done</button>
-                                    </span>
-                                    <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate('from');showFromDatePicker = false;">Clear</button>
-                                </li>
-                            </ul>
-                        </div>-->
                     </div>
-                    <!--<div class="form-group" (clickOutside)="showToDatePicker=false;">
-                        <label class="d-block">To Date</label>
-                        <div class="input-group">
-                            <input type="text" name="to" [ngModel]="moment(mfStockSearchRequest.to).format('DD-MM-YYYY')" (focus)="showToDatePicker = true;" class="form-control" required/>
-                            <span class="input-group-btn">
-                  <button type="button" class="btn btn-default" (click)="showToDatePicker = !showToDatePicker">
-                  <i class="glyphicon glyphicon-calendar"></i>
-                  </button>
-                  </span>
+
+                    <div class="form-group col-xs-1">
+                        <div class="row">
+                            <label class="d-block">Search By</label>
+                            <sh-select placeholder="--Select--" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy" [ItemHeight]="33"></sh-select>
                         </div>
-                        <div *ngIf="showToDatePicker" style="position: absolute; z-index:10; min-height:290px;">
-                            <ul class="my-dropdown-menu calendar-dropdown">
-                                <li>
-                                    <datepicker name="fromDate" (click)="$event.stopPropagation()" [(ngModel)]="mfStockSearchRequest.to" (selectionDone)="showToDatePicker=!showToDatePicker" [showWeeks]="false"></datepicker>
-                                </li>
-                                <li class="pd1 clearfix pdT pdB">
-                                    <span class="btn-group pull-left">
-                                        <button type="button" class="btn btn-xs btn-primary mrR" (click)="setToday('to');showToDatePicker = false;">Today</button>
-                                        <button type="button" class="btn btn-xs btn-success" (click)="showToDatePicker = false">Done</button>
-                                    </span>
-                                    <button type="button" class="btn btn-xs btn-link pull-right" (click)="clearDate('to');showToDatePicker = false;">Clear</button>
-                                </li>
-                            </ul>
+                    </div>
+                    <div class="form-group col-xs-2">
+                        <div class="">
+                            <label class="d-block">Operation</label>
+                            <sh-select placeholder="--Select--" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation" [ItemHeight]="33"></sh-select>
                         </div>
-                    </div>-->
-                    <div class="form-group mrR1">
-                        <label class="d-block">Search By</label>
-                        <!-- <div class="custom-select pos-rel">
-                            <select class="form-control cp" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy">
-                                <option value="">--Select--</option>
-                                <option *ngFor="let item of filtersForSearchBy" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-                            </select>
-                            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                        </div> -->
-                        <sh-select placeholder="--Select--" name="searchBy" [(ngModel)]="mfStockSearchRequest.searchBy" [options]="filtersForSearchBy" [ItemHeight]="33"></sh-select>
                     </div>
-                    <div class="form-group mrR1">
-                        <label class="d-block">Operation</label>
-                        <!-- <div class="custom-select pos-rel">
-                            <select class="form-control cp" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation">
-                                <option value="">--Select--</option>
-                                <option *ngFor="let item of filtersForSearchOperation" [ngValue]="item.uniqueName"> {{ item.name }} </option>
-                            </select>
-                            <span class="select_drop"><i class="fa fa-caret-down"></i></span>
-                        </div> -->
-                        <sh-select placeholder="--Select--" name="searchOperation" [(ngModel)]="mfStockSearchRequest.searchOperation" [options]="filtersForSearchOperation" [ItemHeight]="33"></sh-select>
+                    <div class="form-group col-xs-1">
+                        <div class="row">
+                            <label class="d-block">Value</label>
+                            <input type="text" #numberField="ngModel" (keyup)="checkValueField(numberField.model)" pattern="^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"
+                            />
+                            <!--<p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>-->
+                        </div>
                     </div>
-                    <div class="form-group mrR1">
-                        <label class="d-block">Value</label>
-                        <input type="text" #numberField="ngModel" (keyup)="checkValueField(numberField.model)" pattern="^[+]?([1-9][0-9]*(?:[\.][0-9]*)?|0*\.0*[1-9][0-9]*)(?:[eE][+-][0-9]+)?$" class="form-control" placeholder="Value" name="searchValue" [(ngModel)]="mfStockSearchRequest.searchValue"
-                        />
-                        <!--<p class="text-danger" *ngIf="numberField.invalid && numberField.dirty && numberField.touched">Invalid number</p>-->
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group pull-left mrL2">
                         <label class="d-block">&nbsp;</label>
                         <button class="btn btn-success" type="submit" [disabled]="mfStockSearchRequestForm.invalid">Go</button>
                     </div>

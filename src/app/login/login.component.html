@@ -1,159 +1,140 @@
 <section id="videoBg" class="intro login" style="height: 100%;">
-  <!-- banner content -->
-  <div class="intro-body">
-    <div class="container">
-      <div class="row">
-        <div class="col-sm-12">
-          <h1 class="brand-heading arvo">Enter your accounting space</h1>
+    <!-- banner content -->
+    <div class="intro-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="brand-heading arvo">Enter your accounting space</h1>
 
-          <div id="box" class="text-uppercase">
-            <div class="clearfix mrB1">
-              <p class="lead ">Sign In or register</p>
-            </div>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login google"
-                    (click)="signInWithProviders('google')">
+                    <div id="box" class="text-uppercase">
+                        <div class="clearfix mrB1">
+                            <p class="lead ">Sign In or register</p>
+                        </div>
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login google" (click)="signInWithProviders('google')">
               <img src="./assets/images/google-plus-icon.png">
               connect with Google
             </button>
-            <!-- <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" [disabled]="true">
+                        <!-- <button type="login" class="btn sharp btn-block btn-lg btn-login twitter" [disabled]="true">
   <img src="./assets/images/twitter-icon.png">
   Login with Twitter
 </button> -->
-            <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin"
-                    (click)="signInWithProviders('linkedin')">
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login linkedin" (click)="signInWithProviders('linkedin')">
               <img src="./assets/images/linkedin-icon.png">
               Login with LinkedIn
             </button>
-            <button type="login" class="btn sharp btn-block btn-lg btn-login email btn-default"
-                    (click)="showEmailModal()">
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login email" (click)="showEmailModal()">
               <i class="glyphicon glyphicon-envelope"></i>
               connect with Email
-            </button>
+    </button>
 
-            <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
+                        <button type="login" class="btn sharp btn-block btn-lg btn-login mobile" (click)="showMobileModal()">
               <i class="glyphicon glyphicon-phone"></i>
               Login with Mobile
             </button>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </section>
 
 <!--email varify modal  -->
 <div class="modal fade" tabindex="-1" bsModal #emailVerifyModal="bs-modal" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="noBrdRdsModal">
-        <div class="modal-header">
-          <label class="form-label"><h3>Sign Up with Giddh</h3></label>
-          <button type="button" class="close" (click)="hideEmailModal()" aria-label="Close"><span
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="noBrdRdsModal">
+                <div class="modal-header">
+                    <label class="form-label"><h3>Sign Up with Giddh</h3></label>
+                    <button type="button" class="close" (click)="hideEmailModal()" aria-label="Close"><span
             aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body clearfix">
-          <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
-            <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
+                </div>
+                <div class="modal-body clearfix">
+                    <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
+                        <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clearfix form-group form-group-lg">
 
-              <input class="form-control mrT1" formControlName="email" type="email"
-                     placeholder="Enter your email address" required>
-              <button [disabled]="!emailVerifyForm.controls['email'].valid"
-                      [ladda]="isLoginWithEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1"
-                      (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
+                            <input class="form-control mrT1" formControlName="email" type="email" placeholder="Enter your email address" required>
+                            <button [disabled]="!emailVerifyForm.controls['email'].valid" [ladda]="isLoginWithEmailInProcess$ | async" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Submit
               </button>
 
-            </div>
-            <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
+                        </div>
+                        <div *ngIf="isLoginWithEmailSubmited$ | async" class="clearfix form-group form-group-lg">
 
-              <input class="form-control mrT1" formControlName="token" type="text"
-                     placeholder="Enter verification code here" required>
-              <small>We have sent a verification code to your registered email.</small>
-              <button [disabled]="!emailVerifyForm.controls['token'].valid"
-                      class="btn sharp btn-block btn-success btn-lg mrT1"
-                      [ladda]="isVerifyEmailInProcess$ | async"
-                      (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
+                            <input class="form-control mrT1" formControlName="token" type="text" placeholder="Enter verification code here" required>
+                            <small>We have sent a verification code to your registered email.</small>
+                            <button [disabled]="!emailVerifyForm.controls['token'].valid" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isVerifyEmailInProcess$ | async" (click)="VerifyEmail(emailVerifyForm.controls['email'].value,emailVerifyForm.controls['token'].value)">
                 Last step to go
               </button>
-              <a class="btn btn-link cp pull-right" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
+                            <a class="btn btn-link cp pull-right" (click)="LoginWithEmail(emailVerifyForm.controls['email'].value)">Resend
                 code</a>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!--email varify modal  -->
 
 <!--mobile varify form  -->
 <div class="modal fade" tabindex="-1" bsModal #mobileVerifyModal="bs-modal" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="noBrdRdsModal">
-        <div class="modal-header">
-          <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
-          <button type="button" class="close" (click)="hideMobileModal()" aria-label="Close"><span
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="noBrdRdsModal">
+                <div class="modal-header">
+                    <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
+                    <button type="button" class="close" (click)="hideMobileModal()" aria-label="Close"><span
             aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body clearfix">
-          <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
-            <div class="input-group phoneNum clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                </div>
+                <div class="modal-body clearfix">
+                    <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
+                        <div class="input-group phoneNum clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                             <span class="input-group-addon select2-parent">
                               <sh-select [options]="countryCodeList" class="form-inline"
                                          (selected)="setCountryCode($event)" formControlName="country"></sh-select>
                             </span>
-              <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No"
-                     required/>
-            </div>
-            <button *ngIf="!(isLoginWithMobileSubmited$ | async)" class="btn sharp btn-block btn-success btn-lg mrT1"
-                    (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)"
-                    [ladda]="isLoginWithMobileInProcess$ | async"
-                    [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
+                            <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required/>
+                        </div>
+                        <button *ngIf="!(isLoginWithMobileSubmited$ | async)" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)" [ladda]="isLoginWithMobileInProcess$ | async"
+                            [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
               async) ? 'Get Otp' : 'Resend' }}
             </button>
-            <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
-              <hr class="mrtb10">
-              <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
-              <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
-                      [ladda]="isVerifyMobileInProcess$ | async"
-                      (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)"
-                      [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
+                        <div class="clearfix form-group form-group-lg" *ngIf="(isLoginWithMobileSubmited$ | async)">
+                            <hr class="mrtb10">
+                            <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
+                            <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isVerifyMobileInProcess$ | async" (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['otp'].value)" [disabled]="!mobileVerifyForm.controls['otp'].valid">Login
               </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!--mobile verify form  -->
 
 <!-- two way auth popup -->
 <div class="modal fade" tabindex="-1" bsModal #twoWayAuthModal="bs-modal" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-md">
-    <div class="modal-content">
-      <div class="noBrdRdsModal">
-        <div class="modal-header">
-          <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
-          <button type="button" class="close" (click)="resetTwoWayAuthModal()" aria-label="Close"><span
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="noBrdRdsModal">
+                <div class="modal-header">
+                    <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
+                    <button type="button" class="close" (click)="resetTwoWayAuthModal()" aria-label="Close"><span
             aria-hidden="true">&times;</span></button>
-        </div>
-        <div class="modal-body clearfix">
-          <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">
-            <div class="clearfix form-group form-group-lg">
-              <hr class="mrtb10">
-              <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
-              <small>We have sent an OTP to your registered mobile number.</small>
-              <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1"
-                      [ladda]="isTwoWayAuthInProcess$ | async"
-                      (click)="verifyTwoWayCode()"
-                      [disabled]="twoWayOthForm.get('otp').invalid">Submit
+                </div>
+                <div class="modal-body clearfix">
+                    <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">
+                        <div class="clearfix form-group form-group-lg">
+                            <hr class="mrtb10">
+                            <input class="form-control" placeholder="Enter OTP" style="border-radius:0" formControlName="otp">
+                            <small>We have sent an OTP to your registered mobile number.</small>
+                            <button type="login" class="btn sharp btn-block btn-success btn-lg mrT1" [ladda]="isTwoWayAuthInProcess$ | async" (click)="verifyTwoWayCode()" [disabled]="twoWayOthForm.get('otp').invalid">Submit
               </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-          </form>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- two way auth popup -->

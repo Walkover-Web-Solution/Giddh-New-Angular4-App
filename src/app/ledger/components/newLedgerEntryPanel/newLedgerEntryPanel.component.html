@@ -120,6 +120,10 @@
                         <td class="pdL1">
                             <span>{{""}}</span>
                         </td>
+
+                        <td class="pdL1" *ngIf="(blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                          <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
+                      </td>
                     </tr>
                 </table>
             </div>
@@ -162,7 +166,7 @@
                 </div>
                 <div class="pull-right">
                     <label class="upload_div" [ngClass]="{hide:blankLedger.generateInvoice || blankLedger.attachedFile}">
-            <input type="file" name="invoiceFile" id="invoiceFile" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
+            <input type="file" name="invoiceFile" id="invoiceFile" [options]="fileUploadOptions" ngFileSelect [uploadInput]="uploadInput" (uploadOutput)="onUploadOutput($event)">
             <label for="invoiceFile" class="cp fs16">
               <i class="glyphicon glyphicon-paperclip"></i> Attach file</label>
                     </label>

@@ -1,3 +1,4 @@
+import { GroupService } from './../../../services/group.service';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { BsDatepickerConfig } from 'ngx-bootstrap/datepicker';
 import { Subscription } from 'rxjs/Rx';
@@ -41,6 +42,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   public showChequeDatePicker: boolean  = false;
   public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
   public accounts$: Observable<IOption[]>;
+  public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
   public stockListDropDown$: Observable<IOption[]>;
   public comparisonFilterDropDown$: Observable<IOption[]>;
@@ -50,10 +52,11 @@ export class AdvanceSearchModelComponent implements OnInit {
   private toDate: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
+  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
 
     this.advanceSearchForm = this.fb.group({
-      uniqueNames: [[]],
+      accountUniqueNames: [[]],
+      groupUniqueNames: [[]],
       isInvoiceGenerated: [false],
       amountLessThan: [false],
       includeAmount: [false],
@@ -95,6 +98,7 @@ export class AdvanceSearchModelComponent implements OnInit {
   public ngOnInit() {
 
     this.store.dispatch(this.inventoryAction.GetStock());
+    // this.store.dispatch(this.groupWithAccountsAction.getFlattenGroupsWithAccounts());
 
     this._accountService.GetFlattenAccounts('', '').takeUntil(this.destroyed$).subscribe(data => {
       if (data.status === 'success') {
@@ -116,6 +120,17 @@ export class AdvanceSearchModelComponent implements OnInit {
         });
       }
     })).takeUntil(this.destroyed$);
+
+    // Get groups with accounts
+    this._groupService.GetFlattenGroupsAccounts().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let groups: IOption[] = [];
+        data.body.results.map(d => {
+          groups.push({label: d.groupName, value: d.groupUniqueName});
+        });
+        this.groups$ = Observable.of(groups);
+      }
+    });
   }
 
   public setVoucherTypes() {
@@ -184,14 +199,20 @@ export class AdvanceSearchModelComponent implements OnInit {
       case 'particulars':
         this.advanceSearchForm.get('particulars').patchValue(values);
       break;
-      case 'uniqueNames':
-        this.advanceSearchForm.get('uniqueNames').patchValue(values);
+      case 'accountUniqueNames':
+        this.advanceSearchForm.get('accountUniqueNames').patchValue(values);
       break;
       case 'vouchers':
         this.advanceSearchForm.get('vouchers').patchValue(values);
       break;
       case 'inventory':
         this.advanceSearchForm.get('inventory.inventories').patchValue(values);
+      break;
+      case 'groupUniqueNames':
+        this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
+      break;
+      case 'groupUniqueNames':
+        this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
       break;
     }
   }

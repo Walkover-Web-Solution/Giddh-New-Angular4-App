@@ -109,10 +109,10 @@ export class MfEditComponent implements OnInit {
                   let matchedAccIndex = acc.parentGroups.findIndex((account) => account.uniqueName === d.uniqueName);
                   if (matchedAccIndex > -1) {
                     if (d.category === 'expenses') {
-                      this.expenseGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
+                      this.expenseGroupAccounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
                     }
                     if (d.category === 'liabilities' || d.category === 'assets') {
-                      this.liabilityGroupAccounts.push({ label: acc.name, value: acc.uniqueName });
+                      this.liabilityGroupAccounts.push({ label: `${acc.name} (${acc.uniqueName})`, value: acc.uniqueName });
                     }
                   }
                 }
