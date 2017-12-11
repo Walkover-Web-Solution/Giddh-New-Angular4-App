@@ -11,7 +11,7 @@ export class NeedsAuthorization implements CanActivate {
 
   private requestedScope: string = null;
 
-  constructor(private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
+  constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope (state.url);
@@ -21,6 +21,7 @@ export class NeedsAuthorization implements CanActivate {
         return true;
       } else {
         this._toasty.errorToast('You do not have permission to access this page.');
+        this._router.navigate(['/pages/home']);
         return false;
       }
     } else {
@@ -70,7 +71,7 @@ export class NeedsAuthorization implements CanActivate {
         requestedScope = 'INVENTORY';
         break;
       case '/pages/ledger':
-        requestedScope = 'LEDGER12';
+        requestedScope = 'LEDGER';
         break;
       default:
         requestedScope = null;
