@@ -15,7 +15,11 @@ const helpers = require('./helpers');
 const HOST = process.env.HOST || 'localhost';
 const PORT = process.env.PORT || 3000;
 
-const config = require('./webpack.renderer.dev')({ HMR: true });
+const config = require('./webpack.renderer.dev')({
+  HMR: true,
+  AOT: true,
+  isElectron: true
+});
 config.entry.hmr = `webpack-hot-middleware/client?path=http://${HOST}:${PORT}/__webpack_hmr`;
 config.devServer = config.devServer || {};
 config.devServer.outputPath = config.output.path = helpers.root('dev');
@@ -23,7 +27,9 @@ config.devServer.outputPath = config.output.path = helpers.root('dev');
 config.plugins.push(
   new webpack.NoEmitOnErrorsPlugin(),
   new webpack.HotModuleReplacementPlugin(),
-  new WriteFilePlugin({log: false})
+  new WriteFilePlugin({
+    log: true
+  })
 );
 
 const app = express();
@@ -43,7 +49,7 @@ const wdm = webpackDevMiddleware(compiler, {
 app.use(wdm);
 app.use(webpackHotMiddleware(compiler));
 
-const server = app.listen(PORT, 'localapp.giddh.com', serverError => {
+const server = app.listen(PORT, 'localhost', serverError => {
   if (serverError) {
     return console.error(serverError);
   }
@@ -51,16 +57,20 @@ const server = app.listen(PORT, 'localapp.giddh.com', serverError => {
   // Launch Electron after the initial compile is complete
   let started = false;
   compiler.plugin('done', () => {
-    if(started) {
+    if (started) {
       return;
     }
-    spawn('npm', ['run', 'start:main:dev'], { shell: true, env: process.env, stdio: 'inherit' })
+    spawn('npm', ['run', 'start:main:dev'], {
+        shell: true,
+        env: process.env,
+        stdio: 'inherit'
+      })
       .on('close', code => process.exit(code))
       .on('error', spawnError => console.error(spawnError));
     started = true;
   });
 
-  console.log('Listening at http://localapp.giddh.com:' + PORT);
+  console.log('Listening at http://localhost:' + PORT);
 });
 
 process.on('SIGTERM', () => {
