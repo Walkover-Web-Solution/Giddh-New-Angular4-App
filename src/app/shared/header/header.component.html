@@ -170,8 +170,11 @@
           </div>
         </li>
       </ul>
-
       <ul class="nav navbar-nav navbar-right" *ngIf="(selectedCompany | async)">
+        <li> <button class="btn btn-link mrT1">Go Back To Today</button> </li>
+        <li>
+            <input name="dateRange" autocomplete="off" placeholder="Date range picker" type="text" class="form-control mrT1" bsDaterangepicker (bsValueChange)="setApplicationDate($event)">
+        </li>
         <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
           <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
             <span class="icon-dropdown"></span>
