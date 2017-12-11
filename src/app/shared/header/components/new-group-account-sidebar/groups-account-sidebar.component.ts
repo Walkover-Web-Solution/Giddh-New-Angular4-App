@@ -272,7 +272,9 @@ export class GroupsAccountSidebarComponent implements OnInit, AfterViewInit, OnC
     this.breadcrumbUniqueNamePath = [];
     this.getBreadCrumbPathFromGroup(this._groups, col.uniqueName, null, this.breadcrumbPath, true, this.breadcrumbUniqueNamePath);
     this.breadcrumbPathChanged.emit({ breadcrumbPath: this.breadcrumbPath, breadcrumbUniqueNamePath: this.breadcrumbUniqueNamePath });
-    this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
+    if (col.uniqueName) {
+      this.store.dispatch(this.groupWithAccountsAction.SetActiveGroup(col.uniqueName));
+    }
     this.store.dispatch(this.groupWithAccountsAction.showAddNewForm());
     this.store.dispatch(this.accountsAction.resetActiveAccount());
   }

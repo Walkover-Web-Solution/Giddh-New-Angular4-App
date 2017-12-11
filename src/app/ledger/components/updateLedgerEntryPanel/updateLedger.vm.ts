@@ -7,6 +7,7 @@ import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-ta
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { underStandingTextData } from 'app/ledger/underStandingTextData';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -30,6 +31,17 @@ export class UpdateLedgerVm {
 
   public dateMask = [/\d/, /\d/, '-', /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/];
   public discountComponent: UpdateLedgerDiscountComponent;
+  public ledgerUnderStandingObj = {
+    accountType: '',
+    text: {
+      cr: '',
+      dr: ''
+    },
+    balanceText: {
+      cr: '',
+      dr: ''
+    }
+  };
 
   constructor() {
     this.voucherTypeList = [{
@@ -271,6 +283,34 @@ export class UpdateLedgerVm {
     this.generateCompoundTotal();
   }
 
+  public inventoryTotalChanged() {
+    let discountTrxTotal: number = sumBy(this.selectedLedger.transactions, (t: ILedgerTransactionItem) => {
+      return this.getCategoryNameFromAccount(t.particular.uniqueName) === 'discount' ? t.amount : 0;
+    }) || 0;
+    let taxTotal: number = sumBy(this.selectedTaxes, 'amount') || 0;
+    let total = ((this.grandTotal * 100) + (100 + taxTotal)
+      * discountTrxTotal);
+    let finalTotal = Number((total / (100 + taxTotal)).toFixed(2));
+
+    if (this.stockTrxEntry) {
+      this.stockTrxEntry.amount = Number(Number(finalTotal).toFixed(2));
+      this.stockTrxEntry.inventory.rate = this.stockTrxEntry.amount;
+      this.stockTrxEntry.isUpdated = true;
+    } else {
+      // find account that's from category income || expenses
+      let trx: ILedgerTransactionItem = find(this.selectedLedger.transactions, (t) => {
+        let category = this.getCategoryNameFromAccount(this.getUniqueName(t));
+        return category === 'income' || category === 'expenses';
+      });
+      trx.amount = Number(Number(finalTotal).toFixed(2));
+      trx.isUpdated = true;
+    }
+    this.getEntryTotal();
+    this.generatePanelAmount();
+    // this.generateGrandTotal();
+    this.generateCompoundTotal();
+  }
+
   public unitChanged(stockUnitCode: string) {
     let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitCode === stockUnitCode);
     this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unit.rate, stockUnitCode: unit.stockUnitCode };
@@ -311,6 +351,18 @@ export class UpdateLedgerVm {
     });
     requestObj.taxes = taxes.map(t => t.particular.uniqueName);
     return requestObj;
+  }
+
+  public getUnderstandingText(selectedLedgerAccountType, accountName) {
+    let data = _.cloneDeep(underStandingTextData.find(p => p.accountType === selectedLedgerAccountType));
+    if (data) {
+      data.balanceText.cr = data.balanceText.cr.replace('<accountName>', accountName);
+      data.balanceText.dr = data.balanceText.dr.replace('<accountName>', accountName);
+
+      data.text.dr = data.text.dr.replace('<accountName>', accountName);
+      data.text.cr = data.text.cr.replace('<accountName>', accountName);
+      this.ledgerUnderStandingObj = _.cloneDeep(data);
+    }
   }
 
   public resetVM() {

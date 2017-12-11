@@ -12,7 +12,7 @@
               <div>
                 <perfect-scrollbar class="scrClass" wheel-propagation="true" wheel-speed="1" min-scrollbar-length="20" auto-height>
                   <ul class="dshUl clearfix list-inline ddMaxHeight">
-                    <li class="dmLi trialB">
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'DASHBOARD']">
                       <a [routerLink]="['home']">
                         <div class="media">
                           <div class="media-body">
@@ -23,7 +23,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi trialB">
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'SETTINGS']">
                       <a [routerLink]="['/pages/settings']">
                         <div class="media">
                           <div class="media-body">
@@ -33,7 +33,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi trialB">
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
                       <a [routerLink]="['/pages/sales']">
                         <div class="media">
                           <div class="media-body">
@@ -43,7 +43,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi">
+                    <li class="dmLi" [checkPermission]="['MENU', 'TB_PL']">
                       <a [routerLink]="['trial-balance-and-profit-loss']">
                         <div class="media">
                           <div class="media-body">
@@ -53,7 +53,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi">
+                    <li class="dmLi" [checkPermission]="['MENU', 'INVOICE']">
                       <a [routerLink]="['/pages/invoice']">
                         <div class="media">
                           <div class="media-body">
@@ -63,7 +63,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi">
+                    <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                       <a [routerLink]="['/inventory']">
                         <div class="media">
                           <div class="media-body">
@@ -73,7 +73,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi">
+                    <li class="dmLi" [checkPermission]="['MENU', 'INVENTORY']">
                       <a [routerLink]="['manufacturing']">
                         <div class="media">
                           <div class="media-body">
@@ -83,7 +83,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi trialB" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'TAXES']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                       <a [routerLink]="['/pages/purchase/invoice']">
                         <div class="media">
                           <div class="media-body">
@@ -93,7 +93,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi">
+                    <li class="dmLi" [checkPermission]="['MENU', 'RECURRING_ENTRY']">
                       <a href="">
                         <div class="media">
                           <div class="media-body">
@@ -103,7 +103,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi" ui-sref="Reports">
+                    <li class="dmLi" ui-sref="Reports" [checkPermission]="['MENU', 'REPORT']">
                       <a href="">
                         <div class="media">
                           <div class="media-body">
@@ -113,7 +113,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi" ui-sref="audit-logs">
+                    <li class="dmLi" ui-sref="audit-logs" [checkPermission]="['MENU', 'AUDIT_LOGS']">
                       <a [routerLink]="['audit-logs']">
                         <div class="media">
                           <div class="media-body">
@@ -123,7 +123,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi" ui-sref="search">
+                    <li class="dmLi" ui-sref="search" [checkPermission]="['MENU', 'SEARCH']">
                       <a [routerLink]="['search']">
                         <div class="media">
                           <div class="media-body">
@@ -133,7 +133,7 @@
                         </div>
                       </a>
                     </li>
-                    <!-- <li class="dmLi" *ngIf="userIsSuperUser">
+                    <!-- <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
                       <a [routerLink]="['permissions']">
                         <div class="media">
                           <div class="media-body">
@@ -166,7 +166,7 @@
         </li>
         <li>
           <div class="pd1">
-            <button id="AddManage" type="button" class="btn isActive btn-sm" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
+            <button id="AddManage" type="button" class="btn isActive btn-sm" [checkPermission]="['MENU', 'MANAGE']" (click)="showManageGroupsModal()">Manage Groups & A/c</button>
           </div>
         </li>
       </ul>
