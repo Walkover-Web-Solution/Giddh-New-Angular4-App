@@ -38,6 +38,7 @@ export enum userLoginStateEnum {
 export interface SessionState {
   user?: VerifyEmailResponseModel;
   lastState: string;
+  applicationDate: any;
   companyUniqueName: string;                   // current user | null
   companies: CompanyResponse[];
   isRefreshing: boolean;
@@ -74,6 +75,7 @@ const initialState = {
 const sessionInitialState: SessionState = {
   user: null,
   lastState: '',
+  applicationDate: null,
   companyUniqueName: '',
   companies: [],
   isCompanyCreated: false,
@@ -330,6 +332,15 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
           lastState: stateData.body.lastState,
           companyUniqueName: stateData.body.companyUniqueName
         });
+      }
+      return state;
+    }
+    case CompanyActions.SET_APPLICATION_DATE: {
+      let stateData = action.payload;
+      let latestState = _.cloneDeep(state);
+      if (stateData) {
+        latestState.applicationDate = new Date();
+        return Object.assign({}, state, latestState);
       }
       return state;
     }

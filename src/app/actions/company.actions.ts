@@ -23,6 +23,7 @@ export class CompanyActions {
   public static GET_STATE_DETAILS_RESPONSE = 'CompanyGetStateDetailsResponse';
   public static SET_STATE_DETAILS = 'CompanySetStateDetails';
   public static SET_STATE_DETAILS_RESPONSE = 'CompanySetStateDetailsResponse';
+  public static SET_APPLICATION_DATE = 'SetApplicationDate';
 
   public static CHANGE_COMPANY = 'CHANGE_COMPANY';
   public static CHANGE_COMPANY_RESPONSE = 'CHANGE_COMPANY_RESPONSE';
@@ -234,6 +235,13 @@ export class CompanyActions {
   public SetStateDetails(value: StateDetailsRequest): CustomActions {
     return {
       type: CompanyActions.SET_STATE_DETAILS,
+      payload: value
+    };
+  }
+
+  public SetApplicationDate(value: any): CustomActions {
+    return {
+      type: CompanyActions.SET_APPLICATION_DATE,
       payload: value
     };
   }
