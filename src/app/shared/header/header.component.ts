@@ -327,6 +327,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     this.flyAccounts.next(false);
   }
 
+  public setApplicationDate(ev) {
+    console.log('the event is : ', ev);
+    // this.store.dispatch(this.companyActions.SetApplicationDate());
+  }
+
   public ngOnDestroy() {
     this.destroyed$.next(true);
     this.destroyed$.complete();

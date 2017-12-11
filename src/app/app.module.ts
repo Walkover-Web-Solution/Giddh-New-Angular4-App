@@ -51,9 +51,6 @@ const APP_PROVIDERS = [
   { provide: APP_BASE_HREF, useValue: '/' }
 ];
 
-
-
-
 interface InternalStateType {
   [key: string]: any;
 }
@@ -81,7 +78,6 @@ if (ENV === 'development') {
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process

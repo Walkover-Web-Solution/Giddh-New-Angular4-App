@@ -1,3 +1,4 @@
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PermissionDataService } from './../permissions/permission-data.service';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
@@ -79,7 +80,8 @@ export function provideConfig() {
     ElementViewChildModule,
     DisableFormFieldModule,
     ShSelectModule,
-    DecimalDigitsModule
+    DecimalDigitsModule,
+    BsDatepickerModule
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
