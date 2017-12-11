@@ -1,3 +1,4 @@
+import { PermissionDataService } from './../permissions/permission-data.service';
 import { LogsService } from './logs.service';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { ModuleWithProviders, NgModule } from '@angular/core';
@@ -52,6 +53,7 @@ export class ServiceModule {
       ngModule: ServiceModule,
       providers: [
         GeneralService,
+        PermissionDataService,
         LoaderService,
         StorageService,
         ErrorHandler,
