@@ -209,7 +209,7 @@ module.exports = function (env) {
           'HMR': METADATA.HMR,
           'isElectron': false,
           'errlyticsNeeded': true,
-          'errlyticsKey': ERRLYTICS_KEY_PROD,
+          'errlyticsKey': ERRLYTICS_KEY_DEV,
           'AppUrl': JSON.stringify(METADATA.AppUrl),
           'ApiUrl': JSON.stringify(METADATA.ApiUrl),
           'process.env': {

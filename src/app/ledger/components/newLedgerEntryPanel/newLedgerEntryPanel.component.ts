@@ -147,6 +147,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     // this.cdRef.markForCheck();
   }
 
+
   /**
    *
    * @param {string} type
