@@ -71,8 +71,14 @@ export class NeedsAuthorization implements CanActivate {
         return true;
       } else {
         this._toasty.errorToast('You do not have permission to access this page.');
-        let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0]);
-        this._router.navigate([firstPermittedScope.key]);
+        let indexOfHome = permissions.indexOf('DASHBOARD');
+        if (indexOfHome !== -1) {
+          this._router.navigate(['/pages/home']);
+        } else {
+          let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0]);
+          this._router.navigate([firstPermittedScope.key]);
+        }
+
         return false;
       }
     } else {
