@@ -46,7 +46,7 @@
                     <div class="col-xs-12">
                         <div class="form-group">
                             <label>PAN Number</label><br>
-                            <input type="text" placeholder="PAN Number" class="form-control" [(ngModel)]="companyProfileObj.panNumber" #panNumberField (blur)="isValidPAN(panNumberField)" name="panNumber" />
+                            <input type="text" placeholder="PAN Number" maxLength="10" class="form-control" [(ngModel)]="companyProfileObj.panNumber" #panNumberField (blur)="isValidPAN(panNumberField)" name="panNumber" />
                         </div>
                     </div>
                     <!--<div class="col-xs-6">
