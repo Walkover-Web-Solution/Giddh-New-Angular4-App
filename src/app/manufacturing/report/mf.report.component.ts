@@ -28,6 +28,7 @@ import * as _ from '../../lodash-optimized';
 import * as moment from 'moment/moment';
 import { StocksResponse } from '../../models/api-models/Inventory';
 import { Router } from '@angular/router';
+import { createSelector } from 'reselect';
 
 @Component({
   templateUrl: './mf.report.component.html',
@@ -96,6 +97,20 @@ export class MfReportComponent implements OnInit {
       this.isReportLoading = true;
       this.store.dispatch(this.inventoryAction.GetManufacturingStock());
     });
+
+    // Refresh report data according to universal date
+    this.store.select(p => p.session.applicationDate).takeUntil(this.destroyed$).distinct((val) => val === 'companyUniqueName').subscribe((value: any) => {
+      this.isReportLoading = true;
+      this.store.dispatch(this.inventoryAction.GetManufacturingStock());
+    });
+
+    // get manufacturing stocks
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (appDate) => {
+      let universalDate = _.cloneDeep(appDate);
+      if (universalDate) {
+        console.log('the universal date is :', universalDate);
+      }
+    })).takeUntil(this.destroyed$);
   }
 
   public initializeSearchReqObj() {
