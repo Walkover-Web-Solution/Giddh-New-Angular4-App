@@ -1,4 +1,4 @@
-import { PermissionDataService } from './../permissions/permission-data.service';
+import { PermissionDataService, IScope } from './../permissions/permission-data.service';
 import { ToasterService } from './../services/toaster.service';
 import { AppState } from '../store';
 import { CanActivate, Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
@@ -60,23 +60,24 @@ export const SCOPE_TO_ROUTE_MAPPING = [
 @Injectable()
 export class NeedsAuthorization implements CanActivate {
 
-  private requestedScope: string = null;
+  private requestedScope: IScope = null;
 
   constructor(public _router: Router, private _toasty: ToasterService, private _permissionDataService: PermissionDataService) { }
 
   public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope(state.url);
     if (requestedScopeNeedAuth) {
-      let permissions = this._permissionDataService.getData;
-      if (permissions.length && permissions.indexOf(requestedScopeNeedAuth) !== -1) {
+      let permissions: IScope[] = this._permissionDataService.getData;
+      let permissionIndex = permissions.findIndex((ele: IScope) => ele.name === requestedScopeNeedAuth );
+      if (permissions.length &&  permissionIndex !== -1) {
         return true;
       } else {
         this._toasty.errorToast('You do not have permission to access this page.');
-        let indexOfHome = permissions.indexOf('DASHBOARD');
+        let indexOfHome = permissions.findIndex((ele) => ele.name === 'DASHBOARD');
         if (indexOfHome !== -1) {
           this._router.navigate(['/pages/home']);
         } else {
-          let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0]);
+          let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0].name);
           this._router.navigate([firstPermittedScope.key]);
         }
 
