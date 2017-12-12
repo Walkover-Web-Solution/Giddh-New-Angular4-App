@@ -68,12 +68,12 @@ export class NeedsAuthorization implements CanActivate {
     let requestedScopeNeedAuth = this.mapUIRouteWithAPIScope(state.url);
     if (requestedScopeNeedAuth) {
       let permissions: IScope[] = this._permissionDataService.getData;
-      let permissionIndex = permissions.findIndex((ele: IScope) => ele.name === requestedScopeNeedAuth );
+      let permissionIndex = permissions.findIndex((ele: IScope) => ele.name === requestedScopeNeedAuth);
       if (permissions.length &&  permissionIndex !== -1) {
         return true;
       } else {
         this._toasty.errorToast('You do not have permission to access this page.');
-        let indexOfHome = permissions.findIndex((ele) => ele.name === 'DASHBOARD');
+        let indexOfHome = permissions.findIndex((ele: IScope) => ele.name === 'DASHBOARD');
         if (indexOfHome !== -1) {
           this._router.navigate(['/pages/home']);
         } else {
