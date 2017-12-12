@@ -1,3 +1,4 @@
+import { NeedsAuthorization } from './needAuthorization';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { NeedsAuthentication } from './needsAuthentication';
 import { UserAuthenticated } from './UserAuthenticated';
@@ -15,7 +16,7 @@ export class DecoratorsModule {
         NeedsAuthentication,
         UserAuthenticated,
         NewUserAuthGuard,
-
+        NeedsAuthorization
       ]
     };
   }

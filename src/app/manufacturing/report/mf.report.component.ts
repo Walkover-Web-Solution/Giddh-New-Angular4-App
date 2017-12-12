@@ -124,12 +124,6 @@ export class MfReportComponent implements OnInit {
 
   public pageChanged(event: any): void {
     let data = _.cloneDeep(this.mfStockSearchRequest);
-    let from = moment(data.from).format(GIDDH_DATE_FORMAT);
-    let to = moment(data.to).format(GIDDH_DATE_FORMAT);
-    if (from !== 'Invalid date' && to !== 'Invalid date') {
-      data.from = from;
-      data.to = to;
-    }
     data.page = event.page;
     this.store.dispatch(this.manufacturingActions.GetMfReport(data));
   }
