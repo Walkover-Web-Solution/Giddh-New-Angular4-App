@@ -108,9 +108,9 @@ export class TaxControlComponent implements OnInit, OnDestroy, OnChanges {
       //   oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
       // }
       taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
-      if (taxObj.amount && taxObj.amount > 0) {
-        this.taxRenderData.push(taxObj);
-      }
+      // if (taxObj.amount && taxObj.amount > 0) {
+      this.taxRenderData.push(taxObj);
+      // }
     });
   }
 
