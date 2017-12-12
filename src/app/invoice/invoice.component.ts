@@ -23,6 +23,10 @@ import { StateDetailsRequest } from '../models/api-models/Company';
       background-color: #fff;
       color: #ff5f00;
     }
+    .navbar {
+      min-height: auto;
+      margin-bottom: 10px;
+    }
   `],
   templateUrl: './invoice.component.html'
 })
