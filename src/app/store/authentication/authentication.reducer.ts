@@ -339,7 +339,7 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
       let stateData = action.payload;
       let latestState = _.cloneDeep(state);
       if (stateData) {
-        latestState.applicationDate = new Date();
+        latestState.applicationDate = stateData;
         return Object.assign({}, state, latestState);
       }
       return state;
