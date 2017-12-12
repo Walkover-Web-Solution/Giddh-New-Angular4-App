@@ -43,7 +43,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi" [checkPermission]="['MENU', 'TB_PL']">
+                    <li class="dmLi" [checkPermission]="['MENU', 'REPORT']">
                       <a [routerLink]="['trial-balance-and-profit-loss']">
                         <div class="media">
                           <div class="media-body">
@@ -83,7 +83,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi trialB" [checkPermission]="['MENU', 'TAXES']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']" *ngIf="!selectedCompanyCountry || selectedCompanyCountry === 'India'">
                       <a [routerLink]="['/pages/purchase/invoice']">
                         <div class="media">
                           <div class="media-body">
