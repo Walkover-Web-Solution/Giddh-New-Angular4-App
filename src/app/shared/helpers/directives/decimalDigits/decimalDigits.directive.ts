@@ -81,6 +81,15 @@ export class DecimalDigitsDirective {
     }
   }
 
+  @HostListener('document:paste', ['$event'])
+  public onPress(event) {
+    let cl = event.clipboardData.getData('text/plain');
+    cl = cl.replace(/,\s?/g, '');
+    let evt = new Event('input');
+    event.target.dispatchEvent(evt);
+    event.target.value = cl;
+    event.preventDefault();
+  }
   // tslint:disable-next-line:member-ordering
   constructor(private elemRef: ElementRef) {
     this.el = this.elemRef.nativeElement;
