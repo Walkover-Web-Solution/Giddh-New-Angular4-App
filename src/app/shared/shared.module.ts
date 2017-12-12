@@ -1,10 +1,12 @@
+import { PermissionDataService } from './../permissions/permission-data.service';
+import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
 import { CommonModule } from '@angular/common';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-import { PerfectScrollbarConfigInterface, PerfectScrollbarModule } from 'ngx-perfect-scrollbar';
+import { PerfectScrollbarModule, PERFECT_SCROLLBAR_CONFIG } from 'ngx-perfect-scrollbar';
 import { LayoutComponent } from './layout/layout.component';
 import { HeaderComponent } from './header';
 import { FooterComponent } from './footer/footer.component';
@@ -31,11 +33,11 @@ import { DisableFormFieldModule } from './helpers/directives/disableFormField/di
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
+import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
 
-const PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
+const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
-
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
@@ -55,7 +57,7 @@ export function provideConfig() {
   declarations: [
     LayoutComponent, HeaderComponent, FooterComponent, AccountsSideBarComponent,
     ManageGroupsAccountsComponent, CompanyAddComponent, AccountOperationsComponent, AccountFilterPipe, AccountAddNewComponent, AccountUpdateComponent, AccountUpdateNewComponent, GroupsAccountSidebarComponent,
-    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective],
+    GroupAddComponent, GroupUpdateComponent, ShareGroupModalComponent, ShareAccountModalComponent, VsForDirective, CheckPermissionDirective],
   imports: [
     CommonModule,
     RouterModule,
@@ -67,7 +69,7 @@ export function provideConfig() {
     TooltipModule,
     BsDropdownModule,
     PopoverModule,
-    PerfectScrollbarModule.forChild(),
+    PerfectScrollbarModule,
     SocialLoginModule,
     FormWizardModule,
     // SelectModule,
@@ -90,6 +92,10 @@ export function provideConfig() {
     {
       provide: AuthServiceConfig,
       useFactory: provideConfig
+    },
+    {
+      provide: PERFECT_SCROLLBAR_CONFIG,
+      useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
     }
   ]
 })
