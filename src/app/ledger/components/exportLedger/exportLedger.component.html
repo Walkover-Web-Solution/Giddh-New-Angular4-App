@@ -7,10 +7,10 @@
         <form name="addShareEmailForm" novalidate class="" autocomplete="off">
             <div class="pdB1 clearfix">
                 <label class="radio-inline pd0">
-                  <input type="radio" name="emailType"  [(ngModel)]="emailType" value="admin_condensed" class="radio_theme cp">Mini
+                  <input type="radio" name="emailType"  [(ngModel)]="emailType" value="condensed" class="radio_theme cp">Mini
                 </label>
                 <label class="radio-inline pd0">
-             <input type="radio" name="emailType" [(ngModel)]="emailType" value="admin_detailed" class="radio_theme cp">Detailed
+             <input type="radio" name="emailType" [(ngModel)]="emailType" value="detailed" class="radio_theme cp">Detailed
              </label>
             </div>
             <button class="btn-success btn" (click)="exportLedger()">Download</button>

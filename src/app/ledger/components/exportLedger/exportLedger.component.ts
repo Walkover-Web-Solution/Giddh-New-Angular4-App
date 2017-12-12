@@ -14,7 +14,7 @@ export class ExportLedgerComponent implements OnInit {
   @Input() public from: string = '';
   @Input() public to: string = '';
   @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
-  public emailType: string = 'admin-detailed';
+  public emailType: string = 'detailed';
   public emailData: string = '';
   constructor(private _ledgerService: LedgerService, private _toaster: ToasterService) {
     //
