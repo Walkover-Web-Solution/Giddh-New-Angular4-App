@@ -54,7 +54,8 @@
                         </td>
                         <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length" class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
                             <!--tax control component-->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes" [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes" (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes"
+                            [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes" (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
                             </tax-control>
                         </td>
                         <td class="text-center">
@@ -120,6 +121,10 @@
                         <td class="pdL1">
                             <span>{{""}}</span>
                         </td>
+
+                        <td class="pdL1" *ngIf="(blankLedger.voucherType === 'pur' || blankLedger.voucherType == 'debit note' || blankLedger.voucherType == 'credit note')">
+                          <input type="text" placeholder="Invoice no." class="form-control" [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher" />
+                      </td>
                     </tr>
                 </table>
             </div>
