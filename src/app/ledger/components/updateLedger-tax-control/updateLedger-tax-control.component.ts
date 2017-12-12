@@ -61,9 +61,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
    * prepare taxObject as per needed
    */
   public prepareTaxObject() {
-    let selectedTax = this.taxRenderData.length > 0 ? this.taxRenderData.filter(p => p.isChecked) : [];
-    while (this.taxRenderData.length > 0) {
-      this.taxRenderData.pop();
+    // if updating don't recalculate
+    if (this.taxRenderData.length) {
+      return;
     }
     this.taxes.map(tx => {
       let taxObj = new TaxControlData();
@@ -87,11 +87,7 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
       } else {
         taxObj.amount = tx.taxDetail[0].taxValue;
       }
-      let oldValue = null;
-      if (selectedTax.findIndex(p => p.uniqueName === tx.uniqueName) > -1) {
-        oldValue = selectedTax[selectedTax.findIndex(p => p.uniqueName === tx.uniqueName)];
-      }
-      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1)) || (oldValue && oldValue.isChecked);
+      taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
       if (taxObj.amount && taxObj.amount > 0) {
         this.taxRenderData.push(taxObj);
       }
