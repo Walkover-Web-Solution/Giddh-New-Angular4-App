@@ -6,7 +6,8 @@
             <!-- <div class="grp_list" style="height:700px"> -->
             <ul class="new_btn_ul" *ngIf="i !== 0">
                 <li class="new_btn">
-                    <a href="javascript:void(0)" class="btn-link" *ngIf="!isSearchingGroups" (click)="ShowAddNewForm(col)">Create new</a>
+                    <a href="javascript:void(0)" class="btn-link" *ngIf="!isSearchingGroups || (isSearchingGroups && (activeGroupUniqueName | async))"
+                    (click)="ShowAddNewForm(col)">Create new</a>
                 </li>
             </ul>
             <ng-container *ngIf="col.Items">
