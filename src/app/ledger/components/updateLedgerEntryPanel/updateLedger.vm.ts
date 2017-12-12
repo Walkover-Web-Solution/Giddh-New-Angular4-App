@@ -384,7 +384,6 @@ export class UpdateLedgerVm {
       this.ledgerUnderStandingObj = _.cloneDeep(data);
     }
   }
-
   public resetVM() {
     this.selectedLedger = null;
     this.selectedLedgerBackup = null;
