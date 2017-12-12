@@ -3,7 +3,7 @@ import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BsModalService } from 'ngx-bootstrap/modal';
-import { BsModalRef } from 'ngx-bootstrap/modal'
+import { BsModalRef } from 'ngx-bootstrap/modal';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import * as _ from '../../lodash-optimized';
@@ -101,7 +101,7 @@ export class InvoicePreviewComponent implements OnInit {
         data.body.results.map(d => {
           // Select only sundry debtors account
           if (d.parentGroups.find((o) => o.uniqueName === 'sundrydebtors')) {
-            accounts.push({ label: d.name, value: d.uniqueName });
+            accounts.push({ label: `${d.name} (${d.uniqueName})`, value: d.uniqueName });
           }
         });
         this.accounts$ = Observable.of(accounts);
