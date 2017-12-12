@@ -11,7 +11,13 @@ const INV_PAGE = [
 
 @Component({
   selector: 'invoice-page-dd',
-  templateUrl: './invoice.page.dd.component.html'
+  templateUrl: './invoice.page.dd.component.html',
+  styles: [`
+  .navbar-brand {
+    height: auto;
+    padding: 5px 15px;
+  }
+  `]
 })
 
 export class InvoicePageDDComponent {
