@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { TB_PL_BS_API } from './apiurls/tl-pl.api';
 import { AccountDetails, BalanceSheetRequest, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
 
 @Injectable()
 export class TlPlService {
@@ -17,7 +18,7 @@ export class TlPlService {
   private user: UserDetails;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /**
@@ -26,7 +27,7 @@ export class TlPlService {
   public GetTrailBalance(request: TrialBalanceRequest): Observable<BaseResponse<AccountDetails, TrialBalanceRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(TB_PL_BS_API.GET_TRIAL_BALANCE
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_TRIAL_BALANCE
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {from: request.from, to: request.to, refresh: request.refresh})
       .map((res) => {
         let data: BaseResponse<AccountDetails, TrialBalanceRequest> = res.json();
@@ -46,7 +47,7 @@ export class TlPlService {
       .filter(p => request[p] != null)
       .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
-    return this._http.get(TB_PL_BS_API.GET_PROFIT_LOSS
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_PROFIT_LOSS
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
         let data: BaseResponse<AccountDetails, ProfitLossRequest> = res.json();
@@ -66,7 +67,7 @@ export class TlPlService {
       .filter(p => request[p] != null)
       .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
-    return this._http.get(TB_PL_BS_API.GET_BALANCE_SHEET
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.GET_BALANCE_SHEET
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
         let data: BaseResponse<AccountDetails, BalanceSheetRequest> = res.json();
@@ -80,7 +81,7 @@ export class TlPlService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    return this._http.get(TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_TRIAL_BALANCE_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), request)
       .map((res) => {
         let data = this.b64toBlob(res.json().body, 'application/xml', 512);
@@ -97,7 +98,7 @@ export class TlPlService {
       .filter(p => request[p] != null)
       .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
-    return this._http.get(TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_BALANCE_SHEET_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
         let data = this.b64toBlob(res.json().body, 'application/xml', 512);
@@ -114,7 +115,7 @@ export class TlPlService {
       .filter(p => request[p] != null)
       .reduce((r, i) => ({...r, [i]: request[i]}), {}));
 
-    return this._http.get(TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
+    return this._http.get(this.config.apiUrl + TB_PL_BS_API.DOWNLOAD_PROFIT_LOSS_EXCEL
       .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), filteredRequest)
       .map((res) => {
         let data = this.b64toBlob(res.json().body, 'application/xml', 512);

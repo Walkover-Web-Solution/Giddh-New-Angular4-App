@@ -46,6 +46,8 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { ActionModule } from './actions/action.module';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { Configuration } from 'app/app.constant';
+import { ServiceConfig } from 'app/services/service.config';
 // Application wide providers
 const APP_PROVIDERS = [
   ...APP_RESOLVER_PROVIDERS,
@@ -151,6 +153,10 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     {
       provide: PERFECT_SCROLLBAR_CONFIG,
       useValue: DEFAULT_PERFECT_SCROLLBAR_CONFIG
+    },
+    {
+      provide: ServiceConfig,
+      useValue: { apiUrl: Configuration.ApiUrl, appUrl: Configuration.AppUrl }
     }
   ]
 })
