@@ -95,7 +95,8 @@ export class LedgerVM {
       generateInvoice: false,
       chequeNumber: '',
       chequeClearanceDate: '',
-      invoiceNumberAgainstVoucher: ''
+      invoiceNumberAgainstVoucher: '',
+      compoundTotal: 0
     };
   }
 
@@ -274,6 +275,7 @@ export class BlankLedgerVM {
   public generateInvoice: boolean;
   public chequeNumber: string;
   public chequeClearanceDate: string;
+  public compoundTotal: number;
   public isBankTransaction?: boolean;
   public transactionId?: string;
   public invoiceNumberAgainstVoucher: string;
