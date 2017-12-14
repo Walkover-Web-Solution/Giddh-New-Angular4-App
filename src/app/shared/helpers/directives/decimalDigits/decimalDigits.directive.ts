@@ -81,7 +81,7 @@ export class DecimalDigitsDirective {
     }
   }
 
-  @HostListener('document:paste', ['$event'])
+  @HostListener('paste', ['$event'])
   public onPress(event) {
     let cl = event.clipboardData.getData('text/plain');
     cl = cl.replace(/,\s?/g, '');
