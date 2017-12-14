@@ -281,6 +281,10 @@
                                 <span *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type === 'CREDIT'" class="">0</span>
                             </td>
                         </tr>
+
+                        <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type !== 'DEBIT'">
+                            <td colspan="3" class="col-xs-12">&nbsp;</td>
+                        </tr>
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.debitTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
@@ -313,7 +317,7 @@
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
-                                                <sh-select #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [isFilterEnabled]="true"
+                                                <sh-select [idEl]="txn.id" #shDebit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false" [isFilterEnabled]="true"
                                                     [ItemHeight]="67" [customFilter]="lc.ledgerCustomFilter">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -348,9 +352,9 @@
                                     </tbody>
                                 </table>
                                 <!--new ledge popup-->
-                                <div class="pos-abs entry-modal"  (click)="shDebit?.hide()" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
-                                        (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
+                                <div class="pos-abs entry-modal" (click)="shDebit?.hide()" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'DEBIT' && lc.currentBlankTxn?.id === txn.id ">
+                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                                        (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -389,6 +393,10 @@
                             </td>
                         </tr>
 
+                        <tr class="ledger-row" *ngIf="(lc.transactionData$ | async)?.forwardedBalance.type !== 'CREDIT'">
+                            <td class="col-xs-12" colspan="3">&nbsp;</td>
+                        </tr>
+
                         <tr class="ledger-row" *ngFor="let txn of (lc.transactionData$ | async)?.creditTransactions;" (dblclick)="showUpdateLedgerModal(txn)" (click)="selectCompoundEntry(txn)" [ngClass]="{compoundEntry: txn.entryUniqueName === lc.selectedTxnUniqueName}" tooltip="{{txn.description}}">
                             <td class="col-xs-2">{{ txn.entryDate }}</td>
                             <td class="col-xs-7">
@@ -422,7 +430,7 @@
                                             </td>
                                             <td class="col-xs-7 select2-parent select2-ledger" (mousedown)="showNewLedgerEntryPopup(txn);">
 
-                                                <sh-select #shCredit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
+                                                <sh-select [idEl]="txn.id" #shCredit [options]="lc.flattenAccountList | async" [(ngModel)]="txn.particular" (selected)="selectAccount($event,txn)" [placeholder]="'Select Accounts'" [notFoundLink]="true" (noResultsClicked)="showQuickAccountModal()" [multiple]="false"
                                                     [isFilterEnabled]="true" [ItemHeight]="67" [customFilter]="lc.ledgerCustomFilter">
                                                     <ng-template #optionTemplate let-option="option">
                                                         <ng-container *ngIf="!option.additional?.stock">
@@ -460,8 +468,8 @@
 
                                 <!--new ledge popup-->
                                 <div class="pos-abs entry-modal" (click)="shCredit?.hide()" *ngIf="lc.showNewLedgerPanel && lc.currentBlankTxn?.type === 'CREDIT' && lc.currentBlankTxn?.id === txn.id ">
-                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox" (resetBlankLedger)="resetBlankTransaction()"
-                                        (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
+                                    <new-ledger-entry-panel #newLedPanel class="" [blankLedger]="lc.blankLedger" [currentTxn]="lc.currentBlankTxn" [needToReCalculate]="needToReCalculate" (changeTransactionType)="toggleTransactionType($event)" [showTaxationDiscountBox]="lc.showTaxationDiscountBox"
+                                        (resetBlankLedger)="resetBlankTransaction()" (saveBlankLedger)="saveBlankTransaction()" (clickedOutsideEvent)="hideNewLedgerEntryPopup()">
                                     </new-ledger-entry-panel>
                                 </div>
 
@@ -626,4 +634,3 @@
     </div>
 </div>
 <!-- Advance  search popup -->
-

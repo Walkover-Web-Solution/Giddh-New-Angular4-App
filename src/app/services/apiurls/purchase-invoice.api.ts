@@ -1,5 +1,5 @@
-import { Configuration } from '../../app.constant';
-const COMMON = Configuration.ApiUrl + 'company/:companyUniqueName/';
+
+const COMMON = 'company/:companyUniqueName/';
 
 export const PURCHASE_INVOICE_API = {
   INVOICE_API: COMMON + 'invoices/purchase',  // GET AND PUT call

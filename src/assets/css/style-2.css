@@ -783,29 +783,12 @@ input[type="checkbox"]:after {
     transition: box-shadow 0.3s ease;
 }
 
-.template_action {
-    float: left;
-    width: 100%;
-    overflow: hidden;
-    text-align: center;
-    padding: 16px 0 0;
-}
-
 .thumbnail .caption {
     padding: 20px 7px;
     color: #333;
     overflow: hidden;
     text-align: center;
 }
-
-.template_action button {
-    margin: 0 4px;
-}
-
-
-/*.templateInfo {
-    padding: 7px 4px;
-}*/
 
 .switch.wide.checked small {
     left: 31px;

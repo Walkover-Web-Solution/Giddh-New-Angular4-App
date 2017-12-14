@@ -1,5 +1,5 @@
 import { GroupUpateRequest, MoveGroupResponse } from './../models/api-models/Group';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import 'rxjs/add/operator/map';
 import * as _ from '../lodash-optimized';
 import { Observable } from 'rxjs/Observable';
@@ -14,6 +14,7 @@ import { FlattenGroupsAccountsResponse, GroupCreateRequest, GroupResponse, Group
 import { GROUP_API } from './apiurls/group.api';
 import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccounts';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
 
 // import { UserManager, Log, MetadataService, User } from 'oidc-client';
 @Injectable()
@@ -23,7 +24,8 @@ export class GroupService {
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService,
               public _router: Router,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService,
+              @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   public flattenGroup(rawList: any[], parents: any[] = []) {
@@ -52,7 +54,7 @@ export class GroupService {
   public CreateGroup(model: GroupCreateRequest): Observable<BaseResponse<GroupResponse, GroupCreateRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(GROUP_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + GROUP_API.CREATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<GroupResponse, GroupCreateRequest> = res.json();
       data.request = model;
       return data;
@@ -62,7 +64,7 @@ export class GroupService {
   public UpdateGroup(modele: GroupUpateRequest, groupUniqueName: string): Observable<BaseResponse<GroupResponse, GroupUpateRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(GROUP_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
+    return this._http.put(this.config.apiUrl + GROUP_API.UPDATE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
       let data: BaseResponse<GroupResponse, GroupUpateRequest> = res.json();
       data.queryString = {groupUniqueName};
       data.request = modele;
@@ -74,7 +76,7 @@ export class GroupService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    return this._http.put(GROUP_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
+    return this._http.put(this.config.apiUrl + GROUP_API.SHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
       let data: BaseResponse<string, ShareGroupRequest> = res.json();
       data.queryString = {groupUniqueName};
       data.request = modele;
@@ -85,7 +87,7 @@ export class GroupService {
   public GetGrouptDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupResponse, string> = res.json();
       data.queryString = {groupUniqueName};
       return data;
@@ -97,7 +99,7 @@ export class GroupService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    return this._http.put(GROUP_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), {user: userEmail}).map((res) => {
+    return this._http.put(this.config.apiUrl + GROUP_API.UNSHARE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), {user: userEmail}).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = userEmail;
       data.queryString = {groupUniqueName};
@@ -108,7 +110,7 @@ export class GroupService {
   public ShareWithGroup(groupUniqueName: string): Observable<BaseResponse<GroupSharedWithResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + GROUP_API.SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupSharedWithResponse[], string> = res.json();
       data.queryString = {groupUniqueName};
       data.request = groupUniqueName;
@@ -119,7 +121,7 @@ export class GroupService {
   public GetGroupsWithAccounts(q: string): Observable<BaseResponse<GroupsWithAccountsResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
+    return this._http.get(this.config.apiUrl + GROUP_API.GROUPS_WITH_ACCOUNT.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':q', encodeURIComponent(q || ''))).map((res) => {
       let data: BaseResponse<GroupsWithAccountsResponse[], string> = res.json();
       data.request = q;
       return data;
@@ -129,7 +131,7 @@ export class GroupService {
   public MoveGroup(modele: MoveGroupRequest, groupUniqueName: string): Observable<BaseResponse<MoveGroupResponse, MoveGroupRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(GROUP_API.MOVE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
+    return this._http.put(this.config.apiUrl + GROUP_API.MOVE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName)), modele).map((res) => {
       let data: BaseResponse<MoveGroupResponse, MoveGroupRequest> = res.json();
       data.request = modele;
       data.queryString = {groupUniqueName};
@@ -140,7 +142,7 @@ export class GroupService {
   public GetGroupDetails(groupUniqueName: string): Observable<BaseResponse<GroupResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + GROUP_API.GET_GROUP_DETAILS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupResponse, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
@@ -151,7 +153,7 @@ export class GroupService {
   public DeleteGroup(groupUniqueName: string): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+    return this._http.delete(this.config.apiUrl + GROUP_API.DELETE_GROUP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
@@ -162,7 +164,7 @@ export class GroupService {
   public GetFlattenGroupsAccounts(q: string = '', page: number = 1, count: number = 20000, showEmptyGroups: string = 'false'): Observable<BaseResponse<FlattenGroupsAccountsResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
+    return this._http.get(this.config.apiUrl + GROUP_API.FLATTEN_GROUP_WITH_ACCOUNTS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
       .replace(':q', encodeURIComponent(q || ''))
       .replace(':page', encodeURIComponent(page.toString()))
       .replace(':count', encodeURIComponent(count.toString()))
@@ -178,7 +180,7 @@ export class GroupService {
   public GetTaxHierarchy(groupUniqueName: string): Observable<BaseResponse<GroupsTaxHierarchyResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + GROUP_API.TAX_HIERARCHY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<GroupsTaxHierarchyResponse, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
@@ -193,7 +195,7 @@ export class GroupService {
   public GetGroupSubgroups(groupUniqueName: string): Observable<BaseResponse<any, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + GROUP_API.GET_SUB_GROUPS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':groupUniqueName', encodeURIComponent(groupUniqueName))).map((res) => {
       let data: BaseResponse<any, string> = res.json();
       data.request = groupUniqueName;
       data.queryString = {groupUniqueName};
