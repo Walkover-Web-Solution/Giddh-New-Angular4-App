@@ -94,7 +94,8 @@ export class NeedsAuthorization implements CanActivate {
     let requestedScope =  SCOPE_TO_ROUTE_MAPPING.find((obj) => obj.key === path);
     if (requestedScope) {
       return requestedScope.value;
+    } else {
+      return null;
     }
-    return null;
   }
 }

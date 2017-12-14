@@ -63,6 +63,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public userName: string;
   public isProd = ENV;
   public isElectron: boolean = isElectron;
+  public universalDate: Date[];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -167,6 +168,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
           this.hideManageGroupsModal();
         }
       }
+    });
+
+    // Get universal date
+    this.store.select(p => p.session.applicationDate).subscribe((value: Date[]) => {
+      this.universalDate = _.cloneDeep(value);
     });
   }
 
@@ -330,11 +336,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public setApplicationDate(ev) {
-    let dates = {
-      from: moment(ev[0]).format(GIDDH_DATE_FORMAT),
-      to: moment(ev[1]).format(GIDDH_DATE_FORMAT)
-    };
-    this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+    let data = ev ? ev.viewModel : null;
+    if (data && data.length) {
+      let dates = [data[0], data[1]];
+      this.store.dispatch(this.companyActions.SetApplicationDate(dates));
+    } else {
+      this.store.dispatch(this.companyActions.SetApplicationDate(null));
+    }
+  }
+
+  public jumpToToday() {
+    this.universalDate = null;
+    this.setApplicationDate(null);
   }
 
   public ngOnDestroy() {

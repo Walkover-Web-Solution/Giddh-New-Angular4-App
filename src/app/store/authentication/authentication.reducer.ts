@@ -338,11 +338,8 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
     case CompanyActions.SET_APPLICATION_DATE: {
       let stateData = action.payload;
       let latestState = _.cloneDeep(state);
-      if (stateData) {
-        latestState.applicationDate = stateData;
-        return Object.assign({}, state, latestState);
-      }
-      return state;
+      latestState.applicationDate = stateData;
+      return Object.assign({}, state, latestState);
     }
     case CompanyActions.CHANGE_COMPANY_RESPONSE: {
       let stateData: BaseResponse<StateDetailsResponse, string> = action.payload;

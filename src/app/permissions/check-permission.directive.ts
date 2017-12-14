@@ -14,6 +14,7 @@ export class CheckPermissionDirective implements OnInit {
     if (this.checkPermission && this.checkPermission.length === 2) {
       if (this.checkPermission[0] === 'MENU') {
         if (!permissions.length || permissions.indexOf(this.checkPermission[1]) === -1) {
+          this.el.nativeElement.remove();
           this.renderer.setElementStyle(this.el.nativeElement, 'display', 'none');
           console.log('not found: ', this.checkPermission[1]);
         }
