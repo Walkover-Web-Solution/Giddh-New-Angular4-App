@@ -54,6 +54,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
   public activeAccount$: Observable<AccountResponse>;
   public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   public showAdvanced: boolean;
+  public currentAccountApplicableTaxes: string[] = [];
 
   constructor(private store: Store<AppState>, private _ledgerService: LedgerService,
     private _toasty: ToasterService, private _accountService: AccountService,
@@ -88,16 +89,28 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     // emit upload event
     this.uploadInput = new EventEmitter<UploadInput>();
     // set file upload options
-    this.fileUploadOptions = {concurrency: 0};
+    this.fileUploadOptions = { concurrency: 0 };
 
     // get flatten_accounts list && get transactions list && get ledger account list
     Observable.combineLatest(this.flattenAccountListStream$, this.selectedLedgerStream$, this._accountService.GetAccountDetails(this.accountUniqueName))
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
-          this.vm.flatternAccountList = _.cloneDeep(resp[0]);
+          this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = Observable.of(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
+
+          // check if current account category is type 'income' or 'expenses'
+          let parentAcc = accountDetails.parentGroups[0].uniqueName;
+          let incomeAccArray = ['revenuefromoperations', 'otherincome'];
+          let expensesAccArray = ['operatingcost', 'indirectexpenses'];
+          let incomeAndExpensesAccArray = [...incomeAccArray, ...expensesAccArray];
+          if (incomeAndExpensesAccArray.indexOf(parentAcc) > -1) {
+            let appTaxes = [];
+            accountDetails.applicableTaxes.forEach(app => appTaxes.push(app.uniqueName));
+            this.currentAccountApplicableTaxes = appTaxes;
+          }
+
           this.vm.getUnderstandingText(accountDetails.accountType, accountDetails.name);
           let parentOfAccount = accountDetails.parentGroups[0];
           // check if account is stockable
@@ -265,8 +278,8 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
-        data: {company: companyUniqueName},
-        headers: {'Session-Id': sessionKey},
+        data: { company: companyUniqueName },
+        headers: { 'Session-Id': sessionKey },
       };
       this.uploadInput.emit(event);
     } else if (output.type === 'start') {

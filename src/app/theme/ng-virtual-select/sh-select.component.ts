@@ -21,6 +21,7 @@ import { ShSelectMenuComponent } from './sh-select-menu.component';
   ]
 })
 export class ShSelectComponent implements ControlValueAccessor, OnInit, AfterViewInit {
+  @Input() public idEl: string = '';
   @Input() public placeholder: string = 'Type to filter';
   @Input() public multiple: boolean = false;
   @Input() public mode: 'default' | 'inline' = 'default';

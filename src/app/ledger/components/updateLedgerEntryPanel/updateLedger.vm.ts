@@ -1,13 +1,14 @@
 import { Observable } from 'rxjs/Observable';
 import { ILedgerDiscount, ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, findIndex, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, findIndex, sumBy, uniq } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAccountsResultItem.interface';
 import { UpdateLedgerTaxData } from '../updateLedger-tax-control/updateLedger-tax-control.component';
 import { UpdateLedgerDiscountComponent, UpdateLedgerDiscountData } from '../updateLedgerDiscount/updateLedgerDiscount.component';
 import { TaxControlData } from '../../../theme/tax-control/tax-control.component';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { underStandingTextData } from 'app/ledger/underStandingTextData';
+import { GroupsWithAccountsResponse } from 'app/models/api-models/GroupsWithAccounts';
 
 export class UpdateLedgerVm {
   public flatternAccountList: IFlattenAccountsResultItem[] = [];
@@ -124,29 +125,48 @@ export class UpdateLedgerVm {
   }
 
   public getCategoryNameFromAccount(accountName: string): string {
+    let categoryName = '';
     let account = find(this.flatternAccountList, (fla) => fla.uniqueName === accountName);
     if (account && account.parentGroups[0]) {
-      let parent = account.parentGroups[0];
-      if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
-        return 'liabilities';
-      } else if (find(['fixedassets', 'noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
-        return 'assets';
-      } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
-        return 'income';
-      } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
-        if (accountName === 'roundoff') {
-          return 'roundoff';
+      categoryName = this.accountCatgoryGetterFunc(account, accountName);
+    } else {
+      let flatterAccounts: IFlattenAccountsResultItem[] = this.flatternAccountList;
+      flatterAccounts.map(fa => {
+        if (fa.mergedAccounts !== '') {
+          let tempMergedAccounts = fa.mergedAccounts.split(',').map(mm => mm.trim());
+          if (tempMergedAccounts.indexOf(accountName) > -1) {
+            categoryName = this.accountCatgoryGetterFunc(fa, accountName);
+            if (categoryName) {
+              return categoryName;
+            }
+          }
         }
-        let subParent = account.parentGroups[1];
-        if (subParent && subParent.uniqueName === 'discount') {
-          return 'discount';
-        }
-        return 'expenses';
-      } else {
-        return '';
-      }
+      });
+
     }
-    return '';
+    return categoryName;
+  }
+
+  public accountCatgoryGetterFunc(account, accountName): string {
+    let parent = account.parentGroups[0];
+    if (find(['shareholdersfunds', 'noncurrentliabilities', 'currentliabilities'], p => p === parent.uniqueName)) {
+      return 'liabilities';
+    } else if (find(['fixedassets', 'noncurrentassets', 'currentassets'], p => p === parent.uniqueName)) {
+      return 'assets';
+    } else if (find(['revenuefromoperations', 'otherincome'], p => p === parent.uniqueName)) {
+      return 'income';
+    } else if (find(['operatingcost', 'indirectexpenses'], p => p === parent.uniqueName)) {
+      if (accountName === 'roundoff') {
+        return 'roundoff';
+      }
+      let subParent = account.parentGroups[1];
+      if (subParent && subParent.uniqueName === 'discount') {
+        return 'discount';
+      }
+      return 'expenses';
+    } else {
+      return '';
+    }
   }
 
   public isValidEntry(accountName: string): boolean {
@@ -364,7 +384,6 @@ export class UpdateLedgerVm {
       this.ledgerUnderStandingObj = _.cloneDeep(data);
     }
   }
-
   public resetVM() {
     this.selectedLedger = null;
     this.selectedLedgerBackup = null;

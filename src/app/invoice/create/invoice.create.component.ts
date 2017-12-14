@@ -255,6 +255,10 @@ export class InvoiceCreateComponent implements OnInit {
       data.other.message2 = data.other.message2.replace(/\n/g, '<br />');
     }
 
+    // convert address string to array
+    data.account['billingDetails'].address = this.getArrayFromString(data.account['billingDetails'].addressStr);
+    data.account['shippingDetails'].address = this.getArrayFromString(data.account['shippingDetails'].addressStr);
+
     // convert date object
     data.invoiceDetails.invoiceDate = this.convertDateForAPI(data.invoiceDetails.invoiceDate);
     data.invoiceDetails.dueDate = this.convertDateForAPI(data.invoiceDetails.dueDate);
@@ -262,8 +266,6 @@ export class InvoiceCreateComponent implements OnInit {
 
     let accountUniqueName = this.invFormData.account.uniqueName;
     if (accountUniqueName) {
-      this.prepareAddressForAPI('billingDetails');
-      this.prepareAddressForAPI('shippingDetails');
       model.invoice = data;
       model.uniqueNames = this.getEntryUniqueNames(this.invFormData.entries);
       model.validateTax = true;
