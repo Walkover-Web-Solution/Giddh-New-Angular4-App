@@ -54,7 +54,8 @@
                         </td>
                         <td style="max-width:150px" *ngIf="(companyTaxesList$ | async)?.length" class="pItem pos-rel dropdown-container" (clickOutside)="hideTax()" (click)="$event.stopPropagation()" (mouseenter)="hideDiscount()">
                             <!--tax control component-->
-                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentTxn.selectedAccount?.applicableTaxes" [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes" (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
+                            <tax-control #tax [taxes]="companyTaxesList$ | async" [applicableTaxes]="currentAccountApplicableTaxes.length ? currentAccountApplicableTaxes : currentTxn.selectedAccount?.applicableTaxes"
+                            [date]="blankLedger?.entryDate" [taxRenderData]="currentTxn.taxes" (taxAmountSumEvent)="currentTxn.tax = $event;calculateTotal()" (isApplicableTaxesEvent)="currentTxn.applyApplicableTaxes = $event">
                             </tax-control>
                         </td>
                         <td class="text-center">
@@ -84,7 +85,7 @@
                         <button class="no-btn pdL0">More Details</button>
                     </td>
                     <td class="text-right">
-                        <span class="primary_color">Compound Total: {{ currentTxn?.total | number: '1.1-2' }}</span>
+                        <span class="primary_color">Compound Total: {{ blankLedger.compoundTotal | number: '1.1-2' }}</span>
                     </td>
                 </tr>
             </tbody>
