@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { HttpWrapperService } from './httpWrapper.service';
 import { Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { ELEDGER_API } from './apiurls/eledger.api';
 import { EledgerMapRequest, EledgerResponse } from '../models/api-models/Eledger';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
 
 @Injectable()
 export class EledgerService {
@@ -16,7 +17,7 @@ export class EledgerService {
   private user: UserDetails;
 
   constructor(private errorHandler: ErrorHandler, public _http: HttpWrapperService, public _router: Router,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /*
@@ -28,7 +29,7 @@ export class EledgerService {
   public GetEledgerTransactions(accountUniqueName: string, refresh: boolean = false): Observable<BaseResponse<EledgerResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    let URL = ELEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
+    let URL = this.config.apiUrl + ELEDGER_API.GET.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName));
     if (refresh) {
       URL = URL + '?refresh=true';
     }
@@ -46,7 +47,7 @@ export class EledgerService {
   public TrashEledgerTransaction(accountUniqueName: string, transactionId: string): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(ELEDGER_API.TRASH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId)).map((res) => {
+    return this._http.delete(this.config.apiUrl + ELEDGER_API.TRASH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId)).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.queryString = {accountUniqueName, transactionId};
       return data;
@@ -60,7 +61,7 @@ export class EledgerService {
   public MapEledgerTransaction(model: EledgerMapRequest, accountUniqueName: string, transactionId: string): Observable<BaseResponse<string, EledgerMapRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(ELEDGER_API.MAP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId), model)
+    return this._http.put(this.config.apiUrl + ELEDGER_API.MAP.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':accountUniqueName', encodeURIComponent(accountUniqueName)).replace(':transactionId', transactionId), model)
       .map((res) => {
         let data: BaseResponse<string, EledgerMapRequest> = res.json();
         data.request = model;
