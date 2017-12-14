@@ -1,12 +1,13 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { SETTINGS_FINANCIAL_YEAR_API } from './apiurls/settings.financial-year.api';
 import { ActiveFinancialYear } from '../models/api-models/Company';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
 
 export interface ILockFinancialYearRequest {
   lockAll: boolean;
@@ -26,7 +27,7 @@ export class SettingsFinancialYearService {
   private companyUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /*
@@ -37,7 +38,7 @@ export class SettingsFinancialYearService {
   public GetAllFinancialYears(): Observable<BaseResponse<IFinancialYearResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.GET_ALL_FINANCIAL_YEARS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<IFinancialYearResponse, string> = res.json();
       data.queryString = {};
       return data;
@@ -52,7 +53,7 @@ export class SettingsFinancialYearService {
   public LockFinancialYear(reqObj: ILockFinancialYearRequest): Observable<BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(SETTINGS_FINANCIAL_YEAR_API.LOCK_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), reqObj).map((res) => {
+    return this._http.patch(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.LOCK_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), reqObj).map((res) => {
       let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = res.json();
       data.queryString = {};
       return data;
@@ -67,7 +68,7 @@ export class SettingsFinancialYearService {
   public UnlockFinancialYear(reqObj: ILockFinancialYearRequest): Observable<BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(SETTINGS_FINANCIAL_YEAR_API.UNLOCK_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), reqObj).map((res) => {
+    return this._http.patch(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.UNLOCK_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), reqObj).map((res) => {
       let data: BaseResponse<IFinancialYearResponse, ILockFinancialYearRequest> = res.json();
       data.queryString = {};
       return data;
@@ -82,7 +83,7 @@ export class SettingsFinancialYearService {
   public SwitchFinancialYear(uniqueName: string): Observable<BaseResponse<ActiveFinancialYear, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.patch(SETTINGS_FINANCIAL_YEAR_API.SWITCH_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {uniqueName}).map((res) => {
+    return this._http.patch(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.SWITCH_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {uniqueName}).map((res) => {
       let data: BaseResponse<ActiveFinancialYear, string> = res.json();
       data.queryString = {};
       return data;
@@ -97,7 +98,7 @@ export class SettingsFinancialYearService {
   public AddFinancialYear(fromYear: string): Observable<BaseResponse<IFinancialYearResponse, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(SETTINGS_FINANCIAL_YEAR_API.ADD_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {fromYear}).map((res) => {
+    return this._http.post(this.config.apiUrl + SETTINGS_FINANCIAL_YEAR_API.ADD_FINANCIAL_YEAR.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), {fromYear}).map((res) => {
       let data: BaseResponse<IFinancialYearResponse, string> = res.json();
       data.queryString = {};
       return data;
