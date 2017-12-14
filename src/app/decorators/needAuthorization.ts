@@ -77,14 +77,13 @@ export class NeedsAuthorization implements CanActivate {
         if (indexOfHome !== -1) {
           this._router.navigate(['/pages/home']);
         } else {
-          if (permissions.length) {
+          if (permissions && permissions.length) {
             let firstPermittedScope = SCOPE_TO_ROUTE_MAPPING.find((scope) => scope.value === permissions[0].name);
             this._router.navigate([firstPermittedScope.key]);
           } else {
-            alert('none');
+            this._router.navigate(['/login']);
           }
         }
-
         return false;
       }
     } else {
