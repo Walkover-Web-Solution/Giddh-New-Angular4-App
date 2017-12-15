@@ -48,6 +48,42 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     { name: 'ENGLISH', value: 'en' },
     { name: 'DUTCH', value: 'nl' }
   ];
+  public datePickerOptions: any = {
+    opens: 'left',
+    locale: {
+      applyClass: 'btn-green',
+      applyLabel: 'Go',
+      fromLabel: 'From',
+      format: 'D-MMM-YY',
+      toLabel: 'To',
+      cancelLabel: 'Cancel',
+      customRangeLabel: 'Custom range'
+    },
+    ranges: {
+      'Last 1 Day': [
+        moment().subtract(1, 'days'),
+        moment()
+      ],
+      'Last 7 Days': [
+        moment().subtract(6, 'days'),
+        moment()
+      ],
+      'Last 30 Days': [
+        moment().subtract(29, 'days'),
+        moment()
+      ],
+      'Last 6 Months': [
+        moment().subtract(6, 'months'),
+        moment()
+      ],
+      'Last 1 Year': [
+        moment().subtract(12, 'months'),
+        moment()
+      ]
+    },
+    startDate: moment().subtract(30, 'days'),
+    endDate: moment()
+  };
   public sideMenu: { isopen: boolean } = { isopen: false };
   public userMenu: { isopen: boolean } = { isopen: false };
   public companyMenu: { isopen: boolean } = { isopen: false };
@@ -64,6 +100,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   public isProd = ENV;
   public isElectron: boolean = isElectron;
   public universalDate: Date[];
+  public isTodaysDateSelected: boolean = true;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   /**
@@ -336,16 +373,22 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
   }
 
   public setApplicationDate(ev) {
-    let data = ev ? ev.viewModel : null;
-    if (data && data.length) {
-      let dates = [data[0], data[1]];
+    let data = ev ? ev : null;
+    if (data && data.picker) {
+      this.isTodaysDateSelected = false;
+      let dates = [data.picker.startDate._d, data.picker.endDate._d];
       this.store.dispatch(this.companyActions.SetApplicationDate(dates));
     } else {
-      this.store.dispatch(this.companyActions.SetApplicationDate(null));
+      let today = _.cloneDeep([moment().subtract(30, 'days'), moment()]);
+      today = [today[0]._d, today[1]._d];
+      this.datePickerOptions.startDate = today[0];
+      this.datePickerOptions.endDate = today[1];
+      this.store.dispatch(this.companyActions.SetApplicationDate(today));
     }
   }
 
   public jumpToToday() {
+    this.isTodaysDateSelected = true;
     this.universalDate = null;
     this.setApplicationDate(null);
   }
