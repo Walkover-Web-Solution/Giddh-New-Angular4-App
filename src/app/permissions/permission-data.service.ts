@@ -16,7 +16,7 @@ export class PermissionDataService {
   constructor(private store: Store<AppState>) {
     this.store.select(createSelector([(state: AppState) => state.session.companies, (state: AppState) => state.session.companyUniqueName], (companies, uniqueName) => {
       let currentCompany = companies.find((company) => company.uniqueName === uniqueName);
-      if (currentCompany) {
+      if (currentCompany && currentCompany.userEntityRoles[0] && currentCompany.userEntityRoles.length) {
         this.getData = currentCompany.userEntityRoles[0].role.scopes;
       }
     })).subscribe();
