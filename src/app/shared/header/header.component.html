@@ -43,6 +43,16 @@
                         </div>
                       </a>
                     </li>
+                    <li class="dmLi trialB">
+                      <a [routerLink]="['/pages/daybook']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Daybook</div>
+                            <div class="subTitle">All Recent Transactions</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
                     <li class="dmLi" [checkPermission]="['MENU', 'REPORT']">
                       <a [routerLink]="['trial-balance-and-profit-loss']">
                         <div class="media">
