@@ -18,7 +18,7 @@ import { TaxControlComponent } from '../../../theme/tax-control/tax-control.comp
 import { LedgerService } from '../../../services/ledger.service';
 import { ReconcileRequest, ReconcileResponse, TransactionsRequest } from '../../../models/api-models/Ledger';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
-import { cloneDeep, forEach } from '../../../lodash-optimized';
+import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
 import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.component';
@@ -158,6 +158,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       if (a) {
         this.amountChanged();
         this.calculateTotal();
+        this.calculateCompoundTotal();
       }
     });
     this.cdRef.markForCheck();
@@ -189,6 +190,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       let total = (this.currentTxn.amount - this.currentTxn.discount) || 0;
       this.currentTxn.total = Number((total + ((total * this.currentTxn.tax) / 100)).toFixed(2));
     }
+    this.calculateCompoundTotal();
   }
 
   public amountChanged() {
@@ -213,6 +215,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
     // this.amountChanged();
     this.calculateTotal();
+    this.calculateCompoundTotal();
   }
 
   public changeQuantity(val: string) {
@@ -220,6 +223,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     this.currentTxn.amount = Number((this.currentTxn.inventory.unit.rate * this.currentTxn.inventory.quantity).toFixed(2));
     // this.amountChanged();
     this.calculateTotal();
+    this.calculateCompoundTotal();
   }
 
   public calculateAmount() {
@@ -232,12 +236,23 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.currentTxn.inventory.unit.rate = Number((this.currentTxn.amount / this.currentTxn.inventory.quantity).toFixed(2));
       }
     }
-
+    this.calculateCompoundTotal();
     if (this.isTotalFirts || this.isAmountFirst) {
       return;
     } else {
       this.isTotalFirts = true;
       this.currentTxn.isInclusiveTax = true;
+    }
+  }
+
+  public calculateCompoundTotal() {
+    let debitTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'DEBIT'), 'total')) || 0;
+    let creditTotal = Number(sumBy(this.blankLedger.transactions.filter(t => t.type === 'CREDIT'), 'total')) || 0;
+
+    if (debitTotal > creditTotal) {
+      this.blankLedger.compoundTotal = Number((debitTotal - creditTotal).toFixed(2));
+    } else {
+      this.blankLedger.compoundTotal = Number((creditTotal - debitTotal).toFixed(2));
     }
   }
 
