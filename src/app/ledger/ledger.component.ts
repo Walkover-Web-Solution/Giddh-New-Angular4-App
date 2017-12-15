@@ -1,6 +1,6 @@
 import { Store } from '@ngrx/store';
 import { AppState } from '../store';
-import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, ViewChild, QueryList, ViewChildren } from '@angular/core';
 import { BlankLedgerVM, LedgerVM, TransactionVM } from './ledger.vm';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -31,6 +31,8 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { IOption } from '../theme/ng-virtual-select/sh-options.interface';
 import { NewLedgerEntryPanelComponent } from './components/newLedgerEntryPanel/newLedgerEntryPanel.component';
 import { PaginationComponent } from 'ngx-bootstrap/pagination/pagination.component';
+import { ShSelectComponent } from 'app/theme/ng-virtual-select/sh-select.component';
+import { setTimeout } from 'timers';
 
 @Component({
   selector: 'ledger',
@@ -41,6 +43,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
   @ViewChild('updateledgercomponent') public updateledgercomponent: ElementViewContainerRef;
   @ViewChild('quickAccountComponent') public quickAccountComponent: ElementViewContainerRef;
   @ViewChild('paginationChild') public paginationChild: ElementViewContainerRef;
+  @ViewChildren(ShSelectComponent) public dropDowns: QueryList<ShSelectComponent>;
   public lc: LedgerVM;
   public accountInprogress$: Observable<boolean>;
   public datePickerOptions: any = {
@@ -450,10 +453,21 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     if (unAccountedTrx) {
       this.selectBlankTxn(unAccountedTrx);
+
+      this.dropDowns.filter(dd => dd.idEl === unAccountedTrx.id).forEach(dd => {
+        setTimeout(() => {
+          dd.show(null);
+        }, 0);
+      });
     } else {
       let newTrx = this.lc.addNewTransaction(event);
       this.lc.blankLedger.transactions.push(newTrx);
       this.selectBlankTxn(newTrx);
+      setTimeout(() => {
+        this.dropDowns.filter(dd => dd.idEl === newTrx.id).forEach(dd => {
+          dd.show(null);
+        });
+      }, 0);
     }
   }
 
@@ -527,7 +541,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
       generateInvoice: false,
       chequeNumber: '',
       chequeClearanceDate: '',
-      invoiceNumberAgainstVoucher: ''
+      invoiceNumberAgainstVoucher: '',
+      compoundTotal: 0
     };
     this.hideNewLedgerEntryPopup();
   }

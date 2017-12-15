@@ -43,10 +43,10 @@
     <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="noBrdRdsModal">
+
                 <div class="modal-header">
-                    <label class="form-label"><h3>Sign Up with Giddh</h3></label>
-                    <button type="button" class="close" (click)="hideEmailModal()" aria-label="Close"><span
-            aria-hidden="true">&times;</span></button>
+                    <h3>Sign Up with Giddh</h3>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideEmailModal()">×</span>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
@@ -81,18 +81,14 @@
         <div class="modal-content">
             <div class="noBrdRdsModal">
                 <div class="modal-header">
-                    <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
-                    <button type="button" class="close" (click)="hideMobileModal()" aria-label="Close"><span
-            aria-hidden="true">&times;</span></button>
+                    <h3>Sign Up with Giddh</h3>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="hideMobileModal()">×</span>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
-                        <div class="input-group phoneNum clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                            <span class="input-group-addon select2-parent">
-                              <sh-select [options]="countryCodeList" class="form-inline"
-                                         (selected)="setCountryCode($event)" formControlName="country"></sh-select>
-                            </span>
-                            <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required/>
+                        <div class="clearfix form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
+                            <sh-select [options]="countryCodeList" class="form-inline" (selected)="setCountryCode($event)" [placeholder]="'CC'" formControlName="country" class="pull-left" style="width: 80px;"></sh-select>
+                            <input class="form-control" formControlName="mobileNumber" type="text" placeholder="Enter your Mobile No" required style="width: calc(100% - 80px);" />
                         </div>
                         <button *ngIf="!(isLoginWithMobileSubmited$ | async)" class="btn sharp btn-block btn-success btn-lg mrT1" (click)="getOtp(mobileVerifyForm.controls['mobileNumber'].value,mobileVerifyForm.controls['country'].value)" [ladda]="isLoginWithMobileInProcess$ | async"
                             [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid">{{ !(isLoginWithMobileInProcess$ |
@@ -118,9 +114,8 @@
         <div class="modal-content">
             <div class="noBrdRdsModal">
                 <div class="modal-header">
-                    <label class="form-label mrT1"><h3>Sign Up with Giddh</h3></label>
-                    <button type="button" class="close" (click)="resetTwoWayAuthModal()" aria-label="Close"><span
-            aria-hidden="true">&times;</span></button>
+                    <h3>Sign Up with Giddh</h3>
+                    <span aria-hidden="true" class="close" data-dismiss="modal" (click)="resetTwoWayAuthModal()">×</span>
                 </div>
                 <div class="modal-body clearfix">
                     <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">
