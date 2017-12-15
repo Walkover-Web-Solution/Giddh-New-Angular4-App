@@ -16,6 +16,9 @@ import { IStockItemDetail, IUnitRateItem } from '../../../models/interfaces/stoc
 import { Subject } from 'rxjs/Subject';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IOption } from '../../../theme/ng-virtual-select/sh-options.interface';
+import { ToasterService } from 'app/services/toaster.service';
+import { InventoryService } from 'app/services/inventory.service';
+import { IGroupsWithStocksHierarchyMinItem } from 'app/models/interfaces/groupsWithStocks.interface';
 
 @Component({
   selector: 'invetory-add-stock',  // <home></home>
@@ -45,11 +48,13 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   public isStockDeleteInProcess$: Observable<boolean>;
   public showLoadingForStockEditInProcess$: Observable<boolean>;
   public showManufacturingItemsError: boolean = false;
+  public groupsData$: Observable<IOption[]>;
+  public selectedGroup: IOption;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private route: ActivatedRoute, private sideBarAction: SidebarAction,
     private _fb: FormBuilder, private inventoryAction: InventoryAction, private _accountService: AccountService,
-    private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef) {
+    private customStockActions: CustomStockUnitAction, private ref: ChangeDetectorRef, private _toasty: ToasterService, private _inventoryService: InventoryService) {
     this.fetchingStockUniqueName$ = this.store.select(state => state.inventory.fetchingStockUniqueName).takeUntil(this.destroyed$);
     this.isStockNameAvailable$ = this.store.select(state => state.inventory.isStockNameAvailable).takeUntil(this.destroyed$);
     this.activeGroup$ = this.store.select(s => s.inventory.activeGroup).takeUntil(this.destroyed$);
@@ -62,6 +67,8 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
   }
 
   public ngOnInit() {
+    // get all groups
+    this.getParentGroupData();
     this.formDivBoundingRect.next({
       top: 0,
       bottom: 0,
@@ -130,9 +137,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
         linkedStocks: this._fb.array([]),
         linkedStockUniqueName: [''],
         linkedQuantity: ['', digitsOnly],
-        linkedStockUnitCode: ['']
+        linkedStockUnitCode: [''],
       }, { validator: stockManufacturingDetailsValidator }),
-      isFsStock: [false]
+      isFsStock: [false],
+      parentGroup: [''],
+      hsnCode: ['', digitsOnly]
     });
 
     // subscribe isFsStock for disabling manufacturingDetails
@@ -330,7 +339,11 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
     }
     let groupName = null;
     this.activeGroup$.take(1).subscribe(s => {
-      groupName = s.uniqueName;
+      if (s) {
+        groupName = s.uniqueName;
+      } else {
+        groupName = '';
+      }
     });
     let val: string = this.addStockForm.controls['name'].value;
     val = uniqueNameInvalidStringReplace(val);
@@ -576,7 +589,7 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
       stockObj.manufacturingDetails = null;
     }
 
-    this.store.dispatch(this.inventoryAction.createStock(stockObj, encodeURIComponent(this.groupUniqueName)));
+    this.store.dispatch(this.inventoryAction.createStock(stockObj, formObj.parentGroup));
   }
 
   public update() {
@@ -625,6 +638,41 @@ export class InventoryAddStockComponent implements OnInit, AfterViewInit, OnDest
 
   public deleteStock() {
     this.store.dispatch(this.inventoryAction.removeStock(this.groupUniqueName, this.stockUniqueName));
+  }
+  
+  public getParentGroupData() {
+    // parentgroup data
+    this._inventoryService.GetGroupsWithStocksFlatten().takeUntil(this.destroyed$).subscribe(data => {
+      if (data.status === 'success') {
+        let flattenData: IOption[] = [];
+        this.flattenDATA(data.body.results, flattenData);
+        this.groupsData$ = Observable.of(flattenData);
+      }
+    });
+  }
+
+  public flattenDATA(rawList: IGroupsWithStocksHierarchyMinItem[], parents: IOption[] = []) {
+    rawList.map(p => {
+      if (p) {
+        let newOption: IOption = { label: '', value: '' };
+        newOption.label = p.name;
+        newOption.value = p.uniqueName;
+        parents.push(newOption);
+        if (p.childStockGroups && p.childStockGroups.length > 0) {
+          this.flattenDATA(p.childStockGroups, parents);
+        }
+      }
+    });
+  }
+
+  // group selected
+  public groupSelected(event: IOption) {
+    let selected;
+    this.groupsData$.subscribe(p => {
+      selected = p.find(q => q.value === event.value);
+    });
+    this.selectedGroup = selected;
+    // this.addGroupForm.updateValueAndValidity();
   }
 
   public ngOnDestroy() {
