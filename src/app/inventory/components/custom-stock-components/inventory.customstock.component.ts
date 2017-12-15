@@ -36,6 +36,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   public stockUnitsList = StockUnits;
   public companyProfile: any;
   public country: string;
+  public selectedUnitName: string;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
   constructor(private store: Store<AppState>, private customStockActions: CustomStockUnitAction, private inventoryAction: InventoryAction,
@@ -85,6 +86,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public saveUnit(): any {
     if (!this.editMode) {
+      this.customUnitObj.name = _.cloneDeep(this.selectedUnitName);
       this.store.dispatch(this.customStockActions.CreateStockUnit(_.cloneDeep(this.customUnitObj)));
     } else {
       this.store.dispatch(this.customStockActions.UpdateStockUnit(_.cloneDeep(this.customUnitObj), this.editCode));
@@ -97,14 +99,20 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   }
 
   public editUnit(item: StockUnitRequest) {
+    console.log(item);
     this.customUnitObj = Object.assign({}, item);
+    console.log(this.customUnitObj.name);
+    this.setUnitName(this.customUnitObj.name);
+    if (this.customUnitObj.parentStockUnit) {
+      this.change(this.customUnitObj.parentStockUnit.code);
+    }
     this.editCode = item.code;
     this.editMode = true;
   }
 
   public clearFields() {
     this.customUnitObj = new StockUnitRequest();
-    this.customUnitObj.name = null;
+    // this.customUnitObj = {};
     this.editMode = false;
     this.editCode = '';
 
@@ -112,9 +120,11 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
 
   public change(v) {
     this.stockUnit$.find(p => {
-      let unit = p.find(q => q.code === v.value);
+      let unit = p.find(q => q.code === v);
       if (unit !== undefined) {
+        console.log(this.customUnitObj.parentStockUnit);
         this.customUnitObj.parentStockUnit = unit;
+        console.log(this.customUnitObj.parentStockUnit);
         return true;
       }
     }).subscribe();
@@ -125,10 +135,12 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy {
   }
 
   public setUnitName(name) {
-    let unit = this.stockUnitsList.filter((obj) => obj.value === name.value || obj.label === name.value);
+    let unit = this.stockUnitsList.filter((obj) => obj.value === name || obj.label === name);
     console.log(unit);
     if (unit !== undefined && unit.length > 0) {
       this.customUnitObj.code = unit[0].value;
+      this.customUnitObj.name = unit[0].value;
+      this.selectedUnitName = unit[0].label;
     }
   }
 }

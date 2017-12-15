@@ -18,6 +18,10 @@ import { DatePickerCustomModule } from '../theme/datepicker/date-picker.module';
 import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
+import { SharedModule } from '../shared/shared.module';
+import { ModalModule } from 'ngx-bootstrap';
+import { AsideCustomStockComponent } from 'app/inventory/components/aside-custom-stock.components/aside-custom-stock.component';
+import { AsideInventoryComponent } from 'app/inventory/components/aside-inventory.components/aside-inventory.components';
 // import { PaginationModule  } from 'ngx-bootstrap/pagination';
 // import { CollapseModule } from 'ngx-bootstrap/collapse';
 // import { ModalModule } from 'ngx-bootstrap/modal';
@@ -38,6 +42,8 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     InventoryStockReportComponent,
     StockgrpListComponent,
     StockListComponent,
+    AsideCustomStockComponent,
+    AsideInventoryComponent
   ],
   exports: [
     InventoryComponent,
@@ -48,7 +54,9 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     InventoryCustomStockComponent,
     InventoryStockReportComponent,
     StockgrpListComponent,
-    StockListComponent
+    StockListComponent,
+    AsideCustomStockComponent,
+    AsideInventoryComponent
   ],
   providers: [],
   imports: [
@@ -61,7 +69,9 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
     DatePickerCustomModule,
     LaddaModule,
     DecimalDigitsModule,
-    ShSelectModule
+    ShSelectModule,
+    SharedModule,
+    ModalModule
   ],
 })
 export class InventoryModule {

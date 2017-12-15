@@ -1,0 +1,20 @@
+<div class="aside-pane">
+    <!-- *ngIf="showAsidePane" -->
+    <button id="close" class="btn btn-sm btn-primary" (click)="closeAsidePane()">X</button>
+    <div class="aside-header" *ngIf="isAddServiceOpen">
+        <h3 class="aside-title">Create Group</h3>
+    </div>
+    <div class="aside-body flexy-child" *ngIf="!hideFirstStep">
+        <div class="pd1 alC">
+            <button class="btn btn-lg btn-primary" [routerLink]="['']" (click)="closeAsidePane()">Create Stock</button>
+        </div>
+        <div class="pd1 alC">
+            <!--  -->
+            <button class="btn btn-lg btn-primary" (click)="toggleGroupPane()">Create Group</button>
+        </div>
+    </div>
+
+    <div class="aside-body flexy-child-1 pdT2" *ngIf="isAddServiceOpen">
+        <inventory-add-group (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
+    </div>
+</div>

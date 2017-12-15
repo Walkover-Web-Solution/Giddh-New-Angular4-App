@@ -639,9 +639,11 @@ header {
     text-transform: capitalize;
 }
 
+
+/* 
 .basic>tbody>tr>td a {
     color: #ff5e01;
-}
+} */
 
 .delt {
     text-align: center;
@@ -4365,4 +4367,22 @@ table td[class*=col-]:last-child {
 
 .dropdown-container .dropdown-menu li:last-child label {
     border-bottom: 0;
+}
+
+
+/* ======================================= INVENTORY CSS ===================================== */
+
+.form_header {
+    padding: 12px 20px;
+    background: #e5e5e5;
+    color: #333333;
+}
+
+.form_body {
+    background: #fff;
+    padding: 20px;
+}
+
+.noHover:hover td {
+    background: #fff !important;
 }

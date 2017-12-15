@@ -66,16 +66,16 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
     this.addGroupForm = this._fb.group({
       name: ['', [Validators.required]],
       uniqueName: ['', [Validators.required]],
-      parentStockGroupUniqueName: [{ value: '', disabled: true }, [Validators.required]],
-      isSelfParent: [true]
+      parentStockGroupUniqueName: [{ value: '', disabled: false }, [Validators.required]],
+      isSelfParent: [false]
     });
     // enable disable parentGroup select
     this.addGroupForm.controls['isSelfParent'].valueChanges.takeUntil(this.destroyed$).subscribe(s => {
       if (s) {
         this.addGroupForm.controls['parentStockGroupUniqueName'].reset();
-        this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
-      } else {
         this.addGroupForm.controls['parentStockGroupUniqueName'].enable();
+      } else {
+        this.addGroupForm.controls['parentStockGroupUniqueName'].disable();
         this.addGroupForm.setErrors({ groupNameInvalid: true });
       }
     });
@@ -118,7 +118,7 @@ export class InventoryAddGroupComponent implements OnInit, OnDestroy, AfterViewI
       if (d) {
         this.addGroupForm.reset();
         this.getParentGroupData();
-        this.router.navigate(['/pages', 'inventory', 'add-group']);
+        // this.router.navigate(['/pages', 'inventory', 'add-group']);
       }
     });
   }
