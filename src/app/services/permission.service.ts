@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequest } from '../models/api-models/Permission';
 import { PERMISSION_API } from './apiurls/permission.api';
 import { UserDetails } from '../models/api-models/loginModels';
@@ -8,6 +8,7 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { IPageStr } from '../permissions/permission.utility';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
 
 @Injectable()
 export class PermissionService {
@@ -17,7 +18,7 @@ export class PermissionService {
   private roleUniqueName: string;
 
   constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService,
-              private _generalService: GeneralService) {
+              private _generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
   }
 
   /*
@@ -28,7 +29,7 @@ export class PermissionService {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
 
-    return this._http.get(PERMISSION_API.GET_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + PERMISSION_API.GET_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<IRoleCommonResponseAndRequest[], string> = res.json();
       data.queryString = {};
       return data;
@@ -41,7 +42,7 @@ export class PermissionService {
   public CreateNewRole(model: CreateNewRoleRequest): Observable<BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(PERMISSION_API.CREATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.post(this.config.apiUrl + PERMISSION_API.CREATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<CreateNewRoleResponse, CreateNewRoleRequest> = res.json();
       data.request = model;
       return data;
@@ -54,7 +55,7 @@ export class PermissionService {
   public UpdateRole(model: IRoleCommonResponseAndRequest): Observable<BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', model.uniqueName), model).map((res) => {
+    return this._http.put(this.config.apiUrl + PERMISSION_API.UPDATE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', model.uniqueName), model).map((res) => {
       let data: BaseResponse<IRoleCommonResponseAndRequest, IRoleCommonResponseAndRequest> = res.json();
       data.request = model;
       return data;
@@ -67,7 +68,7 @@ export class PermissionService {
   public DeleteRole(roleUniqueName: string): Observable<BaseResponse<string, string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.delete(PERMISSION_API.DELETE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', roleUniqueName)).map((res) => {
+    return this._http.delete(this.config.apiUrl + PERMISSION_API.DELETE_ROLE.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)).replace(':roleUniqueName', roleUniqueName)).map((res) => {
       let data: BaseResponse<string, string> = res.json();
       data.request = '';
       data.queryString = {roleUniqueName};
@@ -79,7 +80,7 @@ export class PermissionService {
    * Get all page names
   */
   public GetAllPageNames(): Observable<BaseResponse<IPageStr[], string>> {
-    return this._http.get(PERMISSION_API.GET_ALL_PAGE_NAMES).map((res) => {
+    return this._http.get(this.config.apiUrl + PERMISSION_API.GET_ALL_PAGE_NAMES).map((res) => {
       let data: BaseResponse<IPageStr[], string> = res.json();
       data.queryString = {};
       return data;
@@ -92,7 +93,7 @@ export class PermissionService {
   public ShareCompany(model: { role: string, user: string }): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(PERMISSION_API.SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.put(this.config.apiUrl + PERMISSION_API.SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res.json();
       data.request = model;
       return data;
@@ -105,7 +106,7 @@ export class PermissionService {
   public UnShareCompany(model: { user: string }): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.put(PERMISSION_API.UN_SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
+    return this._http.put(this.config.apiUrl + PERMISSION_API.UN_SHARE_COMPANY.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName)), model).map((res) => {
       let data: BaseResponse<any, any> = res.json();
       data.request = model;
       return data;
@@ -118,7 +119,7 @@ export class PermissionService {
   public GetCompanySharedWith(): Observable<BaseResponse<any, any>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(PERMISSION_API.COMPANY_SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + PERMISSION_API.COMPANY_SHARED_WITH.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<any, any> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<any, any>(e));

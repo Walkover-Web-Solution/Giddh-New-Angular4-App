@@ -4,6 +4,8 @@ import { ExportLedgerRequest, MailLedgerRequest } from '../../../models/api-mode
 import { base64ToBlob, validateEmail } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { ToasterService } from '../../../services/toaster.service';
+import { PermissionDataService } from 'app/permissions/permission-data.service';
+import { some } from '../../../lodash-optimized';
 
 @Component({
   selector: 'export-ledger',
@@ -14,21 +16,30 @@ export class ExportLedgerComponent implements OnInit {
   @Input() public from: string = '';
   @Input() public to: string = '';
   @Output() public closeExportLedgerModal: EventEmitter<boolean> = new EventEmitter();
-  public emailType: string = 'detailed';
+  public emailTypeSelected: string = '';
+  public emailTypeMini: string = '';
+  public emailTypeDetail: string;
   public emailData: string = '';
-  constructor(private _ledgerService: LedgerService, private _toaster: ToasterService) {
+  constructor(private _ledgerService: LedgerService, private _toaster: ToasterService, private _permissionDataService: PermissionDataService) {
     //
   }
 
   public ngOnInit() {
-    //
+    this._permissionDataService.getData.forEach(f => {
+      if (f.name === 'LEDGER') {
+        let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
+        this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';
+        this.emailTypeMini = isAdmin ? 'admin-condensed' : 'view-condensed';
+        this.emailTypeDetail = isAdmin ? 'admin-detailed' : 'view-detailed';
+      }
+    });
   }
 
   public exportLedger() {
     let exportRequest = new ExportLedgerRequest();
     exportRequest.from = this.from;
     exportRequest.to = this.to;
-    exportRequest.type = this.emailType;
+    exportRequest.type = this.emailTypeSelected;
     this._ledgerService.ExportLedger(exportRequest, this.accountUniqueName).subscribe(a => {
       let blob = base64ToBlob(a.body, 'application/vnd.ms-excel', 512);
       return saveAs(blob, `${this.accountUniqueName}.xls`);
@@ -55,7 +66,7 @@ export class ExportLedgerComponent implements OnInit {
     }
 
     if (sendData.recipients.length > 0) {
-      this._ledgerService.MailLedger(sendData, this.accountUniqueName, this.from, this.to, this.emailType).subscribe(sent => {
+      this._ledgerService.MailLedger(sendData, this.accountUniqueName, this.from, this.to, this.emailTypeSelected).subscribe(sent => {
         if (sent.status === 'success') {
           this._toaster.successToast(sent.body, sent.status);
           this.emailData = '';
