@@ -1,4 +1,4 @@
-import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+// import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { PermissionDataService } from './../permissions/permission-data.service';
 import { CheckPermissionDirective } from './../permissions/check-permission.directive';
 import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
@@ -35,6 +35,7 @@ import { ShSelectModule } from '../theme/ng-virtual-select/sh-select.module';
 import { VsForDirective } from '../theme/ng2-vs-for/ng2-vs-for';
 import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
 import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar/dist/lib/perfect-scrollbar.interfaces';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
@@ -81,7 +82,8 @@ export function provideConfig() {
     DisableFormFieldModule,
     ShSelectModule,
     DecimalDigitsModule,
-    BsDatepickerModule
+    // BsDatepickerModule,
+    Daterangepicker
     // Ng2UiAuthModule.forRoot(MyAuthConfig)
   ],
   exports: [LayoutComponent, HeaderComponent, FooterComponent, ManageGroupsAccountsComponent,
