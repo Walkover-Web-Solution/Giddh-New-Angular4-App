@@ -1,5 +1,5 @@
-import { Configuration } from '../../app.constant';
-let COMMON_URL = Configuration.ApiUrl + 'company/:companyUniqueName/';
+
+let COMMON_URL = 'company/:companyUniqueName/';
 export const EBANKS = {
   GET_TOKEN: COMMON_URL + 'ebanks/token', // GET
   GET_ALL_ACCOUNTS: COMMON_URL + 'ebanks', // GET
