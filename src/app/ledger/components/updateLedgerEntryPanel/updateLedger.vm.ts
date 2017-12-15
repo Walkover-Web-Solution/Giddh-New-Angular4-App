@@ -130,7 +130,7 @@ export class UpdateLedgerVm {
     if (account && account.parentGroups[0]) {
       categoryName = this.accountCatgoryGetterFunc(account, accountName);
     } else {
-      let flatterAccounts: IFlattenAccountsResultItem[] = cloneDeep(this.flatternAccountList);
+      let flatterAccounts: IFlattenAccountsResultItem[] = this.flatternAccountList;
       flatterAccounts.map(fa => {
         if (fa.mergedAccounts !== '') {
           let tempMergedAccounts = fa.mergedAccounts.split(',').map(mm => mm.trim());

@@ -2,13 +2,14 @@ import { AccountSharedWithResponse } from '../models/api-models/Account';
 import { CompanyRequest, CompanyResponse, GetCouponResp, StateDetailsRequest, StateDetailsResponse, States, TaxResponse } from '../models/api-models/Company';
 import { Observable } from 'rxjs/Observable';
 import { HttpWrapperService } from './httpWrapper.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional, Inject } from '@angular/core';
 import { UserDetails } from '../models/api-models/loginModels';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { COMPANY_API } from './apiurls/comapny.api';
 import { ErrorHandler } from './catchManager/catchmanger';
 import { BulkEmailRequest } from '../models/api-models/Search';
 import { GeneralService } from './general.service';
+import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
 
 @Injectable()
 export class CompanyService {
@@ -16,7 +17,8 @@ export class CompanyService {
   private user: UserDetails;
   private companyUniqueName: string;
 
-  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService) {
+  constructor(private errorHandler: ErrorHandler, private _http: HttpWrapperService, private _generalService: GeneralService,
+    @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
   }
@@ -25,7 +27,7 @@ export class CompanyService {
    * CreateCompany
    */
   public CreateCompany(company: CompanyRequest): Observable<BaseResponse<CompanyResponse, CompanyRequest>> {
-    return this._http.post(COMPANY_API.CREATE_COMPANY, company)
+    return this._http.post(this.config.apiUrl + COMPANY_API.CREATE_COMPANY, company)
       .map((res) => {
         let data: BaseResponse<CompanyResponse, CompanyRequest> = res.json();
         data.request = company;
@@ -39,7 +41,7 @@ export class CompanyService {
    */
   public CompanyList(): Observable<BaseResponse<CompanyResponse[], string>> {
     this.user = this._generalService.user;
-    return this._http.get(COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName))
+    return this._http.get(this.config.apiUrl + COMPANY_API.COMPANY_LIST.replace(':uniqueName', this.user.uniqueName))
       .map((res) => {
         let data: BaseResponse<CompanyResponse[], string> = res.json();
         return data;
@@ -51,7 +53,7 @@ export class CompanyService {
    * DeleteCompany
    */
   public DeleteCompany(uniqueName: string): Observable<BaseResponse<string, string>> {
-    return this._http.delete(COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName))
+    return this._http.delete(this.config.apiUrl + COMPANY_API.DELETE_COMPANY.replace(':uniqueName', uniqueName))
       .map((res) => {
         let data: BaseResponse<string, string> = res.json();
         data.queryString = {uniqueName};
@@ -65,9 +67,9 @@ export class CompanyService {
   public getStateDetails(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
     let url = '';
     if (cmpUniqueName) {
-      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
+      url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
     } else {
-      url = COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
+      url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
     }
     return this._http.get(url).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
@@ -80,9 +82,9 @@ export class CompanyService {
   public getStateDetailsAuthGuard(cmpUniqueName?: string): Observable<BaseResponse<StateDetailsResponse, string>> {
     let url = '';
     if (cmpUniqueName) {
-      url = COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
+      url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace(':companyUniqueName', encodeURIComponent(cmpUniqueName ? cmpUniqueName : ''));
     } else {
-      url = COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
+      url = this.config.apiUrl + COMPANY_API.GET_STATE_DETAILS.replace('?companyUniqueName=:companyUniqueName', '');
     }
     return this._http.get(url).map((res) => {
       let data: BaseResponse<StateDetailsResponse, string> = res.json();
@@ -92,7 +94,7 @@ export class CompanyService {
 
   // Effects need to be review
   public setStateDetails(stateDetails: StateDetailsRequest): Observable<BaseResponse<string, StateDetailsRequest>> {
-    return this._http.post(COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
+    return this._http.post(this.config.apiUrl + COMPANY_API.SET_STATE_DETAILS, stateDetails).map((res) => {
       let data: BaseResponse<string, StateDetailsRequest> = res.json();
       data.request = stateDetails;
       return data;
@@ -102,7 +104,7 @@ export class CompanyService {
   public getComapnyTaxes(): Observable<BaseResponse<TaxResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + COMPANY_API.TAX.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<TaxResponse[], string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<TaxResponse[], string>(e));
@@ -111,7 +113,7 @@ export class CompanyService {
   public getComapnyUsers(): Observable<BaseResponse<AccountSharedWithResponse[], string>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.get(COMPANY_API.GET_COMPANY_USERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
+    return this._http.get(this.config.apiUrl + COMPANY_API.GET_COMPANY_USERS.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).map((res) => {
       let data: BaseResponse<AccountSharedWithResponse[], string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<AccountSharedWithResponse[], string>(e));
@@ -120,7 +122,7 @@ export class CompanyService {
   public sendEmail(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(COMPANY_API.SEND_EMAIL
+    return this._http.post(this.config.apiUrl + COMPANY_API.SEND_EMAIL
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         .replace(':from', encodeURIComponent(request.params.from))
         .replace(':to', encodeURIComponent(request.params.to))
@@ -132,7 +134,7 @@ export class CompanyService {
   public sendSms(request: BulkEmailRequest): Observable<BaseResponse<string, BulkEmailRequest>> {
     this.user = this._generalService.user;
     this.companyUniqueName = this._generalService.companyUniqueName;
-    return this._http.post(COMPANY_API.SEND_SMS
+    return this._http.post(this.config.apiUrl + COMPANY_API.SEND_SMS
         .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
         .replace(':from', encodeURIComponent(request.params.from))
         .replace(':to', encodeURIComponent(request.params.to))
@@ -145,7 +147,7 @@ export class CompanyService {
    * get all states
    */
   public getAllStates(): Observable<BaseResponse<States[], string>> {
-    return this._http.get(COMPANY_API.GET_ALL_STATES).map((res) => {
+    return this._http.get(this.config.apiUrl + COMPANY_API.GET_ALL_STATES).map((res) => {
       let data: BaseResponse<States[], string> = res.json();
       return data;
     }).catch((e) => this.errorHandler.HandleCatch<States[], string>(e));
@@ -158,7 +160,7 @@ export class CompanyService {
    * @memberof CompanyService
    */
   public getCoupon(couponCode: string): Observable<BaseResponse<GetCouponResp, string>> {
-    return this._http.get(COMPANY_API.GET_COUPON
+    return this._http.get(this.config.apiUrl + COMPANY_API.GET_COUPON
       .replace(':code', encodeURIComponent(couponCode))).map((res) => {
       let data: BaseResponse<GetCouponResp, string> = res.json();
       return data;
