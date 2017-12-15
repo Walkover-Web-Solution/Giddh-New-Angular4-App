@@ -96,7 +96,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       .subscribe((resp: any[]) => {
         if (resp[0] && resp[1] && resp[2].status === 'success') {
           //#region flattern group list assign process
-          this.vm.flatternAccountList = _.cloneDeep(resp[0]);
+          this.vm.flatternAccountList = resp[0];
           this.activeAccount$ = Observable.of(resp[2].body);
           let accountDetails: AccountResponse = resp[2].body;
 

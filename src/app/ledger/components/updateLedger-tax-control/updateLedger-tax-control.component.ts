@@ -88,9 +88,9 @@ export class UpdateLedgerTaxControlComponent implements OnInit, OnDestroy, OnCha
         taxObj.amount = tx.taxDetail[0].taxValue;
       }
       taxObj.isChecked = (this.applicableTaxes && (this.applicableTaxes.indexOf(tx.uniqueName) > -1));
-      if (taxObj.amount && taxObj.amount > 0) {
-        this.taxRenderData.push(taxObj);
-      }
+      // if (taxObj.amount && taxObj.amount > 0) {
+      this.taxRenderData.push(taxObj);
+      // }
     });
   }
 
