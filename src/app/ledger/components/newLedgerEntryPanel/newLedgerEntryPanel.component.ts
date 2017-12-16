@@ -25,6 +25,7 @@ import { ShSelectComponent } from '../../../theme/ng-virtual-select/sh-select.co
 import { LoaderService } from '../../../loader/loader.service';
 import { UploaderOptions } from 'ngx-uploader/index';
 import { AccountResponse } from 'app/models/api-models/Account';
+import { Configuration } from 'app/app.constant';
 
 @Component({
   selector: 'new-ledger-entry-panel',
@@ -276,7 +277,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
       this.companyName$.take(1).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
-        url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+        url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
         data: { company: companyUniqueName },
