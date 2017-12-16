@@ -143,16 +143,16 @@
                                                 </div>
                                             </a>
                                         </li>
-                                        <!-- <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
-                      <a [routerLink]="['permissions']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Permissions</div>
-                            <div class="subTitle">Add and manage Roles</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li> -->
+                                        <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
+                                        <a [routerLink]="['permissions']">
+                                            <div class="media">
+                                            <div class="media-body">
+                                                <div class="title">Permissions</div>
+                                                <div class="subTitle">Add and manage Roles</div>
+                                            </div>
+                                            </div>
+                                        </a>
+                                        </li>
                                     </ul>
                                 </perfect-scrollbar>
                             </div>
