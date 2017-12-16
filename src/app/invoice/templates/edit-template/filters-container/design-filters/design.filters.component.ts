@@ -11,6 +11,7 @@ import { ToasterService } from '../../../../../services/toaster.service';
 import { INVOICE_API } from '../../../../../services/apiurls/invoice';
 import { Observable } from 'rxjs/Observable';
 import { UploaderOptions } from 'ngx-uploader/index';
+import { Configuration } from './../../../../../app.constant';
 
 export class TemplateDesignUISectionVisibility {
   public templates: boolean = false;
@@ -177,9 +178,9 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
     this.companyUniqueName$.take(1).subscribe(a => companyUniqueName = a);
     const event: UploadInput = {
       type: 'uploadAll',
-      url: INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
+      url: Configuration.ApiUrl + INVOICE_API.UPLOAD_LOGO.replace(':companyUniqueName', encodeURIComponent(companyUniqueName)),
       method: 'POST',
-      headers: {'Session-Id': sessionId},
+      headers: { 'Session-Id': sessionId },
     };
 
     this.uploadInput.emit(event);
@@ -206,15 +207,15 @@ export class DesignFiltersContainerComponent implements OnInit, OnDestroy {
   }
 
   public cancelUpload(id: string): void {
-    this.uploadInput.emit({type: 'cancel', id});
+    this.uploadInput.emit({ type: 'cancel', id });
   }
 
   public removeFile(id: string): void {
-    this.uploadInput.emit({type: 'remove', id});
+    this.uploadInput.emit({ type: 'remove', id });
   }
 
   public removeAllFiles(): void {
-    this.uploadInput.emit({type: 'removeAll'});
+    this.uploadInput.emit({ type: 'removeAll' });
   }
 
   public toogleLogoVisibility(): void {
