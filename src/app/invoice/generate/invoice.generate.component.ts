@@ -70,13 +70,6 @@ export class InvoiceGenerateComponent implements OnInit {
     private _accountService: AccountService
   ) {
     // set initial values
-    // this.startDate = new Date();
-    // this.endDate = new Date();
-    // this.startDate.setDate(this.startDate.getDate() - 30);
-    // this.endDate.setDate(this.endDate.getDate());
-    // this.ledgerSearchRequest.dateRange = [this.startDate, this.endDate];
-    // this.ledgerSearchRequest.from = moment(this.startDate).format(GIDDH_DATE_FORMAT);
-    // this.ledgerSearchRequest.to = moment(this.endDate).format(GIDDH_DATE_FORMAT);
     this.ledgerSearchRequest.page = 1;
     this.ledgerSearchRequest.count = 12;
   }

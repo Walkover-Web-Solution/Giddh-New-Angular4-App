@@ -91,13 +91,13 @@ export class MfReportComponent implements OnInit, OnDestroy {
     });
 
     // Refresh report data according to universal date
-    this.store.select(p => p.session.applicationDate).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((value: any) => {
-        this.universalDate = _.cloneDeep(value);
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+        this.universalDate = _.cloneDeep(dateObj);
         if (this.universalDate) {
           this.mfStockSearchRequest.dateRange = this.universalDate;
         }
         this.getReportDataOnFresh();
-    });
+    })).subscribe();
   }
 
   public initializeSearchReqObj() {
