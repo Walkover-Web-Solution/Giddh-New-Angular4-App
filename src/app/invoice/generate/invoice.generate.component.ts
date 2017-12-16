@@ -1,3 +1,4 @@
+import { createSelector } from 'reselect';
 import { IOption } from './../../theme/ng-select/option.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
@@ -118,13 +119,13 @@ export class InvoiceGenerateComponent implements OnInit {
       });
 
     // Refresh report data according to universal date
-    this.store.select(p => p.session.applicationDate).distinctUntilChanged().takeUntil(this.destroyed$).subscribe((value: any) => {
-      this.universalDate = _.cloneDeep(value);
+    this.store.select(createSelector([(state: AppState) => state.session.applicationDate], (dateObj: Date[]) => {
+      this.universalDate = _.cloneDeep(dateObj);
       if (this.universalDate) {
         this.ledgerSearchRequest.dateRange = this.universalDate;
       }
       this.getLedgersOfInvoice();
-    });
+    })).subscribe();
   }
 
   public closeInvoiceModel(e) {
