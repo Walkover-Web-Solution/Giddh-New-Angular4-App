@@ -11,7 +11,7 @@ import { AuthKeyResponse, LinkedInRequestModel, SignupWithMobile, UserDetails, V
 import { ErrorHandler } from './catchManager/catchmanger';
 import { Headers, Http } from '@angular/http';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 import { SignUpWithPassword, LoginWithPassword } from '../models/api-models/login';
 
 @Injectable()
