@@ -29,7 +29,8 @@ const otherFiltersOptions = [
 
 const gstrOptions = [
   { name: 'GSTR1', uniqueName: 'gstr1-excel-export' },
-  { name: 'GSTR2', uniqueName: 'gstr2-excel-export' }
+  { name: 'GSTR2', uniqueName: 'gstr2-excel-export' },
+  { name: 'GSTR3B', uniqueName: 'gstr3-excel-export' }
 ];
 
 const purchaseReportOptions = [
@@ -130,6 +131,7 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
   public invoiceSelected: boolean = false;
   public editMode: boolean = false;
   public pageChnageState: boolean = false;
+  public userEmail: string = '';
   private intervalId: any;
   private undoEntryTypeChange: boolean = false;
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -621,4 +623,16 @@ export class PurchaseInvoiceComponent implements OnInit, OnDestroy {
     }
   }
 
+  public emailSheet(isDownloadDetailSheet: boolean) {
+    let check = moment(this.selectedDateForGSTR1, 'YYYY/MM/DD');
+    let monthToSend = check.format('MM') + '-' + check.format('YYYY');
+    if (!monthToSend) {
+      this.toasty.errorToast('Please select a month');
+    } else if (!this.activeCompanyGstNumber) {
+      this.toasty.errorToast('No GST Number found for selected company');
+    } else {
+      this.store.dispatch(this.invoicePurchaseActions.SendGSTR3BEmail(monthToSend, this.activeCompanyGstNumber, isDownloadDetailSheet,  this.userEmail));
+      this.userEmail = '';
+    }
+  }
 }
