@@ -75,7 +75,7 @@
         "prep:dist": "ncp node_modules_electron dist && rimraf dist/yarn.lock",
         "rimraf": "rimraf",
         "server:dev:hmr": "npm run server:dev -- --hotOnly",
-        "server:aot:dev": "cross-env BUILD_AOT=1 npm run server:dev",
+        "server:aot:dev": "cross-env BUILD_AOT=0 npm run server:dev",
         "server:dev": "npm run webpack-dev-server -- --config config/webpack.dev.js --open --progress --profile --watch --content-base src/",
         "server:prod": "http-server dist -p 3000 -c-1 --cors",
         "server:prod:ci": "http-server dist -p 3000 -c-1 --cors",
