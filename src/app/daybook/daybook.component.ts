@@ -11,8 +11,8 @@ import { ModalDirective } from 'ngx-bootstrap';
 })
 export class DaybookComponent {
   // public trxRequest: TransactionsRequest;
-   public DateRange: string;
-  
+  public dateRange: string;
+public companyName:string;
   @ViewChild('advanceSearchModel') public advanceSearchModel: ModalDirective;
   public datePickerOptions: any = {
     locale: {
@@ -51,9 +51,18 @@ export class DaybookComponent {
   };
   constructor(private store: Store<AppState>) {
     // this.trxRequest = new TransactionsRequest();
+    let companyUniqueName, company;
+    store.select(p => p.session.companyUniqueName)
+      .subscribe(p => companyUniqueName = p);
+
+    store.select(p => p.session.companies)
+      .subscribe(p => {
+        company = p.find(q => q.uniqueName === companyUniqueName)
+      });
+      this.companyName=company.name;
   }
   public selectedDate(value: any) {
-    this.DateRange=moment(value.picker.startDate).format('DD-MM-YYYY')+' '+moment(value.picker.endDate).format('DD-MM-YYYY');
+    this.dateRange = `${moment(value.picker.startDate).format('DD-MM-YYYY')} - ${moment(value.picker.endDate).format('DD-MM-YYYY')}`;
     // this.trxRequest.from = moment(value.picker.startDate).format('DD-MM-YYYY');
     // this.trxRequest.to = moment(value.picker.endDate).format('DD-MM-YYYY');
     // this.trxRequest.page = 0;

@@ -21,19 +21,6 @@
                 </span>
               </div>
             </div>
-
-            <div class="col-xs-5">
-              <label for="">Merge Accounts</label>
-              <p>
-                <small>you can merge multiple accounts; further filters will depend on this.</small>
-              </p>
-            </div>
-            <div class="col-xs-7">
-              <div class="form-group">
-                <sh-select [options]="accounts$ | async" name="particulars" (onClear)="onDDClear('accountUniqueNames')" (selected)="onDDElementSelect('accountUniqueNames', $event)"
-                  [isFilterEnabled]="true" [multiple]="true" [placeholder]="'Select Accounts'"></sh-select>
-              </div>
-            </div>
             </div>
             
         </div>
@@ -204,7 +191,7 @@
                 </div>
               </div>
             </div>
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-xs-5">
                 <label for="">Description</label>
               </div>
@@ -213,7 +200,7 @@
                   <input type="text" formControlName="description" placeholder="Description" class="form-control">
                 </div>
               </div>
-            </div>
+            </div> -->
           </div>
         </ng-container>
         <div class="col-xs-12 text-right">
