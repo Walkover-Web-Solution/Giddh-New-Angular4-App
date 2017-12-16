@@ -23,6 +23,7 @@ import { IFlattenAccountsResultItem } from '../../../models/interfaces/flattenAc
 import { base64ToBlob } from '../../../shared/helpers/helperFunctions';
 import { saveAs } from 'file-saver';
 import { LoaderService } from '../../../loader/loader.service';
+import { Configuration } from 'app/app.constant';
 
 @Component({
   selector: 'update-ledger-entry-panel',
@@ -275,7 +276,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
       this.companyName$.take(1).subscribe(a => companyUniqueName = a);
       const event: UploadInput = {
         type: 'uploadAll',
-        url: LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
+        url: Configuration.ApiUrl + LEDGER_API.UPLOAD_FILE.replace(':companyUniqueName', companyUniqueName),
         method: 'POST',
         fieldName: 'file',
         data: { company: companyUniqueName },
