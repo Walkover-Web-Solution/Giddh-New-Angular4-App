@@ -1,3 +1,4 @@
+import { AccountsAction } from './../../../actions/accounts.actions';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { LedgerService } from '../../../services/ledger.service';
 import { MagicLinkRequest } from '../../../models/api-models/Ledger';
@@ -21,15 +22,17 @@ export class ShareLedgerComponent implements OnInit {
   public email: string;
   public magicLink: string = '';
   public isCopied: boolean = false;
-  public activeAccountSharedWith$: Observable<AccountSharedWithResponse[]>;
+  public activeAccountSharedWith: any[] = [];
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
   constructor(private _ledgerService: LedgerService, private _accountService: AccountService,
-    private store: Store<AppState>, private _ledgerActions: LedgerActions) {
-    this.activeAccountSharedWith$ = this.store.select(state => state.ledger.activeAccountSharedWith).takeUntil(this.destroyed$);
+    private store: Store<AppState>, private _ledgerActions: LedgerActions, private accountActions: AccountsAction) {
   }
 
   public ngOnInit() {
     this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
+    this.store.select(state => state.ledger.activeAccountSharedWith).subscribe((data) => {
+      this.activeAccountSharedWith = _.cloneDeep(data);
+    });
   }
 
   public getMagicLink() {
@@ -54,14 +57,23 @@ export class ShareLedgerComponent implements OnInit {
   }
 
   public shareAccount() {
-    let accObject = new ShareAccountRequest();
-    accObject.role = 'view_only';
-    accObject.user = this.email;
-    this.store.dispatch(this._ledgerActions.shareAccount(accObject, this.accountUniqueName));
+    let userRole = {
+      emailId: this.email,
+      entity: 'account',
+      entityUniqueName: this.accountUniqueName,
+    };
+    let selectedPermission = 'view';
+    this.store.dispatch(this.accountActions.shareEntity(userRole, selectedPermission.toLowerCase()));
     this.email = '';
+    setTimeout(() => {
+      this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
+    }, 1000);
   }
 
-  public unShareAccount(val) {
-    this.store.dispatch(this._ledgerActions.unShareAccount(val, this.accountUniqueName));
+  public unShareAccount(entryUniqueName, val) {
+    this.store.dispatch(this.accountActions.unShareEntity(entryUniqueName, 'account', this.accountUniqueName));
+    setTimeout(() => {
+      this.store.dispatch(this._ledgerActions.sharedAccountWith(this.accountUniqueName));
+    }, 1000);
   }
 }
