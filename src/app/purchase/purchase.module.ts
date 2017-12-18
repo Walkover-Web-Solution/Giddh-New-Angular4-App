@@ -1,3 +1,4 @@
+import { TooltipModule } from 'ngx-bootstrap/tooltip';
 import { NgModule } from '@angular/core';
 import { PurchaseRoutingModule } from './purchase.routing.module';
 import { PurchaseInvoiceComponent } from './purchase-invoice/purchase.invoice.component';
@@ -25,7 +26,8 @@ import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight
     BsDropdownModule,
     Daterangepicker,
     LaddaModule,
-    HighlightModule
+    HighlightModule,
+    TooltipModule
   ]
 })
 export class PurchaseModule { }
