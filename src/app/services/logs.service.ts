@@ -9,7 +9,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { LOGS_API } from './apiurls/logs.api';
 import { LogsRequest, LogsResponse } from '../models/api-models/Logs';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class LogsService {
