@@ -1,9 +1,4 @@
-
-    export interface DayBookApiModel {
-        status: string;
-        body: Body;
-    }
-    export interface Body {
+    export interface DayBookResponseModel {
         entries: Entry[];
         page: number;
         count: number;
@@ -37,7 +32,7 @@
 
 
 
-    
+
 
 
 
