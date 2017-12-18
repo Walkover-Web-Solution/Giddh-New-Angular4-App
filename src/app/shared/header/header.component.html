@@ -33,22 +33,22 @@
                         </div>
                       </a>
                     </li>
-                    <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
-                      <a [routerLink]="['/pages/sales']">
-                        <div class="media">
-                          <div class="media-body">
-                            <div class="title">Sales</div>
-                            <div class="subTitle">Generate sales invoice</div>
-                          </div>
-                        </div>
-                      </a>
-                    </li>
                     <li class="dmLi trialB">
                       <a [routerLink]="['/pages/daybook']">
                         <div class="media">
                           <div class="media-body">
                             <div class="title">Daybook</div>
                             <div class="subTitle">All Recent Transactions</div>
+                          </div>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="dmLi trialB" [checkPermission]="['MENU', 'INVOICE']">
+                      <a [routerLink]="['/pages/sales']">
+                        <div class="media">
+                          <div class="media-body">
+                            <div class="title">Sales</div>
+                            <div class="subTitle">Generate sales invoice</div>
                           </div>
                         </div>
                       </a>
@@ -143,7 +143,7 @@
                         </div>
                       </a>
                     </li>
-                    <!-- <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
+                    <li class="dmLi" *ngIf="userIsSuperUser" [checkPermission]="['MENU', 'MANAGE']">
                       <a [routerLink]="['permissions']">
                         <div class="media">
                           <div class="media-body">
@@ -152,7 +152,7 @@
                           </div>
                         </div>
                       </a>
-                    </li> -->
+                    </li>
                   </ul>
                 </perfect-scrollbar>
               </div>
@@ -185,7 +185,7 @@
         <li class="company-name" dropdown [isOpen]="companyMenu.isopen">
           <a id="cmpWrp" (click)="false" class="clearfix" dropdownToggle>
             <span class="icon-dropdown"></span>
-            <div class="cText">
+            <div class="cText text-right">
               <span class="cName">{{ (selectedCompany | async)?.name }}</span>
               <span class="fyear"> {{ (selectedCompany | async)?.activeFinancialYear.uniqueName }} </span>
             </div>
@@ -241,7 +241,8 @@
       </ul>
     </div>
   </nav>
-  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async" (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
+  <accounts-side-bar (clickOutside)="closeSidebar($event.target.id)" [noGroups]="noGroups" [search]='accountSearchValue' [flyAccounts]="flyAccounts | async"
+    (openAddAndManage)="showManageGroupsModal()"></accounts-side-bar>
 </header>
 
 <!--add and manage group account modal -->
