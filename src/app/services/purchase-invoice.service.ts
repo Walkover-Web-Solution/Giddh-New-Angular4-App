@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { PURCHASE_INVOICE_API } from './apiurls/purchase-invoice.api';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 export interface Account {
   name: string;
