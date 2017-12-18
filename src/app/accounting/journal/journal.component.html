@@ -1,1 +1,68 @@
-<h1>Welcome to Jornal</h1>
+<div class="col-xs-10">
+  <div class="row">
+    <div class="col-xs-12 pdT2">
+        <span class="label label-default pd1 isActive">Journal</span> No.1
+        <div class="pull-right text-right">
+            15-Nov-2017 <br>
+            Wednesday
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="table-responsive bdrT bdrB">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width:80%;">Particulars</th>
+                        <th>Debit</th>
+                        <th>Credit</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Something</td>
+                        <td>100</td>
+                        <td>200</td>
+                    </tr>
+                    <tr>
+                        <td>Something else</td>
+                        <td>200</td>
+                        <td>230.30</td>
+                    </tr>
+                    <tr>
+                        <td>Some other things</td>
+                        <td>100</td>
+                        <td>120</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="col-xs-12 pdT2">
+        <div class="form-group input-group">
+            <span class="input-group-addon">By</span>
+            <input type="text" class="form-control" (focus)="showLedgerAccountList = true">
+        </div>
+        <div class="form-group input-group">
+            <span class="input-group-addon">To</span>
+            <input type="text" class="form-control" (focus)="showLedgerAccountList = true">
+        </div>
+    </div>
+  </div>
+</div>
+<div class="col-xs-2" style="height:100vh;background:black;color:white;">
+  <div *ngIf="showLedgerAccountList" (click)="showLedgerAccountList = true;" style="overflow-y:auto;height:100%;width:250px;background:white;position: absolute;left: -250px;z-index: 3;">
+      <h3 class="pd1 bdrB isActive">List of Ledger Accounts</h3>
+      <input type="text" class="form-control" #searchBox>
+      <div *ngFor="let account of accounts$ | async" style="color:black;">
+        {{ account.label }}
+      </div>
+  </div>
+  <ul class="pd2">
+    <li>F1: Accounting Voucher</li>
+    <li>F2: Order Vouchers</li>
+    <li>F3: Payroll Voucher</li>
+    <li>F4: Date</li>
+    <li>F5: Company</li>
+    <li>F6: Contra</li>
+  </ul>
+</div>

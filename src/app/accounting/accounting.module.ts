@@ -5,7 +5,7 @@ import { AccountingComponent } from './accounting.component';
 import { ShSelectModule } from './../theme/ng-virtual-select/sh-select.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { NgModule } from '@angular/core';
+import { NgModule, InjectionToken } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { BsDatepickerModule, DatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ModalModule } from 'ngx-bootstrap/modal';
@@ -33,7 +33,7 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
     LaddaModule,
     SelectModule,
     DecimalDigitsModule,
-    ShSelectModule
+    ShSelectModule,
   ],
 })
 export class AccountingModule {
