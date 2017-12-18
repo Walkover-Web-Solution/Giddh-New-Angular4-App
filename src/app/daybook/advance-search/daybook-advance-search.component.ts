@@ -7,13 +7,13 @@ import { Observable } from 'rxjs/Observable';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import * as moment from 'moment';
 import { createSelector } from 'reselect';
-import { ILedgerAdvanceSearchRequest } from 'app/models/api-models/Ledger';
 import { IOption } from 'app/theme/ng-select/option.interface';
 import { GroupService } from 'app/services/group.service';
 import { InventoryAction } from 'app/actions/inventory/inventory.actions';
 import { AppState } from 'app/store';
-import { LedgerActions } from 'app/actions/ledger/ledger.actions';
+import { DaybookActions } from 'app/actions/daybook/daybook.actions';
 import { AccountService } from 'app/services/account.service';
+import { DayBookRequestModel } from 'app/models/api-models/DaybookRequest';
 
 const COMPARISON_FILTER = [
   { label: 'Greater Than', value: 'greaterThan' },
@@ -30,13 +30,13 @@ const COMPARISON_FILTER = [
 
 export class DaybookAdvanceSearchModelComponent implements OnInit {
 
-  @Output() public closeModelEvent: EventEmitter<boolean> = new EventEmitter(true);
+  @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
 
-  public advanceSearchObject: ILedgerAdvanceSearchRequest = null;
+  public advanceSearchObject: DayBookRequestModel = null;
   public advanceSearchForm: FormGroup;
   public showOtherDetails: boolean = false;
-  public showChequeDatePicker: boolean  = false;
-  public bsConfig: Partial<BsDatepickerConfig> = {showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY'};
+  public showChequeDatePicker: boolean = false;
+  public bsConfig: Partial<BsDatepickerConfig> = { showWeekNumbers: false, dateInputFormat: 'DD-MM-YYYY' };
   public accounts$: Observable<IOption[]>;
   public groups$: Observable<IOption[]>;
   public voucherTypeList: Observable<IOption[]>;
@@ -48,7 +48,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
   private toDate: string = '';
   private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
 
-  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _ledgerActions: LedgerActions, private _accountService: AccountService ) {
+  constructor(private _groupService: GroupService, private inventoryAction: InventoryAction, private store: Store<AppState>, private fb: FormBuilder, private _daybookActions: DaybookActions, private _accountService: AccountService) {
 
     this.advanceSearchForm = this.fb.group({
       accountUniqueNames: [[]],
@@ -100,7 +100,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
       if (data.status === 'success') {
         let accounts: IOption[] = [];
         data.body.results.map(d => {
-          accounts.push({label: d.name, value: d.uniqueName});
+          accounts.push({ label: d.name, value: d.uniqueName });
         });
         this.accounts$ = Observable.of(accounts);
       }
@@ -112,7 +112,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
         let units = data.results;
 
         return units.map(unit => {
-          return {label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName};
+          return { label: ` ${unit.name} (${unit.uniqueName})`, value: unit.uniqueName };
         });
       }
     })).takeUntil(this.destroyed$);
@@ -122,7 +122,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
       if (data.status === 'success') {
         let groups: IOption[] = [];
         data.body.results.map(d => {
-          groups.push({label: d.groupName, value: d.groupUniqueName});
+          groups.push({ label: d.groupName, value: d.groupUniqueName });
         });
         this.groups$ = Observable.of(groups);
       }
@@ -158,7 +158,9 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
   }
 
   public onCancel() {
-    this.closeModelEvent.emit(true);
+    this.closeModelEvent.emit({
+      cancle: true
+    });
   }
 
   /**
@@ -173,13 +175,20 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
    * onSearch
    */
   public onSearch() {
-    let dataToSend = _.cloneDeep(this.advanceSearchForm.value);
+    let dataToSend = _.cloneDeep(this.advanceSearchForm.value) as DayBookRequestModel;
     if (dataToSend.dateOnCheque) {
       dataToSend.dateOnCheque = moment(dataToSend.dateOnCheque).format('DD-MM-YYYY');
     }
+    let fromDate = this.fromDate;
+    let toDate = this.toDate;
     console.log('advanceSearchForm is :', dataToSend);
-    //this.store.dispatch(this._ledgerActions.doAdvanceSearch(dataToSend, this.accountUniqueName, this.fromDate, this.toDate));
-    this.closeModelEvent.emit(true);
+    // this.store.dispatch(this._daybookActions.GetDaybook(dataToSend, this.fromDate, this.toDate));
+    this.closeModelEvent.emit({
+      dataToSend,
+      fromDate,
+      toDate,
+      cancle: false
+    });
     // this.advanceSearchForm.reset();
   }
 
@@ -194,22 +203,22 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
     switch (type) {
       case 'particulars':
         this.advanceSearchForm.get('particulars').patchValue(values);
-      break;
+        break;
       case 'accountUniqueNames':
         this.advanceSearchForm.get('accountUniqueNames').patchValue(values);
-      break;
+        break;
       case 'vouchers':
         this.advanceSearchForm.get('vouchers').patchValue(values);
-      break;
+        break;
       case 'inventory':
         this.advanceSearchForm.get('inventory.inventories').patchValue(values);
-      break;
+        break;
       case 'groupUniqueNames':
         this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
-      break;
+        break;
       case 'groupUniqueNames':
         this.advanceSearchForm.get('groupUniqueNames').patchValue(values);
-      break;
+        break;
     }
   }
 
@@ -230,109 +239,109 @@ export class DaybookAdvanceSearchModelComponent implements OnInit {
         this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'amount-lessThan':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(true);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'amount-greaterThanOrEquals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(true);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-lessThanOrEquals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(true);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-equals':
         this.advanceSearchForm.get('includeAmount').patchValue(true);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(true);
-      break;
+        break;
       case 'amount-exclude':
         this.advanceSearchForm.get('includeAmount').patchValue(false);
         this.advanceSearchForm.get('amountGreaterThan').patchValue(false);
         this.advanceSearchForm.get('amountLessThan').patchValue(false);
         this.advanceSearchForm.get('amountEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-greaterThan':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-lessThan':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryQty-greaterThanOrEquals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-lessThanOrEquals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-equals':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(true);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryQty-exclude':
         this.advanceSearchForm.get('inventory.includeQuantity').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.quantityEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-greaterThan':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-lessThan':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
       case 'inventoryVal-greaterThanOrEquals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-lessThanOrEquals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-equals':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(true);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(true);
-      break;
+        break;
       case 'inventoryVal-exclude':
         this.advanceSearchForm.get('inventory.includeItemValue').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemGreaterThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemLessThan').patchValue(false);
         this.advanceSearchForm.get('inventory.includeItemEqualTo').patchValue(false);
-      break;
+        break;
     }
   }
 
