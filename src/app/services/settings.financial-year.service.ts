@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { SETTINGS_FINANCIAL_YEAR_API } from './apiurls/settings.financial-year.api';
 import { ActiveFinancialYear } from '../models/api-models/Company';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 export interface ILockFinancialYearRequest {
   lockAll: boolean;

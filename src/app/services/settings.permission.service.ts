@@ -7,7 +7,7 @@ import { ErrorHandler } from './catchManager/catchmanger';
 import { SETTINGS_PERMISSION_API } from './apiurls/settings.permission.api';
 import { IUpdatePermissionResponse, ShareRequestForm } from '../models/api-models/Permission';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class SettingsPermissionService {
