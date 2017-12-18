@@ -8,7 +8,7 @@ import { MANUFACTURING_API } from './apiurls/manufacturing.api';
 import { ICommonResponseOfManufactureItem, IManufacturingItemRequest, IManufacturingUnqItemObj, IMfStockSearchRequest } from '../models/interfaces/manufacturing.interface';
 import { StocksResponse } from '../models/api-models/Inventory';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class ManufacturingService {

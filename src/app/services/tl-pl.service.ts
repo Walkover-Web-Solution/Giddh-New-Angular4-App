@@ -10,7 +10,7 @@ import { TB_PL_BS_API } from './apiurls/tl-pl.api';
 import { AccountDetails, BalanceSheetRequest, ProfitLossRequest, TrialBalanceExportExcelRequest, TrialBalanceRequest } from '../models/api-models/tb-pl-bs';
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
-import { ServiceConfig, IServiceConfigArgs } from 'app/services/service.config';
+import { ServiceConfig, IServiceConfigArgs } from './service.config';
 
 @Injectable()
 export class TlPlService {

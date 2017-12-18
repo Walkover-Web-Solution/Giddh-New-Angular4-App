@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, Optional } from '@angular/core';
 import { Subject } from 'rxjs/Subject';
 import { CustomTemplateResponse } from '../models/api-models/Invoice';
-import * as _ from '../lodash-optimized';
+
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { CompanyResponse } from '../models/api-models/Company';
+import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
 export class TemplateContentUISectionVisibility {
   public header: boolean = true;
   public table: boolean = false;
   public footer: boolean = false;
 }
+
+declare var _: any;
 
 @Injectable()
 
@@ -26,8 +29,11 @@ export class InvoiceUiDataService {
 
   private companyName: string;
   private companyAddress: string;
+  private _: any;
 
-  constructor() {
+  constructor( @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
+    this._ = config._;
+    _ = config._;
     //
   }
 
