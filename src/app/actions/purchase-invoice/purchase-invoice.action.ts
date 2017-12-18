@@ -115,6 +115,27 @@ export class InvoicePurchaseActions {
       return { type: 'EmptyAction' };
     });
 
+    @Effect()
+  private SendGSTR3BEmail$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL)
+    .switchMap((action: CustomActions) => {
+      return this.purchaseInvoiceService.SendGSTR3BEmail(action.payload)
+        .map(response => this.SendGSTR3BEmailResponse(response));
+    });
+
+  @Effect()
+  private SendGSTR3BEmailResponse$: Observable<Action> = this.action$
+    .ofType(PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE)
+    .map((response: CustomActions) => {
+      let data: BaseResponse<any, string> = response.payload;
+      if (data.status === 'error') {
+        this.toasty.errorToast(data.message, data.code);
+      } else {
+        this.toasty.successToast(data.body);
+      }
+      return { type: 'EmptyAction' };
+    });
+
   /**
    * UPDATE PURCHASE ENTRY
    */
@@ -265,6 +286,20 @@ export class InvoicePurchaseActions {
   public DownloadGSTR1ErrorSheetResponse(value: BaseResponse<any, string>): CustomActions {
     return {
       type: PURCHASE_INVOICE_ACTIONS.DOWNLOAD_GSTR1_ERROR_SHEET_RESPONSE,
+      payload: value
+    };
+  }
+
+  public SendGSTR3BEmail(month: string, gstNumber: string, isNeedDetailSheet: boolean, email?: string): CustomActions {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL,
+      payload: { month, gstNumber, isNeedDetailSheet, email }
+    };
+  }
+
+  public SendGSTR3BEmailResponse(value: BaseResponse<any, string>): CustomActions {
+    return {
+      type: PURCHASE_INVOICE_ACTIONS.SEND_GSTR3B_EMAIL_RESPONSE,
       payload: value
     };
   }
